@@ -1,15 +1,19 @@
 # NET JRF Statistics app — build state and authoring pattern
 
-Artifact: https://claude.ai/artifact/4Bms3mCU8e32yxNuFZy1Ft (page Version 47)
-Store: 110 docs. `meta/lessons` v39 (41 topics), `meta/catalog` v3 (167 topics, 21 modules).
+Artifact: https://claude.ai/artifact/4Bms3mCU8e32yxNuFZy1Ft (page Version 48)
+Store: 114 docs. `meta/lessons` v40 (43 topics), `meta/catalog` v3 (167 topics, 21 modules).
 
 **Module numbers come from `seed/meta_syllabus.json` labels, not Roman numerals:** 1 probability,
 2 maths, 3A/3B sampling/design, 4 inference, 5 non-parametric, 6 regression, 7 time series,
 8 multivariate, 9 stochastic, 10A official, 10B R. Probability is 1.x and time series is 7.x —
 both were miscited in two lessons and corrected on 2026-11-03.
-Last updated 2026-11-03 (time-series module completed).
+Last updated 2026-11-05. **The pipeline now lives in a GitHub repo** —
+`mubarakclaude-bit/net-jrf-statistics` — with `SPEC.md` carrying the whole house standard, so a
+fresh chat can author a lesson from a cold start instead of inheriting a long conversation. The
+Admin tab's prompt pack was rewritten to bootstrap from that repo rather than describe the
+standard in prose.
 
-## Lessons live (41)
+## Lessons live (43)
 
 **Module 4 — Estimation Theory (inference): COMPLETE, 17 of 17.**
 4.1 Sufficiency (94 min) · 4.2 Completeness/Basu (51) · 4.3 Rao–Blackwell/Lehmann–Scheffé (51) ·
@@ -39,10 +43,15 @@ representation. Each lesson's provenance field records which topic owns what.
 **Module 2 — Mathematics: 2 of 16.** 2.1 Rank, nullity, Sylvester and Frobenius (98) · 2.4 Sequences, series and power series (99). 2.1 was the first
 lesson to carry TWO PYQ anchors, Q26 and Q1, because the catalog topic covers rank and nullity together.
 
-**Module 1 — Probability: 6 of 13.** 1.1 Order statistics (98) · 1.5 Standard discrete distributions (99) ·
+**Module 1 — Probability: 7 of 13.** 1.7 Jensen, Markov, Chebyshev and Cauchy–Schwarz (100) · 1.1 Order statistics (98) · 1.5 Standard discrete distributions (99) ·
 1.8 Independence and inclusion–exclusion (98) · 1.10 Transformations and Jacobians (100) ·
 1.3 Conditional expectation, total variance and mixtures (91) ·
 1.13 Sampling distributions: t, chi-square, F and the correlation coefficient (98)
+
+**Module 5 — Non-parametric methods: 1 of 8.** 5.4 Spearman's ρ and Kendall's τ (100) — PYQ
+anchor Q35, answered wrongly, and the lesson teaches three things the question does not ask:
+Pearson's r on the same raw prices is 0.716682 against ρ of 0.345455, Kendall's τ is 0.288889,
+and the exact one-sided p-value is about 0.165, so the answer the exam wants is not significant.
 
 ## What is next, and why
 
@@ -134,7 +143,7 @@ a file and grep. clicktest now walks 25 lessons and takes several minutes.
 ## Visualisations available (src/30-viz.js)
 
 exp-likelihood, mle-sampling, unif-likelihood, np-power, beta-posterior, chisq-tail,
-risk-curves, sprt, ci-coverage, **ar-acf**, **r-null**, **ord-beta**, **disc-pmf**, **series-conv**, **gamma-sum**, **spectral**. All deterministic, drawn from the real formulas.
+risk-curves, sprt, ci-coverage, **ar-acf**, **r-null**, **ord-beta**, **disc-pmf**, **series-conv**, **gamma-sum**, **spectral**, **ineq-bounds**, **rank-null**. All deterministic, drawn from the real formulas.
 Helpers: nphi, nqnt, lgamma, gammap, chi2cdf, chi2pdf, chi2qnt, lchoose, binpmf.
 New types must be added to `VIZ_OK` in src/62-gen.js or the validator rejects them.
 Geometry: `VW=620, VH=210, VP={l:46,r:14,t:14,b:30}`; each viz is

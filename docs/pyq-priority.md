@@ -30,11 +30,11 @@ lesson covers both. Reading the catalog first saved a duplicate lesson.
 
 ## Current state (2026-11-03)
 
-**41 lessons live**, `meta/lessons` v39, page **Version 47**. Store: 110 docs.
+**43 lessons live**, `meta/lessons` v40, page **Version 48**. Store: 114 docs.
 
 - **Module 4 Estimation theory: COMPLETE, 17 of 17.**
 - **Module 10A Indian statistical system: COMPLETE, 5 of 5.**
-- Module 1 Probability: 6 of 13 — 1.1 Order statistics, 1.3 Conditional expectation and total
+- Module 1 Probability: 7 of 13 — 1.7 Jensen/Markov/Chebyshev/Cauchy–Schwarz, 1.1 Order statistics, 1.3 Conditional expectation and total
   variance, 1.5 Standard discrete distributions, 1.8 Independence and inclusion–exclusion,
   1.10 Transformations and Jacobians, 1.13 Sampling distributions and the correlation coefficient.
 - **Module 7 Time series: COMPLETE, 11 of 11.** 7.1 Stationarity and invertibility, 7.2 ACF/PACF
@@ -136,35 +136,32 @@ Completed, newest first:
 | **4.10** | LRT and Wilks | 99 | Q30's four statements |
 | **4.12** | Size and power | 99 | Q49 and Q39 |
 
-Next, in order, each anchored on a question answered wrongly with a sizeable variant bank:
+**The PYQ-anchored backlog is now EXHAUSTED** (2026-11-05). Both remaining anchored lessons are built:
 
-| # | Lesson | Topic | Anchor | Variants |
-|---|---|---|---|---|
-| 1 | **1.7** | Jensen, Markov, Chebyshev, Cauchy–Schwarz | Q31 — retagged from Q30 | 10 |
-| 2 | **5.4** | Spearman and Kendall | Q35 — Spearman's ρ on 10 years of prices | 10 |
-| 3 | **1.6** | Standard continuous distributions | no direct anchor; completes 1.5 | — |
+| Lesson | Topic | Anchor | Outcome |
+|---|---|---|---|
+| **5.4** | Spearman's ρ and Kendall's τ | Q35 — answered wrongly (key B 0.345, marked C) | built, 100 min |
+| **1.7** | Jensen, Markov, Chebyshev, Cauchy–Schwarz | Q31 — see correction below | built, 100 min |
 
-**After those two anchored lessons, the PYQ-anchored backlog is exhausted.** Every
-June 2026 question that was answered wrongly and carries a variant bank will then be covered.
-The next decision is a genuine fork and should be put to the user: finish module 1 (eight topics
-left, 20 marks), build the nine remaining time-series topics (8 marks, `ar-acf` ready), or start
-one of the three EMPTY banks — stochastic processes is 20 marks with no questions at all, which
-is the largest single gap in the project but needs a bank written from scratch first.
+**CORRECTION — Q31 was answered CORRECTLY.** This document previously listed 1.7 among anchors
+"answered wrongly with a sizeable variant bank". The key is C and the candidate also marked C.
+That description fits Q35 but never fitted Q31. The lesson was built anyway, because its
+ten-variant bank covers four inequalities plus both tail identities and served as a perfectly good
+specification — but the priority ordering that put it second was based on a false premise. Check
+`youMarked` against `answer` in `seed/pyq_j26_full.json` before calling a question wrongly answered.
 
-**Q35 was mislabelled in this doc as an index-numbers question.** It is Spearman's rank
-correlation — ρ = 0.345455 from Σd² = 108 at n = 10, answer B, marked C — and the prices in its
-stem are there only to be ranked. Its real home is `nonparam-t4` "Spearman and Kendall", lesson
-**5.4**. Two lessons on this were nearly misdirected: always read the full stem and the variants
-before trusting a one-line label. Note also that Q35 sits in the MATHS tally while being a
-non-parametric question, the same question-level misfiling as Q29.
+So every June 2026 question that was answered wrongly AND carries a variant bank is now covered.
 
-The nine remaining time-series topics are now **done** (completed 2026-11-03). Seven of them reused
-the `ar-acf` visualisation, as predicted, and one new one (`spectral`) was built for 7.7.
+**The next decision is a genuine fork, and it is the user's:**
 
-With module 7 closed, the next block by PYQ evidence is **probability and maths**: 18 questions and
-36 marks in June 2026, of which 6 of 18 were answered correctly, and modules 1 and 2 stand at 6 of 13
-and 2 of 16. The highest-value remaining anchors are listed in the build-order table above. After
-that, the three empty banks below are the only untouched marks left.
+1. **Finish module 1 (probability)** — 6 topics left of 13, the largest uncovered block by marks
+   among started modules. No PYQ anchors remain, so these are catalog-weight lessons.
+2. **Module 2 (mathematics)** — 14 of 16 left. Shares the 36-mark probability-and-maths block
+   where only 6 of 18 questions were right.
+3. **Module 5 (non-parametric)** — 7 of 8 left, and 5.4 has just laid the permutation-test
+   groundwork the rest of the module reuses.
+4. **One of the three EMPTY banks** — stochastic processes is 20 marks with no questions at all,
+   the largest single gap in the project, but needs a question bank written from scratch first.
 
 ## Deliberately NOT next
 
