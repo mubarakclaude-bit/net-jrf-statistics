@@ -31,7 +31,29 @@ node test.js && node clicktest.js
 or a pool item whose explanation cites its own answer as a distractor. Do not push a lesson
 it has not passed clean.
 
+## What to build next
+
+**[`BACKLOG.md`](BACKLOG.md) is the queue.** Take the top unchecked item, build it, tick it off,
+commit. It is ordered by marks still exposed, and it records which previous-year questions were
+answered wrongly — those anchors are worth more, because the variant bank doubles as a diagnosis.
+
+## Authoring from a phone
+
+Three routes, in increasing order of what they can do:
+
+1. **In the app** — Admin tab, pick module and topic, press *Author it here*. Drafts, validates and
+   previews without leaving the page. It cannot check a number, so it is for conceptual topics;
+   the validator now rejects any draft claiming a figure was verified or simulated.
+2. **A fresh chat** — Admin tab, *Copy prompt for a chat*, paste into a **new** chat. The prompt
+   bootstraps from this repo, so each lesson is a self-contained conversation.
+3. **An issue here** — open one from the *Author a lesson* template, then paste the one-line
+   instruction it contains into a new chat.
+
+A GitHub Action cannot finish the job: lessons live in the artifact's database, which is reachable
+only through a Claude session tied to the owner's account. GitHub holds the queue and the spec;
+a session does the authoring and the store write.
+
 ## Current state
 
 See [`docs/app-build-state.md`](docs/app-build-state.md) for the live inventory and
-[`docs/pyq-priority.md`](docs/pyq-priority.md) for what to build next and why.
+[`docs/pyq-priority.md`](docs/pyq-priority.md) for the scoring analysis behind the ordering.
