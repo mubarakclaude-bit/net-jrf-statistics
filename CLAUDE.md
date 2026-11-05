@@ -11,6 +11,17 @@ published Claude artifact; this repo builds it and authors the content that goes
 - **`BACKLOG.md`** — the queue, ordered by marks still exposed. Take the top unchecked item
   unless told otherwise.
 
+## Authoring several lessons at once
+
+Group lessons that share machinery and do them in ONE session: write a single verification
+script covering the whole group, copy `lessons/TEMPLATE.py` per lesson, and push them in one
+batch at the end. Four lessons in one session costs roughly a third less than four sessions,
+because the SPEC read, the template read and the verification script are paid once.
+
+Do **not** read `lessons/EXAMPLE.py` or any existing `seed/lesson_*.json` to learn the shape —
+`TEMPLATE.py` carries it for a sixth of the tokens. Read a finished lesson only to match prose
+style, and then only one.
+
 ## The loop
 
 ```sh
@@ -67,7 +78,9 @@ outstanding. It is one batch call from a session that does have the tool.
 | Path | What |
 |---|---|
 | `src/` | the app, in build order |
-| `lesson_*.py` | one authoring script per lesson; `lessons/EXAMPLE.py` is the pattern |
+| `lesson_*.py` | one authoring script per lesson |
+| `lessons/TEMPLATE.py` | **copy this** — the shape, ~3k tokens |
+| `lessons/EXAMPLE.py` | a fully worked lesson, ~19k tokens; read only for prose style |
 | `seed/` | generated lessons, question pools, catalog, previous-year banks |
 | `vcheck.js`, `mathrender.js` | validators |
 | `docs/` | build state, scoring analysis, lessons learned |
