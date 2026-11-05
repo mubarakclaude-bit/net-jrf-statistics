@@ -20,8 +20,19 @@ function grab(name, kind) {
 }
 
 const ctx = {};
-new Function("ctx", grab("VIZ_OK") + grab("vScene", "fn") +
-  "ctx.vScene=vScene;ctx.VIZ_OK=VIZ_OK;")(ctx);
+// Everything vScene CALLS has to be grabbed too, or the eval'd copy throws
+// "X is not defined" at validation time. Adding a helper call inside vScene in
+// src/62-gen.js without adding it here breaks addlesson.sh — which is exactly what
+// happened when the fabricated-evidence check was introduced.
+const NEEDED = [["VIZ_OK", null], ["vScene", "fn"]];
+try {
+  new Function("ctx", NEEDED.map(([n, k]) => grab(n, k)).join("\n") +
+    "ctx.vScene=vScene;ctx.VIZ_OK=VIZ_OK;")(ctx);
+} catch (e) {
+  console.error("vcheck could not assemble vScene from src/62-gen.js: " + e.message);
+  console.error("If vScene now calls a new helper, add it to the NEEDED list above.");
+  process.exit(1);
+}
 
 const path = process.argv[2] || "seed/lesson_t1.json";
 const L = JSON.parse(fs.readFileSync(path, "utf8"));

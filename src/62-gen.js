@@ -79,6 +79,9 @@ const FAKE_EVIDENCE = [
   [/\bcomputed directly over\b/i,             'claims a direct computation'],
   [/\bmatch(?:es|ed|ing) the (?:simulated|computed)\b/i, 'compares against a run that did not happen']
 ];
+/* IN-APP PATH ONLY. The shared validators below (vLessonPlan, vScene, vQset) are also used
+   by vcheck.js on hand-authored lessons, where figures really were computed and the
+   provenance SHOULD record it. Calling this from them would reject every honest lesson. */
 function vEvidence(o,at,e){
   const seen=[];
   (function walk(v){
@@ -123,7 +126,6 @@ function vLessonPlan(p){
     (p.revision.cards||[]).forEach((c,i)=>{if(!Array.isArray(c)||c.length!==2)
       e.push("flashcard "+(i+1)+" is not a [front, back] pair")});
   }
-  vEvidence(p,"the plan",e);
   return e;
 }
 function vScene(s,i){
@@ -175,7 +177,6 @@ function vScene(s,i){
     if(!sn.title)e.push(at+" scenario has no title");
     if((sn.body||[]).join(" ").length<400)e.push(at+" scenario is too thin to be worth opening");
   }
-  vEvidence(s,at,e);
   return e;
 }
 function vQset(q,want){
@@ -226,7 +227,6 @@ function vQset(q,want){
     [["easy",6],["moderate",10],["hard",4]].forEach(([d,k])=>{
       if((diffs[d]||0)<k)e.push("only "+(diffs[d]||0)+" "+d+" items; a 3/5/2 draw from 20 needs at least "+k)});
   }
-  q.items.forEach((it,i)=>vEvidence(it,"q"+(i+1),e));
   return e;
 }
 /* ---- prompts ---- */
@@ -388,12 +388,12 @@ async function runGen(stage,m,t){
 async function genLesson(m,t){
   S.gen.phase="Planning the lesson";S.gen.pct=8;genLog("Asking Claude for the plan — objectives, scenes, references.");
   let plan=await askJSON(pPlan(m,t),"complex");
-  let pe=vLessonPlan(plan);
+  let pe=vLessonPlan(plan);vEvidence(plan,'the plan',pe);
   if(pe.length){
     genLog("Plan came back with "+pe.length+" problem"+(pe.length>1?"s":"")+". Asking for a repair.","warn");
     plan=await askJSON(pPlan(m,t)+"\n\nA previous attempt was rejected for these reasons. Fix every one:\n"+
       pe.map(x=>"- "+x).join("\n"),"complex");
-    pe=vLessonPlan(plan);
+    pe=vLessonPlan(plan);vEvidence(plan,'the plan',pe);
     if(pe.length)throw {message:"The plan still fails validation: "+pe.slice(0,3).join("; ")};
   }
   genLog("Plan accepted: "+plan.scenePlan.length+" scenes, "+plan.objectives.length+" objectives, "+
@@ -411,7 +411,7 @@ async function genLesson(m,t){
       try{
         const r=await askJSON(pScenes(m,t,plan,batch),"complex");
         const arr=(r&&r.scenes)||[];
-        const errs=[];arr.forEach((s,j)=>errs.push.apply(errs,vScene(s,batch[j]?batch[j].i:j)));
+        const errs=[];arr.forEach((s,j)=>{const i=batch[j]?batch[j].i:j;errs.push.apply(errs,vScene(s,i));vEvidence(s,'scene '+(i+1),errs)});
         if(arr.length!==batch.length)errs.push("expected "+batch.length+" scenes, got "+arr.length);
         if(errs.length&&tries<2){genLog("Batch "+(k/B+1)+": "+errs[0]+" — retrying.","warn");continue}
         if(errs.length)throw {message:errs.slice(0,2).join("; ")};
@@ -439,7 +439,7 @@ async function genLesson(m,t){
     revision:plan.revision,traps:plan.traps,scenes:scenes};
   const q=scenes.filter(s=>s.kind==="quiz")[0];
   if(q)q.setId=m.id+"_"+qid+"_mastery";
-  const allErrs=[];scenes.forEach((s,i)=>allErrs.push.apply(allErrs,vScene(s,i)));
+  const allErrs=[];scenes.forEach((s,i)=>{allErrs.push.apply(allErrs,vScene(s,i));vEvidence(s,'scene '+(i+1),allErrs)});
   S.gen.out={kind:"lesson",path:"lessons/"+les.id,body:les,
     summary:scenes.length+" scenes · "+JSON.stringify(les).length+" bytes · quiz set "+(q?q.setId:"none")};
   S.gen.errs=allErrs;S.gen.pct=100;S.gen.phase="Ready to review";
@@ -461,7 +461,7 @@ async function genQuestions(m,t,stage){
     const body={moduleId:m.id,source:stage==="mastery"?"mastery":"variant",topicId:t?t.id:"",
       label:(t?t.name:m.name)+" — "+(stage==="mastery"?"mastery test (unseen)":"practice"),
       count:(r.items||[]).length,items:r.items||[]};
-    errs=vQset(body,n);
+    errs=vQset(body,n);(body.items||[]).forEach((it,i)=>vEvidence(it,'q'+(i+1),errs));
     if(errs.length&&tries<2){genLog(errs.length+" problem"+(errs.length>1?"s":"")+" — asking for a repair.","warn");continue}
     out=body;
   }

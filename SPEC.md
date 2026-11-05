@@ -226,6 +226,31 @@ skipped a lesson that would have been pushed while invisible to every test.
 
 Republish the artifact page **only when `src/` changed**. Content changes go to the store alone.
 
+### Two traps in the pipeline itself
+
+**The `<seed-stem>` argument must match the `OUT` constant in the authoring script.** The script
+hardcodes where it writes; the stem only tells `addlesson.sh` where to look. A mismatch used to
+crash with a raw stack trace, or — far worse — silently validate a leftover file from an earlier
+run while the real output went elsewhere. `addlesson.sh` now checks that `seed/<stem>.json` exists
+*and* was written by this run, and fails with the script's actual `OUT` line in the message.
+
+**`vcheck.js` evaluates `vScene` pulled out of `src/62-gen.js`, so everything `vScene` calls must
+be listed in `vcheck.js`'s `NEEDED` array.** Adding a helper call inside `vScene` without adding
+it there breaks `addlesson.sh` with "X is not defined". This has happened once already.
+
+Related, and the reason the two validator paths are kept apart: `vLessonPlan`, `vScene` and
+`vQset` are **shared** between `vcheck.js` (hand-authored lessons) and the in-app generator.
+The fabricated-evidence check `vEvidence` applies **only to the in-app path**, because a
+hand-authored lesson genuinely does compute its figures and *should* record that in `provenance`.
+Wiring it into the shared validators rejects every honest lesson. Keep in-app-only checks in the
+in-app call sites.
+
+### Paths must be repo-relative
+
+Scratch files go in `.cache/` (gitignored, created on demand), never an absolute path. `test.js`
+takes its root from `__dirname`. The repo was pushed once with `/tmp/claude-0/...` and
+`/home/claude/w1` baked into four files, which worked only on the machine that built it.
+
 ---
 
 ## 8. The store

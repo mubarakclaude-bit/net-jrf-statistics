@@ -1,6 +1,7 @@
 #!/bin/bash
 # Assemble the published page from src/ parts.
 set -e
+mkdir -p .cache
 cd "$(dirname "$0")"
 OUT=app.html
 # The build stamp shown in the header was a hand-edited constant and so told the reader
@@ -26,7 +27,7 @@ sed -i "s|^const BUILD=\".*\";|const BUILD=\"$STAMP\";|" src/10-const.js
 python3 -c "
 import re,sys
 h=open('$OUT',encoding='utf-8').read()
-open('/tmp/claude-0/app.js','w',encoding='utf-8').write(re.search(r'<script>(.*)</script>',h,re.S).group(1))
+open('.cache/app.js','w',encoding='utf-8').write(re.search(r'<script>(.*)</script>',h,re.S).group(1))
 "
-node --check /tmp/claude-0/app.js && echo "syntax ok"
+node --check .cache/app.js && echo "syntax ok"
 echo "built $OUT: $(wc -c < $OUT) bytes, $(wc -l < $OUT) lines"

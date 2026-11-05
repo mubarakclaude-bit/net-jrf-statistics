@@ -4,7 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
 
-const W = '/home/claude/w1';
+const W = __dirname;                      // repo root, so a clone works anywhere
+const CACHE = path.join(W, '.cache');
+fs.mkdirSync(CACHE, { recursive: true });
 const SEED = path.join(W, 'seed');
 
 function seedDocs() {
@@ -133,8 +135,8 @@ window.claude = { use: async (n) => {
     '<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}' +
     'body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff}img{max-width:100%}[hidden]{display:none!important}</style>' +
     '<script>' + stub + '</script></head><body>' + body + '</body></html>';
-  fs.writeFileSync('/tmp/claude-0/harness.html', html);
-  await page.goto('file:///tmp/claude-0/harness.html');
+  fs.writeFileSync(path.join(CACHE, 'harness.html'), html);
+  await page.goto('file://' + path.join(CACHE, 'harness.html'));
   await page.waitForTimeout(900);
   // the front door now stands in front of the app
   if (await page.locator('[data-login="me"]').count()) { await page.click('[data-login="me"]'); await page.waitForTimeout(700); }
@@ -317,5 +319,5 @@ window.claude = { use: async (n) => {
 
   say('--- errors: ' + (errs.length ? '\n' + errs.join('\n') : 'none'));
   await browser.close();
-  fs.writeFileSync('/tmp/claude-0/test-out.txt', out.join('\n'));
+  fs.writeFileSync(path.join(CACHE, 'test-out.txt'), out.join('\n'));
 })().catch(e => { console.error('HARNESS FAILED', e); process.exit(1); });

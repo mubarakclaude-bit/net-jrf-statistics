@@ -8,10 +8,28 @@ set -e
 # error in the authoring script was swallowed and the run continued on a STALE seed file.
 set -o pipefail
 PY=$1; STEM=$2; TID=$3; DOC=$4; SET=$5
+mkdir -p .cache
+START=$(date +%s)
 python3 "$PY" | tail -2
+# The authoring script hardcodes its own output path, so a <seed-stem> that does not match it
+# sends the validator to the wrong file. If a file happens to sit at that path from an earlier
+# run, everything downstream validates a STALE seed and passes. Refuse both cases loudly.
+mtime() { stat -c %Y "$1" 2>/dev/null || stat -f %m "$1"; }
+if [ ! -f "seed/$STEM.json" ]; then
+  echo "FAILED: $PY did not write seed/$STEM.json"
+  echo "  The <seed-stem> argument must match the OUT constant in the script."
+  echo "  $PY has: $(grep -m1 '^OUT' "$PY" || echo '(no OUT line found)')"
+  exit 1
+fi
+if [ "$(mtime "seed/$STEM.json")" -lt "$START" ]; then
+  echo "FAILED: seed/$STEM.json is STALE — this run did not write it."
+  echo "  The <seed-stem> argument does not match the OUT constant in $PY."
+  echo "  $PY has: $(grep -m1 '^OUT' "$PY" || echo '(no OUT line found)')"
+  exit 1
+fi
 node vcheck.js "seed/$STEM.json" 2>&1 | grep -vE '^seed/' | head -12
 python3 -I - "$STEM" "$TID" "$DOC" "$SET" <<'PYEOF'
-import io,json,sys,datetime,subprocess
+import io,json,sys,os,datetime,subprocess
 stem,tid,doc,sset=sys.argv[1:5]
 L=json.load(io.open('seed/%s.json'%stem,encoding='utf-8'))
 # every formula through the layout engine: a refusal means the lesson would render as source
@@ -26,10 +44,10 @@ def walk(o):
     elif isinstance(o,list):
         for x in o: walk(x)
 walk(L)
-io.open('/tmp/claude-0/_m.json','w',encoding='utf-8').write(json.dumps(out,ensure_ascii=False))
-subprocess.run(['node','mathrender.js','/tmp/claude-0/_m.json','/tmp/claude-0/_mo.json'],
+io.open('.cache/_m.json','w',encoding='utf-8').write(json.dumps(out,ensure_ascii=False))
+subprocess.run(['node','mathrender.js','.cache/_m.json','.cache/_mo.json'],
                capture_output=True)
-r=json.load(io.open('/tmp/claude-0/_mo.json',encoding='utf-8'))
+r=json.load(io.open('.cache/_mo.json',encoding='utf-8'))
 bad=[k for k,v in r.items() if not v['ok']]
 print('formulas %d, stacked %d, refusals %d'%(len(r),sum(1 for v in r.values() if 'pfrac' in v['print']),len(bad)))
 for k in bad[:4]: print('  REFUSED:',k[:88])
@@ -73,7 +91,10 @@ assert docline in s, 'HARNESS NOT WIRED: missing %s'%docline
 assert setline in s, 'HARNESS NOT WIRED: missing mastery set %s'%setline
 ent={'id':L['id'],'title':L['title'],'moduleId':L['moduleId'],'estMin':L['estMin'],
      'scenes':len(L['scenes']),'status':L['status'],'version':L['version']}
-for path in ('seed/meta_lessons.json','/tmp/claude-0/store/lessons_merged.json'):
+# The second path is a local mirror of the store index; it only exists on the machine that
+# has one, so a clone elsewhere must skip it rather than crash.
+for path in ('seed/meta_lessons.json','.cache/store/lessons_merged.json'):
+    if not os.path.exists(path): continue
     d=json.load(io.open(path,encoding='utf-8'))
     d['topics'][tid]=ent; d['count']=len(d['topics'])
     d['updated']=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')

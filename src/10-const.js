@@ -1,4 +1,4 @@
-const BUILD="2026-11-05 14:31 UTC";
+const BUILD="2026-11-05 17:56 UTC";
 /* ===================== constants ===================== */
 const TABS=[["home","Home"],["learn","Learn"],["bank","Question bank"],["mock","Mock tests"],["progress","Progress"],["admin","Admin"]];
 const FMT={

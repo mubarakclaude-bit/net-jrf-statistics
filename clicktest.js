@@ -8,7 +8,7 @@ const { chromium } = require('playwright');
   const p = await b.newPage({ viewport: { width: 1400, height: 1000 } });
   const errs = []; p.on('pageerror', e => errs.push('PAGEERROR ' + e.message));
   p.on('console', m => { if (m.type() === 'error' && !/ERR_TUNNEL|fonts\.g/.test(m.text())) errs.push('CONSOLE ' + m.text()); });
-  await p.goto('file:///tmp/claude-0/harness.html'); await p.waitForTimeout(1500);
+  await p.goto('file://' + require('path').join(__dirname, '.cache', 'harness.html')); await p.waitForTimeout(1500);
   if (await p.locator('[data-login="me"]').count()) { await p.click('[data-login="me"]'); await p.waitForTimeout(800); }
   await p.click('[data-tab="learn"]'); await p.waitForTimeout(400);
 
