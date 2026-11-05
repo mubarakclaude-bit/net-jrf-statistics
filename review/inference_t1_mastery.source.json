@@ -1,0 +1,427 @@
+{
+ "moduleId": "inference",
+ "source": "mastery",
+ "topicId": "inference-t1",
+ "label": "Sufficiency — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "inf-t1-m-01",
+   "format": "single",
+   "topic": "inference-t1",
+   "stem": "X₁,…,Xₙ are iid Gamma with known shape α and unknown rate β, so f(x;β) = β^α x^(α−1) e^(−βx) / Γ(α) for x > 0. The minimal sufficient statistic for β is:",
+   "options": [
+    "Σxᵢ",
+    "∏xᵢ",
+    "x₍ₙ₎",
+    "(Σxᵢ, ∏xᵢ)"
+   ],
+   "answer": "A",
+   "explanation": "The joint density is β^(nα)/Γ(α)ⁿ · (∏xᵢ)^(α−1) · e^(−βΣxᵢ). The only factor containing β beyond the constant β^(nα) is e^(−βΣxᵢ), so g depends on the data through Σxᵢ alone, and Σxᵢ is minimal sufficient. The product (∏xᵢ)^(α−1) contains no β — α is known — so it belongs in h, which rules out B and the pair in D. Read D carefully, because it is the instructive distractor: (Σxᵢ, ∏xᵢ) IS sufficient, since anything that determines a sufficient statistic is itself sufficient. It is simply not minimal — Σxᵢ is a function of it and not conversely. That is why this stem asks for the MINIMAL statistic: had it asked only for 'a sufficient statistic', both A and D would have been correct answers.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t1-m-02",
+   "format": "numeric",
+   "topic": "inference-t1",
+   "stem": "A sample of 12 independent Bernoulli(p) trials is recorded as an ordered sequence, and 5 of them are successes. Using T = ΣXᵢ as the statistic, give its value and the number of distinct ordered sequences sharing that value.",
+   "options": [
+    "5, and 12 sequences share it",
+    "5, and 792 sequences share it",
+    "0.4167, and 792 sequences share it",
+    "5, and 4096 sequences share it"
+   ],
+   "answer": "B",
+   "explanation": "T = Σxᵢ = 5. The sequences sharing T = 5 are the arrangements of five successes among twelve trials: C(12,5) = 792. Those 792 are conditionally equally likely given T = 5, with p cancelling out — which makes sufficiency made concrete. Option C reports the sample mean x̄ = 5/12, a one-to-one transformation of T for fixed n = 12 and therefore minimal sufficient in its own right, which is exactly why the stem names T rather than asking for 'the minimal sufficient statistic' — under that looser wording both B and C would be correct. Option D is 2¹², the number of all possible sequences.",
+   "check": "Two quantities were asked. C(12,5) = 792, not 12 and not 2¹².",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t1-m-03",
+   "format": "multi",
+   "topic": "inference-t1",
+   "stem": "X₁,…,Xₙ are iid U(θ, θ+1) with θ ∈ ℝ unknown. Consider the following statements.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "A, B and D only",
+    "B and D only"
+   ],
+   "answer": "C",
+   "explanation": "A is true: the joint density is 1 on the region where every xᵢ lies in (θ, θ+1), which is the pair of conditions x₍₁₎ > θ and x₍ₙ₎ < θ+1, so both extremes are needed. B is true for the same reason — one parameter, a two-dimensional minimal sufficient statistic. C is false: the support moves with θ, so this is not an exponential family at all. D is true, and is why the range is the natural thing to look at here.",
+   "statements": [
+    "The minimal sufficient statistic is the pair (X₍₁₎, X₍ₙ₎).",
+    "The minimal sufficient statistic has higher dimension than the parameter.",
+    "The family is a one-parameter exponential family.",
+    "The sample range X₍ₙ₎ − X₍₁₎ carries no information about θ on its own."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The indicator splits into 1{x₍₁₎ > θ} and 1{x₍ₙ₎ < θ+1}; both extremes meet θ."
+    },
+    "B": {
+     "tf": true,
+     "why": "Dimension 2 for a one-dimensional θ. Note WHY: the support moves with θ, so this is not an exponential family at all. A curved exponential family also has dim(T) > dim(θ), but for a different reason, and this family is not one — do not let the two explanations merge."
+    },
+    "C": {
+     "tf": false,
+     "why": "The support depends on θ, which disqualifies the family from exponential form entirely."
+    },
+    "D": {
+     "tf": true,
+     "why": "The range is ancillary: its distribution is free of θ, since shifting θ shifts both extremes equally."
+    }
+   },
+   "diff": "hard"
+  },
+  {
+   "id": "inf-t1-m-04",
+   "format": "numeric",
+   "topic": "inference-t1",
+   "stem": "A sample of n = 10 from N(μ, σ²) with BOTH parameters unknown gives Σxᵢ = 50 and Σxᵢ² = 270. Taking T = (ΣXᵢ, ΣXᵢ²), give its value and its dimension.",
+   "options": [
+    "50, dimension 1",
+    "(5, 2), dimension 2",
+    "(5, 27), dimension 2",
+    "(50, 270), dimension 2"
+   ],
+   "answer": "D",
+   "explanation": "With both parameters unknown the exponent needs t₁(x) = x and t₂(x) = x², so T = (Σxᵢ, Σxᵢ²) = (50, 270), dimension 2 — matching the two-dimensional parameter (μ, σ²), so the family is full rank and T is also complete. Option C reports the per-observation averages, which are a valid one-to-one transform but not the values asked for.",
+   "check": "The question asked for the value AND the dimension. Dimension 2 here equals the dimension of the parameter — that is what makes this family full rank, unlike the curved case.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t1-m-05",
+   "format": "single",
+   "topic": "inference-t1",
+   "stem": "Which statement about the factorisation theorem is correct?",
+   "options": [
+    "h(x) may depend on the data in any way but must not contain θ",
+    "The theorem applies only when the support is independent of θ",
+    "h(x) may contain θ provided g does not",
+    "g must depend on the data through every observation individually"
+   ],
+   "answer": "A",
+   "explanation": "That is exactly the condition: g carries θ and touches the data only through T, while h is free in the data and must contain no θ. B is false, and is the common misreading: the factorisation theorem applies perfectly well when the support depends on θ, provided the indicator is kept inside g — the Uniform families are the standard case. It is the exponential-FAMILY criterion, not the factorisation theorem, that needs a fixed support. C has the roles of g and h swapped: h is the factor that must be free of θ. D is false because g is required to touch the data only through T, which is the opposite of involving each observation separately.",
+   "diff": "easy"
+  },
+  {
+   "id": "inf-t1-m-06",
+   "format": "numeric",
+   "topic": "inference-t1",
+   "stem": "A sample of size 4 from U(0, θ) gives the observations 2.1, 0.7, 3.6 and 1.9. Give the value of the minimal sufficient statistic, and the smallest value of θ that the data do not rule out.",
+   "options": [
+    "8.3, and θ must be at least 8.3",
+    "3.6, and θ must be at least 3.6",
+    "3.6, and θ must be at least 8.3",
+    "2.075, and θ must be at least 3.6"
+   ],
+   "answer": "B",
+   "explanation": "T = x₍ₙ₎ = 3.6. The likelihood is θ^(−4) for θ ≥ 3.6 and exactly zero below, because any smaller θ would have made the observation 3.6 impossible. So the data rule out everything under 3.6, and 3.6 itself is the smallest admissible value — and also the MLE. Option A gives Σxᵢ, which is irrelevant for this family.",
+   "check": "Both parts turn on the maximum. If you computed the sum anywhere in your working, you answered a question about a different family.",
+   "diff": "easy"
+  },
+  {
+   "id": "inf-t1-m-07",
+   "format": "numeric",
+   "topic": "inference-t1",
+   "stem": "X₁,…,Xₙ are iid with f(x;θ) = (1/θ)e^(−x/θ) for x > 0. A sample of n = 6 gives Σxᵢ = 42 and ∏xᵢ = 10080. Identify which of these the likelihood actually depends on, and give its value.",
+   "options": [
+    "10080",
+    "7",
+    "42",
+    "(42, 10080)"
+   ],
+   "answer": "C",
+   "explanation": "Writing the joint density gives θ^(−6) exp(−Σxᵢ/θ), so θ meets the data only through Σxᵢ = 42. The product is a distractor carried over from densities such as θx^(θ−1) where it does matter. Option B is x̄, a correct one-to-one transform but not the value of Σxᵢ that was asked for; option D adds a statistic the likelihood never uses.",
+   "check": "The question asked for the value of the minimal sufficient statistic, not the estimate of θ. Reporting 7 is right working and the wrong quantity.",
+   "diff": "easy"
+  },
+  {
+   "id": "inf-t1-m-08",
+   "format": "multi",
+   "topic": "inference-t1",
+   "stem": "Let T be a minimal sufficient statistic for θ in some family.",
+   "options": [
+    "A, B and D only",
+    "A and B only",
+    "B and C only",
+    "A and D only"
+   ],
+   "answer": "D",
+   "explanation": "A is true — minimal means it is a function of every sufficient statistic, which is the definition. B is false: minimal sufficiency and completeness are different properties, and curved families such as N(θ,θ²) are minimal sufficient without being complete. C is false — an ancillary statistic has a distribution free of θ, which is the opposite situation. D is true, since maximising g(T;θ) over θ can only produce a function of T.",
+   "statements": [
+    "T is a function of every other sufficient statistic for θ.",
+    "T is necessarily complete.",
+    "T is necessarily ancillary.",
+    "Any unique MLE of θ must be a function of T."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "That is the definition of minimality — the coarsest sufficient summary."
+    },
+    "B": {
+     "tf": false,
+     "why": "Full-rank exponential families give both; curved families give minimality without completeness."
+    },
+    "C": {
+     "tf": false,
+     "why": "Ancillary means the distribution does not involve θ — close to the reverse of sufficient."
+    },
+    "D": {
+     "tf": true,
+     "why": "The likelihood is g(T;θ)h(x) and only g involves θ, so the maximiser depends on the data through T."
+    }
+   },
+   "diff": "hard"
+  },
+  {
+   "id": "inf-t1-m-09",
+   "format": "numeric",
+   "topic": "inference-t1",
+   "stem": "X₁,…,Xₙ are iid with density f(x;θ) = θ²x e^(−θx) for x > 0, θ > 0. Identify the minimal sufficient statistic and the dimension of the natural parameter.",
+   "options": [
+    "Σxᵢ, and the parameter is 1-dimensional",
+    "(Σxᵢ, ∏xᵢ), and the parameter is 2-dimensional",
+    "∏xᵢ, and the parameter is 1-dimensional",
+    "(Σxᵢ, Σlog xᵢ), and the parameter is 2-dimensional"
+   ],
+   "answer": "A",
+   "explanation": "The joint density is θ^(2n)·(∏xᵢ)·exp(−θΣxᵢ). Only one exponential term carries θ, with t(x) = x, so T = Σxᵢ and the natural parameter is one-dimensional — a full-rank one-parameter exponential family, making T minimal sufficient and complete. The factor ∏xᵢ has no θ in it and belongs in h, which is what makes option B wrong.",
+   "check": "A factor involving the data is not automatically part of the statistic. Test it: does it contain θ? ∏xᵢ does not, so it goes to h.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t1-m-10",
+   "format": "order",
+   "topic": "inference-t1",
+   "stem": "You are given a density and asked for a minimal sufficient statistic. Arrange these steps in the order they should be carried out.",
+   "options": [
+    "C, D, A, B",
+    "C, A, D, B",
+    "A, D, C, B",
+    "A, C, D, B"
+   ],
+   "answer": "B",
+   "explanation": "Check the support first — whether it moves with θ decides whether you may use the exponential-family shortcut or must keep an indicator. Then write the joint density, group the θ-terms to read off T, and finally argue minimality. Starting with the algebra and discovering the moving support afterwards wastes the time the first check would have saved.",
+   "items": [
+    "A. Write the joint density and group the factors containing θ",
+    "B. Argue minimality, by exponential-family rank or the likelihood ratio",
+    "C. Check whether the support of the density depends on θ",
+    "D. Read T off the grouping and verify h contains no θ"
+   ],
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t1-m-11",
+   "format": "single",
+   "topic": "inference-t1",
+   "diff": "easy",
+   "stem": "A statistic T is sufficient for θ precisely when:",
+   "options": [
+    "T is an unbiased estimator of θ",
+    "T has the smallest variance among all estimators of θ",
+    "the conditional distribution of the sample given T = t does not depend on θ",
+    "T is a one-to-one function of the maximum likelihood estimator"
+   ],
+   "answer": "C",
+   "explanation": "Sufficiency is defined by the conditional distribution: once T is known, the rest of the sample carries no further information about θ. Unbiasedness and minimum variance are properties of estimators, not of sufficiency, and while the MLE is usually a function of a sufficient statistic, that is a consequence rather than the definition."
+  },
+  {
+   "id": "inf-t1-m-12",
+   "format": "numeric",
+   "topic": "inference-t1",
+   "diff": "easy",
+   "stem": "X₁,…,X₆ are iid N(μ, 1) with μ unknown and the variance known to be 1. A sample gives Σxᵢ = 18. Name the minimal sufficient statistic and give its value.",
+   "options": [
+    "Σxᵢ² = 18",
+    "x₍₆₎ = 18",
+    "(ΣXᵢ, Σxᵢ²) = (18, 18)",
+    "ΣXᵢ = 18"
+   ],
+   "answer": "D",
+   "explanation": "With σ² known the density factorises with θ appearing only through Σxᵢ, so ΣXᵢ (equivalently X̄ = 3) is minimal sufficient and its value is 18. Σxᵢ² would be needed only if σ² were also unknown, and the sample maximum carries no special role for a normal family.",
+   "check": "One unknown parameter means one coordinate in the sufficient statistic. If your answer is a pair, check whether σ² was actually given."
+  },
+  {
+   "id": "inf-t1-m-13",
+   "format": "numeric",
+   "topic": "inference-t1",
+   "diff": "moderate",
+   "stem": "X₁,…,X₄ are iid Gamma with BOTH the shape α and the rate β unknown. The observations are 1, 2, 4 and 8. Give the value of the minimal sufficient statistic.",
+   "options": [
+    "(Σxᵢ, Σ log xᵢ) = (15, 4.159)",
+    "Σxᵢ = 15",
+    "(Σxᵢ, Σxᵢ²) = (15, 85)",
+    "(x₍₁₎, x₍₄₎) = (1, 8)"
+   ],
+   "answer": "A",
+   "explanation": "The gamma density is exp{(α−1)log x − βx + α log β − log Γ(α)}, a two-parameter exponential family with natural statistics Σlog Xᵢ and ΣXᵢ. Σxᵢ = 1+2+4+8 = 15 and Σlog xᵢ = log(1·2·4·8) = log 64 = 4.159. Σxᵢ alone would suffice only if α were known.",
+   "check": "Two unknown parameters, two coordinates. The second one is a sum of LOGS, not of squares — that is the giveaway for the gamma rather than the normal."
+  },
+  {
+   "id": "inf-t1-m-14",
+   "format": "multi",
+   "topic": "inference-t1",
+   "diff": "moderate",
+   "stem": "Let T be sufficient for θ in a family with a fixed support.",
+   "options": [
+    "A and C only",
+    "A, B and D only",
+    "B, C and D only",
+    "A, B and C only"
+   ],
+   "answer": "B",
+   "explanation": "A is true — any invertible transformation of a sufficient statistic is sufficient. B is true: that is the factorisation theorem. C is false, and it is the point of minimal sufficiency: the whole sample is always sufficient and is almost never minimal. D is true — the MLE maximises g(T;θ), so it depends on the data only through T.",
+   "statements": [
+    "Any one-to-one function of T is also sufficient for θ.",
+    "f(x;θ) = g(T(x);θ)·h(x) for some non-negative g and h.",
+    "T is necessarily of lower dimension than the sample.",
+    "The MLE is a function of T whenever the MLE is unique."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Knowing T and knowing a one-to-one function of T are the same knowledge."
+    },
+    "B": {
+     "tf": true,
+     "why": "The factorisation theorem, stated in the direction you use to verify sufficiency."
+    },
+    "C": {
+     "tf": false,
+     "why": "The entire sample is sufficient for every family. Reduction is what MINIMAL sufficiency asks for."
+    },
+    "D": {
+     "tf": true,
+     "why": "h(x) does not involve θ, so maximising the likelihood maximises g(T;θ)."
+    }
+   }
+  },
+  {
+   "id": "inf-t1-m-15",
+   "format": "numeric",
+   "topic": "inference-t1",
+   "diff": "moderate",
+   "stem": "X₁,…,X₄ are iid U(θ, θ+1) with θ ∈ ℝ unknown. The observations are 2.3, 2.9, 2.5 and 3.1. Give the value of the minimal sufficient statistic.",
+   "options": [
+    "x̄ = 2.7",
+    "x₍₄₎ = 3.1",
+    "(x₍₁₎, x₍₄₎) = (2.3, 3.1)",
+    "Σxᵢ = 10.8"
+   ],
+   "answer": "C",
+   "explanation": "The likelihood is 1 exactly when θ ≤ x₍₁₎ and x₍₄₎ ≤ θ+1, and 0 otherwise, so it depends on the data only through the smallest and largest observations. The pair (X₍₁₎, X₍₄₎) is minimal sufficient — and note it is two-dimensional for a one-dimensional parameter, which is allowed.",
+   "check": "The support moves with θ at BOTH ends here, so both extremes matter. For U(0,θ) only the maximum would."
+  },
+  {
+   "id": "inf-t1-m-16",
+   "format": "multi",
+   "topic": "inference-t1",
+   "diff": "hard",
+   "stem": "Consider minimal sufficiency and the statistics around it.",
+   "options": [
+    "A, B and C only",
+    "B and D only",
+    "A, B and D only",
+    "A and D only"
+   ],
+   "answer": "D",
+   "explanation": "A is true, and is the usual working definition. B is false: a minimal sufficient statistic need not be complete — U(θ, θ+1) has minimal sufficient (X₍₁₎, X₍₄₎), which is not complete because the range has a θ-free distribution. C is false: an ancillary statistic has a distribution free of θ, so it carries no information about θ on its own. D is true — the Lehmann–Scheffé ratio criterion.",
+   "statements": [
+    "A minimal sufficient statistic is a function of every other sufficient statistic.",
+    "Every minimal sufficient statistic is complete.",
+    "An ancillary statistic is one whose distribution determines θ.",
+    "If f(x;θ)/f(y;θ) is free of θ exactly when T(x) = T(y), then T is minimal sufficient."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "It achieves the greatest reduction, so every other sufficient statistic determines it."
+    },
+    "B": {
+     "tf": false,
+     "why": "U(θ, θ+1) is the standard counterexample: minimal sufficient but not complete."
+    },
+    "C": {
+     "tf": false,
+     "why": "Backwards. Ancillary means the distribution does NOT depend on θ."
+    },
+    "D": {
+     "tf": true,
+     "why": "The ratio criterion, and the practical way to verify minimality."
+    }
+   }
+  },
+  {
+   "id": "inf-t1-m-17",
+   "format": "numeric",
+   "topic": "inference-t1",
+   "diff": "moderate",
+   "stem": "X₁,…,X₅ are iid N(μ, σ²) with BOTH parameters unknown. A sample gives Σxᵢ = 20 and Σxᵢ² = 90. Taking T = (ΣXᵢ, ΣXᵢ²), give its value — and note that s² below means the unbiased sample variance Σ(xᵢ − x̄)²/(n − 1).",
+   "options": [
+    "(Σxᵢ, Σxᵢ²) = (20, 90)",
+    "Σxᵢ = 20",
+    "(x̄, Σxᵢ²) = (20, 90)",
+    "(x̄, s²) = (4, 2.0)"
+   ],
+   "answer": "A",
+   "explanation": "Two unknown parameters give a two-dimensional natural statistic, (ΣXᵢ, ΣXᵢ²) = (20, 90). Option D names a pair that IS minimal sufficient — (x̄, s²) is a one-to-one function of the natural statistic — but its value is wrong: s² = (90 − 20²/5)/(n−1) = 10/4 = 2.5, not 2.0 (2.0 is the divisor-n version). Option C mislabels x̄ as 20 when x̄ = 4.",
+   "check": "Σxᵢ²/n − x̄² = 18 − 16 = 2 is the divisor-n variance; the unbiased s² multiplies by n/(n−1) = 5/4 to give 2.5."
+  },
+  {
+   "id": "inf-t1-m-18",
+   "format": "single",
+   "topic": "inference-t1",
+   "diff": "easy",
+   "stem": "Which statement about sufficient statistics is FALSE?",
+   "options": [
+    "A sufficient statistic can be higher-dimensional than the parameter",
+    "A sufficient statistic must always reduce the data to a single number",
+    "The entire sample (X₁,…,Xₙ) is always sufficient for θ",
+    "The order statistics are sufficient whenever the observations are iid"
+   ],
+   "answer": "B",
+   "explanation": "Sufficiency says nothing about dimension. The whole sample is trivially sufficient, the order statistics are sufficient for any iid model, and U(θ, θ+1) has a two-dimensional minimal sufficient statistic for a one-dimensional θ. Only the claim of reduction to a single number is false."
+  },
+  {
+   "id": "inf-t1-m-19",
+   "format": "numeric",
+   "topic": "inference-t1",
+   "diff": "hard",
+   "stem": "X₁,…,Xₙ are iid Cauchy with location θ, f(x;θ) = 1/(π(1 + (x−θ)²)). What is the minimal sufficient statistic?",
+   "options": [
+    "the sample median",
+    "(ΣXᵢ, ΣXᵢ²)",
+    "the full set of order statistics — no reduction is possible",
+    "x̄, the sample mean"
+   ],
+   "answer": "C",
+   "explanation": "The Cauchy location family is not an exponential family, and the likelihood ratio for two parameter values depends on the individual observations in a way no summary can absorb. The minimal sufficient statistic is the complete set of order statistics: the sample cannot be reduced at all. The sample mean is useless here — the Cauchy has no finite mean and x̄ has the same Cauchy distribution as a single observation.",
+   "check": "If a family is not an exponential family, do not assume a low-dimensional sufficient statistic exists. The Cauchy is the standard case where none does."
+  },
+  {
+   "id": "inf-t1-m-20",
+   "format": "order",
+   "topic": "inference-t1",
+   "diff": "moderate",
+   "stem": "To show a proposed statistic T is sufficient by the factorisation theorem, arrange these steps.",
+   "options": [
+    "A, C, D, B",
+    "C, D, A, B",
+    "A, D, C, B",
+    "C, A, D, B"
+   ],
+   "answer": "D",
+   "explanation": "Write the joint density first — including the indicator functions, because for a moving support those indicators are where the parameter hides. Then split it into a part depending on the data only through T and a part free of θ, confirm the second factor really has no θ in it, and conclude.",
+   "items": [
+    "A. Split the product into a θ-part and a data-only part",
+    "B. Conclude that T is sufficient",
+    "C. Write the joint density, indicators included",
+    "D. Check the data-only factor contains no θ"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,590 @@
+#!/usr/bin/env python3
+# Lesson 10A.3 — Indian statisticians (Unit X). The syllabus names five: P. C.
+# Mahalanobis, P. V. Sukhatme, R. C. Bose, S. N. Roy and C. R. Rao, "and other
+# prominent Indian statisticians".
+#
+# Dates and attributions checked October 2026 against the biographical records for
+# each: Mahalanobis (ISI 1931, Sankhya 1933, Institute of National Importance 1959),
+# C. R. Rao (1920-2023, awards incl. the International Prize in Statistics 2023),
+# R. C. Bose (PBIBD 1939 with Nair, Bose-Mesner 1959, Euler disproof with Shrikhande
+# and Parker), P. V. Sukhatme (ICAR 1940-51, FAO 1951-71, Guy Medal 1963).
+import json, io
+
+def P(*x): return list(x)
+SC = []
+
+SC.append(dict(
+  kind="foundation", id="s0", title="Before the lesson — four things it will assume", mins=5,
+  objective="Recognise the results before you attach the names, so the names have somewhere to land.",
+  body=P(
+   "This topic looks like biography and is really attribution: given a result, name the person; given a person, name the "
+   "result. The questions are one mark each and they are decided in seconds.",
+   "What makes it easy is that you have already met most of the mathematics in other units. The four checks below are "
+   "those results. If they are solid, this lesson is mostly labelling; if they are not, the names will not stick to "
+   "anything."),
+  items=[
+   dict(ask="Which standard results in estimation theory carry Indian names?",
+     recall="The Cramér–Rao bound, the Rao–Blackwell theorem, Basu's theorem and the Bhattacharyya bound. All four are "
+            "taught in the estimation unit without their biography; this topic supplies the people.",
+     refresh=P(
+      "The Cramér–Rao inequality gives the lowest variance an unbiased estimator can have, and C. R. Rao derived it "
+      "independently of Harald Cramér. The Rao–Blackwell theorem says conditioning an unbiased estimator on a sufficient "
+      "statistic cannot increase its variance.",
+      "Basu's theorem — a complete sufficient statistic is independent of any ancillary statistic — is D. Basu's, and the "
+      "Bhattacharyya bound, which sharpens Cramér–Rao using higher derivatives, is A. Bhattacharyya's.",
+      "You met all four in Unit IV. Here they become evidence that a large part of standard estimation theory was written "
+      "in Calcutta.")),
+   dict(ask="What is a block design, and what do BIBD and PBIBD mean?",
+     recall="A block design arranges treatments into blocks so that comparisons stay fair when a single block cannot hold "
+            "every treatment. Balanced incomplete block designs give every pair of treatments the same number of joint "
+            "appearances; partially balanced designs relax that to a few different values, governed by an association "
+            "scheme.",
+     refresh=P(
+      "If you are testing seven fertilisers but each field can take only three, you cannot put every treatment in every "
+      "block. A design decides which three go where, and balance decides whether every pair of treatments is compared "
+      "equally often.",
+      "The balanced case is tidy but exists only for particular parameter combinations. Partial balance, introduced to "
+      "cover the cases full balance cannot reach, allows pairs to fall into classes, each class with its own number of "
+      "concurrences.",
+      "The vocabulary matters because the man who introduced partial balance is one of the five names in this lesson.")),
+   dict(ask="What is a Latin square, and a Graeco-Latin square?",
+     recall="A Latin square of order n is an n × n array in which each of n symbols appears exactly once in every row and "
+            "every column. Two Latin squares are orthogonal — together a Graeco-Latin square — if, superimposed, every "
+            "ordered pair of symbols occurs exactly once.",
+     refresh=P(
+      "Latin squares are the design that lets you control two nuisance factors at once: rows are one blocking factor, "
+      "columns another, and the Latin letters are the treatments.",
+      "Superimpose a second, orthogonal square and you can control three. Euler conjectured in 1782 that no such pair "
+      "exists when n is 6, 10, 14 and so on — orders of the form 4k + 2. That conjecture stood for 177 years.",
+      "Knowing what the object is makes the story in scene 7 land, and the story is one of the few in Indian statistics "
+      "that reached the front pages.")),
+   dict(ask="What does a sample survey need before it can be trusted, and what is a pilot survey?",
+     recall="A sampling frame, a probability design with known inclusion probabilities, trained field staff, and "
+            "estimates of the error. A pilot survey is a small survey run first to test the questionnaire, measure the "
+            "variability and cost, and so choose the sample size and design for the full survey.",
+     refresh=P(
+      "Nothing about a large survey is obvious in advance: how variable the quantity is, how long an interview takes, "
+      "how much a field day costs, which questions are misunderstood. Guess wrong and the main survey is wasted.",
+      "Running a small version first turns those unknowns into measured quantities, which then determine the sample size "
+      "and the allocation. The idea is standard today; it was not when Indian statisticians introduced it in the 1930s.",
+      "Two of the five people in this lesson built their careers on exactly this, one for crops in India and one for "
+      "hunger worldwide."))]))
+
+SC.append(dict(
+  kind="intuition", id="s1", title="Why the syllabus names five people", mins=4,
+  objective="See the group as one institution's output rather than five separate biographies.",
+  body=P(
+   "A syllabus that names individuals is unusual. This one names P. C. Mahalanobis, P. V. Sukhatme, R. C. Bose, S. N. Roy "
+   "and C. R. Rao, and then adds 'and other prominent Indian statisticians'.",
+   "The five are not a random selection of distinguished people. Four of them worked at the same institute in Calcutta, "
+   "founded by the fifth, within about two decades of each other. Mahalanobis built the Indian Statistical Institute in "
+   "1931 and then went looking for mathematicians; Bose and Roy arrived in the 1930s, Rao in the 1940s. The results they "
+   "produced there — the Cramér–Rao bound, the Rao–Blackwell theorem, partially balanced designs, the union–intersection "
+   "principle — are now taught everywhere, usually without any mention of where they came from.",
+   "Sukhatme is the exception that completes the picture: he worked on agricultural statistics in Delhi and then at the "
+   "Food and Agriculture Organization in Rome, applying the same survey ideas to crops and then to world hunger.",
+   "So the honest frame is this: a national statistical system and a body of theoretical statistics were built by the "
+   "same small group at the same time, and the syllabus names them because the exam expects you to know which result "
+   "belongs to whom."),
+  aside=dict(h="The sentence to carry into the exam",
+    body="Mahalanobis built the institutions; Rao, Bose and Roy produced the theory inside them; Sukhatme took the survey "
+         "method to agriculture and then to the world."),
+  ask=dict(q="Why would a statistical institute founded to do survey work end up producing pure results in design theory "
+             "and multivariate analysis?",
+    nudge="Ask what a survey statistician runs into when the sample is small, the design is awkward and the data have "
+          "many dimensions.")))
+
+SC.append(dict(
+  kind="theory", id="s2", title="P. C. Mahalanobis — the institution builder", mins=8,
+  objective="Attach the institutions and the two famous methods to Mahalanobis, with their years.",
+  blocks=[
+   dict(t="def", h="The man",
+     body="Prasanta Chandra Mahalanobis, 29 June 1893 – 28 June 1972, trained in physics at Cambridge and came to "
+          "statistics through Karl Pearson's Biometrika. He died one day before his seventy-ninth birthday."),
+   dict(t="formula", h="What he founded",
+     body="The Indian Statistical Institute: founding meeting 17 December 1931, formally registered in April 1932, and "
+          "declared an Institute of National Importance by an Act of Parliament in 1959. The journal Sankhyā: 1933. The "
+          "National Sample Survey: 1950. He was also the moving force behind the National Income Committee of 1949 and "
+          "therefore, indirectly, behind the CSO of 1951."),
+   dict(t="formula", h="The two methods that carry his name",
+     body="The Mahalanobis distance, a measure of distance between a point and a distribution that accounts for the "
+          "covariance structure — proposed in 1930 and given its definitive form in the 1936 paper. And fractile "
+          "graphical analysis, his method for comparing two socio-economic populations by plotting against fractile "
+          "groups rather than absolute levels."),
+   dict(t="step", h="Large-scale sample surveys and pilot studies",
+     body="His lasting methodological contribution is the practice of large-scale randomised sample surveys: pilot "
+          "surveys to measure variability and cost before committing, interpenetrating network of subsamples to measure "
+          "non-sampling error, and cost functions to choose the design. The interpenetrating subsample — splitting the "
+          "sample between independent teams to compare their results — is his, and it is the direct ancestor of modern "
+          "quality checks on field work."),
+   dict(t="note", h="The Second Five Year Plan",
+     body="His two-sector model, a variant of Leontief's input–output framework, underlay the Second Five Year Plan "
+          "(1956–61) and its emphasis on heavy industry. The Mahalanobis model is economics rather than statistics, but "
+          "it is asked, because it is the clearest case of a statistician setting national policy."),
+   dict(t="trap", h="National Statistics Day",
+     body="29 June, his birthday. The government decided on it in 2006 and it has been observed since 2007. Candidates "
+          "who remember the date often attach it to the wrong year or the wrong reason.")],
+  flow=dict(caption="What Mahalanobis built, and what grew out of it",
+    nodes=[
+      dict(id="m", r=0, c=1, w=2, label="P. C. Mahalanobis (1893–1972)", kind="start"),
+      dict(id="i", r=1, c=0, label="ISI, 1931", kind="step"),
+      dict(id="s", r=1, c=1, label="Sankhyā, 1933", kind="step"),
+      dict(id="n", r=1, c=2, label="National Income Cttee 1949", kind="step"),
+      dict(id="v", r=1, c=3, label="NSS, 1950", kind="step"),
+      dict(id="b", r=2, c=0, w=2, label="Bose · Roy · Rao · Basu trained there", kind="note"),
+      dict(id="c", r=2, c=2, label="CSO, 1951", kind="note"),
+      dict(id="d", r=2, c=3, label="Statistics Day, 29 June", kind="end")],
+    edges=[dict({"from":"m","to":"i"}), dict({"from":"m","to":"s"}), dict({"from":"m","to":"n"}),
+           dict({"from":"m","to":"v"}), dict({"from":"i","to":"b"}), dict({"from":"n","to":"c"}),
+           dict({"from":"v","to":"d"})])))
+
+SC.append(dict(
+  kind="theory", id="s3", title="C. R. Rao — the results you already use", mins=7,
+  objective="Attach four standard results and the main honours to Rao, and place him at the ISI.",
+  blocks=[
+   dict(t="def", h="The man",
+     body="Calyampudi Radhakrishna Rao, 10 September 1920 – 22 August 2023, died at 102. He joined the Indian Statistical "
+          "Institute in the 1940s, took his doctorate at Cambridge under R. A. Fisher, and led the ISI's research and "
+          "training school for more than forty years."),
+   dict(t="formula", h="What is named after him",
+     body="The Cramér–Rao bound, which he derived independently of Harald Cramér; the Rao–Blackwell theorem; Rao's score "
+          "test, the third of the classical trio with the likelihood ratio and Wald tests; orthogonal arrays, which "
+          "became central to industrial experimentation; and the Rao distance and the Fisher–Rao framework, which "
+          "founded information geometry."),
+   dict(t="step", h="Why this matters for the paper",
+     body="Three of these — the Cramér–Rao bound, Rao–Blackwell and the score test — are taught in Unit IV and Unit V as "
+          "pure technique. A question in Unit X asks only who they belong to. The marks are free if the link is made, "
+          "and invisible if it is not."),
+   dict(t="formula", h="Honours",
+     body="Padma Bhushan 1968, Padma Vibhushan 2001, the United States National Medal of Science in 2002, and the "
+          "International Prize in Statistics in 2023, a few months before his death at 102."),
+   dict(t="trap", h="Two Raos",
+     body="C. R. Rao the statistician is not V. K. R. V. Rao the economist, who sat on the National Income Committee of "
+          "1949 with Mahalanobis and Gadgil. Both appear in this module and a careless question will put one in the "
+          "other's place.")],
+  scenario=dict(
+    teaser="One paper, written in his mid-twenties, holds three of the results you have already been examined on.",
+    title="The 1945 paper that carried three theorems",
+    body=P(
+      "In 1945 the Bulletin of the Calcutta Mathematical Society published a paper by a young ISI statistician titled "
+      "'Information and the accuracy attainable in the estimation of statistical parameters'. It runs to a few pages. It "
+      "contains three things that are now separately famous.",
+      "The first is the inequality that bounds the variance of any unbiased estimator below by the reciprocal of the "
+      "Fisher information — the Cramér–Rao bound, which Harald Cramér arrived at independently at about the same time, "
+      "which is why the name carries both men. The second is the result that conditioning an unbiased estimator on a "
+      "sufficient statistic cannot increase its variance, and usually reduces it — the Rao–Blackwell theorem, which "
+      "David Blackwell also found independently. The third is less often taught at this level: Rao treated a family of "
+      "distributions as a curved space and gave it a metric built from the Fisher information, which is the seed of what "
+      "is now called information geometry, and the origin of the Rao distance.",
+      "The point for Unit X is not the mathematics, which Unit IV already covers. It is that two of the standard results "
+      "of estimation theory, and a whole modern field, come out of a single early paper by a single Indian statistician — "
+      "and that the hyphenated names, Cramér–Rao and Rao–Blackwell, each record an independent co-discovery rather than "
+      "a collaboration. Questions test exactly that distinction.",
+      "Rao went on to the score test, to orthogonal arrays, and to a career of sixty years at the ISI and then in the "
+      "United States, receiving the National Medal of Science in 2002 and the International Prize in Statistics in 2023."),
+    close="When a result carries two surnames, ask whether they worked together or found it apart: here, apart, both times.")))
+
+SC.append(dict(
+  kind="recall", id="s4", title="Pause and recall", mins=3,
+  objective="Retrieve the attributions before the remaining three names are added.",
+  intro="Answer aloud, then look. Attribution questions are pure retrieval and reward exactly this.",
+  items=[
+   dict(q="What did Mahalanobis found, and in which years?",
+     a="The Indian Statistical Institute (1931), the journal Sankhyā (1933) and the National Sample Survey (1950). The "
+       "ISI became an Institute of National Importance in 1959."),
+   dict(q="Name four results associated with C. R. Rao.",
+     a="The Cramér–Rao bound, the Rao–Blackwell theorem, Rao's score test, and orthogonal arrays — with the Rao distance "
+       "and information geometry as a fifth."),
+   dict(q="When is National Statistics Day, and why that date?",
+     a="29 June, Mahalanobis's birthday. Decided in 2006, observed since 2007."),
+   dict(q="Which two statistical results are named for D. Basu and A. Bhattacharyya?",
+     a="Basu's theorem, on the independence of a complete sufficient statistic and an ancillary statistic; and the "
+       "Bhattacharyya bound, which sharpens Cramér–Rao using higher-order derivatives."),
+   dict(q="Which prize did C. R. Rao receive in the year before his death?",
+     a="The International Prize in Statistics, in 2023.")]))
+
+SC.append(dict(
+  kind="completion", id="s5", title="Your turn — attach each result to its author", mins=6,
+  objective="Produce the attributions without prompting.",
+  problem="Fill in the name each result belongs to, and the institution behind the first.",
+  steps=[
+   dict(say="The lower bound on the variance of an unbiased estimator.",
+     blank=dict(prompt="Which bound, and which Indian statistician?", answer="Cramér–Rao bound, C. R. Rao",
+       accept=["Cramer-Rao bound, C R Rao","Cramér–Rao, C. R. Rao","Cramer Rao bound C R Rao",
+               "Cramér-Rao bound, CR Rao","Cramer-Rao, C.R. Rao"],
+       hint="Derived independently of a Swedish statistician of the same era."),
+     why="The single most reused attribution in the module — it appears in Unit IV as technique and here as authorship."),
+   dict(say="The institute founded in Calcutta in 1931.",
+     blank=dict(prompt="Which institute, founded by whom?", answer="Indian Statistical Institute, Mahalanobis",
+       accept=["ISI, Mahalanobis","Indian Statistical Institute, P C Mahalanobis","ISI founded by Mahalanobis",
+               "Indian Statistical Institute (Mahalanobis)"],
+       hint="Its journal followed two years later."),
+     why="Four of the five names in this lesson passed through it."),
+   dict(say="The design that relaxes full balance using an association scheme.",
+     blank=dict(prompt="Which design, introduced by whom?", answer="PBIBD, R. C. Bose",
+       accept=["Partially balanced incomplete block design, R C Bose","PBIBD, Bose","PBIBD R C Bose",
+               "Partially balanced incomplete block designs, Bose"],
+       hint="Introduced in 1939 with K. R. Nair."),
+     why="Design of experiments is where the Indian school was strongest, and this is its signature object."),
+   dict(say="The principle behind the largest-root test in multivariate analysis.",
+     blank=dict(prompt="Which principle, due to whom?", answer="Union–intersection principle, S. N. Roy",
+       accept=["Union-intersection principle, S N Roy","union intersection, S. N. Roy","Union–intersection, Roy",
+               "Union-intersection principle (S. N. Roy)"],
+       hint="The man who shared the ISI's mathematics leadership with Bose."),
+     why="Roy is the least known of the five and the most likely to be the answer nobody wrote."),
+   dict(say="The statistician who took survey sampling to agriculture and then to the FAO.",
+     blank=dict(prompt="Who?", answer="P. V. Sukhatme",
+       accept=["Sukhatme","P V Sukhatme","Pandurang Vasudeo Sukhatme","P.V. Sukhatme"],
+       hint="Statistical adviser at the ICAR, then twenty years in Rome."),
+     why="The only one of the five whose main work was outside the ISI.")],
+  after="Five results, five names: Cramér–Rao to Rao, the ISI to Mahalanobis, the PBIBD to Bose, union–intersection to "
+        "Roy, agricultural and world food surveys to Sukhatme."))
+
+SC.append(dict(
+  kind="theory", id="s6", title="Bose, Roy and Sukhatme", mins=8,
+  objective="Give the other three their results, their dates and their institutions.",
+  blocks=[
+   dict(t="def", h="R. C. Bose, 1901–1987 — design of experiments",
+     body="Invited to the ISI by Mahalanobis in December 1932 on the strength of his geometry, and turned towards "
+          "statistics there. With K. R. Nair he introduced partially balanced incomplete block designs in 1939. With "
+          "D. M. Mesner he developed association schemes and the algebra now called the Bose–Mesner algebra, in 1959. "
+          "With D. K. Ray-Chaudhuri he gave the BCH family of error-correcting codes. He later headed the Department of "
+          "Statistics at Calcutta University and then moved to the United States."),
+   dict(t="formula", h="And the conjecture he broke",
+     body="With S. S. Shrikhande and E. T. Parker he disproved Euler's conjecture of 1782 that no pair of orthogonal "
+          "Latin squares exists for orders 4k + 2, by constructing a Graeco-Latin square of order 10. The work appeared "
+          "in 1959–60 and the three became known as Euler's spoilers."),
+   dict(t="def", h="S. N. Roy, 1906–1964 — multivariate analysis",
+     body="Samarendra Nath Roy shared the ISI's mathematical leadership with Bose and later moved to the University of "
+          "North Carolina at Chapel Hill. He gave the union–intersection principle, a general way of building a test for "
+          "a composite hypothesis out of tests for its simple components, and Roy's largest root test, which follows from "
+          "it and remains one of the four standard multivariate test statistics."),
+   dict(t="def", h="P. V. Sukhatme, 1911–1997 — agricultural and food statistics",
+     body="Trained at University College London, he was Statistical Adviser to the Indian Council of Agricultural "
+          "Research from 1940 to 1951 and was instrumental in founding what is now the Indian Agricultural Statistics "
+          "Research Institute. From 1951 to 1971 he directed the Statistics Division of the Food and Agriculture "
+          "Organization in Rome. His textbook, Sampling Theory of Surveys with Applications (1954), taught survey "
+          "sampling to a generation."),
+   dict(t="step", h="Sukhatme on hunger",
+     body="At the FAO he built the statistical machinery for estimating the extent of world hunger and the protein gap. "
+          "He later argued, in what became the Sukhatme–Margen hypothesis, that the body adapts its efficiency at low "
+          "intakes, and showed that variation in a single person's intake over time exceeded variation between people — "
+          "a finding that cut against the simple calorie-counting approach to measuring poverty. He received the Guy "
+          "Medal in Silver of the Royal Statistical Society in 1963 and the Padma Bhushan in 1971."),
+   dict(t="trap", h="Who is paired with whom",
+     body="Bose with Nair (PBIBD), Mesner (algebra), Shrikhande and Parker (Euler), Ray-Chaudhuri (codes). Sukhatme with "
+          "Panse (Statistical Methods for Agricultural Workers) and Margen (the nutrition hypothesis). A matching "
+          "question will mix these pairings, and they are the only hard thing in the lesson.")],
+  flow=dict(caption="The three names, their fields, and the collaborators the exam pairs them with",
+    nodes=[
+      dict(id="b", r=0, c=0, label="R. C. Bose (1901–1987)", kind="start"),
+      dict(id="r", r=0, c=1, label="S. N. Roy (1906–1964)", kind="start"),
+      dict(id="s", r=0, c=2, w=2, label="P. V. Sukhatme (1911–1997)", kind="start"),
+      dict(id="bd", r=1, c=0, label="Design of experiments", kind="step"),
+      dict(id="rd", r=1, c=1, label="Multivariate analysis", kind="step"),
+      dict(id="sd", r=1, c=2, w=2, label="Survey sampling · agriculture", kind="step"),
+      dict(id="b1", r=2, c=0, label="PBIBD, with Nair, 1939", kind="note"),
+      dict(id="r1", r=2, c=1, label="Union–intersection principle", kind="note"),
+      dict(id="s1", r=2, c=2, label="ICAR adviser 1940–51", kind="note"),
+      dict(id="s2", r=2, c=3, label="FAO Rome 1951–71", kind="note"),
+      dict(id="b2", r=3, c=0, label="Euler disproof, with Shrikhande and Parker", kind="end"),
+      dict(id="r2", r=3, c=1, label="Largest root test", kind="end"),
+      dict(id="s3", r=3, c=2, w=2, label="Sampling Theory of Surveys, 1954", kind="end")],
+    edges=[dict({"from":"b","to":"bd"}), dict({"from":"r","to":"rd"}), dict({"from":"s","to":"sd"}),
+           dict({"from":"bd","to":"b1"}), dict({"from":"rd","to":"r1"}), dict({"from":"sd","to":"s1"}),
+           dict({"from":"sd","to":"s2"}), dict({"from":"b1","to":"b2"}), dict({"from":"r1","to":"r2"}),
+           dict({"from":"s1","to":"s3"})])))
+
+SC.append(dict(
+  kind="theory", id="s7", title="The others the syllabus leaves open", mins=6,
+  objective="Carry a short, defensible list of further names, and the two institutional facts attached to them.",
+  blocks=[
+   dict(t="step", h="Named results you have already used",
+     body="D. Basu — Basu's theorem, on the independence of a complete sufficient statistic from any ancillary statistic. "
+          "A. Bhattacharyya — the Bhattacharyya bound, a refinement of Cramér–Rao, and the Bhattacharyya distance between "
+          "distributions. Both worked in the same Calcutta school."),
+   dict(t="step", h="Design theory and beyond",
+     body="K. R. Nair, Bose's co-author on partially balanced designs. S. S. Shrikhande, 1917–2020, of the Euler "
+          "disproof, after whom the Shrikhande graph is named. The geneticist J. B. S. Haldane spent his later career at "
+          "the ISI, which is the usual way he enters an Indian statistics paper."),
+   dict(t="formula", h="The two institutional facts",
+     body="The ISI was declared an Institute of National Importance by an Act of Parliament in 1959, and it awards its "
+          "own degrees. National Statistics Day is 29 June, Mahalanobis's birthday, decided in 2006 and observed since "
+          "2007. The International Statistical Institute is a different body altogether — an international learned "
+          "society, not Indian — and the similarity of the abbreviations is a deliberate trap."),
+   dict(t="note", h="How much to carry",
+     body="For five names the syllabus is explicit and you should know dates, institutions and at least two "
+          "contributions each. For the rest, the result and the name is enough: Basu's theorem, the Bhattacharyya bound, "
+          "Shrikhande and the Euler disproof.")],
+  scenario=dict(
+    teaser="A 177-year-old conjecture by Euler, broken in 1959 by three men working on agricultural field trials.",
+    title="Euler's spoilers and the Graeco-Latin square of order 10",
+    body=P(
+      "In 1782 Leonhard Euler asked whether 36 officers of six ranks and six regiments could be arranged in a 6 × 6 "
+      "square so that each row and each column held one officer of every rank and one from every regiment. He could not "
+      "do it, and conjectured that it was impossible not only for 6 but for every order of the form 4k + 2 — 6, 10, 14, "
+      "18 and so on.",
+      "The conjecture stood for 177 years. It was correct for 6, as a French mathematician showed by exhaustion in 1900. "
+      "Then in 1959 R. C. Bose and S. S. Shrikhande constructed a counterexample of order 22, and with E. T. Parker they "
+      "went on to show that the conjecture fails for every order of that form except 6. Parker constructed the order-10 "
+      "case, which became the famous picture.",
+      "What makes the episode belong in a statistics syllabus rather than a mathematics one is where the three came "
+      "from. Bose had been brought into statistics by Mahalanobis to work on the design of agricultural experiments; "
+      "orthogonal Latin squares are a design device for controlling two nuisance factors at once. The mathematics that "
+      "overturned Euler was developed because someone needed to lay out field trials properly.",
+      "The press called them Euler's spoilers and the order-10 square made the cover of Scientific American. For the "
+      "exam, carry the three names, the object constructed, and the fact that the conjecture fails for every 4k + 2 "
+      "order except 6."),
+    close="Applied problems generate real mathematics: the design of a crop trial is what finally answered Euler.")))
+
+SC.append(dict(
+  kind="guided", id="s8", title="Attribute each contribution", mins=6,
+  objective="Perform the exact task the exam sets.",
+  problem="Name the statistician for each: (a) the interpenetrating network of subsamples; (b) the union–intersection "
+          "principle; (c) partially balanced incomplete block designs; (d) the statistical measurement of world hunger "
+          "at the FAO; (e) the theorem that a complete sufficient statistic is independent of an ancillary statistic.",
+  hints=["Sort them first by field: survey methodology, multivariate analysis, design of experiments, food statistics, "
+         "estimation theory.",
+         "Two of the five are among the syllabus's named people but are the least famous of them.",
+         "The last one is not in the syllabus list by name, but you proved it in Unit IV."],
+  solution=[
+   dict(say="(a) Mahalanobis — the device for measuring non-sampling error by splitting a sample between independent "
+            "teams.", math="Interpenetrating subsamples → Mahalanobis"),
+   dict(say="(b) S. N. Roy, from which his largest root test follows.",
+     math="Union–intersection → S. N. Roy"),
+   dict(say="(c) R. C. Bose, with K. R. Nair, in 1939.", math="PBIBD → Bose and Nair"),
+   dict(say="(d) P. V. Sukhatme, as Director of the FAO's Statistics Division from 1951 to 1971.",
+     math="World hunger statistics → Sukhatme"),
+   dict(say="(e) D. Basu — Basu's theorem.", math="Complete sufficient ⟂ ancillary → Basu")],
+  answer="Mahalanobis; S. N. Roy; R. C. Bose (with K. R. Nair); P. V. Sukhatme; D. Basu.",
+  check="If (a) went to Sukhatme, you have matched 'surveys' to the wrong man: Sukhatme's surveys were agricultural and "
+        "international, the interpenetrating design is Mahalanobis's."))
+
+SC.append(dict(
+  kind="trapcheck", id="s9", title="Six statements — verdict on each before you look", mins=6,
+  objective="Meet the attribution errors the paper actually uses.",
+  intro="Each is either the standard fact or a swap of one name for another.",
+  items=[
+   dict(claim="The Indian Statistical Institute was founded by P. C. Mahalanobis in 1931 and declared an Institute of "
+              "National Importance in 1959.", tf=True,
+     why="Founding meeting December 1931, registered 1932, and the Act of Parliament in 1959."),
+   dict(claim="C. R. Rao received the International Prize in Statistics in 2023.", tf=True,
+     why="Awarded in 2023, a few months before his death in August of that year at the age of 102. He also held the "
+         "Padma Vibhushan (2001) and the US National Medal of Science (2002)."),
+   dict(claim="Euler's conjecture on orthogonal Latin squares was disproved by Mahalanobis, Bose and Roy.", tf=False,
+     why="By R. C. Bose, S. S. Shrikhande and E. T. Parker, in 1959–60. Mahalanobis and Roy had nothing to do with it; "
+         "the names are swapped from the same institute."),
+   dict(claim="The union–intersection principle is due to S. N. Roy.", tf=True,
+     why="And Roy's largest root test follows from it. Roy worked at the ISI and later at Chapel Hill."),
+   dict(claim="P. V. Sukhatme directed the Statistics Division of the Food and Agriculture Organization.", tf=True,
+     why="From 1951 to 1971, after eleven years as Statistical Adviser to the Indian Council of Agricultural Research."),
+   dict(claim="National Statistics Day is observed on 29 June to mark the founding of the Indian Statistical Institute.",
+     tf=False,
+     why="The date is right and the reason is wrong: 29 June is Mahalanobis's birthday. The ISI was founded in December. "
+         "The day was decided in 2006 and has been observed since 2007.")]))
+
+SC.append(dict(
+  kind="guided", id="s10", title="Transfer — a case the lesson has not shown you", mins=6,
+  objective="Reason about attribution when the question gives you a result you have not been told the author of.",
+  problem="A question asks: 'The idea of running a small preliminary survey to estimate variability and cost, and then "
+          "choosing the sample size from those estimates, is most closely associated with which statistician?' No name "
+          "is given in your notes for 'pilot survey'. How do you answer, and how confident should you be?",
+  hints=["Ask which of the five worked on the design of large surveys at the time the idea entered practice.",
+         "Two of the five worked on surveys. Separate them by subject matter and by decade.",
+         "Consider what the examiner is likely to have in mind, and whether any other option in a four-option question "
+         "could be defended."],
+  solution=[
+   dict(say="Two of the five are survey people: Mahalanobis and Sukhatme. The others are theory — estimation, design, "
+            "multivariate analysis — and can be set aside immediately.",
+     math="Survey methodology → Mahalanobis or Sukhatme"),
+   dict(say="Sukhatme's survey work is agricultural and, from 1951, international; Mahalanobis's is the design of "
+            "large-scale household surveys in India from the 1930s, where the pilot survey, the cost function and the "
+            "interpenetrating subsample all originate.",
+     math="Pilot survey + cost function + 1930s India → Mahalanobis"),
+   dict(say="So the answer is Mahalanobis, and the confidence is high — not because the phrase was memorised, but "
+            "because the field and the decade both point one way and no other option survives them.",
+     math="Answer: Mahalanobis")],
+  answer="Mahalanobis, reached by eliminating the three theorists and then separating the two survey statisticians by "
+         "subject and period.",
+  check="The method matters more than this one answer: in attribution questions, sort by field first, then by period. "
+        "It converts a memory question into a two-step deduction."))
+
+SC.append(dict(
+  kind="summary", id="s11", title="What you should now be able to do unaided", mins=3,
+  objective="Compress five biographies to what the exam asks.",
+  body=P(
+   "Mahalanobis (1893–1972): founded the ISI (1931), Sankhyā (1933) and the National Sample Survey (1950); the "
+   "Mahalanobis distance and fractile graphical analysis; pilot surveys, cost functions and interpenetrating subsamples; "
+   "the two-sector model behind the Second Five Year Plan. National Statistics Day, 29 June, is his birthday.",
+   "C. R. Rao (1920–2023): the Cramér–Rao bound, the Rao–Blackwell theorem, Rao's score test, orthogonal arrays, the Rao "
+   "distance and information geometry. Padma Vibhushan 2001, US National Medal of Science 2002, International Prize in "
+   "Statistics 2023.",
+   "R. C. Bose (1901–1987): partially balanced incomplete block designs with K. R. Nair (1939); the Bose–Mesner algebra "
+   "(1959); BCH codes with Ray-Chaudhuri; and, with Shrikhande and Parker, the disproof of Euler's conjecture.",
+   "S. N. Roy (1906–1964): the union–intersection principle and Roy's largest root test; ISI, then Chapel Hill.",
+   "P. V. Sukhatme (1911–1997): random sampling in agricultural statistics; ICAR 1940–51; FAO Statistics Division "
+   "1951–71; Sampling Theory of Surveys with Applications (1954); the measurement of world hunger; Guy Medal 1963.",
+   "Beyond the five: Basu's theorem; the Bhattacharyya bound; K. R. Nair and S. S. Shrikhande in design theory; the ISI "
+   "an Institute of National Importance since 1959. Do not confuse the Indian Statistical Institute with the "
+   "International Statistical Institute.")))
+
+SC.append(dict(kind="quiz", id="s12", title="Mastery test", mins=12,
+  objective="Ten unseen questions, drawn 3 easy / 5 moderate / 2 hard.", setId="official_t3_mastery"))
+
+LES = dict(
+  id="officialt3", moduleId="official", topicId="official-t3",
+  title="Indian Statisticians and Their Contributions",
+  breadcrumb="Official Statistics → Indian Statistical System → Indian statisticians",
+  engine="A", engineName="Institutions and official statistics — who produced which result, and where",
+  estMin=sum(s["mins"] for s in SC), version="1.0", status="approved",
+  provenance="Authored for this platform in October 2026. Dates and attributions checked against the biographical "
+             "records for each statistician: Mahalanobis (ISI 1931, Sankhyā 1933, Institute of National Importance "
+             "1959, National Statistics Day decided 2006), C. R. Rao (1920–2023; Padma Vibhushan 2001, National Medal "
+             "of Science 2002, International Prize in Statistics 2023), R. C. Bose (PBIBD 1939 with Nair, Bose–Mesner "
+             "1959, Euler disproof with Shrikhande and Parker), S. N. Roy (1906–1964) and P. V. Sukhatme (ICAR "
+             "1940–51, FAO 1951–71, Guy Medal 1963). Where a date is disputed — the Mahalanobis distance, 1930 or "
+             "1936 — the lesson gives both and no question tests it.",
+  objectives=[
+    "State what Mahalanobis founded, in which years, and the two methods that carry his name.",
+    "Attach the Cramér–Rao bound, Rao–Blackwell, the score test and orthogonal arrays to C. R. Rao, with his main honours.",
+    "Give R. C. Bose's contributions to design of experiments and his part in the disproof of Euler's conjecture.",
+    "Identify S. N. Roy with the union–intersection principle and the largest root test.",
+    "Place P. V. Sukhatme in agricultural and world food statistics, with his institutions and his book.",
+    "Attribute Basu's theorem and the Bhattacharyya bound, and keep the ISI distinct from the International Statistical Institute."],
+  prereq=[
+    dict(id="p1", name="Results named after Indian statisticians",
+         why="Cramér–Rao, Rao–Blackwell, Basu and Bhattacharyya are taught in Unit IV without their biography; this "
+             "topic supplies the people."),
+    dict(id="p2", name="Block designs: BIBD and PBIBD",
+         why="Bose's signature contribution is the partially balanced design, and the term has to mean something."),
+    dict(id="p3", name="Latin and Graeco-Latin squares",
+         why="The Euler conjecture story is unintelligible without the object it is about."),
+    dict(id="p4", name="Sample surveys and pilot studies",
+         why="Two of the five built their careers on survey methodology, and the vocabulary separates them.")],
+  mastery={"minQ":10, "pass":80, "draw":10, "fmtMin":{"numeric":70,"multi":70},
+    "diffMix":{"easy":3,"moderate":5,"hard":2}, "noHints":True, "retestDays":7,
+    "note":"Platform settings, not an NTA rule. Ten drawn from a pool of twenty at 3 easy / 5 moderate / 2 hard; a "
+           "retake draws again, holding the mix and pulling back items previously got wrong."},
+  refs=[
+      {
+          "title": "History of the Indian Statistical Institute",
+          "where": "Founding date, and the 1959 Act of Parliament",
+          "site": "Indian Statistical Institute (official)",
+          "url": "https://www.isical.ac.in/~lru/history.html",
+          "type": "Institutional page",
+          "free": True,
+          "checked": "2026-10-14",
+          "why": "The Institute's own statement: founded by Mahalanobis in Kolkata on 17 December 1931, and an Institute of National Importance by an Act of Parliament in 1959. Use it in preference to any secondary summary for these two dates."
+      },
+      {
+          "title": "C. R. Rao awarded the 2023 International Prize in Statistics",
+          "where": "The 1945 paper, and the three results it contained",
+          "site": "Amstat News, American Statistical Association",
+          "url": "https://magazine.amstat.org/blog/2023/04/01/rao-awarded-2023-prize/",
+          "type": "Professional society announcement",
+          "free": True,
+          "checked": "2026-10-14",
+          "why": "The source for the claim in scene 4 that one 1945 paper in the Bulletin of the Calcutta Mathematical Society carried the Cramer-Rao bound, the Rao-Blackwell theorem and the seed of information geometry."
+      },
+      {
+          "title": "Raj Chandra Bose",
+          "where": "Biography, PBIBD with K. R. Nair, and the Euler disproof",
+          "site": "MacTutor History of Mathematics Archive, University of St Andrews",
+          "url": "https://mathshistory.st-andrews.ac.uk/Biographies/Bose_Raj/",
+          "type": "Scholarly biographical archive",
+          "free": True,
+          "checked": "2026-10-14",
+          "why": "A sourced biography rather than an encyclopaedia summary, including Shrikhande's own account of the Euler work and the 'Euler spoilers' episode. Note that it states the failing orders loosely; this lesson's '4k + 2, except 6' is the precise form."
+      },
+      {
+          "title": "Sampling Theory of Surveys with Applications",
+          "where": "The textbook named in the syllabus",
+          "site": "P. V. Sukhatme",
+          "url": "",
+          "type": "Textbook",
+          "free": False,
+          "checked": "2026-10-14",
+          "isbn": "978-8171641536",
+          "why": "The book itself, rather than a description of it. Worth seeing once so that the name attaches to a real object: it is the work that carried Indian agricultural sampling into international practice."
+      },
+      {
+          "title": "Linear Statistical Inference and Its Applications, 2nd edition",
+          "where": "C. R. Rao's own text",
+          "site": "C. R. Rao",
+          "url": "",
+          "type": "Textbook",
+          "free": False,
+          "checked": "2026-10-14",
+          "isbn": "978-0471218753",
+          "why": "If you want to see how the man wrote, this is the source. Chapter 5 contains his treatment of the information inequality that carries his name."
+      }
+  ],
+  revision=dict(
+    sheet=[
+      "Mahalanobis 1893–1972; ISI founded 1931 (registered 1932); Sankhyā 1933; NSS 1950.",
+      "ISI declared an Institute of National Importance by Act of Parliament, 1959.",
+      "Mahalanobis distance (1930, definitive 1936); fractile graphical analysis; pilot surveys; interpenetrating subsamples.",
+      "Mahalanobis's two-sector model underlay the Second Five Year Plan (1956–61).",
+      "National Statistics Day: 29 June, his birthday; decided 2006, observed since 2007.",
+      "C. R. Rao 1920–2023: Cramér–Rao bound, Rao–Blackwell theorem, Rao's score test, orthogonal arrays, Rao distance.",
+      "Rao's honours: Padma Bhushan 1968, Padma Vibhushan 2001, US National Medal of Science 2002, International Prize "
+      "in Statistics 2023.",
+      "R. C. Bose 1901–1987: PBIBD with K. R. Nair (1939); Bose–Mesner algebra (1959); BCH codes with Ray-Chaudhuri.",
+      "Bose, Shrikhande and Parker disproved Euler's conjecture; the conjecture fails for every 4k + 2 order except 6.",
+      "S. N. Roy 1906–1964: union–intersection principle; Roy's largest root test; ISI then Chapel Hill.",
+      "P. V. Sukhatme 1911–1997: ICAR Statistical Adviser 1940–51; FAO Statistics Division 1951–71.",
+      "Sukhatme: Sampling Theory of Surveys with Applications (1954); Guy Medal 1963; Padma Bhushan 1971.",
+      "D. Basu — Basu's theorem. A. Bhattacharyya — the Bhattacharyya bound and distance.",
+      "The Indian Statistical Institute is not the International Statistical Institute."],
+    cards=[
+      ["Founded the ISI, Sankhyā and the NSS", "P. C. Mahalanobis — 1931, 1933, 1950"],
+      ["National Statistics Day", "29 June, Mahalanobis's birthday; observed since 2007"],
+      ["Cramér–Rao, Rao–Blackwell, score test, orthogonal arrays", "C. R. Rao (1920–2023)"],
+      ["International Prize in Statistics 2023", "C. R. Rao, at the age of 102"],
+      ["Partially balanced incomplete block designs, 1939", "R. C. Bose with K. R. Nair"],
+      ["Disproved Euler's conjecture", "Bose, Shrikhande and Parker — 'Euler's spoilers'"],
+      ["Union–intersection principle and the largest root test", "S. N. Roy (1906–1964)"],
+      ["FAO Statistics Division, 1951–71", "P. V. Sukhatme"],
+      ["Sampling Theory of Surveys with Applications, 1954", "P. V. Sukhatme"],
+      ["Complete sufficient ⟂ ancillary", "Basu's theorem — D. Basu"]],
+    tricks=[
+      dict(hook="One institute, four of the five",
+           why="Mahalanobis founded the ISI; Bose, Roy and Rao worked in it. Only Sukhatme sits outside — ICAR and FAO."),
+      dict(hook="Rao has the theorems, Bose has the designs, Roy has the multivariate",
+           why="Three theorists, three fields. Sorting by field answers most attribution questions before you think."),
+      dict(hook="29 June is a birthday, not a founding",
+           why="Statistics Day marks Mahalanobis's birth, not the ISI's founding, which was in December."),
+      dict(hook="Two Raos, two Boses",
+           why="C. R. Rao the statistician versus V. K. R. V. Rao the economist; R. C. Bose the designer versus the "
+               "physicist S. N. Bose, who is not in this syllabus at all.")],
+    shortcuts=[
+      "Theory → Rao. Designs → Bose. Multivariate → Roy. Surveys in India → Mahalanobis. Surveys of food → Sukhatme.",
+      "Any option pairing Mahalanobis with a theorem of estimation is almost certainly wrong.",
+      "Any option crediting the Euler disproof to someone other than Bose, Shrikhande or Parker is wrong.",
+      "If the question says International Statistical Institute, it is not talking about the ISI in Calcutta."],
+    remember=[
+      "Sort an attribution question by field before you reach for a name: estimation, design, multivariate, surveys, food.",
+      "Mahalanobis built the institutions; the other four filled them with results."],
+    traps=[
+      "Crediting the Euler disproof to Mahalanobis or Roy instead of Bose, Shrikhande and Parker.",
+      "Attaching National Statistics Day to the ISI's founding rather than to Mahalanobis's birthday.",
+      "Confusing C. R. Rao with V. K. R. V. Rao of the National Income Committee.",
+      "Confusing the Indian Statistical Institute with the International Statistical Institute.",
+      "Giving the interpenetrating subsample to Sukhatme because he too worked on surveys.",
+      "Dating the Mahalanobis distance confidently: sources give 1930 and 1936 for different papers."]),
+  traps=[
+    "Euler's conjecture was disproved by Bose, Shrikhande and Parker — not by any other ISI figure.",
+    "National Statistics Day marks Mahalanobis's birthday, not the founding of the ISI.",
+    "C. R. Rao is not V. K. R. V. Rao; the latter was an economist on the National Income Committee.",
+    "The Indian Statistical Institute and the International Statistical Institute are different bodies.",
+    "Interpenetrating subsamples and pilot surveys are Mahalanobis's; Sukhatme's surveys were agricultural and international.",
+    "The ISI became an Institute of National Importance in 1959, which is not its founding year.",
+    "The Mahalanobis distance is dated 1930 in some sources and 1936 in others; do not bet a mark on the year."],
+  scenes=SC)
+
+json.dump(LES, io.open("seed/lesson_10a3.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+k = {}
+for s in SC: k[s["kind"]] = k.get(s["kind"], 0) + 1
+print("lesson 10A.3 written: %d scenes %s" % (len(SC), k))
+print("  flow %d · scenarios %d · est %d min" %
+      (len([s for s in SC if s.get("flow")]), len([s for s in SC if s.get("scenario")]), LES["estMin"]))

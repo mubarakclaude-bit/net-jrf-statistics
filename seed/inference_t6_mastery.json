@@ -1,0 +1,426 @@
+{
+ "moduleId": "inference",
+ "source": "mastery",
+ "topicId": "inference-t6",
+ "label": "Cramér–Rao and Fisher information — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "inf-t6-m-01",
+   "format": "single",
+   "topic": "inference-t6",
+   "stem": "Fisher information for a single observation may be computed as:",
+   "options": [
+    "−E[∂²ℓ/∂θ²], which equals E[(∂ℓ/∂θ)²] under regularity",
+    "E[∂ℓ/∂θ], which is non-zero under regularity",
+    "E[∂²ℓ/∂θ²], which equals Var(∂ℓ/∂θ) always",
+    "−∂²ℓ/∂θ² evaluated at θ̂"
+   ],
+   "answer": "A",
+   "explanation": "Both forms in A are standard and agree under regularity. B has the wrong sign and drops the condition. C is the OBSERVED information — a number from one dataset, not the expected information the bound uses. D is wrong on the fact: the score has expectation zero under regularity, which is why its variance is the useful quantity.",
+   "diff": "easy"
+  },
+  {
+   "id": "inf-t6-m-02",
+   "format": "numeric",
+   "topic": "inference-t6",
+   "stem": "X₁,…,X₂₅ are iid Bernoulli(p) with p = 0.4. Give the Cramér–Rao bound for unbiased estimators of p, and say whether x̄ attains it.",
+   "options": [
+    "0.0096, and x̄ does not attain it",
+    "0.0096, and x̄ attains it",
+    "0.24, and x̄ attains it",
+    "0.24, and x̄ does not attain it"
+   ],
+   "answer": "B",
+   "explanation": "I(p) = 1/(p(1−p)), so the bound is p(1−p)/n = (0.4)(0.6)/25 = 0.24/25 = 0.0096. And Var(x̄) = p(1−p)/n is exactly that, so x̄ is efficient. Option C forgets to divide by n.",
+   "check": "Two parts: the number and the attainment verdict. 0.24 is p(1−p) before dividing by n — check the n is in there.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t6-m-03",
+   "format": "multi",
+   "topic": "inference-t6",
+   "stem": "Consider the Cramér–Rao bound and its conditions.",
+   "options": [
+    "A and C only",
+    "B and C only",
+    "A, B and D only",
+    "A, C and D only"
+   ],
+   "answer": "C",
+   "explanation": "A is true — the squared derivative is the correct numerator for a function of θ. B is true, and is the general form that reduces to the standard one when b ≡ 0. C is false: the converse fails, as the exponential rate shows. D is true, and is why U(0,θ) is excluded.",
+   "statements": [
+    "For T unbiased for g(θ), the bound is [g′(θ)]²/(nI(θ)).",
+    "For a biased T with bias b(θ), the bound is (1+b′(θ))²/(nI(θ)).",
+    "Every UMVUE attains the Cramér–Rao bound.",
+    "The bound requires the support of the density to be free of θ."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The derivative is squared; forgetting the square is the commonest error in the topic."
+    },
+    "B": {
+     "tf": true,
+     "why": "The general form. Setting b ≡ 0 recovers the standard statement."
+    },
+    "C": {
+     "tf": false,
+     "why": "The exponential rate's UMVUE has variance λ²/(n−2), strictly above the floor λ²/n."
+    },
+    "D": {
+     "tf": true,
+     "why": "A moving support breaks differentiation under the integral, and with it the whole derivation."
+    }
+   },
+   "diff": "hard"
+  },
+  {
+   "id": "inf-t6-m-04",
+   "format": "numeric",
+   "topic": "inference-t6",
+   "stem": "X₁,…,X₁₆ are iid Poisson(λ) with λ = 4. Give Iₙ(λ) and the Cramér–Rao bound for unbiased estimators of λ.",
+   "options": [
+    "Iₙ = 0.25, bound = 4",
+    "Iₙ = 64, bound = 0.015625",
+    "Iₙ = 4, bound = 4",
+    "Iₙ = 4, bound = 0.25"
+   ],
+   "answer": "D",
+   "explanation": "I₁(λ) = 1/λ = 0.25, so Iₙ = n/λ = 16/4 = 4, and the bound is its reciprocal, 1/4 = 0.25. Note Var(x̄) = λ/n = 0.25 too, so x̄ attains it. Option B uses I₁ = λ rather than 1/λ.",
+   "check": "The bound is the RECIPROCAL of the total information. If your two numbers are not reciprocals of each other, one of them is wrong.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t6-m-05",
+   "format": "single",
+   "topic": "inference-t6",
+   "stem": "For which family does the Cramér–Rao bound fail to apply?",
+   "options": [
+    "U(0,θ), because the support depends on θ",
+    "N(μ,σ²) with σ² known, because there are two parameters",
+    "Poisson(λ), because the data are discrete",
+    "Bernoulli(p), because p is bounded"
+   ],
+   "answer": "A",
+   "explanation": "Regularity requires the support to be free of the parameter, and for U(0,θ) it is not — so differentiation under the integral fails and the bound is unavailable. Discreteness is no obstacle (B is wrong; Poisson and Bernoulli are both standard applications), a bounded parameter space is fine provided θ is interior, and in D σ² is known so there is only one unknown parameter.",
+   "diff": "easy"
+  },
+  {
+   "id": "inf-t6-m-06",
+   "format": "numeric",
+   "topic": "inference-t6",
+   "stem": "X₁,…,X₃₆ are iid N(μ, σ²) with σ² = 9 known. Give Iₙ(μ) and the Cramér–Rao bound for unbiased estimators of μ.",
+   "options": [
+    "Iₙ = 0.25, bound = 4",
+    "Iₙ = 4, bound = 0.25",
+    "Iₙ = 324, bound = 0.00309",
+    "Iₙ = 4, bound = 9"
+   ],
+   "answer": "B",
+   "explanation": "I₁(μ) = 1/σ² = 1/9, so Iₙ = n/σ² = 36/9 = 4 and the bound is 1/4 = 0.25. That equals Var(X̄) = σ²/n = 9/36 = 0.25, so x̄ is efficient. Option C multiplies by σ² instead of dividing.",
+   "check": "σ² = 9 is the variance, not the standard deviation. I₁ = 1/σ² = 1/9, not 1/3.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t6-m-07",
+   "format": "multi",
+   "topic": "inference-t6",
+   "stem": "Let T be an unbiased estimator of θ in a regular family.",
+   "options": [
+    "A and B only",
+    "A, B and C only",
+    "B and C only",
+    "C and D only"
+   ],
+   "answer": "C",
+   "explanation": "A is false — the MLE's efficiency is an asymptotic statement; at finite n it may be biased and above the floor. B is true, and is the standard shortcut to a UMVUE. C is true, and is the exact attainment criterion. D is false: efficiency is CRLB/Var, which cannot exceed 1.",
+   "statements": [
+    "The MLE attains the Cramér–Rao bound exactly for every sample size.",
+    "If Var(T) equals the bound, then T is the UMVUE of θ.",
+    "The bound is attained if and only if the score can be written as A(θ)[T − θ].",
+    "Efficiency e(T) = CRLB/Var(T) can exceed 1 for a very good estimator."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": false,
+     "why": "Asymptotic only. Var(θ̂) → 1/(nI(θ)); at finite n it generally sits above."
+    },
+    "B": {
+     "tf": true,
+     "why": "Nothing unbiased can be below the floor, so an estimator on it cannot be beaten."
+    },
+    "C": {
+     "tf": true,
+     "why": "The linear-score condition is exactly the equality case of the Cauchy–Schwarz step."
+    },
+    "D": {
+     "tf": false,
+     "why": "Var(T) ≥ CRLB, so the ratio is at most 1. A value above 1 means an arithmetic error."
+    }
+   },
+   "diff": "hard"
+  },
+  {
+   "id": "inf-t6-m-08",
+   "format": "numeric",
+   "topic": "inference-t6",
+   "stem": "X₁,…,X₁₀ are iid Exponential with rate λ = 2. The UMVUE of λ is (n−1)/ΣX, with variance λ²/(n−2). Give the Cramér–Rao bound and the efficiency of the UMVUE.",
+   "options": [
+    "Bound = 0.5, efficiency = 0.8",
+    "Bound = 0.4, efficiency = 1.0",
+    "Bound = 0.5, efficiency = 1.25",
+    "Bound = 0.4, efficiency = 0.8"
+   ],
+   "answer": "D",
+   "explanation": "I(λ) = 1/λ², so the bound is λ²/n = 4/10 = 0.4. The UMVUE's variance is λ²/(n−2) = 4/8 = 0.5. Efficiency is CRLB/Var = 0.4/0.5 = 0.8. The best unbiased estimator is only 80% efficient here, which is the point: a UMVUE need not sit on the floor.",
+   "check": "Efficiency is bound ÷ variance, so it must come out at or below 1. Option C's 1.25 is the ratio taken upside down.",
+   "diff": "hard"
+  },
+  {
+   "id": "inf-t6-m-09",
+   "format": "numeric",
+   "topic": "inference-t6",
+   "stem": "X₁,…,Xₙ are iid Exponential with mean θ, so f(x) = (1/θ)e^(−x/θ). Given I(θ) = 1/θ², give the Cramér–Rao bound for unbiased estimators of θ and say whether x̄ attains it.",
+   "options": [
+    "θ²/n, and x̄ attains it exactly",
+    "1/(nθ²), and x̄ attains it exactly",
+    "θ/n, and x̄ does not attain it",
+    "θ²/n, and x̄ does not attain it"
+   ],
+   "answer": "A",
+   "explanation": "The bound is 1/(nI(θ)) = θ²/n. For this family Var(X) = θ², so Var(X̄) = θ²/n, equal to the bound — x̄ is efficient. Contrast this with the RATE parameterisation of the same family, where nothing unbiased attains the floor: attainability depends on which parameter you are estimating.",
+   "check": "The bound is the reciprocal of nI(θ), so with I = 1/θ² it is θ²/n and not 1/(nθ²). Writing the reciprocal the wrong way round is the slip option B is built from.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t6-m-10",
+   "format": "order",
+   "topic": "inference-t6",
+   "stem": "To find the Cramér–Rao bound for an unbiased estimator of g(θ), arrange these steps in order.",
+   "options": [
+    "A, C, D, B",
+    "C, A, D, B",
+    "C, D, A, B",
+    "A, D, C, B"
+   ],
+   "answer": "B",
+   "explanation": "Check regularity first — if the support depends on θ there is no bound to compute and everything after is wasted. Then get I₁(θ) from the second derivative, scale to nI₁ and divide [g′(θ)]² by it, and finally compare with the candidate estimator's variance to settle attainment.",
+   "items": [
+    "A. Compute I₁(θ) = −E[∂²ℓ/∂θ²]",
+    "B. Compare with Var(T) to decide whether the bound is attained",
+    "C. Check that the support does not depend on θ",
+    "D. Form [g′(θ)]² / (n I₁(θ))"
+   ],
+   "diff": "easy"
+  },
+  {
+   "id": "inf-t6-m-11",
+   "format": "single",
+   "topic": "inference-t6",
+   "diff": "easy",
+   "stem": "The Cramér–Rao bound gives a lower bound on:",
+   "options": [
+    "the bias of any estimator of θ",
+    "the variance of the maximum likelihood estimator only",
+    "the variance of any unbiased estimator of θ, under regularity conditions",
+    "the mean squared error of every estimator, biased or not"
+   ],
+   "answer": "C",
+   "explanation": "The standard form is a floor on the variance of UNBIASED estimators, and it needs the regularity conditions. A biased estimator has a different bound, with (1+b′(θ))² on top, and its variance can sit below the unbiased floor — which is why the inequality says nothing about every estimator at once."
+  },
+  {
+   "id": "inf-t6-m-12",
+   "format": "numeric",
+   "topic": "inference-t6",
+   "diff": "moderate",
+   "stem": "X₁,…,X₅₀ are iid Bernoulli(p) with p = 0.5. Give Iₙ(p) and the Cramér–Rao bound for unbiased estimators of p.",
+   "options": [
+    "Iₙ = 200, bound = 0.25",
+    "Iₙ = 0.005, bound = 200",
+    "Iₙ = 12.5, bound = 0.08",
+    "Iₙ = 200, bound = 0.005"
+   ],
+   "answer": "D",
+   "explanation": "I₁(p) = 1/(p(1−p)) = 1/0.25 = 4, so Iₙ = 50(4) = 200 and the bound is 1/200 = 0.005. Check it against Var(x̄) = p(1−p)/n = 0.25/50 = 0.005 — equal, so x̄ is efficient here.",
+   "check": "The bound and the total information are reciprocals. If the two numbers do not multiply to 1, one of them is wrong."
+  },
+  {
+   "id": "inf-t6-m-13",
+   "format": "multi",
+   "topic": "inference-t6",
+   "diff": "hard",
+   "stem": "Consider Fisher information.",
+   "options": [
+    "A, B and D only",
+    "A and C only",
+    "B and C only",
+    "A, B and C only"
+   ],
+   "answer": "A",
+   "explanation": "A is true — information adds over independent observations. B is true, and is the identity that makes the second form usable. C is false: I(θ) = −E[∂²ℓ/∂θ²] is the EXPECTED information, a function of θ; evaluating −∂²ℓ/∂θ² at θ̂ gives the OBSERVED information, a number from one dataset. D is true — a zero or negative information signals an algebra error, since I(θ) = Var(score) ≥ 0 and the conditions require it strictly positive.",
+   "statements": [
+    "Iₙ(θ) = n I₁(θ) for an iid sample.",
+    "I(θ) = E[(∂ℓ/∂θ)²] equals −E[∂²ℓ/∂θ²] under regularity.",
+    "I(θ) is computed by evaluating the second derivative at the MLE.",
+    "I(θ) must be strictly positive."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Independence makes the information in the sample the sum of the individual contributions."
+    },
+    "B": {
+     "tf": true,
+     "why": "The information identity, itself a consequence of differentiating under the integral."
+    },
+    "C": {
+     "tf": false,
+     "why": "That is the OBSERVED information. The bound uses the expected version."
+    },
+    "D": {
+     "tf": true,
+     "why": "It is a variance, and the regularity conditions require 0 < I(θ) < ∞."
+    }
+   }
+  },
+  {
+   "id": "inf-t6-m-14",
+   "format": "numeric",
+   "topic": "inference-t6",
+   "diff": "moderate",
+   "stem": "X₁,…,X₉ are iid N(μ, σ²) with σ² = 36 known. An unbiased estimator T of μ has Var(T) = 8. Give the Cramér–Rao bound and the efficiency of T.",
+   "options": [
+    "bound = 4, efficiency = 2",
+    "bound = 4, efficiency = 0.5",
+    "bound = 8, efficiency = 1",
+    "bound = 0.25, efficiency = 0.03"
+   ],
+   "answer": "B",
+   "explanation": "I₁(μ) = 1/σ² = 1/36, so Iₙ = 9/36 = 0.25 and the bound is 1/0.25 = 4, which is also σ²/n = 36/9 = 4. Efficiency is CRLB/Var(T) = 4/8 = 0.5, so T carries half the information X̄ does. Option A takes the ratio upside down.",
+   "check": "Efficiency is bound ÷ variance and can never exceed 1. Any answer above 1 means the ratio was inverted."
+  },
+  {
+   "id": "inf-t6-m-15",
+   "format": "single",
+   "topic": "inference-t6",
+   "diff": "moderate",
+   "stem": "An unbiased estimator T of θ is found with Var(T) strictly below 1/(nI(θ)). What has gone wrong?",
+   "options": [
+    "Nothing — T is simply a very good estimator",
+    "T must be biased after all",
+    "Either the regularity conditions fail, or there is an arithmetic error — no unbiased estimator can beat the bound where it applies",
+    "The Fisher information was computed for the wrong sample size"
+   ],
+   "answer": "C",
+   "explanation": "Where the conditions hold, the inequality is a theorem: nothing unbiased can sit below the floor. A result below it is evidence that a condition was violated — most often a support that moves with θ — or that the arithmetic is wrong. U(0,θ) is the standard case where quoting the bound produces exactly this contradiction."
+  },
+  {
+   "id": "inf-t6-m-16",
+   "format": "numeric",
+   "topic": "inference-t6",
+   "diff": "hard",
+   "stem": "X₁,…,Xₙ are iid Bernoulli(p). Find the Cramér–Rao bound for unbiased estimators of the variance g(p) = p(1−p), and evaluate it at p = 0.4, n = 25.",
+   "options": [
+    "p(1−p)/n = 0.0096",
+    "(1−2p)²/n = 0.0016",
+    "(1−2p)p(1−p)/n = 0.00192",
+    "(1−2p)²p(1−p)/n = 0.000384"
+   ],
+   "answer": "D",
+   "explanation": "g′(p) = 1 − 2p, so [g′(p)]² = (1−2p)². With I(p) = 1/(p(1−p)) the bound is [g′(p)]²/(nI(p)) = (1−2p)²p(1−p)/n. At p = 0.4: (0.2)² = 0.04 and p(1−p) = 0.24, so the bound is 0.04 × 0.24/25 = 0.0096/25 = 0.000384. Option A is the bound for p itself rather than for p(1−p); option C drops the square on the derivative.",
+   "check": "The derivative is SQUARED and the bound is a quotient, not a product. Note also that at p = 0.5 the bound is zero, because g′(0.5) = 0 — the variance is at its maximum there and locally flat."
+  },
+  {
+   "id": "inf-t6-m-17",
+   "format": "multi",
+   "topic": "inference-t6",
+   "diff": "moderate",
+   "stem": "Consider efficiency and attainment of the bound.",
+   "options": [
+    "A, C and D only",
+    "B and C only",
+    "A, B and C only",
+    "A and B only"
+   ],
+   "answer": "A",
+   "explanation": "A is true — efficiency is the ratio of the floor to the achieved variance. B is false: the MLE's efficiency is an asymptotic statement, and at finite n the MLE may be biased and sit above the floor. C is true, and is the exact attainment criterion. D is true — for the exponential rate the UMVUE has variance λ²/(n−2) against a floor of λ²/n.",
+   "statements": [
+    "e(T) = CRLB/Var(T), and T is efficient when e(T) = 1.",
+    "Every maximum likelihood estimator is efficient at every sample size.",
+    "The bound is attained exactly when the score factorises as A(θ)[T − g(θ)].",
+    "A UMVUE can have variance strictly above the Cramér–Rao bound."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The definition, and the ratio is at most 1."
+    },
+    "B": {
+     "tf": false,
+     "why": "Asymptotic only. At finite n the MLE is often biased and above the floor."
+    },
+    "C": {
+     "tf": true,
+     "why": "The equality case of the Cauchy–Schwarz step — the score must be linear in T."
+    },
+    "D": {
+     "tf": true,
+     "why": "λ²/(n−2) > λ²/n. Best unbiased and efficient are different achievements."
+    }
+   }
+  },
+  {
+   "id": "inf-t6-m-18",
+   "format": "numeric",
+   "topic": "inference-t6",
+   "diff": "moderate",
+   "stem": "X₁,…,X₄₀ are iid Exponential with mean θ = 5. Give the Cramér–Rao bound for unbiased estimators of θ, and the efficiency of x̄.",
+   "options": [
+    "bound = 5, efficiency = 1",
+    "bound = 0.625, efficiency = 1",
+    "bound = 0.625, efficiency = 0.8",
+    "bound = 0.125, efficiency = 1"
+   ],
+   "answer": "B",
+   "explanation": "For the mean parameterisation I(θ) = 1/θ², so the bound is θ²/n = 25/40 = 0.625. Var(X̄) = θ²/n = 0.625 as well, so x̄ attains it and its efficiency is exactly 1. The rate parameterisation of the same family behaves differently — there nothing unbiased attains the floor.",
+   "check": "Attainment depends on which parameter you are estimating, not on the family. For the exponential MEAN it is attained; for the RATE it is not."
+  },
+  {
+   "id": "inf-t6-m-19",
+   "format": "single",
+   "topic": "inference-t6",
+   "diff": "easy",
+   "stem": "Which quantity does the Cramér–Rao bound use?",
+   "options": [
+    "the observed information, −∂²ℓ/∂θ² at θ̂",
+    "the score evaluated at the MLE",
+    "the expected Fisher information, −E[∂²ℓ/∂θ²]",
+    "the second derivative of the likelihood, not the log-likelihood"
+   ],
+   "answer": "C",
+   "explanation": "The bound is stated with the expected information, an average over all the samples that might have been drawn and a function of θ. The observed information is a single number computed from the data in hand; software often reports it, and questions exploit the difference."
+  },
+  {
+   "id": "inf-t6-m-20",
+   "format": "order",
+   "topic": "inference-t6",
+   "diff": "moderate",
+   "stem": "To decide whether an unbiased estimator T of θ is efficient, arrange these steps.",
+   "options": [
+    "D, C, A, B",
+    "A, C, D, B",
+    "A, D, C, B",
+    "D, A, C, B"
+   ],
+   "answer": "D",
+   "explanation": "Check regularity first — if the support depends on θ there is no bound to compare against and the question is void. Then compute I(θ) and the bound 1/(nI(θ)), then Var(T), and finally take the ratio to get the efficiency.",
+   "items": [
+    "A. Compute I(θ) and form the bound 1/(nI(θ))",
+    "B. Take the ratio CRLB/Var(T)",
+    "C. Compute Var(T)",
+    "D. Check the regularity conditions hold"
+   ]
+  }
+ ]
+}

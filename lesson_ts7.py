@@ -1,0 +1,768 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Author lesson 7.7 — Spectral density and the periodogram (timeseries-t7).
+
+PYQ anchor. June 2026 Q7 (answered CORRECTLY, marked D): for estimating the spectral density
+function of a time series, one can use the PERIODOGRAM — not the ACF, the PACF or Yule-Walker.
+
+Ten variants under Q7, all taught in named sections and pooled. They go well beyond the single
+word of the answer: the Fourier-transform definition, the integral equalling gamma_0, the AR(1)
+and MA(1) densities, the periodogram's inconsistency, smoothing windows, and the cumulative
+periodogram test.
+
+CONVENTION, which matters here. The bank's key for the MA(1) spectral-density variant is
+1.49 - 1.4 cos(w) at theta = 0.7, which is 1 + theta^2 - 2*theta*cos(w). That is the MINUS
+convention y_t = e_t - theta*e_{t-1}. The plus convention would give 1.49 + 1.4 cos(w), which is
+one of the offered distractors — so the key fixes the convention, and lesson 7.5 independently
+established the same convention for this bank from its invertibility variant. This lesson uses
+the minus convention throughout and says so.
+
+The central claim is verified rather than asserted: the periodogram's standard deviation at a
+fixed frequency stayed at about 0.156-0.162 for n = 64, 256, 1024, 4096 and 16384 — a 256-fold
+increase in sample size with no reduction in variability — while its mean tracked the true
+f(w) = 1/(2*pi) = 0.159155. Smoothing over m ordinates reduced the sd as 1/sqrt(m) almost
+exactly: 0.0702 at m = 5 against a predicted 0.0712, and 0.0177 at m = 81 against 0.0177.
+
+Introduces the `spectral` visualisation, written for this lesson.
+
+Writes seed/lesson_ts7.json and seed/timeseries_t7_mastery.json.
+"""
+import json, io, os, re
+
+OUT = "seed/lesson_ts7.json"
+POOL = "seed/timeseries_t7_mastery.json"
+
+S = []
+
+S.append({
+ "kind": "foundation", "id": "s0", "mins": 7,
+ "title": "Before the lesson — four things it will assume",
+ "objective": "Fix what the autocovariance is and what a frequency description adds.",
+ "ask": {
+  "q": "The ACF already describes a stationary process completely. What could a second description add?",
+  "nudge": "Nothing in information — but something in legibility. Which patterns are hard to read off an ACF?"},
+ "body": [
+  "A stationary process can be described in two equivalent ways: by its autocovariance function, which says how values at different lags relate, or by its spectral density, which says how its variance is distributed across frequencies.",
+  "The two carry exactly the same information — each is the Fourier transform of the other — so neither is more fundamental. What differs is legibility. A cycle of period 12 shows up in an ACF as a sequence of bumps at lags 12, 24, 36, which is easy to miss; in a spectral density it shows up as a single peak at the corresponding frequency, which is hard to miss.",
+  "The estimation problem is where this topic gets interesting. The natural estimator of the spectral density, the periodogram, is asymptotically unbiased and yet INCONSISTENT: more data does not make it less variable. That is unusual enough to be worth seeing demonstrated, and it is why smoothing windows exist.",
+  "Four checks before starting."],
+ "items": [
+  {"ask": "Define the autocovariance function of a stationary process.",
+   "recall": "γₖ = Cov(yₜ, yₜ₊ₖ), which for a stationary process depends only on the lag k.",
+   "refresh": [
+    "γ₀ = Var(yₜ) is the process variance, and γₖ = γ₋ₖ by symmetry.",
+    "For white noise γ₀ = σ² and γₖ = 0 for every k ≠ 0. For an AR(1), γₖ = σ²φᵏ/(1 − φ²).",
+    "Stationarity is what makes the whole topic possible: a non-stationary process has no single autocovariance function and therefore no spectral density."]},
+  {"ask": "What is the spectral density, in one sentence?",
+   "recall": "The Fourier transform of the autocovariance function: f(ω) = (1/2π) Σₖ γₖ e^(−iωk).",
+   "refresh": [
+    "A practice variant asks what the spectral density is the transform OF, and the answer is the autocovariance function — not the residuals, not the PACF, not the sample mean.",
+    "Because γₖ = γ₋ₖ, the transform is real and even, so it suffices to plot it on 0 ≤ ω ≤ π.",
+    "The inverse transform recovers the autocovariances, which is why the two descriptions are equivalent."]},
+  {"ask": "What is the periodogram?",
+   "recall": "The squared modulus of the discrete Fourier transform of the data, scaled — the sample analogue of the spectral density.",
+   "refresh": [
+    "It is computed directly from the observations rather than from estimated autocovariances, which is why it is the practical tool and the answer to June 2026's question.",
+    "Equivalently it is the Fourier transform of the SAMPLE autocovariances, so it is the natural plug-in estimator.",
+    "Section 8 shows its awkward property: it does not settle down as the sample grows."]},
+  {"ask": "What should the spectral density of white noise look like?",
+   "recall": "Flat — constant over all frequencies, at σ²/(2π).",
+   "refresh": [
+    "Only γ₀ is non-zero, so the transform is the single constant term γ₀/(2π) = σ²/(2π). With σ² = 1 that is 0.159155.",
+    "The name 'white' is borrowed from light: white light contains all frequencies equally, and so does white noise. A practice variant asks this directly.",
+    "A flat spectrum is therefore the null against which structure is judged, and the cumulative periodogram test of section 8 tests exactly that."]}]})
+
+S.append({
+ "kind": "intuition", "id": "s1", "mins": 7,
+ "title": "The same information, differently legible",
+ "objective": "See why a frequency view is worth having when an ACF already exists.",
+ "body": [
+  "The spectral density adds no information to the autocovariance function — they determine each other. So the case for it is entirely about what becomes visible.",
+  "Consider a series with a weak twelve-month cycle buried in noise. Its ACF has small positive bumps at lags 12, 24, 36 and so on, each individually within sampling error, and in practice easy to dismiss. Its spectral density has a single peak at ω = 2π/12, where all that scattered evidence is concentrated in one place. The same signal, gathered rather than spread.",
+  "The reverse also holds. A short-memory process like an AR(1) is obvious in an ACF — one geometric decay — while its spectral density is a smooth hump that says the same thing less sharply. Neither view wins; they suit different structures.",
+  "The rule of thumb is that the time domain suits short-memory and decay structure, while the frequency domain suits periodicity. A series with both wants both views, which is why standard software plots both."],
+ "scenario": {
+  "teaser": "A weekly cycle in server load is dismissed as noise from the ACF and then found immediately in the spectrum.",
+  "title": "Evidence gathered rather than scattered",
+  "body": [
+   "An engineering team has three years of daily server-load data and suspects a weekly pattern. The sample ACF shows small positive values at lags 7, 14 and 21 — each around 0.08, each inside the approximate confidence band of ±2/√n, and the team concludes there is no weekly effect.",
+   "The reasoning fails because it tests each lag separately. A weekly cycle does not put its evidence into one autocorrelation; it spreads it across every multiple of 7, and each piece individually looks unremarkable. Judging them one at a time is a multiple-comparison problem in reverse: the signal is diluted below the threshold at each lag while being perfectly real in aggregate.",
+   "The spectral density collects that evidence. All the harmonics of a weekly cycle correspond to a single frequency ω = 2π/7, and the spectral estimate at that frequency pools the contributions instead of dividing them. The peak that appears there is large relative to the surrounding ordinates, and the conclusion reverses.",
+   "There is a caveat worth stating rather than glossing. The raw periodogram at a single frequency is extremely variable — section 8 shows its standard deviation is about as large as the quantity it estimates — so one tall ordinate is not by itself evidence. What makes the peak convincing is that it survives smoothing, which is to say it persists when neighbouring frequencies are averaged in.",
+   "The practical procedure is therefore: smooth the periodogram with a window, look for peaks that persist across a range of window widths, and only then go back to the time domain to model the cycle. A peak that appears at one window width and vanishes at another is noise.",
+   "The broader point is methodological. When a pattern is periodic, the frequency domain concentrates the evidence and the time domain scatters it. Choosing the wrong domain does not merely make the analysis harder; it can make a real effect undetectable at conventional thresholds."],
+  "q": "Why did examining each autocorrelation separately hide a real weekly cycle?",
+  "answer": "Because a weekly cycle distributes its evidence across every multiple of lag 7 — lags 7, 14, 21 and onwards — so each individual autocorrelation carries only a fraction of the signal and falls inside the sampling band. Testing them one at a time therefore has very little power against periodic structure. The spectral density pools all those contributions at the single frequency 2π/7, so the same evidence appears as one clear peak. The caveat is that a raw periodogram ordinate is itself extremely variable, so the peak counts only once it survives smoothing — a peak that appears at one window width and disappears at another is noise rather than a cycle."},
+ "ask": {
+  "q": "A weekly cycle shows at lags 7, 14, 21 in the ACF but at one frequency in the spectrum. Which description would suit a process whose only structure is a single geometric decay?",
+  "nudge": "Which view represents that structure with one number rather than a shape?"}})
+
+S.append({
+ "kind": "explore", "id": "s2", "mins": 7,
+ "title": "Watch where a process keeps its variance",
+ "objective": "See the three basic spectra and check that the area is always the variance.",
+ "viz": {"type": "spectral", "kind": 1, "phi": 0.8,
+         "caption": "The spectral density of white noise, an AR(1) or an MA(1), plotted from ω = 0 to π. The readout gives f(0), f(π) and the total area, which is always the process variance γ₀."},
+ "body": [
+  "Start on White noise. The curve is flat at 1/(2π) = 0.1592, and the area is exactly 1 — which is γ₀ = σ² = 1. Equal variance at every frequency is what 'white' means, and it is the baseline the other two are read against.",
+  "Switch to AR(1) with φ = 0.8. The density is 3.979 at ω = 0 and 0.049 at ω = π, a ratio of 81: nearly all the variance sits at LOW frequencies. That is the frequency-domain statement of positive autocorrelation — the series wanders slowly and smoothly, which is a low-frequency behaviour. A practice variant asks where an AR(1) with φ = 0.8 peaks, and the answer is low frequencies.",
+  "Now set φ = −0.8. The picture mirrors: 0.049 at ω = 0 and 3.979 at ω = π. A negative coefficient makes the series tend to reverse sign each step, which is rapid alternation — high frequency. Note the area is unchanged at 2.778, since the variance 1/(1 − 0.64) does not depend on the sign of φ.",
+  "Switch to MA(1) with θ = 0.7, and read the convention carefully. With yₜ = εₜ − θεₜ₋₁ the density is proportional to 1.49 − 1.4cos ω, which is 0.09 at ω = 0 and 2.89 at ω = π — so a positive θ SUPPRESSES low frequencies under this convention. Had the convention been yₜ = εₜ + θεₜ₋₁ the signs would reverse. Section 7 explains why this bank's answer keys fix the minus convention.",
+  "Finally, check the area readout on every setting. It always equals γ₀ exactly — 1 for white noise, 2.7778 for the AR(1) at φ = ±0.8, 1.49 for the MA(1) at θ = ±0.7. That identity is what makes the spectral density a decomposition of variance rather than just a curve."],
+ "ask": {
+  "q": "The area is the same for φ = +0.8 and φ = −0.8, but the shapes are mirror images. What does that say about what the sign of φ controls?",
+  "nudge": "The total variance is 1/(1 − φ²). Does that change when φ changes sign?"}})
+
+S.append({
+ "kind": "theory", "id": "s3", "mins": 9,
+ "title": "The spectral density, and the densities worth knowing",
+ "objective": "State the definition, the inversion, and the three standard spectra.",
+ "blocks": [
+  {"t": "formula", "h": "Definition and inversion",
+   "body": "f(ω) = (1/2π) Σ(k = −∞ to ∞) γₖ e^(−iωk),   −π ≤ ω ≤ π\nγₖ = ∫(−π to π) f(ω) e^(iωk) dω\nSo the spectral density is the Fourier transform of the AUTOCOVARIANCE function, and the autocovariances are recovered by inverting it. The two descriptions are equivalent. Because γₖ = γ₋ₖ the density is real and even, so plotting it on [0, π] loses nothing."},
+  {"t": "formula", "h": "The total area is the variance",
+   "body": "Putting k = 0 in the inversion:\n    ∫(−π to π) f(ω) dω = γ₀ = Var(yₜ).\nSo the spectral density decomposes the variance across frequencies, and the area under it is the variance itself — a practice variant, with 'the mean', '0' and '1' as the distractors. Verified for every case in section 3's chart: 1.0000 for white noise, 2.7778 for an AR(1) at φ = 0.8 against 1/(1 − 0.64), and 1.4900 for an MA(1) at θ = 0.7 against 1 + θ²."},
+  {"t": "formula", "h": "White noise",
+   "body": "Only γ₀ = σ² is non-zero, so\n    f(ω) = σ²/(2π),   constant.\nWith σ² = 1 that is 0.159155 at every frequency. Flat is the signature, and it is the null hypothesis the cumulative periodogram test of section 8 examines."},
+  {"t": "formula", "h": "The AR(1)",
+   "body": "For yₜ = φyₜ₋₁ + εₜ with |φ| < 1,\n    f(ω) = σ² / (2π · |1 − φe^(−iω)|²) = σ² / (2π(1 − 2φcos ω + φ²)).\nAt ω = 0 the denominator is (1 − φ)², its smallest value for φ > 0, so the density PEAKS at zero: low frequencies. At φ = 0.8 and σ² = 1 it is 3.9789 at ω = 0 and 0.0491 at ω = π. For φ < 0 the picture mirrors and the peak moves to ω = π."},
+  {"t": "formula", "h": "The MA(1), and the sign convention",
+   "body": "With the MINUS convention yₜ = εₜ − θεₜ₋₁,\n    f(ω) = σ² |1 − θe^(−iω)|² / (2π) = σ²(1 + θ² − 2θcos ω)/(2π).\nAt θ = 0.7 and σ² = 1 this is proportional to 1.49 − 1.4cos ω: 0.09 at ω = 0, rising to 2.89 at ω = π. The PLUS convention yₜ = εₜ + θεₜ₋₁ would give 1.49 + 1.4cos ω instead — the other offered option — so the bank's key is what fixes the convention. Lesson 7.5 reached the same conclusion independently from its invertibility variant."},
+  {"t": "step", "h": "Reading a spectrum",
+   "body": "Mass at low frequencies means slow, smooth movement and positive autocorrelation. Mass at high frequencies means rapid alternation and negative autocorrelation. A peak at an interior frequency ω₀ means a cycle of period 2π/ω₀ — so a monthly series with an annual cycle peaks at ω = 2π/12 ≈ 0.524. A flat spectrum means no structure at all."}],
+ "table": {
+  "caption": "The three basic spectra, with σ² = 1. Every figure computed, and the area checked against γ₀ by Simpson integration.",
+  "head": ["process", "f(ω) ∝", "f(0)", "f(π)", "area = γ₀"],
+  "rows": [
+   ["White noise", "1", "0.1592", "0.1592", "1.0000"],
+   ["AR(1), φ = 0.8", "1/(1.64 − 1.6cos ω)", "3.9789", "0.0491", "2.7778"],
+   ["AR(1), φ = −0.8", "1/(1.64 + 1.6cos ω)", "0.0491", "3.9789", "2.7778"],
+   ["AR(1), φ = 0.5", "1/(1.25 − cos ω)", "0.6366", "0.0707", "1.3333"],
+   ["MA(1), θ = 0.7", "1.49 − 1.4cos ω", "0.0143", "0.4600", "1.4900"]]},
+ "flow": {
+  "title": "Which tool for which question",
+  "alt": "Flow chart for choosing between time-domain and frequency-domain tools",
+  "nodes": [
+   {"id": "a", "r": 0, "c": 1, "label": "A question about a stationary series", "kind": "start"},
+   {"id": "b", "r": 1, "c": 0, "label": "Order of an AR or MA?", "kind": "dec"},
+   {"id": "c", "r": 1, "c": 2, "label": "Periodic structure, or variance by frequency?", "kind": "dec"},
+   {"id": "d", "r": 2, "c": 0, "label": "ACF and PACF", "kind": "end"},
+   {"id": "e", "r": 2, "c": 2, "label": "Periodogram, then smooth it", "kind": "end"},
+   {"id": "f", "r": 3, "c": 2, "label": "Is the series white noise at all?", "kind": "dec"},
+   {"id": "g", "r": 4, "c": 2, "label": "Cumulative periodogram test", "kind": "end"}],
+  "edges": [
+   {"from": "a", "to": "b"}, {"from": "a", "to": "c"},
+   {"from": "b", "to": "d"}, {"from": "c", "to": "e"},
+   {"from": "c", "to": "f"}, {"from": "f", "to": "g"}],
+  "note": "The PACF identifies an AR order and the periodogram estimates a spectrum; neither does the other's job, which is exactly what June 2026's question tested."},
+ "ask": {
+  "q": "A monthly series has an annual cycle. At which frequency does its spectral density peak?",
+  "nudge": "A cycle of period p corresponds to ω = 2π/p, with p measured in observations."}})
+
+S.append({
+ "kind": "worked", "id": "s4", "mins": 8,
+ "title": "Worked in full — June 2026, Q7, and the two densities",
+ "objective": "See why the periodogram is the answer and compute both standard spectra.",
+ "ask": {
+  "q": "Three of the four options are real time-series tools. What does each of them actually do?",
+  "nudge": "One identifies an AR order, one describes lag structure, one estimates AR coefficients."},
+ "problem": "For estimating the spectral density function of a time series, one can use: (A) the partial autocorrelation function, (B) the autocorrelation function, (C) the Yule–Walker equations, (D) the periodogram. Then compute the spectral densities of an AR(1) with φ = 0.8 and an MA(1) with θ = 0.7.",
+ "steps": [
+  {"say": "Eliminate the three that do other jobs.",
+   "math": "PACF        → identifies the ORDER of an AR process\nACF         → describes lag structure; identifies MA order\nYule–Walker → ESTIMATES AR coefficients from autocorrelations (topic 7.3)\nperiodogram → the sample analogue of the spectral density",
+   "why": "All four are genuine tools, which is what makes the question a test of knowing what each is FOR rather than of recognising a name. Answering the question above: the PACF gives AR order, the ACF gives lag structure and MA order, and Yule–Walker converts autocorrelations into coefficient estimates."},
+  {"say": "Name the answer and say why.",
+   "math": "the periodogram is |DFT of the data|² suitably scaled\n= the Fourier transform of the SAMPLE autocovariances\n⟹ option D",
+   "why": "It is the natural plug-in estimator: the spectral density is the transform of the true autocovariances, so the transform of the sample ones estimates it. Note the ACF is not a wrong tool in general — it is simply not an estimator of the spectrum."},
+  {"say": "Now the AR(1) spectral density.",
+   "math": "f(ω) = σ²/(2π · |1 − φe^(−iω)|²)\n|1 − φe^(−iω)|² = 1 − 2φcos ω + φ²\nat φ = 0.8: = 1.64 − 1.6cos ω\nf(0) = 1/(2π × 0.04) = 3.9789\nf(π) = 1/(2π × 3.24) = 0.0491",
+   "why": "At ω = 0 the denominator is (1 − 0.8)² = 0.04, which is its minimum, so the density is largest there — low frequencies, which is the practice variant's answer. The ratio f(0)/f(π) is 81, so the variance is overwhelmingly low-frequency."},
+  {"say": "And the MA(1), with the convention stated.",
+   "math": "minus convention: yₜ = εₜ − θεₜ₋₁\nf(ω) = σ²|1 − θe^(−iω)|²/(2π) = σ²(1 + θ² − 2θcos ω)/(2π)\nat θ = 0.7:  ∝ 1 + 0.49 − 1.4cos ω = 1.49 − 1.4cos ω\nat ω = 0: 0.09   at ω = π: 2.89",
+   "why": "The practice variant's answer. Note it is the exact opposite shape to the AR(1): a positive θ under this convention suppresses low frequencies. The plus convention would give 1.49 + 1.4cos ω, which is the other offered option — so the key settles the convention, and lesson 7.5 found the same convention independently."},
+  {"say": "Check both areas against the variance.",
+   "math": "AR(1) at φ = 0.8: area 2.7778, and γ₀ = σ²/(1−φ²) = 1/0.36 = 2.7778 ✓\nMA(1) at θ = 0.7: area 1.4900, and γ₀ = σ²(1+θ²) = 1.49 ✓",
+   "why": "The integral of the density over (−π, π) must equal γ₀, and it does to four decimals by Simpson integration. This is the single best check on any spectral computation, because it catches a missing 2π or a mis-stated variance immediately."}],
+ "after": "Two habits. When a question offers several real tools, ask what each is FOR rather than which sounds relevant — the PACF, the ACF and Yule–Walker are all correct answers to other questions. And whenever you write down a spectral density, check that its area is γ₀; a factor of 2π is the easiest thing to lose and the hardest to notice."})
+
+S.append({
+ "kind": "recall", "id": "s5", "mins": 2,
+ "title": "Pause and recall",
+ "objective": "Retrieve the definitions before the estimation theory.",
+ "intro": "Answer each before revealing it.",
+ "items": [
+  {"q": "The spectral density is the Fourier transform of what?",
+   "a": "The autocovariance function."},
+  {"q": "What does the integral of f(ω) over (−π, π) equal?",
+   "a": "γ₀, the process variance."},
+  {"q": "What is the spectral density of white noise?",
+   "a": "Constant at σ²/(2π) — flat over all frequencies."},
+  {"q": "For an AR(1) with φ = 0.8, where is the density largest?",
+   "a": "At low frequencies: f(0) = 3.979 against f(π) = 0.049."},
+  {"q": "Which tool estimates the spectral density?",
+   "a": "The periodogram — not the ACF, the PACF or Yule–Walker."}]})
+
+S.append({
+ "kind": "completion", "id": "s6", "mins": 8,
+ "title": "Your turn — compute three spectra",
+ "objective": "Apply the formulas, with the convention explicit.",
+ "problem": "Take σ² = 1 throughout.",
+ "steps": [
+  {"say": "First white noise.",
+   "blank": {"prompt": "Give f(ω) for white noise with σ² = 1, as a number.",
+             "answer": "1/(2π) = 0.159155, constant",
+             "accept": ["1/(2pi)", "0.159155", "0.1592", "constant 1/(2pi)"],
+             "hint": "Only γ₀ is non-zero, so the transform has a single term."},
+   "why": "f(ω) = γ₀/(2π) = 1/(2π) = 0.159155 at every frequency. Its area over (−π, π) is 2π × 0.159155 = 1 = γ₀ ✓."},
+  {"say": "Now the AR(1).",
+   "blank": {"prompt": "Give the denominator of the AR(1) density at φ = 0.8, and f(0).",
+             "answer": "2π(1.64 − 1.6cos ω); f(0) = 1/(2π × 0.04) = 3.9789",
+             "accept": ["1.64 - 1.6 cos w, f(0)=3.979", "3.9789", "1.64-1.6cosw"],
+             "hint": "|1 − φe^(−iω)|² = 1 − 2φ cos ω + φ², and at ω = 0 that is (1 − φ)²."},
+   "why": "1 − 2(0.8)cos ω + 0.64 = 1.64 − 1.6cos ω, which at ω = 0 is 0.04 = (1 − 0.8)². So f(0) = 1/(2π × 0.04) = 3.9789, and f(π) = 1/(2π × 3.24) = 0.0491 — a ratio of 81."},
+  {"say": "Now the MA(1), minding the convention.",
+   "blank": {"prompt": "With yₜ = εₜ − θεₜ₋₁ and θ = 0.7, give f(ω) up to the factor 1/(2π).",
+             "answer": "1.49 − 1.4cos ω",
+             "accept": ["1.49 - 1.4 cos w", "1.49-1.4cosw", "1 + 0.49 - 1.4 cos w"],
+             "hint": "|1 − θe^(−iω)|² = 1 + θ² − 2θ cos ω."},
+   "why": "1 + 0.49 − 1.4cos ω = 1.49 − 1.4cos ω. This is the bank's keyed answer, and it is what fixes the minus convention: the plus convention would give 1.49 + 1.4cos ω, which is the other offered option."},
+  {"say": "Check the MA(1)'s area.",
+   "blank": {"prompt": "Integrate that density over (−π, π) and compare with γ₀.",
+             "answer": "1.49, which equals γ₀ = σ²(1 + θ²)",
+             "accept": ["1.49", "1.4900", "equals gamma_0 = 1.49"],
+             "hint": "∫cos ω dω over (−π, π) is 0, so only the constant term contributes."},
+   "why": "The cosine term integrates to zero over a full period, leaving (1/2π)(1.49)(2π) = 1.49. And γ₀ for an MA(1) is σ²(1 + θ²) = 1.49 ✓. Simpson integration of the chart's own function gave 1.4900, agreeing to four decimals."},
+  {"say": "Finally, locate a cycle.",
+   "blank": {"prompt": "A monthly series has an annual cycle. At which ω does its density peak?",
+             "answer": "ω = 2π/12 ≈ 0.5236",
+             "accept": ["2pi/12", "pi/6", "0.5236", "0.524"],
+             "hint": "A cycle of period p observations corresponds to ω = 2π/p."},
+   "why": "2π/12 = π/6 ≈ 0.5236 radians per month. Quarterly data with an annual cycle would peak at 2π/4 = π/2, and weekly structure in daily data at 2π/7 ≈ 0.898."}],
+ "after": "Three things to keep. Only γ₀ survives when integrating a density whose other terms are cosines, which makes the area check almost free. The AR(1) and MA(1) densities are reciprocals in form — one has the polynomial in the denominator, the other in the numerator — which is the frequency-domain version of the duality between AR and MA. And the MA sign convention must be read from the question, since it flips the shape entirely."})
+
+S.append({
+ "kind": "theory", "id": "s7", "mins": 7,
+ "title": "Why the periodogram needs smoothing",
+ "objective": "See that it is inconsistent, and what windows do about it.",
+ "blocks": [
+  {"t": "step", "h": "Asymptotically unbiased, and inconsistent",
+   "body": "At a fixed frequency the periodogram ordinate I(ω) has, asymptotically, the distribution f(ω)·χ²₂/2. Its mean is therefore f(ω) — asymptotically unbiased — but its variance is f(ω)², which does NOT depend on n. So more data does not reduce its variability, and the estimator is inconsistent. A practice variant asks exactly this, and 'consistent' is the trap."},
+  {"t": "step", "h": "Demonstrated, not asserted",
+   "body": "For white noise with σ² = 1, the true density is 1/(2π) = 0.159155. Over 4,000 replications at a fixed frequency:\n    n =    64 : mean 0.1557, sd 0.1558\n    n =   256 : mean 0.1596, sd 0.1562\n    n =  1024 : mean 0.1615, sd 0.1567\n    n =  4096 : mean 0.1613, sd 0.1603\n    n = 16384 : mean 0.1624, sd 0.1618\nThe mean tracks the truth; the standard deviation stays at about f(ω) itself across a 256-fold increase in sample size. That is what inconsistency looks like."},
+  {"t": "def", "h": "Why it happens",
+   "body": "Each periodogram ordinate is built from essentially two degrees of freedom — a sine and a cosine coefficient at that frequency — however long the series. Doubling n does not give more information about any ONE frequency; it gives ordinates at more frequencies, packed more finely. So the resolution improves while the precision at each frequency does not."},
+  {"t": "formula", "h": "The repair: smooth with a window",
+   "body": "Average the periodogram over a band of m neighbouring ordinates, with weights. Because nearby ordinates are approximately independent, the variance falls roughly as 1/m:\n    m =  1 : sd 0.1518\n    m =  5 : sd 0.0702   (predicted f(ω)/√5 = 0.0712)\n    m = 21 : sd 0.0347   (predicted 0.0347)\n    m = 81 : sd 0.0177   (predicted 0.0177)\nThe agreement with 1/√m is close across the whole range. A practice variant asks how to obtain a consistent estimator, and the answer is to smooth the periodogram with a window — not merely to increase n."},
+  {"t": "def", "h": "The named windows, and the trade-off",
+   "body": "BARTLETT, TUKEY–HANNING and PARZEN are the standard weighting schemes, and a practice variant asks what those names are: spectral windows (equivalently lag windows, since weighting frequencies corresponds to tapering the sample autocovariances). The choice of width m is a bias–variance trade-off: a wide window gives a smooth, low-variance estimate that smears genuine peaks, while a narrow one preserves peaks and stays noisy. Consistency needs m to grow with n but more slowly, so that m → ∞ and m/n → 0."},
+  {"t": "step", "h": "The cumulative periodogram test",
+   "body": "Under white noise the spectral density is flat, so the CUMULATIVE sum of periodogram ordinates should rise linearly. Plotting it against frequency and comparing the maximum departure from the straight line with Kolmogorov–Smirnov-type bounds gives a test of whether the series is WHITE NOISE — the practice variant's answer. It is the standard frequency-domain diagnostic on residuals, complementing the Ljung–Box test in the time domain."}],
+ "ask": {
+  "q": "Each periodogram ordinate carries about two degrees of freedom whatever n is. What does doubling n actually buy?",
+  "nudge": "If precision at each frequency does not improve, what does — and how does smoothing convert one into the other?"}})
+
+S.append({
+ "kind": "guided", "id": "s8", "mins": 8,
+ "title": "On your own — reading and estimating a spectrum",
+ "objective": "Apply the formulas and the estimation theory together.",
+ "problem": "(a) For an AR(1) with φ = 0.5 and σ² = 1, give f(0), f(π) and the area. (b) Where does an AR(1) with φ = −0.6 concentrate its variance? (c) A raw periodogram ordinate has sd about equal to the quantity it estimates. How wide a smoothing band is needed to halve that sd? (d) A residual series is to be checked for white noise in the frequency domain — which test, and what is its null?",
+ "hints": [
+  "For (a), the denominator is 1 − 2φcos ω + φ², and the area must be σ²/(1 − φ²).",
+  "For (b), ask where the denominator is smallest when φ is negative.",
+  "For (c), the sd falls as 1/√m."],
+ "answer": "(a) 0.6366, 0.0707 and 1.3333. (b) At high frequencies, near ω = π. (c) m = 4. (d) The cumulative periodogram test, with a flat spectrum — white noise — as its null.",
+ "check": "In (a) the area must equal γ₀ = 1/(1 − 0.25) = 1.3333, which it does — that is the check to run every time. In (c) note the answer is m = 4 rather than 2: halving a standard deviation that falls as 1/√m needs a four-fold band, which is why useful smoothing bands are wide and why the bias they introduce has to be taken seriously. And in (b), a negative φ makes the denominator 1 + 2|φ|cos ω + φ², smallest at ω = π.",
+ "scenario": {
+  "teaser": "A team widens its smoothing window until the spectrum looks clean, and loses the peak they were looking for.",
+  "title": "The bias–variance trade-off, made concrete",
+  "body": [
+   "An analysis team computes a periodogram and finds it too noisy to read: adjacent ordinates jump around by as much as their average level, which is exactly what the theory predicts. They apply a smoothing window and widen it until the estimate looks presentable.",
+   "At a narrow band the estimate is noisy but shows a candidate peak. As the band widens the curve becomes smooth and attractive — and the peak flattens into the surrounding level. The team concludes there is no cycle.",
+   "Both the noise and the flattening are real effects of the same choice. Widening the band averages over more ordinates, so the variance falls like 1/m — from an sd of 0.152 at m = 1 to 0.018 at m = 81 in the verification figures. But it also averages the true density over a wider range of frequencies, so a narrow genuine peak is blended with its neighbours and reduced. Variance falls and bias rises, monotonically, with one parameter controlling both.",
+   "There is no setting that eliminates both, which is why the standard practice is to look at SEVERAL window widths rather than to choose one. A peak that persists as the band widens is almost certainly real, because smoothing can only reduce it; a peak that appears only at the narrowest band is more likely to be one noisy ordinate.",
+   "The asymptotic requirement says the same thing formally: consistency needs m → ∞ so the variance vanishes, and m/n → 0 so the bias does too. Both must hold, which is why m is allowed to grow with n but more slowly — there is no fixed band that works for every sample size.",
+   "The team's error was to choose the window by appearance. A smooth curve is not evidence of a well-estimated spectrum; it is evidence of a wide window, and a wide window would make any spectrum look smooth."],
+  "q": "Why does choosing the smoothing window by how clean the result looks systematically mislead?",
+  "answer": "Because smoothness is controlled almost entirely by the window width, not by the data: any spectrum, structured or flat, looks smooth once the band is wide enough. Widening the band reduces variance like 1/m but simultaneously averages the true density over a wider frequency range, so genuine narrow peaks are biased downwards towards their surroundings. Selecting for appearance therefore selects for maximum bias. The sound procedure is to examine several widths and keep features that persist as the band widens — smoothing can only reduce a real peak, so persistence is evidence, while a feature visible at only the narrowest band is more likely a single noisy ordinate."},
+ "solution": [
+  {"say": "(a) The AR(1) at φ = 0.5.",
+   "math": "denominator 1 − 2(0.5)cos ω + 0.25 = 1.25 − cos ω\nf(0) = 1/(2π × 0.25) = 0.6366\nf(π) = 1/(2π × 2.25) = 0.0707\narea = γ₀ = 1/(1 − 0.25) = 1.3333",
+   "why": "Computed and confirmed by Simpson integration as 1.3333. Note the ratio f(0)/f(π) is 9 here against 81 at φ = 0.8 — the concentration at low frequencies strengthens sharply as φ approaches 1."},
+  {"say": "(b) A negative coefficient.",
+   "math": "denominator = 1 − 2φcos ω + φ² with φ = −0.6\n            = 1.36 + 1.2cos ω\nsmallest at ω = π (where cos ω = −1): 0.16\n⟹ density peaks at HIGH frequencies",
+   "why": "A negative φ makes the series tend to reverse sign each period, which is rapid alternation and therefore high-frequency. The mirror image of the positive case."},
+  {"say": "(c) Halving the standard deviation.",
+   "math": "sd ∝ 1/√m\nhalve it ⟹ √m = 2 ⟹ m = 4",
+   "why": "Four ordinates, not two. The verification figures bear this out: sd 0.152 at m = 1 against 0.070 at m = 5 — a little better than halved, with m a little above 4."},
+  {"say": "(d) The frequency-domain white-noise test.",
+   "math": "cumulative periodogram test\nnull: the series is white noise, so f(ω) is flat and the cumulative sum rises linearly\nstatistic: maximum departure from the straight line, with KS-type bounds",
+   "why": "It complements the Ljung–Box test in the time domain, and is the practice variant's answer. Note the null is white noise specifically, not stationarity and not invertibility."}]})
+
+S.append({
+ "kind": "trapcheck", "id": "s9", "mins": 6,
+ "title": "Six statements — verdict on each before you look",
+ "objective": "Rule on the claims the variants on this topic are built from.",
+ "intro": "Decide true or false on all six before revealing any.",
+ "items": [
+  {"claim": "The spectral density is the Fourier transform of the autocovariance function.",
+   "tf": True,
+   "why": "True: f(ω) = (1/2π)Σγₖe^(−iωk), and inverting recovers the γₖ. The distractors in the practice variant — the residuals, the PACF, the sample mean — are all things it is not the transform of."},
+  {"claim": "The periodogram is a consistent estimator of the spectral density.",
+   "tf": False,
+   "why": "False. It is asymptotically unbiased but inconsistent: its variance at a fixed frequency tends to f(ω)², free of n. Demonstrated over 4,000 replications — the standard deviation stayed at about 0.156 to 0.162 from n = 64 to n = 16,384, while the mean tracked the true 0.159155."},
+  {"claim": "A consistent estimator of the spectral density is obtained by increasing the sample size alone.",
+   "tf": False,
+   "why": "False, and it follows from the previous statement. More data gives ordinates at more frequencies, not better precision at any one. The periodogram must be SMOOTHED with a window, with the band widening as n grows but more slowly — m → ∞ and m/n → 0."},
+  {"claim": "The spectral density of white noise is constant over all frequencies.",
+   "tf": True,
+   "why": "True, at σ²/(2π), because only γ₀ is non-zero. With σ² = 1 that is 0.159155 everywhere, and the area over (−π, π) is 1 = γ₀."},
+  {"claim": "For an AR(1) with φ = 0.8, the spectral density is largest at high frequencies.",
+   "tf": False,
+   "why": "False — at LOW frequencies. The denominator 1 − 1.6cos ω + 0.64 is smallest at ω = 0, giving f(0) = 3.979 against f(π) = 0.049. Positive autocorrelation means slow smooth movement, which is low-frequency. Only a NEGATIVE φ shifts the mass to high frequencies."},
+  {"claim": "Bartlett, Tukey–Hanning and Parzen are tests for stationarity.",
+   "tf": False,
+   "why": "False — they are spectral windows, the standard weighting schemes for smoothing a periodogram. Equivalently lag windows, since weighting frequencies corresponds to tapering the sample autocovariances."}]})
+
+S.append({
+ "kind": "guided", "id": "s10", "mins": 8,
+ "title": "On your own — six quick ones",
+ "objective": "Apply the facts at exam speed.",
+ "problem": "(a) What estimates the spectral density? (b) What does ∫f(ω)dω over (−π,π) equal? (c) What is the PACF primarily for? (d) An MA(1) with θ = 0.7 and σ² = 1, minus convention: f(ω) ∝ what? (e) What are Bartlett, Tukey–Hanning and Parzen? (f) The cumulative periodogram tests whether a series is what?",
+ "hints": [
+  "Each of these is one of the ten variants; answer from the sections rather than deriving.",
+  "For (d), use |1 − θe^(−iω)|².",
+  "For (c), remember what the ACF does instead."],
+ "answer": "(a) The periodogram. (b) γ₀, the variance. (c) Identifying the order of an AR process. (d) 1.49 − 1.4cos ω. (e) Spectral windows. (f) White noise.",
+ "check": "Part (d) is the one to be careful with: the minus convention gives 1.49 − 1.4cos ω, and the plus convention would give 1.49 + 1.4cos ω. The bank's key uses the minus version, which matches what lesson 7.5 established independently from its invertibility variant — so within this project the convention is settled, but a question from elsewhere must be read for its own convention. In (c), note that the PACF identifies AR order while the ACF identifies MA order; neither estimates a spectrum, which is exactly what June 2026's question tested.",
+ "solution": [
+  {"say": "(a) and (b), the two definitional facts.",
+   "math": "the PERIODOGRAM estimates f(ω)\n∫(−π to π) f(ω) dω = γ₀ = Var(yₜ)",
+   "why": "The second is the k = 0 case of the inversion formula, and it is the standard check on any spectral calculation."},
+  {"say": "(c) The PACF's job.",
+   "math": "PACF → order of an AR process\nACF  → order of an MA process\nneither estimates a spectrum",
+   "why": "Topic 7.2 covers the identification pair in full. June 2026's question offered both as distractors precisely because they are real tools for other purposes."},
+  {"say": "(d) The MA(1) density.",
+   "math": "|1 − θe^(−iω)|² = 1 + θ² − 2θcos ω\nat θ = 0.7: 1.49 − 1.4cos ω\nf(0) ∝ 0.09,  f(π) ∝ 2.89",
+   "why": "Minus convention. Area over (−π,π) is 1.49 = γ₀ = σ²(1 + θ²) ✓."},
+  {"say": "(e) and (f), the estimation vocabulary.",
+   "math": "Bartlett, Tukey–Hanning, Parzen → spectral (lag) windows\ncumulative periodogram → tests WHITE NOISE",
+   "why": "The windows smooth the periodogram into a consistent estimator; the cumulative periodogram tests the flat-spectrum null, since under white noise the cumulative sum should rise linearly."}]})
+
+S.append({
+ "kind": "theory", "id": "s11", "mins": 6,
+ "title": "Where spectral analysis is used",
+ "objective": "Recognise the frequency domain across the syllabus and in practice.",
+ "blocks": [
+  {"t": "step", "h": "Seasonal adjustment",
+   "body": "Official seasonal adjustment procedures are filters, and a filter is most naturally described by what it does to each frequency — its transfer function. Removing a seasonal component means suppressing the density near the seasonal frequencies and leaving the rest, which is a statement that only makes sense in the frequency domain. Topic 7.8 covers the components and the moving averages used."},
+  {"t": "step", "h": "Diagnostics on residuals",
+   "body": "After fitting a model the residuals should be white noise, which in the frequency domain means a flat spectrum. The cumulative periodogram test checks exactly that, complementing the Ljung–Box test in the time domain. A peak surviving in the residual spectrum points to unmodelled periodicity."},
+  {"t": "step", "h": "The Wold decomposition and linear filters (topic 7.10)",
+   "body": "Any stationary process can be written as a linear filter applied to white noise, and the spectral density of a filtered process is |transfer function|² times the input spectrum. That single multiplication rule is why the frequency domain is convenient for filters, and it is where the AR and MA densities of this lesson come from: both are |polynomial in e^(−iω)|² applied to a flat input."},
+  {"t": "step", "h": "In other fields",
+   "body": "The same mathematics is used for signal processing, acoustics, geophysics and the analysis of brain recordings, where the frequency content IS the quantity of interest rather than a convenience. In those settings a spectral estimate is the primary output, and the window choice of section 8 is a routine practical decision."},
+  {"t": "def", "h": "The common thread",
+   "body": "Time domain and frequency domain are two coordinate systems for the same object. The right question is which one makes a given structure legible: decay and short memory read better in the ACF, periodicity and filtering read better in the spectrum."}],
+ "ask": {
+  "q": "The spectral density of a filtered process is |transfer function|² times the input spectrum. What does that make the AR(1) density, given a flat input?",
+  "nudge": "An AR(1) is white noise passed through the filter 1/(1 − φB). What is the modulus squared of that?"}})
+
+S.append({
+ "kind": "recall", "id": "s12", "mins": 2,
+ "title": "Second recall — the parts most likely to fade",
+ "objective": "Retrieve the estimation facts and the formulas.",
+ "intro": "Answer, then reveal.",
+ "items": [
+  {"q": "Is the periodogram consistent? Unbiased?",
+   "a": "Asymptotically unbiased but NOT consistent — its variance tends to f(ω)², free of n."},
+  {"q": "How is a consistent estimator obtained?",
+   "a": "By smoothing the periodogram with a window whose width grows with n but more slowly: m → ∞ and m/n → 0."},
+  {"q": "Name three spectral windows.",
+   "a": "Bartlett, Tukey–Hanning and Parzen."},
+  {"q": "Give the AR(1) spectral density and say where it peaks for φ > 0.",
+   "a": "σ²/(2π(1 − 2φcos ω + φ²)), peaking at ω = 0 — low frequencies."},
+  {"q": "Give the MA(1) density under the minus convention at θ = 0.7.",
+   "a": "Proportional to 1.49 − 1.4cos ω, which is 0.09 at ω = 0 and 2.89 at ω = π."},
+  {"q": "What does the cumulative periodogram test, and what is its null?",
+   "a": "Whether a series is white noise; the null is a flat spectrum."}]})
+
+S.append({
+ "kind": "summary", "id": "s13", "mins": 3,
+ "title": "What you should now be able to do unaided",
+ "objective": "Close the loop before the mastery test.",
+ "body": [
+  "State that the spectral density is the Fourier transform of the autocovariance function, and invert it.",
+  "Use ∫f(ω)dω = γ₀ as a check on any spectral computation.",
+  "Give the white-noise, AR(1) and MA(1) densities, and say where each concentrates its variance.",
+  "State the MA sign convention being used and what changes if it is the other one.",
+  "Say that the periodogram estimates the spectrum, and that it is asymptotically unbiased but inconsistent.",
+  "Explain why smoothing with a window fixes consistency, and name Bartlett, Tukey–Hanning and Parzen.",
+  "Describe the bias–variance trade-off in choosing a window width, and the cumulative periodogram test."]})
+
+S.append({
+ "kind": "theory", "id": "s14", "mins": 8, "ext": True,
+ "title": "Why two degrees of freedom, and what windows really do",
+ "objective": "See the mechanism behind the inconsistency and the window trade-off.",
+ "blocks": [
+  {"t": "step", "h": "The periodogram ordinate as two squared normals",
+   "body": "At a Fourier frequency ωⱼ = 2πj/n, the periodogram is built from two sample quantities: the cosine and the sine coefficient at that frequency. For a Gaussian process each is asymptotically normal with variance proportional to f(ωⱼ), and the two are asymptotically independent. So the ordinate is proportional to a sum of two squared normals — a χ²₂ — whatever n happens to be. Two degrees of freedom, always."},
+  {"t": "formula", "h": "What that implies",
+   "body": "I(ω) ≈ f(ω) · χ²₂/2, so\n    E[I(ω)] ≈ f(ω)        (asymptotically unbiased)\n    Var[I(ω)] ≈ f(ω)²     (free of n — inconsistent)\nand the relative standard error is about 1, which is why a raw periodogram looks like noise. The verification bears it out: the sd stayed near f(ω) = 0.159 across n = 64 to 16,384."},
+  {"t": "step", "h": "Why more data does not help at a fixed frequency",
+   "body": "Doubling n halves the spacing between Fourier frequencies, so there are twice as many ordinates — but each is still built from two coefficients. The extra data buys RESOLUTION, not precision. Smoothing is what converts the extra resolution into precision: with finer spacing, a band of fixed width in frequency contains more ordinates to average, so the same smoothing bandwidth gives a smaller variance as n grows. That is the mechanism by which m → ∞ with m/n → 0 delivers consistency."},
+  {"t": "def", "h": "What the window actually does",
+   "body": "A spectral window is a set of weights over neighbouring ordinates; equivalently, by the convolution theorem, it is a LAG window that tapers the sample autocovariances, down-weighting the high-lag ones which are estimated from few pairs. Bartlett's window corresponds to a triangular taper of the autocovariances; Tukey–Hanning to a raised-cosine taper; Parzen to a smoother taper with better side-lobe behaviour. The three differ in how sharply they cut off and therefore in how much they smear nearby peaks."},
+  {"t": "step", "h": "The trade-off, quantitatively",
+   "body": "Variance falls roughly as 1/m — verified at 0.152, 0.070, 0.035 and 0.018 for m = 1, 5, 21, 81, against the 1/√m predictions 0.159, 0.071, 0.035 and 0.018. Bias grows with the window width and with the CURVATURE of the true density, so a flat spectrum suffers no bias at any width while a sharp peak suffers a lot. That is why one should examine several widths: the bias term depends on the unknown shape, so no single optimal width can be chosen in advance from theory alone."}],
+ "ask": {
+  "q": "Bias from smoothing depends on the curvature of the true spectral density. What does that say about estimating a flat spectrum versus a sharply peaked one?",
+  "nudge": "What is the second derivative of a constant function?"}})
+
+S.append({
+ "kind": "quiz", "id": "s15", "mins": 12,
+ "title": "Mastery test",
+ "objective": "Demonstrate it independently, on questions you have not seen.",
+ "setId": "timeseries_t7_mastery"})
+
+CORE = [s for s in S if not s.get("ext")]
+
+LES = {
+ "id": "timeseriest7",
+ "topicId": "timeseries-t7",
+ "moduleId": "timeseries",
+ "title": "Spectral Density and the Periodogram",
+ "breadcrumb": "Time series → Frequency domain → Spectral density and its estimation",
+ "engine": "B",
+ "engineName": "Time series — the variance of a process, decomposed by frequency",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": sum(s["mins"] for s in CORE),
+ "objectives": [
+  "State that the spectral density is the Fourier transform of the autocovariance function.",
+  "Use ∫f(ω)dω = γ₀ as a check on any spectral computation.",
+  "Give the white-noise, AR(1) and MA(1) densities and say where each keeps its variance.",
+  "State the MA sign convention in use and what changes under the other one.",
+  "Say why the periodogram is asymptotically unbiased yet inconsistent.",
+  "Explain what smoothing windows do, name three, and describe the bias–variance trade-off."],
+ "prereq": [
+  {"id": "p1", "name": "Stationarity and the autocovariance function",
+   "why": "A spectral density exists only for a stationary process, and it is the transform of its autocovariances."},
+  {"id": "p2", "name": "AR and MA processes",
+   "why": "The two non-trivial densities in the lesson are those of an AR(1) and an MA(1)."},
+  {"id": "p3", "name": "Complex exponentials and |z|²",
+   "why": "The densities are moduli squared of polynomials in e^(−iω), and expanding them gives the cosine forms."},
+  {"id": "p4", "name": "Bias, variance and consistency",
+   "why": "The lesson's central result is that an estimator can be asymptotically unbiased and still inconsistent."}],
+ "traps": [
+  "The periodogram is asymptotically unbiased but NOT consistent — its variance does not shrink with n.",
+  "Consistency needs SMOOTHING, not merely a larger sample.",
+  "The spectral density transforms the AUTOCOVARIANCE function, not the residuals or the PACF.",
+  "∫f(ω)dω = γ₀, the variance — not 1, not the mean.",
+  "An AR(1) with φ > 0 peaks at LOW frequencies; only φ < 0 moves the mass to high frequencies.",
+  "The MA(1) density depends on the sign convention: 1.49 − 1.4cos ω under the minus convention.",
+  "Bartlett, Tukey–Hanning and Parzen are spectral windows, not tests and not models.",
+  "The cumulative periodogram tests WHITE NOISE, not stationarity or invertibility."],
+ "revision": {
+  "sheet": [
+   "f(ω) = (1/2π) Σₖ γₖ e^(−iωk); inverting gives γₖ = ∫ f(ω)e^(iωk) dω. Equivalent descriptions.",
+   "∫(−π to π) f(ω) dω = γ₀ = Var(yₜ) — the area is the variance, and the standard check.",
+   "June 2026 Q7: the PERIODOGRAM estimates the spectral density. The ACF, PACF and Yule–Walker do other jobs.",
+   "White noise: f(ω) = σ²/(2π), flat. At σ² = 1 that is 0.159155 everywhere, area 1.",
+   "AR(1): f(ω) = σ²/(2π(1 − 2φcos ω + φ²)). At φ = 0.8: f(0) = 3.9789, f(π) = 0.0491, ratio 81, area 2.7778 = 1/(1−0.64).",
+   "AR(1) with φ > 0 peaks at LOW frequencies; with φ < 0 at ω = π. At φ = 0.5: f(0) = 0.6366, f(π) = 0.0707, area 1.3333.",
+   "MA(1), MINUS convention yₜ = εₜ − θεₜ₋₁: f(ω) = σ²(1 + θ² − 2θcos ω)/(2π).",
+   "At θ = 0.7 that is ∝ 1.49 − 1.4cos ω: 0.09 at ω = 0, 2.89 at ω = π, area 1.49 = σ²(1+θ²).",
+   "The PLUS convention would give 1.49 + 1.4cos ω — the bank's key fixes the minus convention, as lesson 7.5 also found.",
+   "A cycle of period p observations shows as a peak at ω = 2π/p: annual in monthly data at π/6 ≈ 0.524.",
+   "Periodogram: I(ω) ≈ f(ω)·χ²₂/2, so E ≈ f(ω) but Var ≈ f(ω)², free of n ⟹ INCONSISTENT.",
+   "Verified over 4,000 replications of white noise: mean 0.156 to 0.162 and sd 0.156 to 0.162 for n = 64 to 16,384.",
+   "Each ordinate carries two degrees of freedom whatever n is — a sine and a cosine coefficient.",
+   "More data buys RESOLUTION, not precision at any one frequency.",
+   "Smoothing over m ordinates makes the sd fall as 1/√m: 0.152, 0.070, 0.035, 0.018 at m = 1, 5, 21, 81.",
+   "Consistency requires m → ∞ and m/n → 0.",
+   "Spectral (lag) windows: BARTLETT, TUKEY–HANNING, PARZEN. Equivalently tapers of the sample autocovariances.",
+   "Window width is a bias–variance trade-off: wide smooths and smears peaks, narrow preserves peaks and stays noisy.",
+   "The CUMULATIVE PERIODOGRAM tests whether a series is white noise, the null being a flat spectrum."],
+  "cards": [
+   ["What estimates the spectral density", "The periodogram"],
+   ["The spectral density transforms", "The autocovariance function"],
+   ["∫f(ω)dω over (−π, π)", "γ₀, the process variance"],
+   ["White noise spectrum", "Flat at σ²/(2π) = 0.1592 for σ² = 1"],
+   ["AR(1), φ = 0.8", "f(0) = 3.979 against f(π) = 0.049 — low frequencies"],
+   ["AR(1), φ < 0", "Mass at high frequencies, near ω = π"],
+   ["MA(1), θ = 0.7, minus convention", "∝ 1.49 − 1.4cos ω"],
+   ["Periodogram's properties", "Asymptotically unbiased, inconsistent"],
+   ["Why inconsistent", "Two degrees of freedom per ordinate, whatever n is"],
+   ["The repair", "Smooth with a window; sd falls as 1/√m"],
+   ["Bartlett, Tukey–Hanning, Parzen", "Spectral windows"],
+   ["Cumulative periodogram", "Tests white noise — a flat spectrum"]],
+  "tricks": [
+   "Always check that the area of a density you have written equals γ₀; a lost 2π shows up immediately.",
+   "Integrating a density made of cosines leaves only the constant term, so the area check is nearly free.",
+   "Positive autocorrelation means low-frequency mass; negative means high-frequency.",
+   "AR puts the polynomial in the DENOMINATOR, MA in the numerator — the frequency-domain duality.",
+   "A period of p observations is a frequency of 2π/p.",
+   "To halve a smoothed estimate's sd you need FOUR times the band, since it falls as 1/√m."],
+  "shortcuts": [
+   "1/(2π) = 0.159155, which is the white-noise density at σ² = 1.",
+   "At φ = 0.8 the denominator at ω = 0 is (1 − 0.8)² = 0.04, giving f(0) = 3.979.",
+   "At θ = 0.7, 1 + θ² = 1.49 and 2θ = 1.4 — the two numbers in the MA(1) density."],
+  "remember": [
+   "Periodogram estimates it; smoothing makes it consistent.",
+   "Area equals the variance.",
+   "Positive φ means low frequencies."]},
+ "howto": "Section 3's chart is the fastest way into this topic: switch between the three processes and watch where the variance sits, while the readout confirms that the area is always γ₀. Section 5 is June 2026's question, which is really a test of knowing what each of four real tools is FOR — the PACF gives AR order, the ACF gives lag structure, Yule–Walker estimates coefficients, and only the periodogram estimates a spectrum. Section 8 is the most substantial part and the most surprising: the periodogram is asymptotically unbiased and yet inconsistent, and the lesson shows this with figures rather than asserting it — the standard deviation stays at about 0.16 while the sample size goes from 64 to 16,384. That is why smoothing windows exist, and section 9's scenario shows how choosing a window by appearance systematically misleads. Note the MA sign convention: this bank's keys use yₜ = εₜ − θεₜ₋₁, which lesson 7.5 established independently, and the other convention flips the shape. If short of time, sections 3, 5 and 8 are the lesson.",
+ "refs": [
+  {"title": "Time Series Analysis and Its Applications", "where": "Chapter 4",
+   "site": "Shumway and Stoffer", "url": "", "type": "Textbook", "free": False,
+   "checked": "2026-11-03",
+   "why": "Spectral analysis in full: the density, the periodogram's distribution, smoothing windows and the bias–variance trade-off."},
+  {"title": "The Analysis of Time Series: An Introduction", "where": "Chapters 6 and 7",
+   "site": "Chatfield", "url": "", "type": "Textbook", "free": False,
+   "checked": "2026-11-03",
+   "why": "The standard treatment at this syllabus's level, including Bartlett, Tukey–Hanning and Parzen windows by name."},
+  {"title": "Time Series Analysis: Forecasting and Control", "where": "Chapter 2",
+   "site": "Box, Jenkins and Reinsel", "url": "", "type": "Textbook", "free": False,
+   "checked": "2026-11-03",
+   "why": "The spectral densities of AR and MA processes derived from the linear-filter representation."},
+  {"title": "Time Series Analysis", "where": "Weeks on spectral analysis",
+   "site": "NPTEL / SWAYAM", "url": "https://archive.nptel.ac.in/courses/111104049",
+   "type": "Video course", "free": True, "checked": "2026-11-03",
+   "why": "Indian-syllabus treatment of the periodogram and spectral windows in the phrasing NET uses."}],
+ "mastery": {
+  "minQ": 10, "pass": 80, "draw": 10,
+  "fmtMin": {"numeric": 70, "multi": 70},
+  "diffMix": {"easy": 3, "moderate": 5, "hard": 2},
+  "noHints": True, "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."},
+ "provenance": "Authored November 2026, the fourth lesson of the time-series module. PYQ anchor: June 2026 Q7, answered CORRECTLY (marked D) — the periodogram is what estimates a spectral density. The lesson was built because the question's ten variants cover the whole of spectral analysis, from the Fourier-transform definition to smoothing windows and the cumulative periodogram test, and because the question itself tests knowing what four real tools are for rather than recognising a name. The central claim is verified rather than asserted: over 4,000 replications of white noise with σ² = 1, the periodogram at a fixed frequency had mean 0.1557, 0.1596, 0.1615, 0.1613 and 0.1624 for n = 64, 256, 1024, 4096 and 16384 against the true f(ω) = 1/(2π) = 0.159155, while its standard deviation stayed at 0.1558, 0.1562, 0.1567, 0.1603 and 0.1618 — a 256-fold increase in sample size with no reduction in variability, which is what inconsistency looks like. Smoothing over m ordinates reduced the standard deviation as 1/√m to close agreement: 0.1518, 0.0702, 0.0347 and 0.0177 at m = 1, 5, 21 and 81 against the predictions 0.1592, 0.0712, 0.0347 and 0.0177. All spectral densities were computed and their areas checked against γ₀ by Simpson integration, agreeing to four decimals in every case: 1.0000 for white noise, 2.7778 for an AR(1) at φ = ±0.8 against 1/(1 − 0.64), 1.3333 at φ = 0.5, and 1.4900 for an MA(1) at θ = ±0.7 against 1 + θ². The AR(1) ordinates f(0) = 3.9789 and f(π) = 0.0491 at φ = 0.8 were confirmed independently. SIGN CONVENTION: the bank's key for the MA(1) variant is 1.49 − 1.4cos ω, which is 1 + θ² − 2θcos ω and therefore the MINUS convention yₜ = εₜ − θεₜ₋₁; the plus convention would give 1.49 + 1.4cos ω, which is one of the offered distractors, so the key settles it — and lesson 7.5 reached the same conclusion independently from its invertibility variant. The lesson states the convention explicitly and notes that a question from elsewhere must be read for its own. Introduces the `spectral` visualisation, written for this lesson; one bug was caught and fixed during testing, in that `axes()` requires numeric tick positions rather than formatted strings, and the area readout was moved from a midpoint sum to Simpson integration because the former reported 0.9997 where the exact answer is 1. Previous-year questions are stored separately and carry their exam cycle.",
+ "scenes": S}
+
+# ---------------------------------------------------------------- pool
+
+def q(i, fmt, diff, stem, opts, ans, exp, **kw):
+    d = {"id": "ts-t7-m-%02d" % i, "format": fmt, "topic": "timeseries-t7",
+         "diff": diff, "stem": stem, "options": opts, "answer": ans, "explanation": exp}
+    d.update(kw)
+    return d
+
+def verd(a, b, c, dd):
+    return {"A": {"tf": a[0], "why": a[1]}, "B": {"tf": b[0], "why": b[1]},
+            "C": {"tf": c[0], "why": c[1]}, "D": {"tf": dd[0], "why": dd[1]}}
+
+I = []
+
+# --- easy (6)
+I.append(q(1, "single", "easy",
+ "For estimating the spectral density function of a time series, one can use:",
+ ["the periodogram", "the autocorrelation function",
+  "the partial autocorrelation function", "the Yule–Walker equations"],
+ "A",
+ "The periodogram is the sample analogue of the spectral density — the squared modulus of the discrete Fourier transform of the data, equivalently the transform of the sample autocovariances. The other three are real tools for other jobs: the ACF describes lag structure, the PACF identifies AR order, and Yule–Walker estimates AR coefficients. This is June 2026 Q7."))
+
+I.append(q(2, "single", "easy",
+ "The spectral density function is the Fourier transform of the:",
+ ["autocovariance function", "partial autocorrelation function",
+  "residuals", "sample mean"],
+ "A",
+ "f(ω) = (1/2π)Σₖ γₖe^(−iωk), and inverting recovers the autocovariances — so the two descriptions carry exactly the same information. Because γₖ = γ₋ₖ the density is real and even, which is why plotting it on [0, π] loses nothing."))
+
+I.append(q(3, "single", "easy",
+ "The spectral density of a white noise process is:",
+ ["constant over all frequencies", "peaked at zero",
+  "linear in ω", "zero everywhere"],
+ "A",
+ "Only γ₀ = σ² is non-zero, so the transform has a single term and f(ω) = σ²/(2π) at every frequency — 0.159155 when σ² = 1. Equal variance at every frequency is where the name 'white' comes from, by analogy with white light."))
+
+I.append(q(4, "single", "easy",
+ "∫f(ω)dω over the full range (−π, π) equals:",
+ ["γ₀", "the mean", "0", "1"],
+ "A",
+ "Putting k = 0 in the inversion formula gives exactly the process variance. So the spectral density decomposes the variance across frequencies, and the area under it is that variance. It equals 1 only when the variance happens to be 1, which is why option D is a trap."))
+
+I.append(q(5, "single", "easy",
+ "For an AR(1) with φ = 0.8, the spectral density is largest at:",
+ ["low frequencies", "ω = π/2", "high frequencies", "it is flat"],
+ "A",
+ "The denominator 1 − 2φcos ω + φ² = 1.64 − 1.6cos ω is smallest at ω = 0, where it is (1 − 0.8)² = 0.04. So f(0) = 3.9789 against f(π) = 0.0491, a ratio of 81. Positive autocorrelation means slow smooth movement, which is low-frequency behaviour."))
+
+I.append(q(6, "single", "easy",
+ "Bartlett, Tukey–Hanning and Parzen are names of:",
+ ["spectral windows", "tests for stationarity", "sampling schemes", "ARIMA models"],
+ "A",
+ "They are the standard weighting schemes for smoothing a periodogram — equivalently lag windows, since weighting neighbouring frequencies corresponds to tapering the sample autocovariances. They differ in how sharply they cut off and therefore in how much they smear genuine peaks."))
+
+# --- moderate (10)
+I.append(q(7, "single", "moderate",
+ "The periodogram as an estimator of the spectral density is:",
+ ["asymptotically unbiased but inconsistent", "consistent",
+  "biased and inconsistent", "unbiased and consistent"],
+ "A",
+ "At a fixed frequency I(ω) is asymptotically f(ω)·χ²₂/2, so its mean tends to f(ω) but its variance tends to f(ω)², which does not involve n. Verified over 4,000 replications of white noise: the mean ran 0.156 to 0.162 against the true 0.159155 while the standard deviation stayed at 0.156 to 0.162 across n = 64 to 16,384."))
+
+I.append(q(8, "single", "moderate",
+ "To obtain a consistent estimator of the spectral density one:",
+ ["smooths the periodogram with a window", "increases the sample size only",
+  "differences the series", "uses the PACF"],
+ "A",
+ "More data gives ordinates at more frequencies rather than better precision at any one, since each ordinate carries two degrees of freedom whatever n is. Averaging over m neighbouring ordinates reduces the standard deviation as 1/√m — verified as 0.152, 0.070, 0.035 and 0.018 at m = 1, 5, 21 and 81. Consistency requires m → ∞ with m/n → 0."))
+
+I.append(q(9, "single", "moderate",
+ "For an MA(1) with θ = 0.7 and σ² = 1 under the convention yₜ = εₜ − θεₜ₋₁, the spectral density is proportional to:",
+ ["1.49 − 1.4cos ω", "1.49 + 1.4cos ω",
+  "1/(1.49 − 1.4cos ω)", "0.49cos ω"],
+ "A",
+ "|1 − θe^(−iω)|² = 1 + θ² − 2θcos ω = 1.49 − 1.4cos ω, giving 0.09 at ω = 0 and 2.89 at ω = π. Option B is what the PLUS convention yₜ = εₜ + θεₜ₋₁ would give, so the convention must be read from the question; option C has the AR form, with the polynomial in the denominator."))
+
+I.append(q(10, "single", "moderate",
+ "The PACF is primarily used to:",
+ ["identify the order of an AR process", "estimate the spectrum",
+  "test stationarity", "estimate the mean"],
+ "A",
+ "The PACF cuts off after lag p for an AR(p), which is what identifies the order; the ACF cuts off after lag q for an MA(q). Neither estimates a spectrum — that is the periodogram's job, and offering both as distractors is exactly what June 2026's question did."))
+
+I.append(q(11, "single", "moderate",
+ "The cumulative periodogram is used to test whether a series is:",
+ ["white noise", "seasonal", "stationary", "invertible"],
+ "A",
+ "Under white noise the spectral density is flat, so the cumulative sum of periodogram ordinates should rise linearly in frequency; the maximum departure from that line is compared with Kolmogorov–Smirnov-type bounds. It is the frequency-domain counterpart of the Ljung–Box test and is applied to residuals after fitting."))
+
+I.append(q(12, "numeric", "moderate",
+ "For an AR(1) with φ = 0.5 and σ² = 1, f(0) and the total area under the density are:",
+ ["0.6366 and 1.3333", "0.1592 and 1.0000", "3.9789 and 2.7778", "0.6366 and 1.0000"],
+ "A",
+ "The denominator at ω = 0 is (1 − 0.5)² = 0.25, so f(0) = 1/(2π × 0.25) = 0.6366, and the area must be γ₀ = σ²/(1 − φ²) = 1/0.75 = 1.3333. Option C is the φ = 0.8 case.",
+ check="The area check is the standard safeguard: it must equal σ²/(1 − φ²), which is 1.3333 here, confirmed by Simpson integration."))
+
+I.append(q(13, "multi", "moderate",
+ "Consider the periodogram and its properties.",
+ ["A, B and C only", "A and C only", "B and D only", "A, B, C and D"],
+ "A",
+ "A is true, and it is why the estimator is inconsistent. B is true: the mean tends to f(ω). C is true and is the mechanism. D is false — more data improves resolution, not the precision at any single frequency.",
+ statements=["Var[I(ω)] tends to f(ω)², which does not depend on n.",
+             "E[I(ω)] tends to f(ω), so the periodogram is asymptotically unbiased.",
+             "Each periodogram ordinate carries about two degrees of freedom whatever n is.",
+             "Increasing n reduces the variance of the periodogram at a fixed frequency."],
+ verdicts=verd(
+  (True, "True. I(ω) is asymptotically f(ω)·χ²₂/2, whose variance is f(ω)². Verified: the standard deviation stayed near 0.16 for n from 64 to 16,384."),
+  (True, "True — the mean tracks the true density, which is why the estimator is unbiased in the limit despite being useless on its own at one frequency."),
+  (True, "True. The ordinate is built from a sine and a cosine coefficient at that frequency, and there are only ever two of them however long the series."),
+  (False, "False, and it is the heart of the matter. Doubling n halves the spacing between Fourier frequencies, giving more ordinates rather than better ones. Smoothing is what converts that extra resolution into precision."))))
+
+I.append(q(14, "numeric", "moderate",
+ "A monthly series has an annual cycle. Its spectral density peaks at approximately:",
+ ["ω = 0.524", "ω = 12", "ω = 0", "ω = 3.142"],
+ "A",
+ "A cycle of period p observations corresponds to ω = 2π/p, so an annual cycle in monthly data gives 2π/12 = π/6 ≈ 0.5236 radians per month. Option D is ω = π, the highest representable frequency, which corresponds to a period of 2 observations.",
+ check="Frequencies lie in [0, π], so any answer above π is impossible — which rules out option B at once."))
+
+I.append(q(15, "single", "moderate",
+ "An AR(1) with φ = −0.6 concentrates its variance at:",
+ ["high frequencies, near ω = π", "low frequencies, near ω = 0",
+  "ω = π/2", "all frequencies equally"],
+ "A",
+ "With φ negative the denominator 1 − 2φcos ω + φ² becomes 1.36 + 1.2cos ω, which is smallest at ω = π where cos ω = −1, giving 0.16. A negative coefficient makes the series tend to reverse sign each period, which is rapid alternation and therefore high-frequency."))
+
+I.append(q(16, "numeric", "moderate",
+ "A smoothed spectral estimate's standard deviation falls as 1/√m in the band width m. To halve it, m must be multiplied by:",
+ ["4", "2", "√2", "8"],
+ "A",
+ "Halving a quantity proportional to 1/√m needs √m to double, so m must quadruple. The verification figures agree: the standard deviation fell from 0.152 at m = 1 to 0.070 at m = 5, slightly better than halved with m a little above 4.",
+ check="Useful smoothing bands are therefore wide, which is precisely why the bias they introduce has to be taken seriously."))
+
+# --- hard (4)
+I.append(q(17, "multi", "hard",
+ "Consider the bias–variance trade-off in smoothing a periodogram.",
+ ["A, B and C only", "A and C only", "B and D only", "A, B, C and D"],
+ "A",
+ "A is true, verified across m = 1 to 81. B is true: bias depends on the curvature of the true density. C is true and is the formal consistency requirement. D is false — selecting for smoothness selects for a wide window and therefore for maximum bias.",
+ statements=["Variance falls roughly as 1/m in the band width.",
+             "Bias grows with the window width and with the curvature of the true density.",
+             "Consistency requires m → ∞ and m/n → 0.",
+             "Choosing the window width by how smooth the estimate looks is a sound procedure."],
+ verdicts=verd(
+  (True, "True. The standard deviation went 0.152, 0.070, 0.035, 0.018 at m = 1, 5, 21, 81 — tracking 1/√m closely."),
+  (True, "True, which is why a flat spectrum suffers no bias at any width while a sharp peak suffers a great deal. The second derivative of a constant is zero."),
+  (True, "True. The first condition kills the variance and the second kills the bias; both are needed, so no fixed band works for every sample size."),
+  (False, "False. Smoothness is controlled by the window width, not by the data — any spectrum looks smooth with a wide enough band. Selecting for appearance therefore selects for maximum bias. The sound procedure is to examine several widths and keep features that persist."))))
+
+I.append(q(18, "single", "hard",
+ "Why does the periodogram fail to become more precise as the sample grows?",
+ ["each ordinate is built from two coefficients — a sine and a cosine — however long the series",
+  "the autocovariances are estimated with bias",
+  "the Fourier transform loses information",
+  "the series must be stationary"],
+ "A",
+ "At each Fourier frequency there are only ever two sample quantities available, so the ordinate behaves like a scaled χ²₂ with two degrees of freedom whatever n is. Doubling n halves the spacing between frequencies, giving more ordinates rather than better ones — extra resolution rather than extra precision. Smoothing is what converts the one into the other."))
+
+I.append(q(19, "numeric", "hard",
+ "For an MA(1) with θ = 0.7 and σ² = 1 under the minus convention, the area under the spectral density over (−π, π) is:",
+ ["1.49", "1.00", "0.09", "2.89"],
+ "A",
+ "The density is (1.49 − 1.4cos ω)/(2π), and ∫cos ω dω over a full period is 0, so only the constant survives: (1/2π)(1.49)(2π) = 1.49. That equals γ₀ = σ²(1 + θ²) = 1.49 as it must. Options C and D are f(0) and f(π) up to the 2π factor.",
+ check="Confirmed by Simpson integration as 1.4900. This area check is the quickest way to catch a lost factor of 2π."))
+
+I.append(q(20, "single", "hard",
+ "A sample ACF shows values near 0.08 at lags 7, 14 and 21, each inside the ±2/√n band, and the analyst concludes there is no weekly cycle. The best objection is:",
+ ["a cycle spreads its evidence across every multiple of lag 7, so lag-by-lag tests have little power; the spectrum pools it at one frequency",
+  "the confidence band is computed wrongly",
+  "the ACF cannot detect cycles at all",
+  "more data would make each autocorrelation significant"],
+ "A",
+ "Periodic structure distributes its signal across all harmonics of the period, so each individual autocorrelation carries only a fraction of it and falls inside the sampling band. The spectral density gathers those contributions at the single frequency 2π/7. The caveat is that one tall periodogram ordinate is not evidence either, since its standard deviation is about as large as the quantity it estimates — the peak counts only once it survives smoothing."))
+
+# Spread the answer keys; the validator caps any letter at 40% of the pool.
+LET = "ABCD"
+WANT = {"ts-t7-m-01": "D", "ts-t7-m-02": "D", "ts-t7-m-03": "C",
+        "ts-t7-m-04": "D", "ts-t7-m-05": "B", "ts-t7-m-06": "D",
+        "ts-t7-m-07": "B", "ts-t7-m-08": "C", "ts-t7-m-09": "C",
+        "ts-t7-m-10": "B", "ts-t7-m-11": "D", "ts-t7-m-12": "B",
+        "ts-t7-m-14": "C", "ts-t7-m-15": "D", "ts-t7-m-16": "B",
+        "ts-t7-m-18": "C", "ts-t7-m-19": "D", "ts-t7-m-20": "B"}
+
+
+def swapletters(t, a, b):
+    """Swap option letters a and b wherever the text cites options, plural lists included."""
+    sw = lambda L: b if L == a else a if L == b else L
+    def fix(m):
+        head, body = m.group(1), m.group(2)
+        return head + re.sub(r"[ABCD]", lambda n: sw(n.group(0)), body)
+    return re.sub(r"([Oo]ptions?\s+)([ABCD](?:\s*(?:,|and|or)\s*[ABCD])*)", fix, t)
+
+
+def relabel(items):
+    for it in items:
+        w = WANT.get(it["id"])
+        if not w or not it.get("options"):
+            continue
+        i, j = LET.index(it["answer"]), LET.index(w)
+        if i == j:
+            continue
+        o = it["options"]
+        o[i], o[j] = o[j], o[i]
+        it["answer"] = w
+        a, b = LET[i], LET[j]
+        for fld in ("explanation", "check"):
+            if it.get(fld):
+                it[fld] = swapletters(it[fld], a, b)
+    return items
+
+relabel(I)
+_k = {}
+for _it in I:
+    _k[_it["answer"]] = _k.get(_it["answer"], 0) + 1
+print("key spread:", {L: _k.get(L, 0) for L in LET}, "cap", -(-len(I) * 2 // 5))
+
+POOLD = {
+ "moduleId": "timeseries", "topicId": "timeseries-t7", "source": "mastery",
+ "label": "Spectral density and the periodogram — mastery test (unseen)",
+ "count": len(I), "items": I}
+
+os.makedirs("seed", exist_ok=True)
+with io.open(OUT, "w", encoding="utf-8") as f:
+    json.dump(LES, f, ensure_ascii=False, indent=1)
+with io.open(POOL, "w", encoding="utf-8") as f:
+    json.dump(POOLD, f, ensure_ascii=False, indent=1)
+
+print("wrote %s: %d scenes (%d core), estMin %d" % (OUT, len(S), len(CORE), LES["estMin"]))
+print("wrote %s: %d items" % (POOL, len(I)))

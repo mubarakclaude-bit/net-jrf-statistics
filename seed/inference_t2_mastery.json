@@ -1,0 +1,427 @@
+{
+ "moduleId": "inference",
+ "source": "mastery",
+ "topicId": "inference-t2",
+ "label": "Completeness and Basu — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "inf-t2-m-01",
+   "format": "single",
+   "topic": "inference-t2",
+   "stem": "A family of distributions of T is complete when:",
+   "options": [
+    "E_θ[g(T)] = 0 for every θ implies g(T) = 0 with probability 1",
+    "E_θ[g(T)] = 0 for some θ implies g(T) = 0 with probability 1",
+    "Var_θ(T) does not depend on θ",
+    "The distribution of T does not depend on θ"
+   ],
+   "answer": "A",
+   "explanation": "That is the definition, and the quantifier 'for every θ' is the whole content — option B weakens it to a single θ, which says almost nothing. Option D describes an ancillary statistic, which is close to the opposite situation. Option C is unrelated to completeness.",
+   "diff": "easy"
+  },
+  {
+   "id": "inf-t2-m-02",
+   "format": "numeric",
+   "topic": "inference-t2",
+   "stem": "X₁,…,X₅ are iid U(0,θ). The sample maximum is x₍₅₎ = 3.5. Given E[X₍ₙ₎] = nθ/(n+1), give the UMVUE of θ and its value here.",
+   "options": [
+    "x₍₅₎ = 3.5",
+    "(6/5)·x₍₅₎ = 4.2",
+    "(5/6)·x₍₅₎ = 2.917",
+    "2x̄, which cannot be found from x₍₅₎ alone"
+   ],
+   "answer": "B",
+   "explanation": "X₍ₙ₎ is complete sufficient, and E[X₍ₙ₎] = 5θ/6, so (6/5)X₍ₙ₎ is unbiased. Being an unbiased function of a complete sufficient statistic, Lehmann–Scheffé makes it the UMVUE: (6/5)(3.5) = 4.2. Option A is the MLE, which is biased low; option C scales the wrong way and makes the bias worse.",
+   "check": "The multiplier is (n+1)/n = 6/5, not n/(n+1). A UMVUE for θ must come out larger than the sample maximum, never smaller.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t2-m-03",
+   "format": "multi",
+   "topic": "inference-t2",
+   "stem": "Consider Basu's theorem and its conditions.",
+   "options": [
+    "A and B only",
+    "B and C only",
+    "A, C and D only",
+    "A, B and D only"
+   ],
+   "answer": "C",
+   "explanation": "A is true — that is the statement of the theorem. B is false: completeness is required as well as sufficiency, and dropping it breaks the conclusion. C is true, and is the standard application. D is true — bounded completeness suffices, which is why some texts state it that way.",
+   "statements": [
+    "If T is complete sufficient and A is ancillary, then T and A are independent for every θ.",
+    "Sufficiency of T alone is enough for the conclusion.",
+    "For an iid normal sample with σ² known, Basu gives the independence of X̄ and S².",
+    "Bounded completeness of T is enough for the theorem to hold."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The theorem exactly as stated."
+    },
+    "B": {
+     "tf": false,
+     "why": "Completeness is essential. U(θ,θ+1) is sufficient without being complete, and no independence follows."
+    },
+    "C": {
+     "tf": true,
+     "why": "X̄ is complete sufficient for μ, S² is ancillary for μ, so they are independent."
+    },
+    "D": {
+     "tf": true,
+     "why": "Basu's proof only needs the condition for bounded g, so bounded completeness suffices."
+    }
+   },
+   "diff": "hard"
+  },
+  {
+   "id": "inf-t2-m-04",
+   "format": "numeric",
+   "topic": "inference-t2",
+   "stem": "X₁,…,X₄ are iid U(θ, θ+1). The range is R = X₍₄₎ − X₍₁₎. Give E[R], and say what it shows about the minimal sufficient statistic (X₍₁₎, X₍₄₎).",
+   "options": [
+    "E[R] = 3/5, and it shows the statistic is not sufficient",
+    "E[R] = 1/5, and it shows the statistic is not complete",
+    "E[R] = 4/5, and it shows the statistic is ancillary",
+    "E[R] = 3/5, and it shows the statistic is not complete"
+   ],
+   "answer": "D",
+   "explanation": "Writing Xᵢ = θ + Uᵢ with Uᵢ iid U(0,1), R = U₍₄₎ − U₍₁₎ with E[R] = (n−1)/(n+1) = 3/5. Since R is ancillary, g(T) = R − 3/5 is a non-zero function with mean 0 for every θ, so T is not complete. It remains perfectly sufficient — option A confuses the two properties.",
+   "check": "Two parts: the number and what it demonstrates. (n−1)/(n+1) with n = 4 is 3/5, not 1/5 — that would be E[U₍₁₎].",
+   "diff": "hard"
+  },
+  {
+   "id": "inf-t2-m-05",
+   "format": "single",
+   "topic": "inference-t2",
+   "stem": "For which family is the minimal sufficient statistic NOT complete?",
+   "options": [
+    "N(θ, θ²) with θ > 0",
+    "Poisson(λ) with λ > 0",
+    "Bernoulli(p) with 0 < p < 1",
+    "Exponential with rate λ > 0"
+   ],
+   "answer": "A",
+   "explanation": "N(θ,θ²) is a curved exponential family: the minimal sufficient statistic (ΣXᵢ, ΣXᵢ²) is two-dimensional while θ is one-dimensional, so the natural parameter traces a curve rather than filling an open rectangle. Full rank fails and completeness goes with it. The other three are full-rank one-parameter families whose sufficient statistic is complete.",
+   "diff": "easy"
+  },
+  {
+   "id": "inf-t2-m-06",
+   "format": "numeric",
+   "topic": "inference-t2",
+   "stem": "X₁,…,X₄ are iid Bernoulli(p) and Σxᵢ = 3. The UMVUE of p² is T(T−1)/(n(n−1)). Give its value, and say why it is the UMVUE.",
+   "options": [
+    "0.5625, because it is the square of the MLE",
+    "0.5, because it is an unbiased function of a complete sufficient statistic",
+    "0.75, because it is the sample proportion",
+    "0.5, because it has the smallest variance among all estimators"
+   ],
+   "answer": "B",
+   "explanation": "T(T−1)/(n(n−1)) = 3·2/(4·3) = 0.5. It is unbiased because E[T(T−1)] = n(n−1)p², and T is complete sufficient, so Lehmann–Scheffé makes the unbiased function of T the UMVUE. Option A is p̂² = 0.5625, which is biased. Option D overstates the claim — UMVUE means smallest variance among UNBIASED estimators only.",
+   "check": "The question asked for the value and the reason. 0.5 with the wrong reason is still a wrong answer in a two-part item.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t2-m-07",
+   "format": "multi",
+   "topic": "inference-t2",
+   "stem": "Let T be sufficient for θ in some family.",
+   "options": [
+    "A, B and C only",
+    "C and D only",
+    "B and D only",
+    "A and B only"
+   ],
+   "answer": "C",
+   "explanation": "A is false — sufficiency does not give completeness; the implication runs the other way. B is true, by Bahadur's theorem. C is false: ancillarity means the distribution is free of θ, which is close to the opposite of sufficiency. D is true, and is exactly how completeness is disproved.",
+   "statements": [
+    "If T is sufficient then T is complete.",
+    "If T is complete and sufficient then T is minimal sufficient.",
+    "A sufficient statistic is always ancillary.",
+    "Exhibiting one non-zero g with E_θ[g(T)] = 0 for all θ disproves completeness."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": false,
+     "why": "No. The whole sample is sufficient and is almost never complete."
+    },
+    "B": {
+     "tf": true,
+     "why": "Bahadur's theorem, assuming a minimal sufficient statistic exists."
+    },
+    "C": {
+     "tf": false,
+     "why": "Ancillary means the distribution does not involve θ — nearly the reverse of carrying all the information about θ."
+    },
+    "D": {
+     "tf": true,
+     "why": "Completeness is a universal claim, so a single counterexample destroys it."
+    }
+   },
+   "diff": "hard"
+  },
+  {
+   "id": "inf-t2-m-08",
+   "format": "numeric",
+   "topic": "inference-t2",
+   "stem": "X₁,…,Xₙ are iid with f(x;θ) = θ e^(−θx), x > 0. Put the family in exponential form and give the dimension of the natural parameter space together with the complete sufficient statistic.",
+   "options": [
+    "Dimension 2, and T = (Σxᵢ, Σxᵢ²)",
+    "Dimension 1, and T = x₍ₙ₎",
+    "Dimension 2, and T = (Σxᵢ, n)",
+    "Dimension 1, and T = Σxᵢ"
+   ],
+   "answer": "D",
+   "explanation": "f = θ·exp(−θx) = h(x)c(θ)exp(w(θ)t(x)) with h = 1, c(θ) = θ, w(θ) = −θ and t(x) = x. One natural parameter, and as θ runs over (0,∞) the value −θ covers an open interval, so the family is full rank. T = Σxᵢ is therefore complete and minimal sufficient.",
+   "check": "One parameter means a one-dimensional T. If you wrote a pair, check how many distinct t-functions the exponent actually needed.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t2-m-09",
+   "format": "numeric",
+   "topic": "inference-t2",
+   "stem": "X₁,…,Xₙ are iid Poisson(λ). You must show T = ΣXᵢ is complete. After writing E_λ[g(T)] = 0 and dividing out e^(−nλ), what remains and what closes the argument?",
+   "options": [
+    "A power series in λ that vanishes on an interval, so every coefficient is zero",
+    "A polynomial in λ of degree n, so it has at most n roots",
+    "An integral over (0,λ), so differentiating in λ gives g ≡ 0",
+    "A moment generating function, so uniqueness of MGFs gives g ≡ 0"
+   ],
+   "answer": "A",
+   "explanation": "Dividing by e^(−nλ) leaves Σ_t [g(t)nᵗ/t!] λ^t = 0 for every λ > 0 — a power series in λ identically zero on an open interval, so every coefficient vanishes and g(t) = 0 for all t. Option B is the Binomial ending, option C the Uniform ending; both are right arguments applied to the wrong family.",
+   "check": "The sum over t is infinite for a Poisson, so it is a power series and not a polynomial. Identify the support before choosing which uniqueness result to cite.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t2-m-10",
+   "format": "order",
+   "topic": "inference-t2",
+   "stem": "To prove a statistic complete, arrange these steps in the order they are carried out.",
+   "options": [
+    "D, C, A, B",
+    "C, A, D, B",
+    "A, C, D, B",
+    "C, D, A, B"
+   ],
+   "answer": "B",
+   "explanation": "Write the distribution of T first — completeness is a statement about that family, so nothing can start without it. Then write E[g(T)] = 0 in full, strip the factors free of t, and close with the uniqueness result. Reaching for a uniqueness theorem before you know whether the sum is finite or infinite is how candidates pick the wrong one.",
+   "items": [
+    "A. Write E_θ[g(T)] = 0 explicitly as a sum or integral",
+    "B. Apply the uniqueness result and conclude g ≡ 0",
+    "C. Identify the distribution of T and its support",
+    "D. Divide out every factor that does not involve t"
+   ],
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t2-m-11",
+   "format": "single",
+   "topic": "inference-t2",
+   "diff": "easy",
+   "stem": "A statistic T is ancillary for θ when:",
+   "options": [
+    "T is sufficient but not complete",
+    "T has expectation zero for every θ",
+    "the distribution of T does not depend on θ",
+    "T is independent of every other statistic"
+   ],
+   "answer": "C",
+   "explanation": "Ancillarity means the distribution of T is the same whatever θ is, so T on its own says nothing about θ. Option B states the condition that appears inside the definition of completeness, not ancillarity, and independence from a complete sufficient statistic is a CONSEQUENCE of ancillarity via Basu, not its definition."
+  },
+  {
+   "id": "inf-t2-m-12",
+   "format": "numeric",
+   "topic": "inference-t2",
+   "diff": "moderate",
+   "stem": "X₁,…,X₆ are iid U(0,θ) with sample maximum x₍₆₎ = 4.2. Using E[X₍ₙ₎] = nθ/(n+1), give the unbiased estimator of θ based on the maximum and its value here.",
+   "options": [
+    "x₍ₙ₎ = 4.2",
+    "2x̄, which cannot be found from this information",
+    "n x₍ₙ₎/(n+1) = 3.6",
+    "(n+1)x₍ₙ₎/n = 4.9"
+   ],
+   "answer": "D",
+   "explanation": "E[X₍₆₎] = 6θ/7, so multiplying by 7/6 gives an unbiased estimator: (n+1)X₍ₙ₎/n = (7/6)(4.2) = 4.9. Option C applies the correction the wrong way round and produces an estimate BELOW the largest observation, which is impossible.",
+   "check": "The correction must push the estimate UP, because the sample maximum always underestimates θ. An answer below 4.2 is wrong on its face."
+  },
+  {
+   "id": "inf-t2-m-13",
+   "format": "multi",
+   "topic": "inference-t2",
+   "diff": "hard",
+   "stem": "Consider completeness and the families it holds in.",
+   "options": [
+    "A, C and D only",
+    "A and B only",
+    "B and C only",
+    "A, B and D only"
+   ],
+   "answer": "A",
+   "explanation": "A is true — that is the definition. B is false: completeness is a property of the FAMILY of distributions of T, not of a single distribution. C is true, and is the standard sufficient condition. D is true: for U(θ, θ+1) the minimal sufficient (X₍₁₎, X₍ₙ₎) is not complete, because the range has a θ-free distribution with non-zero mean that can be centred to give a non-trivial unbiased estimator of zero.",
+   "statements": [
+    "T is complete when E_θ[g(T)] = 0 for all θ forces g(T) = 0 almost surely.",
+    "Completeness is a property of one distribution rather than of a family.",
+    "In a full-rank k-parameter exponential family, the natural statistic is complete.",
+    "A minimal sufficient statistic can fail to be complete."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The definition, stated in the form you actually verify."
+    },
+    "B": {
+     "tf": false,
+     "why": "The quantifier is over θ, so the family is what completeness is about."
+    },
+    "C": {
+     "tf": true,
+     "why": "Full rank means the natural parameter space contains an open set; then the natural statistic is complete."
+    },
+    "D": {
+     "tf": true,
+     "why": "U(θ, θ+1) is the standard counterexample — the range is ancillary and spoils completeness."
+    }
+   }
+  },
+  {
+   "id": "inf-t2-m-14",
+   "format": "numeric",
+   "topic": "inference-t2",
+   "diff": "moderate",
+   "stem": "X₁,…,Xₙ are iid N(μ, σ²) with σ² known. Put the family in exponential form f(x) = h(x)exp{η(μ)T(x) − A(μ)} and identify the natural parameter η and natural statistic T.",
+   "options": [
+    "η = μ, T(x) = x/σ²",
+    "η = μ/σ², T(x) = x",
+    "η = μ/σ², T(x) = x²",
+    "η = 1/σ², T(x) = (x−μ)²"
+   ],
+   "answer": "B",
+   "explanation": "Expanding −(x−μ)²/(2σ²) gives −x²/(2σ²) + μx/σ² − μ²/(2σ²). The term carrying both the parameter and the data is (μ/σ²)·x, so η = μ/σ² and T(x) = x. The −x²/(2σ²) term has no μ and goes into h(x); the −μ²/(2σ²) term has no x and is −A(μ).",
+   "check": "The natural statistic is whatever multiplies the parameter after expanding. If your T still has σ² in it, you have put part of h(x) in the wrong place."
+  },
+  {
+   "id": "inf-t2-m-15",
+   "format": "single",
+   "topic": "inference-t2",
+   "diff": "easy",
+   "stem": "Basu's theorem states that:",
+   "options": [
+    "a complete statistic is always sufficient",
+    "an ancillary statistic is independent of the parameter",
+    "a complete sufficient statistic is independent of every ancillary statistic",
+    "every sufficient statistic is independent of every ancillary statistic"
+   ],
+   "answer": "C",
+   "explanation": "All three conditions matter. Sufficiency alone is not enough — completeness is what makes the independence follow — and the theorem says nothing about a complete statistic being sufficient. Option B is a loose restatement of the definition of ancillarity, not of Basu."
+  },
+  {
+   "id": "inf-t2-m-16",
+   "format": "numeric",
+   "topic": "inference-t2",
+   "diff": "hard",
+   "stem": "X₁,…,Xₙ are iid N(μ, σ²) with σ² known. Use Basu to decide: are X̄ and S² independent, and what is the argument?",
+   "options": [
+    "No — both are computed from the same sample, so they cannot be independent",
+    "Yes — but only because the normal density factorises, not by Basu",
+    "Basu does not apply, because S² is not ancillary",
+    "Yes — X̄ is complete sufficient for μ and S² is ancillary for μ, so Basu applies"
+   ],
+   "answer": "D",
+   "explanation": "With σ² known, X̄ is a complete sufficient statistic for μ. S² = Σ(Xᵢ−X̄)²/(n−1) has a distribution free of μ — shifting every observation by a constant leaves S² unchanged — so it is ancillary for μ. Basu then gives independence immediately, with no distribution theory at all. Sharing a sample is no obstacle to independence.",
+   "check": "Check both hypotheses explicitly before quoting Basu: complete AND sufficient on one side, ancillary on the other. If σ² were unknown, S² would no longer be ancillary and this argument would fail."
+  },
+  {
+   "id": "inf-t2-m-17",
+   "format": "multi",
+   "topic": "inference-t2",
+   "diff": "moderate",
+   "stem": "Let T be a complete sufficient statistic for θ.",
+   "options": [
+    "A, B and C only",
+    "A and D only",
+    "B and C only",
+    "A, B and D only"
+   ],
+   "answer": "A",
+   "explanation": "A is true — this is Lehmann–Scheffé. B is true, by Basu. C is true: completeness forces the unbiased function of T to be unique almost surely. D is false — completeness and sufficiency say nothing about attaining the Cramér–Rao bound, which needs the score to be linear in the estimator.",
+   "statements": [
+    "Any unbiased function of T is the UMVUE of its expectation.",
+    "T is independent of every ancillary statistic.",
+    "There is at most one unbiased function of T for a given target.",
+    "Any unbiased function of T attains the Cramér–Rao bound."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Lehmann–Scheffé, in the form you apply it."
+    },
+    "B": {
+     "tf": true,
+     "why": "Basu's theorem."
+    },
+    "C": {
+     "tf": true,
+     "why": "Two of them would differ by a non-zero function with zero expectation, which completeness forbids."
+    },
+    "D": {
+     "tf": false,
+     "why": "The exponential rate's UMVUE sits strictly above the floor. Best unbiased and efficient are different claims."
+    }
+   }
+  },
+  {
+   "id": "inf-t2-m-18",
+   "format": "numeric",
+   "topic": "inference-t2",
+   "diff": "moderate",
+   "stem": "X₁,…,X₅ are iid Poisson(λ) with Σxᵢ = 10. T = ΣXᵢ is complete sufficient. Give the UMVUE of λ and its value.",
+   "options": [
+    "(T+1)/n = 2.2",
+    "T/n = 2",
+    "T = 10",
+    "T/(n−1) = 2.5"
+   ],
+   "answer": "B",
+   "explanation": "X̄ = T/n is an unbiased function of the complete sufficient statistic T, so by Lehmann–Scheffé it is the UMVUE of λ. Its value is 10/5 = 2. The other options are unbiased for nothing in particular — T estimates nλ, and T/(n−1) is biased upward by a factor n/(n−1).",
+   "check": "Confirm unbiasedness before claiming UMVUE: E[T/n] = nλ/n = λ ✓. Completeness and sufficiency do the rest."
+  },
+  {
+   "id": "inf-t2-m-19",
+   "format": "single",
+   "topic": "inference-t2",
+   "diff": "moderate",
+   "stem": "For which of these is the minimal sufficient statistic complete?",
+   "options": [
+    "U(θ, θ+1), T = (X₍₁₎, X₍ₙ₎)",
+    "N(θ, θ²), T = (ΣXᵢ, ΣXᵢ²)",
+    "Poisson(λ), T = ΣXᵢ",
+    "Cauchy location θ, T = the order statistics"
+   ],
+   "answer": "C",
+   "explanation": "The Poisson is a full-rank one-parameter exponential family, so ΣXᵢ is complete. U(θ, θ+1) fails because the range is ancillary. N(θ, θ²) is a curved exponential family — the two-dimensional natural statistic sits on a curve in a one-parameter problem — and is not complete. The Cauchy order statistics are sufficient but not complete.",
+   "check": "Full-rank exponential family is the condition to look for. 'Curved' — where the number of natural parameters exceeds the number of free parameters — is the warning sign."
+  },
+  {
+   "id": "inf-t2-m-20",
+   "format": "order",
+   "topic": "inference-t2",
+   "diff": "moderate",
+   "stem": "To use Basu's theorem to prove two statistics independent, arrange these steps.",
+   "options": [
+    "A, B, C, D",
+    "C, B, A, D",
+    "B, A, C, D",
+    "B, C, A, D"
+   ],
+   "answer": "D",
+   "explanation": "Identify the complete sufficient statistic first, since everything else is stated relative to it. Then check the other statistic's distribution is free of θ, confirm both hypotheses hold, and only then conclude independence. Quoting Basu before checking completeness is the commonest way the argument is lost.",
+   "items": [
+    "A. Confirm both hypotheses of the theorem are satisfied",
+    "B. Identify a complete sufficient statistic for θ",
+    "C. Show the second statistic has a distribution free of θ",
+    "D. Conclude the two are independent"
+   ]
+  }
+ ]
+}

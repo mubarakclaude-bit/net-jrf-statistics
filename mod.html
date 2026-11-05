@@ -1,0 +1,1324 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8">
+<title>Week 1 - Point Estimation - self-learning module</title></head><body><h1 id="week-1-point-estimation">Week 1 — Point Estimation</h1>
+<h2
+id="self-learning-module-ugc-net-statistics-107-paper-2">Self-learning
+module · UGC NET Statistics (107) · Paper 2</h2>
+<p>This module covers the whole of week 1: sufficiency, completeness,
+ancillarity, Rao–Blackwell, Lehmann–Scheffé, maximum likelihood, the
+method of moments, and the Cramér–Rao inequality. It is written to be
+worked through with a pen, not read.</p>
+<p><strong>How the module maps onto your two kinds of study
+time</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Section</th>
+<th>Mode</th>
+<th>Day</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. What makes an estimator good</td>
+<td>Light</td>
+<td>Mon</td>
+</tr>
+<tr class="even">
+<td>2. Sufficiency</td>
+<td>Deep</td>
+<td>Mon</td>
+</tr>
+<tr class="odd">
+<td>3. Exponential families</td>
+<td>Deep</td>
+<td>Tue</td>
+</tr>
+<tr class="even">
+<td>4. Completeness and ancillarity</td>
+<td>Deep</td>
+<td>Tue</td>
+</tr>
+<tr class="odd">
+<td>5. Rao–Blackwell</td>
+<td>Deep</td>
+<td>Wed</td>
+</tr>
+<tr class="even">
+<td>6. Lehmann–Scheffé and the UMVUE</td>
+<td>Deep</td>
+<td>Thu</td>
+</tr>
+<tr class="odd">
+<td>7. Maximum likelihood</td>
+<td>Deep</td>
+<td>Fri</td>
+</tr>
+<tr class="even">
+<td>8. Method of moments</td>
+<td>Light</td>
+<td>Fri</td>
+</tr>
+<tr class="odd">
+<td>9. Cramér–Rao and Fisher information</td>
+<td>Deep</td>
+<td>Sat</td>
+</tr>
+<tr class="even">
+<td>10. The master table</td>
+<td>Light, all week</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>11. The six June 2026 questions</td>
+<td>Deep</td>
+<td>as scheduled</td>
+</tr>
+<tr class="even">
+<td>12. Practice set — 40 questions</td>
+<td>Deep</td>
+<td>Sat</td>
+</tr>
+<tr class="odd">
+<td>13. Self-test</td>
+<td>Deep</td>
+<td>Sun</td>
+</tr>
+<tr class="even">
+<td>14. Carry sheet</td>
+<td>Light</td>
+<td>all week</td>
+</tr>
+</tbody>
+</table>
+<p>A working rule for every derivation in this module: read it once,
+close the page, reproduce it on blank paper, then compare. Reading a
+derivation and understanding it is not the same as being able to produce
+it in ninety seconds under exam pressure, and only the second one earns
+marks.</p>
+<hr />
+<h1 id="what-makes-an-estimator-good">1. What makes an estimator
+good</h1>
+<h2 id="the-setting">1.1 The setting</h2>
+<p>A random sample X₁, …, Xₙ comes from a distribution f(x; θ) where θ
+is unknown. A <strong>statistic</strong> is any function T(X₁, …, Xₙ)
+that does not involve θ. An <strong>estimator</strong> is a statistic
+used to guess θ (or some function τ(θ) of it). An
+<strong>estimate</strong> is the number it produces for a particular
+sample.</p>
+<p>Keep the three words apart. The estimator is a random variable and
+has a distribution; the estimate is a number and has none.</p>
+<h2 id="unbiasedness">1.2 Unbiasedness</h2>
+<p>T is <strong>unbiased</strong> for τ(θ) if</p>
+<p>E_θ(T) = τ(θ) for every θ in the parameter space.</p>
+<p>“For every θ” is the whole content of the definition. An estimator
+that happens to be right at one value of θ is not unbiased.</p>
+<p><strong>Bias</strong> is b(θ) = E_θ(T) − τ(θ).</p>
+<h2 id="mean-squared-error-the-decomposition-to-memorise">1.3 Mean
+squared error — the decomposition to memorise</h2>
+<p>MSE(T) = E[(T − τ(θ))²] = <strong>Var(T) + [Bias(T)]²</strong></p>
+<p><em>Proof.</em> Write T − τ = (T − E T) + (E T − τ). Square and
+expand; the cross term is 2(E T − τ)·E(T − E T) = 0. ∎</p>
+<p>Two consequences that get examined:</p>
+<ul>
+<li>For an <strong>unbiased</strong> estimator, MSE = Var. This is why,
+once we restrict to unbiased estimators, “minimum variance” and “minimum
+MSE” mean the same thing.</li>
+<li>A <strong>biased</strong> estimator can beat an unbiased one on MSE.
+The MLE of σ² in a normal sample, Σ(Xᵢ − X̄)²/n, has smaller MSE than the
+unbiased S², despite being biased. Unbiasedness is a convention, not a
+law of nature.</li>
+</ul>
+<h2 id="consistency">1.4 Consistency</h2>
+<p>T_n is <strong>consistent</strong> for θ if T_n →ᵖ θ, that is P(|T_n
+− θ| &gt; ε) → 0 for every ε &gt; 0.</p>
+<p><strong>The sufficient condition you will actually use:</strong> if
+Bias(T_n) → 0 and Var(T_n) → 0, then MSE → 0 and T_n is consistent.
+(Convergence in mean square implies convergence in probability, by
+Chebyshev.)</p>
+<p>So X̄ is consistent for μ whenever the variance is finite: it is
+unbiased and Var(X̄) = σ²/n → 0.</p>
+<h2 id="why-we-need-more-than-unbiasedness">1.5 Why we need more than
+unbiasedness</h2>
+<p>There are usually infinitely many unbiased estimators. For a sample
+of size 3 from any distribution with mean μ, all of these are
+unbiased:</p>
+<p>X̄, X₁, (X₁ + X₂)/2, 0.5X₁ + 0.3X₂ + 0.2X₃</p>
+<p>They differ enormously in variance. So the programme of this week is:
+among all unbiased estimators, find the one with the smallest variance —
+the <strong>UMVUE</strong> (uniformly minimum variance unbiased
+estimator), “uniformly” meaning smallest for every θ at once.</p>
+<p>Two machines deliver it. <strong>Rao–Blackwell</strong> says
+conditioning on a sufficient statistic never makes things worse.
+<strong>Lehmann–Scheffé</strong> says that if the sufficient statistic
+is also complete, the result is uniquely best. Everything in sections 2
+to 6 is built to feed those two theorems.</p>
+<hr />
+<h1 id="sufficiency">2. Sufficiency</h1>
+<h2 id="the-idea">2.1 The idea</h2>
+<p>A sufficient statistic is a summary of the data that loses nothing
+about θ. Once you know T, the remaining detail in the sample is noise as
+far as θ is concerned.</p>
+<p>Concretely: toss a coin 10 times and record HTTHHHTHTH. For
+estimating p, does the <em>order</em> matter? No — only the number of
+heads does. The order is information about the experiment, but not about
+p. So ΣXᵢ is sufficient and the sequence is not needed.</p>
+<h2 id="definition">2.2 Definition</h2>
+<p>T is <strong>sufficient</strong> for θ if the conditional
+distribution of the sample given T = t does not depend on θ.</p>
+<p><strong>Worked check — Bernoulli.</strong> X₁, …, Xₙ iid
+Bernoulli(p), T = ΣXᵢ. For any particular sequence x with Σxᵢ = t,</p>
+<p>P(X = x | T = t) = P(X = x)/P(T = t) = p<sup>t·(1−p)</sup>(n−t) /
+[C(n,t) p<sup>t·(1−p)</sup>(n−t)] = 1/C(n,t)</p>
+<p>which is free of p. So given the total, every arrangement is equally
+likely, whatever p is. T is sufficient. ∎</p>
+<p>Working from the definition means computing a conditional
+distribution every time. The factorisation theorem removes that
+labour.</p>
+<h2 id="the-factorisation-theorem-fisherneyman">2.3 The factorisation
+theorem (Fisher–Neyman)</h2>
+<blockquote>
+<p><strong>T is sufficient for θ if and only if the joint density
+factorises as</strong><br />
+<strong>f(x; θ) = g(T(x); θ) · h(x)</strong><br />
+where g depends on the data only through T, and h does not involve θ at
+all.</p>
+</blockquote>
+<p>This is the single most used tool in the unit. The recipe is
+mechanical: write the likelihood, then try to split it into a piece that
+touches θ and a piece that does not.</p>
+<h2 id="worked-examples-do-each-one-yourself-before-reading-on">2.4
+Worked examples — do each one yourself before reading on</h2>
+<p><strong>(a) Bernoulli(p).</strong></p>
+<p>L = ∏ p^(xᵢ) (1−p)^(1−xᵢ) = p^(Σxᵢ) (1−p)^(n−Σxᵢ) = [p/(1−p)]^(Σxᵢ)
+(1−p)ⁿ</p>
+<p>Everything depends on the data only through Σxᵢ, and h(x) = 1.
+<strong>T = ΣXᵢ.</strong></p>
+<p><strong>(b) Poisson(λ).</strong></p>
+<p>L = ∏ exp(−λ) λ^(xᵢ) / xᵢ! = exp(−nλ) λ^(Σxᵢ) · (1/∏xᵢ!)</p>
+<p>g(T, λ) = exp(−nλ)λ^T, h(x) = 1/∏xᵢ!. <strong>T = ΣXᵢ.</strong></p>
+<p><strong>(c) Exponential with rate θ, f = θexp(−θx).</strong></p>
+<p>L = θⁿ exp(−θΣxᵢ)</p>
+<p><strong>T = ΣXᵢ.</strong> Note that the mean is 1/θ, so the same T
+serves for the mean.</p>
+<p><strong>(d) Normal N(μ, σ²), both unknown.</strong></p>
+<p>L = (2πσ²)^(−n/2) exp[−Σ(xᵢ − μ)²/(2σ²)]</p>
+<p>Expand the sum: Σ(xᵢ − μ)² = Σxᵢ² − 2μΣxᵢ + nμ². So the exponent
+involves the data only through Σxᵢ and Σxᵢ².</p>
+<p><strong>T = (ΣXᵢ, ΣXᵢ²)</strong>, a two-dimensional sufficient
+statistic. Equivalently (X̄, S²), since each pair is a one-to-one
+function of the other.</p>
+<p><strong>(e) Normal with σ² known.</strong> Only Σxᵢ survives in the
+θ-involving part, so <strong>T = ΣXᵢ</strong> and the statistic is
+one-dimensional. The dimension of the sufficient statistic matches the
+number of unknown parameters here — which is typical, but not a
+rule.</p>
+<p><strong>(f) Uniform U(0, θ) — the one that breaks the
+pattern.</strong></p>
+<p>f(x; θ) = 1/θ on 0 ≤ x ≤ θ. Write it with an indicator:</p>
+<p>L = (1/θⁿ) · ∏ I(0 ≤ xᵢ ≤ θ) = (1/θⁿ) · I(x₍ₙ₎ ≤ θ) · I(x₍₁₎ ≥ 0)</p>
+<p>The condition “all xᵢ ≤ θ” is exactly “the largest is ≤ θ”. So</p>
+<p>g(T, θ) = (1/θⁿ) I(x₍ₙ₎ ≤ θ), h(x) = I(x₍₁₎ ≥ 0)</p>
+<p><strong>T = X₍ₙ₎</strong>, the sample maximum.</p>
+<p><strong>This is the key lesson of the uniform family: when the
+support depends on θ, the sufficient statistic comes from the indicator,
+not from the algebra.</strong> Nothing about the formula 1/θⁿ involves
+the data at all.</p>
+<p><strong>(g) Uniform U(θ, θ+1).</strong> The indicators give x₍₁₎ ≥ θ
+and x₍ₙ₎ ≤ θ+1, so</p>
+<p><strong>T = (X₍₁₎, X₍ₙ₎)</strong></p>
+<p>Two-dimensional, for a single parameter. Remember this one — it is
+the standard counterexample in section 4.</p>
+<h2 id="minimal-sufficiency">2.5 Minimal sufficiency</h2>
+<p>The whole sample is always sufficient, trivially. So is any
+one-to-one function of a sufficient statistic. We want the
+<em>coarsest</em> such summary.</p>
+<p>T is <strong>minimal sufficient</strong> if it is a function of every
+other sufficient statistic.</p>
+<blockquote>
+<p><strong>The test (Lehmann–Scheffé criterion):</strong> T is minimal
+sufficient if, for any two sample points x and y,<br />
+f(x; θ)/f(y; θ) is free of θ <strong>if and only if</strong> T(x) =
+T(y).</p>
+</blockquote>
+<p><strong>Worked example — Poisson.</strong></p>
+<p>f(x;λ)/f(y;λ) = λ^(Σxᵢ − Σyᵢ) · (∏yᵢ!/∏xᵢ!)</p>
+<p>This is free of λ precisely when Σxᵢ = Σyᵢ. So ΣXᵢ is minimal
+sufficient.</p>
+<p><strong>Points that get examined</strong></p>
+<ul>
+<li>A minimal sufficient statistic is not unique: any one-to-one
+function of one is another. X̄ and ΣXᵢ are both minimal sufficient.</li>
+<li>A complete sufficient statistic is always minimal sufficient. The
+converse is false — U(θ, θ+1) again.</li>
+<li>The dimension of a minimal sufficient statistic can exceed the
+number of parameters. In the Cauchy family it equals the whole ordered
+sample, however large n is: no genuine reduction is possible.</li>
+</ul>
+<h2 id="common-traps">2.6 Common traps</h2>
+<ol type="1">
+<li><strong>Sufficiency is about θ, not about the data.</strong> A
+statistic sufficient for μ in a normal sample says nothing about
+σ².</li>
+<li><strong>h(x) must be completely free of θ</strong>, including in its
+support. This is where U(0, θ) catches people: the indicator carries
+θ.</li>
+<li><strong>Sufficiency does not imply unbiasedness or
+consistency.</strong> X₍ₙ₎ is sufficient for θ in U(0, θ) but
+biased.</li>
+<li>The factorisation is not unique; any constant can be shuffled
+between g and h.</li>
+</ol>
+<hr />
+<h1 id="exponential-families">3. Exponential families</h1>
+<h2 id="why-this-section-exists">3.1 Why this section exists</h2>
+<p>Almost every distribution in the syllabus except the uniform belongs
+to a single family, and membership automatically hands you a complete
+sufficient statistic. Recognising the form is quicker than any
+computation.</p>
+<h2 id="the-one-parameter-form">3.2 The one-parameter form</h2>
+<p>f(x; θ) = <strong>h(x) · c(θ) · exp[w(θ) · t(x)]</strong></p>
+<p>for x in a support that does <strong>not</strong> depend on θ. Then
+for a random sample,</p>
+<p><strong>T = Σ t(Xᵢ)</strong> is sufficient — and, under a mild
+condition below, complete.</p>
+<h2 id="putting-the-standard-distributions-into-the-form">3.3 Putting
+the standard distributions into the form</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Distribution</th>
+<th>h(x)</th>
+<th>c(θ)</th>
+<th>w(θ)</th>
+<th>t(x)</th>
+<th>Sufficient statistic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bernoulli(p)</td>
+<td>1</td>
+<td>1 − p</td>
+<td>log[p/(1−p)]</td>
+<td>x</td>
+<td>ΣXᵢ</td>
+</tr>
+<tr class="even">
+<td>Poisson(λ)</td>
+<td>1/x!</td>
+<td>exp(−λ)</td>
+<td>log λ</td>
+<td>x</td>
+<td>ΣXᵢ</td>
+</tr>
+<tr class="odd">
+<td>Exponential(θ)</td>
+<td>1</td>
+<td>θ</td>
+<td>−θ</td>
+<td>x</td>
+<td>ΣXᵢ</td>
+</tr>
+<tr class="even">
+<td>N(μ, σ² known)</td>
+<td>exp(−x²/2σ²)</td>
+<td>exp(−μ²/2σ²)</td>
+<td>μ/σ²</td>
+<td>x</td>
+<td>ΣXᵢ</td>
+</tr>
+<tr class="odd">
+<td>N(μ known, σ²)</td>
+<td>1</td>
+<td>1/σ</td>
+<td>−1/2σ²</td>
+<td>(x−μ)²</td>
+<td>Σ(Xᵢ−μ)²</td>
+</tr>
+<tr class="even">
+<td>Geometric(p)</td>
+<td>1</td>
+<td>p</td>
+<td>log(1−p)</td>
+<td>x − 1</td>
+<td>ΣXᵢ</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Worked conversion — Bernoulli.</strong></p>
+<p>f(x; p) = p<sup>x(1−p)</sup>(1−x) = (1−p)·[p/(1−p)]^x =
+(1−p)·exp{x·log[p/(1−p)]}</p>
+<p>so c(p) = 1 − p, w(p) = log[p/(1−p)] — the <strong>natural
+parameter</strong>, also called the logit — and t(x) = x. ∎</p>
+<h2 id="the-k-parameter-form">3.4 The k-parameter form</h2>
+<p>f(x; θ) = h(x) c(θ) exp[Σⱼ₌₁ᵏ wⱼ(θ) tⱼ(x)]</p>
+<p>with sufficient statistic (Σt₁(Xᵢ), …, Σt_k(Xᵢ)). The normal with
+both parameters unknown is the k = 2 case, giving (ΣXᵢ, ΣXᵢ²).</p>
+<h2 id="the-completeness-condition">3.5 The completeness condition</h2>
+<blockquote>
+<p>The sufficient statistic of an exponential family is
+<strong>complete</strong> provided the natural parameter space {w(θ) : θ
+∈ Θ} contains an open interval (for k parameters, an open k-dimensional
+rectangle).</p>
+</blockquote>
+<p>For every standard distribution in the syllabus this holds, so in
+practice: <strong>exponential family ⟹ complete sufficient
+statistic</strong>. The condition only bites in artificial cases, such
+as N(θ, θ²), where the two natural parameters are tied together and the
+parameter space collapses to a curve.</p>
+<h2 id="who-is-excluded-and-why-it-matters">3.6 Who is excluded, and why
+it matters</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Not an exponential family</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>U(0, θ), U(θ, θ+1)</td>
+<td>support depends on θ</td>
+</tr>
+<tr class="even">
+<td>Cauchy</td>
+<td>cannot be written in the form</td>
+</tr>
+<tr class="odd">
+<td>Shifted exponential exp(−(x−θ)), x ≥ θ</td>
+<td>support depends on θ</td>
+</tr>
+</tbody>
+</table>
+<p>The uniform and shifted-exponential cases are precisely where the
+usual machinery misbehaves: the Cramér–Rao bound does not apply, the MLE
+sits on a boundary, and the sufficient statistic is an order statistic
+rather than a sum. Examiners use them for exactly that reason.</p>
+<hr />
+<h1 id="completeness-and-ancillarity">4. Completeness and
+ancillarity</h1>
+<h2 id="completeness-the-definition">4.1 Completeness — the
+definition</h2>
+<p>The family of distributions of T is <strong>complete</strong> if</p>
+<p>E_θ[g(T)] = 0 for all θ <strong>implies</strong> g(T) = 0 with
+probability 1.</p>
+<p>Read it as: <em>T admits no non-trivial unbiased estimator of
+zero.</em> That is the property we need, because if two different
+functions of T were both unbiased for the same thing, their difference
+would be a non-trivial unbiased estimator of zero — and completeness
+forbids it. Completeness is therefore exactly the uniqueness
+condition.</p>
+<h2 id="worked-proof-poisson-is-complete">4.2 Worked proof — Poisson is
+complete</h2>
+<p>T = ΣXᵢ ~ Poisson(nλ). Suppose E[g(T)] = 0 for all λ &gt; 0:</p>
+<p>Σ over t = 0, 1, 2, … of g(t)·exp(−nλ)·(nλ)ᵗ/t! = 0</p>
+<p>Multiply by exp(nλ) (which is never zero):</p>
+<p>Σ over t = 0, 1, 2, … of [g(t)·nᵗ/t!]·λᵗ = 0 for all λ &gt; 0</p>
+<p>This is a power series in λ that vanishes identically. A power series
+is identically zero only if every coefficient is zero, so g(t)nᵗ/t! = 0
+for every t, hence g(t) = 0 for every t. ∎</p>
+<h2 id="worked-proof-u0-θ-is-complete">4.3 Worked proof — U(0, θ) is
+complete</h2>
+<p>T = X₍ₙ₎ has density n tⁿ⁻¹/θⁿ on 0 &lt; t &lt; θ. Suppose E[g(T)] =
+0 for all θ &gt; 0:</p>
+<p>∫ (0 to θ) g(t) · n tⁿ⁻¹/θⁿ dt = 0 ⟹ ∫ (0 to θ) g(t) tⁿ⁻¹ dt = 0 for
+all θ &gt; 0</p>
+<p>Differentiate both sides with respect to θ (fundamental theorem of
+calculus):</p>
+<p>g(θ) θⁿ⁻¹ = 0 for all θ &gt; 0 ⟹ g(θ) = 0. ∎</p>
+<p>Note the technique: for a discrete family, completeness arguments use
+power series; for a continuous one, they use differentiation under the
+integral.</p>
+<h2 id="the-counterexample-uθ-θ1-is-sufficient-but-not-complete">4.4 The
+counterexample — U(θ, θ+1) is sufficient but not complete</h2>
+<p>T = (X₍₁₎, X₍ₙ₎) is sufficient (section 2.4g). Consider the
+<strong>range</strong></p>
+<p>R = X₍ₙ₎ − X₍₁₎</p>
+<p>Since the interval has fixed length 1 whatever θ is, shifting θ
+shifts both order statistics equally and leaves R unchanged. R therefore
+has a distribution free of θ, with</p>
+<p>E(R) = (n − 1)/(n + 1)</p>
+<p>Now set g(T) = R − (n−1)/(n+1). Then E_θ[g(T)] = 0 for every θ, yet g
+is not identically zero. <strong>Completeness fails.</strong> ∎</p>
+<p>This single example answers a family of questions. Commit it.</p>
+<h2 id="ancillary-statistics">4.5 Ancillary statistics</h2>
+<p>U is <strong>ancillary</strong> for θ if its distribution does not
+involve θ. It carries no information about θ on its own.</p>
+<p>Examples:<br />
+- The range R above, for U(θ, θ+1)<br />
+- S² in a normal sample when σ² is known and μ is the parameter of
+interest<br />
+- Any difference Xᵢ − Xⱼ in a location family<br />
+- The sample size, in a fixed-design experiment</p>
+<p>Sufficiency and ancillarity are opposite poles: a sufficient
+statistic carries all the information, an ancillary one carries
+none.</p>
+<h2 id="basus-theorem">4.6 Basu’s theorem</h2>
+<blockquote>
+<p><strong>If T is complete sufficient for θ and U is ancillary, then T
+and U are independent.</strong></p>
+</blockquote>
+<p>The power of this is that it proves independence without any joint
+density calculation.</p>
+<p><strong>Classic application.</strong> In a sample from N(μ, σ²) with
+σ² known, X̄ is complete sufficient for μ, and S² is ancillary (its
+distribution involves only σ²). Basu gives <strong>X̄ ⫫ S²</strong>
+immediately. The usual proof of that independence runs through Helmert’s
+orthogonal transformation and takes a page; Basu does it in a line.</p>
+<hr />
+<h1 id="the-raoblackwell-theorem">5. The Rao–Blackwell theorem</h1>
+<h2 id="statement">5.1 Statement</h2>
+<blockquote>
+<p>Let h(X) be an unbiased estimator of τ(θ) with E(h²) &lt; ∞, and let
+T be sufficient for θ. Define φ(T) = E(h | T). Then<br />
+<strong>(i) φ(T) is a statistic</strong> — it does not involve θ<br />
+<strong>(ii) E[φ(T)] = τ(θ)</strong> — it is unbiased<br />
+<strong>(iii) Var[φ(T)] ≤ Var(h)</strong> for every θ, with equality
+only if h was already a function of T</p>
+</blockquote>
+<h2 id="proof">5.2 Proof</h2>
+<p><strong>(i)</strong> Because T is sufficient, the conditional
+distribution of X given T is free of θ, so the conditional expectation
+E(h|T) is a function of T alone and contains no unknown parameter.
+<strong>This is the only place sufficiency is used, and it is
+indispensable</strong> — without it, E(h|T) would still involve θ and
+would not be an estimator at all.</p>
+<p><strong>(ii)</strong> By the tower property, E[φ(T)] = E[E(h|T)] =
+E(h) = τ(θ).</p>
+<p><strong>(iii)</strong> By the law of total variance,</p>
+<p>Var(h) = E[Var(h|T)] + Var[E(h|T)] = E[Var(h|T)] + Var[φ(T)]</p>
+<p>The first term is an expectation of a variance, hence ≥ 0, so Var(h)
+≥ Var[φ(T)]. Equality holds only when Var(h|T) = 0 almost surely, which
+means h is already determined by T. ∎</p>
+<h2 id="what-it-gives-and-what-it-does-not">5.3 What it gives and what
+it does not</h2>
+<p>Rao–Blackwell is a <strong>method of improvement</strong>, not of
+identification. It says conditioning on a sufficient statistic never
+hurts and usually helps. It does <strong>not</strong> say the result is
+best — different starting estimators h could in principle give different
+improved estimators. Completeness is what rules that out, and that is
+section 6.</p>
+<h2 id="worked-example-poisson-estimating-expλ">5.4 Worked example —
+Poisson, estimating exp(−λ)</h2>
+<p>τ(λ) = exp(−λ) = P(X = 0). Start from the crude unbiased
+estimator</p>
+<p>h(X₁) = I(X₁ = 0), since E[h] = P(X₁ = 0) = exp(−λ) ✓</p>
+<p>Condition on T = ΣXᵢ. The key distributional fact: given ΣXᵢ = t, the
+vector of individual counts is multinomial, so <strong>X₁ | T = t ~
+Binomial(t, 1/n)</strong>. Hence</p>
+<p>φ(t) = E[I(X₁ = 0) | T = t] = P(X₁ = 0 | T = t) = (1 − 1/n)ᵗ =
+((n−1)/n)ᵗ</p>
+<p>So the improved estimator is <strong>((n−1)/n)^(ΣXᵢ)</strong>, and
+since T is complete, section 6 will tell us this is the UMVUE of
+exp(−λ).</p>
+<p>Compare variances at n = 10, λ = 1: the crude h is a Bernoulli
+indicator with variance exp(−1)(1 − exp(−1)) ≈ 0.2325; the improved
+version has variance of order 0.01. The improvement is dramatic, and it
+came from throwing away nothing but noise.</p>
+<h2 id="worked-example-the-june-2026-question">5.5 Worked example — the
+June 2026 question</h2>
+<p>Exponential with mean θ. T(X₁) = 1 if X₁ &gt; x₀, else 0. Then</p>
+<p>E[T(X₁)] = P(X₁ &gt; x₀) = exp(−x₀/θ)</p>
+<p>so T(X₁) is unbiased for exp(−x₀/θ). Rao–Blackwellising on T_S = ΣXᵢ
+gives the UMVUE <strong>of that same quantity</strong>, exp(−x₀/θ).</p>
+<blockquote>
+<p><strong>The rule the question is testing: Rao–Blackwell changes the
+estimator, never the estimand.</strong> Whatever h was unbiased for,
+E(h|T) is unbiased for. So read off E(h) first, and the answer follows
+with no computation at all.</p>
+</blockquote>
+<p>For completeness, the explicit form is φ(t) = (1 − x₀/t)ⁿ⁻¹ for t
+&gt; x₀ and 0 otherwise — but the exam asked only what it estimates.</p>
+<hr />
+<h1 id="lehmannscheffé-and-the-umvue">6. Lehmann–Scheffé and the
+UMVUE</h1>
+<h2 id="statement-1">6.1 Statement</h2>
+<blockquote>
+<p>Let T be <strong>complete and sufficient</strong> for θ, and let φ(T)
+be an unbiased estimator of τ(θ). Then φ(T) is the <strong>unique
+UMVUE</strong> of τ(θ).</p>
+</blockquote>
+<h2 id="proof-1">6.2 Proof</h2>
+<p><em>Minimum variance.</em> Let h be any unbiased estimator of τ(θ).
+By Rao–Blackwell, E(h|T) is unbiased with variance no larger. But E(h|T)
+is an unbiased function of T, and so is φ(T); their difference d(T) =
+φ(T) − E(h|T) satisfies E[d(T)] = 0 for all θ. Completeness forces d(T)
+= 0 almost surely, so E(h|T) = φ(T). Therefore Var[φ(T)] ≤ Var(h) for
+every unbiased h. ∎</p>
+<p><em>Uniqueness</em> is the same completeness argument: two unbiased
+functions of a complete T must coincide.</p>
+<p><strong>Note what each hypothesis does.</strong> Sufficiency makes
+E(h|T) a statistic. Completeness makes it unique. Drop completeness and
+you keep improvement but lose “best” — which is exactly why statement C
+of Q61 was false.</p>
+<h2 id="the-two-routes-to-a-umvue">6.3 The two routes to a UMVUE</h2>
+<p><strong>Route A — guess and verify.</strong> Find any function of the
+complete sufficient statistic that is unbiased for τ(θ). Done. This is
+almost always the faster route in an exam.</p>
+<p><strong>Route B — Rao–Blackwellise.</strong> Start from any crude
+unbiased estimator, often an indicator based on a single observation,
+and condition on T. Use this when an unbiased function of T is not
+obvious — typically when τ(θ) is an awkward function such as exp(−λ) or
+P(X &gt; x₀).</p>
+<h2 id="worked-examples">6.4 Worked examples</h2>
+<p><strong>(a) Poisson λ.</strong> T = ΣXᵢ is complete sufficient; E(X̄)
+= λ. <strong>UMVUE = X̄.</strong> (Route A, one line.)</p>
+<p><strong>(b) Bernoulli p.</strong> <strong>UMVUE = X̄.</strong></p>
+<p><strong>(c) Bernoulli p².</strong> Try T(T−1)/(n(n−1)) where T = ΣXᵢ
+~ Bin(n, p). Since E[T(T−1)] = n(n−1)p², this is unbiased, and it is a
+function of the complete sufficient statistic. <strong>UMVUE =
+T(T−1)/(n(n−1)).</strong></p>
+<p><strong>(d) Exponential, rate θ.</strong> T = ΣXᵢ ~ Gamma(n, θ). We
+need E of some function of T to equal θ. Compute</p>
+<p>E(1/T) = ∫ (0 to ∞) (1/t) · θⁿ tⁿ⁻¹ exp(−θt)/Γ(n) dt = θ·Γ(n−1)/Γ(n)
+= θ/(n − 1)</p>
+<p>so E[(n−1)/T] = θ. <strong>UMVUE of θ = (n − 1)/ΣXᵢ</strong>, valid
+for n ≥ 2.</p>
+<p>Contrast the MLE, n/ΣXᵢ, whose expectation is nθ/(n−1). The two
+differ by the factor n/(n−1) — a clean illustration that the MLE need
+not be unbiased.</p>
+<p><strong>(e) Exponential, mean θ.</strong> T = ΣXᵢ, E(X̄) = θ.
+<strong>UMVUE = X̄.</strong> The same distribution gives different
+answers depending on which parameterisation is asked for; read the
+question.</p>
+<p><strong>(f) U(0, θ).</strong> T = X₍ₙ₎ is complete sufficient with
+density n tⁿ⁻¹/θⁿ, so</p>
+<p>E(X₍ₙ₎) = ∫ (0 to θ) t · n tⁿ⁻¹/θⁿ dt = nθ/(n+1)</p>
+<p>The maximum is biased downward — obviously so, since it can never
+exceed θ. Correcting:</p>
+<p><strong>UMVUE of θ = ((n+1)/n)·X₍ₙ₎</strong></p>
+<p><strong>(g) Normal.</strong> (ΣXᵢ, ΣXᵢ²) is complete sufficient.
+<strong>UMVUE of μ = X̄; UMVUE of σ² = S²</strong> with divisor n −
+1.</p>
+<p><strong>(h) Poisson exp(−λ).</strong> From section 5.4, <strong>UMVUE
+= ((n−1)/n)^(ΣXᵢ)</strong>.</p>
+<h2 id="facts-about-the-umvue-that-appear-as-truefalse-statements">6.5
+Facts about the UMVUE that appear as true/false statements</h2>
+<ul>
+<li>The UMVUE is <strong>unique</strong> when it exists.</li>
+<li>It need <strong>not</strong> attain the Cramér–Rao bound. CRLB
+attainment is sufficient for being UMVUE, not necessary.</li>
+<li>A UMVUE may not exist at all for some parametric functions.</li>
+<li>The UMVUE is always a function of the complete sufficient
+statistic.</li>
+<li>If an unbiased estimator attains the CRLB, it is automatically the
+UMVUE.</li>
+<li>The UMVUE is not necessarily the MLE, and the MLE is not necessarily
+unbiased.</li>
+</ul>
+<hr />
+<h1 id="maximum-likelihood-estimation">7. Maximum likelihood
+estimation</h1>
+<h2 id="the-method">7.1 The method</h2>
+<p>The <strong>likelihood</strong> is the joint density read as a
+function of the parameter with the data held fixed:</p>
+<p>L(θ) = ∏ᵢ f(xᵢ; θ)</p>
+<p>The MLE θ̂ is the value of θ maximising L, equivalently maximising
+ℓ(θ) = log L(θ). The usual route is</p>
+<p>∂ℓ/∂θ = 0 (the <strong>likelihood equation</strong>), then check
+∂²ℓ/∂θ² &lt; 0</p>
+<p><strong>But the derivative route only works when the maximum is
+interior and the function is differentiable.</strong> When the support
+depends on θ, the maximum sits on a boundary and must be found by
+inspection. Section 7.3 is that case.</p>
+<h2 id="worked-examples-the-interior-cases">7.2 Worked examples — the
+interior cases</h2>
+<p><strong>(a) Bernoulli(p).</strong></p>
+<p>ℓ = (Σxᵢ) log p + (n − Σxᵢ) log(1−p)<br />
+∂ℓ/∂p = Σxᵢ/p − (n − Σxᵢ)/(1−p) = 0 ⟹ <strong>p̂ = x̄</strong></p>
+<p><strong>(b) Poisson(λ).</strong></p>
+<p>ℓ = −nλ + (Σxᵢ) log λ − Σ log xᵢ!<br />
+∂ℓ/∂λ = −n + Σxᵢ/λ = 0 ⟹ <strong>λ̂ = x̄</strong></p>
+<p><strong>(c) Exponential, rate θ.</strong></p>
+<p>ℓ = n log θ − θΣxᵢ<br />
+∂ℓ/∂θ = n/θ − Σxᵢ = 0 ⟹ <strong>θ̂ = n/Σxᵢ = 1/x̄</strong></p>
+<p><strong>(d) Normal, both unknown.</strong></p>
+<p>ℓ = −(n/2)log(2πσ²) − Σ(xᵢ−μ)²/(2σ²)</p>
+<p>∂ℓ/∂μ = 0 gives <strong>μ̂ = x̄</strong>. Substituting and solving
+∂ℓ/∂σ² = 0 gives</p>
+<p><strong>σ̂² = Σ(xᵢ − x̄)²/n</strong> — divisor n, so biased, with E(σ̂²)
+= ((n−1)/n)σ²</p>
+<p>Hold this beside the UMVUE S², divisor n − 1. The June paper asked
+both, in Q4 and Q37, from the same three data vectors.</p>
+<h2 id="the-boundary-case-u0-θ">7.3 The boundary case — U(0, θ)</h2>
+<p>L(θ) = (1/θⁿ) · I(θ ≥ x₍ₙ₎)</p>
+<p>Differentiating is useless: −n/θⁿ⁺¹ is never zero. Instead reason
+directly. The likelihood is zero for θ &lt; x₍ₙ₎, because such a θ could
+not have produced the observed maximum. For θ ≥ x₍ₙ₎ it is 1/θⁿ, which
+<strong>decreases</strong> in θ. So L is maximised at the smallest
+permissible value:</p>
+<p><strong>θ̂ = X₍ₙ₎</strong></p>
+<p>and E(X₍ₙ₎) = nθ/(n+1) &lt; θ, so the MLE is biased downward. The
+UMVUE multiplies it by (n+1)/n.</p>
+<p><strong>Draw this likelihood function once.</strong> It climbs
+vertically at x₍ₙ₎ and then decays — a picture that makes the whole
+family of uniform questions obvious.</p>
+<h2 id="non-uniqueness">7.4 Non-uniqueness</h2>
+<p><strong>U(θ, θ+1).</strong> The likelihood is 1 for every θ in [x₍ₙ₎
+− 1, x₍₁₎] and 0 outside. Every point of that interval is an MLE, so the
+MLE is <strong>not unique</strong>.</p>
+<p><strong>Laplace (double exponential).</strong> Maximising −Σ|xᵢ − θ|
+gives the sample median, which for even n is any point between the two
+middle observations — again not unique.</p>
+<h2 id="the-invariance-property">7.5 The invariance property</h2>
+<blockquote>
+<p>If θ̂ is the MLE of θ, then <strong>g(θ̂) is the MLE of g(θ)</strong>
+for any function g.</p>
+</blockquote>
+<p>So the MLE of σ is √σ̂², the MLE of exp(−λ) is exp(−x̄), and the MLE of
+the exponential mean is 1/θ̂ = x̄.</p>
+<p><strong>Invariance does not carry unbiasedness with it.</strong>
+exp(−x̄) is the MLE of exp(−λ) but is biased; the UMVUE is the quite
+different ((n−1)/n)^(Σxᵢ).</p>
+<h2 id="properties-the-list-to-memorise">7.6 Properties — the list to
+memorise</h2>
+<p><strong>Holds, under regularity conditions</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Property</th>
+<th>Statement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Function of sufficient statistic</td>
+<td>always, since L factorises through T</td>
+</tr>
+<tr class="even">
+<td>Invariance</td>
+<td>MLE of g(θ) is g(θ̂)</td>
+</tr>
+<tr class="odd">
+<td>Consistency</td>
+<td>θ̂ →ᵖ θ</td>
+</tr>
+<tr class="even">
+<td>Asymptotic normality</td>
+<td>√n(θ̂ − θ) → N(0, 1/I(θ))</td>
+</tr>
+<tr class="odd">
+<td>Asymptotic efficiency</td>
+<td>attains the Cramér–Rao bound in the limit</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Does not hold</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Property</th>
+<th>Counterexample</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Unbiasedness</td>
+<td>σ̂² in the normal; X₍ₙ₎ in U(0,θ); n/ΣXᵢ for the exponential
+rate</td>
+</tr>
+<tr class="even">
+<td>Uniqueness</td>
+<td>U(θ, θ+1); Laplace with even n</td>
+</tr>
+<tr class="odd">
+<td>Existence</td>
+<td>likelihood may be unbounded, e.g. a two-component normal
+mixture</td>
+</tr>
+<tr class="even">
+<td>Attaining CRLB in finite samples</td>
+<td>only asymptotically, in general</td>
+</tr>
+</tbody>
+</table>
+<h2 id="regularity-conditions-why-they-appear-in-questions">7.7
+Regularity conditions — why they appear in questions</h2>
+<p>The asymptotic results and the Cramér–Rao bound require:</p>
+<ol type="1">
+<li>The support of f does not depend on θ</li>
+<li>θ is interior to the parameter space, not on its boundary</li>
+<li>f is twice differentiable in θ and differentiation under the
+integral sign is valid</li>
+<li>The Fisher information is finite and non-zero</li>
+</ol>
+<p><strong>U(0, θ) violates condition 1</strong>, which is why its MLE
+converges at rate n rather than √n, is not asymptotically normal, and
+has variance below what the CRLB would have predicted. When a question
+offers a uniform distribution and asks about CRLB or asymptotic
+normality, the answer is usually “the conditions fail”.</p>
+<hr />
+<h1 id="method-of-moments">8. Method of moments</h1>
+<p>The oldest method, and the easiest marks when it appears.</p>
+<p><strong>Procedure.</strong> Equate the first k sample moments to the
+corresponding population moments and solve for the k parameters.</p>
+<p>m₁′ = x̄ = E(X), m₂′ = (1/n)Σxᵢ² = E(X²), …</p>
+<p><strong>Worked examples</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Distribution</th>
+<th>Equation</th>
+<th>MoM estimator</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Poisson(λ)</td>
+<td>x̄ = λ</td>
+<td>λ̂ = x̄</td>
+</tr>
+<tr class="even">
+<td>Exponential, mean θ</td>
+<td>x̄ = θ</td>
+<td>θ̂ = x̄</td>
+</tr>
+<tr class="odd">
+<td>Exponential, rate θ</td>
+<td>x̄ = 1/θ</td>
+<td>θ̂ = 1/x̄</td>
+</tr>
+<tr class="even">
+<td>U(0, θ)</td>
+<td>x̄ = θ/2</td>
+<td>θ̂ = 2x̄</td>
+</tr>
+<tr class="odd">
+<td>N(μ, σ²)</td>
+<td>x̄ = μ; (1/n)Σxᵢ² = σ² + μ²</td>
+<td>μ̂ = x̄, σ̂² = Σ(xᵢ−x̄)²/n</td>
+</tr>
+<tr class="even">
+<td>Gamma(α, β)</td>
+<td>x̄ = α/β; s² = α/β²</td>
+<td>β̂ = x̄/s², α̂ = x̄²/s²</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Properties worth knowing</strong></p>
+<ul>
+<li>Always consistent, by the weak law of large numbers</li>
+<li>Generally <strong>less efficient</strong> than the MLE</li>
+<li>Not necessarily a function of a sufficient statistic — for U(0, θ)
+it gives 2X̄, which ignores X₍ₙ₎ entirely and can even produce an
+estimate smaller than an observed value</li>
+<li>Can give estimates outside the parameter space</li>
+<li>Computationally trivial, which is its only real advantage</li>
+</ul>
+<p>The U(0, θ) comparison is the standard exam illustration: MoM gives
+2X̄, MLE gives X₍ₙ₎, UMVUE gives ((n+1)/n)X₍ₙ₎, and the three have very
+different variances.</p>
+<hr />
+<h1 id="fisher-information-and-the-cramérrao-inequality">9. Fisher
+information and the Cramér–Rao inequality</h1>
+<h2 id="fisher-information">9.1 Fisher information</h2>
+<p>The <strong>score</strong> is U(θ) = ∂/∂θ log f(X; θ). Under
+regularity, E[U(θ)] = 0.</p>
+<p><strong>Fisher information</strong> is the variance of the score:</p>
+<p>I(θ) = E[(∂/∂θ log f(X; θ))²] = <strong>−E[∂²/∂θ² log f(X;
+θ)]</strong></p>
+<p>The second form is almost always easier to compute — differentiate
+twice and take an expectation, with no squaring.</p>
+<p><strong>Additivity.</strong> For a random sample of size n, I_n(θ) =
+n·I(θ). Information accumulates linearly with sample size, which is the
+formal reason estimator variances fall like 1/n.</p>
+<h2 id="worked-computations">9.2 Worked computations</h2>
+<p><strong>(a) Bernoulli(p).</strong></p>
+<p>log f = x log p + (1−x) log(1−p)<br />
+∂/∂p = x/p − (1−x)/(1−p)<br />
+∂²/∂p² = −x/p² − (1−x)/(1−p)²<br />
+−E[∂²/∂p²] = p/p² + (1−p)/(1−p)² = 1/p + 1/(1−p) =
+<strong>1/[p(1−p)]</strong></p>
+<p><strong>(b) Poisson(λ).</strong></p>
+<p>log f = −λ + x log λ − log x!; ∂²/∂λ² = −x/λ²; −E = λ/λ² =
+<strong>1/λ</strong></p>
+<p><strong>(c) Exponential, rate θ.</strong></p>
+<p>log f = log θ − θx; ∂²/∂θ² = −1/θ²; <strong>I(θ) = 1/θ²</strong></p>
+<p><strong>(d) Normal, mean μ with σ² known.</strong></p>
+<p>log f = −(x−μ)²/(2σ²) + const; ∂²/∂μ² = −1/σ²; <strong>I(μ) =
+1/σ²</strong></p>
+<p><strong>(e) Normal, variance.</strong> Treating σ² as the parameter,
+<strong>I(σ²) = 1/(2σ⁴)</strong>.</p>
+<p>Notice the pattern: in each case I(θ) is the reciprocal of the
+asymptotic variance of the MLE. That is the content of asymptotic
+efficiency.</p>
+<h2 id="the-cramérrao-inequality">9.3 The Cramér–Rao inequality</h2>
+<blockquote>
+<p>For any unbiased estimator T of τ(θ), under the regularity
+conditions,<br />
+<strong>Var(T) ≥ [τ′(θ)]² / (n·I(θ))</strong></p>
+</blockquote>
+<p>For τ(θ) = θ the numerator is 1 and the bound is the familiar
+1/(nI(θ)).</p>
+<p><strong>Equality condition.</strong> The bound is attained if and
+only if the score factorises as</p>
+<p>∂/∂θ log L = k(θ)·[T − τ(θ)]</p>
+<p>for some function k not involving the data. This happens exactly in
+exponential families with T linear in the natural sufficient
+statistic.</p>
+<p><strong>Efficiency</strong> of an unbiased estimator is eff(T) =
+CRLB/Var(T), lying between 0 and 1. An estimator with eff = 1 is
+<strong>efficient</strong>.</p>
+<h2 id="worked-example-poisson">9.4 Worked example — Poisson</h2>
+<p>I(λ) = 1/λ, so the bound for unbiased estimators of λ is λ/n. And
+Var(X̄) = λ/n exactly. So X̄ attains the bound, is efficient, and is
+therefore the UMVUE — confirming by a second route what Lehmann–Scheffé
+gave in section 6.</p>
+<h2 id="worked-example-where-the-bound-fails">9.5 Worked example — where
+the bound fails</h2>
+<p>For U(0, θ) the support depends on θ, so the CRLB does not apply. The
+UMVUE ((n+1)/n)X₍ₙ₎ has variance</p>
+<p>Var = θ²/[n(n+2)]</p>
+<p>which decreases like 1/n², far faster than the 1/n rate the bound
+would suggest. <strong>An estimator “beating” the Cramér–Rao bound is
+always a sign that the regularity conditions have failed</strong>, never
+that the mathematics is wrong.</p>
+<h2 id="relationships-to-keep-straight">9.6 Relationships to keep
+straight</h2>
+<ul>
+<li>Attaining the CRLB ⟹ UMVUE. The converse is false.</li>
+<li>CRLB is a bound for <strong>unbiased</strong> estimators only.
+Biased estimators can have smaller variance, and often smaller MSE.</li>
+<li>The bound involves n·I(θ) because information is additive.</li>
+<li>MLEs attain it <strong>asymptotically</strong>, not in finite
+samples.</li>
+</ul>
+<hr />
+<h1 id="the-master-table">10. The master table</h1>
+<p>Reproducing this from memory is Sunday’s checkpoint. Build it in
+pieces across the week.</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Distribution</th>
+<th>Complete sufficient statistic</th>
+<th>MLE</th>
+<th>UMVUE</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bernoulli(p)</td>
+<td>ΣXᵢ</td>
+<td>X̄</td>
+<td>X̄</td>
+<td>attains CRLB</td>
+</tr>
+<tr class="even">
+<td>Binomial(n known, p)</td>
+<td>ΣXᵢ</td>
+<td>X̄/n</td>
+<td>X̄/n</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Poisson(λ)</td>
+<td>ΣXᵢ</td>
+<td>X̄</td>
+<td>X̄</td>
+<td>attains CRLB</td>
+</tr>
+<tr class="even">
+<td>Poisson, estimating exp(−λ)</td>
+<td>ΣXᵢ</td>
+<td>exp(−X̄)</td>
+<td>((n−1)/n)^(ΣXᵢ)</td>
+<td>MLE biased</td>
+</tr>
+<tr class="odd">
+<td>Geometric(p)</td>
+<td>ΣXᵢ</td>
+<td>1/X̄</td>
+<td>—</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>N(μ, σ² known)</td>
+<td>ΣXᵢ</td>
+<td>X̄</td>
+<td>X̄</td>
+<td>attains CRLB</td>
+</tr>
+<tr class="odd">
+<td>N(μ known, σ²)</td>
+<td>Σ(Xᵢ−μ)²</td>
+<td>Σ(Xᵢ−μ)²/n</td>
+<td>Σ(Xᵢ−μ)²/n</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>N(μ, σ²) both unknown</td>
+<td>(ΣXᵢ, ΣXᵢ²)</td>
+<td>X̄, Σ(Xᵢ−X̄)²/n</td>
+<td>X̄, S²</td>
+<td>divisors n vs n−1</td>
+</tr>
+<tr class="odd">
+<td>Exponential, rate θ</td>
+<td>ΣXᵢ</td>
+<td>n/ΣXᵢ</td>
+<td>(n−1)/ΣXᵢ</td>
+<td>MLE biased by n/(n−1)</td>
+</tr>
+<tr class="even">
+<td>Exponential, mean θ</td>
+<td>ΣXᵢ</td>
+<td>X̄</td>
+<td>X̄</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Exponential, est. exp(−x₀/θ)</td>
+<td>ΣXᵢ</td>
+<td>exp(−x₀/X̄)</td>
+<td>(1 − x₀/T)ⁿ⁻¹</td>
+<td>T = ΣXᵢ</td>
+</tr>
+<tr class="even">
+<td>U(0, θ)</td>
+<td>X₍ₙ₎</td>
+<td>X₍ₙ₎</td>
+<td>((n+1)/n)X₍ₙ₎</td>
+<td>CRLB inapplicable</td>
+</tr>
+<tr class="odd">
+<td>U(θ, θ+1)</td>
+<td>(X₍₁₎, X₍ₙ₎)</td>
+<td>not unique</td>
+<td>—</td>
+<td>sufficient, <strong>not complete</strong></td>
+</tr>
+<tr class="even">
+<td>Gamma(α known, β)</td>
+<td>ΣXᵢ</td>
+<td>α/X̄</td>
+<td>(nα−1)/ΣXᵢ</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fisher information</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Distribution</th>
+<th>I(θ)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bernoulli(p)</td>
+<td>1/[p(1−p)]</td>
+</tr>
+<tr class="even">
+<td>Poisson(λ)</td>
+<td>1/λ</td>
+</tr>
+<tr class="odd">
+<td>Exponential(θ)</td>
+<td>1/θ²</td>
+</tr>
+<tr class="even">
+<td>N(μ), σ² known</td>
+<td>1/σ²</td>
+</tr>
+<tr class="odd">
+<td>N(σ²), μ known</td>
+<td>1/(2σ⁴)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="the-six-june-2026-questions-worked">11. The six June 2026
+questions, worked</h1>
+<p><strong>Q40 — exponential, f(x,θ) = θexp(−θx).</strong> Correct:
+<strong>(C), A, B and C only.</strong></p>
+<p>B is true: (n−1)/Σxᵢ is the UMVUE of θ (section 6.4d). C is true: Σxᵢ
+is sufficient. D is false: ΣXᵢ ~ Gamma(<strong>n</strong>, θ), not
+Gamma(1, θ) — Gamma(1, θ) is a single exponential. A is, strictly,
+false: the MLE of θ is n/Σxᵢ, not Σxᵢ/n. Since only options (B) and (C)
+contain both B and C, and D is false, (C) is the only possible answer.
+<strong>Technique: when a multi-statement question appears to have no
+perfect option, eliminate on the statement you are surest
+about.</strong></p>
+<p><strong>Q41 — Type II censoring, first r order statistics from
+exponential with mean θ.</strong> Correct: <strong>(D), T₁ +
+(n−r)T₂.</strong></p>
+<p>The total time on test is Σᵢ₌₁ʳ X₍ᵢ₎ + (n−r)X₍ᵣ₎ — the failures
+contribute their own times, and each of the n−r survivors contributes
+X₍ᵣ₎. Its expectation is rθ, so dividing by r gives an unbiased
+estimator. Check it at r = n: the correction vanishes and the estimator
+becomes X̄, as it must.</p>
+<p><strong>Q57 — shifted exponential, f = exp(−(x−θ)), x ≥ θ.</strong>
+Correct: <strong>(A), A and B only.</strong></p>
+<p>E(X) = θ + 1 and V(X) = 1. So X̄ →ᵖ θ+1 (A true; D false, the limit is
+θ+1 not θ). V(X̄) = 1/n, not n (C false). The minimum of n such variables
+has density n exp(−n(y−θ)) (B true) — the minimum of n exponentials is
+exponential at n times the rate.</p>
+<p><strong>Q61 — Rao–Blackwell.</strong> Correct: <strong>(D), A, B and
+D only.</strong></p>
+<p>A and B are the theorem. D is true: sufficiency is exactly what makes
+E(h|T) free of θ. C is false — uniqueness as UMVUE needs
+<strong>completeness</strong>, which the question never assumes.</p>
+<p><strong>Q74 — E[T(X₁)|T_S] where T(x₁) = I(X₁ &gt; x₀).</strong>
+Correct: <strong>(C), exp(−x₀/θ).</strong></p>
+<p>E[T(X₁)] = P(X₁ &gt; x₀) = exp(−x₀/θ). Rao–Blackwell preserves the
+estimand.</p>
+<p><strong>Q78 — Poisson, which are unbiased for λ.</strong> Correct:
+<strong>(D), A, B and D only.</strong></p>
+<p>Mean and variance both equal λ, so X̄ (A) and S² (B) are unbiased. X̄ +
+S² has expectation 2λ (C false). Weights summing to one preserve
+unbiasedness, so 0.3X̄ + 0.7S² works (D). <strong>Any aX̄ + (1−a)S² is
+unbiased for λ</strong> — the question could use any coefficients.</p>
+<hr />
+<h1 id="practice-set-40-questions">12. Practice set — 40 questions</h1>
+<p>Work these with the answers covered. Time yourself: 40 questions in
+45 minutes.</p>
+<p><strong>Sufficiency</strong></p>
+<p><strong>1.</strong> A statistic T is sufficient for θ if:<br />
+(A) T is unbiased (B) the conditional distribution of the sample given T
+is free of θ (C) T has minimum variance (D) T is consistent<br />
+→ <strong>(B)</strong>.</p>
+<p><strong>2.</strong> For a random sample from N(μ, σ²) with both
+unknown, a sufficient statistic is:<br />
+(A) X̄ (B) S² (C) (ΣXᵢ, ΣXᵢ²) (D) X₍ₙ₎<br />
+→ <strong>(C)</strong>. Two unknown parameters, two-dimensional
+sufficient statistic.</p>
+<p><strong>3.</strong> For U(0, θ) the sufficient statistic is:<br />
+(A) X̄ (B) ΣXᵢ (C) X₍ₙ₎ (D) X₍₁₎<br />
+→ <strong>(C)</strong>. It comes from the indicator I(x₍ₙ₎ ≤ θ), not
+from the algebra.</p>
+<p><strong>4.</strong> The factorisation theorem states that T is
+sufficient if and only if:<br />
+(A) f(x;θ) = g(T;θ)h(x) (B) f(x;θ) = g(T)h(θ) (C) E(T) = θ (D) T is
+complete<br />
+→ <strong>(A)</strong>.</p>
+<p><strong>5.</strong> For U(θ, θ+1) the minimal sufficient statistic
+is:<br />
+(A) X̄ (B) X₍₁₎ (C) X₍ₙ₎ (D) (X₍₁₎, X₍ₙ₎)<br />
+→ <strong>(D)</strong>. One parameter, two-dimensional statistic —
+perfectly possible.</p>
+<p><strong>6.</strong> Which is <strong>not</strong> necessarily true of
+a sufficient statistic?<br />
+(A) it is unbiased (B) it exists (C) the whole sample is one (D) any
+one-to-one function of it is sufficient<br />
+→ <strong>(A)</strong>. X₍ₙ₎ is sufficient for θ in U(0,θ) but
+biased.</p>
+<p><strong>7.</strong> For a sample from the Cauchy distribution, the
+minimal sufficient statistic is:<br />
+(A) X̄ (B) the sample median (C) the full set of order statistics (D)
+ΣXᵢ²<br />
+→ <strong>(C)</strong>. No genuine reduction is possible.</p>
+<p><strong>8.</strong> If T is sufficient for θ, then the MLE:<br />
+(A) equals T (B) is a function of T (C) is unrelated to T (D) does not
+exist<br />
+→ <strong>(B)</strong>. The likelihood depends on the data only through
+T.</p>
+<p><strong>Exponential families and completeness</strong></p>
+<p><strong>9.</strong> Which distribution is <strong>not</strong> a
+member of the exponential family?<br />
+(A) Poisson (B) Bernoulli (C) U(0, θ) (D) exponential<br />
+→ <strong>(C)</strong>. Its support depends on θ.</p>
+<p><strong>10.</strong> The natural parameter of the Bernoulli family
+is:<br />
+(A) p (B) 1 − p (C) log[p/(1−p)] (D) p²<br />
+→ <strong>(C)</strong>.</p>
+<p><strong>11.</strong> Completeness of T means:<br />
+(A) E[g(T)] = 0 for all θ implies g(T) = 0 a.s. (B) T is unbiased (C) T
+is minimal (D) Var(T) = 0<br />
+→ <strong>(A)</strong>.</p>
+<p><strong>12.</strong> A statistic that is sufficient but not complete
+arises in:<br />
+(A) Poisson (B) U(θ, θ+1) (C) Bernoulli (D) normal with σ² known<br />
+→ <strong>(B)</strong>.</p>
+<p><strong>13.</strong> For U(θ, θ+1), the range X₍ₙ₎ − X₍₁₎ is:<br />
+(A) sufficient (B) complete (C) ancillary (D) the MLE<br />
+→ <strong>(C)</strong>. Its distribution is free of θ.</p>
+<p><strong>14.</strong> Every complete sufficient statistic is:<br />
+(A) minimal sufficient (B) unbiased (C) efficient (D) ancillary<br />
+→ <strong>(A)</strong>. The converse fails.</p>
+<p><strong>15.</strong> Basu’s theorem concerns the independence
+of:<br />
+(A) two sufficient statistics (B) a complete sufficient statistic and an
+ancillary statistic (C) X̄ and the median (D) MLE and UMVUE<br />
+→ <strong>(B)</strong>.</p>
+<p><strong>16.</strong> In N(μ, σ²) with σ² known, Basu’s theorem shows
+immediately that:<br />
+(A) X̄ and S² are independent (B) X̄ is unbiased (C) S² is complete (D) X̄
+is efficient<br />
+→ <strong>(A)</strong>.</p>
+<p><strong>Rao–Blackwell and UMVUE</strong></p>
+<p><strong>17.</strong> Rao–Blackwell requires T to be:<br />
+(A) complete (B) sufficient (C) unbiased (D) minimal<br />
+→ <strong>(B)</strong>. Sufficiency alone; completeness is needed only
+for Lehmann–Scheffé.</p>
+<p><strong>18.</strong> E(h|T) has variance:<br />
+(A) larger than Var(h) (B) no larger than Var(h) (C) equal to Var(h)
+always (D) zero<br />
+→ <strong>(B)</strong>.</p>
+<p><strong>19.</strong> Lehmann–Scheffé needs T to be:<br />
+(A) sufficient only (B) complete only (C) complete and sufficient (D)
+ancillary<br />
+→ <strong>(C)</strong>.</p>
+<p><strong>20.</strong> The UMVUE, when it exists, is:<br />
+(A) unique (B) one of many (C) always the MLE (D) always unbiased for
+every parameter<br />
+→ <strong>(A)</strong>.</p>
+<p><strong>21.</strong> The UMVUE of λ in Poisson(λ) is:<br />
+(A) S² (B) X̄ (C) X₍ₙ₎ (D) ΣXᵢ<br />
+→ <strong>(B)</strong>.</p>
+<p><strong>22.</strong> The UMVUE of θ in U(0, θ) is:<br />
+(A) X₍ₙ₎ (B) ((n+1)/n)X₍ₙ₎ (C) 2X̄ (D) nX₍ₙ₎<br />
+→ <strong>(B)</strong>.</p>
+<p><strong>23.</strong> The UMVUE of θ for exponential with pdf
+θexp(−θx) is:<br />
+(A) X̄ (B) 1/X̄ (C) (n−1)/ΣXᵢ (D) n/ΣXᵢ<br />
+→ <strong>(C)</strong>.</p>
+<p><strong>24.</strong> The UMVUE of exp(−λ) in a Poisson sample
+is:<br />
+(A) exp(−X̄) (B) ((n−1)/n)^(ΣXᵢ) (C) 1/X̄ (D) I(X₁ = 0)<br />
+→ <strong>(B)</strong>. Option (A) is the MLE and is biased; (D) is the
+crude unbiased estimator you Rao–Blackwellise.</p>
+<p><strong>25.</strong> If an unbiased estimator attains the Cramér–Rao
+bound then it is:<br />
+(A) the UMVUE (B) biased (C) inconsistent (D) the MLE<br />
+→ <strong>(A)</strong>.</p>
+<p><strong>26.</strong> Rao–Blackwellising an estimator unbiased for
+τ(θ) gives an estimator unbiased for:<br />
+(A) θ (B) τ(θ) (C) 1/τ(θ) (D) anything<br />
+→ <strong>(B)</strong>. The estimand never changes.</p>
+<p><strong>Maximum likelihood</strong></p>
+<p><strong>27.</strong> The MLE of θ in U(0, θ) is:<br />
+(A) 2X̄ (B) X₍ₙ₎ (C) X₍₁₎ (D) X̄<br />
+→ <strong>(B)</strong>, found by inspection, not differentiation.</p>
+<p><strong>28.</strong> The MLE of σ² in N(μ, σ²) with both unknown
+is:<br />
+(A) Σ(Xᵢ−X̄)²/(n−1) (B) Σ(Xᵢ−X̄)²/n (C) Σ(Xᵢ−μ)²/n (D) S²<br />
+→ <strong>(B)</strong>, divisor n.</p>
+<p><strong>29.</strong> MLEs are always:<br />
+(A) unbiased (B) unique (C) functions of a sufficient statistic (D)
+efficient in finite samples<br />
+→ <strong>(C)</strong>.</p>
+<p><strong>30.</strong> The invariance property states that the MLE of
+g(θ) is:<br />
+(A) g(θ̂) (B) E[g(θ̂)] (C) g(E θ̂) (D) undefined<br />
+→ <strong>(A)</strong>.</p>
+<p><strong>31.</strong> For U(θ, θ+1) the MLE is:<br />
+(A) X₍₁₎ (B) X₍ₙ₎ (C) not unique (D) X̄<br />
+→ <strong>(C)</strong>. Any value in [X₍ₙ₎ − 1, X₍₁₎].</p>
+<p><strong>32.</strong> √n(θ̂ − θ) converges in distribution to:<br />
+(A) N(0, I(θ)) (B) N(0, 1/I(θ)) (C) χ²₁ (D) N(θ, 1)<br />
+→ <strong>(B)</strong>.</p>
+<p><strong>33.</strong> The MLE of θ for exponential with rate θ has
+expectation:<br />
+(A) θ (B) nθ/(n−1) (C) (n−1)θ/n (D) θ/n<br />
+→ <strong>(B)</strong>, hence biased upward.</p>
+<p><strong>34.</strong> The MLE of the exponential mean 1/θ is:<br />
+(A) 1/X̄ (B) X̄ (C) n/ΣXᵢ (D) ΣXᵢ<br />
+→ <strong>(B)</strong>, by invariance applied to θ̂ = 1/X̄.</p>
+<p><strong>Method of moments and Cramér–Rao</strong></p>
+<p><strong>35.</strong> The method-of-moments estimator of θ in U(0, θ)
+is:<br />
+(A) X₍ₙ₎ (B) 2X̄ (C) X̄ (D) ((n+1)/n)X₍ₙ₎<br />
+→ <strong>(B)</strong>, and it ignores the sample maximum entirely.</p>
+<p><strong>36.</strong> Method-of-moments estimators are always:<br />
+(A) unbiased (B) consistent (C) efficient (D) functions of sufficient
+statistics<br />
+→ <strong>(B)</strong>, by the weak law of large numbers.</p>
+<p><strong>37.</strong> Fisher information can be written as:<br />
+(A) E[∂²/∂θ² log f] (B) −E[∂²/∂θ² log f] (C) E[∂/∂θ log f] (D)
+Var(θ̂)<br />
+→ <strong>(B)</strong>.</p>
+<p><strong>38.</strong> For a sample of size n, the total information
+is:<br />
+(A) I(θ) (B) nI(θ) (C) I(θ)/n (D) n²I(θ)<br />
+→ <strong>(B)</strong>.</p>
+<p><strong>39.</strong> Fisher information for Bernoulli(p) is:<br />
+(A) p(1−p) (B) 1/[p(1−p)] (C) 1/p (D) n/p<br />
+→ <strong>(B)</strong>.</p>
+<p><strong>40.</strong> An unbiased estimator with variance smaller than
+the Cramér–Rao bound indicates:<br />
+(A) an error in arithmetic (B) that the regularity conditions fail (C)
+the estimator is biased (D) the bound is wrong<br />
+→ <strong>(B)</strong>. U(0, θ) is the standard instance.</p>
+<hr />
+<h1 id="sunday-self-test-60-minutes-closed-book">13. Sunday self-test —
+60 minutes, closed book</h1>
+<h2 id="part-a-the-master-table-20-minutes-40-marks">Part A — the master
+table (20 minutes, 40 marks)</h2>
+<p>Reproduce, for each of these ten distributions, the complete
+sufficient statistic, the MLE and the UMVUE: Bernoulli(p), Poisson(λ),
+N(μ, σ² known), N(μ known, σ²), N(μ, σ²) both unknown, exponential with
+rate θ, exponential with mean θ, U(0, θ), U(θ, θ+1), geometric(p).</p>
+<p>One mark per correct cell. <strong>Below 32, repeat Thursday’s
+session before starting week 2.</strong></p>
+<h2 id="part-b-written-answers-25-minutes">Part B — written answers (25
+minutes)</h2>
+<ol type="1">
+<li>State the factorisation theorem and use it to find the sufficient
+statistic for U(0, θ). Explain why differentiating the likelihood is
+useless here.</li>
+<li>Give a statistic that is sufficient but not complete, and prove that
+completeness fails.</li>
+<li>Prove that E(h|T) is unbiased whenever h is, and state precisely
+where sufficiency is used in the Rao–Blackwell theorem.</li>
+<li>The MLE of θ in exponential(θ) is n/ΣXᵢ. Show it is biased and give
+the unbiased version.</li>
+<li>T(X₁) = I(X₁ &gt; x₀) in an exponential sample with mean θ. What is
+E(h|T_S) the UMVUE of, and under what extra condition is it unique?</li>
+<li>Compute Fisher information for Poisson(λ) and state the Cramér–Rao
+bound for unbiased estimators of λ. Is it attained? By what?</li>
+</ol>
+<h2 id="part-c-speed-15-minutes">Part C — speed (15 minutes)</h2>
+<p>Twenty items from the practice set above, answers covered.</p>
+<h2 id="after-the-test">After the test</h2>
+<p>Log every error by <strong>type</strong> on the week 1 page: wrong
+quantity reported, missing term, degrees of freedom, sign, pure recall
+gap. If one type appears three times or more, that is your first target
+in week 2, ahead of any new topic.</p>
+<hr />
+<h1 id="carry-sheet-week-1">14. Carry sheet — week 1</h1>
+<p>Copy this onto one side of paper in your own hand. Handwriting it is
+part of the method; a printed copy does not stick the same way.</p>
+<p><strong>Four definitions</strong><br />
+Sufficient — conditional distribution of the sample given T is free of θ
+· Minimal sufficient — a function of every other sufficient statistic ·
+Complete — E[g(T)] = 0 for all θ forces g ≡ 0 · Ancillary — distribution
+free of θ</p>
+<p><strong>Factorisation</strong> f(x;θ) = g(T;θ)·h(x), with h
+completely free of θ including its support</p>
+<p><strong>Rao–Blackwell</strong> needs sufficiency → unbiased, variance
+no larger<br />
+<strong>Lehmann–Scheffé</strong> needs completeness too → unique
+UMVUE<br />
+<strong>Basu</strong> complete sufficient ⫫ ancillary</p>
+<p><strong>MLE</strong> function of sufficient statistic · invariant ·
+consistent · asymptotically normal and efficient — but
+<strong>not</strong> necessarily unbiased, unique or existent</p>
+<p><strong>MLE vs UMVUE, where they differ</strong><br />
+σ²: divisor n vs n−1 · exponential rate: n/ΣXᵢ vs (n−1)/ΣXᵢ · U(0,θ):
+X₍ₙ₎ vs ((n+1)/n)X₍ₙ₎</p>
+<p><strong>CRLB</strong> Var(T) ≥ [τ′(θ)]²/(nI(θ)), I(θ) = −E[∂²/∂θ² log
+f], I_n = nI<br />
+Attained ⟹ UMVUE. Not attained does <strong>not</strong> mean not UMVUE.
+Fails entirely when the support depends on θ.</p>
+<p><strong>The counterexample to quote</strong> U(θ, θ+1): (X₍₁₎, X₍ₙ₎)
+is sufficient, the range is ancillary with mean (n−1)/(n+1), so
+completeness fails.</p>
+</body></html>

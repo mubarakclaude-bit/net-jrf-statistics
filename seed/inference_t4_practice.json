@@ -1,0 +1,233 @@
+{
+ "moduleId": "inference",
+ "source": "variant",
+ "label": "MLE — linked practice",
+ "topicId": "inference-t4",
+ "count": 12,
+ "items": [
+  {
+   "id": "mle-p-01",
+   "format": "single",
+   "topic": "inference-t4",
+   "stem": "The likelihood function L(θ) for a fixed observed sample is best described as:",
+   "options": [
+    "The probability of the observed data, computed as a function of θ",
+    "A probability distribution over θ that integrates to 1",
+    "The posterior density of θ given the data",
+    "The joint density of the sample, as a function of x"
+   ],
+   "answer": "A",
+   "explanation": "It is the joint density read as a function of θ with the data held fixed. It does not integrate to 1 over θ and is not a distribution for θ — treating it as one is the Bayesian posterior, which also needs a prior."
+  },
+  {
+   "id": "mle-p-02",
+   "format": "numeric",
+   "topic": "inference-t4",
+   "stem": "A sample of n = 10 from Bernoulli(p) gives Σxᵢ = 7. Find the MLE of p, and then the MLE of the odds p/(1−p).",
+   "options": [],
+   "answer": "p̂ = 0.7; odds MLE = 0.7/0.3 = 2.333",
+   "explanation": "p̂ = k/n = 7/10 = 0.7. The odds are a function of p, so invariance gives the MLE directly: 0.7/0.3 = 7/3 ≈ 2.333. No second derivation is needed.",
+   "check": "The question asked for two things. Check you reported the odds and not just p̂."
+  },
+  {
+   "id": "mle-p-03",
+   "format": "single",
+   "topic": "inference-t4",
+   "stem": "For X₁,…,Xₙ iid U(0,θ), the MLE of θ is:",
+   "options": [
+    "x̄",
+    "x₍ₙ₎, the sample maximum",
+    "2x̄",
+    "(n+1)/n · x₍ₙ₎"
+   ],
+   "answer": "B",
+   "explanation": "The support depends on θ, so the derivative never vanishes. L(θ) = θ^(−n) for θ ≥ x₍ₙ₎ and 0 below, so the maximum sits at the boundary θ̂ = x₍ₙ₎. Option D is the unbiased correction, not the MLE. Option C is the method-of-moments estimator."
+  },
+  {
+   "id": "mle-p-04",
+   "format": "numeric",
+   "topic": "inference-t4",
+   "stem": "X₁,…,X₅ iid Exponential(λ) with Σxᵢ = 20. Give the MLE of λ and the MLE of the mean lifetime.",
+   "options": [],
+   "answer": "λ̂ = 0.25; mean lifetime MLE = 4",
+   "explanation": "λ̂ = n/Σxᵢ = 5/20 = 0.25. The mean is 1/λ, so by invariance its MLE is 1/0.25 = 4 — which is just x̄.",
+   "check": "Rate and mean are reciprocals. Reporting 4 when the question asked for λ is the classic wrong-quantity slip here."
+  },
+  {
+   "id": "mle-p-05",
+   "format": "multi",
+   "topic": "inference-t4",
+   "stem": "X₁,…,Xₙ are iid N(μ, σ²) with both unknown. Consider the following statements.",
+   "options": [
+    "A and B only",
+    "B and D only",
+    "A and C only",
+    "A, C and D only"
+   ],
+   "answer": "C",
+   "explanation": "A is true: μ̂ = x̄. B is false: the MLE divides by n, so σ̂² = Σ(xᵢ−x̄)²/n. C is true: E[σ̂²] = (n−1)σ²/n < σ². D is false — the bias vanishes as n → ∞, so it is asymptotically unbiased.",
+   "statements": [
+    "The MLE of μ is x̄.",
+    "The MLE of σ² is Σ(xᵢ−x̄)²/(n−1).",
+    "The MLE of σ² is biased downward for every finite n.",
+    "The bias of the MLE of σ² persists as n → ∞."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "∂ℓ/∂μ = 0 gives μ̂ = x̄ immediately, whatever σ² is."
+    },
+    "B": {
+     "tf": false,
+     "why": "That is s², the unbiased estimator. The MLE divides by n."
+    },
+    "C": {
+     "tf": true,
+     "why": "E[σ̂²] = (n−1)σ²/n, which is strictly below σ² for every finite n."
+    },
+    "D": {
+     "tf": false,
+     "why": "(n−1)/n → 1, so the bias dies. Asymptotically unbiased, and consistent."
+    }
+   }
+  },
+  {
+   "id": "mle-p-06",
+   "format": "single",
+   "topic": "inference-t4",
+   "stem": "Which condition, if violated, makes the score equation dℓ/dθ = 0 the wrong tool for finding an MLE?",
+   "options": [
+    "The sample must be iid",
+    "The parameter must be scalar",
+    "The density must be continuous",
+    "The support of the density must not depend on θ"
+   ],
+   "answer": "D",
+   "explanation": "A support that moves with θ puts a discontinuity in L at the boundary, and the maximum sits on it where the derivative is not zero. U(0,θ) is the standard example. The other three are neither necessary nor the operative condition."
+  },
+  {
+   "id": "mle-p-07",
+   "format": "numeric",
+   "topic": "inference-t4",
+   "stem": "A Poisson sample of size n = 12 has Σxᵢ = 36. Give the MLE of λ and the MLE of P(X = 0).",
+   "options": [],
+   "answer": "λ̂ = 3; MLE of P(X=0) = e^(−3) ≈ 0.0498",
+   "explanation": "λ̂ = x̄ = 36/12 = 3. P(X=0) = e^(−λ) is a function of λ, so by invariance its MLE is e^(−3) ≈ 0.0498.",
+   "check": "e^(−3), not 3. Confirm which of the two the question asked for before you write the final line."
+  },
+  {
+   "id": "mle-p-08",
+   "format": "multi",
+   "topic": "inference-t4",
+   "stem": "Consider the maximum likelihood estimator θ̂ under the usual regularity conditions.",
+   "options": [
+    "A, B and D only",
+    "All four",
+    "A and C only",
+    "B, C and D only"
+   ],
+   "answer": "A",
+   "explanation": "A is true (invariance holds with no conditions). B is true (factorisation). C is false — the MLE is not generally unbiased, let alone UMVUE. D is true — that is asymptotic efficiency.",
+   "statements": [
+    "g(θ̂) is the MLE of g(θ) for any function g.",
+    "θ̂ is a function of the sufficient statistic.",
+    "θ̂ is the UMVUE of θ.",
+    "θ̂ is asymptotically normal with variance 1/(nI(θ))."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Invariance, unconditional."
+    },
+    "B": {
+     "tf": true,
+     "why": "L factorises through T, so the maximiser depends on the data only through T."
+    },
+    "C": {
+     "tf": false,
+     "why": "Different criteria. The MLE is often biased, and the UMVUE minimises variance among unbiased estimators."
+    },
+    "D": {
+     "tf": true,
+     "why": "√n(θ̂−θ) →ᵈ N(0, 1/I(θ)) under regularity — the CRLB attained in the limit."
+    }
+   }
+  },
+  {
+   "id": "mle-p-09",
+   "format": "numeric",
+   "topic": "inference-t4",
+   "stem": "For an exponential sample with n = 4, the MLE of the rate is λ̂ = n/Σxᵢ. Its exact expectation is E[λ̂] = nλ/(n−1). By what percentage does it overstate λ on average at n = 4, and what is that property called?",
+   "options": [],
+   "answer": "33.3% high; it is biased but asymptotically unbiased (and consistent)",
+   "explanation": "E[λ̂] = 4λ/3 = 1.333λ, so a 33.3% overstatement on average. The bias is λ/(n−1), which tends to zero: asymptotically unbiased, and combined with vanishing variance, consistent. It is not unbiased at any finite n.",
+   "check": "A percentage and a name were both asked for. One without the other is half an answer."
+  },
+  {
+   "id": "mle-p-10",
+   "format": "single",
+   "topic": "inference-t4",
+   "stem": "The MLE of θ for a sample from U(0,θ) is x₍ₙ₎, with E[x₍ₙ₎] = nθ/(n+1). Which statement is correct?",
+   "options": [
+    "θ̂ overstates θ on average",
+    "θ̂ understates θ on average and is consistent",
+    "θ̂ is the UMVUE of θ",
+    "θ̂ is unbiased"
+   ],
+   "answer": "B",
+   "explanation": "nθ/(n+1) < θ, so it understates. It must: the sample maximum can never exceed the true θ. The bias θ/(n+1) → 0 and the variance → 0, so the estimator is consistent. The UMVUE here is (n+1)/n · x₍ₙ₎."
+  },
+  {
+   "id": "mle-p-11",
+   "format": "match",
+   "topic": "inference-t4",
+   "stem": "Match each model in List I with its maximum likelihood estimator in List II.",
+   "options": [
+    "A-1, B-3, C-2, D-4",
+    "A-3, B-4, C-1, D-2",
+    "A-3, B-1, C-4, D-2",
+    "A-2, B-1, C-4, D-3"
+   ],
+   "answer": "C",
+   "explanation": "Exponential rate inverts the mean: n/Σxᵢ. Bernoulli gives the sample proportion x̄. U(0,θ) is the boundary case x₍ₙ₎. The normal variance with μ unknown divides by n.",
+   "pairs": [
+    [
+     "A. Exponential(λ), estimate λ",
+     "1. x̄"
+    ],
+    [
+     "B. Bernoulli(p), estimate p",
+     "2. Σ(xᵢ−x̄)²/n"
+    ],
+    [
+     "C. U(0,θ), estimate θ",
+     "3. n/Σxᵢ"
+    ],
+    [
+     "D. N(μ,σ²) both unknown, estimate σ²",
+     "4. x₍ₙ₎"
+    ]
+   ]
+  },
+  {
+   "id": "mle-p-12",
+   "format": "order",
+   "topic": "inference-t4",
+   "stem": "Arrange the steps of a standard MLE derivation in the order they should be carried out.",
+   "options": [
+    "A, C, D, B",
+    "C, D, A, B",
+    "A, D, C, B",
+    "C, A, D, B"
+   ],
+   "answer": "D",
+   "explanation": "Write the likelihood as a product, take logs to turn it into a sum, solve the score equation, then confirm the second derivative is negative. The second-order check comes last and is the step most often skipped.",
+   "items": [
+    "A. Take logarithms to obtain ℓ(θ)",
+    "B. Verify ∂²ℓ/∂θ² < 0 at the root",
+    "C. Write L(θ) as a product of densities",
+    "D. Solve ∂ℓ/∂θ = 0"
+   ]
+  }
+ ]
+}

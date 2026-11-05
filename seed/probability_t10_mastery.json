@@ -1,0 +1,364 @@
+{
+ "moduleId": "probability",
+ "topicId": "probability-t10",
+ "source": "mastery",
+ "label": "Transformations and Jacobians — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "pr-t10-m-01",
+   "format": "single",
+   "topic": "probability-t10",
+   "diff": "easy",
+   "stem": "Let X and Y be independent, each exponential with parameter λ. The conditional distribution of X given X + Y = 2 is:",
+   "options": [
+    "Gamma(2, λ)",
+    "Exponential(2)",
+    "Uniform(0, 2)",
+    "Beta(λ/2, λ/2)"
+   ],
+   "answer": "C",
+   "explanation": "f(x | X+Y = s) = λ²e^(−λs)/(λ²s e^(−λs)) = 1/s on 0 < x < s, which is the Uniform(0, s) density; at s = 2 that is Uniform(0, 2). This is June 2026 Q25. Option A is the distribution of the SUM, which is what was marked; option B has unbounded support and so cannot describe a variable confined to (0, 2)."
+  },
+  {
+   "id": "pr-t10-m-02",
+   "format": "single",
+   "topic": "probability-t10",
+   "diff": "easy",
+   "stem": "If X and Y are iid exponential(λ), then X/(X + Y) follows:",
+   "options": [
+    "Exponential(λ)",
+    "Uniform(0, 1)",
+    "Gamma(2, λ)",
+    "Beta(2, 2)"
+   ],
+   "answer": "B",
+   "explanation": "Given X + Y = s, X is Uniform(0, s), so X/s is Uniform(0, 1) — and this holds for every s, so the unconditional distribution is Uniform(0,1) as well. Simulated mean 0.49992 and variance 0.08341 against 0.5 and 1/12 = 0.08333."
+  },
+  {
+   "id": "pr-t10-m-03",
+   "format": "single",
+   "topic": "probability-t10",
+   "diff": "easy",
+   "stem": "The sum of n iid exponential(λ) variables follows:",
+   "options": [
+    "χ²ₙ",
+    "exponential(nλ)",
+    "Normal",
+    "Gamma(n, λ)"
+   ],
+   "answer": "D",
+   "explanation": "The Gamma's shape parameter counts the exponentials, giving mean n/λ and variance n/λ². Option B is the MINIMUM, whose mean 1/(nλ) shrinks with n while the sum's mean grows — the two results point in opposite directions and are easily swapped."
+  },
+  {
+   "id": "pr-t10-m-04",
+   "format": "single",
+   "topic": "probability-t10",
+   "diff": "easy",
+   "stem": "The minimum of n iid exponential(λ) variables follows:",
+   "options": [
+    "exponential(λ/n)",
+    "Gamma(n, λ)",
+    "exponential(nλ)",
+    "Uniform"
+   ],
+   "answer": "C",
+   "explanation": "P(min > t) = (e^(−λt))ⁿ = e^(−nλt), the survival function of an exponential with rate nλ and mean 1/(nλ). Option A would make the minimum slower than a single component, which is the wrong direction. Simulated at λ = 1.5: mean 0.2217 for n = 3 against the exact 0.2222."
+  },
+  {
+   "id": "pr-t10-m-05",
+   "format": "single",
+   "topic": "probability-t10",
+   "diff": "easy",
+   "stem": "The only continuous distribution with the memoryless property is:",
+   "options": [
+    "normal",
+    "exponential",
+    "uniform",
+    "gamma"
+   ],
+   "answer": "B",
+   "explanation": "P(T > s + t | T > s) = P(T > t) characterises the exponential uniquely, and the Gamma has it only in the special case of shape 1, which IS the exponential. The geometric is the discrete counterpart and is likewise unique."
+  },
+  {
+   "id": "pr-t10-m-06",
+   "format": "single",
+   "topic": "probability-t10",
+   "diff": "easy",
+   "stem": "If X ~ exponential(λ), then 2λX follows:",
+   "options": [
+    "χ² with 1 degree of freedom",
+    "exponential(2)",
+    "Gamma(2, 1)",
+    "χ² with 2 degrees of freedom"
+   ],
+   "answer": "D",
+   "explanation": "λX ~ exponential(1) = Gamma(1, 1), and multiplying by 2 gives Gamma(shape 1, scale 2), which is exactly χ²₂. Simulated mean 1.9984 and variance 4.0045 against the χ²₂ values 2 and 4, with KS p = 0.101."
+  },
+  {
+   "id": "pr-t10-m-07",
+   "format": "numeric",
+   "topic": "probability-t10",
+   "diff": "moderate",
+   "stem": "For iid exponential(λ) variables, E(X | X + Y = s) equals:",
+   "options": [
+    "1/λ",
+    "s",
+    "s/2",
+    "s/λ"
+   ],
+   "answer": "C",
+   "explanation": "The conditional distribution is Uniform(0, s), whose mean is s/2. Option A is the UNCONDITIONAL mean E(X); a conditional expectation must depend on the observed total s, and must not contain λ, since λ cancels from the conditional distribution entirely.",
+   "check": "Verify by the tower property: E(E(X | X+Y)) = E((X+Y)/2) = (2/λ)/2 = 1/λ = E(X) ✓."
+  },
+  {
+   "id": "pr-t10-m-08",
+   "format": "numeric",
+   "topic": "probability-t10",
+   "diff": "moderate",
+   "stem": "If N₁ and N₂ are independent Poisson processes with rates λ and 2λ, then P(N₁ = 1 | N₁ + N₂ = 4) equals:",
+   "options": [
+    "4/81",
+    "32/81",
+    "8/27",
+    "16/81"
+   ],
+   "answer": "B",
+   "explanation": "Given the total, N₁ is Binomial(4, p) with p = λ/(λ + 2λ) = 1/3 — the λ cancels, and so does the observation period. So P(N₁ = 1) = C(4,1)(1/3)(2/3)³ = 4 × (1/3) × (8/27) = 32/81 = 0.39506. Simulated as 0.39459 over 101,098 qualifying draws.",
+   "check": "The four probabilities for N₁ = 0,…,4 must sum to 1: (2/3)⁴ + 32/81 + 24/81 + 8/81 + 1/81 = 16/81 + 32/81 + 24/81 + 8/81 + 1/81 = 81/81 ✓."
+  },
+  {
+   "id": "pr-t10-m-09",
+   "format": "single",
+   "topic": "probability-t10",
+   "diff": "moderate",
+   "stem": "If X ~ Binomial(m, p) and Y ~ Binomial(n, p) are independent, then X | (X + Y = k) follows:",
+   "options": [
+    "Negative binomial",
+    "Binomial",
+    "Poisson",
+    "Hypergeometric"
+   ],
+   "answer": "D",
+   "explanation": "P(X = j | X + Y = k) = C(m,j)C(n,k−j)/C(m+n,k), which is the hypergeometric and is free of p entirely. Conditioning on the total turns the problem into drawing k items without replacement from m + n. Checked at m = 6, n = 4, k = 3: empirical 0.0327, 0.3003, 0.4991, 0.1680 against the exact 0.0333, 0.3000, 0.5000, 0.1667. This is the distribution behind Fisher's exact test."
+  },
+  {
+   "id": "pr-t10-m-10",
+   "format": "numeric",
+   "topic": "probability-t10",
+   "diff": "moderate",
+   "stem": "For a Poisson process with rate 2 per minute, P(interarrival time > 6 | > 4) equals:",
+   "options": [
+    "e^(−1)",
+    "e^(−6)",
+    "e^(−4)",
+    "1 − e^(−1)"
+   ],
+   "answer": "C",
+   "explanation": "By memorylessness the elapsed 4 minutes are forgotten: P(T > 6 | T > 4) = P(T > 2) = e^(−2×2) = e^(−4) = 0.018316. The exponent is the rate times the REMAINING time, which is 2 × 2, not 2 × 6 and not 2 × 1.",
+   "check": "Confirmed by simulating the shifted variable over four million draws: 0.018388 against the exact 0.018316. Conditioning a plain simulation on T > 4 keeps only about 200 of 600,000 draws and gives useless precision."
+  },
+  {
+   "id": "pr-t10-m-11",
+   "format": "numeric",
+   "topic": "probability-t10",
+   "diff": "moderate",
+   "stem": "The Jacobian determinant of the transformation (x, y) → (u, v) = (x, x + y) is:",
+   "options": [
+    "−1",
+    "1",
+    "x",
+    "v − u"
+   ],
+   "answer": "B",
+   "explanation": "The inverse map is x = u, y = v − u, so the matrix of partial derivatives is [[1, 0], [−1, 1]] with determinant 1. The joint density therefore transfers unchanged, which is why the main derivation of this lesson takes only three lines.",
+   "check": "A unit Jacobian means the map preserves area, which is plausible: it is a shear, and a shear does not change areas."
+  },
+  {
+   "id": "pr-t10-m-12",
+   "format": "multi",
+   "topic": "probability-t10",
+   "diff": "moderate",
+   "stem": "Consider two independent exponential(λ) variables X and Y.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "A",
+   "explanation": "A is true: the joint density λ²e^(−λ(x+y)) is a function of the sum alone. B is true and is the lesson's main result. C is true, since λ cancels from the ratio. D is false — the sum is Gamma(2, λ), not exponential; exponential(2λ) is the MINIMUM.",
+   "statements": [
+    "The joint density depends on x and y only through x + y.",
+    "X | X + Y = s is Uniform(0, s).",
+    "The conditional distribution does not depend on λ.",
+    "X + Y is exponential with rate 2λ."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. f(x,y) = λe^(−λx)·λe^(−λy) = λ²e^(−λ(x+y)), so the density is constant along any line of fixed sum — which is the whole reason the conditional comes out flat."
+    },
+    "B": {
+     "tf": true,
+     "why": "True, with mean s/2. Verified by simulation: KS p = 0.230 against Uniform(0,2) when conditioning near X+Y = 2."
+    },
+    "C": {
+     "tf": true,
+     "why": "True. Both λ² factors and both e^(−λs) factors cancel in f(x, s−x)/f_{X+Y}(s), leaving 1/s. A conditional answer that still contains λ has failed to cancel something."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. The SUM is Gamma(2, λ) with mean 2/λ; exponential(2λ) with mean 1/(2λ) is the MINIMUM of the two. The two results move in opposite directions as more variables are added."
+    }
+   }
+  },
+  {
+   "id": "pr-t10-m-13",
+   "format": "numeric",
+   "topic": "probability-t10",
+   "diff": "moderate",
+   "stem": "Five independent components each have exponential lifetime with rate λ = 2. The expected time to the first failure is:",
+   "options": [
+    "10",
+    "0.5",
+    "2.5",
+    "0.1"
+   ],
+   "answer": "D",
+   "explanation": "The minimum of 5 iid exponential(2) variables is exponential with rate 5 × 2 = 10, so its mean is 1/10 = 0.1. Option B is the mean lifetime of a single component, 1/λ = 0.5, and option C is the mean of the SUM, 5/λ = 2.5.",
+   "check": "The first of five failures must come sooner than a single component's mean of 0.5, which rules out every option above it."
+  },
+  {
+   "id": "pr-t10-m-14",
+   "format": "single",
+   "topic": "probability-t10",
+   "diff": "moderate",
+   "stem": "Given that exactly one event of a Poisson process occurred in an interval, the distribution of its position is:",
+   "options": [
+    "exponential from the start of the interval",
+    "concentrated at the midpoint",
+    "uniform over the interval",
+    "Beta(2, 2) over the interval"
+   ],
+   "answer": "C",
+   "explanation": "This is the same fact as the lesson's main result: the waiting time to the event and the waiting time from it to the end are the two exponential pieces, and conditioning on their total makes the split uniform. Given k events, the positions behave like k independent uniforms, sorted — the order statistics of lesson 1.1."
+  },
+  {
+   "id": "pr-t10-m-15",
+   "format": "numeric",
+   "topic": "probability-t10",
+   "diff": "moderate",
+   "stem": "The skewness of the sum of n iid exponential variables is:",
+   "options": [
+    "2n",
+    "2/√n",
+    "1/n",
+    "2"
+   ],
+   "answer": "B",
+   "explanation": "The sum is Gamma(n, λ), whose skewness is 2/√n — independent of λ, because λ is a pure scale parameter and rescaling cannot change a shape measure. It gives 2, 1.41, 0.89, 0.63 and 0.37 for n = 1, 2, 5, 10 and 30, which is the central limit theorem arriving at a visible rate.",
+   "check": "At n = 1 it must reduce to the exponential's own skewness, which is 2 ✓."
+  },
+  {
+   "id": "pr-t10-m-16",
+   "format": "single",
+   "topic": "probability-t10",
+   "diff": "moderate",
+   "stem": "Why does the parameter cancel when two independent Poisson counts are conditioned on their total?",
+   "options": [
+    "it does not cancel — the answer depends on λ",
+    "because the Poisson has equal mean and variance",
+    "because the counts are independent",
+    "conditioning on the total fixes the quantity the rate governs, so nothing is left for it to influence"
+   ],
+   "answer": "D",
+   "explanation": "The conditional probability is a ratio in which the parameter appears to the same power above and below. Structurally, the total is a sufficient statistic for the rate, so conditioning on it removes the rate entirely. What survives is the RATIO of the two rates — here 1/3 for rates λ and 2λ. The same device makes Fisher's exact test free of the unknown success probability."
+  },
+  {
+   "id": "pr-t10-m-17",
+   "format": "multi",
+   "topic": "probability-t10",
+   "diff": "hard",
+   "stem": "Consider the Beta–Gamma construction: U ~ Gamma(a, λ) and V ~ Gamma(b, λ) independent, R = U/(U+V), S = U+V.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "A",
+   "explanation": "A is true, with Jacobian s. B is true and is the striking part. C is true: an exponential is a Gamma with shape 1, and Beta(1,1) is the uniform. D is false — the Jacobian is s, not 1; the unit Jacobian belongs to the (x, x+y) map.",
+   "statements": [
+    "The inverse map is u = rs, v = s(1−r), and its Jacobian determinant is s.",
+    "R ~ Beta(a, b) and S ~ Gamma(a+b, λ), and R and S are independent.",
+    "With a = b = 1 this gives X/(X+Y) ~ Uniform(0, 1).",
+    "The Jacobian of this transformation is 1."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True: det [[s, r], [−s, 1−r]] = s(1−r) + rs = s. The Jacobian is not constant here, which is what produces the extra factor of s in the Gamma part."
+    },
+    "B": {
+     "tf": true,
+     "why": "True, and the independence is the striking part: the sum carries all the information about scale and the ratio all the information about the split. It is also why conditioning on the sum leaves a distribution free of λ — the ratio never depended on λ."
+    },
+    "C": {
+     "tf": true,
+     "why": "True. An exponential is Gamma with shape 1, so a = b = 1 gives R ~ Beta(1,1), which is the standard uniform — exactly this lesson's result."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. Its Jacobian is s. The unit Jacobian is that of (x, y) → (x, x+y), a shear, which is a different transformation."
+    }
+   }
+  },
+  {
+   "id": "pr-t10-m-18",
+   "format": "single",
+   "topic": "probability-t10",
+   "diff": "hard",
+   "stem": "For Y = X² with X standard normal, the naive Jacobian formula fails because:",
+   "options": [
+    "Y has no density",
+    "the Jacobian is zero everywhere",
+    "the map is two-to-one, so both branches x = ±√y must be added",
+    "the normal is not continuous"
+   ],
+   "answer": "C",
+   "explanation": "The transformation theorem requires a one-to-one map. Splitting into x > 0 and x < 0 and adding gives f_Y(y) = [f_X(√y) + f_X(−√y)]/(2√y), which for a standard normal is the chi-square with one degree of freedom. Forgetting the second branch halves the answer, and this is the commonest way the method is misapplied."
+  },
+  {
+   "id": "pr-t10-m-19",
+   "format": "numeric",
+   "topic": "probability-t10",
+   "diff": "hard",
+   "stem": "X and Y are iid exponential(λ). Which of these does NOT depend on λ?",
+   "options": [
+    "the distribution of X + Y",
+    "the distribution of X given X + Y = s",
+    "the distribution of min(X, Y)",
+    "E(X)"
+   ],
+   "answer": "B",
+   "explanation": "The conditional distribution is Uniform(0, s), with λ cancelled from both numerator and denominator of the ratio. All three others depend on λ: the sum is Gamma(2, λ), the minimum is exponential(2λ), and E(X) = 1/λ.",
+   "check": "Checking which quantities contain the rate is a quick way to eliminate options on a conditioning question, since a correct conditional-given-the-total answer never does."
+  },
+  {
+   "id": "pr-t10-m-20",
+   "format": "single",
+   "topic": "probability-t10",
+   "diff": "hard",
+   "stem": "A manager must find P(exactly one of 4 calls went to Team A), where two teams' calls arrive as independent Poisson streams with A at half B's rate, and the arrival rate is unknown. The best description is:",
+   "options": [
+    "the answer is 1/2 since there are two teams",
+    "the arrival rate must be estimated from historical data first",
+    "the answer cannot be determined without the length of the observation period",
+    "conditioning on the total of 4 removes the unknown rate, leaving Binomial(4, 1/3) and the answer 32/81"
+   ],
+   "answer": "D",
+   "explanation": "Conditioning on the total fixes the only thing the rate governs, so λ and the period both cancel and the conditional distribution is Binomial(4, λ/(λ+2λ)) = Binomial(4, 1/3), giving 32/81 = 0.3951. What must still be known is the RATIO of the rates, which the statement that A handles half of B's traffic supplies. This is the same device by which Fisher's exact test avoids estimating a nuisance parameter."
+  }
+ ]
+}

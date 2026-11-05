@@ -1,0 +1,362 @@
+{
+ "moduleId": "timeseries",
+ "topicId": "timeseries-t6",
+ "source": "mastery",
+ "label": "Random walk with and without drift — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "ts-t6-m-01",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "easy",
+   "stem": "For the random walk yₜ = μ + yₜ₋₁ + εₜ with E(εₜ) = 0 and E(εₜ²) = σ²ₑ, the mean and variance of yₜ are:",
+   "options": [
+    "μ and tσ²ₑ",
+    "μ and σ²ₑ",
+    "tμ and σ²ₑ",
+    "tμ and tσ²ₑ"
+   ],
+   "answer": "D",
+   "explanation": "Unrolling gives yₜ = tμ + Σεᵢ, so the mean is tμ and, since the shocks are independent, the variance is tσ²ₑ. Both grow with t, which is the signature of a random walk. This is June 2026 Q23; the options with one moment held constant are the traps."
+  },
+  {
+   "id": "ts-t6-m-02",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "easy",
+   "stem": "For the random walk yₜ = yₜ₋₁ + εₜ with no drift, E(yₜ) and Var(yₜ) are:",
+   "options": [
+    "tμ and tσ²",
+    "0 and tσ²",
+    "μ and σ²",
+    "0 and σ²"
+   ],
+   "answer": "B",
+   "explanation": "The shocks have mean zero so the mean stays at 0, but their variances still accumulate to tσ². A constant mean with a growing variance is still non-stationary — only one of the three conditions has to fail. Simulated at t = 20 with σ = 2: mean −0.0102 and variance 79.89 against 0 and 80."
+  },
+  {
+   "id": "ts-t6-m-03",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "easy",
+   "stem": "Weak stationarity requires the autocovariance to depend on:",
+   "options": [
+    "t only",
+    "both t and the lag",
+    "the lag only",
+    "neither"
+   ],
+   "answer": "C",
+   "explanation": "Together with a constant mean and a constant finite variance, that is the definition. The random walk's Corr(yₜ, yₜ₊ₖ) = √(t/(t+k)) depends on t as well as the lag, which is precisely why it fails."
+  },
+  {
+   "id": "ts-t6-m-04",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "easy",
+   "stem": "A random walk becomes stationary after:",
+   "options": [
+    "differencing twice",
+    "taking logarithms",
+    "squaring",
+    "differencing once"
+   ],
+   "answer": "D",
+   "explanation": "Δyₜ = yₜ − yₜ₋₁ = μ + εₜ, which is white noise plus a constant and therefore stationary. Differencing twice would over-difference, introducing a non-invertible moving-average component."
+  },
+  {
+   "id": "ts-t6-m-05",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "easy",
+   "stem": "In a random walk, the effect of a single shock on future values is:",
+   "options": [
+    "alternating",
+    "permanent",
+    "zero",
+    "it dies out geometrically"
+   ],
+   "answer": "B",
+   "explanation": "The coefficient on yₜ₋₁ is exactly 1, so a shock is carried forward undiminished: its impact k periods later is 1ᵏ = 1. Geometric decay at rate φᵏ is what happens in a STATIONARY AR(1) with |φ| < 1, which is the contrast worth holding."
+  },
+  {
+   "id": "ts-t6-m-06",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "easy",
+   "stem": "ARIMA(0, 1, 0) describes:",
+   "options": [
+    "white noise",
+    "an MA(1)",
+    "a random walk",
+    "an AR(1)"
+   ],
+   "answer": "C",
+   "explanation": "No AR terms, one difference, no MA terms. Differencing once leaves Δyₜ = εₜ, which is white noise, so the series is integrated of order 1 with nothing else in the model."
+  },
+  {
+   "id": "ts-t6-m-07",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "moderate",
+   "stem": "For a random walk, Corr(yₜ, yₜ₊ₖ) equals:",
+   "options": [
+    "1",
+    "φᵏ",
+    "0",
+    "√(t/(t+k))"
+   ],
+   "answer": "D",
+   "explanation": "Cov(yₜ, yₜ₊ₖ) = tσ², since the two sums share their first t shocks, and dividing by √(tσ² · (t+k)σ²) gives √(t/(t+k)). Option B is the stationary AR(1)'s autocorrelation. Simulated: t = 10, k = 5 gave 0.8164 against 0.8165; t = 20, k = 20 gave 0.7070 against 0.7071."
+  },
+  {
+   "id": "ts-t6-m-08",
+   "format": "numeric",
+   "topic": "timeseries-t6",
+   "diff": "moderate",
+   "stem": "For a driftless random walk, Corr(y₂₅, y₁₀₀) equals:",
+   "options": [
+    "0.25",
+    "0.50",
+    "0.75",
+    "0.87"
+   ],
+   "answer": "B",
+   "explanation": "√(t/(t+k)) with t = 25 and t + k = 100 gives √(25/100) = √0.25 = 0.5 exactly. Option A is the ratio t/(t+k) without the square root, which is the standard slip.",
+   "check": "The correlation must exceed the variance ratio 0.25, since taking a square root of a number below 1 increases it."
+  },
+  {
+   "id": "ts-t6-m-09",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "moderate",
+   "stem": "The series yₜ = 5 + 0.2t + εₜ is:",
+   "options": [
+    "difference-stationary",
+    "stationary",
+    "trend-stationary",
+    "a random walk"
+   ],
+   "answer": "C",
+   "explanation": "Its mean 5 + 0.2t is not constant, so it is not stationary; but its variance is σ² throughout and its autocovariance depends only on the lag, so subtracting the deterministic line leaves a stationary series. The correct repair is to de-trend, not to difference — differencing would over-difference."
+  },
+  {
+   "id": "ts-t6-m-10",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "moderate",
+   "stem": "Over-differencing a stationary series produces:",
+   "options": [
+    "white noise",
+    "a unit root in the AR part",
+    "a better model",
+    "a non-invertible MA component"
+   ],
+   "answer": "D",
+   "explanation": "Differencing white noise gives Δyₜ = εₜ − εₜ₋₁, an MA(1) with θ = 1 — exactly on the invertibility boundary |θ| < 1. The variance doubles to 2σ² and a lag-1 autocorrelation of −0.5 appears. Simulated: variance 2.0102 against 2, and ρ₁ = −0.4998 against −0.5."
+  },
+  {
+   "id": "ts-t6-m-11",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "moderate",
+   "stem": "For a Gaussian process, weak stationarity implies:",
+   "options": [
+    "ergodicity only",
+    "strict stationarity",
+    "independence",
+    "nothing further"
+   ],
+   "answer": "B",
+   "explanation": "A Gaussian process is completely determined by its mean function and its autocovariance function, so if both are shift-invariant then every joint distribution is too. For a non-Gaussian process weak stationarity implies nothing further — the skewness, for instance, could still change with t."
+  },
+  {
+   "id": "ts-t6-m-12",
+   "format": "multi",
+   "topic": "timeseries-t6",
+   "diff": "moderate",
+   "stem": "Consider the driftless random walk yₜ = yₜ₋₁ + εₜ.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "A",
+   "explanation": "A is true — the mean condition holds. B is true, and it is the reason stationarity fails. C is true: the covariance depends on t. D is false — one differencing suffices, since Δyₜ = εₜ is already white noise.",
+   "statements": [
+    "E(yₜ) = 0 for every t.",
+    "Var(yₜ) = tσ², so the variance is not constant.",
+    "Cov(yₜ, yₜ₊ₖ) = tσ², which depends on t and not only on the lag.",
+    "Two differencings are needed to make it stationary."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. The shocks have mean zero, so the first condition for weak stationarity actually holds — which is why a constant mean alone proves nothing."
+    },
+    "B": {
+     "tf": true,
+     "why": "True. Variances of independent shocks accumulate, giving tσ², and that failure alone destroys stationarity."
+    },
+    "C": {
+     "tf": true,
+     "why": "True. The two sums share their first t shocks, so the covariance is tσ² — a function of the earlier time point rather than of the separation."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. One differencing gives Δyₜ = εₜ, which is white noise. A second differencing would over-difference and introduce a non-invertible MA component."
+    }
+   }
+  },
+  {
+   "id": "ts-t6-m-13",
+   "format": "numeric",
+   "topic": "timeseries-t6",
+   "diff": "moderate",
+   "stem": "For a random walk with μ = 0.3 and σ² = 4, the mean and variance of y₁₀ are:",
+   "options": [
+    "3 and 4",
+    "0.3 and 4",
+    "3 and 40",
+    "30 and 40"
+   ],
+   "answer": "C",
+   "explanation": "E(y₁₀) = tμ = 10 × 0.3 = 3 and Var(y₁₀) = tσ² = 10 × 4 = 40. Both are t times the one-step quantity, so the standard deviation at t = 10 is √40 ≈ 6.32.",
+   "check": "Both moments must be exactly ten times their one-step values, which rules out any option holding one of them fixed."
+  },
+  {
+   "id": "ts-t6-m-14",
+   "format": "numeric",
+   "topic": "timeseries-t6",
+   "diff": "moderate",
+   "stem": "For a driftless random walk at t = 100, the autocorrelations at lags 1 and 20 are approximately:",
+   "options": [
+    "1.000 and 1.000",
+    "0.900 and 0.122",
+    "0.995 and 0.500",
+    "0.995 and 0.913"
+   ],
+   "answer": "D",
+   "explanation": "√(100/101) = 0.9950 and √(100/120) = 0.9129. Option B is a stationary AR(1) with φ = 0.9, whose lag-20 autocorrelation is 0.9²⁰ = 0.122 — the contrast that makes a slowly decaying sample ACF the practical signal of a unit root.",
+   "check": "At lag 50 the value would be √(100/150) = 0.816, still high — the decay is extremely slow by design."
+  },
+  {
+   "id": "ts-t6-m-15",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "moderate",
+   "stem": "Which pair of series has the same mean path but requires opposite repairs?",
+   "options": [
+    "yₜ = εₜ and yₜ = 0.5yₜ₋₁ + εₜ",
+    "yₜ = 5 + 0.2t + εₜ and yₜ = 0.2 + yₜ₋₁ + εₜ",
+    "yₜ = yₜ₋₁ + εₜ and yₜ = 2yₜ₋₁ + εₜ",
+    "yₜ = 5 + εₜ and yₜ = 5 + 0.2t + εₜ"
+   ],
+   "answer": "B",
+   "explanation": "Both have a mean rising at 0.2 per period, but the first is trend-stationary with constant variance σ² and reverts to its line, while the second is a random walk with drift, variance tσ², which never reverts. De-trend the first and difference the second; each wrong choice leaves its own characteristic damage."
+  },
+  {
+   "id": "ts-t6-m-16",
+   "format": "numeric",
+   "topic": "timeseries-t6",
+   "diff": "moderate",
+   "stem": "A stationary AR(1) with φ = 0.99 has variance σ²/(1 − φ²). How does it compare with a random walk's?",
+   "options": [
+    "identical — both are unbounded",
+    "about 100σ², finite, against the random walk's σ²",
+    "about 50σ², finite, against the random walk's unbounded tσ²",
+    "smaller than the random walk's at every t"
+   ],
+   "answer": "C",
+   "explanation": "1/(1 − 0.99²) = 1/0.0199 = 50.25, so the variance is about 50σ² — large but finite, and the process does eventually revert. At φ = 1 the formula breaks down and the variance is tσ², growing without bound. The qualitative change happens at a single point.",
+   "check": "A random walk's variance exceeds 50σ² once t > 50, so option D fails for large t and holds only early on."
+  },
+  {
+   "id": "ts-t6-m-17",
+   "format": "multi",
+   "topic": "timeseries-t6",
+   "diff": "hard",
+   "stem": "Consider regressing one random walk on an independent other.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "A",
+   "explanation": "A is true — the rejection rate tends to 1. B is true: the residuals are non-stationary so the standard error is the thing that fails. C is true, and it is what cointegration tests for. D is false — differencing both is valid for inference but answers a question about changes, discarding any long-run relationship.",
+   "statements": [
+    "The proportion of samples in which the slope appears significant tends to 1 as n grows.",
+    "What fails is the standard error, because the regression residuals are themselves non-stationary.",
+    "If some linear combination of the two series is stationary, a levels relationship is real.",
+    "Differencing both series is always the best repair."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. The t-statistic diverges like √n rather than converging to a fixed distribution, so more data makes the spurious relationship look stronger, not weaker."
+    },
+    "B": {
+     "tf": true,
+     "why": "True. The usual formula assumes stationary errors of finite variance; with non-stationary residuals the quantity divided by n never settles, so the yardstick is wrong by a factor that grows."
+    },
+    "C": {
+     "tf": true,
+     "why": "True — that is the definition of cointegration. The two series wander, but they wander together and the gap between them reverts, so a relationship between levels genuinely exists."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. Differencing is always valid for inference, but it answers a question about short-run changes and discards any long-run levels relationship. Where cointegration is present, that relationship is exactly what is of interest."
+    }
+   }
+  },
+  {
+   "id": "ts-t6-m-18",
+   "format": "numeric",
+   "topic": "timeseries-t6",
+   "diff": "hard",
+   "stem": "Differencing a white-noise series yₜ = εₜ gives a series whose variance and lag-1 autocorrelation are:",
+   "options": [
+    "σ²/2 and −0.5",
+    "σ² and 0",
+    "2σ² and +0.5",
+    "2σ² and −0.5"
+   ],
+   "answer": "D",
+   "explanation": "Δyₜ = εₜ − εₜ₋₁ has variance σ² + σ² = 2σ², and Cov(Δyₜ, Δyₜ₋₁) = −σ², giving an autocorrelation of −σ²/2σ² = −0.5. So differencing has doubled the variance and manufactured a correlation. Simulated: 2.0102 and −0.4998.",
+   "check": "This is an MA(1) with θ = 1, whose theoretical ρ₁ is −θ/(1+θ²) = −1/2 ✓ — and θ = 1 is exactly on the invertibility boundary."
+  },
+  {
+   "id": "ts-t6-m-19",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "hard",
+   "stem": "The variance of a k-step-ahead forecast error from a random walk is:",
+   "options": [
+    "σ², constant",
+    "kσ², growing without bound",
+    "σ²/(1 − φ²), the process variance",
+    "zero for k = 1"
+   ],
+   "answer": "B",
+   "explanation": "The k-step error is the sum of the next k shocks, so its variance is kσ² and the interval widens like √k forever. For a stationary process the forecast error variance rises to a ceiling, namely the process variance σ²/(1 − φ²). That contrast is the practical cost of a unit root: long-horizon forecasts from a random walk carry no useful precision."
+  },
+  {
+   "id": "ts-t6-m-20",
+   "format": "single",
+   "topic": "timeseries-t6",
+   "diff": "hard",
+   "stem": "A forecaster differences every series by default. One model then shows residual lag-1 autocorrelation near −0.5 and an estimated MA coefficient near 1. The best reading is:",
+   "options": [
+    "the model needs an extra AR term",
+    "a second differencing is needed",
+    "the series was already stationary and has been over-differenced",
+    "the shocks are not white noise"
+   ],
+   "answer": "C",
+   "explanation": "Those two figures are the fingerprint of over-differencing: differencing a stationary series doubles its variance and produces an MA(1) with θ = 1 and ρ₁ = −0.5. The remedy is to undo the differencing, not to add terms. Note the contrast with under-differencing, which leaves a slowly decaying ACF and a near-unit AR root — so the two errors are distinguishable."
+  }
+ ]
+}

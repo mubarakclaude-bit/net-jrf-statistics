@@ -1,0 +1,808 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Author lesson 5.4 — Spearman's rho and Kendall's tau (nonparam-t4).
+
+PYQ ANCHOR: June 2026 Q35, answered WRONGLY (key B = 0.345, the user marked C = 0.456).
+Ten variants, j26v-q35-04 .. -13, which supply the lesson's specification.
+
+Q35 is doubly misfiled and the lesson says so: its variant bank sits in the MATHS file and the
+paper tallies it under mathematics, while it is a non-parametric rank-correlation question whose
+home is this topic. The prices in its stem are there only to be ranked. An earlier pass through
+the catalog nearly built it as an "index numbers" lesson on the strength of a one-line label.
+
+Verified from the actual Q35 data (crude oil and gasoline prices, 10 years):
+  crude ranks 5,7,8,4,1,6,2,3,9,10 ; gasoline ranks 3,2,4,1,5,8,7,6,9,10
+  d = 2,5,4,3,-4,-2,-5,-3,0,0  -> sum d = 0 (always), sum d^2 = 108
+  rho = 1 - 6(108)/(10*99) = 0.345455  -> key B. scipy agrees to 6 dp.
+  Pearson's r on the RAW prices = 0.716682 -- more than double rho, and not an option.
+  Kendall's tau = 0.288889.
+  Exact one-sided P(sum d^2 <= 108) ~ 0.165 over 2,000,000 random permutations, so the
+  answer the exam wants is NOT statistically significant. The lesson states this.
+
+Other verified figures:
+  rho = 1 - 2(sum d^2 / max), where max = n(n^2-1)/3 = 40, 70, 330 at n = 5, 6, 10.
+  n=5 d2=4 -> 0.8 ; n=6 d2=35 -> EXACTLY 0 (35 is half of max 70) ; reversed ranks -> -1.
+  rho equals Pearson's r computed on the ranks: agreed to 6 dp on three random permutations.
+  tau = (C-D)/(n(n-1)/2), checked against scipy on three permutations (-0.444444, 0.277778,
+  0.444444 from (C,D) = (10,26), (23,13), (26,10)).
+  Var(rho) = 1/(n-1) ; Var(tau) = 2(2n+5)/(9n(n-1)).
+  Bivariate normal: rho_S = (6/pi)asin(r/2), tau = (2/pi)asin(r). The 3tau/2 ~ rho_S rule is
+  good at small r (0.2910 vs 0.2876 at r=0.3) and breaks at large r (0.8855 vs 0.7859 at 0.8).
+  Ties: midranks then Pearson -- example gave 0.763158 by both routes.
+  Exact null p-values from the new `rank-null` viz: n=5 d2=4 -> 0.066667 ; n=6 d2=0 -> 0.001389 ;
+  n=7 d2=20 -> 0.069444 ; n=8 d2=0 -> 0.0000248.
+
+Uses the new `rank-null` visualisation (exact null distribution of rho by enumerating all n!
+permutations for n <= 8, with the normal approximation overlaid).
+
+Writes seed/lesson_np4.json and seed/nonparam_t4_mastery.json.
+"""
+import json, io, os, re
+
+OUT = "seed/lesson_np4.json"
+POOL = "seed/nonparam_t4_mastery.json"
+
+S = []
+
+S.append({
+ "kind": "foundation", "id": "s0", "mins": 7,
+ "title": "Before the lesson — four things it will assume",
+ "objective": "Fix what a rank correlation measures and why you would want one.",
+ "ask": {
+  "q": "Two variables rise together but in a bent, irregular way rather than along a straight line. Would Pearson's r report that faithfully?",
+  "nudge": "What exactly does r measure — association, or LINEAR association?"},
+ "body": [
+  "Pearson's correlation measures how close a relationship is to a STRAIGHT LINE. That is often not the question. If two quantities move together consistently but not linearly, or if one extreme pair is dragging the arithmetic around, r answers a question nobody asked.",
+  "A rank correlation replaces each value by its position in order and correlates those. It therefore measures MONOTONE association — do the two variables rise and fall together — rather than linear association, and it is unaffected by how far apart the values are, only by their order.",
+  "The June 2026 paper set exactly this computation and it was answered wrongly. Working it honestly turns out to be more interesting than the exam intends: Pearson's r on the same data is more than double Spearman's ρ, and the ρ the exam asks for is not even statistically significant.",
+  "Four checks before starting."],
+ "items": [
+  {"ask": "What does it mean to rank a set of values, and which direction do you rank in?",
+   "recall": "Replace each value by its position when the values are sorted. Smallest gets rank 1 unless stated otherwise.",
+   "refresh": [
+    "Direction is a convention and it does not matter, provided BOTH variables are ranked the same way. Ranking both ascending and ranking both descending give the identical ρ; ranking one each way flips its sign.",
+    "That is worth knowing because it is a cheap source of sign errors in an exam. Fix a direction, apply it to both columns, and move on.",
+    "Ranks for n observations are always the integers 1 to n, whatever the original values were — which is why a rank correlation discards all the spacing information."]},
+  {"ask": "Give Pearson's correlation coefficient and say what it measures.",
+   "recall": "r = Cov(X,Y)/(σ_X σ_Y), measuring LINEAR association, with |r| ≤ 1 by Cauchy–Schwarz.",
+   "refresh": [
+    "Topic 1.13 covers its sampling distribution. The point here is the word 'linear': r = 1 means the points lie exactly on an upward straight line, not merely that Y always rises with X.",
+    "r is also sensitive to a single extreme pair, because it is built from products of deviations and a large deviation in both variables contributes heavily.",
+    "Both of those limitations are what a rank correlation removes, and section 1 shows them doing real damage on the exam's own data."]},
+  {"ask": "What makes a method non-parametric?",
+   "recall": "It makes no assumption about the shape of the underlying distributions.",
+   "refresh": [
+    "Pearson's r has a usable sampling distribution only under bivariate normality, which is a strong assumption. Rank methods need only that the data can be ordered.",
+    "The cost is some efficiency when the normal assumption does happen to hold — rank methods throw away the spacing information, which carries some signal. The gain is validity when it does not hold.",
+    "The whole of module 5 trades the same way, which is why topic 5.5 is about matching the test to the design."]},
+  {"ask": "What is a permutation test, in one line?",
+   "recall": "Compute the statistic for every possible rearrangement of the data and see where the observed value falls.",
+   "refresh": [
+    "For rank correlation this is exact rather than approximate: if the two rankings are unrelated, every one of the n! pairings is equally likely, so the null distribution can be written down by counting.",
+    "That is what the chart in section 2 does — it enumerates all n! orderings for n up to 8 and shows the resulting distribution of ρ, with no approximation anywhere.",
+    "It is also why exact tables exist for small n: the normal approximation is poor until n is reasonably large, as the chart makes visible."]}]})
+
+S.append({
+ "kind": "intuition", "id": "s1", "mins": 7,
+ "title": "The exam's own data, where the two correlations disagree sharply",
+ "objective": "See what ranking does and does not keep.",
+ "body": [
+  "The June 2026 question gives ten years of crude oil and gasoline prices and asks for Spearman's ρ. Ranking both columns ascending gives crude 5, 7, 8, 4, 1, 6, 2, 3, 9, 10 and gasoline 3, 2, 4, 1, 5, 8, 7, 6, 9, 10. The differences are 2, 5, 4, 3, −4, −2, −5, −3, 0, 0, summing to zero as they always must, with Σd² = 108. So ρ = 1 − 6(108)/(10 × 99) = 0.345455, which is option B.",
+  "Now compute Pearson's r on the raw prices instead. It is 0.716682 — more than DOUBLE the rank correlation, and not even among the options offered. The two coefficients disagree about the same ten pairs by a factor of two.",
+  "The reason is visible in the data. The last two years, 92.14 with 82.06 and 96.31 with 84.40, are high in both variables and far from the rest. Pearson's r weights those heavily, because it works with distances and those pairs contribute large products of deviations. Ranking compresses them to ranks 9 and 10 in both columns, where they contribute no more than any other agreeing pair. Meanwhile the middle years disagree substantially — crude rank 1 pairs with gasoline rank 5, crude rank 7 with gasoline rank 2 — and the rank measure counts that disagreement at full weight.",
+  "Neither number is wrong. They answer different questions: r asks how close the cloud is to a straight line, ρ asks how consistently the two orderings agree. On these data the straight-line fit is respectable while the ordering agreement is mediocre, and that is a real feature of the data rather than an artefact.",
+  "One more thing the exam does not ask. Kendall's τ on the same data is 0.288889, and the exact one-sided probability of getting Σd² ≤ 108 by chance when the two rankings are unrelated is about 0.165. So the answer the question wants is not statistically significant at any conventional level. Knowing the value and knowing whether it means anything are separate skills, and only the first is being tested."],
+ "scenario": {
+  "teaser": "An analyst reports r = 0.72 and a colleague reports ρ = 0.35 on the same ten pairs.",
+  "title": "Which number to report",
+  "body": [
+   "Two analysts examine the same ten years of crude oil and gasoline prices. One reports a correlation of 0.72, the other 0.35. Both have computed correctly. The question is which to put in the report.",
+   "The answer depends on the claim being made. If the claim is that gasoline prices move proportionally with crude — that a given rise in crude translates into a predictable rise in gasoline — then the linear measure is the relevant one and 0.72 supports a moderate relationship. If the claim is that the two rank the same years as expensive and cheap, 0.35 is the relevant number and it does not support much.",
+   "What neither analyst should do is report the larger number because it is larger. The gap between them is itself the finding: it says the relationship is carried disproportionately by two extreme years rather than holding steadily across the range. A reader told only 0.72 would form a false picture of consistency.",
+   "There is a practical diagnostic here. When Pearson's r substantially exceeds Spearman's ρ, suspect that a small number of extreme points are doing the work; when ρ substantially exceeds r, suspect a monotone but strongly curved relationship, which ranking handles and a straight line does not. Computing both takes seconds and the comparison is informative in a way that either alone is not.",
+   "On these particular data the honest summary is that ten observations cannot settle much. The exact one-sided p-value for ρ = 0.345 at n = 10 is about 0.165, so even the rank measure's modest value is well within what chance produces. Ten years of annual prices is simply a small sample.",
+   "The reporting principle generalises beyond correlation: when two defensible summaries of the same data differ materially, the difference is a result to be explained, not a choice to be made quietly."],
+  "q": "Pearson's r is 0.72 and Spearman's ρ is 0.35 on the same data. What does the gap itself tell you?",
+  "answer": "That the linear association is being carried disproportionately by a few extreme pairs rather than holding evenly across the range. Pearson's r works with distances, so the two years that are far above the rest in BOTH variables contribute large products of deviations and pull r up; ranking compresses those years to ranks 9 and 10, where they count no more than any other agreeing pair, while the substantial disagreements among the middle years count at full weight. So a high r with a much lower ρ is a signal of leverage from extreme points. The reverse pattern, ρ much larger than r, indicates a relationship that is monotone but strongly curved, which ranks capture and a straight line does not. Either way the gap is a finding to report and explain, not a reason to quietly pick the more flattering number."},
+ "ask": {
+  "q": "Ranking turned the two extreme years into ranks 9 and 10. What information was discarded, and was discarding it the right thing to do?",
+  "nudge": "What do the ranks know about HOW far above the rest those years were?"}})
+
+S.append({
+ "kind": "explore", "id": "s2", "mins": 7,
+ "title": "The exact null distribution, by counting permutations",
+ "objective": "See where an observed ρ falls, with no approximation.",
+ "viz": {"type": "rank-null", "n": 6, "k": 0,
+         "caption": "Every stem is a value ρ can take when the two rankings are unrelated, with its exact probability obtained by running through all n! orderings. The teal curve is the normal approximation ρ ≈ N(0, 1/(n−1))."},
+ "body": [
+  "Start at n = 6 with Σd² = 0, the case of perfect agreement. There are 720 orderings of six ranks and exactly one of them agrees perfectly, so the exact probability of ρ = 1 by chance is 1/720 = 0.001389. The chart reports precisely that.",
+  "Now raise Σd² to 35. The observed ρ becomes exactly 0 and the exact one-sided probability becomes 0.5 — the distribution is symmetric about zero, so half of all orderings give Σd² at or below the midpoint. The reason 35 gives exactly zero is worth noticing: the largest Σd² can be is n(n²−1)/3 = 70 for n = 6, and 35 is exactly half of it. In general ρ = 1 − 2(Σd²/max), so Σd² at half its maximum always gives ρ = 0.",
+  "Push Σd² to 70. That is the reversed ranking, ρ = −1, and the one-sided probability becomes 1 because every ordering has Σd² at or below the maximum. The distribution's two extremes each carry probability 1/n!.",
+  "Now compare the stems with the teal normal curve. At n = 6 the approximation is visibly poor — the true distribution is a coarse set of spikes on 36 distinct values while the normal is smooth. Raise n to 8 and the spikes thicken into something closer to the curve, though 8! = 40,320 orderings still produce only 85 distinct values of ρ. This is exactly why exact tables are published for small n rather than a normal approximation being used.",
+  "Set n = 5 with Σd² = 4, the figure a later section works through: ρ = 0.8 with an exact one-sided probability of 0.066667, which is 8 of the 120 orderings. A correlation of 0.8 sounds decisive and at n = 5 it is not quite significant at the 5% level."],
+ "ask": {
+  "q": "At n = 6 the extreme ρ = 1 has probability 1/720. What is the smallest n at which a perfect agreement would be significant at the 5% level, one-sided?",
+  "nudge": "You need 1/n! < 0.05."}})
+
+S.append({
+ "kind": "theory", "id": "s3", "mins": 9,
+ "title": "Both coefficients, properly stated",
+ "objective": "Get the formulas, the bounds and the tie rule.",
+ "blocks": [
+  {"t": "formula", "h": "Spearman's rank correlation",
+   "body": "Rank both variables, form dᵢ = (rank of xᵢ) − (rank of yᵢ), then\n    ρ = 1 − 6Σd² / [n(n² − 1)].\nΣd is ALWAYS zero, since both rank columns are a permutation of 1 to n and so have the same sum — so Σd is no use as a check on the subtraction, but a non-zero Σd proves an arithmetic error."},
+  {"t": "formula", "h": "The same formula, in a more revealing form",
+   "body": "The largest Σd² can be is at reversed ranks, where\n    max Σd² = n(n² − 1)/3   —  40 at n = 5, 70 at n = 6, 330 at n = 10.\nSubstituting, ρ = 1 − 2(Σd² / max Σd²). So ρ runs linearly from +1 at Σd² = 0 to −1 at the maximum, and Σd² at exactly half its maximum gives ρ = 0. At n = 6 that half-way point is 35, which is why Σd² = 35 gives exactly zero."},
+  {"t": "step", "h": "Why it equals Pearson's r on the ranks",
+   "body": "The formula is not a separate definition. Spearman's ρ IS Pearson's r applied to the two rank columns, and the 1 − 6Σd²/(n(n²−1)) form is what Pearson's formula simplifies to when both inputs are the integers 1 to n — because then both means are (n+1)/2 and both variances are (n²−1)/12, which are known constants rather than things to compute. Verified to six decimal places on three random permutations at n = 12, and on the exam's own data: 0.345455 by both routes."},
+  {"t": "def", "h": "The tie rule",
+   "body": "When values tie, assign each the MIDRANK — the average of the ranks they would have occupied. Three values tying for positions 4, 5 and 6 all get rank 5. With ties present the simplified formula is no longer exact, so the correct procedure is to compute PEARSON'S r on the midranks instead. Checked on a small tied example: 0.763158 by both the standard software routine and Pearson on midranks."},
+  {"t": "formula", "h": "Kendall's tau",
+   "body": "Take all n(n−1)/2 pairs of observations. A pair is CONCORDANT if both variables order it the same way, DISCORDANT if they order it oppositely. Then\n    τ = (C − D) / [n(n − 1)/2].\nChecked against standard software on three permutations at n = 9: (C, D) = (10, 26), (23, 13) and (26, 10) giving τ = −0.444444, 0.277778 and 0.444444. On the exam's data τ = 0.288889 against ρ = 0.345455."},
+  {"t": "step", "h": "Which to use",
+   "body": "Both test the same null hypothesis of no monotone association and usually agree on the verdict. τ has a more direct interpretation — it is a difference of probabilities, P(concordant) − P(discordant) — and handles ties more gracefully; ρ is far more commonly tabulated and quicker to compute by hand from Σd². τ is typically smaller in magnitude than ρ on the same data, as the exam's figures show. For an exam, compute whichever the question names."},
+  {"t": "def", "h": "Testing",
+   "body": "Under the null of independence both have mean 0, with Var(ρ) = 1/(n − 1) and Var(τ) = 2(2n + 5)/[9n(n − 1)] — at n = 10 those are 0.111111 and 0.061728. For small n use exact tables or enumerate permutations as the chart in section 2 does; the normal approximation is unreliable below about n = 20 and visibly so at n = 6."}],
+ "table": {
+  "caption": "The June 2026 Q35 data, worked. Ranks ascending in both columns.",
+  "head": ["year", "crude", "rank", "gasoline", "rank", "d", "d²"],
+  "rows": [
+   ["1", "77.91", "5", "65.46", "3", "+2", "4"],
+   ["2", "82.00", "7", "64.18", "2", "+5", "25"],
+   ["3", "89.20", "8", "65.66", "4", "+4", "16"],
+   ["4", "73.37", "4", "59.23", "1", "+3", "9"],
+   ["5", "66.42", "1", "65.68", "5", "−4", "16"],
+   ["6", "80.10", "6", "69.55", "8", "−2", "4"],
+   ["7", "69.78", "2", "67.81", "7", "−5", "25"],
+   ["8", "72.09", "3", "67.39", "6", "−3", "9"],
+   ["9", "92.14", "9", "82.06", "9", "0", "0"],
+   ["10", "96.31", "10", "84.40", "10", "0", "0"],
+   ["", "", "", "", "", "Σd = 0", "Σd² = 108"]]},
+ "flow": {
+  "title": "Computing a rank correlation",
+  "alt": "Flow chart for computing Spearman's rho or Kendall's tau",
+  "nodes": [
+   {"id": "a", "r": 0, "c": 1, "label": "Paired data on two variables", "kind": "start"},
+   {"id": "b", "r": 1, "c": 1, "label": "Rank both columns the SAME direction", "kind": "step"},
+   {"id": "c", "r": 2, "c": 0, "label": "Ties? Assign midranks", "kind": "step"},
+   {"id": "d", "r": 2, "c": 2, "label": "No ties: form d, then Σd²", "kind": "step"},
+   {"id": "e", "r": 3, "c": 0, "label": "Compute Pearson's r on the midranks", "kind": "end"},
+   {"id": "f", "r": 3, "c": 2, "label": "ρ = 1 − 6Σd²/(n(n²−1))", "kind": "end"},
+   {"id": "g", "r": 4, "c": 1, "label": "Check Σd = 0; then test by exact table for small n", "kind": "note"}],
+  "edges": [
+   {"from": "a", "to": "b"}, {"from": "b", "to": "c"}, {"from": "b", "to": "d"},
+   {"from": "c", "to": "e"}, {"from": "d", "to": "f"},
+   {"from": "e", "to": "g"}, {"from": "f", "to": "g"}],
+  "note": "The simplified Σd² formula is valid only without ties. With ties it is Pearson on midranks, and the two routes agree exactly when there are no ties."},
+ "ask": {
+  "q": "ρ equals Pearson's r on the ranks. Why does that make the Σd² formula a shortcut rather than a different method?",
+  "nudge": "What are the mean and variance of the integers 1 to n?"}})
+
+S.append({
+ "kind": "worked", "id": "s4", "mins": 8,
+ "title": "Worked — the exam question, and what it leaves out",
+ "objective": "Get the answer, then see what it does not establish.",
+ "ask": {
+  "q": "Which of the four options would Pearson's r have matched?",
+  "nudge": "r = 0.717. Look at the options again."},
+ "problem": "For the June 2026 Q35 data, compute Spearman's ρ. Then compute Pearson's r on the raw prices and Kendall's τ, and say whether ρ is significant.",
+ "steps": [
+  {"say": "Rank both columns ascending.",
+   "math": "crude    : 5, 7, 8, 4, 1, 6, 2, 3, 9, 10\ngasoline : 3, 2, 4, 1, 5, 8, 7, 6, 9, 10",
+   "why": "Smallest value gets rank 1 in each column. Crude's smallest is 66.42 in year 5, so year 5 gets crude rank 1; gasoline's smallest is 59.23 in year 4, so year 4 gets gasoline rank 1. Both columns are now a permutation of 1 to 10."},
+  {"say": "Form the differences and square them.",
+   "math": "d  : +2, +5, +4, +3, −4, −2, −5, −3, 0, 0\nΣd = 0  ✓\nd² : 4, 25, 16, 9, 16, 4, 25, 9, 0, 0\nΣd² = 108",
+   "why": "Σd = 0 always, because both rank columns sum to n(n+1)/2 = 55. It is not evidence the ranking is right, but a non-zero Σd would prove the subtraction wrong, so it is worth half a second."},
+  {"say": "Apply the formula.",
+   "math": "ρ = 1 − 6Σd²/[n(n² − 1)]\n  = 1 − 6(108)/[10(100 − 1)]\n  = 1 − 648/990\n  = 1 − 0.654545\n  = 0.345455",
+   "why": "Option B, 0.345. Standard software agrees to six decimals, and so does Pearson's r computed on the two rank columns — confirming that the shortcut and the definition coincide."},
+  {"say": "Check against the alternative form.",
+   "math": "max Σd² = n(n² − 1)/3 = 10(99)/3 = 330\nρ = 1 − 2(108/330) = 1 − 0.654545 = 0.345455  ✓",
+   "why": "The same number by a different route, and it locates the result: 108 is about a third of the way to the maximum, so ρ sits about a third of the way down from +1 towards 0."},
+  {"say": "Now Pearson's r on the raw prices.",
+   "math": "r = 0.716682",
+   "why": "More than double ρ, and NOT among the four options — which answers the question posed above. The gap comes from the last two years, 92.14 with 82.06 and 96.31 with 84.40, which are far above the rest in both variables and so dominate a distance-based measure while counting as ordinary agreeing pairs in a rank-based one."},
+  {"say": "Kendall's τ, and the significance.",
+   "math": "τ = 0.288889\nexact one-sided P(Σd² ≤ 108) ≈ 0.165",
+   "why": "τ is smaller than ρ, as it usually is. And the p-value is the part the exam does not ask: a one-sided probability of about 0.165 means a rank correlation of 0.345 at n = 10 is comfortably within what unrelated rankings produce. The computation is examinable; the conclusion that the data show a relationship is not supported."}],
+ "after": "Answering the question above: none of them — r = 0.717 is above every option, which is a useful sanity signal that the question wants the rank coefficient and not Pearson's. The habit worth building is to compute Σd² carefully, check Σd = 0, and then locate the answer against the maximum 330 so a gross arithmetic error cannot survive."})
+
+S.append({
+ "kind": "recall", "id": "s5", "mins": 2,
+ "title": "Pause and recall",
+ "objective": "Retrieve the formulas before the harder cases.",
+ "intro": "Answer each before revealing it.",
+ "items": [
+  {"q": "Give Spearman's ρ in terms of Σd².",
+   "a": "ρ = 1 − 6Σd²/[n(n² − 1)]."},
+  {"q": "What does Σd always equal, and what is that good for?",
+   "a": "Zero. It cannot confirm the ranking but a non-zero value proves an arithmetic error."},
+  {"q": "Give the maximum possible Σd² and the ρ it produces.",
+   "a": "n(n² − 1)/3, at reversed ranks, giving ρ = −1. It is 330 at n = 10."},
+  {"q": "Give Kendall's τ.",
+   "a": "(C − D)/[n(n − 1)/2], with C concordant and D discordant pairs."},
+  {"q": "What is the correct procedure when ties are present?",
+   "a": "Assign midranks, then compute Pearson's r on them — the Σd² shortcut is no longer exact."}]})
+
+S.append({
+ "kind": "completion", "id": "s6", "mins": 8,
+ "title": "Your turn — five computations",
+ "objective": "Apply both formulas and the structural facts.",
+ "problem": "No ties unless stated.",
+ "steps": [
+  {"say": "n = 5 with Σd² = 4.",
+   "blank": {"prompt": "Give ρ.",
+             "answer": "1 − 6(4)/(5 × 24) = 1 − 24/120 = 0.8",
+             "accept": ["0.8", "0.80", "4/5"],
+             "hint": "n(n² − 1) = 5(24) = 120."},
+   "why": "ρ = 0.8. Its exact one-sided probability at n = 5 is 0.066667, that is 8 of the 120 orderings — so even 0.8 is not significant at the 5% level on five pairs."},
+  {"say": "n = 6 with Σd² = 35.",
+   "blank": {"prompt": "Give ρ.",
+             "answer": "1 − 6(35)/(6 × 35) = 1 − 1 = 0",
+             "accept": ["0", "0.0", "zero"],
+             "hint": "n(n² − 1) = 6(35) = 210, and 6 × 35 = 210."},
+   "why": "Exactly zero, and not a coincidence: max Σd² = 6(35)/3 = 70 and 35 is precisely half, so ρ = 1 − 2(35/70) = 0. Any Σd² at half its maximum gives zero."},
+  {"say": "Ranks exactly reversed.",
+   "blank": {"prompt": "Give ρ, and Σd² for n = 10.",
+             "answer": "ρ = −1, with Σd² = 330",
+             "accept": ["-1 and 330", "−1, 330", "-1; 330"],
+             "hint": "max Σd² = n(n² − 1)/3."},
+   "why": "Reversal is the furthest two rankings can be apart, so ρ attains its lower bound of −1. The matching Σd² is 10(99)/3 = 330, verified by direct computation at n = 5, 6 and 10."},
+  {"say": "n = 9 with 26 concordant and 10 discordant pairs.",
+   "blank": {"prompt": "Give τ.",
+             "answer": "(26 − 10)/(9 × 8/2) = 16/36 = 0.444444",
+             "accept": ["0.4444", "0.444", "16/36", "4/9"],
+             "hint": "There are n(n−1)/2 pairs in all."},
+   "why": "36 pairs, so τ = 16/36 = 0.4444. Note C + D = 36 here, so there are no tied pairs. Checked against standard software on this exact configuration."},
+  {"say": "A sample has ties in both variables.",
+   "blank": {"prompt": "What should you compute?",
+             "answer": "Midranks, then Pearson's r on them",
+             "accept": ["pearson on midranks", "midranks then pearson", "pearson r on the midranks"],
+             "hint": "Is the Σd² shortcut still exact?"},
+   "why": "The shortcut relies on both rank columns being exactly the integers 1 to n, which ties break. Midranks keep the column sums right but change the variances, so Pearson's formula must be used directly. A worked tied example gave 0.763158 by both the software routine and Pearson on midranks."}],
+ "after": "The structure to carry: ρ = 1 − 6Σd²/(n(n²−1)), equivalently 1 − 2(Σd²/max) with max = n(n²−1)/3; Σd = 0 always; reversal gives −1; τ = (C−D) over the number of pairs; and ties send you to Pearson on midranks."})
+
+S.append({
+ "kind": "theory", "id": "s7", "mins": 7,
+ "title": "How the two coefficients relate, and when each wins",
+ "objective": "Compare them properly rather than treating them as interchangeable.",
+ "blocks": [
+  {"t": "step", "h": "What τ means that ρ does not",
+   "body": "τ is a difference of probabilities: P(a randomly chosen pair is concordant) − P(it is discordant). That gives it a direct reading — τ = 0.3 means concordant pairs outnumber discordant ones by 30% of all pairs. ρ has no equally clean interpretation; it is Pearson's r on ranks, which is a statement about a transformed variable rather than about the data's ordering as such."},
+  {"t": "formula", "h": "Under bivariate normality",
+   "body": "If the underlying pair is bivariate normal with correlation r, then\n    E(ρ) = (6/π) arcsin(r/2)   and   E(τ) = (2/π) arcsin(r).\nAt r = 0.5 these give 0.482584 and 0.333333; at r = 0.8, 0.785939 and 0.590334. So both UNDERSTATE the underlying correlation, and τ much more than ρ — which is the main reason they are not interchangeable as numbers even when they agree as tests."},
+  {"t": "step", "h": "The 3τ ≈ 2ρ rule, and where it fails",
+   "body": "A commonly quoted approximation is ρ ≈ 3τ/2. At r = 0.3 it gives 0.290960 against the true 0.287564 — excellent. At r = 0.5, 0.500000 against 0.482584 — acceptable. At r = 0.8, 0.885502 against 0.785939 — a 13% error, and it even exceeds the value ρ can reach. So the rule is a small-correlation approximation and should not be used for strong association."},
+  {"t": "formula", "h": "Null variances",
+   "body": "    Var(ρ) = 1/(n − 1),       Var(τ) = 2(2n + 5)/[9n(n − 1)].\nAt n = 10: 0.111111 and 0.061728. At n = 30: 0.034483 and 0.016603. τ has the smaller null variance at every n, which is one argument for it, though the normal approximation it feeds is itself unreliable at small n."},
+  {"t": "def", "h": "Choosing",
+   "body": "Use ρ when computing by hand from Σd², when consulting published tables, or when a question names it. Use τ when the interpretation matters, when there are many ties, or when reporting to someone who will read the number as a probability statement. For a hypothesis test the choice rarely matters: both are consistent tests of the same null and they almost always agree."}],
+ "ask": {
+  "q": "Both coefficients understate an underlying bivariate-normal correlation. Does that make them biased estimators of r?",
+  "nudge": "Are they trying to estimate r, or something else?"}})
+
+S.append({
+ "kind": "guided", "id": "s8", "mins": 8,
+ "title": "On your own — four parts",
+ "objective": "Work the bounds, the ties and the significance.",
+ "problem": "(a) For n = 8, give max Σd² and the Σd² that yields ρ = 0. (b) For n = 7 with Σd² = 20, give ρ. (c) Rank x = (1, 2, 2, 4, 5) and y = (2, 1, 3, 3, 5) with midranks and say what to compute. (d) At what n does perfect agreement first become significant at the 5% level, one-sided?",
+ "hints": [
+  "For (a), max = n(n² − 1)/3, and ρ = 0 at half of it.",
+  "For (b), n(n² − 1) = 7(48) = 336.",
+  "For (d), the exact probability of ρ = 1 is 1/n!."],
+ "answer": "(a) max = 168, and ρ = 0 at Σd² = 84. (b) ρ = 1 − 120/336 = 0.642857. (c) Midranks x = (1, 2.5, 2.5, 4, 5), y = (2, 1, 3.5, 3.5, 5); compute Pearson's r on those, giving 0.763158. (d) n = 4, since 1/4! = 0.0417 < 0.05 while 1/3! = 0.167.",
+ "check": "In (b) the exact one-sided probability for Σd² = 20 at n = 7 is 0.069444 — that is 350 of the 5,040 orderings — so ρ = 0.643 on seven pairs is still not significant at 5%. Part (d) is the sharpest small-sample fact in the topic: with three pairs, perfect agreement cannot be significant at any level below 1/6 = 0.167, no matter how convincing it looks. Four pairs is the minimum, and even then only just.",
+ "scenario": {
+  "teaser": "A report claims a 'perfect correlation' between two rankings of five items.",
+  "title": "Perfect, and not significant",
+  "body": [
+   "A short report states that two expert panels ranked five candidates in exactly the same order, and concludes that the panels agree and the ranking is reliable. Spearman's ρ is 1.00, which the report describes as a perfect correlation.",
+   "ρ = 1 is correct. The conclusion does not follow. With five items there are 5! = 120 possible orderings, and if the second panel were ranking at random, exactly one of those 120 would match the first perfectly. So the probability of this result under no agreement at all is 1/120 = 0.008333 — which does in fact clear the 5% level, so this particular case is significant.",
+   "But shrink the problem slightly and it collapses. With four items the probability of perfect agreement by chance is 1/24 = 0.041667, which only just clears 5%. With three items it is 1/6 = 0.167, and no result whatever — not even perfect agreement — can be significant at 5%. A report claiming a reliable finding from three ranked items is claiming something the data cannot supply.",
+   "The general shape of this is that a rank correlation on a small number of items has a very coarse null distribution. At n = 5 there are only 21 distinct values ρ can take across all 120 orderings, so the achievable p-values are coarse too: 0.0083, 0.0167, 0.0417, 0.0667 and so on. There is no way to obtain a p-value between 0.0417 and 0.0667, which means the nominal 5% level cannot be hit exactly.",
+   "A second caution for this particular report: ρ = 1 says the two panels ordered the candidates identically, not that either ordering is correct. Two panels sharing the same bias would agree perfectly. Agreement and accuracy are different properties, and a correlation measures only the first.",
+   "The practical rule is to pair any small-sample rank correlation with its exact probability from a table or an enumeration, and to be explicit that n is small. The coefficient alone invites exactly the over-reading this report commits."],
+  "q": "Why can no rank correlation on three items be significant at the 5% level?",
+  "answer": "Because there are only 3! = 6 possible orderings of three items, so the smallest probability any outcome can have under the null of random ranking is 1/6 = 0.1667. Even perfect agreement, ρ = 1, occurs by chance once in six times, which is well above 5%. No amount of agreement can push the p-value below the floor set by the number of permutations. At n = 4 the floor is 1/24 = 0.0417, which just clears 5%, so four pairs is the minimum at which a significant result is attainable at all. The wider point is that the null distribution of a rank correlation is discrete and coarse at small n — at n = 5 only 21 distinct values of ρ are achievable across 120 orderings — so the available p-values come in jumps and the nominal 5% level generally cannot be hit exactly."},
+ "solution": [
+  {"say": "(a) The n = 8 bounds.",
+   "math": "max Σd² = n(n² − 1)/3 = 8(63)/3 = 168\nρ = 0 at half: Σd² = 84",
+   "why": "From ρ = 1 − 2(Σd²/max), zero occurs at exactly half the maximum. The pattern holds at every n: 20 at n = 5, 35 at n = 6, 165 at n = 10."},
+  {"say": "(b) n = 7 with Σd² = 20.",
+   "math": "n(n² − 1) = 7(49 − 1) = 7(48) = 336\nρ = 1 − 6(20)/336 = 1 − 120/336 = 1 − 0.357143 = 0.642857",
+   "why": "Check against the other form: max = 336/3 = 112, and 1 − 2(20/112) = 1 − 0.357143 ✓. Its exact one-sided probability is 0.069444."},
+  {"say": "(c) The tied sample.",
+   "math": "x = (1, 2, 2, 4, 5) → midranks (1, 2.5, 2.5, 4, 5)\ny = (2, 1, 3, 3, 5) → midranks (2, 1, 3.5, 3.5, 5)\ncompute Pearson's r on these → 0.763158",
+   "why": "The two x values tying for positions 2 and 3 each get 2.5; the two y values tying for 3 and 4 each get 3.5. The Σd² shortcut would give a slightly different and incorrect answer, because it assumes both columns are exactly the integers 1 to 5."},
+  {"say": "(d) The smallest usable n.",
+   "math": "P(ρ = 1) = 1/n!\nn=3: 1/6   = 0.1667  — above 5%\nn=4: 1/24  = 0.0417  — below 5% ✓\nn=5: 1/120 = 0.0083",
+   "why": "So n = 4 is the minimum at which any result can be significant one-sided at 5%, and it is perfect agreement or nothing. Below that the null distribution has no tail small enough, whatever the data look like."}]})
+
+S.append({
+ "kind": "trapcheck", "id": "s9", "mins": 6,
+ "title": "Six statements — verdict on each before you look",
+ "objective": "Rule on the claims this topic turns on.",
+ "intro": "Decide true or false on all six before revealing any.",
+ "items": [
+  {"claim": "Spearman's ρ is a different method from Pearson's r, not a special case of it.",
+   "tf": False,
+   "why": "False. ρ IS Pearson's r computed on the two rank columns; the 1 − 6Σd²/(n(n²−1)) form is what Pearson's formula collapses to when both inputs are the integers 1 to n, since the means and variances are then known constants. Verified to six decimals on three permutations and on the exam's own data, 0.345455 both ways."},
+  {"claim": "Σd = 0 confirms that the ranks were assigned correctly.",
+   "tf": False,
+   "why": "False — it is automatic. Both rank columns are a permutation of 1 to n, so both sum to n(n+1)/2 and the differences must cancel. It is still worth checking, because a non-zero Σd proves an error in the subtraction, but it cannot confirm the ranking itself."},
+  {"claim": "The Σd² formula remains exact when ties are present.",
+   "tf": False,
+   "why": "False. The shortcut assumes both columns are exactly the integers 1 to n, which midranks violate — the column sums stay right but the variances change. With ties the correct procedure is Pearson's r on the midranks, which on a worked example gave 0.763158 where the shortcut would not."},
+  {"claim": "Pearson's r and Spearman's ρ can differ substantially on the same data.",
+   "tf": True,
+   "why": "True, and the exam's own data show it: r = 0.716682 against ρ = 0.345455, a factor of more than two. The gap came from two years far above the rest in both variables, which a distance-based measure weights heavily and a rank-based one compresses. A large gap is itself a diagnostic about leverage."},
+  {"claim": "A Spearman correlation of 1 on three paired items is significant at the 5% level.",
+   "tf": False,
+   "why": "False. With 3! = 6 orderings the smallest achievable probability is 1/6 = 0.1667, so no result on three items can be significant at 5%. The minimum is n = 4, where perfect agreement gives 1/24 = 0.0417. The null distribution's coarseness sets a floor the data cannot get under."},
+  {"claim": "Kendall's τ is usually larger in magnitude than Spearman's ρ on the same data.",
+   "tf": False,
+   "why": "False — usually SMALLER. On the exam's data τ = 0.288889 against ρ = 0.345455. Under bivariate normality E(τ) = (2/π)arcsin(r) and E(ρ) = (6/π)arcsin(r/2), which at r = 0.5 give 0.333 and 0.483. The rough rule ρ ≈ 3τ/2 reflects this, though it fails badly for strong association."}]})
+
+S.append({
+ "kind": "guided", "id": "s10", "mins": 8,
+ "title": "On your own — six quick values",
+ "objective": "Compute at exam speed.",
+ "problem": "(a) n = 10, Σd² = 0: ρ. (b) n = 10, Σd² = 165: ρ. (c) n = 6, Σd² = 70: ρ. (d) n = 8 with 20 concordant and 8 discordant pairs: τ. (e) n = 12: Var(ρ) under the null. (f) A bivariate normal with r = 0.5: E(ρ) and E(τ).",
+ "hints": [
+  "For (b), 165 is half of 330.",
+  "For (d), there are 28 pairs at n = 8.",
+  "For (f), (6/π)arcsin(r/2) and (2/π)arcsin(r)."],
+ "answer": "(a) 1. (b) 0. (c) −1. (d) (20 − 8)/28 = 0.428571. (e) 1/11 = 0.090909. (f) 0.482584 and 0.333333.",
+ "check": "Part (d) is worth a second look: C + D = 28, which equals the total number of pairs, so there are no tied pairs. Had C + D fallen short of 28, the difference would be ties and the formula would need the tie-corrected version. Part (f) shows how far both coefficients sit below the underlying r = 0.5 — ρ at 0.483 and τ at only 0.333 — which is why they should never be compared with a Pearson correlation as though they were on the same scale.",
+ "solution": [
+  {"say": "(a), (b) and (c): the three landmarks.",
+   "math": "Σd² = 0        → ρ = 1\nΣd² = 165 = 330/2 → ρ = 1 − 2(0.5) = 0\nΣd² = 70 = max at n = 6 → ρ = −1",
+   "why": "The three reference points of the scale. Knowing max = n(n²−1)/3 lets any Σd² be placed on that scale in one step, which is the quickest guard against an arithmetic slip."},
+  {"say": "(d) and (e): τ and the null variance.",
+   "math": "pairs = 8(7)/2 = 28\nτ = (20 − 8)/28 = 12/28 = 0.428571\nVar(ρ) = 1/(n − 1) = 1/11 = 0.090909",
+   "why": "For comparison Var(τ) at n = 12 is 2(29)/(9 × 12 × 11) = 58/1188 = 0.048822 — smaller, as it is at every n."},
+  {"say": "(f) The bivariate normal relations.",
+   "math": "E(ρ) = (6/π) arcsin(0.25) = 0.482584\nE(τ) = (2/π) arcsin(0.50) = 0.333333\n3τ/2 = 0.500000 vs ρ = 0.482584",
+   "why": "The 3τ/2 rule is close here but drifts: at r = 0.8 it gives 0.886 against the true 0.786, overstating by 13% and exceeding what ρ reaches. Treat it as a small-correlation approximation only."}]})
+
+S.append({
+ "kind": "theory", "id": "s11", "mins": 6,
+ "title": "Where this sits, and a misfiling worth knowing about",
+ "objective": "Place the topic and record how it was nearly missed.",
+ "blocks": [
+  {"t": "step", "h": "Within module 5",
+   "body": "Rank correlation is the association member of the non-parametric family. Topic 5.1's Mann–Whitney and 5.2's Wilcoxon test for differences in location between or within groups; 5.3's Kruskal–Wallis extends that to several groups. This topic asks a different question — whether two variables measured on the same units move together — and topic 5.5 is about choosing among them."},
+  {"t": "step", "h": "The relation to Pearson (topic 1.13)",
+   "body": "That topic covers the sampling distribution of Pearson's r, including its exact null density and the Fisher transformation. The contrast is the point: r's distribution theory needs bivariate normality, while a rank correlation's null distribution is obtained by counting permutations and needs no distributional assumption at all. The price is lower efficiency when normality does hold."},
+  {"t": "step", "h": "Permutation tests as a general idea",
+   "body": "The chart in section 2 is a complete permutation test: enumerate every rearrangement, count how many give a statistic as extreme as the observed one, and report that proportion. The same device underlies most of module 5, and it is why these methods are exact at small n where approximations fail."},
+  {"t": "def", "h": "The misfiling, recorded because it nearly cost a lesson",
+   "body": "Q35 is misfiled twice over. Its variant bank sits in the MATHEMATICS file and the paper's tally counts it under mathematics, while it is a rank-correlation question belonging here. An earlier pass through the catalog had it down as an 'index numbers' question on the strength of a one-line label, and a lesson on index numbers was nearly built instead. The prices in the stem are there only to be ranked. The lesson generalises: read the full stem and a few variants before trusting any summary label, because a mislabelled question sends the work to the wrong place entirely."},
+  {"t": "step", "h": "What else the paper did with this material",
+   "body": "Q29 shows the same pattern in the other direction — a goodness-of-fit question sitting in the mathematics file. Both are question-level misfilings rather than variant-level ones, which means a coverage count built from the file labels will be wrong about two topics at once. Counting by content rather than by label is the only reliable method."}],
+ "ask": {
+  "q": "A coverage count built from file labels would have shown mathematics better covered than it is. What does that suggest about auditing a question bank?",
+  "nudge": "What would you have to read to find such an error?"}})
+
+S.append({
+ "kind": "recall", "id": "s12", "mins": 2,
+ "title": "Second recall — the parts most likely to fade",
+ "objective": "Retrieve the numbers and the cautions.",
+ "intro": "Answer, then reveal.",
+ "items": [
+  {"q": "Give ρ for the exam's data and the Σd² it came from.",
+   "a": "Σd² = 108 at n = 10, giving ρ = 1 − 648/990 = 0.345455."},
+  {"q": "What was Pearson's r on the same raw prices?",
+   "a": "0.716682 — more than double ρ, and not among the options."},
+  {"q": "Give max Σd² at n = 5, 6 and 10.",
+   "a": "40, 70 and 330, from n(n² − 1)/3."},
+  {"q": "At what Σd² does ρ equal zero?",
+   "a": "At half the maximum, since ρ = 1 − 2(Σd²/max)."},
+  {"q": "Give the null variances of ρ and τ.",
+   "a": "1/(n − 1) and 2(2n + 5)/[9n(n − 1)] — 0.1111 and 0.0617 at n = 10."},
+  {"q": "What is the smallest n at which perfect agreement is significant at 5% one-sided?",
+   "a": "n = 4, since 1/4! = 0.0417 while 1/3! = 0.167."}]})
+
+S.append({
+ "kind": "summary", "id": "s13", "mins": 3,
+ "title": "What you should now be able to do unaided",
+ "objective": "Close the loop before the mastery test.",
+ "body": [
+  "Rank two columns in a consistent direction and compute Σd², checking Σd = 0.",
+  "Apply ρ = 1 − 6Σd²/[n(n² − 1)] and get 0.345455 on the exam's data.",
+  "Use max Σd² = n(n² − 1)/3 and ρ = 1 − 2(Σd²/max) to place or check a result.",
+  "Compute Kendall's τ from concordant and discordant pairs.",
+  "Say why ρ equals Pearson's r on the ranks, and handle ties with midranks.",
+  "Explain why Pearson's r and ρ can differ sharply, and what the gap diagnoses.",
+  "Give the null variances, and say why small n makes significance hard to reach.",
+  "Recognise that computing a coefficient and establishing a relationship are separate steps."]})
+
+S.append({
+ "kind": "theory", "id": "s14", "mins": 8, "ext": True,
+ "title": "Deriving the Σd² formula, and the tie correction",
+ "objective": "See where 6 and n(n²−1) come from.",
+ "blocks": [
+  {"t": "step", "h": "Starting from Pearson",
+   "body": "Let Rᵢ and Sᵢ be the two rank columns. Both are a permutation of 1 to n, so both have mean R̄ = S̄ = (n+1)/2 and the same variance. Pearson's r on them is Σ(Rᵢ − R̄)(Sᵢ − S̄) divided by nσ_Rσ_S, and the denominator is a known constant because the ranks are known."},
+  {"t": "formula", "h": "The variance of the ranks",
+   "body": "Σ(Rᵢ − R̄)² = Σi² − n((n+1)/2)² = n(n+1)(2n+1)/6 − n(n+1)²/4 = n(n² − 1)/12.\nSo σ_R² = (n² − 1)/12, the same for S. That constant is why the final formula has no sample variances in it."},
+  {"t": "formula", "h": "Turning the numerator into Σd²",
+   "body": "With dᵢ = Rᵢ − Sᵢ,\n    Σdᵢ² = Σ(Rᵢ − R̄)² + Σ(Sᵢ − S̄)² − 2Σ(Rᵢ − R̄)(Sᵢ − S̄),\nsince the mean terms cancel. The first two sums are each n(n² − 1)/12, so\n    Σ(Rᵢ − R̄)(Sᵢ − S̄) = n(n² − 1)/12 − Σd²/2.\nDividing by nσ_Rσ_S = n(n² − 1)/12 gives\n    ρ = 1 − 6Σd²/[n(n² − 1)].\nThe 6 is just 12/2, inherited from the variance of the integers 1 to n."},
+  {"t": "step", "h": "Where the maximum comes from",
+   "body": "At reversed ranks Sᵢ = n + 1 − Rᵢ, so dᵢ = 2Rᵢ − (n+1) and Σd² = 4Σ(Rᵢ − R̄)² = 4n(n² − 1)/12 = n(n² − 1)/3. Substituting gives ρ = 1 − 6[n(n²−1)/3]/[n(n²−1)] = 1 − 2 = −1, confirming the bound. Verified by direct computation at n = 5, 6 and 10: 40, 70 and 330."},
+  {"t": "step", "h": "Why ties break the shortcut",
+   "body": "Midranks preserve the column sum, so the mean stays (n+1)/2, but they REDUCE the variance below (n²−1)/12 — tied observations are pulled toward each other. The derivation above used that variance as a known constant, so the shortcut no longer holds. A tie correction subtracting Σ(t³ − t)/12 terms exists, but computing Pearson's r on the midranks directly is simpler and exact. The worked example confirmed both routes agree at 0.763158."}],
+ "ask": {
+  "q": "The 6 in the formula comes from 12/2. Where did the 12 come from?",
+  "nudge": "What is the variance of the integers 1 to n?"}})
+
+S.append({
+ "kind": "quiz", "id": "s15", "mins": 12,
+ "title": "Mastery test",
+ "objective": "Demonstrate it independently, on questions you have not seen.",
+ "setId": "nonparam_t4_mastery"})
+
+CORE = [s for s in S if not s.get("ext")]
+
+LES = {
+ "id": "nonparamt4",
+ "topicId": "nonparam-t4",
+ "moduleId": "nonparam",
+ "title": "Spearman's ρ and Kendall's τ",
+ "breadcrumb": "Non-parametric methods → Association → Rank correlation",
+ "engine": "B",
+ "engineName": "Non-parametric — correlate the orderings, not the values",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": sum(s["mins"] for s in CORE),
+ "objectives": [
+  "Rank two columns consistently, compute Σd² and check Σd = 0.",
+  "Apply ρ = 1 − 6Σd²/[n(n² − 1)] and reproduce the June 2026 answer of 0.345455.",
+  "Use max Σd² = n(n² − 1)/3 and ρ = 1 − 2(Σd²/max) to place or check a result.",
+  "Compute Kendall's τ from concordant and discordant pairs.",
+  "Say why ρ equals Pearson's r on the ranks, and handle ties with midranks.",
+  "Explain why Pearson's r and ρ can differ sharply, and what the gap diagnoses."],
+ "prereq": [
+  {"id": "p1", "name": "Pearson's correlation coefficient (topic 1.13)",
+   "why": "ρ is Pearson's r applied to ranks, and the contrast between their distribution theories is the reason to use a rank method."},
+  {"id": "p2", "name": "Ranking and midranks",
+   "why": "Every computation here starts by replacing values with their order, and ties require the midrank convention."},
+  {"id": "p3", "name": "Permutations and counting",
+   "why": "The exact null distribution is obtained by enumerating all n! orderings, which is also what sets the small-sample significance floor."},
+  {"id": "p4", "name": "Sum of squares of the first n integers",
+   "why": "The variance of the ranks is (n² − 1)/12, and that constant is where the 6 in the formula comes from."}],
+ "traps": [
+  "Σd = 0 ALWAYS — it cannot confirm the ranking, only catch a subtraction error.",
+  "Rank both columns in the SAME direction, or the sign flips.",
+  "The Σd² shortcut is NOT exact with ties — use Pearson's r on midranks.",
+  "Pearson's r and ρ can differ by a factor of two on the same data (0.717 against 0.345 here).",
+  "τ is usually SMALLER than ρ, not larger.",
+  "ρ ≈ 3τ/2 is a small-correlation rule and fails badly at strong association.",
+  "No rank correlation on three items can be significant at 5%; the floor is 1/3! = 0.167.",
+  "Both coefficients understate an underlying bivariate-normal r — they are not on r's scale."],
+ "revision": {
+  "sheet": [
+   "SPEARMAN: rank both columns the SAME way, d = (rank x) − (rank y), then ρ = 1 − 6Σd²/[n(n² − 1)].",
+   "Σd = 0 ALWAYS (both columns sum to n(n+1)/2). Useless as confirmation, useful as an error check.",
+   "max Σd² = n(n² − 1)/3, at REVERSED ranks, giving ρ = −1. It is 40, 70, 112, 168, 330 at n = 5, 6, 7, 8, 10.",
+   "Equivalently ρ = 1 − 2(Σd²/max), so Σd² at HALF its maximum gives ρ = 0 exactly.",
+   "  n=6: half of 70 is 35, and Σd² = 35 gives ρ = 0. n=10: half of 330 is 165.",
+   "JUNE 2026 Q35 (answered wrongly, key B, marked C): 10 years of crude oil and gasoline prices.",
+   "  crude ranks 5,7,8,4,1,6,2,3,9,10 ; gasoline ranks 3,2,4,1,5,8,7,6,9,10",
+   "  d = 2,5,4,3,−4,−2,−5,−3,0,0 ; Σd = 0 ✓ ; Σd² = 108",
+   "  ρ = 1 − 6(108)/(10 × 99) = 1 − 648/990 = 0.345455 → option B.",
+   "  Pearson's r on the RAW prices = 0.716682 — more than DOUBLE ρ, and not an option.",
+   "  Kendall's τ = 0.288889. Exact one-sided P(Σd² ≤ 108) ≈ 0.165 — NOT significant.",
+   "ρ IS Pearson's r on the ranks. The shortcut works because the ranks have known mean (n+1)/2",
+   "  and known variance (n² − 1)/12, so the 6 in the formula is 12/2. Agreed to 6 dp in every check.",
+   "n=5, Σd²=4 → ρ = 0.8, exact one-sided p = 0.066667 (8 of 120 orderings) — not significant.",
+   "n=7, Σd²=20 → ρ = 0.642857, exact one-sided p = 0.069444 (350 of 5,040).",
+   "TIES: assign MIDRANKS (average of the positions they occupy), then compute PEARSON'S r on them.",
+   "  The Σd² shortcut fails because midranks reduce the variance below (n² − 1)/12.",
+   "  Worked example gave 0.763158 by both the software routine and Pearson on midranks.",
+   "KENDALL: τ = (C − D)/[n(n − 1)/2], C concordant and D discordant pairs.",
+   "  Checked: n=9 with (C,D) = (26,10) gives 16/36 = 0.444444. C + D < all pairs means ties.",
+   "τ is a probability difference: P(concordant) − P(discordant). ρ has no such clean reading.",
+   "τ is usually SMALLER than ρ in magnitude on the same data.",
+   "NULL: both have mean 0. Var(ρ) = 1/(n − 1); Var(τ) = 2(2n + 5)/[9n(n − 1)].",
+   "  n=10: 0.111111 and 0.061728. n=20: 0.052632 and 0.026316. n=30: 0.034483 and 0.016603.",
+   "BIVARIATE NORMAL with correlation r: E(ρ) = (6/π)arcsin(r/2), E(τ) = (2/π)arcsin(r).",
+   "  r=0.3 → 0.287564 and 0.193973 ; r=0.5 → 0.482584 and 0.333333 ; r=0.8 → 0.785939 and 0.590334.",
+   "  The ρ ≈ 3τ/2 rule: good at r=0.3 (0.291 vs 0.288), fails at r=0.8 (0.886 vs 0.786).",
+   "SMALL-n FLOOR: P(ρ = 1) = 1/n!. n=3 → 0.167 (never significant), n=4 → 0.0417, n=5 → 0.0083.",
+   "  So n = 4 is the minimum at which ANY result can reach 5% one-sided.",
+   "Q35 is misfiled TWICE: its variant bank sits in the maths file and the paper tallies it under",
+   "  mathematics, while it is a rank-correlation question. It was nearly built as 'index numbers'."],
+  "cards": [
+   ["Spearman's ρ", "1 − 6Σd²/[n(n² − 1)]"],
+   ["Σd", "Always 0"],
+   ["max Σd²", "n(n² − 1)/3, at reversed ranks"],
+   ["ρ in terms of the maximum", "1 − 2(Σd²/max)"],
+   ["ρ = 0 when", "Σd² is half its maximum"],
+   ["Q35: Σd² and ρ", "108 at n = 10 → 0.345455"],
+   ["Q35: Pearson's r", "0.716682 — more than double ρ"],
+   ["Kendall's τ", "(C − D)/[n(n − 1)/2]"],
+   ["Ties", "Midranks, then Pearson's r on them"],
+   ["Var(ρ) under the null", "1/(n − 1)"],
+   ["Var(τ) under the null", "2(2n + 5)/[9n(n − 1)]"],
+   ["Smallest usable n", "4, since 1/4! = 0.0417"]],
+  "tricks": [
+   "Check Σd = 0 before squaring — it costs a second and catches subtraction errors.",
+   "Locate the answer against max Σd² = n(n²−1)/3; a gross error cannot survive that.",
+   "n(n² − 1) is 120, 210, 336, 504, 990 at n = 5, 6, 7, 8, 10 — memorise the exam sizes.",
+   "If the question gives raw values and four options, compute the RANK coefficient; Pearson's r often is not an option.",
+   "If ties appear, abandon the shortcut immediately and go to Pearson on midranks.",
+   "Compute both r and ρ when you can: a large gap diagnoses leverage from extreme points."],
+  "shortcuts": [
+   "n(n²−1): 120, 210, 336, 504, 990 at n = 5, 6, 7, 8, 10.",
+   "max Σd² = that ÷ 3: 40, 70, 112, 168, 330.",
+   "6/[n(n²−1)]: 0.05, 0.028571, 0.017857, 0.011905, 0.006061."],
+  "remember": [
+   "Σd is always zero.",
+   "Ties mean Pearson on midranks.",
+   "ρ = 1 − 2(Σd²/max)."]},
+ "howto": "Section 1 works the exam's own data and immediately finds the thing the question hides: Pearson's r on the same ten pairs is 0.716682 against Spearman's ρ of 0.345455, and the answer the exam wants carries an exact one-sided p-value of about 0.165, so it is not significant. That contrast is the lesson's spine, and section 4 works both numbers out in full. Section 2's chart is a complete permutation test — it enumerates all n! orderings for n up to 8 and shows the exact null distribution, which makes the small-sample significance floor visible rather than asserted. Section 3 gives both coefficients with the tie rule, and the one structural fact worth memorising is ρ = 1 − 2(Σd²/max) with max = n(n²−1)/3, because it lets any answer be placed on the scale in one step. Section 7 compares the two coefficients honestly, including where the common ρ ≈ 3τ/2 rule breaks. If short of time, sections 1, 3 and 4 are the lesson. Section 11 records the misfiling that nearly sent this work to an index-numbers lesson instead, which is a process lesson rather than a statistical one but worth the minute.",
+ "refs": [
+  {"title": "Nonparametric Statistical Methods", "where": "Chapter 8",
+   "site": "Hollander, Wolfe and Chicken", "url": "", "type": "Textbook", "free": False,
+   "checked": "2026-11-03",
+   "why": "Both coefficients with their exact null distributions, tie corrections and the relation under bivariate normality."},
+  {"title": "Practical Nonparametric Statistics", "where": "Chapter 5",
+   "site": "Conover", "url": "", "type": "Textbook", "free": False,
+   "checked": "2026-11-03",
+   "why": "The computational treatment and exact tables for small n, in the form examinations use."},
+  {"title": "Fundamentals of Mathematical Statistics", "where": "Chapter on correlation",
+   "site": "Gupta and Kapoor", "url": "", "type": "Textbook", "free": False,
+   "checked": "2026-11-03",
+   "why": "The Σd² derivation and worked rank-correlation problems in the exact style Indian examinations set them."},
+  {"title": "Nonparametric Methods", "where": "Weeks on rank correlation",
+   "site": "NPTEL / SWAYAM", "url": "https://archive.nptel.ac.in/courses/111104120",
+   "type": "Video course", "free": True, "checked": "2026-11-03",
+   "why": "Indian-syllabus treatment of Spearman and Kendall, including the tie handling."}],
+ "mastery": {
+  "minQ": 10, "pass": 80, "draw": 10,
+  "fmtMin": {"numeric": 70, "multi": 70},
+  "diffMix": {"easy": 3, "moderate": 5, "hard": 2},
+  "noHints": True, "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."},
+ "provenance": "Authored November 2026. PYQ anchor: June 2026 Q35, answered WRONGLY — the key is B (0.345) and the user marked C (0.456). Its ten variants, j26v-q35-04 through -13, supplied the lesson's specification, covering the formula, two numerical cases, the reversed-rank bound, the Σd identity, the tie rule, the Pearson-on-ranks equivalence, Kendall's definition, the maximum Σd², and when to prefer rank correlation. Every figure was recomputed from the question's own data rather than taken from the key. Ranking both price columns ascending gives crude 5,7,8,4,1,6,2,3,9,10 and gasoline 3,2,4,1,5,8,7,6,9,10, so d = 2,5,4,3,−4,−2,−5,−3,0,0 with Σd = 0 and Σd² = 108, and ρ = 1 − 648/990 = 0.345455, agreeing with standard software to six decimals and with Pearson's r computed on the two rank columns to the same precision. Three findings go beyond what the question asks and are taught because they change how the answer should be read. First, Pearson's r on the RAW prices is 0.716682 — more than double ρ, and not among the four options — because the last two years sit far above the rest in both variables and dominate a distance-based measure while ranking compresses them; the lesson uses that gap as a diagnostic for leverage. Second, Kendall's τ on the same data is 0.288889, smaller than ρ as it usually is. Third, the exact one-sided probability of Σd² ≤ 108 under random ranking is about 0.165 over two million random permutations, so the value the exam wants is not statistically significant — the lesson says so plainly rather than leaving the impression that a relationship was established. The structural identity ρ = 1 − 2(Σd²/max) with max Σd² = n(n²−1)/3 is given prominence because it places any answer on the scale in one step; max was verified by direct computation as 40, 70 and 330 at n = 5, 6 and 10, and the half-maximum fact explains why n = 6 with Σd² = 35 gives exactly zero, which is one of the variants. Kendall's τ was checked against standard software on three permutations at n = 9, with (C, D) of (10, 26), (23, 13) and (26, 10) giving −0.444444, 0.277778 and 0.444444. The tie rule was verified on a small tied example where midranks plus Pearson and the standard routine both gave 0.763158. The bivariate-normal relations E(ρ) = (6/π)arcsin(r/2) and E(τ) = (2/π)arcsin(r) were computed at r = 0.3, 0.5 and 0.8, and the commonly quoted ρ ≈ 3τ/2 rule is shown to be good at r = 0.3 (0.290960 against 0.287564) and to fail at r = 0.8 (0.885502 against 0.785939), where it even exceeds the attainable value — so the lesson marks it as a small-correlation approximation only. Uses the new `rank-null` visualisation, which enumerates every one of the n! orderings for n ≤ 8 to give the exact null distribution with no approximation; its figures were checked independently, including P(ρ = 1) = 1/720 at n = 6, the exact one-sided 0.066667 for Σd² = 4 at n = 5, and 0.069444 for Σd² = 20 at n = 7. That chart also makes the small-sample floor concrete: P(ρ = 1) = 1/n!, so no result on three items can be significant at 5% and n = 4 is the minimum. One process matter is recorded in the lesson itself because it nearly cost a wasted lesson: Q35 is misfiled twice over, with its variant bank in the MATHEMATICS file and the paper's tally counting it under mathematics, while it is a rank-correlation question; an earlier pass had it down as an 'index numbers' question from a one-line label. Previous-year questions are stored separately and carry their exam cycle.",
+ "scenes": S}
+
+# ---------------------------------------------------------------- pool
+
+def q(i, fmt, diff, stem, opts, ans, exp, **kw):
+    d = {"id": "np-t4-m-%02d" % i, "format": fmt, "topic": "nonparam-t4",
+         "diff": diff, "stem": stem, "options": opts, "answer": ans, "explanation": exp}
+    d.update(kw)
+    return d
+
+def verd(a, b, c, dd):
+    return {"A": {"tf": a[0], "why": a[1]}, "B": {"tf": b[0], "why": b[1]},
+            "C": {"tf": c[0], "why": c[1]}, "D": {"tf": dd[0], "why": dd[1]}}
+
+I = []
+
+# --- easy (6)
+I.append(q(1, "numeric", "easy",
+ "Spearman's rank correlation coefficient, with no ties, is:",
+ ["1 − 6Σd²/[n(n² − 1)]", "1 − 6Σd/[n(n² − 1)]",
+  "6Σd²/[n(n² − 1)]", "1 − Σd²/[n(n² − 1)]"],
+ "A",
+ "d is the difference of the two ranks for each observation. Option B uses Σd, which is always zero and would make ρ equal 1 for every data set. The 6 comes from the variance of the ranks, (n² − 1)/12.",
+ check="At Σd² = 0 the formula must give ρ = 1, and at reversed ranks, where Σd² = n(n² − 1)/3, it must give −1. Both hold."))
+
+I.append(q(2, "numeric", "easy",
+ "In a Spearman calculation, Σd always equals:",
+ ["0", "n", "n(n + 1)/2", "1"],
+ "A",
+ "Both rank columns are a permutation of the integers 1 to n, so both sum to n(n+1)/2 and the differences cancel exactly. It therefore cannot confirm that the ranks were assigned correctly — but a non-zero value does prove an error in the subtraction, so it is worth checking.",
+ check="On the June 2026 data the differences were 2, 5, 4, 3, −4, −2, −5, −3, 0, 0, which sum to 0."))
+
+I.append(q(3, "single", "easy",
+ "If two rankings are exactly reversed, Spearman's ρ equals:",
+ ["−1", "0", "+1", "it depends on n"],
+ "A",
+ "Reversal is the furthest apart two rankings can be, so ρ attains its lower bound. The corresponding Σd² is its maximum, n(n² − 1)/3 — verified as 40, 70 and 330 at n = 5, 6 and 10 — and substituting gives 1 − 2 = −1 for every n."))
+
+I.append(q(4, "single", "easy",
+ "When ties are present, the correct procedure is to:",
+ ["assign midranks and compute Pearson's r on them",
+  "drop the tied observations",
+  "use the Σd² formula unchanged",
+  "rank the ties arbitrarily and proceed"],
+ "A",
+ "A midrank is the average of the positions the tied values occupy — three values tying for positions 4, 5 and 6 all get rank 5. The Σd² shortcut assumes both columns are exactly the integers 1 to n, which midranks violate by reducing the variance below (n² − 1)/12, so Pearson's formula must be applied directly."))
+
+I.append(q(5, "single", "easy",
+ "Spearman's ρ is equivalent to:",
+ ["Pearson's r computed on the ranks", "Kendall's τ",
+  "the Mann–Whitney U statistic", "Pearson's r computed on the raw values"],
+ "A",
+ "ρ is not a separate method: the Σd² formula is what Pearson's expression collapses to when both inputs are the integers 1 to n, since the means and variances are then known constants. Option D is a different number entirely — on the June 2026 data it is 0.716682 against ρ of 0.345455."))
+
+I.append(q(6, "single", "easy",
+ "Kendall's τ is defined using:",
+ ["concordant and discordant pairs", "squared rank differences",
+  "the sum of ranks in each group", "the maximum rank difference"],
+ "A",
+ "τ = (C − D)/[n(n − 1)/2], where a pair is concordant if both variables order it the same way and discordant if they order it oppositely. That makes τ a difference of probabilities — P(concordant) − P(discordant) — which is a more direct reading than ρ offers. Option B describes Spearman's ρ."))
+
+# --- moderate (10)
+I.append(q(7, "numeric", "moderate",
+ "For n = 5 with Σd² = 4, Spearman's ρ equals:",
+ ["0.80", "0.96", "0.20", "0.67"],
+ "A",
+ "ρ = 1 − 6(4)/[5(25 − 1)] = 1 − 24/120 = 0.80. Note that its exact one-sided probability at n = 5 is 0.066667, that is 8 of the 120 possible orderings — so even a ρ of 0.8 is not significant at the 5% level on five pairs.",
+ check="Against the other form: max Σd² = 5(24)/3 = 40, and 1 − 2(4/40) = 1 − 0.2 = 0.80 ✓."))
+
+I.append(q(8, "numeric", "moderate",
+ "For n = 10, the maximum possible value of Σd² is:",
+ ["330", "99", "165", "990"],
+ "A",
+ "The maximum occurs at reversed ranks and equals n(n² − 1)/3 = 10(99)/3 = 330. Option C, 165, is half of it — the value that makes ρ exactly zero. Option D is n(n² − 1) itself, the formula's denominator.",
+ check="Substituting 330 must give ρ = −1: 1 − 6(330)/990 = 1 − 2 = −1 ✓."))
+
+I.append(q(9, "numeric", "moderate",
+ "Ten years of crude oil and gasoline prices give Σd² = 108. Spearman's ρ is:",
+ ["0.345", "0.254", "0.456", "0.565"],
+ "A",
+ "ρ = 1 − 6(108)/[10(100 − 1)] = 1 − 648/990 = 0.345455. This is the June 2026 question, where the answer marked was 0.456. Worth knowing: Pearson's r on the same RAW prices is 0.716682 — more than double, and not among the options — because two extreme years dominate a distance-based measure.",
+ check="Against the maximum: 108/330 = 0.327273, and 1 − 2(0.327273) = 0.345455 ✓."))
+
+I.append(q(10, "numeric", "moderate",
+ "For n = 6 with Σd² = 35, Spearman's ρ equals:",
+ ["exactly 0", "0.5", "−0.5", "1"],
+ "A",
+ "ρ = 1 − 6(35)/[6(35)] = 1 − 210/210 = 0. This is not a coincidence: max Σd² = 6(35)/3 = 70, and 35 is exactly half of it. Since ρ = 1 − 2(Σd²/max), any Σd² at half its maximum gives exactly zero.",
+ check="The exact one-sided probability here is 0.5, as it must be — the null distribution is symmetric about zero."))
+
+I.append(q(11, "numeric", "moderate",
+ "For n = 9 with 26 concordant and 10 discordant pairs, Kendall's τ equals:",
+ ["0.444", "0.722", "0.178", "0.288"],
+ "A",
+ "There are n(n − 1)/2 = 36 pairs, so τ = (26 − 10)/36 = 16/36 = 0.444444. Note C + D = 36 exactly, so there are no tied pairs; had the two counts fallen short of 36, the shortfall would be ties and a corrected formula would be needed.",
+ check="Checked against standard software on this exact configuration, which returns 0.444444."))
+
+I.append(q(12, "multi", "moderate",
+ "Consider rank correlation.",
+ ["A, B and C only", "A and C only", "B and D only", "A, B, C and D"],
+ "A",
+ "A is true — the shortcut is Pearson's formula simplified. B is true: both columns sum to n(n+1)/2. C is true, and the June 2026 data show a factor of more than two. D is false — τ is usually smaller than ρ.",
+ statements=["Spearman's ρ equals Pearson's r computed on the two rank columns.",
+             "Σd is identically zero for any pair of rankings.",
+             "Pearson's r and Spearman's ρ can differ substantially on the same data.",
+             "Kendall's τ is usually larger in magnitude than ρ on the same data."],
+ verdicts=verd(
+  (True, "True. The Σd² form is what Pearson's expression reduces to when both inputs are the integers 1 to n, whose mean is (n+1)/2 and variance (n² − 1)/12. Verified to six decimals on the June 2026 data and on random permutations."),
+  (True, "True — both rank columns are permutations of 1 to n, so both sum to n(n+1)/2 and the differences cancel. It cannot confirm the ranking, but a non-zero Σd proves a subtraction error."),
+  (True, "True, and sharply so on the June 2026 data: r = 0.716682 against ρ = 0.345455. Two years far above the rest in both variables dominate the distance-based measure while ranking compresses them, so a large gap diagnoses leverage from extreme points."),
+  (False, "False — usually SMALLER. On that same data τ = 0.288889 against ρ = 0.345455. Under bivariate normality E(τ) = (2/π)arcsin(r) and E(ρ) = (6/π)arcsin(r/2), giving 0.333 and 0.483 at r = 0.5."))))
+
+I.append(q(13, "single", "moderate",
+ "Rank correlation is preferred to Pearson's r when:",
+ ["the relationship is monotone but not linear, or extreme values have leverage",
+  "the sample is large", "both variables are normally distributed",
+  "the variables are measured in the same units"],
+ "A",
+ "r measures closeness to a STRAIGHT LINE and is built from distances, so a consistently monotone but curved relationship understates and a single extreme pair over-contributes. Ranks keep only the ordering, which removes both problems. Option C is when r is at its most reliable, not least."))
+
+I.append(q(14, "numeric", "moderate",
+ "Under the null hypothesis of independence, the variance of Spearman's ρ is:",
+ ["1/(n − 1)", "1/n", "2(2n + 5)/[9n(n − 1)]", "(n² − 1)/12"],
+ "A",
+ "At n = 10 this is 0.111111. Option C is the null variance of Kendall's τ, which is 0.061728 at n = 10 — smaller than ρ's at every n. Option D is the variance of the ranks themselves, which appears in the derivation of the formula rather than in its sampling theory.",
+ check="At n = 20 the two are 0.052632 and 0.026316, preserving the ordering."))
+
+I.append(q(15, "single", "moderate",
+ "A sample ranking of three items agrees perfectly with another. Is ρ = 1 significant at the 5% level, one-sided?",
+ ["No — with only 3! = 6 orderings the smallest achievable probability is 1/6 = 0.167",
+  "Yes, since ρ = 1 is the maximum possible",
+  "Yes, since the probability is 1/3",
+  "It cannot be determined without the data"],
+ "A",
+ "The null distribution is discrete and its smallest tail is 1/n!, so no result on three items can reach 5%. The minimum usable sample is n = 4, where perfect agreement gives 1/24 = 0.0417; at n = 5 it is 1/120 = 0.0083. The coefficient's value is irrelevant — the floor is set by the number of permutations."))
+
+I.append(q(16, "numeric", "moderate",
+ "For n = 7 with Σd² = 20, Spearman's ρ equals:",
+ ["0.643", "0.357", "0.714", "0.821"],
+ "A",
+ "n(n² − 1) = 7(48) = 336, so ρ = 1 − 6(20)/336 = 1 − 120/336 = 1 − 0.357143 = 0.642857. Option B is the subtracted quantity itself, a common slip.",
+ check="Against the maximum: 336/3 = 112, and 1 − 2(20/112) = 1 − 0.357143 = 0.642857 ✓. Its exact one-sided p-value is 0.069444."))
+
+# --- hard (4)
+I.append(q(17, "multi", "hard",
+ "Consider the derivation and the fine print.",
+ ["A, B and C only", "A and C only", "B and D only", "A, B, C and D"],
+ "A",
+ "A is true — the 6 is 12/2, from the rank variance. B is true: midranks reduce the variance, which the derivation assumed constant. C is true, and the rule even exceeds ρ's attainable value at large r. D is false — both coefficients understate an underlying bivariate-normal r.",
+ statements=["The 6 in Spearman's formula comes from the rank variance (n² − 1)/12.",
+             "Ties break the Σd² shortcut because midranks reduce the variance of the rank column.",
+             "The approximation ρ ≈ 3τ/2 fails for strong association.",
+             "Both ρ and τ are unbiased for the underlying correlation of a bivariate normal."],
+ verdicts=verd(
+  (True, "True. Pearson's r on the ranks has denominator n(n² − 1)/12, and rewriting the numerator through Σd² introduces a factor of 1/2 — so the constant is 12/2 = 6."),
+  (True, "True. The derivation uses σ_R² = (n² − 1)/12 as a known constant; midranks preserve the column sum but pull tied values together, lowering that variance. Hence Pearson's r on the midranks directly, which on a worked example matched the standard routine at 0.763158."),
+  (True, "True. At r = 0.3 the rule gives 0.290960 against the true 0.287564, but at r = 0.8 it gives 0.885502 against 0.785939 — a 13% error, and above what ρ actually reaches. It is a small-correlation approximation only."),
+  (False, "False — both UNDERSTATE it, and τ much more. At r = 0.5, E(ρ) = (6/π)arcsin(0.25) = 0.482584 and E(τ) = (2/π)arcsin(0.5) = 0.333333. They estimate monotone association, not r, so they should never be read on r's scale."))))
+
+I.append(q(18, "numeric", "hard",
+ "Ten years of prices give Spearman's ρ = 0.345 while Pearson's r on the raw values is 0.717. The best explanation is:",
+ ["two extreme years, high in both variables, dominate the distance-based measure",
+  "an arithmetic error in one of the two coefficients",
+  "the data contain ties that were mishandled",
+  "ρ and r always differ by roughly a factor of two"],
+ "A",
+ "The last two years, 92.14 with 82.06 and 96.31 with 84.40, sit far above the rest in both variables and so contribute large products of deviations to r. Ranking compresses them to ranks 9 and 10, where they count no more than any other agreeing pair, while the substantial disagreements among the middle years count at full weight.",
+ check="The gap's direction is the diagnostic: r much larger than ρ indicates leverage from extreme points, while ρ much larger than r indicates a monotone but strongly curved relationship."))
+
+I.append(q(19, "single", "hard",
+ "The June 2026 answer ρ = 0.345 at n = 10 carries an exact one-sided p-value of about 0.165. The sound reading is:",
+ ["the computation is examinable but the data do not establish a relationship",
+  "the key must be wrong",
+  "ρ = 0.345 is significant because it is positive",
+  "a larger sample would necessarily give a larger ρ"],
+ "A",
+ "Obtaining the coefficient and establishing that it means something are separate steps, and only the first is being tested. A one-sided probability of 0.165 means Σd² ≤ 108 arises in about one in six random pairings of ten ranks, so the value sits comfortably within what unrelated rankings produce. Ten annual observations is simply a small sample."))
+
+I.append(q(20, "single", "hard",
+ "Why does Kendall's τ have a more direct interpretation than Spearman's ρ?",
+ ["because τ is P(concordant) − P(discordant), a difference of probabilities",
+  "because τ is always closer to Pearson's r",
+  "because τ has a larger null variance",
+  "because τ is unaffected by the sample size"],
+ "A",
+ "τ = 0.3 says concordant pairs exceed discordant ones by 30% of all pairs — a statement about the data's ordering as such. ρ is Pearson's r on a transformed variable, which has no equally clean reading. Option C is backwards: Var(τ) = 2(2n+5)/[9n(n−1)] is smaller than Var(ρ) = 1/(n−1) at every n."))
+
+LET = "ABCD"
+WANT = {"np-t4-m-01": "C", "np-t4-m-02": "B", "np-t4-m-03": "D",
+        "np-t4-m-04": "C", "np-t4-m-05": "B", "np-t4-m-06": "D",
+        "np-t4-m-07": "C", "np-t4-m-08": "B", "np-t4-m-09": "D",
+        "np-t4-m-10": "C", "np-t4-m-11": "B", "np-t4-m-13": "D",
+        "np-t4-m-14": "C", "np-t4-m-15": "B", "np-t4-m-16": "D",
+        "np-t4-m-18": "C", "np-t4-m-19": "B", "np-t4-m-20": "D"}
+
+
+def swapletters(t, a, b):
+    sw = lambda L: b if L == a else a if L == b else L
+    def fix(m):
+        head, body = m.group(1), m.group(2)
+        return head + re.sub(r"[ABCD]", lambda n: sw(n.group(0)), body)
+    return re.sub(r"([Oo]ptions?\s+)([ABCD](?:\s*(?:,|and|or)\s*[ABCD])*)", fix, t)
+
+
+def relabel(items):
+    for it in items:
+        w = WANT.get(it["id"])
+        if not w or not it.get("options"):
+            continue
+        i, j = LET.index(it["answer"]), LET.index(w)
+        if i == j:
+            continue
+        o = it["options"]
+        o[i], o[j] = o[j], o[i]
+        it["answer"] = w
+        a, b = LET[i], LET[j]
+        for fld in ("explanation", "check"):
+            if it.get(fld):
+                it[fld] = swapletters(it[fld], a, b)
+    return items
+
+relabel(I)
+_k = {}
+for _it in I:
+    _k[_it["answer"]] = _k.get(_it["answer"], 0) + 1
+print("key spread:", {L: _k.get(L, 0) for L in LET}, "cap", -(-len(I) * 2 // 5))
+
+POOLD = {
+ "moduleId": "nonparam", "topicId": "nonparam-t4", "source": "mastery",
+ "label": "Spearman's ρ and Kendall's τ — mastery test (unseen)",
+ "count": len(I), "items": I}
+
+os.makedirs("seed", exist_ok=True)
+with io.open(OUT, "w", encoding="utf-8") as f:
+    json.dump(LES, f, ensure_ascii=False, indent=1)
+with io.open(POOL, "w", encoding="utf-8") as f:
+    json.dump(POOLD, f, ensure_ascii=False, indent=1)
+
+print("wrote %s: %d scenes (%d core), estMin %d" % (OUT, len(S), len(CORE), LES["estMin"]))
+print("wrote %s: %d items" % (POOL, len(I)))

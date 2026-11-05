@@ -1,0 +1,364 @@
+{
+ "moduleId": "probability",
+ "topicId": "probability-t3",
+ "source": "mastery",
+ "label": "Conditional expectation, total variance and mixtures — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "pr-t3-m-01",
+   "format": "single",
+   "topic": "probability-t3",
+   "diff": "easy",
+   "stem": "E(Y | X) is:",
+   "options": [
+    "equal to E(Y) in general",
+    "always a constant",
+    "a random variable, being a function of X",
+    "undefined unless X and Y are independent"
+   ],
+   "answer": "C",
+   "explanation": "E(Y | X = x) is a number for each x, but E(Y | X) is the function of X that returns it — and since X is random, so is the result. That is why E[E(Y|X)] and Var[E(Y|X)] are meaningful quantities, and it is the idea the whole topic rests on."
+  },
+  {
+   "id": "pr-t3-m-02",
+   "format": "single",
+   "topic": "probability-t3",
+   "diff": "easy",
+   "stem": "The law of total variance states that Var(Y) equals:",
+   "options": [
+    "E[Var(Y | X)] × Var[E(Y | X)]",
+    "E[Var(Y | X)]",
+    "Var[E(Y | X)]",
+    "E[Var(Y | X)] + Var[E(Y | X)]"
+   ],
+   "answer": "D",
+   "explanation": "The within term E[Var(Y|X)] averages the conditional variances; the between term Var[E(Y|X)] measures how much the conditional mean itself moves. Both are non-negative, so dropping either understates the variance — and dropping the second is the standard error."
+  },
+  {
+   "id": "pr-t3-m-03",
+   "format": "single",
+   "topic": "probability-t3",
+   "diff": "easy",
+   "stem": "If Y | X ~ Poisson(X), then E(Y) equals:",
+   "options": [
+    "Var(X)",
+    "X",
+    "E(X)",
+    "E(X) + Var(X)"
+   ],
+   "answer": "C",
+   "explanation": "For a Poisson the mean is the parameter, so E(Y | X) = X, and the tower property gives E(Y) = E[E(Y|X)] = E(X). The second option confuses a random variable with its expectation, and the fourth is Var(Y), not E(Y)."
+  },
+  {
+   "id": "pr-t3-m-04",
+   "format": "numeric",
+   "topic": "probability-t3",
+   "diff": "easy",
+   "stem": "For an exponential distribution with mean 1/λ, the variance is:",
+   "options": [
+    "1/λ",
+    "λ²",
+    "λ",
+    "1/λ²"
+   ],
+   "answer": "D",
+   "explanation": "The exponential's standard deviation equals its mean, so the variance is the square of the mean: (1/λ)² = 1/λ². Watch the parameterisation — written as (1/θ)e^(−x/θ) the mean is θ and the variance θ².",
+   "check": "Variance has the squared units of the mean, so if the mean is 1/λ the variance must carry 1/λ²."
+  },
+  {
+   "id": "pr-t3-m-05",
+   "format": "single",
+   "topic": "probability-t3",
+   "diff": "easy",
+   "stem": "If X and Y are independent, E(Y | X) equals:",
+   "options": [
+    "0",
+    "Y",
+    "E(Y)",
+    "E(X)"
+   ],
+   "answer": "C",
+   "explanation": "Independence means X carries no information about Y, so conditioning on it changes nothing and the conditional mean is the constant E(Y). The between term of the law of total variance is then zero, since a constant has no variance."
+  },
+  {
+   "id": "pr-t3-m-06",
+   "format": "single",
+   "topic": "probability-t3",
+   "diff": "easy",
+   "stem": "A Poisson distribution mixed over a Gamma-distributed mean gives:",
+   "options": [
+    "another Poisson",
+    "a negative binomial",
+    "a beta-binomial",
+    "a normal distribution"
+   ],
+   "answer": "B",
+   "explanation": "This is the classical result that justifies modelling overdispersed count data with a negative binomial. The mixing makes the marginal more variable than any single Poisson with the same mean, which is exactly what count data usually shows."
+  },
+  {
+   "id": "pr-t3-m-07",
+   "format": "numeric",
+   "topic": "probability-t3",
+   "diff": "moderate",
+   "stem": "Let X follow the exponential distribution with mean 1/λ and let Y given X = x follow the Poisson distribution with parameter x. Then Var(Y) equals:",
+   "options": [
+    "λ(λ + 1)/λ²",
+    "λ²/(λ + 1)",
+    "λ(λ + 1)",
+    "(λ + 1)/λ²"
+   ],
+   "answer": "D",
+   "explanation": "E(Y|X) = Var(Y|X) = X, so Var(Y) = E(X) + Var(X) = 1/λ + 1/λ². Putting that over a common denominator gives (λ + 1)/λ². This is June 2026 Q45; the marked option simplifies to (λ + 1)/λ, a factor of λ too large.",
+   "check": "Check with λ = 2: E(Y) = 0.5 and Var(Y) = 0.75. A mixed Poisson must have variance above its mean, which rules out any option giving less."
+  },
+  {
+   "id": "pr-t3-m-08",
+   "format": "single",
+   "topic": "probability-t3",
+   "diff": "moderate",
+   "stem": "For any mixture of Poisson distributions, the variance is:",
+   "options": [
+    "equal to the mean",
+    "unrelated to the mean",
+    "less than the mean",
+    "greater than the mean unless the mixing distribution is degenerate"
+   ],
+   "answer": "D",
+   "explanation": "Var(Y) = E(X) + Var(X) = E(Y) + Var(X), so the variance exceeds the mean by exactly the variance of the mixing distribution. Equality holds only when X is constant — that is, when there is no mixing and Y is a plain Poisson. A mixed Poisson can never be underdispersed."
+  },
+  {
+   "id": "pr-t3-m-09",
+   "format": "numeric",
+   "topic": "probability-t3",
+   "diff": "moderate",
+   "stem": "Batches come from machine A with probability 0.6 and machine B with probability 0.4, producing defects as Poisson with means 2 and 5 respectively. Var(Y) for a randomly chosen batch is:",
+   "options": [
+    "3.20",
+    "5.36",
+    "2.16",
+    "10.24"
+   ],
+   "answer": "B",
+   "explanation": "The within term is 0.6(2) + 0.4(5) = 3.2, since each conditional variance equals its conditional mean. The between term is 0.6(4) + 0.4(25) − 3.2² = 12.4 − 10.24 = 2.16. The total is 5.36, which agrees with summing the marginal pmf directly. Option A is the within term alone, which is also E(Y).",
+   "check": "The answer must exceed E(Y) = 3.2, because any Poisson mixture is overdispersed. An answer equal to 3.2 has dropped the between term."
+  },
+  {
+   "id": "pr-t3-m-10",
+   "format": "numeric",
+   "topic": "probability-t3",
+   "diff": "moderate",
+   "stem": "If Y | X ~ N(X, 1) and X ~ N(0, σ²), then Var(Y) equals:",
+   "options": [
+    "σ²",
+    "1",
+    "1 + σ²",
+    "1 − σ²"
+   ],
+   "answer": "C",
+   "explanation": "The within term is E[Var(Y|X)] = E(1) = 1, since the conditional variance is constant, and the between term is Var[E(Y|X)] = Var(X) = σ². So Var(Y) = 1 + σ², and the marginal is exactly N(0, 1 + σ²) — the normal family is closed under this mixing. Dropping the 1 is the same error as omitting the residual variance from a random-effects model.",
+   "check": "Variances add here, so the answer must exceed both 1 and σ² separately."
+  },
+  {
+   "id": "pr-t3-m-11",
+   "format": "single",
+   "topic": "probability-t3",
+   "diff": "moderate",
+   "stem": "If Y | X ~ Binomial(n, X) with X ~ Beta(a, b), then Y follows:",
+   "options": [
+    "a beta-binomial distribution",
+    "a binomial distribution",
+    "a negative binomial distribution",
+    "a hypergeometric distribution"
+   ],
+   "answer": "A",
+   "explanation": "Mixing a binomial success probability over a Beta gives the beta-binomial, with mean na/(a+b) and a variance larger than a binomial's at the same mean. It is the natural model when a success probability varies between units — germination differing by seed lot, response differing by clinic."
+  },
+  {
+   "id": "pr-t3-m-12",
+   "format": "multi",
+   "topic": "probability-t3",
+   "diff": "moderate",
+   "stem": "Consider the two laws of conditioning.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "C and D only"
+   ],
+   "answer": "B",
+   "explanation": "A is true and is the tower property. B is false — that is the within term only, and the between term is missing. C is true, and it is why the law degenerates under independence. D is false: both terms are non-negative, so Var(Y) is at least as large as either.",
+   "statements": [
+    "E(Y) = E[E(Y | X)].",
+    "Var(Y) = E[Var(Y | X)].",
+    "If E(Y | X) is constant then Var(Y) = E[Var(Y | X)].",
+    "Var(Y) can be smaller than E[Var(Y | X)]."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True — the tower property. Average within each value of X, then average over X, and you recover the overall mean."
+    },
+    "B": {
+     "tf": false,
+     "why": "False. That is the within term alone; the law of total variance adds Var[E(Y|X)], which is zero only when the conditional mean does not move with X."
+    },
+    "C": {
+     "tf": true,
+     "why": "True. A constant conditional mean has zero variance, so the between term vanishes and only the within term remains."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. Both terms are non-negative and they are added, so Var(Y) is at least E[Var(Y|X)] and at least Var[E(Y|X)]."
+    }
+   }
+  },
+  {
+   "id": "pr-t3-m-13",
+   "format": "numeric",
+   "topic": "probability-t3",
+   "diff": "moderate",
+   "stem": "Y | X ~ Poisson(X) where X has mean 3 and variance 6. Then E(Y) and Var(Y) are:",
+   "options": [
+    "3 and 9",
+    "3 and 6",
+    "3 and 3",
+    "9 and 9"
+   ],
+   "answer": "A",
+   "explanation": "E(Y) = E(X) = 3 by the tower property, and Var(Y) = E(X) + Var(X) = 3 + 6 = 9. Option C treats Y as a plain Poisson and option B reports Var(X) rather than Var(Y). The marginal here is negative binomial, but only the two moments are needed.",
+   "check": "The variance must exceed the mean for any Poisson mixture, so 9 > 3 is the expected shape of the answer."
+  },
+  {
+   "id": "pr-t3-m-14",
+   "format": "single",
+   "topic": "probability-t3",
+   "diff": "moderate",
+   "stem": "In a random-effects model, the term Var[E(Y | X)] of the law of total variance corresponds to:",
+   "options": [
+    "the within-group variance component",
+    "the between-group variance component",
+    "the residual variance",
+    "the total sum of squares"
+   ],
+   "answer": "B",
+   "explanation": "E(Y | group) is the group's own mean level, so the variance of that quantity across groups is the between-group variance component. The within term E[Var(Y | group)] is the within-group or residual component. The law of total variance IS the variance-components decomposition."
+  },
+  {
+   "id": "pr-t3-m-15",
+   "format": "numeric",
+   "topic": "probability-t3",
+   "diff": "moderate",
+   "stem": "Y | X ~ N(X, X²) where X takes the values 1 and 3 with equal probability. Then Var(Y) equals:",
+   "options": [
+    "5",
+    "6",
+    "4",
+    "10"
+   ],
+   "answer": "B",
+   "explanation": "E(X) = 2, E(X²) = (1 + 9)/2 = 5 and Var(X) = 1. The within term is E[Var(Y|X)] = E(X²) = 5 and the between term is Var[E(Y|X)] = Var(X) = 1, so Var(Y) = 6. Option C uses [E(X)]² = 4 for the within term instead of E(X²) = 5.",
+   "check": "When the conditional variance depends on X, the within term needs the SECOND moment E(X²), which differs from [E(X)]²."
+  },
+  {
+   "id": "pr-t3-m-16",
+   "format": "single",
+   "topic": "probability-t3",
+   "diff": "moderate",
+   "stem": "Why does the mean require only one term while the variance requires two?",
+   "options": [
+    "because variance is always larger than the mean",
+    "because the between term is usually negligible",
+    "because the conditional variance is always constant",
+    "because expectation is linear and variance, involving a square, is not"
+   ],
+   "answer": "D",
+   "explanation": "Averaging conditional averages recovers the overall average exactly, because expectation is linear. Variance involves a square, and squaring does not commute with averaging — the discrepancy is precisely the variance of the conditional means, which is the second term."
+  },
+  {
+   "id": "pr-t3-m-17",
+   "format": "multi",
+   "topic": "probability-t3",
+   "diff": "hard",
+   "stem": "Consider where the law of total variance reappears elsewhere in the syllabus.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "A",
+   "explanation": "A is true — the law read as an inequality is exactly why conditioning cannot increase variance. B is true: a predictive distribution is a mixture, so its variance carries both terms. C is true, and it is the random-effects reading. D is false — conditional expectation projects onto ALL functions of X, while least squares projects onto the linear ones, so the two coincide only when the true conditional mean happens to be linear.",
+   "statements": [
+    "Rao–Blackwell follows from Var(Y) ≥ Var[E(Y | X)].",
+    "A posterior predictive variance exceeds the posterior variance of the mean.",
+    "The two terms are the within-group and between-group variance components.",
+    "Least squares regression always gives exactly E(Y | X)."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. Var(T) = E[Var(T|S)] + Var[E(T|S)] ≥ Var[E(T|S)], so the conditioned estimator E(T|S) has variance no larger than T's."
+    },
+    "B": {
+     "tf": true,
+     "why": "True. The predictive distribution mixes the sampling distribution over the posterior, so its variance adds the average sampling variance to the posterior variance of the mean."
+    },
+    "C": {
+     "tf": true,
+     "why": "True. E(Y | group) is the group's level, so its variance across groups is the between-group component, and the average conditional variance is the within-group component."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. Conditional expectation is the projection onto all functions of X; least squares projects onto the linear ones. They agree exactly when the true conditional mean is linear in X, and not otherwise."
+    }
+   }
+  },
+  {
+   "id": "pr-t3-m-18",
+   "format": "numeric",
+   "topic": "probability-t3",
+   "diff": "hard",
+   "stem": "A variance component of 4 is ignored alongside a residual variance of 1. By what factor are the resulting confidence intervals too narrow?",
+   "options": [
+    "5.00",
+    "2.24",
+    "4.00",
+    "1.25"
+   ],
+   "answer": "B",
+   "explanation": "The correct standard deviation is √(1 + 4) = √5 = 2.236, against the assumed √1 = 1. Interval width is proportional to the standard deviation, so the intervals are about 2.24 times too narrow. Option A mistakes the variance ratio for the width ratio — variances add, widths grow with the square root.",
+   "check": "Widths scale with the standard deviation, never with the variance. A factor of 5 in variance is a factor of √5 in width."
+  },
+  {
+   "id": "pr-t3-m-19",
+   "format": "single",
+   "topic": "probability-t3",
+   "diff": "hard",
+   "stem": "E(Y | X) has a characterisation as the solution to an optimisation problem. It is:",
+   "options": [
+    "the function of X minimising E[(Y − g(X))²]",
+    "the function of X maximising the correlation with Y",
+    "the linear function of X minimising E[(Y − g(X))²]",
+    "the function of X minimising E|Y − g(X)|"
+   ],
+   "answer": "A",
+   "explanation": "E(Y | X) is the minimum-mean-squared-error predictor of Y among ALL functions of X — equivalently the orthogonal projection of Y onto the space of functions of X. Restricting to linear functions gives least squares regression instead, and minimising absolute error gives the conditional median, not the conditional mean."
+  },
+  {
+   "id": "pr-t3-m-20",
+   "format": "single",
+   "topic": "probability-t3",
+   "diff": "hard",
+   "stem": "An insurer models claim counts as Poisson using the portfolio's average rate, and finds the mean accurate but bad years more frequent than predicted. The explanation is:",
+   "options": [
+    "the Poisson mean was estimated badly",
+    "the sample was too small to estimate the variance",
+    "claims are not independent within a policy",
+    "policyholders have heterogeneous rates, so the between term was set to zero"
+   ],
+   "answer": "D",
+   "explanation": "The tower property makes the mean insensitive to heterogeneity — E(Y) = E(X) whether or not rates vary — so the average can be right while the variance is badly understated. Treating the portfolio as a single Poisson discards Var[E(Y|X)], the variance of the individual rates, which is exactly the overdispersion that makes bad years more common than the model allows."
+  }
+ ]
+}

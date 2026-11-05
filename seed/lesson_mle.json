@@ -1,0 +1,798 @@
+{
+ "id": "mle",
+ "moduleId": "inference",
+ "topicId": "inference-t4",
+ "title": "Maximum Likelihood Estimation",
+ "breadcrumb": "Statistical Inference → Point Estimation → MLE",
+ "engine": "B",
+ "engineName": "Estimation and inference — likelihood curves, sampling distributions, visible assumptions",
+ "estMin": 46,
+ "version": "1.3",
+ "status": "approved",
+ "provenance": "Review pass, October 2026: 3 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. The review also found the MLE described as ALWAYS a function of the sufficient statistic in the prerequisite and the revision sheet; applying that finding across the lesson turned up a third copy in a prerequisite-check recall, which the review had not flagged. All three now qualify the claim to an MLE that exists and is unique, and state that otherwise the sufficient statistic determines the set of maximisers. Theory and worked examples authored for this platform; previous-year questions marked separately and carry their exam cycle.",
+ "objectives": [
+  "Build the likelihood of a sample and say why it is a function of θ, not of x.",
+  "Derive an MLE through the log-likelihood and the score equation, and verify it is a maximum.",
+  "Recognise when the derivative method fails and the maximum sits on a boundary.",
+  "Use invariance to get the MLE of a function of θ without redoing the work.",
+  "Separate 'maximum likelihood' from 'unbiased', and state the properties the MLE does have."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Joint density of an iid sample",
+   "why": "The likelihood is that joint density, read as a function of θ."
+  },
+  {
+   "id": "p2",
+   "name": "Differentiating logs and products",
+   "why": "Every MLE derivation turns a product into a sum of logs first."
+  },
+  {
+   "id": "p3",
+   "name": "Sufficiency and the factorisation theorem",
+   "why": "When an MLE exists and is unique it comes out as a function of the sufficient statistic — a free check on your answer. If the maximiser is not unique, the sufficient statistic determines the whole set of maximisers."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the difficulty mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split.",
+  "draw": 10,
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  }
+ },
+ "refs": [
+  {
+   "title": "Maximum Likelihood Estimation",
+   "where": "Lesson 1.2",
+   "site": "Penn State STAT 415 online notes",
+   "url": "https://online.stat.psu.edu/stat415/lesson/1/1.2",
+   "type": "Course notes",
+   "free": true,
+   "checked": "2026-10-12",
+   "why": "The cleanest written derivation of the Bernoulli and Normal MLEs, step by step. Read it after scene 4 if the algebra still feels fast."
+  },
+  {
+   "title": "Maximum likelihood estimation — theory, assumptions, properties",
+   "where": "Sections: the sample and its likelihood; the score; information matrix; consistency; asymptotic normality",
+   "site": "StatLect",
+   "url": "https://www.statlect.com/fundamentals-of-statistics/maximum-likelihood",
+   "type": "Reference",
+   "free": true,
+   "checked": "2026-10-12",
+   "why": "Where to go for the regularity conditions and the asymptotic results stated precisely. This is the source for scene 7, not the intuition scenes."
+  },
+  {
+   "title": "Statistics for Applications — Maximum Likelihood Estimation",
+   "where": "Lecture slides, sessions 4–5",
+   "site": "MIT OpenCourseWare 18.650 (Fall 2016)",
+   "url": "https://ocw.mit.edu/courses/18-650-statistics-for-applications-fall-2016/pages/lecture-slides/",
+   "type": "Lecture slides",
+   "free": true,
+   "checked": "2026-10-12",
+   "why": "Treats the MLE as minimising KL divergence — the view that makes consistency obvious rather than a result to memorise."
+  }
+ ],
+ "revision": {
+  "sheet": [
+   "L(θ) = ∏ f(xᵢ; θ). Same formula as the density; the variable is now θ.",
+   "ℓ(θ) = Σ log f(xᵢ; θ). Maximise ℓ, never L.",
+   "Score equation: ∂ℓ/∂θ = 0. Then check ∂²ℓ/∂θ² < 0 at the root.",
+   "Support depends on θ ⟹ the derivative is useless. Look at the boundary.",
+   "Invariance: MLE of g(θ) is g(θ̂). No second derivation.",
+   "A unique MLE is a function of the sufficient statistic; if maximisers are not unique, the statistic determines the set of them.",
+   "Consistent and asymptotically N(θ, 1/(nI(θ))) under regularity — but not generally unbiased.",
+   "Exponential rate: λ̂ = n/Σxᵢ = 1/x̄.   Bernoulli: p̂ = x̄.   Poisson: λ̂ = x̄.",
+   "N(μ,σ²): μ̂ = x̄, σ̂² = Σ(xᵢ−x̄)²/n — divided by n, not n−1.",
+   "U(0,θ): θ̂ = x₍ₙ₎, the sample maximum."
+  ],
+  "cards": [
+   [
+    "Likelihood, in one sentence",
+    "The probability of the data you actually observed, computed under each candidate θ. Not a probability of θ."
+   ],
+   [
+    "Why take logs?",
+    "It turns the product into a sum, and log is strictly increasing so the maximiser is unchanged."
+   ],
+   [
+    "When does the score equation fail?",
+    "When the support depends on θ — U(0,θ) is the standard case. The maximum is then at a boundary."
+   ],
+   [
+    "MLE of θ², given θ̂",
+    "θ̂², by invariance."
+   ],
+   [
+    "Is the MLE unbiased?",
+    "Not in general. Exponential rate: E[λ̂] = nλ/(n−1). Normal variance: E[σ̂²] = (n−1)σ²/n."
+   ],
+   [
+    "Two properties the MLE does have",
+    "Consistency, and asymptotic normality with variance 1/(nI(θ)) — under regularity conditions."
+   ],
+   [
+    "MLE of σ² for N(μ,σ²), both unknown",
+    "Σ(xᵢ−x̄)²/n. Dividing by n−1 gives the unbiased estimator, which is not the MLE."
+   ],
+   [
+    "Free check on any MLE you derive",
+    "It must be a function of the sufficient statistic."
+   ]
+  ],
+  "tricks": [
+   {
+    "hook": "Log, differentiate, check",
+    "why": "Three steps in order. The third — the second-derivative check — is the one most often skipped and most often worth a mark."
+   },
+   {
+    "hook": "Invariance: substitute, don't re-derive",
+    "why": "MLE of g(θ) is g(θ̂). True for ANY g, one-to-one or not."
+   },
+   {
+    "hook": "Support moves → look, don't differentiate",
+    "why": "U(0,θ): ℓ′ is never zero. The maximum is at the boundary x₍ₙ₎."
+   },
+   {
+    "hook": "MLE is not unbiased",
+    "why": "σ̂² divides by n, not n−1. Efficiency is asymptotic; bias at finite n is normal."
+   }
+  ],
+  "shortcuts": [
+   "Bernoulli / Poisson / exponential mean: the MLE is just x̄.",
+   "Exponential RATE: λ̂ = n/ΣX, biased upward with E[λ̂] = nλ/(n−1).",
+   "N(μ,σ²) both unknown: μ̂ = x̄ and σ̂² = Σ(xᵢ−x̄)²/n — divisor n.",
+   "U(0,θ): θ̂ = x₍ₙ₎. U(θ−1/2, θ+1/2): any value in [x₍ₙ₎−1/2, x₍₁₎+1/2] — the MLE is not unique."
+  ],
+  "remember": [
+   "An MLE need not be unique, unbiased, or even exist in a closed form.",
+   "Under regularity it IS consistent, asymptotically normal and asymptotically efficient — all three are large-sample claims."
+  ]
+ },
+ "traps": [
+  "Writing L(θ) and then differentiating with respect to x.",
+  "Maximising L instead of ℓ, and drowning in the product rule.",
+  "Setting the derivative to zero when the support depends on θ.",
+  "Forgetting the second-order check, so a minimum or a stationary point is reported as the MLE.",
+  "Re-deriving from scratch for g(θ) when invariance gives it in one line.",
+  "Assuming the MLE is unbiased, or that it must equal the UMVUE.",
+  "Dividing by n−1 in σ̂² because that is the formula you have written a hundred times."
+ ],
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "title": "Before the lesson — four things it will assume",
+   "mins": 6,
+   "objective": "Confirm that writing a likelihood, logging it and differentiating it are automatic before the derivations begin.",
+   "body": [
+    "Maximum likelihood is a short topic with a long tail of arithmetic. Everything in it reduces to: write L(θ), take logs, differentiate, set to zero. If any one of those four steps is slow, every derivation in the lesson will feel like three topics at once.",
+    "After a two or three year gap it is usually the differentiating that has gone quiet, not the idea. Four checks, five minutes. Mark anything shaky and read the rebuild before you move on."
+   ],
+   "items": [
+    {
+     "ask": "For an iid sample, what is the likelihood L(θ), and how does it differ from the joint density?",
+     "recall": "L(θ) = ∏ᵢ₌₁ⁿ f(xᵢ;θ). It is exactly the joint density — the same expression, not an approximation of it. The only difference is which symbol you treat as fixed: the density holds θ fixed and varies x, the likelihood holds the observed x fixed and varies θ.",
+     "refresh": [
+      "Independence makes the joint density a product; identical distribution makes every factor the same f. So the joint density of the sample is ∏f(xᵢ;θ).",
+      "Now the data have arrived and are numbers. The only unknown left is θ, so read the same expression as a function of θ and call it L(θ). That re-reading is the entire conceptual content of the word 'likelihood'.",
+      "It is not a probability of θ. L(θ) does not integrate to one over θ, and nothing in this course lets you say 'the probability that θ = 3'. It is a comparison: L(3) > L(5) says the observed data were more probable under 3 than under 5."
+     ]
+    },
+    {
+     "ask": "Differentiate a log-likelihood. Which two rules do you need?",
+     "recall": "log of a product is a sum of logs, so the derivative of the whole is the sum of the derivatives; and d/dθ log g(θ) = g′(θ)/g(θ). Those two turn any product likelihood into a manageable sum.",
+     "refresh": [
+      "Work one all the way through. Exponential with rate λ: f(x;λ) = λe^(−λx), so L(λ) = λⁿ e^(−λΣxᵢ).",
+      "Take logs: ℓ(λ) = n log λ − λΣxᵢ. The product became a sum, and the exponential became linear — that is why you log first and always.",
+      "Differentiate: ℓ′(λ) = n/λ − Σxᵢ. Set it to zero: λ̂ = n/Σxᵢ = 1/x̄. Then check it is a maximum: ℓ″(λ) = −n/λ², negative for every λ > 0, so the stationary point is the maximum. Do not skip that check in the exam — some questions are set precisely where it fails."
+     ]
+    },
+    {
+     "ask": "Why is maximising log L the same as maximising L?",
+     "recall": "log is strictly increasing, so it preserves order: if L(θ₁) > L(θ₂) then log L(θ₁) > log L(θ₂). The maximising θ is therefore identical. The maximum value is not the same, but nobody asked for it.",
+     "refresh": [
+      "A strictly increasing transformation cannot change which input is largest — it only relabels the heights. So the argmax survives, and taking logs is free.",
+      "This is also why the MLE of a function of θ is that function of the MLE when the function is one-to-one: if θ̂ maximises the likelihood in θ, then g(θ̂) maximises it in g(θ). That is the invariance property, and the lesson uses it from the worked examples onwards."
+     ]
+    },
+    {
+     "ask": "What does the factorisation theorem say, and why is it a free check on any MLE you compute?",
+     "recall": "If f(x;θ) = g(T(x);θ)·h(x) with h free of θ, then T is sufficient for θ. The MLE maximises g(T;θ), since h contributes no θ — so an MLE that exists and is unique is a function of a sufficient statistic — and if the maximiser is not unique, the sufficient statistic still determines the set of maximisers.",
+     "refresh": [
+      "Split the joint density into the part that involves θ and the part that does not. Whatever function of the data appears in the θ-part is a sufficient statistic.",
+      "The consequence is a check you can apply in ten seconds. For a Poisson sample the joint density is e^(−nθ)θ^(Σxᵢ)/∏xᵢ!, so Σxᵢ is sufficient — and the MLE must be a function of Σxᵢ. It is: θ̂ = x̄.",
+      "If your derivation ever produces an estimator that depends on the data in some way the sufficient statistic does not capture — the median, say, when the sufficient statistic is Σxᵢ — you have made an algebra slip. Go back rather than trusting it."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "title": "Which rate makes what you saw most plausible?",
+   "mins": 4,
+   "objective": "See the likelihood as the density read backwards.",
+   "body": [
+    "Two bulbs from the same batch failed at 3 hours and at 9 hours. The batch is modelled as exponential with failure rate λ. You do not know λ. You have to name a number.",
+    "Try λ = 0.02. Under that rate, failures at 3 and 9 hours would be startlingly early — the model expects a bulb to last about 50 hours. The data you got would be a surprise.",
+    "Try λ = 2. Now the model expects failure in about half an hour, and lasting 9 hours would be a freak event. Again the data you got would be a surprise.",
+    "Somewhere between those, there is a rate under which the two failures you actually saw are as unsurprising as they can be. That value is the maximum likelihood estimate. The whole method is this one idea, written in algebra.",
+    "The formula does not change — it is the same exponential density. What changes is which symbol you treat as fixed. In probability, θ is fixed and x varies. In likelihood, x is fixed at what you observed and θ varies. That inversion is the entire conceptual content of this topic."
+   ],
+   "aside": {
+    "h": "The sentence that stops the commonest error",
+    "body": "L(θ) is not the probability that θ is correct. It is the probability of your data, computed under θ. It does not integrate to one over θ, and it is not a distribution for θ. That is Bayesian territory and needs a prior."
+   },
+   "ask": {
+    "q": "Why can the best estimate not be a fixed number that ignores which sample you got?",
+    "nudge": "What are you choosing θ to do? Think about what the criterion is measured against."
+   },
+   "id": "s1",
+   "scenario": {
+    "teaser": "In 1942 the Allies estimated German tank production from the serial numbers on captured gearboxes.",
+    "title": "The German tank problem",
+    "body": [
+     "Allied intelligence needed to know how many tanks Germany was building. Estimates assembled from agent reports and aerial reconnaissance put output in the region of 1,000 to 1,550 a month.",
+     "Statisticians took a different route. Captured and destroyed tanks carried sequentially numbered components — gearboxes, wheels, engines. If serial numbers run 1 to N and the captured ones are effectively a random sample, then N is the upper endpoint of a discrete uniform distribution and the serial numbers are the data.",
+     "The maximum likelihood estimate is immediate, and it is exactly the case where differentiating gets you nowhere: the likelihood is zero for any N below the largest serial observed and decreasing above it, so N̂ is the largest serial number seen. It is also obviously biased — it can never exceed the truth and almost always falls short.",
+     "The correction is the same one U(0,θ) needs. With k observations and maximum m, the minimum-variance unbiased estimate is m + m/k − 1: push the maximum up by roughly one average gap. For a sample of 10 with a largest serial of 1,200 that gives 1,200 + 120 − 1 = 1,319.",
+     "Post-war records settled it. For August 1942 the statistical estimate was 327 tanks a month against a true figure of 342 — about 4% out. The intelligence estimate for the same month was 1,550, roughly four and a half times the truth. June 1941 went the same way: 244 estimated against 271 actual, while intelligence said 1,550. The method was not flawless — June 1940 gave 169 against an actual 122 — but it was wrong by tens where the conventional estimates were wrong by thousands.",
+     "The whole argument is two topics of this syllabus: a boundary MLE from this lesson, and its bias correction from Rao–Blackwell and Lehmann–Scheffé."
+    ],
+    "q": "Why is the estimate so much better than the intelligence figure, given that it uses far less information?",
+    "answer": "Because it uses the right information. The sample maximum is sufficient for N: once you know the largest serial number, the others add nothing about N, so a handful of captured tanks carries nearly all the information a much larger sample would. Agent reports, by contrast, carry an unknown and probably non-zero bias that more reports do not remove. A small sample read through the correct model beats a large body of evidence read through the wrong one.",
+    "link": "Figures from the documented wartime comparison of statistical and intelligence estimates. The identical estimator is used today to size populations from sequential identifiers — for instance estimating total units produced from serial numbers on a sample of warranty returns."
+   }
+  },
+  {
+   "kind": "explore",
+   "title": "Move the rate and watch the data become plausible",
+   "mins": 5,
+   "objective": "Locate the peak yourself before being shown the formula for it.",
+   "viz": {
+    "type": "exp-likelihood",
+    "n": 2,
+    "sumx": 12.0
+   },
+   "body": [
+    "The curve is L(λ) = λⁿ e^(−λΣxᵢ) for an exponential sample — the likelihood of the data you actually hold, at every candidate rate.",
+    "Below it is ℓ(λ) = n·log λ − λ·Σxᵢ. Same peak, in the same place, because log is strictly increasing. It is far easier to differentiate.",
+    "Start with n = 2 and Σx = 12, which is the two bulbs. Drag λ and find the top by eye. Then raise n and watch what happens to the width of the curve, not just its position."
+   ],
+   "ask": {
+    "q": "Double every observation, so Σx goes from 12 to 24 with n unchanged. Which way does the peak move, and why does that make sense physically?",
+    "nudge": "Longer lifetimes mean what about the failure rate?"
+   },
+   "id": "s2"
+  },
+  {
+   "kind": "theory",
+   "title": "The three lines that do all the work",
+   "mins": 6,
+   "objective": "Write the standard derivation in its canonical order.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Likelihood",
+     "body": "For an iid sample x₁,…,xₙ from f(x; θ), the likelihood is L(θ) = ∏ᵢ f(xᵢ; θ), viewed as a function of θ with the data held fixed."
+    },
+    {
+     "t": "formula",
+     "h": "Step 1 — take logs",
+     "body": "ℓ(θ) = log L(θ) = Σᵢ log f(xᵢ; θ)"
+    },
+    {
+     "t": "formula",
+     "h": "Step 2 — the score equation",
+     "body": "∂ℓ/∂θ = 0,   solved for θ"
+    },
+    {
+     "t": "formula",
+     "h": "Step 3 — confirm it is a maximum",
+     "body": "∂²ℓ/∂θ² < 0  evaluated at the root"
+    },
+    {
+     "t": "assume",
+     "h": "The condition that decides whether any of this applies",
+     "body": "The support of f must not depend on θ. If the set of possible x values moves when θ moves, ℓ has a jump and the derivative never reaches zero at the maximum. Scene 9 shows exactly that happening."
+    },
+    {
+     "t": "note",
+     "h": "Why step 3 is not optional",
+     "body": "∂ℓ/∂θ = 0 finds stationary points. For the standard one-parameter families the root is the maximum and the check is one line, but examiners do set items where the stationary point is a minimum or where the maximum is at an endpoint. Writing the second derivative costs you five seconds."
+    },
+    {
+     "t": "trap",
+     "h": "The error that costs a mark without feeling like an error",
+     "body": "Differentiating with respect to x instead of θ. By the time you have written ℓ(θ) your variable is θ. The xᵢ are now constants."
+    }
+   ],
+   "id": "s3",
+   "flow": {
+    "title": "Finding an MLE — and knowing when not to differentiate",
+    "alt": "Decision chart for maximum likelihood estimation",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Write the likelihood L(θ) for the observed sample",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Does the SUPPORT depend on θ?",
+      "kind": "decision"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Do not differentiate — inspect where L is positive",
+      "kind": "note"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Take logs, then solve ∂ℓ/∂θ = 0",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 0,
+      "label": "Maximum sits at a boundary, e.g. θ̂ = x₍ₙ₎",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 3,
+      "c": 2,
+      "label": "Check ∂²ℓ/∂θ² < 0 at the solution",
+      "kind": "decision"
+     },
+     {
+      "id": "g",
+      "r": 4,
+      "c": 1,
+      "label": "θ̂ is the MLE",
+      "kind": "step"
+     },
+     {
+      "id": "h",
+      "r": 5,
+      "c": 1,
+      "label": "Asked for g(θ)? By invariance the answer is g(θ̂)",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "yes"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "no"
+     },
+     {
+      "from": "c",
+      "to": "e"
+     },
+     {
+      "from": "d",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "g"
+     },
+     {
+      "from": "f",
+      "to": "g",
+      "label": "yes"
+     },
+     {
+      "from": "g",
+      "to": "h"
+     }
+    ],
+    "note": "The left branch is where marks are lost. For U(0,θ) the derivative of the log-likelihood is never zero, so setting it to zero finds nothing at all — the maximum is at the edge of the support."
+   },
+   "ask": {
+    "q": "When you differentiate the log-likelihood, what must you check before accepting a stationary point as the MLE?",
+    "nudge": "Check the parameter space, boundary points, and whether the point is a maximum rather than a minimum."
+   }
+  },
+  {
+   "kind": "worked",
+   "title": "Worked in full — the exponential rate",
+   "mins": 5,
+   "objective": "See the canonical derivation with reasoning at every step.",
+   "problem": "X₁,…,Xₙ are iid Exponential with rate λ, so f(x; λ) = λe^(−λx) for x > 0. Find the MLE of λ.",
+   "steps": [
+    {
+     "say": "Write the likelihood as the product of densities.",
+     "math": "L(λ) = ∏ᵢ λe^(−λxᵢ) = λⁿ e^(−λΣxᵢ)",
+     "why": "The product collapses because each factor carries one λ and the exponents add. Already you can see the likelihood depends on the data only through Σxᵢ — that is the sufficient statistic announcing itself."
+    },
+    {
+     "say": "Take logs.",
+     "math": "ℓ(λ) = n·log λ − λ·Σxᵢ",
+     "why": "A sum instead of a product. Nothing is lost: log is strictly increasing, so whatever maximises ℓ maximises L."
+    },
+    {
+     "say": "Differentiate with respect to λ and set to zero.",
+     "math": "dℓ/dλ = n/λ − Σxᵢ = 0",
+     "why": "The xᵢ are constants here. The only variable is λ."
+    },
+    {
+     "say": "Solve.",
+     "math": "λ̂ = n / Σxᵢ = 1 / x̄",
+     "why": "The reciprocal of the sample mean. Sensible: the exponential mean is 1/λ, so estimating the mean by x̄ and inverting gives the same answer — which is invariance, arriving early."
+    },
+    {
+     "say": "Check it is a maximum.",
+     "math": "d²ℓ/dλ² = −n/λ² < 0 for all λ > 0",
+     "why": "Negative everywhere, so ℓ is strictly concave and the stationary point is the global maximum. One line, done."
+    },
+    {
+     "say": "Put the numbers in.",
+     "math": "n = 2, Σxᵢ = 12  ⟹  λ̂ = 2/12 = 0.167 per hour",
+     "why": "This is the peak you found by dragging the slider in scene 2. The algebra and the picture agree."
+    }
+   ],
+   "after": "Notice what the derivation never needed: any claim that λ̂ is unbiased, or best, or anything else. Maximum likelihood is a recipe for producing an estimator. Whether that estimator is any good is a separate question, and scene 8 shows it is not always.",
+   "id": "s4",
+   "ask": {
+    "q": "For an exponential sample, how do you distinguish the rate parameterisation from the scale parameterisation when finding the MLE?",
+    "nudge": "Write the exact density first; rate and scale are reciprocals and lead to different-looking likelihoods."
+   }
+  },
+  {
+   "kind": "recall",
+   "title": "Pause and recall",
+   "mins": 2,
+   "objective": "Retrieve before reading on — this is where the retention comes from.",
+   "intro": "Answer each in your head, then reveal. Retrieving an answer wrongly and correcting it beats reading the right answer twice.",
+   "items": [
+    {
+     "q": "In L(θ), which symbol varies and which is held fixed?",
+     "a": "θ varies. The data x₁,…,xₙ are fixed at the values you observed."
+    },
+    {
+     "q": "Why maximise ℓ rather than L?",
+     "a": "log turns the product into a sum, and because log is strictly increasing the maximiser is unchanged."
+    },
+    {
+     "q": "What is the one condition that decides whether the score equation is the right tool at all?",
+     "a": "The support of f must not depend on θ."
+    },
+    {
+     "q": "Write the MLE of the exponential rate from memory.",
+     "a": "λ̂ = n/Σxᵢ = 1/x̄."
+    }
+   ],
+   "id": "s5"
+  },
+  {
+   "kind": "completion",
+   "title": "Your turn, with the scaffolding partly removed — Bernoulli",
+   "mins": 6,
+   "objective": "Supply the steps yourself rather than following them.",
+   "problem": "X₁,…,Xₙ are iid Bernoulli(p), so f(x; p) = p^x (1−p)^(1−x) for x ∈ {0,1}. Let k = Σxᵢ be the number of successes. Find the MLE of p.",
+   "steps": [
+    {
+     "say": "The likelihood.",
+     "math": "L(p) = p^k (1−p)^(n−k)",
+     "why": "Each success contributes p, each failure contributes (1−p)."
+    },
+    {
+     "say": "Take logs.",
+     "blank": {
+      "prompt": "Write ℓ(p).",
+      "answer": "k log p + (n−k) log(1−p)",
+      "accept": [
+       "k log p + (n-k) log(1-p)",
+       "klogp+(n-k)log(1-p)",
+       "k ln p + (n-k) ln(1-p)"
+      ],
+      "hint": "log of a product is a sum of logs; log of a power brings the exponent down."
+     },
+     "why": "Two terms, one for the successes and one for the failures."
+    },
+    {
+     "say": "Differentiate with respect to p and set to zero.",
+     "blank": {
+      "prompt": "Write dℓ/dp = 0.",
+      "answer": "k/p − (n−k)/(1−p) = 0",
+      "accept": [
+       "k/p - (n-k)/(1-p) = 0",
+       "k/p-(n-k)/(1-p)=0",
+       "k/p = (n-k)/(1-p)"
+      ],
+      "hint": "d/dp log(1−p) = −1/(1−p). Mind that minus sign — it is the single commonest slip here."
+     },
+     "why": "The chain rule on the second term supplies the minus sign."
+    },
+    {
+     "say": "Solve for p.",
+     "blank": {
+      "prompt": "Write p̂.",
+      "answer": "k/n",
+      "accept": [
+       "k/n",
+       "x̄",
+       "xbar",
+       "k / n",
+       "the sample proportion"
+      ],
+      "hint": "Cross-multiply: k(1−p) = (n−k)p. Expand and the kp terms cancel."
+     },
+     "why": "The sample proportion — which is also x̄, so the Bernoulli MLE is the sample mean."
+    },
+    {
+     "say": "Check.",
+     "math": "d²ℓ/dp² = −k/p² − (n−k)/(1−p)² < 0",
+     "why": "Negative for every p in (0,1), so the stationary point is the maximum."
+    }
+   ],
+   "after": "Two derivations, identical shape: product → log → differentiate → solve → check. The shape is what you are memorising, not the individual answers.",
+   "id": "s6"
+  },
+  {
+   "kind": "theory",
+   "title": "The four properties the exam actually tests",
+   "mins": 7,
+   "objective": "Hold the properties with their conditions attached, because the conditions are what the items test.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "1. Invariance",
+     "body": "If θ̂ is the MLE of θ, then g(θ̂) is the MLE of g(θ), for any function g. No regularity conditions, no second derivation. If λ̂ = 1/x̄ then the MLE of the mean 1/λ is x̄, and the MLE of λ² is 1/x̄²."
+    },
+    {
+     "t": "def",
+     "h": "2. It is a function of the sufficient statistic",
+     "body": "The factorisation theorem writes L(θ) = g(T(x); θ)·h(x). Maximising over θ only ever touches g, so the maximiser depends on the data only through T. Use this as a free check: if your answer is not a function of the sufficient statistic, you have made an algebra mistake."
+    },
+    {
+     "t": "def",
+     "h": "3. Consistency and asymptotic normality",
+     "body": "Under regularity conditions, θ̂ →ᵖ θ, and √n(θ̂ − θ) →ᵈ N(0, 1/I(θ)) — equivalently θ̂ is approximately N(θ, 1/(nI(θ))) for large n. So the MLE attains the Cramér–Rao bound asymptotically, which is the precise sense in which it is 'efficient'."
+    },
+    {
+     "t": "assume",
+     "h": "Which regularity conditions",
+     "body": "The support does not depend on θ; θ is interior to the parameter space; ℓ is twice differentiable; differentiation and integration can be interchanged; the information I(θ) is finite and positive. U(0,θ) violates the first, which is why the usual asymptotics do not apply there."
+    },
+    {
+     "t": "trap",
+     "h": "4. It is NOT generally unbiased",
+     "body": "This is the property examiners most often test by implication. Maximum likelihood optimises plausibility of the data, not expected value of the estimator. For N(μ,σ²) the MLE σ̂² = Σ(xᵢ−x̄)²/n has E[σ̂²] = (n−1)σ²/n — biased low. For the exponential rate, E[λ̂] = nλ/(n−1) — biased high. Both biases vanish as n grows, which is consistency, not unbiasedness."
+    },
+    {
+     "t": "note",
+     "h": "MLE versus UMVUE",
+     "body": "They coincide often enough to be dangerous. They are different objects: the MLE maximises the likelihood, the UMVUE minimises variance among unbiased estimators. When a question offers both as options, decide which criterion it named."
+    }
+   ],
+   "id": "s7",
+   "ask": {
+    "q": "Why does consistency not imply unbiasedness, and why does unbiasedness not imply minimum variance?",
+    "nudge": "These are distinct properties: limiting behaviour, expectation at fixed n, and variance comparisons answer different questions."
+   }
+  },
+  {
+   "kind": "explore",
+   "title": "Watch the MLE be biased, then watch the bias die",
+   "mins": 5,
+   "objective": "Turn 'the MLE is not unbiased' from a sentence into something you have seen.",
+   "viz": {
+    "type": "mle-sampling",
+    "lam": 0.5,
+    "n": 3
+   },
+   "body": [
+    "This is the exact sampling distribution of λ̂ = n/ΣX for an exponential sample — not a simulation. ΣX is Gamma(n, λ), so λ̂ has a known density and the curve is drawn from it.",
+    "The solid line is the true λ. The dashed line is E[λ̂] = nλ/(n−1). At n = 2 the estimator is biased by a full 100%: it expects to return twice the truth. At n = 3 it is 50% high. At n = 20, about 5%.",
+    "Notice two things moving at once as you raise n: the dashed line slides toward the solid one — that is the bias dying — and the whole distribution narrows — that is the variance dying. Both together are consistency.",
+    "Also notice the shape. Even at moderate n the distribution is visibly right-skewed, not the symmetric normal the asymptotic theory promises. 'Asymptotically normal' means eventually, and the exam has asked which sample size makes that approximation reasonable."
+   ],
+   "ask": {
+    "q": "The bias is nλ/(n−1) − λ = λ/(n−1). An estimator whose bias goes to zero is called asymptotically unbiased. Is every consistent estimator asymptotically unbiased, or are those two different claims?",
+    "nudge": "Consistency is about convergence in probability. Bias is about an expectation. Can an expectation be dragged around by a vanishingly rare but enormous value?"
+   },
+   "id": "s8"
+  },
+  {
+   "kind": "explore",
+   "title": "Where calculus fails — the uniform",
+   "mins": 5,
+   "objective": "Recognise the boundary case on sight, because the derivative will not warn you.",
+   "viz": {
+    "type": "unif-likelihood",
+    "n": 5,
+    "xmax": 4.2
+   },
+   "body": [
+    "X₁,…,Xₙ are iid U(0, θ). The density is 1/θ on [0, θ] and zero outside, so the likelihood is L(θ) = θ^(−n), but only for θ ≥ x₍ₙ₎, the largest observation. For any smaller θ at least one observed value would have been impossible, so L(θ) = 0.",
+    "That gives the shape on screen: flat zero, a vertical cliff at x₍ₙ₎, then a curve decreasing for the rest of its life.",
+    "Set the derivative to zero and you get −n·θ^(−n−1) = 0, which has no solution. The derivative is negative everywhere the likelihood is positive. Nothing is wrong with your algebra — the method simply does not apply, because the support depends on θ.",
+    "The maximum is at the cliff edge: θ̂ = x₍ₙ₎, the sample maximum. Read it off the picture, not off a derivative.",
+    "This estimator is biased low — it can never exceed the true θ, and almost surely falls short, with E[θ̂] = nθ/(n+1). The unbiased correction is (n+1)/n · x₍ₙ₎, which is not the MLE."
+   ],
+   "ask": {
+    "q": "Drag θ below the cliff. Why is the likelihood exactly zero there rather than merely small?",
+    "nudge": "What would θ < x₍ₙ₎ say about the value you actually observed?"
+   },
+   "id": "s9",
+   "scenario": {
+    "teaser": "Why reliability software fits a Weibull by likelihood and not by least squares.",
+    "title": "Fitting lifetimes when most units have not failed yet",
+    "body": [
+     "A reliability engineer has 400 units on test. Sixty have failed; the rest are still running when the test is stopped. The problem is not the sixty — it is the 340, each of which says 'longer than this', and a method that ignores them will make the product look far worse than it is.",
+     "Maximum likelihood handles that in one line of bookkeeping. A failure at time t contributes its density f(t;θ); a unit still running at time t contributes its survival probability 1 − F(t;θ). The likelihood is the product of both kinds of term, and nothing else about the method changes. A least-squares fit to a probability plot has no natural way to carry the second kind of term, which is why the standard reliability packages fit by likelihood.",
+     "Then invariance does the second half of the work. The quantity a warranty department actually wants is rarely a parameter: it is B10 life, the time by which 10% of units have failed, or the probability of surviving the warranty period. Each is a function of the fitted parameters, and the MLE of a function is that function of the MLE — so the answer comes straight out of the fit with no new estimation.",
+     "What the method does not give you for free is a sanity check, and the checks are where the marks and the money both are. A shape parameter below 1 says the failure rate is decreasing — infant mortality, a manufacturing problem — while a shape above 1 says wear-out. Reporting a B10 life from a fit whose shape parameter contradicts the physics is the usual way this goes wrong in practice."
+    ],
+    "close": "Censored data are the ordinary case, not the exception, and the likelihood is the estimator that takes them in its stride."
+   }
+  },
+  {
+   "kind": "guided",
+   "title": "Now without the steps — Poisson",
+   "mins": 6,
+   "objective": "Select the method yourself. The hints are there, and using them is recorded.",
+   "problem": "X₁,…,Xₙ are iid Poisson(λ), so P(X = x) = e^(−λ) λ^x / x! for x = 0,1,2,…  A sample of n = 8 gives Σxᵢ = 20. Find the MLE of λ, and then the MLE of P(X = 0).",
+   "hints": [
+    "Direction — before any algebra, ask which quantity you are choosing. You are choosing λ to make Σxᵢ = 20 as plausible as it can be. Write the likelihood as a product over i and see what survives.",
+    "Method — the support {0,1,2,…} does not depend on λ, so the score equation is the right tool. Take logs: the x! becomes an additive constant that does not involve λ, so it will vanish on differentiation. Do not waste time on it.",
+    "Next step — ℓ(λ) = −nλ + (Σxᵢ)·log λ − Σ log(xᵢ!). Differentiate with respect to λ, set to zero, and solve. Then for the second part do not start again: use invariance."
+   ],
+   "solution": [
+    {
+     "say": "Likelihood.",
+     "math": "L(λ) = ∏ e^(−λ) λ^(xᵢ)/xᵢ! = e^(−nλ) λ^(Σxᵢ) / ∏xᵢ!"
+    },
+    {
+     "say": "Log-likelihood, dropping the constant.",
+     "math": "ℓ(λ) = −nλ + (Σxᵢ) log λ − Σ log(xᵢ!)"
+    },
+    {
+     "say": "Score equation.",
+     "math": "dℓ/dλ = −n + (Σxᵢ)/λ = 0"
+    },
+    {
+     "say": "Solve.",
+     "math": "λ̂ = Σxᵢ / n = x̄ = 20/8 = 2.5"
+    },
+    {
+     "say": "Check.",
+     "math": "d²ℓ/dλ² = −(Σxᵢ)/λ² < 0  ✓"
+    },
+    {
+     "say": "Second part, by invariance.",
+     "math": "P(X=0) = e^(−λ), so its MLE is e^(−λ̂) = e^(−2.5) = 0.0821"
+    }
+   ],
+   "answer": "λ̂ = 2.5 and the MLE of P(X=0) is e^(−2.5) ≈ 0.0821",
+   "check": "The question asked for two quantities. Reporting only λ̂ = 2.5 is the single likeliest way to lose this mark — it is right working, wrong quantity.",
+   "id": "s10"
+  },
+  {
+   "kind": "trapcheck",
+   "title": "Six statements — verdict on each before you look",
+   "mins": 5,
+   "objective": "Practise the per-statement discipline that multi-statement items demand.",
+   "intro": "Give every statement a true or false verdict first. Multi-statement items in the real paper are scored on the whole set, so a verdict you skipped is a mark you gambled.",
+   "items": [
+    {
+     "claim": "If θ̂ is the MLE of θ, then θ̂² is the MLE of θ².",
+     "tf": true,
+     "why": "Invariance, with no conditions attached. This one is true and is often placed among false statements to catch people who distrust it."
+    },
+    {
+     "claim": "The MLE is always unbiased.",
+     "tf": false,
+     "why": "False, and the commonest trap in the topic. E[σ̂²] = (n−1)σ²/n for the normal; E[λ̂] = nλ/(n−1) for the exponential rate."
+    },
+    {
+     "claim": "The MLE always exists and is unique.",
+     "tf": false,
+     "why": "False. The likelihood can be maximised on a set rather than a point — U(θ−½, θ+½) gives an interval of maximisers — and for some models no maximum exists in the parameter space."
+    },
+    {
+     "claim": "The MLE is a function of the sufficient statistic.",
+     "tf": true,
+     "why": "True, straight from the factorisation theorem: maximising over θ touches only the factor that depends on the data through T."
+    },
+    {
+     "claim": "For U(0,θ), the MLE is obtained by setting dℓ/dθ = 0.",
+     "tf": false,
+     "why": "False. The support depends on θ, the derivative never vanishes, and the maximum is at the boundary: θ̂ = x₍ₙ₎."
+    },
+    {
+     "claim": "Under regularity conditions the MLE attains the Cramér–Rao lower bound asymptotically.",
+     "tf": true,
+     "why": "True — that is exactly the content of √n(θ̂−θ) →ᵈ N(0, 1/I(θ)). Note 'asymptotically': for finite n the MLE need not attain the bound at all."
+    }
+   ],
+   "id": "s11"
+  },
+  {
+   "kind": "guided",
+   "title": "Transfer — a case you have not been shown",
+   "mins": 6,
+   "objective": "Apply the method to a two-parameter model with no worked template in front of you.",
+   "problem": "X₁,…,Xₙ are iid N(μ, σ²) with BOTH parameters unknown. Find the MLEs of μ and σ².",
+   "hints": [
+    "Direction — two unknowns means two score equations. Write ℓ(μ, σ²) and take a partial derivative with respect to each, not a total derivative.",
+    "Method — differentiate with respect to μ first. The σ² terms are constants for that derivative and the answer drops out in one line. Substitute that result before differentiating with respect to σ².",
+    "Next step — ℓ = −(n/2)log(2π) − (n/2)log σ² − (1/(2σ²))Σ(xᵢ−μ)². Differentiating in σ² is easier if you treat σ² as a single symbol, say v, rather than squaring and unsquaring."
+   ],
+   "solution": [
+    {
+     "say": "Log-likelihood.",
+     "math": "ℓ(μ, v) = −(n/2)log(2πv) − (1/(2v))·Σ(xᵢ−μ)²,  writing v for σ²"
+    },
+    {
+     "say": "Differentiate in μ.",
+     "math": "∂ℓ/∂μ = (1/v)·Σ(xᵢ−μ) = 0  ⟹  μ̂ = x̄"
+    },
+    {
+     "say": "Substitute and differentiate in v.",
+     "math": "∂ℓ/∂v = −n/(2v) + (1/(2v²))·Σ(xᵢ−x̄)² = 0"
+    },
+    {
+     "say": "Solve.",
+     "math": "v̂ = σ̂² = Σ(xᵢ−x̄)² / n"
+    }
+   ],
+   "answer": "μ̂ = x̄ and σ̂² = Σ(xᵢ−x̄)²/n",
+   "check": "Divided by n, not by n−1. The n−1 version is the unbiased estimator s², and it is not the MLE. E[σ̂²] = (n−1)σ²/n, so the MLE understates the variance — by 10% at n = 10. If you wrote n−1 here, that is the same reflex that produced the degrees-of-freedom errors in your error log, and it is worth a line in it now.",
+   "id": "s12"
+  },
+  {
+   "kind": "summary",
+   "title": "What you should now be able to do unaided",
+   "mins": 3,
+   "objective": "Close the loop before the test.",
+   "body": [
+    "Write L(θ) for any standard family, take logs, solve the score equation, and confirm the sign of the second derivative.",
+    "Spot a support that depends on θ and go straight to the boundary instead of differentiating.",
+    "Produce the MLE of any function of θ in one line by invariance.",
+    "State, with its condition attached, each of: consistency, asymptotic normality, the link to sufficiency, and the absence of unbiasedness.",
+    "The mastery test is ten questions you have not seen, mixing all of these. Hints are off. The pass is 80% overall with 70% floors on the numerical and multi-statement items."
+   ],
+   "id": "s13"
+  },
+  {
+   "kind": "quiz",
+   "title": "Mastery test",
+   "mins": 12,
+   "objective": "Demonstrate it independently, on unseen questions.",
+   "setId": "inference_t4_mastery",
+   "id": "s14"
+  }
+ ]
+}

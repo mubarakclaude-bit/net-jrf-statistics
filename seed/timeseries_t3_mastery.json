@@ -1,0 +1,365 @@
+{
+ "moduleId": "timeseries",
+ "topicId": "timeseries-t3",
+ "source": "mastery",
+ "label": "The Yule–Walker equations — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "ts-t3-m-01",
+   "format": "single",
+   "topic": "timeseries-t3",
+   "diff": "easy",
+   "stem": "For an AR(1) process, the Yule–Walker estimate of φ is:",
+   "options": [
+    "r₁²",
+    "r₂",
+    "r₁",
+    "1 − r₁"
+   ],
+   "answer": "C",
+   "explanation": "With p = 1 the system reduces to the single equation ρ₁ = φ, so matching the sample value gives φ̂ = r₁ directly. It is the simplest method-of-moments estimator in time-series analysis."
+  },
+  {
+   "id": "ts-t3-m-02",
+   "format": "single",
+   "topic": "timeseries-t3",
+   "diff": "easy",
+   "stem": "For an AR(1) process with coefficient φ, the autocorrelation at lag k is:",
+   "options": [
+    "φ for all k",
+    "kφ",
+    "φ/k",
+    "φᵏ"
+   ],
+   "answer": "D",
+   "explanation": "One coefficient determines the whole ACF: ρₖ = φᵏ. With |φ| < 1 this decays geometrically, and when φ is negative it alternates in sign while decaying, so the even lags are positive."
+  },
+  {
+   "id": "ts-t3-m-03",
+   "format": "numeric",
+   "topic": "timeseries-t3",
+   "diff": "easy",
+   "stem": "For an AR(1) process with φ = −0.5, the autocorrelation at lag 2 is:",
+   "options": [
+    "−0.5",
+    "0.25",
+    "−0.25",
+    "0.5"
+   ],
+   "answer": "B",
+   "explanation": "ρ₂ = φ² = (−0.5)² = 0.25, which is positive even though the coefficient is negative. The ACF of a negative-coefficient AR(1) alternates: ρ₁ = −0.5, ρ₂ = +0.25, ρ₃ = −0.125.",
+   "check": "ρₖ = φᵏ, and an even power of a negative number is positive. A negative answer at an even lag means the power was not applied."
+  },
+  {
+   "id": "ts-t3-m-04",
+   "format": "numeric",
+   "topic": "timeseries-t3",
+   "diff": "easy",
+   "stem": "For an AR(1) process with φ = 0.6 and σ²ε = 4, Var(yₜ) is:",
+   "options": [
+    "4.00",
+    "6.25",
+    "2.56",
+    "10.00"
+   ],
+   "answer": "B",
+   "explanation": "Var(yₜ) = σ²ε/(1 − φ²) = 4/(1 − 0.36) = 4/0.64 = 6.25. The process is more variable than its own noise because shocks persist. The first option forgets the inflation factor entirely.",
+   "check": "The variance of the process must EXCEED the noise variance whenever φ ≠ 0, since past shocks accumulate."
+  },
+  {
+   "id": "ts-t3-m-05",
+   "format": "single",
+   "topic": "timeseries-t3",
+   "diff": "easy",
+   "stem": "The relation ρ₂ = φ₁ρ₁ + φ₂ for an AR(2) is obtained by:",
+   "options": [
+    "setting φ₁ = φ₂ in the AR equation",
+    "squaring the AR equation",
+    "differencing the series",
+    "multiplying the AR equation by yₜ₋₂ and taking expectations"
+   ],
+   "answer": "D",
+   "explanation": "It is the k = 2 case of the Yule–Walker derivation. Multiplying by yₜ₋₂ and taking expectations kills the term E(εₜyₜ₋₂), because the shock at time t is uncorrelated with everything earlier, and dividing through by γ₀ converts autocovariances into autocorrelations."
+  },
+  {
+   "id": "ts-t3-m-06",
+   "format": "single",
+   "topic": "timeseries-t3",
+   "diff": "easy",
+   "stem": "The autocorrelation function of an MA(1) process is non-zero:",
+   "options": [
+    "at even lags only",
+    "at every lag",
+    "at lag 1 only",
+    "at no lag"
+   ],
+   "answer": "C",
+   "explanation": "An MA(1) is a weighted combination of only two shocks, so observations more than one period apart share no shock and are uncorrelated: ρ₁ ≠ 0 and ρₖ = 0 for every k ≥ 2. That sharp cut-off is the identifying signature of an MA process, in contrast to the AR's geometric decay."
+  },
+  {
+   "id": "ts-t3-m-07",
+   "format": "numeric",
+   "topic": "timeseries-t3",
+   "diff": "moderate",
+   "stem": "For an AR(2) process the Yule–Walker equations are used. If the sample autocorrelations are r₁ = 0.8 and r₂ = 0.5, the estimate of φ₂ is:",
+   "options": [
+    "−7/18",
+    "16/18",
+    "7/18",
+    "−16/18"
+   ],
+   "answer": "A",
+   "explanation": "φ̂₂ = (r₂ − r₁²)/(1 − r₁²) = (0.5 − 0.64)/(1 − 0.64) = −0.14/0.36 = −7/18. The sign is negative because 0.5 is BELOW r₁² = 0.64 — the measured lag-2 correlation falls short of what the lag-1 relationship alone would produce. This is June 2026 Q3, where a positive option was marked.",
+   "check": "The denominator 1 − r₁² is always positive, so the numerator r₂ − r₁² alone fixes the sign. Compare r₂ with r₁² before computing."
+  },
+  {
+   "id": "ts-t3-m-08",
+   "format": "numeric",
+   "topic": "timeseries-t3",
+   "diff": "moderate",
+   "stem": "For an AR(2) with r₁ = 0.5 and r₂ = 0.3, the Yule–Walker estimate φ̂₂ is:",
+   "options": [
+    "3/5",
+    "7/15",
+    "−1/15",
+    "1/15"
+   ],
+   "answer": "D",
+   "explanation": "φ̂₂ = (0.3 − 0.25)/(1 − 0.25) = 0.05/0.75 = 1/15 ≈ 0.0667, weakly positive because r₂ = 0.3 just exceeds r₁² = 0.25. Option B is φ̂₁ for the same data, which is 0.5(0.7)/0.75 = 7/15.",
+   "check": "Here r₂ exceeds r₁², so φ̂₂ must be positive — the opposite situation to Q3."
+  },
+  {
+   "id": "ts-t3-m-09",
+   "format": "numeric",
+   "topic": "timeseries-t3",
+   "diff": "moderate",
+   "stem": "For an AR(2) fitted to data with r₁ = 0.6 and r₂ = 0.36, the estimates are:",
+   "options": [
+    "φ̂₁ = 0.6, φ̂₂ = 0.36",
+    "φ̂₁ = 0.36, φ̂₂ = 0.6",
+    "φ̂₁ = 0.6, φ̂₂ = 0",
+    "φ̂₁ = 0, φ̂₂ = 0.6"
+   ],
+   "answer": "C",
+   "explanation": "Since 0.6² = 0.36 exactly, the numerator r₂ − r₁² is zero and so is φ̂₂. Then φ̂₁ = 0.6(1 − 0.36)/0.64 = 0.6. So the AR(2) fit collapses to an AR(1) with φ = 0.6 — the relation r₂ = r₁² is the fingerprint of an AR(1).",
+   "check": "When r₂ equals r₁² exactly, φ̂₂ must come out as zero. If it does not, the numerator was formed wrongly."
+  },
+  {
+   "id": "ts-t3-m-10",
+   "format": "single",
+   "topic": "timeseries-t3",
+   "diff": "moderate",
+   "stem": "Which of the following AR(2) parameter pairs (φ₁, φ₂) gives a stationary process?",
+   "options": [
+    "(1.2, −0.2)",
+    "(0.6, 0.4)",
+    "(0.5, 0.6)",
+    "(1.2, −0.4)"
+   ],
+   "answer": "D",
+   "explanation": "Apply all three conditions. For (1.2, −0.4): sum 0.8 < 1 ✓, difference −1.6 < 1 ✓, |φ₂| = 0.4 < 1 ✓ — stationary, and note that φ₁ exceeds 1 without any difficulty. The others all fail the sum condition: (0.6, 0.4) and (1.2, −0.2) sum to exactly 1, giving a unit root in each case, and (0.5, 0.6) sums to 1.1. Testing φ₁ + φ₂ < 1 first eliminates three of the four options immediately."
+  },
+  {
+   "id": "ts-t3-m-11",
+   "format": "numeric",
+   "topic": "timeseries-t3",
+   "diff": "moderate",
+   "stem": "An AR(2) is fitted with r₁ = 0.7 and r₂ = 0.25. The estimate φ̂₁ is approximately:",
+   "options": [
+    "−0.471",
+    "0.471",
+    "1.029",
+    "0.700"
+   ],
+   "answer": "C",
+   "explanation": "φ̂₁ = r₁(1 − r₂)/(1 − r₁²) = 0.7(0.75)/0.51 = 0.525/0.51 = 1.0294. A value above 1 is admissible for an AR(2): the stationarity triangle allows φ₁ up to 2, and here all three conditions hold. Option A is −φ̂₂ for the same data.",
+   "check": "Verify in the equation you did not rearrange: φ̂₁ + φ̂₂r₁ should return r₁. Here 1.0294 + 0.7(−0.4706) = 0.700 ✓"
+  },
+  {
+   "id": "ts-t3-m-12",
+   "format": "multi",
+   "topic": "timeseries-t3",
+   "diff": "moderate",
+   "stem": "Consider the Yule–Walker equations and what they tell you about an AR(2) process.",
+   "options": [
+    "A and C only",
+    "A, B and C only",
+    "B and D only",
+    "C and D only"
+   ],
+   "answer": "A",
+   "explanation": "A is true and it is the sign rule. B is false — for an AR(2), ρ₁ = φ₁ + φ₂ρ₁, so ρ₁ equals φ₁ only when φ₂ = 0. C is true: it is the AR(1) signature. D is false; the AR(2) stationarity region allows φ₁ as large as 2, provided the other two conditions hold.",
+   "statements": [
+    "φ₂ is negative exactly when ρ₂ < ρ₁².",
+    "For an AR(2), ρ₁ always equals φ₁.",
+    "If r₂ = r₁² then the Yule–Walker estimate of φ₂ is zero.",
+    "A stationary AR(2) must have |φ₁| < 1."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. The denominator 1 − ρ₁² is positive for any genuine correlation, so the numerator ρ₂ − ρ₁² alone decides the sign."
+    },
+    "B": {
+     "tf": false,
+     "why": "False. The first Yule–Walker equation is ρ₁ = φ₁ + φ₂ρ₁, so ρ₁ = φ₁ only in the special case φ₂ = 0. Part of the lag-1 correlation is inherited through the second lag."
+    },
+    "C": {
+     "tf": true,
+     "why": "True. The numerator r₂ − r₁² vanishes, so φ̂₂ = 0 and the fit reduces to an AR(1) with φ̂₁ = r₁."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. The three conditions are φ₁ + φ₂ < 1, φ₂ − φ₁ < 1 and |φ₂| < 1, and they permit φ₁ up to 2. The fitted model in June 2026 Q3 has φ̂₁ = 1.11 and is stationary."
+    }
+   }
+  },
+  {
+   "id": "ts-t3-m-13",
+   "format": "single",
+   "topic": "timeseries-t3",
+   "diff": "moderate",
+   "stem": "The partial autocorrelation function of an AR(2) process:",
+   "options": [
+    "is non-zero at lags 1 and 2 and zero beyond",
+    "decays geometrically at every lag",
+    "is zero at every lag",
+    "cuts off after lag 1"
+   ],
+   "answer": "B",
+   "explanation": "For an AR(p) the PACF cuts off at lag p, because beyond p there is no direct effect left once the intervening lags are accounted for. So an AR(2) has a PACF that is non-zero at lags 1 and 2 and zero thereafter — which is precisely how the order is identified. It is the ACF of an AR that decays geometrically."
+  },
+  {
+   "id": "ts-t3-m-14",
+   "format": "single",
+   "topic": "timeseries-t3",
+   "diff": "moderate",
+   "stem": "If φ₁ + φ₂ = 1 in an AR(2) process, the process:",
+   "options": [
+    "is stationary with a slowly decaying ACF",
+    "has a unit root and is not stationary",
+    "is explosive with unbounded variance",
+    "reduces to white noise"
+   ],
+   "answer": "B",
+   "explanation": "Setting z = 1 in the AR polynomial 1 − φ₁z − φ₂z² gives 1 − φ₁ − φ₂ = 0, so z = 1 is a root — a unit root. The process is not stationary, has no finite variance and no ACF, and must be differenced before any ACF-based method applies. An explosive process would need the coefficients to sum to more than 1."
+  },
+  {
+   "id": "ts-t3-m-15",
+   "format": "numeric",
+   "topic": "timeseries-t3",
+   "diff": "moderate",
+   "stem": "For the process yₜ = 0.6yₜ₋₁ + 0.4yₜ₋₂ + εₜ, the ACF of the differenced series Δyₜ is:",
+   "options": [
+    "(0.6)ᵏ",
+    "(0.4)ᵏ",
+    "(−0.4)ᵏ",
+    "(−0.6)ᵏ"
+   ],
+   "answer": "C",
+   "explanation": "The coefficients sum to 1, so there is a unit root and the polynomial factors: 1 − 0.6B − 0.4B² = (1 − B)(1 + 0.4B). Hence (1 + 0.4B)Δyₜ = εₜ, that is Δyₜ = −0.4Δyₜ₋₁ + εₜ, an AR(1) with coefficient −0.4 and so ACF (−0.4)ᵏ. This is June 2026 Q18, where (0.6)ᵏ was marked.",
+   "check": "Add the coefficients first: a sum of 1 means the question must be about a differenced series. Then expand your factorisation back out to confirm the signs."
+  },
+  {
+   "id": "ts-t3-m-16",
+   "format": "single",
+   "topic": "timeseries-t3",
+   "diff": "moderate",
+   "stem": "A sample ACF that decays very slowly and almost linearly, and is still large at lag 20, suggests:",
+   "options": [
+    "an AR(1) with small φ",
+    "a non-stationary series needing differencing",
+    "an MA(1) process",
+    "pure white noise"
+   ],
+   "answer": "B",
+   "explanation": "No stationary AR or MA process has an ACF still substantial at lag 20 — geometric decay would have made it negligible long before. A slow, near-linear decay is the standard sample signature of a unit root, and the series should be differenced before modelling. A formal check is the Dickey–Fuller test."
+  },
+  {
+   "id": "ts-t3-m-17",
+   "format": "multi",
+   "topic": "timeseries-t3",
+   "diff": "hard",
+   "stem": "Consider the derivation and properties of the Yule–Walker estimator.",
+   "options": [
+    "B and C only",
+    "A and C only",
+    "A, B and D only",
+    "A, B and C only"
+   ],
+   "answer": "C",
+   "explanation": "A is true — it is the step that leaves a relation among autocovariances alone, and it requires k ≥ 1. B is true: Yule–Walker matches theoretical autocorrelations to sample ones, which is the method of moments. C is false — the estimator's solution always lies in the stationary region, which is one of its advantages. D is true and explains why the PACF comes free with an AR fit.",
+   "statements": [
+    "The derivation uses E(εₜyₜ₋ₖ) = 0, valid for k ≥ 1.",
+    "Yule–Walker estimation is a method-of-moments procedure.",
+    "Yule–Walker estimates can fall outside the stationary region.",
+    "The PACF at lag k is the last coefficient of the order-k Yule–Walker system."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. The shock at time t is uncorrelated with everything strictly earlier, so the term vanishes for k ≥ 1 — but not for k = 0, since yₜ contains εₜ."
+    },
+    "B": {
+     "tf": true,
+     "why": "True. Theoretical autocorrelations are set equal to sample ones and the equations solved, which is the method of moments applied to autocorrelations."
+    },
+    "C": {
+     "tf": false,
+     "why": "False. The Yule–Walker solution is always stationary, which is why it is used as a starting value for iterative maximum likelihood."
+    },
+    "D": {
+     "tf": true,
+     "why": "True. Solving the order-k system and reading off φ_kk gives the partial autocorrelation at lag k, which the Levinson–Durbin recursion produces for every k in one pass."
+    }
+   }
+  },
+  {
+   "id": "ts-t3-m-18",
+   "format": "numeric",
+   "topic": "timeseries-t3",
+   "diff": "hard",
+   "stem": "For an AR(2), the Yule–Walker system can be written Rφ = r with R = [[1, ρ₁], [ρ₁, 1]]. The determinant of R, and its role, are:",
+   "options": [
+    "1 − ρ₁², and it is the shared denominator of both coefficient formulas",
+    "1 + ρ₁², and it is the variance of the process",
+    "1 − ρ₂, and it is the shared denominator",
+    "ρ₁² − 1, and it is the shared numerator"
+   ],
+   "answer": "A",
+   "explanation": "The determinant of a 2 by 2 matrix [[1, ρ₁], [ρ₁, 1]] is 1 − ρ₁², and inverting the system puts it in the denominator of both φ₁ and φ₂ — which is exactly where the 1 − ρ₁² in the closed-form solutions comes from. It vanishes only if |ρ₁| = 1, which no stationary process has.",
+   "check": "The determinant must be positive for a stationary process, since |ρ₁| < 1. That is why it never affects the sign of either coefficient."
+  },
+  {
+   "id": "ts-t3-m-19",
+   "format": "single",
+   "topic": "timeseries-t3",
+   "diff": "hard",
+   "stem": "Why is it misleading to decide whether an AR(2) is needed by checking whether r₂ is close to zero?",
+   "options": [
+    "because an AR(1) already implies a lag-2 correlation of r₁², so the comparison should be with r₁² rather than with zero",
+    "because r₂ is always close to zero in practice",
+    "because r₂ cannot be estimated reliably",
+    "because the Yule–Walker equations do not use r₂"
+   ],
+   "answer": "A",
+   "explanation": "A pure AR(1) produces a non-zero lag-2 correlation through the indirect route — exactly ρ₁². So an r₂ far from zero is no evidence of a lag-2 effect, and an r₂ near zero can be strong evidence of one when r₁² is large. The informative comparison is r₂ against r₁², which is precisely the numerator of the φ₂ formula."
+  },
+  {
+   "id": "ts-t3-m-20",
+   "format": "single",
+   "topic": "timeseries-t3",
+   "diff": "hard",
+   "stem": "An AR(2) is fitted by Yule–Walker and gives φ̂₁ = 1.11, φ̂₂ = −0.39. The correct assessment is:",
+   "options": [
+    "the fit is stationary, since all three AR(2) conditions hold",
+    "the fit is invalid because φ̂₁ exceeds 1",
+    "the fit is explosive and should be differenced",
+    "the fit implies an MA process rather than an AR one"
+   ],
+   "answer": "A",
+   "explanation": "The three conditions are φ₁ + φ₂ = 0.72 < 1, φ₂ − φ₁ = −1.50 < 1 and |φ₂| = 0.39 < 1, so all hold and the process is stationary. A single coefficient above 1 is perfectly admissible for an AR(2) — the stationarity triangle extends to φ₁ = 2 — and checking only |φ₁| < 1 would wrongly reject this fit. These are the estimates from June 2026 Q3."
+  }
+ ]
+}

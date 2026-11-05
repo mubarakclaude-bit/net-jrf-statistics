@@ -1,0 +1,882 @@
+{
+ "id": "probabilityt8",
+ "topicId": "probability-t8",
+ "moduleId": "probability",
+ "title": "Independence and Inclusion–Exclusion",
+ "breadcrumb": "Probability → Events → Independence, unions and complements",
+ "engine": "B",
+ "engineName": "Probability — turning a union of many events into a product",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 98,
+ "objectives": [
+  "Turn 'at least one' into 1 − ∏P(Aᵢᶜ) and say where independence is used.",
+  "Compute complements explicitly, and handle exponents that add to n(n+1)/2.",
+  "Distinguish independence from mutual exclusivity, including the null-event exception.",
+  "Give a counterexample showing pairwise independence does not imply mutual independence.",
+  "State Bonferroni's inequality, note it needs no assumptions, and say when it is tight.",
+  "Apply inclusion–exclusion for two and three events and explain why it is impractical beyond that."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Axioms of probability and the complement rule",
+   "why": "Every calculation here is P(Aᶜ) = 1 − P(A) applied once per event."
+  },
+  {
+   "id": "p2",
+   "name": "Conditional probability",
+   "why": "Independence is defined through P(A ∩ B) = P(A)P(B), equivalently P(A | B) = P(A)."
+  },
+  {
+   "id": "p3",
+   "name": "Laws of indices",
+   "why": "The exam question turns on multiplying powers of 2, which adds their exponents."
+  },
+  {
+   "id": "p4",
+   "name": "Arithmetic series and binomial coefficients",
+   "why": "1 + 2 + ⋯ + n = n(n+1)/2 is the exponent in the answer, and inclusion–exclusion counts subsets."
+  }
+ ],
+ "traps": [
+  "In Q34 the exponent is n(n+1)/2, not n — multiplying 1/2ⁱ adds the exponents.",
+  "Mutually exclusive events with positive probabilities are DEPENDENT, not independent.",
+  "ΣP(Aᵢ) is an expected count and a Bonferroni bound, not a union probability — it can exceed 1.",
+  "Pairwise independence does not imply mutual independence.",
+  "P(Aᵢ) = 1 − 1/2ⁱ and P(Aᵢ) = 1/2ⁱ give completely different answers: 0.0000305 against 0.298 at n = 5.",
+  "The complement route needs independence; without it the answer can be wrong in either direction.",
+  "A null event IS independent of everything, so the exclusivity rule needs both probabilities positive.",
+  "n(n+1)/2 is the sum 1 + ⋯ + n; n(n−1)/2 counts pairs."
+ ],
+ "revision": {
+  "sheet": [
+   "P(at least one) = 1 − P(none) = 1 − ∏P(Aᵢᶜ), the product step requiring independence.",
+   "For n independent events each of probability p: P(at least one) = 1 − (1 − p)ⁿ.",
+   "June 2026 Q34: P(Aᵢ) = 1 − 1/2ⁱ ⟹ P(Aᵢᶜ) = 1/2ⁱ ⟹ P(none) = 1/2^(1+2+⋯+n) = 1/2^(n(n+1)/2).",
+   "So P(at least one) = 1 − 1/2^(n(n+1)/2) — option D. The marked 1/2ⁿ is not even the right shape.",
+   "Exact values: P(none) = 1/2, 1/8, 1/64, 1/1024, 1/32768 for n = 1 to 5 (exponents 1, 3, 6, 10, 15).",
+   "At n = 3 the probabilities are 1/2, 3/4, 7/8 and P(at least one) = 63/64 — itself a variant.",
+   "CONTRAST: P(Aᵢ) = 1/2ⁱ gives P(none) = ∏(1 − 1/2ⁱ), no closed form; at n = 5 that is 9765/32768 = 0.298 against 0.0000305.",
+   "Independence: P(A ∩ B) = P(A)P(B). Mutual exclusivity: P(A ∩ B) = 0. With both probabilities positive these are incompatible, so mutually exclusive events are DEPENDENT.",
+   "A null event is independent of everything, which is the exception to the line above.",
+   "Independence passes to complements: P(A ∩ Bᶜ) = P(A) − P(A)P(B) = P(A)P(Bᶜ).",
+   "Inclusion–exclusion, two events: P(A ∪ B) = P(A) + P(B) − P(A∩B). Independent with 0.3 and 0.4: 0.58.",
+   "Three events: ΣP − ΣP(pairs) + P(all three). Verified on a six-point space as 5/6.",
+   "n events: 2ⁿ − 1 terms, which is why the complement route is used instead.",
+   "Bonferroni: P(∪Aᵢ) ≤ ΣP(Aᵢ), with NO independence needed. Seven components at 0.2 gives 1.4, true but vacuous.",
+   "Bonferroni is tight for rare events: twelve events at 0.001 give the bound 0.012 against the exact 0.011934, a gap of 0.55%.",
+   "Pairwise is not mutual: two fair coins, A = first head, B = second head, C = they agree. All pairs 1/4 = (1/2)(1/2), but P(A∩B∩C) = 1/4 ≠ 1/8.",
+   "Multiple testing: twenty independent tests at 5% give P(at least one false positive) = 1 − 0.95²⁰ = 0.6415. The Bonferroni correction tests each at α/m.",
+   "Seven components at 0.2: P(at least one fails) = 1 − 0.8⁷ = 0.7903. Ten events at 0.3: 1 − 0.7¹⁰ = 0.9718."
+  ],
+  "cards": [
+   [
+    "P(at least one)",
+    "1 − ∏P(Aᵢᶜ), needing independence"
+   ],
+   [
+    "n identical independent events",
+    "1 − (1 − p)ⁿ"
+   ],
+   [
+    "June 2026 Q34",
+    "1 − 1/2^(n(n+1)/2) — triangular exponent"
+   ],
+   [
+    "Why the exponent is triangular",
+    "Multiplying 1/2ⁱ adds the exponents, 1 + 2 + ⋯ + n"
+   ],
+   [
+    "P(Aᵢ) = 1/2ⁱ instead",
+    "P(none) = ∏(1 − 1/2ⁱ), no closed form"
+   ],
+   [
+    "Mutually exclusive, both positive",
+    "DEPENDENT, since P(A∩B) = 0 ≠ P(A)P(B)"
+   ],
+   [
+    "A null event",
+    "Independent of everything — the exception"
+   ],
+   [
+    "Independence and complements",
+    "A, B independent ⟹ A, Bᶜ independent"
+   ],
+   [
+    "Bonferroni",
+    "P(∪Aᵢ) ≤ ΣP(Aᵢ), no assumptions"
+   ],
+   [
+    "Pairwise vs mutual",
+    "Two coins and 'they agree' — pairwise only"
+   ],
+   [
+    "Twenty tests at 5%",
+    "1 − 0.95²⁰ = 0.6415 chance of a false positive"
+   ],
+   [
+    "1 + 2 + ⋯ + n",
+    "n(n+1)/2 — 1, 3, 6, 10, 15"
+   ]
+  ],
+  "tricks": [
+   "Write P(Aᵢᶜ) explicitly before multiplying anything — the stem is usually built around the complement.",
+   "If probabilities are given as 1 − something, the complement is the clean quantity.",
+   "When complements are powers of a common base, the exponents ADD; look for 1 + 2 + ⋯ + n.",
+   "Check any general answer at n = 3; it costs seconds and catches an exponent slip.",
+   "If a 'probability' comes out above 1, you added when you should have multiplied complements.",
+   "If the question withholds the dependence structure, Bonferroni is the only route that stays valid."
+  ],
+  "shortcuts": [
+   "Triangular numbers: 1, 3, 6, 10, 15, 21, 28 — so Q34 at n = 4 gives 1/2¹⁰ = 1/1024.",
+   "0.8⁷ = 0.2097, 0.7¹⁰ = 0.0282, 0.95²⁰ = 0.3585.",
+   "For rare events, ΣP(Aᵢ) approximates P(∪Aᵢ) to within roughly the sum of the pairwise products."
+  ],
+  "remember": [
+   "At least one = 1 minus a product.",
+   "Exponents add: n(n+1)/2, not n.",
+   "Mutually exclusive means dependent."
+  ]
+ },
+ "howto": "Section 4 is June 2026's question and the fastest route in: 'at least one' becomes 1 minus a product, each complement is 1/2ⁱ, and multiplying them adds the exponents into the triangular number n(n+1)/2. The marked answer 1/2ⁿ comes from taking every complement to be 1/2, which is the slip the lesson is built to prevent. Section 6 is worth attempting before reading, because it puts two near-identical variants side by side — P(Aᵢ) = 1 − 1/2ⁱ and P(Aᵢ) = 1/2ⁱ — whose answers differ by a factor of nearly ten thousand at n = 5. Section 7 gives Bernstein's counterexample in full arithmetic, which is the cleanest way to see why 'independent' has to mean mutually independent. Section 8 covers Bonferroni, including the honest point that the bound is sometimes vacuous and sometimes nearly exact. If short of time, sections 3, 4 and 6 are the lesson. This lesson has no interactive chart: the topic is combinatorial rather than functional, and no visualisation in the app would illustrate it honestly. The optional section derives the alternating signs of inclusion–exclusion from the binomial theorem and gives the higher-order Bonferroni bounds.",
+ "refs": [
+  {
+   "title": "Probability",
+   "where": "Lessons 5 to 7",
+   "site": "Penn State STAT 414",
+   "url": "https://online.stat.psu.edu/stat414/",
+   "type": "Course notes",
+   "free": true,
+   "checked": "2026-11-03",
+   "why": "Independence, conditional probability and inclusion–exclusion with the 'at least one' complement route worked explicitly."
+  },
+  {
+   "title": "An Introduction to Probability Theory and Its Applications, Volume 1",
+   "where": "Chapters 4 and 5",
+   "site": "Feller",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-03",
+   "why": "The classical treatment of inclusion–exclusion and the Bonferroni inequalities, with Bernstein's pairwise-independence example."
+  },
+  {
+   "title": "An Introduction to Probability and Statistics, 3rd edition",
+   "where": "Chapter 2",
+   "site": "Rohatgi and Saleh",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-03",
+   "why": "Independence and unions at exactly NET level, including mutual versus pairwise independence as a stated theorem."
+  },
+  {
+   "title": "Probability and Statistics",
+   "where": "Weeks on probability axioms and independence",
+   "site": "NPTEL / SWAYAM",
+   "url": "https://archive.nptel.ac.in/courses/111105090",
+   "type": "Video course",
+   "free": true,
+   "checked": "2026-11-03",
+   "why": "Indian-syllabus notation and the 'at least one' question style these appear in."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
+ },
+ "provenance": "Authored November 2026 on June 2026 Q34 (answered wrongly, marked A against D): n independent events with P(Aᵢ) = 1 − 1/2ⁱ, find P(at least one). Each complement is 1/2ⁱ, so P(none) = 1/2^(1+2+⋯+n) = 1/2^(n(n+1)/2) and the answer is 1 − 1/2^(n(n+1)/2), option D; the marked 1/2ⁿ is not of the right shape for an 'at least one' probability, and option B is what results from taking every complement to be 1/2. Exact fractions were computed for n = 1 to 5, giving P(none) = 1/2, 1/8, 1/64, 1/1024, 1/32768 with the triangular exponents 1, 3, 6, 10, 15. All nine variants are taught in named sections and present in the pool, including the arithmetic sum 1 + 2 + ⋯ + n, which the examiner evidently included because it is where the difficulty sits. A distinction between two near-identical variants is taught explicitly: P(Aᵢ) = 1 − 1/2ⁱ gives P(none) = 1/2^(n(n+1)/2) while P(Aᵢ) = 1/2ⁱ gives P(none) = ∏(1 − 1/2ⁱ), which has no closed form — at n = 5 the two are 0.0000305 and 9765/32768 = 0.298004, a factor of nearly ten thousand apart from stems differing by four characters. Every figure was computed exactly or verified by enumeration: Bernstein's counterexample was checked over the full four-point sample space (all three pairs independent at 1/4, but P(A∩B∩C) = 1/4 against 1/8); inclusion–exclusion for three events was verified on a six-point space as 5/6 both ways; the Bonferroni bound was checked as tight for rare events (twelve at 0.001 giving 0.012 against the exact 0.011934, a 0.55% gap) and vacuous for common ones (seven at 0.2 giving 1.4 against 0.7903); and 1 − 0.95²⁰ = 0.6415, 1 − 0.8⁷ = 0.7903 and 1 − 0.7¹⁰ = 0.9718 were each computed. No explore scene: the topic is combinatorial rather than functional and no visualisation in the app illustrates it honestly, so none was forced. Previous-year questions are stored separately and carry their exam cycle.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 8,
+   "title": "Before the lesson — four things it will assume",
+   "objective": "Fix the complement trick, the definition of independence, and the one algebraic sum the exam needs.",
+   "ask": {
+    "q": "You want P(at least one of twenty events). Would you rather add twenty terms or multiply twenty?",
+    "nudge": "Inclusion–exclusion on twenty events has over a million terms. What does the complement give you?"
+   },
+   "body": [
+    "Almost every question in this topic asks for the probability that AT LEAST ONE of several events occurs. Computed directly that is a union, and a union of n events expands by inclusion–exclusion into 2ⁿ − 1 terms — hopeless beyond three or four.",
+    "Computed through the complement it is one product. 'At least one occurs' fails exactly when ALL of them fail, so\n    P(at least one) = 1 − P(none) = 1 − P(A₁ᶜ)P(A₂ᶜ)⋯P(Aₙᶜ),\nwhere the product step needs independence. That one line answers June 2026's question and five of its nine variants.",
+    "The second thing the topic tests is whether independence is being confused with mutual exclusivity. They are nearly opposite: independent events can happen together, and mutually exclusive events cannot — which makes mutually exclusive events strongly DEPENDENT.",
+    "Four checks before starting."
+   ],
+   "items": [
+    {
+     "ask": "What does it mean for events A and B to be independent?",
+     "recall": "P(A ∩ B) = P(A)P(B).",
+     "refresh": [
+      "Equivalently P(A | B) = P(A) when P(B) > 0: knowing B tells you nothing about A.",
+      "For more than two events, independence requires the product rule for EVERY subset, not just for pairs. Section 7 shows that pairwise independence is genuinely weaker.",
+      "Independence is a statement about probabilities, not about the events being unrelated in any informal sense."
+     ]
+    },
+    {
+     "ask": "If A and B are mutually exclusive with positive probabilities, are they independent?",
+     "recall": "No — they are dependent.",
+     "refresh": [
+      "Mutually exclusive means P(A ∩ B) = 0, while independence would need P(A)P(B), which is strictly positive. So the two cannot both hold.",
+      "Intuitively, learning that A occurred tells you B definitely did not, which is a great deal of information — the opposite of independence.",
+      "A practice variant asks exactly this, and 'independent' is the offered trap."
+     ]
+    },
+    {
+     "ask": "Write P(A ∪ B) for two events, and say when it simplifies.",
+     "recall": "P(A) + P(B) − P(A ∩ B); and if they are independent, P(A) + P(B) − P(A)P(B).",
+     "refresh": [
+      "The subtraction removes the double-counted overlap. With P(A) = 0.3 and P(B) = 0.4 independent, P(A ∪ B) = 0.3 + 0.4 − 0.12 = 0.58, which is a practice variant.",
+      "Adding without subtracting gives 0.7, the commonest wrong answer, and for enough events that method produces 'probabilities' above 1.",
+      "It simplifies to P(A) + P(B) only when the events are mutually exclusive — the opposite assumption from independence."
+     ]
+    },
+    {
+     "ask": "What is 1 + 2 + 3 + ⋯ + n?",
+     "recall": "n(n + 1)/2.",
+     "refresh": [
+      "The triangular numbers: 1, 3, 6, 10, 15 for n = 1 to 5.",
+      "This appears in the lesson for a specific reason. In June 2026's question P(Aᵢᶜ) = 1/2ⁱ, so the product of the complements is 1/2^(1+2+⋯+n) = 1/2^(n(n+1)/2) — the exponents ADD when the powers multiply.",
+      "A practice variant asks for this sum on its own, which is a strong hint that the examiner knew where the difficulty lay. Note it is n(n+1)/2, not n(n−1)/2, which counts PAIRS."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "Why 'at least one' is always a complement",
+   "objective": "See that the product route is not a trick but the only tractable one.",
+   "body": [
+    "Consider ten independent events, each with probability 0.3. What is the chance at least one happens?",
+    "Added up, the probabilities give 3.0 — which is not a probability at all, and the absurdity is instructive. The sum over-counts every outcome in which two or more events occur, and inclusion–exclusion exists to subtract those back out: 1023 terms for ten events.",
+    "Through the complement it is immediate. Each event fails with probability 0.7, all ten fail with probability 0.7¹⁰ = 0.0282, so at least one occurs with probability 0.9718. One exponentiation.",
+    "That is the shape of nearly every question here: translate 'at least one' into 'not none', multiply the complements, subtract from 1. The only work left is getting the individual complements right — and in June 2026's question that is where the difficulty was hidden, because P(Aᵢ) = 1 − 1/2ⁱ makes P(Aᵢᶜ) = 1/2ⁱ, whose product carries a triangular exponent."
+   ],
+   "scenario": {
+    "teaser": "A reliability report states a failure probability of 1.4 and is signed off.",
+    "title": "Adding probabilities until they exceed one",
+    "body": [
+     "A system has seven independent components, each with a 0.2 probability of failing during a mission. An engineer reports the probability that the system fails — meaning at least one component fails — as 7 × 0.2 = 1.4.",
+     "The number is impossible, and that is the only reason it was caught. Had there been four components the answer would have been 0.8, wrong but plausible, and nothing would have flagged it.",
+     "The correct calculation runs through the complement: each component survives with probability 0.8, all seven survive with probability 0.8⁷ = 0.2097, so the system fails with probability 0.7903. The engineer's 1.4 overstates it by more than half again.",
+     "What the sum actually computes is the EXPECTED NUMBER of failures, which is indeed 1.4. Expected counts can exceed 1; probabilities cannot. The two coincide only when the events are mutually exclusive, so that at most one can occur — and components failing independently is the opposite of that.",
+     "The sum is not useless, though: it is a valid upper bound. Bonferroni's inequality says P(∪Aᵢ) ≤ ΣP(Aᵢ), so 1.4 is a true (and here vacuous) bound on 0.7903. That is why the sum is the right tool for controlling a family-wise error rate, where a conservative bound is wanted and the events are rare enough that the bound is tight.",
+     "The discipline is to notice which question is being asked. 'How many will fail on average' is a sum. 'What is the chance any fails' is one minus a product. Confusing them is the error here, and with rare events the two are numerically close, which is exactly what makes the confusion survive."
+    ],
+    "q": "The engineer's 7 × 0.2 = 1.4 is not a probability. What is it, and when would it have been a good approximation?",
+    "answer": "It is the expected number of failures, which has no upper limit of 1. It also happens to be Bonferroni's upper bound on the union probability, so it is a valid bound rather than nonsense — just a vacuous one here. It approximates P(at least one) well when the individual probabilities are small enough that two simultaneous failures are negligible: with seven components at probability 0.001 the sum gives 0.007 against the exact 0.006979, a relative error under 0.3%. At 0.2 each the overlaps are substantial and the sum is badly wrong, which is why the complement route is the one to use by default."
+   },
+   "ask": {
+    "q": "The sum ΣP(Aᵢ) is a valid upper bound on P(∪Aᵢ). When is it close to the truth, and when is it useless?",
+    "nudge": "What is being double-counted? How large is that when the individual probabilities are tiny?"
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 10,
+   "title": "Independence, unions, and the complement route",
+   "objective": "State the definitions and the three ways of handling a union.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Independence, and what it is not",
+     "body": "A and B are INDEPENDENT if P(A ∩ B) = P(A)P(B).\nA and B are MUTUALLY EXCLUSIVE if A ∩ B = ∅, so P(A ∩ B) = 0.\nThese are different conditions and, for events of positive probability, incompatible: independence needs P(A)P(B) > 0 while exclusivity forces 0. So mutually exclusive events with positive probabilities are DEPENDENT — a practice variant, and the single most reliable source of confusion in the topic."
+    },
+    {
+     "t": "formula",
+     "h": "Inclusion–exclusion",
+     "body": "Two events:   P(A ∪ B) = P(A) + P(B) − P(A∩B)\nThree events: P(A ∪ B ∪ C) = ΣP(Aᵢ) − ΣP(Aᵢ∩Aⱼ) + P(A∩B∩C)\nn events:     alternating sums over all 2ⁿ − 1 non-empty subsets.\nChecked on a six-point space with A = {0,1,2}, B = {1,2,3}, C = {2,3,4}: the union has probability 5/6 and inclusion–exclusion gives 5/6. The method is exact but grows exponentially, which is why it is almost never the route to use."
+    },
+    {
+     "t": "formula",
+     "h": "The complement route — the one to use",
+     "body": "P(at least one of A₁,…,Aₙ) = 1 − P(none of them)\n                            = 1 − P(A₁ᶜ ∩ ⋯ ∩ Aₙᶜ)\n                            = 1 − P(A₁ᶜ)P(A₂ᶜ)⋯P(Aₙᶜ)   [independence]\nFor n independent events each of probability p this is 1 − (1 − p)ⁿ — a practice variant. One product instead of 2ⁿ − 1 terms, and the factorisation is exactly where independence is used."
+    },
+    {
+     "t": "formula",
+     "h": "Bonferroni's inequality",
+     "body": "P(∪Aᵢ) ≤ Σ P(Aᵢ),  always, with no independence needed.\nThis is inclusion–exclusion truncated after the first sum, and the omitted terms are the overlaps, which is why the bound is an over-estimate. It is the upper bound asked for in a practice variant, and it is the basis of the Bonferroni correction for multiple testing (topic 4.15): to hold a family-wise error rate at α across m tests, test each at α/m."
+    },
+    {
+     "t": "step",
+     "h": "Independence passes to complements",
+     "body": "If A and B are independent then so are A and Bᶜ, and Aᶜ and Bᶜ:\n    P(A ∩ Bᶜ) = P(A) − P(A ∩ B) = P(A) − P(A)P(B) = P(A)(1 − P(B)) = P(A)P(Bᶜ).\nThat is what licenses multiplying the complements in the line above, and it is a practice variant in its own right."
+    },
+    {
+     "t": "def",
+     "h": "Independence for more than two events",
+     "body": "Events A₁,…,Aₙ are MUTUALLY (or completely) independent if for every sub-collection the probability of the intersection is the product of the probabilities. PAIRWISE independence requires this only for pairs, and is strictly weaker — section 7 gives a three-event example that is pairwise independent and not mutually so. Exam questions saying 'independent' mean mutual independence, which is what licenses the full product."
+    }
+   ],
+   "table": {
+    "caption": "The three routes to a union probability. All figures computed exactly.",
+    "head": [
+     "route",
+     "what it gives",
+     "needs independence?",
+     "cost for n events"
+    ],
+    "rows": [
+     [
+      "Inclusion–exclusion",
+      "exact",
+      "no",
+      "2ⁿ − 1 terms"
+     ],
+     [
+      "1 − ∏P(Aᵢᶜ)",
+      "exact",
+      "yes",
+      "n factors"
+     ],
+     [
+      "Bonferroni ΣP(Aᵢ)",
+      "upper bound",
+      "no",
+      "n terms"
+     ],
+     [
+      "Σ P(Aᵢ) read as a probability",
+      "wrong — it is an expected count",
+      "—",
+      "can exceed 1"
+     ]
+    ]
+   },
+   "flow": {
+    "title": "Computing P(at least one)",
+    "alt": "Flow chart for computing the probability that at least one of several events occurs",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "P(at least one of n events)",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Independent?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "1 − ∏ P(Aᵢᶜ)",
+      "kind": "end"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "n small? inclusion–exclusion",
+      "kind": "end"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 2,
+      "label": "Otherwise bound it: ΣP(Aᵢ)",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "b",
+      "to": "d"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     }
+    ],
+    "note": "Independence turns an exponential sum into a product of n factors. Without it, inclusion–exclusion is exact but only usable for two or three events, and Bonferroni gives a bound for any number."
+   },
+   "ask": {
+    "q": "The complement route needs independence; Bonferroni needs nothing. What does that tell you about which to reach for when a question withholds the dependence structure?",
+    "nudge": "Which one still gives a true statement when you know nothing about the overlaps?"
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 10,
+   "title": "Worked in full — June 2026, Q34",
+   "objective": "Get the complement right, then handle the triangular exponent.",
+   "ask": {
+    "q": "The exponent came out as n(n+1)/2 rather than n. What operation on the exponents produced that?",
+    "nudge": "You multiplied 2⁻¹ × 2⁻² × ⋯ × 2⁻ⁿ. What happens to exponents under multiplication?"
+   },
+   "problem": "Let A₁, A₂, …, Aₙ be n independent events with P(Aᵢ) = 1 − 1/2ⁱ for i = 1, 2, …, n. Find the probability that at least one of them occurs.",
+   "steps": [
+    {
+     "say": "Translate 'at least one' into its complement.",
+     "math": "P(at least one) = 1 − P(none occurs)\n              = 1 − P(A₁ᶜ ∩ A₂ᶜ ∩ ⋯ ∩ Aₙᶜ)",
+     "why": "Direct computation of the union would need 2ⁿ − 1 inclusion–exclusion terms. The complement is the only practical route, and it is available because independence passes to complements."
+    },
+    {
+     "say": "Write each complement probability.",
+     "math": "P(Aᵢ) = 1 − 1/2ⁱ\n⟹ P(Aᵢᶜ) = 1 − (1 − 1/2ⁱ) = 1/2ⁱ",
+     "why": "This is the step the question is built on. The awkward form 1 − 1/2ⁱ was chosen precisely so that the COMPLEMENT is clean. Whenever probabilities are given as 1 − something, the complement is the thing to look at."
+    },
+    {
+     "say": "Multiply, using independence.",
+     "math": "P(none) = P(A₁ᶜ)P(A₂ᶜ)⋯P(Aₙᶜ)\n        = (1/2¹)(1/2²)⋯(1/2ⁿ)\n        = 1/2^(1 + 2 + ⋯ + n)",
+     "why": "Multiplying powers of 2 adds the exponents. Independence is what licenses the factorisation, and independence of the complements follows from independence of the events."
+    },
+    {
+     "say": "Sum the exponents.",
+     "math": "1 + 2 + ⋯ + n = n(n + 1)/2\n⟹ P(none) = 1/2^(n(n+1)/2)",
+     "why": "The triangular number. For n = 1 to 5 the exponents are 1, 3, 6, 10, 15, giving P(none) = 1/2, 1/8, 1/64, 1/1024, 1/32768 — computed exactly as fractions. This is why a separate variant asks for 1 + 2 + ⋯ + n."
+    },
+    {
+     "say": "Subtract from 1 and choose the option.",
+     "math": "P(at least one) = 1 − 1/2^(n(n+1)/2)\n⟹ option D",
+     "why": "The marked answer was A, 1/2ⁿ, which is not of the right shape at all: a probability of 'at least one' among events that are individually quite likely must be CLOSE TO 1, whereas 1/2ⁿ tends to 0. Option B, 1 − 1/2ⁿ, has the right shape but the wrong exponent — it is what you get by mistakenly taking every P(Aᵢᶜ) to be 1/2."
+    },
+    {
+     "say": "Sanity-check at n = 3.",
+     "math": "P(A₁)=1/2, P(A₂)=3/4, P(A₃)=7/8\nP(none) = (1/2)(1/4)(1/8) = 1/64\nP(at least one) = 63/64 ✓ matches 1 − 1/2^6",
+     "why": "Worth doing because this concrete case is itself one of the nine variants, with 63/64 as its answer. A small-n check costs seconds and catches an exponent slip immediately."
+    }
+   ],
+   "after": "Two habits. When probabilities are given in the form 1 − something, compute the complement first — the question is almost certainly built that way. And when complements are powers of a common base, remember that multiplying them ADDS the exponents, so look for a sum like 1 + 2 + ⋯ + n rather than assuming the exponent stays n."
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 2,
+   "title": "Pause and recall",
+   "objective": "Retrieve the complement route before the variations.",
+   "intro": "Answer each before revealing it.",
+   "items": [
+    {
+     "q": "Write P(at least one of n independent events).",
+     "a": "1 − P(A₁ᶜ)P(A₂ᶜ)⋯P(Aₙᶜ)."
+    },
+    {
+     "q": "For n independent events each with probability p, what is P(at least one)?",
+     "a": "1 − (1 − p)ⁿ."
+    },
+    {
+     "q": "Are mutually exclusive events with positive probabilities independent?",
+     "a": "No — they are dependent, since P(A ∩ B) = 0 while P(A)P(B) > 0."
+    },
+    {
+     "q": "State Bonferroni's inequality.",
+     "a": "P(∪Aᵢ) ≤ ΣP(Aᵢ), with no independence required."
+    },
+    {
+     "q": "What is 1 + 2 + ⋯ + n?",
+     "a": "n(n + 1)/2."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s5",
+   "mins": 8,
+   "title": "Your turn — two products that look alike",
+   "objective": "Distinguish P(Aᵢ) = 1 − 1/2ⁱ from P(Aᵢ) = 1/2ⁱ.",
+   "problem": "Two variants of June 2026's question differ by four characters in the statement of P(Aᵢ). Work out both.",
+   "steps": [
+    {
+     "say": "First the concrete case of Q34.",
+     "blank": {
+      "prompt": "Three independent events with probabilities 1/2, 3/4, 7/8. Give P(at least one).",
+      "answer": "63/64",
+      "accept": [
+       "63/64",
+       "0.984375",
+       "1 - 1/64"
+      ],
+      "hint": "The complements are 1/2, 1/4, 1/8. Multiply them."
+     },
+     "why": "P(none) = (1/2)(1/4)(1/8) = 1/64, so P(at least one) = 63/64 = 0.984375. These are exactly P(Aᵢ) = 1 − 1/2ⁱ at n = 3, and 1/64 = 1/2⁶ with 6 = 3·4/2 ✓."
+    },
+    {
+     "say": "Now the general form, as the exam asked it.",
+     "blank": {
+      "prompt": "For P(Aᵢ) = 1 − 1/2ⁱ, i = 1,…,n, give P(none occurs).",
+      "answer": "1/2^(n(n+1)/2)",
+      "accept": [
+       "1/2^(n(n+1)/2)",
+       "2^(-n(n+1)/2)",
+       "1/2^{n(n+1)/2}"
+      ],
+      "hint": "Each complement is 1/2ⁱ; multiplying adds the exponents."
+     },
+     "why": "The complements are 1/2¹, 1/2², …, 1/2ⁿ and their product is 1/2^(1+2+⋯+n) = 1/2^(n(n+1)/2). So P(at least one) = 1 − 1/2^(n(n+1)/2), option D."
+    },
+    {
+     "say": "Now change the statement: suppose instead P(Aᵢ) = 1/2ⁱ.",
+     "blank": {
+      "prompt": "With P(Aᵢ) = 1/2ⁱ and independence, give P(none occurs).",
+      "answer": "∏(1 − 1/2ⁱ)",
+      "accept": [
+       "prod(1 - 1/2^i)",
+       "∏(1 − 1/2ⁱ)",
+       "product of (1 - 1/2^i)"
+      ],
+      "hint": "Now the COMPLEMENT is the awkward one: P(Aᵢᶜ) = 1 − 1/2ⁱ."
+     },
+     "why": "This is the other variant, and the roles are exactly reversed: now the complements are 1 − 1/2ⁱ, which do not combine into a single power of 2, so the answer must be left as a product. There is no closed form, and that is the point of the question."
+    },
+    {
+     "say": "Evaluate both at n = 5 to see how different they are.",
+     "blank": {
+      "prompt": "Give the two numerical values at n = 5.",
+      "answer": "1/2^15 = 0.0000305 for Q34's version; ∏(1 − 1/2ⁱ) = 9765/32768 = 0.298 for the other",
+      "accept": [
+       "0.0000305 and 0.298",
+       "1/32768 and 9765/32768",
+       "3e-5 and 0.298"
+      ],
+      "hint": "n(n+1)/2 = 15 for the first. For the second, multiply 1/2 × 3/4 × 7/8 × 15/16 × 31/32."
+     },
+     "why": "0.0000305 against 0.298004 — a factor of nearly ten thousand. Two questions whose stems differ by four characters have answers that are nothing like each other, which is why the complement must be written down explicitly rather than assumed."
+    }
+   ],
+   "after": "The transferable rule is simple and worth making mechanical: write P(Aᵢᶜ) explicitly before multiplying anything. In Q34 the complements are clean and the answer is a single power; in the near-identical variant the complements are awkward and no closed form exists. The stem decides which, and only the complement reveals it."
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Pairwise is not mutual",
+   "objective": "See the standard counterexample and know what 'independent' must mean in a question.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "The two definitions",
+     "body": "PAIRWISE independence: P(Aᵢ ∩ Aⱼ) = P(Aᵢ)P(Aⱼ) for every pair.\nMUTUAL independence: the product rule holds for EVERY sub-collection, including all three, all four, and so on.\nMutual implies pairwise. The converse is false, and a practice variant asks precisely whether pairwise implies mutual — the answer is 'not necessarily'."
+    },
+    {
+     "t": "step",
+     "h": "Bernstein's counterexample, with the arithmetic",
+     "body": "Toss two fair coins and define\n    A = the first coin is heads,  B = the second is heads,  C = the two coins agree.\nEach has probability 1/2. Every pair:\n    P(A ∩ B) = 1/4 = (1/2)(1/2) ✓\n    P(A ∩ C) = 1/4 = (1/2)(1/2) ✓   (first heads and agreement means both heads)\n    P(B ∩ C) = 1/4 = (1/2)(1/2) ✓\nSo the three are pairwise independent. But A ∩ B ∩ C is just 'both heads', so\n    P(A ∩ B ∩ C) = 1/4,  while P(A)P(B)P(C) = 1/8.\nThey are therefore NOT mutually independent. Verified by enumerating the four-point sample space."
+    },
+    {
+     "t": "step",
+     "h": "Why the failure is not a technicality",
+     "body": "In the example, any two of the three events leave the third determined: knowing the first two coins fixes whether they agree. So the third event carries no new information given the other two, and the product rule over all three fails. Pairwise checks cannot see this, because they only ever look at two events at a time. For n events, mutual independence is 2ⁿ − n − 1 separate conditions; pairwise is only C(n,2)."
+    },
+    {
+     "t": "def",
+     "h": "What an exam question means",
+     "body": "'Let A₁, …, Aₙ be independent events' means mutually independent, which is what licenses P(A₁ᶜ ∩ ⋯ ∩ Aₙᶜ) = ∏P(Aᵢᶜ). A question that intends only pairwise independence says so explicitly — and if it does, that product is NOT available."
+    },
+    {
+     "t": "step",
+     "h": "Independence of complements, in general",
+     "body": "If A₁,…,Aₙ are mutually independent then so is any collection obtained by replacing some of them by their complements. The two-event case is one line: P(A ∩ Bᶜ) = P(A) − P(A∩B) = P(A)(1 − P(B)) = P(A)P(Bᶜ). This is the fact the whole complement route rests on, and it is a practice variant in its own right."
+    }
+   ],
+   "ask": {
+    "q": "In Bernstein's example, which pairwise checks would have caught the failure?",
+    "nudge": "All three pairs passed. How many events must you look at simultaneously to see the problem?"
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "On your own — unions, bounds and complements",
+   "objective": "Apply all three routes and see when each is appropriate.",
+   "problem": "(a) A and B are independent with P(A) = 0.3 and P(B) = 0.4. Find P(A ∪ B). (b) Seven independent components each fail with probability 0.2; find P(at least one fails). (c) Give Bonferroni's bound for (b) and say how good it is. (d) Twelve events, each of probability 0.001, with unknown dependence: give the best statement you can about P(at least one).",
+   "hints": [
+    "For (a), use P(A) + P(B) − P(A)P(B).",
+    "For (b), work with the survival probability and raise it to the seventh power.",
+    "For (d), you are not told they are independent. Which route survives that?"
+   ],
+   "answer": "(a) 0.58. (b) 1 − 0.8⁷ = 0.7903. (c) 7 × 0.2 = 1.4, a true but vacuous bound. (d) P(at least one) ≤ 0.012 by Bonferroni, and that bound is tight to within about 0.6%.",
+   "check": "Part (c) is the instructive one: the bound 1.4 is perfectly valid — Bonferroni never fails — and perfectly useless, because any probability is at most 1. The bound is only informative when the individual probabilities are small enough that overlaps are negligible, which is exactly part (d): there ΣP = 0.012 against an exact independent value of 1 − 0.999¹² = 0.011934, a relative error of 0.55%. So the same inequality is worthless at p = 0.2 and excellent at p = 0.001, and the deciding quantity is how much the events overlap.",
+   "scenario": {
+    "teaser": "A study tests twenty hypotheses at the 5% level and reports one significant result as a discovery.",
+    "title": "Bonferroni, and the arithmetic of twenty chances",
+    "body": [
+     "A team tests twenty independent hypotheses, each at the 5% level, and finds one significant. The write-up treats it as a finding at the 5% level.",
+     "The probability of at least one false positive, if every null is true, is not 0.05. By the complement route it is 1 − 0.95²⁰ = 0.6415 — better than even odds that at least one of the twenty tests fires spuriously. A single significant result among twenty is roughly what pure chance predicts.",
+     "Bonferroni's bound gives the same warning more crudely: ΣP = 20 × 0.05 = 1.0, which here is vacuous as a bound but exact as a count — the expected number of false positives is 1.0. Seeing one significant result when the expected number of false positives is one is no evidence at all.",
+     "The standard repair is the Bonferroni correction, which is this inequality run backwards: to hold the family-wise error rate at α across m tests, test each at α/m. Here that means 0.05/20 = 0.0025 per test. The exact independent calculation would allow slightly more — 1 − (1 − α)^(1/m) = 0.00256 — so Bonferroni is marginally conservative, which is the price of needing no independence assumption.",
+     "The reason Bonferroni is the standard tool rather than the exact calculation is precisely that it does not need independence. Hypotheses in a real study are usually correlated — overlapping outcomes, shared covariates — and then the exact product is unavailable while the bound still holds.",
+     "The honest reporting is to state how many tests were run. One significant result in twenty and one in one are entirely different claims, and the difference is the whole content of this topic."
+    ],
+    "q": "Why is Bonferroni preferred to the exact 1 − (1 − α)^m calculation in practice, when the exact version is less conservative?",
+    "answer": "Because the exact calculation requires the tests to be independent, and in a real study they rarely are — hypotheses typically share outcomes, covariates or subjects, which makes the product rule unavailable. Bonferroni's bound P(∪Aᵢ) ≤ ΣP(Aᵢ) follows from inclusion–exclusion alone and holds whatever the dependence, so it is always applicable. The cost is being slightly conservative: at α = 0.05 and m = 20 it gives 0.0025 per test against the exact 0.00256, a difference of about 2%. That is a small price for a guarantee that does not rest on an assumption the data would not support."
+   },
+   "solution": [
+    {
+     "say": "(a) Two independent events.",
+     "math": "P(A ∪ B) = P(A) + P(B) − P(A)P(B)\n         = 0.3 + 0.4 − 0.12 = 0.58",
+     "why": "The subtraction removes the double-counted overlap of 0.12. Answering 0.7 forgets it, and 0.42 reports the overlap's complement by mistake."
+    },
+    {
+     "say": "(b) Seven components, complement route.",
+     "math": "each survives with probability 0.8\nP(all survive) = 0.8⁷ = 0.209715\nP(at least one fails) = 1 − 0.209715 = 0.790285",
+     "why": "One exponentiation. Inclusion–exclusion here would need 2⁷ − 1 = 127 terms."
+    },
+    {
+     "say": "(c) Bonferroni for the same problem.",
+     "math": "ΣP(Aᵢ) = 7 × 0.2 = 1.4 ≥ 0.7903 ✓\nbound is true but exceeds 1, so it is vacuous",
+     "why": "A valid inequality carrying no information. It is also the expected number of failures, which is why it may exceed 1."
+    },
+    {
+     "say": "(d) Twelve rare events, dependence unknown.",
+     "math": "Bonferroni: P(at least one) ≤ 12 × 0.001 = 0.012   (no independence needed)\nif independent: 1 − 0.999¹² = 0.011934\nrelative gap: 0.55%",
+     "why": "With rare events the bound is nearly exact, so the Bonferroni statement is both safe and informative. Note what can and cannot be said: the bound holds regardless of dependence, while the value 0.011934 requires independence and must not be asserted without it."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s8",
+   "mins": 6,
+   "title": "Six statements — verdict on each before you look",
+   "objective": "Rule on the claims the variants on this topic are built from.",
+   "intro": "Decide true or false on all six before revealing any.",
+   "items": [
+    {
+     "claim": "If A and B are mutually exclusive with positive probabilities, they are independent.",
+     "tf": false,
+     "why": "False — they are dependent. Exclusivity forces P(A ∩ B) = 0 while independence needs P(A)P(B) > 0, so the two cannot hold together. Knowing A occurred tells you B did not, which is a lot of information."
+    },
+    {
+     "claim": "If A and B are independent, then A and Bᶜ are independent.",
+     "tf": true,
+     "why": "True, in one line: P(A ∩ Bᶜ) = P(A) − P(A ∩ B) = P(A) − P(A)P(B) = P(A)P(Bᶜ). This is what licenses multiplying complement probabilities, and the whole complement route rests on it."
+    },
+    {
+     "claim": "Pairwise independence of three events implies mutual independence.",
+     "tf": false,
+     "why": "False. Toss two fair coins; let A be 'first is heads', B 'second is heads', C 'the coins agree'. All three pairs are independent at 1/4 each, but P(A ∩ B ∩ C) = 1/4 while P(A)P(B)P(C) = 1/8."
+    },
+    {
+     "claim": "For n independent events each of probability p, P(at least one) = 1 − (1 − p)ⁿ.",
+     "tf": true,
+     "why": "True, and it is the complement route in its simplest form: all n must fail, each failing with probability 1 − p. For n = 10 and p = 0.3 it gives 1 − 0.7¹⁰ = 0.9718."
+    },
+    {
+     "claim": "P(∪Aᵢ) ≤ ΣP(Aᵢ) requires the events to be independent.",
+     "tf": false,
+     "why": "False — Bonferroni's inequality needs no assumption at all. It is inclusion–exclusion truncated after the first sum, and the discarded terms are the overlaps. That assumption-free quality is exactly why it is the basis of the multiple-testing correction."
+    },
+    {
+     "claim": "In June 2026's question, P(none occurs) is 1/2ⁿ.",
+     "tf": false,
+     "why": "False: it is 1/2^(n(n+1)/2). Each complement is 1/2ⁱ, and multiplying them adds the exponents to give the triangular number 1 + 2 + ⋯ + n. Taking every complement to be 1/2 is what produces the wrong 1/2ⁿ, and option B of the exam question is built from exactly that slip."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s9",
+   "mins": 8,
+   "title": "On your own — six quick ones",
+   "objective": "Apply the rules at exam speed.",
+   "problem": "(a) 1 + 2 + ⋯ + 10. (b) Ten independent events each of probability 0.3: P(at least one). (c) A, B independent with P(A) = 0.5, P(B) = 0.2: find P(A ∩ Bᶜ). (d) Q34 at n = 4: P(at least one). (e) Are two events of probability 0 ever independent? (f) Three independent events of probabilities 1/2, 3/4, 7/8: P(exactly none).",
+   "hints": [
+    "For (a), n(n+1)/2.",
+    "For (c), independence passes to complements.",
+    "For (e), check the definition rather than the intuition."
+   ],
+   "answer": "(a) 55. (b) 0.9718. (c) 0.4. (d) 1023/1024. (e) Yes — P(A ∩ B) = 0 = P(A)P(B) holds trivially. (f) 1/64.",
+   "check": "Part (e) is the exception to the trapcheck rule and worth being precise about: mutually exclusive events are dependent only when both probabilities are POSITIVE. If P(A) = 0 then P(A ∩ B) = 0 = P(A)P(B) automatically, so a null event is independent of everything, itself included. That is why the statement in the trapcheck carries the words 'with positive probabilities'. In (d), note n(n+1)/2 = 10, so P(none) = 1/1024 — not 1/2⁴.",
+   "solution": [
+    {
+     "say": "(a) The triangular number.",
+     "math": "1 + 2 + ⋯ + 10 = 10 × 11/2 = 55",
+     "why": "n(n+1)/2 with n = 10. The first five triangular numbers are 1, 3, 6, 10, 15."
+    },
+    {
+     "say": "(b) Ten identical independent events.",
+     "math": "P(at least one) = 1 − (1 − 0.3)¹⁰ = 1 − 0.7¹⁰\n               = 1 − 0.0282475 = 0.9717525",
+     "why": "Adding instead would give 3.0, which is the expected count, not a probability."
+    },
+    {
+     "say": "(c) An intersection with a complement.",
+     "math": "P(A ∩ Bᶜ) = P(A)P(Bᶜ) = 0.5 × 0.8 = 0.4",
+     "why": "Independence passes to complements, so the product rule applies directly."
+    },
+    {
+     "say": "(d) Q34 at n = 4.",
+     "math": "n(n+1)/2 = 4 × 5/2 = 10\nP(none) = 1/2¹⁰ = 1/1024\nP(at least one) = 1023/1024 = 0.999023",
+     "why": "Computed exactly as a fraction. The exponent is 10, not 4 — which is the whole content of the question."
+    },
+    {
+     "say": "(e) Null events.",
+     "math": "if P(A) = 0 then P(A ∩ B) ≤ P(A) = 0 and P(A)P(B) = 0\n⟹ P(A ∩ B) = P(A)P(B), so A and B ARE independent",
+     "why": "A null event is independent of every event. The exclusivity-implies-dependence result needs both probabilities positive."
+    },
+    {
+     "say": "(f) The three-event case.",
+     "math": "complements 1/2, 1/4, 1/8\nP(none) = (1/2)(1/4)(1/8) = 1/64 = 0.015625",
+     "why": "The n = 3 instance of Q34, and 1/64 = 1/2⁶ with 6 = 3·4/2 ✓."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s10",
+   "mins": 6,
+   "title": "Where independence does the work",
+   "objective": "Recognise the assumption across the rest of the syllabus.",
+   "blocks": [
+    {
+     "t": "step",
+     "h": "In every likelihood",
+     "body": "A likelihood for a random sample is a PRODUCT of densities, and that product is independence. The whole of module 4 — sufficiency, maximum likelihood, the Cramér–Rao bound — is built on it, which is why dependence in the data invalidates the standard errors rather than merely degrading them."
+    },
+    {
+     "t": "step",
+     "h": "In multiple testing (topic 4.15)",
+     "body": "Bonferroni's inequality is the basis of the correction: test each of m hypotheses at α/m to hold the family-wise error rate at α. Lesson 4.15 covers the trade-off against power. Note that with twenty tests at 5% the chance of at least one false positive is 1 − 0.95²⁰ = 0.6415, which is the arithmetic that makes the correction necessary."
+    },
+    {
+     "t": "step",
+     "h": "In reliability and system lifetimes",
+     "body": "A series system fails if ANY component fails, so its reliability is ∏P(componentᵢ survives) — the complement route under another name. A parallel system survives if any component survives. Lesson 1.1 computed the corresponding expected lifetimes through order statistics."
+    },
+    {
+     "t": "step",
+     "h": "In sampling without replacement",
+     "body": "Draws WITHOUT replacement are not independent, which is why the count is hypergeometric rather than binomial and the variance carries the factor (N − n)/(N − 1) — lesson 1.5's scenario. Independence is an assumption about a design, not a property of data."
+    },
+    {
+     "t": "def",
+     "h": "The common thread",
+     "body": "Independence converts sums over subsets into products over items, which is the difference between 2ⁿ terms and n. That is why it is assumed so often and why its failure is so costly: the arithmetic does not merely become harder, it becomes unavailable, and the standard formulas silently compute the wrong thing."
+    }
+   ],
+   "ask": {
+    "q": "Twenty tests at the 5% level give a 64% chance of at least one false positive. What does that say about a single significant result in a study of twenty hypotheses?",
+    "nudge": "What is the expected number of false positives, and how does it compare with the number of findings reported?"
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s11",
+   "mins": 2,
+   "title": "Second recall — the parts most likely to fade",
+   "objective": "Retrieve the distinctions and the exponent.",
+   "intro": "Answer, then reveal.",
+   "items": [
+    {
+     "q": "In June 2026's question, what is P(none occurs)?",
+     "a": "1/2^(n(n+1)/2) — each complement is 1/2ⁱ and multiplying adds the exponents."
+    },
+    {
+     "q": "P(Aᵢ) = 1/2ⁱ instead. Now what is P(none)?",
+     "a": "∏(1 − 1/2ⁱ), with no closed form — at n = 5 it is 0.298 against 0.0000305 for the other version."
+    },
+    {
+     "q": "Does pairwise independence imply mutual independence?",
+     "a": "No. Two fair coins with A = first head, B = second head, C = they agree is the counterexample."
+    },
+    {
+     "q": "When are mutually exclusive events independent?",
+     "a": "Only when at least one has probability 0; with both positive they are dependent."
+    },
+    {
+     "q": "State Bonferroni's inequality and what it needs.",
+     "a": "P(∪Aᵢ) ≤ ΣP(Aᵢ), needing no assumption about dependence."
+    },
+    {
+     "q": "Twenty independent tests at 5%: chance of at least one false positive?",
+     "a": "1 − 0.95²⁰ = 0.6415."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s12",
+   "mins": 3,
+   "title": "What you should now be able to do unaided",
+   "objective": "Close the loop before the mastery test.",
+   "body": [
+    "Turn 'at least one' into 1 − ∏P(Aᵢᶜ), and say where independence is used.",
+    "Compute P(Aᵢᶜ) explicitly before multiplying, and recognise when the stem was built around the complement.",
+    "Handle the triangular exponent: multiplying powers of 2 adds exponents to give n(n+1)/2.",
+    "Answer June 2026 Q34 and check it at n = 3 against 63/64.",
+    "Distinguish independence from mutual exclusivity, including the null-event exception.",
+    "Give Bernstein's example of pairwise but not mutual independence, with its arithmetic.",
+    "State Bonferroni's inequality, note that it needs no assumptions, and say when it is tight."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s13",
+   "mins": 8,
+   "ext": true,
+   "title": "Inclusion–exclusion, and the Bonferroni inequalities",
+   "objective": "See where the alternating sum comes from and what truncating it gives.",
+   "blocks": [
+    {
+     "t": "step",
+     "h": "Why the signs alternate",
+     "body": "Fix an outcome lying in exactly k of the events. In ΣP(Aᵢ) it is counted C(k,1) times; in ΣP(Aᵢ∩Aⱼ) it is counted C(k,2) times; and so on. The alternating sum counts it\n    C(k,1) − C(k,2) + C(k,3) − ⋯ = 1 − (1 − 1)ᵏ = 1,\nby the binomial theorem, for every k ≥ 1. So every outcome in the union is counted exactly once and every outcome outside it zero times — which is the identity."
+    },
+    {
+     "t": "formula",
+     "h": "The Bonferroni inequalities",
+     "body": "Truncating the alternating sum gives bounds that alternate in direction:\n    P(∪Aᵢ) ≤ Σ P(Aᵢ)\n    P(∪Aᵢ) ≥ Σ P(Aᵢ) − Σ P(Aᵢ ∩ Aⱼ)\n    P(∪Aᵢ) ≤ Σ P(Aᵢ) − Σ P(Aᵢ ∩ Aⱼ) + Σ P(Aᵢ ∩ Aⱼ ∩ Aₖ)\nand so on. Stopping after an odd number of sums over-estimates; after an even number, under-estimates. The first of these is what is usually just called Bonferroni."
+    },
+    {
+     "t": "step",
+     "h": "The second-order bound in use",
+     "body": "For the seven components at probability 0.2, the first bound gives 1.4 and the second gives 1.4 − C(7,2)(0.04) = 1.4 − 0.84 = 0.56, against the exact 0.7903. So the two bracket the answer as 0.56 ≤ P ≤ 1.4, which is a real improvement on a vacuous upper bound alone — and it still needed independence only to evaluate the pairwise terms, not to justify the inequality."
+    },
+    {
+     "t": "def",
+     "h": "Why the first-order bound dominates practice",
+     "body": "Higher-order bounds need the joint probabilities of pairs, triples and so on, which in a real multiple-testing problem are unknown — that is precisely the dependence structure one does not have. The first-order bound needs only the marginal probabilities, which are always available, and that is why it is the one that became a standard procedure."
+    },
+    {
+     "t": "step",
+     "h": "A note on the complement route's hidden assumption",
+     "body": "1 − ∏P(Aᵢᶜ) is exact under independence and can fail in either direction otherwise. With positively dependent events, failures cluster and P(none) is LARGER than the product, so the product route understates the union; with negative dependence it overstates it. So the complement route is not a conservative approximation to be used when independence is doubtful — it is simply wrong, and Bonferroni is the tool for that case."
+    }
+   ],
+   "ask": {
+    "q": "The second-order Bonferroni bound needs pairwise joint probabilities. In a multiple-testing problem, why is that usually the thing you do not have?",
+    "nudge": "What would you need to know about two hypotheses to say how often they fire together?"
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate it independently, on questions you have not seen.",
+   "setId": "probability_t8_mastery"
+  }
+ ]
+}

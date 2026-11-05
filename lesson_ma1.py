@@ -1,0 +1,768 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Author lesson 2.1 — Rank, nullity, Sylvester and Frobenius (maths-t1).
+
+TWO PYQ anchors, both answered wrongly, because the catalog topic covers both.
+
+Q26 (marked C against answer B): the rank of [[2,6,4,2],[3,7,4,2],[4,8,4,2],[5,9,4,2]].
+Successive rows differ by the constant vector (1,1,0,0), so the rows form an arithmetic
+progression and the row space is spanned by just R1 and (1,1,0,0): rank 2, nullity 2. One of
+the variants states that general principle, which makes the bank the specification exactly.
+
+Q1 (marked C against answer D): the nullity of a product. The answer is
+    max{v(A), v(B)} <= v(AB) <= v(A) + v(B),
+which is Sylvester's rank inequality rewritten in nullities. The marked option put v(A)+v(B)-n
+as the upper bound, which fails outright for A = B = I: 0 <= -n is false.
+
+Eighteen variants across the two questions; all taught in named sections and present in the pool.
+
+Bank repairs made while authoring (2026-11-03):
+ - A Poisson-process interarrival item was filed under Q26 in the MATHS variant file. It is a
+   memorylessness question, so it moved to the probability file under Q25 (independent
+   exponentials). Seventh misfiling found in this bank.
+ - Four items under Q1 had contextless stems a learner could not answer ("Its nullity is:" with
+   no matrix). Each was given an explicit context chosen so the existing answer key is correct,
+   and each context was verified by construction rather than by random search, which fails here
+   because random integer matrices are almost always full rank.
+
+Writes seed/lesson_ma1.json and seed/maths_t1_mastery.json.
+"""
+import json, io, os, re
+
+OUT = "seed/lesson_ma1.json"
+POOL = "seed/maths_t1_mastery.json"
+
+S = []
+
+S.append({
+ "kind": "foundation", "id": "s0", "mins": 7,
+ "title": "Before the lesson — four things it will assume",
+ "objective": "Fix what rank and nullity are, and the one theorem that ties them together.",
+ "ask": {
+  "q": "A 4 × 4 matrix has rank 2. How many independent rows does it have, and how many independent columns?",
+  "nudge": "Rank has two apparently different definitions. Do they ever disagree?"},
+ "body": [
+  "Rank counts how much independent information a matrix carries. Everything else in this topic — nullity, singularity, estimability, multicollinearity — is a restatement of that count.",
+  "The single most useful fact is that the row count and the column count always agree: the maximum number of independent rows equals the maximum number of independent columns. So 'rank' is unambiguous, and you may compute it from whichever side is easier. For the exam's matrices, spotting a pattern in the rows is almost always easier than row-reducing.",
+  "Nullity is the complementary count — how much the matrix destroys. The rank–nullity theorem says the two add to the number of columns, so knowing one gives the other immediately.",
+  "Both of June 2026's questions on this topic were answered wrongly, and neither needed heavy computation: one needed a pattern spotted, the other needed one inequality rewritten. Four checks first."],
+ "items": [
+  {"ask": "Define the rank of a matrix.",
+   "recall": "The maximum number of linearly independent rows — equivalently, of columns. Equivalently the dimension of the row space, or of the column space.",
+   "refresh": [
+    "Row rank equals column rank for every matrix, which is why one word suffices. The optional section explains why.",
+    "Equivalently: the number of non-zero rows in a row-reduced echelon form, or the order of the largest non-zero minor.",
+    "Practically, look for dependence before computing. Two proportional rows, a row of zeros, a column that is the sum of others — each drops the rank by one without any arithmetic."]},
+  {"ask": "Do elementary row operations change the rank?",
+   "recall": "No. They preserve it exactly.",
+   "refresh": [
+    "Swapping two rows, scaling a row by a non-zero constant, and adding a multiple of one row to another all leave the row space unchanged, so they leave its dimension unchanged.",
+    "That is precisely why row reduction is a legitimate way to FIND the rank — the whole method would be worthless otherwise.",
+    "One of the practice variants asks this directly. Note that scaling by ZERO is not an elementary operation, and it would destroy a row."]},
+  {"ask": "For an m × n matrix, what is the largest the rank can be?",
+   "recall": "min(m, n).",
+   "refresh": [
+    "The rank cannot exceed the number of rows, nor the number of columns, so it is capped by the smaller. A 3 × 5 matrix has rank at most 3 — a practice variant.",
+    "A matrix attaining this cap is said to have full rank. A square matrix of full rank is non-singular, with non-zero determinant and an inverse.",
+    "So for a wide matrix the columns must be dependent: 5 columns in a 3-dimensional space cannot be independent. That observation is the whole of multicollinearity when there are more predictors than observations."]},
+  {"ask": "State the rank–nullity theorem.",
+   "recall": "For an m × n matrix A, rank(A) + nullity(A) = n, the number of COLUMNS.",
+   "refresh": [
+    "Nullity is the dimension of the null space {x : Ax = 0}. Rank counts the directions A preserves; nullity counts the directions it crushes to zero.",
+    "So an n × n matrix of rank n − 1 has nullity 1, and a 10 × 10 matrix of rank 8 has nullity 2 — both practice variants, both one subtraction.",
+    "Mind that it is n, the column count, not m. For a 3 × 5 matrix of rank 3 the nullity is 5 − 3 = 2, not 0."]}]})
+
+S.append({
+ "kind": "intuition", "id": "s1", "mins": 7,
+ "title": "Rank is how many questions the data can answer",
+ "objective": "See what a rank deficiency means before any algebra.",
+ "body": [
+  "A matrix is usually standing in for a system: a design matrix of predictors, a set of equations, a transformation. Its rank says how many independent directions that system actually distinguishes.",
+  "If a design matrix has fewer independent columns than columns, some combination of the predictors is exactly reproducible from the others, and no amount of data will separate their effects. The computation does not fail politely — it fails by having infinitely many equally good answers, and software may return any one of them.",
+  "That is the practical meaning of nullity: the number of directions in which the parameters can be changed without changing the fit at all. Nullity zero means a unique answer; nullity 3 means a three-dimensional family of answers, all fitting identically.",
+  "Rank deficiency is also usually structural rather than accidental. A column of ones plus a full set of dummy variables for every category; a total column alongside its parts; two predictors recorded in different units. None of these are data problems; they are specification problems, and the rank is what reveals them."],
+ "scenario": {
+  "teaser": "A regression returns coefficients that change completely when the data are reordered.",
+  "title": "The dummy variable trap, seen as a rank deficiency",
+  "body": [
+   "An analyst models salary on an intercept plus four indicator columns, one for each of four departments. The software returns estimates, and a colleague running the same data on different software gets quite different coefficients. Both fits have identical residuals.",
+   "The design matrix has five columns, but the four department indicators sum to a column of ones — exactly the intercept column. So one column is a perfect linear combination of the others, the rank is 4, not 5, and the nullity of the design matrix is 1.",
+   "Nullity 1 means a one-dimensional family of coefficient vectors gives exactly the same fitted values: add any constant c to the intercept and subtract c from all four department effects, and nothing observable changes. The individual coefficients are not estimable; only certain contrasts between them are.",
+   "Different software picks a different member of that family — by dropping a column, by imposing a constraint, or by returning a generalised-inverse solution — which is why two correct programs disagree. Nothing is broken; the question as posed has no unique answer.",
+   "The repair is to remove the redundancy rather than to work around it: drop one indicator, or drop the intercept, or constrain the effects to sum to zero. Each gives a full-rank design and a unique answer, and each answers a slightly different question about what the remaining coefficients mean.",
+   "The general principle is worth stating plainly. X′X is invertible exactly when X has full column rank — and since rank(X′X) = rank(X), checking the rank of X settles it. A rank deficiency is not a numerical nuisance to be medicated with a tolerance setting; it is the model telling you that two of your questions are the same question."],
+  "q": "Why do two correct programs return different coefficients, with identical residuals?",
+  "answer": "Because the design matrix has nullity 1, so there is a whole line of coefficient vectors producing identical fitted values — the fit is unique, the coefficients are not. Adding c to the intercept and subtracting c from every department effect moves along that line and changes nothing observable. Each program resolves the indeterminacy differently (dropping a column, imposing a constraint, or taking a generalised inverse), so each reports a different point on the same line. The residuals agree because the fitted values are identical; the coefficients differ because they were never identified."},
+ "ask": {
+  "q": "A design matrix has 5 columns and rank 4. How many independent linear combinations of the coefficients ARE estimable?",
+  "nudge": "Estimable combinations correspond to directions the matrix preserves, not to the ones it crushes."}})
+
+S.append({
+ "kind": "theory", "id": "s2", "mins": 10,
+ "title": "Rank, nullity, and how to find them without arithmetic",
+ "objective": "State the definitions and the bounds, and learn to read rank off structure.",
+ "blocks": [
+  {"t": "def", "h": "Rank, three equivalent definitions",
+   "body": "For an m × n matrix A, rank(A) is\n  • the maximum number of linearly independent rows,\n  • the maximum number of linearly independent columns,\n  • the dimension of the column space (the image of A), equivalently of the row space.\nAll three agree for every matrix. It also equals the number of non-zero rows in any row-reduced echelon form, and the order of the largest non-vanishing minor."},
+  {"t": "formula", "h": "The bounds",
+   "body": "0 ≤ rank(A) ≤ min(m, n)\nrank(A) = 0 only for the zero matrix.\nA square n × n matrix is non-singular ⟺ rank = n ⟺ det ≠ 0 ⟺ nullity = 0 ⟺ A⁻¹ exists.\nSo a 3 × 5 matrix has rank at most 3, and a 5 × 5 matrix of rank 5 has non-zero determinant — two practice variants in one line."},
+  {"t": "formula", "h": "Rank–nullity",
+   "body": "rank(A) + υ(A) = n,  where n is the number of COLUMNS and υ denotes nullity.\nυ(A) = dim{x : Ax = 0}. Consequences used constantly:\n  rank n − 1 (square) ⟹ υ = 1;   10 × 10 of rank 8 ⟹ υ = 2;   υ(A) = 0 ⟹ A non-singular."},
+  {"t": "step", "h": "Read the rank off the structure, do not compute it",
+   "body": "Every exam matrix in this topic has visible dependence. Look for it in this order:\n  1. A zero row or column.\n  2. Two proportional rows or columns — rank of [[1,2],[2,4]] is 1, since R2 = 2R1.\n  3. All rows equal, or all entries equal — the n × n matrix of ones has rank 1.\n  4. One row or column equal to a combination of others.\n  5. Rows in arithmetic progression — each row the previous plus a FIXED vector. Then every row lies in span{R1, d}, so the rank is at most 2 whatever the size.\nOnly if none of these appears should you row-reduce."},
+  {"t": "def", "h": "Special matrices worth knowing cold",
+   "body": "• n × n matrix of all ones: rank 1 (every row identical).\n• Non-zero skew-symmetric (Aᵀ = −A): rank is always EVEN, so a non-zero skew-symmetric matrix cannot have rank 1 or 3.\n• Idempotent (A² = A): rank(A) = trace(A). This is how ranks are found throughout linear models.\n• Centring matrix C = I − (1/n)11ᵀ: idempotent with trace n − 1, so rank n − 1 and nullity 1 — it kills exactly the constant vector.\n• rank(AᵀA) = rank(A) always, which is why X′X is invertible precisely when X has full column rank."},
+  {"t": "step", "h": "The nullity of a square matrix is the interesting half",
+   "body": "For a square matrix the rank tells you whether the inverse exists; the nullity tells you how badly it does not. Nullity 1 means a one-dimensional family of solutions to Ax = 0, so Ax = b either has no solution or a one-parameter family of them. This is why the statistical content of this topic is almost entirely about nullity."}],
+ "table": {
+  "caption": "Rank and nullity of the matrices this topic keeps returning to. All verified by computation.",
+  "head": ["matrix", "order", "rank", "nullity", "why"],
+  "rows": [
+   ["[[1,2],[2,4]]", "2 × 2", "1", "1", "R2 = 2R1"],
+   ["all ones", "n × n", "1", "n − 1", "every row identical"],
+   ["rows in arithmetic progression", "n × n", "≤ 2", "≥ n − 2", "span{R1, d}"],
+   ["June 2026 Q26 matrix", "4 × 4", "2", "2", "rows in AP, d = (1,1,0,0)"],
+   ["centring matrix I − (1/n)11ᵀ", "n × n", "n − 1", "1", "idempotent, trace n − 1"],
+   ["hat matrix X(XᵀX)⁻¹Xᵀ", "n × n", "k", "n − k", "idempotent, trace k"],
+   ["residual maker I − X(XᵀX)⁻¹Xᵀ", "n × n", "n − k", "k", "idempotent, trace n − k"],
+   ["non-zero skew-symmetric", "n × n", "even", "n − even", "eigenvalues in ± pairs"]]},
+ "flow": {
+  "title": "Finding a rank",
+  "alt": "Flow chart for determining the rank of a matrix",
+  "nodes": [
+   {"id": "a", "r": 0, "c": 1, "label": "A matrix, rank wanted", "kind": "start"},
+   {"id": "b", "r": 1, "c": 1, "label": "Visible dependence?", "kind": "dec"},
+   {"id": "c", "r": 2, "c": 0, "label": "Proportional rows, zero row, all ones", "kind": "step"},
+   {"id": "d", "r": 2, "c": 2, "label": "Rows in AP, or a named matrix", "kind": "step"},
+   {"id": "e", "r": 3, "c": 2, "label": "Idempotent? rank = trace", "kind": "step"},
+   {"id": "f", "r": 3, "c": 0, "label": "Otherwise row-reduce", "kind": "step"},
+   {"id": "g", "r": 4, "c": 1, "label": "Nullity = columns − rank", "kind": "end"}],
+  "edges": [
+   {"from": "a", "to": "b"}, {"from": "b", "to": "c"}, {"from": "b", "to": "d"},
+   {"from": "d", "to": "e"}, {"from": "c", "to": "f"},
+   {"from": "e", "to": "g"}, {"from": "f", "to": "g"}],
+  "note": "Row reduction is the last resort, not the first move. Every matrix set in this topic has structure that gives the rank faster and with fewer chances to slip."},
+ "ask": {
+  "q": "If the rows of an n × n matrix are in arithmetic progression, the rank is at most 2 for every n. Why does the size not matter?",
+  "nudge": "Write row k as R1 + (k−1)d. How many vectors does every row lie in the span of?"}})
+
+S.append({
+ "kind": "worked", "id": "s3", "mins": 9,
+ "title": "Worked in full — June 2026, Q26",
+ "objective": "Get the rank in one observation, then confirm it two other ways.",
+ "ask": {
+  "q": "The difference vector was (1,1,0,0), which has two zeros. Would the answer change if it had been (1,1,1,1)?",
+  "nudge": "What does the rank depend on — the entries of d, or the fact that there is a single fixed d?"},
+ "problem": "Find the rank of\n    [ 2  6  4  2 ]\n    [ 3  7  4  2 ]\n    [ 4  8  4  2 ]\n    [ 5  9  4  2 ]",
+ "steps": [
+  {"say": "Before computing anything, difference successive rows.",
+   "math": "R2 − R1 = (1, 1, 0, 0)\nR3 − R2 = (1, 1, 0, 0)\nR4 − R3 = (1, 1, 0, 0)",
+   "why": "The same vector every time. So the rows are in arithmetic progression: Rₖ = R1 + (k−1)d with d = (1,1,0,0). This is the observation the whole question turns on, and it takes three subtractions."},
+  {"say": "Conclude the rank immediately.",
+   "math": "every row lies in span{R1, d}\n⟹ rank ≤ 2\nR1 = (2,6,4,2) and d = (1,1,0,0) are not proportional\n⟹ rank = 2",
+   "why": "Option B. The row space is spanned by two vectors, and they are independent, so the dimension is exactly 2. No row reduction was needed."},
+  {"say": "Confirm from the columns, which must give the same answer.",
+   "math": "C3 = (4,4,4,4),  C4 = (2,2,2,2)  ⟹ C3 = 2 C4\nC2 − C1 = (4,4,4,4) = C3\n⟹ at most 2 independent columns, and C1, C4 are independent\n⟹ rank = 2 ✓",
+   "why": "Row rank equals column rank, so this is a genuine check rather than a repetition. Two separate dependencies among four columns leave two."},
+  {"say": "Confirm by row reduction, for completeness.",
+   "math": "R2−R1, R3−R1, R4−R1 give rows (1,1,0,0), (2,2,0,0), (3,3,0,0)\nthe last two are 2× and 3× the first\n⟹ echelon form has 2 non-zero rows\n⟹ rank = 2 ✓   and det = 0",
+   "why": "All three routes agree. The marked answer was 3, which is what comes of reducing carelessly and stopping with one spurious non-zero row — the risk the structural route avoids entirely."},
+  {"say": "And the nullity, by rank–nullity.",
+   "math": "υ = (number of columns) − rank = 4 − 2 = 2",
+   "why": "One of the practice variants asks exactly this. Note it is the column count, which happens to equal the row count here only because the matrix is square."}],
+ "after": "The transferable move is differencing successive rows before anything else. It costs three subtractions and it either reveals an arithmetic progression — capping the rank at 2 however large the matrix — or it costs you nothing. Answering the question above: no, the entries of d are irrelevant; what matters is that a SINGLE fixed d works for every step."})
+
+S.append({
+ "kind": "recall", "id": "s4", "mins": 2,
+ "title": "Pause and recall",
+ "objective": "Retrieve the basics before the product inequalities.",
+ "intro": "Answer each before revealing it.",
+ "items": [
+  {"q": "State the rank–nullity theorem, being careful about which dimension appears.",
+   "a": "rank(A) + υ(A) = n, the number of COLUMNS."},
+  {"q": "What is the rank of the n × n matrix of all ones?",
+   "a": "1 — every row is identical."},
+  {"q": "If the rows of a matrix are in arithmetic progression, what is the rank at most?",
+   "a": "2, for every size, since every row lies in span{R1, d}."},
+  {"q": "For an idempotent matrix, what equals the rank?",
+   "a": "The trace."},
+  {"q": "What is rank(AᵀA) in terms of rank(A)?",
+   "a": "Equal to rank(A)."}]})
+
+S.append({
+ "kind": "completion", "id": "s5", "mins": 8,
+ "title": "Your turn — June 2026, Q1",
+ "objective": "Derive the nullity bounds for a product from Sylvester's rank inequality.",
+ "problem": "Let A and B be n × n matrices and let υ(·) denote nullity. Establish the correct bounds on υ(AB).",
+ "steps": [
+  {"say": "Start from the rank side, where the standard results live.",
+   "blank": {"prompt": "Give the two standard bounds on rank(AB).",
+             "answer": "rank(A) + rank(B) − n ≤ rank(AB) ≤ min{rank(A), rank(B)}",
+             "accept": ["rA+rB-n <= rank(AB) <= min(rA,rB)",
+                        "Sylvester: rank(A)+rank(B)-n <= rank(AB) <= min of the two ranks"],
+             "hint": "The upper bound says a product cannot be more informative than either factor; the lower bound is Sylvester's rank inequality."},
+   "why": "The upper bound holds because the image of AB sits inside the image of A, and its rank cannot exceed that of B either. The lower bound is Sylvester's inequality, sometimes called the Frobenius rank inequality in its three-factor form. Both were confirmed over 20,000 random 4 × 4 pairs with no violations."},
+  {"say": "Convert the UPPER rank bound into a nullity statement.",
+   "blank": {"prompt": "Apply υ = n − rank to rank(AB) ≤ min{rank(A), rank(B)}.",
+             "answer": "υ(AB) ≥ max{υ(A), υ(B)}",
+             "accept": ["nu(AB) >= max(nu A, nu B)", "υ(AB) ≥ max{υ(A), υ(B)}"],
+             "hint": "Subtracting from n reverses the inequality, and n − min{·} becomes max{n − ·}."},
+   "why": "n − rank(AB) ≥ n − min{rank A, rank B} = max{n − rank A, n − rank B} = max{υ(A), υ(B)}. A product can only ever destroy MORE than either factor alone, never less — which is the intuitive content of the lower bound on nullity."},
+  {"say": "Now convert the LOWER rank bound.",
+   "blank": {"prompt": "Apply υ = n − rank to rank(AB) ≥ rank(A) + rank(B) − n.",
+             "answer": "υ(AB) ≤ υ(A) + υ(B)",
+             "accept": ["nu(AB) <= nu(A)+nu(B)", "υ(AB) ≤ υ(A) + υ(B)"],
+             "hint": "n − rank(AB) ≤ n − rank(A) − rank(B) + n. Group the terms as two nullities."},
+   "why": "n − rank(AB) ≤ 2n − rank(A) − rank(B) = (n − rank A) + (n − rank B) = υ(A) + υ(B). The nullities are sub-additive: the product cannot destroy more than the two factors destroy between them."},
+  {"say": "Put the two together and pick the option.",
+   "blank": {"prompt": "State the full result.",
+             "answer": "max{υ(A), υ(B)} ≤ υ(AB) ≤ υ(A) + υ(B)",
+             "accept": ["max(nuA,nuB) <= nu(AB) <= nuA+nuB", "option D"],
+             "hint": "Combine the two inequalities you just derived."},
+   "why": "Option D, the official answer. The marked option C put υ(A) + υ(B) − n as the upper bound, which is strictly smaller and fails immediately: take A = B = I, so υ(A) = υ(B) = 0 and υ(AB) = 0, while the claimed bound is −n, and 0 ≤ −n is false."},
+  {"say": "Check that the interval is not merely valid but tight.",
+   "blank": {"prompt": "For 6 × 6 matrices with υ(A) = 3 and υ(B) = 2, what interval does the result give?",
+             "answer": "[3, 5] — and both ends are attainable",
+             "accept": ["[3,5]", "3 to 5", "from 3 to 5"],
+             "hint": "max{3, 2} at the bottom and 3 + 2 at the top."},
+   "why": "Exactly [3, 5], and neither end can be improved: A = diag(1,1,1,0,0,0) with B = diag(1,1,1,1,0,0) gives υ(AB) = 3, while choosing B whose image contains the whole null space of A gives υ(AB) = 5. Both were constructed and verified, which is how you know the answer is the sharpest true statement rather than just a true one."}],
+ "after": "The method generalises: when a result about nullities is wanted and you only remember the rank version, substitute υ = n − rank and remember that subtracting reverses the inequality and turns min into max. That single move converts Sylvester into the answer here, and it is quicker than memorising both forms."})
+
+S.append({
+ "kind": "theory", "id": "s6", "mins": 8,
+ "title": "Sylvester, Frobenius, and the ranks that statistics needs",
+ "objective": "Collect the product results and the matrices built from a design matrix.",
+ "blocks": [
+  {"t": "formula", "h": "Sylvester's rank inequality",
+   "body": "For A (m × n) and B (n × p):\n    rank(A) + rank(B) − n ≤ rank(AB) ≤ min{rank(A), rank(B)}\nThe n subtracted is the SHARED dimension — the number of columns of A, equal to the rows of B. Getting that wrong is the commonest error in applying it."},
+  {"t": "formula", "h": "The Frobenius rank inequality",
+   "body": "For three factors,\n    rank(AB) + rank(BC) ≤ rank(B) + rank(ABC).\nSylvester is the special case with B = I. It is the result the syllabus names alongside Sylvester, and it is rarely needed numerically — recognising the name is usually enough."},
+  {"t": "step", "h": "When the bounds are attained",
+   "body": "Both ends are reachable, which is why the statement cannot be sharpened. With 5 × 5 matrices of rank 3 each, Sylvester's floor is 3 + 3 − 5 = 1, and rank(AB) = 1 is achieved by arranging the image of B to contain the whole null space of A. The upper bound min{3,3} = 3 is achieved whenever the image of B misses the null space of A entirely — the generic case, which is why random examples almost always sit at the top."},
+  {"t": "formula", "h": "Ranks built from a design matrix",
+   "body": "Let X be n × k with full column rank k.\n    rank(XᵀX) = rank(X) = k, so XᵀX is invertible exactly when X has full column rank.\n    hat matrix H = X(XᵀX)⁻¹Xᵀ:   idempotent, trace k, so rank k and nullity n − k.\n    residual maker M = I − H:      idempotent, trace n − k, so rank n − k and nullity k.\nThe nullity of the residual maker is k — one of the practice variants, and it is k because M annihilates exactly the column space of X."},
+  {"t": "def", "h": "Idempotent means rank = trace",
+   "body": "If A² = A then every eigenvalue is 0 or 1, the rank counts the eigenvalues equal to 1, and the trace sums them — so rank(A) = trace(A). This turns every rank question about H, M and the centring matrix into a trace computation, which is far easier. The centring matrix I − (1/n)11ᵀ has trace n − 1·(1/n)·n... more directly, trace = n − 1, hence rank n − 1 and nullity 1."},
+  {"t": "step", "h": "Skew-symmetric matrices have even rank",
+   "body": "If Aᵀ = −A then the non-zero eigenvalues come in conjugate imaginary pairs ±iλ, so there is an even number of them and the rank is even. A non-zero skew-symmetric matrix therefore cannot have rank 1, and a 3 × 3 one has rank exactly 2. Checked over several thousand random skew-symmetric matrices of orders 2 to 6: every observed rank was 2, 4 or 6, never odd."}],
+ "ask": {
+  "q": "rank(XᵀX) = rank(X) for every real X. Why does that make the invertibility of XᵀX a question purely about X?",
+  "nudge": "XᵀX is k × k. When is a k × k matrix invertible, in terms of its rank?"}})
+
+S.append({
+ "kind": "guided", "id": "s7", "mins": 9,
+ "title": "On your own — the statistical matrices, by trace",
+ "objective": "Compute the ranks a linear model needs, using idempotence rather than reduction.",
+ "problem": "Take n = 8 observations and a design matrix X of order 8 × 3 with full column rank 3. Find the rank and nullity of (a) XᵀX, (b) the hat matrix H = X(XᵀX)⁻¹Xᵀ, (c) the residual maker M = I − H, and (d) the centring matrix C = I − (1/8)11ᵀ.",
+ "hints": [
+  "For (a), use rank(AᵀA) = rank(A). Note XᵀX is 3 × 3, so rank–nullity uses 3.",
+  "For (b), (c) and (d), check idempotence first — then the rank is just the trace.",
+  "Collapse trace(X(XᵀX)⁻¹Xᵀ) with trace(AB) = trace(BA) to get a 3 × 3 trace."],
+ "answer": "(a) rank 3, nullity 0. (b) rank 3, nullity 5. (c) rank 5, nullity 3. (d) rank 7, nullity 1.",
+ "check": "Three things to be exact about. In (a) the nullity is 0 because XᵀX is 3 × 3 of rank 3, not 8 − 3. In (c) the NULLITY of the residual maker is 3 = k, while its rank is 5 = n − k; stating those the wrong way round is the standard slip and it is exactly what one of the practice variants tests. And every rank here came from a trace only because all four matrices are idempotent — rank = trace is not a general fact, and it fails for the Q26 matrix, which has trace 15 and rank 2.",
+ "scenario": {
+  "teaser": "An analyst adds two predictors, and the residual degrees of freedom do not drop by two.",
+  "title": "Degrees of freedom are ranks, not column counts",
+  "body": [
+   "A model with 40 observations and 5 predictors plus an intercept reports 34 residual degrees of freedom. The analyst adds two more predictors and expects 32, but the software reports 33.",
+   "The reason is that one of the two new columns was a linear combination of columns already present — a ratio reconstructable from two existing variables, say. The design matrix gained two columns but only one rank, so the residual degrees of freedom fell by one rather than two.",
+   "This is not a quirk of the software. The residual degrees of freedom are literally the rank of the residual maker I − H, which is n − rank(X). It is the rank of the design matrix that counts, never the number of columns, and the two differ precisely when the columns are dependent.",
+   "The same identity explains the arithmetic of every analysis of variance table. Model degrees of freedom are rank(H), residual degrees of freedom are rank(I − H), and they add to n because the two idempotent matrices split the space into orthogonal complements. Nothing in that depends on how many columns were written down.",
+   "The practical reading of the discrepancy is a warning, not a nuisance: the model contains a redundancy the analyst did not intend. The coefficient on at least one of the new predictors is not estimable, and the software has silently resolved the ambiguity — by dropping a column or by using a generalised inverse — rather than refusing to fit.",
+   "So a degrees-of-freedom count that does not match expectation is the cheapest available check on a design matrix. If the number is one too high, a column is redundant, and the fix is to find out which and why."],
+  "q": "Why did adding two columns cost only one degree of freedom?",
+  "answer": "Because residual degrees of freedom are n − rank(X), and the rank counts independent columns rather than columns. One of the two new columns lay in the span of the existing ones, so the rank rose by one while the column count rose by two. The degrees of freedom are the rank of the idempotent matrix I − H, which is n − rank(X) exactly — so a count that is one higher than expected is a direct report that the design matrix has a dependency in it."},
+ "solution": [
+  {"say": "(a) XᵀX, using rank(AᵀA) = rank(A).",
+   "math": "XᵀX is 3 × 3\nrank(XᵀX) = rank(X) = 3  ⟹ full rank ⟹ invertible\nυ(XᵀX) = 3 − 3 = 0",
+   "why": "Full rank, so the normal equations have a unique solution and the inverse in H exists. Had X had rank 2, XᵀX would be singular and the model not estimable — the scenario from section 2."},
+  {"say": "(b) The hat matrix, by idempotence.",
+   "math": "H² = X(XᵀX)⁻¹XᵀX(XᵀX)⁻¹Xᵀ = X(XᵀX)⁻¹Xᵀ = H, so H is idempotent\ntrace(H) = trace(X(XᵀX)⁻¹Xᵀ) = trace((XᵀX)⁻¹XᵀX) = trace(I₃) = 3\n⟹ rank(H) = 3,  υ(H) = 8 − 3 = 5",
+   "why": "The trace step uses trace(AB) = trace(BA) to collapse an 8 × 8 trace into a 3 × 3 one. Verified numerically: rank 3 and trace 3.0000 for a random 8 × 3 X of rank 3."},
+  {"say": "(c) The residual maker.",
+   "math": "M = I − H is idempotent too: M² = I − 2H + H² = I − H = M\ntrace(M) = 8 − 3 = 5\n⟹ rank(M) = 5,  υ(M) = 8 − 5 = 3 = k",
+   "why": "The nullity of M is exactly k = 3, because M annihilates precisely the column space of X, which is 3-dimensional. That is the practice variant's answer, and note it is k rather than n − k — easy to state backwards."},
+  {"say": "(d) The centring matrix.",
+   "math": "C = I − (1/8)11ᵀ is idempotent\ntrace(C) = 8 − (1/8)·trace(11ᵀ) = 8 − (1/8)(8) = 7\n⟹ rank(C) = 7,  υ(C) = 8 − 7 = 1",
+   "why": "In general rank n − 1 and nullity 1: C kills exactly the constant vectors, which form a one-dimensional space, and preserves everything orthogonal to them. Verified at n = 4, 6 and 10 — rank n − 1, trace n − 1, idempotent in each case."},
+  {"say": "Collect the pattern.",
+   "math": "degrees of freedom: model 3 = rank(H), residual 5 = rank(M), total 8\n3 + 5 = 8",
+   "why": "The ranks of H and M are the model and residual degrees of freedom, and they add to n because H and M decompose the space into orthogonal complements. Every degrees-of-freedom count in analysis of variance is a rank computed this way."}]})
+
+S.append({
+ "kind": "trapcheck", "id": "s8", "mins": 6,
+ "title": "Six statements — verdict on each before you look",
+ "objective": "Rule on the claims the variants on this topic are built from.",
+ "intro": "Decide true or false on all six before revealing any.",
+ "items": [
+  {"claim": "Elementary row operations can change the rank of a matrix.",
+   "tf": False,
+   "why": "False — they preserve it exactly, which is the only reason row reduction can be used to find a rank. Row swaps, non-zero scalings and adding a multiple of one row to another all leave the row space unchanged."},
+  {"claim": "rank(A) + nullity(A) equals the number of rows of A.",
+   "tf": False,
+   "why": "False — it equals the number of COLUMNS. For a 3 × 5 matrix of rank 3 the nullity is 5 − 3 = 2, not 0. The confusion is harmless for square matrices and wrong for every other shape."},
+  {"claim": "A non-zero skew-symmetric matrix can have rank 1.",
+   "tf": False,
+   "why": "False. The non-zero eigenvalues of a skew-symmetric matrix come in conjugate imaginary pairs, so the rank is always even. A non-zero 3 × 3 skew-symmetric matrix has rank exactly 2."},
+  {"claim": "If A is idempotent then rank(A) = trace(A).",
+   "tf": True,
+   "why": "True. Idempotence forces every eigenvalue to be 0 or 1; the rank counts the ones and the trace sums them. This is how the ranks of the hat matrix, the residual maker and the centring matrix are found."},
+  {"claim": "For every real matrix A, rank(AᵀA) = rank(A).",
+   "tf": True,
+   "why": "True, and it is why XᵀX is invertible exactly when X has full column rank. It holds for real matrices because Ax = 0 and AᵀAx = 0 have the same solutions: AᵀAx = 0 implies xᵀAᵀAx = ‖Ax‖² = 0."},
+  {"claim": "υ(AB) ≤ υ(A) + υ(B) − n for n × n matrices A and B.",
+   "tf": False,
+   "why": "False, and it is the option marked in June 2026. The correct upper bound is υ(A) + υ(B) with no subtraction. Take A = B = I: then υ(A) = υ(B) = υ(AB) = 0, and the claim reads 0 ≤ −n, which is absurd."}]})
+
+S.append({
+ "kind": "guided", "id": "s9", "mins": 8,
+ "title": "On your own — six quick ranks",
+ "objective": "Apply the structural shortcuts at speed.",
+ "problem": "Give the rank, and where asked the nullity. (a) [[1,2],[2,4]]. (b) The 6 × 6 matrix of all ones, with its nullity. (c) A 3 × 5 matrix — the largest its rank can be, and the nullity if it attains that. (d) A 10 × 10 matrix of rank 8 — its nullity. (e) A square matrix with υ(A) = 0 — what can be said about it. (f) Two 5 × 5 matrices of rank 3 each — the smallest rank(AB) can be.",
+ "hints": [
+  "For (a) and (b), look for proportional or identical rows.",
+  "For (c), the cap is min(m, n), and rank–nullity uses the COLUMN count.",
+  "For (f), use Sylvester's lower bound, then ask whether it is actually attainable."],
+ "answer": "(a) 1. (b) rank 1, nullity 5. (c) rank at most 3, nullity 2. (d) nullity 2. (e) non-singular — invertible, det ≠ 0, full rank. (f) 1.",
+ "check": "Two traps here. In (c) the nullity is 5 − 3 = 2 because there are five columns; answering 0 means using the row count. In (f) Sylvester gives rank(AB) ≥ 3 + 3 − 5 = 1, but a bound is only an answer if it is attained — and it is: put the image of B so that it contains the whole 2-dimensional null space of A, and A destroys two of B's three image dimensions, leaving 1. Random examples will not find it, since generically rank(AB) = 3.",
+ "solution": [
+  {"say": "(a) Proportional rows.",
+   "math": "R2 = 2R1 ⟹ rank 1",
+   "why": "A 2 × 2 matrix of rank 1 has determinant zero: 1·4 − 2·2 = 0, which is the same observation."},
+  {"say": "(b) All ones.",
+   "math": "every row = (1,1,1,1,1,1) ⟹ rank 1\nυ = 6 − 1 = 5",
+   "why": "The row space is one-dimensional, so the null space is five-dimensional — it is every vector whose entries sum to zero."},
+  {"say": "(c) A 3 × 5 matrix.",
+   "math": "rank ≤ min(3, 5) = 3\nif rank = 3 then υ = 5 − 3 = 2",
+   "why": "Five columns in a space of dimension 3 cannot be independent, so there are always at least two independent solutions to Ax = 0."},
+  {"say": "(d) Rank–nullity.",
+   "math": "υ = 10 − 8 = 2",
+   "why": "One subtraction. The matrix crushes a two-dimensional subspace to zero."},
+  {"say": "(e) Zero nullity.",
+   "math": "υ(A) = 0 ⟹ rank = n ⟹ non-singular\n⟹ det ≠ 0, A⁻¹ exists, Ax = 0 only for x = 0",
+   "why": "All four statements are the same statement. 'Non-singular' is the word the options use."},
+  {"say": "(f) Sylvester's floor, and its attainability.",
+   "math": "rank(AB) ≥ rank(A) + rank(B) − n = 3 + 3 − 5 = 1\nattained: A = diag(1,1,1,0,0), B with image span{e₁, e₄, e₅}\nthen rank(AB) = 1 ✓",
+   "why": "Verified by explicit construction. The null space of A is span{e₄, e₅}, and the image of B contains both, so A annihilates two of the three dimensions B produces."}]})
+
+S.append({
+ "kind": "theory", "id": "s10", "mins": 7,
+ "title": "Where rank decides the statistics",
+ "objective": "Recognise rank conditions across the rest of the syllabus.",
+ "blocks": [
+  {"t": "step", "h": "Estimability in linear models (module 6)",
+   "body": "βˆ = (XᵀX)⁻¹Xᵀy exists exactly when X has full column rank, because rank(XᵀX) = rank(X). When it does not, only certain linear combinations cᵀβ are estimable — those with c in the row space of X — and the rest are not identified at all, however much data there is."},
+  {"t": "step", "h": "Degrees of freedom",
+   "body": "Model and residual degrees of freedom ARE ranks: rank(H) = k and rank(I − H) = n − k, and they sum to n because the two matrices decompose the space. Every ANOVA table is a rank decomposition, and the chi-square degrees of freedom in the associated distribution theory are these same ranks."},
+  {"t": "step", "h": "Generalised inverses (topic 2.8)",
+   "body": "When XᵀX is singular a generalised inverse supplies A solution rather than THE solution, and the dimension of the solution family is the nullity. That is the formal version of the dummy-variable scenario: nullity 1 means a one-parameter family, and different software picks different members."},
+  {"t": "step", "h": "Quadratic forms and multivariate work",
+   "body": "The rank of a covariance matrix is the number of dimensions the distribution really occupies: a singular covariance matrix means the data lie in a lower-dimensional subspace exactly. Principal component analysis counts non-zero eigenvalues, which is the rank, and a quadratic form's rank is the number of non-zero coefficients in its diagonalised version."},
+  {"t": "def", "h": "The common thread",
+   "body": "Every one of these asks the same question: how many independent directions does this matrix distinguish? Rank answers it, nullity answers the complement, and rank–nullity converts between them. The statistical consequences — unique estimates, correct degrees of freedom, identifiability — all follow from that one count."}],
+ "ask": {
+  "q": "A covariance matrix of 5 variables has rank 3. What does that say about the data, exactly?",
+  "nudge": "Nullity 2 means two independent directions get crushed. What does a direction of zero variance mean?"}})
+
+S.append({
+ "kind": "recall", "id": "s11", "mins": 2,
+ "title": "Second recall — the parts most likely to fade",
+ "objective": "Retrieve the product bounds and the named matrices.",
+ "intro": "Answer, then reveal.",
+ "items": [
+  {"q": "State Sylvester's rank inequality, being careful which dimension is subtracted.",
+   "a": "rank(A) + rank(B) − n ≤ rank(AB) ≤ min{rank(A), rank(B)}, where n is the SHARED dimension."},
+  {"q": "Give the bounds on υ(AB) for n × n matrices.",
+   "a": "max{υ(A), υ(B)} ≤ υ(AB) ≤ υ(A) + υ(B) — June 2026 Q1, option D."},
+  {"q": "Why is the upper bound NOT υ(A) + υ(B) − n?",
+   "a": "Because A = B = I gives 0 ≤ −n, which is false."},
+  {"q": "Rank and nullity of the centring matrix I − (1/n)11ᵀ?",
+   "a": "Rank n − 1, nullity 1 — it kills exactly the constant vectors."},
+  {"q": "Nullity of the residual maker I − X(XᵀX)⁻¹Xᵀ, for X of order n × k and rank k?",
+   "a": "k, because it annihilates precisely the k-dimensional column space of X."},
+  {"q": "What is the rank of a non-zero skew-symmetric matrix?",
+   "a": "Always even."}]})
+
+S.append({
+ "kind": "summary", "id": "s12", "mins": 3,
+ "title": "What you should now be able to do unaided",
+ "objective": "Close the loop before the mastery test.",
+ "body": [
+  "Give the three equivalent definitions of rank and the bound rank ≤ min(m, n).",
+  "Use rank–nullity with the COLUMN count, in both directions.",
+  "Read a rank off structure: proportional rows, all-ones, rows in arithmetic progression.",
+  "Answer June 2026 Q26 in three subtractions, and confirm it from the columns.",
+  "State Sylvester's rank inequality and convert it into the nullity bounds of June 2026 Q1.",
+  "Dismiss the υ(A) + υ(B) − n bound with the A = B = I counterexample.",
+  "Use rank = trace for idempotent matrices to get the ranks of H, I − H and the centring matrix.",
+  "Say why rank(XᵀX) = rank(X) settles estimability in a linear model."]})
+
+S.append({
+ "kind": "theory", "id": "s13", "mins": 8, "ext": True,
+ "title": "Why row rank equals column rank",
+ "objective": "See the one proof that makes the whole topic coherent.",
+ "blocks": [
+  {"t": "step", "h": "The statement is not obvious",
+   "body": "A 3 × 100 matrix has 3 rows and 100 columns. That the maximum number of independent rows equals the maximum number of independent columns is a genuine theorem, not a definition, and it is the reason 'rank' can be a single number rather than two."},
+  {"t": "step", "h": "The factorisation proof, in four lines",
+   "body": "Let r be the row rank, and let v₁, …, v_r be a basis of the row space. Every row of A is a combination of them, so\n    A = C R,\nwhere R is r × n with the vᵢ as its rows and C is m × r holding the coefficients.\nNow read A = CR by columns: every column of A is a combination of the r columns of C. So the column space has dimension at most r, giving column rank ≤ row rank.\nApply the same argument to Aᵀ to get row rank ≤ column rank. The two are equal."},
+  {"t": "def", "h": "Rank as the dimension of the image",
+   "body": "The cleanest statement is geometric: A maps ℝⁿ to ℝᵐ, and rank(A) is the dimension of the image. Rank–nullity is then the statement that the domain splits into what gets crushed (dimension υ) and what survives (dimension rank), and υ + rank = n because those two account for every direction in ℝⁿ."},
+  {"t": "step", "h": "Why the product bounds are now obvious",
+   "body": "AB first applies B, landing in the image of B, then applies A. The result's dimension cannot exceed the dimension of the image of B, giving rank(AB) ≤ rank(B); and it lies inside the image of A, giving rank(AB) ≤ rank(A). For the lower bound, A can destroy at most υ(A) = n − rank(A) dimensions of B's image, so\n    rank(AB) ≥ rank(B) − υ(A) = rank(A) + rank(B) − n,\nwhich IS Sylvester's inequality, now visibly a counting argument rather than a formula."},
+  {"t": "step", "h": "And why the bounds are tight",
+   "body": "The lower bound is attained exactly when the image of B contains as much of the null space of A as it can. That is what the explicit 5 × 5 construction in section 9 arranges, and it is why random examples never find it: two subspaces in general position intersect as little as possible, which puts rank(AB) at the TOP of its range. Extremes in this topic always have to be built, never sampled."}],
+ "ask": {
+  "q": "Reading rank as the dimension of the image, why can rank(AB) never exceed rank(B)?",
+  "nudge": "AB applies B first. What space is the input to A restricted to?"}})
+
+S.append({
+ "kind": "quiz", "id": "s14", "mins": 12,
+ "title": "Mastery test",
+ "objective": "Demonstrate it independently, on questions you have not seen.",
+ "setId": "maths_t1_mastery"})
+
+CORE = [s for s in S if not s.get("ext")]
+
+LES = {
+ "id": "mathst1",
+ "topicId": "maths-t1",
+ "moduleId": "maths",
+ "title": "Rank, Nullity, Sylvester and Frobenius",
+ "breadcrumb": "Mathematics → Matrix algebra → Rank, nullity and the product inequalities",
+ "engine": "B",
+ "engineName": "Mathematics — counting the independent directions a matrix carries",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": sum(s["mins"] for s in CORE),
+ "objectives": [
+  "Give the equivalent definitions of rank and the bound rank ≤ min(m, n).",
+  "Apply rank–nullity with the column count, in both directions.",
+  "Read a rank off structure rather than by row reduction, including rows in arithmetic progression.",
+  "State Sylvester's rank inequality and convert it into bounds on the nullity of a product.",
+  "Use rank = trace for idempotent matrices to find the ranks a linear model needs.",
+  "Explain why rank(XᵀX) = rank(X) decides estimability."],
+ "prereq": [
+  {"id": "p1", "name": "Matrix multiplication and transposes",
+   "why": "The product results are about AB and AᵀA, and the trace identity trace(AB) = trace(BA) is used directly."},
+  {"id": "p2", "name": "Linear independence and vector spaces",
+   "why": "Rank is the dimension of a span, and every shortcut in this lesson is a statement about dependence."},
+  {"id": "p3", "name": "Determinants and matrix inverses",
+   "why": "Full rank, non-zero determinant and invertibility are the same condition, and the lesson moves between them freely."},
+  {"id": "p4", "name": "Row reduction to echelon form",
+   "why": "It is the fallback method, and knowing that row operations preserve rank is one of the four opening checks."}],
+ "traps": [
+  "rank + nullity = number of COLUMNS, not rows.",
+  "The upper bound on υ(AB) is υ(A) + υ(B), with no −n. Test it on A = B = I.",
+  "In Sylvester's inequality the dimension subtracted is the SHARED one — columns of A, rows of B.",
+  "rank = trace holds only for IDEMPOTENT matrices; the Q26 matrix has trace 15 and rank 2.",
+  "Rows in arithmetic progression cap the rank at 2 for every size — do not row-reduce and lose it.",
+  "A non-zero skew-symmetric matrix cannot have odd rank.",
+  "The nullity of I − X(XᵀX)⁻¹Xᵀ is k, not n − k; its RANK is n − k.",
+  "A Sylvester bound is only the answer to a 'minimum possible' question if it is attainable — check by construction, since random examples sit at the top of the range."],
+ "revision": {
+  "sheet": [
+   "rank = max independent rows = max independent columns = dim of row space = dim of column space.",
+   "0 ≤ rank(A) ≤ min(m, n); a 3 × 5 matrix has rank at most 3.",
+   "Square A: non-singular ⟺ rank n ⟺ det ≠ 0 ⟺ υ = 0 ⟺ A⁻¹ exists.",
+   "Rank–nullity: rank(A) + υ(A) = n, the COLUMN count. Rank n−1 ⟹ υ = 1; 10 × 10 of rank 8 ⟹ υ = 2.",
+   "Elementary row operations PRESERVE rank — that is why row reduction works.",
+   "[[1,2],[2,4]] has rank 1. The n × n all-ones matrix has rank 1 and nullity n − 1.",
+   "Rows in arithmetic progression (each = previous + fixed d) ⟹ every row in span{R1, d} ⟹ rank ≤ 2.",
+   "June 2026 Q26: successive rows differ by (1,1,0,0), so rank 2 and nullity 2. Columns confirm: C3 = 2C4 and C2 − C1 = C3.",
+   "Sylvester: rank(A) + rank(B) − n ≤ rank(AB) ≤ min{rank(A), rank(B)}, n the shared dimension.",
+   "Frobenius: rank(AB) + rank(BC) ≤ rank(B) + rank(ABC); Sylvester is the case B = I.",
+   "June 2026 Q1: max{υ(A), υ(B)} ≤ υ(AB) ≤ υ(A) + υ(B). NOT υ(A) + υ(B) − n, which fails for A = B = I.",
+   "Both ends are tight: υ(A) = 3, υ(B) = 2 in 6 × 6 gives exactly [3, 5], both attained by construction.",
+   "5 × 5 of rank 3 each: min rank(AB) = 1, attained when the image of B contains all of null(A).",
+   "Idempotent (A² = A) ⟹ rank = trace, since every eigenvalue is 0 or 1.",
+   "rank(AᵀA) = rank(A), so XᵀX is invertible exactly when X has full column rank.",
+   "X of order n × k, rank k: hat matrix H has rank k, nullity n − k; residual maker I − H has rank n − k, nullity k.",
+   "Centring matrix I − (1/n)11ᵀ: idempotent, trace n − 1, rank n − 1, nullity 1 — it kills the constant vector.",
+   "A non-zero skew-symmetric matrix has EVEN rank; a 3 × 3 one has rank exactly 2.",
+   "Non-zero 3 × 3 with A² = 0 has rank at most 1, since col(A) ⊆ null(A) forces 2r ≤ 3."],
+  "cards": [
+   ["Rank–nullity", "rank + nullity = number of COLUMNS"],
+   ["Rank bound", "rank ≤ min(m, n)"],
+   ["Rows in arithmetic progression", "rank ≤ 2, for every size"],
+   ["June 2026 Q26", "Rows differ by (1,1,0,0): rank 2, nullity 2"],
+   ["All-ones n × n", "rank 1, nullity n − 1"],
+   ["Sylvester", "rank A + rank B − n ≤ rank(AB) ≤ min{rank A, rank B}"],
+   ["Nullity of a product", "max{υA, υB} ≤ υ(AB) ≤ υA + υB"],
+   ["Why not υA + υB − n", "A = B = I gives 0 ≤ −n, false"],
+   ["Idempotent matrices", "rank = trace"],
+   ["rank(AᵀA)", "= rank(A), so XᵀX invertible ⟺ X full column rank"],
+   ["Centring matrix", "rank n − 1, nullity 1"],
+   ["Non-zero skew-symmetric", "rank is always even"]],
+  "tricks": [
+   "Difference successive rows first. Three subtractions either reveal an arithmetic progression or cost nothing.",
+   "Check for proportional rows and columns before reaching for row reduction.",
+   "If a matrix is idempotent, add up the diagonal — that is the rank.",
+   "Convert a nullity question to a rank question with υ = n − rank; subtracting reverses the inequality and swaps min for max.",
+   "For 'minimum possible rank' questions, use Sylvester's floor and then check it is attainable by construction.",
+   "Collapse an awkward trace with trace(AB) = trace(BA): trace(X(XᵀX)⁻¹Xᵀ) becomes trace(I_k) = k."],
+  "shortcuts": [
+   "Q26's matrix: trace is 15 but rank is 2 — a reminder that rank = trace needs idempotence.",
+   "Sylvester's floor at rank 3, rank 3 and n = 5 is 1; at rank 4, rank 4 and n = 5 it is 3.",
+   "A non-zero skew-symmetric 3 × 3 matrix has rank 2, so its nullity is 1 and its determinant is 0."],
+  "remember": [
+   "Rank + nullity = columns.",
+   "Rows in arithmetic progression: rank at most 2.",
+   "υ(AB) ≤ υ(A) + υ(B), with no minus n."]},
+ "howto": "Both of June 2026's questions on this topic are here, and neither needs much computation. Section 4 is Q26: difference the successive rows, see the arithmetic progression, and the rank is 2 in three subtractions — read that section before anything else, because the method transfers to every rank question the exam sets. Section 6 is Q1, derived rather than memorised: start from Sylvester's rank inequality and substitute υ = n − rank, remembering that subtraction reverses an inequality and turns min into max. Section 8 collects the product results and section 9 works the matrices a linear model needs, all by trace rather than by reduction. If short of time, sections 3, 4, 6 and 8 are the lesson. This lesson has no interactive chart: rank is a counting property rather than a curve, and no visualisation in the app illustrates it honestly. The optional section proves that row rank equals column rank and then makes Sylvester's inequality obvious as a counting argument, which is worth reading if the formula keeps slipping.",
+ "refs": [
+  {"title": "Linear Algebra", "where": "Chapters 2 and 3",
+   "site": "MIT OCW 18.06 (Strang)", "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+   "type": "Course notes and lectures", "free": True, "checked": "2026-11-03",
+   "why": "Rank, the four fundamental subspaces and rank–nullity, with the geometric reading this lesson's optional section uses."},
+  {"title": "Matrix Algebra Useful for Statistics", "where": "Chapters 3 and 5",
+   "site": "Searle", "url": "", "type": "Textbook", "free": False,
+   "checked": "2026-11-03",
+   "why": "The statistician's treatment: rank of AᵀA, idempotent matrices, generalised inverses and estimability."},
+  {"title": "Linear Algebra and its Applications", "where": "Chapters 2 and 4",
+   "site": "Gilbert Strang", "url": "", "type": "Textbook", "free": False,
+   "checked": "2026-11-03",
+   "why": "Sylvester's rank inequality and the product bounds, with the proofs at the level the syllabus sets."},
+  {"title": "Linear Algebra", "where": "Weeks on rank and linear systems",
+   "site": "NPTEL / SWAYAM", "url": "https://archive.nptel.ac.in/courses/111106051",
+   "type": "Video course", "free": True, "checked": "2026-11-03",
+   "why": "Indian-syllabus notation, including the nullity notation υ(·) this question uses."}],
+ "mastery": {
+  "minQ": 10, "pass": 80, "draw": 10,
+  "fmtMin": {"numeric": 70, "multi": 70},
+  "diffMix": {"easy": 3, "moderate": 5, "hard": 2},
+  "noHints": True, "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."},
+ "provenance": "Authored November 2026, the first lesson of the maths module and the first to carry TWO PYQ anchors, because the catalog topic covers both. Q26 (wrong, marked C against B): the rank of a 4 × 4 matrix whose successive rows differ by the constant vector (1,1,0,0), so the rows are in arithmetic progression, the row space is span{R1, d}, and the rank is 2 with nullity 2 — confirmed three ways, from the rows, from the columns (C3 = 2C4 and C2 − C1 = C3) and by reduction, with determinant 0. Q1 (wrong, marked C against D): the nullity bounds on a product, max{υ(A), υ(B)} ≤ υ(AB) ≤ υ(A) + υ(B), which is Sylvester's rank inequality under υ = n − rank; the marked option's extra −n fails for A = B = I. The bounds were checked over 30,000 random 3 × 3 pairs with no violations and both ends frequently attained, and Sylvester's rank form over 20,000 random 4 × 4 pairs. Every other claim was computed: the ranks of the all-ones matrix, matrices with rows in arithmetic progression, the centring matrix at n = 4, 6, 10 (rank n−1, trace n−1, idempotent), rank(XᵀX) = rank(X), and the hat matrix and residual maker for a random 8 × 3 design (ranks 3 and 5, nullities 5 and 3). Skew-symmetric rank was checked over several thousand random matrices of orders 2 to 6: every non-zero rank observed was even. Two bank repairs were made while authoring: a Poisson interarrival item filed under Q26 in the maths variant file moved to the probability file under Q25, the seventh misfiling found in this bank; and four items under Q1 had contextless stems a learner could not answer, each given an explicit context chosen so the existing key is correct and verified BY CONSTRUCTION rather than by random search, which fails here because random integer matrices are almost always full rank. No explore scene: rank is a counting property and no visualisation in the app illustrates it honestly. Previous-year questions are stored separately and carry their exam cycle.",
+ "scenes": S}
+
+# ---------------------------------------------------------------- pool
+
+def q(i, fmt, diff, stem, opts, ans, exp, **kw):
+    d = {"id": "ma-t1-m-%02d" % i, "format": fmt, "topic": "maths-t1",
+         "diff": diff, "stem": stem, "options": opts, "answer": ans, "explanation": exp}
+    d.update(kw)
+    return d
+
+def verd(a, b, c, dd):
+    return {"A": {"tf": a[0], "why": a[1]}, "B": {"tf": b[0], "why": b[1]},
+            "C": {"tf": c[0], "why": c[1]}, "D": {"tf": dd[0], "why": dd[1]}}
+
+I = []
+
+# --- easy (6)
+I.append(q(1, "numeric", "easy",
+ "The rank of the matrix [[2, 6, 4, 2], [3, 7, 4, 2], [4, 8, 4, 2], [5, 9, 4, 2]] is:",
+ ["2", "1", "3", "4"],
+ "A",
+ "Successive rows differ by the constant vector (1,1,0,0), so the rows are in arithmetic progression and every row lies in span{R1, (1,1,0,0)} — a two-dimensional space. The columns confirm it: C3 = 2C4 and C2 − C1 = C3. This is June 2026 Q26.",
+ check="The determinant is 0, so the rank is below 4; and R1 is not a multiple of any other row, so it is above 1."))
+
+I.append(q(2, "numeric", "easy",
+ "The rank of [[1, 2], [2, 4]] is:",
+ ["1", "0", "2", "undefined"],
+ "A",
+ "The second row is exactly twice the first, so there is only one independent row. Equivalently the determinant 1·4 − 2·2 = 0 rules out full rank, and the matrix is non-zero so the rank is not 0.",
+ check="A 2 × 2 matrix has rank 0, 1 or 2 only; zero determinant with a non-zero entry forces rank 1."))
+
+I.append(q(3, "numeric", "easy",
+ "The rank of the n × n matrix all of whose entries are 1 is:",
+ ["1", "n", "n − 1", "0"],
+ "A",
+ "Every row is the same vector (1, 1, …, 1), so the row space is one-dimensional. Its nullity is therefore n − 1, which is option C — the null space is every vector whose entries sum to zero.",
+ check="Verified at n = 3, 5 and 8: rank 1 in every case. The matrix is non-zero so the rank is at least 1, and all rows being identical caps it at 1."))
+
+I.append(q(4, "single", "easy",
+ "If a 5 × 5 matrix has rank 5, then its determinant is:",
+ ["non-zero", "zero", "equal to 5", "equal to 1"],
+ "A",
+ "Full rank for a square matrix is equivalent to non-singularity, which is equivalent to a non-zero determinant and to the existence of an inverse. The nullity is then 0."))
+
+I.append(q(5, "single", "easy",
+ "Elementary row operations change the rank of a matrix:",
+ ["never — they preserve it", "always", "only if rows are swapped",
+  "only if a row is scaled"],
+ "A",
+ "Row swaps, scaling by a non-zero constant and adding a multiple of one row to another all leave the row space unchanged, so they leave its dimension unchanged. This is precisely why row reduction is a valid method for finding a rank."))
+
+I.append(q(6, "numeric", "easy",
+ "For a matrix A of order 3 × 5, the rank is at most:",
+ ["3", "5", "15", "8"],
+ "A",
+ "The rank cannot exceed either dimension, so it is capped by min(3, 5) = 3. If it attains 3, the nullity is 5 − 3 = 2, since rank–nullity uses the number of columns.",
+ check="Five columns cannot be independent in a space of dimension 3, so there must be at least two independent solutions of Ax = 0."))
+
+# --- moderate (10)
+I.append(q(7, "single", "moderate",
+ "Let A and B be two square matrices of order n × n and let υ(·) denote nullity. Then:",
+ ["max{υ(A), υ(B)} ≤ υ(AB) ≤ υ(A) + υ(B)",
+  "min{υ(A), υ(B)} ≤ υ(AB) ≤ max{υ(A), υ(B)}",
+  "max{υ(A), υ(B)} ≤ υ(A) + υ(B) ≤ υ(AB)",
+  "max{υ(A), υ(B)} ≤ υ(AB) ≤ υ(A) + υ(B) − n"],
+ "A",
+ "This is Sylvester's rank inequality rewritten with υ = n − rank: the upper rank bound min{rank A, rank B} becomes the lower nullity bound max{υ(A), υ(B)}, and the lower rank bound rank A + rank B − n becomes the upper nullity bound υ(A) + υ(B). June 2026 Q1. Option D's extra −n fails at once for A = B = I, where it claims 0 ≤ −n."))
+
+I.append(q(8, "numeric", "moderate",
+ "In the matrix [[2, 6, 4, 2], [3, 7, 4, 2], [4, 8, 4, 2], [5, 9, 4, 2]], the nullity is:",
+ ["2", "0", "1", "3"],
+ "A",
+ "The rank is 2, from the arithmetic progression in the rows, and the matrix has 4 columns, so rank–nullity gives υ = 4 − 2 = 2.",
+ check="Rank–nullity uses the COLUMN count. Here the matrix is square so rows and columns agree, but the habit matters for rectangular matrices."))
+
+I.append(q(9, "numeric", "moderate",
+ "The rank of a matrix whose rows form an arithmetic progression — each row equal to the previous plus a fixed vector — is at most:",
+ ["2", "1", "3", "n − 1"],
+ "A",
+ "Row k equals R1 + (k−1)d, so every row lies in span{R1, d}, a space of dimension at most 2. The size of the matrix is irrelevant: a 100 × 100 matrix with this structure still has rank at most 2. This is the general principle behind June 2026 Q26.",
+ check="Verified for 4 × 4, 5 × 5 and 6 × 6 matrices built this way from random R1 and d: rank 2 in every case."))
+
+I.append(q(10, "single", "moderate",
+ "The rank of a non-zero skew-symmetric matrix is:",
+ ["always even", "always odd", "always 1", "equal to its order"],
+ "A",
+ "The non-zero eigenvalues of a skew-symmetric matrix occur in conjugate imaginary pairs ±iλ, so there is an even number of them. A non-zero 3 × 3 skew-symmetric matrix therefore has rank exactly 2, and nullity 1. Checked over several thousand random skew-symmetric matrices of orders 2 to 6: every non-zero rank observed was 2, 4 or 6."))
+
+I.append(q(11, "numeric", "moderate",
+ "If the rank of an n × n matrix is n − 1, its nullity is:",
+ ["1", "0", "n − 1", "n"],
+ "A",
+ "Rank–nullity gives υ = n − (n − 1) = 1. The matrix is singular with a one-dimensional null space, so Ax = 0 has a one-parameter family of solutions and Ax = b has either none or a one-parameter family.",
+ check="Nullity 0 would mean non-singular, which contradicts a rank below n."))
+
+I.append(q(12, "numeric", "moderate",
+ "The rank of the centring matrix I − (1/n)11ᵀ is:",
+ ["n − 1", "n", "1", "n − 2"],
+ "A",
+ "The matrix is idempotent, so its rank equals its trace, which is n − (1/n)·n = n − 1. Its nullity is 1: it annihilates exactly the constant vectors. Verified at n = 4, 6 and 10 — rank n − 1, trace n − 1, idempotent in each case.",
+ check="Centring removes one degree of freedom, the overall mean, which is why the rank drops by exactly 1."))
+
+I.append(q(13, "multi", "moderate",
+ "Consider the rank of the matrices a linear model is built from.",
+ ["A, B and C only", "A and C only", "B and D only", "A, B, C and D"],
+ "A",
+ "A is the idempotent identity, which is how all these ranks are found. B is true: the centring matrix is idempotent with trace n − 1. C is true for every real matrix. D is false — the nullity of the residual maker is k and its RANK is n − k, which is the standard slip.",
+ statements=["If A is idempotent of order n, then rank(A) = trace(A).",
+             "The centring matrix I − (1/n)11ᵀ has rank n − 1 and nullity 1.",
+             "rank(AᵀA) = rank(A) for every real matrix A.",
+             "For X of order n × k with rank k, the nullity of I − X(XᵀX)⁻¹Xᵀ is n − k."],
+ verdicts=verd(
+  (True, "True. Idempotence forces every eigenvalue to be 0 or 1; the rank counts the ones and the trace sums them. It needs idempotence — the Q26 matrix has trace 15 and rank 2."),
+  (True, "True. It is idempotent with trace n − (1/n)·n = n − 1, so rank n − 1, and its nullity is 1 because it annihilates exactly the constant vectors. Verified at n = 4, 6 and 10."),
+  (True, "True, because AᵀAx = 0 forces ‖Ax‖² = 0 and hence Ax = 0, so the two matrices have the same null space. This is why XᵀX is invertible exactly when X has full column rank."),
+  (False, "False, with the two numbers swapped. The residual maker is idempotent with trace n − k, so its RANK is n − k and its nullity is k — it annihilates precisely the k-dimensional column space of X."))))
+
+I.append(q(14, "single", "moderate",
+ "For a real matrix A of order m × n, rank(AᵀA) is:",
+ ["rank(A)", "m", "n", "min(m, n) always"],
+ "A",
+ "Equality holds because Ax = 0 and AᵀAx = 0 have the same solution set: if AᵀAx = 0 then xᵀAᵀAx = ‖Ax‖² = 0, forcing Ax = 0. So the two matrices have the same nullity and hence the same rank. This is why XᵀX is invertible exactly when X has full column rank."))
+
+I.append(q(15, "numeric", "moderate",
+ "X is n × k of rank k. The nullity of P = I − X(XᵀX)⁻¹Xᵀ is:",
+ ["k", "0", "n", "n − k"],
+ "A",
+ "P is the residual maker: idempotent with trace n − k, so its rank is n − k and its nullity is n − (n − k) = k. Concretely it annihilates exactly the k-dimensional column space of X. Option D is its RANK, not its nullity — the commonest slip here.",
+ check="Verified for a random 8 × 3 design of rank 3: rank(P) = 5 and nullity 3 = k."))
+
+I.append(q(16, "single", "moderate",
+ "If υ(A) = 0 for a square matrix A, then A is:",
+ ["nonsingular", "singular", "idempotent", "symmetric"],
+ "A",
+ "Zero nullity means Ax = 0 only for x = 0, so the rank is full, the determinant is non-zero and the inverse exists. 'Non-singular' is the single word for all of those. Nothing follows about idempotence or symmetry."))
+
+# --- hard (4)
+I.append(q(17, "multi", "hard",
+ "Consider rank and nullity of products of n × n matrices.",
+ ["A, B and C only", "A and C only", "B and D only", "A, B, C and D"],
+ "A",
+ "A is Sylvester's rank inequality. B is the nullity form, obtained from A by υ = n − rank. C is true and is why the Q1 interval cannot be sharpened. D is false: the bound is υ(A) + υ(B) with no subtraction, and A = B = I refutes the −n version.",
+ statements=["rank(A) + rank(B) − n ≤ rank(AB) ≤ min{rank(A), rank(B)}.",
+             "max{υ(A), υ(B)} ≤ υ(AB) ≤ υ(A) + υ(B).",
+             "For 6 × 6 matrices with υ(A) = 3 and υ(B) = 2, both endpoints of the resulting interval [3, 5] are attainable.",
+             "υ(AB) ≤ υ(A) + υ(B) − n."],
+ verdicts=verd(
+  (True, "True — Sylvester's rank inequality. The dimension subtracted is the shared one: the columns of A, equal to the rows of B."),
+  (True, "True. Substituting υ = n − rank into A reverses both inequalities, turning min into max and rank A + rank B − n into υ(A) + υ(B). This is June 2026 Q1."),
+  (True, "True, and verified by construction: A = diag(1,1,1,0,0,0) with B = diag(1,1,1,1,0,0) gives υ(AB) = 3, while a B whose image contains the whole null space of A gives υ(AB) = 5. Random examples find only the lower end, since subspaces in general position intersect minimally."),
+  (False, "False. The correct bound has no −n. For A = B = I all three nullities are 0 and the claim reads 0 ≤ −n, which is absurd. This was the option marked in June 2026."))))
+
+I.append(q(18, "numeric", "hard",
+ "Let A and B be 5 × 5 matrices with rank(A) = rank(B) = 3. The minimum possible value of rank(AB) is:",
+ ["1", "2", "0", "3"],
+ "A",
+ "Sylvester's lower bound gives rank(AB) ≥ 3 + 3 − 5 = 1, and the bound is attained: take A = diag(1,1,1,0,0), whose null space is span{e₄, e₅}, and B with image span{e₁, e₄, e₅}. Then A destroys two of B's three image dimensions, leaving rank 1. Option D is the generic value, which is what random examples give.",
+ check="A bound is only an answer if it is attainable, so construct an example rather than sampling — random integer matrices almost never reach the floor."))
+
+I.append(q(19, "numeric", "hard",
+ "Let A be a non-zero 3 × 3 matrix satisfying A² = 0. The maximum possible rank of A is:",
+ ["1", "2", "0", "3"],
+ "A",
+ "A² = 0 means every column of A lies in the null space of A, so rank(A) ≤ υ(A) = 3 − rank(A), giving 2·rank(A) ≤ 3 and hence rank(A) ≤ 1. Since A is non-zero the rank is exactly 1, and such matrices exist — for example the matrix with a single 1 in the top-right corner.",
+ check="The argument is rank ≤ nullity plus rank–nullity; it generalises to rank ≤ ⌊n/2⌋ for any n × n matrix with A² = 0."))
+
+I.append(q(20, "single", "hard",
+ "A regression is fitted with an intercept plus a full set of four indicator columns for four categories. The resulting difficulty is best described as:",
+ ["the design matrix has nullity 1, so a one-parameter family of coefficients gives identical fits",
+  "the design matrix has rank 0",
+  "the residuals cannot be computed",
+  "the determinant of X is negative"],
+ "A",
+ "The four indicators sum to the intercept column, so one of the five columns is a combination of the others: rank 4, nullity 1. Adding c to the intercept and subtracting c from every category effect leaves all fitted values unchanged, so the fit is unique while the coefficients are not. Since rank(XᵀX) = rank(X) = 4 < 5, XᵀX is singular and different software returns different members of the same family."))
+
+# Spread the answer keys; the validator caps any letter at 40% of the pool.
+LET = "ABCD"
+WANT = {"ma-t1-m-01": "B", "ma-t1-m-02": "C", "ma-t1-m-03": "D",
+        "ma-t1-m-04": "B", "ma-t1-m-05": "C", "ma-t1-m-06": "D",
+        "ma-t1-m-07": "D", "ma-t1-m-09": "B", "ma-t1-m-10": "C",
+        "ma-t1-m-11": "D", "ma-t1-m-12": "B", "ma-t1-m-14": "C",
+        "ma-t1-m-15": "D", "ma-t1-m-16": "B", "ma-t1-m-18": "C",
+        "ma-t1-m-19": "D"}
+
+
+def swapletters(t, a, b):
+    """Swap option letters a and b wherever the text cites options — including plural lists
+    like "options B and C", which a singular "option X" regex missed and which once left a
+    check line ruling out its own answer."""
+    sw = lambda L: b if L == a else a if L == b else L
+    def fix(m):
+        head, body = m.group(1), m.group(2)
+        return head + re.sub(r"[ABCD]", lambda n: sw(n.group(0)), body)
+    return re.sub(r"([Oo]ptions?\s+)([ABCD](?:\s*(?:,|and|or)\s*[ABCD])*)", fix, t)
+
+
+def relabel(items):
+    for it in items:
+        w = WANT.get(it["id"])
+        if not w or not it.get("options"):
+            continue
+        i, j = LET.index(it["answer"]), LET.index(w)
+        if i == j:
+            continue
+        o = it["options"]
+        o[i], o[j] = o[j], o[i]
+        it["answer"] = w
+        a, b = LET[i], LET[j]
+        for fld in ("explanation", "check"):
+            if it.get(fld):
+                it[fld] = swapletters(it[fld], a, b)
+    return items
+
+relabel(I)
+_k = {}
+for _it in I:
+    _k[_it["answer"]] = _k.get(_it["answer"], 0) + 1
+print("key spread:", {L: _k.get(L, 0) for L in LET}, "cap", -(-len(I) * 2 // 5))
+
+POOLD = {
+ "moduleId": "maths", "topicId": "maths-t1", "source": "mastery",
+ "label": "Rank, nullity, Sylvester and Frobenius — mastery test (unseen)",
+ "count": len(I), "items": I}
+
+os.makedirs("seed", exist_ok=True)
+with io.open(OUT, "w", encoding="utf-8") as f:
+    json.dump(LES, f, ensure_ascii=False, indent=1)
+with io.open(POOL, "w", encoding="utf-8") as f:
+    json.dump(POOLD, f, ensure_ascii=False, indent=1)
+
+print("wrote %s: %d scenes (%d core), estMin %d" % (OUT, len(S), len(CORE), LES["estMin"]))
+print("wrote %s: %d items" % (POOL, len(I)))

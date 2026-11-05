@@ -1,0 +1,806 @@
+<title>Point Estimation Drill</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one column, max 940px; sticky tab rail; question cards; diagrams inside the column */
+:root{
+  --paper:#f6f7f9; --card:#ffffff; --ink:#14181e; --muted:#5a646f; --line:#dce2ea;
+  --accent:#2f4b8f; --accent-soft:#e9edf7; --ok:#1d7a4d; --bad:#a93226; --warn:#9a6511;
+  --ok-soft:#e6f3ec; --bad-soft:#fae9e7; --warn-soft:#fbf1e0;
+  --serif:"IBM Plex Serif",Georgia,serif;
+  --sans:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11141a; --card:#191e26; --ink:#e6eaf1; --muted:#98a3b0; --line:#2a313b;
+  --accent:#8ea8e6; --accent-soft:#1e2636; --ok:#5ec48f; --bad:#e5867e; --warn:#d9a85c;
+  --ok-soft:#16281f; --bad-soft:#2c1b19; --warn-soft:#2a2216; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --paper:#11141a; --card:#191e26; --ink:#e6eaf1; --muted:#98a3b0; --line:#2a313b;
+  --accent:#8ea8e6; --accent-soft:#1e2636; --ok:#5ec48f; --bad:#e5867e; --warn:#d9a85c;
+  --ok-soft:#16281f; --bad-soft:#2c1b19; --warn-soft:#2a2216; color-scheme:dark;}
+
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;}
+.wrap{max-width:940px;margin:0 auto;padding-inline:16px;padding-block:0 48px;}
+h1,h2,h3{font-family:var(--serif);text-wrap:balance;margin:0;}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;}
+
+header.top{padding-block:22px 14px;border-bottom:1px solid var(--line);}
+header.top h1{font-size:1.5rem;font-weight:600;letter-spacing:-.01em;}
+header.top p{margin:4px 0 0;color:var(--muted);font-size:.86rem;}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);
+  display:flex;gap:4px;overflow-x:auto;padding-block:8px;border-bottom:1px solid var(--line);margin-bottom:20px;}
+nav.tabs button{flex:0 0 auto;font:500 .82rem/1 var(--sans);letter-spacing:.02em;color:var(--muted);
+  background:none;border:1px solid transparent;border-radius:999px;padding:8px 13px;cursor:pointer;}
+nav.tabs button:hover{color:var(--ink);}
+nav.tabs button[aria-selected="true"]{background:var(--accent-soft);color:var(--accent);border-color:var(--line);}
+nav.tabs button:focus-visible,.btn:focus-visible,.cell:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:14px;}
+.lede{color:var(--muted);font-size:.9rem;margin-bottom:14px;}
+.btn{font:500 .84rem var(--sans);border:1px solid var(--line);background:var(--card);color:var(--ink);
+  border-radius:7px;padding:8px 13px;cursor:pointer;}
+.btn:hover{border-color:var(--accent);}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.btn.primary:hover{opacity:.9;}
+.btn[disabled]{opacity:.42;cursor:not-allowed;}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.spread{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;}
+.eyebrow{font:600 .7rem/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);}
+.stat{font-family:var(--mono);font-variant-numeric:tabular-nums;}
+
+/* question card */
+.qstem{font-size:1.02rem;margin-bottom:12px;}
+.sts{display:grid;gap:8px;margin-bottom:14px;}
+.st{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:start;
+  border:1px solid var(--line);border-radius:8px;padding:10px 11px;min-width:0;}
+.st .lab{font-family:var(--mono);font-weight:500;color:var(--accent);}
+.st .txt{min-width:0;font-size:.94rem;}
+.tf{display:flex;gap:5px;}
+.tf button{font:500 .74rem var(--sans);border:1px solid var(--line);background:var(--card);
+  color:var(--muted);border-radius:6px;padding:5px 9px;cursor:pointer;}
+.tf button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff;}
+.st.right{border-color:var(--ok);background:var(--ok-soft);}
+.st.wrong{border-color:var(--bad);background:var(--bad-soft);}
+.why{grid-column:2/-1;font-size:.85rem;color:var(--muted);margin-top:2px;}
+.opts{display:grid;gap:7px;}
+.opt{text-align:left;font:400 .93rem/1.45 var(--sans);border:1px solid var(--line);background:var(--card);
+  color:var(--ink);border-radius:8px;padding:10px 12px;cursor:pointer;min-width:0;}
+.opt:hover{border-color:var(--accent);}
+.opt .k{font-family:var(--mono);font-weight:500;color:var(--accent);margin-right:8px;}
+.opt.correct{border-color:var(--ok);background:var(--ok-soft);}
+.opt.chosen-wrong{border-color:var(--bad);background:var(--bad-soft);}
+.gate{font-size:.85rem;color:var(--warn);background:var(--warn-soft);border:1px solid var(--line);
+  border-radius:8px;padding:9px 11px;margin-bottom:12px;}
+.ans{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;font-size:.93rem;}
+.ans .val{font-family:var(--mono);font-weight:500;font-size:1.05rem;color:var(--accent);}
+.chk{background:var(--warn-soft);border-left:3px solid var(--warn);padding:8px 11px;border-radius:0 7px 7px 0;
+  margin-top:10px;font-size:.88rem;}
+.pill{display:inline-block;font:500 .7rem/1 var(--sans);letter-spacing:.04em;padding:5px 9px;
+  border-radius:999px;background:var(--accent-soft);color:var(--accent);}
+
+/* tables */
+.tblwrap{overflow-x:auto;}
+table{border-collapse:collapse;width:100%;font-size:.86rem;}
+th{text-align:left;font:600 .72rem/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;}
+td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top;}
+td.dist{font-weight:500;}
+.cell{font-family:var(--mono);font-size:.84rem;background:var(--accent-soft);color:transparent;
+  border:1px dashed var(--line);border-radius:5px;padding:4px 9px;cursor:pointer;min-width:62px;display:inline-block;}
+.cell.shown{background:none;color:var(--ink);border-color:transparent;border-style:solid;}
+
+/* log */
+.logitem{border:1px solid var(--line);border-radius:8px;padding:11px 12px;margin-bottom:8px;}
+.logitem .meta{font-size:.76rem;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;margin-top:5px;}
+.due{border-color:var(--warn);background:var(--warn-soft);}
+input[type=text],select,textarea{font:400 .9rem var(--sans);color:var(--ink);background:var(--card);
+  border:1px solid var(--line);border-radius:7px;padding:9px 10px;width:100%;min-width:0;}
+label.fld{display:block;margin-bottom:10px;}
+label.fld span{display:block;font:600 .72rem/1 var(--sans);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:5px;}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+.note{font-size:.84rem;color:var(--muted);}
+svg{max-width:100%;height:auto;display:block;}
+.pick{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;
+  padding:10px 12px;margin-bottom:7px;cursor:pointer;}
+.pick input{margin-top:3px;flex:0 0 auto;}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));
+  background:var(--ink);color:var(--paper);font-size:.84rem;padding:10px 16px;border-radius:999px;z-index:20;}
+input[type=range]{width:100%;accent-color:var(--accent);}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Point Estimation Drill</h1>
+    <p>Week 1 · UGC NET Statistics (107) · the parts of the module that work better on a screen than on paper</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="multi" aria-selected="true">Multi-statement</button>
+    <button role="tab" data-tab="numeric" aria-selected="false">Numerical</button>
+    <button role="tab" data-tab="concept" aria-selected="false">Conceptual</button>
+    <button role="tab" data-tab="recall" aria-selected="false">Recall</button>
+    <button role="tab" data-tab="diagrams" aria-selected="false">Diagrams</button>
+    <button role="tab" data-tab="log" aria-selected="false">Error log</button>
+    <button role="tab" data-tab="offline" aria-selected="false">Take offline</button>
+  </nav>
+
+  <section id="p-multi"></section>
+  <section id="p-numeric" hidden></section>
+  <section id="p-concept" hidden></section>
+  <section id="p-recall" hidden></section>
+  <section id="p-diagrams" hidden></section>
+  <section id="p-log" hidden></section>
+  <section id="p-offline" hidden></section>
+</div>
+
+<script>
+const D = {"bank": {"conceptual": [{"n": 1, "stem": "A statistic T is sufficient for θ if:", "opts": ["T is unbiased", "the conditional distribution of the sample given T is free of θ", "T has minimum variance", "T is consistent"], "ans": "B", "expl": ""}, {"n": 2, "stem": "For a random sample from N(μ, σ²) with both unknown, a sufficient statistic is:", "opts": ["X̄", "S²", "(ΣXᵢ, ΣXᵢ²)", "X₍ₙ₎"], "ans": "C", "expl": "Two unknown parameters, two-dimensional sufficient statistic."}, {"n": 3, "stem": "For U(0, θ) the sufficient statistic is:", "opts": ["X̄", "ΣXᵢ", "X₍ₙ₎", "X₍₁₎"], "ans": "C", "expl": "It comes from the indicator I(x₍ₙ₎ ≤ θ), not from the algebra."}, {"n": 4, "stem": "The factorisation theorem states that T is sufficient if and only if:", "opts": ["f(x;θ) = g(T;θ)h(x)", "f(x;θ) = g(T)h(θ)", "E(T) = θ", "T is complete"], "ans": "A", "expl": ""}, {"n": 5, "stem": "For U(θ, θ+1) the minimal sufficient statistic is:", "opts": ["X̄", "X₍₁₎", "X₍ₙ₎", "(X₍₁₎, X₍ₙ₎)"], "ans": "D", "expl": "One parameter, two-dimensional statistic — perfectly possible."}, {"n": 6, "stem": "Which is **not** necessarily true of a sufficient statistic?", "opts": ["it is unbiased", "it exists", "the whole sample is one", "any one-to-one function of it is sufficient"], "ans": "A", "expl": "X₍ₙ₎ is sufficient for θ in U(0,θ) but biased."}, {"n": 7, "stem": "For a sample from the Cauchy distribution, the minimal sufficient statistic is:", "opts": ["X̄", "the sample median", "the full set of order statistics", "ΣXᵢ²"], "ans": "C", "expl": "No genuine reduction is possible."}, {"n": 8, "stem": "If T is sufficient for θ, then the MLE:", "opts": ["equals T", "is a function of T", "is unrelated to T", "does not exist"], "ans": "B", "expl": "The likelihood depends on the data only through T."}, {"n": 9, "stem": "Which distribution is **not** a member of the exponential family?", "opts": ["Poisson", "Bernoulli", "U(0, θ)", "exponential"], "ans": "C", "expl": "Its support depends on θ."}, {"n": 10, "stem": "The natural parameter of the Bernoulli family is:", "opts": ["p", "1 − p", "log[p/(1−p)]", "p²"], "ans": "C", "expl": ""}, {"n": 11, "stem": "Completeness of T means:", "opts": ["E[g(T)] = 0 for all θ implies g(T) = 0 a.s.", "T is unbiased", "T is minimal", "Var(T) = 0"], "ans": "A", "expl": ""}, {"n": 12, "stem": "A statistic that is sufficient but not complete arises in:", "opts": ["Poisson", "U(θ, θ+1)", "Bernoulli", "normal with σ² known"], "ans": "B", "expl": ""}, {"n": 13, "stem": "For U(θ, θ+1), the range X₍ₙ₎ − X₍₁₎ is:", "opts": ["sufficient", "complete", "ancillary", "the MLE"], "ans": "C", "expl": "Its distribution is free of θ."}, {"n": 14, "stem": "Every complete sufficient statistic is:", "opts": ["minimal sufficient", "unbiased", "efficient", "ancillary"], "ans": "A", "expl": "The converse fails."}, {"n": 15, "stem": "Basu's theorem concerns the independence of:", "opts": ["two sufficient statistics", "a complete sufficient statistic and an ancillary statistic", "X̄ and the median", "MLE and UMVUE"], "ans": "B", "expl": ""}, {"n": 16, "stem": "In N(μ, σ²) with σ² known, Basu's theorem shows immediately that:", "opts": ["X̄ and S² are independent", "X̄ is unbiased", "S² is complete", "X̄ is efficient"], "ans": "A", "expl": ""}, {"n": 17, "stem": "Rao–Blackwell requires T to be:", "opts": ["complete", "sufficient", "unbiased", "minimal"], "ans": "B", "expl": "Sufficiency alone; completeness is needed only for Lehmann–Scheffé."}, {"n": 18, "stem": "E(h|T) has variance:", "opts": ["larger than Var(h)", "no larger than Var(h)", "equal to Var(h) always", "zero"], "ans": "B", "expl": ""}, {"n": 19, "stem": "Lehmann–Scheffé needs T to be:", "opts": ["sufficient only", "complete only", "complete and sufficient", "ancillary"], "ans": "C", "expl": ""}, {"n": 20, "stem": "The UMVUE, when it exists, is:", "opts": ["unique", "one of many", "always the MLE", "always unbiased for every parameter"], "ans": "A", "expl": ""}, {"n": 21, "stem": "The UMVUE of λ in Poisson(λ) is:", "opts": ["S²", "X̄", "X₍ₙ₎", "ΣXᵢ"], "ans": "B", "expl": ""}, {"n": 22, "stem": "The UMVUE of θ in U(0, θ) is:", "opts": ["X₍ₙ₎", "((n+1)/n)X₍ₙ₎", "2X̄", "nX₍ₙ₎"], "ans": "B", "expl": ""}, {"n": 23, "stem": "The UMVUE of θ for exponential with pdf θexp(−θx) is:", "opts": ["X̄", "1/X̄", "(n−1)/ΣXᵢ", "n/ΣXᵢ"], "ans": "C", "expl": ""}, {"n": 24, "stem": "The UMVUE of exp(−λ) in a Poisson sample is:", "opts": ["exp(−X̄)", "((n−1)/n)^(ΣXᵢ)", "1/X̄", "I(X₁ = 0)"], "ans": "B", "expl": "Option (A) is the MLE and is biased; (D) is the crude unbiased estimator you Rao–Blackwellise."}, {"n": 25, "stem": "If an unbiased estimator attains the Cramér–Rao bound then it is:", "opts": ["the UMVUE", "biased", "inconsistent", "the MLE"], "ans": "A", "expl": ""}, {"n": 26, "stem": "Rao–Blackwellising an estimator unbiased for τ(θ) gives an estimator unbiased for:", "opts": ["θ", "τ(θ)", "1/τ(θ)", "anything"], "ans": "B", "expl": "The estimand never changes."}, {"n": 27, "stem": "The MLE of θ in U(0, θ) is:", "opts": ["2X̄", "X₍ₙ₎", "X₍₁₎", "X̄"], "ans": "B", "expl": ", found by inspection, not differentiation."}, {"n": 28, "stem": "The MLE of σ² in N(μ, σ²) with both unknown is:", "opts": ["Σ(Xᵢ−X̄)²/(n−1)", "Σ(Xᵢ−X̄)²/n", "Σ(Xᵢ−μ)²/n", "S²"], "ans": "B", "expl": ", divisor n."}, {"n": 29, "stem": "MLEs are always:", "opts": ["unbiased", "unique", "functions of a sufficient statistic", "efficient in finite samples"], "ans": "C", "expl": ""}, {"n": 30, "stem": "The invariance property states that the MLE of g(θ) is:", "opts": ["g(θ̂)", "E[g(θ̂)]", "g(E θ̂)", "undefined"], "ans": "A", "expl": ""}, {"n": 31, "stem": "For U(θ, θ+1) the MLE is:", "opts": ["X₍₁₎", "X₍ₙ₎", "not unique", "X̄"], "ans": "C", "expl": "Any value in [X₍ₙ₎ − 1, X₍₁₎]."}, {"n": 32, "stem": "√n(θ̂ − θ) converges in distribution to:", "opts": ["N(0, I(θ))", "N(0, 1/I(θ))", "χ²₁", "N(θ, 1)"], "ans": "B", "expl": ""}, {"n": 33, "stem": "The MLE of θ for exponential with rate θ has expectation:", "opts": ["θ", "nθ/(n−1)", "(n−1)θ/n", "θ/n"], "ans": "B", "expl": ", hence biased upward."}, {"n": 34, "stem": "The MLE of the exponential mean 1/θ is:", "opts": ["1/X̄", "X̄", "n/ΣXᵢ", "ΣXᵢ"], "ans": "B", "expl": ", by invariance applied to θ̂ = 1/X̄."}, {"n": 35, "stem": "The method-of-moments estimator of θ in U(0, θ) is:", "opts": ["X₍ₙ₎", "2X̄", "X̄", "((n+1)/n)X₍ₙ₎"], "ans": "B", "expl": ", and it ignores the sample maximum entirely."}, {"n": 36, "stem": "Method-of-moments estimators are always:", "opts": ["unbiased", "consistent", "efficient", "functions of sufficient statistics"], "ans": "B", "expl": ", by the weak law of large numbers."}, {"n": 37, "stem": "Fisher information can be written as:", "opts": ["E[∂²/∂θ² log f]", "−E[∂²/∂θ² log f]", "E[∂/∂θ log f]", "Var(θ̂)"], "ans": "B", "expl": ""}, {"n": 38, "stem": "For a sample of size n, the total information is:", "opts": ["I(θ)", "nI(θ)", "I(θ)/n", "n²I(θ)"], "ans": "B", "expl": ""}, {"n": 39, "stem": "Fisher information for Bernoulli(p) is:", "opts": ["p(1−p)", "1/[p(1−p)]", "1/p", "n/p"], "ans": "B", "expl": ""}, {"n": 40, "stem": "An unbiased estimator with variance smaller than the Cramér–Rao bound indicates:", "opts": ["an error in arithmetic", "that the regularity conditions fail", "the estimator is biased", "the bound is wrong"], "ans": "B", "expl": "U(0, θ) is the standard instance."}], "numerical": [{"n": 1, "stem": "n = 10 from Bernoulli(p), with Σxᵢ = 3. Find the MLE of p.", "ans": "0.3", "work": "p̂ = x̄ = 3/10", "check": "a probability must lie in [0, 1]."}, {"n": 2, "stem": "Same data. Find the UMVUE of p.", "ans": "0.3", "work": "X̄ is unbiased and a function of the complete sufficient statistic, so MLE and UMVUE coincide here", "check": "ask whether the parameter sits in a denominator — if not, the two usually agree."}, {"n": 3, "stem": "Same data. Find the UMVUE of p².", "ans": "0.0667", "work": "T(T−1)/[n(n−1)] = (3)(2)/[(10)(9)] = 6/90", "check": "compare with p̂² = 0.09. They differ, and must — the UMVUE of p² is not the square of the UMVUE of p."}, {"n": 4, "stem": "n = 5 from Poisson(λ) with Σxᵢ = 12. Find the MLE of λ, the total Fisher information, and the CRLB for unbiased estimators of λ.", "ans": "λ̂ = 2.4; nI(λ) = 5/2.4 = 2.083; CRLB = λ/n = 0.48", "work": "", "check": "Var(X̄) = λ/n equals the bound exactly, so X̄ is efficient."}, {"n": 5, "stem": "Same Poisson data. Find the UMVUE of e^(−λ) and compare it with the MLE.", "ans": "UMVUE = (4/5)¹² = 0.0687; MLE = exp(−2.4) = 0.0907", "work": "", "check": "both must lie in (0, 1), and they must differ — the MLE of e^(−λ) is biased."}, {"n": 6, "stem": "n = 8 from exponential with rate θ, Σxᵢ = 20. Find the MLE and the UMVUE of θ, and the bias of the MLE.", "ans": "MLE = 8/20 = 0.4; UMVUE = 7/20 = 0.35; bias = θ/(n−1) = θ/7", "work": "", "check": "the MLE must exceed the UMVUE, since E(MLE) = nθ/(n−1) > θ."}, {"n": 7, "stem": "Same data, but now θ denotes the **mean**. Find the MLE and the UMVUE.", "ans": "Both X̄ = 20/8 = 2.5", "work": "", "check": "reread which parameterisation the question used. Rate and mean give different answers from identical data."}, {"n": 8, "stem": "n = 6 from U(0, θ) with x₍₆₎ = 9.2. Find the MLE and the UMVUE of θ.", "ans": "MLE = 9.2; UMVUE = (7/6)(9.2) = 10.733", "work": "", "check": "the UMVUE must exceed the observed maximum — θ cannot be smaller than a value you have already seen."}, {"n": 9, "stem": "In problem 8, write the variance of the UMVUE.", "ans": "θ²/[n(n+2)] = θ²/48", "work": "", "check": "this falls like 1/n², faster than any CRLB rate — correct, because the support depends on θ and the bound does not apply."}, {"n": 10, "stem": "n = 10 from N(μ, σ²), both unknown, with Σ(xᵢ − x̄)² = 36. Find the MLE and the UMVUE of σ².", "ans": "MLE = 36/10 = 3.6; UMVUE = 36/9 = 4", "work": "", "check": "divisor n versus n − 1. The MLE is always the smaller."}, {"n": 11, "stem": "Compute Fisher information for a single Bernoulli observation at p = 0.25.", "ans": "I(p) = 1/[p(1−p)] = 1/0.1875 = 5.333", "work": "", "check": "information is largest near p = 0 or 1 and smallest at p = 0.5 — substitute p = 0.5 and confirm you get 4."}, {"n": 12, "stem": "With n = 20 and p = 0.25, find the CRLB for unbiased estimators of p.", "ans": "p(1−p)/n = 0.1875/20 = 0.009375", "work": "", "check": "Var(X̄) = p(1−p)/n is identical, so X̄ attains the bound."}, {"n": 13, "stem": "n = 25 from N(μ, 16). Find the CRLB for μ and state whether X̄ attains it.", "ans": "σ²/n = 16/25 = 0.64; yes, Var(X̄) = 0.64", "work": "", "check": "efficiency = CRLB/Var = 1."}, {"n": 14, "stem": "n = 10 from exponential with rate θ. Compare the variance of the UMVUE of θ with the CRLB.", "ans": "Var[(n−1)/ΣXᵢ] = θ²/(n−2) = θ²/8; CRLB = θ²/n = θ²/10", "work": "", "check": "the UMVUE's variance is larger. This is legitimate — being UMVUE does not require attaining the bound."}, {"n": 15, "stem": "n = 12 from geometric(p), counting trials to the first success, with Σxᵢ = 40. Find the MLE of p.", "ans": "p̂ = 1/x̄ = 12/40 = 0.3", "work": "", "check": "p must lie in (0, 1], and x̄ = 3.33 should be near 1/p = 3.33."}, {"n": 16, "stem": "n = 10 from U(0, θ) with x̄ = 4.1 and x₍₁₀₎ = 9.2. Find the method-of-moments estimate and comment.", "ans": "2x̄ = 8.2", "work": ", which is **smaller than an observed value**", "check": "any estimate of θ below x₍ₙ₎ is impossible. This is the standard demonstration that the method of moments can ignore a sufficient statistic."}, {"n": 17, "stem": "n = 5 from Gamma(α = 3 known, β) with Σxᵢ = 30. Find the MLE of β.", "ans": "β̂ = nα/Σxᵢ = 15/30 = 0.5", "work": "", "check": "E(X) = α/β = 6, and x̄ = 6 ✓."}, {"n": 18, "stem": "n = 8 from N(5, σ²) with μ known to be 5 and Σ(xᵢ − 5)² = 40. Find the MLE and the UMVUE of σ².", "ans": "Both 40/8 = 5", "work": "", "check": "when μ is known, no degree of freedom is spent, so the divisor is n for both."}, {"n": 19, "stem": "For n = 10, compare the MSE of the MLE of σ² with the MSE of S².", "ans": "MSE(MLE) = 0.19σ⁴; MSE(S²) = 2σ⁴/9 = 0.222σ⁴", "work": "Working: Var(MLE) = 2(n−1)σ⁴/n² = 0.18σ⁴, bias = −σ²/n so bias² = 0.01σ⁴", "check": "the biased estimator wins on MSE — unbiasedness is a convention, not an optimum."}, {"n": 20, "stem": "n = 20 from Bernoulli with Σxᵢ = 5. State the efficiency of X̄ as an estimator of p.", "ans": "1", "work": "Var(X̄) = p(1−p)/n equals the CRLB", "check": "efficiency can never exceed 1 under the regularity conditions."}, {"n": 21, "stem": "n = 6 from exponential with rate θ and Σxᵢ = 15. Estimate P(X > 2) by maximum likelihood.", "ans": "θ̂ = 6/15 = 0.4, so exp(−2θ̂) = exp(−0.8) = 0.449", "work": "", "check": "a probability, so it must sit in (0, 1); and since the mean is 2.5, P(X > 2) should be a little under 0.5 ✓."}, {"n": 22, "stem": "n = 4 from Poisson with Σxᵢ = 6. Find the UMVUE of e^(−λ).", "ans": "(3/4)⁶ = 0.178", "work": "", "check": "compare the MLE exp(−1.5) = 0.223. The UMVUE is the smaller here."}, {"n": 23, "stem": "n = 4 from U(0, θ) with x₍₄₎ = 10 and x̄ = 5.5. Give the MLE, the UMVUE and the MoM estimate.", "ans": "MLE = 10; UMVUE = (5/4)(10) = 12.5; MoM = 2(5.5) = 11", "work": "", "check": "all three must be at least 10. Here they are, but only by luck for MoM."}, {"n": 24, "stem": "n = 20 from Poisson(λ = 4). Find the total Fisher information and the CRLB for unbiased estimators of λ.", "ans": "nI(λ) = 20/4 = 5; CRLB = 1/5 = 0.2", "work": "", "check": "λ/n = 4/20 = 0.2 ✓, the two routes must agree."}, {"n": 25, "stem": "A sample of size n from exponential with mean θ. Write the distribution of ΣXᵢ, of 2ΣXᵢ/θ, and E(1/ΣXᵢ).", "ans": "Gamma(n, 1/θ); χ²₂ₙ; E(1/ΣXᵢ) = 1/[θ(n−1)]", "work": "", "check": "the chi-square has 2n degrees of freedom, not n — this is what converts exponential problems onto chi-square tables."}], "multi": [{"n": 1, "day": "Day 1 — sufficiency", "stem": "X₁, …, Xₙ are iid Bernoulli(p).", "sts": ["ΣXᵢ is sufficient for p.", "The conditional distribution of the sample given ΣXᵢ = t depends on p.", "X̄ is sufficient for p.", "(X₁, X₂) is sufficient for p."], "opts": ["A, C only", "A, B, C only", "A, C, D only", "B, D only"], "ans": "A", "v": {"A": {"tf": true, "why": "by factorisation"}, "B": {"tf": false, "why": "that is precisely what sufficiency denies"}, "C": {"tf": true, "why": "one-to-one function of ΣXᵢ"}, "D": {"tf": false, "why": "it discards the rest of the sample"}}}, {"n": 2, "day": "Day 1 — sufficiency", "stem": "Concerning the factorisation theorem.", "sts": ["f(x;θ) = g(T;θ)h(x) is necessary and sufficient for sufficiency.", "h(x) may involve θ through its support.", "The factorisation is unique.", "The whole sample is always sufficient."], "opts": ["A, B only", "A, D only", "A, C, D only", "B, C only"], "ans": "B", "v": {"A": {"tf": true, "why": "the theorem is an \"if and only if\""}, "B": {"tf": false, "why": "h must be free of θ entirely, support included — this is the U(0,θ) trap"}, "C": {"tf": false, "why": "constants can be moved between g and h"}, "D": {"tf": true, "why": "trivially"}}}, {"n": 3, "day": "Day 1 — sufficiency", "stem": "A random sample from U(0, θ).", "sts": ["X₍ₙ₎ is sufficient.", "X̄ is sufficient.", "The support depends on θ.", "The family is an exponential family."], "opts": ["A, C only", "A, B, C only", "C, D only", "A, D only"], "ans": "A", "v": {"A": {"tf": true, "why": "from the indicator"}, "B": {"tf": false, "why": "X̄ throws away the maximum"}, "C": {"tf": true, "why": ""}, "D": {"tf": false, "why": "exponential families cannot have θ-dependent support"}}}, {"n": 4, "day": "Day 1 — sufficiency", "stem": "Concerning minimal sufficiency.", "sts": ["A minimal sufficient statistic is a function of every sufficient statistic.", "It is unique.", "A complete sufficient statistic is minimal sufficient.", "For the Cauchy family the order statistics are minimal sufficient."], "opts": ["A, B, C only", "A, C, D only", "B, C only", "A, D only"], "ans": "B", "v": {"A": {"tf": true, "why": "by definition"}, "B": {"tf": false, "why": "unique only up to one-to-one transformation — X̄ and ΣXᵢ are both minimal sufficient"}, "C": {"tf": true, "why": ""}, "D": {"tf": true, "why": "no genuine reduction is possible there"}}}, {"n": 5, "day": "Day 1 — sufficiency", "stem": "A random sample from N(μ, σ²) with both parameters unknown.", "sts": ["(ΣXᵢ, ΣXᵢ²) is sufficient.", "(X̄, S²) is sufficient.", "X̄ alone is sufficient for μ.", "The sufficient statistic is two-dimensional."], "opts": ["A, B, D only", "A, C only", "A, B, C, D", "B, D only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": true, "why": "one-to-one with A"}, "C": {"tf": false, "why": "with σ² unknown, X̄ alone does not reproduce the likelihood"}, "D": {"tf": true, "why": ""}}}, {"n": 6, "day": "Day 2 — exponential families, completeness, ancillarity", "stem": "Concerning exponential families.", "sts": ["Poisson belongs.", "U(0, θ) belongs.", "The natural parameter for Bernoulli is log[p/(1−p)].", "Membership gives a complete sufficient statistic when the natural parameter space contains an open interval."], "opts": ["A, C, D only", "A, B, C only", "C, D only", "A, D only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": false, "why": "θ-dependent support"}, "C": {"tf": true, "why": "the logit"}, "D": {"tf": true, "why": "this is the completeness condition"}}}, {"n": 7, "day": "Day 2 — exponential families, completeness, ancillarity", "stem": "Concerning completeness.", "sts": ["E[g(T)] = 0 for all θ implying g ≡ 0 is the definition.", "Completeness implies sufficiency.", "For U(θ, θ+1), (X₍₁₎, X₍ₙ₎) is complete.", "For U(0, θ), X₍ₙ₎ is complete."], "opts": ["A, D only", "A, B, D only", "A, C only", "B, C, D only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": false, "why": "they are independent properties; neither implies the other"}, "C": {"tf": false, "why": "the range provides a non-trivial unbiased estimator of zero"}, "D": {"tf": true, "why": "proved by differentiating under the integral"}}}, {"n": 8, "day": "Day 2 — exponential families, completeness, ancillarity", "stem": "Concerning ancillary statistics.", "sts": ["An ancillary statistic has a distribution free of θ.", "The range in U(θ, θ+1) is ancillary.", "An ancillary statistic is sufficient.", "Basu's theorem gives independence of a complete sufficient statistic and any ancillary statistic."], "opts": ["A, B, D only", "A, B, C only", "A, D only", "B, C, D only"], "ans": "A", "v": {"A": {"tf": true, "why": "by definition"}, "B": {"tf": true, "why": "the interval has fixed length"}, "C": {"tf": false, "why": "it is the opposite pole from sufficiency"}, "D": {"tf": true, "why": ""}}}, {"n": 9, "day": "Day 2 — exponential families, completeness, ancillarity", "stem": "A random sample from N(μ, σ²) with σ² known.", "sts": ["X̄ is complete sufficient for μ.", "S² is ancillary.", "X̄ and S² are independent.", "Proving that independence requires Helmert's transformation."], "opts": ["A, B, C only", "A, C, D only", "A, B, C, D", "B, C only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": true, "why": "its distribution involves only σ², which is known"}, "C": {"tf": true, "why": ""}, "D": {"tf": false, "why": "Basu's theorem gives it in one line"}}}, {"n": 10, "day": "Day 2 — exponential families, completeness, ancillarity", "stem": "The shifted exponential f(x) = exp(−(x−θ)), x ≥ θ.", "sts": ["It belongs to the exponential family.", "X₍₁₎ is sufficient for θ.", "The Cramér–Rao bound applies.", "X̄ − 1 is unbiased for θ."], "opts": ["B, D only", "A, B only", "B, C, D only", "A, C only"], "ans": "A", "v": {"A": {"tf": false, "why": "support depends on θ"}, "B": {"tf": true, "why": "from the indicator"}, "C": {"tf": false, "why": "the regularity conditions fail"}, "D": {"tf": true, "why": "since E(X) = θ + 1"}}}, {"n": 11, "day": "Day 3 — Rao–Blackwell", "stem": "Concerning the Rao–Blackwell theorem.", "sts": ["It requires T to be sufficient.", "It requires T to be complete.", "E(h|T) is unbiased for whatever h was unbiased for.", "Var[E(h|T)] ≤ Var(h)."], "opts": ["A, C, D only", "A, B, C only", "A, B, C, D", "C, D only"], "ans": "A", "v": {"A": {"tf": true, "why": "this is what makes E(h|T) a statistic"}, "B": {"tf": false, "why": "completeness belongs to Lehmann–Scheffé"}, "C": {"tf": true, "why": "the estimand never changes"}, "D": {"tf": true, "why": "by the law of total variance"}}}, {"n": 12, "day": "Day 3 — Rao–Blackwell", "stem": "Further statements on Rao–Blackwell.", "sts": ["E(h|T) is a statistic because T is sufficient.", "Equality in the variance inequality holds only if h is already a function of T.", "Applying it to a biased estimator makes the result unbiased.", "Its proof uses the law of total variance."], "opts": ["A, B, D only", "A, B, C only", "B, C, D only", "A, D only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": true, "why": "equality needs Var(h|T) = 0"}, "C": {"tf": false, "why": "it preserves bias exactly as it preserves unbiasedness"}, "D": {"tf": true, "why": ""}}}, {"n": 13, "day": "Day 3 — Rao–Blackwell", "stem": "Estimating e^(−λ) in a Poisson sample.", "sts": ["I(X₁ = 0) is unbiased for e^(−λ).", "X₁ given ΣXᵢ = t is Binomial(t, 1/n).", "The Rao–Blackwell improvement is ((n−1)/n)^ΣXᵢ.", "exp(−X̄) is unbiased for e^(−λ)."], "opts": ["A, B, C only", "A, C, D only", "B, C, D only", "A, B only"], "ans": "A", "v": {"A": {"tf": true, "why": "P(X₁ = 0) = e^(−λ)"}, "B": {"tf": true, "why": "the multinomial split"}, "C": {"tf": true, "why": "computed from B"}, "D": {"tf": false, "why": "it is the MLE and is biased, by Jensen"}}}, {"n": 14, "day": "Day 3 — Rao–Blackwell", "stem": "X₁, …, Xₙ iid exponential with mean θ; T(X₁) = 1 if X₁ > x₀, else 0.", "sts": ["E[T(X₁)] = e^(−x₀/θ).", "E[T(X₁) | ΣXᵢ] is the UMVUE of θ.", "It is the UMVUE of e^(−x₀/θ).", "Rao–Blackwell changes the estimand."], "opts": ["A, C only", "A, B only", "A, C, D only", "B, D only"], "ans": "A", "v": {"A": {"tf": true, "why": "the survival probability"}, "B": {"tf": false, "why": "wrong estimand"}, "C": {"tf": true, "why": ""}, "D": {"tf": false, "why": "it changes the estimator, never the estimand"}}}, {"n": 15, "day": "Day 3 — Rao–Blackwell", "stem": "More on improvement by conditioning.", "sts": ["Conditioning on an ancillary statistic improves an estimator.", "Conditioning on a sufficient statistic never increases variance.", "If T is not complete the improved estimator may still not be UMVUE.", "Rao–Blackwell assumes E(h²) < ∞."], "opts": ["B, C, D only", "A, B, C only", "B, D only", "A, C, D only"], "ans": "A", "v": {"A": {"tf": false, "why": "an ancillary statistic carries no information about θ"}, "B": {"tf": true, "why": ""}, "C": {"tf": true, "why": "this is exactly why completeness matters"}, "D": {"tf": true, "why": "needed for the variance to exist"}}}, {"n": 16, "day": "Day 4 — Lehmann–Scheffé and the UMVUE", "stem": "Concerning Lehmann–Scheffé.", "sts": ["It requires completeness and sufficiency.", "The UMVUE is unique.", "Every parametric function has a UMVUE.", "The UMVUE is always a function of the complete sufficient statistic."], "opts": ["A, B, D only", "A, B, C only", "B, C, D only", "A, D only"], "ans": "A", "v": {"A": {"tf": true, "why": "both"}, "B": {"tf": true, "why": "completeness forces it"}, "C": {"tf": false, "why": "existence is not guaranteed"}, "D": {"tf": true, "why": ""}}}, {"n": 17, "day": "Day 4 — Lehmann–Scheffé and the UMVUE", "stem": "A random sample from Poisson(λ).", "sts": ["X̄ is the UMVUE of λ.", "S² is the UMVUE of λ.", "X̄ attains the Cramér–Rao bound.", "aX̄ + (1−a)S² is unbiased for λ for every a."], "opts": ["A, C, D only", "A, B, C only", "A, C only", "B, C, D only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": false, "why": "S² is unbiased for λ but has larger variance and is not a function of the complete sufficient statistic alone"}, "C": {"tf": true, "why": "Var(X̄) = λ/n"}, "D": {"tf": true, "why": "weights summing to one preserve unbiasedness"}}}, {"n": 18, "day": "Day 4 — Lehmann–Scheffé and the UMVUE", "stem": "Exponential with rate θ.", "sts": ["n/ΣXᵢ is the MLE.", "(n−1)/ΣXᵢ is the UMVUE.", "Both are unbiased.", "The UMVUE attains the Cramér–Rao bound."], "opts": ["A, B only", "A, B, C only", "A, B, D only", "B, C only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": true, "why": ""}, "C": {"tf": false, "why": "the MLE has expectation nθ/(n−1)"}, "D": {"tf": false, "why": "its variance is θ²/(n−2), above the bound θ²/n"}}}, {"n": 19, "day": "Day 4 — Lehmann–Scheffé and the UMVUE", "stem": "A random sample from U(0, θ).", "sts": ["X₍ₙ₎ is the MLE.", "((n+1)/n)X₍ₙ₎ is the UMVUE.", "2X̄ is the method-of-moments estimator.", "The UMVUE attains the Cramér–Rao bound."], "opts": ["A, B, C only", "A, B, D only", "A, C, D only", "B, C only"], "ans": "A", "v": {"A": {"tf": true, "why": "by inspection"}, "B": {"tf": true, "why": ""}, "C": {"tf": true, "why": "from x̄ = θ/2"}, "D": {"tf": false, "why": "the bound does not apply at all here"}}}, {"n": 20, "day": "Day 4 — Lehmann–Scheffé and the UMVUE", "stem": "Relationships between the UMVUE and the bound.", "sts": ["Attaining the Cramér–Rao bound implies being the UMVUE.", "Being the UMVUE implies attaining the bound.", "A UMVUE may have variance strictly above the bound.", "The UMVUE is by definition unbiased."], "opts": ["A, C, D only", "A, B, D only", "C, D only", "A, B, C, D"], "ans": "A", "v": {"A": {"tf": true, "why": "nothing can do better than the bound"}, "B": {"tf": false, "why": "the converse fails"}, "C": {"tf": true, "why": "as in question 18"}, "D": {"tf": true, "why": "it is in the name"}}}, {"n": 21, "day": "Day 5 — maximum likelihood", "stem": "General properties of maximum likelihood estimators.", "sts": ["They are always unbiased.", "They are always functions of a sufficient statistic.", "They are invariant.", "They are always unique."], "opts": ["B, C only", "A, B, C only", "B, C, D only", "A, C only"], "ans": "A", "v": {"A": {"tf": false, "why": "σ̂², X₍ₙ₎, n/ΣXᵢ are all biased"}, "B": {"tf": true, "why": "the likelihood factorises through T"}, "C": {"tf": true, "why": ""}, "D": {"tf": false, "why": "U(θ, θ+1) and the Laplace median"}}}, {"n": 22, "day": "Day 5 — maximum likelihood", "stem": "A random sample from N(μ, σ²), both unknown.", "sts": ["The MLE of σ² has divisor n.", "The MLE of σ² is unbiased.", "S² is the UMVUE of σ².", "The MLE of μ is X̄."], "opts": ["A, C, D only", "A, B, D only", "A, D only", "B, C, D only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": false, "why": "E(σ̂²) = ((n−1)/n)σ²"}, "C": {"tf": true, "why": ""}, "D": {"tf": true, "why": ""}}}, {"n": 23, "day": "Day 5 — maximum likelihood", "stem": "A random sample from U(0, θ).", "sts": ["The likelihood equation has no solution.", "The MLE is found by inspection.", "The MLE is biased downward.", "The MLE is asymptotically normal."], "opts": ["A, B, C only", "A, B, D only", "B, C, D only", "A, C only"], "ans": "A", "v": {"A": {"tf": true, "why": "the derivative is never zero"}, "B": {"tf": true, "why": "the likelihood decreases beyond x₍ₙ₎"}, "C": {"tf": true, "why": "E = nθ/(n+1) < θ"}, "D": {"tf": false, "why": "it converges at rate n and has a non-normal limit"}}}, {"n": 24, "day": "Day 5 — maximum likelihood", "stem": "The invariance property.", "sts": ["The MLE of g(θ) is g(θ̂).", "Invariance preserves unbiasedness.", "The MLE of σ is the square root of the MLE of σ².", "The MLE of e^(−λ) in a Poisson sample is exp(−X̄)."], "opts": ["A, C, D only", "A, B, C only", "A, D only", "C, D only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": false, "why": "g(θ̂) is generally biased even when θ̂ is not"}, "C": {"tf": true, "why": ""}, "D": {"tf": true, "why": ""}}}, {"n": 25, "day": "Day 5 — maximum likelihood", "stem": "Asymptotic behaviour.", "sts": ["√n(θ̂ − θ) converges to N(0, 1/I(θ)).", "MLEs are consistent under regularity.", "MLEs attain the Cramér–Rao bound in finite samples.", "MLEs are asymptotically efficient."], "opts": ["A, B, D only", "A, B, C only", "B, C, D only", "A, D only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": true, "why": ""}, "C": {"tf": false, "why": "only in the limit, and only in exponential families exactly"}, "D": {"tf": true, "why": ""}}}, {"n": 26, "day": "Day 6 — method of moments and Cramér–Rao", "stem": "Concerning method-of-moments estimators.", "sts": ["They are always consistent.", "They are always functions of a sufficient statistic.", "They are generally less efficient than MLEs.", "They can give estimates outside the parameter space."], "opts": ["A, C, D only", "A, B, C only", "C, D only", "A, B, D only"], "ans": "A", "v": {"A": {"tf": true, "why": "by the weak law"}, "B": {"tf": false, "why": "2X̄ for U(0,θ) ignores X₍ₙ₎ entirely"}, "C": {"tf": true, "why": ""}, "D": {"tf": true, "why": ""}}}, {"n": 27, "day": "Day 6 — method of moments and Cramér–Rao", "stem": "The method of moments applied to U(0, θ).", "sts": ["2X̄ is the estimator.", "2X̄ is unbiased.", "2X̄ can fall below an observed value.", "2X̄ is the UMVUE."], "opts": ["A, B, C only", "A, C, D only", "A, B only", "B, C, D only"], "ans": "A", "v": {"A": {"tf": true, "why": "from x̄ = θ/2"}, "B": {"tf": true, "why": "E(2X̄) = θ"}, "C": {"tf": true, "why": "and then it is logically impossible"}, "D": {"tf": false, "why": "the UMVUE is ((n+1)/n)X₍ₙ₎"}}}, {"n": 28, "day": "Day 6 — method of moments and Cramér–Rao", "stem": "Concerning Fisher information.", "sts": ["I(θ) = −E[∂²/∂θ² log f].", "I_n(θ) = nI(θ).", "I(θ) is the variance of the score.", "The expected score equals 1."], "opts": ["A, B, C only", "A, B, D only", "B, C, D only", "A, C only"], "ans": "A", "v": {"A": {"tf": true, "why": "the computational form"}, "B": {"tf": true, "why": "additivity"}, "C": {"tf": true, "why": "since the score has mean zero"}, "D": {"tf": false, "why": "the expected score is 0, which is why C holds"}}}, {"n": 29, "day": "Day 6 — method of moments and Cramér–Rao", "stem": "Concerning the Cramér–Rao inequality.", "sts": ["It applies to unbiased estimators.", "Var(T) ≥ [τ′(θ)]²/(nI(θ)).", "It applies when the support depends on θ.", "Equality holds if and only if the score equals k(θ)[T − τ(θ)]."], "opts": ["A, B, D only", "A, B, C only", "B, C, D only", "A, D only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": true, "why": "note the squared derivative"}, "C": {"tf": false, "why": "that violates the first regularity condition"}, "D": {"tf": true, "why": ""}}}, {"n": 30, "day": "Day 6 — method of moments and Cramér–Rao", "stem": "Values of Fisher information.", "sts": ["For Bernoulli, I(p) = 1/[p(1−p)].", "For Poisson, I(λ) = λ.", "For exponential with rate θ, I(θ) = 1/θ².", "For N(μ, σ²) with σ² known, I(μ) = 1/σ²."], "opts": ["A, C, D only", "A, B, D only", "A, B, C only", "C, D only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": false, "why": "it is 1/λ — information is the reciprocal of the asymptotic variance"}, "C": {"tf": true, "why": ""}, "D": {"tf": true, "why": ""}}}, {"n": 31, "day": "Day 7 — mixed revision", "stem": "Criteria for comparing estimators.", "sts": ["MSE = variance + bias².", "For unbiased estimators MSE equals the variance.", "A biased estimator can have smaller MSE.", "Consistency requires unbiasedness."], "opts": ["A, B, C only", "A, B, D only", "A, C, D only", "B, C only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": true, "why": "bias is zero"}, "C": {"tf": true, "why": "the MLE of σ² beats S² on MSE"}, "D": {"tf": false, "why": "asymptotic unbiasedness suffices"}}}, {"n": 32, "day": "Day 7 — mixed revision", "stem": "General statements about sufficiency.", "sts": ["Sufficiency is defined relative to a parameter.", "A statistic sufficient for μ in a normal sample is also sufficient for σ².", "Any one-to-one function of a sufficient statistic is sufficient.", "Sufficiency implies consistency."], "opts": ["A, C only", "A, B, C only", "C, D only", "A, B only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": false, "why": "sufficiency is always for a stated parameter"}, "C": {"tf": true, "why": ""}, "D": {"tf": false, "why": "X₍ₙ₎ is sufficient for θ in U(0,θ) and biased"}}}, {"n": 33, "day": "Day 7 — mixed revision", "stem": "Distribution facts for the exponential family with rate θ.", "sts": ["ΣXᵢ follows Gamma(n, θ).", "2θΣXᵢ follows χ² with 2n degrees of freedom.", "E(1/ΣXᵢ) = θ/(n−1).", "ΣXᵢ follows Gamma(1, θ)."], "opts": ["A, B, C only", "A, B, D only", "B, C, D only", "A, C only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": true, "why": "note 2n, not n"}, "C": {"tf": true, "why": "which is where the UMVUE comes from"}, "D": {"tf": false, "why": "Gamma(1, θ) is a single exponential — this was the trap in Q40"}}}, {"n": 34, "day": "Day 7 — mixed revision", "stem": "A random sample from U(0, θ).", "sts": ["E(X₍ₙ₎) = nθ/(n+1).", "The variance of the UMVUE is θ²/[n(n+2)].", "The MLE converges at rate √n.", "The UMVUE is ((n+1)/n)X₍ₙ₎."], "opts": ["A, B, D only", "A, C, D only", "B, C, D only", "A, D only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": true, "why": ""}, "C": {"tf": false, "why": "the rate is n, which is why the estimator appears to beat the bound"}, "D": {"tf": true, "why": ""}}}, {"n": 35, "day": "Day 7 — mixed revision", "stem": "The architecture of the week.", "sts": ["Completeness gives uniqueness of the UMVUE.", "Sufficiency is what makes E(h|T) a statistic.", "Basu's theorem links a complete sufficient statistic with an ancillary one.", "Rao–Blackwell requires completeness."], "opts": ["A, B, C only", "A, B, D only", "B, C, D only", "A, C only"], "ans": "A", "v": {"A": {"tf": true, "why": ""}, "B": {"tf": true, "why": ""}, "C": {"tf": true, "why": ""}, "D": {"tf": false, "why": "sufficiency alone — this single word was the whole of Q61"}}}]}, "master": [["Bernoulli(p)", "ΣXᵢ", "X̄", "X̄", "attains CRLB"], ["Binomial(n known, p)", "ΣXᵢ", "X̄/n", "X̄/n", ""], ["Poisson(λ)", "ΣXᵢ", "X̄", "X̄", "attains CRLB"], ["Poisson, estimating exp(−λ)", "ΣXᵢ", "exp(−X̄)", "((n−1)/n)^(ΣXᵢ)", "MLE biased"], ["Geometric(p)", "ΣXᵢ", "1/X̄", "—", ""], ["N(μ, σ² known)", "ΣXᵢ", "X̄", "X̄", "attains CRLB"], ["N(μ known, σ²)", "Σ(Xᵢ−μ)²", "Σ(Xᵢ−μ)²/n", "Σ(Xᵢ−μ)²/n", ""], ["N(μ, σ²) both unknown", "(ΣXᵢ, ΣXᵢ²)", "X̄, Σ(Xᵢ−X̄)²/n", "X̄, S²", "divisors n vs n−1"], ["Exponential, rate θ", "ΣXᵢ", "n/ΣXᵢ", "(n−1)/ΣXᵢ", "MLE biased by n/(n−1)"], ["Exponential, mean θ", "ΣXᵢ", "X̄", "X̄", ""], ["Exponential, est. exp(−x₀/θ)", "ΣXᵢ", "exp(−x₀/X̄)", "(1 − x₀/T)ⁿ⁻¹", "T = ΣXᵢ"], ["U(0, θ)", "X₍ₙ₎", "X₍ₙ₎", "((n+1)/n)X₍ₙ₎", "CRLB inapplicable"], ["U(θ, θ+1)", "(X₍₁₎, X₍ₙ₎)", "not unique", "—", "sufficient, **not complete**"], ["Gamma(α known, β)", "ΣXᵢ", "α/X̄", "(nα−1)/ΣXᵢ", ""]], "fisher": [["Bernoulli(p)", "1/[p(1−p)]"], ["Poisson(λ)", "1/λ"], ["Exponential(θ)", "1/θ²"], ["N(μ), σ² known", "1/σ²"], ["N(σ²), μ known", "1/(2σ⁴)"]], "carry": [["Sufficient", "the conditional distribution of the sample given T is free of θ"], ["Minimal sufficient", "a function of every other sufficient statistic"], ["Complete", "E[g(T)] = 0 for all θ forces g ≡ 0"], ["Ancillary", "distribution free of θ"], ["Factorisation", "f(x;θ) = g(T;θ)·h(x), h free of θ including its support"], ["Rao–Blackwell needs", "sufficiency → unbiased, variance no larger"], ["Lehmann–Scheffé needs", "sufficiency AND completeness → unique UMVUE"], ["Basu", "complete sufficient ⫫ ancillary"], ["MLE holds", "function of sufficient statistic, invariant, consistent, asymptotically normal and efficient"], ["MLE fails", "unbiasedness, uniqueness, existence"], ["The three corrections", "σ²: n−1 · exponential rate: n−1 · uniform: n+1"], ["CRLB", "Var(T) ≥ [τ′(θ)]²/(nI(θ)), I(θ) = −E[∂²/∂θ² log f], I_n = nI"], ["CRLB attained", "⟹ UMVUE. Not attained does NOT mean not UMVUE"], ["CRLB fails", "whenever the support depends on θ"], ["The counterexample", "U(θ, θ+1): sufficient, not complete — the range is ancillary with mean (n−1)/(n+1)"], ["Outlaws", "uniform and Cauchy — not exponential family, no CRLB"], ["Convex cups upward", "E[g(X)] ≥ g(EX); 1/x, x², eˣ convex, log and √ concave"], ["Double it, double the df", "2θΣX ~ χ²₂ₙ"], ["Rank over n plus one", "E(X₍ᵣ₎) = r/(n+1) for the uniform"]], "errorTypes": ["Reported the wrong quantity", "Squared or rooted wrongly", "Missed a term", "Degrees of freedom", "Sign", "Pure recall gap", "Missed a condition", "Ran out of time"]};
+const $ = (s,r=document)=>r.querySelector(s);
+const el = (t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e;};
+const esc = s => String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+const LET = ['A','B','C','D'];
+const today = () => new Date().toISOString().slice(0,10);
+
+/* ---------- small persistent store: db when available, else localStorage ---------- */
+let db=null, uid=null, store='local';
+function lsGet(k,f){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):f; }catch(e){ return f; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+
+const Log = {
+  items: lsGet('pe.log',[]),
+  async load(){
+    if(!db) return;
+    try{
+      const snap = await db.collection('errors').orderBy('ts','desc').limit(200).get();
+      this.items = snap.docs.map(d=>Object.assign({id:d.id}, d.data()));
+    }catch(e){}
+  },
+  async add(it){
+    it.id = 'e'+Date.now().toString(36);
+    this.items.unshift(it);
+    lsSet('pe.log', this.items.slice(0,200));
+    if(db){ try{ await db.collection('errors').doc(it.id).set(it); }catch(e){} }
+  },
+  async mark(id, field){
+    const it = this.items.find(x=>x.id===id); if(!it) return;
+    it[field] = today();
+    lsSet('pe.log', this.items.slice(0,200));
+    if(db){ try{ await db.collection('errors').doc(id).update({[field]: it[field]}); }catch(e){} }
+  },
+  async remove(id){
+    this.items = this.items.filter(x=>x.id!==id);
+    lsSet('pe.log', this.items);
+    if(db){ try{ await db.collection('errors').doc(id).delete(); }catch(e){} }
+  }
+};
+const Drill = {
+  v: lsGet('pe.drill',{}),
+  bump(kind){ const d=today(); this.v[d]=this.v[d]||{multi:0,numeric:0,concept:0};
+    this.v[d][kind]=(this.v[d][kind]||0)+1; lsSet('pe.drill',this.v); },
+  todayCount(kind){ return (this.v[today()]||{})[kind]||0; }
+};
+
+/* ---------- tabs ---------- */
+const PANELS = ['multi','numeric','concept','recall','diagrams','log','offline'];
+function show(tab){
+  PANELS.forEach(p=>{ $('#p-'+p).hidden = (p!==tab); });
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-selected', String(b.dataset.tab===tab)));
+  lsSet('pe.tab', tab);
+  if(tab==='log') renderLog();
+  if(tab==='diagrams') renderDiagrams();
+  window.scrollTo({top:0,behavior:'instant'});
+}
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>show(b.dataset.tab));
+
+/* ---------- multi-statement ---------- */
+let mIdx = 0, mVerdicts = {}, mDone = false, mScore = lsGet('pe.mscore',{n:0,opt:0,st:0});
+function renderMulti(){
+  const q = D.bank.multi[mIdx];
+  const host = $('#p-multi'); host.innerHTML='';
+  const head = el('div','spread');
+  head.appendChild(el('div','', `<span class="eyebrow">${esc(q.day)}</span>
+     <div class="note" style="margin-top:4px">Question ${q.n} of ${D.bank.multi.length} · five a day</div>`));
+  head.appendChild(el('div','', `<span class="pill">today ${Drill.todayCount('multi')}/5</span>`));
+  const card = el('div','card');
+  card.appendChild(head);
+  card.appendChild(el('div','qstem', esc(q.stem)));
+
+  const wrapS = el('div','sts');
+  q.sts.forEach((s,i)=>{
+    const L = LET[i];
+    const row = el('div','st'); row.dataset.l = L;
+    row.appendChild(el('div','lab', L));
+    row.appendChild(el('div','txt', esc(s)));
+    const tf = el('div','tf');
+    ['True','False'].forEach(w=>{
+      const b = el('button',null,w);
+      b.setAttribute('aria-pressed','false');
+      b.onclick = ()=>{
+        if(mDone) return;
+        mVerdicts[L] = (w==='True');
+        tf.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', String(x.textContent===w)));
+        maybeOpen();
+      };
+      tf.appendChild(b);
+    });
+    row.appendChild(tf);
+    wrapS.appendChild(row);
+  });
+  card.appendChild(wrapS);
+
+  const gate = el('div','gate','Judge all four statements before the options appear. That order is the whole point of the drill.');
+  card.appendChild(gate);
+  const optBox = el('div','opts'); optBox.hidden = true;
+  q.opts.forEach((o,i)=>{
+    const b = el('button','opt', `<span class="k">${LET[i]}</span>${esc(o)}`);
+    b.onclick = ()=>pickMulti(LET[i]);
+    optBox.appendChild(b);
+  });
+  card.appendChild(optBox);
+  const ansBox = el('div','ans'); ansBox.hidden = true; ansBox.id='m-ans';
+  card.appendChild(ansBox);
+
+  const nav = el('div','row'); nav.style.marginTop='14px';
+  const prev = el('button','btn','Previous'); prev.disabled = mIdx===0;
+  prev.onclick = ()=>{ mIdx--; mVerdicts={}; mDone=false; renderMulti(); };
+  const next = el('button','btn primary','Next question');
+  next.onclick = ()=>{ mIdx=(mIdx+1)%D.bank.multi.length; mVerdicts={}; mDone=false; renderMulti(); };
+  const logb = el('button','btn','Log an error');
+  logb.onclick = ()=>{ prefillLog('Multi-statement Q'+q.n); show('log'); };
+  nav.append(prev,next,logb);
+  card.appendChild(nav);
+  host.appendChild(card);
+
+  const sc = el('div','card');
+  sc.innerHTML = `<span class="eyebrow">Running accuracy</span>
+    <div class="row" style="margin-top:8px;gap:20px">
+      <div><div class="stat" style="font-size:1.35rem">${mScore.n?Math.round(100*mScore.opt/mScore.n):0}%</div>
+           <div class="note">option correct · ${mScore.opt}/${mScore.n}</div></div>
+      <div><div class="stat" style="font-size:1.35rem">${mScore.n?Math.round(100*mScore.st/(4*mScore.n)):0}%</div>
+           <div class="note">statements judged right · ${mScore.st}/${4*mScore.n}</div></div>
+    </div>
+    <p class="note" style="margin-top:10px">The second number is the one that matters. In June you scored 11% on this
+    format; getting the option right while misjudging two statements is a near miss, not a skill.</p>`;
+  host.appendChild(sc);
+
+  function maybeOpen(){
+    if(Object.keys(mVerdicts).length===4){ gate.hidden=true; optBox.hidden=false; }
+  }
+}
+function pickMulti(choice){
+  if(mDone) return;
+  mDone = true;
+  const q = D.bank.multi[mIdx];
+  const host = $('#p-multi');
+  host.querySelectorAll('.opt').forEach((b,i)=>{
+    if(LET[i]===q.ans) b.classList.add('correct');
+    else if(LET[i]===choice) b.classList.add('chosen-wrong');
+  });
+  let right = 0;
+  host.querySelectorAll('.st').forEach(row=>{
+    const L = row.dataset.l, v = q.v[L];
+    const mine = mVerdicts[L];
+    const ok = (mine === v.tf);
+    if(ok) right++;
+    row.classList.add(ok?'right':'wrong');
+    row.appendChild(el('div','why',
+      `<strong>${v.tf?'True':'False'}</strong> — ${esc(v.why)}${ok?'':' · you said '+(mine?'true':'false')}`));
+  });
+  mScore = {n:mScore.n+1, opt:mScore.opt+(choice===q.ans?1:0), st:mScore.st+right};
+  lsSet('pe.mscore', mScore);
+  Drill.bump('multi');
+  const a = $('#m-ans'); a.hidden=false;
+  a.innerHTML = `Correct option <span class="val">(${q.ans})</span> — ${esc(q.opts[LET.indexOf(q.ans)])}.
+    You judged <strong>${right} of 4</strong> statements correctly.`;
+}
+
+/* ---------- numerical ---------- */
+let nIdx = 0, nWritten=false, nChecked=false;
+function renderNum(){
+  const q = D.bank.numerical[nIdx];
+  const host = $('#p-numeric'); host.innerHTML='';
+  const card = el('div','card');
+  card.appendChild(el('div','spread',
+    `<span class="eyebrow">Problem ${q.n} of ${D.bank.numerical.length}</span>
+     <span class="pill">today ${Drill.todayCount('numeric')}</span>`));
+  card.appendChild(el('div','qstem', esc(q.stem)));
+  const gate = el('div','gate','Work it on paper first. The answer unlocks only after both boxes below are ticked — an unchecked answer is what produced 4/21 in June.');
+  card.appendChild(gate);
+  const row = el('div','row');
+  const b1 = el('button','btn','① I wrote my answer');
+  const b2 = el('button','btn','② I ran the check');
+  const reveal = el('button','btn primary','Reveal'); reveal.disabled = true;
+  b1.onclick = ()=>{ nWritten=!nWritten; b1.classList.toggle('primary',nWritten); gateCheck(); };
+  b2.onclick = ()=>{ nChecked=!nChecked; b2.classList.toggle('primary',nChecked); gateCheck(); };
+  function gateCheck(){ reveal.disabled = !(nWritten && nChecked); }
+  const ansBox = el('div','ans'); ansBox.hidden=true;
+  reveal.onclick = ()=>{
+    ansBox.hidden=false; gate.hidden=true;
+    ansBox.innerHTML = `<div><span class="val">${esc(q.ans)}</span></div>` +
+      (q.work?`<div style="margin-top:6px">${esc(q.work)}</div>`:'') +
+      (q.check?`<div class="chk"><strong>Check</strong> — ${esc(q.check)}</div>`:'');
+    Drill.bump('numeric');
+  };
+  row.append(b1,b2,reveal);
+  card.appendChild(row);
+  card.appendChild(ansBox);
+  const nav = el('div','row'); nav.style.marginTop='14px';
+  const prev = el('button','btn','Previous'); prev.disabled = nIdx===0;
+  prev.onclick=()=>{ nIdx--; nWritten=nChecked=false; renderNum(); };
+  const next = el('button','btn','Next problem');
+  next.onclick=()=>{ nIdx=(nIdx+1)%D.bank.numerical.length; nWritten=nChecked=false; renderNum(); };
+  const lg = el('button','btn','Log an error');
+  lg.onclick=()=>{ prefillLog('Numerical Q'+q.n); show('log'); };
+  nav.append(prev,next,lg);
+  card.appendChild(nav);
+  host.appendChild(card);
+}
+
+/* ---------- conceptual ---------- */
+let cIdx = 0, cDone=false;
+function renderConc(){
+  const q = D.bank.conceptual[cIdx];
+  const host = $('#p-concept'); host.innerHTML='';
+  const card = el('div','card');
+  card.appendChild(el('div','spread',
+    `<span class="eyebrow">Question ${q.n} of ${D.bank.conceptual.length}</span>
+     <span class="note">recognition — your strongest tier, so keep it short</span>`));
+  card.appendChild(el('div','qstem', esc(q.stem)));
+  const box = el('div','opts');
+  q.opts.forEach((o,i)=>{
+    const b = el('button','opt', `<span class="k">${LET[i]}</span>${esc(o)}`);
+    b.onclick = ()=>{
+      if(cDone) return; cDone = true;
+      box.querySelectorAll('.opt').forEach((x,j)=>{
+        if(LET[j]===q.ans) x.classList.add('correct');
+        else if(j===i) x.classList.add('chosen-wrong');
+      });
+      ans.hidden=false; ans.innerHTML = esc(q.expl);
+      Drill.bump('concept');
+    };
+    box.appendChild(b);
+  });
+  card.appendChild(box);
+  const ans = el('div','ans'); ans.hidden=true; card.appendChild(ans);
+  const nav = el('div','row'); nav.style.marginTop='14px';
+  const next = el('button','btn primary','Next');
+  next.onclick=()=>{ cIdx=(cIdx+1)%D.bank.conceptual.length; cDone=false; renderConc(); };
+  const lg = el('button','btn','Log an error');
+  lg.onclick=()=>{ prefillLog('Conceptual Q'+q.n); show('log'); };
+  nav.append(next,lg);
+  card.appendChild(nav);
+  host.appendChild(card);
+}
+
+/* ---------- recall ---------- */
+function renderRecall(){
+  const host = $('#p-recall'); host.innerHTML='';
+  const c1 = el('div','card');
+  c1.innerHTML = `<div class="spread"><h2 style="font-size:1.1rem">The master table</h2>
+    <button class="btn" id="revall">Reveal all</button></div>
+    <p class="lede">Tap a cell to check yourself. Sunday's Part A is reproducing this on blank paper, so use this to find the gaps, not to read.</p>`;
+  const tw = el('div','tblwrap');
+  const tb = el('table');
+  tb.innerHTML = '<thead><tr><th>Distribution</th><th>Complete sufficient statistic</th><th>MLE</th><th>UMVUE</th><th>Note</th></tr></thead>';
+  const body = el('tbody');
+  D.master.forEach(r=>{
+    const tr = el('tr');
+    tr.appendChild(el('td','dist', esc(r[0])));
+    [1,2,3].forEach(i=>{
+      const td = el('td');
+      const b = el('button','cell', esc(r[i]||'—'));
+      b.onclick = ()=>b.classList.toggle('shown');
+      td.appendChild(b); tr.appendChild(td);
+    });
+    tr.appendChild(el('td','note', esc(r[4]||'')));
+    body.appendChild(tr);
+  });
+  tb.appendChild(body); tw.appendChild(tb); c1.appendChild(tw);
+  host.appendChild(c1);
+  $('#revall').onclick = ()=>{
+    const cells = host.querySelectorAll('.cell');
+    const anyHidden = [...cells].some(c=>!c.classList.contains('shown'));
+    cells.forEach(c=>c.classList.toggle('shown', anyHidden));
+    $('#revall').textContent = anyHidden ? 'Hide all' : 'Reveal all';
+  };
+
+  const c2 = el('div','card');
+  c2.innerHTML = `<h2 style="font-size:1.1rem">Fisher information</h2>`;
+  const tw2 = el('div','tblwrap'); const t2 = el('table');
+  t2.innerHTML = '<thead><tr><th>Distribution</th><th>I(θ)</th></tr></thead>';
+  const b2 = el('tbody');
+  D.fisher.forEach(r=>{
+    const tr = el('tr');
+    tr.appendChild(el('td','dist', esc(r[0])));
+    const td = el('td'); const btn = el('button','cell', esc(r[1]));
+    btn.onclick=()=>btn.classList.toggle('shown'); td.appendChild(btn); tr.appendChild(td);
+    b2.appendChild(tr);
+  });
+  t2.appendChild(b2); tw2.appendChild(t2); c2.appendChild(tw2);
+  host.appendChild(c2);
+
+  const c3 = el('div','card');
+  c3.innerHTML = `<h2 style="font-size:1.1rem">Carry sheet</h2>
+    <p class="lede">The deciding line for each idea. Handwrite your own version — copying this one does not stick the same way.</p>`;
+  const tw3 = el('div','tblwrap'); const t3 = el('table');
+  const b3 = el('tbody');
+  D.carry.forEach(r=>{
+    const tr = el('tr');
+    tr.appendChild(el('td','dist', esc(r[0])));
+    const td = el('td'); const btn = el('button','cell', esc(r[1]));
+    btn.style.whiteSpace='normal'; btn.style.textAlign='left';
+    btn.onclick=()=>btn.classList.toggle('shown'); td.appendChild(btn); tr.appendChild(td);
+    b3.appendChild(tr);
+  });
+  t3.appendChild(b3); tw3.appendChild(t3); c3.appendChild(tw3);
+  host.appendChild(c3);
+}
+
+/* ---------- diagrams ---------- */
+function renderDiagrams(){
+  const host = $('#p-diagrams');
+  if(host.dataset.built) { drawFisher(); return; }
+  host.dataset.built = '1';
+  host.innerHTML = `
+  <div class="card">
+    <h2 style="font-size:1.1rem">How the week fits together</h2>
+    <p class="lede">Every theorem in week 1 exists to feed the one to its right. Read it once and the section order stops being arbitrary.</p>
+    <div class="tblwrap"><svg viewBox="0 0 700 430" role="img" aria-label="How the week fits together" style="min-width:560px">
+<defs><marker id="ar" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+<polygon points="0 0, 9 3.5, 0 7" fill="var(--muted)"/></marker></defs>
+<style>
+.bx{fill:var(--card);stroke:var(--line);stroke-width:1.2}
+.bk{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.4}
+.tl{font:600 12.5px var(--sans);fill:var(--ink)}
+.sb{font:11px var(--sans);fill:var(--muted)}
+.ln{stroke:var(--muted);stroke-width:1.2;fill:none;marker-end:url(#ar)}
+.lb{font:10.5px var(--sans);fill:var(--muted)}
+</style>
+<rect class="bx" x="12" y="20" width="150" height="46" rx="7"/>
+<text class="tl" x="24" y="42">Factorisation</text><text class="sb" x="24" y="57">f = g(T;θ)·h(x)</text>
+
+<rect class="bk" x="222" y="20" width="150" height="46" rx="7"/>
+<text class="tl" x="234" y="42">Sufficiency</text><text class="sb" x="234" y="57">T keeps everything</text>
+
+<rect class="bx" x="12" y="104" width="150" height="46" rx="7"/>
+<text class="tl" x="24" y="126">Exponential family</text><text class="sb" x="24" y="141">h·c(θ)·exp[w(θ)t(x)]</text>
+
+<rect class="bk" x="222" y="104" width="150" height="46" rx="7"/>
+<text class="tl" x="234" y="126">Completeness</text><text class="sb" x="234" y="141">E[g(T)]=0 ⟹ g≡0</text>
+
+<rect class="bx" x="432" y="20" width="150" height="46" rx="7"/>
+<text class="tl" x="444" y="42">Rao–Blackwell</text><text class="sb" x="444" y="57">variance no larger</text>
+
+<rect class="bk" x="432" y="104" width="150" height="46" rx="7"/>
+<text class="tl" x="444" y="126">Lehmann–Scheffé</text><text class="sb" x="444" y="141">unique UMVUE</text>
+
+<rect class="bx" x="12" y="188" width="150" height="46" rx="7"/>
+<text class="tl" x="24" y="210">Ancillarity</text><text class="sb" x="24" y="225">distribution free of θ</text>
+
+<rect class="bx" x="222" y="188" width="150" height="46" rx="7"/>
+<text class="tl" x="234" y="210">Basu</text><text class="sb" x="234" y="225">the two are independent</text>
+
+<rect class="bx" x="12" y="282" width="150" height="46" rx="7"/>
+<text class="tl" x="24" y="304">Regularity</text><text class="sb" x="24" y="319">support free of θ</text>
+
+<rect class="bx" x="222" y="282" width="150" height="46" rx="7"/>
+<text class="tl" x="234" y="304">Fisher information</text><text class="sb" x="234" y="319">I(θ) = −E[∂²log f/∂θ²]</text>
+
+<rect class="bx" x="432" y="282" width="150" height="46" rx="7"/>
+<text class="tl" x="444" y="304">Cramér–Rao</text><text class="sb" x="444" y="319">a floor on variance</text>
+
+<rect class="bx" x="222" y="366" width="150" height="46" rx="7"/>
+<text class="tl" x="234" y="388">MLE and moments</text><text class="sb" x="234" y="403">routes that ignore all this</text>
+
+<path class="ln" d="M162 43 H 218"/>
+<path class="ln" d="M372 43 H 428"/>
+<path class="ln" d="M162 127 H 218"/>
+<path class="ln" d="M372 127 H 428"/>
+<path class="ln" d="M297 66 V 100"/>
+<path class="ln" d="M507 66 V 100"/>
+<path class="ln" d="M297 150 V 184"/>
+<path class="ln" d="M162 211 H 218"/>
+<path class="ln" d="M162 305 H 218"/>
+<path class="ln" d="M372 305 H 428"/>
+<path class="ln" d="M297 328 V 362"/>
+<text class="lb" x="378" y="38">one S</text>
+<text class="lb" x="378" y="122">two S</text>
+<text class="lb" x="302" y="88">adds</text>
+<text class="lb" x="512" y="88">plus completeness</text>
+<text class="lb" x="302" y="172">meets no information</text>
+<text class="lb" x="302" y="352">if they fail</text>
+</svg></div>
+  </div>
+  <div class="card">
+    <h2 style="font-size:1.1rem">Finding a UMVUE — the algorithm</h2>
+    <p class="lede">Run this under time pressure instead of recalling the theory.</p>
+    <div class="tblwrap"><svg viewBox="0 0 660 400" role="img" aria-label="UMVUE decision flowchart" style="min-width:520px">
+<defs><marker id="ar2" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+<polygon points="0 0, 9 3.5, 0 7" fill="var(--muted)"/></marker></defs>
+<style>
+.d{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.4}
+.b{fill:var(--card);stroke:var(--line);stroke-width:1.2}
+.g{fill:var(--ok-soft);stroke:var(--ok);stroke-width:1.4}
+.t{font:600 12.5px var(--sans);fill:var(--ink)}
+.s{font:11px var(--sans);fill:var(--muted)}
+.l{stroke:var(--muted);stroke-width:1.2;fill:none;marker-end:url(#ar2)}
+.e{font:10.5px var(--sans);fill:var(--muted)}
+</style>
+<rect class="d" x="170" y="14" width="300" height="52" rx="7"/>
+<text class="t" x="186" y="36">Is there a complete sufficient statistic T?</text>
+<text class="s" x="186" y="52">exponential family ⟹ yes. Uniform, Cauchy ⟹ check by hand</text>
+
+<rect class="d" x="170" y="112" width="300" height="52" rx="7"/>
+<text class="t" x="186" y="134">Can you see an unbiased function of T?</text>
+<text class="s" x="186" y="150">does E of something built from T give τ(θ)?</text>
+
+<rect class="g" x="20" y="212" width="250" height="56" rx="7"/>
+<text class="t" x="36" y="234">Route A — that is the UMVUE</text>
+<text class="s" x="36" y="250">X̄ for λ, (n−1)/ΣX for the rate,</text>
+<text class="s" x="36" y="263">(n+1)/n · X₍ₙ₎ for U(0, θ)</text>
+
+<rect class="g" x="330" y="212" width="300" height="56" rx="7"/>
+<text class="t" x="346" y="234">Route B — Rao–Blackwellise</text>
+<text class="s" x="346" y="250">start from an indicator on one observation,</text>
+<text class="s" x="346" y="263">condition on T. The estimand never changes</text>
+
+<rect class="b" x="170" y="320" width="300" height="52" rx="7"/>
+<text class="t" x="186" y="342">No complete sufficient statistic</text>
+<text class="s" x="186" y="358">a UMVUE may not exist — U(θ, θ+1) is the case</text>
+
+<path class="l" d="M320 66 V 108"/>
+<path class="l" d="M240 164 L 150 208"/>
+<path class="l" d="M400 164 L 470 208"/>
+<path class="l" d="M470 40 H 600 V 346 H 474"/>
+<text class="e" x="330" y="90">yes</text>
+<text class="e" x="176" y="190">yes</text>
+<text class="e" x="438" y="190">no</text>
+<text class="e" x="528" y="34">no</text>
+</svg></div>
+  </div>
+  <div class="card">
+    <h2 style="font-size:1.1rem">Why the uniform MLE sits on a boundary</h2>
+    <p class="lede">The likelihood for U(0, θ): zero below the sample maximum, then falling as 1/θⁿ. Nothing to differentiate — the maximum is at the left edge.</p>
+    <div class="tblwrap"><svg viewBox="0 0 640 280" role="img" aria-label="Likelihood for the uniform family" style="min-width:460px">
+<style>.ax{stroke:var(--line);stroke-width:1.2}.cv{stroke:var(--accent);stroke-width:2.4;fill:none}
+.gd{stroke:var(--line);stroke-dasharray:3 4}.lb{font:11px var(--sans);fill:var(--muted)}
+.hl{font:600 12px var(--sans);fill:var(--accent)}</style>
+<line class="ax" x1="60" y1="30" x2="60" y2="230"/>
+<line class="ax" x1="60" y1="230" x2="610" y2="230"/>
+<line class="gd" x1="240" y1="30" x2="240" y2="230"/>
+<path class="cv" d="M60 230 L 240 230"/>
+<path class="cv" d="M240 230 L 240 62"/>
+<path class="cv" d="M240 62 C 300 100, 380 150, 600 198"/>
+<circle cx="240" cy="62" r="5.5" fill="var(--accent)"/>
+<text class="hl" x="252" y="56">maximum at θ = x₍ₙ₎</text>
+<text class="lb" x="246" y="248">x₍ₙ₎</text>
+<text class="lb" x="120" y="214">L(θ) = 0</text>
+<text class="lb" x="118" y="228" font-size="10">no θ below the data</text>
+<text class="lb" x="400" y="130">L(θ) = 1/θⁿ, falling</text>
+<text class="lb" x="596" y="248" text-anchor="end">θ</text>
+<text class="lb" x="30" y="36">L(θ)</text>
+</svg></div>
+  </div>
+  <div class="card">
+    <h2 style="font-size:1.1rem">Fisher information for a proportion</h2>
+    <p class="lede">I(p) = 1/[p(1−p)]. Information explodes near 0 and 1 and is smallest at p = 0.5 — which is why extreme proportions are the easiest to estimate and p near a half the hardest.</p>
+    <div class="tblwrap"><svg id="fsvg" viewBox="0 0 640 300" role="img" aria-label="Fisher information curve"></svg></div>
+    <label class="fld" style="margin-top:10px"><span>p = <span class="stat" id="plab">0.25</span></span>
+      <input type="range" id="pslider" min="2" max="98" value="25"></label>
+    <p class="note" id="fnote"></p>
+  </div>`;
+  $('#pslider').oninput = drawFisher;
+  drawFisher();
+}
+function drawFisher(){
+  const sl = $('#pslider'); if(!sl) return;
+  const p = (+sl.value)/100;
+  const W=640,H=300,L=56,R=20,T=18,B=42;
+  const xs = v => L + v*(W-L-R);
+  const maxI = 40;
+  const ys = v => H-B - Math.min(v,maxI)/maxI*(H-T-B);
+  let path='';
+  for(let i=1;i<=199;i++){ const v=i/200, I=1/(v*(1-v)); if(I>maxI) continue;
+    path += (path?'L':'M')+xs(v).toFixed(1)+' '+ys(I).toFixed(1); }
+  const I = 1/(p*(1-p));
+  const ticks=[0,0.25,0.5,0.75,1].map(v=>`<line x1="${xs(v)}" y1="${H-B}" x2="${xs(v)}" y2="${H-B+5}" stroke="var(--line)"/>
+     <text x="${xs(v)}" y="${H-B+20}" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="var(--mono)">${v}</text>`).join('');
+  const yt=[4,10,20,40].map(v=>`<line x1="${L-5}" y1="${ys(v)}" x2="${W-R}" y2="${ys(v)}" stroke="var(--line)" stroke-dasharray="2 4"/>
+     <text x="${L-9}" y="${ys(v)+4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="var(--mono)">${v}</text>`).join('');
+  $('#fsvg').innerHTML = `${yt}
+    <line x1="${L}" y1="${T}" x2="${L}" y2="${H-B}" stroke="var(--line)"/>
+    <line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="var(--line)"/>
+    ${ticks}
+    <path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2.2"/>
+    <line x1="${xs(p)}" y1="${T}" x2="${xs(p)}" y2="${H-B}" stroke="var(--warn)" stroke-dasharray="4 3"/>
+    <circle cx="${xs(p)}" cy="${ys(I)}" r="5" fill="var(--warn)"/>
+    <text x="${W-R}" y="${T+12}" text-anchor="end" font-size="12" fill="var(--muted)" font-family="var(--mono)">I(p)</text>
+    <text x="${(L+W-R)/2}" y="${H-6}" text-anchor="middle" font-size="11" fill="var(--muted)">p</text>`;
+  $('#plab').textContent = p.toFixed(2);
+  $('#fnote').innerHTML = `At p = ${p.toFixed(2)}: I(p) = <span class="stat">${I.toFixed(2)}</span>. ` +
+    `With n = 20 the Cramér–Rao bound for unbiased estimators of p is p(1−p)/n = <span class="stat">${(p*(1-p)/20).toFixed(5)}</span>, ` +
+    `and Var(X̄) equals it exactly — so X̄ is efficient at every p.`;
+}
+
+/* ---------- error log ---------- */
+let logPrefill = '';
+function prefillLog(ref){ logPrefill = ref; }
+function dueState(it){
+  const days = d => Math.floor((Date.now()-Date.parse(d))/86400000);
+  if(!it.r1 && days(it.ts) >= 7) return 'first repair due';
+  if(it.r1 && !it.r2 && days(it.ts) >= 14) return 'second repair due';
+  return '';
+}
+function renderLog(){
+  const host = $('#p-log'); host.innerHTML='';
+  const form = el('div','card');
+  form.innerHTML = `<h2 style="font-size:1.1rem">Log an error</h2>
+    <p class="lede">Record the <em>type</em>, not the question. ${store==='db'
+      ? 'Saved to this artifact, so it follows you between phone and laptop.'
+      : 'Saved in this browser only — sign in to sync across devices.'}</p>
+    <div class="grid2">
+      <label class="fld"><span>Type</span><select id="etype">${D.errorTypes.map(t=>`<option>${esc(t)}</option>`).join('')}</select></label>
+      <label class="fld"><span>Question</span><input type="text" id="eref" value="${esc(logPrefill)}" placeholder="Multi-statement Q14"></label>
+    </div>
+    <label class="fld"><span>The fix, in one line</span><input type="text" id="efix" placeholder="Rao–Blackwell keeps the estimand — read E(h) first"></label>
+    <button class="btn primary" id="esave">Save entry</button>`;
+  host.appendChild(form);
+  $('#esave').onclick = async ()=>{
+    const fix = $('#efix').value.trim();
+    if(!fix){ $('#efix').focus(); return; }
+    await Log.add({type:$('#etype').value, ref:$('#eref').value.trim(), fix, ts:new Date().toISOString(), r1:'', r2:''});
+    logPrefill=''; toast('Entry saved'); renderLog();
+  };
+
+  const counts = {};
+  Log.items.forEach(i=>counts[i.type]=(counts[i.type]||0)+1);
+  const top = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const sum = el('div','card');
+  sum.innerHTML = `<h2 style="font-size:1.1rem">By type</h2>` + (top.length
+    ? `<div class="tblwrap"><table><tbody>${top.map(([t,c])=>
+        `<tr><td class="dist">${esc(t)}</td><td class="stat" style="text-align:right">${c}</td>
+         <td class="note">${c>=3?'three or more — this is next week\'s first target':''}</td></tr>`).join('')}</tbody></table></div>`
+    : `<p class="note">Nothing logged yet. The log is the part of the plan that decides what you study next, so it only works if you feed it.</p>`);
+  host.appendChild(sum);
+
+  const due = Log.items.filter(i=>dueState(i));
+  const dueCard = el('div','card');
+  dueCard.innerHTML = `<h2 style="font-size:1.1rem">Spaced repair queue</h2>
+    <p class="lede">Every error gets redone twice — once after a week, once a fortnight on. From blank paper, never by rereading the fix.</p>`;
+  if(!due.length) dueCard.appendChild(el('p','note','Nothing due. Entries appear here seven days after you log them.'));
+  due.forEach(it=>{
+    const d = el('div','logitem due');
+    d.innerHTML = `<strong>${esc(it.type)}</strong>${it.ref?' · '+esc(it.ref):''}
+      <div style="margin-top:5px">${esc(it.fix)}</div>
+      <div class="meta"><span>${esc(dueState(it))}</span><span>logged ${esc((it.ts||'').slice(0,10))}</span></div>`;
+    const b = el('button','btn','Redone from blank paper');
+    b.style.marginTop='9px';
+    b.onclick = async ()=>{ await Log.mark(it.id, it.r1?'r2':'r1'); renderLog(); };
+    d.appendChild(b);
+    dueCard.appendChild(d);
+  });
+  host.appendChild(dueCard);
+
+  const all = el('div','card');
+  all.innerHTML = `<h2 style="font-size:1.1rem">All entries</h2>`;
+  if(!Log.items.length) all.appendChild(el('p','note','Empty.'));
+  Log.items.forEach(it=>{
+    const d = el('div','logitem');
+    d.innerHTML = `<strong>${esc(it.type)}</strong>${it.ref?' · '+esc(it.ref):''}
+      <div style="margin-top:5px">${esc(it.fix)}</div>
+      <div class="meta"><span>logged ${esc((it.ts||'').slice(0,10))}</span>
+        <span>${it.r1?'repaired '+esc(it.r1):'not yet repaired'}</span>
+        <span>${it.r2?'second repair '+esc(it.r2):''}</span></div>`;
+    const x = el('button','btn','Delete'); x.style.marginTop='9px';
+    x.onclick = async ()=>{ await Log.remove(it.id); renderLog(); };
+    d.appendChild(x);
+    all.appendChild(d);
+  });
+  host.appendChild(all);
+}
+function toast(msg){
+  const t = el('div','toast', esc(msg)); document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2200);
+}
+
+/* ---------- take offline ---------- */
+const SECTIONS = [
+  ['master','The master table'],
+  ['fisher','Fisher information table'],
+  ['carry','Carry sheet'],
+  ['multi','Multi-statement set — 35 questions with per-statement verdicts'],
+  ['numeric','Numerical set — 25 problems with answers and checks'],
+  ['concept','Conceptual set — 40 questions'],
+  ['log','Your error log'],
+];
+function renderOffline(){
+  const host = $('#p-offline'); host.innerHTML='';
+  const c = el('div','card');
+  c.innerHTML = `<h2 style="font-size:1.1rem">Take selected parts offline</h2>
+    <p class="lede">Tick what you need, download one HTML file, and print it from your own browser. Printing is blocked inside this frame, so the file is the way out.</p>`;
+  SECTIONS.forEach(([k,label])=>{
+    const l = el('label','pick');
+    l.innerHTML = `<input type="checkbox" value="${k}" checked><span>${esc(label)}</span>`;
+    c.appendChild(l);
+  });
+  const row = el('div','row'); row.style.marginTop='12px';
+  const dl = el('button','btn primary','Download HTML');
+  dl.onclick = ()=>doDownload('html');
+  const anki = el('button','btn','Download Anki CSV');
+  anki.onclick = ()=>doDownload('csv');
+  row.append(dl,anki);
+  c.appendChild(row);
+  c.appendChild(el('p','note','The CSV holds the carry sheet and the master table as question-and-answer pairs — import it into Anki for the spaced-recall half.'));
+  host.appendChild(c);
+}
+function selected(){ return [...$('#p-offline').querySelectorAll('input:checked')].map(i=>i.value); }
+function buildHTML(keys){
+  const css = `body{font:12pt/1.35 "IBM Plex Sans",system-ui,sans-serif;color:#15181d;max-width:960px;margin:0 auto;padding:18px;}
+  h1{font-size:19pt}h2{font-size:14pt;border-bottom:2px solid #0f2a4a;padding-bottom:4px;margin-top:26px}
+  table{border-collapse:collapse;width:100%;font-size:10pt;margin:8px 0}
+  th{background:#e7eef6;text-align:left;padding:5px 7px;border:.5pt solid #b6c4d4}
+  td{padding:4px 7px;border:.5pt solid #ccd6e2;vertical-align:top}
+  .q{margin:10px 0;page-break-inside:avoid}.a{color:#19456f}
+  @media print{@page{size:A4;margin:14mm}body{padding:0}}`;
+  let h = `<!doctype html><html><head><meta charset="utf-8"><title>Week 1 — selected</title><style>${css}</style></head><body>`;
+  h += `<h1>Week 1 — Point estimation</h1><p>Selected sections · UGC NET Statistics (107)</p>`;
+  const tbl = (head, rows) => `<table><thead><tr>${head.map(x=>`<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${
+    rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c??'')}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  if(keys.includes('master')) h += `<h2>The master table</h2>` +
+    tbl(['Distribution','Complete sufficient statistic','MLE','UMVUE','Note'], D.master);
+  if(keys.includes('fisher')) h += `<h2>Fisher information</h2>` + tbl(['Distribution','I(θ)'], D.fisher);
+  if(keys.includes('carry')) h += `<h2>Carry sheet</h2>` + tbl(['Idea','The deciding line'], D.carry);
+  if(keys.includes('multi')){ h += `<h2>Multi-statement set</h2>`;
+    D.bank.multi.forEach(q=>{ h += `<div class="q"><strong>${q.n}.</strong> ${esc(q.stem)}<br>` +
+      q.sts.map((s,i)=>`${LET[i]}. ${esc(s)}`).join(' ') + `<br>` +
+      q.opts.map((o,i)=>`(${LET[i]}) ${esc(o)}`).join(' ') +
+      `<br><span class="a">→ (${q.ans}). ` + LET.map(L=>`${L} ${q.v[L].tf?'✓':'✗'} ${esc(q.v[L].why)}`).join('. ') +
+      `</span></div>`; }); }
+  if(keys.includes('numeric')){ h += `<h2>Numerical set</h2>`;
+    D.bank.numerical.forEach(q=>{ h += `<div class="q"><strong>${q.n}.</strong> ${esc(q.stem)}<br>` +
+      `<span class="a">→ ${esc(q.ans)}. ${esc(q.work)}${q.check?' <em>Check: '+esc(q.check)+'</em>':''}</span></div>`; }); }
+  if(keys.includes('concept')){ h += `<h2>Conceptual set</h2>`;
+    D.bank.conceptual.forEach(q=>{ h += `<div class="q"><strong>${q.n}.</strong> ${esc(q.stem)}<br>` +
+      q.opts.map((o,i)=>`(${LET[i]}) ${esc(o)}`).join(' ') +
+      `<br><span class="a">→ (${q.ans}). ${esc(q.expl)}</span></div>`; }); }
+  if(keys.includes('log') && Log.items.length) h += `<h2>Error log</h2>` +
+    tbl(['Type','Question','Fix','Logged'], Log.items.map(i=>[i.type,i.ref,i.fix,(i.ts||'').slice(0,10)]));
+  return h + `</body></html>`;
+}
+function buildCSV(){
+  const q = s => '"'+String(s).replace(/"/g,'""')+'"';
+  const rows = [];
+  D.carry.forEach(r=>rows.push([q(r[0]), q(r[1]), q('week1 carry')]));
+  D.master.forEach(r=>{
+    rows.push([q('Complete sufficient statistic for '+r[0]), q(r[1]), q('week1 master')]);
+    if(r[2]) rows.push([q('MLE for '+r[0]), q(r[2]), q('week1 master')]);
+    if(r[3]) rows.push([q('UMVUE for '+r[0]), q(r[3]), q('week1 master')]);
+  });
+  D.fisher.forEach(r=>rows.push([q('Fisher information for '+r[0]), q(r[1]), q('week1 fisher')]));
+  return rows.map(r=>r.join(',')).join('\n');
+}
+async function doDownload(kind){
+  const keys = selected();
+  if(kind==='html' && !keys.length){ toast('Tick at least one section'); return; }
+  const data = kind==='html' ? buildHTML(keys) : buildCSV();
+  const filename = kind==='html' ? 'week1-point-estimation-selected.html' : 'week1-anki.csv';
+  const dl = window.claude?.use ? await window.claude.use('downloads').catch(()=>null) : null;
+  if(!dl){ toast('Downloads are not available in this view'); return; }
+  try{ await dl.save({filename, data}); toast('Saved'); }
+  catch(e){ toast(e && e.code==='declined' ? 'Download cancelled' : 'Could not save the file'); }
+}
+
+/* ---------- boot ---------- */
+renderMulti(); renderNum(); renderConc(); renderRecall(); renderOffline();
+show(lsGet('pe.tab','multi'));
+(async ()=>{
+  if(!window.claude?.use) return;
+  try{
+    const u = await window.claude.use('user');
+    db = await window.claude.use('db');
+    if(db){ store='db'; uid = u ? await u.id() : null; await Log.load(); if(!$('#p-log').hidden) renderLog(); }
+  }catch(e){}
+})();
+</script>

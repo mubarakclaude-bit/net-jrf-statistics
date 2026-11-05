@@ -1,0 +1,382 @@
+{
+ "moduleId": "inference",
+ "source": "mastery",
+ "topicId": "inference-t8",
+ "label": "Decision Theory: Loss, Risk, Admissibility and Minimax — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "inference-t8-m-01",
+   "format": "single",
+   "topic": "inference-t8",
+   "diff": "easy",
+   "stem": "The risk of a decision rule δ is:",
+   "options": [
+    "A single number summarising its quality",
+    "The loss incurred at the observed sample",
+    "The expected loss averaged over a prior for θ",
+    "The expected loss over the sampling distribution, as a function of θ"
+   ],
+   "answer": "D",
+   "explanation": "R(θ, δ) = E_θ[L(θ, δ(X))] — an expectation over the DATA with θ held fixed, so it is a function of θ. The averaged-over-a-prior option describes Bayes risk, which is a single number, and the loss at the observed sample is the loss itself, before any expectation is taken at all."
+  },
+  {
+   "id": "inference-t8-m-02",
+   "format": "single",
+   "topic": "inference-t8",
+   "diff": "easy",
+   "stem": "A decision rule δ₂ is inadmissible if:",
+   "options": [
+    "Some rule has risk no larger at every θ and strictly smaller at some θ",
+    "Its risk is not constant in θ",
+    "It is not a Bayes rule for any prior",
+    "Its worst-case risk exceeds that of some other rule"
+   ],
+   "answer": "A",
+   "explanation": "That is the definition of being dominated. Non-constant risk is irrelevant to admissibility, and having a larger worst case than another rule only means you are not minimax — a rule can lose on the worst case and still be admissible, because the other rule may be worse elsewhere."
+  },
+  {
+   "id": "inference-t8-m-03",
+   "format": "single",
+   "topic": "inference-t8",
+   "diff": "easy",
+   "stem": "Under squared-error loss, the risk of an estimator equals:",
+   "options": [
+    "Its variance",
+    "Its squared bias",
+    "Its variance plus its squared bias",
+    "Its variance minus its squared bias"
+   ],
+   "answer": "C",
+   "explanation": "Risk under squared error is the mean squared error, which decomposes as variance + bias². It reduces to the variance alone only when the estimator is unbiased — which is why the risk of the sample proportion is just p(1−p)/n."
+  },
+  {
+   "id": "inference-t8-m-04",
+   "format": "single",
+   "topic": "inference-t8",
+   "diff": "easy",
+   "stem": "A minimax decision rule is one that minimises:",
+   "options": [
+    "The average risk over a prior",
+    "The risk at the true parameter value",
+    "The variance of the estimator",
+    "The maximum risk over all θ"
+   ],
+   "answer": "D",
+   "explanation": "Minimax minimises sup_θ R(θ, δ) — the worst case. Minimising the average risk over a prior gives the Bayes rule, and 'the risk at the true parameter value' is not a usable criterion, since the true value is unknown — that impossibility is the reason the two collapses of the risk curve exist at all."
+  },
+  {
+   "id": "inference-t8-m-05",
+   "format": "numeric",
+   "topic": "inference-t8",
+   "diff": "easy",
+   "stem": "For X ~ Bin(n, p), the worst-case risk of the maximum likelihood estimator p̂ = X/n under squared-error loss is:",
+   "options": [
+    "1/(2n)",
+    "1/(4n)",
+    "1/n",
+    "1/(4n²)"
+   ],
+   "answer": "B",
+   "explanation": "p̂ is unbiased, so its risk is Var(p̂) = p(1−p)/n, which is largest at p = 0.5 where p(1−p) = 1/4. The worst case is therefore 1/(4n) — for n = 9 that is 1/36 = 0.0278.",
+   "check": "Maximise p(1−p) first: it peaks at 1/4 when p = 0.5. Then divide by n."
+  },
+  {
+   "id": "inference-t8-m-06",
+   "format": "single",
+   "topic": "inference-t8",
+   "diff": "easy",
+   "stem": "Which relation is used in practice to establish that a rule is minimax?",
+   "options": [
+    "A Bayes rule with constant risk is minimax",
+    "Every admissible rule is minimax",
+    "Every minimax rule is a Bayes rule for the uniform prior",
+    "An unbiased rule with minimum variance is minimax"
+   ],
+   "answer": "A",
+   "explanation": "This is the relation that does the work: it converts minimising a supremum into choosing a prior that flattens the risk curve. Admissibility does not imply minimaxity, the least favourable prior is generally not uniform, and minimum-variance unbiasedness is a separate criterion entirely."
+  },
+  {
+   "id": "inference-t8-m-07",
+   "format": "numeric",
+   "topic": "inference-t8",
+   "diff": "moderate",
+   "stem": "For X ~ Bin(16, p) under squared-error loss, the minimax estimator of p and its risk are:",
+   "options": [
+    "(x + 2)/20 and 0.0100",
+    "(x + 4)/24 and 0.0156",
+    "(x + 2)/18 and 0.0100",
+    "(x + 2)/20 and 0.0156"
+   ],
+   "answer": "A",
+   "explanation": "With a = √n/2 = 2, the estimator is (x + a)/(n + 2a) = (x + 2)/20 and the constant risk is 1/(4(1 + √n)²) = 1/(4 × 25) = 0.0100. The value 0.0156 is 1/64, which is the MLE's worst case for n = 16, and (x + 2)/18 has the wrong denominator — it must be n + 2a, not n + a.",
+   "check": "Denominator n + 2a = 16 + 4 = 20, and 1/(4(1+4)²) = 1/100. Both must be right for the option to be."
+  },
+  {
+   "id": "inference-t8-m-08",
+   "format": "single",
+   "topic": "inference-t8",
+   "diff": "moderate",
+   "stem": "The rule 'ignore the data and always report the constant c' under squared-error loss is:",
+   "options": [
+    "Inadmissible, because it uses no data",
+    "Minimax, because its risk is constant",
+    "Admissible, because its risk is zero at θ = c",
+    "Neither admissible nor minimax, because its risk is unbounded"
+   ],
+   "answer": "C",
+   "explanation": "Its risk is (θ − c)², which is zero at θ = c, so no rule can have risk no larger everywhere and strictly smaller somewhere — it is admissible. Its risk is not constant and is unbounded, so it is certainly not minimax. This is the standard demonstration that admissibility is a weak criterion."
+  },
+  {
+   "id": "inference-t8-m-09",
+   "format": "multi",
+   "topic": "inference-t8",
+   "diff": "moderate",
+   "stem": "Consider the following statements about the relations between Bayes, minimax and admissible rules.",
+   "options": [
+    "A and B only",
+    "A, B and C only",
+    "A and D only",
+    "A, B, C and D"
+   ],
+   "answer": "C",
+   "explanation": "A and D hold. B is false without a uniqueness qualifier — a minimax rule need not be admissible, though a UNIQUE one is. C is false too: a Bayes rule is minimax only if its risk is constant, which most Bayes rules are not.",
+   "statements": [
+    "A unique Bayes rule is admissible.",
+    "Every minimax rule is admissible.",
+    "Every Bayes rule is minimax.",
+    "A Bayes rule whose risk is constant in θ is minimax."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The uniqueness is essential; without it the implication can fail."
+    },
+    "B": {
+     "tf": false,
+     "why": "Minimaxity concerns the worst case only; a unique minimax rule is admissible, but not every one."
+    },
+    "C": {
+     "tf": false,
+     "why": "Only if its risk is constant. Most Bayes rules have risk that varies with θ."
+    },
+    "D": {
+     "tf": true,
+     "why": "A maximum is at least an average, applied once — and the prior is then the least favourable prior."
+    }
+   }
+  },
+  {
+   "id": "inference-t8-m-10",
+   "format": "numeric",
+   "topic": "inference-t8",
+   "diff": "moderate",
+   "stem": "For X ~ Bin(9, p), the risk of the MLE and that of the minimax estimator are equal at:",
+   "options": [
+    "p = 0.25 and 0.75",
+    "p = 0.1693 and 0.8307",
+    "p = 0.2 and 0.8",
+    "p = 0.5 only"
+   ],
+   "answer": "B",
+   "explanation": "Set p(1−p)/9 = 1/64, giving p² − p + 9/64 = 0 and p = (1 ± √0.4375)/2 = 0.1693 and 0.8307. The pair 0.2 and 0.8 is the answer for n = 16, where the equation is p² − p + 0.16 = 0 — a genuine result for the wrong sample size.",
+   "check": "The two roots must be symmetric about 0.5, since p(1−p) is. And at p = 0.5 the MLE's risk is 0.0278 against 0.0156, so they are certainly not equal there."
+  },
+  {
+   "id": "inference-t8-m-11",
+   "format": "single",
+   "topic": "inference-t8",
+   "diff": "moderate",
+   "stem": "For a normal mean with known variance σ², the estimator x̄ has risk σ²/n at every θ. It follows that x̄ is:",
+   "options": [
+    "Inadmissible, since shrinkage estimators exist",
+    "Minimax only if the prior is normal",
+    "Not minimax, because its risk does not depend on θ",
+    "Minimax, because its risk is constant"
+   ],
+   "answer": "D",
+   "explanation": "Constant risk means the worst case equals the everywhere-case, and no rule can better it in the worst case — so x̄ is minimax. Shrinkage estimators beat it near their target and lose elsewhere, so they do not dominate it in one dimension, and the option denying minimaxity inverts the argument: constant risk is what makes a rule minimax, not what disqualifies it."
+  },
+  {
+   "id": "inference-t8-m-12",
+   "format": "match",
+   "topic": "inference-t8",
+   "diff": "moderate",
+   "stem": "Match the criterion in List I with its definition in List II.",
+   "options": [
+    "A-III, B-IV, C-I, D-II",
+    "A-I, B-III, C-IV, D-II",
+    "A-III, B-I, C-II, D-IV",
+    "A-IV, B-III, C-I, D-II"
+   ],
+   "answer": "A",
+   "explanation": "Risk is the expected loss over the data for fixed θ; Bayes risk averages that over a prior; a minimax rule minimises the maximum risk; an admissible rule is one that nothing dominates. Each wrong option moves at least two pairs, so the mapping must be checked rather than inferred from one entry.",
+   "check": "Separate the two that are quantities (risk, Bayes risk) from the two that are properties of a rule (minimax, admissible), and the mapping halves.",
+   "pairs": [
+    [
+     "A. Risk",
+     "I. Minimises the maximum risk over θ"
+    ],
+    [
+     "B. Bayes risk",
+     "II. Not dominated by any other rule"
+    ],
+    [
+     "C. Minimax rule",
+     "III. Expected loss over the data, for a fixed θ"
+    ],
+    [
+     "D. Admissible rule",
+     "IV. Risk averaged over a prior for θ"
+    ]
+   ]
+  },
+  {
+   "id": "inference-t8-m-13",
+   "format": "numeric",
+   "topic": "inference-t8",
+   "diff": "moderate",
+   "stem": "For X ~ Bin(4, p) under squared-error loss, the minimax value is:",
+   "options": [
+    "0.0625",
+    "0.0278",
+    "0.1250",
+    "0.0156"
+   ],
+   "answer": "B",
+   "explanation": "The minimax value is 1/(4(1 + √n)²) = 1/(4 × 9) = 1/36 = 0.0278. The value 0.0625 is 1/16, which is the MLE's worst case 1/(4n) for n = 4 — a correct quantity for the wrong question, and the distractor most candidates pick.",
+   "check": "The minimax value must be strictly below the MLE's worst case of 1/(4n) = 0.0625, so 0.0625 cannot be the answer and 0.1250 is larger still."
+  },
+  {
+   "id": "inference-t8-m-14",
+   "format": "single",
+   "topic": "inference-t8",
+   "diff": "moderate",
+   "stem": "In decision-theoretic language, a test of hypotheses uses the action space {0, 1} and 0–1 loss. Its risk at a particular θ is:",
+   "options": [
+    "The power of the test",
+    "The size of the test",
+    "The probability of an error at that θ",
+    "The expected sample size"
+   ],
+   "answer": "C",
+   "explanation": "With 0–1 loss the expected loss is the probability of taking the wrong action: the probability of a type I error for θ in H₀, and of a type II error for θ in H₁. Size is the supremum of the first over H₀ and power is one minus the second, so both are features of that risk function rather than the risk itself."
+  },
+  {
+   "id": "inference-t8-m-15",
+   "format": "multi",
+   "topic": "inference-t8",
+   "diff": "moderate",
+   "stem": "Consider the following statements about admissibility.",
+   "options": [
+    "A and B only",
+    "B and C only",
+    "A, C and D only",
+    "A, B and D only"
+   ],
+   "answer": "C",
+   "explanation": "A, C and D hold. B is false: the maximum likelihood estimator of a normal mean VECTOR is inadmissible once the dimension is three or more, which is the most famous inadmissibility result in the subject.",
+   "statements": [
+    "A rule that ignores the data entirely can be admissible.",
+    "The maximum likelihood estimator is admissible in every problem.",
+    "An unbiased estimator need not be admissible.",
+    "Admissibility does not imply minimaxity."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Its risk is zero at one parameter value, so nothing can dominate it."
+    },
+    "B": {
+     "tf": false,
+     "why": "For a normal mean vector in dimension three or more, a shrinkage estimator dominates it everywhere."
+    },
+    "C": {
+     "tf": true,
+     "why": "Unbiasedness is a constraint, not a guarantee of undominatedness."
+    },
+    "D": {
+     "tf": true,
+     "why": "A constant rule is admissible and its worst-case risk is unbounded."
+    }
+   }
+  },
+  {
+   "id": "inference-t8-m-16",
+   "format": "single",
+   "topic": "inference-t8",
+   "diff": "moderate",
+   "stem": "The least favourable prior in a minimax problem is best described as:",
+   "options": [
+    "The prior against which the best achievable Bayes risk is largest",
+    "The prior that a cautious statistician would actually believe",
+    "The uniform prior over the parameter space",
+    "The prior that minimises the Bayes risk of the minimax rule"
+   ],
+   "answer": "A",
+   "explanation": "It names the hardest problem in the family — the prior maximising the minimum achievable Bayes risk — and solving that one problem solves the minimax problem. It is a device rather than a belief, and it is generally not uniform: for the binomial problem it is Beta(√n/2, √n/2)."
+  },
+  {
+   "id": "inference-t8-m-17",
+   "format": "numeric",
+   "topic": "inference-t8",
+   "diff": "hard",
+   "stem": "Under the loss L(θ, a) = 3(θ − a) for a < θ and (a − θ) for a ≥ θ, the Bayes rule is:",
+   "options": [
+    "The posterior median",
+    "The posterior mean",
+    "The 0.25 quantile of the posterior",
+    "The 0.75 quantile of the posterior"
+   ],
+   "answer": "D",
+   "explanation": "This is weighted absolute-error loss with k₁ = 3 for under-estimation and k₂ = 1 for over-estimation, and the Bayes rule is the k₁/(k₁ + k₂) quantile — here 3/4. Under-estimating is the costlier error, so the estimate must move ABOVE the median; the 0.25 quantile is the answer with the weights transposed, which is the error the options are built around.",
+   "check": "Equal weights must give the median, and 1/(1+1) = 1/2 ✓. Then check the direction: costlier under-estimation pushes the estimate up."
+  },
+  {
+   "id": "inference-t8-m-18",
+   "format": "single",
+   "topic": "inference-t8",
+   "diff": "hard",
+   "stem": "A rule has perfectly constant risk σ² for every θ, and is not minimax. Which explanation is correct?",
+   "options": [
+    "Constant risk is sufficient for minimaxity, so the premise is impossible",
+    "Constant risk is only sufficient alongside the rule being a Bayes rule, and this one is not",
+    "The risk must be constant AND small for the rule to be minimax",
+    "Minimaxity requires the risk to be constant and the loss to be bounded"
+   ],
+   "answer": "B",
+   "explanation": "The relation has two conditions: a BAYES rule with constant risk is minimax. 'Always report x₁' has constant risk σ², is flat as anything, and is dominated by x̄ for every n > 1 — so flatness alone proves nothing. The third option is not a theorem, because 'small' is not a defined condition, and boundedness of the loss is not required."
+  },
+  {
+   "id": "inference-t8-m-19",
+   "format": "numeric",
+   "topic": "inference-t8",
+   "diff": "hard",
+   "stem": "For X ~ Bin(25, p), by what factor does the MLE's worst-case risk exceed the minimax value?",
+   "options": [
+    "1.20",
+    "1.44",
+    "1.78",
+    "2.25"
+   ],
+   "answer": "B",
+   "explanation": "The MLE's worst case is 1/(4n) = 1/100 = 0.0100 and the minimax value is 1/(4(1 + √n)²) = 1/(4 × 36) = 1/144 = 0.006944. The ratio is 144/100 = 1.44. In general the factor is (1 + √n)²/n, which equals 1.78 for n = 9 and approaches 1 as n grows — the minimax rule's advantage is a small-sample phenomenon.",
+   "check": "The general factor is (1+√n)²/n = (1 + 1/√n)². For n = 25 that is (1 + 0.2)² = 1.44."
+  },
+  {
+   "id": "inference-t8-m-20",
+   "format": "single",
+   "topic": "inference-t8",
+   "diff": "hard",
+   "stem": "Two rules have identical risk at every value of θ. Which conclusion is correct?",
+   "options": [
+    "Each dominates the other, so both are inadmissible",
+    "They must be the same rule",
+    "Both must be minimax",
+    "Neither dominates the other, so the admissibility of one says nothing about the other"
+   ],
+   "answer": "D",
+   "explanation": "Domination requires risk no larger everywhere AND strictly smaller somewhere; identical risk fails the second condition in both directions, so neither dominates. They need not be the same rule — two different rules can be risk-equivalent — and whether either is minimax depends on whether that common risk has the smallest achievable supremum, which identical risk alone does not establish."
+  }
+ ]
+}

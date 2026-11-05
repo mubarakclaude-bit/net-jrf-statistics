@@ -1,0 +1,27 @@
+const { chromium } = require('playwright');
+(async () => {
+  const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium/chrome-linux/chrome' }).catch(() => chromium.launch());
+  const p = await b.newPage({ viewport: { width: 1400, height: 1020 }, deviceScaleFactor: 2 });
+  await p.goto('file:///tmp/claude-0/harness.html'); await p.waitForTimeout(900);
+  await p.click('[data-tab="learn"]'); await p.waitForTimeout(300);
+  await p.click('.navmh[data-mod="inference"]'); await p.waitForTimeout(200);
+  await p.click('[data-topic="inference-t4"]'); await p.waitForTimeout(700);
+  await p.screenshot({ path: '/tmp/claude-0/s-overview.png' });
+  await p.evaluate(() => gotoScene(1)); await p.waitForTimeout(400);
+  await p.screenshot({ path: '/tmp/claude-0/s-explore.png' });
+  await p.evaluate(() => gotoScene(8)); await p.waitForTimeout(400);
+  await p.screenshot({ path: '/tmp/claude-0/s-unif.png' });
+  await p.evaluate(() => gotoScene(5)); await p.waitForTimeout(400);
+  await p.screenshot({ path: '/tmp/claude-0/s-completion.png', fullPage: true });
+  await p.evaluate(() => { document.documentElement.setAttribute('data-theme','dark'); gotoScene(7); }); await p.waitForTimeout(400);
+  await p.screenshot({ path: '/tmp/claude-0/s-sampling-dark.png' });
+  await p.evaluate(() => { document.documentElement.setAttribute('data-theme','light'); });
+  await p.click('[data-tab="admin"]'); await p.waitForTimeout(400);
+  await p.screenshot({ path: '/tmp/claude-0/s-admin.png' });
+  await p.setViewportSize({ width: 390, height: 844 });
+  await p.click('[data-tab="learn"]'); await p.waitForTimeout(300);
+  await p.evaluate(() => { S.navOpen = false; openTopic('inference-t4'); }); await p.waitForTimeout(600);
+  await p.evaluate(() => gotoScene(1)); await p.waitForTimeout(400);
+  await p.screenshot({ path: '/tmp/claude-0/s-mobile.png' });
+  await b.close();
+})();

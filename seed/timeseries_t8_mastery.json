@@ -1,0 +1,365 @@
+{
+ "moduleId": "timeseries",
+ "topicId": "timeseries-t8",
+ "source": "mastery",
+ "label": "Components, moving averages and smoothing — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "ts-t8-m-01",
+   "format": "single",
+   "topic": "timeseries-t8",
+   "diff": "easy",
+   "stem": "The four classical components of a time series are:",
+   "options": [
+    "level, slope, curvature and noise",
+    "mean, variance, skewness and kurtosis",
+    "trend, seasonal, cyclical and irregular",
+    "autoregressive, moving average, trend and season"
+   ],
+   "answer": "C",
+   "explanation": "Seasonal has a KNOWN fixed period — twelve months, four quarters — while cyclical is a longer swing with no fixed period, typically several years. Trend and cycle are often hard to separate in practice and are combined into a single trend-cycle component."
+  },
+  {
+   "id": "ts-t8-m-02",
+   "format": "single",
+   "topic": "timeseries-t8",
+   "diff": "easy",
+   "stem": "A multiplicative decomposition is preferred when:",
+   "options": [
+    "the seasonal swing is a roughly constant size",
+    "the seasonal swing is a roughly constant proportion of the level",
+    "there is no trend",
+    "the series is stationary"
+   ],
+   "answer": "B",
+   "explanation": "If the swings widen as the series grows, the seasonal effect is proportional and the model should be multiplicative. Taking logarithms converts it to an additive one, which is usually the easiest route in practice."
+  },
+  {
+   "id": "ts-t8-m-03",
+   "format": "numeric",
+   "topic": "timeseries-t8",
+   "diff": "easy",
+   "stem": "In simple exponential smoothing with parameter α, the weight on the observation j periods ago is:",
+   "options": [
+    "α/j",
+    "(1 − α)αʲ",
+    "αʲ",
+    "α(1 − α)ʲ"
+   ],
+   "answer": "D",
+   "explanation": "Unrolling Ŝₜ = αyₜ + (1−α)Ŝₜ₋₁ gives weights α(1−α)ʲ, which form a geometric series summing to exactly 1 — verified to eight decimals at α = 0.1, 0.3 and 0.5.",
+   "check": "At j = 0 the weight must be α, the weight on the current observation, which it is."
+  },
+  {
+   "id": "ts-t8-m-04",
+   "format": "single",
+   "topic": "timeseries-t8",
+   "diff": "easy",
+   "stem": "Additive seasonal components should be normalised so that they:",
+   "options": [
+    "sum to one",
+    "average to one",
+    "sum to zero",
+    "are all positive"
+   ],
+   "answer": "C",
+   "explanation": "Additive deviations redistribute the level without changing it, so they must sum to zero over a full cycle. It is the MULTIPLICATIVE indices that average to one, and mixing the two normalisations is a common error."
+  },
+  {
+   "id": "ts-t8-m-05",
+   "format": "single",
+   "topic": "timeseries-t8",
+   "diff": "easy",
+   "stem": "A moving average of even order requires centring because:",
+   "options": [
+    "the weights do not sum to one",
+    "the average falls between two time points",
+    "it removes the trend as well",
+    "it cannot handle seasonality"
+   ],
+   "answer": "B",
+   "explanation": "The average of twelve consecutive months belongs at the midpoint between the sixth and seventh, which is not an observation time. A second averaging of two consecutive such values places the result on a time point, giving the 2×k filter."
+  },
+  {
+   "id": "ts-t8-m-06",
+   "format": "numeric",
+   "topic": "timeseries-t8",
+   "diff": "easy",
+   "stem": "The average age of the observations in simple exponential smoothing with parameter α is:",
+   "options": [
+    "α",
+    "α/(1 − α)",
+    "1/α",
+    "(1 − α)/α"
+   ],
+   "answer": "D",
+   "explanation": "It is 9 at α = 0.1, 4 at α = 0.2, 2.333 at α = 0.3 and 1 at α = 0.5. It gives a feel for the smoothing: α = 0.1 behaves roughly like a nineteen-term moving average.",
+   "check": "As α approaches 1 the average age must approach 0, since all the weight goes on the current observation — which this formula gives."
+  },
+  {
+   "id": "ts-t8-m-07",
+   "format": "numeric",
+   "topic": "timeseries-t8",
+   "diff": "moderate",
+   "stem": "A simple five-term moving average is applied to a white-noise series. The lag-1 autocorrelation of the output is:",
+   "options": [
+    "0.2",
+    "0",
+    "0.8",
+    "1.0"
+   ],
+   "answer": "C",
+   "explanation": "Consecutive five-term averages share four of their five terms, so ρ₁ = (k−1)/k = 4/5 = 0.8. This is the Slutsky–Yule effect: smoothing reduces the variance to σ²/5 but manufactures autocorrelation, and the smoothed series LOOKS cyclical when the raw one was not.",
+   "check": "The output is an equal-weight MA(4) with triangular ACF 0.8, 0.6, 0.4, 0.2, then zero."
+  },
+  {
+   "id": "ts-t8-m-08",
+   "format": "numeric",
+   "topic": "timeseries-t8",
+   "diff": "moderate",
+   "stem": "The weights of a 2×4 centred moving average are:",
+   "options": [
+    "1/4, 1/4, 1/4, 1/4",
+    "1/8, 1/4, 1/4, 1/4, 1/8",
+    "1/5 each",
+    "1/8, 1/8, 1/4, 1/4, 1/4"
+   ],
+   "answer": "B",
+   "explanation": "Five terms in all. The two end observations appear in only one of the two four-term averages and so get half the inner weight: 1/(2×4) = 1/8 against 1/4. The sum is 0.125 + 0.250 + 0.250 + 0.250 + 0.125 = 1.",
+   "check": "A trend filter's weights must sum to 1, so that it reproduces a constant series exactly."
+  },
+  {
+   "id": "ts-t8-m-09",
+   "format": "single",
+   "topic": "timeseries-t8",
+   "diff": "moderate",
+   "stem": "Simple exponential smoothing with parameter α produces the same forecasts as:",
+   "options": [
+    "ARIMA(0,2,2) with θ = α",
+    "ARIMA(0,1,1) with θ = α",
+    "ARIMA(1,0,0) with φ = α",
+    "ARIMA(0,1,1) with θ = 1 − α"
+   ],
+   "answer": "D",
+   "explanation": "The coefficient is 1 − α, not α — at α = 0.3 the equivalent MA coefficient is 0.7. This equivalence says exactly when the method is appropriate: the series should have a unit root and its first difference should be an MA(1). Holt's method corresponds to ARIMA(0,2,2)."
+  },
+  {
+   "id": "ts-t8-m-10",
+   "format": "numeric",
+   "topic": "timeseries-t8",
+   "diff": "moderate",
+   "stem": "The half-life of the exponential smoothing weights at α = 0.3 is approximately:",
+   "options": [
+    "0.70 periods",
+    "3.33 periods",
+    "1.94 periods",
+    "2.33 periods"
+   ],
+   "answer": "C",
+   "explanation": "Half-life = ln(0.5)/ln(1 − α) = (−0.693147)/(−0.356675) = 1.9434. Note this differs from the average age, which is (1−0.3)/0.3 = 2.333 — the two summaries answer different questions and are easy to confuse.",
+   "check": "At α = 0.5 the half-life must be exactly 1, since the weight halves every period, and the formula gives ln(0.5)/ln(0.5) = 1."
+  },
+  {
+   "id": "ts-t8-m-11",
+   "format": "numeric",
+   "topic": "timeseries-t8",
+   "diff": "moderate",
+   "stem": "A 2×12 centred moving average has how many terms, and what are its end weights?",
+   "options": [
+    "12 terms, with end weights 1/12",
+    "13 terms, with end weights 1/24",
+    "13 terms, all weights 1/13",
+    "12 terms, with end weights 1/24"
+   ],
+   "answer": "B",
+   "explanation": "The filter spans thirteen observations: two ends at 1/24 = 0.041667 and eleven inner at 1/12 = 0.083333. The sum is 2(1/24) + 11(1/12) = 1/12 + 11/12 = 1.",
+   "check": "Counting by the sum is the reliable way: equal weights of 1/13 would not annihilate a twelve-period season, which is the filter's purpose."
+  },
+  {
+   "id": "ts-t8-m-12",
+   "format": "multi",
+   "topic": "timeseries-t8",
+   "diff": "moderate",
+   "stem": "Consider filters and smoothing.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "A",
+   "explanation": "A is true and is the Slutsky–Yule effect. B is true — a geometric series with ratio 1−α sums to α/α = 1. C is true: the model carries only a level. D is false — the coefficient is 1 − α, which is the trap in this topic.",
+   "statements": [
+    "A simple k-term moving average applied to white noise induces ρ₁ = (k−1)/k.",
+    "The exponential smoothing weights sum to exactly 1.",
+    "Simple exponential smoothing gives the same forecast at every horizon.",
+    "Simple exponential smoothing with parameter α is ARIMA(0,1,1) with θ = α."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. Consecutive averages share k−1 of their k terms, giving 0.6667 at k=3, 0.8 at k=5 and 0.9167 at k=12. The output is an equal-weight MA(k−1) with a triangular ACF."
+    },
+    "B": {
+     "tf": true,
+     "why": "True: Σα(1−α)ʲ = α/(1 − (1−α)) = 1, verified to eight decimals. This makes the smoothed value a genuine weighted average, returning c exactly for a constant series c."
+    },
+    "C": {
+     "tf": true,
+     "why": "True — the model has only a level, so ŷₜ₊ₖ = Ŝₜ for every k. That is correct for a random walk plus noise; a trending series needs Holt's method."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. It is θ = 1 − α, so α = 0.3 corresponds to θ = 0.7. Note that a small α gives θ near 1, the invertibility boundary and the heavy-smoothing end of the range."
+    }
+   }
+  },
+  {
+   "id": "ts-t8-m-13",
+   "format": "numeric",
+   "topic": "timeseries-t8",
+   "diff": "moderate",
+   "stem": "Quarterly detrended values average 0.92, 1.05, 1.10 and 0.95. The normalised multiplicative seasonal index for the third quarter is approximately:",
+   "options": [
+    "0.9154",
+    "1.1000",
+    "1.0500",
+    "1.0945"
+   ],
+   "answer": "D",
+   "explanation": "The four figures average (0.92 + 1.05 + 1.10 + 0.95)/4 = 1.005, so each is divided by 1.005. For the third quarter, 1.10/1.005 = 1.0945. Omitting this normalisation is the commonest error in a decomposition question.",
+   "check": "The four normalised indices 0.9154, 1.0448, 1.0945, 0.9453 average to exactly 1."
+  },
+  {
+   "id": "ts-t8-m-14",
+   "format": "single",
+   "topic": "timeseries-t8",
+   "diff": "moderate",
+   "stem": "An apparent multi-year cycle appears in a series only after a five-year moving average is applied. The soundest response is:",
+   "options": [
+    "apply a longer moving average to confirm it",
+    "report the cycle and project the next peak",
+    "apply the same filter to simulated white noise and compare, and check the raw ACF",
+    "conclude the series is non-stationary"
+   ],
+   "answer": "C",
+   "explanation": "A five-term filter gives white noise a lag-1 autocorrelation of 0.8, which traced on a chart looks like smooth multi-year waves whose apparent period comes from the filter width. Filtering simulated noise settles whether the waves are real, and a genuine cycle of period p would also show in the RAW autocorrelations near lag p, which filtering can neither create nor remove. Applying a longer filter would make the artefact worse, not clearer."
+  },
+  {
+   "id": "ts-t8-m-15",
+   "format": "single",
+   "topic": "timeseries-t8",
+   "diff": "moderate",
+   "stem": "In a classical decomposition, the correct order of operations is:",
+   "options": [
+    "average by season, normalise, then estimate the trend",
+    "estimate the trend, detrend, average by season, then normalise",
+    "normalise, estimate the trend, then detrend",
+    "estimate the trend and the season simultaneously"
+   ],
+   "answer": "B",
+   "explanation": "The seasonal figures are obtained from the DETRENDED values, so the trend must come first. Averaging the raw values by season would confound the seasonal effect with whatever the trend was doing in those months. The normalisation comes last, once all the seasonal averages are in hand."
+  },
+  {
+   "id": "ts-t8-m-16",
+   "format": "single",
+   "topic": "timeseries-t8",
+   "diff": "moderate",
+   "stem": "Holt's method extends simple exponential smoothing by:",
+   "options": [
+    "estimating α by maximum likelihood",
+    "adding a seasonal term",
+    "using a moving average instead of exponential weights",
+    "adding a smoothed trend term, giving a linear rather than flat forecast"
+   ],
+   "answer": "D",
+   "explanation": "Holt adds a trend component with its own smoothing parameter β, so the k-step forecast becomes level plus k times slope rather than a constant. It corresponds to ARIMA(0,2,2). Adding a SEASONAL term as well, with parameter γ, gives Holt–Winters."
+  },
+  {
+   "id": "ts-t8-m-17",
+   "format": "multi",
+   "topic": "timeseries-t8",
+   "diff": "hard",
+   "stem": "Consider the properties of the centred moving-average filter.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "A",
+   "explanation": "A is true — the two end observations each appear in only one of the two k-term averages. B is true, and it is the reason for matching the filter length to the seasonal period. C is true: that transfer function has zeros at exactly the seasonal frequency and its harmonics. D is false — the filter spans k+1 observations, so a 2×12 filter has thirteen terms.",
+   "statements": [
+    "The end weights of a 2×k filter are half the inner weights.",
+    "A 2×k filter annihilates a season of period k exactly, not approximately.",
+    "A k-term average has transfer function sin(kω/2)/(k sin(ω/2)), with zeros at ω = 2πj/k.",
+    "A 2×k centred filter spans exactly k observations."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True: each end observation is in only one of the two averages and so receives (1/2)(1/k) = 1/(2k), while each inner one is in both and receives 1/k. For k = 12 that is 1/24 against 1/12."
+    },
+    "B": {
+     "tf": true,
+     "why": "True, provided the seasonal component sums to zero over any k consecutive periods — which the additive normalisation guarantees. Each k-term average then contains exactly one full cycle, so the seasonal contribution is zero."
+    },
+    "C": {
+     "tf": true,
+     "why": "True, and it is the frequency-domain statement of the previous point: the annihilation is the filter having a zero at the seasonal frequency 2π/k and its harmonics. That is topic 7.7's language."
+    },
+    "D": {
+     "tf": false,
+     "why": "False — it spans k+1 observations, because the second averaging shifts the window by one. A 2×12 filter therefore has thirteen terms, not twelve, and summing the weights is the way to be sure."
+    }
+   }
+  },
+  {
+   "id": "ts-t8-m-18",
+   "format": "numeric",
+   "topic": "timeseries-t8",
+   "diff": "hard",
+   "stem": "A simple twelve-term moving average is applied to white noise of variance σ². The output variance and lag-1 autocorrelation are:",
+   "options": [
+    "σ² and 0.9167",
+    "σ²/12 and 0",
+    "σ²/12 and 0.9167",
+    "σ²/144 and 0.9167"
+   ],
+   "answer": "C",
+   "explanation": "The variance of an average of twelve independent terms is σ²/12, and consecutive averages share eleven of their twelve terms, giving ρ₁ = 11/12 = 0.9167. A series with autocorrelation that high looks strongly cyclical, which is exactly the Slutsky–Yule warning.",
+   "check": "The ACF is triangular: 11/12, 10/12, …, 1/12, then zero — an equal-weight MA(11)."
+  },
+  {
+   "id": "ts-t8-m-19",
+   "format": "single",
+   "topic": "timeseries-t8",
+   "diff": "hard",
+   "stem": "The error-correction form of simple exponential smoothing is Ŝₜ = Ŝₜ₋₁ + αeₜ. This shows that the method:",
+   "options": [
+    "ignores the previous estimate entirely",
+    "adjusts the previous estimate by a fraction α of the error just made",
+    "requires the whole data history at each step",
+    "is equivalent to a simple moving average"
+   ],
+   "answer": "B",
+   "explanation": "The method is an error-correction rule: a large α means it responds strongly to its own mistakes and so adapts quickly; α = 0 would mean learning nothing. This is also the form in which the method generalises, since Holt and Holt–Winters add further error-correction terms for trend and season."
+  },
+  {
+   "id": "ts-t8-m-20",
+   "format": "single",
+   "topic": "timeseries-t8",
+   "diff": "hard",
+   "stem": "Why did exponential smoothing survive the arrival of the Box–Jenkins framework rather than being displaced by it?",
+   "options": [
+    "because it makes no assumptions about the data",
+    "because it is easier to compute",
+    "because ARIMA models cannot handle seasonality",
+    "because it is the optimal forecast for a specific ARIMA model, not an ad hoc rule"
+   ],
+   "answer": "D",
+   "explanation": "Simple exponential smoothing gives exactly the ARIMA(0,1,1) forecast with θ = 1 − α, and Holt's method the ARIMA(0,2,2) forecast. So the classical recursions were already optimal for well-defined models, which is why they remained respectable rather than merely convenient. Computational cheapness mattered historically but is not the reason the methods are still taught."
+  }
+ ]
+}

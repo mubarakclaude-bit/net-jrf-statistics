@@ -1,0 +1,956 @@
+{
+ "id": "probabilityt5",
+ "topicId": "probability-t5",
+ "moduleId": "probability",
+ "title": "Standard Discrete Distributions",
+ "breadcrumb": "Probability → Distributions → Standard discrete families",
+ "engine": "B",
+ "engineName": "Probability — naming a family from what it counts, and checking it by its moments",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 99,
+ "objectives": [
+  "Identify a discrete family from what is fixed and what is counted.",
+  "State the pmf, mean, variance and mgf of the binomial, Poisson, geometric and negative binomial.",
+  "Use the variance-to-mean ratio as an independent check on an identification.",
+  "Explain why the geometric has no fixed dispersion direction, with p = 0.5 as the boundary.",
+  "State the limits and closures: negative binomial at r = 1, binomial to Poisson, Poisson additivity.",
+  "Say why sampling without replacement gives a hypergeometric and what the correction factor does."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Expectation and variance",
+   "why": "Every family is identified here by its mean, its variance and the ratio between them."
+  },
+  {
+   "id": "p2",
+   "name": "Independence and Bernoulli trials",
+   "why": "Four of the five families are built from independent success-or-failure trials, and the hypergeometric is what happens when independence fails."
+  },
+  {
+   "id": "p3",
+   "name": "Moment generating functions",
+   "why": "The mgf of the binomial is asked directly, and the Poisson limit and additivity are one line each with mgfs."
+  },
+  {
+   "id": "p4",
+   "name": "Combinations and the binomial theorem",
+   "why": "The pmfs are built from C(n, k), and the binomial mgf is the binomial theorem with peᵗ in place of p."
+  }
+ ],
+ "traps": [
+  "'A finite number of trials' means binomial; 'the rᵗʰ success' means negative binomial. Read which is fixed.",
+  "The geometric's variance does NOT always exceed its mean — the ratio is q/p, equal at p = 0.5.",
+  "Poisson rates ADD: Poisson(2) + Poisson(3) is Poisson(5), not Poisson(6).",
+  "Sampling without replacement is hypergeometric, not binomial — the means agree, the variances do not.",
+  "Mind the geometric convention: counting trials gives mean 1/p, counting failures gives q/p.",
+  "A binomial's variance is always below its mean, so a binomial can never be equidispersed.",
+  "The negative binomial's ratio 1/p does not involve r, so r never affects whether it is overdispersed.",
+  "A variance-to-mean ratio of 1 narrows the field but does not prove the Poisson — a geometric with p = 0.5 has it too."
+ ],
+ "revision": {
+  "sheet": [
+   "Identification: fixed trials → binomial; first success → geometric; rᵗʰ success → negative binomial; n large, p small → Poisson; without replacement → hypergeometric.",
+   "June 2026 Q6: A-III binomial, B-IV geometric, C-I negative binomial, D-II Poisson.",
+   "Binomial B(n,p): pmf C(n,k)pᵏq^(n−k); mean np; var npq; mgf (q + peᵗ)ⁿ; ratio q < 1.",
+   "Poisson(λ): pmf e^(−λ)λᵏ/k!; mean λ; var λ; mgf e^(λ(eᵗ−1)); ratio exactly 1.",
+   "Geometric(p) counting trials: pmf q^(k−1)p, k ≥ 1; mean 1/p; var q/p²; mgf peᵗ/(1 − qeᵗ) for t < −ln q; ratio q/p.",
+   "Negative binomial(r,p) counting failures: pmf C(k+r−1,k)pʳqᵏ; mean rq/p; var rq/p²; ratio 1/p > 1 always.",
+   "Hypergeometric(N,K,n): mean nK/N; var npq(N−n)/(N−1); ratio q(N−n)/(N−1) < q.",
+   "The ratio depends only on the shape parameter, never on n, λ or r — so it survives a question that withholds the size.",
+   "Geometric dispersion: overdispersed for p < 0.5, exactly equal at p = 0.5 (mean 2, var 2), underdispersed above. Most summaries state this wrongly.",
+   "Negative binomial with r = 1 IS the geometric; checked at p = 0.3, both means 2.333.",
+   "Binomial → Poisson as n → ∞, p → 0, np = λ. At λ = 2, P(X=2) runs 0.2852 (n=20), 0.2734 (n=100), 0.2709 (n=1000) → 0.2707.",
+   "Poisson additivity: independent Poisson(λ₁) + Poisson(λ₂) = Poisson(λ₁+λ₂). P(Poisson(5) = 4) = 0.17547.",
+   "Hypergeometric → binomial as N grows: correction (N−n)/(N−1) is 40/49 = 0.816 at N=50,n=10 but 0.99991 at N=100,000.",
+   "Rule of thumb: the binomial approximates the hypergeometric when the sample is under about 5% of the population.",
+   "Geometric memorylessness: P(X > m+n | X > m) = qⁿ = P(X > n), and the geometric is the ONLY discrete law with it.",
+   "Identification from moments: mean 6, var 15 → ratio 2.5 = 1/p → p = 0.4, and rq/p = 6 → r = 4.",
+   "Identification from moments: mean 6, var 4.2 → ratio 0.7 = q → p = 0.3; with n = 20, np = 6 confirms it.",
+   "Example: N=50, K=20, n=10 gives hypergeometric variance 1.959 against the binomial's 2.400."
+  ],
+  "cards": [
+   [
+    "Fixed trials, random successes",
+    "Binomial — mean np, var npq"
+   ],
+   [
+    "First success awaited",
+    "Geometric — mean 1/p counting trials"
+   ],
+   [
+    "Failures before the rᵗʰ success",
+    "Negative binomial — mean rq/p"
+   ],
+   [
+    "n large, p infinitesimal",
+    "Poisson — mean = variance = λ"
+   ],
+   [
+    "Without replacement",
+    "Hypergeometric — variance shrunk by (N−n)/(N−1)"
+   ],
+   [
+    "Variance ÷ mean, binomial",
+    "q, always below 1"
+   ],
+   [
+    "Variance ÷ mean, negative binomial",
+    "1/p, always above 1 — and free of r"
+   ],
+   [
+    "Variance ÷ mean, geometric",
+    "q/p — equal at p = 0.5, either side otherwise"
+   ],
+   [
+    "mgf of B(n, p)",
+    "(q + peᵗ)ⁿ, equal to 1 at t = 0"
+   ],
+   [
+    "Poisson(2) + Poisson(3)",
+    "Poisson(5) — the rates add"
+   ],
+   [
+    "Negative binomial at r = 1",
+    "The geometric"
+   ],
+   [
+    "The only memoryless discrete law",
+    "The geometric — nothing is ever 'due'"
+   ]
+  ],
+  "tricks": [
+   "Find the word that fixes a quantity: 'finite number of trials', 'first', 'rᵗʰ', 'without replacement'.",
+   "Compute variance ÷ mean as a second, independent route to the family.",
+   "The ratio gives p directly: q for a binomial, 1/p for a negative binomial — no need for n or r.",
+   "If the question says 'geometric' without saying what is counted, use the mean to tell: 1/p counts trials, q/p counts failures.",
+   "Check any mgf by putting t = 0; it must give exactly 1.",
+   "For Poisson sums, add the rates. For binomial sums, you may not add at all unless p matches."
+  ],
+  "shortcuts": [
+   "(N−n)/(N−1) at N = 50, n = 10 is 40/49 = 0.816; the binomial is safe only when this is near 1.",
+   "q/p = 1 exactly at p = 0.5, which is the geometric's equidispersion point.",
+   "P(Poisson(5) = 4) = e^(−5)·625/24 = 0.1755."
+  ],
+  "remember": [
+   "Read what is FIXED, not what the words sound like.",
+   "Ratio: q, 1, 1/p, q/p.",
+   "Poisson rates add. Nothing is ever due."
+  ]
+ },
+ "howto": "The interactive chart in section 3 is the fastest way into this topic: step the family slider through all four and watch the variance-to-mean ratio go below 1, to exactly 1, and then above 1, which is the single most useful discriminator in the lesson. Section 5 is June 2026's own question, matched out one description at a time, and the method there — find the word that says which quantity is fixed — is what the matching questions actually test. Section 7 has you derive the four ratios rather than memorise them, and it is where the geometric's awkwardness appears: its ratio q/p sits on either side of 1 depending on p, so 'the geometric is overdispersed' is wrong as usually stated. Section 10's part (f) is a deliberate trap worth attempting before reading the check. If short of time, sections 3, 4, 5 and 7 are the lesson. The optional section derives the Poisson limit and proves that the geometric is the only memoryless discrete distribution, which is worth reading because the proof is three lines and explains why the exponential behaves the same way.",
+ "refs": [
+  {
+   "title": "Discrete Distributions",
+   "where": "Lessons 10 to 12",
+   "site": "Penn State STAT 414",
+   "url": "https://online.stat.psu.edu/stat414/",
+   "type": "Course notes",
+   "free": true,
+   "checked": "2026-11-03",
+   "why": "Binomial, geometric, negative binomial, Poisson and hypergeometric with derivations of each mean, variance and mgf."
+  },
+  {
+   "title": "Statistical Inference, 2nd edition",
+   "where": "Section 3.2",
+   "site": "Casella and Berger",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-03",
+   "why": "The standard reference for the discrete families, including the Poisson limit and the relationships between them."
+  },
+  {
+   "title": "An Introduction to Probability and Statistics, 3rd edition",
+   "where": "Chapter 5",
+   "site": "Rohatgi and Saleh",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-03",
+   "why": "Discrete distributions at NET level, with the memorylessness characterisation of the geometric stated as a theorem."
+  },
+  {
+   "title": "Probability and Statistics",
+   "where": "Weeks on discrete distributions",
+   "site": "NPTEL / SWAYAM",
+   "url": "https://archive.nptel.ac.in/courses/111105090",
+   "type": "Video course",
+   "free": true,
+   "checked": "2026-11-03",
+   "why": "Indian-syllabus notation and the matching-question style these appear in."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
+ },
+ "provenance": "Authored November 2026 on June 2026 Q6 (answered wrongly, marked B against A), a match-the-list question pairing four descriptions with four discrete families. The marked option moved all four pairs, so the lesson teaches identification by what is FIXED versus what is COUNTED, and then supplies the variance-to-mean ratio as an independent check. All ten variants filed under Q6 are discrete-distribution items, which places the lesson at probability-t5 rather than t6. Every figure was computed and cross-checked against a 400,000-sample simulation: the means and variances of the binomial, Poisson, geometric and negative binomial; the hypergeometric mean and the finite-population correction (1.959 against the binomial's 2.400 at N=50, K=20, n=10); the Poisson limit of the binomial at λ=2 for n = 20, 100 and 1000; Poisson additivity including P(Poisson(5)=4) = 0.17547; geometric memorylessness at p=0.3; and the mgfs of all three main families. Each pmf was summed over its support and came to 1.00000000. One correction to the usual summary was found and is taught explicitly: the geometric's variance-to-mean ratio is q/p, so it is overdispersed only for p < 0.5, exactly equidispersed at p = 0.5 (mean 2, variance 2) and underdispersed above — the claim that a geometric always has variance above its mean is false, and the visualisation reports this per-family rather than asserting a Poisson signature wherever the ratio is 1. The geometric mgf's closed form was confirmed by stable partial summation after a naive simulation disagreed; the cause was Monte Carlo error near the divergence at t = −ln q, not a wrong formula. Introduces the `disc-pmf` visualisation, written for this lesson and reusable for 1.4 and 1.6. Previous-year questions are stored separately and carry their exam cycle.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Before the lesson — four things it will assume",
+   "objective": "Fix what each family counts, since that is how every question identifies them.",
+   "ask": {
+    "q": "Binomial, geometric and negative binomial all involve repeated success-or-failure trials. What actually differs between them?",
+    "nudge": "In each case, which quantity is fixed in advance and which one is random?"
+   },
+   "body": [
+    "There are five discrete families worth knowing cold, and they are distinguished by one question: what is fixed and what is counted?",
+    "Fix the number of trials and count the successes — binomial. Fix one success and count the trials needed — geometric. Fix r successes and count the failures before them — negative binomial. Let the trials become very numerous and the success probability very small — Poisson. Sample without replacement from a finite population — hypergeometric.",
+    "June 2026's question was exactly this matching, and all four pairs were marked wrongly. So the first half of the lesson is about reading the description; the second half gives an independent check — the variance-to-mean ratio — so that an answer can be confirmed rather than guessed.",
+    "Four checks before starting."
+   ],
+   "items": [
+    {
+     "ask": "For a binomial B(n, p), give the mean and the variance.",
+     "recall": "Mean np, variance npq where q = 1 − p.",
+     "refresh": [
+      "Each of the n trials contributes p to the mean and pq to the variance, and independence lets both add.",
+      "Since q < 1, the variance npq is always LESS than the mean np. That is the binomial's signature, and it is one of the practice variants.",
+      "The ratio variance ÷ mean is exactly q, which is a cleaner thing to remember than either moment alone."
+     ]
+    },
+    {
+     "ask": "For a Poisson with parameter λ, give the mean and the variance.",
+     "recall": "Both equal λ.",
+     "refresh": [
+      "Mean equal to variance is the Poisson's defining fingerprint, and it is what 'equidispersion' means.",
+      "It makes the Poisson the reference point: real count data with variance above its mean is called overdispersed, and below it underdispersed.",
+      "A practice variant asks this directly, and the ratio variance ÷ mean = 1 is the single most useful fact in the topic."
+     ]
+    },
+    {
+     "ask": "A geometric distribution counts what, and with what mean?",
+     "recall": "The number of trials up to and including the first success; mean 1/p.",
+     "refresh": [
+      "Mind the convention. Counting TRIALS gives support 1, 2, 3, … with mean 1/p and variance q/p². Counting FAILURES before the first success gives support 0, 1, 2, … with mean q/p and variance q/p². Exam options usually make clear which is meant; if they do not, the mean distinguishes them.",
+      "A practice variant asks for the mean 'counting trials', and the answer is 1/p. If a question says 'number of failures' instead, the mean is q/p.",
+      "With p = 0.3 the mean is 1/0.3 = 3.33 trials, which is the sensible reading: a one-in-three chance takes about three attempts."
+     ]
+    },
+    {
+     "ask": "What does a negative binomial count, and what is its relationship to the geometric?",
+     "recall": "The number of failures before the rᵗʰ success; with r = 1 it IS the geometric.",
+     "refresh": [
+      "Fix the number of successes you are waiting for, not the number of trials. With r = 1 you are waiting for the first success, which is exactly the geometric — a practice variant.",
+      "Mean rq/p and variance rq/p², so the ratio variance ÷ mean is 1/p, which exceeds 1 for every p. The negative binomial is therefore ALWAYS overdispersed.",
+      "That is why it is the standard model for count data too variable for a Poisson, as lesson 1.3 showed from the mixture side: a Poisson mixed over a Gamma mean gives exactly this distribution."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "Reading the description is the whole skill",
+   "objective": "See that these questions test identification, not computation.",
+   "body": [
+    "Almost nothing in this topic requires arithmetic. A question describes a situation, and the work is to recognise which family it describes — after which the mean, the variance and the probabilities follow from memory.",
+    "That makes the failure mode distinctive. Getting such a question wrong is rarely a calculation slip; it is reading 'failures preceding the rᵗʰ success' and reaching for the binomial because the words 'success' and 'trials' appeared. The defence is to ask, every time: which quantity was fixed in advance, and which one is random?",
+    "Fixed trials, random successes — binomial. Fixed successes, random trials or failures — geometric or negative binomial. Neither fixed, with a rate over a period — Poisson. A finite population sampled without replacement — hypergeometric.",
+    "The second defence is arithmetic after all, but of the cheapest kind: compute the variance-to-mean ratio. Below 1 the family is binomial or hypergeometric; exactly 1 and it is Poisson; above 1 and it is negative binomial, or geometric with p below a half. Two independent routes to the same answer is what turns a guess into a mark."
+   ],
+   "scenario": {
+    "teaser": "A lot of 50 is inspected by sampling 10, and the acceptance probability is computed from the wrong family.",
+    "title": "Sampling without replacement is not binomial",
+    "body": [
+     "An inspector receives lots of 50 components, of which some number are defective, and samples 10 without replacement. The acceptance rule is to pass the lot if at most two defectives appear. The probability of acceptance is computed from a binomial with p set to the defective proportion.",
+     "For a lot containing 20 defectives the binomial model gives p = 0.4 and a variance of 10 × 0.4 × 0.6 = 2.4 for the number of defectives found. The correct hypergeometric variance is 10 × 0.4 × 0.6 × (50 − 10)/(50 − 1) = 1.96 — about 18% smaller.",
+     "The reason is that the draws are not independent. Having drawn a defective, the remaining population contains proportionally fewer, so each draw pulls the next the other way. That negative dependence suppresses the variance, and the factor (N − n)/(N − 1) is exactly the finite-population correction that measures it.",
+     "Both models agree on the MEAN — 4 defectives either way — which is what makes the error survive casual checking. Only the spread differs, so the acceptance probability computed from the binomial is wrong in a way the average cannot reveal.",
+     "The direction matters for the decision. The binomial overstates the variability, so it overstates the chance of an extreme count in both directions; the real sampling distribution is tighter around 4 than the binomial suggests, and the acceptance probability computed from the binomial is correspondingly off.",
+     "The binomial is the right model when sampling WITH replacement, or when the population is so large relative to the sample that (N − n)/(N − 1) is near 1. Sampling 10 from 50 is not that case: the correction is 40/49 = 0.816, nowhere near 1. As a rule of thumb the binomial approximation is defensible when the sample is below about 5% of the population, and here it is 20%."
+    ],
+    "q": "Both models give a mean of 4. Why does only the variance distinguish them, and why does that make the error dangerous?",
+    "answer": "Because the draws are identically distributed either way — each single draw is defective with probability 0.4 whether or not earlier draws are replaced — so the expected count is 10 × 0.4 = 4 in both models. What replacement changes is the dependence between draws: without it, drawing a defective leaves proportionally fewer, so the draws are negatively correlated and the variance shrinks by the factor (N − n)/(N − 1). The error is dangerous precisely because the mean is a correct check that passes: any validation based on average defective counts would confirm the model while the acceptance probability it produces is wrong."
+   },
+   "ask": {
+    "q": "The finite-population correction is (N − n)/(N − 1). What happens to it when the population is huge relative to the sample, and what does that say about when the binomial is safe?",
+    "nudge": "Put N = 100,000 and n = 10 and evaluate it."
+   }
+  },
+  {
+   "kind": "explore",
+   "id": "s2",
+   "mins": 7,
+   "title": "Watch the four families, and the ratio that names them",
+   "objective": "See the shapes and the variance-to-mean ratio change together.",
+   "viz": {
+    "type": "disc-pmf",
+    "fam": 0,
+    "sz": 12,
+    "p": 0.3,
+    "caption": "The probability mass function of the selected family, with its mean marked and the variance-to-mean ratio reported. Move the family slider through all four and watch the ratio: below 1, exactly 1, variable, then always above 1."
+   },
+   "body": [
+    "Start on Binomial with n = 12 and p = 0.3. The mean is 3.6, the variance 2.52, and the ratio 0.70 — which is exactly q. Change p and watch the ratio follow q precisely. It can never reach 1, which is why a binomial can never look equidispersed.",
+    "Switch to Poisson. The ratio is 1 whatever λ is. This is the reference point everything else is measured against.",
+    "Switch to Geometric. At p = 0.3 the ratio is 2.33 = q/p, strongly overdispersed. Now raise p to 0.5 and the ratio is exactly 1; raise it to 0.7 and the ratio is 0.43, underdispersed. The geometric is the one family with no fixed answer, which is worth knowing because most summaries assert one.",
+    "Switch to Negative binomial. At r = 4, p = 0.4 the ratio is 2.5 = 1/p, and no value of p brings it to 1 or below. The negative binomial is always overdispersed — which is why it is the standard repair for count data a Poisson cannot stretch to.",
+    "Finally, return to Binomial and set n large with p small — n = 30, p = 0.05, say. The shape becomes the Poisson with mean 1.5, and the ratio 0.95 creeps towards 1. That limit is statement D of the exam question, seen rather than asserted."
+   ],
+   "ask": {
+    "q": "The binomial's ratio is q and the negative binomial's is 1/p. Which values of p, if any, make the two families equally dispersed?",
+    "nudge": "Set q = 1/p and remember both must lie in (0, 1). Is there a solution?"
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 9,
+   "title": "The five families, and the ratio that identifies them",
+   "objective": "Hold all five with their pmf, moments and mgf, and the identification rule.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Identification: what is fixed, what is counted",
+     "body": "Binomial — n trials FIXED, number of successes counted.\nGeometric — one success awaited, number of trials (or failures) counted.\nNegative binomial — r successes awaited, number of failures counted.\nPoisson — a rate over an interval; equivalently n → ∞, p → 0 with np = λ fixed.\nHypergeometric — n drawn WITHOUT replacement from N containing K successes.\nEvery matching question in this topic is this list read backwards."
+    },
+    {
+     "t": "formula",
+     "h": "The probability mass functions",
+     "body": "Binomial:          P(X = k) = C(n,k) pᵏ q^(n−k),      k = 0, …, n\nPoisson:           P(X = k) = e^(−λ) λᵏ / k!,         k = 0, 1, 2, …\nGeometric (trials): P(X = k) = q^(k−1) p,             k = 1, 2, 3, …\nNegative binomial:  P(X = k) = C(k+r−1, k) pʳ qᵏ,     k = 0, 1, 2, … (failures)\nHypergeometric:     P(X = k) = C(K,k) C(N−K, n−k) / C(N,n)\nEach was summed numerically over its support and came to 1.00000000."
+    },
+    {
+     "t": "formula",
+     "h": "The moment generating functions",
+     "body": "Binomial:           M(t) = (q + p eᵗ)ⁿ\nPoisson:            M(t) = e^(λ(eᵗ − 1))\nGeometric (trials): M(t) = p eᵗ / (1 − q eᵗ),  valid only for t < −ln q\nThe binomial mgf is a practice variant. Check any mgf by putting t = 0: it must give 1, and (q + p)ⁿ = 1 confirms the first. Differentiating once at 0 gives the mean: for the binomial, n(q+p)^(n−1)p = np."
+    },
+    {
+     "t": "formula",
+     "h": "The variance-to-mean ratio — the discriminator",
+     "body": "Binomial:          mean np,    var npq,     ratio q        < 1 always\nPoisson:           mean λ,     var λ,       ratio 1        = 1 always\nNegative binomial: mean rq/p,  var rq/p²,   ratio 1/p      > 1 always\nGeometric (trials): mean 1/p,  var q/p²,    ratio q/p      DEPENDS on p\nHypergeometric:    mean nK/N,  var npq(N−n)/(N−1),  ratio q(N−n)/(N−1) < q\nThe geometric is the exception to every slogan: overdispersed for p < 0.5, exactly equidispersed at p = 0.5, underdispersed for p > 0.5. Verified at p = 0.2, 0.3, 0.5, 0.7, 0.9."
+    },
+    {
+     "t": "step",
+     "h": "Why the ratio works as a check",
+     "body": "The ratio is dimensionless and depends on the shape parameter alone, not on the size parameter: it is q for ANY n, and 1/p for ANY r. So computing it from a stated mean and variance pins down the family even when the question withholds the parameters. If a question gives mean 6 and variance 15, the ratio 2.5 rules out binomial, Poisson and hypergeometric at once, and 1/p = 2.5 gives p = 0.4."
+    }
+   ],
+   "table": {
+    "caption": "The five discrete families. Every mean, variance and ratio below was checked against a 400,000-sample simulation.",
+    "head": [
+     "family",
+     "what is counted",
+     "mean",
+     "variance",
+     "var ÷ mean"
+    ],
+    "rows": [
+     [
+      "Binomial(n, p)",
+      "successes in n fixed trials",
+      "np",
+      "npq",
+      "q, below 1"
+     ],
+     [
+      "Poisson(λ)",
+      "events at a rate; n→∞, p→0",
+      "λ",
+      "λ",
+      "exactly 1"
+     ],
+     [
+      "Geometric(p), trials",
+      "trials to the first success",
+      "1/p",
+      "q/p²",
+      "q/p, either side of 1"
+     ],
+     [
+      "Negative binomial(r, p)",
+      "failures before the rᵗʰ success",
+      "rq/p",
+      "rq/p²",
+      "1/p, above 1"
+     ],
+     [
+      "Hypergeometric(N, K, n)",
+      "successes drawn without replacement",
+      "nK/N",
+      "npq(N−n)/(N−1)",
+      "below q"
+     ]
+    ]
+   },
+   "flow": {
+    "title": "Identifying a discrete family",
+    "alt": "Flow chart for identifying which discrete distribution a description refers to",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "A counting description",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Fixed number of trials?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 1,
+      "c": 2,
+      "label": "Waiting for successes?",
+      "kind": "dec"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 0,
+      "label": "With replacement → Binomial",
+      "kind": "end"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 0,
+      "label": "Without → Hypergeometric",
+      "kind": "end"
+     },
+     {
+      "id": "f",
+      "r": 2,
+      "c": 2,
+      "label": "Just the first → Geometric",
+      "kind": "end"
+     },
+     {
+      "id": "g",
+      "r": 3,
+      "c": 2,
+      "label": "The rᵗʰ → Negative binomial",
+      "kind": "end"
+     },
+     {
+      "id": "h",
+      "r": 4,
+      "c": 1,
+      "label": "A rate, n large and p small → Poisson",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "a",
+      "to": "c"
+     },
+     {
+      "from": "b",
+      "to": "d"
+     },
+     {
+      "from": "b",
+      "to": "e"
+     },
+     {
+      "from": "c",
+      "to": "f"
+     },
+     {
+      "from": "c",
+      "to": "g"
+     },
+     {
+      "from": "a",
+      "to": "h"
+     }
+    ],
+    "note": "One decision — is the trial count fixed, or the success count? — separates the two branches, and replacement separates the first. Confirm whatever you choose with the variance-to-mean ratio."
+   },
+   "ask": {
+    "q": "A count has mean 6 and variance 15. Which families does that rule out, and what parameter does it imply for the one that survives?",
+    "nudge": "Compute the ratio first, then match it against q, 1 and 1/p."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 8,
+   "title": "Worked in full — June 2026, Q6",
+   "objective": "Match all four by reading what is fixed and what is counted.",
+   "ask": {
+    "q": "Three of the four descriptions mention successes and trials. What single word in each one decides the family?",
+    "nudge": "Look for 'finite number of trials', 'first', and 'rth'."
+   },
+   "problem": "Match List I with List II.\n  A. Probability of number of successes in a finite number of trials\n  B. Probability of first success\n  C. Probability of number of failures preceding the rᵗʰ success\n  D. Probability of success is infinitesimally small and the number of trials is very large\nList II: I. Negative Binomial   II. Poisson   III. Binomial   IV. Geometric",
+   "steps": [
+    {
+     "say": "A — 'a finite number of trials'.",
+     "math": "trials FIXED at n, successes counted\n⟹ Binomial = III",
+     "why": "The phrase 'finite number of trials' is the giveaway: n is given in advance and the random quantity is how many succeed. Mean np, variance npq."
+    },
+    {
+     "say": "B — 'first success'.",
+     "math": "one success awaited, trials counted\n⟹ Geometric = IV",
+     "why": "Waiting for the FIRST success is the geometric by definition. Mean 1/p counting trials. Note this is the negative binomial with r = 1, which is why the two are easy to swap by mistake."
+    },
+    {
+     "say": "C — 'failures preceding the rᵗʰ success'.",
+     "math": "r successes awaited, failures counted\n⟹ Negative Binomial = I",
+     "why": "The 'rᵗʰ' is doing the work. Fixing the number of successes and counting what happens before them is exactly the negative binomial. Mean rq/p, variance rq/p²."
+    },
+    {
+     "say": "D — 'p infinitesimally small, n very large'.",
+     "math": "n → ∞, p → 0 with np = λ fixed\n⟹ Poisson = II",
+     "why": "This is the classical limit, and it is worth seeing numerically: with np = 2, the binomial probabilities of 0, 1, 2, 3 are 0.1216, 0.2702, 0.2852, 0.1901 at n = 20 and 0.1351, 0.2707, 0.2709, 0.1806 at n = 1000, against the Poisson(2) values 0.1353, 0.2707, 0.2707, 0.1805."
+    },
+    {
+     "say": "Assemble and check against the options.",
+     "math": "A-III, B-IV, C-I, D-II\n⟹ option A",
+     "why": "The marked option B was A-II, B-I, C-IV, D-III, which moves every pair. Note that each wrong option here shifts at least two entries, so recognising one pair is not enough — the whole mapping has to be built, which is why the four-way reading above is the method."
+    }
+   ],
+   "after": "The transferable rule is to find the word that says which quantity is fixed: 'finite number of trials' fixes n, 'first' fixes one success, 'rᵗʰ' fixes r, and 'infinitesimally small p with very large n' fixes neither but fixes their product. Then confirm with the ratio — binomial below 1, Poisson exactly 1, negative binomial above 1."
+  },
+  {
+   "kind": "recall",
+   "id": "s5",
+   "mins": 2,
+   "title": "Pause and recall",
+   "objective": "Retrieve the identification rule and the moments.",
+   "intro": "Answer each before revealing it.",
+   "items": [
+    {
+     "q": "What distinguishes the binomial from the negative binomial?",
+     "a": "The binomial fixes the number of trials and counts successes; the negative binomial fixes the number of successes and counts failures."
+    },
+    {
+     "q": "Give the mean and variance of a binomial B(n, p).",
+     "a": "np and npq, so the variance is always less than the mean."
+    },
+    {
+     "q": "What is the variance-to-mean ratio for a Poisson?",
+     "a": "Exactly 1, for every λ."
+    },
+    {
+     "q": "The negative binomial with r = 1 is which distribution?",
+     "a": "The geometric."
+    },
+    {
+     "q": "What is the mean of a geometric counting trials?",
+     "a": "1/p."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s6",
+   "mins": 8,
+   "title": "Your turn — derive the four ratios",
+   "objective": "Get the discriminator from the moments rather than memorising it.",
+   "problem": "For each family, form the ratio variance ÷ mean and say what it implies.",
+   "steps": [
+    {
+     "say": "The binomial first.",
+     "blank": {
+      "prompt": "With mean np and variance npq, give variance ÷ mean and its range.",
+      "answer": "q, which is strictly below 1",
+      "accept": [
+       "q",
+       "1-p",
+       "q < 1",
+       "q, less than 1"
+      ],
+      "hint": "Divide npq by np and cancel."
+     },
+     "why": "npq / np = q. Since 0 < q < 1 for any non-degenerate p, a binomial is ALWAYS underdispersed and can never be mistaken for a Poisson on this criterion."
+    },
+    {
+     "say": "Now the negative binomial, counting failures.",
+     "blank": {
+      "prompt": "With mean rq/p and variance rq/p², give variance ÷ mean and its range.",
+      "answer": "1/p, which is strictly above 1",
+      "accept": [
+       "1/p",
+       "1/p > 1",
+       "one over p"
+      ],
+      "hint": "Divide rq/p² by rq/p; the r and the q cancel."
+     },
+     "why": "The ratio is 1/p and does not involve r at all, so the negative binomial is always overdispersed whatever r is. At p = 0.4 the ratio is 2.5 — matching mean 6 and variance 15, computed and simulated."
+    },
+    {
+     "say": "Now the geometric, counting trials.",
+     "blank": {
+      "prompt": "With mean 1/p and variance q/p², give variance ÷ mean.",
+      "answer": "q/p",
+      "accept": [
+       "q/p",
+       "(1-p)/p"
+      ],
+      "hint": "Dividing by 1/p is multiplying by p."
+     },
+     "why": "(q/p²) × p = q/p. Unlike the other families this can sit on either side of 1, and that is the point of the next blank."
+    },
+    {
+     "say": "So when is the geometric overdispersed?",
+     "blank": {
+      "prompt": "For which p is q/p greater than 1, and what happens at p = 0.5?",
+      "answer": "overdispersed for p < 0.5; at p = 0.5 the ratio is exactly 1",
+      "accept": [
+       "p < 0.5",
+       "p below 0.5; equal at 0.5",
+       "p<1/2, equal at 1/2"
+      ],
+      "hint": "q/p > 1 means q > p. With q = 1 − p, solve."
+     },
+     "why": "q/p > 1 ⟺ 1 − p > p ⟺ p < 0.5. At p = 0.5 the mean is 2 and the variance is 2 exactly, so the ratio is 1 — a geometric that looks equidispersed. Above 0.5 it is underdispersed: at p = 0.7 the mean is 1.43 and the variance 0.61. This is why 'the geometric is overdispersed' is wrong as stated."
+    },
+    {
+     "say": "Finally the hypergeometric, against the binomial.",
+     "blank": {
+      "prompt": "Its variance is npq(N−n)/(N−1). How does its ratio compare with the binomial's q?",
+      "answer": "smaller, by the factor (N−n)/(N−1)",
+      "accept": [
+       "smaller",
+       "less than q",
+       "q times (N-n)/(N-1)"
+      ],
+      "hint": "The extra factor is below 1 whenever n > 1."
+     },
+     "why": "The ratio is q(N−n)/(N−1) < q. Sampling without replacement induces negative dependence between draws, which suppresses the variance. For N = 50, n = 10, K = 20 the ratio is 0.490 against the binomial's 0.600."
+    }
+   ],
+   "after": "Two things worth keeping. The ratio depends only on the shape parameter — q, or 1/p — never on n, λ or r, so it survives a question that withholds the size parameter. And the geometric's ratio q/p is the one result in this topic with no fixed sign, so a question that depends on the direction of the geometric's dispersion must state p."
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 7,
+   "title": "How the families connect",
+   "objective": "Know the limits and closures that questions are built from.",
+   "blocks": [
+    {
+     "t": "step",
+     "h": "Negative binomial with r = 1 is the geometric",
+     "body": "Waiting for the first success is waiting for the rᵗʰ with r = 1. Checking the moments: rq/p and rq/p² become q/p and q/p², which are the geometric's moments on the failures convention. Simulated at p = 0.3: a negative binomial with r = 1 gave mean 2.331 and a geometric minus one gave 2.337, both against the exact q/p = 2.333."
+    },
+    {
+     "t": "formula",
+     "h": "Binomial → Poisson",
+     "body": "If X ~ B(n, p) with n → ∞, p → 0 and np = λ held fixed, then X converges to Poisson(λ). The ratio tells the same story: it is q = 1 − λ/n, which rises to 1 as n grows. This is statement D of the exam question, and it is why the Poisson is called the law of rare events."
+    },
+    {
+     "t": "step",
+     "h": "Poisson additivity",
+     "body": "If X₁ ~ Poisson(λ₁) and X₂ ~ Poisson(λ₂) are independent, then X₁ + X₂ ~ Poisson(λ₁ + λ₂). So Poisson(2) + Poisson(3) is Poisson(5), not Poisson(6) and not Poisson(2.5) — a practice variant. Confirmed by simulation: mean 5.007, variance 5.011, and P(sum = 4) came to 0.1749 against the exact 0.1755. The mgf makes it immediate: e^(λ₁(eᵗ−1)) × e^(λ₂(eᵗ−1)) = e^((λ₁+λ₂)(eᵗ−1)). The binomial is closed under addition only when p matches."
+    },
+    {
+     "t": "def",
+     "h": "The geometric is the only discrete memoryless law",
+     "body": "P(X > m + n | X > m) = P(X > n) for the geometric, and for no other discrete distribution. Counting trials with p = 0.3: P(X > 5 | X > 3) = q² = 0.49 = P(X > 2), confirmed by simulation at 0.4904. The exponential is its continuous counterpart and is likewise unique. This answers a practice variant, and it is the formal content of the gambler's fallacy."
+    },
+    {
+     "t": "step",
+     "h": "Hypergeometric → binomial",
+     "body": "As N grows with K/N held at p, the finite-population correction (N − n)/(N − 1) tends to 1 and the hypergeometric tends to the binomial. The practical rule is that the binomial is a safe approximation when the sample is under about 5% of the population: at N = 50 and n = 10 the correction is 40/49 = 0.816, far from 1, while at N = 100,000 and n = 10 it is 0.99991."
+    }
+   ],
+   "ask": {
+    "q": "Poisson variables add to a Poisson. Why do two binomials with the same n but different p NOT add to a binomial?",
+    "nudge": "Multiply their mgfs, (q₁ + p₁eᵗ)ⁿ(q₂ + p₂eᵗ)ⁿ. Is the result of the form (q + peᵗ)^m?"
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 7,
+   "title": "On your own — identify and compute",
+   "objective": "Use the ratio to name a family from its moments alone.",
+   "problem": "(a) A count has mean 6 and variance 15. Name the family and give its parameter p. (b) A count has mean 6 and variance 4.2 with 20 trials. Name the family and give p. (c) X₁ ~ Poisson(2) and X₂ ~ Poisson(3) independently; name the distribution of X₁ + X₂ and give P(X₁ + X₂ = 4). (d) Give the mgf of B(n, p) and verify it at t = 0.",
+   "hints": [
+    "For (a) and (b), compute variance ÷ mean first and compare with q, 1 and 1/p.",
+    "For (c), use the mgf: the product of two Poisson mgfs is a Poisson mgf with the rates added.",
+    "For (d), every mgf must equal 1 at t = 0."
+   ],
+   "answer": "(a) Negative binomial with 1/p = 2.5, so p = 0.4. (b) Binomial with q = 0.7, so p = 0.3 — consistent with np = 20 × 0.3 = 6. (c) Poisson(5), with P = 0.1755. (d) (q + peᵗ)ⁿ, which at t = 0 gives (q + p)ⁿ = 1.",
+   "check": "In (a) the ratio 15/6 = 2.5 exceeds 1, which rules out binomial, Poisson and hypergeometric immediately, and 1/p = 2.5 gives p = 0.4; with mean rq/p = 6 that forces r = 4, and a negative binomial with r = 4, p = 0.4 does have mean 6 and variance 15. In (b) the ratio 4.2/6 = 0.7 = q gives p = 0.3, and np = 6 confirms it — note the ratio alone gave p without using n, which is the point of the method.",
+   "scenario": {
+    "teaser": "A player who has lost nine times in a row is told the next attempt is more likely to succeed.",
+    "title": "Memorylessness, and why nothing is ever 'due'",
+    "body": [
+     "A game succeeds with probability 0.1 on each independent attempt. A player has failed nine times and reasons that a success is overdue, since the expected number of attempts to the first success is 1/p = 10.",
+     "The expectation is right and the inference is wrong. The number of attempts is geometric, and the geometric is memoryless: P(X > m + n | X > m) = P(X > n). Having failed nine times, the distribution of the number of FURTHER attempts needed is exactly the original distribution — still geometric with p = 0.1, still with mean 10 more attempts.",
+     "The nine failures are not evidence of anything about the tenth attempt, because the attempts are independent by assumption. The mean of 10 was never a promise that a success arrives by the tenth; it is an average over a distribution whose right tail is long, and P(X > 10) = 0.9¹⁰ = 0.349, so more than a third of players are still waiting after ten attempts.",
+     "The geometric is the ONLY discrete distribution with this property, which is worth knowing in both directions. It means that if a waiting time is memoryless, it is geometric; and it means that any model with a 'due' effect — a component more likely to fail as it ages, a machine more likely to jam the longer it has run — is explicitly NOT geometric, and needs a distribution with a changing hazard.",
+     "That is the useful reading for an exam and for real work. Memorylessness is a strong modelling assumption, not a neutral default: it says the process has no wear, no learning and no memory of its own history. Where that is implausible, choosing a geometric or an exponential builds the gambler's fallacy into the model rather than out of it.",
+     "The arithmetic check is the cleanest refutation. With p = 0.1, P(success on attempt 10 | nine failures) = 0.1, identical to the unconditional probability on attempt 1."
+    ],
+    "q": "The mean number of attempts is 10 and the player has had nine failures. Why is the next attempt not more likely to succeed?",
+    "answer": "Because the attempts are independent, so the conditional probability of success on the tenth attempt given nine failures is just 0.1, the same as on the first. Formally the geometric is memoryless: P(X > m + n | X > m) = P(X > n) = qⁿ, so conditioning on past failures returns the original distribution with the same mean of 10 further attempts. The mean of 10 is an average over a long-tailed distribution, not a deadline — P(X > 10) = 0.9¹⁰ = 0.349, so a third of players are still waiting after ten tries. Treating the mean as a due date is the gambler's fallacy, and the geometric is precisely the distribution in which it is most clearly false."
+   },
+   "solution": [
+    {
+     "say": "(a) Ratio first.",
+     "math": "variance ÷ mean = 15/6 = 2.5 > 1\n⟹ not binomial (q < 1), not Poisson (= 1), not hypergeometric (< q)\n1/p = 2.5 ⟹ p = 0.4\nmean rq/p = r(0.6)/(0.4) = 1.5r = 6 ⟹ r = 4",
+     "why": "Negative binomial with r = 4 and p = 0.4. Checked: mean 6.000 and variance 15.000 exactly, and a 400,000-sample simulation gave 5.998 and 14.96."
+    },
+    {
+     "say": "(b) Ratio again.",
+     "math": "variance ÷ mean = 4.2/6 = 0.7 = q\n⟹ p = 0.3, and np = 20 × 0.3 = 6 ✓",
+     "why": "Binomial B(20, 0.3). Note that the ratio alone determined p without using n, and n then served as a consistency check."
+    },
+    {
+     "say": "(c) Poisson additivity.",
+     "math": "X₁ + X₂ ~ Poisson(2 + 3) = Poisson(5)\nP(= 4) = e^(−5) 5⁴/4! = 0.006738 × 625/24 = 0.17547",
+     "why": "Poisson(5), not Poisson(6) — the rates add, they do not multiply. Simulation gave P = 0.17491 against the exact 0.17547."
+    },
+    {
+     "say": "(d) The binomial mgf.",
+     "math": "M(t) = E(e^(tX)) = Σ C(n,k)(peᵗ)ᵏ q^(n−k) = (q + peᵗ)ⁿ\nat t = 0: (q + p)ⁿ = 1ⁿ = 1 ✓",
+     "why": "The sum is the binomial theorem with peᵗ in place of p. Checked numerically at t = 0.3 with n = 20, p = 0.3: the formula gives 7.3606 and the simulated E(e^(0.3X)) gave 7.3560."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 6,
+   "title": "Six statements — verdict on each before you look",
+   "objective": "Rule on the claims the variants on this topic are built from.",
+   "intro": "Decide true or false on all six before revealing any.",
+   "items": [
+    {
+     "claim": "For a binomial distribution the variance is less than the mean.",
+     "tf": true,
+     "why": "True. The variance npq divided by the mean np is q, which is strictly below 1 for any non-degenerate p. A binomial can therefore never be equidispersed."
+    },
+    {
+     "claim": "The geometric is the only discrete distribution with the memoryless property.",
+     "tf": true,
+     "why": "True, and its continuous counterpart the exponential is likewise unique. P(X > m + n | X > m) = qⁿ = P(X > n), so conditioning on past failures returns the original distribution."
+    },
+    {
+     "claim": "The variance of a geometric distribution always exceeds its mean.",
+     "tf": false,
+     "why": "False, and this is the statement most summaries get wrong. The ratio is q/p, so the geometric is overdispersed only for p < 0.5; at p = 0.5 the mean and variance are both 2, and for p = 0.7 the mean is 1.43 against a variance of 0.61."
+    },
+    {
+     "claim": "If X₁ ~ Poisson(2) and X₂ ~ Poisson(3) are independent, then X₁ + X₂ ~ Poisson(6).",
+     "tf": false,
+     "why": "False — the rates ADD, giving Poisson(5). The mgf shows it in one line: e^(2(eᵗ−1)) × e^(3(eᵗ−1)) = e^(5(eᵗ−1))."
+    },
+    {
+     "claim": "Sampling n items without replacement from a finite population and counting successes gives a binomial distribution.",
+     "tf": false,
+     "why": "False — it gives a hypergeometric. The binomial requires independent trials, and without replacement the draws are negatively dependent, shrinking the variance by the factor (N − n)/(N − 1). The MEANS agree, which is what lets the error pass unnoticed."
+    },
+    {
+     "claim": "The negative binomial has variance greater than its mean, for every r and p.",
+     "tf": true,
+     "why": "True. The ratio is 1/p, which exceeds 1 for every p in (0, 1) and does not involve r at all. This is why the negative binomial is the standard model for overdispersed counts."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 8,
+   "title": "On your own — six quick identifications",
+   "objective": "Read a description and name the family at speed.",
+   "problem": "Name the distribution in each case, with its mean. (a) The number of heads in 10 tosses of a fair coin. (b) The number of tosses until the first head. (c) The number of tails before the third head. (d) The number of typing errors per page, where errors are rare and the page is long. (e) The number of aces in 5 cards dealt from a standard deck. (f) A distribution with mean 4 and variance 4.",
+   "hints": [
+    "For each of (a) to (c), ask what is fixed: the trial count or the success count?",
+    "For (e), is the dealing done with replacement?",
+    "For (f), compute the ratio and see which family it names."
+   ],
+   "answer": "(a) Binomial(10, 0.5), mean 5. (b) Geometric(0.5), mean 2. (c) Negative binomial(r = 3, p = 0.5), mean 3. (d) Poisson, mean λ. (e) Hypergeometric(52, 4, 5), mean 5 × 4/52 = 0.385. (f) Poisson(4) is the natural answer — but see the check.",
+   "check": "Part (f) is deliberately a trap. Mean equal to variance is the Poisson's signature, but it does not identify the Poisson uniquely: a geometric with p = 0.5 has mean 2 and variance 2, and more generally mean = variance is consistent with several families at particular parameter values. With mean 4 and variance 4 the Poisson(4) is the natural and intended answer, but the honest statement is that the ratio NARROWS the field rather than settling it — it rules out the binomial and the negative binomial conclusively, which is usually all a question needs. Also note (b) and (c): a geometric is a negative binomial with r = 1, so the two answers are the same family seen at different r.",
+   "solution": [
+    {
+     "say": "(a) Ten tosses, heads counted.",
+     "math": "trials fixed at 10 ⟹ Binomial(10, 0.5)\nmean = np = 5, variance = npq = 2.5",
+     "why": "Fixed trials, random successes. The ratio 2.5/5 = 0.5 = q, as it must be."
+    },
+    {
+     "say": "(b) Tosses until the first head.",
+     "math": "one success awaited ⟹ Geometric(0.5), counting trials\nmean = 1/p = 2, variance = q/p² = 2",
+     "why": "Note this is the p = 0.5 case where the geometric's mean and variance coincide — the exception from section 6."
+    },
+    {
+     "say": "(c) Tails before the third head.",
+     "math": "three successes awaited, failures counted ⟹ Negative binomial(r = 3, p = 0.5)\nmean = rq/p = 3, variance = rq/p² = 6",
+     "why": "Ratio 6/3 = 2 = 1/p ✓. The same family as (b) with r = 3 instead of 1."
+    },
+    {
+     "say": "(d) Rare errors over a long page.",
+     "math": "n large, p small, np = λ ⟹ Poisson(λ)\nmean = variance = λ",
+     "why": "The law of rare events: many opportunities for an error, each unlikely. This is statement D of the exam question in applied dress."
+    },
+    {
+     "say": "(e) Five cards from a deck.",
+     "math": "dealt WITHOUT replacement ⟹ Hypergeometric(N = 52, K = 4, n = 5)\nmean = nK/N = 5 × 4/52 = 0.3846",
+     "why": "Not binomial: once an ace is dealt, the remaining deck has fewer. The correction factor here is (52−5)/51 = 0.922."
+    },
+    {
+     "say": "(f) Mean 4, variance 4.",
+     "math": "ratio = 1 ⟹ not binomial (q < 1), not negative binomial (1/p > 1)\nPoisson(4) fits",
+     "why": "The intended answer, and the ratio does rule out two families outright. But as the check notes, a ratio of 1 narrows rather than determines — it is the useful half of an identification, not a proof."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s11",
+   "mins": 6,
+   "title": "Where these families reappear",
+   "objective": "Recognise the topic across the rest of the syllabus.",
+   "blocks": [
+    {
+     "t": "step",
+     "h": "In inference (module 4)",
+     "body": "The binomial is the worked example for sufficiency, for the Cramér–Rao bound and for the exact test of a proportion; its conjugate prior is the Beta, which is topic 4.7. The Poisson is the standard example for the method of moments and for likelihood ratio tests on a rate, and its conjugate prior is the Gamma."
+    },
+    {
+     "t": "step",
+     "h": "In mixtures and overdispersion (topic 1.3)",
+     "body": "A Poisson whose rate is itself random is always overdispersed, and mixing a Poisson over a Gamma gives exactly the negative binomial. So the negative binomial arrives twice in this syllabus — as a waiting-time distribution here, and as a Gamma mixture of Poissons there — and the two derivations give the same family."
+    },
+    {
+     "t": "step",
+     "h": "In sampling theory (module 3A)",
+     "body": "The hypergeometric IS the distribution of a count in simple random sampling without replacement, and the finite-population correction (N − n)/(N − 1) is the same factor that appears in the variance of a sample mean under that design. The 5% rule of thumb for ignoring it is the same rule of thumb there."
+    },
+    {
+     "t": "step",
+     "h": "In goodness of fit (topic 4.14)",
+     "body": "A chi-square goodness-of-fit test against a fitted binomial or Poisson is a standard exam question — June 2026's Q29 is exactly that, four coins tossed 160 times against a fitted binomial. Fitting the family costs a degree of freedom, which is why the df there is not simply k − 1."
+    },
+    {
+     "t": "def",
+     "h": "The common thread",
+     "body": "These five families are the vocabulary of discrete modelling, and almost every question about them is identification followed by recall. Learning them by what they COUNT, with the variance-to-mean ratio as a check, covers both the matching questions and the computational ones."
+    }
+   ],
+   "ask": {
+    "q": "The negative binomial arises both as a waiting time and as a Gamma mixture of Poissons. Does the variance-to-mean ratio agree across the two derivations?",
+    "nudge": "Lesson 1.3 gave the mixture variance as E(X) + Var(X). Compare its ratio with 1/p."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s12",
+   "mins": 2,
+   "title": "Second recall — the parts most likely to fade",
+   "objective": "Retrieve the connections and the exceptions.",
+   "intro": "Answer, then reveal.",
+   "items": [
+    {
+     "q": "Give the variance-to-mean ratio for all four main families.",
+     "a": "Binomial q, Poisson 1, negative binomial 1/p, geometric q/p."
+    },
+    {
+     "q": "When is the geometric NOT overdispersed?",
+     "a": "At p = 0.5 it is exactly equidispersed, and for p > 0.5 it is underdispersed."
+    },
+    {
+     "q": "What is the mgf of B(n, p)?",
+     "a": "(q + peᵗ)ⁿ, which equals 1 at t = 0."
+    },
+    {
+     "q": "Poisson(2) + Poisson(3), independent, gives what?",
+     "a": "Poisson(5) — the rates add."
+    },
+    {
+     "q": "Sampling without replacement from a finite population gives which family, and how does its variance compare?",
+     "a": "Hypergeometric, with variance smaller than the binomial's by the factor (N − n)/(N − 1)."
+    },
+    {
+     "q": "Which discrete distribution is memoryless, and why does it matter?",
+     "a": "The geometric, uniquely. It means no outcome is ever 'due' — the gambler's fallacy made precise."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "What you should now be able to do unaided",
+   "objective": "Close the loop before the mastery test.",
+   "body": [
+    "Identify a discrete family from what is fixed and what is counted, and match a list of descriptions to names.",
+    "Write the pmf, mean, variance and mgf of the binomial, Poisson, geometric and negative binomial.",
+    "Use the variance-to-mean ratio — q, 1, 1/p, q/p — as an independent check on an identification.",
+    "Say why the geometric has no fixed dispersion direction, with p = 0.5 as the boundary.",
+    "State the connections: negative binomial with r = 1 is geometric; binomial tends to Poisson; Poissons add; hypergeometric tends to binomial.",
+    "Explain why sampling without replacement is hypergeometric and what the finite-population correction does.",
+    "State the memorylessness of the geometric and why nothing is ever 'due'."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s14",
+   "mins": 8,
+   "ext": true,
+   "title": "Two derivations worth seeing",
+   "objective": "Derive the Poisson limit and the uniqueness of memorylessness.",
+   "blocks": [
+    {
+     "t": "step",
+     "h": "The Poisson limit, from the pmf",
+     "body": "Take X ~ B(n, p) with p = λ/n and hold k fixed:\n    P(X = k) = C(n,k)(λ/n)ᵏ(1 − λ/n)^(n−k)\n             = [n(n−1)⋯(n−k+1)/nᵏ] · (λᵏ/k!) · (1 − λ/n)^(n−k).\nAs n → ∞ the first bracket → 1, the last factor → e^(−λ), and what remains is e^(−λ)λᵏ/k!. That is the Poisson pmf, and the convergence is visible numerically: at λ = 2 the binomial's P(X = 2) runs 0.2852, 0.2734, 0.2709 at n = 20, 100, 1000 against the Poisson's 0.2707."
+    },
+    {
+     "t": "step",
+     "h": "Why the mgf route is quicker",
+     "body": "M(t) = (q + peᵗ)ⁿ with p = λ/n gives (1 + (λ/n)(eᵗ − 1))ⁿ, and (1 + x/n)ⁿ → eˣ, so M(t) → e^(λ(eᵗ−1)), the Poisson mgf. One limit instead of three, and it also makes the additivity obvious, since multiplying two such mgfs adds the λ."
+    },
+    {
+     "t": "step",
+     "h": "The geometric is the unique memoryless discrete law",
+     "body": "Suppose X takes values 1, 2, 3, … and P(X > m + n | X > m) = P(X > n) for all m, n. Writing G(n) = P(X > n), the condition is G(m + n) = G(m)G(n). Setting m = n = 1 gives G(2) = G(1)², and by induction G(n) = G(1)ⁿ. Writing G(1) = q, we have P(X > n) = qⁿ, so P(X = n) = G(n−1) − G(n) = q^(n−1)(1 − q) — the geometric with p = 1 − q. No other discrete distribution can satisfy the functional equation."
+    },
+    {
+     "t": "def",
+     "h": "What that uniqueness is good for",
+     "body": "It makes memorylessness a complete characterisation: a waiting time is geometric if and only if it is memoryless. So assuming a geometric model is exactly assuming no wear, no learning and no accumulated risk — and if a process plainly has any of those, the model must be something else. The same argument with a continuous variable gives the exponential, which is why the two distributions behave so alike."
+    },
+    {
+     "t": "step",
+     "h": "A note on the hazard",
+     "body": "The hazard P(X = n | X ≥ n) is constant at p for the geometric, and that is another way of saying the same thing. A distribution with an increasing hazard describes wear-out and a decreasing hazard describes early-failure weeding. Constant hazard is the knife-edge between them — convenient, and rarely true of anything mechanical."
+    }
+   ],
+   "ask": {
+    "q": "The functional equation G(m+n) = G(m)G(n) forced G(n) = qⁿ. What is the continuous analogue of that equation, and which distribution does it force?",
+    "nudge": "Replace the integers with real numbers and ask which function satisfies G(s+t) = G(s)G(t)."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s15",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate it independently, on questions you have not seen.",
+   "setId": "probability_t5_mastery"
+  }
+ ]
+}

@@ -1,0 +1,364 @@
+{
+ "moduleId": "inference",
+ "topicId": "inference-t14",
+ "source": "mastery",
+ "label": "Chi-square goodness of fit — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "inf-t14-m-01",
+   "format": "single",
+   "topic": "inference-t14",
+   "diff": "easy",
+   "stem": "The chi-square goodness-of-fit statistic must be computed from:",
+   "options": [
+    "percentages in each category",
+    "observed and expected proportions",
+    "observed and expected frequencies",
+    "the cumulative distribution function"
+   ],
+   "answer": "C",
+   "explanation": "The statistic is Σ(Oᵢ − Eᵢ)²/Eᵢ with O and E as counts. Substituting proportions divides out the sample size, and the sample size is precisely what decides whether a discrepancy is large — the resulting number has no distributional meaning at all."
+  },
+  {
+   "id": "inf-t14-m-02",
+   "format": "single",
+   "topic": "inference-t14",
+   "diff": "easy",
+   "stem": "In a chi-square goodness-of-fit test, Σ(Oᵢ − Eᵢ) always equals:",
+   "options": [
+    "n",
+    "k − 1",
+    "the chi-square statistic",
+    "zero"
+   ],
+   "answer": "D",
+   "explanation": "Both the observed and the expected counts total n, so the signed differences cancel exactly. This is the quickest check that the expected counts have been computed correctly, and it is also why the differences must be squared before being combined — their signed sum carries no information."
+  },
+  {
+   "id": "inf-t14-m-03",
+   "format": "single",
+   "topic": "inference-t14",
+   "diff": "easy",
+   "stem": "The chi-square goodness-of-fit test is:",
+   "options": [
+    "two-tailed",
+    "one-tailed, rejecting for large values",
+    "one-tailed, rejecting for small values",
+    "either, depending on the alternative"
+   ],
+   "answer": "B",
+   "explanation": "The statistic measures total discrepancy, so it is large when the fit is poor and near zero when observed and expected agree. Close agreement is evidence FOR the claimed distribution, so there is no lower critical value. The one-sidedness is a property of the statistic, not of the alternative, which has no direction at all."
+  },
+  {
+   "id": "inf-t14-m-04",
+   "format": "single",
+   "topic": "inference-t14",
+   "diff": "easy",
+   "stem": "The minimum expected frequency generally recommended per cell is:",
+   "options": [
+    "1",
+    "30",
+    "10",
+    "5"
+   ],
+   "answer": "D",
+   "explanation": "Five is the usual working rule, and it applies to the EXPECTED counts rather than the observed ones. The reason is that each term treats its count as roughly normal, and a count with a small expectation is skewed and lumpy — nothing like normal. When a cell fails the rule, adjacent categories are pooled."
+  },
+  {
+   "id": "inf-t14-m-05",
+   "format": "numeric",
+   "topic": "inference-t14",
+   "diff": "easy",
+   "stem": "Three coins are tossed 80 times. Under the assumption that the coins are fair, the expected frequency of exactly 2 heads is:",
+   "options": [
+    "40",
+    "20",
+    "30",
+    "10"
+   ],
+   "answer": "C",
+   "explanation": "The number of heads is Binomial(3, 1/2), so P(exactly 2) = C(3,2)/8 = 3/8, and the expected frequency is 80 × 3/8 = 30. Option B would be the answer for exactly 3 heads doubled, and option D is 80 × 1/8, the expectation for 0 or for 3 heads.",
+   "check": "An expected frequency is n times a probability. The four expectations here are 10, 30, 30, 10 and must total 80."
+  },
+  {
+   "id": "inf-t14-m-06",
+   "format": "single",
+   "topic": "inference-t14",
+   "diff": "easy",
+   "stem": "Yates' correction applies to:",
+   "options": [
+    "any goodness-of-fit test with small expected counts",
+    "tests where a parameter has been estimated",
+    "contingency tables of any size",
+    "2 × 2 contingency tables"
+   ],
+   "answer": "D",
+   "explanation": "Yates' continuity correction, which replaces each (Oᵢ − Eᵢ)² by (|Oᵢ − Eᵢ| − 0.5)², is for 2 by 2 tables only — the smallest table, where the discreteness of the counts matters most. It always reduces the statistic, so it is conservative. For small expected counts elsewhere the remedies are pooling or an exact test."
+  },
+  {
+   "id": "inf-t14-m-07",
+   "format": "numeric",
+   "topic": "inference-t14",
+   "diff": "moderate",
+   "stem": "Four coins are tossed 160 times, giving observed frequencies 17, 52, 54, 31, 6 for 0, 1, 2, 3, 4 heads. Assuming the coins are unbiased, the calculated chi-square is:",
+   "options": [
+    "8.275",
+    "10.275",
+    "12.725",
+    "15.725"
+   ],
+   "answer": "C",
+   "explanation": "The expected frequencies are 160 × (1, 4, 6, 4, 1)/16 = 10, 40, 60, 40, 10. The five terms are 4.900, 3.600, 0.600, 2.025 and 1.600, summing to 12.725. This is June 2026 Q29, where 10.275 was marked — a shortfall of 2.45, close to the size of the fourth term.",
+   "check": "Check ΣE = 160 first. Then write the five terms one per line; the commonest error is losing or mis-dividing one of them, which gives a plausibly wrong total rather than an obviously wrong one."
+  },
+  {
+   "id": "inf-t14-m-08",
+   "format": "numeric",
+   "topic": "inference-t14",
+   "diff": "moderate",
+   "stem": "Fitting a Poisson distribution to 7 classes, with λ estimated from the data, gives degrees of freedom:",
+   "options": [
+    "7",
+    "6",
+    "5",
+    "4"
+   ],
+   "answer": "C",
+   "explanation": "df = k − 1 − m = 7 − 1 − 1 = 5. One degree of freedom goes to the constraint that the expected counts total n, and one to the estimated λ. Answering 6 counts the total constraint but forgets that the parameter was taken from the data.",
+   "check": "If the question made you estimate a parameter, m ≥ 1 and the answer is not k − 1."
+  },
+  {
+   "id": "inf-t14-m-09",
+   "format": "numeric",
+   "topic": "inference-t14",
+   "diff": "moderate",
+   "stem": "For a 4 × 3 contingency table, the degrees of freedom are:",
+   "options": [
+    "12",
+    "11",
+    "6",
+    "7"
+   ],
+   "answer": "C",
+   "explanation": "df = (r − 1)(c − 1) = 3 × 2 = 6. Option A is the number of cells, and option B is cells minus one, which would be the rule for a goodness-of-fit test over 12 fully specified categories — not for a table whose row and column totals come from the data.",
+   "check": "A contingency table uses (r − 1)(c − 1), not rc − 1. The two agree only when one dimension is 1."
+  },
+  {
+   "id": "inf-t14-m-10",
+   "format": "single",
+   "topic": "inference-t14",
+   "diff": "moderate",
+   "stem": "A normal distribution is fitted to 8 classes, with both μ and σ² estimated from the data. The degrees of freedom are:",
+   "options": [
+    "7",
+    "6",
+    "5",
+    "4"
+   ],
+   "answer": "C",
+   "explanation": "Two parameters were estimated, so df = k − 1 − m = 8 − 1 − 2 = 5. Answering 6 counts only one of the two estimated parameters, which is the standard slip in this case — a normal fit always costs two."
+  },
+  {
+   "id": "inf-t14-m-11",
+   "format": "single",
+   "topic": "inference-t14",
+   "diff": "moderate",
+   "stem": "Testing the equality of several population proportions uses:",
+   "options": [
+    "the chi-square test",
+    "the t test",
+    "the F test",
+    "the z test for a single proportion"
+   ],
+   "answer": "A",
+   "explanation": "Several proportions arranged as a 2 by c table of counts are tested with the same chi-square statistic, on (2 − 1)(c − 1) = c − 1 degrees of freedom. The z test handles one proportion or a comparison of two; for more than two the chi-square test is the standard route."
+  },
+  {
+   "id": "inf-t14-m-12",
+   "format": "multi",
+   "topic": "inference-t14",
+   "diff": "moderate",
+   "stem": "Consider the conditions and conventions of the chi-square goodness-of-fit test.",
+   "options": [
+    "A and C only",
+    "A, C and D only",
+    "B and D only",
+    "C and D only"
+   ],
+   "answer": "A",
+   "explanation": "A is true, and it is the quickest check available. B is false — the rule concerns expected counts, and an observed zero is unremarkable if its expectation is adequate. C is true: pooling changes k, and the degrees of freedom use the number of categories actually tested. D is false; Yates' correction is confined to 2 by 2 tables.",
+   "statements": [
+    "The expected counts must total n, so Σ(Oᵢ − Eᵢ) = 0.",
+    "The minimum-count rule of 5 applies to the observed count in each cell.",
+    "After pooling categories, the degrees of freedom use the reduced number of categories.",
+    "Yates' correction should be used whenever any expected count falls below 5."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. Both sets of counts sum to n, so the signed differences cancel — which makes it the fastest check on a set of expected counts."
+    },
+    "B": {
+     "tf": false,
+     "why": "False. The condition is on the EXPECTED counts. An observed count of zero in a cell with expectation 20 is perfectly ordinary; it is a small expectation that breaks the normal approximation behind each term."
+    },
+    "C": {
+     "tf": true,
+     "why": "True. k is counted after pooling, so merging two classes reduces the degrees of freedom by one — pool first, count second, subtract third."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. Yates' correction applies to 2 by 2 contingency tables only. Small expected counts elsewhere call for pooling or an exact test."
+    }
+   }
+  },
+  {
+   "id": "inf-t14-m-13",
+   "format": "numeric",
+   "topic": "inference-t14",
+   "diff": "moderate",
+   "stem": "A Poisson distribution is fitted to 8 classes with λ estimated from the data, but the last two classes must be pooled because their expected counts are below 5. The degrees of freedom are:",
+   "options": [
+    "6",
+    "5",
+    "4",
+    "7"
+   ],
+   "answer": "B",
+   "explanation": "Pool first: 8 classes become 7. Then df = k − 1 − m = 7 − 1 − 1 = 5. Applying the rule to the original 8 classes gives 6, and that changes the 5% critical value from 11.070 to 12.592 — enough to reverse a borderline verdict.",
+   "check": "Pool first, count k second, subtract third. If your answer used the number of classes before pooling, it is one too high."
+  },
+  {
+   "id": "inf-t14-m-14",
+   "format": "numeric",
+   "topic": "inference-t14",
+   "diff": "moderate",
+   "stem": "A 9:3:3:1 ratio is predicted for 160 plants, and the observed counts are 100, 18, 24, 18. The chi-square statistic is:",
+   "options": [
+    "7.815",
+    "13.511",
+    "9.600",
+    "4.267"
+   ],
+   "answer": "B",
+   "explanation": "The expected counts are 90, 30, 30, 10, totalling 160. The four terms are 1.111, 4.800, 1.200 and 6.400, summing to 13.511. On 3 degrees of freedom this exceeds 7.815, so the ratio is rejected — and the largest term comes from the smallest category, where 18 were observed against 10 expected.",
+   "check": "Expected counts are the ratio numbers times 160/16 = 10. Confirm they total 160 before computing the terms."
+  },
+  {
+   "id": "inf-t14-m-15",
+   "format": "single",
+   "topic": "inference-t14",
+   "diff": "moderate",
+   "stem": "Which of the following would NOT be detected by a chi-square goodness-of-fit test?",
+   "options": [
+    "a steady trend across ordered categories, as distinct from scattered discrepancies",
+    "an excess in one particular category",
+    "a distribution with the wrong shape",
+    "a total that disagrees with the claimed probabilities"
+   ],
+   "answer": "A",
+   "explanation": "The statistic is a sum over categories and is unchanged if the categories are shuffled, so it cannot distinguish a systematic trend from an unrelated scatter of the same total magnitude. For an ordered variable that is a genuine loss of power, and a test designed for trend does better. The other three are exactly what the test is for."
+  },
+  {
+   "id": "inf-t14-m-16",
+   "format": "single",
+   "topic": "inference-t14",
+   "diff": "moderate",
+   "stem": "In a goodness-of-fit test the calculated chi-square is very close to zero. The correct conclusion is:",
+   "options": [
+    "reject H₀, because such a close fit is implausible",
+    "the degrees of freedom were counted wrongly",
+    "the test is invalid",
+    "do not reject H₀; the observed and expected frequencies agree closely"
+   ],
+   "answer": "D",
+   "explanation": "The test is upper-tail only. A near-zero statistic means every observed count is close to its expectation, which is agreement with the claimed distribution. There is no lower critical value, so an unusually good fit is never grounds for rejection by this test — though in a real investigation a suspiciously perfect fit might prompt questions about the data's provenance rather than about the distribution."
+  },
+  {
+   "id": "inf-t14-m-17",
+   "format": "multi",
+   "topic": "inference-t14",
+   "diff": "hard",
+   "stem": "Consider the theoretical basis of the chi-square goodness-of-fit statistic.",
+   "options": [
+    "A, B and D only",
+    "A and C only",
+    "B and C only",
+    "A, B and C only"
+   ],
+   "answer": "A",
+   "explanation": "A is true — each count is binomial and approximately normal for large expectation, which is the first step of the argument. B is true, and it is where the subtraction of 1 comes from. C is false: the terms are not independent, and that dependence is exactly why the limit has k − 1 rather than k degrees of freedom. D is true, and it is why the degrees-of-freedom rule matches topic 4.10's.",
+   "statements": [
+    "Each term rests on a count with large expectation being approximately normal.",
+    "The constraint that the counts total n removes one degree of freedom.",
+    "The k terms of the sum are independent of one another.",
+    "Pearson's statistic is the second-order approximation to the multinomial likelihood ratio statistic."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. Oᵢ is Binomial(n, pᵢ) with mean Eᵢ, and for large Eᵢ the standardised count is roughly normal — which is precisely what fails when an expected count is small."
+    },
+    "B": {
+     "tf": true,
+     "why": "True. Σ(Oᵢ − Eᵢ) = 0 is one exact linear constraint among the k quantities, and a sum of squares subject to one such constraint behaves like a chi-square with k − 1 degrees of freedom."
+    },
+    "C": {
+     "tf": false,
+     "why": "False. They are constrained to have signed differences summing to zero, so they cannot be independent. If they were, the limit would have k degrees of freedom rather than k − 1."
+    },
+    "D": {
+     "tf": true,
+     "why": "True. Expanding 2 Σ Oᵢ log(Oᵢ/Eᵢ) about Oᵢ = Eᵢ gives Σ(Oᵢ − Eᵢ)²/Eᵢ to second order, which is why Wilks' theorem supplies the same limit and the same degrees of freedom."
+    }
+   }
+  },
+  {
+   "id": "inf-t14-m-18",
+   "format": "numeric",
+   "topic": "inference-t14",
+   "diff": "hard",
+   "stem": "Yarn breaks per shift over 100 shifts: 42 shifts with 0, 33 with 1, 17 with 2, 6 with 3, 2 with 4. A Poisson is fitted with λ estimated from the data, and classes with expected counts below 5 are pooled into '3 or more'. The chi-square statistic and degrees of freedom are:",
+   "options": [
+    "1.483 on 2 df",
+    "0.752 on 4 df",
+    "0.752 on 2 df",
+    "0.752 on 3 df"
+   ],
+   "answer": "C",
+   "explanation": "λ̂ = 93/100 = 0.93, giving expected counts 39.455, 36.693, 17.062, 5.289, 1.230 and 0.271 for 0, 1, 2, 3, 4 and 5 or more. Pooling the last three gives observed 8 against expected 6.790, and the four terms are 0.164, 0.372, 0.000 and 0.216, summing to 0.752. Four classes after pooling, less one for the total and one for λ̂, leaves 2 degrees of freedom. Against 5.991 the Poisson fit is not rejected.",
+   "check": "Count k after pooling, then subtract 1 for the total and 1 for the estimated λ. An answer of 4 df has skipped both subtractions."
+  },
+  {
+   "id": "inf-t14-m-19",
+   "format": "single",
+   "topic": "inference-t14",
+   "diff": "hard",
+   "stem": "A category in a goodness-of-fit test has expected count 1. Why does this break the chi-square approximation?",
+   "options": [
+    "because a count with expectation 1 is strongly skewed and nothing like normal, so its squared standardised value is not chi-square",
+    "because the observed count may be zero",
+    "because the degrees of freedom cannot be counted",
+    "because Σ(Oᵢ − Eᵢ) is no longer zero"
+   ],
+   "answer": "A",
+   "explanation": "Each term's distribution rests on the count being approximately normal, which needs a reasonably large expectation. A count with expectation 1 takes the value zero about 37% of the time and is heavily skewed, so its term is not approximately chi-square with 1 degree of freedom — and because the terms are summed, one bad term contaminates the total. An observed zero is not itself the problem, and the identity in the last option holds regardless."
+  },
+  {
+   "id": "inf-t14-m-20",
+   "format": "single",
+   "topic": "inference-t14",
+   "diff": "hard",
+   "stem": "A goodness-of-fit test rejects at the 5% level, and the largest single term of the sum comes from the category with the smallest expected count. The most useful next step is:",
+   "options": [
+    "to discard that category and recompute",
+    "to report the rejection and note that the discrepancy is concentrated in that category",
+    "to apply Yates' correction",
+    "to conclude that the minimum-count rule was violated"
+   ],
+   "answer": "B",
+   "explanation": "The test is omnibus, so the total says only that the fit fails; the terms say where, and that is the actionable information. Discarding an inconvenient category changes the hypothesis being tested, Yates' correction is confined to 2 by 2 tables, and a small expected count is only a problem if it is below the adequacy threshold — a category with expectation 10 contributing the largest term is a finding, not a defect."
+  }
+ ]
+}

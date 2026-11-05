@@ -1,0 +1,365 @@
+{
+ "moduleId": "inference",
+ "topicId": "inference-t11",
+ "source": "mastery",
+ "label": "The sequential probability ratio test — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "inf-t11-m-01",
+   "format": "single",
+   "topic": "inference-t11",
+   "diff": "easy",
+   "stem": "In a sequential probability ratio test, what is fixed in advance?",
+   "options": [
+    "the sample size only",
+    "the power at a single alternative",
+    "the Type I error probability only",
+    "both the Type I and Type II error probabilities"
+   ],
+   "answer": "D",
+   "explanation": "The SPRT fixes both α and β and leaves the sample size random. A fixed-sample test can fix one error rate and let the other follow from n; because the sample size here is free, there is room to pin down both."
+  },
+  {
+   "id": "inf-t11-m-02",
+   "format": "single",
+   "topic": "inference-t11",
+   "diff": "easy",
+   "stem": "In an SPRT the sample size is:",
+   "options": [
+    "fixed before sampling begins",
+    "a random variable",
+    "always equal to the fixed-sample size for the same α",
+    "chosen after the data are seen"
+   ],
+   "answer": "B",
+   "explanation": "Sampling continues until the likelihood ratio leaves the corridor between B and A, so the number of observations is random. Wald proved the test terminates with probability 1 and that the expected sample size is finite, but no bound is fixed in advance — which is why real plans add a truncation rule."
+  },
+  {
+   "id": "inf-t11-m-03",
+   "format": "single",
+   "topic": "inference-t11",
+   "diff": "easy",
+   "stem": "The SPRT continues sampling as long as:",
+   "options": [
+    "Λₙ ≥ A",
+    "Λₙ ≤ B",
+    "B < Λₙ < A",
+    "Λₙ = 1"
+   ],
+   "answer": "C",
+   "explanation": "Strictly between the two boundaries no decision is made and another observation is taken. Reaching or passing the upper boundary stops the test with H₀ rejected; reaching or passing the lower one stops it with H₀ accepted."
+  },
+  {
+   "id": "inf-t11-m-04",
+   "format": "numeric",
+   "topic": "inference-t11",
+   "diff": "easy",
+   "stem": "For an SPRT with α = 0.05 and β = 0.10, Wald's boundary constants are:",
+   "options": [
+    "A = 19, B = 0.1000",
+    "A = 0.1053, B = 18",
+    "A = 18, B = 0.1053",
+    "A = 18, B = 0.0500"
+   ],
+   "answer": "C",
+   "explanation": "A = (1 − β)/α = 0.90/0.05 = 18 and B = β/(1 − α) = 0.10/0.95 = 0.10526. Note that A exceeds 1 and B is below 1; the second option has them the wrong way round, and the third divides by α rather than using 1 − β on top.",
+   "check": "A must be greater than 1 and B less than 1 whenever α and β are below a half. Both error rates appear in both constants."
+  },
+  {
+   "id": "inf-t11-m-05",
+   "format": "single",
+   "topic": "inference-t11",
+   "diff": "easy",
+   "stem": "The SPRT is designed for testing:",
+   "options": [
+    "goodness of fit of a whole distribution",
+    "a composite null against a composite alternative",
+    "a simple null against a one-sided composite alternative",
+    "a simple null against a simple alternative"
+   ],
+   "answer": "D",
+   "explanation": "The likelihood ratio requires both hypotheses to be completely specified, so the SPRT in this form tests one specified value against another — the same restriction as the Neyman–Pearson lemma. A composite problem must be reduced to two representative values first."
+  },
+  {
+   "id": "inf-t11-m-06",
+   "format": "single",
+   "topic": "inference-t11",
+   "diff": "easy",
+   "stem": "The operating characteristic function L(θ) of an SPRT gives:",
+   "options": [
+    "the probability of rejecting H₀ when θ is true",
+    "the expected number of observations when θ is true",
+    "the probability of eventually accepting H₀ when θ is true",
+    "the probability that the test never terminates"
+   ],
+   "answer": "C",
+   "explanation": "L(θ) is the sequential analogue of the power function read the other way up, and two of its values are fixed by construction: L(θ₀) = 1 − α and L(θ₁) = β. The expected number of observations is the average sample number, a different function."
+  },
+  {
+   "id": "inf-t11-m-07",
+   "format": "numeric",
+   "topic": "inference-t11",
+   "diff": "moderate",
+   "stem": "An SPRT has α = 0.02 and β = 0.05. The value of A is:",
+   "options": [
+    "20.0",
+    "19.0",
+    "48.5",
+    "47.5"
+   ],
+   "answer": "D",
+   "explanation": "A = (1 − β)/α = 0.95/0.02 = 47.5. The second option computes 1/α approximately, ignoring the numerator 1 − β, and the third adds rather than using the correct numerator.",
+   "check": "A = (1 − β)/α. A smaller α pushes A higher, since more evidence is being demanded before a true H₀ is rejected."
+  },
+  {
+   "id": "inf-t11-m-08",
+   "format": "numeric",
+   "topic": "inference-t11",
+   "diff": "moderate",
+   "stem": "For a Bernoulli SPRT of H₀: p = 0.3 against H₁: p = 0.6, the common slope of the two boundary lines in the (n, Sₙ) plane is:",
+   "options": [
+    "0.600",
+    "0.300",
+    "0.447",
+    "0.450"
+   ],
+   "answer": "C",
+   "explanation": "s = log((1 − p₀)/(1 − p₁))/log(p₁(1 − p₀)/(p₀(1 − p₁))) = log(1.75)/log(3.5) = 0.559616/1.252763 = 0.44671. The slope depends only on the two hypotheses, never on α or β, and it must lie between p₀ and p₁ — which 0.447 does.",
+   "check": "The slope must lie strictly between p₀ and p₁. A value equal to either hypothesis means the formula was not applied."
+  },
+  {
+   "id": "inf-t11-m-09",
+   "format": "single",
+   "topic": "inference-t11",
+   "diff": "moderate",
+   "stem": "In the boundary lines Sₙ = a + sn and Sₙ = −b + sn, the quantities a and b depend on:",
+   "options": [
+    "the two hypotheses only",
+    "the two error rates only",
+    "the sample size",
+    "neither the hypotheses nor the error rates"
+   ],
+   "answer": "B",
+   "explanation": "The intercepts are a = log A/k and b = −log B/k, and A and B are built from α and β alone — the k in the denominator is common to the slope too. So changing α shifts one line without tilting it, while changing a hypothesis tilts both. That separation is the structural fact this topic tests."
+  },
+  {
+   "id": "inf-t11-m-10",
+   "format": "numeric",
+   "topic": "inference-t11",
+   "diff": "moderate",
+   "stem": "For the test with boundaries 'reject H₀ if Sₙ ≥ 2.3072 + 0.44671n' and 'accept H₀ if Sₙ ≤ −1.7971 + 0.44671n', the earliest observation at which any decision is possible is:",
+   "options": [
+    "n = 5",
+    "n = 3",
+    "n = 1",
+    "n = 8"
+   ],
+   "answer": "A",
+   "explanation": "Rejection needs Sₙ ≥ 2.3072 + 0.44671n with Sₙ at most n, so n(1 − 0.44671) ≥ 2.3072 and n ≥ 4.17, giving n = 5 with all five successes. Acceptance needs −1.7971 + 0.44671n ≥ 0, so n ≥ 4.02, again n = 5 with no successes. Before that the lower boundary is negative and the upper one above n.",
+   "check": "A count of successes lies between 0 and n. A decision is impossible while the upper boundary exceeds n and the lower one is below 0."
+  },
+  {
+   "id": "inf-t11-m-11",
+   "format": "numeric",
+   "topic": "inference-t11",
+   "diff": "moderate",
+   "stem": "Using those boundaries, the sequence of results 1, 1, 0, 1, 1, 1 (where 1 is a success) causes the test to:",
+   "options": [
+    "reject H₀ at n = 6",
+    "accept H₀ at n = 6",
+    "reject H₀ at n = 5",
+    "still be continuing at n = 6"
+   ],
+   "answer": "A",
+   "explanation": "The running totals are 1, 2, 2, 3, 4, 5. At n = 5 the rejection boundary is 4.541 and S₅ = 4, just short, so the test continues. At n = 6 the boundary is 4.987 and S₆ = 5, so the test stops and rejects H₀. Six observations against the 22 a fixed-sample test would need.",
+   "check": "Evaluate both boundaries at each n and compare with the running total. The near-miss at n = 5 is the step the question is built on."
+  },
+  {
+   "id": "inf-t11-m-12",
+   "format": "multi",
+   "topic": "inference-t11",
+   "diff": "moderate",
+   "stem": "Consider the properties of the sequential probability ratio test.",
+   "options": [
+    "A and C only",
+    "A, B and C only",
+    "B and D only",
+    "A and D only"
+   ],
+   "answer": "A",
+   "explanation": "A is true and is the method's defining feature. B is false — the ASN is largest for a parameter between the hypotheses, where the evidence per observation is weakest. C is true, from Wald's termination theorem. D is false: the likelihood ratio needs both hypotheses specified.",
+   "statements": [
+    "Both error probabilities are fixed in advance and the sample size is random.",
+    "The average sample number is largest under H₀.",
+    "The test terminates with probability 1 and has finite expected sample size.",
+    "The test applies directly to composite hypotheses on both sides."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. This is what distinguishes the SPRT from every fixed-sample test in the module."
+    },
+    "B": {
+     "tf": false,
+     "why": "False. The ASN peaks at a parameter value between θ₀ and θ₁, where the walk wanders instead of drifting. Neither E(N|H₀) nor E(N|H₁) is the worst case."
+    },
+    "C": {
+     "tf": true,
+     "why": "True — Wald proved both, so the sample size is a genuine random variable with a finite mean rather than a risk of never stopping."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. Both hypotheses must be simple, since the likelihood ratio has to be evaluated at two specified parameter values."
+    }
+   }
+  },
+  {
+   "id": "inf-t11-m-13",
+   "format": "numeric",
+   "topic": "inference-t11",
+   "diff": "moderate",
+   "stem": "For the Bernoulli SPRT with p₀ = 0.3 and p₁ = 0.6, the expected log-likelihood-ratio per observation under H₀ is:",
+   "options": [
+    "−0.5596",
+    "0.1920",
+    "0.6931",
+    "−0.1838"
+   ],
+   "answer": "D",
+   "explanation": "E₀[Z] = p₀ log(p₁/p₀) + (1 − p₀) log((1 − p₁)/(1 − p₀)) = 0.3(0.693147) + 0.7(−0.559616) = −0.183787. The second option is the same expectation under H₁, and the last two are the individual step sizes rather than their expectation.",
+   "check": "E₀[Z] must be NEGATIVE: under the null the accumulated ratio drifts downward, which is what makes the test eventually accept H₀."
+  },
+  {
+   "id": "inf-t11-m-14",
+   "format": "numeric",
+   "topic": "inference-t11",
+   "diff": "moderate",
+   "stem": "For that test with α = 0.05 and β = 0.10, log A = 2.8904, log B = −2.2513 and E₀[Z] = −0.18379. The average sample number under H₀ is approximately:",
+   "options": [
+    "22.00",
+    "12.37",
+    "10.85",
+    "18.00"
+   ],
+   "answer": "C",
+   "explanation": "E(N|H₀) ≈ [α log A + (1 − α) log B]/E₀[Z] = [0.05(2.8904) + 0.95(−2.2513)]/(−0.18379) = −1.9942/−0.18379 = 10.85. Option B is the ASN under H₁, option A is the fixed-sample size and option D is the constant A.",
+   "check": "Two negatives divide to give a positive. An ASN that comes out negative means the sign of log B or of E₀[Z] was mishandled."
+  },
+  {
+   "id": "inf-t11-m-15",
+   "format": "single",
+   "topic": "inference-t11",
+   "diff": "moderate",
+   "stem": "The principal practical advantage of an SPRT over a fixed-sample test with the same α and β is:",
+   "options": [
+    "it is easier to compute",
+    "it needs about half as many observations on average",
+    "it gives exact error probabilities",
+    "it requires no assumptions about the distribution"
+   ],
+   "answer": "B",
+   "explanation": "For the standard example the ASN is 10.85 under H₀ and 12.37 under H₁ against a fixed-sample 22 — roughly half the data for identical error rates. It is not easier to compute, its error rates are approximate rather than exact, and it needs the distribution fully specified under both hypotheses."
+  },
+  {
+   "id": "inf-t11-m-16",
+   "format": "single",
+   "topic": "inference-t11",
+   "diff": "moderate",
+   "stem": "In practice a sequential sampling plan is usually truncated at some maximum sample size. The consequence is that:",
+   "options": [
+    "the plan becomes invalid",
+    "the true error probabilities differ from the nominal α and β",
+    "the average sample number rises substantially",
+    "the boundaries become non-linear"
+   ],
+   "answer": "B",
+   "explanation": "Wald's boundaries assume the test may continue as long as needed, so forcing a decision at a maximum n means some paths are decided on weaker evidence than the boundaries demanded, and the realised α and β shift. The ASN barely changes, since paths reaching the truncation point are rare. The honest practice is to recompute the real error rates by simulation."
+  },
+  {
+   "id": "inf-t11-m-17",
+   "format": "multi",
+   "topic": "inference-t11",
+   "diff": "hard",
+   "stem": "Consider the exactness of Wald's boundary constants and the error probabilities they deliver.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and C only",
+    "A, B and D only"
+   ],
+   "answer": "D",
+   "explanation": "A is true — the argument over the rejecting paths gives 1 − β ≥ Aα, an inequality. B is true, and it names the reason the inequality is not an equality. C is false: the correct bounds are α' ≤ α/(1 − β) and β' ≤ β/(1 − α), and the total inequality runs α' + β' ≤ α + β, so the total error cannot exceed the nominal total. D is true and follows from those bounds.",
+   "statements": [
+    "The exact relation between A, α and β is an inequality, A ≤ (1 − β)/α.",
+    "Taking that inequality as an equality ignores the overshoot past the boundary.",
+    "The realised error rates can jointly exceed the nominal ones, so α' + β' > α + β is possible.",
+    "For α = 0.05 and β = 0.10 the bound on the realised Type I error is about 0.056."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. On every rejecting path Λ ≥ A, so P₁ ≥ A P₀ over that set, giving 1 − β ≥ Aα."
+    },
+    "B": {
+     "tf": true,
+     "why": "True. The walk takes a discrete step and lands at or beyond the boundary rather than exactly on it; that excess is the overshoot, and it is the whole source of the approximation."
+    },
+    "C": {
+     "tf": false,
+     "why": "False. The bounds give α' + β' ≤ α + β — the total is never worse than advertised, though the split between the two may shift."
+    },
+    "D": {
+     "tf": true,
+     "why": "True: α/(1 − β) = 0.05/0.90 = 0.0556, close enough to 0.05 that the nominal value is what gets reported."
+    }
+   }
+  },
+  {
+   "id": "inf-t11-m-18",
+   "format": "numeric",
+   "topic": "inference-t11",
+   "diff": "hard",
+   "stem": "For the Bernoulli SPRT with p₀ = 0.3, p₁ = 0.6, α = 0.05, β = 0.10, where E₁[Z] = 0.19204, the average sample number under H₁ is approximately:",
+   "options": [
+    "10.85",
+    "12.37",
+    "15.05",
+    "11.61"
+   ],
+   "answer": "B",
+   "explanation": "E(N|H₁) ≈ [(1 − β) log A + β log B]/E₁[Z] = [0.90(2.8904) + 0.10(−2.2513)]/0.19204 = 2.3762/0.19204 = 12.37. Option A is the ASN under H₀; note that the ASN is slightly larger under H₁ here, because the failure step is smaller in magnitude than the success step.",
+   "check": "Under H₁ both the numerator and E₁[Z] are positive. The weights on log A and log B are 1 − β and β, not α and 1 − α."
+  },
+  {
+   "id": "inf-t11-m-19",
+   "format": "single",
+   "topic": "inference-t11",
+   "diff": "hard",
+   "stem": "The Wald–Wolfowitz theorem states that among all tests with error probabilities at most α and β, the SPRT:",
+   "options": [
+    "minimises the expected sample size under both H₀ and H₁",
+    "is the most powerful at every alternative",
+    "minimises the maximum possible sample size",
+    "minimises the expected sample size at every parameter value"
+   ],
+   "answer": "A",
+   "explanation": "The result is about expected sample size at the two hypotheses, and it is unusually strong in holding at both simultaneously. It says nothing about the maximum sample size, which is unbounded, and nothing about parameter values between the hypotheses — where the ASN is largest and the SPRT is not especially efficient."
+  },
+  {
+   "id": "inf-t11-m-20",
+   "format": "single",
+   "topic": "inference-t11",
+   "diff": "hard",
+   "stem": "Which feature of a testing problem would make an SPRT inappropriate?",
+   "options": [
+    "observations are expensive and arrive one at a time",
+    "the response takes longer to measure than the interval between arriving items",
+    "both hypotheses are completely specified",
+    "the two error rates are both required to be small"
+   ],
+   "answer": "B",
+   "explanation": "The method depends on assessing each observation before deciding whether to take the next, so a response measured more slowly than items arrive defeats it. The other three features are precisely the conditions the SPRT is designed for: costly observations arriving singly, two simple hypotheses, and both error rates specified in advance."
+  }
+ ]
+}

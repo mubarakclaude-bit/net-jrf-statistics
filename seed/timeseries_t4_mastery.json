@@ -1,0 +1,367 @@
+{
+ "moduleId": "timeseries",
+ "topicId": "timeseries-t4",
+ "source": "mastery",
+ "label": "Autocovariance of AR processes — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "ts-t4-m-01",
+   "format": "numeric",
+   "topic": "timeseries-t4",
+   "diff": "easy",
+   "stem": "The variance of a stationary AR(1) process with coefficient φ and shock variance σ² is:",
+   "options": [
+    "σ²/(1 − φ)",
+    "σ²(1 − φ²)",
+    "σ²/(1 − φ²)",
+    "σ²φ²"
+   ],
+   "answer": "C",
+   "explanation": "From γ₀ = φγ₁ + σ² and γ₁ = φγ₀, substituting gives γ₀ = φ²γ₀ + σ², hence γ₀ = σ²/(1 − φ²). The σ² term comes from E(yₜεₜ), which is not zero because yₜ contains εₜ.",
+   "check": "The result must exceed σ², since 1 − φ² < 1 for any stationary φ — the process is more variable than its shocks."
+  },
+  {
+   "id": "ts-t4-m-02",
+   "format": "numeric",
+   "topic": "timeseries-t4",
+   "diff": "easy",
+   "stem": "The autocorrelation at lag k of an AR(1) process is:",
+   "options": [
+    "kφ",
+    "φᵏ",
+    "φ/(1 − φ)",
+    "φ/k"
+   ],
+   "answer": "B",
+   "explanation": "Multiplying the model by yₜ₋ₖ and taking expectations gives γₖ = φγₖ₋₁, so γₖ = φᵏγ₀ and ρₖ = φᵏ. Simulated at φ = 0.7: 0.7001, 0.4903, 0.3433 at lags 1, 2, 3.",
+   "check": "At k = 0 this gives ρ₀ = 1, as any autocorrelation function must."
+  },
+  {
+   "id": "ts-t4-m-03",
+   "format": "single",
+   "topic": "timeseries-t4",
+   "diff": "easy",
+   "stem": "In deriving the autocovariances of an AR process, the term σ² appears in:",
+   "options": [
+    "none of the equations",
+    "every equation",
+    "only the k = 1 equation",
+    "only the k = 0 equation"
+   ],
+   "answer": "D",
+   "explanation": "E(yₜ₋ₖεₜ) = 0 for k ≥ 1, because yₜ₋ₖ is built from shocks dated t−k and earlier. Only at k = 0 does the cross term survive, as E(yₜεₜ) = σ². That is why the recursion for k ≥ 1 is homogeneous and the variance needs a separate equation."
+  },
+  {
+   "id": "ts-t4-m-04",
+   "format": "numeric",
+   "topic": "timeseries-t4",
+   "diff": "easy",
+   "stem": "For an AR(1) with φ = 0.5 and σ² = 1, the variance is:",
+   "options": [
+    "0.7500",
+    "2.0000",
+    "1.3333",
+    "1.5000"
+   ],
+   "answer": "C",
+   "explanation": "γ₀ = 1/(1 − 0.25) = 1/0.75 = 1.3333. This equals Σφ^(2j) = 1 + 0.25 + 0.0625 + ⋯, the sum from the MA(∞) representation.",
+   "check": "It must exceed 1 = σ², which it does."
+  },
+  {
+   "id": "ts-t4-m-05",
+   "format": "single",
+   "topic": "timeseries-t4",
+   "diff": "easy",
+   "stem": "The autocorrelations of an AR process depend on:",
+   "options": [
+    "σ² only",
+    "the coefficients only, not σ²",
+    "both equally",
+    "neither"
+   ],
+   "answer": "B",
+   "explanation": "ρₖ = φᵏ for an AR(1) and the recursion for higher orders — in each case a function of the coefficients alone. Multiplying σ² by a constant scales every γₖ equally, leaving the ratios unchanged. The shock variance sets the scale, the coefficients set the shape."
+  },
+  {
+   "id": "ts-t4-m-06",
+   "format": "single",
+   "topic": "timeseries-t4",
+   "diff": "easy",
+   "stem": "The autocovariances of an AR(2) satisfy, for k ≥ 1:",
+   "options": [
+    "γₖ = φ₁γₖ₋₁ only",
+    "γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂ + σ²",
+    "γₖ = φ₁ᵏ + φ₂ᵏ",
+    "γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂"
+   ],
+   "answer": "D",
+   "explanation": "Multiplying the model by yₜ₋ₖ for k ≥ 1 and taking expectations gives exactly this, with the σ² term absent because E(yₜ₋ₖεₜ) = 0. The same relation holds in ρ after dividing by γ₀."
+  },
+  {
+   "id": "ts-t4-m-07",
+   "format": "numeric",
+   "topic": "timeseries-t4",
+   "diff": "moderate",
+   "stem": "For an AR(2) process, the lag-1 autocorrelation is:",
+   "options": [
+    "φ₁ + φ₂",
+    "φ₁",
+    "φ₁/(1 − φ₂)",
+    "φ₁/(1 + φ₂)"
+   ],
+   "answer": "C",
+   "explanation": "The k = 1 equation reads ρ₁ = φ₁ + φ₂ρ₋₁, and ρ₋₁ = ρ₁ by symmetry, so ρ₁(1 − φ₂) = φ₁. The symmetry is essential: without it the equation cannot be solved. At (0.5, 0.3) the value is 0.5/0.7 = 0.7143, simulated 0.7145.",
+   "check": "Setting φ₂ = 0 must recover ρ₁ = φ₁, the AR(1) case, which it does."
+  },
+  {
+   "id": "ts-t4-m-08",
+   "format": "numeric",
+   "topic": "timeseries-t4",
+   "diff": "moderate",
+   "stem": "For an AR(2) with φ = (0.5, 0.3) and σ² = 1, the variance is:",
+   "options": [
+    "1.3333",
+    "2.2436",
+    "3.3333",
+    "1.7500"
+   ],
+   "answer": "B",
+   "explanation": "γ₀ = σ²(1−φ₂)/[(1+φ₂)((1−φ₂)²−φ₁²)] = 0.7/(1.3 × (0.49 − 0.25)) = 0.7/0.312 = 2.2436, simulated 2.2466. It exceeds the 1.3333 an AR(1) with φ = 0.5 would give, because the second lag adds persistence.",
+   "check": "The step-by-step route gives the same: γ₀(1 − 0.5ρ₁ − 0.3ρ₂) = 1 with ρ₁ = 0.7143 and ρ₂ = 0.6571 yields 1/0.4457 = 2.2436."
+  },
+  {
+   "id": "ts-t4-m-09",
+   "format": "numeric",
+   "topic": "timeseries-t4",
+   "diff": "moderate",
+   "stem": "An AR(2) with φ = (0.5, 0.3) has lag-2 autocorrelation:",
+   "options": [
+    "0.7143",
+    "0.5102",
+    "0.3000",
+    "0.6571"
+   ],
+   "answer": "D",
+   "explanation": "ρ₂ = φ₁ρ₁ + φ₂ρ₀ = 0.5(0.7143) + 0.3(1) = 0.3571 + 0.3 = 0.6571, simulated 0.6577. Note it is larger than ρ₁² = 0.5102 would be, so the decay is slower than geometric.",
+   "check": "The recursion then gives ρ₃ = 0.5(0.6571) + 0.3(0.7143) = 0.5429, simulated 0.5432."
+  },
+  {
+   "id": "ts-t4-m-10",
+   "format": "single",
+   "topic": "timeseries-t4",
+   "diff": "moderate",
+   "stem": "The variance of an AR(1) at φ = −0.7 compared with φ = +0.7 is:",
+   "options": [
+    "larger",
+    "smaller",
+    "identical, since γ₀ depends on φ²",
+    "undefined"
+   ],
+   "answer": "C",
+   "explanation": "γ₀ = σ²/(1 − φ²) sees only φ², so both give 1.9608 at σ² = 1. The ACFs differ — φᵏ alternates when φ is negative — so the sign changes the shape without changing the magnitude. Keeping those two readings separate avoids a common confusion."
+  },
+  {
+   "id": "ts-t4-m-11",
+   "format": "multi",
+   "topic": "timeseries-t4",
+   "diff": "moderate",
+   "stem": "Consider the autocovariance structure of AR processes.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "A",
+   "explanation": "A is true and is the commonest error to avoid. B is true: the recursion is homogeneous, so only the k = 0 equation fixes the scale. C is true — the variance always exceeds σ² for a stationary AR. D is false: the symmetry γ₋ₖ = γₖ is essential, since the AR(2) k = 1 equation cannot be solved without recognising γ₋₁ as γ₁.",
+   "statements": [
+    "For an AR(2), ρ₁ is φ₁/(1 − φ₂) rather than φ₁.",
+    "The recursion for k ≥ 1 determines the shape of the autocovariance function but not its scale.",
+    "The variance of a stationary AR process always exceeds σ².",
+    "The symmetry γ₋ₖ = γₖ plays no role in the AR(2) derivation."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. The k = 1 equation involves γ₋₁, which must be identified with γ₁, and solving gives ρ₁(1 − φ₂) = φ₁. At (0.5, 0.3) that is 0.7143, not 0.5."
+    },
+    "B": {
+     "tf": true,
+     "why": "True — the recursion is homogeneous, so multiplying every γ by a constant preserves it. The scale comes from the k = 0 equation, the only one with a σ² term."
+    },
+    "C": {
+     "tf": true,
+     "why": "True. Shocks accumulate through the MA(∞) representation, giving γ₀ = σ²Σψⱼ² > σ². For an AR(1) the amplification factor is 1/(1 − φ²), which is always above 1."
+    },
+    "D": {
+     "tf": false,
+     "why": "False — it is essential. Without γ₋₁ = γ₁ the k = 1 equation has an unknown on the wrong side and the derivation of ρ₁ = φ₁/(1 − φ₂) does not go through."
+    }
+   }
+  },
+  {
+   "id": "ts-t4-m-12",
+   "format": "numeric",
+   "topic": "timeseries-t4",
+   "diff": "moderate",
+   "stem": "An AR(1) has variance 2.7778 with σ² = 1. The modulus of its coefficient is:",
+   "options": [
+    "0.6",
+    "0.8",
+    "0.9",
+    "0.5"
+   ],
+   "answer": "B",
+   "explanation": "Inverting γ₀ = 1/(1 − φ²): 1 − φ² = 1/2.7778 = 0.36, so φ² = 0.64 and |φ| = 0.8. The sign is not determined by the variance — ρ₁ would settle it.",
+   "check": "Forward check: 1/(1 − 0.64) = 1/0.36 = 2.7778 ✓."
+  },
+  {
+   "id": "ts-t4-m-13",
+   "format": "single",
+   "topic": "timeseries-t4",
+   "diff": "moderate",
+   "stem": "An AR(2) with φ = (0.6, 0.5) is substituted into the variance formula, which returns a negative value. The correct reading is:",
+   "options": [
+    "the formula applies only to AR(1) processes",
+    "an arithmetic error has been made",
+    "the shock variance must be negative",
+    "the coefficients are outside the stationarity region, so no autocovariance function exists"
+   ],
+   "answer": "D",
+   "explanation": "φ₁ + φ₂ = 1.1 > 1 violates the first stationarity condition. The denominator factors as (1+φ₂)(1−φ₂−φ₁)(1−φ₂+φ₁), whose three factors are exactly the three conditions, so the variance is positive if and only if the process is stationary. A negative value is the formula reporting that its precondition failed."
+  },
+  {
+   "id": "ts-t4-m-14",
+   "format": "numeric",
+   "topic": "timeseries-t4",
+   "diff": "moderate",
+   "stem": "An AR(2) with φ = (0.5, −0.2) has lag-2 autocorrelation approximately:",
+   "options": [
+    "0.250",
+    "0.417",
+    "0.008",
+    "0.617"
+   ],
+   "answer": "C",
+   "explanation": "ρ₁ = 0.5/(1 − (−0.2)) = 0.5/1.2 = 0.4167, then ρ₂ = 0.5(0.4167) + (−0.2)(1) = 0.2083 − 0.2 = 0.0083. The negative second coefficient both enlarges the denominator for ρ₁ and subtracts in the recursion, so the ACF collapses almost to zero by lag 2.",
+   "check": "The two lags are working against each other here, unlike the (0.5, 0.3) case where ρ₂ stayed high at 0.6571."
+  },
+  {
+   "id": "ts-t4-m-15",
+   "format": "single",
+   "topic": "timeseries-t4",
+   "diff": "moderate",
+   "stem": "An AR(2) process has an autocorrelation function that oscillates and crosses zero repeatedly. This indicates:",
+   "options": [
+    "a moving-average component",
+    "complex characteristic roots, with damping √|φ₂|",
+    "non-stationarity",
+    "a negative shock variance"
+   ],
+   "answer": "B",
+   "explanation": "When φ₁² + 4φ₂ < 0 the characteristic equation z² − φ₁z − φ₂ = 0 has a complex conjugate pair, so the difference equation's solution is a damped sine ρₖ = Crᵏ sin(ωk + δ) with r = √|φ₂|. It is still a pure AR(2), with a PACF cutting off at lag 2."
+  },
+  {
+   "id": "ts-t4-m-16",
+   "format": "numeric",
+   "topic": "timeseries-t4",
+   "diff": "moderate",
+   "stem": "For an AR(1) with φ = 0.95 and σ² = 1, the variance is approximately:",
+   "options": [
+    "0.95",
+    "1.95",
+    "20.00",
+    "10.26"
+   ],
+   "answer": "D",
+   "explanation": "1/(1 − 0.9025) = 1/0.0975 = 10.2564. The amplification factor grows sharply near the unit circle: 1.33 at φ = 0.5, 2.78 at 0.8, 5.26 at 0.9 and 10.26 at 0.95, diverging as φ approaches 1.",
+   "check": "A persistent process must be far more variable than its shocks, which rules out the small options at once."
+  },
+  {
+   "id": "ts-t4-m-17",
+   "format": "multi",
+   "topic": "timeseries-t4",
+   "diff": "hard",
+   "stem": "Consider the AR(2) variance formula and its structure.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "A",
+   "explanation": "A is true — the difference of squares factors that way, and the three factors are the three stationarity conditions. B is true: setting φ₂ = 0 must give the AR(1) result, and it does. C is true, and it is correct because yₜ = φ₂yₜ₋₂ + εₜ is two interleaved AR(1) processes. D is false — the formula gives γ₀, and higher autocovariances come from the recursion.",
+   "statements": [
+    "The denominator factors as (1+φ₂)(1−φ₂−φ₁)(1−φ₂+φ₁).",
+    "At φ₂ = 0 the formula reduces to σ²/(1 − φ₁²).",
+    "At φ₁ = 0 it reduces to σ²/(1 − φ₂²).",
+    "The formula gives γₖ for every lag k directly."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True: (1−φ₂)² − φ₁² is a difference of squares. The three factors are positive exactly when |φ₂| < 1, φ₁+φ₂ < 1 and φ₂−φ₁ < 1 — the stationarity triangle — so the variance is positive precisely when the process is stationary."
+    },
+    "B": {
+     "tf": true,
+     "why": "True, and it is a necessary check on any AR(2) derivation: with φ₂ = 0 the process IS an AR(1), so the formula must collapse to σ²/(1 − φ₁²)."
+    },
+    "C": {
+     "tf": true,
+     "why": "True, and correct for a reason worth seeing: yₜ = φ₂yₜ₋₂ + εₜ links only times of the same parity, so the odd- and even-indexed observations each form an AR(1) in φ₂ with the same variance σ²/(1 − φ₂²)."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. It gives γ₀ alone. The higher autocovariances follow from γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂ once γ₀ and γ₁ are known."
+    }
+   }
+  },
+  {
+   "id": "ts-t4-m-18",
+   "format": "numeric",
+   "topic": "timeseries-t4",
+   "diff": "hard",
+   "stem": "For an AR(2) with φ = (1.2, −0.4) and σ² = 1, the lag-1 autocorrelation is:",
+   "options": [
+    "0.7143",
+    "1.2000",
+    "0.8571",
+    "0.3000"
+   ],
+   "answer": "C",
+   "explanation": "ρ₁ = φ₁/(1 − φ₂) = 1.2/(1 − (−0.4)) = 1.2/1.4 = 0.8571. Note the negative φ₂ enlarges the denominator to 1.4, so ρ₁ falls below φ₁ even though φ₁ exceeds 1 — and the process is stationary, since 0.8 < 1, −1.6 < 1 and 0.4 < 1 all hold.",
+   "check": "ρ₁ must lie in [−1, 1], which rules out the value 1.2 immediately."
+  },
+  {
+   "id": "ts-t4-m-19",
+   "format": "single",
+   "topic": "timeseries-t4",
+   "diff": "hard",
+   "stem": "Why does the difference equation γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂ not by itself determine the autocovariance function?",
+   "options": [
+    "it holds only for k = 1 and k = 2",
+    "it is homogeneous, so it fixes the shape but not the scale, which the k = 0 equation supplies",
+    "it requires complex roots to be solvable",
+    "it determines the scale but not the shape"
+   ],
+   "answer": "B",
+   "explanation": "Multiplying every γₖ by any constant still satisfies the recursion, so it cannot pin down the magnitude. The scale is set by the k = 0 equation γ₀ = φ₁γ₁ + φ₂γ₂ + σ², the only one containing σ². That is the structural reason the variance is computed separately rather than falling out of the recursion."
+  },
+  {
+   "id": "ts-t4-m-20",
+   "format": "single",
+   "topic": "timeseries-t4",
+   "diff": "hard",
+   "stem": "Sample variance estimates from an AR(1) with φ = 0.95 and n = 200 scatter widely and tend to fall below the theoretical 10.26. The main reasons are:",
+   "options": [
+    "the shocks not being normally distributed",
+    "an error in the theoretical formula",
+    "the process being non-stationary",
+    "a small effective sample size, and downward bias from centring on the sample mean"
+   ],
+   "answer": "D",
+   "explanation": "The effective sample size is roughly n(1−φ)/(1+φ) ≈ 5 at these values, so even an unbiased estimator would scatter badly. On top of that, the sample variance is computed around the sample mean, which for a persistent series tracks wherever the realisation happened to wander — so subtracting it removes genuine variation and biases the estimate downward. Both effects shrink as φ moves away from 1."
+  }
+ ]
+}

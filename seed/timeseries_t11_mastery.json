@@ -1,0 +1,366 @@
+{
+ "moduleId": "timeseries",
+ "topicId": "timeseries-t11",
+ "source": "mastery",
+ "label": "Forecasting stationary and invertible processes — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "ts-t11-m-01",
+   "format": "single",
+   "topic": "timeseries-t11",
+   "diff": "easy",
+   "stem": "The forecast that minimises mean squared error is:",
+   "options": [
+    "the most recent observation",
+    "the conditional median",
+    "the conditional expectation given the observed past",
+    "the unconditional mean"
+   ],
+   "answer": "C",
+   "explanation": "E(Y − g(X))² is minimised at g(X) = E(Y | X) for any function g. The conditional MEDIAN minimises mean ABSOLUTE error instead; the two coincide for a Gaussian process, which is why the distinction rarely surfaces in practice."
+  },
+  {
+   "id": "ts-t11-m-02",
+   "format": "numeric",
+   "topic": "timeseries-t11",
+   "diff": "easy",
+   "stem": "For an AR(1) with mean 0, the k-step forecast is:",
+   "options": [
+    "φyₜ",
+    "φᵏyₜ",
+    "kφyₜ",
+    "yₜ"
+   ],
+   "answer": "B",
+   "explanation": "Iterating the model with future shocks set to zero multiplies by φ at each step. Note φᵏ equals ρₖ for an AR(1), so the ACF is literally the forecast function.",
+   "check": "At k = 1 this must give φyₜ, the one-step forecast, which it does; and as k grows it tends to 0, the mean."
+  },
+  {
+   "id": "ts-t11-m-03",
+   "format": "numeric",
+   "topic": "timeseries-t11",
+   "diff": "easy",
+   "stem": "The forecast error variance at horizon k, in terms of the weights, is:",
+   "options": [
+    "σ²/k",
+    "σ²Σ(j≥k) ψⱼ²",
+    "σ²ψₖ²",
+    "σ²Σ(j=0..k−1) ψⱼ²"
+   ],
+   "answer": "D",
+   "explanation": "The error consists of the shocks dated t+1 to t+k, which carry weights ψ₀ through ψₖ₋₁. Option B is the complementary sum, which belongs to the forecast rather than the error.",
+   "check": "At k = 1 the sum is σ²ψ₀² = σ², the one-step error variance, which holds for any model with ψ₀ = 1."
+  },
+  {
+   "id": "ts-t11-m-04",
+   "format": "single",
+   "topic": "timeseries-t11",
+   "diff": "easy",
+   "stem": "As the forecast horizon grows, the forecast error variance of a stationary process:",
+   "options": [
+    "decreases towards σ²",
+    "grows without bound",
+    "increases towards γ₀, the variance of the process",
+    "stays at σ²"
+   ],
+   "answer": "C",
+   "explanation": "Each extra horizon adds a non-negative term σ²ψₖ₋₁², and the total converges to σ²Σψⱼ² = γ₀. Unbounded growth is the NON-stationary case: a random walk has error variance kσ²."
+  },
+  {
+   "id": "ts-t11-m-05",
+   "format": "single",
+   "topic": "timeseries-t11",
+   "diff": "easy",
+   "stem": "An MA(q) process can be forecast beyond the mean for:",
+   "options": [
+    "q + 1 steps",
+    "exactly q steps",
+    "indefinitely",
+    "one step only"
+   ],
+   "answer": "B",
+   "explanation": "For k > q, yₜ₊ₖ = εₜ₊ₖ − θ₁εₜ₊ₖ₋₁ − ⋯ involves only shocks dated after t, all with expectation zero, so the forecast is the mean. Beyond q steps the error variance is exactly γ₀ — attained, not approached."
+  },
+  {
+   "id": "ts-t11-m-06",
+   "format": "single",
+   "topic": "timeseries-t11",
+   "diff": "easy",
+   "stem": "Forecasting an MA process requires invertibility because:",
+   "options": [
+    "otherwise the forecast would be biased",
+    "it guarantees a finite variance",
+    "it makes the process Gaussian",
+    "the unobserved shocks must be reconstructed from the observed past"
+   ],
+   "answer": "D",
+   "explanation": "The forecast involves εₜ, which is never observed, so it must be computed as εₜ = yₜ + θyₜ₋₁ + θ²yₜ₋₂ + ⋯ — convergent only when |θ| < 1. Without invertibility no forecast can be formed from observables at all. A finite MA has finite variance whatever its coefficients."
+  },
+  {
+   "id": "ts-t11-m-07",
+   "format": "numeric",
+   "topic": "timeseries-t11",
+   "diff": "moderate",
+   "stem": "For an AR(1) with φ = 0.7 and σ² = 1, the two-step forecast error variance is:",
+   "options": [
+    "1.96",
+    "1.00",
+    "1.49",
+    "0.49"
+   ],
+   "answer": "C",
+   "explanation": "σ²(1 − φ⁴)/(1 − φ²) = (1 − 0.2401)/0.51 = 0.7599/0.51 = 1.4900, with simulated 1.48388 over 400,000 observations. Option B is the one-step value and option A the limit γ₀ = 1.9608.",
+   "check": "It must lie strictly between σ² = 1 and γ₀ = 1.9608, which 1.49 does."
+  },
+  {
+   "id": "ts-t11-m-08",
+   "format": "numeric",
+   "topic": "timeseries-t11",
+   "diff": "moderate",
+   "stem": "The one-step forecast error variance of any general linear process with ψ₀ = 1 is:",
+   "options": [
+    "γ₀",
+    "σ²",
+    "σ²(1 + ψ₁²)",
+    "0"
+   ],
+   "answer": "B",
+   "explanation": "The error at one step is ψ₀εₜ₊₁ = εₜ₊₁, with variance σ². No model can do better, since the next shock is by construction unforecastable — this is the irreducible floor on forecast accuracy.",
+   "check": "It is also the k = 1 case of σ²Σ(j<k)ψⱼ², where the sum contains the single term ψ₀² = 1."
+  },
+  {
+   "id": "ts-t11-m-09",
+   "format": "numeric",
+   "topic": "timeseries-t11",
+   "diff": "moderate",
+   "stem": "An MA(1) with θ = 0.6, σ² = 1, and current shock εₜ = 2 has one-step and two-step forecasts of:",
+   "options": [
+    "0 and 0",
+    "1.2 and 0",
+    "−1.2 and −1.2",
+    "−1.2 and 0"
+   ],
+   "answer": "D",
+   "explanation": "ŷₜ(1) = −θεₜ = −0.6(2) = −1.2, taking the sign from the minus convention yₜ = εₜ − θεₜ₋₁. At two steps only future shocks remain, so the forecast is the mean, 0.",
+   "check": "The corresponding error variances are σ² = 1 and γ₀ = 1 + 0.36 = 1.36, simulated as 0.998 and 1.355."
+  },
+  {
+   "id": "ts-t11-m-10",
+   "format": "single",
+   "topic": "timeseries-t11",
+   "diff": "moderate",
+   "stem": "A twelve-step forecast from a fitted stationary model performs no better than the unconditional mean. The correct conclusion is:",
+   "options": [
+    "the series needs differencing",
+    "the model has failed and should be respecified",
+    "this confirms the model — the optimal long-horizon forecast IS the mean",
+    "a higher-order model is required"
+   ],
+   "answer": "C",
+   "explanation": "For an AR(1) with φ = 0.6 the twelve-step multiplier is 0.6¹² = 0.0022, so the model's own best forecast is numerically the mean. Comparing them at that horizon tests nothing. If a long-horizon forecast DID beat the mean, that would be the warning sign — of a mishandled trend or of information leaking from the future into the evaluation."
+  },
+  {
+   "id": "ts-t11-m-11",
+   "format": "multi",
+   "topic": "timeseries-t11",
+   "diff": "moderate",
+   "stem": "Consider forecasting a stationary process.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "A",
+   "explanation": "A is true — each horizon adds σ²ψₖ₋₁² and the total converges to γ₀. B is true: the error at one step is εₜ₊₁ whatever the model. C is true, and the factor is 1/√(1 − φ²) for an AR(1). D is false — an MA(q) is forecastable for exactly q steps.",
+   "statements": [
+    "The forecast error variance increases with the horizon and converges to γ₀.",
+    "The one-step error variance is σ² for any model with ψ₀ = 1.",
+    "A prediction interval must widen with the horizon.",
+    "An MA(2) process is forecastable three steps ahead."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True. Each extra horizon contributes a non-negative σ²ψₖ₋₁², and the total tends to σ²Σψⱼ² = γ₀ — at φ = 0.7 the values are 1.00, 1.49, 1.73, 1.91 and 1.96, settling at 1.9608."
+    },
+    "B": {
+     "tf": true,
+     "why": "True: the error is ψ₀εₜ₊₁ = εₜ₊₁, so the variance is σ². The next shock cannot be anticipated by any model, which makes this the irreducible floor."
+    },
+    "C": {
+     "tf": true,
+     "why": "True, except for white noise, where the limit is attained at the first step. For an AR(1) the fan-out factor is 1/√(1 − φ²): 1.40 at φ = 0.7 and 2.29 at φ = 0.9."
+    },
+    "D": {
+     "tf": false,
+     "why": "False — exactly TWO steps. At three steps yₜ₊₃ = εₜ₊₃ − θ₁εₜ₊₂ − θ₂εₜ₊₁ involves only future shocks, so the forecast is the mean and the error variance is γ₀ exactly."
+    }
+   }
+  },
+  {
+   "id": "ts-t11-m-12",
+   "format": "numeric",
+   "topic": "timeseries-t11",
+   "diff": "moderate",
+   "stem": "By what factor should an AR(1) forecast interval widen from the one-step horizon to the long run?",
+   "options": [
+    "1/(1 − φ²)",
+    "1/√(1 − φ²)",
+    "1/(1 − φ)",
+    "√(1 − φ²)"
+   ],
+   "answer": "B",
+   "explanation": "The one-step error variance is σ² and the limiting one is γ₀ = σ²/(1 − φ²), so the VARIANCE ratio is 1/(1 − φ²) and the interval width, being a standard deviation, scales as its square root. Option A is the variance factor.",
+   "check": "At φ = 0.7 the factor is 1/√0.51 = 1.400, and at φ = 0.9 it is 1/√0.19 = 2.294."
+  },
+  {
+   "id": "ts-t11-m-13",
+   "format": "single",
+   "topic": "timeseries-t11",
+   "diff": "moderate",
+   "stem": "A reporting system shows forecast intervals of the same width at every horizon from one to twelve. This is:",
+   "options": [
+    "correct provided the model is invertible",
+    "correct for any stationary process",
+    "correct for an AR(1) only",
+    "an error, except for white noise"
+   ],
+   "answer": "D",
+   "explanation": "The interval is ŷ ± z√(σ²Σ(j<k)ψⱼ²), which increases with k towards ±z√γ₀. A flat band reports the one-step width at every horizon, understating long-horizon uncertainty by up to 1/√(1 − φ²) — a factor of 2.29 at φ = 0.9. Only white noise, where γ₀ = σ², has a genuinely flat band."
+  },
+  {
+   "id": "ts-t11-m-14",
+   "format": "numeric",
+   "topic": "timeseries-t11",
+   "diff": "moderate",
+   "stem": "For an AR(2) with φ = (0.5, 0.3), yₜ = 2 and yₜ₋₁ = 1, the one-step and two-step forecasts are:",
+   "options": [
+    "1.0 and 0.5",
+    "1.3 and 0.65",
+    "1.3 and 1.25",
+    "1.3 and 1.3"
+   ],
+   "answer": "C",
+   "explanation": "ŷₜ(1) = 0.5(2) + 0.3(1) = 1.3. Then ŷₜ(2) = 0.5 ŷₜ(1) + 0.3 yₜ = 0.65 + 0.6 = 1.25 — the forecast replaces the unavailable future value while yₜ, still an actual observation, enters directly.",
+   "check": "Option B omits the 0.3yₜ term, which is the commonest slip: at the second step one of the two lagged values is still observed."
+  },
+  {
+   "id": "ts-t11-m-15",
+   "format": "single",
+   "topic": "timeseries-t11",
+   "diff": "moderate",
+   "stem": "The forecast update formula ŷₜ₊₁(k−1) = ŷₜ(k) + ψₖ₋₁eₜ(1) says that:",
+   "options": [
+    "forecasts are never revised",
+    "each new observation revises every forecast in proportion to the one-step surprise",
+    "only the one-step forecast is revised",
+    "revisions are proportional to the horizon"
+   ],
+   "answer": "B",
+   "explanation": "eₜ(1) is the one-step error just observed, and the weight ψₖ₋₁ determines how much of that surprise is carried into the horizon-(k−1) forecast. Since ψⱼ decays for a stationary process, very long-horizon forecasts are barely revised — consistent with their being near the mean already. This is the error-correction structure exponential smoothing exhibits in its simplest form."
+  },
+  {
+   "id": "ts-t11-m-16",
+   "format": "numeric",
+   "topic": "timeseries-t11",
+   "diff": "moderate",
+   "stem": "For a random walk with yₜ = 7 and σ² = 1, the four-step forecast and its error variance are:",
+   "options": [
+    "7 and 16",
+    "0 and 4",
+    "7 and 1",
+    "7 and 4"
+   ],
+   "answer": "D",
+   "explanation": "The forecast is the current value at every horizon, since the best prediction of the next change is zero, and the error variance is kσ² = 4 — growing without bound. Both limits of the stationary case fail: there is no mean to revert to and γ₀ is infinite.",
+   "check": "At k = 1 the variance must be σ² = 1, which kσ² gives, so the formula is consistent with the universal one-step floor."
+  },
+  {
+   "id": "ts-t11-m-17",
+   "format": "multi",
+   "topic": "timeseries-t11",
+   "diff": "hard",
+   "stem": "Consider the finer structure of forecasting.",
+   "options": [
+    "A, B and C only",
+    "A and C only",
+    "B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "A",
+   "explanation": "A is true and is why most of the useful horizon is short. B is true: the AR(2) forecast satisfies the same difference equation as its ACF. C is true — intervals treat estimated quantities as known. D is false: the forecast function and the ACF satisfy the same recursion but have different starting values, so they are not equal.",
+   "statements": [
+    "At φ = 0.7, over half the limiting forecast error variance is already present at one step.",
+    "An AR(2) with complex roots has a forecast function that oscillates about the mean.",
+    "A correctly widening prediction interval still understates the true uncertainty.",
+    "For an AR(2) the forecast function and the autocorrelation function are the same sequence."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "True: 1.0000/1.9608 = 51% at one step, 76% at two, 88% at three and 97% by five. The band fans out sharply and then flattens, so most of the eventual uncertainty appears immediately."
+    },
+    "B": {
+     "tf": true,
+     "why": "True. The forecast satisfies ŷₜ(k) = φ₁ŷₜ(k−1) + φ₂ŷₜ(k−2), whose characteristic equation z² − φ₁z − φ₂ = 0 gives a damped sine when the roots are complex. The oscillation looks odd on a chart and is what the model implies."
+    },
+    "C": {
+     "tf": true,
+     "why": "True — it treats the coefficients and σ² as known when both are estimated, and reflects no model uncertainty at all. The parameter effect is proportionally largest at short horizons and in small samples."
+    },
+    "D": {
+     "tf": false,
+     "why": "False. They satisfy the same recursion but start differently: the ACF starts at ρ₀ = 1 and ρ₁ = φ₁/(1 − φ₂), while the forecast starts from the observed values. For an AR(1) the forecast multiplier does equal ρₖ, but that is special to that case."
+    }
+   }
+  },
+  {
+   "id": "ts-t11-m-18",
+   "format": "numeric",
+   "topic": "timeseries-t11",
+   "diff": "hard",
+   "stem": "For an AR(1) with φ = 0.9, at approximately what horizon does the forecast error variance reach 90% of its limit?",
+   "options": [
+    "k = 5",
+    "k = 2",
+    "k = 11",
+    "k = 30"
+   ],
+   "answer": "C",
+   "explanation": "Solving 1 − φ^(2k) = 0.9 gives (0.81)ᵏ = 0.1, so k = ln(0.1)/ln(0.81) = (−2.3026)/(−0.2107) = 10.93, hence k = 11. The same calculation at φ = 0.5 gives k = 1.66, so k = 2 — persistence extends the horizon over which uncertainty is still growing by about a factor of six between these cases.",
+   "check": "At φ = 0.7 the answer would be ln(0.1)/ln(0.49) = 3.23, so k = 4 — between the two, as the ordering in φ requires."
+  },
+  {
+   "id": "ts-t11-m-19",
+   "format": "single",
+   "topic": "timeseries-t11",
+   "diff": "hard",
+   "stem": "An out-of-sample evaluation estimates the model's parameters on the full sample, including the periods being forecast. The consequence is:",
+   "options": [
+    "the forecasts become unbiased",
+    "information leaks from the future and the evaluation flatters the model",
+    "the error variance is correctly estimated",
+    "nothing, provided the model is stationary"
+   ],
+   "answer": "B",
+   "explanation": "Parameters fitted partly on the forecast period encode information not available when the forecast would have been made, so the measured accuracy exceeds what the model could achieve in use. Each forecast should be made from parameters estimated only on preceding data. This is also one explanation to check when a long-horizon forecast appears to beat the unconditional mean, which for a stationary process should not be possible."
+  },
+  {
+   "id": "ts-t11-m-20",
+   "format": "single",
+   "topic": "timeseries-t11",
+   "diff": "hard",
+   "stem": "Why does the conditional expectation minimise mean squared error among ALL predictors, not just linear ones?",
+   "options": [
+    "because squared error is itself a linear criterion",
+    "because all predictors of a stationary process are linear",
+    "because the process is assumed Gaussian",
+    "because the cross term in E(Y − m + m − g)² vanishes for any g, leaving E(Y − m)² + E(m − g)²"
+   ],
+   "answer": "D",
+   "explanation": "Writing m(X) = E(Y | X) and expanding, the cross term 2E[(Y − m)(m − g)] is zero by conditioning on X, since E(Y − m | X) = 0 and (m − g) is a function of X. So E(Y − g)² = E(Y − m)² + E(m − g)² ≥ E(Y − m)², with equality only when g = m. No linearity or normality is used. For a general linear process the conditional expectation happens to be linear, which is why the weight-based formula is exact rather than merely best-in-class."
+  }
+ ]
+}

@@ -1,0 +1,426 @@
+{
+ "moduleId": "inference",
+ "source": "mastery",
+ "topicId": "inference-t5",
+ "label": "Method of moments, minimum chi-square and least squares — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "inf-t5-m-01",
+   "format": "single",
+   "topic": "inference-t5",
+   "stem": "The method of moments estimator of a k-parameter family is obtained by:",
+   "options": [
+    "equating the first k sample moments to the corresponding population moments and solving",
+    "minimising the sum of squared deviations of the observations from their mean",
+    "maximising the likelihood subject to the first k moments being correct",
+    "equating the sample median and quartiles to their population counterparts"
+   ],
+   "answer": "A",
+   "explanation": "The method matches moments, nothing more. Option C describes a constrained likelihood method, not this one; C is least squares applied to a location problem; D is a quantile-matching method, which exists but is not the method of moments.",
+   "diff": "easy"
+  },
+  {
+   "id": "inf-t5-m-02",
+   "format": "numeric",
+   "topic": "inference-t5",
+   "stem": "X₁,…,Xₙ are iid Gamma(α, β) with E[X] = αβ and Var(X) = αβ². A sample gives x̄ = 10 and m₂ = 5. Give the method of moments estimates of α and β.",
+   "options": [
+    "α̃ = 0.5, β̃ = 20",
+    "α̃ = 20, β̃ = 0.5",
+    "α̃ = 20, β̃ = 2",
+    "α̃ = 2, β̃ = 5"
+   ],
+   "answer": "B",
+   "explanation": "Divide the variance equation by the mean equation: β̃ = m₂/x̄ = 5/10 = 0.5. Then α̃ = x̄/β̃ = x̄²/m₂ = 100/5 = 20. Check: α̃β̃ = 20(0.5) = 10 = x̄ ✓ and α̃β̃² = 20(0.25) = 5 = m₂ ✓.",
+   "check": "Reconstruct both moments from your answers. If α̃β̃ does not come back to x̄, you have inverted the ratio.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t5-m-03",
+   "format": "multi",
+   "topic": "inference-t5",
+   "stem": "Consider the properties of method of moments estimators.",
+   "options": [
+    "B and C only",
+    "A, B and D only",
+    "A and D only",
+    "A, C and D only"
+   ],
+   "answer": "C",
+   "explanation": "A is true — consistency follows from the weak law applied to the sample moments. B is false: moment estimators are frequently biased, as σ̃² and the exponential rate both show. C is false: the method uses only the first k moments, which are not in general sufficient, so it is typically LESS efficient than the MLE. D is true, and 2x̄ for U(0,θ) is the standard example.",
+   "statements": [
+    "Method of moments estimators are consistent under mild conditions.",
+    "Method of moments estimators are unbiased.",
+    "Method of moments estimators are asymptotically more efficient than maximum likelihood estimators.",
+    "A method of moments estimate can fall outside the parameter space."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Sample moments converge to population moments, and the estimator is a continuous function of them."
+    },
+    "B": {
+     "tf": false,
+     "why": "σ̃² has expectation (n−1)σ²/n; the exponential rate estimator has bias λ/(n−1)."
+    },
+    "C": {
+     "tf": false,
+     "why": "The other way round. Discarding everything beyond the first k moments costs efficiency."
+    },
+    "D": {
+     "tf": true,
+     "why": "2x̄ can be below the sample maximum for U(0,θ), which no legal θ can be."
+    }
+   },
+   "diff": "hard"
+  },
+  {
+   "id": "inf-t5-m-04",
+   "format": "numeric",
+   "topic": "inference-t5",
+   "stem": "X₁,…,Xₙ are iid Uniform(a, b). A sample gives x̄ = 8 and m₂ = 12. Give the method of moments estimates of a and b.",
+   "options": [
+    "ã = 4, b̃ = 12",
+    "ã = 2, b̃ = 12",
+    "ã = −4, b̃ = 20",
+    "ã = 2, b̃ = 14"
+   ],
+   "answer": "D",
+   "explanation": "(b−a)²/12 = m₂ gives b − a = √(12 × 12) = 12, so half the range is 6; and (a+b)/2 = 8. Hence ã = 8 − 6 = 2 and b̃ = 8 + 6 = 14. Check: mean (2+14)/2 = 8 ✓ and (14−2)²/12 = 144/12 = 12 ✓.",
+   "check": "The two estimates must be symmetric about x̄. If they are not equidistant from 8, the sum equation has been mishandled.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t5-m-05",
+   "format": "single",
+   "topic": "inference-t5",
+   "stem": "For which distribution can the method of moments not be applied at all?",
+   "options": [
+    "Cauchy, because it has no finite mean",
+    "Poisson(λ), because the mean and variance are equal",
+    "Gamma(α,β), because there are two parameters",
+    "Uniform(0,θ), because the support depends on θ"
+   ],
+   "answer": "A",
+   "explanation": "The method needs the population moments to exist, and the Cauchy has no finite mean — there is nothing for x̄ to be equated to. The uniform is awkward but perfectly solvable (2x̄ for U(0,θ)); two parameters just means two equations; and the Poisson's equal mean and variance is a convenience, not an obstacle.",
+   "diff": "easy"
+  },
+  {
+   "id": "inf-t5-m-06",
+   "format": "numeric",
+   "topic": "inference-t5",
+   "stem": "X₁,…,X₆ are iid Exponential with rate λ = 3. The method of moments estimator is λ̃ = n/ΣXᵢ, and E[1/ΣXᵢ] = λ/(n−1). Give E[λ̃] and the bias.",
+   "options": [
+    "E[λ̃] = 2.5, bias = −0.5",
+    "E[λ̃] = 3.6, bias = 0.6",
+    "E[λ̃] = 3.6, bias = 3.6",
+    "E[λ̃] = 3, bias = 0"
+   ],
+   "answer": "B",
+   "explanation": "E[λ̃] = n·λ/(n−1) = 6(3)/5 = 3.6, so the bias is 3.6 − 3 = 0.6 = λ/(n−1) = 3/5. The estimator overstates the rate, and the bias shrinks like 1/n — consistent but biased at every finite n. Option D comes from the false step E[1/X̄] = 1/E[X̄].",
+   "check": "Bias is E[λ̃] − λ, not E[λ̃] itself. And the sign should be positive here: 1/ΣX is a convex function of ΣX, so the expectation sits above the value at the mean.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t5-m-07",
+   "format": "multi",
+   "topic": "inference-t5",
+   "stem": "Consider minimum chi-square and least squares estimation.",
+   "options": [
+    "C and D only",
+    "B and C only",
+    "A, C and D only",
+    "A and B only"
+   ],
+   "answer": "C",
+   "explanation": "A is true — that is the criterion, with expected frequencies in the denominator. B is false: the modified version divides by the OBSERVED frequency Oᵢ, which is what makes it easier to minimise. C is true, and it is why normality is not an assumption of least squares but the condition under which it coincides with maximum likelihood. D is true: both chi-square estimators and the MLE are BAN for multinomial data.",
+   "statements": [
+    "Minimum chi-square estimation chooses θ to minimise Σ(Oᵢ − npᵢ(θ))²/(npᵢ(θ)).",
+    "Modified minimum chi-square uses the expected frequency npᵢ(θ) in the denominator.",
+    "Least squares and maximum likelihood give the same estimates when the errors are independent normal with constant variance.",
+    "For multinomial data, minimum chi-square and maximum likelihood estimators are asymptotically equivalent."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The Pearson statistic treated as a function of θ and minimised."
+    },
+    "B": {
+     "tf": false,
+     "why": "The modified version puts the observed Oᵢ underneath, so θ appears only in the numerator."
+    },
+    "C": {
+     "tf": true,
+     "why": "Maximising that normal likelihood is minimising the sum of squares — same β̂."
+    },
+    "D": {
+     "tf": true,
+     "why": "Both are BAN with the same limiting distribution; they differ only at finite n."
+    }
+   },
+   "diff": "hard"
+  },
+  {
+   "id": "inf-t5-m-08",
+   "format": "numeric",
+   "topic": "inference-t5",
+   "stem": "A sample of n = 10 from N(μ, σ²) gives Σxᵢ = 50 and Σxᵢ² = 290. Give the method of moments estimates of μ and σ².",
+   "options": [
+    "μ̃ = 5, σ̃² = 4.44",
+    "μ̃ = 5, σ̃² = 29",
+    "μ̃ = 50, σ̃² = 4",
+    "μ̃ = 5, σ̃² = 4"
+   ],
+   "answer": "D",
+   "explanation": "x̄ = 50/10 = 5, so μ̃ = 5. The moment estimator of σ² is m₂ = (1/n)Σxᵢ² − x̄² = 29 − 25 = 4. Option A is the unbiased s² = n·m₂/(n−1) = 40/9 = 4.44, which is a different estimator — the method of moments gives the divisor n.",
+   "check": "The moment estimator of σ² divides by n. 4.44 is the n−1 version; if you reached it, you applied Bessel's correction that the method does not ask for.",
+   "diff": "moderate"
+  },
+  {
+   "id": "inf-t5-m-09",
+   "format": "numeric",
+   "topic": "inference-t5",
+   "stem": "A sample of n = 6 from Uniform(0, θ) has x̄ = 3 and largest observation x₍₆₎ = 7. Give the method of moments estimate of θ and say whether it is usable.",
+   "options": [
+    "θ̃ = 6, and it is not usable because it is below x₍₆₎ = 7",
+    "θ̃ = 3.5, and it is not usable because it is below x₍₆₎ = 7",
+    "θ̃ = 7, since the method returns the sample maximum",
+    "θ̃ = 6, and it is usable since 6 is close to 7"
+   ],
+   "answer": "A",
+   "explanation": "θ/2 = x̄ gives θ̃ = 2x̄ = 6. But an observation of 7 was recorded, and no θ below 7 can produce a 7 — the likelihood is exactly zero there, so the estimate is inadmissible. Report the MLE θ̂ = x₍₆₎ = 7, or the unbiased (n+1)x₍ₙ₎/n = 7(7)/6 ≈ 8.17, and say why.",
+   "check": "Always compare a uniform moment estimate with the sample maximum. 'Close' is not a defence: below the maximum means zero likelihood, not low likelihood.",
+   "diff": "hard"
+  },
+  {
+   "id": "inf-t5-m-10",
+   "format": "order",
+   "topic": "inference-t5",
+   "stem": "Arrange the steps of the method of moments in the order that avoids dead ends.",
+   "options": [
+    "A, D, C, B",
+    "C, A, D, B",
+    "A, C, D, B",
+    "C, D, A, B"
+   ],
+   "answer": "B",
+   "explanation": "Count the parameters first, so you know how many equations to write — starting with one equation for a two-parameter family is the commonest way to waste time. Then write the population moments as expressions in the parameters, equate them to the sample moments and solve, and finally check the solution lies in the parameter space, which for a uniform means checking it against the sample maximum.",
+   "items": [
+    "A. Write E[X], and Var(X) if needed, in terms of the parameters",
+    "B. Check the solution lies in the parameter space",
+    "C. Count the unknown parameters",
+    "D. Equate to x̄ and m₂ and solve"
+   ],
+   "diff": "easy"
+  },
+  {
+   "id": "inf-t5-m-11",
+   "format": "single",
+   "topic": "inference-t5",
+   "diff": "easy",
+   "stem": "The method of moments requires that:",
+   "options": [
+    "the likelihood function be differentiable",
+    "the support of the density be free of the parameter",
+    "the population moments being matched exist and are finite",
+    "the sample size exceed the number of parameters by at least ten"
+   ],
+   "answer": "C",
+   "explanation": "The method matches moments, so the moments have to exist — this is exactly why it cannot be applied to the Cauchy. Differentiability of the likelihood is a maximum likelihood concern, a moving support troubles the Cramér–Rao bound rather than this method, and there is no sample-size rule of that kind."
+  },
+  {
+   "id": "inf-t5-m-12",
+   "format": "numeric",
+   "topic": "inference-t5",
+   "diff": "moderate",
+   "stem": "X₁,…,Xₙ are iid Exponential with mean θ. A sample of n = 12 gives Σxᵢ = 60. Give the method of moments estimate of θ, and say whether it is unbiased.",
+   "options": [
+    "θ̃ = 5, and it is biased upward",
+    "θ̃ = 0.2, and it is unbiased",
+    "θ̃ = 12/60 = 0.2, and it is biased",
+    "θ̃ = 5, and it is unbiased"
+   ],
+   "answer": "D",
+   "explanation": "E[X] = θ, so the moment equation is θ = x̄ = 60/12 = 5. Since E[X̄] = θ exactly, this estimator is unbiased at every n. Note the contrast with the RATE parameterisation of the same family, where λ̃ = 1/x̄ is biased: unbiasedness is a property of the estimator, not of the family.",
+   "check": "The target here is the MEAN, so the moment equation is solved directly and no reciprocal is taken. 0.2 is the rate, not the mean."
+  },
+  {
+   "id": "inf-t5-m-13",
+   "format": "multi",
+   "topic": "inference-t5",
+   "diff": "hard",
+   "stem": "Consider how the method of moments compares with maximum likelihood.",
+   "options": [
+    "A, B and D only",
+    "A and C only",
+    "B and C only",
+    "A, B and C only"
+   ],
+   "answer": "A",
+   "explanation": "A is true — this is the usual reason to reach for it. B is true: for the exponential, Poisson, Bernoulli and the normal mean the two methods give the same estimator. C is false: the moment estimator is generally LESS efficient, because it uses only the first k moments rather than the whole likelihood. D is true, and it is the standard practical use of the method today.",
+   "statements": [
+    "The moment estimator is usually available in closed form where the MLE is not.",
+    "For some standard families the two methods give the same estimator.",
+    "The moment estimator has smaller asymptotic variance than the MLE.",
+    "The moment estimate is commonly used as the starting value for an iterative search for the MLE."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Solving moment equations is algebra; solving the likelihood equation may need a computer."
+    },
+    "B": {
+     "tf": true,
+     "why": "The exponential rate, the Poisson mean and the Bernoulli p all coincide."
+    },
+    "C": {
+     "tf": false,
+     "why": "Backwards. Discarding everything past the kth moment costs efficiency."
+    },
+    "D": {
+     "tf": true,
+     "why": "Cheap to compute and close enough to start a Newton iteration from."
+    }
+   }
+  },
+  {
+   "id": "inf-t5-m-14",
+   "format": "numeric",
+   "topic": "inference-t5",
+   "diff": "moderate",
+   "stem": "X₁,…,Xₙ are iid Uniform(−θ, θ) with θ > 0. A sample gives x̄ = 0.2 and m₂ = 12. Give the method of moments estimate of θ.",
+   "options": [
+    "θ̃ = 12",
+    "θ̃ = 6",
+    "θ̃ = 3.46",
+    "θ̃ = 0.4"
+   ],
+   "answer": "B",
+   "explanation": "E[X] = 0 whatever θ is, so the first moment equation is useless and you must match the variance instead: Var(X) = (2θ)²/12 = θ²/3 = m₂, giving θ̃ = √(3m₂) = √36 = 6. Option D is 2x̄, which would be the answer for U(0,θ) and is meaningless here.",
+   "check": "When the first moment carries no parameter, skip it and go to the second. Reading the question for which endpoints are known is the whole task."
+  },
+  {
+   "id": "inf-t5-m-15",
+   "format": "single",
+   "topic": "inference-t5",
+   "diff": "moderate",
+   "stem": "For U(0,θ), the moment estimator 2x̄ can fall below the sample maximum. The correct response in an exam is to:",
+   "options": [
+    "round the estimate up to the sample maximum and present it as the moment estimate",
+    "discard the largest observation and recompute",
+    "report that the estimate is inadmissible and give the MLE x₍ₙ₎ instead, with the reason",
+    "report 2x̄ anyway, since the method was applied correctly"
+   ],
+   "answer": "C",
+   "explanation": "The method was applied correctly and still produced something impossible, which is itself the examinable point: the moment estimate can land outside the parameter space. Saying so, and offering x₍ₙ₎ or the unbiased (n+1)x₍ₙ₎/n, is the complete answer. Rounding or discarding data would be inventing a different estimator and hiding the defect."
+  },
+  {
+   "id": "inf-t5-m-16",
+   "format": "numeric",
+   "topic": "inference-t5",
+   "diff": "hard",
+   "stem": "X₁,…,Xₙ are iid Gamma(α, β) with E[X] = αβ and Var(X) = αβ². A sample gives x̄ = 4 and m₂ = 16. Give the method of moments estimates, and comment on α̃.",
+   "options": [
+    "α̃ = 1, β̃ = 16",
+    "α̃ = 4, β̃ = 1 — a shape of 4 with unit scale",
+    "α̃ = 16, β̃ = 0.25",
+    "α̃ = 1, β̃ = 4 — the estimate says the data look exponential"
+   ],
+   "answer": "D",
+   "explanation": "β̃ = m₂/x̄ = 16/4 = 4 and α̃ = x̄²/m₂ = 16/16 = 1. A gamma with shape 1 is exactly the exponential distribution, so the moment estimates are telling you the sample is consistent with an exponential of mean 4 — which is also what a variance equal to the squared mean indicates, since that is the exponential's signature.",
+   "check": "Shape 1 is not a failure of the method; it is a meaningful answer. The clue was m₂ = x̄², which is Var = mean² — the exponential."
+  },
+  {
+   "id": "inf-t5-m-17",
+   "format": "multi",
+   "topic": "inference-t5",
+   "diff": "moderate",
+   "stem": "Consider least squares estimation.",
+   "options": [
+    "A, B and D only",
+    "A and C only",
+    "B and C only",
+    "A, B and C only"
+   ],
+   "answer": "A",
+   "explanation": "A is true — least squares assumes only the form of the mean. B is true, and is the Gauss–Markov theorem. C is false: least squares and maximum likelihood coincide only under normal errors; without normality least squares is still BLUE but is not a likelihood method. D is true, and it follows from the first normal equation.",
+   "statements": [
+    "Least squares requires no distributional assumption about the errors.",
+    "Under the Gauss–Markov conditions, least squares gives the best linear unbiased estimator.",
+    "Least squares always coincides with maximum likelihood.",
+    "The fitted regression line always passes through (x̄, ȳ)."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Only E[yᵢ] = β₀ + β₁xᵢ is assumed; the error distribution is left open."
+    },
+    "B": {
+     "tf": true,
+     "why": "Gauss–Markov: BLUE under zero-mean, constant-variance, uncorrelated errors."
+    },
+    "C": {
+     "tf": false,
+     "why": "Only when the errors are independent normal with constant variance."
+    },
+    "D": {
+     "tf": true,
+     "why": "β̂₀ = ȳ − β̂₁x̄ rearranges to ȳ = β̂₀ + β̂₁x̄."
+    }
+   }
+  },
+  {
+   "id": "inf-t5-m-18",
+   "format": "numeric",
+   "topic": "inference-t5",
+   "diff": "moderate",
+   "stem": "A simple linear regression on n = 5 points gives S_xx = 20, S_xy = 30, x̄ = 4 and ȳ = 10. Give the least squares estimates of the slope and intercept.",
+   "options": [
+    "β̂₁ = 0.667, β̂₀ = 7.33",
+    "β̂₁ = 1.5, β̂₀ = 4",
+    "β̂₁ = 1.5, β̂₀ = 16",
+    "β̂₁ = 1.5, β̂₀ = 10"
+   ],
+   "answer": "B",
+   "explanation": "β̂₁ = S_xy/S_xx = 30/20 = 1.5, then β̂₀ = ȳ − β̂₁x̄ = 10 − 1.5(4) = 10 − 6 = 4. Option A inverts the ratio to S_xx/S_xy, and option C adds rather than subtracts in the intercept formula.",
+   "check": "Substitute back: at x = x̄ = 4 the line gives 4 + 1.5(4) = 10 = ȳ ✓. The line must pass through the point of means."
+  },
+  {
+   "id": "inf-t5-m-19",
+   "format": "single",
+   "topic": "inference-t5",
+   "diff": "easy",
+   "stem": "Modified minimum chi-square estimation differs from minimum chi-square in that it:",
+   "options": [
+    "requires the data to be ungrouped",
+    "maximises the likelihood instead of minimising a distance",
+    "uses the observed frequency Oᵢ in the denominator rather than the expected npᵢ(θ)",
+    "minimises the absolute deviations instead of the squared ones"
+   ],
+   "answer": "C",
+   "explanation": "Putting Oᵢ underneath removes θ from the denominator, so the quantity to minimise is far simpler — the parameter appears only in the numerator. The two versions, and the MLE, are all BAN for multinomial data and asymptotically equivalent; they differ only at finite n, where the modified version is the one you can solve by hand."
+  },
+  {
+   "id": "inf-t5-m-20",
+   "format": "order",
+   "topic": "inference-t5",
+   "diff": "easy",
+   "stem": "To estimate two parameters by the method of moments, arrange these steps.",
+   "options": [
+    "A, C, D, B",
+    "C, D, A, B",
+    "A, D, C, B",
+    "C, A, D, B"
+   ],
+   "answer": "D",
+   "explanation": "Count the parameters first so you write the right number of equations. Then express the mean and the variance in terms of them, set those equal to x̄ and m₂ and solve — dividing one equation by the other when a parameter appears in both — and finally check the answer lies inside the parameter space.",
+   "items": [
+    "A. Express E[X] and Var(X) in terms of the parameters",
+    "B. Check the solution lies in the parameter space",
+    "C. Count the unknown parameters",
+    "D. Equate to x̄ and m₂ and solve"
+   ]
+  }
+ ]
+}

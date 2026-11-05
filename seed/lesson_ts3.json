@@ -1,0 +1,968 @@
+{
+ "id": "timeseriest3",
+ "topicId": "timeseries-t3",
+ "moduleId": "timeseries",
+ "title": "The Yule–Walker Equations",
+ "breadcrumb": "Time Series → Autoregressive models → The Yule–Walker equations",
+ "engine": "B",
+ "engineName": "Time series — converting between a model's coefficients and its autocorrelations",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 106,
+ "objectives": [
+  "Derive the Yule–Walker equations and say why the shock term vanishes for k ≥ 1.",
+  "Solve the AR(2) system in closed form and estimate the coefficients from a sample ACF.",
+  "Predict the sign of φ₂ from ρ₂ against ρ₁², and recognise r₂ = r₁² as an AR(1) signature.",
+  "State the AR(1) and AR(2) stationarity conditions and apply the AR(2) triangle.",
+  "Recognise a unit root from φ₁ + φ₂ = 1, factor out the difference operator, and find the ACF of the differenced series.",
+  "Identify an AR or MA order from the cut-off pattern of the ACF and PACF."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Covariance and correlation",
+   "why": "An autocovariance is a covariance between a series and a shifted copy of itself. Every derivation here is an expectation of a product."
+  },
+  {
+   "id": "p2",
+   "name": "Stationarity and white noise",
+   "why": "The ACF only exists for a stationary process, and the derivation needs the shock to be uncorrelated with the past. Both assumptions are used in the first line of every calculation."
+  },
+  {
+   "id": "p3",
+   "name": "Solving two linear equations in two unknowns",
+   "why": "The AR(2) case is exactly that, and the shared denominator 1 − ρ₁² is the determinant of the system."
+  },
+  {
+   "id": "p4",
+   "name": "Method of moments estimation",
+   "why": "Yule–Walker estimation is the method of moments applied to autocorrelations — matching theoretical values to sample ones, as in the inference module."
+  }
+ ],
+ "traps": [
+  "ρ₁ is not φ₁ for an AR(2) — part of each correlation is inherited from shorter lags.",
+  "φ₂ is negative when ρ₂ < ρ₁², even with both correlations positive.",
+  "r₂ = r₁² is the signature of an AR(1), and makes φ̂₂ come out zero.",
+  "An AR(2) needs all THREE stationarity conditions; |φ₁| < 1 is neither necessary nor sufficient.",
+  "φ₁ + φ₂ = 1 means a unit root — no ACF at all, so difference first.",
+  "Differencing flips the sign: (1 − 0.6B − 0.4B²) gives Δyₜ = −0.4Δyₜ₋₁ + εₜ, so the ACF is (−0.4)ᵏ.",
+  "The PACF cuts off for an AR; the ACF cuts off for an MA.",
+  "For an AR(1) with negative φ, even lags of the ACF are positive."
+ ],
+ "revision": {
+  "sheet": [
+   "AR(p): yₜ = φ₁yₜ₋₁ + … + φₚyₜ₋ₚ + εₜ with εₜ white noise. γₖ = Cov(yₜ, yₜ₊ₖ), ρₖ = γₖ/γ₀, ρ₀ = 1, ρ₋ₖ = ρₖ.",
+   "Derivation: multiply by yₜ₋ₖ and take expectations. E(εₜyₜ₋ₖ) = 0 for k ≥ 1, leaving γₖ = φ₁γₖ₋₁ + … + φₚγₖ₋ₚ.",
+   "Yule–Walker: ρₖ = φ₁ρₖ₋₁ + … + φₚρₖ₋ₚ for k = 1,…,p. In matrix form R φ = r with R Toeplitz.",
+   "AR(1): ρ₁ = φ, so φ̂ = r₁, and ρₖ = φᵏ. Var(yₜ) = σ²ε/(1 − φ²).",
+   "AR(2) equations: ρ₁ = φ₁ + φ₂ρ₁ and ρ₂ = φ₁ρ₁ + φ₂.",
+   "AR(2) solutions: φ₁ = ρ₁(1 − ρ₂)/(1 − ρ₁²) and φ₂ = (ρ₂ − ρ₁²)/(1 − ρ₁²). The shared denominator is the determinant.",
+   "Sign rule: φ₂ > 0 if ρ₂ > ρ₁², = 0 if ρ₂ = ρ₁², < 0 if ρ₂ < ρ₁². The denominator is always positive.",
+   "June 2026 Q3: r₁ = 0.8, r₂ = 0.5 gives φ̂₂ = (0.5 − 0.64)/0.36 = −7/18 and φ̂₁ = 10/9 ≈ 1.111.",
+   "r₂ = r₁² is the AR(1) fingerprint: r₁ = 0.6, r₂ = 0.36 gives φ̂₂ = 0 and φ̂₁ = 0.6.",
+   "Stationarity, AR(1): |φ| < 1. AR(2): φ₁ + φ₂ < 1, φ₂ − φ₁ < 1, |φ₂| < 1 — a triangle with vertices (2, −1), (−2, −1), (0, 1).",
+   "So φ₁ may exceed 1 in a stationary AR(2); checking |φ₁| < 1 alone is wrong.",
+   "General condition: all roots of the AR polynomial lie strictly outside the unit circle.",
+   "φ₁ + φ₂ = 1 ⟹ unit root ⟹ not stationary, no ACF, difference it.",
+   "June 2026 Q18: yₜ = 0.6yₜ₋₁ + 0.4yₜ₋₂ + εₜ has φ₁ + φ₂ = 1. Factor 1 − 0.6B − 0.4B² = (1 − B)(1 + 0.4B), so Δyₜ = −0.4Δyₜ₋₁ + εₜ and the ACF of Δyₜ is (−0.4)ᵏ. The process is ARIMA(1,1,0).",
+   "Identification: PACF cuts off at p for AR(p); ACF cuts off at q for MA(q); the other decays geometrically.",
+   "An MA(1) has ρ₁ ≠ 0 and ρₖ = 0 for all k ≥ 2.",
+   "A sample ACF decaying slowly and nearly linearly means a unit root; confirm with Dickey–Fuller.",
+   "Yule–Walker is method of moments; its solution is always stationary; the PACF at lag k is the last coefficient φ_kk of the order-k system, produced by the Levinson–Durbin recursion."
+  ],
+  "cards": [
+   [
+    "The Yule–Walker equations",
+    "ρₖ = φ₁ρₖ₋₁ + … + φₚρₖ₋ₚ for k = 1 to p, using ρ₀ = 1 and ρ₋ⱼ = ρⱼ"
+   ],
+   [
+    "Where they come from",
+    "Multiply the AR equation by yₜ₋ₖ and take expectations; the shock term vanishes for k ≥ 1"
+   ],
+   [
+    "AR(1) estimate",
+    "φ̂ = r₁, and the whole ACF is ρₖ = φᵏ"
+   ],
+   [
+    "AR(2) solution for φ₂",
+    "(ρ₂ − ρ₁²)/(1 − ρ₁²) — the numerator alone fixes the sign"
+   ],
+   [
+    "When φ₂ is negative",
+    "When ρ₂ < ρ₁², which can happen with both correlations positive"
+   ],
+   [
+    "The AR(1) fingerprint",
+    "r₂ = r₁², which makes φ̂₂ exactly zero"
+   ],
+   [
+    "AR(2) stationarity",
+    "φ₁ + φ₂ < 1, φ₂ − φ₁ < 1, |φ₂| < 1 — all three, and φ₁ may exceed 1"
+   ],
+   [
+    "φ₁ + φ₂ = 1 means",
+    "A unit root: not stationary, no ACF, difference the series"
+   ],
+   [
+    "Q18's answer",
+    "(1 − 0.6B − 0.4B²) = (1 − B)(1 + 0.4B), so Δyₜ is AR(1) with φ = −0.4 and ACF (−0.4)ᵏ"
+   ],
+   [
+    "Identification rule",
+    "The function that CUTS OFF names the order: PACF for AR, ACF for MA"
+   ],
+   [
+    "MA(1) ACF",
+    "Non-zero at lag 1 only; zero at every lag from 2 onwards"
+   ],
+   [
+    "What the PACF is",
+    "The last coefficient φ_kk of the order-k Yule–Walker system"
+   ]
+  ],
+  "tricks": [
+   "Add the coefficients first on any AR(2) with numbers in it. A sum of exactly 1 means the question is about differencing, not about the ACF.",
+   "Compare r₂ with r₁² before computing. It gives you the sign of φ̂₂ and tells you whether an AR(1) would do.",
+   "Compute 1 − r₁² once; it is the determinant and is shared by both coefficients.",
+   "Check your answers in the equation you did NOT rearrange: φ̂₁ + φ̂₂r₁ should return r₁.",
+   "Expand any factorisation back out before using it. A sign slip there changes the final ACF."
+  ],
+  "shortcuts": [
+   "For an AR(1), everything follows from r₁: φ̂ = r₁, ρₖ = r₁ᵏ, Var = σ²ε/(1 − r₁²).",
+   "A negative φ in an AR(1) makes the ACF alternate, so even lags are positive — ρ₂ = 0.25 for φ = −0.5.",
+   "On a 'which pair is stationary' question, test φ₁ + φ₂ < 1 first; it eliminates most options immediately."
+  ],
+  "remember": [
+   "ρ₁ is not φ₁. Part of every correlation is inherited.",
+   "Sign of φ₂ follows ρ₂ − ρ₁².",
+   "Add the coefficients first. A sum of 1 is a unit root."
+  ]
+ },
+ "howto": "This is the first lesson of the time-series module, so it builds its own vocabulary — read the opening four checks properly rather than skimming them. Sections 3 and 4 are the examinable core: the equations derived once, then June 2026's own question substituted into them. Section 5 adds the two further estimation cases the practice questions use, and the comparison of r₂ with r₁² introduced there is the single most useful habit in the topic. Section 10 works the OTHER time-series question that went wrong on the paper, where the process turns out to have a unit root and the answer concerns the differenced series. If you are short of time, sections 3, 4, 7 and 10 are the lesson. Attempt the question at the end of each section before opening the answer. There is no interactive chart here because the app has no time-series visualisation yet; the reference table in section 3 shows the ACF decay patterns instead.",
+ "refs": [
+  {
+   "title": "Time Series Analysis",
+   "where": "Lessons 2 and 3 on AR models and the PACF",
+   "site": "Penn State STAT 510",
+   "url": "https://online.stat.psu.edu/stat510/",
+   "type": "Course notes",
+   "free": true,
+   "checked": "2026-11-03",
+   "why": "AR models, the ACF and PACF, and identification from their patterns, at exactly this level. The right companion to sections 3 and 11."
+  },
+  {
+   "title": "Time Series Analysis: Forecasting and Control",
+   "where": "Chapter 3, autoregressive processes",
+   "site": "Box, Jenkins and Reinsel",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-03",
+   "why": "The standard reference. The Yule–Walker equations, the stationarity region for an AR(2) and the identification method all originate in the Box–Jenkins treatment."
+  },
+  {
+   "title": "Time Series Analysis and Its Applications",
+   "where": "Chapter 3",
+   "site": "Shumway and Stoffer",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-03",
+   "why": "Clear derivations of the Yule–Walker system in matrix form and of the Levinson–Durbin recursion, which the optional section sketches."
+  },
+  {
+   "title": "Time Series Analysis",
+   "where": "Weeks on ARIMA modelling",
+   "site": "NPTEL / SWAYAM",
+   "url": "https://archive.nptel.ac.in/courses/111104049",
+   "type": "Video course",
+   "free": true,
+   "checked": "2026-11-03",
+   "why": "Indian syllabus notation and worked numerical examples of Yule–Walker estimation, which is the phrasing NET questions use."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
+ },
+ "provenance": "Authored November 2026 for this platform against the UGC NET Statistics syllabus, and the first lesson of the time-series module. Prioritised from the June 2026 paper, where of the four time-series questions two were answered wrongly and both concern AR processes. Q3 asked for the Yule–Walker estimate of φ₂ from r₁ = 0.8 and r₂ = 0.5; the answer is (0.5 − 0.64)/0.36 = −7/18 and the response sheet shows the positive-magnitude option was marked, so the sign rule is treated here as the central skill and the question is worked in section 4. Q18 gave yₜ = 0.6yₜ₋₁ + 0.4yₜ₋₂ + εₜ, whose coefficients sum to 1, and asked for the ACF of the differenced series; the polynomial factors as (1 − B)(1 + 0.4B), making Δyₜ an AR(1) with coefficient −0.4 and ACF (−0.4)ᵏ, and the response sheet shows (0.6)ᵏ was marked. That question is worked in section 10. Q3 appeared to carry 15 practice variants; 5 were principal-component items belonging to Q2, the equicorrelation question, and were retagged on 2026-11-03, leaving 10 genuine variants — the AR(1) estimate, two further AR(2) cases, Var(yₜ) for an AR(1), the PACF of an AR(2), the stationarity of candidate parameter pairs, ρ₂ for a negative φ, the origin of ρ₂ = φ₁ρ₁ + φ₂, and the ACF of an MA(1) — each taught in a named section and each in the pool. Every numerical value was computed rather than recalled: φ̂₂ = −7/18 and φ̂₁ = 10/9 for Q3 with its stationarity check; φ̂₁ = 7/15 and φ̂₂ = 1/15 for r₁ = 0.5, r₂ = 0.3; φ̂₁ = 0.6 and φ̂₂ = 0 for r₁ = 0.6, r₂ = 0.36; φ̂₁ = 1.0294 and φ̂₂ = −0.4706 for r₁ = 0.7, r₂ = 0.25; Var(yₜ) = 6.25 for an AR(1) with φ = 0.6 and σ²ε = 4; the ACF table for φ = ±0.8 and ±0.4; and the factorisation of Q18's polynomial, expanded back out as a check. This lesson has no explore scene because src/30-viz.js contains no time-series visualisation; the ACF patterns are given as a reference table instead. Previous-year questions themselves are stored separately and carry their exam cycle.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 6,
+   "title": "Before the lesson — four things it will assume",
+   "objective": "Fix what an AR process is and what an autocorrelation is, because this topic is entirely about the relationship between the two.",
+   "ask": {
+    "q": "An AR(2) process has two coefficients. Its autocorrelation function has infinitely many values. How can two numbers determine infinitely many?",
+    "nudge": "Look at the AR(1) case in the fourth check. How many numbers determine that whole sequence?"
+   },
+   "body": [
+    "A time series is a sequence of observations in time order, and the thing that makes it a subject of its own is that neighbouring observations are correlated. Today's reservoir level is not independent of yesterday's.",
+    "An autoregressive process is the simplest model of that dependence: each value is a weighted sum of recent past values plus fresh random noise. The weights are the coefficients, written φ₁, φ₂ and so on.",
+    "The autocorrelation function, or ACF, describes the same dependence from the outside — how strongly observations k apart are correlated, for every k. The Yule–Walker equations are the dictionary between the two descriptions: coefficients in, autocorrelations out, or the other way round.",
+    "Four checks. Two on notation, one on the ACF's basic properties, and one on the AR(1) case, which is the pattern everything else generalises."
+   ],
+   "items": [
+    {
+     "ask": "Write an AR(2) process in full, naming every term.",
+     "recall": "yₜ = φ₁yₜ₋₁ + φ₂yₜ₋₂ + εₜ, where φ₁ and φ₂ are constants and εₜ is white noise — mean zero, constant variance σ²ε, uncorrelated across time.",
+     "refresh": [
+      "The '2' counts how far back the dependence reaches. An AR(1) uses only yₜ₋₁; an AR(p) uses p lags.",
+      "εₜ is the new information at time t. It is uncorrelated with everything earlier, which is the property every derivation in this lesson uses.",
+      "The process is assumed to have mean zero. If it does not, subtract the mean first — a constant term changes nothing about the autocorrelations, which is why questions usually omit it."
+     ]
+    },
+    {
+     "ask": "Define the autocovariance γₖ and the autocorrelation ρₖ, and give the values of γ₀ and ρ₀.",
+     "recall": "γₖ = Cov(yₜ, yₜ₊ₖ) and ρₖ = γₖ/γ₀. So γ₀ = Var(yₜ) and ρ₀ = 1.",
+     "refresh": [
+      "The autocorrelation is just the autocovariance divided by the variance, which puts it on a scale from −1 to 1 like any correlation.",
+      "Both are symmetric in the lag: γ₋ₖ = γₖ and ρ₋ₖ = ρₖ. Correlation does not care which of the two observations came first, and that symmetry is used in the derivation in section 3.",
+      "This all assumes the process is stationary — that γₖ depends on the gap k and not on where in time you look. Section 7 is about when that assumption holds, and section 10 about what happens when it does not."
+     ]
+    },
+    {
+     "ask": "For an AR(1) process yₜ = φyₜ₋₁ + εₜ, what is ρₖ?",
+     "recall": "ρₖ = φᵏ.",
+     "refresh": [
+      "One coefficient determines the whole infinite sequence of autocorrelations, by raising it to the power of the lag.",
+      "So if |φ| < 1 the ACF decays geometrically towards zero. If φ is negative it alternates in sign while decaying — the reference table in section 3 shows both patterns.",
+      "This single fact answers several variant questions directly: for φ = −0.5, ρ₂ = (−0.5)² = 0.25, positive even though φ is negative."
+     ]
+    },
+    {
+     "ask": "For an AR(1) with |φ| < 1 and noise variance σ²ε, what is Var(yₜ)?",
+     "recall": "σ²ε/(1 − φ²).",
+     "refresh": [
+      "Take variances of both sides of yₜ = φyₜ₋₁ + εₜ. Stationarity means Var(yₜ) = Var(yₜ₋₁) = γ₀, and εₜ is uncorrelated with yₜ₋₁, so γ₀ = φ²γ₀ + σ²ε.",
+      "Solving gives γ₀ = σ²ε/(1 − φ²). For φ = 0.6 and σ²ε = 4 this is 4/0.64 = 6.25 — the process is more variable than its own noise, because shocks persist.",
+      "Notice that the formula needs |φ| < 1 or the variance would be negative or infinite. That is the first sign that stationarity is a condition and not a formality."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "Two descriptions of the same dependence",
+   "objective": "See why a dictionary between coefficients and correlations is needed at all.",
+   "body": [
+    "There are two natural ways to describe how a series depends on its own past, and they answer different questions.",
+    "The coefficients φ₁, φ₂ describe the MECHANISM — how this period's value is generated from the last two. They are what you would need to simulate the series or to forecast it.",
+    "The autocorrelations ρ₁, ρ₂ describe the APPEARANCE — how strongly values one apart and two apart move together. They are what you can measure directly from data, by computing sample correlations at each lag.",
+    "So the practical problem is that you can observe one and you want the other. You measure correlations; you need coefficients. The Yule–Walker equations convert between them, and that conversion is the whole of this topic.",
+    "The conversion is not as simple as it looks, and that is the point. ρ₁ is not φ₁. A value two periods ago influences today both directly, through φ₂, and indirectly, through its effect on yesterday. The equations are exactly the bookkeeping that separates those two routes."
+   ],
+   "scenario": {
+    "teaser": "A reservoir engineer has forty years of monthly inflow and needs next month's forecast.",
+    "title": "Correlations measured, coefficients needed",
+    "body": [
+     "A reservoir engineer has four decades of monthly inflow records. The releases for next month have to be planned now, so a forecast is needed, and the obvious resource is that inflows are strongly related from month to month.",
+     "What the records give directly is correlations. Compute the correlation between each month and the previous month: 0.8. Between each month and the one two back: 0.5. Those are sample autocorrelations, and they are easy to get.",
+     "What a forecast needs is coefficients — the weights to put on last month and the month before. And here is the trap the engineer must not fall into: the weights are NOT 0.8 and 0.5.",
+     "The reason is double-counting. Two months ago influenced last month, and last month influences this month. So part of the correlation at lag 2 is just the lag-1 relationship applied twice — 0.8 × 0.8 = 0.64 of it, in fact. The measured lag-2 correlation of 0.5 is LESS than that 0.64, which means that once the indirect route is accounted for, what remains of the direct influence is negative.",
+     "That is a genuinely counter-intuitive finding and it is exactly what June 2026's question tested. Both correlations are positive, and yet the second coefficient comes out negative. An engineer who used 0.5 as the weight on two months back would be double-counting the indirect effect and forecasting badly.",
+     "The Yule–Walker equations do that separation mechanically. They are two linear equations in two unknowns, and the next section derives them."
+    ],
+    "q": "Both measured correlations are positive. How can the coefficient on two months back be negative?",
+    "answer": "Because the correlation at lag 2 includes the indirect route — two months ago affected last month, which affects this month — and that route alone would produce a lag-2 correlation of ρ₁² = 0.64. The measured value is only 0.5, which is less. So the direct influence has to be negative to pull the total down from 0.64 to 0.50. The sign of φ₂ is decided by whether ρ₂ is above or below ρ₁², not by whether ρ₂ is positive."
+   },
+   "ask": {
+    "q": "If the engineer had measured ρ₁ = 0.8 and ρ₂ = 0.64 exactly, what would φ₂ come to, and what would that say about the process?",
+    "nudge": "0.64 is exactly ρ₁². What is left for the direct route to explain?"
+   }
+  },
+  {
+   "kind": "explore",
+   "id": "s1b",
+   "mins": 7,
+   "title": "Watch the ACF that a pair of coefficients produces",
+   "objective": "See the decay, the sign alternation and the PACF cut-off, and find the AR(1) signature for yourself.",
+   "viz": {
+    "type": "ar-acf",
+    "p1": 0.8,
+    "p2": 0.0,
+    "K": 14
+   },
+   "body": [
+    "The stems are the autocorrelations ρₖ that the coefficients below produce, computed from the recursion rather than simulated. The readouts underneath give ρ₁, ρ₂ and ρ₃ and — importantly — the partial autocorrelations.",
+    "Start with φ₁ = 0.8 and φ₂ = 0, which is an AR(1). The stems fall away geometrically, and ρ₂ reads 0.6400. That is exactly 0.8², and it is the identity that section 6 calls the AR(1) fingerprint: for an AR(1), ρ₂ = ρ₁². Note too that the PACF is 0.80 at lag 1 and zero beyond — the cut-off that identifies the order.",
+    "Now make φ₁ negative, say −0.4. The stems alternate: down, up, down, while their magnitudes shrink. Read ρ₂ — it is +0.16, positive, because an even power of a negative number is positive. A negative coefficient does not mean negative correlation at every lag, and that is worth seeing once rather than memorising.",
+    "Bring φ₂ into play. Set φ₁ = 0.6 and φ₂ = 0.3, and look at the PACF readouts: 0.857 at lag 1, then 0.300 at lag 2, then zero. The lag-2 value has returned φ₂ exactly. That is not a coincidence — the PACF at lag k IS the last coefficient of the Yule–Walker system of order k, which section 12 explains, and it also checks your solution.",
+    "Now the boundary. Raise φ₂ to 0.4 with φ₁ still 0.6, so the two sum to exactly 1. The chart refuses to draw an ACF and says so: there is a unit root, and no autocorrelation function exists. Back off to φ₂ = 0.35 and the ACF returns but decays so slowly that a real sample would struggle to distinguish it from a non-stationary series.",
+    "One last thing worth trying, because it contradicts a natural assumption. Set φ₁ = 1.2 and φ₂ = −0.4. The sum is 0.8, all three conditions hold, and the ACF is perfectly well behaved — even though φ₁ exceeds 1. Section 7 states why, and June 2026's own fitted model sits in exactly this region."
+   ],
+   "ask": {
+    "q": "With φ₁ = 0.6 and φ₂ = 0.3, the PACF reads 0.300 at lag 2. What would it read at lag 2 for an AR(1)?",
+    "nudge": "An AR(1) has no second coefficient. What should the PACF return at a lag where there is no direct effect?"
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 9,
+   "title": "Deriving the equations, and solving them",
+   "objective": "Get the equations from one multiplication, and the AR(1) and AR(2) solutions in closed form.",
+   "blocks": [
+    {
+     "t": "step",
+     "h": "The derivation, in three lines",
+     "body": "Start from the AR(p) equation and multiply both sides by yₜ₋ₖ for some k ≥ 1, then take expectations:\n1. yₜ yₜ₋ₖ = φ₁yₜ₋₁yₜ₋ₖ + … + φₚyₜ₋ₚyₜ₋ₖ + εₜyₜ₋ₖ\n2. E(εₜyₜ₋ₖ) = 0 for k ≥ 1, because the shock at time t is uncorrelated with everything before it. This is the step that makes the whole thing work, and it needs k ≥ 1.\n3. So γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂ + … + φₚγₖ₋ₚ. Dividing by γ₀ gives the same relation for the autocorrelations."
+    },
+    {
+     "t": "formula",
+     "h": "The Yule–Walker equations",
+     "body": "ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂ + … + φₚρₖ₋ₚ   for k = 1, 2, …, p\nwith ρ₀ = 1 and ρ₋ⱼ = ρⱼ. That gives p equations in the p unknown coefficients."
+    },
+    {
+     "t": "formula",
+     "h": "Written out for an AR(2)",
+     "body": "k = 1:  ρ₁ = φ₁ρ₀ + φ₂ρ₋₁ = φ₁ + φ₂ρ₁\nk = 2:  ρ₂ = φ₁ρ₁ + φ₂ρ₀ = φ₁ρ₁ + φ₂\nThe symmetry ρ₋₁ = ρ₁ is what turns the first equation into something usable, and ρ₀ = 1 is what removes the other unknown. One variant asks precisely where the second of these two relations comes from: it is k = 2 of the derivation above."
+    },
+    {
+     "t": "formula",
+     "h": "Solving the AR(2) system",
+     "body": "φ₁ = ρ₁(1 − ρ₂)/(1 − ρ₁²)\nφ₂ = (ρ₂ − ρ₁²)/(1 − ρ₁²)\nThese two are worth memorising; almost every numerical question on this topic is a substitution into the second one."
+    },
+    {
+     "t": "def",
+     "h": "The AR(1) case, and the signature it leaves",
+     "body": "With p = 1 there is one equation, ρ₁ = φ₁, so the Yule–Walker estimate of φ is simply r₁ — the sample autocorrelation at lag 1. And since ρₖ = φᵏ for an AR(1), the whole ACF is determined, which means ρ₂ = ρ₁² exactly. That identity is the fingerprint of an AR(1): if the measured r₂ equals r₁², the second coefficient comes out as zero and an AR(1) fits. Look at the numerator of the φ₂ formula to see why."
+    },
+    {
+     "t": "step",
+     "h": "The sign rule, which is what the exam tests",
+     "body": "φ₂ is positive when ρ₂ > ρ₁², zero when ρ₂ = ρ₁², and NEGATIVE when ρ₂ < ρ₁². The denominator 1 − ρ₁² is always positive for a genuine correlation, so the numerator alone fixes the sign. Both correlations can be comfortably positive and φ₂ still negative — which is exactly how June 2026's question was built, and it is the single most useful thing to carry out of this lesson."
+    }
+   ],
+   "table": {
+    "caption": "The ACF of an AR(1), ρₖ = φᵏ, for four values of φ. A negative coefficient alternates in sign while decaying; the magnitudes are identical to the positive case.",
+    "head": [
+     "φ",
+     "ρ₁",
+     "ρ₂",
+     "ρ₃",
+     "ρ₄",
+     "ρ₅",
+     "ρ₆"
+    ],
+    "rows": [
+     [
+      "0.8",
+      "0.800",
+      "0.640",
+      "0.512",
+      "0.410",
+      "0.328",
+      "0.262"
+     ],
+     [
+      "0.4",
+      "0.400",
+      "0.160",
+      "0.064",
+      "0.026",
+      "0.010",
+      "0.004"
+     ],
+     [
+      "−0.4",
+      "−0.400",
+      "0.160",
+      "−0.064",
+      "0.026",
+      "−0.010",
+      "0.004"
+     ],
+     [
+      "−0.8",
+      "−0.800",
+      "0.640",
+      "−0.512",
+      "0.410",
+      "−0.328",
+      "0.262"
+     ]
+    ]
+   },
+   "flow": {
+    "title": "Which direction are you going?",
+    "alt": "Flow chart showing the two uses of the Yule-Walker equations",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "An AR(p) process",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Coefficients known → find the ACF",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 1,
+      "c": 2,
+      "label": "Sample ACF measured → estimate the coefficients",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 1,
+      "label": "ρₖ = φ₁ρₖ₋₁ + … + φₚρₖ₋ₚ,  k = 1…p",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 0,
+      "label": "Theoretical ACF, e.g. ρₖ = φᵏ for AR(1)",
+      "kind": "end"
+     },
+     {
+      "id": "f",
+      "r": 3,
+      "c": 2,
+      "label": "Estimates φ̂, by substituting rₖ for ρₖ",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "a",
+      "to": "c"
+     },
+     {
+      "from": "b",
+      "to": "d"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     },
+     {
+      "from": "d",
+      "to": "e",
+      "label": "solve forwards"
+     },
+     {
+      "from": "d",
+      "to": "f",
+      "label": "solve backwards"
+     }
+    ],
+    "note": "The same p equations run both ways. Examination questions almost always run them backwards — correlations given, coefficients wanted."
+   },
+   "ask": {
+    "q": "Step 2 of the derivation needs k ≥ 1. What goes wrong at k = 0, and what would the equation become?",
+    "nudge": "Is εₜ uncorrelated with yₜ itself? Look at the AR equation and ask what yₜ contains."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Worked in full — June 2026, Q3",
+   "objective": "Substitute into the formula and get the sign right, which is the whole of this question.",
+   "ask": {
+    "q": "The answer is −7/18 and the options included +7/18. What single comparison decides between them?",
+    "nudge": "Look only at the numerator. Which of ρ₂ and ρ₁² is larger?"
+   },
+   "problem": "For an AR(2) process yₜ = φ₁yₜ₋₁ + φ₂yₜ₋₂ + εₜ the Yule–Walker equations are used. The sample autocorrelations are r₁ = 0.8 and r₂ = 0.5. Estimate φ₂, and also φ₁. Then check whether the fitted model is stationary.",
+   "steps": [
+    {
+     "say": "Write the two equations with the sample values substituted for the theoretical ones.",
+     "math": "0.8 = φ̂₁ + 0.8 φ̂₂\n0.5 = 0.8 φ̂₁ + φ̂₂",
+     "why": "Replacing ρₖ by rₖ is the whole of Yule–Walker estimation — it is a method-of-moments estimator, matching theoretical autocorrelations to sample ones. Two equations, two unknowns."
+    },
+    {
+     "say": "Compute the common denominator first, since both answers share it.",
+     "math": "1 − r₁² = 1 − 0.64 = 0.36",
+     "why": "Doing this once saves repeating it and gives a number to sanity-check. It is positive, as it must be for any |r₁| < 1, which is why the numerator alone decides each sign."
+    },
+    {
+     "say": "Now φ̂₂, which is what was asked.",
+     "math": "φ̂₂ = (r₂ − r₁²)/(1 − r₁²)\n   = (0.5 − 0.64)/0.36\n   = −0.14/0.36\n   = −7/18  ≈ −0.3889",
+     "why": "This is the official answer, option A. The sign comes from 0.5 being LESS than 0.64 — the measured lag-2 correlation falls short of what the lag-1 relationship alone would produce, so the direct effect must be negative. Option C offered +7/18, the same magnitude with the comparison reversed, and that is the trap."
+    },
+    {
+     "say": "And φ̂₁, for completeness and as a check.",
+     "math": "φ̂₁ = r₁(1 − r₂)/(1 − r₁²)\n   = 0.8(0.5)/0.36\n   = 0.4/0.36\n   = 10/9  ≈ 1.1111",
+     "why": "Substituting both back into the first equation: 1.1111 + 0.8(−0.3889) = 1.1111 − 0.3111 = 0.8 = r₁ ✓. That check costs ten seconds and catches an algebra slip."
+    },
+    {
+     "say": "Check the fitted model for stationarity, since φ̂₁ exceeds 1.",
+     "math": "φ̂₁ + φ̂₂ = 1.1111 − 0.3889 = 0.7222 < 1  ✓\nφ̂₂ − φ̂₁ = −1.5000 < 1  ✓\n|φ̂₂| = 0.3889 < 1  ✓\nall three hold ⟹ stationary",
+     "why": "Worth doing because φ̂₁ = 1.11 looks alarming. For an AR(2) a single coefficient above 1 is perfectly compatible with stationarity — it is the three conditions together that matter, and section 7 states them. An AR(1) with φ = 1.11 would be non-stationary; an AR(2) is a different object."
+    }
+   ],
+   "after": "The arithmetic took one line. What the question was really testing is whether you know that φ₂ can be negative when both correlations are positive, and the reason is the double-counting described in section 2. If a question gives you r₂ noticeably below r₁², expect a negative second coefficient and do not be talked out of it by the options."
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 2,
+   "title": "Pause and recall",
+   "objective": "Retrieve the equations and the two solutions before going on.",
+   "intro": "Answer each before revealing it.",
+   "items": [
+    {
+     "q": "Write the Yule–Walker equations for an AR(p).",
+     "a": "ρₖ = φ₁ρₖ₋₁ + … + φₚρₖ₋ₚ for k = 1 to p, using ρ₀ = 1 and ρ₋ⱼ = ρⱼ."
+    },
+    {
+     "q": "Which step of the derivation needs the shock to be uncorrelated with the past?",
+     "a": "Setting E(εₜyₜ₋ₖ) = 0, which holds for k ≥ 1 and is what leaves a relation among the autocovariances alone."
+    },
+    {
+     "q": "Give the AR(2) solution for φ₂.",
+     "a": "φ₂ = (ρ₂ − ρ₁²)/(1 − ρ₁²)."
+    },
+    {
+     "q": "What is the Yule–Walker estimate of φ for an AR(1)?",
+     "a": "φ̂ = r₁, the sample autocorrelation at lag 1."
+    },
+    {
+     "q": "When is φ₂ negative?",
+     "a": "When ρ₂ < ρ₁². The denominator is always positive, so the numerator decides the sign — and both correlations can be positive."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s5",
+   "mins": 8,
+   "title": "Your turn — two estimation cases, and a signature",
+   "objective": "Apply the formulas, and meet the case that reveals an AR(1) hiding inside an AR(2) fit.",
+   "problem": "Estimate φ₁ and φ₂ by Yule–Walker in two cases: (a) r₁ = 0.5, r₂ = 0.3, and (b) r₁ = 0.6, r₂ = 0.36. Then say what case (b) tells you about the process.",
+   "steps": [
+    {
+     "say": "Start with case (a). Compute the shared denominator.",
+     "blank": {
+      "prompt": "For r₁ = 0.5, what is 1 − r₁²?",
+      "answer": "0.75",
+      "accept": [
+       "0.75",
+       "3/4",
+       ".75",
+       "0.750"
+      ],
+      "hint": "1 − 0.25."
+     },
+     "why": "Always positive, so it never affects a sign. Computing it first makes both coefficients one division each."
+    },
+    {
+     "say": "Now both coefficients for case (a).",
+     "blank": {
+      "prompt": "Compute φ̂₁ and φ̂₂ for r₁ = 0.5, r₂ = 0.3.",
+      "answer": "φ̂₁ = 7/15 ≈ 0.4667 and φ̂₂ = 1/15 ≈ 0.0667",
+      "accept": [
+       "0.4667 and 0.0667",
+       "7/15 and 1/15",
+       "0.467, 0.067",
+       "phi1=0.4667 phi2=0.0667",
+       "0.47 and 0.07"
+      ],
+      "hint": "φ̂₁ = 0.5(1 − 0.3)/0.75 and φ̂₂ = (0.3 − 0.25)/0.75."
+     },
+     "why": "φ̂₂ is positive here, and only just — 0.3 exceeds 0.25 = r₁² by a small margin, so the direct lag-2 effect is weakly positive. Compare with Q3, where the comparison went the other way."
+    },
+    {
+     "say": "Case (b) now. Look at the numerator of φ̂₂ before computing anything.",
+     "blank": {
+      "prompt": "For r₁ = 0.6 and r₂ = 0.36, what is r₂ − r₁², and so what is φ̂₂?",
+      "answer": "r₂ − r₁² = 0.36 − 0.36 = 0, so φ̂₂ = 0",
+      "accept": [
+       "0, so phi2 = 0",
+       "zero",
+       "0 and phi2=0",
+       "numerator is 0 so phi2 is 0"
+      ],
+      "hint": "0.6² = 0.36, which is exactly the value of r₂."
+     },
+     "why": "The numerator vanishes, so the second coefficient is exactly zero. No lag-2 effect at all remains once the indirect route is accounted for."
+    },
+    {
+     "say": "Compute φ̂₁ for case (b) and identify what model has been fitted.",
+     "blank": {
+      "prompt": "Compute φ̂₁, and say which model this is.",
+      "answer": "φ̂₁ = 0.6, so the fit is an AR(1) with φ = 0.6",
+      "accept": [
+       "0.6, an AR(1)",
+       "phi1 = 0.6, AR(1) model",
+       "0.6 — it reduces to AR(1)",
+       "AR(1) with 0.6"
+      ],
+      "hint": "φ̂₁ = 0.6(1 − 0.36)/0.64. Simplify, and recall the AR(1) Yule–Walker estimate."
+     },
+     "why": "0.6(0.64)/0.64 = 0.6 exactly, which is r₁ — the AR(1) estimate. So r₂ = r₁² is the fingerprint of an AR(1): fit an AR(2) to such data and the second coefficient comes out zero, leaving the AR(1) behind. This is why checking r₂ against r₁² is the first thing to do with a sample ACF."
+    }
+   ],
+   "after": "Three cases now, and the numerator r₂ − r₁² decided each one: negative in Q3, slightly positive in (a), exactly zero in (b). That single comparison tells you the sign of the second coefficient and whether an AR(1) would do, before you compute anything. It is the most useful habit in this topic."
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 7,
+   "title": "When is an AR process stationary?",
+   "objective": "Get the conditions, because they decide whether the ACF exists at all.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "What stationarity means here",
+     "body": "A process is (weakly) stationary if its mean and variance do not change with time and its autocovariance γₖ depends only on the gap k, not on where in time you look. Everything in this lesson has assumed it: the ACF is only well defined if the process is stationary, and Yule–Walker estimation presumes an ACF to match."
+    },
+    {
+     "t": "formula",
+     "h": "The condition in general",
+     "body": "Write the AR polynomial φ(B) = 1 − φ₁B − φ₂B² − … − φₚBᵖ, where B is the backshift operator. The process is stationary if and only if every root of φ(z) = 0 lies strictly OUTSIDE the unit circle — that is, every root has modulus greater than 1."
+    },
+    {
+     "t": "formula",
+     "h": "The AR(1) and AR(2) conditions spelled out",
+     "body": "AR(1):  |φ| < 1.\nAR(2):  all three of\n    φ₁ + φ₂ < 1,\n    φ₂ − φ₁ < 1,\n    |φ₂| < 1.\nThose three inequalities describe a triangle in the (φ₁, φ₂) plane with vertices at (2, −1), (−2, −1) and (0, 1), and the parameter pair must lie inside it."
+    },
+    {
+     "t": "step",
+     "h": "What the triangle lets you see at once",
+     "body": "φ₁ alone may exceed 1 — the triangle extends to φ₁ = 2 — which is why the fitted model in section 4 with φ̂₁ = 1.11 is perfectly stationary. The three conditions act together, and checking only |φ₁| < 1 is wrong for an AR(2). A variant on this topic asks which of four parameter pairs gives a stationary process, and the triangle answers it in seconds."
+    },
+    {
+     "t": "def",
+     "h": "The boundary case, which is the one that gets examined",
+     "body": "φ₁ + φ₂ = 1 puts the parameter pair exactly ON the edge of the triangle, which means z = 1 is a root of the polynomial — a UNIT ROOT. The process is then not stationary, has no finite variance and no ACF, and Yule–Walker does not apply to it at all. Section 10 works the June 2026 question that turns on this, and the repair is differencing."
+    },
+    {
+     "t": "step",
+     "h": "The practical check, in order",
+     "body": "Given an AR(2) with numbers in it: first add the coefficients. If they sum to 1 you have a unit root and the question is about differencing, not about the ACF. If they sum to more than 1 the process is explosive. Only if all three inequalities hold is there an ACF to talk about, and only then do the Yule–Walker formulas mean anything."
+    }
+   ],
+   "ask": {
+    "q": "Which of these AR(2) pairs is stationary: (1.2, −0.2), (0.6, 0.4), (0.5, 0.6)?",
+    "nudge": "Test all three inequalities on each. The second pair sums to exactly 1 — what does that mean?"
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "On your own — estimate and then check",
+   "objective": "Run the whole procedure unaided: estimate, verify, and judge whether the fit is admissible.",
+   "problem": "A series of 200 monthly observations gives sample autocorrelations r₁ = 0.7 and r₂ = 0.25. (a) Estimate φ₁ and φ₂ by Yule–Walker. (b) Verify your answers by substituting back. (c) Check whether the fitted model is stationary. (d) Would an AR(1) have been adequate?",
+   "hints": [
+    "For (a), compute 1 − r₁² once, then apply the two formulas. Look at r₂ against r₁² before you start, to know what sign to expect.",
+    "For (b), put both estimates into r₁ = φ̂₁ + φ̂₂r₁ and confirm you recover 0.7.",
+    "For (d), an AR(1) would be adequate if the lag-2 correlation were about r₁². Compare 0.25 with 0.49 and judge whether the gap is substantial."
+   ],
+   "answer": "(a) φ̂₁ ≈ 1.0294, φ̂₂ ≈ −0.4706. (b) 1.0294 + 0.7(−0.4706) = 0.70 ✓. (c) Stationary: sum 0.5588 < 1, difference −1.5 < 1, |φ̂₂| = 0.47 < 1. (d) No — r₂ = 0.25 is far below r₁² = 0.49, so the lag-2 term is doing real work.",
+   "check": "Three things an examiner would look for. The sign of φ̂₂ should have been predicted before computing: 0.25 is well below 0.49, so a negative second coefficient was expected. φ̂₁ exceeds 1 and that is not an error — the AR(2) stationarity triangle allows φ₁ up to 2, and all three conditions hold here. And in (d) the comparison is with r₁², never with zero: an AR(1) is adequate when r₂ ≈ r₁², and a lag-2 correlation of 0.25 looks substantial until you notice that 0.49 was what the AR(1) alone predicted.",
+   "scenario": {
+    "teaser": "A mill's order book is being modelled, and the choice of order decides the forecast.",
+    "title": "One lag or two?",
+    "body": [
+     "A textile mill forecasts weekly orders. The planner has a sample ACF and must decide whether to model it as AR(1) or AR(2) — a decision that changes every forecast the model produces.",
+     "The lazy reading is to look at r₂ = 0.25 and call it 'small, so one lag is enough'. That is the wrong comparison. The question is not whether r₂ is near zero but whether it is near r₁², because an AR(1) with r₁ = 0.7 already PREDICTS a lag-2 correlation of 0.49.",
+     "The observed 0.25 is barely half of that. So the data say the lag-2 relationship is much weaker than a pure AR(1) would imply, and capturing that requires a negative second coefficient. Dropping it would make the model systematically over-predict the persistence of a shock two weeks out.",
+     "The business consequence is concrete: an AR(1) fitted here would forecast that a surge in orders carries forward longer than it actually does, and the mill would hold inventory for demand that has already faded.",
+     "The general lesson is the one the whole lesson rests on. In a time series, a correlation at one lag is partly inherited from shorter lags. Judging a lag-2 term against zero ignores that inheritance; judging it against r₁² accounts for it."
+    ],
+    "q": "Why is comparing r₂ with zero the wrong test for whether a second lag is needed?",
+    "answer": "Because a pure AR(1) already produces a non-zero lag-2 correlation — exactly r₁², through the indirect route. So r₂ being far from zero is no evidence of a lag-2 effect, and r₂ being close to zero can be strong evidence of one, if r₁² is large. The informative comparison is between r₂ and r₁², which is precisely the numerator of the φ₂ formula."
+   },
+   "solution": [
+    {
+     "say": "(a) Predict the sign, then compute.",
+     "math": "r₁² = 0.49, and r₂ = 0.25 < 0.49 ⟹ expect φ̂₂ < 0\n1 − r₁² = 1 − 0.49 = 0.51\nφ̂₁ = 0.7(1 − 0.25)/0.51 = 0.525/0.51 = 1.0294\nφ̂₂ = (0.25 − 0.49)/0.51 = −0.24/0.51 = −0.4706",
+     "why": "Predicting the sign first turns the arithmetic into a confirmation rather than a leap, and it is the habit that would have caught June 2026's question."
+    },
+    {
+     "say": "(b) Substitute back into the first Yule–Walker equation.",
+     "math": "φ̂₁ + φ̂₂ r₁ = 1.0294 + 0.7(−0.4706)\n            = 1.0294 − 0.3294 = 0.7000 = r₁ ✓",
+     "why": "The check uses the equation you did not rearrange, so it is a genuine test rather than a restatement. Ten seconds, and it catches sign and arithmetic slips."
+    },
+    {
+     "say": "(c) Test all three stationarity conditions.",
+     "math": "φ̂₁ + φ̂₂ = 1.0294 − 0.4706 = 0.5588 < 1  ✓\nφ̂₂ − φ̂₁ = −1.5000 < 1  ✓\n|φ̂₂| = 0.4706 < 1  ✓\nstationary",
+     "why": "φ̂₁ above 1 is admissible for an AR(2); the sum is what must stay below 1. Checking only the first coefficient would wrongly reject this perfectly good fit."
+    },
+    {
+     "say": "(d) Judge whether the second lag earns its place.",
+     "math": "AR(1) with φ = 0.7 would predict ρ₂ = 0.49\nobserved r₂ = 0.25, about half of that\n⟹ the lag-2 term is doing substantial work; AR(1) is not adequate",
+     "why": "And the direction matters: the data show less persistence at lag 2 than an AR(1) implies, so the fitted negative coefficient is pulling the forecast back towards the mean faster. That is a real feature of the series, not a statistical artefact."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s8",
+   "mins": 6,
+   "title": "Six statements — verdict on each before you look",
+   "objective": "Rule on the claims the variant questions on this topic are built from.",
+   "intro": "Decide true or false on all six before revealing any.",
+   "items": [
+    {
+     "claim": "For an AR(1) process the Yule–Walker estimate of φ is the sample autocorrelation r₁.",
+     "tf": true,
+     "why": "True. With p = 1 there is a single equation ρ₁ = φ, so matching the sample value gives φ̂ = r₁ directly. It is the simplest method-of-moments estimator in the subject."
+    },
+    {
+     "claim": "In an AR(2), φ₂ must be positive whenever both ρ₁ and ρ₂ are positive.",
+     "tf": false,
+     "why": "False, and this is June 2026 Q3. The sign of φ₂ follows the sign of ρ₂ − ρ₁², so with ρ₁ = 0.8 and ρ₂ = 0.5 both positive, φ₂ = −7/18 is negative because 0.5 is below 0.64."
+    },
+    {
+     "claim": "For an AR(2) to be stationary it is enough that |φ₁| < 1 and |φ₂| < 1.",
+     "tf": false,
+     "why": "False — three conditions are needed: φ₁ + φ₂ < 1, φ₂ − φ₁ < 1 and |φ₂| < 1. The pair (0.6, 0.4) satisfies both stated bounds and yet sums to 1, giving a unit root and no stationarity at all."
+    },
+    {
+     "claim": "For an AR(1) with φ = −0.5, the autocorrelation at lag 2 is 0.25.",
+     "tf": true,
+     "why": "True: ρₖ = φᵏ, so ρ₂ = (−0.5)² = 0.25, positive. A negative coefficient makes the ACF alternate in sign, so the even lags are positive and the odd lags negative."
+    },
+    {
+     "claim": "The relation ρ₂ = φ₁ρ₁ + φ₂ is obtained by multiplying the AR(2) equation by yₜ₋₂ and taking expectations.",
+     "tf": true,
+     "why": "True — it is the k = 2 case of the derivation. The term E(εₜyₜ₋₂) vanishes because the shock is uncorrelated with the past, and dividing through by γ₀ turns autocovariances into autocorrelations."
+    },
+    {
+     "claim": "The ACF of an MA(1) process is non-zero at every lag.",
+     "tf": false,
+     "why": "False. An MA(1) has ρ₁ non-zero and ρₖ = 0 for every k ≥ 2 — the ACF cuts off after lag 1. That sharp cut-off is the identifying signature of an MA process, in contrast to the AR's geometric decay, and section 11 uses the contrast."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s9",
+   "mins": 8,
+   "title": "Worked in full — when Yule–Walker does not apply (June 2026, Q18)",
+   "objective": "Spot a unit root, factor the polynomial, and find the ACF of the differenced series.",
+   "ask": {
+    "q": "The marked answer was (0.6)ᵏ, taken straight from the coefficient on yₜ₋₁. What does the right answer's −0.4 refer to?",
+    "nudge": "It is a coefficient, but of a different process. Which process, and on which variable?"
+   },
+   "problem": "Consider the process yₜ = 0.6yₜ₋₁ + 0.4yₜ₋₂ + εₜ with E(εₜ) = 0 and E(ε²ₜ) = σ²ε. Find the ACF of the differenced series Δyₜ.",
+   "steps": [
+    {
+     "say": "Before anything else, add the coefficients.",
+     "math": "φ₁ + φ₂ = 0.6 + 0.4 = 1",
+     "why": "Exactly 1, so the parameter pair sits on the boundary of the stationarity triangle. There is a unit root, the process is not stationary, and it has no ACF of its own. That is why the question asks about Δyₜ rather than about yₜ — a detail easy to read past."
+    },
+    {
+     "say": "Write the process in operator form and factor the polynomial.",
+     "math": "(1 − 0.6B − 0.4B²) yₜ = εₜ\n1 − 0.6z − 0.4z² = (1 − z)(1 + 0.4z)\ncheck: (1 − z)(1 + 0.4z) = 1 + 0.4z − z − 0.4z² = 1 − 0.6z − 0.4z² ✓",
+     "why": "The factor (1 − z) is the unit root made visible — z = 1 is a root, confirming the first step. Always expand the factorisation back out as a check; a sign error here changes the final answer."
+    },
+    {
+     "say": "Identify what the remaining factor acts on.",
+     "math": "(1 − B)(1 + 0.4B) yₜ = εₜ\n(1 − B)yₜ = Δyₜ,  so\n(1 + 0.4B) Δyₜ = εₜ",
+     "why": "The (1 − B) factor IS the differencing operator. So once the unit root is extracted, what is left acts on the differenced series — and that is the whole trick of the question."
+    },
+    {
+     "say": "Read off the process for Δyₜ.",
+     "math": "Δyₜ + 0.4 Δyₜ₋₁ = εₜ\nΔyₜ = −0.4 Δyₜ₋₁ + εₜ",
+     "why": "An AR(1) in the differenced series, with coefficient −0.4. Note the sign flip: moving the term across changes +0.4 to −0.4, and missing that gives (0.4)ᵏ, which was one of the options."
+    },
+    {
+     "say": "Apply the AR(1) ACF.",
+     "math": "for AR(1) with coefficient φ:  ρₖ = φᵏ\nhere φ = −0.4, so  rₖ = (−0.4)ᵏ\n|−0.4| < 1 ✓ so Δyₜ is stationary",
+     "why": "This is the official answer, option C. The ACF alternates in sign — negative at lag 1, positive at lag 2 — which the reference table in section 3 shows. The marked option (0.6)ᵏ took the coefficient from the original undifferenced equation, which has no ACF at all."
+    }
+   ],
+   "after": "The whole question was decided before any algebra, by adding 0.6 and 0.4 and getting 1. That single check tells you the series is non-stationary, that the question must be about a differenced series, and that the original coefficients cannot appear in the answer. Make it the first thing you do with any AR(2) that has numbers in it. The general name for this situation is an ARIMA(1,1,0) process — one autoregressive term, one difference — and the broader treatment belongs to the unit-roots topic."
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 7,
+   "title": "On your own — reading the ACF and PACF",
+   "objective": "Use the two functions to identify a model's order, which is what they are for.",
+   "problem": "Say what model each pattern suggests and why. (a) The ACF decays geometrically and the PACF cuts off after lag 1. (b) The ACF cuts off after lag 1 and the PACF decays. (c) The PACF cuts off after lag 2. (d) The sample ACF decays very slowly, almost linearly, and is still large at lag 20.",
+   "hints": [
+    "The partial autocorrelation at lag k is the correlation between observations k apart with the effect of the intervening ones removed — exactly the separation the Yule–Walker equations perform.",
+    "For an AR(p), the PACF is zero beyond lag p, because beyond p there is no direct effect left. For an MA(q), it is the ACF that cuts off, at lag q.",
+    "For (d), ask whether any stationary process can have an ACF that is still large at lag 20, and what the sample ACF of a non-stationary series looks like."
+   ],
+   "answer": "(a) AR(1). (b) MA(1). (c) AR(2). (d) Not stationary — a unit root; difference the series before modelling it.",
+   "check": "The rule to carry is that the function which CUTS OFF names the order. PACF cuts off at p for an AR(p); ACF cuts off at q for an MA(q); and the other function decays geometrically in each case. Case (c) is the PACF of an AR(2), which one of the variants on this topic asks about directly — it is non-zero at lags 1 and 2 and zero beyond. Case (d) is the pattern that should stop you modelling altogether: no stationary AR or MA process has an ACF still substantial at lag 20, so the series needs differencing first, and a formal check is the Dickey–Fuller test.",
+   "solution": [
+    {
+     "say": "(a) Geometric ACF, PACF cutting off at lag 1.",
+     "math": "PACF zero beyond lag 1 ⟹ no direct effect beyond one lag ⟹ AR(1)\nconsistent with ρₖ = φᵏ decaying geometrically",
+     "why": "The PACF at lag k measures the direct effect at that lag with intervening lags removed. For an AR(1) there is only one direct effect, so the PACF has one non-zero value."
+    },
+    {
+     "say": "(b) ACF cutting off at lag 1, PACF decaying.",
+     "math": "ACF zero beyond lag 1 ⟹ MA(1)",
+     "why": "An MA(1) is a weighted sum of only two shocks, so observations more than one apart share no shock and are uncorrelated. The pattern is the mirror image of (a), which is why the two functions are always read as a pair."
+    },
+    {
+     "say": "(c) PACF cutting off at lag 2.",
+     "math": "PACF non-zero at lags 1 and 2, zero beyond ⟹ AR(2)",
+     "why": "This is exactly the PACF of an AR(2), and it is the identification that justifies using the two Yule–Walker equations of this lesson rather than one or three."
+    },
+    {
+     "say": "(d) An ACF that decays slowly and almost linearly.",
+     "math": "a stationary AR or MA ACF decays geometrically, so is negligible by lag 20\na slow near-linear decay ⟹ unit root, not stationary\n⟹ difference first; test formally with Dickey–Fuller",
+     "why": "This is the diagnostic counterpart of section 9's algebra. There the unit root was visible in the coefficients; here it is visible in the sample ACF. Both say the same thing: difference the series before fitting anything."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s11",
+   "mins": 6,
+   "title": "What kind of estimator this is",
+   "objective": "Place Yule–Walker among the alternatives, which is how the conceptual questions are framed.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "It is a method-of-moments estimator",
+     "body": "The theoretical autocorrelations are functions of the coefficients. Yule–Walker estimation sets the theoretical values equal to the sample values and solves — which is precisely the method of moments, applied to autocorrelations instead of to raw moments. That connects this topic to the estimation methods of the inference module."
+    },
+    {
+     "t": "step",
+     "h": "The alternatives, and when they differ",
+     "body": "Least squares regresses yₜ on its own lags; maximum likelihood maximises the Gaussian likelihood of the whole series. All three agree asymptotically for a stationary AR, and for moderate samples the differences are small. Yule–Walker has one property the others lack: its solution is always stationary — it cannot return a parameter pair outside the triangle — which makes it a safe starting point for the iterative methods."
+    },
+    {
+     "t": "def",
+     "h": "The PACF is Yule–Walker in disguise",
+     "body": "Solve the Yule–Walker system of order k and take the last coefficient, φ_kk. That number is the partial autocorrelation at lag k. So the PACF is not a separate idea: it is what you get by fitting successively higher AR orders and reading off the newest coefficient each time. This is why the PACF of an AR(p) is zero beyond lag p — fitting an extra lag to a process that does not have one returns zero."
+    },
+    {
+     "t": "step",
+     "h": "The limits worth knowing",
+     "body": "The method assumes the process is a stationary AR of KNOWN order, so the order has to be identified first — which is what section 10 was about. It applies to pure AR models; for MA and mixed ARMA models the moment equations are nonlinear and this neat linear solution is not available. And it uses only the first p sample autocorrelations, which are themselves noisy in a short series, so the estimates can be imprecise even when they are correctly computed."
+    }
+   ],
+   "ask": {
+    "q": "Yule–Walker estimates are always stationary by construction. Why is that useful rather than merely tidy?",
+    "nudge": "What would you do with a fitted model whose coefficients implied infinite variance?"
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s12",
+   "mins": 2,
+   "title": "Second recall — the parts most likely to fade",
+   "objective": "Retrieve the formulas and the two diagnostics that carry marks.",
+   "intro": "Answer, then reveal.",
+   "items": [
+    {
+     "q": "Give the three stationarity conditions for an AR(2).",
+     "a": "φ₁ + φ₂ < 1, φ₂ − φ₁ < 1, and |φ₂| < 1. They describe a triangle, and φ₁ alone may exceed 1."
+    },
+    {
+     "q": "An AR(2) has φ₁ + φ₂ = 1. What follows?",
+     "a": "A unit root: the process is not stationary, has no ACF, and must be differenced. The polynomial has (1 − B) as a factor."
+    },
+    {
+     "q": "For an AR(1) with φ = 0.6 and σ²ε = 4, what is Var(yₜ)?",
+     "a": "σ²ε/(1 − φ²) = 4/0.64 = 6.25."
+    },
+    {
+     "q": "Which function cuts off for an AR(p), and which for an MA(q)?",
+     "a": "The PACF cuts off at lag p for an AR(p); the ACF cuts off at lag q for an MA(q). The other one decays geometrically."
+    },
+    {
+     "q": "What does a sample ACF that decays very slowly and nearly linearly suggest?",
+     "a": "A unit root — the series is not stationary and should be differenced. Confirm with a Dickey–Fuller test."
+    },
+    {
+     "q": "How is the PACF at lag k related to Yule–Walker?",
+     "a": "It is the last coefficient, φ_kk, from solving the Yule–Walker system of order k."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "What you should now be able to do unaided",
+   "objective": "Close the loop before the mastery test.",
+   "body": [
+    "Derive the Yule–Walker equations by multiplying the AR equation by yₜ₋ₖ and taking expectations, knowing why the shock term vanishes for k ≥ 1.",
+    "Write the two AR(2) equations and solve them, getting φ₁ = ρ₁(1 − ρ₂)/(1 − ρ₁²) and φ₂ = (ρ₂ − ρ₁²)/(1 − ρ₁²).",
+    "Predict the sign of φ₂ from the comparison of ρ₂ with ρ₁² before computing anything, and recognise r₂ = r₁² as the signature of an AR(1).",
+    "State the AR(1) and AR(2) stationarity conditions, and use the triangle to see that φ₁ may exceed 1.",
+    "Recognise φ₁ + φ₂ = 1 as a unit root, factor out (1 − B), and find the ACF of the differenced series.",
+    "Identify an AR or MA order from which of the ACF and PACF cuts off, and recognise a slowly decaying sample ACF as non-stationarity.",
+    "Say that Yule–Walker is a method-of-moments estimator, that its solution is always stationary, and that the PACF is its last coefficient at each order."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s14",
+   "mins": 8,
+   "ext": true,
+   "title": "The general system, and solving it efficiently",
+   "objective": "See the matrix form and the recursion that generates the PACF, for a fuller picture of where the equations lead.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "The system in matrix form",
+     "body": "For an AR(p), the p Yule–Walker equations are R φ = r, where\n    R is the p by p matrix with (i, j) entry ρ_{|i−j|},\n    φ = (φ₁, …, φₚ)′ and r = (ρ₁, …, ρₚ)′.\nR has 1 along its diagonal and is symmetric, with constant entries along each diagonal — a Toeplitz matrix. The solution is φ = R⁻¹ r."
+    },
+    {
+     "t": "step",
+     "h": "What the AR(2) case looks like in that form",
+     "body": "R = [[1, ρ₁], [ρ₁, 1]] and r = (ρ₁, ρ₂)′. Inverting a 2 by 2 matrix gives exactly the two closed-form solutions of section 3, with the determinant 1 − ρ₁² appearing as the shared denominator. That is where the denominator comes from, and it is why it is the same for both coefficients."
+    },
+    {
+     "t": "def",
+     "h": "Why the determinant cannot vanish",
+     "body": "For p = 2 the determinant is 1 − ρ₁², which is zero only if |ρ₁| = 1 — perfect correlation at lag 1, which no stationary process has. In general R is positive definite for a genuine stationary process, so the system always has a unique solution. A sample ACF can occasionally produce a near-singular R in a short series, and that is a signal of near-non-stationarity rather than an arithmetic problem."
+    },
+    {
+     "t": "step",
+     "h": "The Levinson–Durbin recursion",
+     "body": "Solving the system afresh for each order p is wasteful, because the order-p solution can be built from the order-(p−1) solution. The Levinson–Durbin recursion does exactly that, and its by-product at each step is the last coefficient φ_kk — which, as section 11 noted, is the partial autocorrelation at lag k. So one pass through the recursion produces the whole PACF, which is why software reports the PACF essentially for free alongside an AR fit."
+    },
+    {
+     "t": "step",
+     "h": "Where this is heading",
+     "body": "The PACF is the identification tool: run the recursion, look at where φ_kk becomes negligible, and that lag is the suggested order p. Then the order-p solution is already in hand. Identification, estimation and the diagnostic all come out of the same set of equations, which is a large part of why Yule–Walker remains the starting point in practice even though maximum likelihood is usually the final estimator."
+    }
+   ],
+   "ask": {
+    "q": "The Levinson–Durbin recursion yields the PACF as a by-product. Why does that make identifying the order cheap?",
+    "nudge": "If fitting order p already tells you the PACF at every lag up to p, how many separate fits do you need to choose the order?"
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s15",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate it independently, on questions you have not seen.",
+   "setId": "timeseries_t3_mastery"
+  }
+ ]
+}
