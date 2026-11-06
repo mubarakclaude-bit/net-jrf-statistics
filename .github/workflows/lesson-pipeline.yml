@@ -1,0 +1,132 @@
+name: Lesson authoring pipeline
+
+# Runs the full deterministic authoring path for lesson branches. It generates seeds in the
+# runner workspace, validates them, and runs the app/browser tests. It never writes to ArtifactData.
+on:
+  pull_request:
+    branches: ["tooling/whats-next", "main"]
+    paths:
+      - "lesson_*.py"
+      - "verify_*.py"
+      - "seed/lesson_*.json"
+      - "seed/*_mastery.json"
+      - ".github/workflows/lesson-pipeline.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lesson-pipeline-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  author-and-validate:
+    if: startsWith(github.head_ref || github.ref_name, 'lesson/') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out lesson branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install numerical verification dependency
+        run: python -m pip install --upgrade pip numpy
+
+      - name: Identify changed authoring scripts
+        id: discover
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD > .cache_changed.txt
+          else
+            git ls-files 'lesson_*.py' > .cache_changed.txt
+          fi
+          grep -E '^lesson_[A-Za-z0-9_-]+\.py$' .cache_changed.txt > .lesson_scripts.txt || true
+          echo "Authoring scripts:"
+          cat .lesson_scripts.txt
+          if [ ! -s .lesson_scripts.txt ]; then
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "No authoring script changed; seed-only validation remains in validate.yml."
+          else
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run verification and generate lesson seeds
+        if: steps.discover.outputs.found == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p seed .cache
+          while IFS= read -r author; do
+            [ -n "$author" ] || continue
+            stem=$(python - "$author" <<'PY'
+          import re,sys
+          s=open(sys.argv[1],encoding="utf-8").read()
+          m=re.search(r'^OUT\s*=\s*["\']seed/([^"\']+)\.json["\']',s,re.M)
+          if not m: raise SystemExit("Cannot identify OUT seed stem in "+sys.argv[1])
+          print(m.group(1))
+          PY
+          )
+            pool=$(python - "$author" <<'PY'
+          import re,sys
+          s=open(sys.argv[1],encoding="utf-8").read()
+          m=re.search(r'^POOL\s*=\s*["\']seed/([^"\']+)\.json["\']',s,re.M)
+          if not m: raise SystemExit("Cannot identify POOL seed stem in "+sys.argv[1])
+          print(m.group(1))
+          PY
+          )
+            verifier="verify_${stem#lesson_}.py"
+            # Existing naming convention may not map one-to-one; also accept any verifier
+            # changed in this PR when there is exactly one.
+            if [ -f "$verifier" ]; then
+              python "$verifier"
+            else
+              mapfile -t verifiers < <(grep '^verify_.*\.py$' .cache_changed.txt || true)
+              if [ "${#verifiers[@]}" -eq 1 ]; then python "${verifiers[0]}"; fi
+            fi
+            python "$author"
+            test -s "seed/$stem.json"
+            read -r topic doc < <(python - "$stem" <<'PY'
+          import json,sys
+          d=json.load(open("seed/"+sys.argv[1]+".json",encoding="utf-8"))
+          print(d["topicId"],d["id"])
+          PY
+          )
+            ./addlesson.sh "$author" "$stem" "$topic" "$doc" "$pool"
+          done < .lesson_scripts.txt
+
+      - name: Check seed index and harness consistency
+        if: steps.discover.outputs.found == 'true'
+        run: ./check.sh
+
+      - name: Build application
+        if: steps.discover.outputs.found == 'true'
+        run: ./build.sh
+
+      - name: Run application tests
+        if: steps.discover.outputs.found == 'true'
+        run: |
+          node test.js
+          node clicktest.js
+
+      - name: Publish pipeline summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Lesson authoring pipeline"
+            echo ""
+            echo "- Branch: `$GITHUB_HEAD_REF`"
+            echo "- Authoring scripts detected: ${{ steps.discover.outputs.found || 'not evaluated' }}"
+            echo "- This workflow validates in an isolated runner. It does not deploy or write to ArtifactData."
+          } >> "$GITHUB_STEP_SUMMARY"
