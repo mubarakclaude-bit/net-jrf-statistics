@@ -58,71 +58,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          grep -E '^verify_[A-Za-z0-9_-]+\\.py
-        if: steps.discover.outputs.found == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p seed .cache
-          author=$(cat .lesson_scripts.txt)
-          out_path=$(grep -m1 '^OUT[[:space:]]*=' "$author" | cut -d '"' -f2)
-          pool_path=$(grep -m1 '^POOL[[:space:]]*=' "$author" | cut -d '"' -f2)
-          [[ "$out_path" =~ ^seed/[A-Za-z0-9_-]+\.json$ ]] || { echo "Invalid OUT path: $out_path"; exit 1; }
-          [[ "$pool_path" =~ ^seed/[A-Za-z0-9_-]+\.json$ ]] || { echo "Invalid POOL path: $pool_path"; exit 1; }
-          stem="${out_path#seed/}"; stem="${stem%.json}"
-          pool="${pool_path#seed/}"; pool="${pool%.json}"
-          rm -f "$out_path" "$pool_path"
-          python "$author"
-          test -s "$out_path"
-          read -r topic doc < <(python -c 'import json,sys; d=json.load(open(sys.argv[1],encoding="utf-8")); print(d["topicId"],d["id"])' "$out_path")
-          ./addlesson.sh "$author" "$stem" "$topic" "$doc" "$pool"
-
-      - name: Check index and harness consistency
-        if: steps.discover.outputs.found == 'true'
-        run: ./check.sh
-
-      - name: Build application
-        if: steps.discover.outputs.found == 'true'
-        run: ./build.sh
-
-      - name: Install Playwright and Chromium
-        if: steps.discover.outputs.found == 'true'
-        run: |
-          npm install --no-save --no-package-lock playwright
-          npx playwright install --with-deps chromium
-
-      - name: Run application tests
-        if: steps.discover.outputs.found == 'true'
-        run: |
-          node test.js
-          node clicktest.js
-
-      - name: Upload generated review artifacts
-        if: always() && steps.discover.outputs.found == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: lesson-candidate-${{ github.event.pull_request.number }}
-          if-no-files-found: warn
-          path: |
-            seed/lesson_*.json
-            seed/*_mastery.json
-            seed/meta_lessons.json
-            test.js
-            .cache/
-
-      - name: Publish pipeline summary
-        if: always()
-        shell: bash
-        run: |
-          {
-            echo "## Lesson authoring pipeline"
-            echo ""
-            echo "- Branch: $GITHUB_HEAD_REF"
-            echo "- Commit: $GITHUB_SHA"
-            echo "- Lesson scripts detected: ${{ steps.discover.outputs.found || 'not evaluated' }}"
-            echo "- This workflow does not deploy or write to ArtifactData."
-          } >> "$GITHUB_STEP_SUMMARY"
- .cache_changed.txt > .verifier_scripts.txt || true
+          grep -E '^verify_[A-Za-z0-9_-]+\.py$' .cache_changed.txt > .verifier_scripts.txt || true
           count=$(wc -l < .verifier_scripts.txt)
           [ "$count" -eq 1 ] || { echo "Exactly one changed verification script is required; found $count"; exit 1; }
           verifier=$(cat .verifier_scripts.txt)
