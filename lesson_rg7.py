@@ -52,9 +52,9 @@ S = [
   "ask":{"q":"Which estimator has the smaller covariance matrix in this verified example?","nudge":"Compare the two matrices through their difference."},
   "problem":"Let X have rows (1,0), (1,1), (1,2), (1,3), and let Ω=diag(1,2,3,4). Find the OLS and GLS covariance matrices, omitting the common factor σ².",
   "steps":[
-   {"say":"Write the design cross-product and its inverse.","math":"X′X=[[4,6],[6,14]],  (X′X)⁻¹=[[0.7,−0.3],[−0.3,0.2]].","why":"The determinant is 4×14−6×6=20, so the inverse is (1/20)[[14,−6],[−6,4]]."},
+   {"say":"Write the design cross-product and its inverse.","math":"X′X=[[4,6],[6,14]],  (X′X)⁻¹=[[49/58,−23/58],[−23/58,25/58]].","why":"The determinant is 4×14−6×6=20, so the inverse is (1/20)[[14,−6],[−6,4]]."},
    {"say":"Use the general covariance formula for OLS.","math":"X′ΩX=[[10,20],[20,50]].  Var(β̂_OLS)=(X′X)⁻¹X′ΩX(X′X)⁻¹=[[1,−0.5],[−0.5,0.5]].","why":"This is not σ²(X′X)⁻¹ because Ω is not σ²I. The covariance values are independently checked in verify_regression_t7.py."},
-   {"say":"Use the GLS covariance formula.","math":"Var(β̂_GLS)=(X′Ω⁻¹X)⁻¹=[[0.7,−0.3],[−0.3,0.2]].","why":"The GLS covariance is smaller in the positive-semidefinite ordering for this example. The difference is [[0.3,−0.2],[−0.2,0.3]], whose eigenvalues are 0.1 and 0.5."}],
+   {"say":"Use the GLS covariance formula.","math":"Var(β̂_GLS)=(X′Ω⁻¹X)⁻¹=[[49/58,−23/58],[−23/58,25/58]].","why":"The GLS covariance is smaller in the positive-semidefinite ordering for this example. The difference is [[9/58,−6/58],[−6/58,4/58]], whose eigenvalues are 0 and 13/58."}],
   "after":"The OLS estimate is not automatically biased. It simply fails to use the known precision pattern. GLS weights each observation according to its variance."},
  {"kind":"recall","id":"s5","mins":2,"title":"Pause and recall","objective":"Retrieve the core distinctions before moving to the GLS derivation.",
   "intro":"Answer each before revealing it.",
