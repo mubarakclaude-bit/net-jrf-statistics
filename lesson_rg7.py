@@ -201,6 +201,14 @@ I=[
  item(19,"numeric","hard","If Var(uᵢ|X)=σ²·4 for every observation, the GLS relative weight for each observation is:",["4","1/4","σ²","1"],"B","All observations receive the same inverse-variance weight, so GLS is coefficient-equivalent to OLS.",check:"A common positive weight cancels from the normal equations."),
  item(20,"single","hard","A White test auxiliary regression typically includes:",["only the fitted values","original regressors, their squares and cross-products","the response ranks only","lagged residuals only"],"B","White's general auxiliary regression includes squares and cross-products to detect broad variance patterns.")
 ]
+# Spread the correct keys evenly; explanations state the mathematics rather than a letter.
+TARGETS=list("ABCD")*5
+for it, target in zip(I,TARGETS):
+ current=it["answer"]
+ if current != target:
+  a,b="ABCD".index(current),"ABCD".index(target)
+  it["options"][a],it["options"][b]=it["options"][b],it["options"][a]
+  it["answer"]=target
 POOLD={"moduleId":"regression","topicId":"regression-t7","source":"mastery","label":"Heteroscedasticity and GLS — mastery test (unseen)","count":20,"items":I}
 
 # Structural checks before serialisation; addlesson.sh performs the full app validator.
