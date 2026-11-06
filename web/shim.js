@@ -10,11 +10,20 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
   function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
   function lsKeys() { var out = []; try { for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf(LS) === 0) out.push(k.slice(LS.length)); } } catch (e) {} return out; }
-  var mem = {};                                  // writes that could not be persisted
+  var mem = {};                                  // writes that are not persisted
+  // Only per-learner paths persist in the browser. Content documents (meta/, lessons/, qsets/)
+  // belong to the deployed bundle: the app writes some of them back during its rescan, and a
+  // persisted copy would shadow every later deploy, so returning visitors would never see new
+  // lessons. Those writes stay in memory for the page's lifetime only.
+  function persists(p) { return p.indexOf("data/") === 0 || p.indexOf("feedback/") === 0; }
+  lsKeys().forEach(function (p) { if (!persists(p)) lsDel(LS + p); });   // drop stale copies saved by older builds
+  function store(p, j) {
+    if (persists(p) && lsSet(LS + p, j)) { delete mem[p]; return; }
+    mem[p] = JSON.parse(j);
+  }
   function read(p) {
     if (Object.prototype.hasOwnProperty.call(mem, p)) return mem[p];
-    var s = lsGet(LS + p);
-    if (s !== null) { try { return JSON.parse(s); } catch (e) {} }
+    if (persists(p)) { var s = lsGet(LS + p); if (s !== null) { try { return JSON.parse(s); } catch (e) {} } }
     return bundle[p];
   }
   function snap(p) {
@@ -26,13 +35,9 @@
     return {
       id: p.split("/").pop(), path: p,
       get: async function () { return snap(p); },
-      set: async function (b) {
-        var j = JSON.stringify(b);
-        if (lsSet(LS + p, j)) delete mem[p]; else mem[p] = JSON.parse(j);
-      },
+      set: async function (b) { store(p, JSON.stringify(b)); },
       update: async function (b) {
-        var cur = read(p) || {}; var n = Object.assign({}, cur, b); var j = JSON.stringify(n);
-        if (lsSet(LS + p, j)) delete mem[p]; else mem[p] = JSON.parse(j);
+        var cur = read(p) || {}; store(p, JSON.stringify(Object.assign({}, cur, b)));
       },
       delete: async function () { lsDel(LS + p); delete mem[p]; },
       onSnapshot: function (next) { Promise.resolve().then(function () { next(snap(p)); }); return function () {}; },
