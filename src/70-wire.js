@@ -530,15 +530,27 @@ function wireAll(){
   const progressRecords=["attempts","mocks","topics","errors","config","mastery","requests","notes","asks"];
   const progressPath=n=>"data/users/"+S.uid+"/"+upath(n);
   const plainObject=x=>!!x&&typeof x==="object"&&!Array.isArray(x)&&(Object.getPrototypeOf(x)===Object.prototype||Object.getPrototypeOf(x)===null);
+  function jsonSafe(x,depth){
+    if(depth>12)return false;
+    if(x===null||typeof x==="string"||typeof x==="boolean")return true;
+    if(typeof x==="number")return Number.isFinite(x);
+    if(Array.isArray(x))return x.length<=10000&&x.every(v=>jsonSafe(v,depth+1));
+    if(!plainObject(x))return false;
+    return Object.keys(x).length<=20000&&Object.keys(x).every(k=>
+      k!=="__proto__"&&k!=="constructor"&&k!=="prototype"&&jsonSafe(x[k],depth+1));
+  }
+  const objectMap=x=>plainObject(x)&&Object.keys(x).every(k=>plainObject(x[k]));
+  const objectList=x=>Array.isArray(x)&&x.length<=10000&&x.every(plainObject);
   function validateProgressRecord(n,v){
     if(v===null)return true;
-    if(!plainObject(v))return false;
+    if(!plainObject(v)||!jsonSafe(v,0))return false;
     if((n==="attempts"||n==="mastery")&&v.v!=null&&v.v!==SCHEMA)return false;
-    if(n==="attempts")return plainObject(v.a);
-    if(n==="mocks"||n==="errors"||n==="requests"||n==="asks")return Array.isArray(v.list);
-    if(n==="topics")return plainObject(v.t);
-    if(n==="mastery")return plainObject(v.m);
-    if(n==="notes")return plainObject(v.n);
+    if(n==="attempts")return Object.keys(v).every(k=>["a","v"].includes(k))&&plainObject(v.a)&&objectMap(v.a);
+    if(n==="mocks"||n==="errors"||n==="requests"||n==="asks")
+      return Object.keys(v).every(k=>k==="list")&&objectList(v.list);
+    if(n==="topics")return Object.keys(v).every(k=>k==="t")&&objectMap(v.t);
+    if(n==="mastery")return Object.keys(v).every(k=>["m","v"].includes(k))&&plainObject(v.m)&&objectMap(v.m);
+    if(n==="notes")return Object.keys(v).every(k=>k==="n")&&plainObject(v.n)&&jsonSafe(v.n,0);
     if(n==="config"){
       if(v.exam!=null&&typeof v.exam!=="string")return false;
       if(v.target!=null&&(!Number.isFinite(v.target)||v.target<60||v.target>200))return false;
