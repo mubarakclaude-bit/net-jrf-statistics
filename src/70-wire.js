@@ -527,6 +527,73 @@ function wireAll(){
   one("#mkExit",()=>{S.mock=null;render()});
 
   /* --- progress --- */
+  const progressRecords=["attempts","mocks","topics","errors","config","mastery","requests","notes","asks"];
+  const progressPath=n=>"data/users/"+S.uid+"/"+upath(n);
+  async function flushProgressPending(){
+    for(const n of progressRecords){
+      if(!Object.prototype.hasOwnProperty.call(PEND,n))continue;
+      if(save["t_"+n]){clearTimeout(save["t_"+n]);delete save["t_"+n]}
+      const body=PEND[n];delete PEND[n];
+      await S.db.doc(progressPath(n)).set(body);
+    }
+  }
+  const progressExport=V.querySelector("#progressExport");
+  if(progressExport)progressExport.onclick=async()=>{
+    if(!S.db||!S.uid){toast("Learner progress is not available");return}
+    progressExport.disabled=true;
+    try{
+      await flushProgressPending();
+      const records={};
+      for(const n of progressRecords){
+        const snap=await S.db.doc(progressPath(n)).get();
+        records[n]=snap.exists?snap.data():null;
+      }
+      const backup={format:"net-jrf-statistics-progress",version:1,exportedAt:new Date().toISOString(),sourceUserId:S.uid,records};
+      const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
+      const url=URL.createObjectURL(blob),a=document.createElement("a");
+      a.href=url;a.download="net-jrf-progress-"+dayStr(now())+".json";
+      document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+      toast("Progress backup downloaded");
+    }catch(e){toast("Backup failed: "+((e&&e.message)||"unknown error"))}
+    finally{progressExport.disabled=false}
+  };
+  const progressImportBtn=V.querySelector("#progressImportBtn"),progressImportFile=V.querySelector("#progressImportFile");
+  if(progressImportBtn&&progressImportFile){
+    progressImportBtn.onclick=()=>progressImportFile.click();
+    progressImportFile.onchange=async()=>{
+      const file=progressImportFile.files&&progressImportFile.files[0];if(!file)return;
+      try{
+        const backup=JSON.parse(await file.text());
+        const names=progressRecords;
+        if(!backup||backup.format!=="net-jrf-statistics-progress"||backup.version!==1||
+           !backup.records||typeof backup.records!=="object"||Array.isArray(backup.records)||
+           names.some(n=>!Object.prototype.hasOwnProperty.call(backup.records,n))||
+           Object.keys(backup.records).some(n=>names.indexOf(n)<0)){
+          toast("This is not a supported NET-JRF progress backup");return;
+        }
+        if(!confirm("Import "+file.name+"? This replaces the nine progress records in this browser. Export a backup of current progress first if you may need it."))return;
+        const previous={};
+        for(const n of names){const snap=await S.db.doc(progressPath(n)).get();previous[n]=snap.exists?snap.data():null}
+        for(const n of names){
+          const v=backup.records[n];
+          if(v!==null&&(typeof v!=="object"||Array.isArray(v)))throw new Error("Invalid "+n+" record");
+        }
+        for(const n of names){if(save["t_"+n]){clearTimeout(save["t_"+n]);delete save["t_"+n]}delete PEND[n]}
+        const written=[];
+        try{
+          for(const n of names){const ref=S.db.doc(progressPath(n));
+            if(backup.records[n]===null)await ref.delete();else await ref.set(backup.records[n]);
+            written.push(n)}
+        }catch(writeErr){
+          for(const n of written.reverse()){const ref=S.db.doc(progressPath(n));
+            try{if(previous[n]===null)await ref.delete();else await ref.set(previous[n])}catch(rollbackErr){}}
+          throw writeErr;
+        }
+        await loadProfileData();render();toast("Progress imported into this browser");
+      }catch(e){toast("Import failed: "+((e&&e.message)||"invalid backup"))}
+      finally{progressImportFile.value=""}
+    };
+  }
   const la=V.querySelector("#loadAllBtn");if(la)la.onclick=async()=>{la.disabled=true;
     await loadAll((i,n)=>{la.textContent="Loading "+i+"/"+n});la.textContent="Loaded";render()};
   const ec=V.querySelector("#errClear");if(ec)ec.onclick=()=>{
