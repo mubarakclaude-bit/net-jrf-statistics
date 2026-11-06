@@ -67,6 +67,51 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p seed .cache
+          while IFS= read -r verifier; do
+            [ -n "$verifier" ] && python "$verifier"
+          done < <(grep '^verify_.*\.py
+            test -s "seed/$stem.json"
+            read -r topic doc < <(python - "$stem" <<'PY'
+          import json,sys
+          d=json.load(open("seed/"+sys.argv[1]+".json",encoding="utf-8"))
+          print(d["topicId"],d["id"])
+          PY
+          )
+            ./addlesson.sh "$author" "$stem" "$topic" "$doc" "$pool"
+          done < .lesson_scripts.txt
+
+      - name: Check seed index and harness consistency
+        if: steps.discover.outputs.found == 'true'
+        run: ./check.sh
+
+      - name: Build application
+        if: steps.discover.outputs.found == 'true'
+        run: ./build.sh
+
+      - name: Install Playwright and Chromium
+        if: steps.discover.outputs.found == 'true'
+        run: |
+          npm install --no-save --no-package-lock playwright
+          npx playwright install --with-deps chromium
+
+      - name: Run application tests
+        if: steps.discover.outputs.found == 'true'
+        run: |
+          node test.js
+          node clicktest.js
+
+      - name: Publish pipeline summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Lesson authoring pipeline"
+            echo ""
+            echo "- Branch: `$GITHUB_HEAD_REF`"
+            echo "- Authoring scripts detected: ${{ steps.discover.outputs.found || 'not evaluated' }}"
+            echo "- This workflow validates in an isolated runner. It does not deploy or write to ArtifactData."
+          } >> "$GITHUB_STEP_SUMMARY"
+ .cache_changed.txt || true)
           while IFS= read -r author; do
             [ -n "$author" ] || continue
             stem=$(python - "$author" <<'PY'
@@ -85,15 +130,6 @@ jobs:
           print(m.group(1))
           PY
           )
-            verifier="verify_${stem#lesson_}.py"
-            # Existing naming convention may not map one-to-one; also accept any verifier
-            # changed in this PR when there is exactly one.
-            if [ -f "$verifier" ]; then
-              python "$verifier"
-            else
-              mapfile -t verifiers < <(grep '^verify_.*\.py$' .cache_changed.txt || true)
-              if [ "${#verifiers[@]}" -eq 1 ]; then python "${verifiers[0]}"; fi
-            fi
             python "$author"
             test -s "seed/$stem.json"
             read -r topic doc < <(python - "$stem" <<'PY'
