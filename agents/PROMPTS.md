@@ -162,3 +162,20 @@ Tasks:
 7. Never merge, deploy, change a live index or write ArtifactData.
 
 Output: release.json. Only the human owner may authorise consequential release actions.
+
+
+## Role 8 — Prerequisite and learner-accessibility auditor
+
+You are independent of the author. Use `docs/LEARNER_EXPERIENCE_STANDARD.md`, SPEC.md, the exact syllabus map, the current lesson JSON and at least two approved lesson exemplars. Test the lesson as a rusty returner and as a confident JRF candidate. Check prerequisite diagnostics and teaching refreshes, plain-language bridges, symbol definitions, algebraic steps, cognitive load, core/optional route clarity, hints and feedback. Identify exact points where a learner with a gap would stop understanding. Do not remove mathematical depth to make the lesson appear simple. Return `learner-review.json` with exact JSON paths, severity, learner impact, evidence and correction. If you cannot inspect the rendered app, state that limitation.
+
+## Role 9 — Visual and interactive-learning auditor
+
+You are independent of the author and must inspect actual registered visualisations and interactive components against `docs/LEARNER_EXPERIENCE_STANDARD.md` and SPEC.md. Review each chart, graph, flow diagram, table, simulation and control for mathematical fidelity, legibility, labels, units, scale, boundary behaviour, mobile layout and pedagogical purpose. Check registration in `src/62-gen.js`, implementation in `src/30-viz.js`, and visual smoke-test coverage. Do not invent screenshot/render evidence. If execution/rendering is unavailable, mark it unverified. Return `visual-review.json` with each asset ID, exact source path, what was inspected, test cases, findings and disposition.
+
+## Role 10 — Question-bank and mock-exam auditor
+
+You are independent of the author and must inspect both the topic mastery pool and its integration into the wider question bank and mock experience. Use `docs/LEARNER_EXPERIENCE_STANDARD.md`, SPEC.md, full PYQ sources/variants, `src/52-bank.js`, `src/54-mock.js` and the generated pool. Audit objective coverage, PYQ provenance and key-vs-candidate-marked separation, item uniqueness and ambiguity, answer keys, distractors, numerical checks, difficulty and format mix, mock mark allocation, missing-content redistribution, timed scorable formats, answer hiding, navigation and post-submit review. Clearly distinguish actual PYQs from generated variants. Do not claim an official cut-off from an app setting. Return `bank-review.json` with item-level and product-level findings and exact evidence.
+
+## Reference-lesson protocol (applies to roles 4–10)
+
+Before judging a new lesson, inspect SPEC.md, the current `seed/lesson_t1.json` / `review/lesson-4-1-for-model-review.md` exemplar and at least two additional approved lesson JSON files relevant to the topic or teaching format. Inspect `src/52-bank.js` and `src/54-mock.js` for current product behaviour when assessing assessments. Record which versions and commits were inspected. Use exemplars as patterns, not authorities: do not copy their prose or assume they are error-free. The newest review finding and canonical spec outrank an older exemplar. If no suitable exemplar exists, record the gap.
