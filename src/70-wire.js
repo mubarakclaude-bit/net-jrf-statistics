@@ -621,6 +621,7 @@ function wireAll(){
     progressImportBtn.onclick=()=>progressImportFile.click();
     progressImportFile.onchange=async()=>{
       const file=progressImportFile.files&&progressImportFile.files[0];if(!file)return;
+      let progressImported=false;
       try{
         const backup=JSON.parse(await file.text()),names=progressRecords;
         if(!plainObject(backup)||backup.format!=="net-jrf-statistics-progress"||backup.version!==1||
@@ -668,15 +669,18 @@ function wireAll(){
             : " Previous records were restored. Pre-import snapshot: "+snapshotId+".";
           throw new Error((writeErr&&writeErr.message||"write failed")+"."+detail);
         }
-        await loadProfileData();
-        if(saveFb.t){clearTimeout(saveFb.t);delete saveFb.t}
-        const feedback={uid:S.uid,name:S.ownerName||"",label:S.profile||"me",
-          asks:(S.asks||[]).slice(-200),reqs:(S.reqs||[]).slice(-200),updated:now()};
-        await S.db.doc(fbPath()).set(feedback);
-        const fbSnap=await S.db.doc(fbPath()).get();
-        if(!fbSnap.exists||!sameJson(fbSnap.data(),feedback))throw new Error("Progress imported, but shared feedback refresh could not be verified");
-        render();toast("Progress imported and verified. Pre-import snapshot: "+snapshotId);
-      }catch(e){toast("Import failed: "+((e&&e.message)||"invalid backup"))}
+        await loadProfileData();progressImported=true;
+        let feedbackOk=true;
+        try{
+          if(saveFb.t){clearTimeout(saveFb.t);delete saveFb.t}
+          const feedback={uid:S.uid,name:S.ownerName||"",label:S.profile||"me",
+            asks:(S.asks||[]).slice(-200),reqs:(S.reqs||[]).slice(-200),updated:now()};
+          await S.db.doc(fbPath()).set(feedback);
+          const fbSnap=await S.db.doc(fbPath()).get();
+          feedbackOk=!!(fbSnap.exists&&sameJson(fbSnap.data(),feedback));
+        }catch(feedbackErr){feedbackOk=false}
+        render();toast("Progress imported and verified. "+(feedbackOk?"Shared feedback refreshed. ":"Shared feedback refresh needs attention. ")+"Pre-import snapshot: "+snapshotId);
+      }catch(e){toast((progressImported?"Progress imported; follow-up issue: ":"Import failed: ")+((e&&e.message)||"invalid backup"))}
       finally{progressImportFile.value=""}
     };
   }
