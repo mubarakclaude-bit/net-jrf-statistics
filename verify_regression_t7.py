@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Verify every numerical claim used by regression-t7 (heteroscedasticity and GLS).
-# Run with Python 3, numpy and scipy. Exact algebraic identities are also asserted.
+# Run with Python 3 and numpy. Exact algebraic identities are also asserted.
 import numpy as np
 from fractions import Fraction as F
 
