@@ -1,0 +1,97 @@
+name: Validate lessons
+
+# The gate for every author, human or model. A pull request cannot merge while this is red.
+# It checks only the lessons the change touches (the repo has older lessons that predate the
+# current standard; the manual "audit" run reports those without blocking anyone).
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      audit:
+        description: "Validate EVERY lesson (reports legacy failures; does not block)"
+        type: boolean
+        default: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Index and harness agree with the seeds
+        run: ./check.sh
+
+      - name: Work out which lesson seeds changed
+        id: changed
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            BASE="${{ github.event.before }}"
+          else
+            BASE=""
+          fi
+          if [ -n "$BASE" ] && git cat-file -e "$BASE" 2>/dev/null; then
+            git diff --name-only --diff-filter=AM "$BASE" HEAD -- 'seed/lesson_*.json' > .changed.txt
+          else
+            : > .changed.txt
+          fi
+          echo "Changed lesson seeds:"; cat .changed.txt || true
+
+      - name: Validate changed lessons and their mastery pools
+        run: |
+          fail=0
+          while read -r f; do
+            [ -z "$f" ] && continue
+            echo "::group::$f"
+            out=$(node vcheck.js "$f" 2>&1) || rc=$?
+            echo "$out" | grep -v '^seed/' || true
+            if [ "${rc:-0}" -ne 0 ] || echo "$out" | grep -q "FAILURES"; then
+              echo "::error file=$f::validation failed"; fail=1
+            fi
+            rc=0
+            echo "::endgroup::"
+          done < .changed.txt
+          exit $fail
+
+      - name: Audit every lesson (manual run only)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit }}
+        continue-on-error: true
+        run: |
+          for f in seed/lesson_*.json; do
+            out=$(node vcheck.js "$f" 2>&1) || true
+            if echo "$out" | grep -q "FAILURES"; then echo "::warning file=$f::$(echo "$out" | grep -A3 FAILURES | tr '\n' ' ')"; fi
+          done
+
+  browser:
+    # The two suites need a browser, so they run after the fast checks pass.
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright
+          npx playwright install --with-deps chromium
+      - name: Build the app
+        run: ./build.sh
+      - name: test.js
+        run: node test.js
+      - name: clicktest.js
+        run: node clicktest.js
