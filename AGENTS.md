@@ -16,6 +16,44 @@ Finished lessons can sit on a feature branch for days before their pull request 
 trust `main` alone. Then open a draft pull request for your topic straight away, so the next
 person's run of the script sees it.
 
+## Maximum-automation workflow
+
+Use the repository scripts as the deterministic controller; use an AI author/reviewer only for
+work that needs language or statistical judgement.
+
+1. **Discover and reserve:** run `./whats-next.sh --fetch --live`. A branch named
+   `lesson/<topic-id>` reserves the topic before generated JSON exists. Do not start a topic
+   already present in the index, another lesson branch, or an open draft PR.
+2. **Create the work branch and draft PR immediately:** use `lesson/<topic-id>`; include the
+   topic ID, intended seed stem, store document ID and mastery-set stem in the PR description.
+3. **Research before drafting:** inspect the syllabus label, full PYQ stems and variants,
+   answer-key evidence, prerequisite lessons and relevant references. Record source provenance.
+4. **Compute before prose:** write and run the numerical/theoretical verification script first.
+   Save reproducible checks and outputs in the PR.
+5. **Generate:** author from `lessons/TEMPLATE.py`; run `addlesson.sh` to produce the lesson and
+   mastery JSON, update the index and wire the harness.
+6. **Validate and test:** run `./check.sh`, `./build.sh`, `node test.js`, and
+   `node clicktest.js`. Never treat an unexecuted check as passed.
+7. **Independent review:** a second author/model reviews mathematical correctness, assumptions,
+   question keys, distractors, teaching sequence, PYQ alignment and originality. Record findings.
+8. **Deliver:** update the draft PR with generated seeds, verification output and review checklist.
+   Merge, deploy, and write to the Claude ArtifactData store only through their authorised
+   workflows and explicit approval.
+
+A failure at any stage blocks progression to the next stage. The controller must report the exact
+failed command and preserve logs; it must never silently continue using stale generated seeds.
+Chat-only agents may prepare and commit source files, but must not claim to have run shell or
+browser tests they cannot execute.
+
+## Automation safety boundaries
+
+- Automated generation and validation may run without approval.
+- Opening or updating a draft PR is permitted for the selected lesson branch.
+- Merging, deploying, changing the live lesson index, and writing to ArtifactData require human
+  approval and the appropriate authorised environment.
+- Do not store credentials in the repository, lesson files, prompts or PR descriptions.
+- Every generated lesson must retain a provenance record and an auditable verification report.
+
 ## Read first, in this order
 
 1. `SPEC.md` — the house standard: lesson shape, scene kinds, mastery-pool rules, store layout,
