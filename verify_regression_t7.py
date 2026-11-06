@@ -16,6 +16,7 @@ gls_cov=np.linalg.inv(X.T@np.linalg.inv(Omega)@X)
 gls_beta=np.linalg.solve(X.T@np.linalg.inv(Omega)@X,X.T@np.linalg.inv(Omega)@y)
 assert np.allclose(gls_beta,beta)
 assert np.all(np.linalg.eigvalsh(ols_cov-gls_cov)>-1e-10)
+assert np.allclose(np.linalg.inv(X.T@X),[[0.7,-0.3],[-0.3,0.2]])
 assert np.allclose(ols_cov,[[1.0,-0.5],[-0.5,0.5]])
 assert np.allclose(gls_cov,[[49/58,-23/58],[-23/58,25/58]])
 # A heteroskedasticity-robust sandwich covariance is not the homoskedastic formula.
