@@ -118,3 +118,39 @@ versa.
   append duplicate index entries.
 - A changed source commit creates a new artifact version; do not overwrite the prior audit record.
 - The orchestrator must detect a reservation already held by another open branch/PR and stop.
+
+
+## learner-review.json
+
+Required additional fields:
+- reviewer_independent: true
+- rubric_version, candidate_commit, exemplar_refs
+- learner_paths_tested: [{profile: rusty_returner|uneven_foundation|jrf_ready, scenes_examined, entry_barriers, result}]
+- prerequisite_audit: [{prerequisite, diagnostic_path, refresh_path, verdict, evidence}]
+- findings: [{severity, location, learner_impact, evidence, correction}]
+- core_vs_extension_check, notation_and_language_check
+- disposition: pass|changes_required|blocked
+
+## visual-review.json
+
+Required additional fields:
+- reviewer_independent: true
+- rubric_version, candidate_commit
+- assets: [{asset_id, source_path, registered, rendered_or_executed, test_cases, mathematical_check, mobile_check, verdict}]
+- findings: [{severity, location, issue, evidence, correction}]
+- unverified_assets, disposition: pass|changes_required|blocked
+
+## bank-review.json
+
+Required additional fields:
+- reviewer_independent: true
+- rubric_version, candidate_commit
+- pyq_coverage: [{source_path, srcQ, variant_id, objective_id, scene_or_item, status}]
+- item_audit: [{item_id, stem_standalone, key_verified, distractors_valid, explanation_valid, duplicate_risk, severity}]
+- pool_counts, difficulty_mix, format_mix, key_distribution
+- mock_behaviour_checks: [{feature, source_path, test_or_evidence, result}]
+- generated_variant_label_check, official_cutoff_claim_check
+- findings: [{severity, location, issue, evidence, correction}]
+- disposition: pass|changes_required|blocked
+
+All three reports use the common envelope and exact candidate SHA. A missing rendered inspection must be represented as unverified, not pass.
