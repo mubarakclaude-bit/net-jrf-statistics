@@ -84,7 +84,8 @@ Required additional fields:
 
 Required additional fields:
 - candidate_commit, pr_number, ci_runs: [{run_id, status, conclusion, jobs}]
-- gates: [{gate, status, evidence_refs, blocking_reasons}]
+- required_reviews: {review: review.json, learner: learner-review.json, visual: visual-review.json, bank: bank-review.json}
+- gates: [{gate, status, evidence_refs, blocking_reasons}]; learner-access, visual-quality and bank/mock gates are mandatory
 - unresolved_findings, human_approval_required: true
 - decision: BLOCKED|CHANGES REQUIRED|READY FOR HUMAN APPROVAL
 - prohibited_actions_not_taken: [merge, deploy, live_index_write, artifactdata_write]
