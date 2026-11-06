@@ -63,3 +63,30 @@ Return exactly one decision: BLOCKED, CHANGES REQUIRED or READY FOR HUMAN APPROV
 7. Explicit limitations. Never claim a test passed without its actual result.
 
 The reviewer cannot change release state or merge the PR.
+
+
+### Prerequisite access and instructional clarity
+- Can a rusty learner enter the lesson without already knowing the target concept?
+- Are diagnostic checks aligned with the actual prerequisites used later?
+- Does each shaky prerequisite have a complete, accurate refresh?
+- Are intuition, definitions, symbols, algebra and derivations sequenced without hidden jumps?
+- Are core and optional JRF extension paths clear, with advanced depth preserved?
+- Are hints, self-checks and feedback useful without leaking answers?
+
+### Visual and interactive quality
+- Does each chart/graph/flow diagram teach a specific concept?
+- Are labels, axes, units, scales, legends and plotted values correct?
+- Are diagrams logically complete and visually legible?
+- Are interactive boundaries and slider combinations tested for invalid values?
+- Does the layout work on mobile, and is meaning conveyed without colour alone?
+- Is rendered evidence available? If not, mark the asset unverified.
+
+### Question bank and mock quality
+- Are PYQ stems, variants, years, official keys and candidate-marked answers traceable?
+- Are generated variants clearly distinguished from actual PYQs?
+- Does every item have one defensible key and plausible distractors?
+- Are mastery pool and bank coverage mapped to objectives and syllabus?
+- Do mocks follow intended mark and format mix, and clearly disclose missing-content redistribution?
+- Are timed mocks restricted to formats that can be scored fairly?
+- Are answer hiding, navigation, submission, review, scoring and history correct?
+- Are app thresholds clearly labelled as platform settings, not official NTA/JRF cut-offs?
