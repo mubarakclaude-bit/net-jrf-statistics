@@ -215,6 +215,9 @@ POOLD={"moduleId":"regression","topicId":"regression-t7","source":"mastery","lab
 assert len(CORE)==15 and LES["estMin"]==100
 assert len(I)==20 and sum(x["diff"]=="easy" for x in I)==6 and sum(x["diff"]=="moderate" for x in I)==10 and sum(x["diff"]=="hard" for x in I)==4
 assert sum(x["format"]=="numeric" for x in I)>=4 and sum(x["format"]=="multi" for x in I)>=2
+assert {k:sum(x["answer"]==k for x in I) for k in "ABCD"}=={"A":5,"B":5,"C":5,"D":5}
+for x in I:
+ if x["format"]=="multi": assert len(x.get("statements",[]))==4 and set(x.get("verdicts",{}))==set("ABCD")
 for x in I:
  assert len(x["options"])==4 and len(x["explanation"])>=40
  if x["format"]=="numeric": assert len(x.get("check",""))>=20
