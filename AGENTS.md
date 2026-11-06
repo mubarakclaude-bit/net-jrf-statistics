@@ -125,3 +125,14 @@ it reports, and opens the pull request.
 ## Multi-agent architecture and review
 
 The specialised agent roles, stage contracts, fail-closed quality gates, security boundaries and release authority are defined in `docs/LESSON_PRODUCTION_ARCHITECTURE.md`. The independent reviewer must use `docs/LESSON_REVIEW_RUBRIC.md` and must not be the author of the lesson under review. These documents extend this file; `SPEC.md` remains the technical contract for lesson shape and validation.
+
+
+## Learner access, visuals and assessment quality
+
+Every lesson PR must include independent reviews for:
+- prerequisite access and clarity for a learner returning after a long gap;
+- mathematical and pedagogical correctness at JRF depth;
+- charts, graphs, flow diagrams and interactive visualisations;
+- PYQ provenance, mastery pool, question-bank coverage and mock-exam behaviour.
+
+Use `docs/UGC_NET_STATISTICS_SYLLABUS_ALIGNMENT.md` as the exact subject-syllabus map and `docs/LEARNER_EXPERIENCE_STANDARD.md` as the learner-quality standard. Compare against the current approved Lesson 4.1 exemplar and at least two relevant approved lessons, but do not copy or assume they are error-free. Inspect `src/52-bank.js` and `src/54-mock.js` when reviewing bank/mock integration. Every review returns exact-path findings; a model's unsupported “looks good” is not approval. A lesson cannot be marked ready with unverified central mathematics, broken visuals, inaccessible prerequisite steps, unresolved high-severity item defects or missing PYQ/syllabus traceability.
