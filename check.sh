@@ -18,9 +18,18 @@
 # does not have. Resolve such a case by pushing the lesson, not by reindexing.
 set -e
 set -o pipefail
+# Windows installs Python as `python`, and `python3` there is often a Microsoft Store alias
+# that is not a working interpreter. Pick a real one rather than assuming the name.
+PYBIN=""
+for c in python3 python; do
+  if command -v "$c" >/dev/null 2>&1 && "$c" -c "import sys;sys.exit(0 if sys.version_info[0]==3 else 1)" >/dev/null 2>&1; then
+    PYBIN="$c"; break
+  fi
+done
+[ -n "$PYBIN" ] || { echo "FAILED: no working Python 3 found (tried python3, python)"; exit 1; }
 FIX=0; [ "$1" = "--fix-index" ] && FIX=1
 mkdir -p .cache
-FIX=$FIX python3 -I - <<'PYEOF'
+FIX=$FIX "$PYBIN" -I - <<'PYEOF'
 import io,json,glob,os,re,sys,datetime
 fix=os.environ.get('FIX')=='1'
 bad=0

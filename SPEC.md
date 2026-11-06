@@ -245,6 +245,13 @@ hand-authored lesson genuinely does compute its figures and *should* record that
 Wiring it into the shared validators rejects every honest lesson. Keep in-app-only checks in the
 in-app call sites.
 
+### Windows
+
+The scripts are bash, so run them from **Git Bash**, not Command Prompt. Windows installs Python
+as `python`, and `python3` there is usually a Microsoft Store alias that is not a working
+interpreter — so `build.sh`, `addlesson.sh` and `check.sh` each pick a real Python 3 at the top
+rather than assuming the name. Node must be on the PATH for the validators and both suites.
+
 ### Paths must be repo-relative
 
 Scratch files go in `.cache/` (gitignored, created on demand), never an absolute path. `test.js`

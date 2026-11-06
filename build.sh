@@ -1,6 +1,15 @@
 #!/bin/bash
 # Assemble the published page from src/ parts.
 set -e
+# Windows installs Python as `python`, and `python3` there is often a Microsoft Store alias
+# that is not a working interpreter. Pick a real one rather than assuming the name.
+PYBIN=""
+for c in python3 python; do
+  if command -v "$c" >/dev/null 2>&1 && "$c" -c "import sys;sys.exit(0 if sys.version_info[0]==3 else 1)" >/dev/null 2>&1; then
+    PYBIN="$c"; break
+  fi
+done
+[ -n "$PYBIN" ] || { echo "FAILED: no working Python 3 found (tried python3, python)"; exit 1; }
 mkdir -p .cache
 cd "$(dirname "$0")"
 OUT=app.html
@@ -24,7 +33,7 @@ sed -i "s|^const BUILD=\".*\";|const BUILD=\"$STAMP\";|" src/10-const.js
   done
   echo '</script>'
 } > $OUT
-python3 -c "
+"$PYBIN" -c "
 import re,sys
 h=open('$OUT',encoding='utf-8').read()
 open('.cache/app.js','w',encoding='utf-8').write(re.search(r'<script>(.*)</script>',h,re.S).group(1))

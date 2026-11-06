@@ -50,6 +50,8 @@ Republish the artifact page **only when `src/` changed**; content goes to the st
 4. **Module numbers come from `seed/meta_syllabus.json` labels**, not Roman numerals. Probability
    is 1.x, time series is 7.x. Both have been miscited in shipped lessons and had to be fixed.
 5. **Never pipe `test.js` or `clicktest.js` through `tail`.**
+   On Windows, run the scripts from Git Bash; they pick `python` when `python3` is only a
+   Microsoft Store alias.
 6. **The `<seed-stem>` argument must match the `OUT` constant in the authoring script.**
    `addlesson.sh` checks this and fails loudly; a mismatch once validated a stale seed silently.
 7. **Scratch files go in `.cache/`, never an absolute path.** The repo must work on any machine.

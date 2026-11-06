@@ -4,13 +4,22 @@
 # Generates, validates, checks every formula through the renderer, wires the test harness,
 # and updates both copies of the lesson index. Prints only what changed or what failed.
 set -e
-# pipefail matters: `python3 "$PY" | tail -2` otherwise reports tail's exit code, so a syntax
+# pipefail matters: `"$PYBIN" "$PY" | tail -2` otherwise reports tail's exit code, so a syntax
 # error in the authoring script was swallowed and the run continued on a STALE seed file.
 set -o pipefail
+# Windows installs Python as `python`, and `python3` there is often a Microsoft Store alias
+# that is not a working interpreter. Pick a real one rather than assuming the name.
+PYBIN=""
+for c in python3 python; do
+  if command -v "$c" >/dev/null 2>&1 && "$c" -c "import sys;sys.exit(0 if sys.version_info[0]==3 else 1)" >/dev/null 2>&1; then
+    PYBIN="$c"; break
+  fi
+done
+[ -n "$PYBIN" ] || { echo "FAILED: no working Python 3 found (tried python3, python)"; exit 1; }
 PY=$1; STEM=$2; TID=$3; DOC=$4; SET=$5
 mkdir -p .cache
 START=$(date +%s)
-python3 "$PY" | tail -2
+"$PYBIN" "$PY" | tail -2
 # The authoring script hardcodes its own output path, so a <seed-stem> that does not match it
 # sends the validator to the wrong file. If a file happens to sit at that path from an earlier
 # run, everything downstream validates a STALE seed and passes. Refuse both cases loudly.
@@ -28,7 +37,7 @@ if [ "$(mtime "seed/$STEM.json")" -lt "$START" ]; then
   exit 1
 fi
 node vcheck.js "seed/$STEM.json" 2>&1 | grep -vE '^seed/' | head -12
-python3 -I - "$STEM" "$TID" "$DOC" "$SET" <<'PYEOF'
+"$PYBIN" -I - "$STEM" "$TID" "$DOC" "$SET" <<'PYEOF'
 import io,json,sys,os,datetime,subprocess
 stem,tid,doc,sset=sys.argv[1:5]
 L=json.load(io.open('seed/%s.json'%stem,encoding='utf-8'))
