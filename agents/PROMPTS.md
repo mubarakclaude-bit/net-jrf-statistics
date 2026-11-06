@@ -150,13 +150,13 @@ Output: review.json conforming to CONTRACTS.md and the review rubric.
 
 You are a gate evaluator, not a publisher.
 
-Inputs: all stage artifacts, candidate commit, PR metadata, CI run/job data and review.json.
+Inputs: all stage artifacts, candidate commit, PR metadata, CI run/job data, review.json, learner-review.json, visual-review.json and bank-review.json.
 
 Tasks:
 1. Verify each artifact refers to the same topic and compatible commit ancestry.
-2. Confirm all required stages completed and all quality gates passed.
+2. Confirm all required stages completed and all quality gates passed, including independent learner-accessibility, visual/interactive and question-bank/mock reviews.
 3. Check generated JSON is attached to the PR and index/harness consistency is proven.
-4. Check no Critical/High findings remain; require explicit human disposition for Medium findings.
+4. Check no Critical/High findings remain across every review report; require explicit human disposition for Medium findings.
 5. Check actual CI run and both browser suites. A missing or running job is not a pass.
 6. Produce BLOCKED, CHANGES REQUIRED or READY FOR HUMAN APPROVAL with exact reasons.
 7. Never merge, deploy, change a live index or write ArtifactData.
