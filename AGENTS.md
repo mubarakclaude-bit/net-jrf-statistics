@@ -120,3 +120,8 @@ it reports, and opens the pull request.
 - **Vercel site:** merging to `main` rebuilds and redeploys it from `seed/`. Nothing else to do.
 - **Claude artifact:** a separate push to its store, done from a Claude session with the
   `ArtifactData` tool. The Vercel site and the artifact can differ until that push is made.
+
+
+## Multi-agent architecture and review
+
+The specialised agent roles, stage contracts, fail-closed quality gates, security boundaries and release authority are defined in `docs/LESSON_PRODUCTION_ARCHITECTURE.md`. The independent reviewer must use `docs/LESSON_REVIEW_RUBRIC.md` and must not be the author of the lesson under review. These documents extend this file; `SPEC.md` remains the technical contract for lesson shape and validation.
