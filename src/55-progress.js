@@ -7,7 +7,7 @@ function vProgress(){
   const emax=Math.max(1,...Object.values(et));
   const loadedAny=Object.keys(S.bank).length>0;
   return '<div class="hd"><h1>Progress</h1><p>The diagnostic view: marks at stake against marks you can currently defend.</p>'+
-    '<div class="sp"><button class="btn sm" id="loadAllBtn">Load every module</button></div></div>'+
+    '<div class="sp"><button class="btn sm" id="loadAllBtn">Load every module</button> <button class="btn sm" id="progressExport">Download progress backup</button> <button class="btn sm" id="progressImportBtn">Import backup</button><input id="progressImportFile" type="file" accept=".json,application/json" hidden></div></div>'+
   '<div class="grid g2" style="margin-bottom:12px">'+
     '<div class="card"><h3 style="margin-bottom:10px">Paper 2 · '+Math.round(o2.proj)+' of 200 projected</h3>'+
       o2.ms.map(x=>'<div style="margin-bottom:9px"><div class="kv"><span>'+esc(x.m.name)+' <span class="note">'+x.m.marks+'m</span></span><b>'+Math.round(x.proj)+'<span class="note"> / '+x.m.marks+'</span></b></div>'+

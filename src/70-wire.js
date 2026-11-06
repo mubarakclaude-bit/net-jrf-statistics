@@ -527,11 +527,167 @@ function wireAll(){
   one("#mkExit",()=>{S.mock=null;render()});
 
   /* --- progress --- */
+  const progressRecords=["attempts","mocks","topics","errors","config","mastery","requests","notes","asks"];
+  const progressPath=n=>"data/users/"+S.uid+"/"+upath(n);
+  const plainObject=x=>!!x&&typeof x==="object"&&!Array.isArray(x)&&(Object.getPrototypeOf(x)===Object.prototype||Object.getPrototypeOf(x)===null);
+  function jsonSafe(x,depth){
+    if(depth>12)return false;
+    if(x===null||typeof x==="string"||typeof x==="boolean")return true;
+    if(typeof x==="number")return Number.isFinite(x);
+    if(Array.isArray(x))return x.length<=10000&&x.every(v=>jsonSafe(v,depth+1));
+    if(!plainObject(x))return false;
+    return Object.keys(x).length<=20000&&Object.keys(x).every(k=>
+      k!=="__proto__"&&k!=="constructor"&&k!=="prototype"&&jsonSafe(x[k],depth+1));
+  }
+  const objectMap=x=>plainObject(x)&&Object.keys(x).every(k=>plainObject(x[k]));
+  const objectList=x=>Array.isArray(x)&&x.length<=10000&&x.every(plainObject);
+  function validateProgressRecord(n,v){
+    if(v===null)return true;
+    if(!plainObject(v)||!jsonSafe(v,0))return false;
+    if((n==="attempts"||n==="mastery")&&v.v!=null&&v.v!==SCHEMA)return false;
+    if(n==="attempts")return Object.keys(v).every(k=>["a","v"].includes(k))&&plainObject(v.a)&&objectMap(v.a);
+    if(n==="mocks"||n==="errors"||n==="requests"||n==="asks")
+      return Object.keys(v).every(k=>k==="list")&&objectList(v.list);
+    if(n==="topics")return Object.keys(v).every(k=>k==="t")&&objectMap(v.t);
+    if(n==="mastery")return Object.keys(v).every(k=>["m","v"].includes(k))&&plainObject(v.m)&&objectMap(v.m);
+    if(n==="notes")return Object.keys(v).every(k=>k==="n")&&plainObject(v.n)&&jsonSafe(v.n,0);
+    if(n==="config"){
+      if(v.exam!=null&&typeof v.exam!=="string")return false;
+      if(v.target!=null&&(!Number.isFinite(v.target)||v.target<60||v.target>200))return false;
+      if(v.mode!=null&&!Object.prototype.hasOwnProperty.call(MODES,v.mode))return false;
+      if(v.paper!=null&&![1,2,"all"].includes(v.paper))return false;
+      return true;
+    }
+    return false;
+  }
+  function emptyProgressRecord(n,v){
+    if(v===null)return true;
+    if(n==="attempts")return Object.keys(v.a||{}).length===0;
+    if(n==="topics")return Object.keys(v.t||{}).length===0;
+    if(n==="mastery")return Object.keys(v.m||{}).length===0;
+    if(n==="notes")return Object.keys(v.n||{}).length===0;
+    if(n==="config")return Object.keys(v).filter(k=>k!=="v").length===0;
+    return !((v.list||[]).length);
+  }
+  function sameJson(a,b){return JSON.stringify(a)===JSON.stringify(b)}
+  async function readProgressRecord(n){
+    const snap=await S.db.doc(progressPath(n)).get();
+    return snap.exists?snap.data():null;
+  }
+  async function verifyProgressWrite(path,value){
+    const snap=await S.db.doc(path).get();
+    const actual=snap.exists?snap.data():null;
+    if(!sameJson(actual,value))throw new Error("Read-back verification failed for "+path.split("/").pop());
+    // The hosted static adapter can fall back to in-memory storage when localStorage is
+    // unavailable or full. A database read-back alone would then give a false success.
+    try{
+      if(localStorage.getItem("njuid")!==null){
+        const raw=localStorage.getItem("njdb:"+path);
+        if(value===null){if(raw!==null)throw new Error("Durability check failed for "+path.split("/").pop())}
+        else if(raw===null||!sameJson(JSON.parse(raw),value))throw new Error("Durability check failed for "+path.split("/").pop());
+      }
+    }catch(e){if(e&&/Durability check/.test(e.message))throw e;
+      throw new Error("Could not verify browser storage durability")}
+  }
+  async function flushProgressPending(){
+    for(const n of progressRecords){
+      if(!Object.prototype.hasOwnProperty.call(PEND,n))continue;
+      if(save["t_"+n]){clearTimeout(save["t_"+n]);delete save["t_"+n]}
+      const body=PEND[n];delete PEND[n];
+      await S.db.doc(progressPath(n)).set(body);
+      await verifyProgressWrite(progressPath(n),body);
+    }
+  }
+  const progressExport=V.querySelector("#progressExport");
+  if(progressExport)progressExport.onclick=async()=>{
+    if(!S.db||!S.uid){toast("Learner progress is not available");return}
+    progressExport.disabled=true;
+    try{
+      await flushProgressPending();
+      const records={};
+      for(const n of progressRecords)records[n]=await readProgressRecord(n);
+      const backup={format:"net-jrf-statistics-progress",version:1,schemaVersion:SCHEMA,
+        exportedAt:new Date().toISOString(),sourceUserId:S.uid,records};
+      const blob=new Blob([JSON.stringify(backup,null,2)],{type:"application/json"});
+      const url=URL.createObjectURL(blob),a=document.createElement("a");
+      a.href=url;a.download="net-jrf-progress-"+dayStr(now())+".json";
+      document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+      toast("Progress backup downloaded");
+    }catch(e){toast("Backup failed: "+((e&&e.message)||"unknown error"))}
+    finally{progressExport.disabled=false}
+  };
+  const progressImportBtn=V.querySelector("#progressImportBtn"),progressImportFile=V.querySelector("#progressImportFile");
+  if(progressImportBtn&&progressImportFile){
+    progressImportBtn.onclick=()=>progressImportFile.click();
+    progressImportFile.onchange=async()=>{
+      const file=progressImportFile.files&&progressImportFile.files[0];if(!file)return;
+      let progressImported=false;
+      try{
+        const backup=JSON.parse(await file.text()),names=progressRecords;
+        if(!plainObject(backup)||backup.format!=="net-jrf-statistics-progress"||backup.version!==1||
+           backup.schemaVersion!==SCHEMA||!plainObject(backup.records)||
+           names.some(n=>!Object.prototype.hasOwnProperty.call(backup.records,n))||
+           Object.keys(backup.records).some(n=>names.indexOf(n)<0)){
+          toast("Unsupported backup format or schema version");return;
+        }
+        for(const n of names)if(!validateProgressRecord(n,backup.records[n])){
+          toast("Backup validation failed: "+n+" has an invalid structure");return;
+        }
+        if(names.every(n=>emptyProgressRecord(n,backup.records[n]))){
+          toast("This backup contains no learner progress; nothing was imported");return;
+        }
+        if(!confirm("Import "+file.name+"? Current progress will first be snapshotted, then replaced. Continue?"))return;
+        await flushProgressPending();
+        const previous={};
+        for(const n of names)previous[n]=await readProgressRecord(n);
+        const snapshotId="preimport-"+Date.now().toString(36);
+        const snapshotPath="data/users/"+S.uid+"/progress-snapshots/"+snapshotId;
+        const snapshot={format:"net-jrf-statistics-preimport",version:1,createdAt:new Date().toISOString(),
+          learnerId:S.uid,profile:S.profile||"me",records:previous};
+        await S.db.doc(snapshotPath).set(snapshot);
+        await verifyProgressWrite(snapshotPath,snapshot);
+        for(const n of names){if(save["t_"+n]){clearTimeout(save["t_"+n]);delete save["t_"+n]}delete PEND[n]}
+        const written=[];
+        try{
+          for(const n of names){
+            const path=progressPath(n),ref=S.db.doc(path),value=backup.records[n];
+            if(value===null)await ref.delete();else await ref.set(value);
+            await verifyProgressWrite(path,value);
+            written.push(n);
+          }
+        }catch(writeErr){
+          const rollbackFailed=[];
+          for(const n of names.slice().reverse()){
+            try{
+              const ref=S.db.doc(progressPath(n));
+              if(previous[n]===null)await ref.delete();else await ref.set(previous[n]);
+              await verifyProgressWrite(progressPath(n),previous[n]);
+            }catch(rollbackErr){rollbackFailed.push(n)}
+          }
+          const detail=rollbackFailed.length
+            ? " Rollback could not restore: "+rollbackFailed.join(", ")+". Pre-import snapshot: "+snapshotId+"."
+            : " Previous records were restored. Pre-import snapshot: "+snapshotId+".";
+          throw new Error((writeErr&&writeErr.message||"write failed")+"."+detail);
+        }
+        await loadProfileData();progressImported=true;
+        let feedbackOk=true;
+        try{
+          if(saveFb.t){clearTimeout(saveFb.t);delete saveFb.t}
+          const feedback={uid:S.uid,name:S.ownerName||"",label:S.profile||"me",
+            asks:(S.asks||[]).slice(-200),reqs:(S.reqs||[]).slice(-200),updated:now()};
+          await S.db.doc(fbPath()).set(feedback);
+          const fbSnap=await S.db.doc(fbPath()).get();
+          feedbackOk=!!(fbSnap.exists&&sameJson(fbSnap.data(),feedback));
+        }catch(feedbackErr){feedbackOk=false}
+        render();toast("Progress imported and verified. "+(feedbackOk?"Shared feedback refreshed. ":"Shared feedback refresh needs attention. ")+"Pre-import snapshot: "+snapshotId);
+      }catch(e){toast((progressImported?"Progress imported; follow-up issue: ":"Import failed: ")+((e&&e.message)||"invalid backup"))}
+      finally{progressImportFile.value=""}
+    };
+  }
   const la=V.querySelector("#loadAllBtn");if(la)la.onclick=async()=>{la.disabled=true;
     await loadAll((i,n)=>{la.textContent="Loading "+i+"/"+n});la.textContent="Loaded";render()};
   const ec=V.querySelector("#errClear");if(ec)ec.onclick=()=>{
     if(ec.dataset.c){S.errs=[];saveErrs();render()}else{ec.dataset.c="1";ec.textContent="Press again to clear "+S.errs.length}};
-
   /* --- admin --- */
   const rs=V.querySelector("#rescan");if(rs)rs.onclick=()=>{rs.disabled=true;rs.textContent="Scanning…";rescan()};
   one("#diagRun",e=>{const b=V.querySelector("#diagRun");b.disabled=true;b.textContent="Checking…";runDiag()});
