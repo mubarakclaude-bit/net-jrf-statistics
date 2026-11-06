@@ -6,7 +6,7 @@ Ordering is by **marks still exposed** = module marks × (1 − topic coverage),
 previous-year anchor exists. An anchor that was *answered wrongly* is worth more than one answered
 correctly, because the variant bank then doubles as a diagnosis.
 
-Current state: **43 lessons live**, page Version 48, store 114 documents.
+Current state: **48 lessons live**, page Version 48, store 124 documents.
 Figures below come from `seed/catalog.json` (marks, baseline), `seed/meta_lessons.json` (coverage)
 and `seed/pyq_j26_full.json` (what was answered correctly).
 
@@ -42,26 +42,26 @@ correct with no lessons at all.** Coverage is not the same as need.
 
 The strongest target available. Three anchors, **all answered wrongly**, each with a variant bank.
 
-- [ ] **regression-t2** — Gauss–Markov, BLUE, estimability · anchor **Q11**, 6 variants, key B marked D
+- [x] **regression-t2** — Gauss–Markov, BLUE, estimability · anchor **Q11**, 6 variants, key B marked D
       The three-equation setup (y₁ = β₁+β₂+u₁, y₂ = 2β₁+u₂, y₃ = β₁−β₂+u₃) is a classic
       estimability question. Verify which linear combinations are estimable by construction.
-- [ ] **regression-t5** — Multicollinearity · anchor **Q38**, 4 variants, key C marked B
+- [x] **regression-t5** — Multicollinearity · anchor **Q38**, 4 variants, key C marked B
       "Which is *not* a consequence" — a negation question, so the lesson must drill what
       multicollinearity does and does not do to the OLS estimator.
-- [ ] **regression-t1** — Hat matrix, residual maker, quadratic forms · anchor **Q9**, 10 variants,
+- [x] **regression-t1** — Hat matrix, residual maker, quadratic forms · anchor **Q9**, 10 variants,
       key B marked A. Read the full stem before assigning: Q9 may belong to t1 or t2.
-- [ ] regression-t3 — ANOVA decomposition and the F test from R²
-- [ ] regression-t4 — R², adjusted R², model comparison
+- [x] regression-t3 — ANOVA decomposition and the F test from R²
+- [x] regression-t4 — R², adjusted R², model comparison
 - [ ] regression-t7 — Heteroscedasticity and GLS
 - [ ] regression-t6 — Autocorrelation and Durbin–Watson *(cross-reference time series 7.2)*
-- [ ] regression-t11 — Indicator and dummy variables
+- [x] regression-t11 — Indicator and dummy variables
 - [ ] regression-t8 — Endogeneity and instrumental variables
-- [ ] regression-t10 — Two-stage least squares
+- [x] regression-t10 — Two-stage least squares
 - [ ] regression-t9 — Identification in simultaneous equations
-- [ ] regression-t12 — Logistic regression models
-- [ ] regression-t13 — Restricted regression: exact, stochastic and mixed restrictions
-- [ ] regression-t14 — Errors in variables and stochastic regressors
-- [ ] regression-t15 — k-class estimators
+- [x] regression-t12 — Logistic regression models
+- [x] regression-t13 — Restricted regression: exact, stochastic and mixed restrictions
+- [x] regression-t14 — Errors in variables and stochastic regressors
+- [x] regression-t15 — k-class estimators
 
 ## 2 — Multivariate (18 marks, scored 4/9, nothing built)
 

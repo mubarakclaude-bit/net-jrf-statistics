@@ -8,6 +8,14 @@ This repo builds and fills a personalised UGC NET Statistics (JRF) preparation a
 the source of truth for lessons.** Everything else (the Claude artifact store, the Vercel site) is
 produced from it.
 
+## Before you start: check for duplicates
+
+Run `./whats-next.sh --fetch` (add `--live` to compare with the deployed site). It lists what is
+built, what is **in progress on other branches**, and the next unbuilt item in `BACKLOG.md`.
+Finished lessons can sit on a feature branch for days before their pull request merges, so do not
+trust `main` alone. Then open a draft pull request for your topic straight away, so the next
+person's run of the script sees it.
+
 ## Read first, in this order
 
 1. `SPEC.md` — the house standard: lesson shape, scene kinds, mastery-pool rules, store layout,
