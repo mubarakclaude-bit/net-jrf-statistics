@@ -33,6 +33,31 @@ if (pq) pq.items.forEach(it => {
   if (typeof it.explanation === "string")
     it.explanation = it.explanation.replace(/\s*Response sheet Q\d+;[^]*$/, "").trim();
 });
+// The candidate's per-module June scores ("3/11") and the "projected" figure built from them are
+// personal. The hosted copy starts everyone at zero: keep the denominator, drop the numerator.
+docs["meta/catalog"].modules.forEach(m => {
+  const den = String(m.baseline || "0/1").split("/")[1] || "1";
+  m.baseline = "0/" + den;
+});
+// Drop any sentence that says which option the candidate marked or how they were scored.
+const PERSONAL = /response sheet|\bmarked (option )?[A-D]\b|\byou marked\b|answered (it )?wrongly|marked wrong|\bI scored\b|candidate scored|your own answer/i;
+let dropped = [];
+function scrubText(s) {
+  if (!PERSONAL.test(s)) return s;
+  const parts = s.split(/(?<=[.!?])\s+/);
+  const keep = parts.filter(p => { if (PERSONAL.test(p)) { dropped.push(p.slice(0, 110)); return false; } return true; });
+  return keep.join(" ");
+}
+function scrubDeep(o) {
+  if (typeof o === "string") return scrubText(o);
+  if (Array.isArray(o)) return o.map(scrubDeep);
+  if (o && typeof o === "object") { for (const k of Object.keys(o)) o[k] = scrubDeep(o[k]); return o; }
+  return o;
+}
+for (const k of Object.keys(docs)) if (k.startsWith("lessons/")) docs[k] = scrubDeep(docs[k]);
+console.log("scrubbed " + dropped.length + " personal sentence(s) from lesson text");
+if (process.env.SHOW_SCRUBBED) dropped.forEach(d => console.log("  - " + d));
+
 const leak = JSON.stringify(docs).match(/youMarked|you marked/i);
 if (leak) { console.error("FAILED: personal answer data still in the bundle:", leak[0]); process.exit(1); }
 // Lesson prose and provenance notes sometimes say which wrong option was marked on the June paper.
