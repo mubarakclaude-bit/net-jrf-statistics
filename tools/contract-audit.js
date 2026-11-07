@@ -2,12 +2,11 @@
 /* Read-only inventory of lesson and question-pool seeds before Phase 2 schemas.
    It reports observed shapes; it does not impose a new contract or rewrite seeds. */
 "use strict";
-const fs = require("fs");
-const path = require("path");
 const { listSeeds, lessonIndex } = require("./seed-docs");
 
 const { lessons, qsets } = listSeeds();
-const index = lessonIndex({ lessons, qsets });
+const audit = lessonIndex({ lessons, qsets });
+const index = audit.index;
 const counts = xs => xs.reduce((a, x) => (a[x] = (a[x] || 0) + 1, a), {});
 const unionKeys = xs => [...new Set(xs.flatMap(x => Object.keys(x || {})))].sort();
 const lessonData = lessons.filter(x => x.data).map(x => x.data);
@@ -25,9 +24,12 @@ for (const d of [...lessonData, ...poolData]) {
   }
 }
 const report = {
-  generatedAt: new Date().toISOString(),
   source: "seed/ via tools/seed-docs.js (read-only)",
-  files: { lessons: lessons.length, pools: qsets.length, malformed: lessons.filter(x => x.error).length },
+  files: {
+    lessons: lessonData.length,
+    pools: poolData.length,
+    malformed: lessons.filter(x => x.error).length
+  },
   lessonIds: lessonData.map(x => x.id).sort(),
   topLevelKeys,
   topLevelTypes: Object.fromEntries(Object.entries(topLevelByType).map(([k, v]) => [k, [...v].sort()])),
@@ -37,9 +39,10 @@ const report = {
   itemFormats,
   itemKeys,
   duplicateOrMissing: {
-    lessonIndexProblems: index.problems,
-    lessonIndexWarnings: index.warnings
-  }
+    lessonIndexProblems: audit.problems,
+    lessonIndexWarnings: audit.warnings
+  },
+  generatedIndexCount: index.count
 };
 console.log(JSON.stringify(report, null, 2));
-if (report.files.malformed || index.problems.length) process.exitCode = 1;
+if (report.files.malformed || audit.problems.length) process.exitCode = 1;
