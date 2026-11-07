@@ -31,8 +31,10 @@ node clicktest.js
 ```
 
 `addlesson.sh` generates the seed, runs both validators, renders every formula, audits the pool
-for self-cited answers, wires the test harness and updates the index. Read what it reports, fix,
-re-run until clean. **Do not push a lesson it has not passed.**
+for self-cited answers and asserts the lesson is wired (topic id, store doc id, quiz pool of 20). It
+edits **no shared file**: the lesson index and the test harness are generated from `seed/` by
+`tools/seed-docs.js`, so parallel authors do not conflict. Read what it reports, fix, re-run until
+clean. **Do not push a lesson it has not passed.**
 
 Build the app itself with `./build.sh` (concatenates `src/` into `app.html`, then `node --check`).
 Republish the artifact page **only when `src/` changed**; content goes to the store alone.
@@ -69,7 +71,10 @@ Short sentences, no filler. `SPEC.md` has the full brief.
 Lessons live in the artifact's database, reached through Claude's `ArtifactData` tool. Push the
 lesson, its question set and `meta/lessons` in **one batch call**, with `file_path` so a large
 document never passes through the conversation, and pin `meta/lessons` with the `if_version` you
-last read.
+last read. The index is not committed: `node tools/gen-index.js` writes the generated one to
+`.cache/meta_lessons.generated.json`. Read the **live** `meta/lessons` first, add the new topic
+entries to it, and push that merged document; never overwrite the live index with a local copy.
+The Claude artifact is a generated output now (the hosted site is primary); see `ARCHITECTURE.md`.
 
 If this session has no `ArtifactData` tool, do everything else — author, verify, validate, test,
 commit the script and the generated `seed/*.json` — and say clearly that the store write is

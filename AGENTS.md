@@ -62,15 +62,22 @@ it reports, and opens the pull request.
 
 - One group of related lessons per branch. Commit the authoring scripts, the generated
   `seed/lesson_*.json` and `seed/*_mastery.json`, and the verification script.
-- `addlesson.sh` edits `seed/meta_lessons.json` and `test.js`. Parallel branches collide there:
-  after any merge or rebase run `./check.sh` and resolve with `--fix-index` only when the seeds
-  are the truth.
+- **A lesson PR touches only its own files**: `seed/lesson_<stem>.json`, its `seed/*_mastery.json`, its
+  authoring and verification scripts. `addlesson.sh` no longer edits `test.js` or the lesson index;
+  both are generated from `seed/` by `tools/seed-docs.js`, so two authors adding lessons in parallel
+  merge without conflicts. If your PR modifies `test.js` or adds `seed/meta_lessons.json`, you are on an
+  old branch: rebase onto the current base and drop those edits (the index is no longer committed).
+- `./check.sh` validates the whole seed set (duplicate ids, required fields, quiz pools, catalog).
 - The GitHub Action validates the lessons you changed and runs both browser suites. It must pass.
 - **Another author reviews each lesson** (see the pull-request template). A different model finds
   different mistakes; this is the main reason to use more than one.
 
 ## Where lessons go live
 
-- **Vercel site:** merging to `main` rebuilds and redeploys it from `seed/`. Nothing else to do.
-- **Claude artifact:** a separate push to its store, done from a Claude session with the
-  `ArtifactData` tool. The Vercel site and the artifact can differ until that push is made.
+- **Vercel site (primary):** merging to the production branch rebuilds and redeploys it from `seed/`.
+  Nothing else to do. See `ARCHITECTURE.md` for the direction of travel and the phase plan.
+- **Claude artifact (secondary, generated):** a separate push to its store, done from a Claude session
+  with the `ArtifactData` tool. It is an output, never an authoring surface, so the Vercel site and
+  the artifact can differ until that push is made.
+
+See `ARCHITECTURE.md` for the lanes (content and feature), the contracts and the storage adapter.

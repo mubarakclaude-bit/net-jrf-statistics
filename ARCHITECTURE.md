@@ -1,0 +1,81 @@
+# ARCHITECTURE
+
+Goal: **Claude and GPT (or any human) each work independently — add content, change features — and
+their work merges without either author reading the other's tooling.** Everything below serves that.
+
+Decisions (made by the owner, 2026-11-07):
+1. **The hosted site is the primary product.** The repo is the only source of truth. The Claude
+   artifact becomes an optional, *generated* copy; it is never an authoring surface.
+2. **A light bundler (esbuild) replaces shell-script concatenation** when the features are split (phase 4).
+
+## What was blocking independent work
+
+| Problem | Evidence | Fix | Phase |
+|---|---|---|---|
+| Every new lesson edited two shared files (`test.js`, `seed/meta_lessons.json`) | Two parallel lesson additions conflicted in both files | Generate both from `seed/`; commit neither | **1 — done** |
+| The same `seed/` scan was written three times, one with a ~90-entry hand-edited list | `test.js` had silently dropped 6 inference questions | One module: `tools/seed-docs.js` | **1 — done** |
+| The Claude artifact was the real backend (`ArtifactData` reachable only from a Claude session) | GPT could not read, push or test the live store | Hosted site primary; artifact generated | 1 (decision), 3 (adapter) |
+| No spec for a lesson, a pool or a progress record; each author inferred it from code | PR #4 was reviewed by writing tests afterwards and found 4 contract gaps | Versioned JSON schemas + CI | 2 |
+| Two backends behaved differently, so a path valid in one failed in the other | PR #4's snapshot path has 5 segments, which the artifact store treats as a collection | One storage interface, one conformance suite run against both | 3 |
+| The app is one global `S` and one giant `wireAll()` | Two features cannot be edited without touching the same functions | Feature modules with a registry, bundled by esbuild | 4 |
+
+## Phase 1 — delivered
+
+- `tools/seed-docs.js` is the only place that turns `seed/` into store documents:
+  `lessons/<id>` from `seed/lesson_*.json`, `qsets/<stem>` from every other seed with an `items` array,
+  `meta/lessons` **generated** from the lesson seeds. It is read-only.
+- `tools/gen-index.js` writes the generated index (`.cache/meta_lessons.generated.json`), validates the
+  set (`--check`), and asserts one lesson is wired as its author says (`--expect`).
+- `test.js` and `build_site.js` use the shared builder. `addlesson.sh` edits **no** shared file; it asserts wiring.
+  `check.sh` validates the seed set. `seed/meta_lessons.json` is untracked and ignored.
+- Verified: the hosted bundle built the new way equals the old bundle document for document (the only difference
+  is the unused `updated` and `v` keys of the index); `test.js` and `clicktest.js` pass; and a simulated
+  parallel addition of two lessons merges cleanly, where the same two additions made the old way conflict in
+  both shared files.
+
+**Rule:** a lesson PR touches only its own files — `seed/lesson_<stem>.json`, its `seed/*_mastery.json`, and its
+authoring and verification scripts. A lesson exists because its seed exists. Nothing lists lessons by hand.
+
+**In-flight branches written before this change** (for example regression-t7) edit `test.js` and
+`seed/meta_lessons.json`. When they merge, take the new base's `test.js`, drop their edits to it, and delete
+`seed/meta_lessons.json` (modify/delete conflict: accept the deletion). Their lesson files need no change.
+
+## Phase 2 — contracts (not started)
+
+`contracts/` holds versioned JSON Schemas: `lesson`, `pool`, `progress-backup`, and a storage-path table.
+CI validates every seed against them. Any author, human or model, who produces valid output is accepted
+without anyone reviewing the other's tooling. Known gaps to close in the schemas, found while testing PR #4:
+the backup envelope must carry the profile id; every storage path must be a valid *document* path
+(even segment count); feedback must be keyed per profile.
+
+## Phase 3 — storage adapter (not started)
+
+The app talks to one interface: `get`, `set`, `list`, `delete`, `onChange`. Two implementations: **hosted**
+(browser storage; today's `web/shim.js`) and **artifact** (the Claude runtime). One conformance suite runs
+against both, so a path that is valid in one and refused by the other fails in CI. The hosted adapter is the
+reference; the artifact adapter is allowed to lag.
+
+## Phase 4 — feature modules (not started)
+
+`src/features/<name>/` holds `view`, `wire`, storage keys and its own test, registered with
+`registerFeature({id, route, view, wire, keys})`. esbuild bundles real modules into one file. The giant
+`wireAll()` and the global `S` are split out feature by feature, one feature per PR, so two authors can change
+different features without touching the same function.
+
+## Lanes and rules
+
+| Lane | Owns | Rule |
+|---|---|---|
+| Content | `seed/`, `lesson_*.py`, `verify_*.py`, `BACKLOG.md` | Touch only your lesson's files. Claim with a draft PR on `lesson/<topic-id>`; run `./whats-next.sh` first if it exists on your base. |
+| Feature | `src/`, feature tests | One feature per PR. Add a test with it. |
+| Contract | `contracts/`, `tools/`, `.github/workflows/` | Changes need approval from **both** authors, because everything else depends on them. |
+
+Every PR is reviewed by a different author from the one who wrote it. The hosted site deploys from the
+production branch; the artifact is pushed separately and is never authoritative.
+
+## Related documents
+
+`AGENTS.md` (how to author), `SPEC.md` (the lesson standard), `CLAUDE.md` (Claude-specific). The branch
+`automation/max-pipeline` carries a review-agent workflow (`agents/CONTRACTS.md`,
+`docs/LESSON_PRODUCTION_ARCHITECTURE.md`); it describes *who reviews what*, and this file describes *how the code
+and data are organised*. They are complementary and should be reconciled when that branch merges.
