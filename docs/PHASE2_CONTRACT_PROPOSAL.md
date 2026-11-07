@@ -44,6 +44,9 @@ documented compatible subset.
 
 ## Inventory required before writing binding schemas
 
+A first read-only storage inventory is recorded in [`PHASE2_STORAGE_INVENTORY.md`](./PHASE2_STORAGE_INVENTORY.md). It captures the nine current progress records, profile-aware path convention, and two unresolved points: the current progress-backup draft omits `profileId`, and feedback is currently learner-scoped rather than profile-scoped. This inventory is a draft for review, not a binding contract.
+
+
 - Enumerate every `seed/lesson_*.json` and every question-set seed discovered by
   `tools/seed-docs.js`.
 - Collect top-level keys, required keys, types, enum values, and optional fields across all seeds.
