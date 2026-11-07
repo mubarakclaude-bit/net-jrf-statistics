@@ -34,6 +34,9 @@ jobs:
       - name: Inventory seed contracts (read-only; Phase 2 preparation)
         run: node tools/contract-audit.js
 
+      - name: Check non-binding schema draft JSON syntax
+        run: node -e 'for (const f of ["docs/schema-drafts/lesson.schema.json", "docs/schema-drafts/pool.schema.json"]) { JSON.parse(require("fs").readFileSync(f, "utf8")); console.log("valid JSON:", f); }'
+
       - name: Work out which lesson seeds changed
         id: changed
         run: |
