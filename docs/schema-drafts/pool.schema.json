@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://net-jrf-statistics.invalid/schema-drafts/pool.schema.json",
+  "title": "NET JRF Statistics question pool (non-binding draft)",
+  "description": "Permissive structural draft based on all 63 discovered question pools and 1,609 items. Item formats are enumerated from the current inventory; variant-specific required fields are intentionally not enforced until runtime consumers and all shapes receive joint review.",
+  "type": "object",
+  "required": [
+    "moduleId",
+    "source",
+    "label",
+    "count",
+    "items"
+  ],
+  "properties": {
+    "moduleId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "topicId": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Observed labels include variant, pyq and mastery; keep open until the full source-value audit is jointly reviewed."
+    },
+    "label": {
+      "type": "string"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/item"
+      }
+    }
+  },
+  "$defs": {
+    "item": {
+      "type": "object",
+      "required": [
+        "id",
+        "format"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "single",
+            "numeric",
+            "multi",
+            "match",
+            "order"
+          ]
+        },
+        "stem": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "paper": {
+          "type": "number"
+        },
+        "year": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "pno": {
+          "type": "number"
+        },
+        "diff": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array"
+        },
+        "answer": {},
+        "explanation": {
+          "type": "string"
+        },
+        "check": {},
+        "statements": {
+          "type": "array"
+        },
+        "verdicts": {
+          "type": "object"
+        },
+        "pairs": {
+          "type": "array"
+        },
+        "items": {
+          "type": "array"
+        },
+        "needsReview": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
