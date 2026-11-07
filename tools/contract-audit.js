@@ -53,6 +53,8 @@ const report = {
   lessonTopLevel: { keys: keys(lessonData.map(x => x.data)), fieldTypes: fieldTypes(lessonData.map(x => x.data)) },
   sceneVariants: grouped(sceneRecords, x => x.data.kind),
   poolEnvelopes: grouped(poolData, x => "pool"),
+  poolSources: counts(poolData.map(x => x.data.source || "(missing)")),
+  lessonStatuses: counts(lessonData.map(x => x.data.status || "(missing)")),
   itemVariants: grouped(itemRecords, x => x.data.format),
   duplicateOrMissing: { problems: audit.problems, warnings: audit.warnings },
   generatedIndexCount: index.count
