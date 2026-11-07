@@ -114,3 +114,35 @@ simply changing the path and losing visibility of old feedback.
 - No attempt to migrate Claude ArtifactData records.
 - No changes to PR #4 or any other author's branch.
 - No authoritative files under `contracts/` until joint approval.
+
+
+## Post-bootstrap independence requirement (owner's explicit requirement)
+
+Once the initial shared foundation is complete and jointly accepted, neither GPT nor Claude
+may be a runtime, authoring, validation, or release dependency of the other.
+
+That means:
+
+- **No author-specific tooling:** lesson and feature contributions use repository contracts and
+  documented commands, not private prompts, hidden scripts, session state, or one author's memory.
+- **Self-contained contributions:** a lesson carries its own content, pool, authoring/verification
+  material; a feature carries its own module, storage-key declaration, tests and documentation.
+- **Stable machine-readable contracts:** schemas and storage interfaces are versioned, committed,
+  and validated in CI. Either author can independently produce a conforming contribution.
+- **Automated integration:** discovery, index generation, test registration, bundling and validation
+  are deterministic repository processes; no other author has to manually wire a contribution.
+- **Independent tests:** each contribution has tests that run from a clean checkout. Shared adapter
+  conformance tests run against every supported backend.
+- **No cross-author approval bottleneck for ordinary work:** after the foundation is approved,
+  either author may add a conforming lesson or an isolated feature without the other author
+  changing files, preparing data, or being online. Review remains required by the repository's
+  normal PR policy, but review must not require the other author's private environment.
+- **Compatibility policy:** breaking changes to shared contracts require a new version and an
+  explicit migration path. Existing conforming lessons/features must continue to validate against
+  the supported contract version.
+- **Reproducible release:** CI builds from repository contents alone. The Claude artifact is an
+  optional generated output and must not be required for hosted-site builds, tests, or learner data.
+
+The acceptance test for the architecture is practical: after a clean clone, either author can
+independently add a valid lesson and a valid feature, run the documented checks, open a PR, and
+obtain the same deterministic build without contacting the other author or transferring files.
