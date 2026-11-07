@@ -6,25 +6,13 @@
  * Personal data never enters the bundle: the answers/marks in the June paper are scrubbed,
  * and the test-profile list (meta/users) is left out. */
 const fs = require("fs"), path = require("path");
-const W = __dirname, SEED = path.join(W, "seed"), OUT = path.join(W, "site");
-const J = f => JSON.parse(fs.readFileSync(path.join(SEED, f), "utf8"));
-
-const docs = {};
-docs["meta/catalog"] = J("catalog.json");
-docs["meta/lessons"] = J("meta_lessons.json");
-docs["meta/syllabus"] = J("meta_syllabus.json");
-docs["meta/app"] = { url: "", title: "NET JRF Statistics", v: 4 };
-
-for (const f of fs.readdirSync(SEED).filter(x => x.endsWith(".json")).sort()) {
-  const stem = f.slice(0, -5);
-  if (stem.startsWith("meta_") || stem === "catalog") continue;
-  const d = J(f);
-  if (stem.startsWith("lesson_")) {
-    if (d.id && Array.isArray(d.scenes)) docs["lessons/" + d.id] = d;
-    continue;
-  }
-  if (d && Array.isArray(d.items)) docs["qsets/" + stem] = d;
-}
+const W = __dirname, OUT = path.join(W, "site");
+// Every store document comes from tools/seed-docs.js, the one place that scans seed/. The lesson
+// index is generated there from the lesson files, so adding a lesson never edits a shared file.
+const { buildDocs } = require("./tools/seed-docs");
+const built = buildDocs();
+if (built.problems.length) { built.problems.forEach(p => console.error("PROBLEM " + p)); console.error("FAILED: the seeds have problems"); process.exit(1); }
+const docs = built.docs;
 
 // scrub the candidate's own answers out of the previous-year paper
 const pq = docs["qsets/pyq_j26_full"];

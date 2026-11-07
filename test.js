@@ -10,65 +10,13 @@ fs.mkdirSync(CACHE, { recursive: true });
 const SEED = path.join(W, 'seed');
 
 function seedDocs() {
-  const J = f => JSON.parse(fs.readFileSync(path.join(SEED, f + '.json'), 'utf8'));
-  const docs = {};
-  docs['meta/catalog'] = J('catalog');
-  for (const f of ['inference_multi_1', 'inference_numeric_1', 'inference_concept_1', 'pyq_j26_full',
-                   'inference_t4_practice', 'inference_t4_mastery', 'inference_t1_mastery', 'inference_t2_mastery', 'inference_t3_mastery', 'inference_t6_mastery', 'inference_t5_mastery', 'inference_t9_mastery', 'inference_t7_mastery', 'inference_t8_mastery', 'inference_t12_mastery', 'inference_t10_mastery', 'inference_t13_mastery', 'inference_t17_mastery', 'inference_t15_mastery', 'inference_t14_mastery', 'inference_t16_mastery', 'inference_t11_mastery', 'timeseries_t3_mastery', 'timeseries_t5_mastery', 'official_t1_mastery', 'official_t2_mastery', 'official_t3_mastery', 'official_t4_mastery', 'official_t5_mastery', 'regression_t5_mastery', 'regression_t4_mastery', 'regression_t3_mastery', 'regression_t2_mastery', 'regression_t1_mastery', 'probability_t7_mastery', 'nonparam_t4_mastery', 'timeseries_t11_mastery', 'timeseries_t10_mastery', 'timeseries_t9_mastery', 'timeseries_t8_mastery', 'timeseries_t4_mastery', 'timeseries_t2_mastery', 'timeseries_t1_mastery', 'timeseries_t7_mastery', 'timeseries_t6_mastery', 'probability_t10_mastery', 'probability_t8_mastery', 'maths_t4_mastery', 'probability_t5_mastery', 'maths_t1_mastery', 'probability_t1_mastery', 'probability_t13_mastery', 'probability_t3_mastery',
-                   'inference_pyq_variants','maths_pyq_variants','probability_pyq_variants',
-                   'timeseries_pyq_variants','rprog_pyq_variants','regression_pyq_variants',
-                   'multivariate_pyq_variants','nonparam_pyq_variants','official_pyq_variants']) docs['qsets/' + f] = J(f);
-  docs['lessons/mle'] = J('lesson_mle');
-  docs['lessons/inferencet1'] = J('lesson_t1');
-  docs['lessons/inferencet2'] = J('lesson_t2');
-  docs['lessons/inferencet3'] = J('lesson_t3');
-  docs['lessons/inferencet6'] = J('lesson_t6');
-  docs['lessons/inferencet5'] = J('lesson_t5');
-  docs['lessons/inferencet9'] = J('lesson_t9');
-  docs['lessons/inferencet7'] = J('lesson_t7');
-  docs['lessons/inferencet8'] = J('lesson_t8');
-  docs['lessons/inferencet12'] = J('lesson_t12');
-  docs['lessons/inferencet10'] = J('lesson_t10');
-  docs['lessons/inferencet13'] = J('lesson_t13');
-  docs['lessons/inferencet17'] = J('lesson_t17');
-  docs['lessons/inferencet15'] = J('lesson_t15');
-  docs['lessons/inferencet14'] = J('lesson_t14');
-  docs['lessons/inferencet16'] = J('lesson_t16');
-  docs['lessons/inferencet11'] = J('lesson_t11');
-  docs['lessons/timeseriest3'] = J('lesson_ts3');
-  docs['lessons/timeseriest5'] = J('lesson_ts5');
-  docs['lessons/officialt1'] = J('lesson_10a1');
-  docs['lessons/officialt2'] = J('lesson_10a2');
-  docs['lessons/officialt3'] = J('lesson_10a3');
-  docs['lessons/officialt4'] = J('lesson_10a4');
-  docs['lessons/officialt5'] = J('lesson_10a5');
-  docs['lessons/probabilityt3'] = J('lesson_pr3');
-  docs['lessons/probabilityt13'] = J('lesson_pr13');
-  docs['lessons/probabilityt1'] = J('lesson_pr1');
-  docs['lessons/mathst1'] = J('lesson_ma1');
-  docs['lessons/probabilityt5'] = J('lesson_pr5');
-  docs['lessons/mathst4'] = J('lesson_ma4');
-  docs['lessons/probabilityt8'] = J('lesson_pr8');
-  docs['lessons/probabilityt10'] = J('lesson_pr10');
-  docs['lessons/timeseriest6'] = J('lesson_ts6');
-  docs['lessons/timeseriest7'] = J('lesson_ts7');
-  docs['lessons/timeseriest1'] = J('lesson_ts1');
-  docs['lessons/timeseriest2'] = J('lesson_ts2');
-  docs['lessons/timeseriest4'] = J('lesson_ts4');
-  docs['lessons/timeseriest8'] = J('lesson_ts8');
-  docs['lessons/timeseriest9'] = J('lesson_ts9');
-  docs['lessons/timeseriest10'] = J('lesson_ts10');
-  docs['lessons/timeseriest11'] = J('lesson_ts11');
-  docs['lessons/nonparamt4'] = J('lesson_np4');
-  docs['lessons/probabilityt7'] = J('lesson_pr7');
-  docs['lessons/regressiont1'] = J('lesson_rg1');
-  docs['lessons/regressiont2'] = J('lesson_rg2');
-  docs['lessons/regressiont3'] = J('lesson_rg3');
-  docs['lessons/regressiont4'] = J('lesson_rg4');
-  docs['lessons/regressiont5'] = J('lesson_rg5');
-  docs['meta/lessons'] = J('meta_lessons');
-  docs['meta/users'] = J('meta_users');
-  docs['meta/syllabus'] = J('meta_syllabus');
+  // Nothing here lists lessons or question sets by hand. tools/seed-docs.js builds every store
+  // document from seed/, so adding a lesson never edits this file.
+  const { buildDocs } = require('./tools/seed-docs');
+  const built = buildDocs();
+  if (built.problems.length) throw new Error('seed problems: ' + built.problems.join(' | '));
+  const docs = built.docs;
+  docs['meta/users'] = JSON.parse(fs.readFileSync(path.join(SEED, 'meta_users.json'), 'utf8'));   // test profiles
   docs['meta/app'] = { url: 'https://claude.ai/artifact/TEST', title: 'NET JRF Statistics', v: 4 };
   return docs;
 }

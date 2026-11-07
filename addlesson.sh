@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # One call for the mechanical half of adding a lesson, replacing four separate steps.
 #   ./addlesson.sh <authoring.py> <seed-stem> <topicId> <storeDocId> <masterySetStem>
-# Generates, validates, checks every formula through the renderer, wires the test harness,
-# and updates both copies of the lesson index. Prints only what changed or what failed.
+# Generates, validates, checks every formula through the renderer and asserts the lesson is wired.
+# It edits NO shared file: the lesson index and the test harness are generated from seed/ by
+# tools/seed-docs.js. Prints only what changed or what failed.
 set -e
 # pipefail matters: `"$PYBIN" "$PY" | tail -2` otherwise reports tail's exit code, so a syntax
 # error in the authoring script was swallowed and the run continued on a STALE seed file.
@@ -79,34 +80,8 @@ if selfcite:
     for x in selfcite: print('  SELF-CITED ANSWER: %s %s cites its own answer %s'%x)
     raise SystemExit('pool cites its own answer as an option — fix before pushing')
 print('option references consistent with the keys')
-# wire the test harness, idempotently
-s=io.open('test.js',encoding='utf-8').read()
-# Match the EXACT wiring line, not a substring: 'probabilityt1' is a substring of
-# 'probabilityt13', which once made this report "already wired" and silently skip a lesson.
-docline="docs['lessons/%s'] = J("%doc
-setline="'%s',"%sset
-if docline not in s:
-    anchor="  docs['meta/lessons'] = J('meta_lessons');"
-    assert s.count(anchor)==1
-    s=s.replace(anchor,"  docs['lessons/%s'] = J('%s');\n%s"%(doc,stem,anchor),1)
-    a="'official_t5_mastery',"; assert s.count(a)==1
-    s=s.replace(a,a+" %s"%setline,1)
-    io.open('test.js','w',encoding='utf-8').write(s)
-    print('harness wired')
-else: print('harness already wired')
-# Never leave this to chance again: assert both halves really are present.
-s=io.open('test.js',encoding='utf-8').read()
-assert docline in s, 'HARNESS NOT WIRED: missing %s'%docline
-assert setline in s, 'HARNESS NOT WIRED: missing mastery set %s'%setline
-ent={'id':L['id'],'title':L['title'],'moduleId':L['moduleId'],'estMin':L['estMin'],
-     'scenes':len(L['scenes']),'status':L['status'],'version':L['version']}
-# The second path is a local mirror of the store index; it only exists on the machine that
-# has one, so a clone elsewhere must skip it rather than crash.
-for path in ('seed/meta_lessons.json','.cache/store/lessons_merged.json'):
-    if not os.path.exists(path): continue
-    d=json.load(io.open(path,encoding='utf-8'))
-    d['topics'][tid]=ent; d['count']=len(d['topics'])
-    d['updated']=datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-    json.dump(d,io.open(path,'w',encoding='utf-8'),ensure_ascii=False,indent=1)
-print('indexed %s: %d min, %d scenes | store doc lessons/%s, qset %s'%(tid,ent['estMin'],ent['scenes'],doc,sset))
 PYEOF
+# The lesson index and the test harness are GENERATED from seed/ by tools/seed-docs.js, so this script
+# no longer edits test.js or seed/meta_lessons.json (the two files every parallel author used to collide
+# in). It only asserts that the lesson is wired the way you said: topic id, store doc id, quiz set, 20 items.
+node tools/gen-index.js --expect "$TID" "$DOC" "$SET"
