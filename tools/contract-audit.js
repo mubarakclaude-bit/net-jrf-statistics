@@ -42,7 +42,6 @@ const malformed = lessons.filter(x => x.error).map(x => ({file:x.file,error:x.er
 const report = {
   source: "all seed/*.json discovered by tools/seed-docs.js; read-only",
   totals: {
-    jsonFilesDiscovered: lessons.length + qsets.length + 3,
     lessonFiles: lessonData.length,
     questionPoolFiles: poolData.length,
     malformedJsonFiles: malformed.length,
