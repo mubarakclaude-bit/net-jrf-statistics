@@ -41,23 +41,29 @@ function wire(ctx, el) {
     catch (e) { ctx.toast("Could not save: " + (e && e.message || e)); }
   };
 
+  // One exam date for the whole app: the same date as Settings and the header chip, through ctx.app.settings.
+  // Version 1.0.0 of this feature kept its own copy at its own storage key; a date saved there is moved into the shared
+  // setting once, and the old key is then removed, so nothing a learner saved is lost.
   guard(async () => {
-    const saved = await ctx.store.get("exam_date");
-    if (typeof saved === "string") dateInput.value = saved;
-    updateResult(dateInput.value);
+    const saved = ctx.app.settings.get().exam;
+    if (!saved) {
+      const legacy = await ctx.store.get("exam_date");
+      if (typeof legacy === "string" && legacy) {
+        await ctx.app.settings.set({ exam: legacy });   // saves, and redraws the app, which draws this view again with the date
+        await ctx.store.remove("exam_date");
+        return;
+      }
+    }
+    dateInput.value = saved;
+    updateResult(saved);
   })();
 
   dateInput.addEventListener("change", guard(async () => {
-    const value = dateInput.value;
-    if (value) await ctx.store.set("exam_date", value);
-    else await ctx.store.remove("exam_date");
-    updateResult(value);
+    await ctx.app.settings.set({ exam: dateInput.value });   // "" clears it; the app redraws, this view included
   }));
 
   el.querySelector("#examCountdownClear").onclick = guard(async () => {
-    await ctx.store.remove("exam_date");
-    dateInput.value = "";
-    updateResult("");
+    await ctx.app.settings.set({ exam: "" });
   });
 }
 
