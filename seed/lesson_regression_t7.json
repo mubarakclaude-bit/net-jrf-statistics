@@ -1,0 +1,683 @@
+{
+  "id": "regressiont7",
+  "topicId": "regression-t7",
+  "moduleId": "regression",
+  "title": "6.6 — Heteroscedasticity and Generalized Least Squares (GLS)",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.6 Heteroscedasticity and GLS",
+  "engine": "B",
+  "engineName": "Diagnose non-constant error variance, understand consequences for OLS inference, and derive and apply feasible generalized least squares.",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 105,
+  "objectives": [
+    "Define heteroscedasticity through the conditional error variance.",
+    "Distinguish unbiasedness of OLS coefficients from efficiency and validity of conventional standard errors.",
+    "Recognize the limits of residual plots and formal heteroscedasticity tests.",
+    "Derive the weighted least squares transformation for known unequal variances.",
+    "Explain feasible GLS when the variance structure is estimated.",
+    "Choose robust standard errors or WLS/FGLS according to the inferential or modelling objective."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Classical linear regression assumptions",
+      "why": "The conditional mean and variance of the disturbance determine OLS properties."
+    },
+    {
+      "id": "p2",
+      "name": "OLS estimator and covariance matrix",
+      "why": "The variance formula shows exactly where a non-spherical error covariance enters."
+    },
+    {
+      "id": "p3",
+      "name": "Matrix algebra and weighted least squares",
+      "why": "GLS is OLS after premultiplying by a suitable whitening transformation."
+    }
+  ],
+  "traps": [
+    "Heteroscedasticity means Var(uᵢ|X)=σᵢ² is not constant across observations; it does not mean the conditional mean is nonzero.",
+    "Under exogeneity and a correctly specified conditional mean, OLS can remain unbiased/consistent despite heteroscedasticity.",
+    "Conventional homoscedastic OLS standard errors are generally incorrect; the direction of error is not universally upward.",
+    "OLS is generally inefficient among linear unbiased estimators when the covariance matrix is non-spherical.",
+    "White/heteroscedasticity-robust standard errors change estimated uncertainty, not the OLS coefficient estimates.",
+    "If Ω is known and positive definite, GLS uses Ω⁻¹; WLS is the diagonal special case.",
+    "For Var(uᵢ|X)=σ²hᵢ, WLS weights are proportional to 1/hᵢ, not 1/σᵢ.",
+    "FGLS substitutes an estimated covariance structure and therefore adds estimation uncertainty; it is not automatically superior in small samples.",
+    "Breusch–Pagan tests a specified variance relation; White's test is more general but can consume degrees of freedom.",
+    "Do not confuse heteroscedasticity with autocorrelation: one concerns unequal variances, the other cross-observation covariance."
+  ],
+  "howto": "Start by stating the conditional mean and variance assumptions. If the mean model is exogenous but variance is non-constant, OLS coefficients may remain valid while conventional standard errors fail. Use heteroscedasticity-robust inference when the mean model is the target and variance structure is unknown. If a credible variance model is available, transform by its inverse standard deviation and estimate by WLS; with an estimated variance model, call it FGLS and check sensitivity.",
+  "refs": [
+    {
+      "title": "Econometric Analysis",
+      "where": "Heteroscedasticity, GLS and feasible GLS",
+      "site": "William H. Greene",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Detailed treatment of OLS under non-spherical disturbances and GLS."
+    },
+    {
+      "title": "Introductory Econometrics: A Modern Approach",
+      "where": "Heteroskedasticity and robust inference",
+      "site": "Jeffrey M. Wooldridge",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Accessible discussion of consequences, tests and robust standard errors."
+    },
+    {
+      "title": "Econometric Analysis of Cross Section and Panel Data",
+      "where": "Heteroskedasticity-robust covariance and GLS",
+      "site": "Jeffrey M. Wooldridge",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Matrix and asymptotic foundations for robust covariance estimation and GLS."
+    }
+  ],
+  "provenance": "This is a syllabus-aligned Unit VI regression/econometrics lesson from the repository backlog item regression-t7. The currently documented June 2026 regression PYQ anchors concern other topics; no direct heteroscedasticity PYQ stem is claimed here. Mastery questions are original practice items.",
+  "revision": {
+    "sheet": [
+      "Homoscedasticity: Var(uᵢ|X)=σ²; heteroscedasticity: Var(uᵢ|X)=σᵢ² varies with i.",
+      "With exogeneity, heteroscedasticity alone need not bias OLS coefficients.",
+      "Conventional OLS standard errors rely on the homoscedastic covariance assumption and may be wrong.",
+      "Under heteroscedasticity, OLS is generally not BLUE; it can remain unbiased/consistent.",
+      "Robust (sandwich) SEs change inference, not OLS coefficients.",
+      "Known Ω: GLS β̂=(X′Ω⁻¹X)⁻¹X′Ω⁻¹y.",
+      "If Ω=σ²H, use H⁻¹; the common scale σ² cancels.",
+      "Diagonal H=diag(hᵢ): WLS weights are 1/hᵢ, or transform each row by 1/√hᵢ.",
+      "FGLS estimates H (or Ω) before applying GLS.",
+      "Breusch–Pagan and White tests assess heteroscedasticity; diagnose with plots and context too."
+    ],
+    "cards": [
+      [
+        "Variance assumption",
+        "Var(uᵢ|X)=σᵢ²"
+      ],
+      [
+        "Homoscedastic",
+        "σᵢ²=σ² for all i"
+      ],
+      [
+        "OLS coefficients",
+        "May remain unbiased under exogeneity"
+      ],
+      [
+        "Conventional SE",
+        "Generally unreliable"
+      ],
+      [
+        "Robust SE",
+        "Sandwich covariance"
+      ],
+      [
+        "GLS",
+        "Weight by Ω⁻¹"
+      ],
+      [
+        "WLS weight",
+        "1/hᵢ when Var=σ²hᵢ"
+      ],
+      [
+        "Transformation",
+        "Divide row i by √hᵢ"
+      ],
+      [
+        "FGLS",
+        "Estimate variance structure first"
+      ],
+      [
+        "Tests",
+        "Breusch–Pagan; White"
+      ]
+    ],
+    "tricks": [
+      "If the question asks about coefficient bias, check exogeneity before blaming heteroscedasticity.",
+      "If it asks about standard errors, distinguish conventional from robust/sandwich estimates.",
+      "For WLS, inverse variance is the weight; inverse standard deviation is the row multiplier.",
+      "If Ω=σ²H, the unknown common σ² factor cancels from the GLS coefficient formula."
+    ],
+    "shortcuts": [
+      "Unequal variance → conventional SE problem; robust SE is a common inference fix.",
+      "Known variance pattern → WLS/GLS can improve efficiency.",
+      "Estimated variance pattern → FGLS; report the modelling assumption."
+    ],
+    "remember": [
+      "Robust SEs do not repair omitted variables, endogeneity or a misspecified conditional mean.",
+      "Finite-sample performance of FGLS depends on how well the variance structure is estimated."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Rebuild the error assumptions",
+      "objective": "Recall what the regression disturbance assumptions say.",
+      "body": [
+        "Write the model as yᵢ=xᵢ′β+uᵢ. The conditional mean assumption E(uᵢ|X)=0 says the regressors do not systematically predict the error.",
+        "A separate assumption concerns conditional variance. Homoscedasticity says Var(uᵢ|X)=σ² for every observation. Heteroscedasticity allows Var(uᵢ|X)=σᵢ² to vary with i.",
+        "These assumptions do different jobs: the mean condition protects coefficient interpretation, while the variance condition enters the covariance matrix and standard errors."
+      ],
+      "items": [
+        {
+          "ask": "What does E(uᵢ|X)=0 describe?",
+          "recall": "The conditional mean of the error is zero.",
+          "refresh": [
+            "It says that after conditioning on the regressors, the error has no systematic average component.",
+            "It is central to unbiasedness/consistency arguments for OLS.",
+            "It is not the same as saying every realised error equals zero."
+          ]
+        },
+        {
+          "ask": "What does homoscedasticity mean?",
+          "recall": "Var(uᵢ|X)=σ² for all i.",
+          "refresh": [
+            "The conditional error variance is constant across observations.",
+            "It does not require the errors to have a normal distribution.",
+            "It is a variance assumption, not a statement about the conditional mean."
+          ]
+        },
+        {
+          "ask": "What changes under heteroscedasticity?",
+          "recall": "The conditional error variance depends on the observation or regressors.",
+          "refresh": [
+            "Some observations can have more variable errors than others.",
+            "The variance need not increase monotonically with a regressor.",
+            "The key is non-constant conditional variance, not a nonzero conditional mean."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Which assumption is directly violated by heteroscedasticity?",
+        "nudge": "Look at Var(uᵢ|X), not E(uᵢ|X)."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 6,
+      "title": "Same mean model, different spread",
+      "objective": "Recognize unequal conditional spread.",
+      "body": [
+        "Imagine household expenditure explained by income. The average relationship may be correctly specified, but prediction errors can be tightly clustered for low-income households and widely spread for high-income households.",
+        "That fan-shaped spread is a visual clue, not a proof. Heteroscedasticity can have many shapes, and a plot can miss patterns that a formal test or subject-matter reasoning detects."
+      ],
+      "scenario": {
+        "teaser": "Residual spread widens with fitted value",
+        "title": "A fan-shaped residual plot",
+        "body": [
+          "A residual-versus-fitted plot shows small vertical spread at low fitted values and much larger spread at high fitted values.",
+          "The pattern suggests non-constant conditional variance. It does not by itself identify the exact variance function or prove the cause."
+        ],
+        "q": "What assumption is the fan shape warning about?",
+        "answer": "Constant conditional error variance; the pattern suggests heteroscedasticity."
+      },
+      "ask": {
+        "q": "Does a fan-shaped residual plot prove heteroscedasticity?",
+        "nudge": "A diagnostic plot is evidence, not a formal proof."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 6,
+      "title": "Visualise unequal error variance",
+      "objective": "Connect variance changes to residual spread.",
+      "body": [
+        "The key feature is changing vertical spread as fitted values or a predictor changes. The conditional centre may remain around zero while the spread changes.",
+        "A pattern in spread is distinct from a curved mean pattern. If the residual centre bends, investigate mean-model misspecification as well as variance."
+      ],
+      "viz": "ineq-bounds",
+      "scenario": {
+        "teaser": "The centre stays near zero but the spread changes",
+        "title": "Variance changes without a mean shift",
+        "body": [
+          "At each value of x, residuals remain centred around zero. Their dispersion, however, increases with x.",
+          "This illustrates how E(u|X)=0 can hold while Var(u|X) is non-constant."
+        ],
+        "q": "Can zero conditional mean coexist with heteroscedasticity?",
+        "answer": "Yes. The conditional mean can remain zero while the conditional variance changes."
+      },
+      "ask": {
+        "q": "Which residual-plot feature signals changing variance?",
+        "nudge": "Focus on the width of the vertical cloud."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 8,
+      "title": "Consequences for OLS",
+      "objective": "Separate coefficient properties, efficiency and inference.",
+      "blocks": [
+        {
+          "h": "Coefficient estimates",
+          "p": "If E(u|X)=0 and the conditional mean model is correctly specified, heteroscedasticity alone does not generally make OLS coefficients biased. Under standard regularity conditions, OLS can remain consistent."
+        },
+        {
+          "h": "Efficiency",
+          "p": "The usual Gauss–Markov covariance condition is Var(u|X)=σ²I. When the covariance is not spherical, OLS is generally not the best linear unbiased estimator; a correctly weighted estimator can be more efficient."
+        },
+        {
+          "h": "Standard errors",
+          "p": "The conventional covariance estimate σ̂²(X′X)⁻¹ is generally invalid under heteroscedasticity. Its error can be upward or downward, so ordinary t and F inference may be unreliable."
+        }
+      ],
+      "flow": {
+        "caption": "What heteroscedasticity changes",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Non-constant Var(u|X)",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Exogeneity still holds?",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "OLS coefficients may remain unbiased/consistent",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Conventional SE generally invalid",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Use robust inference or model variance",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      },
+      "ask": {
+        "q": "Does heteroscedasticity alone necessarily bias OLS coefficients?",
+        "nudge": "Keep the zero conditional mean assumption separate from constant variance."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 7,
+      "title": "Worked example: diagnose the claim",
+      "objective": "Identify which OLS statements remain valid.",
+      "problem": "A model satisfies E(u|X)=0 but Var(uᵢ|X)=σ²xᵢ², with xᵢ>0. What follows?",
+      "steps": [
+        {
+          "say": "The conditional mean restriction is still satisfied.",
+          "math": "E(u|X)=0",
+          "why": "This is the condition supporting the usual OLS unbiasedness argument."
+        },
+        {
+          "say": "The variance is not constant when xᵢ varies.",
+          "math": "Var(uᵢ|X)=σ²xᵢ²",
+          "why": "The conditional variance changes with xᵢ, so the errors are heteroscedastic."
+        },
+        {
+          "say": "Do not use the usual homoscedastic standard-error formula without correction.",
+          "math": "Var(u|X)=Ω ≠ σ²I",
+          "why": "The covariance structure assumed by conventional OLS standard errors is violated."
+        },
+        {
+          "say": "OLS coefficients can remain unbiased, but conventional inference can fail.",
+          "math": "E(β̂_OLS|X)=β",
+          "why": "The variance assumption affects efficiency and estimated uncertainty, not automatically the conditional mean."
+        }
+      ],
+      "ask": {
+        "q": "Which statement is the safest conclusion?",
+        "nudge": "State the coefficient and standard-error consequences separately."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s5",
+      "mins": 7,
+      "title": "Detecting heteroscedasticity",
+      "objective": "Use graphical and formal diagnostics carefully.",
+      "blocks": [
+        {
+          "h": "Residual plots",
+          "p": "Plot residuals against fitted values and important regressors. Look for changing spread, clusters or other structure. A plot is a diagnostic aid, not a verdict."
+        },
+        {
+          "h": "Breusch–Pagan",
+          "p": "A common form regresses squared OLS residuals on selected explanatory variables. The null is constant variance relative to the specified auxiliary variance model. The LM statistic is asymptotically chi-square with degrees of freedom equal to the number of tested slope restrictions."
+        },
+        {
+          "h": "White test",
+          "p": "The White test uses a more general auxiliary regression, often including regressors, their squares and cross-products. It is flexible but can use many degrees of freedom, especially with many regressors."
+        }
+      ],
+      "ask": {
+        "q": "What is the null hypothesis in a standard heteroscedasticity test?",
+        "nudge": "It is the constant-variance hypothesis."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s6",
+      "mins": 8,
+      "title": "Worked example: Breusch–Pagan LM statistic",
+      "objective": "Calculate and interpret a simple BP test statistic.",
+      "problem": "An auxiliary regression of squared residuals on two non-constant terms gives n=80 and R²_aux=0.12. Calculate the LM statistic and state its asymptotic reference distribution.",
+      "steps": [
+        {
+          "say": "Use the LM form n times the auxiliary R-squared.",
+          "math": "LM=nR²_aux",
+          "why": "This is the standard large-sample Breusch–Pagan LM statistic."
+        },
+        {
+          "say": "Substitute the values.",
+          "math": "LM=80(0.12)=9.6",
+          "why": "The sample size multiplies the auxiliary regression R-squared."
+        },
+        {
+          "say": "Use two degrees of freedom for the two tested slopes.",
+          "math": "LM \\overset{a}{\\sim} χ²₂",
+          "why": "The degrees of freedom equal the number of non-constant variance terms being tested."
+        },
+        {
+          "say": "Compare 9.6 with the chosen chi-square critical value or p-value.",
+          "math": "χ²_{2,0.95}=5.991",
+          "why": "At the 5% level, 9.6 exceeds 5.991, so reject the constant-variance null in this example."
+        }
+      ],
+      "ask": {
+        "q": "At 5%, what is the decision?",
+        "nudge": "Compare 9.6 with 5.991."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s7",
+      "mins": 5,
+      "title": "Choose the response to the problem",
+      "objective": "Match robust inference and variance modelling to the objective.",
+      "intro": "There is no single automatic repair. Choose according to whether the aim is valid inference for the conditional mean or efficient estimation under a credible variance model.",
+      "items": [
+        {
+          "ask": "What do heteroscedasticity-robust standard errors change?",
+          "answer": "The estimated covariance matrix and standard errors, not the OLS coefficient estimates."
+        },
+        {
+          "ask": "When is WLS/GLS attractive?",
+          "answer": "When a credible variance/covariance structure is known or can be modelled well."
+        },
+        {
+          "ask": "What does FGLS add?",
+          "answer": "It estimates the unknown variance/covariance structure before applying GLS."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s8",
+      "mins": 8,
+      "title": "Derive GLS from the covariance matrix",
+      "objective": "Understand the matrix weighting in GLS.",
+      "blocks": [
+        {
+          "h": "Model and covariance",
+          "p": "For y=Xβ+u, suppose E(u|X)=0 and Var(u|X)=Ω, where Ω is known and positive definite. The GLS estimator minimizes the weighted quadratic form (y−Xβ)′Ω⁻¹(y−Xβ)."
+        },
+        {
+          "h": "Estimator",
+          "p": "Differentiating the quadratic form and setting the normal equations to zero gives β̂_GLS=(X′Ω⁻¹X)⁻¹X′Ω⁻¹y, assuming X′Ω⁻¹X is invertible."
+        },
+        {
+          "h": "Whitening interpretation",
+          "p": "Choose C such that C′C=Ω⁻¹. Then Cy=CXβ+Cu and Var(Cu|X)=I. Applying OLS to the transformed model is GLS."
+        }
+      ],
+      "flow": {
+        "caption": "GLS as transformed OLS",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Original model y=Xβ+u",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Know Ω=Var(u|X)",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Premultiply by C with C′C=Ω⁻¹",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Transformed errors have identity covariance",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Apply OLS to transformed model",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      },
+      "ask": {
+        "q": "What matrix determines the GLS weights?",
+        "nudge": "It is the inverse of the disturbance covariance matrix."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s9",
+      "mins": 8,
+      "title": "Worked example: diagonal WLS weights",
+      "objective": "Transform a model with known unequal variances.",
+      "problem": "Suppose Var(uᵢ|X)=σ²hᵢ, with h=(1,4,9). What row multipliers transform the model to unit error variance, and what WLS weights result?",
+      "steps": [
+        {
+          "say": "Divide observation i by the square root of hᵢ.",
+          "math": "yᵢ/√hᵢ=(xᵢ′/√hᵢ)β+uᵢ/√hᵢ",
+          "why": "The transformed error variance is σ²hᵢ/hᵢ=σ²."
+        },
+        {
+          "say": "The row multipliers are inverse standard deviations.",
+          "math": "1/√h=(1,1/2,1/3)",
+          "why": "These are the factors applied to yᵢ and the corresponding row of X."
+        },
+        {
+          "say": "The least-squares criterion is weighted by inverse hᵢ.",
+          "math": "Σ (1/hᵢ)(yᵢ−xᵢ′β)²",
+          "why": "Squaring the row multipliers produces weights 1, 1/4 and 1/9."
+        }
+      ],
+      "ask": {
+        "q": "What are the three relative WLS weights?",
+        "nudge": "Use inverse h, not inverse square-root h."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 7,
+      "title": "Guided problem: compute a GLS estimate",
+      "objective": "Apply the GLS formula to a diagonal covariance.",
+      "problem": "Let X=(1,1)′, y=(2,4)′ and Ω=diag(1,4). Find the GLS estimate of the scalar β in yᵢ=β+uᵢ.",
+      "hints": [
+        "Write Ω⁻¹=diag(1,1/4).",
+        "Use β̂=(X′Ω⁻¹X)⁻¹X′Ω⁻¹y.",
+        "Calculate the weighted average."
+      ],
+      "answer": "β̂=(2+4/4)/(1+1/4)=3.2/1.25=2.56.",
+      "solution": [
+        "The inverse covariance is diag(1,1/4).",
+        "The numerator is X′Ω⁻¹y=2+1=3; the denominator is X′Ω⁻¹X=1+1/4=1.25.",
+        "Therefore β̂_GLS=3/1.25=2.4. The weighted average is (1·2+0.25·4)/1.25=2.4."
+      ],
+      "ask": {
+        "q": "Which observation receives less weight?",
+        "nudge": "The second observation has variance four times as large."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s11",
+      "mins": 7,
+      "title": "Feasible GLS and robust covariance",
+      "objective": "Distinguish estimated weighting from robust standard errors.",
+      "blocks": [
+        {
+          "h": "Feasible GLS",
+          "p": "When Ω is unknown, specify a variance model, estimate its parameters, construct Ω̂, and substitute Ω̂⁻¹ into the GLS formula. This is feasible GLS (FGLS). Its quality depends on the variance model and the accuracy of Ω̂."
+        },
+        {
+          "h": "Robust covariance",
+          "p": "A heteroscedasticity-consistent sandwich estimator keeps β̂_OLS but replaces the conventional covariance estimate. In a common HC form it is (X′X)⁻¹[Σ xᵢxᵢ′ êᵢ²](X′X)⁻¹, with finite-sample variants."
+        },
+        {
+          "h": "Decision",
+          "p": "Use robust SEs when the primary need is inference robust to unknown heteroscedasticity. Consider WLS/FGLS when the variance structure is substantively defensible and efficiency matters. Compare results and avoid treating estimated weights as known truth."
+        }
+      ],
+      "ask": {
+        "q": "Do robust standard errors change the OLS coefficient estimates?",
+        "nudge": "They change the estimated uncertainty around the same coefficients."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s12",
+      "mins": 7,
+      "title": "Guided problem: choose the method",
+      "objective": "Select a defensible correction for each situation.",
+      "problem": "A cross-sectional study has a plausible zero conditional mean but unknown heteroscedasticity. No reliable variance function is available. What is the sensible first inference adjustment?",
+      "hints": [
+        "The target is inference for the OLS conditional-mean coefficients.",
+        "The variance function is unknown and not credibly modelled.",
+        "Choose a method that does not require estimating a full variance model."
+      ],
+      "answer": "Use heteroscedasticity-robust (sandwich) standard errors for OLS inference.",
+      "solution": [
+        "Retain the OLS coefficient estimates under the maintained mean/exogeneity assumptions.",
+        "Replace conventional standard errors with a heteroscedasticity-consistent covariance estimator.",
+        "State that this does not repair endogeneity or misspecification of the conditional mean."
+      ],
+      "ask": {
+        "q": "What important limitation should accompany this recommendation?",
+        "nudge": "Robust SEs do not repair a biased coefficient estimator."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s13",
+      "mins": 6,
+      "title": "Exam traps and method distinctions",
+      "objective": "Avoid common false claims about heteroscedasticity.",
+      "intro": "Check each statement against the exact assumption it concerns.",
+      "items": [
+        {
+          "q": "Heteroscedasticity necessarily makes OLS coefficients biased.",
+          "answer": "False. Under exogeneity, OLS may remain unbiased/consistent; variance and efficiency are affected."
+        },
+        {
+          "q": "Conventional homoscedastic OLS standard errors are generally valid under heteroscedasticity.",
+          "answer": "False. Use a heteroscedasticity-consistent covariance estimate or a valid variance model."
+        },
+        {
+          "q": "For Var(uᵢ|X)=σ²hᵢ, the WLS weight is 1/hᵢ.",
+          "answer": "True. The row multiplier is 1/√hᵢ, whose square gives the criterion weight."
+        },
+        {
+          "q": "FGLS treats the estimated covariance matrix as if it were known without uncertainty.",
+          "answer": "False. The covariance is estimated; its quality and finite-sample uncertainty matter."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s14",
+      "mins": 5,
+      "title": "Summary: what to remember",
+      "objective": "Consolidate the path from diagnosis to correction.",
+      "body": [
+        "Heteroscedasticity is non-constant conditional error variance. It does not, by itself, imply a nonzero conditional mean or biased OLS coefficients.",
+        "The conventional OLS covariance formula is generally wrong under heteroscedasticity, and OLS is generally inefficient among linear unbiased estimators.",
+        "Robust standard errors support inference without changing OLS coefficients. GLS uses Ω⁻¹; WLS is its diagonal special case. FGLS estimates the variance structure first.",
+        "For Var(uᵢ|X)=σ²hᵢ, divide row i by √hᵢ and use weight 1/hᵢ. Always state the assumptions behind the chosen correction."
+      ],
+      "ask": {
+        "q": "In one line, distinguish robust SE from WLS.",
+        "nudge": "One changes estimated uncertainty; the other changes the fitting criterion."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s15",
+      "mins": 5,
+      "title": "Mastery test",
+      "setId": "regression_t7_mastery"
+    }
+  ]
+}
