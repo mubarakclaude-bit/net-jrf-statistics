@@ -13,8 +13,10 @@
      ctx.toast(message)             a short message
      ctx.rerender()                 draw the feature again
      ctx.route                      the route it is shown at: "f-<id>", or the built-in route it replaces (see below)
-     ctx.app                        the host interface, read this and call it; see appApi() below. A feature never touches
-                                    the app's internal state S or its global helpers directly.
+     ctx.app                        the host interface (version 2), see appApi() below: gate, overall, formatStats, errors,
+                                    loadAll, clearErrors, settings.get/set (exam date, target), lessons(), learnProgress(),
+                                    navigate(route), ui helpers and data tables. A feature never touches the app's internal
+                                    state S or its global helpers directly.
      ctx.store.get/set/remove(key)  learner data. ONLY the keys declared in feature.json "storage"; each is stored at
                                     data/users/<uid>/features/<id>/<key> (under p/<profile>/ for a non-default profile),
                                     a path the storage contract allows. Any other key throws.
@@ -54,6 +56,30 @@ function appApi(){
     bankLoaded:()=>Object.keys(S.bank).length>0,
     loadAll:onProgress=>loadAll(onProgress),  /* load every module's questions */
     clearErrors:()=>{S.errs=[];saveErrs()},
+    /* v2 */
+    version:2,
+    settings:Object.freeze({
+      /* the learner's own settings, the same ones the app's Settings page edits: { exam: "YYYY-MM-DD" or "", target: 60..200 } */
+      get:()=>({exam:S.cfg.exam||"",target:S.cfg.target||150}),
+      /* change some of them; written at once with the learner's config (not after the usual short delay), and the header and
+         every view redraw. Bad values throw. Returns a promise that settles when the setting is saved. */
+      set:patch=>{
+        if(!patch||typeof patch!=="object")throw new Error("settings.set needs an object, for example {exam:\"2026-12-01\"}");
+        const keys=Object.keys(patch),known=["exam","target"],odd=keys.filter(k=>known.indexOf(k)<0);
+        if(odd.length)throw new Error("settings.set: unknown setting '"+odd[0]+"' (known: "+known.join(", ")+")");
+        if("exam" in patch){const v=patch.exam;
+          if(v!==""&&!(typeof v==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(v)&&!isNaN(new Date(v+"T00:00:00"))))throw new Error("settings.set: exam must be \"\" or a date like 2026-12-01")}
+        if("target" in patch){const v=patch.target;if(typeof v!=="number"||!isFinite(v))throw new Error("settings.set: target must be a number from 60 to 200")}
+        if("exam" in patch)S.cfg.exam=patch.exam;
+        if("target" in patch)S.cfg.target=cl(patch.target,60,200);
+        saveCfg();const done=flushSave("config");render();
+        return done||Promise.resolve();   /* settles when the setting is written */
+      }
+    }),
+    lessons:()=>{const ix=(S.lessonIdx&&S.lessonIdx.topics)||{};   /* every lesson, as copies: topicId, id, title, moduleId, estMin, scenes, status, version */
+      return Object.keys(ix).sort().map(t=>Object.assign({topicId:t},ix[t]))},
+    learnProgress:()=>Object.assign({},learnProgress()),
+    navigate:route=>{if(!routeKnown(route))throw new Error("navigate: '"+route+"' is not a route (known: "+allRoutes().join(", ")+")");location.hash="#"+route},
     ui:Object.freeze({bar:bar,pc:pc,fmtPct:fmtPct,nTag:nTag,modNo:modNo,askBox:askBox}),
     data:Object.freeze({FORDER:FORDER,FMT:FMT,ERRT:ERRT})
   });

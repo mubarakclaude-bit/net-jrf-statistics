@@ -70,6 +70,15 @@ function save(name,body){
     }
   },700);
 }
+/* Write a pending (debounced) save now. Returns a promise that settles when the write has finished, or null if nothing was
+   pending. For changes a learner must not lose by closing the tab straight away, such as a setting from a feature. */
+function flushSave(name){
+  if(!(name in PEND))return null;
+  clearTimeout(save["t_"+name]);
+  const b=PEND[name];delete PEND[name];
+  const path="data/users/"+S.uid+"/"+upath(name);
+  return S.db.doc(path).set(b).catch(e=>{toast(e&&e.code==="invalid_argument"?"This view cannot save progress":"Could not save progress")});
+}
 function upath(name){
   // profile "me" keeps the original paths, so nothing already saved has to move
   return S.profile&&S.profile!=="me"

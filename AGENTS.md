@@ -94,7 +94,10 @@ A feature is a folder, `src/features/<id>/`. Adding or changing one edits **no s
    navigation bar; `false` makes it reachable only at `#f-<id>`), and `storage`: **every key you will save**.
 3. `index.js` runs in a private scope and must end with `return { render, wire };`. `render(ctx)` returns HTML;
    `wire(ctx, el)` attaches behaviour. Use only `ctx`: `ctx.store.get/set/remove`, `ctx.esc`, `ctx.toast`,
-   `ctx.rerender`, `ctx.profile`, `ctx.uid`. `ctx.store` refuses any key not declared in `storage` and writes to a path
+   `ctx.rerender`, `ctx.profile`, `ctx.uid`, and `ctx.app`, the host interface (version 2): `settings.get/set` (the
+   learner's exam date and target, the same ones Settings and the header use: never keep your own copy), `lessons()`,
+   `learnProgress()`, `overall(paper)`, `navigate(route)`, plus the helpers Progress uses (`src/14-features.js`, `appApi()`).
+   If you need something it lacks, that is a core change (section C): add it there, named and tested, never reach for `S`. `ctx.store` refuses any key not declared in `storage` and writes to a path
    the storage contract allows, separately per learner and per profile.
    **Keys must be written out:** call `ctx.store.get/set/remove("key")` directly with a string literal that is listed in
    `storage`. A key held in a variable, built by concatenation or a template, or a `ctx.store` that is aliased, destructured or

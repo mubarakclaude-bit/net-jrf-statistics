@@ -57,6 +57,26 @@ const server = http.createServer((q, r) => {
       expect("has a section in the page", await page.evaluate(r => !!document.getElementById("v-" + r), route));
       expect(manifest.replaces ? "its built-in tab '" + route + "' is still in the navigation bar, exactly once" : "navigation shows it exactly when its manifest says tab:" + manifest.tab,
         (await page.locator('#nav [data-tab="' + route + '"]').count()) === (manifest.replaces || manifest.tab ? 1 : 0));
+      if (id === ids[0]) {          // the host interface (ctx.app, version 2) is checked once per run, whichever feature runs first
+        const h = await page.evaluate(() => {
+          const a = FEATURES[Object.keys(FEATURES)[0]].ctx.app, out = {}, cfg0 = a.settings.get();
+          out.version = a.version;
+          const ls = a.lessons(); out.lessons = ls.length; out.expectLessons = Object.keys(S.lessonIdx.topics).length;
+          out.shape = ls.length > 0 && ls.every(l => l.topicId && l.title && l.moduleId);
+          const t0 = ls[0].title; ls[0].title = "changed by a feature"; out.lessonsCopy = a.lessons()[0].title === t0 && S.lessonIdx.topics[ls[0].topicId].title === t0;
+          const lp = a.learnProgress(); out.lp = lp.withLesson === out.expectLessons; lp.withLesson = -1; out.lpCopy = a.learnProgress().withLesson === out.expectLessons;
+          const g = a.settings.get(); g.exam = "mutated"; out.getCopy = a.settings.get().exam === cfg0.exam;
+          try { a.navigate("no-such-route"); out.navBad = "accepted"; } catch (e) { out.navBad = String(e.message); }
+          a.navigate("learn"); out.navOk = location.hash === "#learn";
+          return out;
+        });
+        await page.waitForFunction(() => S.route === "learn", null, { timeout: 5000 }).catch(() => {});
+        expect("host interface v2: version is 2", h.version === 2, h.version);
+        expect("host interface v2: lessons() lists every lesson with topicId, title and moduleId", h.lessons > 0 && h.lessons === h.expectLessons && h.shape, JSON.stringify(h));
+        expect("host interface v2: lessons(), learnProgress() and settings.get() return copies a feature cannot corrupt", h.lessonsCopy && h.lpCopy && h.getCopy && h.lp, JSON.stringify(h));
+        expect("host interface v2: navigate() goes to a known route and refuses an unknown one, naming the known routes", h.navOk && /not a route/.test(h.navBad) && /learn/.test(h.navBad), h.navBad);
+        expect("host interface v2: the route actually changed", await page.evaluate(() => S.route === "learn"));
+      }
       await t.open();
       expect("is visible at #" + route, await page.evaluate(r => document.getElementById("v-" + r).classList.contains("on"), route));
       expect("did not fall back to the error card", (await page.locator("#v-" + route).textContent()).indexOf("failed to display") < 0);
