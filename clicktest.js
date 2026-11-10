@@ -13,7 +13,10 @@ const { chromium } = require('playwright');
   await p.click('[data-tab="learn"]'); await p.waitForTimeout(400);
 
   await p.waitForFunction(() => !!(S.lessonIdx && S.lessonIdx.topics), null, { timeout: 15000 });
-  const topics = await p.evaluate(() => Object.keys(S.lessonIdx.topics).sort());
+  let topics = await p.evaluate(() => Object.keys(S.lessonIdx.topics).sort());
+  // CLICKTEST_SHARD="i/n" (1-based) runs every n-th lesson, so CI can run n copies at once. Unset runs all of them.
+  const shard = /^(\d+)\/(\d+)$/.exec(process.env.CLICKTEST_SHARD || '');
+  if (shard) { const i = +shard[1] - 1, n = +shard[2]; topics = topics.filter((_, k) => k % n === i); console.log('shard ' + shard[1] + '/' + n + ': ' + topics.length + ' lessons'); }
   let fails = 0; const bad = m => { fails++; console.log('   FAIL ' + m); };
 
   for (const tid of topics) {

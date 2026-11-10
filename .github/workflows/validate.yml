@@ -134,8 +134,19 @@ jobs:
         run: npm run build
       - name: test.js (the app against the storage-path contract, in strict mode)
         run: node test.js
-      - name: clicktest.js (every lesson starts and advances)
-        run: node clicktest.js
+      - name: clicktest.js (every lesson starts and advances; 4 shards at once, each its own browser)
+        run: |
+          pids=""
+          for i in 1 2 3 4; do
+            CLICKTEST_SHARD="$i/4" node clicktest.js > ".cache/click-$i.log" 2>&1 &
+            pids="$pids $!"
+          done
+          fail=0
+          for p in $pids; do wait "$p" || fail=1; done
+          for i in 1 2 3 4; do echo "::group::shard $i"; tail -n 8 ".cache/click-$i.log"; echo "::endgroup::"; done
+          if [ "$fail" -ne 0 ]; then
+            echo "::error::a clicktest shard failed"; grep -h "FAIL\|PAGEERROR\|CONSOLE" .cache/click-*.log | head -20; exit 1
+          fi
       - name: Hosted storage adapter conformance
         run: node tests/hosted-shim.test.js
       - name: Every feature's own browser test
