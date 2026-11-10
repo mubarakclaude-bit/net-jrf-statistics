@@ -6,6 +6,9 @@ ROOT=Path(__file__).resolve().parent
 L=json.loads((ROOT/"seed/lesson_stochastic_t4.json").read_text())
 P=json.loads((ROOT/"seed/stochastic_t4_mastery.json").read_text())
 assert L["id"]=="stochastict4" and len(L["scenes"])>=11
+assert sum("scenario" in s for s in L["scenes"])>=2
+assert sum(bool(s.get("flow")) for s in L["scenes"])>=1
+assert all(s.get("ask",{}).get("nudge") for s in L["scenes"] if s["kind"] in ("foundation","intuition","theory","worked"))
 assert len(P["items"])==20
 assert [sum(q["diff"]==d for q in P["items"]) for d in ("easy","moderate","hard")]==[6,10,4]
 assert [sum(q["format"]==f for q in P["items"]) for f in ("single","numeric","multi")]==[13,5,2]
