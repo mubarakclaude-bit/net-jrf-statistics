@@ -171,7 +171,31 @@
       ],
       "answer": "C",
       "explanation": "A, B and C are true; return to zero is not guaranteed after two steps.",
-      "check": "A:true;B:true;C:true;D:false"
+      "check": "A:true;B:true;C:true;D:false",
+      "statements": [
+        "The drift is zero.",
+        "The number of upward steps in n moves is Binomial(n,1/2).",
+        "The variance of the position increment over n steps is n.",
+        "The walk always returns to zero after every two steps."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "For p=q=1/2, the mean increment is zero."
+        },
+        "B": {
+          "tf": true,
+          "why": "The n independent upward/downward indicators are Bernoulli(1/2)."
+        },
+        "C": {
+          "tf": true,
+          "why": "Each increment has variance one, and independent variances add to n."
+        },
+        "D": {
+          "tf": false,
+          "why": "The walk can be at ±2 after two steps; return is not guaranteed."
+        }
+      }
     },
     {
       "id": "stochastic-t6-m-12",
@@ -218,7 +242,31 @@
       ],
       "answer": "B",
       "explanation": "A, B and C are the boundary and first-step equations; i/N is the fair case.",
-      "check": "A:true;B:true;C:true;D:false"
+      "check": "A:true;B:true;C:true;D:false",
+      "statements": [
+        "For the upper-barrier probability, u₀=0.",
+        "For the upper-barrier probability, u_N=1.",
+        "The interior recurrence is u_i=pu_{i+1}+qu_{i−1}.",
+        "The formula u_i=i/N applies for all p and q."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Starting at zero means the upper barrier is not reached first."
+        },
+        "B": {
+          "tf": true,
+          "why": "Starting at N means the upper barrier has already been reached."
+        },
+        "C": {
+          "tf": true,
+          "why": "Condition on the first upward or downward step."
+        },
+        "D": {
+          "tf": false,
+          "why": "The linear solution is the fair case p=q=1/2."
+        }
+      }
     },
     {
       "id": "stochastic-t6-m-15",
@@ -281,7 +329,31 @@
       ],
       "answer": "B",
       "explanation": "C is false: one is a probability and the other is an expected number of steps.",
-      "check": "A:true;B:true;C:false;D:true"
+      "check": "A:true;B:true;C:false;D:true",
+      "statements": [
+        "The fair upper-barrier probability is linear in i.",
+        "The biased solution uses q/p.",
+        "Expected absorption time and ruin probability are the same quantity.",
+        "Both boundary states are absorbing."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "For a fair walk u_i=i/N."
+        },
+        "B": {
+          "tf": true,
+          "why": "The biased solution is expressed using powers of q/p."
+        },
+        "C": {
+          "tf": false,
+          "why": "One is an expected number of steps; the other is a probability."
+        },
+        "D": {
+          "tf": true,
+          "why": "The process stops at either boundary."
+        }
+      }
     },
     {
       "id": "stochastic-t6-m-19",
