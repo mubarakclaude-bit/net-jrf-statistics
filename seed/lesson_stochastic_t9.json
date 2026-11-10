@@ -105,6 +105,18 @@
       [
         "Reward rate",
         "E[R]/E[X]."
+      ],
+      [
+        "Renewal equation",
+        "m(t)=F(t)+∫₀ᵗm(t−x)dF(x)."
+      ],
+      [
+        "Elementary renewal theorem",
+        "m(t)/t→1/μ."
+      ],
+      [
+        "Poisson special case",
+        "Exponential iid gaps."
       ]
     ],
     "tricks": [
@@ -120,7 +132,8 @@
     ],
     "remember": [
       "IID gaps are central to the ordinary renewal model.",
-      "Long-run results do not determine all finite-time probabilities."
+      "Long-run results do not determine all finite-time probabilities.",
+      "The finite-time renewal count depends on the full inter-renewal distribution."
     ]
   },
   "scenes": [
@@ -138,31 +151,23 @@
         {
           "ask": "If gaps are 3 and 5 hours, when does renewal 2 occur?",
           "recall": "At 8 hours.",
-          "refresh": [
-            "Add the first two cycle lengths.",
-            "An epoch is cumulative time, not a gap.",
-            "S₂=3+5=8 hours."
-          ]
+          "refresh": "Start from the meaning of a duration between events. For example, if a component works for 3 hours after one replacement and then for 5 hours after the next, the two cycle lengths are X₁=3 and X₂=5. The first renewal epoch is S₁=3, while the second is S₂=3+5=8 hours. This distinction between a gap and a cumulative event time is used throughout the lesson."
         },
         {
           "ask": "If X₁=2, X₂=4 and X₃=1, find S₃.",
           "recall": "7.",
-          "refresh": [
-            "Add all three gaps.",
-            "S₃ is the third cumulative epoch.",
-            "2+4+1=7."
-          ]
+          "refresh": "A cumulative sum adds every completed inter-renewal time up to the event being considered. If X₁=2, X₂=4 and X₃=1, then S₁=2, S₂=2+4=6 and S₃=2+4+1=7. The third renewal does not occur after only the third gap; it occurs after all three gaps have elapsed."
         },
         {
           "ask": "If X is 1 or 3 with equal probability, find E[X].",
           "recall": "2.",
-          "refresh": [
-            "Weight each value by its probability.",
-            "Add 1/2 and 3/2.",
-            "The mean gap is 2."
-          ]
+          "refresh": "For a discrete random variable, expectation is the probability-weighted average. If X is 1 with probability one-half and 3 with probability one-half, then E[X]=1(1/2)+3(1/2)=2. This mean gap is denoted μ and later its reciprocal gives the long-run renewal rate."
         }
-      ]
+      ],
+      "ask": {
+        "q": "What is the difference between an inter-renewal time and a renewal epoch?",
+        "nudge": "One is a single duration; the other is the cumulative time from the start."
+      }
     },
     {
       "kind": "intuition",
@@ -178,11 +183,17 @@
         "teaser": "A service centre replaces components",
         "title": "Count completed service cycles",
         "body": [
-          "The times between component replacements are X₁,X₂,… . The third replacement occurs at S₃=X₁+X₂+X₃.",
-          "The ordinary model assumes iid positive cycle lengths. If ageing changes the distribution from cycle to cycle, this model may not apply."
+          "A reliability team monitors a fleet of identical pumps. Whenever a pump fails, it is repaired or replaced and a new operating cycle begins. The operating duration from the end of one repair to the next failure is recorded as a cycle length.",
+          "Let X₁,X₂,… denote successive cycle lengths. The first replacement occurs at S₁=X₁, the second at S₂=X₁+X₂, and the nth at Sₙ=X₁+⋯+Xₙ. A time horizon t may contain a random number of completed replacements.",
+          "The ordinary renewal model treats these cycle lengths as independent and identically distributed positive random variables. This is an idealisation: if the pump ages and its failure distribution changes after each repair, the iid assumption may fail and a different reliability model may be needed.",
+          "The model is useful when a renewal restores the system to a statistically comparable starting condition. It separates the duration of one cycle from the count of cycles completed over a long operating period."
         ],
         "q": "What does one renewal cycle measure?",
         "answer": "The time from one renewal to the next."
+      },
+      "ask": {
+        "q": "What is the mathematical assumption about successive cycle lengths?",
+        "nudge": "The ordinary model uses a common distribution and independence."
       }
     },
     {
@@ -194,7 +205,33 @@
       "body": [
         "Let X₁,X₂,… be iid positive inter-renewal times with distribution F and finite mean μ=E[X₁] when finite-mean results are used.",
         "Renewal epochs: S₀=0 and Sₙ=Σᵢ₌₁ⁿXᵢ. Counting process: N(t)=max{n:Sₙ≤t}. Renewal function: m(t)=E[N(t)]."
-      ]
+      ],
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Inter-renewal times",
+          "body": "X₁,X₂,… are iid positive random variables with distribution F. Their common mean is μ=E[X₁], when finite."
+        },
+        {
+          "t": "formula",
+          "h": "Renewal epochs",
+          "body": "S₀=0 and Sₙ=Σᵢ₌₁ⁿXᵢ for n≥1. Each epoch is measured from the initial time origin."
+        },
+        {
+          "t": "formula",
+          "h": "Counting process",
+          "body": "N(t)=max{n≥0:Sₙ≤t}. It counts completed renewals, including an event exactly at t."
+        },
+        {
+          "t": "def",
+          "h": "Renewal function",
+          "body": "m(t)=E[N(t)] is the expected number of renewals by time t. N(t) is random; m(t) is deterministic for a specified model."
+        }
+      ],
+      "ask": {
+        "q": "Why is m(t) not the same thing as N(t)?",
+        "nudge": "Compare a random realised count with its expected value."
+      }
     },
     {
       "kind": "worked",
@@ -223,7 +260,11 @@
           "math": "N(11)=2",
           "why": "Only 4 and 8 are at most 11."
         }
-      ]
+      ],
+      "ask": {
+        "q": "What is N(12) if replacements occur exactly at 4, 8 and 12 hours?",
+        "nudge": "The definition counts epochs satisfying Sₙ≤t."
+      }
     },
     {
       "kind": "theory",
@@ -234,7 +275,28 @@
       "body": [
         "N(t)≥n if and only if Sₙ≤t. Exactly n renewals means Sₙ≤t<Sₙ₊₁.",
         "For random gaps, the cumulative epochs and therefore the number of renewals by a fixed t are random."
-      ]
+      ],
+      "blocks": [
+        {
+          "t": "def",
+          "h": "At least n renewals",
+          "body": "N(t)≥n if and only if Sₙ≤t. The nth renewal must have occurred by time t."
+        },
+        {
+          "t": "formula",
+          "h": "Exactly n renewals",
+          "body": "N(t)=n if and only if Sₙ≤t<Sₙ₊₁. The nth event has occurred but the next has not."
+        },
+        {
+          "t": "step",
+          "h": "Random count",
+          "body": "If the inter-renewal times are random, the cumulative epochs are random. Consequently N(t), the number of epochs before the fixed horizon, is a random variable."
+        }
+      ],
+      "ask": {
+        "q": "Express N(t)=n using Sₙ and Sₙ₊₁.",
+        "nudge": "The nth event has happened, but event n+1 has not."
+      }
     },
     {
       "kind": "worked",
@@ -258,7 +320,22 @@
           "math": "E[N(2)]=λt=3×2=6",
           "why": "The expected count equals rate times duration."
         }
-      ]
+      ],
+      "ask": {
+        "q": "Does every renewal process have Poisson counts?",
+        "nudge": "What special distribution must the iid gaps have for the Poisson case?"
+      },
+      "scenario": {
+        "teaser": "A help desk receives calls with exponential gaps",
+        "title": "A Poisson arrival stream as a renewal model",
+        "body": [
+          "A help desk receives incoming calls. Suppose the time between consecutive calls is independent and exponentially distributed with rate λ calls per hour. Each new call starts the next inter-arrival interval.",
+          "Exponential iid inter-arrival times define a homogeneous Poisson process. Therefore the number of calls in an interval of length t has a Poisson distribution with mean λt, and its expected count is λt.",
+          "For example, at λ=3 calls per hour, the expected number in a two-hour interval is six. This does not mean exactly six calls will arrive; it is the expectation over repeated intervals under the model.",
+          "This is a special case of renewal theory. A general renewal process may have non-exponential iid gaps and will not, in general, have Poisson counts."
+        ],
+        "close": "The exponential-gap model links renewal theory to the Poisson process."
+      }
     },
     {
       "kind": "theory",
@@ -269,10 +346,31 @@
       "body": [
         "Let F(t)=P(X₁≤t). The renewal function satisfies m(t)=F(t)+∫₀ᵗm(t−x)dF(x).",
         "Condition on the first gap x: if the first renewal occurs at x, the remaining time is t−x and the expected subsequent count is m(t−x)."
-      ]
+      ],
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Inter-renewal distribution",
+          "body": "Let F(t)=P(X₁≤t) be the distribution function of one cycle length."
+        },
+        {
+          "t": "formula",
+          "h": "Renewal equation",
+          "body": "m(t)=F(t)+∫₀ᵗm(t−x)dF(x). The first term accounts for a first renewal by t; the integral accounts for subsequent renewals after the first gap."
+        },
+        {
+          "t": "step",
+          "h": "Condition on the first gap",
+          "body": "If the first cycle lasts x, then t−x time remains after that renewal. The expected number of further renewals is m(t−x). Averaging over the first-gap distribution gives the integral."
+        }
+      ],
+      "ask": {
+        "q": "What does the term F(t) represent in the renewal equation?",
+        "nudge": "It is the probability that the first cycle has finished by time t."
+      }
     },
     {
-      "kind": "explore",
+      "kind": "theory",
       "id": "s7",
       "mins": 6,
       "title": "Fixed gaps versus random gaps",
@@ -280,7 +378,39 @@
       "body": [
         "A deterministic gap gives regular epochs and N(t)=⌊t/c⌋. Random gaps create variable spacing.",
         "Two models can have the same mean gap but different finite-time count distributions. The mean alone does not determine every finite-time probability."
-      ]
+      ],
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Deterministic gaps",
+          "body": "If every gap equals c, then the epochs occur at c, 2c, 3c,… and N(t)=⌊t/c⌋."
+        },
+        {
+          "t": "note",
+          "h": "Random gaps",
+          "body": "For random cycle lengths, the distribution of N(t) depends on the full distribution of the cumulative sums Sₙ."
+        },
+        {
+          "t": "trap",
+          "h": "Same mean does not mean same finite-time law",
+          "body": "Two renewal models can have the same mean gap and the same long-run renewal rate, yet different finite-time count distributions."
+        }
+      ],
+      "ask": {
+        "q": "Does knowing only E[X] determine P(N(5)=2) for every renewal model?",
+        "nudge": "Finite-time probabilities depend on more than the mean."
+      },
+      "scenario": {
+        "teaser": "Two replacement policies have different variability",
+        "title": "Same average life, different short-term behaviour",
+        "body": [
+          "Consider two component-replacement policies with the same average cycle duration. One policy produces nearly regular lifetimes; the other has much more variable lifetimes. Both can have the same long-run renewal rate under the elementary renewal theorem.",
+          "At a short fixed horizon, however, the number of replacements can differ because the distributions of the cumulative epochs are different. Knowing only the mean cycle length does not determine the full distribution of N(t).",
+          "This distinction matters when a maintenance planner needs a finite-horizon probability, such as the chance of at least two failures before a scheduled inspection. The complete inter-renewal distribution is then needed, not just its mean.",
+          "The long-run theorem is valuable for average planning over long periods, while finite-time risk questions require distribution-specific analysis."
+        ],
+        "close": "The mean controls the asymptotic rate, not every finite-time probability."
+      }
     },
     {
       "kind": "theory",
@@ -291,7 +421,69 @@
       "body": [
         "Under standard conditions for iid positive gaps with finite mean μ, the elementary renewal theorem states m(t)/t→1/μ as t→∞.",
         "The long-run renewal rate is the reciprocal of the mean cycle length. This is an asymptotic result, not an exact finite-time formula."
-      ]
+      ],
+      "ask": {
+        "q": "If the mean gap is 2.5 days, what is the long-run rate per day?",
+        "nudge": "Take the reciprocal of 2.5."
+      },
+      "flow": {
+        "caption": "From the cycle-length distribution to a long-run rate",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Define iid positive gaps Xᵢ",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Calculate μ=E[X]",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Check finite positive mean",
+            "kind": "decision"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 0,
+            "label": "Use renewal rate 1/μ",
+            "kind": "end"
+          },
+          {
+            "id": "e",
+            "r": 3,
+            "c": 2,
+            "label": "If reward R per cycle: E[R]/μ",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "c",
+            "to": "e"
+          }
+        ]
+      }
     },
     {
       "kind": "guided",
@@ -314,7 +506,11 @@
         "μ=1/4+9/4=5/2.",
         "The elementary renewal theorem gives rate 1/μ.",
         "The rate is 2/5 renewals per hour."
-      ]
+      ],
+      "ask": {
+        "q": "Why do we invert the mean gap to obtain a rate?",
+        "nudge": "A rate counts cycles per unit time, while μ measures time per cycle."
+      }
     },
     {
       "kind": "theory",
@@ -325,7 +521,28 @@
       "body": [
         "If R is the reward earned in one cycle and X is its length, the renewal-reward theorem gives long-run reward per unit time E[R]/E[X], under standard iid-cycle and integrability conditions.",
         "Use expected reward per cycle divided by expected cycle duration."
-      ]
+      ],
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Cycle reward",
+          "body": "Let Rᵢ be the reward earned during cycle i, paired with cycle length Xᵢ. Assume iid cycles and the standard finite-expectation conditions."
+        },
+        {
+          "t": "formula",
+          "h": "Renewal-reward theorem",
+          "body": "Long-run reward per unit time = E[R]/E[X]."
+        },
+        {
+          "t": "step",
+          "h": "Interpretation",
+          "body": "Divide the average reward earned per cycle by the average time consumed per cycle. This is a long-run average rate."
+        }
+      ],
+      "ask": {
+        "q": "If expected reward is 12 and mean cycle duration is 3 hours, find the long-run reward rate.",
+        "nudge": "Divide 12 units by 3 hours."
+      }
     },
     {
       "kind": "guided",
@@ -347,7 +564,11 @@
       "solution": [
         "Divide expected reward per cycle by expected cycle duration.",
         "100/5=20 units per hour."
-      ]
+      ],
+      "ask": {
+        "q": "If expected cycle duration doubles while expected reward stays fixed, what happens to the long-run reward rate?",
+        "nudge": "The denominator doubles."
+      }
     },
     {
       "kind": "trapcheck",
