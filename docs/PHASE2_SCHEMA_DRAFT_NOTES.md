@@ -1,6 +1,11 @@
 # Phase 2 — initial schema drafts (GPT proposal)
 
-Status: **non-binding review drafts only**. These files deliberately live under
+Status: **superseded.** The drafts in `docs/schema-drafts/` were promoted, tightened against the data, and replaced by
+[`contracts/lesson.schema.json`](../contracts/lesson.schema.json) and
+[`contracts/pool.schema.json`](../contracts/pool.schema.json); the draft files were removed. See
+[`PHASE2_REVIEW.md`](./PHASE2_REVIEW.md) for what changed and why. The notes below are kept as the evidence trail.
+
+Original status: **non-binding review drafts only**. These files deliberately live under
 `docs/schema-drafts/`, not `contracts/`. They do not change runtime behavior and are not
 used to reject lesson or pool contributions.
 

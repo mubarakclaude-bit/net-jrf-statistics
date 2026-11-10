@@ -1,6 +1,10 @@
 # Phase 2 — contract design proposal (GPT draft)
 
-Status: **proposal only; not an authoritative contract**.
+Status: **promoted.** This proposal is kept as the historical record. Its decisions were reviewed in
+[`PHASE2_REVIEW.md`](./PHASE2_REVIEW.md) and the contracts now live in [`contracts/`](../contracts/README.md),
+enforced in CI. Where the two differ, `contracts/` and the review are authoritative.
+
+Original status: **proposal only; not an authoritative contract**.
 Base: `multi-author-hosting`.
 This document is deliberately outside `contracts/`. The architecture assigns contract changes to
 both authors for approval. Claude and the owner should review this proposal before schemas become

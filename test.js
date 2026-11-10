@@ -25,7 +25,21 @@ function seedDocs() {
 const STUB = `
 window.__writes = [];
 window.__docs = __SEED__;
+__PATHS__
+// Storage-path contract (contracts/storage-paths.json), enforced exactly as the artifact store would:
+// an invalid DOCUMENT path throws invalid_argument. Violations are also recorded, because the app
+// swallows many database errors and a thrown error alone could hide one; test.js fails the run on any.
+window.__pathViolations = [];
+function guardDoc(p){
+  const r = window.__NJ_PATHS.checkDocPath(p);
+  if (!r.ok) { window.__pathViolations.push(p + ' -> ' + r.reason); const e = new Error('invalid_argument: ' + r.reason); e.code = 'invalid_argument'; throw e; }
+}
+function guardColl(p){
+  const r = window.__NJ_PATHS.checkCollectionPath(p);
+  if (!r.ok) { window.__pathViolations.push(p + ' -> ' + r.reason); const e = new Error('invalid_argument: ' + r.reason); e.code = 'invalid_argument'; throw e; }
+}
 function mkDoc(p){
+  guardDoc(p);
   return {
     id: p.split('/').pop(), path: p,
     get: async () => { await new Promise(r=>setTimeout(r,(window.__SLOW_LESSON&&p.indexOf('lessons/')===0)?window.__SLOW_LESSON:180)); const d = window.__docs[p];
@@ -40,6 +54,7 @@ function mkDoc(p){
   };
 }
 function mkColl(cp, filters){
+  guardColl(cp);
   filters = filters || [];
   const q = {
     path: cp,
@@ -81,7 +96,7 @@ window.claude = { use: async (n) => {
   page.on('console', m => { if (m.type() === 'error') errs.push('CONSOLE: ' + m.text()); });
 
   const body = fs.readFileSync(path.join(W, 'app.html'), 'utf8');
-  const stub = STUB.replace('__SEED__', JSON.stringify(seedDocs()));
+  const stub = STUB.replace('__SEED__', () => JSON.stringify(seedDocs())).replace('__PATHS__', () => require('./tools/storage-paths').browserSource());
   // mirror the real artifact wrapper, viewport meta and safe-area padding included
   const html = '<!doctype html><html><head><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">' +
@@ -270,7 +285,10 @@ window.claude = { use: async (n) => {
       await page.click('[data-exit="1"]'); await page.waitForTimeout(200); }
   }
 
+  const pathViolations = await page.evaluate(() => window.__pathViolations || []);
+  pathViolations.forEach(v => errs.push('STORAGE PATH VIOLATION: ' + v));
   say('--- errors: ' + (errs.length ? '\n' + errs.join('\n') : 'none'));
   await browser.close();
+  if (errs.length) process.exitCode = 1;   // it used to print the list and still exit 0, so CI could never fail on an error
   fs.writeFileSync(path.join(CACHE, 'test-out.txt'), out.join('\n'));
 })().catch(e => { console.error('HARNESS FAILED', e); process.exit(1); });

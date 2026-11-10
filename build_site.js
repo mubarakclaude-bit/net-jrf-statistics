@@ -63,7 +63,9 @@ let html = fs.readFileSync(app, "utf8");
 const shim = fs.readFileSync(path.join(W, "web", "shim.js"), "utf8");
 const i = html.indexOf("<script>");
 if (i < 0) { console.error("FAILED: no <script> in app.html"); process.exit(1); }
-html = html.slice(0, i) + "<script>\n" + shim + "\n</script>\n" + html.slice(i);
+// The storage-path checker is injected ahead of the shim so the hosted adapter enforces the same contract as the tests.
+const pathChecker = require("./tools/storage-paths").browserSource();
+html = html.slice(0, i) + "<script>\n" + pathChecker + "\n" + shim + "\n</script>\n" + html.slice(i);
 // app.html is a fragment (the artifact host supplies the document shell); a standalone page needs its own.
 html = '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n' +
   (/name=["']viewport["']/.test(html) ? "" : '<meta name="viewport" content="width=device-width, initial-scale=1">\n') +

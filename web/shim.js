@@ -10,6 +10,18 @@
   function lsSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
   function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
   function lsKeys() { var out = []; try { for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf(LS) === 0) out.push(k.slice(LS.length)); } } catch (e) {} return out; }
+  // Storage-path contract (contracts/storage-paths.json). window.__NJ_PATHS is the SAME checker the validator and
+  // the test stub run; build_site.js injects it. In production a bad path only warns once (a learner must never be
+  // locked out by a path slip); with window.__NJ_STRICT_PATHS set, as the tests do, it throws invalid_argument
+  // exactly like the Claude artifact store would.
+  var warned = {};
+  function guard(p, isColl) {
+    var P = window.__NJ_PATHS; if (!P) return;
+    var r = isColl ? P.checkCollectionPath(p) : P.checkDocPath(p);
+    if (r.ok) return;
+    if (window.__NJ_STRICT_PATHS) { var e = new Error("invalid_argument: " + r.reason); e.code = "invalid_argument"; throw e; }
+    if (!warned[p]) { warned[p] = 1; try { console.warn("[storage contract] " + p + ": " + r.reason); } catch (x) {} }
+  }
   var mem = {};                                  // writes that are not persisted
   // Only per-learner paths persist in the browser. Content documents (meta/, lessons/, qsets/)
   // belong to the deployed bundle: the app writes some of them back during its rescan, and a
@@ -32,6 +44,7 @@
              metadata: { fromCache: false, hasPendingWrites: false } };
   }
   function mkDoc(p) {
+    guard(p, false);
     return {
       id: p.split("/").pop(), path: p,
       get: async function () { return snap(p); },
@@ -45,6 +58,7 @@
     };
   }
   function mkColl(cp, filters) {
+    guard(cp, true);
     filters = filters || [];
     var q = {
       path: cp,

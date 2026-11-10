@@ -15,8 +15,8 @@ Decisions (made by the owner, 2026-11-07):
 | Every new lesson edited two shared files (`test.js`, `seed/meta_lessons.json`) | Two parallel lesson additions conflicted in both files | Generate both from `seed/`; commit neither | **1 — done** |
 | The same `seed/` scan was written three times, one with a ~90-entry hand-edited list | `test.js` had silently dropped 6 inference questions | One module: `tools/seed-docs.js` | **1 — done** |
 | The Claude artifact was the real backend (`ArtifactData` reachable only from a Claude session) | GPT could not read, push or test the live store | Hosted site primary; artifact generated | 1 (decision), 3 (adapter) |
-| No spec for a lesson, a pool or a progress record; each author inferred it from code | PR #4 was reviewed by writing tests afterwards and found 4 contract gaps | Versioned JSON schemas + CI | 2 |
-| Two backends behaved differently, so a path valid in one failed in the other | PR #4's snapshot path has 5 segments, which the artifact store treats as a collection | One storage interface, one conformance suite run against both | 3 |
+| No spec for a lesson, a pool or a progress record; each author inferred it from code | PR #4 was reviewed by writing tests afterwards and found 4 contract gaps | Versioned JSON schemas + CI | **2 - done** |
+| Two backends behaved differently, so a path valid in one failed in the other | PR #4's snapshot path has 5 segments, which the artifact store treats as a collection | One storage interface, one conformance suite run against both (the path rule is already enforced at run time) | 3 |
 | The app is one global `S` and one giant `wireAll()` | Two features cannot be edited without touching the same functions | Feature modules with a registry, bundled by esbuild | 4 |
 
 ## Phase 1 — delivered
@@ -40,13 +40,15 @@ authoring and verification scripts. A lesson exists because its seed exists. Not
 `seed/meta_lessons.json`. When they merge, take the new base's `test.js`, drop their edits to it, and delete
 `seed/meta_lessons.json` (modify/delete conflict: accept the deletion). Their lesson files need no change.
 
-## Phase 2 — contracts (not started)
+## Phase 2 - contracts (delivered; pending the owner's approval of the PR)
 
-`contracts/` holds versioned JSON Schemas: `lesson`, `pool`, `progress-backup`, and a storage-path table.
-CI validates every seed against them. Any author, human or model, who produces valid output is accepted
-without anyone reviewing the other's tooling. Known gaps to close in the schemas, found while testing PR #4:
-the backup envelope must carry the profile id; every storage path must be a valid *document* path
-(even segment count); feedback must be keyed per profile.
+`contracts/` holds the machine-checkable definition of a conforming contribution: lesson, question pool (and the
+20-item mastery profile), progress backup (version 2, with `profileId`), pre-import snapshot, feedback (per profile),
+the storage-path rule, and `legacy-exceptions.json`. `npm run contracts` validates the contracts against the app source
+they mirror, runs 42 valid and 73 invalid fixtures, checks every literal path in `src/`, and validates all 48 lessons
+and 63 pools. The path rule is enforced at run time (the test stub, the hosted shim). `npm run acceptance` proves the
+independence requirement for content. GPT's drafts (PR #5) were the starting point; see `docs/PHASE2_REVIEW.md` for
+the six decisions, the disagreements and the requirements added. Rules for changing a contract: `contracts/README.md`.
 
 ## Phase 3 — storage adapter (not started)
 

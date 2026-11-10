@@ -15,6 +15,24 @@ produced from it.
 2. `lessons/TEMPLATE.py` — copy this per lesson. Do not copy another finished lesson.
 3. `BACKLOG.md` — the queue. Take the top unchecked item unless told otherwise.
 
+## Setup and the proof that your contribution is acceptable
+
+Everything below runs from a clean checkout with no other author, no session and no Claude artifact.
+
+```sh
+npm ci                  # once: installs the pinned validator and browser test tool
+npm run check           # contracts + seed set  (what CI runs first)
+npm run build           # app.html and the hosted site
+npm test                # test.js, clicktest.js, hosted adapter conformance
+npm run acceptance      # two authors add lessons independently: clean merges, identical build
+```
+
+**Add or change a lesson:** write the verification and authoring scripts, run `./addlesson.sh`, then `npm run check`.
+**Add or change a feature:** until Phase 4, one feature per pull request, with its own test; any new storage path must be
+added to `contracts/storage-paths.json`, and the app must pass `node test.js` (it fails on any invalid path).
+**Change a contract:** read `contracts/README.md` first.
+`contracts/` says what a valid contribution is; `docs/PHASE2_REVIEW.md` says why.
+
 ## Non-negotiables
 
 1. **Compute every number; never recall one.** Write one verification script for the whole group of
