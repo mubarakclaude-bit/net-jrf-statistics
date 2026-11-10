@@ -61,6 +61,20 @@ def main(lesson_path):
         print('FAILED: pool cites its own answer as an option; fix before pushing'); failed = True
     else:
         print('option references consistent with the keys')
+    # Key spread (SPEC.md, "Spreading the keys"): a letter that is never right, or almost never, lets a learner guess the
+    # pattern. Every existing pool gives each letter at least 2 correct answers, so that is the floor.
+    counts = dict.fromkeys('ABCD', 0)
+    for it in P.get('items', []):
+        if it.get('answer') in counts: counts[it['answer']] += 1
+    if sum(counts.values()) >= 10:
+        low = [k for k, v in counts.items() if v < 2]
+        if low:
+            print('  KEY SPREAD: %s; letters %s are the answer to fewer than 2 questions' % (
+                ' '.join('%s=%d' % kv for kv in counts.items()), ', '.join(low)))
+            print('FAILED: spread the keys with the WANT table in lessons/TEMPLATE.py (SPEC.md, "Spreading the keys")')
+            failed = True
+        else:
+            print('answer keys spread: ' + ' '.join('%s=%d' % kv for kv in counts.items()))
     return 1 if failed else 0
 
 if __name__ == '__main__':
