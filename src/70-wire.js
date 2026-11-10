@@ -526,12 +526,6 @@ function wireAll(){
   }
   one("#mkExit",()=>{S.mock=null;render()});
 
-  /* --- progress --- */
-  const la=V.querySelector("#loadAllBtn");if(la)la.onclick=async()=>{la.disabled=true;
-    await loadAll((i,n)=>{la.textContent="Loading "+i+"/"+n});la.textContent="Loaded";render()};
-  const ec=V.querySelector("#errClear");if(ec)ec.onclick=()=>{
-    if(ec.dataset.c){S.errs=[];saveErrs();render()}else{ec.dataset.c="1";ec.textContent="Press again to clear "+S.errs.length}};
-
   /* --- admin --- */
   const rs=V.querySelector("#rescan");if(rs)rs.onclick=()=>{rs.disabled=true;rs.textContent="Scanning…";rescan()};
   one("#diagRun",e=>{const b=V.querySelector("#diagRun");b.disabled=true;b.textContent="Checking…";runDiag()});

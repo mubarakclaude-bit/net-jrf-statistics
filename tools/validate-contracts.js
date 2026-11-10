@@ -134,7 +134,7 @@ runFixtures("contracts/fixtures/features.json", "feature manifest", V("feature")
 {
   const fdir = path.join(ROOT, "src", "features");
   const ids = fs.existsSync(fdir) ? fs.readdirSync(fdir, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name).sort() : [];
-  const fv = V("feature"); let n = 0;
+  const fv = V("feature"); let n = 0; const replaced = {};
   for (const id of ids) {
     if (filesArg && !filesArg.some(f => f.split(String.fromCharCode(92)).join("/").startsWith("src/features/" + id + "/"))) continue;
     n++;
@@ -143,6 +143,11 @@ runFixtures("contracts/fixtures/features.json", "feature manifest", V("feature")
     let m; try { m = JSON.parse(fs.readFileSync(mf, "utf8")); } catch (e) { fail("src/features/" + id + "/feature.json is not valid JSON"); continue; }
     if (!fv(m)) fail("src/features/" + id + "/feature.json violates the feature contract: " + brief(fv.errors));
     if (m.id !== id) fail("src/features/" + id + ": manifest id '" + m.id + "' must equal the folder name");
+    if (m.replaces) {
+      if (m.tab) fail("src/features/" + id + ": a feature that replaces '" + m.replaces + "' must have tab:false (the built-in tab already exists)");
+      if (replaced[m.replaces]) fail("src/features/" + id + ": route '" + m.replaces + "' is already replaced by feature '" + replaced[m.replaces] + "'");
+      replaced[m.replaces] = id;
+    }
     for (const f of ["index.js", "test.js"]) if (!fs.existsSync(path.join(fdir, id, f))) fail("src/features/" + id + "/" + f + " is missing");
     const idx = path.join(fdir, id, "index.js");
     if (fs.existsSync(idx)) {

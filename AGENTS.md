@@ -18,7 +18,7 @@ instructions or availability. `docs/INDEPENDENCE.md` says exactly when that is t
 | Create or change a **lesson** or a **question pool** | [A. Lessons](#a-lessons) | `npm run check`, plus the lesson's own `./addlesson.sh` |
 | Create or change an **application feature** | [B. Features](#b-features) | `npm run build && node tests/features.test.js --only <id> && npm run check` |
 | Change a **contract** (a schema, the storage paths) | `contracts/README.md` | `npm run check`, and the owner's approval |
-| Change a **built-in view** (Home, Learn, Question bank, Mock tests, Progress, Admin) or `src/` outside `src/features/` | [C. Core changes](#c-core-changes) | `npm test`, and the owner's review |
+| Change a **built-in view** (Home, Learn, Question bank, Mock tests, Admin) or `src/` outside `src/features/` | [C. Core changes](#c-core-changes) | `npm test`, and the owner's review |
 
 Every task ends the same way: open a pull request and let CI verify it ([Pull requests](#pull-requests)).
 
@@ -106,10 +106,23 @@ change: see C.
 
 ## C. Core changes
 
-The built-in views are still the original single bundle, wired through `src/70-wire.js`, `src/40-render.js` and
-`build.sh`. A change there edits shared files, so two authors changing the same view can conflict. Until a view is
-extracted into a feature module, **one author at a time works on it**: say so in a draft pull request first. Run
-`npm test` before and after. The owner reviews every core change. `docs/INDEPENDENCE.md` lists the six views still to extract.
+**Progress is now a feature module** (`src/features/progress/`), so it is changed like any feature (section B). The other
+built-in views (Home, Learn, Question bank, Mock tests, Admin) are still the original single bundle, wired through
+`src/70-wire.js`, `src/40-render.js` and `build.sh`. A change there edits shared files, so two authors changing the same
+view can conflict. Until a view is extracted into a feature module, **one author at a time works on it**: say so in a
+draft pull request first. Run `npm test` before and after. The owner reviews every core change.
+`docs/INDEPENDENCE.md` lists the views still to extract.
+
+**Extracting a view** is a core change done once per view, as its own PR, and it must change nothing the learner sees:
+1. Move the view into `src/features/<id>/`, with `"replaces": "<route>"` and `"tab": false` in `feature.json`. It is then
+   shown at the built-in route and in the built-in tab's place; nothing in the navigation bar moves.
+2. A feature reaches the app only through `ctx` (`ctx.app` is the host interface, defined in `src/14-features.js`, `appApi()`).
+   If the view needs something the interface lacks, add it there, named and documented: that addition is the core change.
+3. Delete the old view function, its file in `build.sh`, its entry in `src/40-render.js` and its handlers in `src/70-wire.js`.
+4. **Prove it changed nothing:** build before and after and compare the exact HTML with
+   `node tools/golden-view.js <site-dir> <out.json> <route>`; the two files must be identical in all three states. Then
+   write the view's own `test.js`, add the route to the `replaces` list in `contracts/feature.schema.json`, and run
+   `npm test`, `npm run check` and `npm run acceptance`.
 
 ## Pull requests
 

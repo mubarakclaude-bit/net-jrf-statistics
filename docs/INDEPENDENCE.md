@@ -45,12 +45,13 @@ Conditions 1 to 3 are objective. Condition 4 is a one-time confirmation. After i
 **Covered:** new and modified lessons and question pools; new features; modifications to features that exist as feature
 modules (`src/features/<id>/`); changes to a feature's own storage keys, as long as they are declared in its manifest.
 
-**Not covered, and said plainly:** the application's built-in views (Home, Learn, Question bank, Mock tests, Progress,
+**Not covered, and said plainly:** the application's remaining built-in views (Home, Learn, Question bank, Mock tests,
 Admin) are still the original single bundle, wired through `src/70-wire.js`. A change to one of them edits shared files,
 so two authors changing the same built-in view can still conflict. They become independent as each is extracted into a
 feature module; every extraction is an ordinary feature PR, and until a view is extracted the honest rule is
-*one author at a time on that view*. The six still to extract are: Home, Learn, Question bank, Mock tests, Progress and
-Admin (the progress backup in PR #4 should be written as a feature module from the start).
+*one author at a time on that view*. **Progress was extracted first** (`src/features/progress/`, with `"replaces"`, and
+proved byte-identical by `tools/golden-view.js`). The five still to extract are: Home, Learn, Question bank, Mock tests
+and Admin.
 
 **Storage backends:** the hosted browser backend is the supported one and is tested on every PR. The Claude artifact
 backend is generated output; it shares the same interface and is checked only when someone runs a Claude session with

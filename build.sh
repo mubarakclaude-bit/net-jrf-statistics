@@ -28,7 +28,7 @@ sed -i "s|^const BUILD=\".*\";|const BUILD=\"$STAMP\";|" src/10-const.js
   for f in src/10-const.js src/11-state.js src/12-utils.js src/05-auth.js src/13-db.js src/14-features.js \
            src/20-metrics.js src/21-attempts.js src/22-llm.js src/23-ask.js src/30-viz.js src/31-flow.js src/32-math.js \
            src/40-render.js src/45-learn.js src/52-bank.js src/53-drill.js \
-           src/54-mock.js src/55-progress.js src/60-admin.js src/62-gen.js src/65-export.js \
+           src/54-mock.js src/60-admin.js src/62-gen.js src/65-export.js \
            src/70-wire.js .cache/features.generated.js src/80-boot.js; do
     cat "$f"; echo
   done
