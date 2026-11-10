@@ -174,9 +174,10 @@
           "ask": "If a model has k parameters including the intercept, how many slopes does it have?",
           "recall": "k−1 slopes.",
           "refresh": [
-            "One of the k parameters is the intercept.",
-            "The remaining k−1 parameters are slope coefficients.",
-            "The overall regression test jointly tests these k−1 slope coefficients against zero."
+            "The intercept is one of the k parameters in the model. The other k−1 parameters are slopes attached to explanatory variables.",
+            "The overall regression test asks whether all of those slope coefficients are zero at the same time. This is a joint hypothesis with k−1 restrictions.",
+            "That is why the numerator degrees of freedom are k−1. If a question instead defines k as the number of predictors excluding the intercept, its numerator df is k and the residual df is n−k−1.",
+            "Always read the question's definition of k before substituting. This lesson consistently counts the intercept inside k."
           ]
         },
         {
@@ -273,6 +274,64 @@
       "ask": {
         "q": "For n=40 and k=5, what are regression and residual degrees of freedom?",
         "nudge": "The numerator uses the number of slopes; the denominator uses n minus all parameters."
+      },
+      "flow": {
+        "caption": "Regression ANOVA calculation",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Start with TSS",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Split into RegSS + RSS",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Assign degrees of freedom",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Calculate MSR and MSE",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Form F = MSR / MSE",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
       }
     },
     {
@@ -345,6 +404,17 @@
       "ask": {
         "q": "What is denominator df in the stated convention?",
         "nudge": "Subtract total estimated parameters from n."
+      },
+      "scenario": {
+        "teaser": "A formula can be reconstructed from its two mean squares",
+        "title": "From R² to an F statistic",
+        "body": [
+          "Suppose the output gives R² but not the raw sums of squares. You can still reconstruct the overall F ratio because R² is the explained fraction of total variation.",
+          "The unexplained fraction is 1−R². Divide the explained fraction by the number of tested slopes, and divide the unexplained fraction by residual degrees of freedom.",
+          "Taking the first quantity divided by the second gives the same F statistic as the ANOVA table. This is the algebraic shortcut used in the official June 2026 Q9."
+        ],
+        "q": "Why does total sum of squares disappear from the compact formula?",
+        "answer": "It appears in both RegSS=R²·TSS and RSS=(1−R²)·TSS, so it cancels in their ratio."
       }
     },
     {
