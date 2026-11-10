@@ -16,6 +16,7 @@ const ROOT = path.join(__dirname, "..");
 const SITE = path.join(ROOT, "site"), FEATURES = path.join(ROOT, "src", "features");
 if (!fs.existsSync(path.join(SITE, "index.html"))) { console.error("FAILED: site/ is not built. Run: npm run build"); process.exit(2); }
 const only = process.argv.includes("--only") ? process.argv[process.argv.indexOf("--only") + 1] : null;
+const verbose = process.argv.includes("--verbose");          // also print every passing check, not only the failures
 const ids = (fs.existsSync(FEATURES) ? fs.readdirSync(FEATURES, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name).sort() : []).filter(i => !only || i === only);
 if (!ids.length) { console.log(only ? "FAILED: no feature named " + only : "no features to test"); process.exit(only ? 1 : 0); }
 
@@ -58,6 +59,7 @@ const server = http.createServer((q, r) => {
     expect("no page error or console error while it ran", errs.length === 0, errs.slice(0, 2).join(" | "));
     const bad = lines.filter(l => !l.ok);
     console.log((bad.length ? "FAIL " : "PASS ") + "feature " + id + "  (" + (lines.length - bad.length) + "/" + lines.length + " checks)");
+    if (verbose) for (const l of lines.filter(x => x.ok)) console.log("     ok " + l.name);
     for (const l of bad) console.log("     x " + l.name + (l.detail ? "  — " + String(l.detail).slice(0, 160) : ""));
     failed += bad.length; total += lines.length;
     await ctx.close();

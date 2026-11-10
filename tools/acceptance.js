@@ -60,7 +60,7 @@ function build(branch, withFeatureTests) {                        // validate + 
   out.dataHash = sha(path.join(base, "site", "data.json")); out.featHash = sha(path.join(base, ".cache", "features.generated.js"));
   out.data = out.dataHash ? JSON.parse(fs.readFileSync(path.join(base, "site", "data.json"), "utf8")) : {};
   out.gen = fs.existsSync(path.join(base, ".cache", "features.generated.js")) ? fs.readFileSync(path.join(base, ".cache", "features.generated.js"), "utf8") : "";
-  if (withFeatureTests) out.features = node("tests/features.test.js");
+  if (withFeatureTests) out.features = node("tests/features.test.js", "--verbose");
   out.ok = out.contracts.status === 0 && out.index.status === 0 && out.build.status === 0 && out.site.status === 0 && (!withFeatureTests || out.features.status === 0);
   return out;
 }
@@ -86,11 +86,24 @@ function addFeature(id, title) {                                   // a feature,
     fs.writeFileSync(path.join(to, f), s);
   }
 }
-function reviseFeature(id, mark) {
-  const idx = path.join(base, "src", "features", id, "index.js"), mf = path.join(base, "src", "features", id, "feature.json");
-  fs.writeFileSync(idx, fs.readFileSync(idx, "utf8").replace("A reference feature.", "A reference feature. " + mark));
-  const m = JSON.parse(fs.readFileSync(mf, "utf8")); m.version = "1.1.0"; fs.writeFileSync(mf, JSON.stringify(m, null, 2) + "\n");
+const FIX = () => path.join(base, "tools", "acceptance-fixtures", "features");
+function installFixture(fixture, id) {                              // an INDEPENDENTLY AUTHORED feature: real behaviour, its own storage key and its own test, written from scratch
+  const to = path.join(base, "src", "features", id); fs.mkdirSync(to, { recursive: true });
+  for (const f of fs.readdirSync(path.join(FIX(), fixture))) fs.copyFileSync(path.join(FIX(), fixture, f), path.join(to, f));
 }
+const reviseCounter = () => installFixture("ref-counter-1.1", "ref-counter");   // a REAL revision: new behaviour (a step size), a new declared storage key, and an updated test
+// tests/features.test.js --verbose prints "PASS feature <id>" and then one "     ok <check>" line per passing check, so each
+// check is attributed to the feature whose block it sits in. A check passed only if its feature passed overall.
+function featureChecks(r) {
+  const out = {}; let cur = null;
+  for (const line of (r.features.stdout || "").split("\n")) {
+    const m = /^(PASS|FAIL) feature (\S+)/.exec(line);
+    if (m) { cur = m[2]; out[cur] = { pass: m[1] === "PASS", checks: [] }; }
+    else if (cur && line.startsWith("     ok ")) out[cur].checks.push(line.slice(8).trim());
+  }
+  return out;
+}
+const passed = (r, id, check) => { const f = featureChecks(r)[id]; return !!f && f.pass && f.checks.includes(check); };
 const within = (touched, prefixes) => touched.length > 0 && touched.every(f => prefixes.some(p => f === p || f.startsWith(p)));
 
 // ================================================================ S1
@@ -122,22 +135,29 @@ if (want("S2")) {
 // ================================================================ S3
 scene = "S3";
 if (want("S3")) {
-  const G = author("s3-g", () => addFeature("acc-gpt-notes", "Notes (acceptance feature)"));
-  step("the new feature touched only its own folder: no other feature's files, no shared wiring", within(G, ["src/features/acc-gpt-notes/"]), G.join(", "));
+  const G = author("s3-g", () => installFixture("checklist", "checklist"));
+  step("the new feature touched only its own folder: no other feature's files, no shared wiring", within(G, ["src/features/checklist/"]), G.join(", "));
   const r = build("s3-g", true);
-  step("validates, builds, and every feature's own browser test passes, including the new one", r.ok && /acc-gpt-notes/.test(r.features.stdout) && /PASS feature acc-gpt-notes/.test(r.features.stdout), lastLine(r.features));
-  step("the feature is in the built app, registered by the generated block (no hand-edited list)", /registerFeature\(__manifest/.test(r.gen) && /"id":"acc-gpt-notes"/.test(r.gen));
+  step("validates and builds, and every feature's own browser test passes, including the new one", r.ok && /PASS feature checklist/.test(r.features.stdout), lastLine(r.features));
+  step("its real behaviour was exercised: adding, ticking, persisting across a reload, removing", ["adds items and counts them", "ticking an item lowers the remaining count", "the list persists across a reload", "removing an item updates the count"].every(c => passed(r, "checklist", c)));
+  step("it appears in the navigation bar, because its manifest says tab:true", passed(r, "checklist", "navigation shows it exactly when its manifest says tab:true") && r.gen.includes('"tab":true'));
+  step("it saved only through its declared key, at a contract-valid path", passed(r, "checklist", "saves at the contract path data/users/<uid>/features/checklist/items") && passed(r, "checklist", "a key it did not declare is refused"));
+  step("the feature is in the built app through the generated block (no hand-edited list)", r.gen.includes("registerFeature(__manifest") && r.gen.includes('"id":"checklist"'));
 }
 // ================================================================ S4
 scene = "S4";
 if (want("S4")) {
-  const A = author("s4-a", () => reviseFeature("ref-counter", "REVISED-BY-A."));
-  const B = author("s4-b", () => addFeature("acc-claude-plan", "Plan (acceptance feature)"));
-  step("one author modified an existing feature, the other created a different one, with disjoint files", within(A, ["src/features/ref-counter/"]) && within(B, ["src/features/acc-claude-plan/"]), A.join(",") + " | " + B.join(","));
+  const A = author("s4-a", () => reviseCounter());
+  const B = author("s4-b", () => installFixture("study-log", "study-log"));
+  step("one author revised an existing feature, the other created a different one, with disjoint files", within(A, ["src/features/ref-counter/"]) && within(B, ["src/features/study-log/"]), A.join(",") + " | " + B.join(","));
+  step("the revision changes behaviour, storage and test together, not just text", A.includes("src/features/ref-counter/test.js") && A.includes("src/features/ref-counter/index.js") && A.includes("src/features/ref-counter/feature.json"));
   step("merging either order is conflict-free", merged("s4-ab", "s4-a", "s4-b") && merged("s4-ba", "s4-b", "s4-a"));
   const r1 = build("s4-ab", true), r2 = build("s4-ba", true);
   step("the merged app validates, builds, and every feature test passes (either order)", r1.ok && r2.ok, lastLine(r1.features));
-  step("the modification and the new feature are both in the build", /REVISED-BY-A\./.test(r1.gen) && /"version":"1.1.0"/.test(r1.gen) && /"id":"acc-claude-plan"/.test(r1.gen));
+  step("the revised feature's NEW behaviour passes: a step size, remembered across a reload, with its own declared key", ["counts by the chosen step of 5", "stores the step at its own declared key .../features/ref-counter/step", "the chosen step survives a reload"].every(c => passed(r1, "ref-counter", c)));
+  step("the revised feature's OLD behaviour still passes (nothing was lost)", ["counts by the default step of 1", "the value survives a reload", "a non-default profile is stored under p/<profile>/ and does not touch the default"].every(c => passed(r1, "ref-counter", c)));
+  step("the other author's feature passes its own behaviour tests in the same build", ["logging minutes raises the total", "an invalid amount is refused with a message and changes nothing", "the log persists across a reload"].every(c => passed(r1, "study-log", c)));
+  step("both are in the build: the revised manifest and the new feature", r1.gen.includes('"version":"1.1.0"') && r1.gen.includes('"storage":["count","step"]') && r1.gen.includes('"id":"study-log"'));
   step("the build is byte-identical whichever order was used", !!r1.featHash && r1.featHash === r2.featHash && r1.dataHash === r2.dataHash, short(r1.featHash) + " vs " + short(r2.featHash));
 }
 // ================================================================ S5
@@ -159,7 +179,8 @@ scene = "S6";
 if (want("S6")) {
   checkout("main");
   step("the scratch copy had no installed packages, no build output, no cache and no session files", !fs.existsSync(path.join(base, "node_modules")) && files.every(f => !/^(\.cache|site|app\.html|node_modules)\b/.test(f)) && files.every(f => !/\.local\.json$/.test(f)));
-  const tooling = ["build.sh", "build_site.js", "check.sh", "test.js", "clicktest.js", ...fs.readdirSync(path.join(base, "tools")).map(f => "tools/" + f), ...fs.readdirSync(path.join(base, "tests")).map(f => "tests/" + f)];
+  const filesIn = d => fs.readdirSync(path.join(base, d), { withFileTypes: true }).filter(e => e.isFile()).map(e => d + "/" + e.name);   // files only: tools/ also holds a fixtures directory
+  const tooling = ["build.sh", "build_site.js", "check.sh", "test.js", "clicktest.js", ...filesIn("tools"), ...filesIn("tests")];
   const leaks = tooling.filter(f => f !== "tools/acceptance.js" && /ArtifactData|api\.anthropic\.com/.test(fs.readFileSync(path.join(base, f), "utf8")));
   step("no build, check or test tool depends on the Claude artifact or the Anthropic API", leaks.length === 0, leaks.join(", ") || "none reference it");
   step("every command a contributor is told to run exists in package.json", ["check", "contracts", "build", "test", "acceptance"].every(k => readJ("package.json").scripts[k]));
