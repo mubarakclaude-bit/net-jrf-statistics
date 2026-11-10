@@ -1,0 +1,629 @@
+{
+ "id": "stochastict1",
+ "topicId": "stochastic-t1",
+ "moduleId": "stochastic",
+ "title": "Markov Chains: n-step Probabilities and Chapman–Kolmogorov",
+ "breadcrumb": "Stochastic processes → Markov chains → Transition probabilities",
+ "engine": "B",
+ "engineName": "A Markov chain updates state probabilities by multiplying the transition matrix.",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 96,
+ "objectives": [
+  "Define a discrete-time Markov chain and state the Markov property in words and symbols.",
+  "Construct and check a transition matrix using the row-stochastic convention used here.",
+  "Compute two-step and n-step transition probabilities using matrix powers.",
+  "Apply the Chapman–Kolmogorov equation by conditioning on an intermediate state."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Conditional probability",
+   "why": "The Markov property is a statement about conditional probabilities given the present and the past."
+  },
+  {
+   "id": "p2",
+   "name": "Matrix multiplication",
+   "why": "An n-step transition matrix is obtained by multiplying transition matrices."
+  },
+  {
+   "id": "p3",
+   "name": "Addition and multiplication of fractions",
+   "why": "Path probabilities are multiplied along a path and added across mutually exclusive paths."
+  }
+ ],
+ "traps": [
+  "The convention here uses rows as current states and columns as next states; each row sums to one.",
+  "P² is not obtained by squaring each entry; it is ordinary matrix multiplication.",
+  "For a two-step transition, multiply along each possible intermediate state and add the path probabilities.",
+  "The Markov property says the present state screens off the past; it does not say successive states are independent.",
+  "A stationary distribution is not automatically the limiting distribution; periodicity and reducibility matter."
+ ],
+ "revision": {
+  "sheet": [
+   "Markov property: P(Xₙ₊₁=j | Xₙ=i, Xₙ₋₁,…)=P(Xₙ₊₁=j | Xₙ=i)=pᵢⱼ.",
+   "P=(pᵢⱼ), with pᵢⱼ≥0 and Σⱼpᵢⱼ=1 for every row i.",
+   "Rows = current state; columns = next state. State this convention before calculating.",
+   "Two-step: pᵢⱼ(2)=Σₖpᵢₖpₖⱼ; add over every possible intermediate state k.",
+   "n-step: P⁽ⁿ⁾ is the ordinary matrix power P×P×…×P.",
+   "Chapman–Kolmogorov: P⁽ᵐ⁺ⁿ⁾=P⁽ᵐ⁾P⁽ⁿ⁾.",
+   "Example P=[[1/2,1/2],[1/4,3/4]]. P²=[[3/8,5/8],[5/16,11/16]].",
+   "For that example P³=[[11/32,21/32],[21/64,43/64]].",
+   "If initial row distribution is α, distribution after n steps is αP⁽ⁿ⁾.",
+   "A stationary row vector π satisfies πP=π, πᵢ≥0 and Σπᵢ=1."
+  ],
+  "cards": [
+   [
+    "Markov property",
+    "Given the present, the past adds no information about the next state."
+   ],
+   [
+    "Transition matrix convention",
+    "Rows are current states; columns are next states."
+   ],
+   [
+    "Row-sum check",
+    "Every row is nonnegative and sums to 1."
+   ],
+   [
+    "Two-step probability",
+    "Sum pᵢₖpₖⱼ over all intermediate states k."
+   ],
+   [
+    "n-step transition matrix",
+    "P⁽ⁿ⁾, the ordinary matrix power."
+   ],
+   [
+    "Chapman–Kolmogorov",
+    "P⁽ᵐ⁺ⁿ⁾=P⁽ᵐ⁾P⁽ⁿ⁾."
+   ],
+   [
+    "Distribution update",
+    "αₙ=α₀P⁽ⁿ⁾."
+   ],
+   [
+    "Stationary distribution",
+    "πP=π and Σπᵢ=1."
+   ]
+  ],
+  "tricks": [
+   "For a two-step route, draw the intermediate state before multiplying; add the mutually exclusive routes.",
+   "Check a computed transition matrix by checking every row sum, not every column sum, under this convention.",
+   "Keep row vectors for distributions so αₙ=α₀P⁽ⁿ⁾ is consistent."
+  ],
+  "shortcuts": [
+   "For two states, each row is determined by one probability q and its complement 1−q.",
+   "The first row of P² is the weighted average p₁₁(row 1)+p₁₂(row 2).",
+   "For a two-state chain [[a,1−a],[b,1−b]], a stationary probability of state 1 is b/(b+1−a), when the denominator is positive."
+  ],
+  "remember": [
+   "Present state determines the next-step distribution; the past is irrelevant once the present is known.",
+   "Matrix powers count transitions over multiple steps; never square entries separately."
+  ]
+ },
+ "howto": "Work through the first transition-matrix example before reading the formulas. In the worked example, follow each intermediate-state path separately, then add. The guided scenes ask you to repeat the method with a new matrix and a three-state transfer case. This lesson covers the Markov property, transition matrices, n-step probabilities and Chapman–Kolmogorov. Detailed classification of states, first-passage times, and long-run convergence belong to later stochastic-process topics.",
+ "refs": [
+  {
+   "title": "Introduction to Probability Models",
+   "where": "Markov chains chapter",
+   "site": "Sheldon M. Ross",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-10",
+   "why": "Discrete-time Markov-chain definitions, transition probabilities and multi-step calculations."
+  },
+  {
+   "title": "Introduction to Stochastic Processes",
+   "where": "Discrete-time Markov chains",
+   "site": "Gregory F. Lawler",
+   "url": "https://www.math.uchicago.edu/~lawler/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-10",
+   "why": "A mathematical treatment of Markov chains and transition probabilities; consult the Markov-chain sections."
+  },
+  {
+   "title": "Markov Chains",
+   "where": "Chapter  Markov chains",
+   "site": "J. R. Norris, Markov Chains",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-10",
+   "why": "Formal treatment of transition matrices and Chapman–Kolmogorov equations."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. The 3/5/2 draw is a platform practice mix, not an official NTA difficulty split."
+ },
+ "provenance": "This is an original teaching lesson aligned to catalog topic stochastic-t1 (Unit 9): Markov chains, n-step probabilities and Chapman–Kolmogorov. No June 2026 stochastic-process PYQ variant was located in the checked repository bank, so none of the questions is represented as an official PYQ. Exact rational arithmetic was independently checked in verify_stochastic_t1.py: each transition row is nonnegative and sums to one; P²=[[3/8,5/8],[5/16,11/16]]; P³=[[11/32,21/32],[21/64,43/64]]; P·P²=P²·P=P³; π=(1/3,2/3) satisfies πP=π; and an absorbing-state example has a valid stochastic matrix. The script uses fractions.Fraction, avoiding floating-point rounding. Scope stops before detailed state classification, first-passage analysis and convergence theorems.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Three tools this lesson uses",
+   "objective": "Refresh conditional probability, matrix multiplication and path addition.",
+   "body": [
+    "A weather service records whether a day is sunny or rainy. To predict tomorrow, we need conditional probabilities such as the chance of rain tomorrow given that today is sunny. We also need to combine possible routes over two days.",
+    "The lesson uses conditional probability, ordinary matrix multiplication and the rule that probabilities of disjoint routes add."
+   ],
+   "items": [
+    {
+     "ask": "What does P(A|B) mean?",
+     "recall": "The probability that A occurs, given that B is known to have occurred.",
+     "refresh": [
+      "Restrict attention to outcomes where B occurred.",
+      "Within that restricted set, measure the proportion that also satisfy A.",
+      "For events with P(B)>0, P(A|B)=P(A∩B)/P(B)."
+     ]
+    },
+    {
+     "ask": "In ordinary matrix multiplication, how is entry (i,j) of AB formed?",
+     "recall": "Multiply row i of A by column j of B and add the products.",
+     "refresh": [
+      "Take the entries across row i of A.",
+      "Multiply them position-by-position by entries down column j of B.",
+      "Add those products. Entrywise multiplication alone is not matrix multiplication."
+     ]
+    },
+    {
+     "ask": "If two different routes to an outcome cannot happen together, how do their probabilities combine?",
+     "recall": "Add their probabilities.",
+     "refresh": [
+      "The routes are mutually exclusive events.",
+      "The probability of their union is the sum of their probabilities.",
+      "If routes are sequential, first multiply along each route, then add across routes."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "Why will a two-step transition require both multiplication and addition?",
+    "nudge": "Think about the probability of one route, then the possibility of several intermediate states."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "A system whose next move depends on its present state",
+   "objective": "Explain the Markov property in plain language.",
+   "body": [
+    "A machine can be in one of two states at the end of each hour: Working or Failed. The chance of its state one hour later is determined by its current state. The full sequence of earlier states does not add information once the current state is known.",
+    "This is the Markov property: the present state summarises the relevant information from the past for predicting the next state. It does not say that states at different times are independent."
+   ],
+   "scenario": {
+    "teaser": "A simple weather-state record.",
+    "title": "Sunny and rainy days",
+    "body": [
+     "Imagine classifying each day as Sunny or Rainy. From historical records, suppose that after a Sunny day the next day is Sunny with probability 1/2 and Rainy with probability 1/2. After a Rainy day, the next day is Sunny with probability 1/4 and Rainy with probability 3/4. The model uses today's weather category to predict tomorrow. It does not claim that weather is truly governed by only two states in every real setting; it is a deliberately small model for learning the probability calculation. The key modelling assumption is that once today's state is known, yesterday's state does not further change tomorrow's transition probabilities."
+    ],
+    "q": "Under this model, what information is used to predict tomorrow?",
+    "answer": "Today's state (Sunny or Rainy), not the entire earlier weather history."
+   },
+   "ask": {
+    "q": "What is the information that the Markov property says is sufficient for the next step?",
+    "nudge": "It is the current state."
+   }
+  },
+  {
+   "kind": "explore",
+   "id": "s2",
+   "mins": 7,
+   "title": "Read the transition matrix",
+   "objective": "Interpret each matrix entry and check a valid transition matrix.",
+   "viz": {
+    "type": "disc-pmf",
+    "caption": "Read each row as the distribution of the next state, conditional on the current state; use the table below for the exact transition probabilities."
+   },
+   "body": [
+    "Use the order Sunny, Rainy for both rows and columns. The transition matrix is P=[[1/2,1/2],[1/4,3/4]]. The first row says that from Sunny, the next state is Sunny with probability 1/2 and Rainy with probability 1/2. The second row says that from Rainy, the next state is Sunny with probability 1/4 and Rainy with probability 3/4.",
+    "Each entry is nonnegative. Each row sums to one: 1/2+1/2=1 and 1/4+3/4=1. Columns do not generally have to sum to one."
+   ],
+   "table": {
+    "caption": "Transition matrix; rows are current states and columns are next states.",
+    "head": [
+     "Current state",
+     "Next: Sunny",
+     "Next: Rainy"
+    ],
+    "rows": [
+     [
+      "Sunny",
+      "1/2",
+      "1/2"
+     ],
+     [
+      "Rainy",
+      "1/4",
+      "3/4"
+     ]
+    ]
+   },
+   "ask": {
+    "q": "Starting from Rainy, what is the probability of Sunny tomorrow?",
+    "nudge": "Read row Rainy, column Sunny."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 9,
+   "title": "Definition and the transition matrix",
+   "objective": "Write the Markov property and identify a row-stochastic transition matrix.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Markov property",
+     "body": "For states i,j, P(Xₙ₊₁=j | Xₙ=i, Xₙ₋₁,…,X₀)=P(Xₙ₊₁=j | Xₙ=i), whenever the conditioning event has positive probability."
+    },
+    {
+     "t": "formula",
+     "h": "One-step transition probabilities",
+     "body": "pᵢⱼ=P(Xₙ₊₁=j | Xₙ=i). For a time-homogeneous chain this probability does not depend on n."
+    },
+    {
+     "t": "formula",
+     "h": "Transition matrix",
+     "body": "P=(pᵢⱼ), pᵢⱼ≥0 and Σⱼpᵢⱼ=1 for every i. Under the row convention, rows are current states and columns are next states."
+    }
+   ],
+   "flow": {
+    "title": "How to read a one-step transition",
+    "alt": "Start at the current state, choose a row, then read the probability in the column of the next state.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Current state i",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Read row i",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 1,
+      "label": "Column j gives pᵢⱼ",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     }
+    ],
+    "note": "Each row is a probability distribution over the next state."
+   },
+   "ask": {
+    "q": "What two checks must every row of P pass?",
+    "nudge": "One concerns signs; the other concerns the total."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 8,
+   "title": "Calculate a two-step probability",
+   "objective": "Compute a two-step transition by listing intermediate states.",
+   "problem": "For P=[[1/2,1/2],[1/4,3/4]], find the probability of being Rainy after two days when today is Sunny.",
+   "steps": [
+    {
+     "say": "List the possible weather states after the first day.",
+     "math": "The intermediate state k can be Sunny or Rainy.",
+     "why": "Every two-day route must pass through exactly one of these intermediate states."
+    },
+    {
+     "say": "Calculate the route Sunny → Sunny → Rainy.",
+     "math": "P(Sunny→Sunny)P(Sunny→Rainy)=(1/2)(1/2)=1/4.",
+     "why": "For sequential transitions along one route, multiply the conditional probabilities."
+    },
+    {
+     "say": "Calculate the route Sunny → Rainy → Rainy.",
+     "math": "P(Sunny→Rainy)P(Rainy→Rainy)=(1/2)(3/4)=3/8.",
+     "why": "This is the other possible intermediate state."
+    },
+    {
+     "say": "Add the mutually exclusive routes.",
+     "math": "1/4+3/8=2/8+3/8=5/8.",
+     "why": "The chain is Rainy after two days through exactly one of the two intermediate states."
+    }
+   ],
+   "after": "The required probability is 5/8. The transferable method is multiply along each route, then add over all intermediate states.",
+   "ask": {
+    "q": "What is the two-step probability of Rainy given Sunny today?",
+    "nudge": "There are two routes: via Sunny and via Rainy."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s5",
+   "mins": 2,
+   "title": "Pause and recall",
+   "objective": "Retrieve the definitions before moving to matrix powers.",
+   "intro": "Answer each before revealing it.",
+   "items": [
+    {
+     "q": "What does pᵢⱼ represent?",
+     "a": "The one-step probability of moving from current state i to next state j."
+    },
+    {
+     "q": "What is the row-sum condition?",
+     "a": "For every current state i, Σⱼpᵢⱼ=1."
+    },
+    {
+     "q": "What is the Markov property?",
+     "a": "Given the present state, the past does not change the conditional distribution of the next state."
+    },
+    {
+     "q": "How do you combine routes through different intermediate states?",
+     "a": "Multiply probabilities along each route and add the route probabilities."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s6",
+   "mins": 8,
+   "title": "Complete the matrix multiplication",
+   "objective": "Build P² from the row-by-column rule.",
+   "problem": "Find the (1,2) entry of P² for P=[[1/2,1/2],[1/4,3/4]].",
+   "steps": [
+    {
+     "say": "Take row 1 of P and column 2 of P.",
+     "blank": {
+      "prompt": "Write the row-by-column products.",
+      "answer": "(1/2)(1/2)+(1/2)(3/4)",
+      "accept": [
+       "1/4+3/8"
+      ],
+      "hint": "Use the first row and second column."
+     },
+     "why": "The middle index ranges over the two possible intermediate states."
+    },
+    {
+     "say": "Add the products.",
+     "blank": {
+      "prompt": "Give the final fraction.",
+      "answer": "5/8",
+      "accept": [
+       "0.625"
+      ],
+      "hint": "Convert 1/4 to eighths first."
+     },
+     "why": "The entry is a probability and lies between zero and one."
+    }
+   ],
+   "after": "P²=[[3/8,5/8],[5/16,11/16]]. Every row still sums to one."
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 7,
+   "title": "From two steps to n steps",
+   "objective": "Use powers of P to obtain multi-step transition probabilities.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Two-step Chapman–Kolmogorov equation",
+     "body": "pᵢⱼ(2)=Σₖ pᵢₖpₖⱼ. The sum is over all possible intermediate states k."
+    },
+    {
+     "t": "formula",
+     "h": "n-step transition matrix",
+     "body": "P⁽ⁿ⁾ is the ordinary matrix product P×P×…×P (n factors). Its (i,j) entry is the probability of moving from i to j in n steps."
+    },
+    {
+     "t": "step",
+     "h": "Chapman–Kolmogorov",
+     "body": "For m,n≥0, P⁽ᵐ⁺ⁿ⁾=P⁽ᵐ⁾P⁽ⁿ⁾. The same identity follows by conditioning on the state reached after m steps."
+    }
+   ],
+   "ask": {
+    "q": "Why is P³ equal to P²P as well as PP²?",
+    "nudge": "Ordinary matrix multiplication is associative."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Find a three-step transition",
+   "objective": "Apply matrix multiplication to a new initial and final state.",
+   "problem": "For the same two-state chain, find the probability of being Sunny after three days, starting Sunny today.",
+   "hints": [
+    "Direction: identify the (Sunny, Sunny) entry of P³.",
+    "Method: use P³=P²P, with the verified P² from the worked calculation.",
+    "Next step: multiply row 1 of P² by column 1 of P."
+   ],
+   "answer": "(3/8)(1/2)+(5/8)(1/4)=3/16+5/32=11/32.",
+   "check": "The answer is between zero and one. The verification script computes the full P³ and checks both P·P² and P²·P.",
+   "scenario": {
+    "teaser": "A machine can be Operating or Under Repair.",
+    "title": "Machine condition after several shifts",
+    "body": [
+     "A maintenance team records the condition of a machine at the end of each shift. It is either Operating or Under Repair. The team estimates transition probabilities from past shift records and uses a two-state, time-homogeneous Markov model for a short planning exercise. This model can help estimate the probability that the machine is operating after two or three shifts, conditional on its current condition. It is not a reliability guarantee: the model assumes the transition probabilities remain stable and that the current condition contains all relevant information. A real engineering model might need age, load, maintenance history or additional states if those factors affect future transitions."
+    ],
+    "q": "What assumption would fail if machine age changes the next-shift probability even after current condition is known?",
+    "answer": "The Markov property with only the two listed states would fail; age or history would need to be included in the state."
+   },
+   "solution": [
+    {
+     "say": "Use the first row of P² and first column of P.",
+     "math": "(3/8)(1/2)+(5/8)(1/4)=3/16+5/32=6/32+5/32=11/32.",
+     "why": "The two terms correspond to the two possible states after two shifts."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 6,
+   "title": "Six statements that often cause errors",
+   "objective": "Distinguish the Markov property from independence and matrix conventions.",
+   "intro": "Decide true or false on all six before revealing any.",
+   "items": [
+    {
+     "claim": "Every row of a transition matrix sums to one under the row convention.",
+     "tf": true,
+     "why": "A row gives all possible next states conditional on one current state."
+    },
+    {
+     "claim": "Every column of a transition matrix must sum to one.",
+     "tf": false,
+     "why": "Column sums need not equal one; this is not generally a doubly stochastic matrix."
+    },
+    {
+     "claim": "The Markov property says the next state is independent of the present state.",
+     "tf": false,
+     "why": "The next-state distribution depends on the present state; the past is conditionally irrelevant given the present."
+    },
+    {
+     "claim": "P² is found by squaring each entry of P.",
+     "tf": false,
+     "why": "P² is ordinary matrix multiplication, using row-by-column products."
+    },
+    {
+     "claim": "Two different intermediate-state routes are added after each route probability is calculated.",
+     "tf": true,
+     "why": "The routes are mutually exclusive and exhaustive for the intermediate state."
+    },
+    {
+     "claim": "If a distribution is stationary, it satisfies πP=π.",
+     "tf": true,
+     "why": "That is the defining equation for a stationary row distribution; it does not alone guarantee convergence from every initial state."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 8,
+   "title": "Transfer: a three-state chain",
+   "objective": "Set up a multi-step probability with three possible intermediate states.",
+   "problem": "A three-state chain has P=[[1/2,1/3,1/6],[0,1/2,1/2],[1/4,1/4,1/2]]. Set up, but do not fully simplify, the two-step probability of moving from state 1 to state 3.",
+   "hints": [
+    "Direction: the target is entry (1,3) of P².",
+    "Method: apply p₁₃(2)=Σₖp₁ₖpₖ₃.",
+    "Next step: write one product for each of k=1,2,3."
+   ],
+   "answer": "(1/2)(1/6)+(1/3)(1/2)+(1/6)(1/2)=1/12+1/6+1/12=1/3.",
+   "check": "The three row sums are all one; the answer 1/3 is a valid probability.",
+   "solution": [
+    {
+     "say": "List all three intermediate states.",
+     "math": "k=1, 2, 3.",
+     "why": "A three-state chain has three possible intermediate states."
+    },
+    {
+     "say": "Multiply along each route and add.",
+     "math": "p₁₃(2)=(1/2)(1/6)+(1/3)(1/2)+(1/6)(1/2)=1/3.",
+     "why": "Each product is the probability of one route; the routes are disjoint."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s11",
+   "mins": 6,
+   "title": "Initial distributions and stationary distributions",
+   "objective": "Update an initial distribution and define stationarity without overclaiming convergence.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Distribution after n steps",
+     "body": "If α₀ is a row vector of initial state probabilities, then αₙ=α₀P⁽ⁿ⁾."
+    },
+    {
+     "t": "def",
+     "h": "Stationary distribution",
+     "body": "A probability row vector π is stationary if πP=π and its entries are nonnegative and sum to one."
+    },
+    {
+     "t": "step",
+     "h": "Do not confuse stationarity with convergence",
+     "body": "A stationary distribution is unchanged by one transition. Whether α₀P⁽ⁿ⁾ converges to π depends on additional properties such as irreducibility and aperiodicity; those are treated in the state-classification topic."
+    }
+   ],
+   "ask": {
+    "q": "What equation defines a stationary row distribution?",
+    "nudge": "It remains unchanged after multiplication by P."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s12",
+   "mins": 2,
+   "title": "Second recall",
+   "objective": "Recall the four calculations that matter most.",
+   "intro": "Answer, then reveal.",
+   "items": [
+    {
+     "q": "What is P⁽ⁿ⁾?",
+     "a": "The ordinary nth matrix power of P."
+    },
+    {
+     "q": "State Chapman–Kolmogorov in matrix form.",
+     "a": "P⁽ᵐ⁺ⁿ⁾=P⁽ᵐ⁾P⁽ⁿ⁾."
+    },
+    {
+     "q": "How does a row initial distribution update?",
+     "a": "αₙ=α₀P⁽ⁿ⁾."
+    },
+    {
+     "q": "What equation does a stationary distribution satisfy?",
+     "a": "πP=π, with nonnegative entries summing to one."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "What you should now be able to do",
+   "objective": "Summarise the method without prompts.",
+   "body": [
+    "State the Markov property: the present state makes the past irrelevant for the next-step conditional distribution.",
+    "Read P using the stated row convention and check nonnegative entries and unit row sums.",
+    "Calculate P² and P⁽ⁿ⁾ by ordinary matrix multiplication.",
+    "Use Chapman–Kolmogorov by conditioning on an intermediate state.",
+    "Update an initial distribution with α₀P⁽ⁿ⁾ and define a stationary distribution through πP=π.",
+    "Keep stationarity separate from convergence; classification and limiting behaviour are later topics."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate the method independently on unseen questions.",
+   "setId": "stochastic_t1_mastery"
+  }
+ ]
+}
