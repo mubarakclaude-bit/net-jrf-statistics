@@ -1,0 +1,670 @@
+{
+  "id": "regressiont4",
+  "topicId": "regression-t4",
+  "moduleId": "regression",
+  "title": "6.4 — R², Adjusted R² and Model Comparison",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.4 R², adjusted R² and model comparison",
+  "engine": "B",
+  "engineName": "Interpret explained variation, derive adjusted R-squared, and compare nested regression models without confusing fit with complexity.",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 100,
+  "objectives": [
+    "Define R² through regression, residual and total sums of squares.",
+    "Explain why ordinary R² cannot decrease when a predictor is added to a nested OLS model with an intercept.",
+    "Derive and calculate adjusted R² using consistent parameter-count conventions.",
+    "Interpret negative adjusted R² and distinguish it from ordinary R².",
+    "Compare models while accounting for sample size and number of estimated parameters.",
+    "Recognize limitations of R² and adjusted R² as model-selection criteria."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Regression ANOVA decomposition",
+      "why": "R² is the explained fraction of corrected total variation."
+    },
+    {
+      "id": "p2",
+      "name": "Degrees of freedom",
+      "why": "Adjusted R² penalizes the residual mean square using residual degrees of freedom."
+    },
+    {
+      "id": "p3",
+      "name": "OLS and nested models",
+      "why": "The monotonic behaviour of R² follows from the least-squares minimization over nested model spaces."
+    }
+  ],
+  "traps": [
+    "R²=1−RSS/TSS=RegSS/TSS for ordinary least squares with an intercept.",
+    "Adding predictors to a nested OLS model cannot reduce ordinary R²; it can stay the same or increase.",
+    "Adjusted R² can decrease when a predictor is added because it penalizes model size.",
+    "Adjusted R² can be negative; ordinary R² with an intercept and the usual in-sample definition lies between 0 and 1.",
+    "Do not compare adjusted R² across models fitted to different response variables or different samples without careful justification.",
+    "A high R² does not prove causality, correct specification, or good out-of-sample prediction.",
+    "For k counting all parameters including the intercept, adjusted R²=1−[(RSS/(n−k))/(TSS/(n−1))].",
+    "For a model with p predictors excluding the intercept, k=p+1 and residual df=n−p−1."
+  ],
+  "howto": "Compute R² from 1−RSS/TSS. For adjusted R², identify n and k consistently, calculate residual and total mean squares, then use 1−(1−R²)(n−1)/(n−k). For comparison, check that response and sample are the same, then consider adjusted R² alongside diagnostics and validation.",
+  "refs": [
+    {
+      "title": "Introduction to Linear Regression Analysis",
+      "where": "Coefficient of determination and adjusted R-squared",
+      "site": "Montgomery, Peck and Vining",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Standard regression fit measures and model comparison."
+    },
+    {
+      "title": "Applied Linear Statistical Models",
+      "where": "Multiple regression fit and variable selection",
+      "site": "Kutner, Nachtsheim, Neter and Li",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Explains R², adjusted R² and model-comparison cautions."
+    },
+    {
+      "title": "Regression Modeling Strategies",
+      "where": "Model assessment and predictive validation",
+      "site": "Frank Harrell",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Supports the distinction between in-sample fit measures and predictive validation."
+    }
+  ],
+  "provenance": "The repository's June 2026 Q9 variant cluster includes an adjusted-R² calculation (n=50, k=5, R²=0.55; answer 0.51), the possibility of negative adjusted R², the effect of adding an irrelevant predictor, and the definition of R². These are related practice variants linked to Q9, not the direct official Q9 stem. The direct official Q9 asks for the overall F statistic. This lesson does not mislabel the adjusted-R² variants as the direct PYQ.",
+  "revision": {
+    "sheet": [
+      "R²=RegSS/TSS=1−RSS/TSS, for OLS with an intercept.",
+      "R² is the proportion of corrected sample variation explained by the fitted model.",
+      "Adding a predictor to a nested OLS model cannot increase RSS; ordinary R² cannot decrease.",
+      "Adjusted R²=1−[(RSS/(n−k))/(TSS/(n−1))], with k including the intercept.",
+      "Equivalent: adjusted R²=1−(1−R²)(n−1)/(n−k).",
+      "Adjusted R² may increase or decrease when a predictor is added.",
+      "Adjusted R² can be negative; ordinary in-sample R² with an intercept is between 0 and 1.",
+      "For p predictors excluding intercept, use k=p+1 and residual df=n−p−1.",
+      "Compare models on the same response and same observations; otherwise the comparison may be misleading.",
+      "Neither R² nor adjusted R² establishes causality or guarantees out-of-sample performance."
+    ],
+    "cards": [
+      [
+        "Coefficient of determination",
+        "R²=RegSS/TSS"
+      ],
+      [
+        "Residual form",
+        "R²=1−RSS/TSS"
+      ],
+      [
+        "Adjusted R²",
+        "1−(RSS/(n−k))/(TSS/(n−1))"
+      ],
+      [
+        "Compact form",
+        "1−(1−R²)(n−1)/(n−k)"
+      ],
+      [
+        "Nested OLS",
+        "R² cannot decrease when a predictor is added"
+      ],
+      [
+        "Adjusted R²",
+        "May increase or decrease"
+      ],
+      [
+        "Negative adjusted R²",
+        "Possible"
+      ],
+      [
+        "Parameter convention",
+        "k includes intercept"
+      ],
+      [
+        "Same-model comparison",
+        "Same response and same observations"
+      ],
+      [
+        "Prediction",
+        "Use validation, not R² alone"
+      ]
+    ],
+    "tricks": [
+      "If R² and n,k are given, use the compact adjusted R² formula directly.",
+      "If the question gives p predictors excluding the intercept, replace k by p+1.",
+      "If an irrelevant predictor is added, RSS falls or stays the same; adjusted R² may fall.",
+      "A negative adjusted R² is possible and is not an arithmetic impossibility."
+    ],
+    "shortcuts": [
+      "R² rewards fit only; adjusted R² also penalizes parameter count.",
+      "Ordinary R² is monotone for nested OLS; adjusted R² is not.",
+      "Check whether k includes the intercept before substituting."
+    ],
+    "remember": [
+      "The standard formula assumes the usual corrected total sum of squares and a regression with an intercept.",
+      "Comparisons across different samples or different dependent variables require additional care."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh sums of squares and proportions",
+      "objective": "Rebuild the ingredients behind R².",
+      "body": [
+        "R² describes how much of the observed variation around the sample mean is accounted for by the fitted regression. It is built from the same sums of squares used in the regression ANOVA table.",
+        "This lesson assumes ordinary least squares with an intercept and uses k for the total number of estimated parameters, including that intercept."
+      ],
+      "items": [
+        {
+          "ask": "What is corrected total sum of squares?",
+          "recall": "TSS=Σ(yᵢ−ȳ)².",
+          "refresh": [
+            "Each response is compared with the sample mean, not with zero.",
+            "The squared deviations are added to measure total corrected variation.",
+            "With an intercept, this is the total variation that regression and residual sums of squares partition."
+          ]
+        },
+        {
+          "ask": "What does RSS measure?",
+          "recall": "The sum of squared residuals.",
+          "refresh": [
+            "A residual is the observed response minus its fitted value: eᵢ=yᵢ−ŷᵢ.",
+            "RSS=Σeᵢ² measures the variation left unexplained by the fitted model.",
+            "OLS chooses coefficients to minimize RSS among the models in the specified column space."
+          ]
+        },
+        {
+          "ask": "If k counts all estimated parameters, how many residual degrees of freedom remain?",
+          "recall": "n−k.",
+          "refresh": [
+            "The sample supplies n observations.",
+            "Estimating k parameters uses k degrees of freedom in the full-rank model.",
+            "The residual degrees of freedom are n−k; adjusted R² uses this quantity in its residual mean square."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Which two sums of squares give R² through the residual form?",
+        "nudge": "Use total variation and unexplained variation."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 6,
+      "title": "What R² tells us",
+      "objective": "Interpret the coefficient of determination without overclaiming.",
+      "body": [
+        "For a regression with an intercept, R²=1−RSS/TSS. If residual variation is small relative to total variation, R² is close to one.",
+        "For example, R²=0.70 means 70% of the corrected sample variation is accounted for by the fitted model. It does not mean that the model is 70% correct, nor that predictions are 70% accurate.",
+        "R² is an in-sample fit summary. It does not establish a causal relationship or guarantee good predictions for new observations."
+      ],
+      "scenario": {
+        "teaser": "A model explains seven-tenths of sample variation",
+        "title": "Interpreting R² = 0.70",
+        "body": [
+          "Imagine a regression fitted to 40 observations. Its corrected total sum of squares is 100 and its residual sum of squares is 30.",
+          "Then R²=1−30/100=0.70. The model accounts for 70 units out of 100 units of corrected sample variation.",
+          "This is a statement about variation in this sample and this fitted model. It does not say that 70% of individual predictions are correct or that the predictors cause the response."
+        ],
+        "q": "If TSS=100 and RSS=30, what is R²?",
+        "answer": "R²=1−30/100=0.70."
+      },
+      "ask": {
+        "q": "What does R²=0.70 mean in the usual regression setting?",
+        "nudge": "Interpret it as a proportion of corrected sample variation."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Why ordinary R² cannot fall in nested OLS",
+      "objective": "Use the least-squares minimization principle.",
+      "body": [
+        "A nested larger model contains every fitted value available to the smaller model, plus possibly more. The larger model can always reproduce the old fit by setting the new coefficient to zero.",
+        "OLS chooses the coefficients that minimize RSS. Therefore the minimum RSS in the larger model cannot be greater than the minimum RSS in the smaller model.",
+        "For the same response and sample, TSS is unchanged. Since R²=1−RSS/TSS, a non-increasing RSS means ordinary R² cannot decrease."
+      ],
+      "scenario": {
+        "teaser": "A predictor is added to a nested regression",
+        "title": "The model gains one more predictor",
+        "body": [
+          "The original regression has a fitted sum of squares and a residual sum of squares. A second model adds one predictor while keeping the same observations and response.",
+          "The larger model can always set the new coefficient to zero and recover the original fit. Its optimized RSS therefore cannot be larger.",
+          "Consequently its ordinary R² cannot be smaller. But the extra parameter has a cost in adjusted R², so adjusted R² may move downward."
+        ],
+        "q": "Can ordinary R² decrease after adding a predictor to a nested OLS model on the same data?",
+        "answer": "No. The optimized RSS cannot increase, and TSS stays fixed, so R² cannot decrease."
+      },
+      "ask": {
+        "q": "Why does the new model have RSS no larger than the old model?",
+        "nudge": "It can always reproduce the old fit by assigning zero to the new coefficient."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 8,
+      "title": "Derive adjusted R²",
+      "objective": "Understand the degrees-of-freedom penalty.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Start from mean squares",
+          "body": "Adjusted R²=1−[RSS/(n−k)]/[TSS/(n−1)], where k includes the intercept."
+        },
+        {
+          "t": "step",
+          "h": "Replace sums of squares by R²",
+          "body": "RSS=(1−R²)TSS. Substitute this into the ratio."
+        },
+        {
+          "t": "step",
+          "h": "Cancel TSS",
+          "body": "Adjusted R²=1−[(1−R²)TSS/(n−k)]/[TSS/(n−1)]. The TSS cancels."
+        },
+        {
+          "t": "formula",
+          "h": "Compact expression",
+          "body": "Adjusted R²=1−(1−R²)(n−1)/(n−k)."
+        }
+      ],
+      "flow": {
+        "caption": "Derive adjusted R² from the residual and total mean squares",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Start with RSS and TSS",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Use RSS=(1−R²)TSS",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Divide by residual and total df",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Cancel TSS",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Obtain adjusted R²",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      },
+      "ask": {
+        "q": "What is the compact adjusted R² formula when k includes the intercept?",
+        "nudge": "The multiplier is (n−1)/(n−k)."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked example: calculate adjusted R²",
+      "objective": "Substitute n, k and R² carefully.",
+      "problem": "A model has n=50 observations, k=5 total parameters including the intercept, and R²=0.55. Find adjusted R².",
+      "steps": [
+        {
+          "say": "Write the compact formula.",
+          "math": "R̄²=1−(1−R²)(n−1)/(n−k)",
+          "why": "This version uses R² directly and keeps the parameter convention explicit."
+        },
+        {
+          "say": "Substitute the values.",
+          "math": "R̄²=1−(0.45)(49/45)",
+          "why": "There are 49 total df and 45 residual df."
+        },
+        {
+          "say": "Calculate the penalty term.",
+          "math": "0.45×49/45=0.49",
+          "why": "The fraction 49/45 adjusts the unexplained proportion for degrees of freedom."
+        },
+        {
+          "say": "Subtract from one.",
+          "math": "R̄²=1−0.49=0.51",
+          "why": "The adjusted coefficient of determination is 0.51."
+        }
+      ],
+      "ask": {
+        "q": "Why is adjusted R² lower than ordinary R² in this example?",
+        "nudge": "The unexplained fraction is multiplied by a factor greater than one."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s5",
+      "mins": 7,
+      "title": "The meaning of the adjustment",
+      "objective": "Explain how model size affects adjusted R².",
+      "blocks": [
+        {
+          "t": "note",
+          "h": "Penalty for complexity",
+          "body": "Adjusted R² compares residual mean square with total mean square. Adding parameters reduces residual degrees of freedom and imposes a penalty."
+        },
+        {
+          "t": "note",
+          "h": "Not guaranteed to rise",
+          "body": "An added predictor may reduce RSS, but the reduction may be too small to compensate for the loss of a residual degree of freedom. Adjusted R² can then fall."
+        },
+        {
+          "t": "note",
+          "h": "Negative values",
+          "body": "Adjusted R² can be negative. This indicates that the residual mean square exceeds the total mean square under the stated formula; it is not an invalid calculation."
+        },
+        {
+          "t": "note",
+          "h": "Ordinary R²",
+          "body": "For the usual in-sample OLS definition with an intercept, ordinary R² lies between zero and one. The adjusted measure does not share that lower bound."
+        }
+      ],
+      "ask": {
+        "q": "Can adjusted R² be negative?",
+        "nudge": "Think about whether the residual mean square can exceed the total mean square."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s6",
+      "mins": 9,
+      "title": "Worked example: an adjusted R² can be negative",
+      "objective": "Recognize negative adjusted R² without treating it as an error.",
+      "problem": "A model has n=12, k=4 including the intercept, and R²=0.10. Calculate adjusted R².",
+      "steps": [
+        {
+          "say": "Write the formula.",
+          "math": "R̄²=1−(1−R²)(n−1)/(n−k)",
+          "why": "The adjustment uses total df 11 and residual df 8."
+        },
+        {
+          "say": "Substitute.",
+          "math": "R̄²=1−0.90(11/8)",
+          "why": "The explained proportion is small relative to the parameter penalty."
+        },
+        {
+          "say": "Calculate.",
+          "math": "R̄²=1−1.2375=−0.2375",
+          "why": "The adjusted value is below zero."
+        },
+        {
+          "say": "Interpret.",
+          "math": "R̄²=−0.2375 is possible",
+          "why": "The negative value indicates weak fit after the degrees-of-freedom adjustment; it is not an arithmetic mistake."
+        }
+      ],
+      "ask": {
+        "q": "Does a negative adjusted R² mean ordinary R² is negative?",
+        "nudge": "They are different measures with different bounds."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s7",
+      "mins": 5,
+      "title": "Recall the fit measures",
+      "objective": "Retrieve the formulas and their behaviour.",
+      "intro": "Try to state each identity before revealing the answer.",
+      "items": [
+        {
+          "q": "Write R² using RSS and TSS.",
+          "a": "R²=1−RSS/TSS."
+        },
+        {
+          "q": "Write adjusted R² when k includes the intercept.",
+          "a": "1−(1−R²)(n−1)/(n−k)."
+        },
+        {
+          "q": "Can ordinary R² decrease when a predictor is added to nested OLS on the same sample?",
+          "a": "No; it can stay the same or increase."
+        },
+        {
+          "q": "Can adjusted R² be negative?",
+          "a": "Yes."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 8,
+      "title": "Guided problem: calculate adjusted R²",
+      "objective": "Use the correct parameter count.",
+      "problem": "A model has n=30 observations, p=3 predictors excluding the intercept, and R²=0.60. Find adjusted R².",
+      "hints": [
+        "The question gives p excluding the intercept, so k=p+1=4.",
+        "Use adjusted R²=1−(1−R²)(n−1)/(n−k).",
+        "Substitute 0.40, 29 and 26."
+      ],
+      "answer": "k=4. Adjusted R²=1−0.40(29/26)=1−0.4461538≈0.5538.",
+      "solution": [
+        {
+          "say": "Convert the parameter convention.",
+          "math": "k=p+1=3+1=4"
+        },
+        {
+          "say": "Substitute into the compact formula.",
+          "math": "R̄²=1−0.40(29/26)"
+        },
+        {
+          "say": "Calculate the penalty.",
+          "math": "0.40×29/26≈0.44615"
+        },
+        {
+          "say": "Subtract.",
+          "math": "R̄²≈0.55385"
+        }
+      ],
+      "ask": {
+        "q": "What would be wrong with using n−p in the denominator here?",
+        "nudge": "The residual df must account for the intercept too."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s9",
+      "mins": 7,
+      "title": "Comparing two regression models",
+      "objective": "Use adjusted R² carefully when comparing models.",
+      "blocks": [
+        {
+          "t": "note",
+          "h": "Same response and observations",
+          "body": "A direct comparison of fit measures is clearest when models use the same dependent variable and the same observations."
+        },
+        {
+          "t": "note",
+          "h": "Nested models",
+          "body": "Ordinary R² cannot decrease as predictors are added. Adjusted R² can help assess whether the improvement in fit compensates for model complexity."
+        },
+        {
+          "t": "note",
+          "h": "Non-nested models",
+          "body": "Adjusted R² may be one descriptive input, but it is not a universal model-selection rule. Consider theory, diagnostics, parsimony and validation."
+        },
+        {
+          "t": "note",
+          "h": "Prediction",
+          "body": "For predictive performance, evaluate on held-out data or use cross-validation. In-sample R² is not an out-of-sample accuracy guarantee."
+        }
+      ],
+      "ask": {
+        "q": "Why should two models being compared use the same observations?",
+        "nudge": "TSS and the response variation should be comparable."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 9,
+      "title": "Guided problem: interpret a model comparison",
+      "objective": "Separate ordinary R² from adjusted R².",
+      "problem": "Model A has R²=0.62 and adjusted R²=0.59. After adding a predictor on the same observations, Model B has R²=0.64 and adjusted R²=0.57. What can you conclude?",
+      "hints": [
+        "Ordinary R² rose, as expected for a nested OLS model.",
+        "Adjusted R² fell, so the added predictor's fit gain did not compensate for its complexity penalty under this measure.",
+        "Do not conclude causality or predictive superiority from these two values alone."
+      ],
+      "answer": "Model B fits the sample at least as well by ordinary R², but its adjusted R² is lower. The added predictor did not improve the complexity-adjusted fit measure. Further diagnostics and validation are needed.",
+      "solution": [
+        {
+          "say": "Compare ordinary R².",
+          "math": "0.64>0.62",
+          "why": "The larger nested model has no lower ordinary R²."
+        },
+        {
+          "say": "Compare adjusted R².",
+          "math": "0.57<0.59",
+          "why": "After the complexity penalty, the larger model scores lower."
+        },
+        {
+          "say": "State a careful conclusion.",
+          "math": "The added predictor does not improve adjusted R²",
+          "why": "This is a descriptive model-comparison result, not proof that the predictor is useless in every context."
+        },
+        {
+          "say": "Identify what else is needed.",
+          "math": "Check diagnostics and validation",
+          "why": "Fit measures alone do not establish model adequacy or predictive performance."
+        }
+      ],
+      "ask": {
+        "q": "Does the higher ordinary R² alone prove Model B is better?",
+        "nudge": "Consider the penalty for adding a parameter and out-of-sample performance."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s11",
+      "mins": 6,
+      "title": "Exam traps: R² and adjusted R²",
+      "objective": "Avoid common interpretation errors.",
+      "intro": "Mark each statement true or false.",
+      "items": [
+        {
+          "claim": "For nested OLS models on the same data, ordinary R² cannot decrease when a predictor is added.",
+          "tf": true,
+          "why": "The larger model can reproduce the smaller model's fit."
+        },
+        {
+          "claim": "Adjusted R² must increase whenever ordinary R² increases.",
+          "tf": false,
+          "why": "The complexity penalty may outweigh the fit improvement."
+        },
+        {
+          "claim": "Adjusted R² can be negative.",
+          "tf": true,
+          "why": "The residual mean square can exceed the total mean square."
+        },
+        {
+          "claim": "A high R² proves that the predictors cause the response.",
+          "tf": false,
+          "why": "R² describes in-sample variation explained, not causality."
+        },
+        {
+          "claim": "If k includes the intercept, residual df are n−k.",
+          "tf": true,
+          "why": "The total parameter count includes the intercept."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s12",
+      "mins": 7,
+      "title": "Limitations and sensible model assessment",
+      "objective": "Avoid using a single fit statistic as the whole decision.",
+      "blocks": [
+        {
+          "t": "note",
+          "h": "Specification",
+          "body": "A high R² can occur in a misspecified model, with irrelevant predictors, or in relationships driven by common trends. It does not diagnose every regression assumption."
+        },
+        {
+          "t": "note",
+          "h": "Causality",
+          "body": "Neither R² nor adjusted R² identifies causal effects. Causal interpretation requires an appropriate design and assumptions."
+        },
+        {
+          "t": "note",
+          "h": "Prediction",
+          "body": "A model can have high in-sample R² and poor test performance. Use hold-out data or cross-validation to assess prediction."
+        },
+        {
+          "t": "note",
+          "h": "Model choice",
+          "body": "Combine adjusted R² with subject-matter reasoning, residual diagnostics, parsimony and validation rather than applying a single automatic rule."
+        }
+      ],
+      "ask": {
+        "q": "What should you use to assess out-of-sample predictive performance?",
+        "nudge": "Evaluate predictions on observations not used to fit the model."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 4,
+      "title": "Summary: R² and adjusted R²",
+      "objective": "Retain definitions, behaviour and comparison cautions.",
+      "body": [
+        "R²=1−RSS/TSS=RegSS/TSS for OLS with an intercept. It is the proportion of corrected sample variation explained by the fitted regression.",
+        "Adjusted R²=1−(RSS/(n−k))/(TSS/(n−1))=1−(1−R²)(n−1)/(n−k), where k includes the intercept. It penalizes model size and can be negative.",
+        "For nested OLS models on the same sample, ordinary R² cannot decrease when a predictor is added. Adjusted R² may rise or fall. Compare models on the same response and observations, and use diagnostics and validation rather than R² alone."
+      ],
+      "ask": {
+        "q": "State the adjusted R² formula and explain what k counts.",
+        "nudge": "Use total parameters, including the intercept."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 1,
+      "title": "6.4 mastery test",
+      "setId": "regression_t4_mastery"
+    }
+  ]
+}
