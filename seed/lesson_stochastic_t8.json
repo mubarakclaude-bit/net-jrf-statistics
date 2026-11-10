@@ -316,54 +316,41 @@
       }
     },
     {
-      "kind": "explore",
+      "kind": "theory",
       "id": "s5",
       "mins": 7,
-      "title": "Visualise the offspring distribution",
-      "objective": "Connect offspring probabilities to the PGF.",
+      "title": "Read the offspring PGF",
+      "objective": "Interpret the PGF coefficients and its value at zero.",
       "body": [
         "A PGF is not just a formula. Each coefficient gives the probability of one offspring count. The constant term is especially important: p₀ is the chance that an individual leaves no offspring.",
         "For a finite offspring distribution, the PGF is a polynomial. Its shape on [0,1] helps us study the fixed-point equation f(s)=s."
       ],
-      "viz": {
-        "type": "plot",
-        "title": "Illustrative offspring PGF",
-        "data": {
-          "x": [
-            0,
-            0.25,
-            0.5,
-            0.75,
-            1
-          ],
-          "series": [
-            {
-              "name": "f(s)",
-              "y": [
-                0.2,
-                0.34375,
-                0.525,
-                0.74375,
-                1
-              ]
-            },
-            {
-              "name": "s",
-              "y": [
-                0,
-                0.25,
-                0.5,
-                0.75,
-                1
-              ]
-            }
-          ]
-        }
-      },
       "ask": {
         "q": "What does the intercept f(0) equal?",
         "nudge": "Set s=0 in the PGF; all positive powers vanish."
-      }
+      },
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Offspring probabilities",
+          "body": "The coefficient pₖ is the probability that one individual produces k offspring. The constant term p₀ is the probability of producing none."
+        },
+        {
+          "t": "formula",
+          "h": "PGF at zero",
+          "body": "f(0)=p₀. Every positive power of zero vanishes, leaving only the probability of zero offspring."
+        },
+        {
+          "t": "formula",
+          "h": "PGF at one",
+          "body": "f(1)=Σpₖ=1. This is the first normalisation check for an offspring distribution."
+        },
+        {
+          "t": "step",
+          "h": "Read the polynomial",
+          "body": "For f(s)=0.2+0.5s+0.3s², the probabilities of 0, 1 and 2 offspring are 0.2, 0.5 and 0.3."
+        }
+      ]
     },
     {
       "kind": "worked",
@@ -497,6 +484,87 @@
       "ask": {
         "q": "Can a supercritical process become extinct?",
         "nudge": "Check whether the extinction fixed point can be below one."
+      },
+      "flow": {
+        "title": "Classify a Galton–Watson process",
+        "alt": "Calculate the offspring mean, then interpret the extinction fixed point and check degenerate cases.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Find m=f′(1)",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "m<1",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 0,
+            "label": "Extinction certain (non-degenerate)",
+            "kind": "end"
+          },
+          {
+            "id": "d",
+            "r": 2,
+            "c": 1,
+            "label": "m=1",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 3,
+            "c": 1,
+            "label": "Check K=1 a.s.; otherwise extinction certain",
+            "kind": "end"
+          },
+          {
+            "id": "f",
+            "r": 2,
+            "c": 2,
+            "label": "m>1",
+            "kind": "step"
+          },
+          {
+            "id": "g",
+            "r": 3,
+            "c": 2,
+            "label": "Solve f(q)=q; smallest root",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "a",
+            "to": "d"
+          },
+          {
+            "from": "a",
+            "to": "f"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          },
+          {
+            "from": "f",
+            "to": "g"
+          }
+        ]
       }
     },
     {
