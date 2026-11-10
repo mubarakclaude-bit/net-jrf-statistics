@@ -1,0 +1,38 @@
+name: Regression T7 heteroscedasticity and GLS validation
+
+on:
+  pull_request:
+    branches: [main, gpt/regression-t4-r2-adjusted]
+  push:
+    branches: [gpt/regression-t7-heteroscedasticity-gls]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-regression-t7:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Verify exact GLS calculations and mastery pool
+        run: python verify_regression_t7.py
+      - name: Validate lesson structure and pool
+        run: node vcheck.js seed/lesson_regression_t7.json
+      - name: Build app
+        run: bash build.sh
+      - name: Install browser-test dependency
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run browser integration suite
+        run: |
+          node test.js
+          node clicktest.js
