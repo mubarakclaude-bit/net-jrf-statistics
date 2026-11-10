@@ -1,0 +1,583 @@
+{
+ "id": "stochastict2",
+ "topicId": "stochastic-t2",
+ "moduleId": "stochastic",
+ "title": "Stationary Distributions: Solving πP = π",
+ "breadcrumb": "Stochastic processes → Markov chains → Stationary distributions",
+ "engine": "B",
+ "engineName": "A stationary distribution is a probability distribution that is unchanged by one transition.",
+ "version": "4.1",
+ "status": "approved",
+ "estMin": 98,
+ "objectives": [
+  "Define a stationary distribution and verify it by multiplication.",
+  "Find stationary probabilities by solving πP=π together with the sum-to-one condition.",
+  "Solve two-state and three-state transition-matrix problems exactly.",
+  "Distinguish existence, uniqueness and convergence to a stationary distribution."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Row probability vectors",
+   "why": "A distribution is a row vector with nonnegative entries summing to one."
+  },
+  {
+   "id": "p2",
+   "name": "Matrix multiplication",
+   "why": "The distribution after one step is αP under the row convention."
+  },
+  {
+   "id": "p3",
+   "name": "Solving linear equations",
+   "why": "The stationary equations are a linear system plus a normalization equation."
+  }
+ ],
+ "traps": [
+  "With row distributions, use πP=π. A column-vector convention changes the equation.",
+  "Do not use every equation in πP=π as independent; one is redundant for a stochastic matrix.",
+  "Always impose πᵢ≥0 and Σᵢπᵢ=1. An eigenvector alone need not be a probability vector.",
+  "Existence does not imply uniqueness. A reducible chain can have many stationary distributions.",
+  "Uniqueness does not by itself guarantee convergence from every starting state; periodicity can prevent convergence.",
+  "A stationary distribution describes an invariant distribution, not necessarily the observed long-run fraction of time without further conditions."
+ ],
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Three tools needed before solving",
+   "objective": "Refresh probability vectors, matrix updates and linear equations.",
+   "body": [
+    "A distribution over three states might be (1/2, 1/3, 1/6). Its entries are probabilities, so none is negative and their total is one.",
+    "For row vectors, one transition changes α into αP. A stationary distribution is a distribution for which that update makes no change.",
+    "The calculation uses a linear system. Because transition probabilities sum to one in each row, some stationary equations are dependent; normalization supplies the probability scale."
+   ],
+   "items": [
+    {
+     "ask": "What two conditions make a row vector a probability distribution?",
+     "recall": "Every entry is nonnegative and all entries sum to one.",
+     "refresh": [
+      "A probability distribution assigns a nonnegative probability to each state.",
+      "The probabilities of all mutually exclusive states must add to one.",
+      "For example, (0.2,0.5,0.3) is a distribution; (0.2,0.5,0.4) is not because its sum is 1.1."
+     ]
+    },
+    {
+     "ask": "If α is a row distribution and P is a transition matrix, what is the next distribution?",
+     "recall": "αP.",
+     "refresh": [
+      "The row convention places the current state in the row and the next state in the column.",
+      "The probability of a destination state is the sum over all possible current states: αₙ₊₁,j=Σᵢαₙ,ᵢpᵢⱼ.",
+      "In matrix form this is αₙ₊₁=αₙP."
+     ]
+    },
+    {
+     "ask": "What extra equation turns a nonzero stationary eigenvector into a probability vector?",
+     "recall": "The entries must sum to one.",
+     "refresh": [
+      "The equation πP=π is homogeneous in π: if π is a solution, a scalar multiple is also a solution.",
+      "A probability vector must have total mass one.",
+      "Therefore add Σᵢπᵢ=1, then check nonnegativity."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "What must be checked after solving the stationary equations?",
+    "nudge": "Check both probability conditions, not only the matrix equation."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "A distribution that does not move",
+   "objective": "Explain stationarity as invariance under one transition.",
+   "body": [
+    "Imagine a two-state system: a customer is either with Provider A or Provider B. Each week, some customers switch providers. The transition matrix describes the switching probabilities for one week.",
+    "A particular split of customers may reproduce itself after one week. If 40% are with A and 60% with B before the transition, and the same proportions remain afterwards, (0.4,0.6) is stationary.",
+    "Stationary does not mean that individual customers never switch. People may move in both directions while the overall distribution remains unchanged."
+   ],
+   "scenario": {
+    "teaser": "Customer shares remain balanced",
+    "title": "A two-provider market",
+    "body": [
+     "A market researcher follows customers who use one of two providers, A and B. Each month, 80% of A customers stay with A and 20% move to B. Of B customers, 40% move to A and 60% stay with B. The researcher wants a distribution that remains unchanged after applying these monthly switching probabilities. This is not a claim that the same individuals remain with each provider. Customers can switch in both directions. The question is whether the overall proportions can balance so that the inflow and outflow at each provider match. That invariant split is called a stationary distribution."
+    ],
+    "q": "Does stationarity mean no customer changes provider?",
+    "answer": "No. It means the overall probability proportions are unchanged; individual switching can continue."
+   },
+   "ask": {
+    "q": "What is unchanged under stationarity: each individual's state or the distribution?",
+    "nudge": "Think of the total share at A and B."
+   }
+  },
+  {
+   "kind": "explore",
+   "id": "s2",
+   "mins": 7,
+   "title": "Read the stationary equation",
+   "objective": "Translate the definition into a matrix equation.",
+   "viz": {
+    "type": "disc-pmf",
+    "caption": "A probability distribution is stationary when one transition leaves every state probability unchanged."
+   },
+   "body": [
+    "Use row vectors throughout this lesson. If the current distribution is π, the next distribution is πP.",
+    "Stationarity requires πP=π. This says that the probability mass arriving at each state equals the mass assigned to that state in π.",
+    "The equation is not πP=0, and it is not generally Pπ=π under the row convention."
+   ],
+   "ask": {
+    "q": "If π=(π₁,π₂), what equation states that π is stationary?",
+    "nudge": "Multiply the row vector by P and set the result equal to the original vector."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 8,
+   "title": "Definition and the normalization condition",
+   "objective": "State the complete mathematical definition.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Stationary distribution",
+     "body": "A row probability vector π is stationary for a transition matrix P if πP=π."
+    },
+    {
+     "t": "formula",
+     "h": "Probability constraints",
+     "body": "πᵢ≥0 for every i, and Σᵢπᵢ=1."
+    },
+    {
+     "t": "step",
+     "h": "Solve the system",
+     "body": "Rearrange πP=π as π(P−I)=0, then add Σᵢπᵢ=1. For a stochastic matrix, one stationary equation is usually redundant."
+    }
+   ],
+   "flow": {
+    "title": "Stationary-distribution workflow",
+    "alt": "Set up the invariant equation, solve with normalization, then verify the result.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Write πP = π",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Solve linear equations",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 1,
+      "label": "Impose sum = 1",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 1,
+      "label": "Check π ≥ 0 and πP = π",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ],
+    "note": "Do not stop at an eigenvector; the answer must be a probability vector."
+   },
+   "ask": {
+    "q": "Why is normalization necessary?",
+    "nudge": "The homogeneous equation also admits scalar multiples."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 9,
+   "title": "Worked example: a two-state chain",
+   "objective": "Solve a two-state stationary distribution step by step.",
+   "problem": "For P=[[0.8,0.2],[0.4,0.6]], find the stationary distribution.",
+   "steps": [
+    {
+     "say": "Write the unknown row distribution.",
+     "math": "π=(x,1−x)",
+     "why": "Two probabilities must add to one."
+    },
+    {
+     "say": "Apply πP=π and use the first coordinate.",
+     "math": "0.8x+0.4(1−x)=x",
+     "why": "The first coordinate of πP must equal x."
+    },
+    {
+     "say": "Expand and collect x.",
+     "math": "0.8x+0.4−0.4x=x; 0.4=0.6x; x=2/3",
+     "why": "Subtract 0.4x from both sides, then divide by 0.6."
+    },
+    {
+     "say": "Find the second probability and verify.",
+     "math": "π=(2/3,1/3)",
+     "why": "The entries are nonnegative and sum to one. Multiplication gives (2/3,1/3)P=(2/3,1/3)."
+    }
+   ],
+   "ask": {
+    "q": "What is the stationary probability of Provider B?",
+    "nudge": "Use one minus the probability of A."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s5",
+   "mins": 5,
+   "title": "Recall the two-state shortcut",
+   "objective": "Recognise the balance equation for two states.",
+   "intro": "For P=[[a,1−a],[b,1−b]], write π=(x,1−x).",
+   "items": [
+    {
+     "q": "What balance equation follows from the first coordinate?",
+     "a": "x(1−a)=(1−x)b."
+    },
+    {
+     "q": "When b+1−a is positive, what is x?",
+     "a": "x=b/(b+1−a)."
+    },
+    {
+     "q": "What must be checked after using the shortcut?",
+     "a": "The resulting vector has nonnegative entries, sums to one, and satisfies πP=π."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s6",
+   "mins": 7,
+   "title": "Complete a second two-state solution",
+   "objective": "Complete the algebra without seeing every step.",
+   "problem": "For P=[[0.7,0.3],[0.2,0.8]], find π.",
+   "steps": [
+    {
+     "blank": {
+      "prompt": "Set π equal to",
+      "answer": "(x,1−x)",
+      "accept": [
+       "(x,1-x)"
+      ],
+      "hint": "There are two states and the probabilities sum to one."
+     }
+    },
+    {
+     "blank": {
+      "prompt": "The first coordinate equation is",
+      "answer": "0.7x+0.2(1−x)=x",
+      "accept": [
+       "0.7x+0.2(1-x)=x"
+      ],
+      "hint": "Multiply the row vector by the first column."
+     }
+    },
+    {
+     "blank": {
+      "prompt": "Solving gives x =",
+      "answer": "2/5",
+      "accept": [
+       "0.4",
+       "2/5"
+      ],
+      "hint": "Collect x terms and divide."
+     }
+    },
+    {
+     "blank": {
+      "prompt": "The stationary distribution is",
+      "answer": "(2/5,3/5)",
+      "accept": [
+       "(2/5,3/5)",
+       "(0.4,0.6)"
+      ],
+      "hint": "The second coordinate is one minus the first."
+     }
+    }
+   ],
+   "ask": {
+    "q": "How would you verify your completed answer?",
+    "nudge": "Multiply π by P and compare both coordinates."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Three-state chains and redundant equations",
+   "objective": "Set up and solve a three-state stationary system.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Three-state setup",
+     "body": "Let π=(x,y,z). Solve (x,y,z)P=(x,y,z) together with x+y+z=1."
+    },
+    {
+     "t": "step",
+     "h": "Use independent equations",
+     "body": "Write the coordinate equations. Because rows of P sum to one, the stationary equations are linearly dependent; use two independent equations plus normalization."
+    },
+    {
+     "t": "def",
+     "h": "Verification",
+     "body": "Substitute the candidate vector into πP and check every coordinate, nonnegativity and total mass."
+    }
+   ],
+   "ask": {
+    "q": "For three states, how many independent coordinate equations are usually needed alongside normalization?",
+    "nudge": "One of the three stationary equations is redundant."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Guided problem: three states",
+   "objective": "Solve a three-state stationary distribution with hints.",
+   "problem": "For P=[[1/2,1/2,0],[0,1/2,1/2],[1/2,0,1/2]], find a stationary distribution.",
+   "hints": [
+    "Start with π=(x,y,z) and use πP=π.",
+    "Write the three coordinate equations; combine them with x+y+z=1.",
+    "The equations imply x=y=z; normalize the three equal entries."
+   ],
+   "answer": "π=(1/3,1/3,1/3).",
+   "solution": [
+    "The first coordinate gives x=x/2+z/2, so x=z.",
+    "The second gives y=x/2+y/2, so y=x.",
+    "Thus x=y=z. Since x+y+z=1, each equals 1/3.",
+    "Multiplication confirms (1/3,1/3,1/3)P=(1/3,1/3,1/3)."
+   ],
+   "scenario": {
+    "teaser": "Three machines share the same load pattern",
+    "title": "A three-state maintenance cycle",
+    "body": [
+     "A factory records the condition of a machine at the end of each shift as Ready, Warning or Repair. The transition matrix is P=[[1/2,1/2,0],[0,1/2,1/2],[1/2,0,1/2]]. A stationary distribution represents a probability allocation across the three conditions that is unchanged after one shift. The states are not equally likely merely because there are three of them; equality must be derived from the equations. In this particular system, the transition structure creates a cyclic balance. The calculation is a useful test of whether the learner can form all coordinate equations, identify redundancy and apply the sum-to-one condition."
+    ],
+    "q": "Why should equal stationary probabilities be derived rather than assumed?",
+    "answer": "A stationary vector is determined by P; equal probabilities are not automatic for every three-state chain."
+   },
+   "ask": {
+    "q": "What is the role of the normalization equation in this example?",
+    "nudge": "It determines the common value after the equations show the entries are equal."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 7,
+   "title": "Existence, uniqueness and convergence are different",
+   "objective": "Distinguish three claims that are often confused.",
+   "intro": "Mark each statement true or false, then read the reason.",
+   "items": [
+    {
+     "claim": "Every finite transition matrix has at least one stationary distribution.",
+     "tf": true,
+     "why": "A finite stochastic matrix has at least one stationary probability vector."
+    },
+    {
+     "claim": "Every finite irreducible chain has a unique stationary distribution.",
+     "tf": true,
+     "why": "For a finite irreducible chain, the stationary distribution exists and is unique."
+    },
+    {
+     "claim": "A unique stationary distribution guarantees convergence from every initial state.",
+     "tf": false,
+     "why": "A finite irreducible periodic chain has a unique stationary distribution but its distributions may oscillate."
+    },
+    {
+     "claim": "A reducible chain can have more than one stationary distribution.",
+     "tf": true,
+     "why": "Multiple closed classes can support different stationary distributions and their mixtures."
+    },
+    {
+     "claim": "A stationary distribution must be uniform.",
+     "tf": false,
+     "why": "The stationary probabilities depend on the transition structure."
+    },
+    {
+     "claim": "If πP=π, starting with distribution π leaves the distribution unchanged at every step.",
+     "tf": true,
+     "why": "Repeated multiplication gives πPⁿ=π for every n."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 8,
+   "title": "Transfer: identify non-uniqueness",
+   "objective": "Recognise a family of stationary distributions in a reducible chain.",
+   "problem": "For P=[[1,0,0],[0,1,0],[1/3,1/3,1/3]], determine all stationary distributions.",
+   "hints": [
+    "Let π=(x,y,z) and write πP=π.",
+    "Compare the third coordinate and use normalization.",
+    "Check whether the stationary equations force a unique split between x and y."
+   ],
+   "answer": "Every vector π=(t,1−t,0), 0≤t≤1, is stationary; the stationary distribution is not unique.",
+   "solution": [
+    "Multiplication gives πP=(x+z/3,y+z/3,z/3).",
+    "Equating to (x,y,z) gives z/3=z, hence z=0.",
+    "The first two equations then impose no restriction beyond x+y=1.",
+    "Nonnegativity gives 0≤x≤1. Write x=t and y=1−t. Every such vector is stationary."
+   ],
+   "ask": {
+    "q": "Why is the stationary distribution not unique here?",
+    "nudge": "The first two states are absorbing, so any initial mixture concentrated on them is invariant."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s11",
+   "mins": 5,
+   "title": "What to carry into the exam",
+   "objective": "Summarise the solution method and the main logical distinctions.",
+   "body": [
+    "A stationary distribution is a probability row vector π satisfying πP=π. Solve the coordinate equations and impose the sum-to-one condition.",
+    "For two states, use the balance equation x(1−a)=(1−x)b. For three or more states, write the full system, remove one redundant equation and normalize.",
+    "For a finite chain, at least one stationary distribution exists. Irreducibility gives uniqueness. Convergence needs an additional aperiodicity condition in the standard finite irreducible setting.",
+    "A periodic chain can have a unique stationary distribution without the distributions from a fixed starting state converging. A reducible chain can have several stationary distributions."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s12",
+   "mins": 2,
+   "title": "Mastery test",
+   "objective": "Check independent problem-solving.",
+   "setId": "stochastic_t2_mastery"
+  }
+ ],
+ "revision": {
+  "sheet": [
+   "Stationary row vector: πP=π.",
+   "Probability constraints: πᵢ≥0 and Σπᵢ=1.",
+   "For row distributions, update by αₙ₊₁=αₙP.",
+   "Solve π(P−I)=0 with normalization.",
+   "One stationary equation is redundant for a stochastic matrix.",
+   "Two-state P=[[a,1−a],[b,1−b]]: π₁=b/(b+1−a), when denominator is positive.",
+   "For finite chains, at least one stationary distribution exists.",
+   "Finite irreducibility gives a unique stationary distribution.",
+   "Uniqueness does not alone imply convergence; periodicity matters.",
+   "Reducibility can allow multiple stationary distributions."
+  ],
+  "cards": [
+   [
+    "Definition",
+    "πP=π; one transition leaves the distribution unchanged."
+   ],
+   [
+    "Normalization",
+    "All entries are nonnegative and sum to one."
+   ],
+   [
+    "Two-state balance",
+    "π₁(1−a)=π₂b."
+   ],
+   [
+    "Two-state shortcut",
+    "π₁=b/(b+1−a), if denominator >0."
+   ],
+   [
+    "Finite existence",
+    "Every finite transition matrix has at least one stationary distribution."
+   ],
+   [
+    "Uniqueness",
+    "A finite irreducible chain has a unique stationary distribution."
+   ],
+   [
+    "Convergence",
+    "For finite irreducible chains, aperiodicity ensures convergence to π."
+   ],
+   [
+    "Reducibility",
+    "Several closed classes can produce several stationary distributions."
+   ]
+  ],
+  "tricks": [
+   "Use one coordinate equation plus normalization for a two-state chain.",
+   "For three states, solve two independent equations and normalization; do not treat all three as independent.",
+   "Always substitute the final vector into πP; a plausible eigenvector is not enough."
+  ],
+  "shortcuts": [
+   "Balance flow into and out of a state: πᵢ(1−pᵢᵢ)=Σⱼ≠ᵢπⱼpⱼᵢ.",
+   "If symmetry makes all coordinates equal, normalize only after verifying the equations.",
+   "For an absorbing state i, the point mass concentrated at i is stationary."
+  ],
+  "remember": [
+   "Stationary means invariant distribution, not frozen states.",
+   "Unique stationary distribution and convergence are separate questions."
+  ]
+ },
+ "howto": "Work through the two-state example first. In each problem, keep the row-vector convention fixed, solve πP=π, impose normalization, and verify by multiplication. The three-state guided example demonstrates equation redundancy. The transfer problem shows why reducibility can create infinitely many stationary distributions. Detailed classification and first-passage calculations are treated in later topics.",
+ "refs": [
+  {
+   "title": "Markov Chains",
+   "where": "Stationary distributions and finite chains",
+   "site": "J. R. Norris",
+   "url": "https://www.statslab.cam.ac.uk/~james/Markov/",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Standard treatment of invariant distributions, irreducibility and recurrence."
+  },
+  {
+   "title": "Introduction to Probability Models",
+   "where": "Markov chains chapter",
+   "site": "Sheldon M. Ross",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Finite-state Markov chains and stationary probabilities."
+  },
+  {
+   "title": "Introduction to Stochastic Processes",
+   "where": "Discrete-time Markov chains",
+   "site": "Gregory F. Lawler",
+   "url": "https://www.math.uchicago.edu/~lawler/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Mathematical foundations of Markov chains and invariant measures."
+  }
+ ],
+ "provenance": "Author-created Unit 9 lesson aligned to catalog topic stochastic-t2. Exact rational calculations for the two-state, three-state and reducible examples are recorded in verify_stochastic_t2.py; theorem distinctions follow standard finite-state Markov-chain results.",
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA rule."
+ }
+}
