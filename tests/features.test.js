@@ -43,21 +43,23 @@ const server = http.createServer((q, r) => {
     page.on("pageerror", e => errs.push(e.message));
     page.on("console", m => { if (m.type() === "error" || /storage contract/.test(m.text())) errs.push(m.text()); });
     const expect = (name, ok, detail) => { lines.push({ name, ok: !!ok, detail }); };
+    // A feature normally lives at #f-<id>; one that "replaces" a built-in view lives at that view's own route.
+    const route = manifest.replaces || "f-" + id;
     const t = { id, page, expect, open: async () => {
-      await page.evaluate(i => { location.hash = "#f-" + i; }, id);
-      await page.waitForSelector("#v-f-" + id + ".on", { timeout: 10000 });
+      await page.evaluate(r => { location.hash = "#" + r; }, route);
+      await page.waitForSelector("#v-" + route + ".on", { timeout: 10000 });
       await page.waitForTimeout(250);
     } };
     try {
       await page.goto(base); await page.waitForSelector('[data-login="me"]', { timeout: 20000 });
       await page.click('[data-login="me"]'); await page.waitForFunction(() => typeof S !== "undefined" && S.authed, null, { timeout: 20000 });
       expect("registered with the app", await page.evaluate(i => typeof FEATURES !== "undefined" && !!FEATURES[i], id));
-      expect("has a section in the page", await page.evaluate(i => !!document.getElementById("v-f-" + i), id));
-      expect("navigation shows it exactly when its manifest says tab:" + manifest.tab,
-        (await page.locator('#nav [data-tab="f-' + id + '"]').count()) === (manifest.tab ? 1 : 0));
+      expect("has a section in the page", await page.evaluate(r => !!document.getElementById("v-" + r), route));
+      expect(manifest.replaces ? "its built-in tab '" + route + "' is still in the navigation bar, exactly once" : "navigation shows it exactly when its manifest says tab:" + manifest.tab,
+        (await page.locator('#nav [data-tab="' + route + '"]').count()) === (manifest.replaces || manifest.tab ? 1 : 0));
       await t.open();
-      expect("is visible at #f-" + id, await page.evaluate(i => document.getElementById("v-f-" + i).classList.contains("on"), id));
-      expect("did not fall back to the error card", (await page.locator("#v-f-" + id).textContent()).indexOf("failed to display") < 0);
+      expect("is visible at #" + route, await page.evaluate(r => document.getElementById("v-" + r).classList.contains("on"), route));
+      expect("did not fall back to the error card", (await page.locator("#v-" + route).textContent()).indexOf("failed to display") < 0);
       if (loadError) throw loadError;
       await testFn(t);
     } catch (e) { expect("its test ran to the end", false, String(e && e.message || e).split("\n")[0]); }

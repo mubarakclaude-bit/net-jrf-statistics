@@ -23,7 +23,7 @@ function render(){
   if(pc2){pc2.textContent=profileName();pc2.className="chip "+(S.profile==="me"?"dim":"och");pc2.hidden=!S.ready}
   allRoutes().forEach(k=>{const s=$("#v-"+k);if(s)s.classList.toggle("on",S.route===k)});
   document.body.classList.toggle("wide",S.route==="learn");
-  const f={home:vHome,learn:vLearn,bank:vBank,mock:vMock,progress:vProgress,admin:vAdmin}[S.route]||featureView(S.route);
+  const f={home:vHome,learn:vLearn,bank:vBank,mock:vMock,admin:vAdmin}[S.route]||featureView(S.route);
   if(f)$("#v-"+S.route).innerHTML=f()+(typeof reqModal==="function"?reqModal():"")
     +(typeof askPanelHTML==="function"?askPanelHTML():"")
     +(typeof askChipHTML==="function"?askChipHTML():"");

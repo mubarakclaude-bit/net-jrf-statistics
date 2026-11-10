@@ -12,10 +12,17 @@
      ctx.esc(s)                     HTML-escape
      ctx.toast(message)             a short message
      ctx.rerender()                 draw the feature again
+     ctx.route                      the route it is shown at: "f-<id>", or the built-in route it replaces (see below)
+     ctx.app                        the host interface, read this and call it; see appApi() below. A feature never touches
+                                    the app's internal state S or its global helpers directly.
      ctx.store.get/set/remove(key)  learner data. ONLY the keys declared in feature.json "storage"; each is stored at
                                     data/users/<uid>/features/<id>/<key> (under p/<profile>/ for a non-default profile),
                                     a path the storage contract allows. Any other key throws.
-   A feature that throws while drawing shows an error card; it can never blank the rest of the app. */
+   A feature that throws while drawing shows an error card; it can never blank the rest of the app.
+
+   A manifest may say "replaces": "<built-in route>" (tab must then be false). The feature is shown at that built-in route,
+   in that route's place in the navigation bar, and the app no longer draws the built-in view. This is how a built-in view
+   becomes a feature module without changing its address, its position or what the learner sees. */
 const FEATURES={};
 
 function makeFeatureStore(f){
@@ -35,36 +42,63 @@ function makeFeatureStore(f){
   };
 }
 
+/* The host interface a feature may call (ctx.app). Small, read-mostly, and defined once here so that a view moved out of
+   the core bundle reaches the app's logic through a named, documented surface and not through globals. Everything is looked
+   up at call time. Adding to it is a core change (AGENTS.md, section C). */
+function appApi(){
+  return Object.freeze({
+    gate:()=>gate(),                          /* "" when the app is ready, else the view to show instead */
+    overall:paper=>overall(paper),            /* marks, projection and per-module status for paper 1 or 2 */
+    formatStats:()=>fmtStats(),               /* accuracy by question format across the loaded bank */
+    errors:()=>S.errs.slice(),                /* the learner's logged errors (a copy) */
+    bankLoaded:()=>Object.keys(S.bank).length>0,
+    loadAll:onProgress=>loadAll(onProgress),  /* load every module's questions */
+    clearErrors:()=>{S.errs=[];saveErrs()},
+    ui:Object.freeze({bar:bar,pc:pc,fmtPct:fmtPct,nTag:nTag,modNo:modNo,askBox:askBox}),
+    data:Object.freeze({FORDER:FORDER,FMT:FMT,ERRT:ERRT})
+  });
+}
+let APP_API=null;
+
 function registerFeature(manifest,def){
   if(!manifest||!manifest.id)throw new Error("registerFeature: manifest has no id");
   if(FEATURES[manifest.id])throw new Error("feature '"+manifest.id+"' is registered twice");
   if(!def||typeof def.render!=="function")throw new Error("feature '"+manifest.id+"' must provide render(ctx)");
-  const route="f-"+manifest.id,f={manifest:manifest,def:def,route:route};
+  const route=manifest.replaces||"f-"+manifest.id,f={manifest:manifest,def:def,route:route};
+  if(manifest.replaces){
+    if(!TABS.some(t=>t[0]===manifest.replaces))throw new Error("feature '"+manifest.id+"' replaces '"+manifest.replaces+"', which is not a built-in route");
+    if(featureByRoute(route))throw new Error("route '"+route+"' is already served by feature '"+featureByRoute(route).manifest.id+"'");
+  }
   FEATURES[manifest.id]=f;
   if(!document.getElementById("v-"+route)){
     const home=document.getElementById("v-home"),sec=document.createElement("section");sec.id="v-"+route;
     if(home&&home.parentNode)home.parentNode.appendChild(sec);
   }
   f.ctx={id:manifest.id,version:manifest.version,route:route,
+    get app(){return APP_API||(APP_API=appApi())},
     get profile(){return S.profile||"me"},get uid(){return S.uid},
     esc:esc,toast:toast,rerender:()=>render(),store:makeFeatureStore(f)};
 }
 const featureIds=()=>Object.keys(FEATURES).sort();
 /* every route the app can show: the built-in tabs and every feature (a feature is reachable at #f-<id>) */
-const allRoutes=()=>TABS.map(t=>t[0]).concat(featureIds().map(i=>"f-"+i));
+const allRoutes=()=>TABS.map(t=>t[0]).concat(featureIds().filter(i=>!FEATURES[i].manifest.replaces).map(i=>"f-"+i));
 const routeKnown=r=>allRoutes().indexOf(r)>=0;
 /* the navigation entries for features whose manifest says tab:true */
-const featureTabs=()=>featureIds().filter(i=>FEATURES[i].manifest.tab).map(i=>["f-"+i,FEATURES[i].manifest.title]);
+const featureTabs=()=>featureIds().filter(i=>FEATURES[i].manifest.tab&&!FEATURES[i].manifest.replaces).map(i=>["f-"+i,FEATURES[i].manifest.title]);
+/* the feature shown at a route: "f-<id>", or the built-in route it replaces */
+function featureByRoute(route){
+  if(/^f-/.test(route)){const f=FEATURES[route.slice(2)];return f&&!f.manifest.replaces?f:null}
+  const ids=featureIds();for(let i=0;i<ids.length;i++)if(FEATURES[ids[i]].manifest.replaces===route)return FEATURES[ids[i]];
+  return null;
+}
 function featureView(route){
-  if(!/^f-/.test(route))return null;
-  const f=FEATURES[route.slice(2)];if(!f)return null;
+  const f=featureByRoute(route);if(!f)return null;
   return()=>{try{return f.def.render(f.ctx)||""}
     catch(e){console.error("feature "+f.manifest.id+" failed to render",e);
       return '<div class="card"><h3>'+esc(f.manifest.title)+'</h3><p class="note">This feature failed to display: '+esc((e&&e.message)||e)+'</p></div>'}};
 }
 function featureAfterRender(){
-  if(!/^f-/.test(S.route))return;
-  const f=FEATURES[S.route.slice(2)];if(!f||typeof f.def.wire!=="function")return;
+  const f=featureByRoute(S.route);if(!f||typeof f.def.wire!=="function")return;
   try{f.def.wire(f.ctx,document.getElementById("v-"+S.route))}
   catch(e){console.error("feature "+f.manifest.id+" failed to wire",e);toast("Feature error: "+((e&&e.message)||e))}
 }

@@ -66,8 +66,8 @@ each feature in its own scope. `contracts/feature.schema.json` and the validator
 and the storage declarations. `tests/features.test.js` runs every feature's own browser test in strict path mode. Two
 reference features (`ref-counter`, `ref-about`) are the living templates. A plain generator is used and not a bundler:
 it needs no installed package, which keeps the Vercel build dependency-free. esbuild stays the plan if real ES-module
-imports are needed when the built-in views are migrated. Pending: extracting Home, Learn, Question bank, Mock tests,
-Progress and Admin into feature modules, one per PR; until then two authors must not change the same built-in view.
+imports are needed when the built-in views are migrated. Progress has been extracted (it uses `replaces` and the host interface `ctx.app`). Pending: Home, Learn,
+Question bank, Mock tests and Admin, one per PR; until then two authors must not change the same built-in view.
 
 ## Lanes and rules
 
