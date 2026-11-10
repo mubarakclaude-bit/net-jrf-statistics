@@ -1,0 +1,665 @@
+{
+  "id": "regressiont5",
+  "topicId": "regression-t5",
+  "moduleId": "regression",
+  "title": "6.5 — Multicollinearity",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.5 Multicollinearity",
+  "engine": "B",
+  "engineName": "Diagnose near-linear dependence among regressors and reason about what it changes in OLS.",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 90,
+  "objectives": [
+    "Distinguish perfect from near multicollinearity using the rank and conditioning of the design matrix.",
+    "Explain why multicollinearity inflates sampling variances and standard errors of affected coefficient estimates.",
+    "Identify what multicollinearity does not automatically cause: OLS bias or loss of overall fit.",
+    "Interpret high R² with weak individual t-statistics and unstable coefficient estimates.",
+    "Evaluate remedies and distinguish prediction goals from coefficient-interpretation goals.",
+    "Answer the June 2026 Paper 2 Q38 negation question and its linked variants."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Multiple regression model",
+      "why": "Multicollinearity concerns linear relationships among explanatory variables."
+    },
+    {
+      "id": "p2",
+      "name": "OLS variance and standard errors",
+      "why": "The main consequence is seen through (X′X)⁻¹ and coefficient variances."
+    },
+    {
+      "id": "p3",
+      "name": "t tests, F tests and R²",
+      "why": "The exam anchor contrasts individual significance with overall fit."
+    }
+  ],
+  "traps": [
+    "Multicollinearity does not, by itself, bias OLS when the exogeneity assumption holds.",
+    "Near multicollinearity increases variances/standard errors; it does not necessarily make coefficient estimates large in magnitude.",
+    "Perfect multicollinearity makes X′X singular, so unique separate OLS coefficients cannot be computed by the ordinary inverse formula.",
+    "A high R² with individually insignificant t-statistics can be a symptom, not a proof, of multicollinearity.",
+    "Multicollinearity does not automatically destroy prediction within the observed predictor range.",
+    "Dropping a relevant predictor can introduce omitted-variable bias; it is not a harmless universal remedy.",
+    "The June 2026 Q38 asks what is NOT a consequence: bias is the correct answer (C)."
+  ],
+  "howto": "Check whether regressors are strongly linearly related; inspect correlations, VIFs and condition indices; connect the pattern to coefficient standard errors and stability; distinguish inference from prediction; select a remedy that preserves the scientific model and target.",
+  "refs": [
+    {
+      "title": "Introduction to Econometrics",
+      "where": "Multiple regression and multicollinearity",
+      "site": "Jeffrey M. Wooldridge",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Applied treatment of collinearity and inference."
+    },
+    {
+      "title": "Econometric Analysis",
+      "where": "Multicollinearity and least squares",
+      "site": "William H. Greene",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Detailed treatment of regression variance and diagnostics."
+    },
+    {
+      "title": "The Theory and Practice of Econometrics",
+      "where": "Linear regression diagnostics",
+      "site": "Johnston and DiNardo",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Classical econometric discussion of collinearity."
+    }
+  ],
+  "provenance": "Anchored to repository item j26-q38 in seed/pyq_j26_full.json. The official answer is C (Estimates are biased); response sheet Q74 records the candidate marked B. Four linked practice variants j26v-q38-01 to j26v-q38-04 are preserved in seed/regression_pyq_variants.json. Original mastery questions in this lesson are newly authored practice, not official PYQs.",
+  "revision": {
+    "sheet": [
+      "Perfect multicollinearity: exact linear dependence among columns of X; rank deficient; X′X singular.",
+      "Near multicollinearity: regressors are highly, but not perfectly, linearly related.",
+      "For full-rank OLS, Var(β̂|X)=σ²(X′X)⁻¹; near dependence can make parts of (X′X)⁻¹ large.",
+      "Typical consequence: larger standard errors, wider confidence intervals, smaller absolute t-statistics and unstable coefficient estimates.",
+      "OLS remains unbiased under exogeneity; collinearity alone does not create bias.",
+      "R² and overall F can remain high while individual t tests are weak.",
+      "Prediction within the observed predictor region may remain adequate; extrapolation and coefficient interpretation are more fragile.",
+      "VIF_j=1/(1−R_j²), where R_j² comes from regressing x_j on the other regressors.",
+      "Perfect collinearity prevents unique separate coefficient estimation with ordinary OLS.",
+      "Remedies depend on the goal: collect more informative data, redesign the study, combine predictors only with substantive justification, use dimension reduction or regularisation when prediction is the goal."
+    ],
+    "cards": [
+      [
+        "Perfect collinearity",
+        "Exact linear dependence; X′X singular."
+      ],
+      [
+        "Near collinearity",
+        "Strong but not exact linear dependence."
+      ],
+      [
+        "Main consequence",
+        "Inflated coefficient variances and standard errors."
+      ],
+      [
+        "Bias?",
+        "Not from collinearity alone, if exogeneity holds."
+      ],
+      [
+        "R²",
+        "Can remain high."
+      ],
+      [
+        "Individual t tests",
+        "May be weak due to large standard errors."
+      ],
+      [
+        "VIF",
+        "1/(1−R_j²)."
+      ],
+      [
+        "Prediction",
+        "Can remain good within the observed data region."
+      ],
+      [
+        "June 2026 Q38",
+        "NOT a consequence: OLS estimates are biased (option C)."
+      ]
+    ],
+    "tricks": [
+      "For a negation stem, identify the standard consequences first, then select the one that is not on the list.",
+      "High R² + low individual t-statistics is a classic exam clue, but not a logical proof on its own.",
+      "Ask whether the question concerns bias, variance, inference or prediction; do not mix these."
+    ],
+    "shortcuts": [
+      "Multicollinearity → variance/SE up; |t| often down; bias does not automatically appear.",
+      "VIF above 10 is a common rule-of-thumb flag, not a universal theorem or cutoff.",
+      "Perfect collinearity means no unique ordinary OLS solution for all separate coefficients."
+    ],
+    "remember": [
+      "Large standard errors do not mean coefficient estimates must be large in magnitude.",
+      "Removing a correlated variable can change the estimand and create omitted-variable bias if that variable belongs in the model."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh regression and variance basics",
+      "objective": "Rebuild the ideas needed to understand collinearity's effect on OLS.",
+      "body": [
+        "Multicollinearity is about the explanatory variables, not about the response variable. Before studying it, recall what the design matrix contains and how OLS uncertainty is measured.",
+        "The key idea is that when two or more columns of X carry almost the same information, it becomes difficult to separate their individual contributions. The model may still fit the observed response well."
+      ],
+      "items": [
+        {
+          "ask": "In y=Xβ+u, which part contains the explanatory variables?",
+          "recall": "X, the design matrix.",
+          "refresh": [
+            "Each column of X records one predictor across observations; a column of ones may represent the intercept.",
+            "The regression coefficients in β assign a separate weight to each column. OLS uses the joint geometry of all columns, not one predictor at a time.",
+            "If one predictor column is almost a combination of other columns, the data contain little independent information for separating their coefficients."
+          ]
+        },
+        {
+          "ask": "What happens to the variance of an estimator when its standard error increases?",
+          "recall": "Variance increases because SE is the square root of variance.",
+          "refresh": [
+            "For an estimator θ̂, SE(θ̂)=√Var(θ̂). Squaring gives Var(θ̂)=SE(θ̂)².",
+            "A larger standard error means estimates would vary more from sample to sample, even if their expected value remains correct.",
+            "This is the central distinction in multicollinearity: it commonly harms precision, not unbiasedness by itself."
+          ]
+        },
+        {
+          "ask": "What does a t statistic compare?",
+          "recall": "Estimate divided by its standard error, after accounting for the null value.",
+          "refresh": [
+            "For testing H₀:β_j=0, the usual statistic is t=β̂_j/SE(β̂_j).",
+            "If the standard error becomes larger while the estimate stays similar, the absolute t statistic becomes smaller.",
+            "Therefore a real predictor can look individually insignificant when its coefficient is estimated imprecisely because of strong overlap with other predictors."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What is the main distinction to keep in mind: bias or precision?",
+        "nudge": "Think about the expected value versus how much estimates vary across samples."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 6,
+      "title": "Two predictors telling almost the same story",
+      "objective": "Build an intuitive picture of multicollinearity.",
+      "body": [
+        "Imagine predicting house prices using both floor area in square metres and floor area in square feet. These columns contain almost exactly the same information. The model can estimate their combined contribution well, but separating the individual coefficients is unstable.",
+        "In real data, predictors are rarely exact conversions. They may be strongly related because of shared underlying causes, overlapping measurements or a narrow sample range.",
+        "This is why multicollinearity is often a problem of identifying individual effects rather than fitting or predicting the response."
+      ],
+      "scenario": {
+        "teaser": "A housing model includes two measures of size",
+        "title": "The overlapping predictor problem",
+        "body": [
+          "A housing analyst includes floor area in square metres and floor area in square feet as separate regressors. The two columns are almost perfectly proportional.",
+          "Many combinations of the two coefficients produce nearly the same fitted values. A small change in the sample can shift the estimated weight from one size variable to the other.",
+          "The model can retain a high R² because the size information is still present. Yet individual standard errors can be large, signs can look unstable and separate coefficient interpretations become unreliable.",
+          "The problem is not that the response is unexplained; it is that the predictors do not provide enough independent variation to isolate their individual effects."
+        ],
+        "q": "What is difficult to identify in this example?",
+        "answer": "The separate effects of the two highly overlapping size variables."
+      },
+      "ask": {
+        "q": "Can a model fit well while individual coefficients are imprecise?",
+        "nudge": "The predictors can jointly explain y while providing little separate information."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 6,
+      "title": "Perfect versus near multicollinearity",
+      "objective": "Distinguish singularity from poor conditioning.",
+      "body": [
+        "Perfect multicollinearity means an exact linear relationship among one or more columns of X. For example, if x₃=2x₁+x₂ for every observation, the columns are linearly dependent and X′X is singular.",
+        "Near multicollinearity means the relationship is very strong but not exact. X can retain full column rank, so ordinary OLS coefficients exist, but the inverse (X′X)⁻¹ can contain large values in sensitive directions.",
+        "Do not confuse the two cases: perfect collinearity prevents unique separate coefficient estimation by the usual inverse formula; near collinearity makes estimates imprecise and unstable."
+      ],
+      "viz": {
+        "type": "rank-null",
+        "caption": "Exact dependence reduces rank; near dependence keeps rank but makes the design poorly conditioned."
+      },
+      "ask": {
+        "q": "Which case makes X′X singular?",
+        "nudge": "Look for exact linear dependence, not merely a high correlation."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 8,
+      "title": "Why standard errors increase",
+      "objective": "Connect collinearity to the OLS variance formula.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "OLS variance under spherical errors",
+          "body": "Var(β̂|X)=σ²(X′X)⁻¹, provided X has full column rank."
+        },
+        {
+          "t": "def",
+          "h": "What near dependence does",
+          "body": "When columns of X are nearly linearly dependent, X′X is close to singular. Its inverse can have large entries in directions that are poorly identified by the data."
+        },
+        {
+          "t": "step",
+          "h": "Practical implication",
+          "body": "The affected coefficient variances and standard errors can become large. Confidence intervals widen and individual t statistics often shrink."
+        },
+        {
+          "t": "note",
+          "h": "What does not follow",
+          "body": "The formula does not say the coefficient estimates must be large in magnitude, nor does near collinearity alone make OLS biased."
+        }
+      ],
+      "ask": {
+        "q": "What part of the OLS variance formula becomes numerically problematic under near dependence?",
+        "nudge": "It is the inverse cross-product matrix."
+      },
+      "flow": {
+        "caption": "From predictor overlap to imprecise individual coefficients",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Predictor columns overlap",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "X′X nearly singular",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "(X′X)⁻¹ entries grow",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Coefficient SEs rise",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Individual t tests weaken",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked example: standard error and t statistic",
+      "objective": "See how larger standard errors weaken individual tests.",
+      "problem": "A coefficient estimate is 2.4. Its standard error rises from 0.6 to 1.2 because the predictors overlap more strongly. Compare the t statistics for H₀:β=0.",
+      "steps": [
+        {
+          "say": "Use t=estimate/standard error.",
+          "math": "t=β̂/SE(β̂)"
+        },
+        {
+          "say": "Before the increase in standard error.",
+          "math": "t₁=2.4/0.6=4"
+        },
+        {
+          "say": "After the increase in standard error.",
+          "math": "t₂=2.4/1.2=2"
+        },
+        {
+          "say": "Interpret the change.",
+          "math": "SE doubles; |t| halves",
+          "why": "The point estimate did not change, but its precision fell."
+        }
+      ],
+      "ask": {
+        "q": "Did the coefficient become biased merely because its standard error doubled?",
+        "nudge": "A change in precision is not itself a change in expected value."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 5,
+      "title": "Recall the core consequences",
+      "objective": "Retrieve the standard consequence pattern.",
+      "intro": "Answer from memory before revealing the short explanation.",
+      "items": [
+        {
+          "q": "What is the main statistical consequence of near multicollinearity?",
+          "a": "Inflated variances and standard errors for affected coefficient estimates."
+        },
+        {
+          "q": "Does multicollinearity alone bias OLS?",
+          "a": "No, not if the exogeneity assumption holds."
+        },
+        {
+          "q": "Can R² remain high?",
+          "a": "Yes. Overall fit can remain high even when individual coefficients are imprecise."
+        },
+        {
+          "q": "What happens to individual t statistics when standard errors rise and estimates stay similar?",
+          "a": "Their absolute values tend to fall."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 7,
+      "title": "Complete the inference chain",
+      "objective": "Reconstruct the effect on standard errors and tests.",
+      "problem": "Complete the chain from near dependence to individual inference.",
+      "steps": [
+        {
+          "say": "Near dependence makes X′X close to singular.",
+          "blank": {
+            "prompt": "The inverse matrix in Var(β̂|X)=σ²(____) becomes unstable.",
+            "answer": "X′X",
+            "accept": [
+              "X'X"
+            ],
+            "hint": "It is the cross-product matrix of the design."
+          }
+        },
+        {
+          "say": "Poor conditioning can increase coefficient variances.",
+          "blank": {
+            "prompt": "The square root of a coefficient variance is its _____.",
+            "answer": "standard error",
+            "accept": [
+              "SE"
+            ],
+            "hint": "It measures sampling uncertainty in the estimator."
+          }
+        },
+        {
+          "say": "A larger standard error affects the t ratio.",
+          "blank": {
+            "prompt": "For a fixed estimate, a larger SE makes |t| generally _____.",
+            "answer": "smaller",
+            "accept": [
+              "lower",
+              "decrease"
+            ],
+            "hint": "The estimate is divided by a larger denominator."
+          }
+        },
+        {
+          "say": "State what does not automatically change.",
+          "blank": {
+            "prompt": "Under exogeneity, multicollinearity alone does not make OLS _____.",
+            "answer": "biased",
+            "accept": [
+              "biased"
+            ],
+            "hint": "Think expected value, not precision."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 8,
+      "title": "What multicollinearity does NOT do",
+      "objective": "Separate precision problems from bias and model fit.",
+      "blocks": [
+        {
+          "t": "note",
+          "h": "Not an automatic source of bias",
+          "body": "If E(u|X)=0 holds, OLS remains unbiased even when regressors are highly correlated. Multicollinearity changes the variance, not the zero-mean condition."
+        },
+        {
+          "t": "note",
+          "h": "Not necessarily a low R²",
+          "body": "The predictors can jointly explain the response very well. High R² and weak individual t statistics can coexist."
+        },
+        {
+          "t": "note",
+          "h": "Not necessarily poor prediction",
+          "body": "Predictions within the observed range of predictor combinations may remain stable, even when individual coefficient estimates are unstable. Extrapolation can be much more sensitive."
+        },
+        {
+          "t": "note",
+          "h": "Not necessarily large coefficients",
+          "body": "The magnitude of an estimate depends on the data and parameterisation. The reliable general consequence is imprecision, not a guaranteed large magnitude."
+        }
+      ],
+      "ask": {
+        "q": "Which is the safest general statement: multicollinearity raises bias or raises variance?",
+        "nudge": "Use the OLS variance expression and keep exogeneity separate."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s8",
+      "mins": 7,
+      "title": "Detecting multicollinearity: correlation and VIF",
+      "objective": "Interpret common diagnostic tools without treating rules of thumb as laws.",
+      "body": [
+        "A correlation matrix can reveal pairs of strongly related regressors, but pairwise correlations can miss a predictor that is explained by a combination of several other predictors.",
+        "The variance inflation factor for regressor j is VIFⱼ=1/(1−Rⱼ²), where Rⱼ² is obtained by regressing xⱼ on all the other explanatory variables. As Rⱼ² approaches 1, VIF grows without bound.",
+        "A VIF around 10 is a familiar warning rule in some applied settings, but it is not a universal theorem or a mandatory cutoff. Interpret diagnostics in context, with sample size, purpose and coefficient uncertainty."
+      ],
+      "scenario": {
+        "teaser": "A VIF report flags one predictor",
+        "title": "Read the diagnostic, not just the threshold",
+        "body": [
+          "A model reports R²_j=0.90 when predictor xⱼ is regressed on the remaining explanatory variables. Its VIF is 1/(1−0.90)=10.",
+          "This indicates that the variance of the coefficient estimator is inflated relative to an orthogonal-design benchmark, conditional on the other model assumptions.",
+          "The value 10 is often used as a warning threshold, but it does not prove that the model is unusable. The analyst should inspect coefficient uncertainty, scientific purpose, sample design and whether prediction or interpretation is the priority.",
+          "A diagnostic is evidence to investigate, not an automatic instruction to delete the predictor."
+        ],
+        "q": "What is the VIF when R²_j=0.90?",
+        "answer": "10."
+      },
+      "ask": {
+        "q": "Can pairwise correlations alone rule out multicollinearity?",
+        "nudge": "One predictor may be explained by a linear combination of several others."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s9",
+      "mins": 8,
+      "title": "Worked example: calculate VIF",
+      "objective": "Compute and interpret a variance inflation factor.",
+      "problem": "An auxiliary regression of x₂ on the other regressors has R²₂=0.80. Calculate VIF₂.",
+      "steps": [
+        {
+          "say": "Recall the definition.",
+          "math": "VIF₂=1/(1−R²₂)"
+        },
+        {
+          "say": "Substitute the auxiliary R-squared.",
+          "math": "VIF₂=1/(1−0.80)"
+        },
+        {
+          "say": "Simplify.",
+          "math": "VIF₂=1/0.20=5"
+        },
+        {
+          "say": "Interpret.",
+          "math": "VIF₂=5",
+          "why": "The variance is five times the orthogonal benchmark under the standard VIF interpretation; the standard error factor is √5."
+        }
+      ],
+      "ask": {
+        "q": "If R²₂ rises closer to 1, what happens to VIF₂?",
+        "nudge": "The denominator 1−R²₂ approaches zero."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 8,
+      "title": "Guided problem: identify the false consequence",
+      "objective": "Use the consequence list to answer a negation-style NET question.",
+      "problem": "Which is NOT a consequence of near multicollinearity? A. Large standard errors. B. Unstable estimates after small data changes. C. Biased OLS estimates. D. Weak individual significance despite high R².",
+      "hints": [
+        "Translate NOT into a search for the statement that does not generally follow.",
+        "Check the variance and t-statistic consequences first.",
+        "Keep the exogeneity condition separate from predictor correlation."
+      ],
+      "answer": "C. Biased OLS estimates.",
+      "solution": [
+        {
+          "say": "Near dependence makes the design poorly conditioned.",
+          "math": "(X′X)⁻¹ can have large entries"
+        },
+        {
+          "say": "This inflates variances and standard errors.",
+          "math": "Var(β̂|X)=σ²(X′X)⁻¹"
+        },
+        {
+          "say": "Large standard errors can weaken individual t tests even when overall fit is high.",
+          "math": "|t|=|β̂|/SE(β̂)"
+        },
+        {
+          "say": "Bias does not follow from collinearity alone when E(u|X)=0.",
+          "math": "E(β̂|X)=β"
+        }
+      ],
+      "ask": {
+        "q": "Which answer is the exception, and why?",
+        "nudge": "The issue is whether the expected value of OLS changes."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s11",
+      "mins": 6,
+      "title": "Exam traps: bias, variance, fit and prediction",
+      "objective": "Avoid common conceptual confusions.",
+      "intro": "Classify each statement as true or false.",
+      "items": [
+        {
+          "claim": "Near multicollinearity can increase standard errors.",
+          "tf": true,
+          "why": "The inverse cross-product matrix becomes poorly conditioned."
+        },
+        {
+          "claim": "Multicollinearity alone makes OLS biased under exogeneity.",
+          "tf": false,
+          "why": "The zero conditional mean assumption still gives unbiasedness."
+        },
+        {
+          "claim": "A high R² rules out multicollinearity.",
+          "tf": false,
+          "why": "High overall fit can coexist with weak individual t statistics."
+        },
+        {
+          "claim": "Perfect multicollinearity makes X′X singular.",
+          "tf": true,
+          "why": "Exact linear dependence reduces column rank."
+        },
+        {
+          "claim": "Deleting any correlated regressor is always a safe remedy.",
+          "tf": false,
+          "why": "If the omitted variable belongs in the model and is correlated with included regressors, omission can cause bias."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s12",
+      "mins": 9,
+      "title": "Transfer problem: choose a remedy for the goal",
+      "objective": "Match the response to the purpose of the regression.",
+      "problem": "A research team has two highly overlapping measures of household wealth. Their main goal is accurate prediction within the observed sample range, not separate causal interpretation of each wealth measure. Suggest a defensible strategy and one caution.",
+      "hints": [
+        "First identify the modelling goal: prediction or separate coefficient interpretation.",
+        "Consider combining/reducing redundant information or regularisation, but state the trade-off.",
+        "Do not delete a scientifically necessary variable without considering omitted-variable bias."
+      ],
+      "answer": "A dimension-reduction or regularised predictive model may be defensible, evaluated on held-out data; interpretability and coefficient meaning may change.",
+      "solution": [
+        {
+          "say": "State the goal.",
+          "math": "Prediction within the observed range"
+        },
+        {
+          "say": "A prediction-focused method can tolerate a change in parameterisation.",
+          "math": "Principal components or ridge regression may stabilise predictions"
+        },
+        {
+          "say": "Evaluate performance out of sample.",
+          "math": "Use validation or test-set prediction error"
+        },
+        {
+          "say": "State the caution.",
+          "math": "Do not interpret transformed/penalised coefficients as ordinary OLS causal effects"
+        }
+      ],
+      "ask": {
+        "q": "Why might ridge regression be considered for prediction but not as an automatic fix for unbiased OLS inference?",
+        "nudge": "Penalisation trades some bias for lower variance."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 4,
+      "title": "Summary: what changes and what does not",
+      "objective": "Recall the exam-ready multicollinearity framework.",
+      "body": [
+        "Near multicollinearity means strong but imperfect linear dependence among regressors. It makes X′X poorly conditioned, so (X′X)⁻¹ can inflate coefficient variances and standard errors. Estimates can become unstable, confidence intervals widen and individual t tests weaken.",
+        "Multicollinearity alone does not bias OLS when exogeneity holds. Overall R² can remain high, and prediction within the observed predictor region may still be useful. Perfect multicollinearity is different: X′X is singular and unique separate OLS coefficients are not available by the ordinary inverse formula.",
+        "For the June 2026 negation question, the NOT-consequence is biased estimates (option C). Read the stem carefully, list the real consequences, and choose the exception."
+      ],
+      "ask": {
+        "q": "Give the one-line exam distinction between multicollinearity and omitted-variable bias.",
+        "nudge": "One primarily affects precision; the other can violate the zero conditional mean assumption."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 1,
+      "title": "6.5 mastery test",
+      "setId": "regression_t5_mastery"
+    }
+  ]
+}
