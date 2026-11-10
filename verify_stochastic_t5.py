@@ -45,7 +45,8 @@ assert abs(conditional-math.exp(-lam*t))<1e-14
 items=pool["items"]
 from collections import Counter
 assert Counter(x["diff"] for x in items)=={"easy":6,"moderate":10,"hard":4}
-assert Counter(x["format"] for x in items)=={"single":11,"numeric":5,"multi":4} or sum(Counter(x["format"] for x in items).values())==20
+assert Counter(x["format"] for x in items)=={"single":12,"numeric":5,"multi":3}
+assert Counter(x["answer"] for x in items)=={"A":5,"B":5,"C":5,"D":5}
 assert all(x["topic"]=="stochastic-t5" for x in items)
 assert all(x["answer"] in {"A","B","C","D"} for x in items)
 print("T5 Poisson, exponential, Erlang and mastery checks: PASS")
