@@ -12,9 +12,9 @@
 
 ## Mastery pool audit
 - 20 items: 6 easy, 10 moderate, 4 hard.
-- Formats: 13 single-choice, 5 numeric, 2 multi-statement.
+- Formats: 12 single-choice, 5 numeric, 3 multi-statement.
 - Numeric items include arithmetic checks; multi items include four statements and four reasoned verdicts.
-- Answer key distribution: A=6, B=8, C=6, D=0; maximum is 40%.
+- Answer key distribution: A=5, B=5, C=5, D=5; maximum is 25%.
 
 ## Execution limitation
 The GitHub connector can write source files but cannot execute this repository's Node/Playwright pipeline in this session. vcheck.js, mathrender.js, test.js and clicktest.js must still run in a clone/CI before production merge. This report does not claim those suites passed.
