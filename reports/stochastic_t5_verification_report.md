@@ -3,7 +3,7 @@
 **Status: authoring package created; automated repository execution pending.**
 
 - Lesson: `seed/lesson_stochastic_t5.json`; 12 scenes covering foundations, count law, increments, inter-arrival times, exponential waiting, kth arrival and memorylessness.
-- Mastery pool: `seed/stochastic_t5_mastery.json`; 20 unseen questions designed across easy / moderate / hard levels.
+- Mastery pool: `seed/stochastic_t5_mastery.json`; 20 unseen questions: 6 easy / 10 moderate / 4 hard; 12 single-choice / 5 numeric / 3 multi-statement. Answer positions are balanced 5 each across A–D.
 - Evidence map: `evidence/stochastic_t5_evidence_map.md`.
 - Independent verifier: `verify_stochastic_t5.py`.
 
