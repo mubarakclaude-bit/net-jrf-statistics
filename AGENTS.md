@@ -115,6 +115,8 @@ extracted into a feature module, **one author at a time works on it**: say so in
 
 - **One concern per pull request**, on its own branch named for the task (`lesson/<topic-id>`, `feature/<id>`).
   Open it as a draft early; that is how the other assistant sees the work is claimed.
+- **Base every branch on `multi-author-hosting`, and target your PR at it.** That is the production branch: Vercel deploys
+  it. `main` is not deployed. Branch from its latest commit (`git fetch` first, or create the branch from it in GitHub).
 - **Dependent work is stacked and says so:** if your change needs another open PR, base your branch on that PR's branch
   and write "Depends on #N" at the top of the description. Do not copy its commits into yours.
 - **CI is the independent verification.** The `Validate` workflow runs three jobs, and a PR must pass all three:
@@ -146,7 +148,7 @@ Local commands are useful, not mandatory. The mandatory part is that CI passes.
    session that cannot run it writes the seed files directly in the documented shape (`lessons/TEMPLATE.py`, `contracts/`).
    For a **feature**: the folder `src/features/<id>/`.
 3. Push. The `Validate` workflow runs on the branch and on the PR. It does what `addlesson.sh` and the local commands do:
-   contracts and every pool; `vcheck.js` and the formula-render and self-cited-answer audit (`tools/audit-lesson.py`) on each
+   contracts and every pool; `vcheck.js` and the formula-render, self-cited-answer and answer-key-spread audit (`tools/audit-lesson.py`; each letter A to D must be the answer to at least 2 questions) on each
    lesson you changed; every changed `verify_*.py` (`tools/run-verifiers.js`); the browser tests; every feature's own test;
    and the independence scenarios.
 4. Read the failing step in the Actions log, fix the files, push again. Repeat until all three jobs are green.
@@ -157,7 +159,7 @@ Claude sessions with `ArtifactData` only).
 
 ## Where things go live
 
-- **Vercel site (primary):** merging to the production branch rebuilds and redeploys it from the repository.
+- **Vercel site (primary):** merging to the production branch, `multi-author-hosting`, rebuilds and redeploys it from the repository.
 - **Claude artifact (optional, generated):** pushed separately from a Claude session. It can lag the site; nothing here
   requires it.
 
