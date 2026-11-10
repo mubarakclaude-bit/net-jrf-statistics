@@ -102,6 +102,8 @@ jobs:
         run: node clicktest.js
       - name: Hosted storage adapter conformance
         run: node tests/hosted-shim.test.js
+      - name: Every feature's own browser test
+        run: node tests/features.test.js
 
   acceptance:
     # The owner's requirement as a command: two authors add lessons independently, merge in either order, same build.
@@ -118,4 +120,4 @@ jobs:
           python-version: "3.12"
       - run: npm ci
       - name: Independence acceptance test
-        run: node tools/acceptance-content.js
+        run: node tools/acceptance.js

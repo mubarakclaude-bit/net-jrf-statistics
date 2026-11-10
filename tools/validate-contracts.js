@@ -33,7 +33,7 @@ const fail = m => errors.push(m);
 
 // ---- load the contracts
 const ajv = new Ajv2020({ allErrors: true, strict: true, strictTypes: false, strictRequired: false });
-const NAMES = ["lesson", "pool", "mastery-pool", "progress-backup", "progress-snapshot", "feedback"];
+const NAMES = ["lesson", "pool", "mastery-pool", "progress-backup", "progress-snapshot", "feedback", "feature"];
 const SCHEMAS = {};
 for (const n of NAMES) { SCHEMAS[n] = read("contracts/" + n + ".schema.json"); ajv.addSchema(SCHEMAS[n]); }
 const V = n => ajv.getSchema(SCHEMAS[n].$id);
@@ -95,6 +95,7 @@ runFixtures("contracts/fixtures/progress-snapshot.json", "progress snapshot", V(
 runFixtures("contracts/fixtures/feedback.json", "feedback", V("feedback"));
 runFixtures("contracts/fixtures/pools.json", "pool envelope", V("pool"));
 runFixtures("contracts/fixtures/mastery-pools.json", "mastery pool", V("mastery-pool"));
+runFixtures("contracts/fixtures/features.json", "feature manifest", V("feature"));
 
 // ---- 3. the storage-path rule
 {
@@ -112,6 +113,29 @@ runFixtures("contracts/fixtures/mastery-pools.json", "mastery pool", V("mastery-
     for (const m of src.matchAll(/\.doc\(\s*["']([^"']+)["']\s*\)/g)) { n++; const r = checkDocPath(m[1]); if (!r.ok) fail("src/" + f + ": document path '" + m[1] + "' violates the contract: " + r.reason); }
   }
   notes.push("src/: " + n + " literal document paths checked");
+}
+
+// ---- 4b. features: every manifest conforms, and no feature uses a storage key it did not declare
+{
+  const fdir = path.join(ROOT, "src", "features");
+  const ids = fs.existsSync(fdir) ? fs.readdirSync(fdir, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name).sort() : [];
+  const fv = V("feature"); let n = 0;
+  for (const id of ids) {
+    if (filesArg && !filesArg.some(f => f.split(String.fromCharCode(92)).join("/").startsWith("src/features/" + id + "/"))) continue;
+    n++;
+    const mf = path.join(fdir, id, "feature.json");
+    if (!fs.existsSync(mf)) { fail("src/features/" + id + "/feature.json is missing"); continue; }
+    let m; try { m = JSON.parse(fs.readFileSync(mf, "utf8")); } catch (e) { fail("src/features/" + id + "/feature.json is not valid JSON"); continue; }
+    if (!fv(m)) fail("src/features/" + id + "/feature.json violates the feature contract: " + brief(fv.errors));
+    if (m.id !== id) fail("src/features/" + id + ": manifest id '" + m.id + "' must equal the folder name");
+    for (const f of ["index.js", "test.js"]) if (!fs.existsSync(path.join(fdir, id, f))) fail("src/features/" + id + "/" + f + " is missing");
+    const idx = path.join(fdir, id, "index.js");
+    if (fs.existsSync(idx)) {
+      const used = [...fs.readFileSync(idx, "utf8").matchAll(/store\.(?:get|set|remove)\(\s*["']([^"']+)["']/g)].map(x => x[1]);
+      for (const k of new Set(used)) if (!(m.storage || []).includes(k)) fail("src/features/" + id + "/index.js uses storage key '" + k + "' which feature.json does not declare in \"storage\"");
+    }
+  }
+  notes.push("features: " + n + " manifest(s) checked" + (ids.length ? " (" + ids.join(", ") + ")" : ""));
 }
 
 // ---- 5. the seeds

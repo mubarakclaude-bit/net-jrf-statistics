@@ -2,29 +2,161 @@
   "contractVersion": 1,
   "rule": "A DOCUMENT path has an EVEN number of segments (collection/document/collection/document...). An odd-length path is a COLLECTION and cannot be read or written as a document. Every segment must match segmentPattern and must not be '.' or '..'. Every document path a feature uses must match exactly one entry of 'documents' below; a path that matches 'forbidden' is a known mistake.",
   "segmentPattern": "^[A-Za-z0-9_\\-.~:@+]{1,200}$",
-  "records": ["attempts", "mocks", "topics", "errors", "config", "mastery", "requests", "notes", "asks"],
+  "records": [
+    "attempts",
+    "mocks",
+    "topics",
+    "errors",
+    "config",
+    "mastery",
+    "requests",
+    "notes",
+    "asks"
+  ],
   "documents": [
-    { "id": "meta", "pattern": "meta/{name}", "segments": 2, "scope": "shared content", "writer": "build / store push",
-      "params": { "name": ["app", "catalog", "index", "lessons", "personal", "syllabus", "users"] } },
-    { "id": "lesson", "pattern": "lessons/{id}", "segments": 2, "scope": "shared content", "writer": "build / store push", "params": { "id": "^[a-z0-9]+$" } },
-    { "id": "qset", "pattern": "qsets/{id}", "segments": 2, "scope": "shared content", "writer": "build / store push", "params": { "id": "^[a-z0-9_]+$" } },
-    { "id": "progress", "pattern": "data/users/{uid}/{record}", "segments": 4, "scope": "learner, default profile", "writer": "learner's browser",
-      "params": { "uid": "^[A-Za-z0-9_.~:@+-]+$", "record": "records" } },
-    { "id": "progress-profile", "pattern": "data/users/{uid}/p/{profile}/{record}", "segments": 6, "scope": "learner, non-default profile", "writer": "learner's browser",
-      "params": { "uid": "^[A-Za-z0-9_.~:@+-]+$", "profile": "^(?!me(?:/|$))[a-z0-9][a-z0-9_-]{0,63}$", "record": "records" } },
-    { "id": "snapshot", "pattern": "data/users/{uid}/snapshots/{snapshot}/record", "segments": 6, "scope": "learner, default profile", "writer": "import",
-      "params": { "uid": "^[A-Za-z0-9_.~:@+-]+$", "snapshot": "^preimport-[a-z0-9]+$" } },
-    { "id": "snapshot-profile", "pattern": "data/users/{uid}/p/{profile}/snapshots/{snapshot}/record", "segments": 8, "scope": "learner, non-default profile", "writer": "import",
-      "params": { "uid": "^[A-Za-z0-9_.~:@+-]+$", "profile": "^(?!me(?:/|$))[a-z0-9][a-z0-9_-]{0,63}$", "snapshot": "^preimport-[a-z0-9]+$" } },
-    { "id": "feedback", "pattern": "feedback/{uid}", "segments": 2, "scope": "learner, default profile", "writer": "learner's browser",
-      "params": { "uid": "^[A-Za-z0-9_.@+-]+$" } },
-    { "id": "feedback-profile", "pattern": "feedback/{uid}~{profile}", "segments": 2, "scope": "learner, non-default profile", "writer": "learner's browser",
-      "params": { "uid": "^[A-Za-z0-9_.@+-]+$", "profile": "^(?!me(?:/|$))[a-z0-9][a-z0-9_-]{0,63}$" } }
+    {
+      "id": "meta",
+      "pattern": "meta/{name}",
+      "segments": 2,
+      "scope": "shared content",
+      "writer": "build / store push",
+      "params": {
+        "name": [
+          "app",
+          "catalog",
+          "index",
+          "lessons",
+          "personal",
+          "syllabus",
+          "users"
+        ]
+      }
+    },
+    {
+      "id": "lesson",
+      "pattern": "lessons/{id}",
+      "segments": 2,
+      "scope": "shared content",
+      "writer": "build / store push",
+      "params": {
+        "id": "^[a-z0-9]+$"
+      }
+    },
+    {
+      "id": "qset",
+      "pattern": "qsets/{id}",
+      "segments": 2,
+      "scope": "shared content",
+      "writer": "build / store push",
+      "params": {
+        "id": "^[a-z0-9_]+$"
+      }
+    },
+    {
+      "id": "progress",
+      "pattern": "data/users/{uid}/{record}",
+      "segments": 4,
+      "scope": "learner, default profile",
+      "writer": "learner's browser",
+      "params": {
+        "uid": "^[A-Za-z0-9_.~:@+-]+$",
+        "record": "records"
+      }
+    },
+    {
+      "id": "progress-profile",
+      "pattern": "data/users/{uid}/p/{profile}/{record}",
+      "segments": 6,
+      "scope": "learner, non-default profile",
+      "writer": "learner's browser",
+      "params": {
+        "uid": "^[A-Za-z0-9_.~:@+-]+$",
+        "profile": "^(?!me(?:/|$))[a-z0-9][a-z0-9_-]{0,63}$",
+        "record": "records"
+      }
+    },
+    {
+      "id": "snapshot",
+      "pattern": "data/users/{uid}/snapshots/{snapshot}/record",
+      "segments": 6,
+      "scope": "learner, default profile",
+      "writer": "import",
+      "params": {
+        "uid": "^[A-Za-z0-9_.~:@+-]+$",
+        "snapshot": "^preimport-[a-z0-9]+$"
+      }
+    },
+    {
+      "id": "snapshot-profile",
+      "pattern": "data/users/{uid}/p/{profile}/snapshots/{snapshot}/record",
+      "segments": 8,
+      "scope": "learner, non-default profile",
+      "writer": "import",
+      "params": {
+        "uid": "^[A-Za-z0-9_.~:@+-]+$",
+        "profile": "^(?!me(?:/|$))[a-z0-9][a-z0-9_-]{0,63}$",
+        "snapshot": "^preimport-[a-z0-9]+$"
+      }
+    },
+    {
+      "id": "feedback",
+      "pattern": "feedback/{uid}",
+      "segments": 2,
+      "scope": "learner, default profile",
+      "writer": "learner's browser",
+      "params": {
+        "uid": "^[A-Za-z0-9_.@+-]+$"
+      }
+    },
+    {
+      "id": "feedback-profile",
+      "pattern": "feedback/{uid}~{profile}",
+      "segments": 2,
+      "scope": "learner, non-default profile",
+      "writer": "learner's browser",
+      "params": {
+        "uid": "^[A-Za-z0-9_.@+-]+$",
+        "profile": "^(?!me(?:/|$))[a-z0-9][a-z0-9_-]{0,63}$"
+      }
+    },
+    {
+      "id": "feature-record",
+      "pattern": "data/users/{uid}/features/{feature}/{key}",
+      "segments": 6,
+      "scope": "learner, default profile",
+      "writer": "a feature, through ctx.store",
+      "params": {
+        "uid": "^[A-Za-z0-9_.~:@+-]+$",
+        "feature": "^[a-z0-9]+(-[a-z0-9]+)*$",
+        "key": "^[a-z0-9_]{1,40}$"
+      }
+    },
+    {
+      "id": "feature-record-profile",
+      "pattern": "data/users/{uid}/p/{profile}/features/{feature}/{key}",
+      "segments": 8,
+      "scope": "learner, non-default profile",
+      "writer": "a feature, through ctx.store",
+      "params": {
+        "uid": "^[A-Za-z0-9_.~:@+-]+$",
+        "profile": "^(?!me(?:/|$))[a-z0-9][a-z0-9_-]{0,63}$",
+        "feature": "^[a-z0-9]+(-[a-z0-9]+)*$",
+        "key": "^[a-z0-9_]{1,40}$"
+      }
+    }
   ],
   "collections": [
-    "meta", "lessons", "qsets", "feedback", "data/users/{uid}", "data/users/{uid}/p/{profile}"
+    "meta",
+    "lessons",
+    "qsets",
+    "feedback",
+    "data/users/{uid}",
+    "data/users/{uid}/p/{profile}"
   ],
   "forbidden": [
-    { "pattern": "data/users/{uid}/progress-snapshots/{id}", "reason": "five segments: a collection path, not a document. This is where PR #4 first wrote its snapshot; the hosted shim accepted it but the Claude artifact store would refuse it." }
+    {
+      "pattern": "data/users/{uid}/progress-snapshots/{id}",
+      "reason": "five segments: a collection path, not a document. This is where PR #4 first wrote its snapshot; the hosted shim accepted it but the Claude artifact store would refuse it."
+    }
   ]
 }

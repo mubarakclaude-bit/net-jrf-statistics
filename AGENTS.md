@@ -33,6 +33,28 @@ added to `contracts/storage-paths.json`, and the app must pass `node test.js` (i
 **Change a contract:** read `contracts/README.md` first.
 `contracts/` says what a valid contribution is; `docs/PHASE2_REVIEW.md` says why.
 
+## Create a feature (a new view or behaviour in the app)
+
+A feature is a folder, `src/features/<id>/`. Adding one edits **no shared file**: the build discovers it by scanning.
+
+1. Copy `src/features/ref-counter/` (stores data) or `ref-about/` (read-only) to `src/features/<your-id>/`.
+   Use lowercase letters, digits and dashes for `<id>`; prefix every element `id` in your HTML with it, because all
+   features share one page.
+2. `feature.json`: `id` (must equal the folder name), `title`, `version`, `description`, `tab` (`true` puts it in the
+   navigation bar; `false` makes it reachable only at `#f-<id>`), and `storage`: **every key you will save**.
+3. `index.js` runs in a private scope and must end with `return { render, wire };`.
+   `render(ctx)` returns an HTML string. `wire(ctx, el)` attaches behaviour. Use only `ctx` (`ctx.store.get/set/remove`,
+   `ctx.esc`, `ctx.toast`, `ctx.rerender`, `ctx.profile`, `ctx.uid`). `ctx.store` refuses any key not in `storage` and
+   writes to a path the storage contract allows, per learner and per profile.
+4. `test.js` is your feature's own browser test (see the two reference tests). Write only what is specific to your
+   feature; the runner already checks that it is registered, visible, in the navigation exactly when `tab` says so, and
+   free of page errors.
+5. Prove it: `npm run build && node tests/features.test.js --only <your-id> && npm run check`.
+
+Do not edit `src/70-wire.js`, `src/40-render.js`, `build.sh` or another feature's folder. If your feature seems to need
+a change there, that is a core change for its own PR, reviewed by the owner. `docs/INDEPENDENCE.md` says exactly what is
+and is not independent today.
+
 ## Non-negotiables
 
 1. **Compute every number; never recall one.** Write one verification script for the whole group of
