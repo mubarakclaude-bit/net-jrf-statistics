@@ -769,7 +769,7 @@ def main():
     os.makedirs("seed", exist_ok=True)
     with io.open(OUT, "w", encoding="utf-8") as f:
         json.dump(LESSON, f, ensure_ascii=False, indent=1)
-        f.write("\\n")
+        f.write("\n")
     print("wrote %s (%d core scenes, %d minutes)" %
           (OUT, sum(not s.get("ext") for s in LESSON["scenes"]), LESSON["estMin"]))
     print("validated and reused %s (%d mastery questions)" % (POOL, pool["count"]))
