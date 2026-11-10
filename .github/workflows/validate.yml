@@ -115,8 +115,7 @@ jobs:
             if echo "$out" | grep -q "FAILURES"; then echo "::warning file=$f::$(echo "$out" | grep -A3 FAILURES | tr '\n' ' ')"; fi
           done
 
-  browser:
-    needs: validate
+  browser:   # runs in parallel with validate and acceptance: all three are required checks, so none is skipped
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -145,7 +144,6 @@ jobs:
   acceptance:
     # The owner's requirement as a command. It runs browser tests (scenarios 3 and 4 run the features' own tests),
     # so it needs the browser installed as well.
-    needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
