@@ -11,15 +11,21 @@ assert len(L['objectives'])>=5 and len(L['prereq'])>=3 and len(L['refs'])>=3
 assert sum(s['kind']=='guided' for s in L['scenes'])>=2
 assert sum('scenario' in s for s in L['scenes'])>=1
 assert len([s for s in L['scenes'] if s['kind']=='worked'])>=2
-# Exact symbolic identities are checked through small full-rank designs.
-import numpy as np
-X=np.array([[1,0],[1,1],[1,2]],dtype=object)
-H=X@np.linalg.inv(np.array(X.T@X,dtype=float))@X.T
-M=np.eye(3)-H
-assert np.allclose(H.T,H) and np.allclose(H@H,H)
-assert np.allclose(M.T,M) and np.allclose(M@M,M)
-assert np.allclose(H@M,0) and np.allclose(X.T@M,0)
-assert abs(np.trace(H)-2)<1e-9 and abs(np.trace(M)-1)<1e-9
+# Exact rational projection identities for X = [[1,0],[1,1],[1,2]].
+from fractions import Fraction as F
+H=[[F(5,6),F(1,3),F(-1,6)],[F(1,3),F(1,3),F(1,3)],[F(-1,6),F(1,3),F(5,6)]]
+M=[[F(1,6),F(-1,3),F(1,6)],[F(-1,3),F(2,3),F(-1,3)],[F(1,6),F(-1,3),F(1,6)]]
+def tr(A): return sum(A[i][i] for i in range(len(A)))
+def mul(A,B):
+    return [[sum(A[i][k]*B[k][j] for k in range(len(B))) for j in range(len(B[0]))] for i in range(len(A))]
+def transpose(A): return [list(x) for x in zip(*A)]
+I=[[F(int(i==j)) for j in range(3)] for i in range(3)]
+X=[[F(1),F(0)],[F(1),F(1)],[F(1),F(2)]]
+assert transpose(H)==H and mul(H,H)==H
+assert transpose(M)==M and mul(M,M)==M
+assert mul(H,M)==[[F(0)]*3 for _ in range(3)]
+assert mul(transpose(X),M)==[[F(0)]*3 for _ in range(2)]
+assert tr(H)==2 and tr(M)==1
 Q=P['items']
 assert len(Q)==20
 assert Counter(x['diff'] for x in Q)=={'easy':6,'moderate':10,'hard':4}
