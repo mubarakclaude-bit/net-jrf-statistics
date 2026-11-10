@@ -58,7 +58,11 @@ The generated lesson index and the test harness are not files you edit; see `too
 
 **Rules that apply to every change**
 - **Keep ids stable.** Never rename or reuse a lesson id, scene id or question id: learners' progress and attempts are
-  stored against them. Add new ones instead.
+  stored against them. Add new ones instead. CI enforces this (`tools/check-ids.js`): a PR that drops a scene or question
+  id, changes a lesson id or topicId, or deletes or renames a lesson or question-set file fails. Editing any text, adding
+  scenes or questions, and correcting an answer key (reported as a note) are fine. If a removal is truly intended, the owner
+  records it in `contracts/id-exceptions.json` (`{"removed":[{"file":"seed/lesson_x.json","ids":["s7"],"reason":"..."}]}`),
+  so the decision is visible in review.
 - **Numbers are computed, never recalled.** Change a number only together with the verification script that produces it.
 - A pool keeps 20 items, each letter A to D is the answer to at least 2 questions, and no explanation cites its own answer
   as a wrong option. `tools/audit-lesson.py` checks all three and CI runs it.
