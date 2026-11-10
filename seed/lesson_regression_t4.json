@@ -222,16 +222,11 @@
       }
     },
     {
-      "kind": "explore",
+      "kind": "theory",
       "id": "s2",
       "mins": 7,
       "title": "Why ordinary R² cannot fall in nested OLS",
       "objective": "Use the least-squares minimization principle.",
-      "body": [
-        "A nested larger model contains every fitted value available to the smaller model, plus possibly more. The larger model can always reproduce the old fit by setting the new coefficient to zero.",
-        "OLS chooses the coefficients that minimize RSS. Therefore the minimum RSS in the larger model cannot be greater than the minimum RSS in the smaller model.",
-        "For the same response and sample, TSS is unchanged. Since R²=1−RSS/TSS, a non-increasing RSS means ordinary R² cannot decrease."
-      ],
       "scenario": {
         "teaser": "A predictor is added to a nested regression",
         "title": "The model gains one more predictor",
@@ -246,7 +241,24 @@
       "ask": {
         "q": "Why does the new model have RSS no larger than the old model?",
         "nudge": "It can always reproduce the old fit by assigning zero to the new coefficient."
-      }
+      },
+      "blocks": [
+        {
+          "t": "step",
+          "h": "A larger nested model contains the smaller model",
+          "body": "A nested larger model contains every fitted value available to the smaller model, plus possibly more. The larger model can always reproduce the old fit by setting the new coefficient to zero."
+        },
+        {
+          "t": "step",
+          "h": "Least squares cannot produce a larger minimum RSS",
+          "body": "OLS chooses the coefficients that minimize RSS. Therefore the minimum RSS in the larger model cannot be greater than the minimum RSS in the smaller model."
+        },
+        {
+          "t": "step",
+          "h": "Therefore ordinary R² cannot decrease",
+          "body": "For the same response and sample, TSS is unchanged. Since R²=1−RSS/TSS, a non-increasing RSS means ordinary R² cannot decrease."
+        }
+      ]
     },
     {
       "kind": "theory",
