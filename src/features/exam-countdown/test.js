@@ -17,7 +17,7 @@ module.exports = async function (t) {
 
   const stored = await page.evaluate(() => {
     const uid = localStorage.getItem("njuid");
-    const raw = localStorage.getItem("njdb:data/users/" + uid + "/features/exam-countdown/exam-date");
+    const raw = localStorage.getItem("njdb:data/users/" + uid + "/features/exam-countdown/exam_date");
     return raw ? JSON.parse(raw).value : null;
   });
   expect("stores the learner's selected date at the feature contract path", stored === future, stored);
