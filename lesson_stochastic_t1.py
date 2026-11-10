@@ -26,6 +26,6 @@ assert sum(1 for q in pool["items"] if q["diff"] == "moderate") == 10
 assert sum(1 for q in pool["items"] if q["diff"] == "hard") == 4
 
 for path, data in ((LESSON, lesson), (POOL, pool)):
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\\n", encoding="utf-8")
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
 print("Wrote lesson seed and 20-item mastery pool from the reviewed JSON source.")
