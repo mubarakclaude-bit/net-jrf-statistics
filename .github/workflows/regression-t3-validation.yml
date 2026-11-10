@@ -1,0 +1,38 @@
+name: Regression T3 ANOVA validation
+
+on:
+  pull_request:
+    branches: [main, gpt/regression-t1-hat-matrix]
+  push:
+    branches: [gpt/regression-t3-anova-f-test]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-regression-t3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Verify exact ANOVA and F calculations
+        run: python verify_regression_t3.py
+      - name: Validate lesson structure and pool
+        run: node vcheck.js seed/lesson_regression_t3.json
+      - name: Build app
+        run: bash build.sh
+      - name: Install browser-test dependency
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run browser integration suite
+        run: |
+          node test.js
+          node clicktest.js
