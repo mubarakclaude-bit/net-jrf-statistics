@@ -18,13 +18,19 @@ name: Validate
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: ["**"]        # every pushed branch is verified, so a branch has an independent CI result before any PR exists
   workflow_dispatch:
     inputs:
       audit:
         description: "Also run vcheck.js on EVERY lesson and print the seed inventory (reports legacy findings; does not block)"
         type: boolean
         default: false
+
+# A pull request and the push that opened it share one branch name, so they share one group: the older run is cancelled
+# and the same checks do not run twice.
+concurrency:
+  group: validate-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
   validate:
