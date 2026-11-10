@@ -1,0 +1,676 @@
+{
+  "id": "regressiont6",
+  "topicId": "regression-t6",
+  "moduleId": "regression",
+  "title": "6.7 — Autocorrelation and the Durbin–Watson Test",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.7 Autocorrelation and Durbin–Watson",
+  "engine": "B",
+  "engineName": "Understand serial correlation in regression disturbances, derive its consequences for OLS inference, and apply the Durbin–Watson diagnostic.",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 100,
+  "objectives": [
+    "Define autocorrelation in regression disturbances and distinguish it from heteroscedasticity.",
+    "Explain how serial correlation affects OLS efficiency and conventional standard errors.",
+    "Recognize positive and negative serial correlation from residual patterns.",
+    "Calculate and interpret the Durbin–Watson statistic.",
+    "State the hypotheses, bounds and limitations of the Durbin–Watson test.",
+    "Identify when alternative tests or GLS-type corrections are needed."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Classical linear regression assumptions",
+      "why": "The covariance matrix of the disturbance determines the OLS variance formula."
+    },
+    {
+      "id": "p2",
+      "name": "Residuals, fitted values and OLS",
+      "why": "Durbin–Watson is computed from regression residuals."
+    },
+    {
+      "id": "p3",
+      "name": "Time-series lag notation and autocorrelation",
+      "why": "Serial correlation concerns dependence across observations ordered in time."
+    }
+  ],
+  "traps": [
+    "Autocorrelation is covariance across different observations; heteroscedasticity is non-constant variance within observations.",
+    "With exogeneity, serial correlation alone need not bias OLS coefficients, but OLS is generally inefficient and conventional standard errors are unreliable.",
+    "DW is approximately 2(1−r̂₁), where r̂₁ is the first-order sample residual autocorrelation.",
+    "DW values near 0 suggest positive first-order serial correlation; values near 2 suggest none; values near 4 suggest negative serial correlation.",
+    "The DW statistic lies between 0 and 4.",
+    "The usual DW bounds test has an inconclusive region; do not force a decision when d lies between dL and dU (or their upper-tail counterparts).",
+    "The standard DW test is not appropriate in its usual form when lagged dependent variables are included among regressors.",
+    "DW tests first-order serial correlation, not every possible higher-order dependence pattern.",
+    "Durbin's h or Breusch–Godfrey LM may be needed in dynamic models or for higher-order serial correlation.",
+    "Do not confuse a DW statistic with a p-value; formal decisions use bounds or an appropriate reference procedure."
+  ],
+  "howto": "Order observations in time and fit the stated regression. Compute residuals eₜ, then DW=Σₜ₌₂ⁿ(eₜ−eₜ₋₁)²/Σₜ₌₁ⁿeₜ². Interpret the value on the 0–4 scale, but use the DW lower and upper critical bounds for a formal decision. State the inconclusive region and check whether lagged dependent variables invalidate the usual test. If the model is dynamic or a higher-order alternative is relevant, consider Durbin's h or Breusch–Godfrey.",
+  "refs": [
+    {
+      "title": "Introductory Econometrics: A Modern Approach",
+      "where": "Serial correlation and the Durbin–Watson test",
+      "site": "Jeffrey M. Wooldridge",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Clear treatment of serial correlation, DW limitations and alternative tests."
+    },
+    {
+      "title": "Econometric Analysis",
+      "where": "Autocorrelation in regression disturbances",
+      "site": "William H. Greene",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Formal treatment of GLS, tests and serially correlated errors."
+    },
+    {
+      "title": "Time Series Analysis: Forecasting and Control",
+      "where": "Autocorrelation and residual diagnostics",
+      "site": "George E. P. Box, Gwilym M. Jenkins, Gregory C. Reinsel and Greta M. Ljung",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Time-series background for lag dependence and residual autocorrelation."
+    }
+  ],
+  "provenance": "This lesson implements repository backlog topic regression-t6, numbered 6.7 in the regression lesson sequence. The June 2026 actual paper includes a Yule–Walker AR(2) question (j26-q03), which is adjacent time-series/autocorrelation knowledge, not a direct Durbin–Watson question. The lesson uses it only as a conceptual bridge; mastery questions are original practice.",
+  "revision": {
+    "sheet": [
+      "Autocorrelation: Cov(uₜ,uₛ|X)≠0 for some t≠s; first-order AR(1): uₜ=ρuₜ₋₁+εₜ.",
+      "Homoscedasticity concerns Var(uₜ|X); autocorrelation concerns cross-time covariance.",
+      "Under exogeneity OLS may remain unbiased, but is generally inefficient and conventional SEs may be wrong.",
+      "DW = Σₜ₌₂ⁿ(eₜ−eₜ₋₁)² / Σₜ₌₁ⁿeₜ².",
+      "Approximation: DW ≈ 2(1−r̂₁).",
+      "DW range is 0 to 4; 0 indicates strong positive, 2 no first-order, 4 strong negative autocorrelation.",
+      "Positive autocorrelation: successive residuals tend to have same sign; negative: signs tend to alternate.",
+      "DW bounds: d<dL evidence positive; d>dU no evidence positive; between dL,dU inconclusive.",
+      "For negative autocorrelation use 4−d and the upper-tail bounds.",
+      "Usual DW assumptions exclude lagged dependent variable regressors; consider BG or Durbin h in dynamic models."
+    ],
+    "cards": [
+      [
+        "First-order AR(1)",
+        "uₜ=ρuₜ₋₁+εₜ"
+      ],
+      [
+        "Positive serial correlation",
+        "ρ>0"
+      ],
+      [
+        "Negative serial correlation",
+        "ρ<0"
+      ],
+      [
+        "DW formula",
+        "Σ(Δeₜ)² / Σeₜ²"
+      ],
+      [
+        "DW range",
+        "0 to 4"
+      ],
+      [
+        "No first-order correlation",
+        "DW near 2"
+      ],
+      [
+        "Positive evidence",
+        "DW near 0"
+      ],
+      [
+        "Negative evidence",
+        "DW near 4"
+      ],
+      [
+        "Approximation",
+        "DW≈2(1−r̂₁)"
+      ],
+      [
+        "Alternative test",
+        "Breusch–Godfrey LM"
+      ]
+    ],
+    "tricks": [
+      "If DW is around 1, approximate r̂₁≈1−DW/2≈0.5.",
+      "If DW is around 3, approximate r̂₁≈−0.5.",
+      "A value between the critical bounds is inconclusive, not acceptance of H₀.",
+      "When yₜ₋₁ is a regressor, do not apply the ordinary DW bounds mechanically."
+    ],
+    "shortcuts": [
+      "DW≈2(1−r̂₁) is a quick interpretation tool, not a replacement for the bounds test.",
+      "Remember the 0–2–4 scale: positive–none–negative."
+    ],
+    "remember": [
+      "DW addresses first-order serial correlation in a regression setting; it is not a universal residual independence test.",
+      "Robust standard errors and GLS corrections address different objectives and assumptions."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Rebuild covariance across observations",
+      "objective": "Distinguish variance within one observation from covariance across observations.",
+      "body": [
+        "A regression disturbance uₜ is the part of yₜ not explained by the regressors. Its variance Var(uₜ|X) describes the spread of the error at time t.",
+        "Cov(uₜ,uₛ|X) describes whether errors at two different times move together. If this covariance is nonzero, the disturbances are correlated across observations.",
+        "Autocorrelation in time-series regression usually means this cross-time covariance depends on the lag between t and s. It is not the same assumption as constant variance."
+      ],
+      "items": [
+        {
+          "q": "What does Var(uₜ|X) measure?",
+          "a": "The conditional variance of the error at observation t."
+        },
+        {
+          "q": "What does Cov(uₜ,uₜ₋₁|X) measure?",
+          "a": "The conditional covariance between adjacent-time disturbances."
+        },
+        {
+          "q": "What is first-order autocorrelation?",
+          "a": "Dependence between disturbances one time period apart, commonly represented by Cov(uₜ,uₜ₋₁|X)≠0."
+        }
+      ],
+      "ask": {
+        "q": "Which quantity directly describes serial dependence?",
+        "nudge": "It is a covariance between different time points."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 6,
+      "title": "Why residuals may run in sequences",
+      "objective": "Recognize positive and negative serial dependence.",
+      "body": [
+        "If a disturbance is positive this period, positive autocorrelation makes a positive disturbance next period more likely. Residuals tend to appear in runs of the same sign.",
+        "Negative autocorrelation produces alternation: a positive residual is more likely to be followed by a negative one, and vice versa.",
+        "A residual plot against time can reveal these patterns, but visual inspection is only a diagnostic."
+      ],
+      "scenario": {
+        "teaser": "Residuals remain positive for several consecutive periods",
+        "title": "A run of same-sign residuals",
+        "body": [
+          "Imagine residuals from a quarterly sales regression. Several consecutive residuals are positive, followed by several negative residuals.",
+          "Such runs suggest that the errors may be moving together over time rather than behaving independently.",
+          "This pattern can arise when a dynamic feature has been omitted or when the disturbance itself follows a time-series process."
+        ],
+        "q": "Which direction of first-order autocorrelation is suggested by long same-sign runs?",
+        "answer": "Positive first-order autocorrelation."
+      },
+      "ask": {
+        "q": "What residual sign pattern is typical of negative autocorrelation?",
+        "nudge": "Think of successive signs alternating."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 6,
+      "title": "Visualise residual dependence",
+      "objective": "Connect the lag-one relationship to serial correlation.",
+      "body": [
+        "A lag plot places eₜ on one axis and eₜ₋₁ on the other. An upward association suggests positive first-order residual autocorrelation; a downward association suggests negative association.",
+        "A cloud with no clear linear trend is consistent with little first-order correlation, though absence of a visible pattern does not prove independence.",
+        "Always inspect residuals in their time order as well as through a lag plot."
+      ],
+      "viz": {
+        "type": "rank-null",
+        "caption": "A lag-one residual plot assesses whether eₜ tends to move with eₜ₋₁."
+      },
+      "scenario": {
+        "teaser": "The lag-one residual plot slopes downward",
+        "title": "Alternating residual movements",
+        "body": [
+          "Suppose the lag plot of eₜ against eₜ₋₁ shows a clear downward trend.",
+          "Large positive residuals tend to follow negative residuals and vice versa. This is evidence consistent with negative first-order autocorrelation.",
+          "The formal DW statistic can summarise this first-order pattern, but its critical bounds must still be used for a test decision."
+        ],
+        "q": "Would the DW statistic tend to be below or above 2?",
+        "answer": "Above 2, because the first-order residual autocorrelation is negative."
+      },
+      "ask": {
+        "q": "What does an upward lag-one residual pattern suggest?",
+        "nudge": "Successive residuals tend to share their sign."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 8,
+      "title": "AR(1) disturbances and OLS consequences",
+      "objective": "Model first-order serial correlation and state its consequences.",
+      "blocks": [
+        {
+          "h": "AR(1) disturbance",
+          "p": "A common model is uₜ=ρuₜ₋₁+εₜ, with |ρ|<1 for covariance stationarity under the usual innovation assumptions. Positive ρ produces persistence; negative ρ produces alternation."
+        },
+        {
+          "h": "Coefficient properties",
+          "p": "If the conditional mean is correctly specified and regressors are exogenous, serial correlation alone need not bias OLS coefficients. However, OLS is generally inefficient relative to a correctly specified GLS estimator."
+        },
+        {
+          "h": "Inference",
+          "p": "The usual OLS covariance formula assumes no cross-observation error covariance. Under serial correlation, conventional standard errors and the resulting t and F tests can be unreliable."
+        }
+      ],
+      "flow": {
+        "caption": "Separate mean assumptions from error covariance",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Serially correlated disturbances",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Exogeneity maintained?",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "OLS coefficients may remain unbiased",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "OLS generally inefficient; usual SE unreliable",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Diagnose and choose valid inference/correction",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      },
+      "ask": {
+        "q": "Does autocorrelation alone necessarily bias OLS under exogeneity?",
+        "nudge": "Separate the conditional mean assumption from the covariance assumption."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 7,
+      "title": "Worked example: classify the disturbance process",
+      "objective": "Interpret the AR(1) coefficient.",
+      "problem": "A regression disturbance follows uₜ=0.7uₜ₋₁+εₜ. What kind of serial dependence is represented?",
+      "steps": [
+        {
+          "say": "Read the coefficient on the lagged disturbance.",
+          "math": "ρ=0.7",
+          "why": "The AR(1) coefficient controls the sign and strength of first-order persistence."
+        },
+        {
+          "say": "The coefficient is positive.",
+          "math": "ρ>0",
+          "why": "Positive shocks tend to be followed by shocks of the same sign."
+        },
+        {
+          "say": "Its magnitude is below one.",
+          "math": "|ρ|=0.7<1",
+          "why": "Under standard innovation assumptions, this is compatible with a stationary AR(1) disturbance."
+        },
+        {
+          "say": "Conclude positive first-order serial correlation.",
+          "math": "Corr(uₜ,uₜ₋₁)=ρ=0.7",
+          "why": "The correlation at lag one is positive and substantial."
+        }
+      ],
+      "ask": {
+        "q": "If ρ were −0.6, what would change?",
+        "nudge": "The sign indicates the direction of adjacent-time dependence."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s5",
+      "mins": 8,
+      "title": "Derive the Durbin–Watson statistic",
+      "objective": "Understand what the DW ratio measures.",
+      "blocks": [
+        {
+          "h": "Definition",
+          "p": "For OLS residuals e₁,…,eₙ ordered in time, DW=Σₜ₌₂ⁿ(eₜ−eₜ₋₁)² / Σₜ₌₁ⁿeₜ². The numerator measures squared changes between adjacent residuals; the denominator scales by total residual magnitude."
+        },
+        {
+          "h": "Approximation",
+          "p": "Expanding the numerator and using the endpoint approximation gives DW≈2(1−r̂₁), where r̂₁ is the sample lag-one residual autocorrelation. This makes DW near 0 a sign of positive correlation, near 2 a sign of little first-order correlation, and near 4 a sign of negative correlation."
+        },
+        {
+          "h": "Range",
+          "p": "The statistic is between 0 and 4. The approximation is useful for interpretation; formal testing uses critical bounds that depend on sample size, regressors and significance level."
+        }
+      ],
+      "flow": {
+        "caption": "Interpret DW on the 0–4 scale",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "DW near 0",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Positive first-order correlation",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "DW near 2: little first-order correlation",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "DW near 4: negative first-order correlation",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          }
+        ]
+      },
+      "ask": {
+        "q": "What approximate residual autocorrelation corresponds to DW=1.2?",
+        "nudge": "Rearrange DW≈2(1−r̂₁)."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s6",
+      "mins": 8,
+      "title": "Worked example: calculate DW",
+      "objective": "Calculate the Durbin–Watson statistic from residuals.",
+      "problem": "For four ordered residuals e=(1,2,1,0), calculate DW.",
+      "steps": [
+        {
+          "say": "Calculate adjacent differences.",
+          "math": "2−1=1; 1−2=−1; 0−1=−1",
+          "why": "The numerator uses differences from time 2 onward."
+        },
+        {
+          "say": "Square and add the differences.",
+          "math": "Σ(eₜ−eₜ₋₁)²=1+1+1=3",
+          "why": "Squaring removes signs and measures total adjacent movement."
+        },
+        {
+          "say": "Calculate the sum of squared residuals.",
+          "math": "Σeₜ²=1+4+1+0=6",
+          "why": "This is the denominator of the DW ratio."
+        },
+        {
+          "say": "Divide numerator by denominator.",
+          "math": "DW=3/6=0.5",
+          "why": "A value below 2 suggests positive first-order serial correlation; formal inference requires critical bounds."
+        }
+      ],
+      "ask": {
+        "q": "What is the DW statistic in this example?",
+        "nudge": "Use 3 divided by 6."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 8,
+      "title": "Formal DW bounds test",
+      "objective": "State hypotheses and handle the inconclusive region.",
+      "blocks": [
+        {
+          "h": "Positive autocorrelation",
+          "p": "For H₀:ρ=0 against H₁:ρ>0, compare d with lower and upper bounds dL and dU. If d<dL, reject H₀ in favour of positive autocorrelation. If d>dU, do not reject for positive autocorrelation. If dL≤d≤dU, the result is inconclusive."
+        },
+        {
+          "h": "Negative autocorrelation",
+          "p": "For H₀:ρ=0 against H₁:ρ<0, use the transformed statistic 4−d and the corresponding DW bounds. Equivalently, values near 4 are evidence of negative serial correlation."
+        },
+        {
+          "h": "Two-sided alternative",
+          "p": "A two-sided decision combines the positive and negative tails, retaining inconclusive regions. The exact bounds depend on n, number of regressors (excluding the intercept) and the chosen significance level."
+        }
+      ],
+      "ask": {
+        "q": "What is the correct decision when dL<d<dU?",
+        "nudge": "The test does not give a definite rejection or non-rejection in this interval."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 7,
+      "title": "Worked example: interpret a bounds result",
+      "objective": "Avoid forcing a decision in the inconclusive region.",
+      "problem": "Suppose the tabulated bounds are dL=1.20 and dU=1.45, and the observed DW statistic is 1.32. What is the conclusion for the positive-autocorrelation test?",
+      "steps": [
+        {
+          "say": "Locate the observed statistic relative to the bounds.",
+          "math": "1.20<1.32<1.45",
+          "why": "The observed value lies between the lower and upper critical bounds."
+        },
+        {
+          "say": "Apply the bounds-test rule.",
+          "math": "dL<d<dU ⇒ inconclusive",
+          "why": "Neither rejection nor non-rejection is established by the bounds procedure."
+        },
+        {
+          "say": "Report the limitation explicitly.",
+          "math": "No definite DW decision",
+          "why": "Do not label this result as proof of no autocorrelation or as a rejection."
+        }
+      ],
+      "ask": {
+        "q": "Can we conclude that there is no positive autocorrelation?",
+        "nudge": "An inconclusive outcome is neither a rejection nor a non-rejection."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 7,
+      "title": "Guided problem: infer residual correlation",
+      "objective": "Use the DW approximation to interpret a statistic.",
+      "problem": "A regression has DW=2.8. Approximate the first-order residual autocorrelation.",
+      "hints": [
+        "Use DW≈2(1−r̂₁).",
+        "Divide both sides by 2.",
+        "Rearrange for r̂₁."
+      ],
+      "answer": "r̂₁≈1−DW/2=1−1.4=−0.4.",
+      "solution": [
+        "Start from DW≈2(1−r̂₁).",
+        "Then r̂₁≈1−DW/2.",
+        "Substitute 2.8: r̂₁≈1−1.4=−0.4, suggesting negative first-order residual autocorrelation."
+      ],
+      "ask": {
+        "q": "What direction of autocorrelation does this suggest?",
+        "nudge": "The estimated correlation is negative."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s10",
+      "mins": 7,
+      "title": "Limitations and alternative tests",
+      "objective": "Know when ordinary DW is not the right procedure.",
+      "blocks": [
+        {
+          "h": "Lagged dependent variable",
+          "p": "The standard Durbin–Watson bounds test is not valid in its usual form when a lagged dependent variable appears among the regressors. The statistic may still be reported descriptively, but its usual critical bounds should not be used mechanically."
+        },
+        {
+          "h": "Higher-order serial correlation",
+          "p": "DW is designed for first-order serial correlation. A Breusch–Godfrey LM test can test higher-order alternatives and is suitable in many dynamic regression settings."
+        },
+        {
+          "h": "Durbin's h",
+          "p": "For certain models containing a lagged dependent variable, Durbin's h statistic provides an alternative test under its assumptions. If its variance expression is unsuitable, use an appropriate BG procedure."
+        }
+      ],
+      "ask": {
+        "q": "Which test is a common alternative for higher-order serial correlation?",
+        "nudge": "It is the LM test named after Breusch and Godfrey."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "mins": 7,
+      "title": "Guided problem: choose the diagnostic",
+      "objective": "Select a suitable test based on model structure.",
+      "problem": "A dynamic regression includes yₜ₋₁ as a regressor, and the researcher wants to test for serial correlation through order 2. Which procedure is generally more appropriate than the usual DW bounds test?",
+      "hints": [
+        "The model includes a lagged dependent variable.",
+        "The alternative is through order 2, not only first order.",
+        "Choose a test that accommodates dynamic regressors and higher-order alternatives."
+      ],
+      "answer": "The Breusch–Godfrey LM test is generally appropriate.",
+      "solution": [
+        "The usual DW bounds test has a restriction concerning lagged dependent variables.",
+        "The requested alternative is higher-order serial correlation.",
+        "The Breusch–Godfrey LM test can test serial correlation through a chosen order in dynamic regression settings."
+      ],
+      "ask": {
+        "q": "Why should ordinary DW bounds not be used mechanically here?",
+        "nudge": "The model contains a lagged dependent variable."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s12",
+      "mins": 5,
+      "title": "Recall the key facts",
+      "objective": "Retrieve the DW formula, range and decision rules.",
+      "intro": "Try to state each fact before revealing the answer.",
+      "items": [
+        {
+          "q": "Write the Durbin–Watson statistic.",
+          "a": "DW=Σₜ₌₂ⁿ(eₜ−eₜ₋₁)²/Σₜ₌₁ⁿeₜ²."
+        },
+        {
+          "q": "What is the approximate relation to residual autocorrelation?",
+          "a": "DW≈2(1−r̂₁)."
+        },
+        {
+          "q": "What does a value near 4 suggest?",
+          "a": "Negative first-order serial correlation."
+        },
+        {
+          "q": "What does the interval between dL and dU mean?",
+          "a": "The DW bounds test is inconclusive."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s13",
+      "mins": 6,
+      "title": "Exam traps: autocorrelation and DW",
+      "objective": "Correct common statements about serial correlation.",
+      "intro": "Mark each statement true or false.",
+      "items": [
+        {
+          "claim": "Autocorrelation concerns covariance between disturbances at different time points.",
+          "tf": true,
+          "why": "It is cross-observation dependence, unlike heteroscedasticity which concerns unequal conditional variances."
+        },
+        {
+          "claim": "DW is approximately 2(1−r̂₁).",
+          "tf": true,
+          "why": "This approximation links the statistic to the first-order sample residual autocorrelation."
+        },
+        {
+          "claim": "A DW statistic near 4 suggests positive first-order autocorrelation.",
+          "tf": false,
+          "why": "Values near 4 suggest negative first-order autocorrelation."
+        },
+        {
+          "claim": "The DW bounds test has an inconclusive region.",
+          "tf": true,
+          "why": "Values between dL and dU do not yield a definite decision."
+        },
+        {
+          "claim": "The usual DW bounds can be applied without qualification when a lagged dependent variable is a regressor.",
+          "tf": false,
+          "why": "The standard DW test is not valid in its usual form in that dynamic-regression setting."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s14",
+      "mins": 5,
+      "title": "Summary: diagnose without overclaiming",
+      "objective": "Consolidate the meaning and limitations of DW.",
+      "body": [
+        "Autocorrelation is dependence between disturbances at different times. It differs from heteroscedasticity, which concerns non-constant conditional variance.",
+        "Under exogeneity, OLS coefficients may remain unbiased, but serial correlation generally reduces efficiency and invalidates conventional standard-error calculations.",
+        "DW=Σ(eₜ−eₜ₋₁)²/Σeₜ² and DW≈2(1−r̂₁). Its range is 0–4: near 0 positive, near 2 little first-order, near 4 negative correlation.",
+        "Use dL and dU bounds and report inconclusive outcomes honestly. For dynamic regressions or higher-order alternatives, consider Durbin's h or Breusch–Godfrey."
+      ],
+      "ask": {
+        "q": "What is the most important limitation to remember about the usual DW test?",
+        "nudge": "Think about lagged dependent variables and the order of serial correlation."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s15",
+      "mins": 5,
+      "title": "Mastery test",
+      "setId": "regression_t6_mastery"
+    }
+  ]
+}
