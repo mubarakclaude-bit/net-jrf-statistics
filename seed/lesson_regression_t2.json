@@ -163,9 +163,9 @@
           "ask": "If E(X)=μ and a,b are constants, what is E(aX+b)?",
           "recall": "aμ+b.",
           "refresh": [
-            "Expectation is linear: constants can be taken outside the expectation.",
-            "E(aX+b)=aE(X)+E(b). Since b is fixed, E(b)=b.",
-            "Therefore E(aX+b)=aμ+b. This rule is used to show that OLS is unbiased."
+            "Expectation is the probability-weighted average of a random quantity. For a discrete variable taking values 0 and 4 with equal probabilities, E(X)=0(1/2)+4(1/2)=2. The average is not required to be one of the values the variable can actually take.",
+            "Linearity means constants can be pulled outside expectation and sums can be separated: E(aX+b)=aE(X)+b. Here a and b are fixed numbers, so E(b)=b. For example, if E(X)=3, then E(2X+5)=2(3)+5=11.",
+            "In the OLS proof, the estimator is β̂=β+(X′X)⁻¹X′u. Taking conditional expectation gives β+(X′X)⁻¹X′E(u|X). The zero conditional mean assumption sets the final term to zero, leaving β."
           ]
         },
         {
@@ -177,7 +177,11 @@
             "Then X′X is invertible, allowing the ordinary OLS formula (X′X)⁻¹X′y."
           ]
         }
-      ]
+      ],
+      "ask": {
+        "q": "Which two matrix/probability tools will we repeatedly use in this lesson?",
+        "nudge": "Think transpose/products, expectation/variance, and rank/row-space."
+      }
     },
     {
       "kind": "intuition",
@@ -262,6 +266,64 @@
       "ask": {
         "q": "Which covariance condition is stronger than merely saying every error has variance σ²?",
         "nudge": "It also specifies the off-diagonal covariances."
+      },
+      "flow": {
+        "caption": "Gauss–Markov route: assumptions to the BLUE conclusion",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Linear model y=Xβ+u",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Check E(u|X)=0",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Check V(u|X)=σ²I",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Check rank(X)=k",
+            "kind": "decision"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "OLS is BLUE",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
       }
     },
     {
