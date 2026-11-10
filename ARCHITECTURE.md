@@ -45,7 +45,7 @@ authoring and verification scripts. A lesson exists because its seed exists. Not
 `contracts/` holds the machine-checkable definition of a conforming contribution: lesson, question pool (and the
 20-item mastery profile), progress backup (version 2, with `profileId`), pre-import snapshot, feedback (per profile),
 the storage-path rule, and `legacy-exceptions.json`. `npm run contracts` validates the contracts against the app source
-they mirror, runs 42 valid and 73 invalid fixtures, checks every literal path in `src/`, and validates all 48 lessons
+they mirror, runs 42 valid and 77 invalid fixtures, checks every literal path in `src/`, and validates all 48 lessons
 and 63 pools. The path rule is enforced at run time (the test stub, the hosted shim). `npm run acceptance` proves the
 independence requirement for content. GPT's drafts (PR #5) were the starting point; see `docs/PHASE2_REVIEW.md` for
 the six decisions, the disagreements and the requirements added. Rules for changing a contract: `contracts/README.md`.

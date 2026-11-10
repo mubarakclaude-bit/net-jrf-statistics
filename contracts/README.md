@@ -49,8 +49,11 @@ throws when `window.__NJ_STRICT_PATHS` is set). A feature that invents a path mu
 
 ## Versioning and compatibility
 
-- Every exchanged record carries a version (`progress-backup.version`, `schemaVersion`). Readers accept every version
+- Every exchanged record carries a version (`progress-backup.version`, `schemaVersion`). Readers accept every `version`
   listed in the schema; writers write the newest. `version` 1 backups (no `profileId`) are import-only.
+- `schemaVersion` is **pinned to the app's `SCHEMA`** (currently 4) and the validator fails if the two differ. An older or
+  newer value is rejected, not guessed at. Bumping `SCHEMA` means bumping the contract in the same PR and documenting a
+  migration for every older value that must stay importable.
 - A change that old conforming data would fail is a **breaking change**: add a new versioned schema alongside the old
   one (`*.v2.schema.json`, new `$id`), keep both until every seed and stored record has migrated, and ship the migration
   with it. Adding an optional field, widening an enum, or fixing a fixture is not breaking.

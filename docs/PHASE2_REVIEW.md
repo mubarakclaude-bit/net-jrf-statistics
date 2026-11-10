@@ -70,7 +70,7 @@ The feature half of the criterion needs Phases 3 and 4; its criteria are fixed n
   validator, in `test.js`'s stub (strict) and in the hosted shim, so a bad path fails a test and does not reach learners.
 - **No hand-copied lists.** The visualisation names, modes, question formats and `SCHEMA` live in `src/`; the validator
   fails on any difference with the contract.
-- **A contract that tests itself.** Fixtures: 42 valid cases accepted, 73 invalid cases rejected for the stated reason.
+- **A contract that tests itself.** Fixtures: 42 valid cases accepted, 77 invalid cases rejected for the stated reason.
 - **Reproducible tooling.** `package.json` and a lockfile pin the validator and Playwright, so both authors and CI run
   the same versions; `npm ci` is the only setup step.
 - **`test.js` could not fail CI.** It printed its error list and exited 0. It now exits 1 on any error, including a

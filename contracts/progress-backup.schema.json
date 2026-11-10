@@ -9,7 +9,7 @@
   "properties": {
     "format": { "const": "net-jrf-statistics-progress" },
     "version": { "enum": [1, 2] },
-    "schemaVersion": { "type": "integer", "minimum": 1, "$comment": "app progress-record schema; equals SCHEMA in src/10-const.js (checked by tools/validate-contracts.js)" },
+    "schemaVersion": { "const": 4, "$comment": "the app progress-record schema; MUST equal SCHEMA in src/10-const.js, and tools/validate-contracts.js fails if they differ. When SCHEMA is bumped the contract is bumped in the same PR, together with a documented migration for every older value that is still importable; until such a migration exists, an older or newer value is rejected, not guessed at." },
     "exportedAt": { "$ref": "#/$defs/isoTime" },
     "sourceUserId": { "type": "string", "minLength": 1 },
     "profileId": { "$ref": "#/$defs/profileId" },

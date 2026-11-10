@@ -75,7 +75,9 @@ const sameSet = (a, b) => a.length === b.length && a.every(x => b.includes(x));
   const fmtContract = enumOf(SCHEMAS.pool, ["$defs", "item", "properties", "format"]);
   if (!fmtSrc) fail("DRIFT: cannot read FORDER (the question formats) from src/10-const.js");
   else if (!sameSet(fmtSrc, fmtContract)) fail("DRIFT: pool.schema.json formats (" + fmtContract.join(",") + ") differ from FORDER in src/10-const.js (" + fmtSrc.join(",") + ")");
-  globalThis.__SCHEMA_N = schemaN;
+  const schemaContract = SCHEMAS["progress-backup"].properties.schemaVersion.const;
+  if (!Number.isInteger(schemaN)) fail("DRIFT: cannot read SCHEMA from src/10-const.js");
+  else if (schemaContract !== schemaN) fail("DRIFT: progress-backup.schema.json pins schemaVersion " + schemaContract + " but SCHEMA in src/10-const.js is " + schemaN + ". Bump the contract in the same PR and document a migration for any older value that must stay importable.");
 }
 
 // ---- 2. fixtures: every valid one passes, every invalid one fails
