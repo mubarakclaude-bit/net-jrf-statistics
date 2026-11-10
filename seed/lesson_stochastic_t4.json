@@ -142,27 +142,24 @@
           "ask": "What does a directed path from i to j mean?",
           "recall": "There is a positive-probability route from i to j in some finite number of steps.",
           "refresh": [
-            "A path may use several transitions.",
-            "Every edge on the path must have positive probability.",
-            "A direct one-step transition is not required."
+            "A directed path can contain one or several transitions. It exists when every edge on the route has positive probability; the product of those positive probabilities is then positive.",
+            "A direct arrow is sufficient but not necessary. For example, if 1 can move to 2 and 2 can move to 3, there is a two-step path from 1 to 3 even if p₁₃=0."
           ]
         },
         {
           "ask": "What does mutual reachability mean?",
           "recall": "i can reach j and j can reach i.",
           "refresh": [
-            "Both directions are required.",
-            "One-way reachability is not communication.",
-            "This relation forms communicating classes."
+            "Communication is stronger than one-way reachability. State i communicates with j only when a path exists from i to j and another path exists from j to i.",
+            "If only one direction is possible, the states do not communicate. Mutual reachability groups states into communicating classes, which can then be checked for closure."
           ]
         },
         {
           "ask": "What is the period based on?",
           "recall": "The gcd of all positive possible return times.",
           "refresh": [
-            "List n≥1 for which pᵢᵢ⁽ⁿ⁾>0.",
-            "Take their greatest common divisor.",
-            "Do not take the minimum return time."
+            "For state i, collect every positive integer n for which a return in exactly n steps is possible, equivalently pᵢᵢ⁽ⁿ⁾>0. The period is the greatest common divisor of this entire set.",
+            "The smallest return time alone is not enough. If returns are possible in 4 and 6 steps, the period is gcd(4,6)=2. A self-loop makes return in one step possible and therefore forces period one."
           ]
         }
       ],
@@ -185,7 +182,9 @@
         "teaser": "A one-way exit changes the class",
         "title": "A network with an absorbing destination",
         "body": [
-          "States 1 and 2 reach one another. State 2 can also move to state 3, while state 3 is absorbing. State 3 cannot return to either 1 or 2. Therefore {1,2} is a communicating class but is not closed; {3} is closed."
+          "Consider three locations in a directed transition network. State 1 can move to state 2, and state 2 can move back to state 1, so the two states are mutually reachable and form one communicating class.",
+          "State 2 also has a positive-probability transition to state 3. State 3 is absorbing: once entered, the chain remains there forever. There is no path from state 3 back to either state 1 or state 2.",
+          "Consequently {1,2} is a communicating class but it is not closed, because a transition can leave it. The singleton {3} is a closed communicating class. In a finite chain, states in closed communicating classes are recurrent, while states outside all closed classes are transient."
         ],
         "q": "Which class is closed?",
         "answer": "The singleton class {3}, because no transition leaves state 3."
@@ -308,7 +307,9 @@
         "teaser": "A finite chain has one exit from a communicating pair",
         "title": "Classify the transient states",
         "body": [
-          "States 1 and 2 communicate. From state 2 the chain can move to absorbing state 3, and state 3 cannot return. The pair {1,2} is therefore not closed, while {3} is closed."
+          "A reliability network has two operating modes that can move back and forth, plus a terminal shutdown state. The operating modes communicate with each other, but one of them can send the system into shutdown.",
+          "Shutdown is absorbing: after entering it, the system cannot return to either operating mode. Thus the two operating modes form a communicating class that is not closed, whereas shutdown forms a closed singleton class.",
+          "To classify the states, do not simply ask whether they can reach one another. First form communicating classes using mutual reachability, then inspect every outgoing transition to decide whether each class is closed. In a finite chain this identifies the recurrent classes and the transient states."
         ],
         "q": "Which states are transient?",
         "answer": "States 1 and 2, because they lie outside the only closed communicating class {3}."
@@ -345,7 +346,31 @@
       ],
       "ask": {
         "q": "Is this class recurrent even though it is periodic?"
-      }
+      },
+      "hints": [
+        "Find the set of states reachable from each state and check mutual reachability.",
+        "Check whether any positive-probability transition leaves the proposed class.",
+        "Use the finite-chain result: states in closed communicating classes are recurrent; states outside them are transient."
+      ],
+      "solution": [
+        {
+          "say": "Each state reaches the other and returns.",
+          "math": "{1,2} is one communicating class"
+        },
+        {
+          "say": "No transition leaves the pair.",
+          "math": "{1,2} is closed"
+        },
+        {
+          "say": "State 1 returns only at even times.",
+          "math": "{2,4,6,…}; gcd=2"
+        },
+        {
+          "say": "The same holds for state 2.",
+          "math": "d(1)=d(2)=2"
+        }
+      ],
+      "answer": "The two operating states form a communicating class, but it is not closed if either can transition to shutdown. The absorbing shutdown state forms a closed recurrent class; the operating states are transient in this finite chain."
     },
     {
       "kind": "guided",
@@ -373,7 +398,27 @@
       ],
       "ask": {
         "q": "Why is the outside state transient?"
-      }
+      },
+      "hints": [
+        "List possible positive return times to state 1.",
+        "For the alternating chain, returns occur only after an even number of steps.",
+        "Take the gcd of the full set of return times; periodicity does not imply transience."
+      ],
+      "solution": [
+        {
+          "say": "The outside state can leave but cannot be revisited after entering a closed class.",
+          "math": "Outside state is transient"
+        },
+        {
+          "say": "Each closed class is recurrent in a finite chain.",
+          "math": "C₁ and C₂ are recurrent classes"
+        },
+        {
+          "say": "There is no single forced stationary distribution across the two closed classes.",
+          "math": "Multiple stationary distributions can exist"
+        }
+      ],
+      "answer": "The two states form one closed communicating recurrent class, and each state has period 2."
     },
     {
       "kind": "trapcheck",
@@ -383,22 +428,26 @@
       "objective": "Avoid one-way communication and period mistakes.",
       "items": [
         {
-          "q": "If i can reach j but j cannot reach i, do they communicate?",
-          "a": "No. Communication requires mutual reachability."
+          "claim": "If i can reach j but j cannot reach i, the two states communicate.",
+          "tf": false,
+          "why": "Communication requires reachability in both directions."
         },
         {
-          "q": "Is every communicating class closed?",
-          "a": "No. A class may have transitions leaving it."
+          "claim": "A communicating class is closed only if no transition from any state in it leads outside the class.",
+          "tf": true,
+          "why": "Closure rules out every outgoing transition to an external state."
         },
         {
-          "q": "Does period two imply transience?",
-          "a": "No. A recurrent class can be periodic."
+          "claim": "A recurrent state may have period greater than one.",
+          "tf": true,
+          "why": "Periodicity describes the timing of returns; it does not imply transience."
         }
       ],
       "ask": {
         "q": "What quick test identifies an absorbing state's period?",
         "nudge": "It returns at every positive integer time."
-      }
+      },
+      "intro": "Judge each statement using the definitions of communication, closure and period. Pay particular attention to the difference between a class that can be left and one that cannot."
     },
     {
       "kind": "recall",
@@ -423,7 +472,8 @@
       "ask": {
         "q": "What is shared by states in one communicating class?",
         "nudge": "Their period."
-      }
+      },
+      "intro": "Recall the definitions and finite-state classification results before moving to the mastery questions."
     },
     {
       "kind": "worked",
