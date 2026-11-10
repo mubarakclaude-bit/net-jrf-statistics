@@ -164,27 +164,30 @@
           "ask": "What is the transpose of a product AB?",
           "recall": "(AB)′=B′A′.",
           "refresh": [
-            "When transposing a product, reverse the order and transpose each factor.",
-            "For example, (AB)′=B′A′, not A′B′.",
-            "This reversal is essential when proving that H=X(X′X)⁻¹X′ is symmetric."
+            "A transpose exchanges rows and columns. For a matrix A, the entry in row i and column j moves to row j and column i.",
+            "For products, the order reverses: (AB)′=B′A′. This is why the transpose of X(X′X)⁻¹X′ can be simplified by transposing each factor and reversing the order.",
+            "The matrix X′X is symmetric because (X′X)′=X′X. Its inverse is also symmetric, which is used in proving H′=H.",
+            "When proving matrix identities, preserve factor order. Associativity lets you regroup adjacent factors, but matrices cannot generally be swapped."
           ]
         },
         {
           "ask": "If X has full column rank k, what can you say about X′X?",
           "recall": "X′X is invertible.",
           "refresh": [
-            "Full column rank means the columns of X are linearly independent.",
-            "For any nonzero vector a, a′X′Xa=(Xa)′(Xa)=||Xa||²>0.",
-            "Thus X′X is positive definite and has an ordinary inverse."
+            "Full column rank means none of the k columns of X is a linear combination of the others.",
+            "For any nonzero a, a′X′Xa=(Xa)′(Xa)=||Xa||². Full column rank ensures Xa is not zero, so this quantity is positive.",
+            "Therefore X′X is positive definite and invertible. This is the condition behind the ordinary OLS formula β̂=(X′X)⁻¹X′y.",
+            "If the design is rank deficient, the projection onto C(X) still exists, but the ordinary inverse formula must be replaced by a suitable generalized-inverse treatment."
           ]
         },
         {
           "ask": "What does it mean for two vectors to be orthogonal?",
           "recall": "Their inner product is zero.",
           "refresh": [
-            "Vectors a and b are orthogonal when a′b=0.",
-            "In least squares, the residual vector is orthogonal to every column of the design matrix.",
-            "That fact becomes X′e=0, the normal-equation condition."
+            "The inner product of two real column vectors a and b is a′b. They are orthogonal when this scalar equals zero.",
+            "A vector is orthogonal to a subspace when it is orthogonal to every vector in that subspace. In regression, the residual is orthogonal to every column of X.",
+            "Writing this condition for all columns at once gives X′e=0. These are the OLS normal equations in residual form.",
+            "Orthogonality also explains why fitted and residual components form perpendicular projections of y."
           ]
         }
       ],
@@ -239,6 +242,18 @@
       "ask": {
         "q": "What is the dimension of H when X is n×k?",
         "nudge": "H maps an n-dimensional response vector to an n-dimensional fitted vector."
+      },
+      "scenario": {
+        "teaser": "A response vector is projected onto a model space",
+        "title": "Why the hat matrix is a projection",
+        "body": [
+          "Imagine that the columns of X span a plane of all fitted vectors the regression can produce. The observed response y may not lie in that plane.",
+          "OLS chooses the point in the plane that is closest to y in squared Euclidean distance. That point is the fitted vector, and H maps y to it.",
+          "The leftover difference is perpendicular to the plane. The residual-maker matrix M maps y to that perpendicular component.",
+          "This geometry tells us what H and M do before we calculate their algebraic properties."
+        ],
+        "q": "What does H return when it acts on y?",
+        "answer": "The orthogonal projection of y onto the column space of X, namely the fitted vector."
       }
     },
     {
