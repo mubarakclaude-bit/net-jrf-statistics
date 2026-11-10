@@ -21,3 +21,5 @@ echo "$out" | tail -1
 node tools/content.js check
 out=$(node tests/changed-topics.test.js) || { echo "$out"; exit 1; }   # which lessons a pull request must click-test
 echo "$out" | tail -1
+out=$(node tests/check-ids.test.js) || { echo "$out"; exit 1; }   # the id-stability tool, in a throwaway git repo
+echo "$out" | tail -1
