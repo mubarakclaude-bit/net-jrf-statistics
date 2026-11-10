@@ -21,7 +21,7 @@ assert XtX[0][0]*XtX[1][1]-XtX[0][1]*XtX[1][0]==12
 # Rank-one design rows are multiples of (1,1): sum estimable, difference not.
 rows=[[1,1],[2,2],[3,3]]
 assert all(row[0]==row[1] for row in rows)
-assert (1,1) in rows and (1,-1) not in rows
+assert all(tuple(row)==(1,1) for row in rows) and (1,-1) not in [tuple(row) for row in rows]
 Q=P["items"]
 assert len(Q)==20
 assert Counter(x["diff"] for x in Q)=={"easy":6,"moderate":10,"hard":4}
