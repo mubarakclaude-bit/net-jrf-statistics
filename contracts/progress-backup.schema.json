@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://net-jrf-statistics/contracts/progress-backup.schema.json",
+  "title": "Learner progress backup (contract v1)",
+  "$comment": "version 2 is what exports MUST write: it names the profile the records belong to. version 1 (no profileId) is accepted for IMPORT ONLY, and the importer must ask which profile it replaces. The envelope is STRICT (no unknown keys). The nine record shapes are the ones the app writes in src/13-db.js. Import semantics are REPLACEMENT only: the nine records of the selected learner+profile are replaced after a verified pre-import snapshot; merging is a separate, future version. sourceUserId is informational and is never the destination: records are always written under the current learner id and the selected profile.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "schemaVersion", "exportedAt", "sourceUserId", "records"],
+  "properties": {
+    "format": { "const": "net-jrf-statistics-progress" },
+    "version": { "enum": [1, 2] },
+    "schemaVersion": { "const": 4, "$comment": "the app progress-record schema; MUST equal SCHEMA in src/10-const.js, and tools/validate-contracts.js fails if they differ. When SCHEMA is bumped the contract is bumped in the same PR, together with a documented migration for every older value that is still importable; until such a migration exists, an older or newer value is rejected, not guessed at." },
+    "exportedAt": { "$ref": "#/$defs/isoTime" },
+    "sourceUserId": { "type": "string", "minLength": 1 },
+    "profileId": { "$ref": "#/$defs/profileId" },
+    "records": { "$ref": "#/$defs/records" }
+  },
+  "allOf": [
+    { "if": { "properties": { "version": { "const": 2 } }, "required": ["version"] }, "then": { "required": ["profileId"] } },
+    { "if": { "properties": { "version": { "const": 1 } }, "required": ["version"] }, "then": { "not": { "required": ["profileId"] } } }
+  ],
+  "$defs": {
+    "isoTime": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})$" },
+    "profileId": { "type": "string", "pattern": "^(me|[a-z0-9][a-z0-9_-]{0,63})$", "$comment": "'me' is the default profile, exactly as the app names it internally" },
+    "objectMap": { "type": "object", "additionalProperties": { "type": "object" } },
+    "objectList": { "type": "array", "maxItems": 10000, "items": { "type": "object" } },
+    "records": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["attempts", "mocks", "topics", "errors", "config", "mastery", "requests", "notes", "asks"],
+      "$comment": "each record is null (never written) or its shape",
+      "properties": {
+        "attempts": { "oneOf": [{ "type": "null" }, { "type": "object", "additionalProperties": false, "required": ["a"], "properties": { "a": { "$ref": "#/$defs/objectMap" }, "v": { "type": "integer" } } }] },
+        "mastery": { "oneOf": [{ "type": "null" }, { "type": "object", "additionalProperties": false, "required": ["m"], "properties": { "m": { "$ref": "#/$defs/objectMap" }, "v": { "type": "integer" } } }] },
+        "topics": { "oneOf": [{ "type": "null" }, { "type": "object", "additionalProperties": false, "required": ["t"], "properties": { "t": { "$ref": "#/$defs/objectMap" } } }] },
+        "notes": { "oneOf": [{ "type": "null" }, { "type": "object", "additionalProperties": false, "required": ["n"], "properties": { "n": { "type": "object" } } }] },
+        "mocks": { "$ref": "#/$defs/listRecord" }, "errors": { "$ref": "#/$defs/listRecord" },
+        "requests": { "$ref": "#/$defs/listRecord" }, "asks": { "$ref": "#/$defs/listRecord" },
+        "config": {
+          "oneOf": [{ "type": "null" }, {
+            "type": "object",
+            "properties": {
+              "exam": { "type": "string" },
+              "target": { "type": "number", "minimum": 60, "maximum": 200 },
+              "mode": { "enum": ["syllabus", "pyq", "personal"], "$comment": "must equal the keys of MODES in src/45-learn.js (checked by tools/validate-contracts.js)" },
+              "paper": { "enum": [1, 2, "all"] }
+            }
+          }]
+        }
+      }
+    },
+    "listRecord": { "oneOf": [{ "type": "null" }, { "type": "object", "additionalProperties": false, "required": ["list"], "properties": { "list": { "$ref": "#/$defs/objectList" } } }] }
+  }
+}
