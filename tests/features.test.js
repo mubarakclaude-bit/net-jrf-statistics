@@ -33,7 +33,11 @@ const server = http.createServer((q, r) => {
   let failed = 0, total = 0;
   for (const id of ids) {
     const manifest = JSON.parse(fs.readFileSync(path.join(FEATURES, id, "feature.json"), "utf8"));
-    const ctx = await browser.newContext({ viewport: { width: 1100, height: 800 } });
+    // A feature's test may export contextOptions (for example { timezoneId: "Pacific/Kiritimati" }) to run in a particular
+    // browser setting. Playwright can only set these when the context is created, so the test file is loaded first.
+    let testFn = null, loadError = null;
+    try { testFn = require(path.join(FEATURES, id, "test.js")); } catch (e) { loadError = e; }
+    const ctx = await browser.newContext(Object.assign({ viewport: { width: 1100, height: 800 } }, (testFn && testFn.contextOptions) || {}));
     await ctx.addInitScript(() => { window.__NJ_STRICT_PATHS = true; });
     const page = await ctx.newPage(), errs = [], lines = [];
     page.on("pageerror", e => errs.push(e.message));
@@ -54,7 +58,8 @@ const server = http.createServer((q, r) => {
       await t.open();
       expect("is visible at #f-" + id, await page.evaluate(i => document.getElementById("v-f-" + i).classList.contains("on"), id));
       expect("did not fall back to the error card", (await page.locator("#v-f-" + id).textContent()).indexOf("failed to display") < 0);
-      await require(path.join(FEATURES, id, "test.js"))(t);
+      if (loadError) throw loadError;
+      await testFn(t);
     } catch (e) { expect("its test ran to the end", false, String(e && e.message || e).split("\n")[0]); }
     expect("no page error or console error while it ran", errs.length === 0, errs.slice(0, 2).join(" | "));
     const bad = lines.filter(l => !l.ok);

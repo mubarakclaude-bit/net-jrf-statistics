@@ -19,6 +19,9 @@ let Ajv2020;
 try { Ajv2020 = require("ajv/dist/2020"); }
 catch (e) { console.error("FAILED: the 'ajv' package is not installed. Run:  npm ci"); process.exit(2); }
 const { checkDocPath } = require("./storage-paths");
+let analyzeFeatureCode;
+try { ({ analyzeFeatureCode } = require("./feature-code")); }
+catch (e) { console.error("FAILED: the 'acorn' package is not installed. Run:  npm ci"); process.exit(2); }
 const { listSeeds } = require("./seed-docs");
 
 const ROOT = path.join(__dirname, "..");
@@ -97,6 +100,18 @@ runFixtures("contracts/fixtures/pools.json", "pool envelope", V("pool"));
 runFixtures("contracts/fixtures/mastery-pools.json", "mastery pool", V("mastery-pool"));
 runFixtures("contracts/fixtures/features.json", "feature manifest", V("feature"));
 
+// ---- 2b. the feature storage rule's own fixtures: every valid snippet passes, every bypass is rejected for the stated reason
+{
+  const fx = read("contracts/fixtures/feature-code.json"); let nv = 0, ni = 0;
+  for (const [name, code] of Object.entries(fx.valid)) { nv++; const p = analyzeFeatureCode(code, fx.declared); if (p.length) fail("FEATURE-CODE fixture should be VALID but is rejected: " + name + ": " + p[0]); }
+  for (const b of fx.invalid) {
+    ni++; const p = analyzeFeatureCode(b.code, fx.declared);
+    if (!p.length) fail("FEATURE-CODE fixture should be INVALID but is accepted (a storage bypass): " + b.name);
+    else if (!p.some(x => x.includes(b.expect))) fail("FEATURE-CODE fixture rejected for the wrong reason: " + b.name + " (expected '" + b.expect + "', got " + p[0].slice(0, 100) + ")");
+  }
+  notes.push("feature storage rule: " + nv + " valid snippets accepted, " + ni + " bypass attempts rejected");
+}
+
 // ---- 3. the storage-path rule
 {
   const fx = read("contracts/fixtures/storage-paths.json"); let nv = 0, ni = 0;
@@ -131,8 +146,9 @@ runFixtures("contracts/fixtures/features.json", "feature manifest", V("feature")
     for (const f of ["index.js", "test.js"]) if (!fs.existsSync(path.join(fdir, id, f))) fail("src/features/" + id + "/" + f + " is missing");
     const idx = path.join(fdir, id, "index.js");
     if (fs.existsSync(idx)) {
-      const used = [...fs.readFileSync(idx, "utf8").matchAll(/store\.(?:get|set|remove)\(\s*["']([^"']+)["']/g)].map(x => x[1]);
-      for (const k of new Set(used)) if (!(m.storage || []).includes(k)) fail("src/features/" + id + "/index.js uses storage key '" + k + "' which feature.json does not declare in \"storage\"");
+      // A syntax-tree check (tools/feature-code.js), not a regular expression: dynamic keys, aliases and the other ways of
+      // reaching around ctx.store are rejected, so every storage key a feature uses is a declared string literal.
+      for (const p of analyzeFeatureCode(fs.readFileSync(idx, "utf8"), m.storage || [])) fail("src/features/" + id + "/index.js " + p);
     }
   }
   notes.push("features: " + n + " manifest(s) checked" + (ids.length ? " (" + ids.join(", ") + ")" : ""));

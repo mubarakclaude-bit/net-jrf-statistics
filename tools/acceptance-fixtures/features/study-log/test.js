@@ -1,10 +1,16 @@
-module.exports = async function (t) {
+const test = async function (t) {
   const { page, expect } = t;
   const total = async want => { await page.waitForFunction(w => document.querySelector("#studyLogTotal").textContent.trim() === w, want); return (await page.textContent("#studyLogTotal")).trim(); };
+  // The browser is in UTC+14 (see contextOptions below) and the clock is fixed at 12:00 UTC on 7 November, so for this learner
+  // it is already 02:00 on 8 November. A feature that used the UTC date would record 7 November.
+  await page.clock.setFixedTime(new Date("2026-11-07T12:00:00Z"));
   await t.open();
   expect("starts at zero", (await total("0")) === "0");
   await page.fill("#studyLogMinutes", "25"); await page.click("#studyLogAdd");
   expect("logging minutes raises the total", (await total("25")) === "25");
+  const U = await page.evaluate(() => localStorage.getItem("njuid"));
+  const stored = JSON.parse(await page.evaluate(u => localStorage.getItem("njdb:data/users/" + u + "/features/study-log/entries"), U)).value;
+  expect("records the learner's LOCAL calendar day, not the UTC day", stored.length === 1 && stored[0].date === "2026-11-08", JSON.stringify(stored));
   await page.fill("#studyLogMinutes", "35"); await page.click("#studyLogAdd");
   expect("a second entry on the same day adds to that day, not a new day", (await total("60")) === "60" && (await page.textContent("#studyLogDays")).trim() === "1");
   await page.fill("#studyLogMinutes", "0"); await page.click("#studyLogAdd");
@@ -18,3 +24,5 @@ module.exports = async function (t) {
   });
   expect("another profile is stored separately and the default log is untouched", !!other && (await page.textContent("#studyLogTotal")).trim() === "60");
 };
+test.contextOptions = { timezoneId: "Pacific/Kiritimati" };     // UTC+14
+module.exports = test;

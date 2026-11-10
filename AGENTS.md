@@ -89,6 +89,11 @@ A feature is a folder, `src/features/<id>/`. Adding or changing one edits **no s
    `wire(ctx, el)` attaches behaviour. Use only `ctx`: `ctx.store.get/set/remove`, `ctx.esc`, `ctx.toast`,
    `ctx.rerender`, `ctx.profile`, `ctx.uid`. `ctx.store` refuses any key not declared in `storage` and writes to a path
    the storage contract allows, separately per learner and per profile.
+   **Keys must be written out:** call `ctx.store.get/set/remove("key")` directly with a string literal that is listed in
+   `storage`. A key held in a variable, built by concatenation or a template, or a `ctx.store` that is aliased, destructured or
+   passed on is rejected by `npm run check` (parsed with acorn, `tools/feature-code.js`). So are `localStorage`, `S`,
+   `indexedDB`, `eval` and `Function`. This is a static check, not a sandbox: deliberately obfuscated code can slip past it,
+   which is why `ctx.store` also refuses undeclared keys at run time and the feature's own test runs in strict-path mode.
 4. `test.js` is your feature's own browser test. Test what is specific to your feature (see the two reference tests and
    `tools/acceptance-fixtures/features/`, which are real examples written from scratch). The runner already checks that
    the feature is registered, visible, in the navigation exactly when `tab` says so, and free of page errors.
@@ -113,7 +118,7 @@ extracted into a feature module, **one author at a time works on it**: say so in
 - **Dependent work is stacked and says so:** if your change needs another open PR, base your branch on that PR's branch
   and write "Depends on #N" at the top of the description. Do not copy its commits into yours.
 - **CI is the independent verification.** The `Validate` workflow runs three jobs, and a PR must pass all three:
-  `validate` (contracts, fixtures, storage paths, every lesson and pool, and `vcheck.js` on the lessons you changed),
+  `validate` (contracts, fixtures, storage paths, every lesson and pool, `vcheck.js`, the formula and answer audit and every changed `verify_*.py`),
   `browser` (build, `test.js`, `clicktest.js`, the hosted adapter, every feature's own test) and `acceptance` (the six
   independence scenarios). Local success is useful but does not replace it: quote the CI run link in the PR.
 - **A different assistant or the owner reviews it.** Review must be reproducible from a clean checkout; do not rely on
@@ -123,15 +128,32 @@ extracted into a feature module, **one author at a time works on it**: say so in
 
 ## Who can do what
 
-| Step | Needs | Chat-only model | Assistant with a shell (Claude Code, Codex, a GitHub agent) |
-|---|---|---|---|
-| Write verification and authoring scripts; write a feature's files | text only | yes | yes |
-| Run `./addlesson.sh`, `npm run check`, `npm test` | Python 3, Node 20+, a shell | no: hand the files to someone who can | yes |
-| Open the pull request and read CI | GitHub access | via the owner | yes |
-| Push to the Claude artifact store | Claude's `ArtifactData` tool | no | Claude sessions only; optional |
+What you can finish depends on what your session is allowed to do, not on which assistant you are. Find your row.
 
-A chat-only model delivers files on a branch or pasted text: `verify_<group>.py` and `lesson_<stem>.py` for a lesson, or
-the feature folder for a feature. Someone with a shell runs the commands, fixes what they report, and opens the PR.
+| Your session can | Can it finish a task alone? | How |
+|---|---|---|
+| **Write to this GitHub repository** (create a branch, commit files, open a pull request, read Actions results) but has no shell: a chat model with the GitHub connector, a GitHub agent | **Yes** | The GitHub-native flow below. CI is your shell. |
+| **Run commands** (Claude Code, Codex, a terminal) | **Yes** | Run the commands in "Setup and the commands" before pushing. Faster, but CI still verifies the PR. |
+| Only **read** the repository or paste text (no write access) | **No** | It can write the files as text, but a person with write access must commit them. The owner can grant *Contents: write*, *Pull requests: write* and *Actions: read* on the repository, or hand the files to a session that has them. |
+
+Local commands are useful, not mandatory. The mandatory part is that CI passes.
+
+### The GitHub-native flow (no shell needed)
+
+1. Create a branch named for the task (`lesson/<topic-id>` or `feature/<id>`) and open a **draft** pull request.
+2. Commit only the files the task owns (see A and B). For a **lesson**: `verify_<group>.py`, `lesson_<stem>.py`, and the seed JSON
+   they describe (`seed/lesson_<stem>.json` and its `seed/*_mastery.json`). `addlesson.sh` only generates and checks these, so a
+   session that cannot run it writes the seed files directly in the documented shape (`lessons/TEMPLATE.py`, `contracts/`).
+   For a **feature**: the folder `src/features/<id>/`.
+3. Push. The `Validate` workflow runs on the branch and on the PR. It does what `addlesson.sh` and the local commands do:
+   contracts and every pool; `vcheck.js` and the formula-render and self-cited-answer audit (`tools/audit-lesson.py`) on each
+   lesson you changed; every changed `verify_*.py` (`tools/run-verifiers.js`); the browser tests; every feature's own test;
+   and the independence scenarios.
+4. Read the failing step in the Actions log, fix the files, push again. Repeat until all three jobs are green.
+5. Mark the PR ready, put the CI run link in the description, and stop. The owner or the other assistant reviews and merges.
+
+CI cannot judge whether a verification script checks the right thing, and it does not push to the Claude artifact (optional;
+Claude sessions with `ArtifactData` only).
 
 ## Where things go live
 

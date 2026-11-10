@@ -21,7 +21,9 @@ function wire(ctx, el) {
     const m = Number(el.querySelector("#studyLogMinutes").value);
     if (!Number.isInteger(m) || m < 1 || m > 600) { msg.textContent = "Enter a whole number of minutes from 1 to 600."; return; }
     msg.textContent = "";
-    const today = new Date().toISOString().slice(0, 10), found = entries.find(e => e.date === today);
+    // The learner's LOCAL calendar day, not the UTC day: toISOString() would put a late-evening session in the wrong day.
+    const now = new Date(), pad = n => String(n).padStart(2, "0");
+    const today = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate()), found = entries.find(e => e.date === today);
     if (found) found.minutes += m; else entries.push({ date: today, minutes: m });
     try { await ctx.store.set("entries", entries); } catch (e) { ctx.toast("Could not save: " + (e && e.message || e)); }
     el.querySelector("#studyLogMinutes").value = ""; draw();
