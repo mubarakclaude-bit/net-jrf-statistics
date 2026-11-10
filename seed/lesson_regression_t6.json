@@ -143,7 +143,10 @@
     ],
     "shortcuts": [
       "DW≈2(1−r̂₁) is a quick interpretation tool, not a replacement for the bounds test.",
-      "Remember the 0–2–4 scale: positive–none–negative."
+      "Remember the 0–2–4 scale: positive–none–negative.",
+      "DW below 2 points toward positive first-order residual correlation; above 2 points toward negative correlation.",
+      "Always state whether the alternative is positive, negative or two-sided before applying DW bounds.",
+      "For a dynamic regression with a lagged dependent variable, use an appropriate alternative such as Breusch–Godfrey rather than the ordinary DW bounds."
     ],
     "remember": [
       "DW addresses first-order serial correlation in a regression setting; it is not a universal residual independence test.",
@@ -164,16 +167,31 @@
       ],
       "items": [
         {
-          "q": "What does Var(uₜ|X) measure?",
-          "a": "The conditional variance of the error at observation t."
+          "ask": "What does Var(uₜ|X) measure?",
+          "recall": "The conditional variance of the error at observation t.",
+          "refresh": [
+            "It describes the spread of the error distribution at a particular time point, after conditioning on the regressors.",
+            "It is a within-observation quantity and does not tell us whether errors at two different times move together.",
+            "For example, Var(uₜ|X)=4 says the conditional variance at time t is four; it does not specify Cov(uₜ,uₜ₋₁|X)."
+          ]
         },
         {
-          "q": "What does Cov(uₜ,uₜ₋₁|X) measure?",
-          "a": "The conditional covariance between adjacent-time disturbances."
+          "ask": "What does Cov(uₜ,uₜ₋₁|X) measure?",
+          "recall": "The conditional covariance between adjacent-time disturbances.",
+          "refresh": [
+            "It measures whether the error at time t moves systematically with the error one period earlier.",
+            "A positive covariance indicates same-direction movement on average; a negative covariance indicates opposite-direction movement.",
+            "This cross-time covariance is the quantity involved in first-order autocorrelation."
+          ]
         },
         {
-          "q": "What is first-order autocorrelation?",
-          "a": "Dependence between disturbances one time period apart, commonly represented by Cov(uₜ,uₜ₋₁|X)≠0."
+          "ask": "What is first-order autocorrelation?",
+          "recall": "Dependence between disturbances one time period apart, commonly represented by Cov(uₜ,uₜ₋₁|X)≠0.",
+          "refresh": [
+            "The word first-order refers to lag one: compare uₜ with uₜ₋₁.",
+            "It is a statement about dependence across observations, not about the marginal variance at each time point.",
+            "A common representation is the AR(1) disturbance equation uₜ=ρuₜ₋₁+εₜ."
+          ]
         }
       ],
       "ask": {
@@ -198,7 +216,10 @@
         "body": [
           "Imagine residuals from a quarterly sales regression. Several consecutive residuals are positive, followed by several negative residuals.",
           "Such runs suggest that the errors may be moving together over time rather than behaving independently.",
-          "This pattern can arise when a dynamic feature has been omitted or when the disturbance itself follows a time-series process."
+          "This pattern can arise when a dynamic feature has been omitted or when the disturbance itself follows a time-series process.",
+          "The order of the observations matters: rearranging the residuals would destroy the time sequence and could hide the dependence.",
+          "A useful first diagnostic is therefore a residual-versus-time plot, followed by a lag-one residual plot or a formal test.",
+          "Persistent same-sign residuals often indicate that the regression has left a systematic time pattern unexplained."
         ],
         "q": "Which direction of first-order autocorrelation is suggested by long same-sign runs?",
         "answer": "Positive first-order autocorrelation."
@@ -229,7 +250,10 @@
         "body": [
           "Suppose the lag plot of eₜ against eₜ₋₁ shows a clear downward trend.",
           "Large positive residuals tend to follow negative residuals and vice versa. This is evidence consistent with negative first-order autocorrelation.",
-          "The formal DW statistic can summarise this first-order pattern, but its critical bounds must still be used for a test decision."
+          "The formal DW statistic can summarise this first-order pattern, but its critical bounds must still be used for a test decision.",
+          "A lag plot is useful because the horizontal axis shows the previous residual and the vertical axis shows the current residual. The slope direction gives a visual clue about the sign of lag-one dependence.",
+          "A positive association does not establish the full disturbance model, and a weak association does not rule out higher-order serial correlation.",
+          "Use the plot alongside the model specification and a formal diagnostic rather than treating it as a stand-alone test."
         ],
         "q": "Would the DW statistic tend to be below or above 2?",
         "answer": "Above 2, because the first-order residual autocorrelation is negative."
