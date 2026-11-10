@@ -2,7 +2,7 @@ name: Regression T6 autocorrelation and DW validation
 
 on:
   pull_request:
-    branches: [main, gpt/regression-t7-heteroscedasticity-gls]
+    branches: [main, gpt/regression-t7-heteroscedasticity-gls, gpt/regression-t6-autocorrelation-dw]
   push:
     branches: [gpt/regression-t6-autocorrelation-dw]
   workflow_dispatch:
@@ -24,8 +24,11 @@ jobs:
           node-version: "20"
       - name: Verify exact DW calculations and mastery pool
         run: python verify_regression_t6.py
-      - name: Validate lesson structure and pool
-        run: node vcheck.js seed/lesson_regression_t6.json
+      - name: Validate all regression lesson structures and pools
+        run: |
+          for f in seed/lesson_regression_t{1,2,3,4,5,6,7}.json; do
+            node vcheck.js "$f"
+          done
       - name: Build app
         run: bash build.sh
       - name: Install browser-test dependency
