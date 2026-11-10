@@ -142,27 +142,24 @@
           "ask": "What does pᵢⱼ represent?",
           "recall": "The probability that the next state is j given that the current state is i.",
           "refresh": [
-            "The first index is the current state.",
-            "The second index is the destination.",
-            "Each row sums to one."
+            "A transition probability pᵢⱼ is the chance that the next state is j when the current state is i. It is conditional on the present state, not on the entire path already travelled.",
+            "For a fixed current state i, the possible next states are mutually exclusive and exhaustive. Therefore the probabilities across row i add to one; this is a useful check before writing any first-step equation."
           ]
         },
         {
           "ask": "Why condition on the first transition?",
           "recall": "It separates mutually exclusive next-state possibilities.",
           "refresh": [
-            "List each possible next state.",
-            "Multiply its probability by the continuation quantity.",
-            "Add the contributions."
+            "Condition on the first transition by splitting the experiment into the possible destinations k. These branches are mutually exclusive, so their contributions can be added.",
+            "For an expected remaining time, each branch contributes its probability multiplied by the expected time from the destination. Remember that one transition has already been used, so the equation includes a leading 1."
           ]
         },
         {
           "ask": "What is the remaining hitting time when the target is already reached?",
           "recall": "Zero.",
           "refresh": [
-            "The stopping event has occurred.",
-            "No further transitions are required.",
-            "This is the boundary condition."
+            "A hitting time stops the first time the target is reached. If the chain is already in that target state, the stopping condition has been met and no further transitions are needed.",
+            "Thus the boundary condition for the expected hitting time is hⱼ=0. For a hitting probability the corresponding boundary value is instead gⱼ=1, because the target has already been hit with certainty."
           ]
         }
       ],
@@ -185,7 +182,9 @@
         "teaser": "A machine reaches a repair-complete state",
         "title": "When does the machine first become ready?",
         "body": [
-          "A machine moves through operating states before reaching the repair-complete state. The manager asks for the number of transitions until the first arrival at repair-complete. If the chain later leaves that state, the first-passage time does not change."
+          "A maintenance process can occupy several operating states before reaching the repair-complete state. At each inspection the machine either remains in its current condition or moves to another condition according to a transition matrix.",
+          "The manager asks for the number of transitions until the first arrival at repair-complete. The clock stops at that first arrival. If the machine later leaves the repair-complete state and returns, that later movement does not alter the first-passage time already recorded.",
+          "This distinction matters operationally: first arrival measures time to initial readiness, while a return-time question would begin at readiness and measure the time until the process comes back after at least one transition."
         ],
         "q": "Does a later departure change the first-passage time?",
         "answer": "No. The first-passage time is fixed at the first arrival."
@@ -336,7 +335,31 @@
       ],
       "ask": {
         "q": "Why does the self-loop increase the expected time?"
-      }
+      },
+      "hints": [
+        "First write the boundary value for the target state 3.",
+        "Use hᵢ=1+Σₖpᵢₖhₖ for each non-target state; include the self-loop term.",
+        "Solve the state-2 equation first, then substitute its value into the state-1 equation."
+      ],
+      "solution": [
+        {
+          "say": "Set the boundary value.",
+          "math": "h₃=0"
+        },
+        {
+          "say": "Write the state-2 equation.",
+          "math": "h₂=1+(1/2)h₂"
+        },
+        {
+          "say": "Solve for h₂.",
+          "math": "h₂=2"
+        },
+        {
+          "say": "Write the state-1 equation.",
+          "math": "h₁=1+(3/4)h₂+(1/4)h₃=5/2"
+        }
+      ],
+      "answer": "h₂=2 transitions and h₁=5/2 transitions."
     },
     {
       "kind": "guided",
@@ -360,7 +383,24 @@
       "ask": {
         "q": "Which boundary value belongs to a hitting probability at the target?",
         "nudge": "The event of having hit the target is certain there."
-      }
+      },
+      "problem": "From state 1 the chain moves to state 2 with probability 1/3 and to target 3 with probability 2/3. State 2 moves to state 3 with probability one. Find the probability of hitting 3 within two transitions and the expected time to hit 3.",
+      "hints": [
+        "List the two possible first transitions from state 1.",
+        "Both branches reach state 3 by the second transition; for the mean, write the first-step equation.",
+        "Set h₃=0, h₂=1, and calculate h₁=1+(1/3)h₂+(2/3)h₃."
+      ],
+      "solution": [
+        {
+          "say": "The direct branch reaches 3 in one step; the other branch reaches 2 and then 3 in a second step.",
+          "math": "P(T₃≤2)=2/3+1/3=1"
+        },
+        {
+          "say": "For the mean time, use the boundary value and first-step equation.",
+          "math": "h₃=0, h₂=1, h₁=1+(1/3)(1)+(2/3)(0)=4/3"
+        }
+      ],
+      "answer": "The hitting probability within two steps is 1 and the expected hitting time from state 1 is 4/3 transitions."
     },
     {
       "kind": "trapcheck",
@@ -370,22 +410,26 @@
       "objective": "Avoid boundary, indexing and interpretation errors.",
       "items": [
         {
-          "q": "What is the boundary condition for expected hitting time?",
-          "a": "hⱼ=0."
+          "claim": "For an expected hitting time, the target boundary value is hⱼ=0.",
+          "tf": true,
+          "why": "Once the target is reached, no additional transitions are required."
         },
         {
-          "q": "What is the boundary condition for hitting probability?",
-          "a": "gⱼ=1."
+          "claim": "For the probability of ever hitting the target, the target boundary value is gⱼ=0.",
+          "tf": false,
+          "why": "At the target the event has occurred with certainty, so gⱼ=1."
         },
         {
-          "q": "Does a self-loop consume a transition?",
-          "a": "Yes. It contributes one step in an expected hitting-time equation."
+          "claim": "A self-loop consumes one transition and must be counted in an expected hitting-time equation.",
+          "tf": true,
+          "why": "The first-step equation includes one step before adding the expected continuation."
         }
       ],
       "ask": {
         "q": "What range check applies to a hitting probability?",
         "nudge": "It is a probability, so it cannot exceed one or be negative."
-      }
+      },
+      "intro": "Check whether each statement confuses the event of first reaching a target with ordinary occupancy, or mixes the boundary values for a probability and an expected time."
     },
     {
       "kind": "recall",
@@ -410,7 +454,8 @@
       "ask": {
         "q": "Which equation would you use if the question asks for a mean number of steps?",
         "nudge": "Use h, include the first step, and set the target value to zero."
-      }
+      },
+      "intro": "Retrieve the definition, boundary conditions and first-step equations from memory before attempting the mastery questions."
     },
     {
       "kind": "worked",
