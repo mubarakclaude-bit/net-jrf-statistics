@@ -53,7 +53,7 @@ check("null-space direction satisfies X'z=0", [dot(row,z) for row in Xt] == [F(0
 check("OLS weights orthogonal to null-space direction", dot(a,z) == 0)
 for t in [F(-2),F(-1),F(0),F(1),F(2)]:
     c = [ai+t*zi for ai,zi in zip(a,z)]
-    check("variance difference equals t^2 for t=%s" % t, dot(c,c)-dot(a,a) == t*t)
+    check("variance difference equals 3t^2 for t=%s" % t, dot(c,c)-dot(a,a) == 3*t*t)
 
 Xa = [[F(1),F(1),F(0)],[F(1),F(0),F(1)]]
 r1,r2 = Xa
