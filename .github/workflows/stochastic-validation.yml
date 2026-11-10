@@ -1,0 +1,54 @@
+name: Stochastic lesson validation
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [gpt/stochastic-t2-stationary-distribution]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-stochastic-lessons:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run exact-arithmetic lesson verifiers
+        run: |
+          python verify_stochastic_t2.py
+          python verify_stochastic_t3.py
+          python verify_stochastic_t4.py
+
+      - name: Run app lesson-structure validation
+        run: |
+          node vcheck.js seed/lesson_stochastic_t2.json
+          node vcheck.js seed/lesson_stochastic_t3.json
+          node vcheck.js seed/lesson_stochastic_t4.json
+
+      - name: Build app and check JavaScript syntax
+        run: bash build.sh
+
+      - name: Install browser-test dependency
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Run browser integration suite
+        run: |
+          node test.js
+          node clicktest.js
