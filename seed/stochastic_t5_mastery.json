@@ -171,7 +171,31 @@
       ],
       "answer": "C",
       "explanation": "A, B and D are true; E[T₁]=1/λ.",
-      "check": "A:true;B:true;C:false;D:true"
+      "check": "A:true;B:true;C:false;D:true",
+      "statements": [
+        "E[N(t)]=λt.",
+        "Var[N(t)]=λt.",
+        "E[T₁]=λ.",
+        "T₂ has a Gamma/Erlang distribution."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The mean of a Poisson count is its parameter λt."
+        },
+        "B": {
+          "tf": true,
+          "why": "The variance of a Poisson count equals its parameter λt."
+        },
+        "C": {
+          "tf": false,
+          "why": "The mean first waiting time is 1/λ, not λ."
+        },
+        "D": {
+          "tf": true,
+          "why": "The second arrival time is the sum of two iid exponential gaps."
+        }
+      }
     },
     {
       "id": "stochastic-t5-m-12",
@@ -218,7 +242,31 @@
       ],
       "answer": "C",
       "explanation": "A, B and D are true; mean is 1/λ.",
-      "check": "A:true;B:true;C:false;D:true"
+      "check": "A:true;B:true;C:false;D:true",
+      "statements": [
+        "Inter-arrival times are independent.",
+        "Inter-arrival times are identically distributed.",
+        "Each inter-arrival time has mean λ.",
+        "Each inter-arrival time has variance 1/λ²."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "A homogeneous Poisson process has independent increments, yielding independent gaps."
+        },
+        "B": {
+          "tf": true,
+          "why": "All gaps have the same Exp(λ) distribution."
+        },
+        "C": {
+          "tf": false,
+          "why": "The mean gap is 1/λ."
+        },
+        "D": {
+          "tf": true,
+          "why": "An Exp(λ) variable has variance 1/λ²."
+        }
+      }
     },
     {
       "id": "stochastic-t5-m-15",
@@ -280,7 +328,31 @@
       ],
       "answer": "D",
       "explanation": "Overlapping intervals share events and are generally dependent.",
-      "check": "A:true;B:true;C:true;D:false"
+      "check": "A:true;B:true;C:true;D:false",
+      "statements": [
+        "The process has stationary increments.",
+        "The process has independent increments.",
+        "The process has a constant rate.",
+        "Counts in overlapping intervals are independent."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The increment law depends only on interval length."
+        },
+        "B": {
+          "tf": true,
+          "why": "Counts over disjoint intervals are independent."
+        },
+        "C": {
+          "tf": true,
+          "why": "Homogeneity means the rate λ is constant over time."
+        },
+        "D": {
+          "tf": false,
+          "why": "Overlapping intervals share events, so their counts are generally dependent."
+        }
+      }
     },
     {
       "id": "stochastic-t5-m-19",
