@@ -1,0 +1,104 @@
+# Content guide: learn what exists, then tune it
+
+For Claude, ChatGPT or a person. Read this before changing any lesson, question bank or previous-year (PYQ) material. It
+answers three questions: *what content is there*, *where does each piece live*, and *how do I change it safely*.
+
+## 1. Learn what exists (five minutes)
+
+**Read the content map.** It is generated from the real files, so it never goes stale like a hand-written summary.
+
+- **No shell (GitHub only):** open `CONTENT_MAP.md` on the repository's **`content-map` branch**. It is rebuilt from
+  production after every merge.
+- **With a shell:** `npm run content -- map` writes the same file to `.cache/content-map/`. Or ask a narrower question:
+
+| Command | Answers |
+|---|---|
+| `npm run content -- gaps` | What to build or fix next, ranked: topics without a lesson (most marks first), June 2026 questions with no lesson or variant bank, lessons and pools to tighten |
+| `npm run content -- module <id>` | One module: its topics, which have a lesson, how many marks have none |
+| `npm run content -- topic <id>` | Everything about one topic and the path of every piece: catalog row, lesson, objectives, traps, prerequisites, pool, authoring and verification scripts, June questions it names |
+| `npm run content -- pyq <n>` | One June 2026 question: the key, what the candidate marked, which lessons and variant banks use it |
+| `npm run content -- search <text>` | A word or phrase in lesson titles, objectives and traps, and in question stems and explanations |
+
+Topic ids look like `regression-t5`; module ids like `regression`. `npm run content -- check` (run by `npm run check` and CI)
+fails when the files disagree with each other.
+
+**How reliable is it?** Marks, topics, lessons, pools and keys are read exactly. Two things are *read from prose* and are a
+guide, not a guarantee: a lesson is linked to a June question when its `provenance` text names it (`Anchor: Q38`), and a
+lesson is linked to its authoring and verification scripts by the file names they mention. "No script found" can mean the
+script exists under another naming.
+
+## 2. How the content fits together
+
+```
+seed/meta_syllabus.json   unit numbers  ──┐
+seed/catalog.json         modules and topics: extent, importance, expected marks
+        │  topic id (regression-t5)
+        ▼
+seed/lesson_<stem>.json   the lesson: scenes, objectives, traps, prerequisites, provenance
+        │  its quiz scene's setId
+        ▼
+seed/<topic>_mastery.json 20 questions that test the lesson
+seed/<module>_pyq_variants.json   variants of real June 2026 questions; each item's srcQ is the question number
+seed/pyq_j26_full.json    the real June 2026 Paper 2: key, and what the candidate marked
+seed/*_practice.json, inference_*_1.json   other practice sets
+```
+
+| Piece | Source of truth | Change it by |
+|---|---|---|
+| A lesson and its mastery pool | `lesson_<stem>.py` (generates both) | edit the script, then `./addlesson.sh`; see 3a |
+| A lesson that has **no** script | `seed/lesson_<stem>.json` itself | edit the JSON directly; see 3b |
+| A PYQ variant bank, a practice set | the JSON file | edit the JSON; `npm run check` validates it |
+| The June 2026 paper | `seed/pyq_j26_full.json` | almost never: keys and marks are facts |
+| Modules, topics, marks | `seed/catalog.json` | the owner only; it moves every projection in the app |
+| The numbers a lesson uses | `verify_<group>.py` | the lesson's author |
+
+The generated lesson index and the test harness are not files you edit; see `tools/seed-docs.js`.
+
+## 3. Tuning recipes
+
+**Rules that apply to every change**
+- **Keep ids stable.** Never rename or reuse a lesson id, scene id or question id: learners' progress and attempts are
+  stored against them. Add new ones instead.
+- **Numbers are computed, never recalled.** Change a number only together with the verification script that produces it.
+- A pool keeps 20 items, each letter A to D is the answer to at least 2 questions, and no explanation cites its own answer
+  as a wrong option. `tools/audit-lesson.py` checks all three and CI runs it.
+- Bump the lesson `version` when its content changes, and say what changed in `provenance`.
+- One concern per PR. A lesson PR is reviewed by the other assistant (`AGENTS.md`, Pull requests).
+
+**3a. Revise a lesson that has a script.** `npm run content -- topic <id>` shows the script. Edit the script, run
+`./addlesson.sh <script> <seed-stem> <topicId> <storeDocId> <masterySetStem>`, update `verify_*.py` if a number moved,
+`npm run check`. If you cannot run commands, commit the script **and** the regenerated seed files in one commit and read
+CI (`AGENTS.md`, "The GitHub-native flow").
+
+**3b. Revise a lesson that has no script.** Some older lessons (the map lists them under "Lessons and pools to tighten")
+were built before the script pipeline, or their script is not in the repository. Their seed JSON is the source: edit
+`seed/lesson_<stem>.json` and its pool directly, keeping every id. CI still runs the house-standard validator and the formula
+and answer audits on any lesson file you change. Do not regenerate such a lesson from scratch; that discards its history.
+
+**3c. Tune one question.** In a script-built lesson, change it in the script. In a variant bank or practice set, edit the
+item in the JSON and keep its `id`. Keep the fields the contract requires (`contracts/pool.schema.json`); a wrong key or a
+missing option fails `npm run check`.
+
+**3d. Extend previous-year material.**
+- *More variants of a June 2026 question:* add items to `seed/<module>_pyq_variants.json` with ids `j26v-qNN-MM` and
+  `srcQ: NN`. The map then shows the question as covered. Start from `npm run content -- gaps`: questions the candidate
+  answered wrongly and that no lesson names are worth the most.
+- *Anchor a lesson to a question:* name it in the lesson's `provenance` (`Anchor: Q38`); the map reads it from there.
+- *A second paper or another year:* **not supported yet.** The June 2026 paper is the single reference (`pyq_j26_full.json`)
+  and the map, the catalog weights and the app's progress projection all key on it. Adding a year means a small core change
+  to how the paper is identified. Propose it as a core change (`AGENTS.md`, section C) before adding files.
+
+**3e. Guides and revision notes.** Each lesson carries its own `howto`, `refs` and `revision` material; edit those with the
+lesson. `mod.md`, `sec13.md` and the other long notes in the repository root are study material written outside the app; the
+build does not read them.
+
+## 4. Reading order for a new assistant
+
+1. `AGENTS.md`: what you may do, and how a pull request is verified.
+2. The content map (above): what exists and what is missing.
+3. `SPEC.md`: the house standard for lessons and pools (read it before writing prose).
+4. `npm run content -- topic <id>` for the topic you will touch, then the lesson's script and its verification script.
+5. One finished lesson, only to match the prose style.
+
+Older notes (`handoff.md`, `BACKLOG.md` figures, `docs/app-build-state.md`) describe the project as it was and are not kept
+current; where they disagree with the map, the map is right.

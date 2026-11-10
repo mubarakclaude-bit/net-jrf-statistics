@@ -1,7 +1,11 @@
 # UGC NET Statistics (JRF) — study-content pipeline
 
-Authoring pipeline for a personalised UGC NET Statistics Paper 2 preparation app.
-The app itself is a Claude artifact; this repo holds everything that *builds* it.
+Authoring pipeline and source for a personalised UGC NET Statistics Paper 2 preparation app. This repository is the
+source of truth: the hosted site (Vercel) is built from it, and the Claude artifact is an optional generated copy.
+
+**Start with [`AGENTS.md`](AGENTS.md)** (what you may do and how a pull request is verified), then
+[`docs/CONTENT_GUIDE.md`](docs/CONTENT_GUIDE.md) (what content exists, where it lives, how to tune it). The live content map is
+on the `content-map` branch, or run `npm run content -- map`.
 
 **Read [`SPEC.md`](SPEC.md) before authoring anything.** It carries the house standard,
 the pool rules, the registered visualisation names and the store layout.
@@ -18,7 +22,8 @@ the pool rules, the registered visualisation names and the store layout.
 | `test.js`, `clicktest.js` | Headless suites. `test.js` first (it rebuilds the harness), then `clicktest.js`. |
 | `lesson_*.py` | One authoring script per lesson. `lessons/EXAMPLE.py` is the pattern to copy. |
 | `seed/` | Generated lesson JSON, question pools, the catalog, and the previous-year question banks. |
-| `docs/` | Build state, priority order, and lessons learned the hard way. |
+| `docs/` | `CONTENT_GUIDE.md` (learn and tune the content), independence and contract notes, and older build notes. |
+| `tools/content.js` | The content map: what lessons, pools and previous-year material exist, where they live, and what is missing. |
 
 ## Authoring a lesson
 

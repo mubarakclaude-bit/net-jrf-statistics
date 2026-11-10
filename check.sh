@@ -10,7 +10,12 @@
 #                                    fixture and reject every invalid one, every literal storage path in src/ is allowed,
 #                                    and every lesson and question-set seed conforms (known legacy deviations are listed in
 #                                    contracts/legacy-exceptions.json and reported on every run).
+# 3. tests/content.test.js           the content tool (tools/content.js) against a made-up content set with known answers
+#    tools/content.js check          the real seed files agree with each other (catalog, lessons, June 2026 paper, variant banks)
 set -e
 cd "$(dirname "$0")"
 node tools/gen-index.js --check
 node tools/validate-contracts.js
+out=$(node tests/content.test.js) || { echo "$out"; exit 1; }   # not a pipe: a pipe would hide a failure
+echo "$out" | tail -1
+node tools/content.js check

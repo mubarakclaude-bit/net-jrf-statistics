@@ -1,3 +1,6 @@
+> **Historical.** This describes the project when it was built as a Claude artifact. It is not kept current; the repository,
+> `AGENTS.md`, `docs/CONTENT_GUIDE.md` and the live content map (`npm run content -- map`) replace it.
+
 # NET JRF Statistics app — build state and authoring pattern
 
 Artifact: https://claude.ai/artifact/4Bms3mCU8e32yxNuFZy1Ft (page Version 26)

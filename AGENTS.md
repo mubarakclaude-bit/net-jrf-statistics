@@ -11,6 +11,12 @@ authoring surface.
 application feature, and it can finish that using only what is in this repository: no other assistant's session, files,
 instructions or availability. `docs/INDEPENDENCE.md` says exactly when that is true and what is not yet covered.
 
+## Learn the content first
+
+Before changing any lesson, question bank or previous-year material, read [`docs/CONTENT_GUIDE.md`](docs/CONTENT_GUIDE.md) and the
+live content map (`CONTENT_MAP.md` on the `content-map` branch, or `npm run content -- map`). They say what exists, where each
+piece lives, what is missing, and how to tune it. `npm run content -- topic <id>` shows everything about one topic.
+
 ## Start here: what were you asked to do?
 
 | Task | Go to | What proves it is acceptable |
@@ -30,6 +36,7 @@ Everything runs from a clean checkout. There is no other setup.
 npm ci                  # once. Installs the pinned validator and the browser test tool (Playwright).
 npx playwright install --with-deps chromium   # once, only if you will run the browser tests
 npm run check           # contracts + seed set: schemas, fixtures, storage paths, every lesson and pool
+npm run content -- gaps # what content exists and what to build next (also: map, module, topic, pyq, search, check)
 npm run build           # app.html and the hosted site (site/)
 npm test                # test.js, clicktest.js, hosted storage adapter, and every feature's own browser test
 npm run acceptance      # the independence test: six scenarios, in a scratch copy (about two minutes)
