@@ -49,4 +49,5 @@ assert Counter(x["format"] for x in items)=={"single":12,"numeric":5,"multi":3}
 assert Counter(x["answer"] for x in items)=={"A":5,"B":5,"C":5,"D":5}
 assert all(x["topic"]=="stochastic-t5" for x in items)
 assert all(x["answer"] in {"A","B","C","D"} for x in items)
+assert all(len(x.get("statements", []))==4 and set(x.get("verdicts",{}))=={"A","B","C","D"} for x in items if x["format"]=="multi")
 print("T5 Poisson, exponential, Erlang and mastery checks: PASS")
