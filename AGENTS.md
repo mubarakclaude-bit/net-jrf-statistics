@@ -125,8 +125,28 @@ extracted into a feature module, **one author at a time works on it**: say so in
   independence scenarios). Local success is useful but does not replace it: quote the CI run link in the PR.
 - **A different assistant or the owner reviews it.** Review must be reproducible from a clean checkout; do not rely on
   the other assistant's session or files.
+- **A lesson PR is reviewed by the OTHER assistant before the owner merges it.** Green CI proves the lesson is well-formed;
+  it cannot prove the content is right. The author never reviews its own lesson. The reviewer works from the PR alone and
+  posts the checklist below as a PR comment, saying plainly what it did and did not check.
 - **Do not merge or deploy** unless the owner told you to in this task. Merging to the production branch redeploys the
   Vercel site.
+
+### Lesson review checklist
+
+1. **Read the verification script, not just its output.** Does each number in the lesson come from a computation in
+   `verify_<group>.py`? Is the computation the right one for the claim (the right formula, the right denominator, the right
+   tail)? A script that prints PASS for the wrong check is the failure CI cannot see.
+2. **Recompute three numbers yourself** from scratch (two worked examples and one answer in the question pool). Do not copy
+   the script's method.
+3. **Check every module and topic cross-reference** against `seed/meta_syllabus.json` labels.
+4. **Compare with the previous-year questions** in `seed/*_pyq_variants.json` for the topic: does the lesson teach what the
+   exam actually asked, and does it avoid writing the candidate's marked answers into prose?
+5. **Scan the prose** for the SPEC.md rules: plain words and a concrete case before any symbol, every algebraic step shown,
+   no *clearly*, *obviously* or *recall that*, and no self-correction left in the text.
+6. **Question pool:** every item has one defensible answer, the wrong options are plausible, and the explanation does not
+   rule out its own answer.
+7. Post: "Reviewed by <assistant>: items 1-6 checked / not checked (list)", the numbers you recomputed, and either
+   "no blocking issue" or the specific problems. Blocking problems go back to the author as a comment on the PR.
 
 ## Who can do what
 
