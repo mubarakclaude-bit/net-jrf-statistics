@@ -42,20 +42,20 @@ function wire(ctx, el) {
   };
 
   guard(async () => {
-    const saved = await ctx.store.get("exam-date");
+    const saved = await ctx.store.get("exam_date");
     if (typeof saved === "string") dateInput.value = saved;
     updateResult(dateInput.value);
   })();
 
   dateInput.addEventListener("change", guard(async () => {
     const value = dateInput.value;
-    if (value) await ctx.store.set("exam-date", value);
-    else await ctx.store.remove("exam-date");
+    if (value) await ctx.store.set("exam_date", value);
+    else await ctx.store.remove("exam_date");
     updateResult(value);
   }));
 
   el.querySelector("#examCountdownClear").onclick = guard(async () => {
-    await ctx.store.remove("exam-date");
+    await ctx.store.remove("exam_date");
     dateInput.value = "";
     updateResult("");
   });
