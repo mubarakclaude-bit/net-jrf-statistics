@@ -96,7 +96,6 @@ function gaps(B) {
   B.june.filter(q => q.wrong && !q.lessons.length).forEach(q => { const r = out.june.find(x => x.n === q.n); if (!r) out.june.push({ n: q.n, wrong: true, format: q.format, stem: q.stem, note: "answered wrongly; has a variant bank but no lesson names it" }); });
   out.june.sort((a, b) => (b.wrong - a.wrong) || a.n - b.n);
   B.modules.forEach(m => m.topics.filter(t => t.lesson).forEach(t => {
-    if (!t.authoring) out.lessons.push({ id: t.id, issue: "no lesson_*.py names " + t.lesson.file + " (a script may exist under another naming; if not, edit the seed JSON directly)" });
     if (!t.verification.length) out.lessons.push({ id: t.id, issue: "no verification script mentions this topic" });
     if (t.pool) { const low = Object.entries(t.pool.keys).filter(([, v]) => v < 2).map(([k]) => k); if (low.length && t.pool.count >= 10) out.pools.push({ id: t.id, issue: "answer keys " + JSON.stringify(t.pool.keys) + ": " + low.join(",") + " are the answer to fewer than 2 questions" }); if (t.pool.count !== 20) out.pools.push({ id: t.id, issue: "pool has " + t.pool.count + " items, the standard is 20" }); }
     else out.pools.push({ id: t.id, issue: "the lesson's quiz points at a pool that does not exist" });
@@ -145,8 +144,8 @@ function mapMarkdown(B) {
   L.push("", "### Lessons and pools to tighten", "", g.lessons.length + g.pools.length ? g.lessons.concat(g.pools).map(x => "- `" + x.id + "`: " + x.issue).join("\n") : "None.");
   L.push("", "## Where things live", "",
     "| What | Where | Edit by |", "|---|---|---|",
-    "| A lesson | `seed/lesson_<stem>.json` | its authoring script `lesson_<stem>.py`, then `./addlesson.sh` (never hand-edit generated JSON unless the script is missing) |",
-    "| A lesson's mastery pool (20 questions) | `seed/<topic>_mastery.json` | the same authoring script |",
+    "| A lesson, once merged | `seed/lesson_<stem>.json` | edit the JSON directly (docs/CONTENT_GUIDE.md, 3a); a new lesson starts from `lessons/TEMPLATE.py` and `./addlesson.sh` |",
+    "| A lesson's mastery pool (20 questions) | `seed/<topic>_mastery.json` | the same: edit the JSON once merged |",
     "| Previous-year variant banks | `seed/<module>_pyq_variants.json` | edit the JSON; `npm run check` validates it |",
     "| The June 2026 paper, with keys and what was marked | `seed/pyq_j26_full.json` | rarely; keys are facts |",
     "| Modules, topics, marks, extent | `seed/catalog.json`; unit numbers in `seed/meta_syllabus.json` | the owner; changes move marks |",

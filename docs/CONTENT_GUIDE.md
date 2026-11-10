@@ -45,8 +45,8 @@ seed/*_practice.json, inference_*_1.json   other practice sets
 
 | Piece | Source of truth | Change it by |
 |---|---|---|
-| A lesson and its mastery pool | `lesson_<stem>.py` (generates both) | edit the script, then `./addlesson.sh`; see 3a |
-| A lesson that has **no** script | `seed/lesson_<stem>.json` itself | edit the JSON directly; see 3b |
+| A lesson and its mastery pool, **once merged** | the seed JSON: `seed/lesson_<stem>.json` and `seed/<topic>_mastery.json` | edit the JSON directly; see 3a |
+| A **new** lesson, before its first merge | `lesson_<stem>.py`, built from `lessons/TEMPLATE.py` | the script, then `./addlesson.sh`; see `AGENTS.md`, section A |
 | A PYQ variant bank, a practice set | the JSON file | edit the JSON; `npm run check` validates it |
 | The June 2026 paper | `seed/pyq_j26_full.json` | almost never: keys and marks are facts |
 | Modules, topics, marks | `seed/catalog.json` | the owner only; it moves every projection in the app |
@@ -65,18 +65,26 @@ The generated lesson index and the test harness are not files you edit; see `too
 - Bump the lesson `version` when its content changes, and say what changed in `provenance`.
 - One concern per PR. A lesson PR is reviewed by the other assistant (`AGENTS.md`, Pull requests).
 
-**3a. Revise a lesson that has a script.** `npm run content -- topic <id>` shows the script. Edit the script, run
-`./addlesson.sh <script> <seed-stem> <topicId> <storeDocId> <masterySetStem>`, update `verify_*.py` if a number moved,
-`npm run check`. If you cannot run commands, commit the script **and** the regenerated seed files in one commit and read
-CI (`AGENTS.md`, "The GitHub-native flow").
+**3a. Revise an existing lesson (the normal case).** Once a lesson is merged, its seed JSON is the source of truth. The
+generator script made the first draft; it is not kept in step with later edits, and some older lessons have none. So edit
+`seed/lesson_<stem>.json` (and its pool) directly, keeping every id, bump `version`, and say what changed in `provenance`.
+Then check it exactly as CI will:
 
-**3b. Revise a lesson that has no script.** Some older lessons (the map lists them under "Lessons and pools to tighten")
-were built before the script pipeline, or their script is not in the repository. Their seed JSON is the source: edit
-`seed/lesson_<stem>.json` and its pool directly, keeping every id. CI still runs the house-standard validator and the formula
-and answer audits on any lesson file you change. Do not regenerate such a lesson from scratch; that discards its history.
+```sh
+python -I tools/audit-lesson.py seed/lesson_<stem>.json   # formulas render, no answer cites itself, keys spread
+node vcheck.js seed/lesson_<stem>.json                    # the house-standard validator
+npm run check
+```
 
-**3c. Tune one question.** In a script-built lesson, change it in the script. In a variant bank or practice set, edit the
-item in the JSON and keep its `id`. Keep the fields the contract requires (`contracts/pool.schema.json`); a wrong key or a
+If you cannot run commands, commit the JSON and read CI (`AGENTS.md`, "The GitHub-native flow"); CI runs the same checks
+on every lesson file you change. Where you change a number, update the verification script that produces it, and where
+no script covers it, say so in the PR. Do not re-run the old generator: `./addlesson.sh` now refuses to, because it
+would overwrite the later edits. (If you updated the script on purpose, `REGENERATE=1 ./addlesson.sh ...` allows it.)
+
+**3b. A new lesson.** Start from `lessons/TEMPLATE.py`, with a verification script written first (`AGENTS.md`, section A).
+The script is the generator for the lesson's first version; from its first merge the JSON is the source of truth.
+
+**3c. Tune one question.** Edit the item in the pool JSON (a mastery pool, a variant bank or a practice set) and keep its `id`. Keep the fields the contract requires (`contracts/pool.schema.json`); a wrong key or a
 missing option fails `npm run check`.
 
 **3d. Extend previous-year material.**

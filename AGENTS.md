@@ -59,6 +59,10 @@ python verify_<group>.py                       # ONE verification script for the
 npm run check
 ```
 
+**Changing a lesson that is already merged:** edit its seed JSON directly (`docs/CONTENT_GUIDE.md`, 3a). From its first
+merge the JSON is the source of truth; `addlesson.sh` refuses to re-run an old generator over it unless you set
+`REGENERATE=1`. CI runs the same validators and audits on any lesson file you change.
+
 `addlesson.sh` generates the seed, runs both validators, renders every formula, audits the pool, and asserts the lesson
 is wired. It edits no shared file: the lesson index and the test harness are generated from `seed/`. A lesson exists
 because its seed exists.
