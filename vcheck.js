@@ -37,6 +37,23 @@ try {
 const path = process.argv[2] || "seed/lesson_t1.json";
 const L = JSON.parse(fs.readFileSync(path, "utf8"));
 let errs = [];
+
+// Regression lessons use the mastery policy at overview and quiz runtime.
+// Keep this data contract explicit so an absent object fails before browser integration.
+if (L.moduleId === "regression") {
+  const p = L.mastery;
+  if (!p || typeof p !== "object") errs.push("regression lesson has no top-level mastery policy");
+  else {
+    if (p.minQ !== 10) errs.push("regression mastery.minQ must be 10");
+    if (p.pass !== 80) errs.push("regression mastery.pass must be 80");
+    if (p.draw !== 10) errs.push("regression mastery.draw must be 10");
+    if (!p.fmtMin || p.fmtMin.numeric !== 70 || p.fmtMin.multi !== 70) errs.push("regression mastery.fmtMin must set numeric and multi to 70");
+    if (!p.diffMix || p.diffMix.easy !== 3 || p.diffMix.moderate !== 5 || p.diffMix.hard !== 2) errs.push("regression mastery.diffMix must be 3 easy / 5 moderate / 2 hard");
+    if (p.noHints !== true) errs.push("regression mastery.noHints must be true");
+    if (p.retestDays !== 7) errs.push("regression mastery.retestDays must be 7");
+    if (typeof p.note !== "string" || !p.note.trim()) errs.push("regression mastery.note is required");
+  }
+}
 L.scenes.forEach((s, i) => { errs = errs.concat(ctx.vScene(s, i) || []); });
 
 // house-standard checks the plan validator applies, run against the finished lesson
