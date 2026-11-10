@@ -1,0 +1,597 @@
+{
+  "id": "stochastict5",
+  "topicId": "stochastic-t5",
+  "moduleId": "stochastic",
+  "title": "Poisson Process: Counts, Inter-arrival Times and Waiting Times",
+  "breadcrumb": "Stochastic processes → Poisson process → Counts and waiting times",
+  "engine": "B",
+  "engineName": "Translate between event counts, inter-arrival times and waiting-time distributions using the rate λ.",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 100,
+  "objectives": [
+    "Recognise the defining assumptions and rate parameter of a homogeneous Poisson process.",
+    "Calculate event-count probabilities using N(t) ~ Poisson(λt).",
+    "Derive and use exponential inter-arrival and waiting-time distributions.",
+    "Find the distribution and moments of the time to the kth event.",
+    "Use independent and stationary increments and the exponential memoryless property without confusing counts with waiting times."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Poisson distribution",
+      "why": "The number of events in an interval of length t has a Poisson distribution with mean λt."
+    },
+    {
+      "id": "p2",
+      "name": "Exponential distribution",
+      "why": "The time between successive events has an exponential distribution with rate λ."
+    },
+    {
+      "id": "p3",
+      "name": "Integration and factorials",
+      "why": "Waiting-time probabilities and Poisson count probabilities require these calculations."
+    }
+  ],
+  "traps": [
+    "λ is a rate per unit time; λt is the expected count over an interval of length t.",
+    "Use the same time unit for λ and t.",
+    "P(N(t)=n) is a count probability; P(T₁>t) is a waiting-time survival probability.",
+    "The inter-arrival time is exponential with mean 1/λ, not λ.",
+    "The time to the kth event is Gamma/Erlang, not exponential when k>1.",
+    "Independent increments apply to disjoint intervals; stationary increments depend only on interval length.",
+    "At an arbitrary time, the residual waiting time is exponential by memorylessness; this is not a claim that all conditional waiting questions are identical."
+  ],
+  "howto": "Start by identifying whether the question asks for a count, the first waiting time, an inter-arrival time or the kth arrival time. Convert the rate to the stated time unit. Write the distribution before substituting numbers, then check units and whether the event is 'by t', 'after t' or 'exactly n'.",
+  "refs": [
+    {
+      "title": "Introduction to Probability Models",
+      "where": "Poisson processes and exponential interarrival times",
+      "site": "Sheldon M. Ross",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Standard treatment of homogeneous Poisson processes and arrival times."
+    },
+    {
+      "title": "Introduction to Stochastic Processes",
+      "where": "Poisson process; interarrival and waiting-time distributions",
+      "site": "Gregory F. Lawler",
+      "url": "https://www.math.uchicago.edu/~lawler/",
+      "type": "Free online textbook",
+      "free": true,
+      "checked": "2026-11-11",
+      "why": "Mathematical background for counting processes and exponential waiting times."
+    }
+  ],
+  "provenance": "Original teaching material aligned to the Poisson-process, inter-arrival and waiting-time items in UGC NET Statistics Unit IX. Practice questions are original and are not represented as official UGC NET PYQs.",
+  "revision": {
+    "sheet": [
+      "A homogeneous Poisson process has rate λ>0 and N(0)=0.",
+      "N(t)~Poisson(λt): P(N(t)=n)=e^(−λt)(λt)^n/n!.",
+      "E[N(t)]=Var[N(t)]=λt.",
+      "Counts on disjoint intervals are independent; increment distributions depend only on interval length.",
+      "Inter-arrival times X₁,X₂,… are iid Exp(λ).",
+      "P(X>t)=e^(−λt); F_X(t)=1−e^(−λt), t≥0.",
+      "E[X]=1/λ and Var(X)=1/λ².",
+      "Time T_k to the kth event has Gamma/Erlang(k, rate λ) distribution.",
+      "E[T_k]=k/λ and Var(T_k)=k/λ².",
+      "Use consistent time units and distinguish exactly n, at least n and no events."
+    ],
+    "cards": [
+      [
+        "Count in time t",
+        "N(t)~Poisson(λt)."
+      ],
+      [
+        "Rate",
+        "Expected number of events per unit time."
+      ],
+      [
+        "Inter-arrival time",
+        "Time between consecutive events; Exp(λ)."
+      ],
+      [
+        "First arrival",
+        "T₁=X₁~Exp(λ)."
+      ],
+      [
+        "kth arrival",
+        "T_k is Gamma/Erlang with shape k and rate λ."
+      ],
+      [
+        "Independent increments",
+        "Counts in disjoint time intervals are independent."
+      ],
+      [
+        "Stationary increments",
+        "A count over an interval depends on its length, not its location."
+      ],
+      [
+        "Memoryless property",
+        "P(X>s+t | X>s)=P(X>t)."
+      ]
+    ],
+    "tricks": [
+      "If the rate is r per hour and time is in minutes, use λ=r/60 per minute or convert minutes to hours.",
+      "'At least one event' is 1−P(N(t)=0)=1−e^(−λt).",
+      "'Wait more than t' is e^(−λt); 'arrive by t' is 1−e^(−λt).",
+      "For the kth event, use the Erlang survival/CDF or the equivalent Poisson-count identity."
+    ],
+    "shortcuts": [
+      "P(N(t)≥1)=1−e^(−λt).",
+      "P(T_k>t)=P(N(t)≤k−1).",
+      "Coefficient of variation of an exponential waiting time is 1."
+    ],
+    "remember": [
+      "Poisson counts and exponential gaps are two descriptions of the same homogeneous process.",
+      "Independent increments do not mean event counts at overlapping intervals are independent.",
+      "The sum of k iid Exp(λ) inter-arrival times is Gamma(k,λ)."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh rates, counts and exponentials",
+      "objective": "Rebuild the probability tools needed for the Poisson process.",
+      "body": [
+        "A rate describes an average number of events per unit time. If calls arrive at an average rate of 6 per hour, the expected number in 30 minutes is 6×(1/2)=3.",
+        "A Poisson random variable models a nonnegative integer count. An exponential random variable models a nonnegative waiting time. They are related, but they are not the same random variable.",
+        "For an exponential variable with rate λ, the survival probability is e^(−λt), the mean is 1/λ and the variance is 1/λ². The parameter is a rate, so its reciprocal has time units."
+      ],
+      "items": [
+        {
+          "ask": "If events occur at 8 per hour, what is the expected count in 15 minutes?",
+          "recall": "2 events.",
+          "refresh": [
+            "Convert 15 minutes to 1/4 hour.",
+            "Expected count is rate multiplied by duration: 8×1/4=2.",
+            "The expected count need not be an integer, although an observed count is an integer."
+          ]
+        },
+        {
+          "ask": "For X~Exp(λ), what is P(X>t)?",
+          "recall": "e^(−λt), for t≥0.",
+          "refresh": [
+            "The exponential CDF is F(t)=1−e^(−λt).",
+            "A survival probability is one minus the CDF, so P(X>t)=e^(−λt).",
+            "The exponent λt must be dimensionless: rate times time."
+          ]
+        },
+        {
+          "ask": "If X~Exp(λ), what is its mean?",
+          "recall": "1/λ.",
+          "refresh": [
+            "λ is the rate parameter, not the mean.",
+            "A larger rate means events arrive more frequently and the average waiting time becomes shorter.",
+            "The mean waiting time is 1/λ time units."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Which distribution describes a count, and which describes a waiting time?",
+        "nudge": "Think integer-valued versus continuous nonnegative."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Events arriving over time",
+      "objective": "Interpret a homogeneous Poisson process in a practical setting.",
+      "body": [
+        "Imagine a help desk receiving independent incoming calls at a stable average rate. The process records how many calls have arrived by time t.",
+        "A homogeneous Poisson process assumes a constant rate over time and independent counts in disjoint time intervals. Its count distribution depends on the interval length.",
+        "The model does not say that calls arrive at perfectly regular intervals. Short gaps and long gaps both occur; the exponential distribution describes the gaps."
+      ],
+      "scenario": {
+        "teaser": "A support desk receives calls",
+        "title": "Calls during a shift",
+        "body": [
+          "A support desk receives calls at an average rate of 4 per hour. The model treats arrivals as a homogeneous Poisson process: the rate is stable during the period considered, and arrivals in disjoint intervals are independent.",
+          "The supervisor asks two different questions. First: how many calls arrive in the next half-hour? This is a count question. Second: how long until the next call? This is a waiting-time question. Both use λ=4 per hour, but their probability distributions are different.",
+          "Over half an hour the Poisson mean is λt=2. The time to the next call is exponential with rate 4 per hour and mean 1/4 hour, or 15 minutes."
+        ],
+        "q": "What is the expected number of calls in 30 minutes, and what is the mean wait for the next call?",
+        "answer": "Expected count = 4×0.5=2 calls. Mean wait = 1/4 hour = 15 minutes."
+      },
+      "ask": {
+        "q": "Why do the count and waiting-time questions use different distributions?",
+        "nudge": "One is integer-valued; the other is measured on a continuous time scale."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 9,
+      "title": "Definition and assumptions",
+      "objective": "State the homogeneous Poisson process properties.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Counting process",
+          "body": "N(t) is the number of events in (0,t], with N(0)=0 and nondecreasing integer-valued paths."
+        },
+        {
+          "t": "formula",
+          "h": "Poisson count law",
+          "body": "P{N(t)=n}=e^(−λt)(λt)^n/n!, n=0,1,2,…; λ>0."
+        },
+        {
+          "t": "step",
+          "h": "Increment properties",
+          "body": "Counts in disjoint intervals are independent, and the distribution of an increment depends only on the interval length (stationary increments)."
+        }
+      ],
+      "flow": {
+        "title": "Choose the correct model",
+        "alt": "Identify count or waiting time, set the rate and time units, then use the matching distribution.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "What is being asked?",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 0,
+            "label": "Number of events",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 1,
+            "c": 2,
+            "label": "Waiting time",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 2,
+            "c": 0,
+            "label": "Poisson(λt)",
+            "kind": "end"
+          },
+          {
+            "id": "e",
+            "r": 2,
+            "c": 2,
+            "label": "Exponential / Gamma",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "a",
+            "to": "c"
+          },
+          {
+            "from": "b",
+            "to": "d"
+          },
+          {
+            "from": "c",
+            "to": "e"
+          }
+        ]
+      },
+      "ask": {
+        "q": "What two properties distinguish increments of a homogeneous Poisson process?",
+        "nudge": "Consider disjoint intervals and shifting an interval without changing its length."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 9,
+      "title": "Worked example: probability of an exact count",
+      "objective": "Calculate an event-count probability.",
+      "problem": "Calls arrive at rate 3 per hour. Find the probability of exactly 2 calls in the next hour.",
+      "steps": [
+        {
+          "say": "Identify the rate and duration.",
+          "math": "λ=3 per hour; t=1 hour",
+          "why": "The Poisson parameter is λt=3."
+        },
+        {
+          "say": "Write the count distribution.",
+          "math": "N(1)~Poisson(3)",
+          "why": "The count in one hour has mean 3."
+        },
+        {
+          "say": "Substitute n=2.",
+          "math": "P(N(1)=2)=e^(−3)3²/2!",
+          "why": "Use the Poisson probability mass function."
+        },
+        {
+          "say": "Simplify.",
+          "math": "P(N(1)=2)=4.5e^(−3)≈0.2240",
+          "why": "The probability is about 22.4%."
+        }
+      ],
+      "ask": {
+        "q": "What changes if the question asks for no calls?",
+        "nudge": "Set n=0 in the same Poisson formula."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s4",
+      "mins": 8,
+      "title": "Mean, variance and increments",
+      "objective": "Use the moments and interval properties of Poisson counts.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Count moments",
+          "body": "E[N(t)]=λt and Var[N(t)]=λt."
+        },
+        {
+          "t": "def",
+          "h": "Stationary increments",
+          "body": "For 0≤s<t, N(t)−N(s)~Poisson(λ(t−s))."
+        },
+        {
+          "t": "step",
+          "h": "Independent increments",
+          "body": "For disjoint intervals, the corresponding event counts are independent random variables."
+        }
+      ],
+      "ask": {
+        "q": "If λ=5 per minute, what are the mean and variance of the count in 2 minutes?",
+        "nudge": "Both equal λt."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s5",
+      "mins": 9,
+      "title": "Worked example: at least one event",
+      "objective": "Use the complement rule for a Poisson count.",
+      "problem": "A machine fails according to a Poisson process at rate 0.2 per day. Find the probability of at least one failure in 3 days.",
+      "steps": [
+        {
+          "say": "Find the Poisson mean.",
+          "math": "λt=0.2×3=0.6",
+          "why": "The count over three days is Poisson with parameter 0.6."
+        },
+        {
+          "say": "Use the complement.",
+          "math": "P(N(3)≥1)=1−P(N(3)=0)",
+          "why": "It is easier to calculate zero failures."
+        },
+        {
+          "say": "Evaluate the zero-count probability.",
+          "math": "P(N(3)=0)=e^(−0.6)",
+          "why": "The n=0 term of the Poisson law is e^(−λt)."
+        },
+        {
+          "say": "Complete the result.",
+          "math": "1−e^(−0.6)≈0.4512",
+          "why": "The probability of at least one failure is about 0.4512."
+        }
+      ],
+      "ask": {
+        "q": "What is the probability of no failures in the three days?",
+        "nudge": "It is e^(−0.6)."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 9,
+      "title": "Inter-arrival times are exponential",
+      "objective": "Derive the distribution of the time to the first event.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "First arrival time",
+          "body": "T₁ is the time from time zero to the first event."
+        },
+        {
+          "t": "formula",
+          "h": "Survival and CDF",
+          "body": "P(T₁>t)=P(N(t)=0)=e^(−λt); F_T₁(t)=1−e^(−λt), t≥0."
+        },
+        {
+          "t": "step",
+          "h": "Moments",
+          "body": "T₁~Exp(λ), E[T₁]=1/λ and Var(T₁)=1/λ²."
+        }
+      ],
+      "ask": {
+        "q": "Why is the first waiting time exponential?",
+        "nudge": "The event T₁>t means that no event has occurred by time t."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s7",
+      "mins": 9,
+      "title": "Guided problem: a waiting-time probability",
+      "objective": "Calculate an exponential waiting-time probability with diminishing hints.",
+      "problem": "Events arrive at rate 6 per hour. Find the probability that the wait for the next event exceeds 10 minutes.",
+      "hints": [
+        "Convert 10 minutes to hours, or convert the rate to events per minute.",
+        "Use P(T₁>t)=e^(−λt), not the Poisson formula for an exact count.",
+        "Here λt=6×(1/6)=1."
+      ],
+      "answer": "P(T₁>10 minutes)=e^(−1)≈0.3679.",
+      "solution": [
+        "Ten minutes is 1/6 hour.",
+        "The first waiting time is Exp(6) when time is measured in hours.",
+        "P(T₁>1/6)=e^(−6/6)=e^(−1)≈0.3679."
+      ],
+      "scenario": {
+        "teaser": "A bus-arrival gap",
+        "title": "Waiting for the next bus",
+        "body": [
+          "Suppose arrivals at a stop are modelled by a homogeneous Poisson process with rate 6 buses per hour. The waiting time from the observation start to the next arrival has an exponential distribution with rate 6 per hour.",
+          "Ten minutes is one-sixth of an hour. The chance of waiting longer than ten minutes is the survival probability e^(−6×1/6), approximately 0.3679.",
+          "This probability is not the probability of exactly one bus in ten minutes. That latter question would use the Poisson count distribution."
+        ],
+        "q": "What probability would you use for a wait longer than ten minutes?",
+        "answer": "Use the exponential survival probability e^(−λt)=e^(−1), approximately 0.3679."
+      },
+      "ask": {
+        "q": "What is the most common unit mistake in this problem?",
+        "nudge": "The rate is per hour, so express t in hours."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s8",
+      "mins": 9,
+      "title": "The kth arrival: Gamma and Erlang",
+      "objective": "Relate successive exponential gaps to the time of the kth event.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Inter-arrival sequence",
+          "body": "Let X₁,X₂,… be the times between consecutive events. In a homogeneous Poisson process they are iid Exp(λ)."
+        },
+        {
+          "t": "formula",
+          "h": "Time to kth event",
+          "body": "T_k=X₁+⋯+X_k~Gamma(shape k, rate λ), also called Erlang when k is a positive integer."
+        },
+        {
+          "t": "formula",
+          "h": "Moments",
+          "body": "E[T_k]=k/λ and Var(T_k)=k/λ²."
+        },
+        {
+          "t": "step",
+          "h": "Count identity",
+          "body": "P(T_k>t)=P(N(t)≤k−1). The kth event has not occurred by t exactly when at most k−1 events have occurred."
+        }
+      ],
+      "ask": {
+        "q": "What distribution describes the time to the third event?",
+        "nudge": "It is the sum of three independent exponential inter-arrival times."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s9",
+      "mins": 9,
+      "title": "Worked example: time to the second event",
+      "objective": "Calculate a kth-arrival probability using a Poisson count identity.",
+      "problem": "Events occur at rate 2 per hour. Find the probability that the second event occurs after 1 hour.",
+      "steps": [
+        {
+          "say": "Translate the event.",
+          "math": "P(T₂>1)=P(N(1)≤1)",
+          "why": "The second event has not occurred by one hour if there are zero or one events."
+        },
+        {
+          "say": "Find the Poisson parameter.",
+          "math": "λt=2×1=2",
+          "why": "The count in one hour is Poisson(2)."
+        },
+        {
+          "say": "Add the zero- and one-count probabilities.",
+          "math": "P(T₂>1)=e^(−2)(1+2)",
+          "why": "Use the Poisson probabilities for n=0 and n=1."
+        },
+        {
+          "say": "Evaluate.",
+          "math": "P(T₂>1)=3e^(−2)≈0.4060",
+          "why": "This is the survival probability of the second arrival time."
+        }
+      ],
+      "ask": {
+        "q": "What is E[T₂] for this process?",
+        "nudge": "Use k/λ."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s10",
+      "mins": 7,
+      "title": "Trap check: count or waiting time?",
+      "objective": "Separate similar-looking Poisson and exponential statements.",
+      "intro": "Mark each claim true or false, then compare the reason.",
+      "items": [
+        {
+          "claim": "The number of events in time t has a Poisson distribution with mean λt.",
+          "tf": true,
+          "why": "This is the defining count law of a homogeneous Poisson process."
+        },
+        {
+          "claim": "The mean inter-arrival time is λ.",
+          "tf": false,
+          "why": "The mean is 1/λ; λ is the event rate."
+        },
+        {
+          "claim": "The time to the third event is exponential with rate λ.",
+          "tf": false,
+          "why": "It is the sum of three iid exponential gaps, hence Gamma/Erlang."
+        },
+        {
+          "claim": "Counts in two disjoint intervals are independent.",
+          "tf": true,
+          "why": "This is the independent-increments property."
+        },
+        {
+          "claim": "P(T₁>t)=P(N(t)=0).",
+          "tf": true,
+          "why": "Waiting longer than t is equivalent to observing no event by t."
+        }
+      ],
+      "ask": {
+        "q": "Which phrase should immediately make you think of a Gamma/Erlang distribution?",
+        "nudge": "It asks for the time to a specified later event, not the first."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s11",
+      "mins": 5,
+      "title": "Rapid recall and exam checklist",
+      "objective": "Retrieve the core formulas and choose the right distribution quickly.",
+      "intro": "Answer before revealing each formula.",
+      "items": [
+        {
+          "q": "What is the distribution of N(t)?",
+          "a": "Poisson(λt)."
+        },
+        {
+          "q": "What is the distribution of one inter-arrival time?",
+          "a": "Exponential with rate λ."
+        },
+        {
+          "q": "What is the mean inter-arrival time?",
+          "a": "1/λ."
+        },
+        {
+          "q": "What is the distribution of T_k?",
+          "a": "Gamma/Erlang with shape k and rate λ."
+        },
+        {
+          "q": "How can P(T_k>t) be written using N(t)?",
+          "a": "P(N(t)≤k−1)."
+        }
+      ],
+      "ask": {
+        "q": "Before submitting a numerical answer, what three checks should you make?",
+        "nudge": "Distribution, units and event wording."
+      }
+    }
+  ],
+  "mastery": {
+    "ref": "stochastic_t5_mastery",
+    "count": 20,
+    "label": "Poisson process — mastery test (unseen)"
+  }
+}
