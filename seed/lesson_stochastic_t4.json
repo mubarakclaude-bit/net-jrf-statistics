@@ -1,0 +1,475 @@
+{
+  "id": "stochastict4",
+  "topicId": "stochastic-t4",
+  "moduleId": "stochastic",
+  "title": "Classification of States: Communication, Recurrence and Periodicity",
+  "breadcrumb": "Stochastic processes → Markov chains → Classification of States: Communication, Recurrence and Periodicity",
+  "engine": "B",
+  "engineName": "Use state diagrams, first-step equations and exact checks to solve Markov-chain problems.",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 82,
+  "objectives": [
+    "Define the relevant Markov-chain quantity and interpret it correctly.",
+    "Set up equations using the transition matrix and the correct boundary conditions.",
+    "Solve finite-state examples exactly and verify the result.",
+    "Recognise assumptions, limiting cases and common UGC NET examination traps."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Markov property",
+      "why": "The conditional future depends on the present state."
+    },
+    {
+      "id": "p2",
+      "name": "Transition matrices",
+      "why": "Rows encode one-step transition probabilities."
+    },
+    {
+      "id": "p3",
+      "name": "Linear equations and gcd",
+      "why": "First-step equations and period calculations use these tools."
+    }
+  ],
+  "traps": [
+    "Do not confuse first passage with occupancy at a fixed time.",
+    "Do not forget that the target has zero remaining hitting time.",
+    "A hitting probability must lie in [0,1]; a mean time need not be an integer.",
+    "Communication is mutual reachability; a one-way path is insufficient.",
+    "A closed class has no outgoing transition.",
+    "Period is a gcd, not the smallest return time."
+  ],
+  "howto": "Draw the transition graph first. Mark the target or communicating class, write the relevant definition, and then calculate. Try each scene's question before opening its explanation. Finish by checking the result against the original transition structure.",
+  "refs": [
+    {
+      "title": "Introduction to Probability Models",
+      "where": "Markov chains and hitting times",
+      "site": "Sheldon M. Ross",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "First-step equations, hitting probabilities and expected hitting times."
+    },
+    {
+      "title": "Markov Chains",
+      "where": "Finite-state chains, recurrence and periodicity",
+      "site": "J. R. Norris",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Formal definitions of communication, recurrence, transience and period."
+    },
+    {
+      "title": "Introduction to Stochastic Processes",
+      "where": "Discrete-time Markov chains",
+      "site": "Gregory F. Lawler",
+      "url": "https://www.math.uchicago.edu/~lawler/",
+      "type": "Free online textbook",
+      "free": true,
+      "checked": "2026-11-11",
+      "why": "Mathematical background for finite-state Markov chains."
+    }
+  ],
+  "provenance": "Original teaching material aligned to stochastic-t4 in the repository syllabus. Examples and mastery items are original practice questions, not represented as official UGC NET PYQs. Exact arithmetic and graph properties are checked by the accompanying verifier.",
+  "revision": {
+    "sheet": [
+      "Communication is mutual reachability.",
+      "Communicating classes partition the state space.",
+      "A class is closed when no transition leaves it.",
+      "Finite closed communicating classes are recurrent.",
+      "States outside closed classes are transient in a finite chain.",
+      "Absorbing states have period one.",
+      "Period is the gcd of positive possible return times.",
+      "Communicating states share their period."
+    ],
+    "cards": [
+      [
+        "Define the event",
+        "Specify the target state and stopping rule."
+      ],
+      [
+        "First-step analysis",
+        "Condition on the state after one transition."
+      ],
+      [
+        "Boundary condition",
+        "Remaining hitting time at the target is zero."
+      ],
+      [
+        "Communication",
+        "Each state must be reachable from the other."
+      ],
+      [
+        "Closed class",
+        "No transition leaves the class."
+      ],
+      [
+        "Period",
+        "GCD of possible positive return times."
+      ]
+    ],
+    "tricks": [
+      "Draw arrows before classifying states.",
+      "For a hitting-time equation, count the first step explicitly.",
+      "Use gcd for periodicity; do not use the minimum return time."
+    ],
+    "shortcuts": [
+      "A self-loop makes the period one.",
+      "An absorbing state is a closed singleton class.",
+      "In a finite chain, closed communicating classes are recurrent."
+    ],
+    "remember": [
+      "First-passage probability and expected first-passage time are different quantities.",
+      "Recurrence and aperiodicity are separate properties."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Read the transition graph",
+      "objective": "Refresh directed paths and transition probabilities.",
+      "body": [
+        "A transition matrix can be viewed as a directed graph: draw i→j whenever pᵢⱼ>0.",
+        "State classification depends on which states can reach one another, whether a group can be left, and the possible return times."
+      ],
+      "items": [
+        {
+          "ask": "What does a directed path from i to j mean?",
+          "recall": "There is a positive-probability route from i to j in some finite number of steps.",
+          "refresh": [
+            "A path may use several transitions.",
+            "Every edge on the path must have positive probability.",
+            "A direct one-step transition is not required."
+          ]
+        },
+        {
+          "ask": "What does mutual reachability mean?",
+          "recall": "i can reach j and j can reach i.",
+          "refresh": [
+            "Both directions are required.",
+            "One-way reachability is not communication.",
+            "This relation forms communicating classes."
+          ]
+        },
+        {
+          "ask": "What is the period based on?",
+          "recall": "The gcd of all positive possible return times.",
+          "refresh": [
+            "List n≥1 for which pᵢᵢ⁽ⁿ⁾>0.",
+            "Take their greatest common divisor.",
+            "Do not take the minimum return time."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What information do you need to classify states?",
+        "nudge": "Reachability, exits from classes and return-time possibilities."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "A network of communicating states",
+      "objective": "Understand communication as mutual reachability.",
+      "body": [
+        "In a directed network, two locations communicate if each can eventually reach the other. A one-way route does not establish communication.",
+        "A communicating class is closed if no transition from a state in the class leads outside it."
+      ],
+      "scenario": {
+        "teaser": "A one-way exit changes the class",
+        "title": "A network with an absorbing destination",
+        "body": [
+          "States 1 and 2 reach one another. State 2 can also move to state 3, while state 3 is absorbing. State 3 cannot return to either 1 or 2. Therefore {1,2} is a communicating class but is not closed; {3} is closed."
+        ],
+        "q": "Which class is closed?",
+        "answer": "The singleton class {3}, because no transition leaves state 3."
+      },
+      "ask": {
+        "q": "Why do states 1 and 2 not communicate with state 3?",
+        "nudge": "Can state 3 reach either of them?"
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "Definitions: classes, recurrence and period",
+      "objective": "State the formal classification definitions.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Communication",
+          "body": "i↔j if i is reachable from j and j is reachable from i."
+        },
+        {
+          "t": "formula",
+          "h": "Period",
+          "body": "d(i)=gcd{n≥1:pᵢᵢ⁽ⁿ⁾>0}."
+        },
+        {
+          "t": "step",
+          "h": "Finite-chain theorem",
+          "body": "Every finite closed communicating class is recurrent. In a finite chain, states outside the closed classes are transient. All states in a communicating class share the same period."
+        }
+      ],
+      "flow": {
+        "title": "Classification workflow",
+        "alt": "Find reachability classes, test closure, classify recurrence and compute period.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Find mutual reachability",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Form communicating classes",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Check which classes are closed",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Classify and compute period",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          }
+        ]
+      },
+      "ask": {
+        "q": "What makes a communicating class closed?",
+        "nudge": "Check every possible transition out of every state in the class."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 9,
+      "title": "Worked example: one transient class and one closed class",
+      "objective": "Classify states from a transition matrix.",
+      "problem": "For P=[[0,1,0],[1/2,0,1/2],[0,0,1]], identify communicating classes and classify the states.",
+      "steps": [
+        {
+          "say": "States 1 and 2 reach each other.",
+          "math": "1↔2",
+          "why": "They form the class {1,2}."
+        },
+        {
+          "say": "State 2 can leave for state 3.",
+          "math": "{1,2} is not closed",
+          "why": "A positive-probability transition leaves the class."
+        },
+        {
+          "say": "State 3 is absorbing.",
+          "math": "{3} is closed",
+          "why": "No transition leaves state 3."
+        },
+        {
+          "say": "Use the finite-chain classification.",
+          "math": "1,2 transient; 3 recurrent",
+          "why": "The only closed class is {3}."
+        }
+      ],
+      "ask": {
+        "q": "Which states are transient?"
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s4",
+      "mins": 8,
+      "title": "Guided example: an alternating chain",
+      "objective": "Compute the period from return times.",
+      "problem": "A two-state chain has P=[[0,1],[1,0]]. Classify its communicating class and period.",
+      "steps": [
+        {
+          "say": "Each state reaches the other and returns.",
+          "math": "{1,2} is one communicating class",
+          "why": "Mutual reachability holds."
+        },
+        {
+          "say": "No transition leaves the pair.",
+          "math": "{1,2} is closed",
+          "why": "Both states remain in the class."
+        },
+        {
+          "say": "State 1 returns only at even times.",
+          "math": "{2,4,6,…}; gcd=2",
+          "why": "The period is the gcd of positive return times."
+        },
+        {
+          "say": "The same holds for state 2.",
+          "math": "d(1)=d(2)=2",
+          "why": "Communicating states share their period."
+        }
+      ],
+      "ask": {
+        "q": "Is this class recurrent even though it is periodic?"
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s5",
+      "mins": 8,
+      "title": "Guided example: multiple closed classes",
+      "objective": "Recognise transient states and multiple recurrent classes.",
+      "problem": "A finite chain has two disjoint closed communicating classes C₁ and C₂. A state outside them can enter either class but cannot be reached from either. Classify the outside state and the two classes.",
+      "steps": [
+        {
+          "say": "The outside state can leave but cannot be revisited after entering a closed class.",
+          "math": "Outside state is transient",
+          "why": "It lies outside every closed communicating class."
+        },
+        {
+          "say": "Each closed class is recurrent in a finite chain.",
+          "math": "C₁ and C₂ are recurrent classes",
+          "why": "Finite closed communicating classes are recurrent."
+        },
+        {
+          "say": "There is no single forced stationary distribution across the two closed classes.",
+          "math": "Multiple stationary distributions can exist",
+          "why": "Stationary mass can be distributed between closed classes."
+        }
+      ],
+      "ask": {
+        "q": "Why is the outside state transient?"
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s6",
+      "mins": 6,
+      "title": "Common classification traps",
+      "objective": "Avoid one-way communication and period mistakes.",
+      "items": [
+        {
+          "q": "If i can reach j but j cannot reach i, do they communicate?",
+          "a": "No. Communication requires mutual reachability."
+        },
+        {
+          "q": "Is every communicating class closed?",
+          "a": "No. A class may have transitions leaving it."
+        },
+        {
+          "q": "Does period two imply transience?",
+          "a": "No. A recurrent class can be periodic."
+        }
+      ],
+      "ask": {
+        "q": "What quick test identifies an absorbing state's period?",
+        "nudge": "It returns at every positive integer time."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s7",
+      "mins": 5,
+      "title": "Recall the classification rules",
+      "objective": "Recall the key definitions.",
+      "items": [
+        {
+          "q": "Define a closed communicating class.",
+          "a": "A communicating class with no transition leaving it."
+        },
+        {
+          "q": "What is the period of a state?",
+          "a": "The gcd of positive n for which pᵢᵢ⁽ⁿ⁾>0."
+        },
+        {
+          "q": "What is true of finite closed communicating classes?",
+          "a": "They are recurrent."
+        }
+      ],
+      "ask": {
+        "q": "What is shared by states in one communicating class?",
+        "nudge": "Their period."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 8,
+      "title": "Worked example: return-time gcd",
+      "objective": "Calculate a period from a nonconsecutive set of return times.",
+      "problem": "A state can return to itself at times 6, 10 and 14, and at no other positive times. Find its period.",
+      "steps": [
+        {
+          "say": "List the possible return times.",
+          "math": "{6,10,14}",
+          "why": "Only positive return times are used."
+        },
+        {
+          "say": "Take their greatest common divisor.",
+          "math": "gcd(6,10,14)=2",
+          "why": "The common divisors are 1 and 2; the greatest is 2."
+        },
+        {
+          "say": "State the classification implication.",
+          "math": "d(i)=2",
+          "why": "The state is periodic with period two; this alone does not determine recurrence."
+        }
+      ],
+      "ask": {
+        "q": "Why is the period not six?"
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s9",
+      "mins": 6,
+      "title": "Exam summary",
+      "objective": "Consolidate communication, closure, recurrence and period.",
+      "body": [
+        "Communication is mutual reachability and partitions the state space into classes.",
+        "A class is closed when no transition leaves it. In a finite chain, closed communicating classes are recurrent; states outside them are transient.",
+        "Period is gcd{n≥1:pᵢᵢ⁽ⁿ⁾>0}. An absorbing state has period one; an alternating two-state chain has period two."
+      ],
+      "ask": {
+        "q": "What is the correct order for classifying a finite chain?",
+        "nudge": "Find classes, test closure, then classify recurrence and period."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s10",
+      "mins": 10,
+      "title": "Mastery practice",
+      "objective": "Test independent state-classification skills.",
+      "setId": "stochastic_t4_mastery",
+      "ask": {
+        "q": "Ready for the unseen mastery set?",
+        "nudge": "Draw the graph before answering."
+      }
+    }
+  ]
+}
