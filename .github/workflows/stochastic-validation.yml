@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main, gpt/stochastic-t2-stationary-distribution]
   push:
-    branches: [gpt/stochastic-t2-stationary-distribution, gpt/stochastic-t5-poisson-process, gpt/stochastic-t6-random-walk-gamblers-ruin]
+    branches: [gpt/stochastic-t2-stationary-distribution, gpt/stochastic-t5-poisson-process, gpt/stochastic-t6-random-walk-gamblers-ruin, gpt/stochastic-t7-birth-death-mm1]
   workflow_dispatch:
 
 permissions:
@@ -35,6 +35,7 @@ jobs:
           python verify_stochastic_t4.py
           python verify_stochastic_t5.py
           python verify_stochastic_t6.py
+          python verify_stochastic_t7.py
 
       - name: Run app lesson-structure validation
         run: |
@@ -43,6 +44,7 @@ jobs:
           node vcheck.js seed/lesson_stochastic_t4.json
           node vcheck.js seed/lesson_stochastic_t5.json
           node vcheck.js seed/lesson_stochastic_t6.json
+          node vcheck.js seed/lesson_stochastic_t7.json
 
       - name: Build app and check JavaScript syntax
         run: bash build.sh
