@@ -19,3 +19,5 @@ node tools/validate-contracts.js
 out=$(node tests/content.test.js) || { echo "$out"; exit 1; }   # not a pipe: a pipe would hide a failure
 echo "$out" | tail -1
 node tools/content.js check
+out=$(node tests/check-ids.test.js) || { echo "$out"; exit 1; }   # the id-stability tool, in a throwaway git repo
+echo "$out" | tail -1
