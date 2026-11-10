@@ -115,8 +115,7 @@ jobs:
             if echo "$out" | grep -q "FAILURES"; then echo "::warning file=$f::$(echo "$out" | grep -A3 FAILURES | tr '\n' ' ')"; fi
           done
 
-  browser:
-    needs: validate
+  browser:   # runs in parallel with validate and acceptance: all three are required checks, so none is skipped
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -135,8 +134,19 @@ jobs:
         run: npm run build
       - name: test.js (the app against the storage-path contract, in strict mode)
         run: node test.js
-      - name: clicktest.js (every lesson starts and advances)
-        run: node clicktest.js
+      - name: clicktest.js (every lesson starts and advances; 4 shards at once, each its own browser)
+        run: |
+          pids=""
+          for i in 1 2 3 4; do
+            CLICKTEST_SHARD="$i/4" node clicktest.js > ".cache/click-$i.log" 2>&1 &
+            pids="$pids $!"
+          done
+          fail=0
+          for p in $pids; do wait "$p" || fail=1; done
+          for i in 1 2 3 4; do echo "::group::shard $i"; tail -n 8 ".cache/click-$i.log"; echo "::endgroup::"; done
+          if [ "$fail" -ne 0 ]; then
+            echo "::error::a clicktest shard failed"; grep -h "FAIL\|PAGEERROR\|CONSOLE" .cache/click-*.log | head -20; exit 1
+          fi
       - name: Hosted storage adapter conformance
         run: node tests/hosted-shim.test.js
       - name: Every feature's own browser test
@@ -145,7 +155,6 @@ jobs:
   acceptance:
     # The owner's requirement as a command. It runs browser tests (scenarios 3 and 4 run the features' own tests),
     # so it needs the browser installed as well.
-    needs: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
