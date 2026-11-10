@@ -1,0 +1,414 @@
+{
+  "id": "stochastict9",
+  "topicId": "stochastic-t9",
+  "moduleId": "stochastic",
+  "title": "Renewal Processes and Long-Run Reward",
+  "breadcrumb": "Stochastic processes → Renewal processes",
+  "engine": "B",
+  "engineName": "Track repeated renewals using inter-arrival times, renewal counts and long-run averages.",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 95,
+  "objectives": [
+    "Define a renewal process from iid positive inter-renewal times.",
+    "Construct renewal epochs and the counting process N(t).",
+    "Distinguish inter-arrival time, renewal count and renewal function.",
+    "Use the renewal equation and elementary renewal theorem in elementary cases.",
+    "Apply the renewal-reward theorem."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "IID random variables",
+      "why": "Successive gaps are iid in the ordinary renewal model."
+    },
+    {
+      "id": "p2",
+      "name": "Expectation and distribution functions",
+      "why": "Renewal counts and long-run rates use expectations and distribution functions."
+    },
+    {
+      "id": "p3",
+      "name": "Poisson process",
+      "why": "A Poisson process is a special renewal process with exponential gaps."
+    }
+  ],
+  "traps": [
+    "Renewal epochs are cumulative sums, not individual gaps.",
+    "N(t) counts renewals by t; m(t)=E[N(t)] is the renewal function.",
+    "The long-run renewal rate is 1/μ, not μ.",
+    "The elementary renewal theorem is asymptotic, not an exact finite-time formula.",
+    "The renewal-reward rate is E[R]/E[X]."
+  ],
+  "howto": "Define iid positive gaps Xᵢ; form Sₙ=ΣXᵢ; count N(t)=max{n:Sₙ≤t}; calculate μ=E[X]; use 1/μ for long-run renewal rate and E[R]/μ for long-run reward.",
+  "refs": [
+    {
+      "title": "Renewal Theory",
+      "where": "Renewal processes",
+      "site": "MIT OpenCourseWare — Stochastic Processes",
+      "url": "https://ocw.mit.edu/",
+      "type": "University course material",
+      "free": true,
+      "checked": "2026-11-11",
+      "why": "Background for renewal-process definitions and long-run results."
+    },
+    {
+      "title": "Introduction to Probability Models",
+      "where": "Renewal processes",
+      "site": "Sheldon M. Ross",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Standard treatment of renewal counts and rewards."
+    },
+    {
+      "title": "Stochastic Processes",
+      "where": "Renewal theory",
+      "site": "Sheldon M. Ross",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Inter-renewal distributions and elementary renewal results."
+    }
+  ],
+  "provenance": "Supplementary enrichment from repository backlog item stochastic-t9. Renewal processes are not explicitly named in the official UGC NET Statistics Unit IX syllabus shared for this project. All practice questions are original, not official PYQs.",
+  "revision": {
+    "sheet": [
+      "X₁,X₂,… are iid positive inter-renewal times with mean μ=E[X₁].",
+      "Sₙ=Σᵢ₌₁ⁿXᵢ; N(t)=max{n:Sₙ≤t}.",
+      "m(t)=E[N(t)] is the renewal function.",
+      "Renewal equation: m(t)=F(t)+∫₀ᵗm(t−x)dF(x).",
+      "Elementary renewal theorem: m(t)/t→1/μ.",
+      "Long-run renewal rate is 1/μ.",
+      "Renewal-reward rate is E[R]/E[X].",
+      "Exponential iid gaps give a Poisson process."
+    ],
+    "cards": [
+      [
+        "Epoch",
+        "Sₙ=ΣXᵢ."
+      ],
+      [
+        "Count",
+        "N(t)=max{n:Sₙ≤t}."
+      ],
+      [
+        "Renewal function",
+        "m(t)=E[N(t)]."
+      ],
+      [
+        "Long-run rate",
+        "1/μ."
+      ],
+      [
+        "Reward rate",
+        "E[R]/E[X]."
+      ]
+    ],
+    "tricks": [
+      "Draw the timeline before counting N(t).",
+      "Include an event exactly at t because Sₙ≤t.",
+      "Invert the mean gap for the long-run rate.",
+      "Do not use the Poisson count formula for a general renewal process."
+    ],
+    "shortcuts": [
+      "Deterministic gap c: N(t)=⌊t/c⌋.",
+      "Exponential gaps of rate λ: E[N(t)]=λt.",
+      "Mean gap μ: long-run rate 1/μ."
+    ],
+    "remember": [
+      "IID gaps are central to the ordinary renewal model.",
+      "Long-run results do not determine all finite-time probabilities."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Refresh cumulative waiting times",
+      "objective": "Recover waiting-time foundations.",
+      "body": [
+        "Successive cycle lengths are X₁,X₂,… . The time of the second event is S₂=X₁+X₂; the time of the nth event is Sₙ=X₁+⋯+Xₙ.",
+        "A gap is a duration. An epoch is the cumulative time at which an event occurs."
+      ],
+      "items": [
+        {
+          "ask": "If gaps are 3 and 5 hours, when does renewal 2 occur?",
+          "recall": "At 8 hours.",
+          "refresh": [
+            "Add the first two cycle lengths.",
+            "An epoch is cumulative time, not a gap.",
+            "S₂=3+5=8 hours."
+          ]
+        },
+        {
+          "ask": "If X₁=2, X₂=4 and X₃=1, find S₃.",
+          "recall": "7.",
+          "refresh": [
+            "Add all three gaps.",
+            "S₃ is the third cumulative epoch.",
+            "2+4+1=7."
+          ]
+        },
+        {
+          "ask": "If X is 1 or 3 with equal probability, find E[X].",
+          "recall": "2.",
+          "refresh": [
+            "Weight each value by its probability.",
+            "Add 1/2 and 3/2.",
+            "The mean gap is 2."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "A system that renews repeatedly",
+      "objective": "Interpret renewal cycles.",
+      "body": [
+        "A renewal may represent replacing a failed component, completing a repair or replenishing stock. Each renewal begins a fresh cycle.",
+        "The ordinary model assumes cycle lengths are iid positive random variables. If the distribution changes from cycle to cycle, the ordinary model may not apply."
+      ],
+      "scenario": {
+        "teaser": "A service centre replaces components",
+        "title": "Count completed service cycles",
+        "body": [
+          "The times between component replacements are X₁,X₂,… . The third replacement occurs at S₃=X₁+X₂+X₃.",
+          "The ordinary model assumes iid positive cycle lengths. If ageing changes the distribution from cycle to cycle, this model may not apply."
+        ],
+        "q": "What does one renewal cycle measure?",
+        "answer": "The time from one renewal to the next."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "Formal definition of a renewal process",
+      "objective": "Define epochs and counts.",
+      "body": [
+        "Let X₁,X₂,… be iid positive inter-renewal times with distribution F and finite mean μ=E[X₁] when finite-mean results are used.",
+        "Renewal epochs: S₀=0 and Sₙ=Σᵢ₌₁ⁿXᵢ. Counting process: N(t)=max{n:Sₙ≤t}. Renewal function: m(t)=E[N(t)]."
+      ]
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example: deterministic gaps",
+      "objective": "Calculate a finite-time count.",
+      "body": [
+        "If every inter-renewal time is c=4 hours, then S₁=4, S₂=8 and S₃=12.",
+        "At t=11, exactly two epochs have occurred, so N(11)=2. The definition includes events exactly at t."
+      ],
+      "problem": "A component is replaced exactly every 4 hours. Find S₁,S₂,S₃ and N(11).",
+      "steps": [
+        {
+          "say": "Each gap is 4 hours.",
+          "math": "X₁=X₂=X₃=4",
+          "why": "The cycle length is deterministic."
+        },
+        {
+          "say": "Add the gaps.",
+          "math": "S₁=4, S₂=8, S₃=12",
+          "why": "Epochs are cumulative sums."
+        },
+        {
+          "say": "Count epochs not exceeding 11.",
+          "math": "N(11)=2",
+          "why": "Only 4 and 8 are at most 11."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s4",
+      "mins": 8,
+      "title": "Renewal counts and their distribution",
+      "objective": "Express count events using epochs.",
+      "body": [
+        "N(t)≥n if and only if Sₙ≤t. Exactly n renewals means Sₙ≤t<Sₙ₊₁.",
+        "For random gaps, the cumulative epochs and therefore the number of renewals by a fixed t are random."
+      ]
+    },
+    {
+      "kind": "worked",
+      "id": "s5",
+      "mins": 8,
+      "title": "Worked example: exponential gaps",
+      "objective": "Recognise the Poisson special case.",
+      "body": [
+        "If iid gaps are exponential with rate λ, the renewal counting process is a homogeneous Poisson process.",
+        "For λ=3 per hour and t=2 hours, E[N(2)]=λt=6. This formula is specific to exponential gaps."
+      ],
+      "problem": "Inter-renewal times are iid exponential with rate 3 per hour. Find E[N(2)].",
+      "steps": [
+        {
+          "say": "Exponential iid gaps define a Poisson process.",
+          "math": "N(t)∼Poisson(λt)",
+          "why": "This is the special renewal model."
+        },
+        {
+          "say": "Use the Poisson mean.",
+          "math": "E[N(2)]=λt=3×2=6",
+          "why": "The expected count equals rate times duration."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "The renewal equation",
+      "objective": "Interpret the renewal equation.",
+      "body": [
+        "Let F(t)=P(X₁≤t). The renewal function satisfies m(t)=F(t)+∫₀ᵗm(t−x)dF(x).",
+        "Condition on the first gap x: if the first renewal occurs at x, the remaining time is t−x and the expected subsequent count is m(t−x)."
+      ]
+    },
+    {
+      "kind": "explore",
+      "id": "s7",
+      "mins": 6,
+      "title": "Fixed gaps versus random gaps",
+      "objective": "Compare finite-time behaviour.",
+      "body": [
+        "A deterministic gap gives regular epochs and N(t)=⌊t/c⌋. Random gaps create variable spacing.",
+        "Two models can have the same mean gap but different finite-time count distributions. The mean alone does not determine every finite-time probability."
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s8",
+      "mins": 8,
+      "title": "Elementary renewal theorem",
+      "objective": "Use the long-run renewal rate.",
+      "body": [
+        "Under standard conditions for iid positive gaps with finite mean μ, the elementary renewal theorem states m(t)/t→1/μ as t→∞.",
+        "The long-run renewal rate is the reciprocal of the mean cycle length. This is an asymptotic result, not an exact finite-time formula."
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Guided problem: long-run rate",
+      "objective": "Calculate an asymptotic rate.",
+      "body": [
+        "Let X be 1 hour with probability 1/4 and 3 hours with probability 3/4. Then μ=1/4+9/4=5/2 hours.",
+        "The long-run rate is 1/μ=2/5 renewals per hour. The mean gap is a time; its reciprocal is a rate."
+      ],
+      "problem": "X is 1 hour with probability 1/4 and 3 hours with probability 3/4. Find the long-run renewal rate.",
+      "hints": [
+        "Calculate μ=E[X].",
+        "Use the reciprocal 1/μ.",
+        "State renewals per hour."
+      ],
+      "answer": "μ=5/2 hours; rate=2/5 per hour.",
+      "solution": [
+        "μ=1/4+9/4=5/2.",
+        "The elementary renewal theorem gives rate 1/μ.",
+        "The rate is 2/5 renewals per hour."
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s10",
+      "mins": 8,
+      "title": "Renewal-reward theorem",
+      "objective": "Calculate long-run reward.",
+      "body": [
+        "If R is the reward earned in one cycle and X is its length, the renewal-reward theorem gives long-run reward per unit time E[R]/E[X], under standard iid-cycle and integrability conditions.",
+        "Use expected reward per cycle divided by expected cycle duration."
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "mins": 8,
+      "title": "Guided problem: reward rate",
+      "objective": "Apply reward-rate reasoning.",
+      "body": [
+        "A system earns expected reward 100 units per cycle and has expected cycle duration 5 hours.",
+        "The long-run reward rate is 100/5=20 units per hour."
+      ],
+      "problem": "Expected reward per cycle is 100 units and expected cycle duration is 5 hours. Find the long-run reward rate.",
+      "hints": [
+        "Identify E[R]=100.",
+        "Identify E[X]=5.",
+        "Use E[R]/E[X]."
+      ],
+      "answer": "20 units per hour.",
+      "solution": [
+        "Divide expected reward per cycle by expected cycle duration.",
+        "100/5=20 units per hour."
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s12",
+      "mins": 6,
+      "title": "Exam traps and interpretation checks",
+      "objective": "Avoid common confusions.",
+      "body": [
+        "Renewal epochs are cumulative sums, N(t) is a count, and m(t)=E[N(t)] is an expected count.",
+        "The long-run rate is 1/μ, not μ. A Poisson process is a special renewal process, not the only renewal process."
+      ],
+      "intro": "Mark each statement true or false.",
+      "items": [
+        {
+          "claim": "Renewal epochs are cumulative sums.",
+          "tf": true,
+          "why": "Sₙ is the sum of the first n gaps."
+        },
+        {
+          "claim": "N(t) counts renewals completed by t.",
+          "tf": true,
+          "why": "It counts epochs not exceeding t."
+        },
+        {
+          "claim": "The long-run rate is μ.",
+          "tf": false,
+          "why": "It is 1/μ."
+        },
+        {
+          "claim": "Every renewal process is Poisson.",
+          "tf": false,
+          "why": "Only exponential iid gaps give the Poisson process."
+        },
+        {
+          "claim": "The reward rate is E[R]/E[X].",
+          "tf": true,
+          "why": "This is the renewal-reward theorem."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 4,
+      "title": "Summary and supplementary status",
+      "objective": "Recall the key results and scope.",
+      "body": [
+        "Start with iid positive gaps; form Sₙ; count N(t); and distinguish the random count from m(t)=E[N(t)].",
+        "The elementary renewal theorem gives rate 1/E[X]. The renewal-reward theorem gives E[R]/E[X]. This lesson is supplementary: renewal processes are not explicitly named in the official Unit IX syllabus shared for this project."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 1,
+      "title": "Mastery test",
+      "objective": "Assess mastery.",
+      "body": [
+        "Complete the unseen mastery pool after the lesson."
+      ],
+      "setId": "stochastic_t9_mastery"
+    }
+  ]
+}
