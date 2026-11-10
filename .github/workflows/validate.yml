@@ -73,6 +73,26 @@ jobs:
           done < .changed.txt
           exit $fail
 
+      - name: Formula-render and self-cited-answer audit on the lessons this change touches (same as addlesson.sh)
+        run: |
+          fail=0
+          while read -r f; do
+            [ -z "$f" ] && continue
+            echo "::group::$f"
+            python -I tools/audit-lesson.py "$f" || { echo "::error file=$f::lesson audit failed"; fail=1; }
+            echo "::endgroup::"
+          done < .changed.txt
+          exit $fail
+
+      - name: Verification scripts this change touches (numbers are computed, never typed)
+        run: |
+          pip install numpy scipy
+          if [ "${{ github.event_name }}" = "pull_request" ]; then BASE="${{ github.event.pull_request.base.sha }}"
+          elif [ "${{ github.event_name }}" = "push" ]; then BASE="${{ github.event.before }}"
+          else BASE=""; fi
+          if [ -n "$BASE" ] && git cat-file -e "$BASE" 2>/dev/null; then node tools/run-verifiers.js "$BASE"
+          else echo "no base to compare with; nothing to run"; fi
+
       - name: Audit every lesson and print the seed inventory (manual run only)
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit }}
         continue-on-error: true

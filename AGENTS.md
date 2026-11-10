@@ -64,17 +64,30 @@ Run the scripts from Git Bash on Windows. Never pipe `test.js` or `clicktest.js`
 
 ## Who can do what
 
-| Step | Needs | ChatGPT / chat-only model | Claude Code / Codex with a shell |
-|---|---|---|---|
-| Write the verification script and the authoring script | text only | yes | yes |
-| Generate seeds, run `addlesson.sh`, run both suites | a shell with Python 3 and Node | no: hand the scripts to someone who has one | yes |
-| Push to the Claude artifact store | Claude's `ArtifactData` tool | no | Claude only |
-| Publish to the Vercel site | merge to `main` | n/a | n/a |
+What you can finish depends on what your session is allowed to do, not on which assistant you are.
 
-**A chat-only model delivers exactly this**, as files on a branch or as pasted text:
-`verify_<group>.py`, one `lesson_<stem>.py` per lesson, and the output of running the
-verification script. A person (or a shell-capable tool) then runs `addlesson.sh`, fixes whatever
-it reports, and opens the pull request.
+| Your session can | Can it finish a task alone? | How |
+|---|---|---|
+| **Write to this GitHub repository** (branch, commit, open a PR, read Actions results) but has no shell | **Yes** | The GitHub-native flow below. CI is your shell. |
+| **Run commands** (Claude Code, Codex, a terminal) | **Yes** | Run the commands above before pushing. Faster, but CI still verifies the PR. |
+| Only **read** the repository or paste text | **No** | A person with write access must commit its files. The owner can grant *Contents: write*, *Pull requests: write* and *Actions: read*, or hand the files to a session that has them. |
+
+Local commands are useful, not mandatory. The mandatory part is that CI passes.
+
+**The GitHub-native flow (no shell needed)**
+
+1. Create a branch `lesson/<topic-id>` and open a **draft** pull request.
+2. Commit only the lesson's files: `verify_<group>.py`, `lesson_<stem>.py`, and the seed JSON they describe
+   (`seed/lesson_<stem>.json`, `seed/*_mastery.json`). `addlesson.sh` only generates and checks these, so a session that cannot run
+   it writes the seed files directly in the documented shape (`lessons/TEMPLATE.py`, `contracts/`).
+3. Push. `Validate` runs on the branch and the PR: contracts and every pool; `vcheck.js` and the formula-render and
+   self-cited-answer audit (`tools/audit-lesson.py`) on each lesson you changed; every changed `verify_*.py`
+   (`tools/run-verifiers.js`); the browser tests.
+4. Read the failing step in the Actions log, fix, push again, until green.
+5. Mark the PR ready with the CI run link in the description, and stop. The owner or the other assistant reviews and merges.
+
+CI cannot judge whether a verification script checks the right thing, and it does not push to the Claude artifact (optional;
+Claude sessions with `ArtifactData` only).
 
 ## Pull requests
 
