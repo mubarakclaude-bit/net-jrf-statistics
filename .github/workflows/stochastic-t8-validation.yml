@@ -1,0 +1,41 @@
+name: T8 branching-process validation
+
+on:
+  pull_request:
+    branches: [gpt/stochastic-t7-birth-death-mm1]
+  push:
+    branches: [gpt/stochastic-t8-branching-processes]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-t8:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Verify T8 exact arithmetic and mastery pool
+        run: python verify_stochastic_t8.py
+      - name: Validate T8 lesson and mastery pool
+        run: node vcheck.js seed/lesson_stochastic_t8.json
+      - name: Build app and check JavaScript syntax
+        run: bash build.sh
+      - name: Install browser-test dependency
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run browser integration suite
+        run: |
+          node test.js
+          node clicktest.js
