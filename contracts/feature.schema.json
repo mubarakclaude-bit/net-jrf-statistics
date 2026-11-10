@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://net-jrf-statistics/contracts/feature.schema.json",
+  "title": "Feature manifest (contract v1)",
+  "$comment": "src/features/<id>/feature.json. A feature is a folder: this manifest, index.js (the feature, run in a private scope), test.js (its own browser test), and optionally feature.css. The build discovers features by scanning src/features/, so adding one edits NO shared file. A feature reaches learner storage only through ctx.store, which allows exactly the keys declared here and writes them to the contract's feature paths (data/users/{uid}/features/{id}/{key}, or under p/{profile}/ for a non-default profile). The folder name must equal id (checked by tools/validate-contracts.js).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "version", "description", "tab", "storage"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 40 },
+    "title": { "type": "string", "minLength": 1, "maxLength": 60 },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "description": { "type": "string", "minLength": 1 },
+    "tab": { "type": "boolean", "$comment": "true: shown in the navigation bar. false: reachable only at #f-<id> (reference and internal features)" },
+    "storage": {
+      "type": "array", "uniqueItems": true, "maxItems": 20,
+      "items": { "type": "string", "pattern": "^[a-z0-9_]{1,40}$" },
+      "$comment": "every key the feature may read or write through ctx.store; each becomes one document, so keep values small"
+    }
+  }
+}

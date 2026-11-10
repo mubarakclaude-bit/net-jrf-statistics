@@ -21,6 +21,7 @@ node tools/validate-contracts.js --file backup.json --as progress-backup        
 | `progress-backup.schema.json` | Portable learner backup: strict envelope, nine records, `profileId` |
 | `progress-snapshot.schema.json` | The verified copy taken before an import replaces anything |
 | `feedback.schema.json` | A learner's asks and requests, per profile |
+| `feature.schema.json` | A feature manifest: id, title, version, tab, and every storage key it may use |
 | `storage-paths.json` | Every valid store document path, and the known-bad ones |
 | `legacy-exceptions.json` | Seeds that deviate today, each with a reason; reported on every run |
 | `fixtures/` | The contracts' own tests: every valid case must pass, every invalid case must fail for the stated reason |

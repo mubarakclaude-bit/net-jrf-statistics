@@ -1,8 +1,20 @@
 name: Validate
 
-# The gate for every author, human or model. A pull request cannot merge while this is red.
-# Everything here is a documented command (see AGENTS.md); nothing depends on one author's tools, prompts or session.
-# Run the same checks locally with:  npm ci && npm run check && npm run build && npm test && npm run acceptance
+# The independent verification for every pull request, whoever or whatever wrote it. A PR cannot merge while this is red.
+# Every step is a documented command (see AGENTS.md) that runs from a clean checkout with `npm ci`; nothing depends on
+# one assistant's tools, prompts or session, and nothing needs the Claude artifact.
+#
+#   validate    contracts, fixtures, storage paths, EVERY lesson and question pool, and the generated lesson index;
+#               plus the house-standard check (vcheck.js) on the lessons this PR changes
+#   browser     builds the app and the hosted site, then runs test.js, clicktest.js, the hosted storage adapter, and
+#               EVERY feature's own browser test (each feature in a fresh browser, in strict storage-path mode)
+#   acceptance  the independence test, six scenarios on a scratch copy (docs/INDEPENDENCE.md):
+#                 S1 two authors each create a lesson           S2 a lesson is revised while another is added
+#                 S3 an author creates a feature (own folder)   S4 a feature is revised while another is created
+#                 S5 non-conforming lessons and features are rejected   S6 a clean copy, no artifact dependency
+#               Each merges the authors' branches in BOTH orders and requires a byte-identical build.
+#
+# Run the same checks locally:  npm ci && npm run check && npm run build && npm test && npm run acceptance
 on:
   pull_request:
   push:
@@ -10,7 +22,7 @@ on:
   workflow_dispatch:
     inputs:
       audit:
-        description: "Also validate EVERY lesson with vcheck.js and print the seed inventory (reports legacy findings; does not block)"
+        description: "Also run vcheck.js on EVERY lesson and print the seed inventory (reports legacy findings; does not block)"
         type: boolean
         default: false
 
@@ -37,7 +49,7 @@ jobs:
       - name: Install (from the lockfile, so every author runs the same tools)
         run: npm ci
 
-      - name: Contracts and the seed set (schemas, fixtures, storage paths, generated index)
+      - name: Contracts and the seed set (schemas, fixtures, storage paths, features, generated index)
         run: ./check.sh
 
       - name: Work out which lesson seeds changed
@@ -104,7 +116,6 @@ jobs:
           done
 
   browser:
-    # The browser suites run after the fast checks pass.
     needs: validate
     runs-on: ubuntu-latest
     steps:
@@ -128,9 +139,12 @@ jobs:
         run: node clicktest.js
       - name: Hosted storage adapter conformance
         run: node tests/hosted-shim.test.js
+      - name: Every feature's own browser test
+        run: node tests/features.test.js --verbose
 
   acceptance:
-    # The owner's requirement as a command: two authors add lessons independently, merge in either order, same build.
+    # The owner's requirement as a command. It runs browser tests (scenarios 3 and 4 run the features' own tests),
+    # so it needs the browser installed as well.
     needs: validate
     runs-on: ubuntu-latest
     steps:
@@ -142,6 +156,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: npm ci
-      - name: Independence acceptance test
-        run: node tools/acceptance-content.js
+      - name: Install (from the lockfile) and the browser
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Independence acceptance test (six scenarios)
+        run: node tools/acceptance.js

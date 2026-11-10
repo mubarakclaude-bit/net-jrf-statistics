@@ -1,0 +1,210 @@
+{
+ "valid": {
+  "reference feature with one storage key": {
+   "id": "ref-counter",
+   "title": "Counter",
+   "version": "1.0.0",
+   "description": "What it does.",
+   "tab": false,
+   "storage": [
+    "count"
+   ]
+  },
+  "a tab feature with no storage": {
+   "id": "study-plan",
+   "title": "Counter",
+   "version": "1.0.0",
+   "description": "What it does.",
+   "tab": true,
+   "storage": []
+  },
+  "several keys": {
+   "id": "ref-counter",
+   "title": "Counter",
+   "version": "1.0.0",
+   "description": "What it does.",
+   "tab": false,
+   "storage": [
+    "a",
+    "b_2",
+    "c3"
+   ]
+  }
+ },
+ "invalid": [
+  {
+   "name": "id with capitals",
+   "doc": {
+    "id": "Ref-Counter",
+    "title": "Counter",
+    "version": "1.0.0",
+    "description": "What it does.",
+    "tab": false,
+    "storage": [
+     "count"
+    ]
+   },
+   "expect": "pattern"
+  },
+  {
+   "name": "id with an underscore",
+   "doc": {
+    "id": "ref_counter",
+    "title": "Counter",
+    "version": "1.0.0",
+    "description": "What it does.",
+    "tab": false,
+    "storage": [
+     "count"
+    ]
+   },
+   "expect": "pattern"
+  },
+  {
+   "name": "storage key with a dash",
+   "doc": {
+    "id": "ref-counter",
+    "title": "Counter",
+    "version": "1.0.0",
+    "description": "What it does.",
+    "tab": false,
+    "storage": [
+     "my-key"
+    ]
+   },
+   "expect": "pattern"
+  },
+  {
+   "name": "storage key with capitals",
+   "doc": {
+    "id": "ref-counter",
+    "title": "Counter",
+    "version": "1.0.0",
+    "description": "What it does.",
+    "tab": false,
+    "storage": [
+     "Count"
+    ]
+   },
+   "expect": "pattern"
+  },
+  {
+   "name": "duplicate storage keys",
+   "doc": {
+    "id": "ref-counter",
+    "title": "Counter",
+    "version": "1.0.0",
+    "description": "What it does.",
+    "tab": false,
+    "storage": [
+     "count",
+     "count"
+    ]
+   },
+   "expect": "uniqueItems"
+  },
+  {
+   "name": "version not semver",
+   "doc": {
+    "id": "ref-counter",
+    "title": "Counter",
+    "version": "1.0",
+    "description": "What it does.",
+    "tab": false,
+    "storage": [
+     "count"
+    ]
+   },
+   "expect": "pattern"
+  },
+  {
+   "name": "tab as a string",
+   "doc": {
+    "id": "ref-counter",
+    "title": "Counter",
+    "version": "1.0.0",
+    "description": "What it does.",
+    "tab": "yes",
+    "storage": [
+     "count"
+    ]
+   },
+   "expect": "boolean"
+  },
+  {
+   "name": "missing title",
+   "doc": {
+    "id": "ref-counter",
+    "version": "1.0.0",
+    "description": "What it does.",
+    "tab": false,
+    "storage": [
+     "count"
+    ]
+   },
+   "expect": "title"
+  },
+  {
+   "name": "missing storage declaration",
+   "doc": {
+    "id": "ref-counter",
+    "title": "Counter",
+    "version": "1.0.0",
+    "description": "What it does.",
+    "tab": false
+   },
+   "expect": "storage"
+  },
+  {
+   "name": "unknown manifest key",
+   "doc": {
+    "id": "ref-counter",
+    "title": "Counter",
+    "version": "1.0.0",
+    "description": "What it does.",
+    "tab": false,
+    "storage": [
+     "count"
+    ],
+    "permissions": [
+     "all"
+    ]
+   },
+   "expect": "additionalProperties"
+  },
+  {
+   "name": "more than 20 keys",
+   "doc": {
+    "id": "ref-counter",
+    "title": "Counter",
+    "version": "1.0.0",
+    "description": "What it does.",
+    "tab": false,
+    "storage": [
+     "k0",
+     "k1",
+     "k2",
+     "k3",
+     "k4",
+     "k5",
+     "k6",
+     "k7",
+     "k8",
+     "k9",
+     "k10",
+     "k11",
+     "k12",
+     "k13",
+     "k14",
+     "k15",
+     "k16",
+     "k17",
+     "k18",
+     "k19",
+     "k20"
+    ]
+   },
+   "expect": "maxItems"
+  }
+ ]
+}

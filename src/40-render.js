@@ -3,7 +3,7 @@ function render(){
   if(S.ready&&!S.authed){
     document.body.classList.add("gated");
     const nv=$("#nav");nv.innerHTML="";nv.dataset.h="";measureTop();
-    TABS.forEach(([k])=>{const n=$("#v-"+k);if(n)n.classList.remove("on")});
+    allRoutes().forEach(k=>{const n=$("#v-"+k);if(n)n.classList.remove("on")});
     const h=$("#v-home");h.classList.add("on");h.innerHTML=vAuth();
     wire();return;
   }
@@ -21,13 +21,14 @@ function render(){
   const bst=$("#hdBuild");if(bst)bst.textContent="build "+BUILD.slice(5,16);
   const pc2=$("#hdProfile");
   if(pc2){pc2.textContent=profileName();pc2.className="chip "+(S.profile==="me"?"dim":"och");pc2.hidden=!S.ready}
-  TABS.forEach(([k])=>{const s=$("#v-"+k);if(s)s.classList.toggle("on",S.route===k)});
+  allRoutes().forEach(k=>{const s=$("#v-"+k);if(s)s.classList.toggle("on",S.route===k)});
   document.body.classList.toggle("wide",S.route==="learn");
-  const f={home:vHome,learn:vLearn,bank:vBank,mock:vMock,progress:vProgress,admin:vAdmin}[S.route];
+  const f={home:vHome,learn:vLearn,bank:vBank,mock:vMock,progress:vProgress,admin:vAdmin}[S.route]||featureView(S.route);
   if(f)$("#v-"+S.route).innerHTML=f()+(typeof reqModal==="function"?reqModal():"")
     +(typeof askPanelHTML==="function"?askPanelHTML():"")
     +(typeof askChipHTML==="function"?askChipHTML():"");
   wire();
+  featureAfterRender();
 }
 function measureTop(){
   const t=$("#top");if(!t)return;
@@ -37,7 +38,7 @@ function measureTop(){
 function renderNav(){
   const o=S.ready&&S.catalog?overall():null;
   const lp=o?learnProgress():null;
-  const html=TABS.filter(([k])=>k!=="admin"||S.isAdmin).map(([k,n])=>{
+  const html=TABS.concat(featureTabs()).filter(([k])=>k!=="admin"||S.isAdmin).map(([k,n])=>{
     let b="";
     if(k==="learn"&&lp)b=' <span class="chip '+(lp.mastered?"ok":"dim")+' num">'+lp.mastered+'/'+lp.withLesson+'</span>';
     if(k==="bank"&&o)b=' <span class="chip dim num">'+o.loaded+'</span>';

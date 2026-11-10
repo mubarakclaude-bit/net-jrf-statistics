@@ -50,19 +50,24 @@ and 63 pools. The path rule is enforced at run time (the test stub, the hosted s
 independence requirement for content. GPT's drafts (PR #5) were the starting point; see `docs/PHASE2_REVIEW.md` for
 the six decisions, the disagreements and the requirements added. Rules for changing a contract: `contracts/README.md`.
 
-## Phase 3 — storage adapter (not started)
+## Phase 3 - storage adapter (first slice delivered)
 
-The app talks to one interface: `get`, `set`, `list`, `delete`, `onChange`. Two implementations: **hosted**
-(browser storage; today's `web/shim.js`) and **artifact** (the Claude runtime). One conformance suite runs
-against both, so a path that is valid in one and refused by the other fails in CI. The hosted adapter is the
-reference; the artifact adapter is allowed to lag.
+Delivered: features reach learner data only through `ctx.store` (`get`, `set`, `remove`), which allows only the keys the
+feature declares and writes to contract-valid paths (`data/users/{uid}/features/{id}/{key}`, under `p/{profile}/` for a
+non-default profile). The path rule is enforced in the test stub and the hosted shim. Not yet: a formal adapter interface
+with a conformance suite run against the artifact backend as well as the hosted one. The hosted backend is the supported
+one and is tested on every PR; the artifact backend stays generated output and is not required for independence.
 
-## Phase 4 — feature modules (not started)
+## Phase 4 - feature modules (host and mechanism delivered; extraction pending)
 
-`src/features/<name>/` holds `view`, `wire`, storage keys and its own test, registered with
-`registerFeature({id, route, view, wire, keys})`. esbuild bundles real modules into one file. The giant
-`wireAll()` and the global `S` are split out feature by feature, one feature per PR, so two authors can change
-different features without touching the same function.
+Delivered: `src/14-features.js` is the one-time plug-in point (registry, routes, navigation entry, error isolation).
+`tools/build-features.js` discovers `src/features/<id>/` and generates the registrations, deterministically, wrapping
+each feature in its own scope. `contracts/feature.schema.json` and the validator enforce the manifest, the folder name
+and the storage declarations. `tests/features.test.js` runs every feature's own browser test in strict path mode. Two
+reference features (`ref-counter`, `ref-about`) are the living templates. A plain generator is used and not a bundler:
+it needs no installed package, which keeps the Vercel build dependency-free. esbuild stays the plan if real ES-module
+imports are needed when the built-in views are migrated. Pending: extracting Home, Learn, Question bank, Mock tests,
+Progress and Admin into feature modules, one per PR; until then two authors must not change the same built-in view.
 
 ## Lanes and rules
 

@@ -19,6 +19,9 @@ let Ajv2020;
 try { Ajv2020 = require("ajv/dist/2020"); }
 catch (e) { console.error("FAILED: the 'ajv' package is not installed. Run:  npm ci"); process.exit(2); }
 const { checkDocPath } = require("./storage-paths");
+let analyzeFeatureCode;
+try { ({ analyzeFeatureCode } = require("./feature-code")); }
+catch (e) { console.error("FAILED: the 'acorn' package is not installed. Run:  npm ci"); process.exit(2); }
 const { listSeeds } = require("./seed-docs");
 
 const ROOT = path.join(__dirname, "..");
@@ -33,7 +36,7 @@ const fail = m => errors.push(m);
 
 // ---- load the contracts
 const ajv = new Ajv2020({ allErrors: true, strict: true, strictTypes: false, strictRequired: false });
-const NAMES = ["lesson", "pool", "mastery-pool", "progress-backup", "progress-snapshot", "feedback"];
+const NAMES = ["lesson", "pool", "mastery-pool", "progress-backup", "progress-snapshot", "feedback", "feature"];
 const SCHEMAS = {};
 for (const n of NAMES) { SCHEMAS[n] = read("contracts/" + n + ".schema.json"); ajv.addSchema(SCHEMAS[n]); }
 const V = n => ajv.getSchema(SCHEMAS[n].$id);
@@ -95,6 +98,19 @@ runFixtures("contracts/fixtures/progress-snapshot.json", "progress snapshot", V(
 runFixtures("contracts/fixtures/feedback.json", "feedback", V("feedback"));
 runFixtures("contracts/fixtures/pools.json", "pool envelope", V("pool"));
 runFixtures("contracts/fixtures/mastery-pools.json", "mastery pool", V("mastery-pool"));
+runFixtures("contracts/fixtures/features.json", "feature manifest", V("feature"));
+
+// ---- 2b. the feature storage rule's own fixtures: every valid snippet passes, every bypass is rejected for the stated reason
+{
+  const fx = read("contracts/fixtures/feature-code.json"); let nv = 0, ni = 0;
+  for (const [name, code] of Object.entries(fx.valid)) { nv++; const p = analyzeFeatureCode(code, fx.declared); if (p.length) fail("FEATURE-CODE fixture should be VALID but is rejected: " + name + ": " + p[0]); }
+  for (const b of fx.invalid) {
+    ni++; const p = analyzeFeatureCode(b.code, fx.declared);
+    if (!p.length) fail("FEATURE-CODE fixture should be INVALID but is accepted (a storage bypass): " + b.name);
+    else if (!p.some(x => x.includes(b.expect))) fail("FEATURE-CODE fixture rejected for the wrong reason: " + b.name + " (expected '" + b.expect + "', got " + p[0].slice(0, 100) + ")");
+  }
+  notes.push("feature storage rule: " + nv + " valid snippets accepted, " + ni + " bypass attempts rejected");
+}
 
 // ---- 3. the storage-path rule
 {
@@ -112,6 +128,30 @@ runFixtures("contracts/fixtures/mastery-pools.json", "mastery pool", V("mastery-
     for (const m of src.matchAll(/\.doc\(\s*["']([^"']+)["']\s*\)/g)) { n++; const r = checkDocPath(m[1]); if (!r.ok) fail("src/" + f + ": document path '" + m[1] + "' violates the contract: " + r.reason); }
   }
   notes.push("src/: " + n + " literal document paths checked");
+}
+
+// ---- 4b. features: every manifest conforms, and no feature uses a storage key it did not declare
+{
+  const fdir = path.join(ROOT, "src", "features");
+  const ids = fs.existsSync(fdir) ? fs.readdirSync(fdir, { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name).sort() : [];
+  const fv = V("feature"); let n = 0;
+  for (const id of ids) {
+    if (filesArg && !filesArg.some(f => f.split(String.fromCharCode(92)).join("/").startsWith("src/features/" + id + "/"))) continue;
+    n++;
+    const mf = path.join(fdir, id, "feature.json");
+    if (!fs.existsSync(mf)) { fail("src/features/" + id + "/feature.json is missing"); continue; }
+    let m; try { m = JSON.parse(fs.readFileSync(mf, "utf8")); } catch (e) { fail("src/features/" + id + "/feature.json is not valid JSON"); continue; }
+    if (!fv(m)) fail("src/features/" + id + "/feature.json violates the feature contract: " + brief(fv.errors));
+    if (m.id !== id) fail("src/features/" + id + ": manifest id '" + m.id + "' must equal the folder name");
+    for (const f of ["index.js", "test.js"]) if (!fs.existsSync(path.join(fdir, id, f))) fail("src/features/" + id + "/" + f + " is missing");
+    const idx = path.join(fdir, id, "index.js");
+    if (fs.existsSync(idx)) {
+      // A syntax-tree check (tools/feature-code.js), not a regular expression: dynamic keys, aliases and the other ways of
+      // reaching around ctx.store are rejected, so every storage key a feature uses is a declared string literal.
+      for (const p of analyzeFeatureCode(fs.readFileSync(idx, "utf8"), m.storage || [])) fail("src/features/" + id + "/index.js " + p);
+    }
+  }
+  notes.push("features: " + n + " manifest(s) checked" + (ids.length ? " (" + ids.join(", ") + ")" : ""));
 }
 
 // ---- 5. the seeds
