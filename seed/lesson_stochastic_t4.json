@@ -10,26 +10,26 @@
   "status": "approved",
   "estMin": 82,
   "objectives": [
-    "Define the relevant Markov-chain quantity and interpret it correctly.",
-    "Set up equations using the transition matrix and the correct boundary conditions.",
-    "Solve finite-state examples exactly and verify the result.",
-    "Recognise assumptions, limiting cases and common UGC NET examination traps."
+    "Determine whether two states communicate using directed reachability.",
+    "Identify communicating classes and test whether each class is closed.",
+    "Classify states as transient or recurrent in a finite chain.",
+    "Calculate the period from the set of possible positive return times."
   ],
   "prereq": [
     {
       "id": "p1",
-      "name": "Markov property",
-      "why": "The conditional future depends on the present state."
+      "name": "Transition matrices",
+      "why": "Positive entries define the directed edges of the transition graph."
     },
     {
       "id": "p2",
-      "name": "Transition matrices",
-      "why": "Rows encode one-step transition probabilities."
+      "name": "Matrix powers",
+      "why": "The entry pᵢᵢ⁽ⁿ⁾ identifies possible returns in n steps."
     },
     {
       "id": "p3",
-      "name": "Linear equations and gcd",
-      "why": "First-step equations and period calculations use these tools."
+      "name": "Greatest common divisor",
+      "why": "The period is the gcd of all possible positive return times."
     }
   ],
   "traps": [
@@ -44,23 +44,23 @@
   "refs": [
     {
       "title": "Introduction to Probability Models",
-      "where": "Markov chains and hitting times",
+      "where": "Markov chains: communicating classes and recurrence",
       "site": "Sheldon M. Ross",
       "url": "",
       "type": "Textbook",
       "free": false,
       "checked": "2026-11-11",
-      "why": "First-step equations, hitting probabilities and expected hitting times."
+      "why": "Finite-state classification and recurrence."
     },
     {
       "title": "Markov Chains",
-      "where": "Finite-state chains, recurrence and periodicity",
+      "where": "Communication, closed classes and period",
       "site": "J. R. Norris",
       "url": "",
       "type": "Textbook",
       "free": false,
       "checked": "2026-11-11",
-      "why": "Formal definitions of communication, recurrence, transience and period."
+      "why": "Formal treatment of irreducibility, recurrence and periodicity."
     },
     {
       "title": "Introduction to Stochastic Processes",
@@ -73,57 +73,57 @@
       "why": "Mathematical background for finite-state Markov chains."
     }
   ],
-  "provenance": "Original teaching material aligned to stochastic-t4 in the repository syllabus. Examples and mastery items are original practice questions, not represented as official UGC NET PYQs. Exact arithmetic and graph properties are checked by the accompanying verifier.",
+  "provenance": "Original teaching material aligned to stochastic-t4 in the repository syllabus. Examples and mastery items are original practice questions, not represented as official UGC NET PYQs. Classification statements use standard finite-state Markov-chain results.",
   "revision": {
     "sheet": [
-      "Communication is mutual reachability.",
-      "Communicating classes partition the state space.",
-      "A class is closed when no transition leaves it.",
-      "Finite closed communicating classes are recurrent.",
-      "States outside closed classes are transient in a finite chain.",
-      "Absorbing states have period one.",
-      "Period is the gcd of positive possible return times.",
-      "Communicating states share their period."
+      "i communicates with j when each is reachable from the other.",
+      "Communication is an equivalence relation; classes partition the state space.",
+      "A class is closed if no positive-probability transition leaves it.",
+      "In a finite chain, every closed communicating class is recurrent.",
+      "In a finite chain, states outside the closed classes are transient.",
+      "The period is gcd{n≥1:pᵢᵢ⁽ⁿ⁾>0}.",
+      "Communicating states have the same period.",
+      "An absorbing state has period one; an alternating two-state class has period two."
     ],
     "cards": [
       [
-        "Define the event",
-        "Specify the target state and stopping rule."
-      ],
-      [
-        "First-step analysis",
-        "Condition on the state after one transition."
-      ],
-      [
-        "Boundary condition",
-        "Remaining hitting time at the target is zero."
-      ],
-      [
         "Communication",
-        "Each state must be reachable from the other."
+        "Check reachability in both directions."
+      ],
+      [
+        "Communicating class",
+        "A maximal set of mutually communicating states."
       ],
       [
         "Closed class",
-        "No transition leaves the class."
+        "No transition from the class goes outside it."
+      ],
+      [
+        "Transient state",
+        "A state outside the closed classes of a finite chain."
+      ],
+      [
+        "Recurrent class",
+        "A closed communicating class in a finite chain."
       ],
       [
         "Period",
-        "GCD of possible positive return times."
+        "The gcd of all possible positive return times."
       ]
     ],
     "tricks": [
-      "Draw arrows before classifying states.",
-      "For a hitting-time equation, count the first step explicitly.",
-      "Use gcd for periodicity; do not use the minimum return time."
+      "A one-way path does not imply communication.",
+      "Test closure by checking every outgoing edge from every state in the class.",
+      "Use the gcd of all possible return times, not the smallest return time."
     ],
     "shortcuts": [
-      "A self-loop makes the period one.",
-      "An absorbing state is a closed singleton class.",
-      "In a finite chain, closed communicating classes are recurrent."
+      "An absorbing singleton is closed, recurrent and aperiodic.",
+      "A finite chain may have more than one closed recurrent class.",
+      "A self-loop makes the period one."
     ],
     "remember": [
-      "First-passage probability and expected first-passage time are different quantities.",
-      "Recurrence and aperiodicity are separate properties."
+      "Recurrence and periodicity are different properties.",
+      "A closed class is a property of the whole class, not merely one state."
     ]
   },
   "scenes": [
