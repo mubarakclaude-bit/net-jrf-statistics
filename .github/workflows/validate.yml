@@ -119,6 +119,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # the click-test scope compares this change with its base
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -134,18 +136,31 @@ jobs:
         run: npm run build
       - name: test.js (the app against the storage-path contract, in strict mode)
         run: node test.js
-      - name: clicktest.js (every lesson starts and advances; 4 shards at once, each its own browser)
+      - name: clicktest.js (every lesson starts and advances)
+        # A pull request that only changes lesson content walks just the lessons it changed (tools/changed-topics.js);
+        # anything that reaches the app, the build or the tests, and every push to production, walks all lessons in 4 shards.
         run: |
-          pids=""
-          for i in 1 2 3 4; do
-            CLICKTEST_SHARD="$i/4" node clicktest.js > ".cache/click-$i.log" 2>&1 &
-            pids="$pids $!"
-          done
-          fail=0
-          for p in $pids; do wait "$p" || fail=1; done
-          for i in 1 2 3 4; do echo "::group::shard $i"; tail -n 8 ".cache/click-$i.log"; echo "::endgroup::"; done
-          if [ "$fail" -ne 0 ]; then
-            echo "::error::a clicktest shard failed"; grep -h "FAIL\|PAGEERROR\|CONSOLE" .cache/click-*.log | head -20; exit 1
+          MODE=FULL
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            MODE=$(node tools/changed-topics.js "${{ github.event.pull_request.base.sha }}")
+          fi
+          echo "click-test scope: $MODE"
+          if [ "$MODE" = "NONE" ]; then
+            CLICKTEST_LIMIT=1 node clicktest.js
+          elif [ "$MODE" != "FULL" ]; then
+            CLICKTEST_TOPICS="$MODE" node clicktest.js
+          else
+            pids=""
+            for i in 1 2 3 4; do
+              CLICKTEST_SHARD="$i/4" node clicktest.js > ".cache/click-$i.log" 2>&1 &
+              pids="$pids $!"
+            done
+            fail=0
+            for p in $pids; do wait "$p" || fail=1; done
+            for i in 1 2 3 4; do echo "::group::shard $i"; tail -n 8 ".cache/click-$i.log"; echo "::endgroup::"; done
+            if [ "$fail" -ne 0 ]; then
+              echo "::error::a clicktest shard failed"; grep -h "FAIL\|PAGEERROR\|CONSOLE" .cache/click-*.log | head -20; exit 1
+            fi
           fi
       - name: Hosted storage adapter conformance
         run: node tests/hosted-shim.test.js
