@@ -177,9 +177,10 @@
           "ask": "What does homoscedasticity mean?",
           "recall": "Var(uᵢ|X)=σ² for all i.",
           "refresh": [
-            "The conditional error variance is constant across observations.",
-            "It does not require the errors to have a normal distribution.",
-            "It is a variance assumption, not a statement about the conditional mean."
+            "The conditional error variance is the same number for every observation after conditioning on X.",
+            "Write this as Var(uᵢ|X)=σ², where σ² does not depend on i or the regressor values.",
+            "It is a restriction on the spread of the error distribution, not on its centre.",
+            "Constant variance is stronger than zero conditional mean; one assumption does not imply the other."
           ]
         },
         {
@@ -212,7 +213,10 @@
         "title": "A fan-shaped residual plot",
         "body": [
           "A residual-versus-fitted plot shows small vertical spread at low fitted values and much larger spread at high fitted values.",
-          "The pattern suggests non-constant conditional variance. It does not by itself identify the exact variance function or prove the cause."
+          "The pattern suggests non-constant conditional variance. It does not by itself identify the exact variance function or prove the cause.",
+          "A residual plot is usually examined after fitting the mean model, because fitted values provide a compact summary of the regressors for this diagnostic.",
+          "If the widening spread is systematic, conventional homoscedastic standard errors should not be trusted without further adjustment.",
+          "Possible next steps include robust standard errors for inference or a defensible model for the conditional variance."
         ],
         "q": "What assumption is the fan shape warning about?",
         "answer": "Constant conditional error variance; the pattern suggests heteroscedasticity."
@@ -232,13 +236,19 @@
         "The key feature is changing vertical spread as fitted values or a predictor changes. The conditional centre may remain around zero while the spread changes.",
         "A pattern in spread is distinct from a curved mean pattern. If the residual centre bends, investigate mean-model misspecification as well as variance."
       ],
-      "viz": "ineq-bounds",
+      "viz": {
+        "type": "rank-null",
+        "caption": "A changing vertical spread around a zero conditional mean is the visual signature to investigate."
+      },
       "scenario": {
         "teaser": "The centre stays near zero but the spread changes",
         "title": "Variance changes without a mean shift",
         "body": [
           "At each value of x, residuals remain centred around zero. Their dispersion, however, increases with x.",
-          "This illustrates how E(u|X)=0 can hold while Var(u|X) is non-constant."
+          "This illustrates how E(u|X)=0 can hold while Var(u|X) is non-constant.",
+          "This distinction matters in applications where larger units naturally have more variable outcomes, such as expenditure, firm size or production.",
+          "A variance-stabilising transformation may sometimes help, but it changes the scale and interpretation of the model and should not be applied mechanically.",
+          "The diagnostic question is whether the conditional variance is stable after accounting for the chosen mean model."
         ],
         "q": "Can zero conditional mean coexist with heteroscedasticity?",
         "answer": "Yes. The conditional mean can remain zero while the conditional variance changes."
@@ -433,16 +443,16 @@
       "intro": "There is no single automatic repair. Choose according to whether the aim is valid inference for the conditional mean or efficient estimation under a credible variance model.",
       "items": [
         {
-          "ask": "What do heteroscedasticity-robust standard errors change?",
-          "answer": "The estimated covariance matrix and standard errors, not the OLS coefficient estimates."
+          "q": "What do heteroscedasticity-robust standard errors change?",
+          "a": "The estimated covariance matrix and standard errors, not the OLS coefficient estimates."
         },
         {
-          "ask": "When is WLS/GLS attractive?",
-          "answer": "When a credible variance/covariance structure is known or can be modelled well."
+          "q": "When is WLS/GLS attractive?",
+          "a": "When a credible variance/covariance structure is known or can be modelled well."
         },
         {
-          "ask": "What does FGLS add?",
-          "answer": "It estimates the unknown variance/covariance structure before applying GLS."
+          "q": "What does FGLS add?",
+          "a": "It estimates the unknown variance/covariance structure before applying GLS."
         }
       ]
     },
@@ -638,20 +648,24 @@
       "intro": "Check each statement against the exact assumption it concerns.",
       "items": [
         {
-          "q": "Heteroscedasticity necessarily makes OLS coefficients biased.",
-          "answer": "False. Under exogeneity, OLS may remain unbiased/consistent; variance and efficiency are affected."
+          "claim": "Heteroscedasticity necessarily makes OLS coefficients biased.",
+          "tf": false,
+          "why": "Under exogeneity, OLS may remain unbiased/consistent; variance and efficiency are affected."
         },
         {
-          "q": "Conventional homoscedastic OLS standard errors are generally valid under heteroscedasticity.",
-          "answer": "False. Use a heteroscedasticity-consistent covariance estimate or a valid variance model."
+          "claim": "Conventional homoscedastic OLS standard errors are generally valid under heteroscedasticity.",
+          "tf": false,
+          "why": "Use a heteroscedasticity-consistent covariance estimate or a valid variance model."
         },
         {
-          "q": "For Var(uᵢ|X)=σ²hᵢ, the WLS weight is 1/hᵢ.",
-          "answer": "True. The row multiplier is 1/√hᵢ, whose square gives the criterion weight."
+          "claim": "For Var(uᵢ|X)=σ²hᵢ, the WLS weight is 1/hᵢ.",
+          "tf": true,
+          "why": "The row multiplier is 1/√hᵢ, whose square gives the criterion weight."
         },
         {
-          "q": "FGLS treats the estimated covariance matrix as if it were known without uncertainty.",
-          "answer": "False. The covariance is estimated; its quality and finite-sample uncertainty matter."
+          "claim": "FGLS treats the estimated covariance matrix as if it were known without uncertainty.",
+          "tf": false,
+          "why": "The covariance is estimated; its quality and finite-sample uncertainty matter."
         }
       ]
     },
