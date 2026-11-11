@@ -450,7 +450,7 @@
    }
   },
   {
-   "kind": "guided",
+   "kind": "theory",
    "id": "s7",
    "mins": 8,
    "title": "Hierarchical cluster analysis",
@@ -480,26 +480,10 @@
    "ask": {
     "q": "Which linkage is most associated with chaining?",
     "nudge": "It merges clusters whenever at least one cross-cluster pair is close."
-   },
-   "hints": [
-    "Write all four distances between points in different clusters.",
-    "Single linkage takes the minimum; complete linkage takes the maximum.",
-    "The four distances are 3, 9, 4 and 2."
-   ],
-   "answer": "Single linkage is 2 and complete linkage is 9.",
-   "check": "Minimum cross-distance = 2; maximum cross-distance = 9.",
-   "scenario": {
-    "title": "Grouping retail outlets",
-    "body": [
-     "A retail chain compares outlets using two standardised measures: monthly customer growth and average basket value. Each outlet is represented by a point in a two-dimensional feature space. The analyst first forms small groups of nearby outlets and then considers whether to merge two existing groups. The distance between groups depends on the linkage definition, not merely on the distance between their centroids.",
-     "If the analyst uses single linkage, one close pair of outlets can connect two otherwise widely separated groups. Complete linkage instead considers the farthest cross-group pair and tends to favour more compact clusters. Average linkage uses the mean of all cross-group pair distances. The analyst should explain which rule was used before interpreting the resulting dendrogram, because different linkage choices can produce different group structures."
-    ],
-    "q": "Which linkage rule uses the largest cross-cluster pairwise distance?",
-    "answer": "Complete linkage."
    }
   },
   {
-   "kind": "worked",
+   "kind": "guided",
    "id": "s8",
    "mins": 6,
    "title": "Read the linkage rule",
@@ -525,6 +509,40 @@
    "ask": {
     "q": "What would average linkage use?",
     "nudge": "It aggregates all four cross-cluster distances."
+   },
+   "hints": [
+    "List all four distances between points in different clusters.",
+    "Single linkage takes the minimum; complete linkage takes the maximum.",
+    "The four cross-cluster distances are 3, 9, 4 and 2."
+   ],
+   "answer": "Single linkage is 2 and complete linkage is 9.",
+   "check": "Minimum cross-distance = 2; maximum cross-distance = 9.",
+   "solution": [
+    {
+     "say": "List the cross-cluster distances.",
+     "math": "3, 9, 4, 2.",
+     "why": "Only pairs with one point from each cluster are considered."
+    },
+    {
+     "say": "Apply single linkage.",
+     "math": "min(3,9,4,2)=2.",
+     "why": "Single linkage uses the nearest cross-cluster pair."
+    },
+    {
+     "say": "Apply complete linkage.",
+     "math": "max(3,9,4,2)=9.",
+     "why": "Complete linkage uses the farthest cross-cluster pair."
+    }
+   ],
+   "scenario": {
+    "teaser": "Grouping retail outlets",
+    "title": "A retail-chain clustering decision",
+    "body": [
+     "A retail chain compares outlets using two standardised measures: monthly customer growth and average basket value. Each outlet is represented by a point in a two-dimensional feature space. The analyst first forms small groups of nearby outlets and then considers whether to merge two existing groups. The distance between groups depends on the linkage definition, not merely on the distance between their centroids.",
+     "If the analyst uses single linkage, one close pair of outlets can connect two otherwise widely separated groups. Complete linkage instead considers the farthest cross-group pair and tends to favour more compact clusters. Average linkage uses the mean of all cross-group pair distances. The analyst should explain which rule was used before interpreting the resulting dendrogram, because different linkage choices can produce different group structures."
+    ],
+    "q": "Which linkage rule uses the largest cross-cluster pairwise distance?",
+    "answer": "Complete linkage."
    }
   },
   {
