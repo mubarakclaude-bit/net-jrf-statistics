@@ -169,6 +169,32 @@
     "A matrix transforms vectors. An eigenvector is a non-zero vector whose direction is unchanged by the transformation: Av=λv. The scalar λ is its eigenvalue.",
     "Rearranging gives (A−λI)v=0. A non-zero solution exists exactly when A−λI is singular, hence det(A−λI)=0.",
     "The zero vector is excluded because it satisfies the equation for every λ and carries no directional information."
+   ],
+   "items": [
+    {
+     "ask": "What is the determinant condition for an eigenvalue?",
+     "recall": "det(A−λI)=0.",
+     "refresh": [
+      "Start from Av=λv and move all terms to one side: (A−λI)v=0. This homogeneous system has a non-zero solution precisely when its coefficient matrix is singular, which is equivalent to determinant zero.",
+      "For a 2×2 matrix, expand the determinant and solve the resulting quadratic. Check the roots using the trace and determinant: their sum must equal tr(A), and their product must equal det(A)."
+     ]
+    },
+    {
+     "ask": "What is the null space of a matrix?",
+     "recall": "The set of all vectors x satisfying Ax=0.",
+     "refresh": [
+      "The null space is a vector subspace. Its dimension is the nullity, and a basis for it gives all independent directions sent to zero by A.",
+      "For eigenvalue λ, the eigenspace is exactly null(A−λI). The zero vector belongs to every null space, but it is excluded when naming eigenvectors."
+     ]
+    },
+    {
+     "ask": "What does linear independence mean?",
+     "recall": "Only the trivial linear combination of the vectors equals zero.",
+     "refresh": [
+      "Vectors v1,…,vk are independent when c1v1+…+ckvk=0 forces every coefficient ci to be zero. Otherwise one vector is redundant and can be written as a combination of the others.",
+      "Diagonalisation requires n independent eigenvectors in an n-dimensional space. Distinct eigenvalues guarantee independence; repeated eigenvalues require a dimension check of each eigenspace."
+     ]
+    }
    ]
   },
   {
@@ -305,11 +331,18 @@
     "teaser": "Two directions scale by different factors.",
     "title": "A diagonal transformation in two dimensions",
     "body": [
-     "For A=diag(2,3), the coordinate axes are invariant directions.",
-     "The first component doubles and the second triples. These scale factors are the eigenvalues.",
-     "The same idea extends to non-diagonal matrices after changing to an eigenvector basis."
+     "For A=[[2,1],[1,2]], the vector (1,1) is stretched by a factor of three while (1,−1) is unchanged. These are the two eigen-directions.",
+     "Because the eigenvectors are independent, they form a basis. In that basis the matrix is diagonal, with entries 3 and 1. This is the central practical meaning of diagonalisation: a complicated transformation becomes independent scaling along special directions.",
+     "In a statistical application, such directions can describe principal axes of a quadratic form or directions of changing variation. The interpretation depends on the matrix and the model, but the algebraic advantage is the same: diagonal coordinates separate the components."
     ]
-   }
+   },
+   "hints": [
+    "Write A−3I and solve the two linear equations.",
+    "The first row gives −x+y=0, so choose x=1.",
+    "For λ=1, the equation is x+y=0; choose x=1."
+   ],
+   "answer": "For λ=3, an eigenvector is (1,1); for λ=1, an eigenvector is (1,−1).",
+   "solution": "The eigenspace for λ=3 is span{(1,1)}. The eigenspace for λ=1 is span{(1,−1)}. The two eigenvectors are independent and form the columns of an invertible P."
   },
   {
    "kind": "theory",
@@ -423,7 +456,14 @@
      },
      "why": "A⁻¹=(5I−A)/6."
     }
-   ]
+   ],
+   "hints": [
+    "Move 6I to the right and factor A from A²−5A.",
+    "A(A−5I)=−6I. Multiply by A⁻¹ on the left.",
+    "Rearrange A−5I=−6A⁻¹, then isolate A⁻¹."
+   ],
+   "answer": "A⁻¹=(5I−A)/6.",
+   "solution": "From A²−5A+6I=0, obtain A(A−5I)=−6I. Multiplication by A⁻¹ gives A−5I=−6A⁻¹, hence A⁻¹=(5I−A)/6."
   },
   {
    "kind": "theory",
