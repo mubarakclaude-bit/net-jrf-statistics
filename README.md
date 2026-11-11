@@ -1,7 +1,7 @@
 # UGC NET Statistics (JRF) — study-content pipeline
 
 Authoring pipeline and source for a personalised UGC NET Statistics Paper 2 preparation app. This repository is the
-source of truth: the hosted site (Vercel) is built from it, and the Claude artifact is an optional generated copy.
+source of truth: the hosted site (Vercel) is built from it, and the Claude artifact is retired as a publishing target.
 
 **Start with [`AGENTS.md`](AGENTS.md)** (what you may do and how a pull request is verified), then
 [`docs/CONTENT_GUIDE.md`](docs/CONTENT_GUIDE.md) (what content exists, where it lives, how to tune it). The live content map is
