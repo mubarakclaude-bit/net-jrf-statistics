@@ -1,0 +1,663 @@
+{
+  "id": "probabilityt12",
+  "topicId": "probability-t12",
+  "moduleId": "probability",
+  "title": "Bayes Theorem and Conditional Probability",
+  "breadcrumb": "Probability → Bayes theorem and conditional probability",
+  "engine": "B",
+  "engineName": "Probability — conditioning, partitions and posterior updating",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 95,
+  "objectives": [
+    "Compute conditional probabilities using the multiplication rule.",
+    "Use partitions and the law of total probability.",
+    "Apply Bayes theorem to reverse conditional probabilities.",
+    "Interpret prevalence, sensitivity, specificity, PPV and NPV.",
+    "Recognise independence and avoid base-rate neglect in diagnostic problems."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Events, complements and unions",
+      "why": "Define the event structure."
+    },
+    {
+      "id": "p2",
+      "name": "Conditional probability",
+      "why": "Use the conditional-probability denominator correctly."
+    },
+    {
+      "id": "p3",
+      "name": "Mutually exclusive and exhaustive partitions",
+      "why": "Apply total probability across causes."
+    }
+  ],
+  "traps": [
+    "P(A|B) and P(B|A) are not interchangeable.",
+    "The total-probability denominator must include every partition cell.",
+    "False-positive rate is 1−specificity, not specificity.",
+    "PPV depends on prevalence; sensitivity alone does not determine it.",
+    "Mutually exclusive events with positive probabilities are not independent.",
+    "Use P(A∩B)=P(A|B)P(B) consistently."
+  ],
+  "revision": {
+    "sheet": [
+      "P(A|B)=P(A∩B)/P(B).",
+      "P(A∩B)=P(A|B)P(B).",
+      "For a partition, P(B)=ΣP(B|A_i)P(A_i).",
+      "Bayes: P(A_j|B)=P(B|A_j)P(A_j)/P(B).",
+      "Sensitivity=P(+|D).",
+      "Specificity=P(−|Dᶜ).",
+      "False-positive rate=1−specificity.",
+      "PPV=P(D|+); NPV=P(Dᶜ|−)."
+    ],
+    "cards": [
+      [
+        "Conditional probability",
+        "Intersection divided by conditioning event"
+      ],
+      [
+        "Total probability",
+        "Sum over a partition"
+      ],
+      [
+        "Bayes",
+        "Likelihood × prior / evidence"
+      ],
+      [
+        "Sensitivity",
+        "P(+|D)"
+      ],
+      [
+        "Specificity",
+        "P(−|Dᶜ)"
+      ],
+      [
+        "PPV",
+        "P(D|+)"
+      ],
+      [
+        "NPV",
+        "P(Dᶜ|−)"
+      ]
+    ],
+    "tricks": [
+      "Draw a 2×2 table for diagnostic tests.",
+      "Convert specificity to false-positive rate before calculation.",
+      "Write the partition before using total probability."
+    ],
+    "shortcuts": [
+      "Out of 10,000, translate prevalence into counts.",
+      "Posterior odds = prior odds × likelihood ratio.",
+      "Check that posterior probabilities sum to one across the partition."
+    ],
+    "remember": [
+      "P(+|D) is not P(D|+).",
+      "Rare conditions can have low PPV despite high sensitivity."
+    ]
+  },
+  "howto": "Define the target cause and evidence event, write the prior and likelihoods, build the total-probability denominator and only then apply Bayes. For diagnostic tests use a 2×2 table or out-of-10,000 counts to keep prevalence visible.",
+  "refs": [
+    {
+      "title": "A First Course in Probability",
+      "where": "Conditional probability and Bayes theorem",
+      "site": "Sheldon Ross",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Bayes, partitions and diagnostic examples."
+    },
+    {
+      "title": "Statistical Inference",
+      "where": "Conditional probability",
+      "site": "Casella and Berger",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Formal probability identities."
+    },
+    {
+      "title": "Introduction to Probability Models",
+      "where": "Bayes and reliability applications",
+      "site": "Sheldon Ross",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Applied probability models and posterior reasoning."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Proposed platform settings, not an NTA rule."
+  },
+  "provenance": "Original syllabus-aligned lesson authored 12 November 2026. The diagnostic PPV and machine-origin posterior values were checked by total-probability and Bayes calculations. No PYQ attribution is claimed.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Before the lesson — four foundations",
+      "objective": "Retrieve events, intersections and conditional probability.",
+      "body": [
+        "Conditional probability changes the sample space to the event already known to have occurred.",
+        "Bayes theorem reverses the direction of conditioning; total probability supplies its denominator."
+      ],
+      "ask": {
+        "q": "What event appears in the denominator of P(A|B)?",
+        "nudge": "It is the event you already know has occurred."
+      },
+      "items": [
+        {
+          "ask": "What is a complement?",
+          "recall": "Aᶜ=Ω\\A.",
+          "refresh": [
+            "P(Aᶜ)=1−P(A)."
+          ]
+        },
+        {
+          "ask": "What does mutually exclusive mean?",
+          "recall": "The intersection is empty.",
+          "refresh": [
+            "Positive-probability mutually exclusive events are dependent."
+          ]
+        },
+        {
+          "ask": "What is P(A∩B)?",
+          "recall": "P(A|B)P(B).",
+          "refresh": [
+            "This is the multiplication rule."
+          ]
+        },
+        {
+          "ask": "What is a partition?",
+          "recall": "A disjoint, exhaustive collection of events.",
+          "refresh": [
+            "Every outcome belongs to exactly one cell."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "A positive test is not a diagnosis",
+      "objective": "Understand base-rate neglect.",
+      "body": [
+        "A test's sensitivity is the chance of a positive result among diseased people. It is not the chance of disease among positive people.",
+        "The posterior denominator includes true positives and false positives. When prevalence is low, healthy people may greatly outnumber diseased people.",
+        "Bayes theorem combines prior prevalence and likelihoods; ignoring the prior is the base-rate fallacy."
+      ],
+      "scenario": {
+        "teaser": "A screening test is accurate, but the posterior probability remains low.",
+        "title": "The base rate is part of the evidence",
+        "body": [
+          "A disease affects 1% of a population. A test detects 95% of true cases and correctly clears 90% of healthy people. One patient tests positive.",
+          "Out of 10,000 people, about 100 have the disease and 95 test positive. Of 9,900 healthy people, 990 test positive because the false-positive rate is 10%.",
+          "There are 1,085 positive results, of which only 95 are true cases. The posterior is 95/1,085≈8.76%, not 95%.",
+          "Sensitivity is P(+|D), not P(D|+). Bayes reverses the conditioning and includes all sources of positive evidence."
+        ],
+        "q": "Why is P(D|+) much lower than 95% sensitivity?",
+        "answer": "Because the many healthy people who test positive contribute to the denominator; the prior prevalence is only 1%."
+      },
+      "ask": {
+        "q": "Why does prevalence matter to PPV?",
+        "nudge": "Count how many healthy people can test positive."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 10,
+      "title": "Conditional probability, partitions and Bayes",
+      "objective": "Derive posterior probabilities.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Conditional probability",
+          "body": "P(A|B)=P(A∩B)/P(B), for P(B)>0. Multiplication: P(A∩B)=P(A|B)P(B)=P(B|A)P(A)."
+        },
+        {
+          "t": "def",
+          "h": "Partition and total probability",
+          "body": "If A₁,…,A_k are disjoint and exhaustive, P(B)=ΣP(B|A_i)P(A_i). The partition must cover the sample space."
+        },
+        {
+          "t": "step",
+          "h": "Bayes theorem",
+          "body": "P(A_j|B)=P(B|A_j)P(A_j)/P(B). Posterior = likelihood × prior / total evidence."
+        },
+        {
+          "t": "step",
+          "h": "Odds form",
+          "body": "Posterior odds = prior odds × likelihood ratio. For a positive test, LR+=sensitivity/(1−specificity)."
+        },
+        {
+          "t": "step",
+          "h": "Independence",
+          "body": "A,B independent iff P(A∩B)=P(A)P(B), equivalently P(A|B)=P(A) when P(B)>0. Mutually exclusive positive-probability events are not independent."
+        },
+        {
+          "t": "step",
+          "h": "Diagnostic testing",
+          "body": "Sensitivity=P(+|D); specificity=P(−|Dᶜ); false-positive rate=1−specificity; PPV=P(D|+), which depends on prevalence."
+        }
+      ],
+      "table": {
+        "caption": "Diagnostic-test quantities",
+        "head": [
+          "Quantity",
+          "Definition",
+          "Condition"
+        ],
+        "rows": [
+          [
+            "Sensitivity",
+            "P(+|D)",
+            "Disease present"
+          ],
+          [
+            "Specificity",
+            "P(−|Dᶜ)",
+            "Disease absent"
+          ],
+          [
+            "False-positive rate",
+            "P(+|Dᶜ)",
+            "Disease absent"
+          ],
+          [
+            "PPV",
+            "P(D|+)",
+            "Test positive"
+          ],
+          [
+            "NPV",
+            "P(Dᶜ|−)",
+            "Test negative"
+          ]
+        ]
+      },
+      "flow": {
+        "title": "Bayes calculation",
+        "alt": "Flow for calculating posterior probability",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Define cause A and evidence B",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Write prior P(A)",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Write likelihoods",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Compute P(B) by total probability",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Posterior P(A|B)",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ],
+        "note": "The denominator sums evidence over every cell in the partition."
+      },
+      "ask": {
+        "q": "Why does Bayes require a denominator?",
+        "nudge": "The likelihood contributions must be normalised across all possible causes."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example — rare disease screening",
+      "objective": "Compute a positive predictive value.",
+      "problem": "A disease prevalence is 1%; sensitivity is 95% and specificity is 90%. Find P(D|+).",
+      "steps": [
+        {
+          "say": "Set prior and likelihoods",
+          "math": "P(D)=.01; P(Dᶜ)=.99; P(+|D)=.95; P(+|Dᶜ)=.10.",
+          "why": "False-positive rate is 1−specificity=.10."
+        },
+        {
+          "say": "Compute total positive probability",
+          "math": "P(+)=.95(.01)+.10(.99)=.0095+.099=.1085.",
+          "why": "Include true positives and false positives."
+        },
+        {
+          "say": "Apply Bayes",
+          "math": "P(D|+)=.0095/.1085≈.08756=8.76%.",
+          "why": "A positive result raises the prior from 1% to 8.76%, but most positives are false."
+        }
+      ],
+      "after": "Sensitivity is P(+|D); the requested posterior is P(D|+).",
+      "ask": {
+        "q": "What is the false-positive rate when specificity is 90%?",
+        "nudge": "Take one minus specificity."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 3,
+      "title": "Pause and retrieve",
+      "objective": "Recall Bayes identities.",
+      "intro": "Answer before revealing.",
+      "items": [
+        {
+          "q": "State the multiplication rule.",
+          "a": "P(A∩B)=P(A|B)P(B)."
+        },
+        {
+          "q": "State total probability.",
+          "a": "P(B)=ΣP(B|A_i)P(A_i) over a partition."
+        },
+        {
+          "q": "State Bayes theorem.",
+          "a": "P(A_j|B)=P(B|A_j)P(A_j)/P(B)."
+        },
+        {
+          "q": "What is specificity?",
+          "a": "P(−|Dᶜ)."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 7,
+      "title": "Complete the Bayes denominator",
+      "objective": "Construct the posterior step by step.",
+      "problem": "For a test with prevalence 1%, sensitivity 95% and specificity 90%, complete the PPV calculation.",
+      "steps": [
+        {
+          "say": "Find the false-positive rate.",
+          "blank": {
+            "prompt": "P(+|Dᶜ)=?",
+            "answer": "0.10",
+            "accept": [
+              ".10",
+              "10%"
+            ],
+            "hint": "One minus specificity."
+          },
+          "why": "1−.90=.10."
+        },
+        {
+          "say": "Find the total positive probability.",
+          "blank": {
+            "prompt": "P(+)=?",
+            "answer": "0.1085",
+            "accept": [
+              ".1085"
+            ],
+            "hint": ".95(.01)+.10(.99)."
+          },
+          "why": "The denominator includes true and false positives."
+        },
+        {
+          "say": "Find the posterior.",
+          "blank": {
+            "prompt": "P(D|+)=?",
+            "answer": "0.08756",
+            "accept": [
+              ".08756",
+              ".0876",
+              "8.76%"
+            ],
+            "hint": ".0095/.1085."
+          },
+          "why": "The posterior is about 8.76%."
+        }
+      ],
+      "after": "The denominator is the total evidence probability, not just the true-positive term."
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Odds, independence and diagnostic interpretation",
+      "objective": "Use odds and distinguish independence.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Posterior odds",
+          "body": "Posterior odds = prior odds × LR, where LR+ = sensitivity/(1−specificity) for a positive test."
+        },
+        {
+          "t": "def",
+          "h": "Independence",
+          "body": "A and B are independent iff P(A∩B)=P(A)P(B), equivalently P(A|B)=P(A) when P(B)>0."
+        },
+        {
+          "t": "step",
+          "h": "Mutual exclusivity trap",
+          "body": "If A and B are disjoint and both have positive probability, P(A∩B)=0 while P(A)P(B)>0; therefore they are not independent."
+        }
+      ],
+      "ask": {
+        "q": "Can two mutually exclusive events with positive probabilities be independent?",
+        "nudge": "Compare zero intersection with the product of their positive probabilities."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s7",
+      "mins": 9,
+      "title": "On your own — machine origin",
+      "objective": "Reverse the conditioning direction.",
+      "problem": "Machine M₁ produces 60% of items with 2% defect rate; M₂ produces 40% with 5% defect rate. Given a defective item, find P(M₂|D).",
+      "hints": [
+        "P(D)=.02(.60)+.05(.40).",
+        "The numerator is P(D|M₂)P(M₂).",
+        "Divide the numerator by total defect probability."
+      ],
+      "answer": "P(D)=.032; P(M₂|D)=.02/.032=.625.",
+      "check": "The posterior is 62.5%, not 5% or 40%; it combines likelihood and prior and normalises.",
+      "scenario": {
+        "teaser": "A defective item is traced back to one of two machines.",
+        "title": "Reverse the conditioning direction",
+        "body": [
+          "Machine M₁ produces 60% of items with a 2% defect rate. M₂ produces 40% with a 5% defect rate. An item is found defective.",
+          "The known quantities are P(D|M₁), P(D|M₂), P(M₁) and P(M₂); the requested probability is P(M₂|D).",
+          "Total defect probability is .02×.60+.05×.40=.032. The M₂ defective contribution is .05×.40=.02.",
+          "Thus P(M₂|D)=.02/.032=.625. Define the partition, compute the denominator and only then reverse the conditioning."
+        ],
+        "q": "What is P(M₂|D)?",
+        "answer": "0.625."
+      },
+      "solution": [
+        {
+          "say": "Total probability",
+          "math": "P(D)=.012+.020=.032",
+          "why": "Sum both machine contributions."
+        },
+        {
+          "say": "Bayes numerator",
+          "math": "P(D|M₂)P(M₂)=.05(.40)=.020",
+          "why": "This is the M₂ defective contribution."
+        },
+        {
+          "say": "Posterior",
+          "math": "P(M₂|D)=.020/.032=.625",
+          "why": "Normalise by all defective items."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s8",
+      "mins": 6,
+      "title": "Six claims — decide before revealing",
+      "objective": "Avoid conditioning and base-rate errors.",
+      "intro": "Decide true or false.",
+      "items": [
+        {
+          "claim": "P(A|B) and P(B|A) are not interchangeable.",
+          "tf": true,
+          "why": "True: conditioning directions differ."
+        },
+        {
+          "claim": "The total-probability denominator must include every partition cell.",
+          "tf": true,
+          "why": "True: total probability sums over all partition cells."
+        },
+        {
+          "claim": "False-positive rate is 1−specificity, not specificity.",
+          "tf": true,
+          "why": "True: false-positive rate is one minus specificity."
+        },
+        {
+          "claim": "PPV depends on prevalence; sensitivity alone does not determine it.",
+          "tf": true,
+          "why": "True: posterior probability depends on the prior prevalence."
+        },
+        {
+          "claim": "Mutually exclusive events with positive probabilities are not independent.",
+          "tf": true,
+          "why": "True: disjoint positive-probability events cannot be independent."
+        },
+        {
+          "claim": "Use P(A∩B)=P(A|B)P(B) consistently.",
+          "tf": true,
+          "why": "True: this is the multiplication rule."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Transfer problem — PPV and NPV",
+      "objective": "Compute both predictive values.",
+      "problem": "A test has prevalence 2%, sensitivity 90% and specificity 95%. Find PPV=P(D|+) and NPV=P(Dᶜ|−).",
+      "hints": [
+        "P(+)=.90(.02)+.05(.98).",
+        "PPV=.90(.02)/P(+).",
+        "P(−)=.10(.02)+.95(.98)."
+      ],
+      "answer": "P(+)=.067; PPV=.018/.067≈.2687. P(−)=.933; NPV=.931/.933≈.9979.",
+      "check": "False-positive rate is 5%. NPV is about 99.79%, PPV about 26.87%.",
+      "solution": [
+        {
+          "say": "Positive denominator",
+          "math": "P(+)=.018+.049=.067",
+          "why": "Include false positives."
+        },
+        {
+          "say": "Positive predictive value",
+          "math": "PPV=.018/.067=.2687",
+          "why": "Bayes reverses sensitivity."
+        },
+        {
+          "say": "Negative predictive value",
+          "math": "NPV=.931/(.002+.931)=.9979",
+          "why": "Use the negative-result partition."
+        }
+      ]
+    },
+    {
+      "kind": "recall",
+      "id": "s10",
+      "mins": 3,
+      "title": "Second recall — exam-critical distinctions",
+      "objective": "Retrieve diagnostic definitions.",
+      "intro": "State each in one line.",
+      "items": [
+        {
+          "q": "Sensitivity?",
+          "a": "P(+|D)."
+        },
+        {
+          "q": "Specificity?",
+          "a": "P(−|Dᶜ)."
+        },
+        {
+          "q": "PPV?",
+          "a": "P(D|+)."
+        },
+        {
+          "q": "False-positive rate?",
+          "a": "1−specificity."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 3,
+      "title": "What you should now do unaided",
+      "objective": "Summarise Bayes workflow.",
+      "body": [
+        "Compute conditional probabilities using the multiplication rule.",
+        "Use partitions and the law of total probability.",
+        "Apply Bayes theorem to reverse conditional probabilities.",
+        "Interpret prevalence, sensitivity, specificity, PPV and NPV.",
+        "Recognise independence and avoid base-rate neglect in diagnostic problems.",
+        "Define prior, likelihood, partition and posterior explicitly."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 12,
+      "title": "Mastery test",
+      "objective": "Demonstrate independent understanding.",
+      "setId": "probability_t12_mastery"
+    }
+  ]
+}
