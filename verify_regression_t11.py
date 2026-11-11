@@ -4,10 +4,11 @@ from pathlib import Path
 L=json.loads(Path("seed/lesson_regression_t11.json").read_text(encoding="utf-8"))
 P=json.loads(Path("seed/regression_t11_mastery.json").read_text(encoding="utf-8"))
 assert len(L["scenes"]) == 16
+assert L["estMin"] == sum(s.get("mins",0) for s in L["scenes"])
 assert sum(not s.get("ext",False) for s in L["scenes"]) == 15
 assert len([s for s in L["scenes"] if s.get("scenario")]) >= 2
 assert len([s for s in L["scenes"] if s.get("kind")=="guided"]) >= 2
-assert sum(len(s.get("scenario",{}).get("body",[])) for s in L["scenes"]) >= 4
+assert all(len(" ".join(s.get("scenario",{}).get("body",[]))) >= 400 for s in L["scenes"] if s.get("scenario"))
 assert len(P["items"]) == 20
 assert {d:sum(q["diff"]==d for q in P["items"]) for d in ["easy","moderate","hard"]} == {"easy":6,"moderate":10,"hard":4}
 assert sum(q["format"]=="numeric" for q in P["items"]) >= 4
