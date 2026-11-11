@@ -147,9 +147,9 @@ q(14, "single", "moderate",
    "The Indian Council of Medical Research",
    "The Registrar General of India",
    "The International Institute for Population Sciences, Mumbai"], "D",
-  "IIPS Mumbai is the nodal agency. NFHS-6, fielded in 2023-24 and released in May 2026, covered about 6.79 lakh "
-  "households across 715 districts and reported a total fertility rate of 2.0. The Registrar General handles the census "
-  "and the Sample Registration System, which is a neighbouring topic and the reason that option is attractive.")
+  "IIPS Mumbai is the nodal agency under MoHFW. The Registrar General handles the Census and the Sample Registration "
+  "System, while MoSPI's NSO produces HCES and PLFS. Keep institutional ownership separate and quote NFHS indicators "
+  "only with the published round and reference period.")
 
 q(15, "single", "moderate",
   "Which sector appears in the new IIP series on base 2022-23 but did not exist as a sector in the 2011-12 series?",
@@ -163,16 +163,16 @@ q(16, "multi", "moderate",
   "Consider the following statements about the Wholesale Price Index and the Producer Price Index.",
   ["A and B only", "A, B and C only", "B, C and D only", "A, B, C and D"], "B",
   "A, B and C hold: the base was revised from 2011-12 to 2022-23, the basket expanded from 697 to 957 items, and the "
-  "Output PPI was launched alongside it with a quarterly Services PPI covering seven sectors. D is false — the WPI is "
-  "to be discontinued after a five-year transition, not immediately, which is the detail the option sets turn on.",
+  "Output PPI was launched alongside it with a quarterly Services PPI covering seven specified services. D is false: "
+  "the OEA continues to publish WPI and PPI series concurrently.",
   statements=["The WPI base year was revised from 2011-12 to 2022-23.",
               "The WPI basket expanded from 697 to 957 items.",
               "An Output Producer Price Index was launched alongside the revised WPI.",
-              "The WPI was discontinued immediately on the launch of the PPI."],
+              "The WPI stopped being published when the PPI series was introduced in June 2026."],
   verdicts={"A": dict(tf=True,  why="The same financial year the IIP moved to."),
             "B": dict(tf=True,  why="957 items on the revised base, against 697 before."),
             "C": dict(tf=True,  why="Launched 15 June 2026, with a trial Input PPI for manufacturing and a quarterly Services PPI."),
-            "D": dict(tf=False, why="A five-year transition window was announced; the WPI continues to be published through it.")})
+            "D": dict(tf=False, why="OEA continues to publish WPI base 2022-23 alongside Output PPI, trial Input PPI and phased Services PPIs.")})
 
 # ------------------------------------------------------------------ hard (4)
 q(17, "numeric", "hard",
@@ -197,15 +197,14 @@ q(18, "single", "hard",
   check="A ratio can fall while both of its parts rise. Decide which quantity is the numerator before reading a trend.")
 
 q(19, "single", "hard",
-  "A statement reads: 'All three of India's main indices — CPI, WPI and IIP — were rebased in 2026, and all three "
-  "continue to be published on their new bases.' What is wrong with it?",
-  ["The WPI is being replaced by the Producer Price Index after a five-year transition",
-   "The IIP was not rebased in this period",
-   "The CPI was replaced rather than rebased",
-   "Nothing is wrong; the statement is accurate"], "A",
-  "All three were indeed rebased, so the first half holds. The flaw is in the second half: the WPI alone is also being "
-  "replaced, by the Producer Price Index, after a five-year transition window. Rebasing and replacement are different "
-  "things, and only one of the three indices is undergoing both.")
+  "Which statement correctly describes the current publication status of WPI and PPI in India?",
+  ["WPI publication ended when Output PPI was launched in June 2026",
+   "WPI base 2022-23 continues to be published alongside Output PPI, trial Input PPI and phased Services PPIs",
+   "PPI is compiled by MoSPI's NSO, while WPI is compiled by RBI",
+   "Services PPI covers every service industry with full sectoral weights"], "B",
+  "The Office of the Economic Adviser, DPIIT, publishes WPI base 2022-23 alongside Output PPI, trial Input PPI and "
+  "phased Services PPIs. The initial Services PPI covers seven specified services and is not a comprehensive index "
+  "for every service industry. PPI's use in GDP compilation does not imply WPI publication has ended.")
 
 q(20, "single", "hard",
   "In the group table of the new CPI series, the weight of food and beverages falls from 45.86% to 40.10%. The correct "
