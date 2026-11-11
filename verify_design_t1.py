@@ -41,8 +41,8 @@ blocks=[sum(row) for row in rbd]
 ss_t=sum(F(t*t,b) for t in treat)-cf
 ss_b=sum(F(x*x,a) for x in blocks)-cf
 ss_e=ss_total-ss_t-ss_b
-assert (G,sum(x*x for x in vals),cf,ss_total,treat,blocks)==(120,1244,F(1200),F(44),[24,30,27,39],[40,44,36])
-assert (ss_t,ss_b,ss_e)==(F(34),F(20,3),F(10,3))
+assert (G,sum(x*x for x in vals),cf,ss_total,treat,blocks)==(120,1248,F(1200),F(48),[25,29,27,39],[40,44,36])
+assert (ss_t,ss_b,ss_e)==(F(116,3),F(8),F(4,3))
 assert (a-1,b-1,(a-1)*(b-1),N-1)==(3,2,6,11)
 assert (ss_t/3)/(ss_e/6)==58
 assert F(48,2)/(F(12,8))==16
