@@ -8,7 +8,7 @@
  "engineName": "Translate between event counts, inter-arrival times and waiting-time distributions using the rate λ.",
  "version": "4.1",
  "status": "approved",
- "estMin": 115,
+ "estMin": 93,
  "objectives": [
   "Recognise the defining assumptions and rate parameter of a homogeneous Poisson process.",
   "Calculate event-count probabilities using N(t) ~ Poisson(λt).",
@@ -75,7 +75,7 @@
    "why": "A standard mathematical treatment of counting processes and inter-arrival times."
   }
  ],
- "provenance": "Original teaching material aligned to the Poisson-process, inter-arrival and waiting-time items in UGC NET Statistics Unit IX. Practice questions are original and are not represented as official UGC NET PYQs.",
+ "provenance": "Original teaching material aligned to the Poisson-process, inter-arrival and waiting-time items in UGC NET Statistics Unit IX. Practice questions are original and are not represented as official UGC NET PYQs. The v4.1 revision expands foundation rebuilds, adds a transfer exercise on the third arrival, a concise summary and a mastery test; the original scenario and numerical examples remain intact.",
  "revision": {
   "sheet": [
    "A homogeneous Poisson process has rate λ>0 and N(0)=0.",
@@ -144,7 +144,7 @@
   {
    "kind": "foundation",
    "id": "s0",
-   "mins": 8,
+   "mins": 6,
    "title": "Refresh rates, counts and exponentials",
    "objective": "Rebuild the probability tools needed for the Poisson process.",
    "body": [
@@ -189,7 +189,7 @@
   {
    "kind": "intuition",
    "id": "s1",
-   "mins": 7,
+   "mins": 5,
    "title": "Events arriving over time",
    "objective": "Interpret a homogeneous Poisson process in a practical setting.",
    "body": [
@@ -216,7 +216,7 @@
   {
    "kind": "theory",
    "id": "s2",
-   "mins": 9,
+   "mins": 7,
    "title": "Definition and assumptions",
    "objective": "State the homogeneous Poisson process properties.",
    "blocks": [
@@ -303,7 +303,7 @@
   {
    "kind": "worked",
    "id": "s3",
-   "mins": 9,
+   "mins": 7,
    "title": "Worked example: probability of an exact count",
    "objective": "Calculate an event-count probability.",
    "problem": "Calls arrive at rate 3 per hour. Find the probability of exactly 2 calls in the next hour.",
@@ -337,7 +337,7 @@
   {
    "kind": "theory",
    "id": "s4",
-   "mins": 8,
+   "mins": 6,
    "title": "Mean, variance and increments",
    "objective": "Use the moments and interval properties of Poisson counts.",
    "blocks": [
@@ -365,7 +365,7 @@
   {
    "kind": "worked",
    "id": "s5",
-   "mins": 9,
+   "mins": 7,
    "title": "Worked example: at least one event",
    "objective": "Use the complement rule for a Poisson count.",
    "problem": "A machine fails according to a Poisson process at rate 0.2 per day. Find the probability of at least one failure in 3 days.",
@@ -399,7 +399,7 @@
   {
    "kind": "theory",
    "id": "s6",
-   "mins": 9,
+   "mins": 6,
    "title": "Inter-arrival times are exponential",
    "objective": "Derive the distribution of the time to the first event.",
    "blocks": [
@@ -427,7 +427,7 @@
   {
    "kind": "guided",
    "id": "s7",
-   "mins": 9,
+   "mins": 7,
    "title": "Guided problem: a waiting-time probability",
    "objective": "Calculate an exponential waiting-time probability with diminishing hints.",
    "problem": "Events arrive at rate 6 per hour. Find the probability that the wait for the next event exceeds 10 minutes.",
@@ -438,9 +438,15 @@
    ],
    "answer": "P(T₁>10 minutes)=e^(−1)≈0.3679.",
    "solution": [
-    "Ten minutes is 1/6 hour.",
-    "The first waiting time is Exp(6) when time is measured in hours.",
-    "P(T₁>1/6)=e^(−6/6)=e^(−1)≈0.3679."
+    {
+     "say": "Ten minutes is 1/6 hour."
+    },
+    {
+     "say": "The first waiting time is Exp(6) when time is measured in hours."
+    },
+    {
+     "say": "P(T₁>1/6)=e^(−6/6)=e^(−1)≈0.3679."
+    }
    ],
    "scenario": {
     "teaser": "A bus-arrival gap",
@@ -461,7 +467,7 @@
   {
    "kind": "theory",
    "id": "s8",
-   "mins": 9,
+   "mins": 7,
    "title": "The kth arrival: Gamma and Erlang",
    "objective": "Relate successive exponential gaps to the time of the kth event.",
    "blocks": [
@@ -494,7 +500,7 @@
   {
    "kind": "worked",
    "id": "s9",
-   "mins": 9,
+   "mins": 7,
    "title": "Worked example: time to the second event",
    "objective": "Calculate a kth-arrival probability using a Poisson count identity.",
    "problem": "Events occur at rate 2 per hour. Find the probability that the second event occurs after 1 hour.",
@@ -528,7 +534,7 @@
   {
    "kind": "trapcheck",
    "id": "s10",
-   "mins": 7,
+   "mins": 5,
    "title": "Trap check: count or waiting time?",
    "objective": "Separate similar-looking Poisson and exponential statements.",
    "intro": "Mark each claim true or false, then compare the reason.",
@@ -567,7 +573,7 @@
   {
    "kind": "recall",
    "id": "s11",
-   "mins": 5,
+   "mins": 4,
    "title": "Rapid recall and exam checklist",
    "objective": "Retrieve the core formulas and choose the right distribution quickly.",
    "intro": "Answer before revealing each formula.",
@@ -601,7 +607,7 @@
   {
    "kind": "guided",
    "id": "s12",
-   "mins": 8,
+   "mins": 7,
    "title": "Guided problem: waiting for the third event",
    "objective": "Translate a kth-arrival probability into a Poisson count.",
    "problem": "A homogeneous Poisson process has rate 2 events per minute. Find P(T₃>1 minute), the probability that the third event has not occurred by one minute.",
@@ -612,16 +618,24 @@
    ],
    "answer": "P(T₃>1)=P(N(1)≤2)=e^(−2)(1+2+2)=5e^(−2)≈0.6767.",
    "solution": [
-    "The event T₃>1 is equivalent to N(1)≤2: the third arrival has not yet occurred exactly when no more than two arrivals have occurred.",
-    "The count in one minute is Poisson with mean λt=2×1=2.",
-    "Therefore P(T₃>1)=P(N(1)=0)+P(N(1)=1)+P(N(1)=2).",
-    "Evaluate the Poisson terms: e^(−2)[1+2+2²/2!]=5e^(−2)≈0.6767."
+    {
+     "say": "The event T₃>1 is equivalent to N(1)≤2: the third arrival has not yet occurred exactly when no more than two arrivals have occurred."
+    },
+    {
+     "say": "The count in one minute is Poisson with mean λt=2×1=2."
+    },
+    {
+     "say": "Therefore P(T₃>1)=P(N(1)=0)+P(N(1)=1)+P(N(1)=2)."
+    },
+    {
+     "say": "Evaluate the Poisson terms: e^(−2)[1+2+2²/2!]=5e^(−2)≈0.6767."
+    }
    ]
   },
   {
    "kind": "summary",
    "id": "s13",
-   "mins": 5,
+   "mins": 4,
    "title": "Summary: counts, gaps and arrival epochs",
    "objective": "Connect the main Poisson-process formulas before mastery practice.",
    "body": [
@@ -639,7 +653,7 @@
   {
    "kind": "quiz",
    "id": "s14",
-   "mins": 12,
+   "mins": 8,
    "title": "Mastery test",
    "objective": "Demonstrate independent problem-solving on unseen Poisson-process questions.",
    "setId": "stochastic_t5_mastery",
