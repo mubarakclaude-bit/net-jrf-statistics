@@ -1,0 +1,640 @@
+{
+  "id": "designt5",
+  "topicId": "design-t5",
+  "moduleId": "design",
+  "title": "Principles of Experimental Design",
+  "breadcrumb": "Unit III · Design of Experiments · Core principles",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 88,
+  "objectives": [
+    "Explain the principles of replication, randomisation and local control.",
+    "Distinguish experimental units, treatments, factors, blocks and replicates.",
+    "Explain how randomisation supports unbiased inference and valid error assessment.",
+    "Use local control/blocking to reduce nuisance variation.",
+    "Select CRD, RBD or Latin square according to the nuisance structure."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Experimental units and treatment allocation",
+      "why": "Design principles govern how treatments are assigned to units."
+    },
+    {
+      "id": "p2",
+      "name": "ANOVA and experimental error",
+      "why": "Replication and randomisation support estimation and inference."
+    },
+    {
+      "id": "p3",
+      "name": "CRD, RBD and Latin square layouts",
+      "why": "Local control is implemented through blocking."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule. Ten items are drawn with a 3/5/2 difficulty mix; retakes draw again."
+  },
+  "refs": [
+    {
+      "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+      "where": "Design of experiments",
+      "site": "NIST",
+      "url": "https://www.itl.nist.gov/div898/handbook/",
+      "type": "reference",
+      "free": true,
+      "why": "Open reference on experimental design principles."
+    },
+    {
+      "title": "Fisher, The Design of Experiments",
+      "where": "Replication, randomisation and local control",
+      "site": "Oliver & Boyd",
+      "url": "https://archive.org/",
+      "type": "book",
+      "free": false,
+      "why": "Foundational treatment of experimental design."
+    },
+    {
+      "title": "Montgomery, Design and Analysis of Experiments",
+      "where": "Basic principles of experimental design",
+      "site": "Wiley",
+      "url": "https://www.wiley.com/",
+      "type": "book",
+      "free": false,
+      "why": "Standard reference for practical design and analysis."
+    }
+  ],
+  "traps": [
+    "Replication means independent experimental units receiving the same treatment, not repeated readings on one unit.",
+    "Randomisation is used to protect against systematic allocation bias and justify probability-based error assessment.",
+    "Local control reduces nuisance variation by grouping similar units into blocks.",
+    "Blocking is not the same as replication: a block controls a nuisance source; replication supplies repeated treatment applications.",
+    "CRD uses no blocking; RBD controls one major nuisance direction; Latin square controls two orthogonal directions.",
+    "Randomisation does not guarantee equal group sizes or remove all confounding by itself.",
+    "A design principle is not a specific layout: replication, randomisation and local control work together."
+  ],
+  "howto": "Identify the experimental unit and treatment structure first. Replicate treatments on independent units, randomise allocation within the restrictions of the design, and use blocks when a known nuisance source creates systematic variation. Choose CRD, RBD or Latin square from the number and structure of nuisance directions.",
+  "revision": {
+    "sheet": [
+      "Replication: apply each treatment to multiple independent experimental units.",
+      "Randomisation: allocate treatments using a chance mechanism.",
+      "Local control: group similar units into blocks to reduce nuisance variation.",
+      "Replication estimates experimental error and improves precision.",
+      "Randomisation protects against allocation bias and supports valid inference.",
+      "Blocking explains systematic nuisance variation rather than leaving it in residual error.",
+      "CRD: no blocks; RBD: one blocking factor; Latin square: row and column blocking.",
+      "Blocks must be formed before treatment allocation; randomise treatments within the permitted structure.",
+      "Repeated measurements on one unit are not automatically independent replicates."
+    ],
+    "cards": [
+      [
+        "Replication",
+        "Independent repeated treatment applications"
+      ],
+      [
+        "Randomisation",
+        "Chance-based allocation"
+      ],
+      [
+        "Local control",
+        "Block similar experimental units"
+      ],
+      [
+        "CRD",
+        "No explicit blocking"
+      ],
+      [
+        "RBD",
+        "One blocking direction"
+      ],
+      [
+        "Latin square",
+        "Two orthogonal blocking directions"
+      ],
+      [
+        "Experimental unit",
+        "Smallest unit independently assigned a treatment"
+      ],
+      [
+        "Precision",
+        "Reduced unexplained variation improves precision"
+      ]
+    ],
+    "tricks": [
+      {
+        "hook": "Replicate = repeat units",
+        "why": "Independent experimental units, not merely repeated readings."
+      },
+      {
+        "hook": "Randomise = remove allocation choice",
+        "why": "Chance allocation prevents systematic assignment."
+      },
+      {
+        "hook": "Local control = block",
+        "why": "Group units that are alike on a nuisance variable."
+      }
+    ],
+    "shortcuts": [
+      "Ask what is replicated: the experimental unit, not the observation count.",
+      "Ask how many nuisance directions are controlled: zero, one or two.",
+      "Randomise within the restrictions imposed by the chosen layout."
+    ],
+    "remember": [
+      "The three principles are complementary, not alternatives.",
+      "Blocking reduces nuisance variation; randomisation protects unbiased comparisons."
+    ],
+    "traps": [
+      "Confusing repeated measurement with replication.",
+      "Treating blocking and randomisation as interchangeable.",
+      "Claiming randomisation removes all error."
+    ]
+  },
+  "provenance": "Original GPT-authored lesson for design-t5. No official PYQ is claimed. Covers Fisher's principles, experimental units, allocation, nuisance variation, blocking and selection among CRD/RBD/Latin square. Numerical mastery questions use elementary counts and design logic; no official PYQ is reproduced.",
+  "anchors": [],
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "What makes an experiment well designed?",
+      "objective": "Identify the role of design before data collection.",
+      "body": [
+        "An experiment compares treatments by assigning them to experimental units and measuring responses. The design specifies which units receive which treatments and how assignment is carried out.",
+        "A sound design protects comparisons from systematic bias, provides a basis for estimating experimental error, and controls known nuisance variation where possible."
+      ],
+      "items": [
+        {
+          "ask": "What is the purpose of experimental design?",
+          "recall": "Plan treatment allocation so comparisons are fair, precise and interpretable.",
+          "refresh": [
+            "Define the experimental unit before counting observations.",
+            "Allocation determines which treatment is applied to which unit.",
+            "Good design supports valid estimation and inference.  This rebuild makes the prerequisite explicit before the new design method is used. Identify what is being counted, which units are independent, and which assumptions allow the calculation. Then explain how that idea supports the next step rather than memorising the symbol alone."
+          ]
+        },
+        {
+          "ask": "What is an experimental unit?",
+          "recall": "The smallest unit independently assigned a treatment.",
+          "refresh": [
+            "A plot, patient, machine batch or classroom may be an experimental unit depending on how treatment is assigned.",
+            "Repeated readings from one unit are not automatically independent experimental replicates.",
+            "The number of experimental units determines the genuine replication available for estimating experimental error.",
+            "Define the unit before counting observations or calculating sample size."
+          ]
+        },
+        {
+          "ask": "What is a nuisance variable?",
+          "recall": "A source of variation not of primary interest that may affect the response.",
+          "refresh": [
+            "Soil fertility, operator, day or location may influence the outcome even though they are not the treatment being studied.",
+            "Blocking groups similar units to control a known nuisance source.",
+            "Randomisation protects against systematic allocation bias; blocking does not replace it.",
+            "Replication provides information about experimental variability."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What is the main decision or result in “What makes an experiment well designed?”?",
+        "nudge": "State the rule in your own words, then connect it to the calculation or design example in this scene."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Fisher's three principles",
+      "objective": "Name and distinguish replication, randomisation and local control.",
+      "body": [
+        "The classical principles are replication, randomisation and local control (often implemented through blocking). They address different needs: repeated independent applications, chance allocation, and control of nuisance heterogeneity.",
+        "They work together. A design may replicate and randomise while also blocking units that share a known nuisance condition."
+      ],
+      "scenario": {
+        "teaser": "A field trial compares four fertilisers across a sloping field.",
+        "title": "Identify the three principles",
+        "body": [
+          "Each fertiliser is applied to several separate plots (replication). Fertilisers are assigned by a random procedure (randomisation). Similar plots are grouped into blocks along the slope (local control).",
+          "The slope is a nuisance source because it may affect yield independently of fertiliser.",
+          "The choice should be made before data collection, because the allocation structure determines which comparisons are protected and which error term supports inference. Replication, randomisation and local control solve different problems; using one does not make the others unnecessary. Count independent units rather than repeated measurements when planning the experiment."
+        ],
+        "q": "Which principle is implemented by grouping similar plots?",
+        "answer": "Local control, through blocking."
+      },
+      "ask": {
+        "q": "Name the three classical principles of experimental design.",
+        "nudge": "One repeats, one uses chance, one controls nuisance variation."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 7,
+      "title": "Replication means independent units",
+      "objective": "Distinguish replication from repeated measurement.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Experimental unit",
+          "body": "The experimental unit is the smallest unit independently assigned to a treatment. It may be a plot, patient, animal, batch or machine."
+        },
+        {
+          "t": "formula",
+          "h": "Replication",
+          "body": "Replication applies the same treatment to multiple independent experimental units. It provides information about experimental variability and improves precision."
+        },
+        {
+          "t": "assume",
+          "h": "Repeated readings are different",
+          "body": "Several measurements on one treated unit are subsamples or repeated measurements, not automatically independent replications. Treating them as independent can underestimate uncertainty."
+        }
+      ],
+      "ask": {
+        "q": "If one plot is measured five times, how many independently treated plots have been replicated?",
+        "nudge": "Repeated readings do not create new experimental units."
+      },
+      "flow": {
+        "title": "Apply the three design principles",
+        "alt": "Apply the three design principles",
+        "nodes": [
+          {
+            "id": "n0",
+            "r": 0,
+            "c": 0,
+            "label": "Define experimental units",
+            "kind": "start"
+          },
+          {
+            "id": "n1",
+            "r": 1,
+            "c": 0,
+            "label": "Choose CRD, RBD or Latin square",
+            "kind": "step"
+          },
+          {
+            "id": "n2",
+            "r": 2,
+            "c": 0,
+            "label": "Randomise treatment allocation",
+            "kind": "step"
+          },
+          {
+            "id": "n3",
+            "r": 3,
+            "c": 0,
+            "label": "Replicate and control nuisance variation",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "n0",
+            "to": "n1"
+          },
+          {
+            "from": "n1",
+            "to": "n2"
+          },
+          {
+            "from": "n2",
+            "to": "n3"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s3",
+      "mins": 7,
+      "title": "Count the experimental units",
+      "objective": "Calculate units from treatments and replication.",
+      "problem": "A completely randomised experiment compares five treatments with four independent units per treatment. How many experimental units are required?",
+      "hints": [
+        "Multiply treatment count by independent replicates per treatment.",
+        "Use the formula for this layout, then verify the result against the design identity.",
+        "Use the formula for this layout, then verify the result against the design identity."
+      ],
+      "answer": "20 experimental units.",
+      "check": "Five treatments each applied to four independent units.",
+      "ask": {
+        "q": "Six treatments with three independent replicates each require how many units?",
+        "nudge": "6×3."
+      },
+      "steps": [
+        {
+          "say": "Count the allocation units.",
+          "math": "N=t×r=5×4=20.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Interpret.",
+          "math": "There are 20 independently treated experimental units.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ],
+      "solution": [
+        {
+          "say": "Identify the structure.",
+          "math": "20 experimental units."
+        },
+        {
+          "say": "Apply the rule.",
+          "math": "Five treatments each applied to four independent units."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s4",
+      "mins": 8,
+      "title": "Randomisation protects comparisons",
+      "objective": "Explain why chance allocation is essential.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Chance allocation",
+          "body": "Randomisation assigns treatments to experimental units using a chance mechanism, subject to the restrictions of the design."
+        },
+        {
+          "t": "formula",
+          "h": "Why it matters",
+          "body": "It prevents investigators from systematically assigning favourable units to preferred treatments and supports probability-based inference under the model."
+        },
+        {
+          "t": "assume",
+          "h": "What it does not do",
+          "body": "Randomisation does not guarantee identical groups, eliminate all variation, or repair a fundamentally unsuitable design. It protects against systematic allocation bias in expectation."
+        }
+      ],
+      "ask": {
+        "q": "Does randomisation guarantee exactly equal baseline characteristics in every realised experiment?",
+        "nudge": "Think about what chance allocation guarantees in expectation, not in every sample."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s5",
+      "mins": 7,
+      "title": "Local control: block similar units",
+      "objective": "Explain blocking as nuisance-variation control.",
+      "body": [
+        "Local control groups experimental units that are similar with respect to a known nuisance variable, such as soil fertility, operator, batch or day. Treatments are then compared within these relatively homogeneous groups.",
+        "Blocking accounts for systematic nuisance variation and can reduce residual error, increasing precision of treatment comparisons when blocks are effective."
+      ],
+      "scenario": {
+        "teaser": "A field has a fertility gradient from north to south.",
+        "title": "Use blocks to control the gradient",
+        "body": [
+          "If the gradient is ignored, one fertiliser may receive more fertile plots by chance or through poor allocation. Divide the field into blocks of nearby, similar plots and randomise all treatments within each block when using a complete RBD.",
+          "The block effect is separated from treatment variation in the analysis.",
+          "The choice should be made before data collection, because the allocation structure determines which comparisons are protected and which error term supports inference. Replication, randomisation and local control solve different problems; using one does not make the others unnecessary. Count independent units rather than repeated measurements when planning the experiment."
+        ],
+        "q": "What nuisance source is local control addressing?",
+        "answer": "The soil-fertility gradient."
+      },
+      "ask": {
+        "q": "What is the main statistical purpose of blocking?",
+        "nudge": "Move predictable nuisance variation out of residual error."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 7,
+      "title": "Replication, randomisation and blocking are not substitutes",
+      "objective": "Compare the three principles.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Different questions",
+          "body": "Replication asks whether treatments are applied to multiple independent units. Randomisation asks how assignments are chosen. Blocking asks whether similar units should be grouped to control a nuisance source."
+        },
+        {
+          "t": "assume",
+          "h": "Combined use",
+          "body": "An RBD can replicate treatments across blocks, randomise treatments within each block, and use blocks for local control. The principles complement one another."
+        }
+      ],
+      "ask": {
+        "q": "Which principle controls a known soil gradient by grouping similar plots?",
+        "nudge": "It is local control."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s7",
+      "mins": 8,
+      "title": "Choose CRD, RBD or Latin square",
+      "objective": "Match design layout to nuisance structure.",
+      "problem": "A laboratory compares five treatments. Units are homogeneous and no important blocking variable is identified. Which basic design is suitable?",
+      "hints": [
+        "Ask whether nuisance grouping is needed.",
+        "Count blocking directions."
+      ],
+      "answer": "CRD is appropriate when units are sufficiently homogeneous and no blocking factor is needed.",
+      "check": "CRD has no explicit blocks; RBD has one; Latin square has two.",
+      "ask": {
+        "q": "A trial has one known nuisance gradient. Which common design controls it?",
+        "nudge": "Use one blocking factor."
+      },
+      "steps": [
+        {
+          "say": "No known nuisance direction.",
+          "math": "Use a completely randomised design (CRD).",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "If one nuisance factor existed.",
+          "math": "A randomised block design (RBD) would control one blocking direction.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "If two orthogonal nuisance factors existed.",
+          "math": "A Latin square could control row and column effects, subject to its structural restrictions.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s8",
+      "mins": 7,
+      "title": "Randomisation within restricted layouts",
+      "objective": "Understand randomisation under blocking restrictions.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "CRD randomisation",
+          "body": "In a CRD, treatment labels are randomly allocated across all experimental units."
+        },
+        {
+          "t": "formula",
+          "h": "RBD randomisation",
+          "body": "In a complete RBD, treatments are randomly permuted within each block so every treatment appears once per block."
+        },
+        {
+          "t": "assume",
+          "h": "Latin square randomisation",
+          "body": "A Latin square requires randomisation that preserves one occurrence of each treatment in every row and column; arbitrary independent assignment would destroy the layout."
+        }
+      ],
+      "ask": {
+        "q": "In a complete RBD, where are treatments randomised?",
+        "nudge": "Within each block."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s9",
+      "mins": 6,
+      "title": "Precision, bias and validity",
+      "objective": "Separate design goals and limitations.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Precision",
+          "body": "Precision concerns the variability of an estimator. Effective replication and blocking can reduce uncertainty."
+        },
+        {
+          "t": "formula",
+          "h": "Bias protection",
+          "body": "Randomisation protects against systematic allocation bias; it does not guarantee a small standard error."
+        },
+        {
+          "t": "assume",
+          "h": "External validity",
+          "body": "A well-randomised experiment can still have limited generalisability if units, settings or treatment implementation do not represent the target population."
+        }
+      ],
+      "ask": {
+        "q": "Does a precise experiment automatically guarantee broad generalisability?",
+        "nudge": "Internal design quality and external validity are different."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 7,
+      "title": "Diagnose common design mistakes",
+      "objective": "Apply principles to practical scenarios.",
+      "problem": "A researcher applies three treatments to one plot each, measures every plot ten times, and assigns the preferred treatment to the best-looking plot.",
+      "hints": [
+        "Identify independent experimental units.",
+        "Identify allocation bias.",
+        "Identify missing replication."
+      ],
+      "solution": [
+        {
+          "say": "Replication problem.",
+          "math": "There is only one independently treated plot per treatment; ten readings do not create ten independent plots."
+        },
+        {
+          "say": "Randomisation problem.",
+          "math": "Assigning the preferred treatment to the best-looking plot is systematic allocation, not randomisation."
+        },
+        {
+          "say": "Local control.",
+          "math": "If plots differ along a known gradient, use blocks of similar plots and randomise within blocks."
+        }
+      ],
+      "answer": "The study lacks independent replication and randomisation; blocking may also be needed.",
+      "check": "Independent units, chance allocation and nuisance control are distinct.",
+      "ask": {
+        "q": "What is wrong with treating ten readings on one plot as ten replicates?",
+        "nudge": "The treatment was assigned only once to that plot."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s11",
+      "mins": 6,
+      "title": "Principles: quick examination traps",
+      "objective": "Avoid common conceptual errors.",
+      "intro": "Mark each statement TRUE or FALSE. Read the reason after submitting all verdicts.",
+      "items": [
+        {
+          "claim": "Replication requires multiple independently treated experimental units.",
+          "tf": true,
+          "why": "Repeated readings from a single unit do not automatically create independent replication."
+        },
+        {
+          "claim": "Randomisation protects against systematic treatment-allocation bias.",
+          "tf": true,
+          "why": "Chance allocation supports valid comparisons in expectation."
+        },
+        {
+          "claim": "Blocking makes randomisation unnecessary.",
+          "tf": false,
+          "why": "Treatments should still be randomised within the blocks."
+        },
+        {
+          "claim": "Local control groups similar experimental units to reduce nuisance variation.",
+          "tf": true,
+          "why": "Blocking is the standard local-control mechanism."
+        }
+      ]
+    },
+    {
+      "kind": "worked",
+      "id": "s12",
+      "mins": 7,
+      "title": "Select a design from the nuisance pattern",
+      "objective": "Choose an appropriate layout.",
+      "problem": "A crop experiment has two identifiable nuisance directions: a north–south fertility gradient and an east–west irrigation gradient. A Latin square layout is feasible and treatment count matches rows and columns. Which design principle is being used?",
+      "hints": [
+        "Two orthogonal nuisance directions are present.",
+        "Local control is implemented in rows and columns."
+      ],
+      "answer": "Local control through a Latin square design.",
+      "check": "The design controls two orthogonal nuisance factors.",
+      "ask": {
+        "q": "Which design controls two orthogonal blocking directions?",
+        "nudge": "Rows and columns."
+      },
+      "steps": [
+        {
+          "say": "Identify nuisance structure.",
+          "math": "There are two blocking directions.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Choose layout.",
+          "math": "A Latin square controls row and column effects, with each treatment appearing once in every row and column.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 5,
+      "title": "Principles mastery checkpoint",
+      "objective": "Consolidate the three principles and their use.",
+      "body": [
+        "Replication uses multiple independent experimental units; randomisation uses chance allocation; local control groups similar units to reduce nuisance variation.",
+        "CRD has no explicit blocking, RBD controls one blocking factor, and Latin square controls two orthogonal directions. The principles complement each other and do not eliminate all error."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 2,
+      "title": "Unseen mastery test",
+      "objective": "Demonstrate that you can reconstruct and apply the design methods without hints.",
+      "setId": "design_t5_mastery"
+    }
+  ]
+}

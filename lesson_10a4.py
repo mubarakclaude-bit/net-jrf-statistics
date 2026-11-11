@@ -8,7 +8,7 @@
 #   IIP   base 2022-23=100, base report 25 May 2026, first release 1 Jun 2026,
 #         general linking factor 1.3834 (defined the other way round).
 #   WPI   base revised to 2022-23, launched with the Output PPI on 15 Jun 2026;
-#         WPI to be discontinued after a five-year transition.
+#         WPI continues to be published alongside Output PPI, trial Input PPI and phased Services PPIs.
 #   PLFS  revamped Jan 2025: monthly all-India CWS bulletins, quarterly rural+urban,
 #         annual on a calendar year, 22,692 FSUs and 12 households per FSU.
 #   HCES  2022-23 and 2023-24 rounds; MPCE 4,122 rural / 6,996 urban in 2023-24.
@@ -261,7 +261,7 @@ SC.append(dict(
      why="The CPI base is a calendar year and the IIP base a financial year; the pairing is examinable."),
    dict(say="The wholesale price index is being replaced by a new index.",
      blank=dict(prompt="By what, and over how long a transition?", answer="the Producer Price Index, over five years",
-       accept=["Producer Price Index, five years", "PPI, 5 years", "Output PPI over five years",
+       accept=["Producer Price Index, five years", "PPI, 5 years", "Output PPI alongside current WPI publication",
                "PPI over a five year transition"],
        hint="The output version of it launched alongside the revised wholesale index."),
      why="A question will ask whether WPI was rebased or abolished; the answer is both, in that order."),
@@ -288,7 +288,7 @@ SC.append(dict(
      body="Classification moved to COICOP 2018 — twelve divisions in place of six groups, resolving to 43 groups, 92 "
           "classes, 162 subclasses and 358 items, up from 299. Goods rose from 259 to 308 and services from 40 to 50. "
           "Food and beverages carry 40.10% in the group table against 45.86% before, and housing 11.88% against 10.07%. "
-          "Rural house rent entered the index for the first time. Prices now come from 1,465 villages and 1,407 urban "
+          "Rural house rent entered the index for the first time. Prices now come from 1,465 villages and 1,395 urban "
           "markets across 434 towns, collected electronically on handheld devices, with e-commerce prices used in twelve "
           "large towns and administrative data for rail fares, postal charges and fuel."),
    dict(t="def", h="WPI, and the index replacing it",
@@ -326,7 +326,7 @@ SC.append(dict(
       dict(id="p", r=1, c=3, label="Output PPI, 2026", kind="step"),
       dict(id="h", r=2, c=0, label="weights from HCES 2023-24", kind="note"),
       dict(id="a", r=2, c=1, label="weights from ASI · NIC 2025", kind="note"),
-      dict(id="x", r=2, c=2, w=2, label="WPI discontinued after five years", kind="end")],
+      dict(id="x", r=2, c=2, w=2, label="WPI and PPI published concurrently", kind="end")],
     edges=[dict({"from":"m","to":"c"}), dict({"from":"m","to":"i"}), dict({"from":"d","to":"w"}),
            dict({"from":"d","to":"p"}), dict({"from":"c","to":"h"}), dict({"from":"i","to":"a"}),
            dict({"from":"w","to":"x"}), dict({"from":"p","to":"x"})]),
@@ -567,7 +567,7 @@ LES = dict(
       "CPI base 2024=100 from 12 Feb 2026; weights from HCES 2023-24; COICOP 2018; 358 items; food 40.10%, housing 11.88%.",
       "CPI is a modified Laspeyres index: Jevons at the elementary level, Young/modified Laspeyres above it.",
       "WPI base revised 2011-12 → 2022-23; 957 items; goods only; Office of the Economic Adviser, DPIIT.",
-      "Output PPI launched 15 June 2026; WPI to be discontinued after a five-year transition; Services PPI is quarterly.",
+      "Output PPI launched 15 June 2026; WPI base 2022-23 remains published alongside OPPI, trial IPPI and Services PPI.",
       "IIP base 2022-23=100 from 1 June 2026; 1,042 products in 463 item groups; NIC 2025.",
       "IIP sector weights: manufacturing 76.062, mining 11.053, electricity and gas 10.865, water and sewerage 2.020.",
       "IIP use-based: primary 31.136, intermediate 22.416, consumer non-durables 16.147, durables 11.311, infra 10.908, capital 8.082.",
@@ -616,7 +616,7 @@ LES = dict(
   traps=[
     "CPI's base is calendar 2024; IIP's and WPI's is financial 2022-23.",
     "WPI covers goods only and is produced by DPIIT, not MoSPI.",
-    "WPI is being replaced by the PPI after a five-year transition, not merely rebased.",
+    "WPI and PPI series are published concurrently; do not infer WPI discontinuation from PPI availability.",
     "The consumption round before 2022-23 is 2011-12; the 2017-18 round was withheld.",
     "Water supply and sewerage is the new IIP sector; gas supply sits inside electricity.",
     "The CPI linking factor is new over old, so it multiplies; the IIP factor is defined the other way round.",
