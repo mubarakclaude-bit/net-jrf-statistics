@@ -1,0 +1,756 @@
+{
+ "id": "designt2",
+ "topicId": "design-t2",
+ "moduleId": "design",
+ "title": "CRD, Randomised Block Design and Latin Square Design",
+ "breadcrumb": "Unit III · Design of Experiments · Basic layouts",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "4.1",
+ "status": "approved",
+ "estMin": 92,
+ "objectives": [
+  "Identify when a completely randomised, randomised block or Latin square design is appropriate.",
+  "Construct treatment allocation layouts and identify experimental units, treatments, blocks, rows and columns.",
+  "Compare the control of nuisance variation and replication structure across the three designs.",
+  "Calculate and interpret the ANOVA components and degrees of freedom for complete RBD and Latin square layouts.",
+  "Recognise the assumptions and limitations of Latin square designs, including equal numbers of treatments, rows and columns."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Experimental units, treatments and replication",
+   "why": "A design assigns treatments to experimental units and determines how often each treatment is observed."
+  },
+  {
+   "id": "p2",
+   "name": "ANOVA sums of squares and degrees of freedom",
+   "why": "The layouts determine how total variation is partitioned into treatment, block and error components."
+  },
+  {
+   "id": "p3",
+   "name": "Randomisation and independence",
+   "why": "Valid treatment comparisons depend on random allocation and an appropriate error structure."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA rule. Ten items are drawn with a 3/5/2 difficulty mix; retakes draw again."
+ },
+ "refs": [
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+   "where": "Design of experiments and analysis of variance",
+   "site": "NIST",
+   "url": "https://www.itl.nist.gov/div898/handbook/",
+   "type": "reference",
+   "free": true,
+   "why": "Accessible reference for experimental design and ANOVA."
+  },
+  {
+   "title": "Penn State STAT 503",
+   "where": "Design of Experiments",
+   "site": "Penn State Eberly College of Science",
+   "url": "https://online.stat.psu.edu/stat503/",
+   "type": "course",
+   "free": true,
+   "why": "Open course material on design principles and standard layouts."
+  },
+  {
+   "title": "Montgomery, Design and Analysis of Experiments",
+   "where": "Completely randomized, randomized block and Latin square designs",
+   "site": "Wiley",
+   "url": "https://www.wiley.com/",
+   "type": "book",
+   "free": false,
+   "why": "Standard reference for layout construction, analysis and design efficiency."
+  }
+ ],
+ "traps": [
+  "CRD controls no explicit block source; it relies on randomisation to distribute nuisance variation across treatments.",
+  "RBD has one block factor and each block contains every treatment once.",
+  "A Latin square controls two blocking directions, not two treatment factors.",
+  "A p×p Latin square has p treatments, p rows and p columns; every treatment appears exactly once in every row and column.",
+  "Latin square error df is (p−1)(p−2), not p²−p.",
+  "Latin square treatment, row and column effects are assumed additive; treatment-by-row and treatment-by-column interactions are not separately estimated.",
+  "Randomisation of a Latin square must preserve the Latin property; arbitrary cell shuffling destroys the design."
+ ],
+ "howto": "Read the decision map first. For each design, draw the layout before looking at the ANOVA formula. Work both numerical examples by hand and verify the Latin property cell by cell. Complete the mastery test without hints.",
+ "revision": {
+  "sheet": [
+   "CRD: assign all experimental units to treatments completely at random; no explicit block term.",
+   "CRD treatment df=a−1; error df=N−a; total df=N−1.",
+   "RBD: each of b blocks contains all a treatments once; N=ab.",
+   "RBD df: treatment a−1; block b−1; error (a−1)(b−1); total ab−1.",
+   "RBD SS treatment=ΣTᵢ²/b−CF; block SS=ΣBⱼ²/a−CF.",
+   "Latin square: p treatments, p rows and p columns; each treatment occurs once in each row and column.",
+   "Latin square SS rows=ΣRᵢ²/p−CF; columns=ΣCⱼ²/p−CF; treatments=ΣTᵢ²/p−CF.",
+   "Latin square df: rows p−1; columns p−1; treatments p−1; error (p−1)(p−2); total p²−1.",
+   "Latin square error SS=total SS−row SS−column SS−treatment SS.",
+   "Choose CRD for no dominant nuisance block; RBD for one; Latin square for two crossed nuisance directions."
+  ],
+  "cards": [
+   [
+    "CRD",
+    "One randomisation; no block row"
+   ],
+   [
+    "RBD",
+    "One block factor; every treatment per block"
+   ],
+   [
+    "Latin square",
+    "Two blocking directions; p×p layout"
+   ],
+   [
+    "RBD error df",
+    "(a−1)(b−1)"
+   ],
+   [
+    "Latin square error df",
+    "(p−1)(p−2)"
+   ],
+   [
+    "Latin square total df",
+    "p²−1"
+   ],
+   [
+    "CF",
+    "G²/N"
+   ],
+   [
+    "Randomisation",
+    "Preserve the required layout"
+   ]
+  ],
+  "tricks": [
+   {
+    "hook": "0–1–2 blocks",
+    "why": "CRD has no explicit block factor, RBD controls one, Latin square controls two."
+   },
+   {
+    "hook": "Square means square",
+    "why": "A Latin square uses p rows, p columns and p treatments, each represented once in every row and column."
+   },
+   {
+    "hook": "Three equal df terms",
+    "why": "In a Latin square, rows, columns and treatments each have p−1 degrees of freedom."
+   }
+  ],
+  "shortcuts": [
+   "Identify the nuisance directions before choosing a design: none → CRD; one → RBD; two crossed directions → Latin square.",
+   "Check every row and every column of a proposed Latin square for one occurrence of each treatment.",
+   "For a p×p Latin square, calculate error df as (p−1)(p−2) and verify all source df add to p²−1."
+  ],
+  "remember": [
+   "Blocking improves precision when the chosen block factor explains response variation and the model assumptions are reasonable.",
+   "Latin square is restrictive: the number of treatments, row levels and column levels must be equal."
+  ],
+  "traps": [
+   "Calling the row and column factors treatments in a Latin square; they are blocking factors.",
+   "Using an arbitrary random permutation of all p² cells rather than a randomisation that preserves the Latin structure.",
+   "Assuming a Latin square estimates treatment-by-row and treatment-by-column interactions with one observation per cell."
+  ]
+ },
+ "provenance": "Original GPT-authored lesson for repository catalog topic design-t2. No official PYQ is claimed. Examples are independently checked with exact arithmetic in verify_design_t2.py. The lesson covers standard balanced CRD, complete RBD and p×p Latin square designs; factorial, incomplete block and split-plot designs are outside this topic.",
+ "anchors": [],
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 6,
+   "title": "The design decides what variation can be controlled",
+   "objective": "Refresh treatments, experimental units, replication and nuisance factors.",
+   "body": [
+    "An experimental design is the allocation plan: which treatment is assigned to which experimental unit, and how the allocation is randomised. The design determines what comparisons are fair and which sources of variation can be separated in the analysis.",
+    "A nuisance factor affects the response but is not the main scientific question. Blocking groups similar units before randomising treatments. This can improve precision because predictable nuisance variation is accounted for rather than left inside the residual error."
+   ],
+   "items": [
+    {
+     "ask": "What is an experimental unit?",
+     "recall": "The smallest unit independently assigned to a treatment.",
+     "refresh": [
+      "A plot, patient, machine batch or animal may be an experimental unit, depending on how treatment is assigned.",
+      "The measurement unit need not be the experimental unit. Several measurements on one assigned plot do not automatically create independent replications.",
+      "Design choice begins by identifying the unit that receives the treatment."
+     ]
+    },
+    {
+     "ask": "What is a nuisance factor?",
+     "recall": "A source of response variation that is not the main treatment question.",
+     "refresh": [
+      "Examples include field position, operator, day or machine.",
+      "If nuisance levels can be grouped before treatment assignment, blocking may account for their variation.",
+      "A nuisance factor is not ignored; a planned block term can improve the treatment comparison."
+     ]
+    },
+    {
+     "ask": "Why must treatment allocation be randomised?",
+     "recall": "To avoid systematic allocation bias and support valid inference.",
+     "refresh": [
+      "Randomisation prevents the investigator from deliberately or inadvertently assigning better units to a preferred treatment.",
+      "It supports the independence structure assumed by standard analyses, though it does not guarantee equal variances or normal errors.",
+      "In blocked designs, randomisation is performed subject to the block structure."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "Three layouts answer three different design problems",
+   "objective": "Choose a design by counting the nuisance directions that should be blocked.",
+   "body": [
+    "Suppose a crop experiment compares fertilisers. If plots are reasonably similar, allocate fertilisers completely at random: a CRD. If fertility changes along one slope, group similar plots into blocks and randomise all fertilisers within each block: an RBD. If fertility changes in two crossed directions, such as north–south and east–west gradients, a Latin square can block rows and columns simultaneously.",
+    "These designs are not a ranking from weak to strong. A more restricted design is useful only when its structure matches the experimental setting. A Latin square is inappropriate if rows and columns do not represent meaningful nuisance sources or if its equal-level structure cannot be achieved."
+   ],
+   "scenario": {
+    "teaser": "A greenhouse has a temperature gradient from the door to the back wall, but no second systematic gradient.",
+    "title": "Choose a design for a one-direction gradient",
+    "body": [
+     "A researcher compares four nutrient solutions on 16 greenhouse benches. Temperature changes from the door to the back wall, so benches near each other are more comparable than benches far apart.",
+     "The researcher forms four blocks of four neighbouring benches. Each block receives all four nutrient solutions, with the four positions randomised independently within each block. This is a complete randomised block design.",
+     "A Latin square would add a second blocking direction, but the researcher has no credible second nuisance gradient. Adding an unnecessary row factor would consume degrees of freedom and impose a more restrictive model without a clear gain."
+    ],
+    "q": "Which design is appropriate and what is the block?",
+    "answer": "A complete RBD. The block is the group of four neighbouring benches along the temperature gradient; each block contains all four nutrient solutions once."
+   },
+   "ask": {
+    "q": "Why is a Latin square not automatically better than an RBD?",
+    "nudge": "A design should match the nuisance structure, not maximise the number of rows in the ANOVA table."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s2",
+   "mins": 6,
+   "title": "Decision map: no block, one block or two blocks",
+   "objective": "Translate the experimental setting into a design choice.",
+   "body": [
+    "Use the number and structure of nuisance directions as a first decision rule. CRD has no explicit block factor. RBD controls one block factor. Latin square controls two crossed blocking factors, conventionally called rows and columns.",
+    "The rule is conditional: blocks should be formed from a meaningful source of variation, and the layout must be feasible. Randomisation remains necessary in all three designs."
+   ],
+   "flow": {
+    "title": "Select the basic experimental layout",
+    "caption": "Start with the nuisance variation that can be identified before randomisation.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Identify experimental units and treatments",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "No planned nuisance block",
+      "kind": "decision"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "CRD: randomise all units",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "One nuisance direction",
+      "kind": "decision"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 1,
+      "label": "RBD: complete blocks contain all treatments",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "Two crossed nuisance directions with p levels",
+      "kind": "decision"
+     },
+     {
+      "id": "g",
+      "r": 5,
+      "c": 1,
+      "label": "Latin square: p rows × p columns × p treatments",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "b",
+      "to": "d"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     },
+     {
+      "from": "f",
+      "to": "g"
+     }
+    ]
+   },
+   "ask": {
+    "q": "A study has three treatments and four operators. Every operator can test all three treatments. Which design directly controls operator-to-operator variation?",
+    "nudge": "Each block should contain every treatment once."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 8,
+   "title": "Completely randomised design: the simplest allocation",
+   "objective": "Describe CRD allocation, replication and its ANOVA structure.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Layout",
+     "body": "There are a treatments and N experimental units. Assign the treatments to units completely at random. Replications may be equal or unequal; in a balanced CRD, each treatment has n units and N=an."
+    },
+    {
+     "t": "formula",
+     "h": "One-way model",
+     "body": "Yᵢⱼ=μ+τᵢ+εᵢⱼ. The treatment effect is fixed in the usual fixed-effects analysis; the error terms are independent with common variance under the standard ANOVA model."
+    },
+    {
+     "t": "formula",
+     "h": "Degrees of freedom",
+     "body": "Treatment: a−1. Error: N−a. Total: N−1. In a balanced design, treatment SS=ΣTᵢ²/n−CF, where CF=G²/N."
+    },
+    {
+     "t": "assume",
+     "h": "When CRD is suitable",
+     "body": "Use CRD when experimental units are sufficiently homogeneous or when nuisance variation cannot be organised into a useful block. Randomisation distributes uncontrolled variation across treatments, but it does not remove it."
+    }
+   ],
+   "ask": {
+    "q": "If all experimental units are similar and no nuisance grouping is needed, why is CRD attractive?",
+    "nudge": "Think about simplicity, unrestricted randomisation and the absence of a block term."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 8,
+   "title": "Randomised block design: one complete block factor",
+   "objective": "Construct a complete RBD and state its model and degrees of freedom.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Layout",
+     "body": "There are a treatments and b blocks. Each block contains all a treatments exactly once, so N=ab. Randomise the treatment positions independently within each block."
+    },
+    {
+     "t": "formula",
+     "h": "Additive model",
+     "body": "Yᵢⱼ=μ+τᵢ+βⱼ+εᵢⱼ. The treatment and block effects are additive. Each block controls a nuisance source such as field strip, operator, day or batch."
+    },
+    {
+     "t": "formula",
+     "h": "Degrees of freedom",
+     "body": "Treatment a−1; blocks b−1; error (a−1)(b−1); total ab−1. Check: (a−1)+(b−1)+(a−1)(b−1)=ab−1."
+    },
+    {
+     "t": "formula",
+     "h": "Treatment sum of squares",
+     "body": "CF=G²/(ab). SS_T=ΣTᵢ²/b−CF; SS_B=ΣBⱼ²/a−CF; SS_E=SS_Total−SS_T−SS_B."
+    },
+    {
+     "t": "assume",
+     "h": "Important limitation",
+     "body": "With one observation in each treatment-by-block cell, treatment-by-block interaction cannot be estimated separately from residual error. The ordinary RBD model assumes additivity."
+    }
+   ],
+   "ask": {
+    "q": "Why must every complete RBD block contain every treatment?",
+    "nudge": "The within-block comparison should compare all treatments under a common block condition."
+   },
+   "scenario": {
+    "teaser": "A hospital compares three sterilisation protocols across four operating teams.",
+    "title": "Block on the operating team",
+    "body": [
+     "Three sterilisation protocols are compared. Each of four operating teams uses all three protocols once, and the order of protocols is randomised within each team.",
+     "Operating teams may differ in experience and routine. Treating team as a block makes the protocol comparison within a team before combining information across teams.",
+     "This is a complete RBD, not a Latin square: only one nuisance factor is blocked. A Latin square would require a second crossed nuisance direction with the same number of levels as treatments."
+    ],
+    "q": "Why is a complete RBD appropriate here rather than a Latin square?",
+    "answer": "There is one planned nuisance factor, operating team. Each team receives all three protocols once. A Latin square requires two crossed blocking factors and equal numbers of treatments, rows and columns."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s5",
+   "mins": 10,
+   "title": "Worked RBD: block the operator effect",
+   "objective": "Calculate the RBD sums of squares, degrees of freedom and treatment F.",
+   "problem": "Three machine settings are tested by four operators. Each operator tests all settings once. The response table is:",
+   "table": {
+    "caption": "Rows are operators (blocks); columns are settings (treatments)",
+    "head": [
+     "Operator",
+     "A",
+     "B",
+     "C",
+     "Block total"
+    ],
+    "rows": [
+     [
+      "1",
+      "8",
+      "11",
+      "9",
+      "28"
+     ],
+     [
+      "2",
+      "10",
+      "12",
+      "11",
+      "33"
+     ],
+     [
+      "3",
+      "7",
+      "10",
+      "9",
+      "26"
+     ],
+     [
+      "4",
+      "11",
+      "13",
+      "12",
+      "36"
+     ],
+     [
+      "Treatment total",
+      "36",
+      "46",
+      "41",
+      "123"
+     ]
+    ]
+   },
+   "steps": [
+    {
+     "say": "Count the layout and calculate CF.",
+     "math": "a=3, b=4, N=12, G=123; CF=123²/12=5043/4=1260.75.",
+     "why": "Every operator tested all three settings, so this is a complete RBD."
+    },
+    {
+     "say": "Calculate total SS.",
+     "math": "Σy²=1294; SS_Total=1294−1260.75=33.25=133/4.",
+     "why": "Total SS measures variation around the grand mean."
+    },
+    {
+     "say": "Calculate treatment and block SS.",
+     "math": "SS_T=(36²+46²+41²)/4−1260.75=12.5.\\nSS_B=(28²+33²+26²+36²)/3−1260.75=251/12.",
+     "why": "Treatment totals are divided by the number of blocks; block totals by the number of treatments."
+    },
+    {
+     "say": "Find residual SS.",
+     "math": "SS_E=33.25−12.5−20.9167=0.8333=5/6.",
+     "why": "The three components must add to total SS."
+    },
+    {
+     "say": "Calculate df, mean squares and F.",
+     "math": "df_T=2; df_B=3; df_E=6; df_Total=11.\\nMS_T=12.5/2=6.25; MS_E=(5/6)/6=5/36.\\nF_T=6.25/(5/36)=45.",
+     "why": "The treatment test uses residual mean square, not block mean square."
+    }
+   ],
+   "after": "The treatment F statistic is 45 with df (2,6). This is a very large ratio, but a formal decision still requires the chosen significance level and model assumptions. The block effect is accounted for because operators are a planned nuisance factor."
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 9,
+   "title": "Latin square: block rows and columns simultaneously",
+   "objective": "Construct the Latin square layout and state its ANOVA decomposition.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "The p×p arrangement",
+     "body": "A Latin square has p treatments, p rows and p columns. Each treatment occurs exactly once in every row and exactly once in every column. Rows and columns are two blocking factors."
+    },
+    {
+     "t": "formula",
+     "h": "Additive model",
+     "body": "Yᵢⱼ=μ+ρᵢ+κⱼ+τₖ+εᵢⱼ, where ρ is the row effect, κ the column effect and τ the treatment effect assigned to that cell."
+    },
+    {
+     "t": "formula",
+     "h": "Sums of squares",
+     "body": "CF=G²/p². SS_Row=ΣRᵢ²/p−CF; SS_Column=ΣCⱼ²/p−CF; SS_Treatment=ΣTₖ²/p−CF. SS_Error=SS_Total−SS_Row−SS_Column−SS_Treatment."
+    },
+    {
+     "t": "formula",
+     "h": "Degrees of freedom",
+     "body": "Rows p−1; columns p−1; treatments p−1; error (p−1)(p−2); total p²−1. The three fitted main-effect sources each use p−1 df."
+    },
+    {
+     "t": "assume",
+     "h": "Restrictions and assumptions",
+     "body": "The number of treatments, rows and columns must be equal. The standard model assumes additivity. With one observation per cell, treatment-by-row and treatment-by-column interactions cannot be separately estimated from error."
+    }
+   ],
+   "ask": {
+    "q": "Why does a Latin square have (p−1)(p−2) error degrees of freedom?",
+    "nudge": "Start from p²−1 total df and subtract three sources, each with p−1 df."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s7",
+   "mins": 10,
+   "title": "Worked Latin square: a 3×3 layout",
+   "objective": "Verify the Latin property and calculate the treatment ANOVA.",
+   "problem": "Three treatments A, B and C are arranged in a 3×3 Latin square. Rows and columns are blocking directions. The responses are:",
+   "table": {
+    "caption": "Treatment labels and observed responses",
+    "head": [
+     "Row",
+     "Column 1",
+     "Column 2",
+     "Column 3",
+     "Row total"
+    ],
+    "rows": [
+     [
+      "1",
+      "A: 8",
+      "B: 12",
+      "C: 10",
+      "30"
+     ],
+     [
+      "2",
+      "C: 11",
+      "A: 10",
+      "B: 13",
+      "34"
+     ],
+     [
+      "3",
+      "B: 9",
+      "C: 12",
+      "A: 11",
+      "32"
+     ],
+     [
+      "Column total",
+      "28",
+      "34",
+      "34",
+      "96"
+     ]
+    ]
+   },
+   "steps": [
+    {
+     "say": "Check the Latin property.",
+     "math": "Each row contains A, B, C once; each column also contains A, B, C once.",
+     "why": "A square arrangement is not enough; the treatment labels must occur once in every row and every column."
+    },
+    {
+     "say": "Calculate the correction factor and total SS.",
+     "math": "G=96; N=9; CF=96²/9=1024.\\nΣy²=1044; SS_Total=20.",
+     "why": "The grand total is counted once, and the corrected total SS is the sum of squared observations minus CF."
+    },
+    {
+     "say": "Find row, column and treatment totals.",
+     "math": "Rows: 30,34,32. Columns: 28,34,34. Treatments: A=29, B=34, C=33.",
+     "why": "Each source total contains p=3 observations, so each squared total is divided by 3."
+    },
+    {
+     "say": "Calculate the three model sums of squares.",
+     "math": "SS_Row=8/3; SS_Column=8; SS_Treatment=14/3.",
+     "why": "Rows, columns and treatments are separate additive sources."
+    },
+    {
+     "say": "Obtain error SS and degrees of freedom.",
+     "math": "SS_Error=20−8/3−8−14/3=14/3.\\ndf: rows=2, columns=2, treatments=2, error=2, total=8.",
+     "why": "The source df add to 2+2+2+2=8, equal to p²−1."
+    },
+    {
+     "say": "Calculate treatment F.",
+     "math": "MS_T= (14/3)/2=7/3; MS_E=(14/3)/2=7/3; F_T=1.",
+     "why": "This example gives equal treatment and error mean squares; it illustrates the calculation rather than a significant treatment result."
+    }
+   ],
+   "after": "The treatment F statistic is 1 with df (2,2). The Latin square has controlled two nuisance directions, but the small 3×3 design leaves only two error degrees of freedom. Design efficiency must be balanced against the restrictions and limited residual information."
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 7,
+   "title": "Guided choice: identify the correct design",
+   "objective": "Select a design from the structure of the experimental setting.",
+   "problem": "A researcher compares four treatments. The units are grouped into five batches, and every batch can receive all four treatments. There is only one relevant nuisance factor.",
+   "hints": [
+    "Identify the treatments and the nuisance grouping.",
+    "A complete block contains every treatment once.",
+    "Choose the design with one block factor."
+   ],
+   "solution": [
+    {
+     "say": "There are four treatments and five batches; batches are the blocks."
+    },
+    {
+     "say": "Each batch contains all four treatments once, with random allocation within the batch."
+    },
+    {
+     "say": "Use a complete RBD with a=4 and b=5. Its error df are (4−1)(5−1)=12."
+    }
+   ],
+   "answer": "A complete randomised block design. Treatments are the four treatment conditions and batches are the five blocks.",
+   "check": "The layout contains 20 experimental units; treatment df=3, block df=4, error df=12 and total df=19."
+  },
+  {
+   "kind": "guided",
+   "id": "s9",
+   "mins": 7,
+   "title": "Guided check: Latin square degrees of freedom",
+   "objective": "Calculate the source degrees of freedom for a Latin square.",
+   "problem": "A 5×5 Latin square compares five treatments. Find the row, column, treatment, error and total degrees of freedom.",
+   "hints": [
+    "Here p=5; there are 25 observations.",
+    "Rows, columns and treatments each have p−1 df.",
+    "Error df=(p−1)(p−2); total df=p²−1."
+   ],
+   "solution": [
+    {
+     "say": "Rows, columns and treatments each have 5−1=4 df."
+    },
+    {
+     "say": "Error df=(5−1)(5−2)=4×3=12."
+    },
+    {
+     "say": "Total df=25−1=24; the source df add to 4+4+4+12=24."
+    }
+   ],
+   "answer": "Rows 4, columns 4, treatments 4, error 12, total 24.",
+   "check": "The decomposition is internally consistent: 4+4+4+12=24."
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s10",
+   "mins": 6,
+   "title": "Design selection and layout traps",
+   "objective": "Correct common errors in the three basic designs.",
+   "intro": "Decide whether each statement is true or false.",
+   "items": [
+    {
+     "claim": "A CRD has an explicit block term in its standard one-way ANOVA table.",
+     "tf": false,
+     "why": "A CRD has no planned block factor; all variation not explained by treatments remains in the residual."
+    },
+    {
+     "claim": "In a complete RBD, each block contains every treatment once.",
+     "tf": true,
+     "why": "This is the defining complete-block arrangement."
+    },
+    {
+     "claim": "A Latin square controls two blocking directions.",
+     "tf": true,
+     "why": "Rows and columns are both blocking factors; treatments are arranged to appear once in each."
+    },
+    {
+     "claim": "A Latin square may have p treatments, p rows and q columns where q differs from p.",
+     "tf": false,
+     "why": "The standard Latin square is p×p with p treatments, p rows and p columns."
+    },
+    {
+     "claim": "The Latin square error df are (p−1)(p−2).",
+     "tf": true,
+     "why": "Subtract row, column and treatment df from total p²−1."
+    },
+    {
+     "claim": "Randomising all p² cells independently preserves the Latin square property.",
+     "tf": false,
+     "why": "The treatment pattern must be randomised using row, column and treatment permutations that preserve one occurrence per row and column."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s11",
+   "mins": 7,
+   "title": "Transfer: choose a design for two gradients",
+   "objective": "Apply Latin square logic to a new setting.",
+   "problem": "A greenhouse compares four treatments. Light intensity changes by row of benches and temperature changes by column. There are four rows and four columns. Each treatment must occur once in every row and every column.",
+   "hints": [
+    "There are two crossed nuisance directions.",
+    "The treatment count must equal the number of rows and columns.",
+    "Preserve the Latin property when randomising the layout."
+   ],
+   "solution": [
+    {
+     "say": "There are four treatments, four row levels and four column levels."
+    },
+    {
+     "say": "Arrange treatments in a 4×4 Latin square so each appears once per row and column."
+    },
+    {
+     "say": "Randomise the square while preserving its Latin structure; then use row, column and treatment terms in the additive ANOVA."
+    }
+   ],
+   "answer": "Use a 4×4 Latin square design, with rows blocking the light gradient and columns blocking the temperature gradient.",
+   "check": "Each treatment occurs four times overall and once in every row and column."
+  },
+  {
+   "kind": "summary",
+   "id": "s12",
+   "mins": 4,
+   "title": "Compare the layouts before memorising formulas",
+   "objective": "Summarise the defining structure and the choice rule.",
+   "body": [
+    "CRD randomises all experimental units without an explicit block factor. RBD groups units into b blocks, each containing all a treatments once. Latin square arranges p treatments in p rows and p columns so each treatment appears once in every row and column.",
+    "The design choice depends on the nuisance structure: no useful block, one block direction or two crossed block directions. The more restricted the design, the more carefully its layout and assumptions must be justified.",
+    "For an RBD, the residual df are (a−1)(b−1). For a Latin square, rows, columns and treatments each use p−1 df, leaving (p−1)(p−2) error df. Always verify the source df add to total df."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s13",
+   "mins": 2,
+   "title": "Unseen mastery test",
+   "objective": "Demonstrate design selection and layout analysis without hints.",
+   "setId": "design_t2_mastery"
+  }
+ ]
+}
