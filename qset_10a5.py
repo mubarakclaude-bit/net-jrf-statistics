@@ -164,7 +164,7 @@ q(16, "multi", "moderate",
   "registration, each of which has its own Act.",
   statements=["It is conducted by the Office of the Registrar General of India.",
               "It operates under a statute of its own.",
-              "By 2023 it covered 8,839 sampling units and 8.981 million people.",
+              "In 2024 it covered 8,839 sampling units and 8.981 million people.",
               "Its sample is designed so that IMR has a relative standard error below 15%."],
   verdicts={"A": dict(tf=True,  why="The same body that takes the census and oversees civil registration."),
             "B": dict(tf=False, why="No statute. The Census Act 1948 covers the census and the RBD Act 1969 registration; the SRS is administrative."),
@@ -213,7 +213,7 @@ q(20, "single", "hard",
    "The biological value differs across Indian states",
    "The three-year averaging has biased the national figure downwards",
    "The shortfall is systematic, and the state variation must reflect behaviour rather than biology"], "D",
-  "A biological constant cannot vary by state, so a range from 974 to 868 locates the variation in behaviour. Nor is "
+  "A biological constant cannot vary by state, so a range from 978 to 872 locates the variation in behaviour. Nor is "
   "the gap sampling noise: the SRS covers 8.981 million people and the figure is averaged over three years "
   "precisely to damp year-to-year variation, which reduces noise rather than introducing bias. This is the one "
   "indicator in the set that does not fit a pattern of steady improvement.")
