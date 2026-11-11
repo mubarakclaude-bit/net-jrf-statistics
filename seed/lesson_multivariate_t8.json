@@ -1,0 +1,553 @@
+{
+ "id": "multivariatet8",
+ "topicId": "multivariate-t8",
+ "moduleId": "multivariate",
+ "title": "Mahalanobis Distance, Discriminant Analysis and MANOVA",
+ "breadcrumb": "Module 8 · Multivariate Analysis · Mahalanobis distance, discriminant analysis and MANOVA",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 75,
+ "objectives": [
+  "Calculate and interpret squared Mahalanobis distance.",
+  "Explain how covariance adjusts distance for scale and correlation.",
+  "Distinguish linear and quadratic discriminant analysis.",
+  "Explain the purpose of MANOVA and recognise its four common criteria."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Mean vectors and covariance matrices",
+   "why": "Mahalanobis distance measures displacement relative to covariance geometry."
+  },
+  {
+   "id": "p2",
+   "name": "Matrix inverse and quadratic forms",
+   "why": "The distance is a quadratic form involving the inverse covariance matrix."
+  },
+  {
+   "id": "p3",
+   "name": "Multivariate normal distribution",
+   "why": "Classical discriminant methods and MANOVA are commonly introduced under normal models."
+  }
+ ],
+ "traps": [
+  "Use Σ⁻¹, not Σ, in the Mahalanobis quadratic form.",
+  "D² is squared distance; take a square root only when D is requested.",
+  "LDA assumes a common within-group covariance matrix.",
+  "QDA permits group-specific covariance matrices.",
+  "MANOVA tests group mean response vectors jointly.",
+  "A small Wilks' lambda is not itself a p-value."
+ ],
+ "revision": {
+  "sheet": [
+   "Squared Mahalanobis distance: D²=(x−μ)′Σ⁻¹(x−μ).",
+   "If X~Nₚ(μ,Σ), with μ and Σ known, then D²~χ²ₚ.",
+   "LDA: multivariate normal groups with a common covariance matrix; linear boundary.",
+   "QDA: group-specific covariance matrices; boundaries generally quadratic.",
+   "MANOVA tests H₀: μ₁=…=μg for a vector-valued response.",
+   "Common criteria: Wilks' lambda, Pillai's trace, Hotelling–Lawley trace and Roy's largest root."
+  ],
+  "cards": [
+   [
+    "Squared Mahalanobis distance",
+    "(x−μ)′Σ⁻¹(x−μ)"
+   ],
+   [
+    "Known normal model",
+    "D²~χ²ₚ"
+   ],
+   [
+    "LDA",
+    "Common covariance; linear boundary"
+   ],
+   [
+    "QDA",
+    "Group-specific covariance; quadratic boundary"
+   ],
+   [
+    "MANOVA",
+    "Joint test of mean response vectors"
+   ],
+   [
+    "Wilks' lambda",
+    "|E|/|E+H|"
+   ]
+  ],
+  "tricks": [
+   "Use D² directly for chi-square reference; do not take an unnecessary square root.",
+   "For diagonal Σ, sum squared deviations divided by corresponding variances.",
+   "LDA means pooled/common covariance; QDA means separate covariance matrices.",
+   "Several dependent variables and a group effect suggest MANOVA."
+  ],
+  "shortcuts": [
+   "Check that Σ⁻¹ is p×p and the final quadratic form is scalar.",
+   "Identify common versus group-specific covariance before choosing LDA or QDA.",
+   "Distinguish a test statistic from its p-value."
+  ],
+  "remember": [
+   "Mahalanobis distance adjusts for scale and correlation.",
+   "LDA shares covariance; QDA does not.",
+   "MANOVA compares group mean vectors jointly."
+  ]
+ },
+ "howto": "For Mahalanobis distance, centre the observation, apply the inverse covariance matrix and form the quadratic product. For classification, identify whether covariance is shared across groups. For several response variables, formulate a joint MANOVA test of group mean vectors.",
+ "refs": [
+  {
+   "title": "An Introduction to Multivariate Statistical Analysis",
+   "where": "Multivariate distances, classification and multivariate inference",
+   "site": "T. W. Anderson",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Classical mathematical treatment of multivariate distance and inference."
+  },
+  {
+   "title": "Applied Multivariate Statistical Analysis",
+   "where": "Discriminant analysis and MANOVA",
+   "site": "Johnson and Wichern",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Standard applied reference for classification and multivariate group comparisons."
+  },
+  {
+   "title": "STAT 505: Applied Multivariate Statistical Analysis",
+   "where": "Multivariate methods course notes",
+   "site": "Penn State",
+   "url": "https://online.stat.psu.edu/stat505/",
+   "type": "Free course notes",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Accessible supporting material for multivariate methods."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [],
+ "provenance": "Authored 11 November 2026 from catalog topic multivariate-t8. June 2026 Paper 2 source bank was searched for Mahalanobis distance, discriminant analysis and MANOVA; no directly matching question was found, so no PYQ anchor is claimed. Scope is introductory definitions, interpretation and method selection; advanced derivations are excluded.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 6,
+   "title": "Distance in multivariate space",
+   "objective": "Recall covariance and quadratic forms.",
+   "body": [
+    "An observation with p variables is a p×1 vector. Euclidean distance treats all coordinates as if they had the same scale and were unrelated.",
+    "Real variables may have different variances and may be correlated. The covariance matrix describes this scale and dependence structure.",
+    "Mahalanobis distance uses the covariance matrix to adjust displacement from a reference centre."
+   ],
+   "items": [
+    {
+     "ask": "What is on the diagonal of a covariance matrix?",
+     "recall": "Variances.",
+     "refresh": [
+      "The jth diagonal entry is the variance of variable j. It measures spread along that coordinate.",
+      "Off-diagonal entries are covariances. They describe how pairs of variables vary together and determine the orientation of the data cloud."
+     ]
+    },
+    {
+     "ask": "Which matrix appears in the standard Mahalanobis formula?",
+     "recall": "The inverse covariance matrix.",
+     "refresh": [
+      "The inverse covariance matrix scales deviations by their variability and accounts for correlations.",
+      "Using the covariance matrix rather than its inverse would not give the standard Mahalanobis distance."
+     ]
+    },
+    {
+     "ask": "What is the dimension of the final quadratic form?",
+     "recall": "A scalar.",
+     "refresh": [
+      "The displacement is p×1, its transpose is 1×p, and the inverse covariance is p×p.",
+      "Multiplication gives a 1×1 scalar, the squared distance from the reference centre."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "Why can Euclidean distance mislead when variables are strongly correlated?",
+    "nudge": "Think about the long and short axes of an elliptical data cloud."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 5,
+   "title": "Distance from a data cloud",
+   "objective": "Interpret covariance-adjusted distance.",
+   "body": [
+    "Imagine observations forming a long tilted ellipse. Moving along its long axis is common; moving the same raw distance across its narrow axis is unusual.",
+    "Mahalanobis distance accounts for the ellipse's scale and orientation. It measures displacement relative to the covariance structure.",
+    "A point that appears far away in raw units may still be typical when its direction follows the natural spread of the data."
+   ],
+   "scenario": {
+    "teaser": "Two correlated measurements",
+    "title": "Height and weight",
+    "body": [
+     "A tall and correspondingly heavy person may be ordinary relative to a positively correlated population. A tall but unusually light person may be more atypical. Mahalanobis distance uses the joint covariance pattern to distinguish these cases."
+    ],
+    "q": "What extra information does Mahalanobis distance use?",
+    "answer": "The covariance structure, including variances and correlations."
+   },
+   "ask": {
+    "q": "What happens to the distance if centimetres are converted to metres and covariance is transformed consistently?",
+    "nudge": "The covariance adjustment makes the measure invariant to nonsingular linear coordinate changes."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Definition and reference distribution",
+   "objective": "Use the squared distance formula.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Squared Mahalanobis distance",
+     "body": "D²(x,μ)=(x−μ)′Σ⁻¹(x−μ), where Σ is positive definite."
+    },
+    {
+     "t": "def",
+     "h": "Distance versus squared distance",
+     "body": "D² is nonnegative. The distance itself is D=√D²."
+    },
+    {
+     "t": "formula",
+     "h": "Known normal model",
+     "body": "If X~Nₚ(μ,Σ), with μ and Σ known, then D²(X,μ)~χ²ₚ."
+    },
+    {
+     "t": "step",
+     "h": "Important qualification",
+     "body": "If μ and Σ are estimated from the same sample, do not automatically apply the known-parameter chi-square result; the reference distribution changes."
+    }
+   ],
+   "flow": {
+    "title": "Compute Mahalanobis distance",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Choose reference μ and covariance Σ",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Calculate x−μ",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Find Σ⁻¹ and form the quadratic product",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Report D² or √D² as requested",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
+   },
+   "ask": {
+    "q": "For a known bivariate normal model, what is the distribution of D²?",
+    "nudge": "Use p as the chi-square degrees of freedom."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 9,
+   "title": "A bivariate calculation",
+   "objective": "Calculate squared Mahalanobis distance.",
+   "problem": "Let μ=(0,0)′, Σ=diag(4,1), and x=(2,1)′. Find D² and D.",
+   "steps": [
+    {
+     "say": "Calculate the displacement.",
+     "math": "x−μ=(2,1)′.",
+     "why": "Subtract the reference mean coordinate-wise."
+    },
+    {
+     "say": "Invert the diagonal covariance.",
+     "math": "Σ⁻¹=diag(1/4,1).",
+     "why": "Take reciprocals of the diagonal entries."
+    },
+    {
+     "say": "Form the quadratic product.",
+     "math": "D²=2²/4+1²/1=2.",
+     "why": "Each squared deviation is weighted by its inverse variance."
+    },
+    {
+     "say": "Take the square root for distance.",
+     "math": "D=√2.",
+     "why": "The question asks for both squared distance and distance."
+    }
+   ],
+   "ask": {
+    "q": "If only D² is requested, should you take the square root?",
+    "nudge": "Keep the squared and unsquared quantities distinct."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 4,
+   "title": "Recall the core definitions",
+   "objective": "Retrieve key facts.",
+   "intro": "Try to answer before revealing each formula.",
+   "items": [
+    {
+     "q": "Squared Mahalanobis distance?",
+     "a": "D²=(x−μ)′Σ⁻¹(x−μ)."
+    },
+    {
+     "q": "What does Σ⁻¹ account for?",
+     "a": "Different variances and correlations."
+    },
+    {
+     "q": "Known-parameter normal reference distribution?",
+     "a": "D²~χ²ₚ."
+    },
+    {
+     "q": "Is D² negative?",
+     "a": "No, it is nonnegative for positive definite Σ."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s5",
+   "mins": 5,
+   "title": "Complete a distance calculation",
+   "objective": "Apply the quadratic form.",
+   "problem": "Let μ=(1,1)′, Σ=diag(1,4), and x=(3,3)′.",
+   "steps": [
+    {
+     "say": "Find the displacement.",
+     "math": "x−μ=(2,2)′.",
+     "why": "Subtract the reference mean.",
+     "blank": {
+      "prompt": "Enter the first coordinate.",
+      "answer": "2",
+      "accept": [
+       "2"
+      ],
+      "hint": "3−1."
+     }
+    },
+    {
+     "say": "Invert the covariance matrix.",
+     "math": "Σ⁻¹=diag(1,1/4).",
+     "why": "Take reciprocal diagonal entries.",
+     "blank": {
+      "prompt": "Enter the second diagonal entry.",
+      "answer": "1/4",
+      "accept": [
+       "1/4",
+       "0.25"
+      ],
+      "hint": "Reciprocal of four."
+     }
+    },
+    {
+     "say": "Calculate squared distance.",
+     "math": "D²=2²+2²/4=5.",
+     "why": "Weight each squared deviation by inverse variance.",
+     "blank": {
+      "prompt": "Enter D².",
+      "answer": "5",
+      "accept": [
+       "5",
+       "5.0"
+      ],
+      "hint": "Four plus one."
+     }
+    }
+   ],
+   "after": "The squared distance is five; the second coordinate contributes less because its variance is larger.",
+   "ask": {
+    "q": "What is the unsquared distance?",
+    "nudge": "Take the nonnegative square root of five."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Discriminant analysis: LDA and QDA",
+   "objective": "Distinguish classification assumptions.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Classification",
+     "body": "Given an observed vector x, assign it to one of g known groups using group distributions or discriminant scores."
+    },
+    {
+     "t": "formula",
+     "h": "Linear discriminant analysis",
+     "body": "Classical LDA assumes multivariate normal groups with a common covariance matrix Σg=Σ. Comparing group scores leaves a linear function of x."
+    },
+    {
+     "t": "formula",
+     "h": "Quadratic discriminant analysis",
+     "body": "QDA allows group-specific covariance matrices Σg. The inverse covariance and determinant terms vary by group, so boundaries are generally quadratic."
+    },
+    {
+     "t": "step",
+     "h": "Choosing a method",
+     "body": "Use LDA when a common covariance assumption is reasonable. QDA is more flexible but estimates more covariance parameters."
+    }
+   ],
+   "ask": {
+    "q": "Which method has a linear decision boundary under the classical normal model?",
+    "nudge": "It is the method with a common covariance matrix."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 7,
+   "title": "Choose the classifier",
+   "objective": "Select LDA or QDA.",
+   "problem": "Two multivariate normal populations have different mean vectors but are assumed to share the same covariance matrix. Which classical discriminant method fits?",
+   "hints": [
+    "Focus on the covariance assumption.",
+    "A common covariance leads to a linear discriminant score."
+   ],
+   "answer": "Linear discriminant analysis (LDA).",
+   "check": "Common covariance → LDA.",
+   "solution": [
+    "LDA pools information across groups to estimate a common covariance matrix.",
+    "With a shared covariance, quadratic terms cancel when group scores are compared, leaving a linear decision boundary."
+   ],
+   "scenario": {
+    "title": "A second classification study",
+    "body": [
+     "A dataset suggests that diagnostic groups have substantially different covariance structures. Forcing a common covariance may be too restrictive."
+    ],
+    "q": "Which alternative allows each group its own covariance matrix?",
+    "answer": "Quadratic discriminant analysis (QDA)."
+   },
+   "ask": {
+    "q": "What is one cost of QDA?",
+    "nudge": "Consider the number of covariance parameters that must be estimated."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s8",
+   "mins": 6,
+   "title": "Spot the method-selection traps",
+   "objective": "Avoid common classification errors.",
+   "intro": "Decide whether each statement is correct.",
+   "items": [
+    {
+     "q": "LDA assumes a common within-group covariance matrix.",
+     "a": "True. This is the defining classical covariance restriction."
+    },
+    {
+     "q": "QDA assumes all groups have identical covariance matrices.",
+     "a": "False. QDA allows group-specific covariance matrices."
+    },
+    {
+     "q": "MANOVA is simply ordinary ANOVA on one response.",
+     "a": "False. MANOVA jointly analyses a vector of responses."
+    },
+    {
+     "q": "Mahalanobis distance is invariant under nonsingular linear coordinate changes when covariance is transformed consistently.",
+     "a": "True. The covariance adjustment preserves the quadratic distance."
+    }
+   ],
+   "ask": {
+    "q": "Which assumption separates LDA from QDA?",
+    "nudge": "Compare pooled and group-specific covariance matrices."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s9",
+   "mins": 7,
+   "title": "MANOVA and its common criteria",
+   "objective": "Interpret multivariate group comparison.",
+   "problem": "Three groups are compared on two response variables. The question is whether their population mean response vectors are equal. Which method is appropriate?",
+   "hints": [
+    "There are multiple dependent variables.",
+    "The null concerns the whole vector of means."
+   ],
+   "answer": "MANOVA: H₀: μ₁=μ₂=μ₃.",
+   "check": "Several responses and a joint group-mean hypothesis → MANOVA.",
+   "solution": [
+    "MANOVA extends group-comparison logic to a vector-valued response.",
+    "The hypothesis and error sum-of-products matrices are commonly denoted H and E.",
+    "Four standard criteria are Wilks' lambda, Pillai's trace, Hotelling–Lawley trace and Roy's largest root."
+   ],
+   "ask": {
+    "q": "What does Wilks' lambda compare?",
+    "nudge": "It is a determinant ratio involving within-group error and total variation."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s10",
+   "mins": 4,
+   "title": "One-minute method selector",
+   "objective": "Connect the three methods.",
+   "body": [
+    "Mahalanobis distance measures covariance-adjusted separation: D²=(x−μ)′Σ⁻¹(x−μ).",
+    "LDA uses a common within-group covariance matrix; QDA permits group-specific covariance matrices.",
+    "MANOVA tests equality of group mean vectors when there are multiple response variables. Its common criteria are Wilks' lambda, Pillai's trace, Hotelling–Lawley trace and Roy's largest root.",
+    "This lesson is introductory: it focuses on definitions, interpretation and method selection rather than advanced derivations."
+   ],
+   "ask": {
+    "q": "Which method compares several groups on a vector of outcomes?",
+    "nudge": "It is the multivariate extension of ANOVA."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s11",
+   "mins": 6,
+   "title": "Check your understanding",
+   "objective": "Test essential distinctions.",
+   "setId": "multivariate_t8_mastery"
+  }
+ ]
+}
