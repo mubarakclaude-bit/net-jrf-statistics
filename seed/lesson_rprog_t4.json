@@ -240,7 +240,24 @@
       "ask": {
         "q": "What is the key output rule to check in this section?",
         "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
-      }
+      },
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Dimensions",
+          "body": "dim(A) returns c(nrow(A), ncol(A))."
+        },
+        {
+          "t": "def",
+          "h": "Indexing",
+          "body": "A[i,j] selects one element; A[i,] selects row i; A[,j] selects column j."
+        },
+        {
+          "t": "def",
+          "h": "Preserve dimensions",
+          "body": "Use drop=FALSE to keep a one-row or one-column subset as a matrix."
+        }
+      ]
     },
     {
       "kind": "worked",
@@ -257,27 +274,22 @@
         "q": "What is the key output rule to check in this section?",
         "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
       },
-      "problem": "Find matrix(c(2,4,6,8,10,12),nrow=2,ncol=3).",
+      "problem": "Construct matrix(c(2,4,6,8,10,12), nrow=2, ncol=3) using R's default filling order. State the resulting rows.",
       "steps": [
         {
-          "say": "Fill column one.",
-          "math": "2,4.",
-          "why": "R fills down columns."
+          "say": "Fill the first column",
+          "math": "The first two values fill rows one and two: 2, 4.",
+          "why": "R fills matrices down columns by default."
         },
         {
-          "say": "Fill column two.",
-          "math": "6,8.",
-          "why": "Continue in vector order."
+          "say": "Fill the remaining columns",
+          "math": "The second column is 6, 8; the third is 10, 12.",
+          "why": "Continue down each column before moving to the next."
         },
         {
-          "say": "Fill column three.",
-          "math": "10,12.",
-          "why": "Complete the requested dimensions."
-        },
-        {
-          "say": "Read rows.",
-          "math": "(2,6,10) and (4,8,12).",
-          "why": "Rows are read across the completed matrix."
+          "say": "Read the completed rows",
+          "math": "Row 1 is (2,6,10); row 2 is (4,8,12).",
+          "why": "Read across the completed matrix after filling by columns."
         }
       ]
     },
@@ -295,7 +307,30 @@
       "ask": {
         "q": "What is the key output rule to check in this section?",
         "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
-      }
+      },
+      "intro": "Recall the main matrix operators and their purposes.",
+      "items": [
+        {
+          "q": "A*B",
+          "a": "Multiplies corresponding entries element by element."
+        },
+        {
+          "q": "A%*%B",
+          "a": "Performs matrix multiplication using row-by-column dot products."
+        },
+        {
+          "q": "t(A)",
+          "a": "Returns the transpose of A."
+        },
+        {
+          "q": "det(A)",
+          "a": "Calculates the determinant of a square matrix."
+        },
+        {
+          "q": "solve(A,b)",
+          "a": "Solves the linear system Ax=b."
+        }
+      ]
     },
     {
       "kind": "theory",
@@ -358,7 +393,24 @@
             "to": "d"
           }
         ]
-      }
+      },
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Elementwise multiplication",
+          "body": "The * operator multiplies corresponding entries; it is not a matrix product."
+        },
+        {
+          "t": "def",
+          "h": "Conformability",
+          "body": "For A of size m×n and B of size p×q, A%*%B exists only when n=p."
+        },
+        {
+          "t": "def",
+          "h": "Result dimensions",
+          "body": "A conformable product A%*%B has size m×q."
+        }
+      ]
     },
     {
       "kind": "guided",
@@ -414,7 +466,24 @@
       "ask": {
         "q": "What is the key output rule to check in this section?",
         "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
-      }
+      },
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Transpose",
+          "body": "t(A) exchanges rows and columns: an m×n matrix becomes n×m."
+        },
+        {
+          "t": "def",
+          "h": "Determinant",
+          "body": "For a 2×2 matrix, det(A)=ad−bc. The determinant requires a square matrix."
+        },
+        {
+          "t": "def",
+          "h": "Solving systems",
+          "body": "solve(A,b) solves Ax=b; solve(A) gives the inverse when A is nonsingular."
+        }
+      ]
     },
     {
       "kind": "worked",
@@ -431,18 +500,23 @@
         "q": "What is the key output rule to check in this section?",
         "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
       },
-      "problem": "For A=[[2,1],[3,2]], find det(A).",
+      "problem": "For A = [[2,1],[3,2]], calculate det(A) and state whether A is nonsingular.",
       "answer": "1",
       "steps": [
         {
-          "say": "Identify entries.",
-          "math": "a=2,b=1,c=3,d=2.",
-          "why": "Use ad−bc."
+          "say": "Identify the entries",
+          "math": "a=2, b=1, c=3, d=2.",
+          "why": "Match the matrix entries to the determinant formula."
         },
         {
-          "say": "Substitute.",
-          "math": "2×2−1×3=1.",
-          "why": "The determinant is one."
+          "say": "Apply the 2×2 formula",
+          "math": "det(A)=ad−bc = 2×2−1×3 = 1.",
+          "why": "Substitute each entry in the correct position."
+        },
+        {
+          "say": "Interpret the result",
+          "math": "The determinant is 1, which is nonzero; A is nonsingular.",
+          "why": "A square matrix with nonzero determinant has an inverse."
         }
       ],
       "scenario": {
@@ -471,7 +545,24 @@
       "ask": {
         "q": "What is the key output rule to check in this section?",
         "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
-      }
+      },
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Diagonal",
+          "body": "diag(A) extracts diagonal entries; diag(n) creates an n×n identity matrix."
+        },
+        {
+          "t": "def",
+          "h": "Row and column totals",
+          "body": "rowSums(A) and colSums(A) calculate row and column totals."
+        },
+        {
+          "t": "def",
+          "h": "Example",
+          "body": "For [[1,2],[3,4]], rowSums is (3,7), colSums is (4,6), and diag is (1,4)."
+        }
+      ]
     },
     {
       "kind": "guided",
