@@ -168,29 +168,28 @@
           "ask": "How is f_Y(y) obtained?",
           "recall": "Integrate the joint density over x on the joint support.",
           "refresh": [
-            "Limits depend on the joint support.",
-            "The marginal density must integrate to one."
+            "To obtain f_Y(y), integrate the joint density over every x value allowed by the joint support while holding y fixed. First read the lower and upper x limits from the support region; do not automatically integrate from zero to one. Then simplify the resulting expression and check that the marginal density is non-negative and integrates to one over the admissible y range. This marginal is the denominator in f(X|Y=y)."
           ]
         },
         {
           "ask": "Define P(A|B).",
           "recall": "P(A∩B)/P(B), when P(B)>0.",
           "refresh": [
-            "The denominator is the probability of the known event."
+            "Conditional probability is P(A|B)=P(A∩B)/P(B), provided P(B)>0. The event B is the information already known, so it belongs in the denominator. The intersection in the numerator enforces both the event of interest and the observed information. For random variables, the same direction matters: f(X|Y=y) divides by f_Y(y), not by f_X(x)."
           ]
         },
         {
           "ask": "How is E[g(X)|Y=y] computed?",
           "recall": "Integrate g(x) against f_{X|Y}(x|y).",
           "refresh": [
-            "Use the conditional support."
+            "First construct f_{X|Y}(x|y) by dividing the joint density by f_Y(y), and state the conditional support. Then evaluate the integral of g(x) over that support, weighted by the conditional density. For a conditional mean choose g(x)=x; for a second moment choose g(x)=x². Finally use Var(X|Y=y)=E(X²|Y=y)−[E(X|Y=y)]²."
           ]
         },
         {
           "ask": "What characterises independence?",
           "recall": "The conditional law equals the marginal law almost everywhere.",
           "refresh": [
-            "The conditional law must not change with the observed value."
+            "Independence means learning Y does not change the distribution of X. Formally, the conditional pmf or density of X given Y=y equals the marginal pmf or density of X for almost every admissible y. Equivalently, the joint law factors into the product of its marginals. A single matching conditional value is not enough; the equality must hold almost everywhere."
           ]
         }
       ]
