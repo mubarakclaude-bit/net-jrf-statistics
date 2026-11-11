@@ -1,0 +1,734 @@
+{
+  "id": "regressiont1",
+  "topicId": "regression-t1",
+  "moduleId": "regression",
+  "title": "6.1 — Hat Matrix, Residual Maker and Quadratic Forms",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.1 Hat matrix, residual maker and quadratic forms",
+  "engine": "B",
+  "engineName": "Derive the OLS projection and residual operators, then use their matrix properties to solve regression questions.",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 100,
+  "objectives": [
+    "Derive the hat matrix H and residual-maker matrix M from the OLS projection.",
+    "Prove that H and M are symmetric and idempotent under full-column-rank OLS.",
+    "Use H and M to express fitted values, residuals, SSE and residual orthogonality.",
+    "Connect trace and rank of projection matrices to model and residual degrees of freedom.",
+    "Evaluate quadratic forms involving symmetric idempotent matrices.",
+    "Avoid confusing the hat matrix, residual maker, projection space and their ranks."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Matrix transpose and multiplication",
+      "why": "H and M are built from products involving X and (X′X)⁻¹."
+    },
+    {
+      "id": "p2",
+      "name": "Rank, column space and linear independence",
+      "why": "The rank of a projection matrix equals the dimension of its projected subspace."
+    },
+    {
+      "id": "p3",
+      "name": "OLS normal equations",
+      "why": "The residual vector is orthogonal to the column space of X."
+    }
+  ],
+  "traps": [
+    "H projects y onto C(X), while M projects y onto the orthogonal complement of C(X).",
+    "H and M are both symmetric and idempotent; M=I−H.",
+    "rank(H)=trace(H)=k when X has full column rank k; rank(M)=trace(M)=n−k.",
+    "H is n×n, not k×k.",
+    "The diagonal entries hᵢᵢ are leverage values; they are not generally all equal.",
+    "The residual vector is e=My and satisfies X′e=0.",
+    "For a symmetric idempotent matrix A, y′Ay is nonnegative and has rank(A) degrees of freedom under a standard normal vector."
+  ],
+  "howto": "Write H=X(X′X)⁻¹X′ and M=I−H; verify dimensions; use transpose and idempotence identities; express ŷ=Hy and e=My; use trace/rank for degrees of freedom; simplify quadratic forms with A′=A and A²=A.",
+  "refs": [
+    {
+      "title": "Introduction to Linear Regression Analysis",
+      "where": "Least squares geometry and projection matrices",
+      "site": "Montgomery, Peck and Vining",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Applied linear-model treatment of hat and residual matrices."
+    },
+    {
+      "title": "Linear Models",
+      "where": "Projection matrices and quadratic forms",
+      "site": "S. R. Searle",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Matrix theory for linear models."
+    },
+    {
+      "title": "The Theory of Linear Models",
+      "where": "Least-squares projection and residual spaces",
+      "site": "R. Christensen",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Geometric and algebraic treatment of linear models."
+    }
+  ],
+  "provenance": "This lesson is authored from the repository's regression-t1 catalog scope. The June 2026 Q9 variant cluster is predominantly adjusted R², ANOVA/F tests and model fit; it is not used as a hat-matrix anchor. The repository backlog itself notes that Q9's topic assignment is uncertain. No official PYQ is claimed as a direct hat-matrix question here. Mastery questions are original practice.",
+  "revision": {
+    "sheet": [
+      "H=X(X′X)⁻¹X′ is the hat matrix; ŷ=Hy.",
+      "M=I−H is the residual-maker matrix; e=My.",
+      "H′=H and H²=H; M′=M and M²=M.",
+      "HM=MH=0; H+M=I.",
+      "rank(H)=tr(H)=k; rank(M)=tr(M)=n−k when rank(X)=k.",
+      "X′M=0, so X′e=0 and residuals are orthogonal to every column of X.",
+      "SSE=e′e=y′My because M′M=M.",
+      "For symmetric idempotent A, y′Ay≥0; if y~N(0,σ²I), y′Ay/σ² has χ²_rank(A) distribution.",
+      "hᵢᵢ are leverages, 0≤hᵢᵢ≤1 and sum hᵢᵢ=k.",
+      "M removes the fitted component and leaves the residual component."
+    ],
+    "cards": [
+      [
+        "Hat matrix",
+        "H=X(X′X)⁻¹X′"
+      ],
+      [
+        "Fitted values",
+        "ŷ=Hy"
+      ],
+      [
+        "Residual maker",
+        "M=I−H"
+      ],
+      [
+        "Residuals",
+        "e=My"
+      ],
+      [
+        "Symmetry",
+        "H′=H; M′=M"
+      ],
+      [
+        "Idempotence",
+        "H²=H; M²=M"
+      ],
+      [
+        "Ranks",
+        "rank(H)=k; rank(M)=n−k"
+      ],
+      [
+        "Trace",
+        "tr(H)=k; tr(M)=n−k"
+      ],
+      [
+        "Orthogonality",
+        "X′e=0; HM=0"
+      ],
+      [
+        "SSE",
+        "e′e=y′My"
+      ]
+    ],
+    "tricks": [
+      "To prove H²=H, cancel X′X between the two factors using (X′X)⁻¹X′X=I.",
+      "For M², expand (I−H)² and use H²=H.",
+      "Trace is invariant under cyclic rearrangement: tr(ABC)=tr(BCA) when dimensions conform.",
+      "For idempotent matrices, eigenvalues are 0 or 1, so trace equals rank."
+    ],
+    "shortcuts": [
+      "H keeps the component in C(X); M removes it.",
+      "H+M=I and HM=0.",
+      "Trace equals rank for symmetric idempotent projection matrices."
+    ],
+    "remember": [
+      "These formulas assume X has full column rank for the ordinary inverse expression.",
+      "For rank-deficient X, projection onto C(X) still exists, but use a suitable generalized inverse; do not blindly use (X′X)⁻¹."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh the matrix tools",
+      "objective": "Rebuild the algebra used to derive projection matrices.",
+      "body": [
+        "This lesson is built around two matrices: one keeps the fitted part of the response, and the other keeps the residual part. Their properties come from ordinary matrix algebra.",
+        "You do not need to memorise every identity at once. First recover transpose, inverse, rank and orthogonality; then each result will follow from a short calculation."
+      ],
+      "items": [
+        {
+          "ask": "What is the transpose of a product AB?",
+          "recall": "(AB)′=B′A′.",
+          "refresh": [
+            "A transpose exchanges rows and columns. For a matrix A, the entry in row i and column j moves to row j and column i.",
+            "For products, the order reverses: (AB)′=B′A′. This is why the transpose of X(X′X)⁻¹X′ can be simplified by transposing each factor and reversing the order.",
+            "The matrix X′X is symmetric because (X′X)′=X′X. Its inverse is also symmetric, which is used in proving H′=H.",
+            "When proving matrix identities, preserve factor order. Associativity lets you regroup adjacent factors, but matrices cannot generally be swapped."
+          ]
+        },
+        {
+          "ask": "If X has full column rank k, what can you say about X′X?",
+          "recall": "X′X is invertible.",
+          "refresh": [
+            "Full column rank means none of the k columns of X is a linear combination of the others.",
+            "For any nonzero a, a′X′Xa=(Xa)′(Xa)=||Xa||². Full column rank ensures Xa is not zero, so this quantity is positive.",
+            "Therefore X′X is positive definite and invertible. This is the condition behind the ordinary OLS formula β̂=(X′X)⁻¹X′y.",
+            "If the design is rank deficient, the projection onto C(X) still exists, but the ordinary inverse formula must be replaced by a suitable generalized-inverse treatment."
+          ]
+        },
+        {
+          "ask": "What does it mean for two vectors to be orthogonal?",
+          "recall": "Their inner product is zero.",
+          "refresh": [
+            "The inner product of two real column vectors a and b is a′b. They are orthogonal when this scalar equals zero.",
+            "A vector is orthogonal to a subspace when it is orthogonal to every vector in that subspace. In regression, the residual is orthogonal to every column of X.",
+            "Writing this condition for all columns at once gives X′e=0. These are the OLS normal equations in residual form.",
+            "Orthogonality also explains why fitted and residual components form perpendicular projections of y."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Which matrix operation reverses factor order when transposing a product?",
+        "nudge": "Recall the transpose rule for AB."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 6,
+      "title": "Fitted part and leftover part",
+      "objective": "Understand the two complementary projections.",
+      "body": [
+        "OLS chooses the fitted vector ŷ inside the column space of X. The residual e=y−ŷ is the part of y left over after projection onto that space.",
+        "The hat matrix H maps y to ŷ. The residual-maker matrix M maps y to e. They split the same response vector into two perpendicular components: y=Hy+My.",
+        "Think of H as keeping the model-explained component and M as removing it."
+      ],
+      "scenario": {
+        "teaser": "Project a data vector onto a model space",
+        "title": "Two operators, one decomposition",
+        "body": [
+          "Suppose the columns of X span all fitted vectors that the regression model can produce. OLS selects the point in that space closest to y.",
+          "The projection operator H produces that fitted point. The remaining perpendicular vector is the residual, produced by M=I−H.",
+          "Because the fitted and residual components are orthogonal, their inner product is zero. The total squared length of y splits into fitted and residual sums of squares when the model includes the appropriate intercept/centering convention.",
+          "This geometry is the foundation for the algebraic properties tested in NET questions."
+        ],
+        "q": "Which matrix produces the residual vector from y?",
+        "answer": "M=I−H."
+      },
+      "ask": {
+        "q": "What is the relationship between the fitted and residual components?",
+        "nudge": "They add to y and are perpendicular."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 6,
+      "title": "Derive the hat matrix",
+      "objective": "Obtain H from the OLS estimator.",
+      "body": [
+        "For y=Xβ+u, the full-column-rank OLS estimator is β̂=(X′X)⁻¹X′y. The fitted vector is ŷ=Xβ̂.",
+        "Substitute the estimator into the fitted vector: ŷ=X(X′X)⁻¹X′y. The matrix multiplying y is called the hat matrix H.",
+        "Therefore H=X(X′X)⁻¹X′ and ŷ=Hy. It is n×n because it maps an n-vector y to another n-vector ŷ."
+      ],
+      "viz": {
+        "type": "rank-null",
+        "caption": "The hat matrix projects the response vector onto the column space of X."
+      },
+      "ask": {
+        "q": "What is the dimension of H when X is n×k?",
+        "nudge": "H maps an n-dimensional response vector to an n-dimensional fitted vector."
+      },
+      "scenario": {
+        "teaser": "A response vector is projected onto a model space",
+        "title": "Why the hat matrix is a projection",
+        "body": [
+          "Imagine that the columns of X span a plane of all fitted vectors the regression can produce. The observed response y may not lie in that plane.",
+          "OLS chooses the point in the plane that is closest to y in squared Euclidean distance. That point is the fitted vector, and H maps y to it.",
+          "The leftover difference is perpendicular to the plane. The residual-maker matrix M maps y to that perpendicular component.",
+          "This geometry tells us what H and M do before we calculate their algebraic properties."
+        ],
+        "q": "What does H return when it acts on y?",
+        "answer": "The orthogonal projection of y onto the column space of X, namely the fitted vector."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 8,
+      "title": "Symmetry and idempotence of H",
+      "objective": "Prove the two defining projection properties.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Hat matrix",
+          "body": "H=X(X′X)⁻¹X′."
+        },
+        {
+          "t": "step",
+          "h": "Symmetry",
+          "body": "H′=[X(X′X)⁻¹X′]′=X[(X′X)⁻¹]′X′=X(X′X)⁻¹X′=H, since X′X and its inverse are symmetric."
+        },
+        {
+          "t": "step",
+          "h": "Idempotence",
+          "body": "H²=X(X′X)⁻¹X′X(X′X)⁻¹X′=X(X′X)⁻¹X′=H."
+        },
+        {
+          "t": "note",
+          "h": "Interpretation",
+          "body": "A projection performed twice has the same result as performing it once. Once y is in C(X), projecting it onto C(X) again does not move it."
+        }
+      ],
+      "ask": {
+        "q": "Which identity is used to simplify the middle of H²?",
+        "nudge": "The product (X′X)⁻¹(X′X) equals the identity."
+      },
+      "flow": {
+        "caption": "Projection-matrix proof sequence",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Define H",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Transpose product",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Show H′=H",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Multiply H by H",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Use inverse cancellation",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked proof: H is idempotent",
+      "objective": "Simplify H² without skipping matrix order.",
+      "problem": "Show that H²=H for H=X(X′X)⁻¹X′.",
+      "steps": [
+        {
+          "say": "Write the product H times H, preserving the factor order.",
+          "math": "H²=X(X′X)⁻¹X′X(X′X)⁻¹X′",
+          "why": "Matrix multiplication is associative but not commutative."
+        },
+        {
+          "say": "Group the adjacent X′X factors.",
+          "math": "=X(X′X)⁻¹(X′X)(X′X)⁻¹X′",
+          "why": "The middle product is the matrix being inverted."
+        },
+        {
+          "say": "Cancel the inverse with the matrix.",
+          "math": "=X I (X′X)⁻¹X′",
+          "why": "(X′X)⁻¹(X′X)=I."
+        },
+        {
+          "say": "Recover the original expression.",
+          "math": "=X(X′X)⁻¹X′=H",
+          "why": "The product equals H, which proves idempotence."
+        }
+      ],
+      "ask": {
+        "q": "What property of matrix multiplication must you not assume in this proof?",
+        "nudge": "You may regroup factors, but you cannot freely swap their order."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 5,
+      "title": "Recall the residual maker",
+      "objective": "Connect M to H and list its properties.",
+      "intro": "Try to reconstruct each identity before checking the answer.",
+      "items": [
+        {
+          "q": "Define the residual-maker matrix.",
+          "a": "M=I−H."
+        },
+        {
+          "q": "What vector does M produce?",
+          "a": "The residual vector e=My."
+        },
+        {
+          "q": "Is M symmetric and idempotent?",
+          "a": "Yes. M′=M and M²=M."
+        },
+        {
+          "q": "What is HM?",
+          "a": "HM=0; fitted and residual projections are orthogonal."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 7,
+      "title": "Complete the residual-maker proof",
+      "objective": "Derive symmetry and idempotence for M.",
+      "problem": "Given M=I−H, H′=H and H²=H, complete the properties of M.",
+      "steps": [
+        {
+          "say": "Transpose M.",
+          "blank": {
+            "prompt": "M′=(I−H)′=____",
+            "answer": "I−H",
+            "accept": [
+              "I-H"
+            ],
+            "hint": "Both I and H are symmetric."
+          },
+          "why": "The identity and hat matrices are symmetric."
+        },
+        {
+          "say": "Expand M².",
+          "blank": {
+            "prompt": "(I−H)²=I−2H+____",
+            "answer": "H²",
+            "accept": [
+              "H^2"
+            ],
+            "hint": "Use (A−B)²=A²−AB−BA+B², with I commuting with H."
+          },
+          "why": "The expansion contains the H squared term."
+        },
+        {
+          "say": "Use H²=H.",
+          "blank": {
+            "prompt": "I−2H+H²=I−2H+H=____",
+            "answer": "I−H",
+            "accept": [
+              "I-H"
+            ],
+            "hint": "Combine the two H terms."
+          },
+          "why": "Idempotence of H makes M idempotent too."
+        },
+        {
+          "say": "State the final property.",
+          "blank": {
+            "prompt": "M²=____=M",
+            "answer": "I−H",
+            "accept": [
+              "I-H"
+            ],
+            "hint": "The expression is exactly the definition of M."
+          },
+          "why": "The residual maker is a symmetric idempotent projection."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 8,
+      "title": "Ranks, traces and degrees of freedom",
+      "objective": "Use projection dimension to obtain model and residual degrees of freedom.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Rank and trace of H",
+          "body": "If rank(X)=k, then rank(H)=k and tr(H)=k."
+        },
+        {
+          "t": "formula",
+          "h": "Rank and trace of M",
+          "body": "M=I−H projects onto a space of dimension n−k, so rank(M)=tr(M)=n−k."
+        },
+        {
+          "t": "step",
+          "h": "Trace calculation",
+          "body": "tr(H)=tr[X(X′X)⁻¹X′]=tr[(X′X)⁻¹X′X]=tr(Iₖ)=k, using cyclic rearrangement."
+        },
+        {
+          "t": "note",
+          "h": "Degrees of freedom",
+          "body": "The residual sum of squares has n−k residual degrees of freedom under the standard full-rank linear model."
+        }
+      ],
+      "ask": {
+        "q": "If n=30 and k=4, what are tr(H) and tr(M)?",
+        "nudge": "The two projection-space dimensions add to n."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s8",
+      "mins": 6,
+      "title": "Orthogonality and the residual vector",
+      "objective": "Show that residuals are orthogonal to the design columns.",
+      "body": [
+        "Since M=I−H and H projects onto C(X), the residual component is perpendicular to every column of X. Algebraically, X′M=0.",
+        "Thus e=My implies X′e=X′My=0. This is exactly the OLS normal-equation condition.",
+        "The fitted and residual projection matrices are mutually annihilating: HM=MH=0. Also H+M=I."
+      ],
+      "viz": {
+        "type": "rank-null",
+        "caption": "The fitted space and residual space are orthogonal complements when X has full column rank."
+      },
+      "ask": {
+        "q": "What matrix equation expresses residual orthogonality to all columns of X?",
+        "nudge": "Multiply X transpose by e."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s9",
+      "mins": 8,
+      "title": "Worked example: a simple projection",
+      "objective": "Compute H and M for a model with an intercept only.",
+      "problem": "Let X=1₃, a three-entry column of ones. Find H and M.",
+      "steps": [
+        {
+          "say": "Compute X′X.",
+          "math": "X′X=1+1+1=3",
+          "why": "The design has one column and three observations."
+        },
+        {
+          "say": "Apply the hat-matrix formula.",
+          "math": "H=(1/3)11′=(1/3)[[1,1,1],[1,1,1],[1,1,1]]",
+          "why": "The projection replaces each observation by the sample mean."
+        },
+        {
+          "say": "Subtract H from the identity.",
+          "math": "M=I−H",
+          "why": "The residual maker removes the fitted constant component."
+        },
+        {
+          "say": "State the residual vector for y.",
+          "math": "e=My=y−ȳ1",
+          "why": "The residuals are deviations from the sample mean and sum to zero."
+        }
+      ],
+      "ask": {
+        "q": "What is the rank of this intercept-only hat matrix?",
+        "nudge": "Its column space is the one-dimensional span of the vector of ones."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 8,
+      "title": "Guided problem: use trace and rank",
+      "objective": "Calculate model and residual degrees of freedom.",
+      "problem": "A regression has n=24 observations and k=5 linearly independent columns in X. Find rank(H), tr(H), rank(M), tr(M) and residual degrees of freedom.",
+      "hints": [
+        "The fitted space has dimension k.",
+        "The residual space is the orthogonal complement, with dimension n−k.",
+        "For symmetric idempotent projection matrices, trace equals rank."
+      ],
+      "answer": "rank(H)=tr(H)=5; rank(M)=tr(M)=19; residual degrees of freedom=19.",
+      "solution": [
+        {
+          "say": "The hat matrix projects onto C(X).",
+          "math": "rank(H)=k=5"
+        },
+        {
+          "say": "For a projection matrix, trace equals rank.",
+          "math": "tr(H)=5"
+        },
+        {
+          "say": "The residual space has dimension n−k.",
+          "math": "rank(M)=24−5=19"
+        },
+        {
+          "say": "Trace and residual degrees of freedom match that dimension.",
+          "math": "tr(M)=19; df(residual)=19"
+        }
+      ],
+      "ask": {
+        "q": "Why is residual df not n−1 in this model?",
+        "nudge": "There are five independent fitted directions, not just one."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s11",
+      "mins": 6,
+      "title": "Exam traps: H, M and rank",
+      "objective": "Distinguish the projection identities.",
+      "intro": "Classify each statement as true or false.",
+      "items": [
+        {
+          "claim": "H is always k×k when X is n×k.",
+          "tf": false,
+          "why": "H maps n-vectors to n-vectors, so it is n×n."
+        },
+        {
+          "claim": "Both H and M are idempotent.",
+          "tf": true,
+          "why": "H²=H and (I−H)²=I−H."
+        },
+        {
+          "claim": "tr(H)=k when X has full column rank k.",
+          "tf": true,
+          "why": "The projection onto C(X) has dimension k."
+        },
+        {
+          "claim": "HM=I.",
+          "tf": false,
+          "why": "HM=H(I−H)=H−H²=0."
+        },
+        {
+          "claim": "The residual vector satisfies X′e=0.",
+          "tf": true,
+          "why": "OLS residuals are orthogonal to the column space of X."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s12",
+      "mins": 9,
+      "title": "Transfer problem: quadratic forms",
+      "objective": "Use symmetry and idempotence to simplify a residual sum of squares.",
+      "problem": "Given M′=M and M²=M, show that e′e=y′My when e=My.",
+      "hints": [
+        "Start with e′e=(My)′(My).",
+        "Use the transpose rule and M′=M.",
+        "Use M²=M to reduce the product."
+      ],
+      "answer": "e′e=y′M′My=y′M²y=y′My.",
+      "solution": [
+        {
+          "say": "Substitute e=My into the sum of squared residuals.",
+          "math": "e′e=(My)′(My)"
+        },
+        {
+          "say": "Transpose the first product.",
+          "math": "=y′M′My"
+        },
+        {
+          "say": "Use symmetry and idempotence.",
+          "math": "=y′MMy=y′My"
+        },
+        {
+          "say": "Interpret the result.",
+          "math": "SSE=y′My",
+          "why": "The quadratic form in M equals the residual sum of squares."
+        }
+      ],
+      "ask": {
+        "q": "Which two properties of M are used?",
+        "nudge": "One handles the transpose; the other collapses the repeated matrix."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 4,
+      "title": "Summary: projection matrix toolkit",
+      "objective": "Recall the identities used in NET/JRF problems.",
+      "body": [
+        "H=X(X′X)⁻¹X′ is the n×n hat matrix and ŷ=Hy. It is symmetric and idempotent. M=I−H is the residual maker and e=My; it too is symmetric and idempotent.",
+        "The projections are complementary: H+M=I and HM=MH=0. With rank(X)=k, rank(H)=tr(H)=k and rank(M)=tr(M)=n−k. Residuals satisfy X′e=0.",
+        "For the residual sum of squares, e′e=y′M′My=y′My. In quadratic-form questions, use symmetry and idempotence before expanding entries."
+      ],
+      "ask": {
+        "q": "State the two most important properties shared by H and M.",
+        "nudge": "One concerns transpose; the other concerns squaring the matrix."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s14",
+      "mins": 8,
+      "ext": true,
+      "title": "Extension — the chi-square result in full",
+      "objective": "Prove that u′Mu/σ² is chi-square with n − k degrees of freedom.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "Diagonalise M",
+          "body": "M is symmetric, so M = QΛQ′ with Q orthogonal and Λ diagonal. Its eigenvalues are 0 or 1, and exactly n − k of them equal 1 because the trace is n − k."
+        },
+        {
+          "t": "step",
+          "h": "Rotate the errors",
+          "body": "Let w = Q′u. If u ~ N(0, σ²I) then Var(w) = Q′(σ²I)Q = σ²I, so the w_i are independent N(0, σ²). Since Q′ is orthogonal the rotation does not change the distribution."
+        },
+        {
+          "t": "step",
+          "h": "Read off the sum",
+          "body": "u′Mu = u′QΛQ′u = w′Λw = Σλ_i w_i². Exactly n − k of the λ_i are 1 and the rest are 0, so u′Mu = (a sum of n − k independent squares of N(0, σ²)). Dividing by σ² gives a sum of n − k independent squared standard normals, which is chi-square with n − k degrees of freedom."
+        }
+      ],
+      "ask": {
+        "q": "Which two properties of M are used in this proof?",
+        "nudge": "One decides the eigenvalues, the other counts them."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s15",
+      "mins": 1,
+      "title": "6.1 mastery test",
+      "setId": "regression_t1_mastery",
+      "objective": "Demonstrate the method independently on unseen mastery questions."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings, not an NTA rule. Ten unseen questions are drawn as 3 easy, 5 moderate and 2 hard; the pass threshold is 80% overall with 70% floors for numerical and multi-statement items. Hints are disabled and a retention retest is due after seven days."
+  }
+}
