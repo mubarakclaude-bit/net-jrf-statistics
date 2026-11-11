@@ -1,0 +1,663 @@
+{
+  "id": "probabilityt9",
+  "topicId": "probability-t9",
+  "moduleId": "probability",
+  "title": "Convergence, WLLN, SLLN and CLT",
+  "breadcrumb": "Probability → Convergence and limit theorems",
+  "engine": "B",
+  "engineName": "Probability — convergence, laws and normal limits",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 105,
+  "objectives": [
+    "Distinguish almost-sure, in-probability and distributional convergence.",
+    "State weak and strong laws with their assumptions.",
+    "Use Chebyshev's inequality to establish convergence in probability.",
+    "Apply the central limit theorem to sample means and sums.",
+    "Interpret the CLT as an asymptotic law for scaled errors, not an exact finite-sample identity."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Random variables and distribution functions",
+      "why": "Define convergence through distributions and events."
+    },
+    {
+      "id": "p2",
+      "name": "Expectation and finite variance",
+      "why": "State LLN and CLT assumptions."
+    },
+    {
+      "id": "p3",
+      "name": "Chebyshev inequality and normal standardisation",
+      "why": "Prove concentration and standardise errors."
+    }
+  ],
+  "traps": [
+    "Almost sure convergence implies convergence in probability, but not conversely in general.",
+    "WLLN concerns convergence in probability; SLLN concerns almost-sure convergence.",
+    "CLT concerns the scaled error, not the unscaled sample mean.",
+    "Use σ/√n as the standard error, not σ²/n.",
+    "The finite-variance CLT is asymptotic, not an exact finite-sample normal law.",
+    "Chebyshev gives an upper bound; it is not a normal approximation."
+  ],
+  "revision": {
+    "sheet": [
+      "X_n→X a.s. means sample paths converge except on a null set.",
+      "X_n→X in probability iff P(|X_n−X|>ε)→0 for every ε>0.",
+      "X_n⇒X means CDF convergence at continuity points.",
+      "Almost sure ⇒ in probability ⇒ in distribution.",
+      "WLLN: X̄_n→μ in probability.",
+      "SLLN: X̄_n→μ almost surely.",
+      "CLT: √n(X̄_n−μ)/σ⇒N(0,1).",
+      "SE of X̄_n is σ/√n."
+    ],
+    "cards": [
+      [
+        "Almost sure",
+        "Pathwise convergence a.s."
+      ],
+      [
+        "In probability",
+        "Large deviations become unlikely"
+      ],
+      [
+        "In distribution",
+        "CDFs converge at continuity points"
+      ],
+      [
+        "WLLN",
+        "Average converges in probability"
+      ],
+      [
+        "SLLN",
+        "Average converges almost surely"
+      ],
+      [
+        "CLT",
+        "Scaled error tends to normal"
+      ]
+    ],
+    "tricks": [
+      "Identify the mode before selecting a theorem.",
+      "For the mean use σ/√n, not σ²/n.",
+      "Separate a bound from an approximation."
+    ],
+    "shortcuts": [
+      "For n=100, standard error is σ/10.",
+      "For a two-sided CLT interval, standardise both endpoints.",
+      "Chebyshev bound is σ²/(nε²)."
+    ],
+    "remember": [
+      "LLN is about the average; CLT is about its scaled error.",
+      "Distributional convergence does not imply probability convergence."
+    ]
+  },
+  "howto": "Underline the mode of convergence before selecting a theorem. WLLN is in probability, SLLN is almost sure, and CLT is in distribution for a scaled error. Keep Chebyshev bounds separate from normal approximations.",
+  "refs": [
+    {
+      "title": "Probability: Theory and Examples",
+      "where": "Convergence and laws of large numbers",
+      "site": "Rick Durrett",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Precise modes of convergence and limit theorems."
+    },
+    {
+      "title": "A First Course in Probability",
+      "where": "Limit theorems",
+      "site": "Sheldon Ross",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "WLLN, SLLN and CLT examples."
+    },
+    {
+      "title": "Statistical Inference",
+      "where": "Asymptotic distributions",
+      "site": "Casella and Berger",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Sampling distributions and asymptotic reasoning."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Proposed platform settings, not an NTA rule."
+  },
+  "provenance": "Original syllabus-aligned lesson authored 12 November 2026. Standard errors, Chebyshev bounds and CLT standardisations were checked algebraically. The X_n=(-1)^nX example is a direct counterexample to the converse from distributional to probability convergence. No PYQ attribution is claimed.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Before the lesson — four foundations",
+      "objective": "Retrieve expectation, variance and normalisation.",
+      "body": [
+        "Convergence describes what happens to a sequence of random variables as n grows.",
+        "Three modes are central: almost sure, in probability and in distribution. WLLN and SLLN describe averages; CLT describes scaled fluctuations."
+      ],
+      "ask": {
+        "q": "What is the standard error of an iid sample mean?",
+        "nudge": "Divide the population SD by square root n."
+      },
+      "items": [
+        {
+          "ask": "What is Var(X̄_n)?",
+          "recall": "σ²/n for iid independent observations.",
+          "refresh": [
+            "The SD is σ/√n."
+          ]
+        },
+        {
+          "ask": "What does Chebyshev bound?",
+          "recall": "A tail probability using variance.",
+          "refresh": [
+            "It is an upper bound, not a normal approximation."
+          ]
+        },
+        {
+          "ask": "What is a CDF?",
+          "recall": "F(x)=P(X≤x).",
+          "refresh": [
+            "Distributional convergence is defined through CDFs."
+          ]
+        },
+        {
+          "ask": "What is standard normalisation?",
+          "recall": "Subtract the mean and divide by the SD.",
+          "refresh": [
+            "For a sample mean, use its standard error."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "The average stabilises; the scaled error remains random",
+      "objective": "Separate LLN and CLT roles.",
+      "body": [
+        "The law of large numbers says that the sample average approaches the population mean.",
+        "The central limit theorem does not contradict this. It rescales the shrinking error by √n, revealing a non-degenerate normal limit.",
+        "The standard error shrinks as σ/√n, while the scaled error has a limiting distribution."
+      ],
+      "scenario": {
+        "teaser": "A factory average is stable even though individual fills remain variable.",
+        "title": "The average is not an individual item",
+        "body": [
+          "A process has mean fill 500 ml and SD 12 ml. A sample of 144 items is taken.",
+          "The standard error of the sample mean is 12/√144=1 ml. By the CLT, the probability that the sample mean lies between 498 and 502 is approximately P(−2<Z<2)=0.9545.",
+          "This is not the probability that an individual item lies between 498 and 502 ml. Individual variability remains 12 ml; averaging reduces the SD by √n.",
+          "The LLN says the average settles near 500; the CLT quantifies the remaining error at the 1 ml scale."
+        ],
+        "q": "Why is the sample mean less variable than an individual observation?",
+        "answer": "Var(X̄_n)=σ²/n, so its SD is σ/√n; the individual SD remains 12 ml."
+      },
+      "ask": {
+        "q": "What does the LLN say that the CLT does not?",
+        "nudge": "One is convergence to a constant; the other is a distribution for the scaled error."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 10,
+      "title": "Three modes and two laws",
+      "objective": "State convergence and LLN results.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Three modes of convergence",
+          "body": "Almost surely: P(lim X_n=X)=1. In probability: P(|X_n−X|>ε)→0 for every ε>0. In distribution: F_n(x)→F(x) at continuity points of F."
+        },
+        {
+          "t": "def",
+          "h": "Implication ladder",
+          "body": "Almost sure convergence implies convergence in probability, which implies convergence in distribution. The converses are false in general."
+        },
+        {
+          "t": "step",
+          "h": "Weak law (WLLN)",
+          "body": "For iid X_i with finite mean μ, X̄_n→μ in probability. Finite variance gives a short Chebyshev proof: Var(X̄_n)=σ²/n."
+        },
+        {
+          "t": "step",
+          "h": "Strong law (SLLN)",
+          "body": "For iid variables with E|X₁|<∞, X̄_n→μ almost surely. This is stronger than convergence in probability."
+        },
+        {
+          "t": "step",
+          "h": "Central limit theorem",
+          "body": "For iid variables with finite positive variance σ², √n(X̄_n−μ)/σ⇒N(0,1). Equivalently (S_n−nμ)/(σ√n)⇒N(0,1)."
+        },
+        {
+          "t": "step",
+          "h": "What CLT does not say",
+          "body": "It is asymptotic, not an exact finite-n normal law. It does not say individual observations become normal or that the unscaled average has a random normal limit."
+        }
+      ],
+      "table": {
+        "caption": "Modes of convergence and their use",
+        "head": [
+          "Mode / theorem",
+          "Statement",
+          "Interpretation"
+        ],
+        "rows": [
+          [
+            "Almost sure",
+            "P(lim X_n=X)=1",
+            "Pathwise"
+          ],
+          [
+            "In probability",
+            "P(|X_n−X|>ε)→0",
+            "Large errors become unlikely"
+          ],
+          [
+            "In distribution",
+            "F_n(x)→F(x) at continuity points",
+            "CDF convergence"
+          ],
+          [
+            "WLLN",
+            "X̄_n→μ in probability",
+            "Average concentrates"
+          ],
+          [
+            "SLLN",
+            "X̄_n→μ almost surely",
+            "Pathwise average convergence"
+          ],
+          [
+            "CLT",
+            "√n(X̄_n−μ)/σ⇒N(0,1)",
+            "Scaled error is asymptotically normal"
+          ]
+        ]
+      },
+      "flow": {
+        "title": "Choose the limit theorem",
+        "alt": "Decision flow for LLN and CLT",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "What is the conclusion?",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 0,
+            "label": "Average approaches μ",
+            "kind": "dec"
+          },
+          {
+            "id": "c",
+            "r": 1,
+            "c": 2,
+            "label": "Scaled error has a limit law",
+            "kind": "dec"
+          },
+          {
+            "id": "d",
+            "r": 2,
+            "c": 0,
+            "label": "WLLN / SLLN",
+            "kind": "end"
+          },
+          {
+            "id": "e",
+            "r": 2,
+            "c": 2,
+            "label": "CLT",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "a",
+            "to": "c"
+          },
+          {
+            "from": "b",
+            "to": "d"
+          },
+          {
+            "from": "c",
+            "to": "e"
+          }
+        ],
+        "note": "LLN concerns the unscaled average; CLT concerns its scaled error."
+      },
+      "ask": {
+        "q": "Which mode of convergence appears in the classical CLT?",
+        "nudge": "The theorem describes convergence of distributions."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example — a sample mean",
+      "objective": "Use the CLT with the correct standard error.",
+      "problem": "An iid population has mean 50 and SD 10. For n=100, approximate P(49<X̄<51) using the CLT.",
+      "steps": [
+        {
+          "say": "Standardise the mean",
+          "math": "Z=√n(X̄−μ)/σ; SE=10/√100=1.",
+          "why": "Use SD divided by square root n, not the population SD."
+        },
+        {
+          "say": "Convert the interval",
+          "math": "P(49<X̄<51)≈P(−1<Z<1).",
+          "why": "The standardised endpoints are −1 and 1."
+        },
+        {
+          "say": "Read the normal area",
+          "math": "Φ(1)−Φ(−1)=.8413−.1587=.6826≈.6827.",
+          "why": "This is approximate unless the parent population is normal."
+        }
+      ],
+      "after": "The CLT approximation is not exact unless the parent population is normal.",
+      "ask": {
+        "q": "What is the standard error in this example?",
+        "nudge": "σ/√n=10/10."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 3,
+      "title": "Pause and retrieve",
+      "objective": "Retrieve convergence definitions.",
+      "intro": "Answer before revealing.",
+      "items": [
+        {
+          "q": "What does WLLN state?",
+          "a": "X̄_n→μ in probability."
+        },
+        {
+          "q": "What does SLLN state?",
+          "a": "X̄_n→μ almost surely."
+        },
+        {
+          "q": "What does CLT standardise?",
+          "a": "√n(X̄_n−μ)/σ."
+        },
+        {
+          "q": "What is the implication ladder?",
+          "a": "Almost sure ⇒ in probability ⇒ in distribution."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 7,
+      "title": "Complete the Chebyshev bound",
+      "objective": "Use the variance of the sample mean.",
+      "problem": "For iid variables with variance σ², complete the bound for the sample mean.",
+      "steps": [
+        {
+          "say": "Variance of the sample mean.",
+          "blank": {
+            "prompt": "Var(X̄_n)=?",
+            "answer": "σ²/n",
+            "accept": [
+              "sigma^2/n",
+              "σ²/n"
+            ],
+            "hint": "Independent variances add, then divide by n²."
+          },
+          "why": "Var(X̄_n)=nσ²/n²=σ²/n."
+        },
+        {
+          "say": "Apply Chebyshev.",
+          "blank": {
+            "prompt": "P(|X̄_n−μ|≥ε)≤?",
+            "answer": "σ²/(nε²)",
+            "accept": [
+              "sigma^2/(n epsilon^2)",
+              "σ²/(nε²)"
+            ],
+            "hint": "Variance divided by ε²."
+          },
+          "why": "Chebyshev uses Var(X̄_n)/ε²."
+        },
+        {
+          "say": "Take n to infinity.",
+          "blank": {
+            "prompt": "The upper bound tends to?",
+            "answer": "0",
+            "accept": [
+              "0"
+            ],
+            "hint": "The denominator grows with n."
+          },
+          "why": "This proves convergence in probability under finite variance."
+        }
+      ],
+      "after": "Chebyshev supplies a proof of the WLLN under finite variance."
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "CLT standardisation and limits",
+      "objective": "Apply the CLT to sums and means.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Sample mean",
+          "body": "√n(X̄_n−μ)/σ ⇒ N(0,1); equivalently X̄_n is approximately N(μ,σ²/n) for large n."
+        },
+        {
+          "t": "formula",
+          "h": "Sample sum",
+          "body": "(S_n−nμ)/(σ√n) ⇒ N(0,1), where S_n=ΣX_i."
+        },
+        {
+          "t": "def",
+          "h": "Assumptions and caveats",
+          "body": "The classical iid CLT requires finite positive variance. The approximation improves with n but its accuracy depends on the parent distribution, especially skewness and tail weight."
+        }
+      ],
+      "ask": {
+        "q": "Why do we divide by σ/√n rather than σ²/n?",
+        "nudge": "One is a standard deviation; the other is a variance."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s7",
+      "mins": 9,
+      "title": "On your own — a second CLT interval",
+      "objective": "Standardise a new sample-mean interval.",
+      "problem": "An iid population has μ=20 and σ²=36. For n=144, use the CLT to approximate P(19.5<X̄<20.5).",
+      "hints": [
+        "SE=σ/√n=6/12.",
+        "Standardise both endpoints around μ=20.",
+        "Use Φ(1)−Φ(−1)."
+      ],
+      "answer": "SE=.5; the standardised interval is (−1,1); probability≈.6827.",
+      "check": "Use σ=6, not variance 36, in the standard error.",
+      "scenario": {
+        "teaser": "A student reverses the implication from convergence in distribution.",
+        "title": "Same marginal laws do not force closeness",
+        "body": [
+          "Let X be standard normal and X_n=(−1)^nX. Every X_n has the same standard normal distribution, so X_n converges in distribution to X.",
+          "But X_n does not converge in probability to X: for odd n, |X_n−X|=2|X|, which exceeds any fixed small ε with non-vanishing probability.",
+          "Thus convergence in distribution controls marginal CDFs, not the closeness of two variables on a common probability space.",
+          "Remember the implication ladder: almost sure ⇒ in probability ⇒ in distribution; reverse implications need extra assumptions."
+        ],
+        "q": "Does convergence in distribution imply convergence in probability?",
+        "answer": "No. The marginal laws can converge while the variables remain separated on the probability space."
+      },
+      "solution": [
+        {
+          "say": "Find the standard error",
+          "math": "SE=6/√144=.5",
+          "why": "The variance is 36, so SD is 6."
+        },
+        {
+          "say": "Standardise",
+          "math": "(19.5−20)/.5=−1; (20.5−20)/.5=1",
+          "why": "The interval becomes (−1,1)."
+        },
+        {
+          "say": "Read the CLT area",
+          "math": "P(−1<Z<1)=.6827",
+          "why": "The normal approximation is asymptotic."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s8",
+      "mins": 6,
+      "title": "Six claims — decide before revealing",
+      "objective": "Avoid convergence and standard-error errors.",
+      "intro": "Decide true or false.",
+      "items": [
+        {
+          "claim": "Almost sure convergence implies convergence in probability, but not conversely in general.",
+          "tf": true,
+          "why": "True: this implication always holds."
+        },
+        {
+          "claim": "WLLN concerns convergence in probability; SLLN concerns almost-sure convergence.",
+          "tf": true,
+          "why": "True: the two laws differ by the mode of convergence."
+        },
+        {
+          "claim": "CLT concerns the scaled error, not the unscaled sample mean.",
+          "tf": true,
+          "why": "True: CLT is about scaled error."
+        },
+        {
+          "claim": "Use σ/√n as the standard error, not σ²/n.",
+          "tf": false,
+          "why": "False: standard error is σ/√n."
+        },
+        {
+          "claim": "The finite-variance CLT is asymptotic, not an exact finite-sample normal law.",
+          "tf": true,
+          "why": "True: the classical CLT is asymptotic."
+        },
+        {
+          "claim": "Chebyshev gives an upper bound; it is not a normal approximation.",
+          "tf": true,
+          "why": "True: Chebyshev is a bound, not a normal approximation."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Transfer problem — bound versus approximation",
+      "objective": "Compare Chebyshev with the CLT.",
+      "problem": "If iid X_i have μ=8 and σ²=25, use Chebyshev to bound P(|X̄_100−8|≥1). Compare with the CLT approximation.",
+      "hints": [
+        "Var(X̄_100)=25/100.",
+        "Chebyshev: P(|X̄−μ|≥ε)≤Var(X̄)/ε².",
+        "CLT standardises by σ/√n."
+      ],
+      "answer": "Chebyshev bound=.25. CLT approximation P(|Z|≥2)=.0455.",
+      "check": "The Chebyshev bound is .25, not .05. A bound and a normal approximation are different.",
+      "solution": [
+        {
+          "say": "Compute variance of mean",
+          "math": "Var(X̄)=25/100=.25",
+          "why": "Independent observations divide the variance by n."
+        },
+        {
+          "say": "Apply Chebyshev",
+          "math": "P(|X̄−8|≥1)≤.25",
+          "why": "Use variance over ε²."
+        },
+        {
+          "say": "Compare CLT",
+          "math": "SE=.5, so threshold is 2 standard errors; P(|Z|≥2)≈.0455",
+          "why": "This is an approximation, not a guaranteed upper bound."
+        }
+      ]
+    },
+    {
+      "kind": "recall",
+      "id": "s10",
+      "mins": 3,
+      "title": "Second recall — exam-critical distinctions",
+      "objective": "Retrieve the theorem statements.",
+      "intro": "State each in one line.",
+      "items": [
+        {
+          "q": "WLLN mode?",
+          "a": "In probability."
+        },
+        {
+          "q": "SLLN mode?",
+          "a": "Almost surely."
+        },
+        {
+          "q": "CLT mode?",
+          "a": "In distribution."
+        },
+        {
+          "q": "Chebyshev bound?",
+          "a": "σ²/(nε²) for the sample mean."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 3,
+      "title": "What you should now do unaided",
+      "objective": "Summarise the convergence workflow.",
+      "body": [
+        "Distinguish almost-sure, in-probability and distributional convergence.",
+        "State weak and strong laws with their assumptions.",
+        "Use Chebyshev's inequality to establish convergence in probability.",
+        "Apply the central limit theorem to sample means and sums.",
+        "Interpret the CLT as an asymptotic law for scaled errors, not an exact finite-sample identity.",
+        "State assumptions and distinguish exact identities, bounds and approximations."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 12,
+      "title": "Mastery test",
+      "objective": "Demonstrate independent understanding.",
+      "setId": "probability_t9_mastery"
+    }
+  ]
+}
