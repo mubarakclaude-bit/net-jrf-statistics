@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 # Lesson 10A.5 - Census and vital statistics (Unit X). Closes the module.
 #
-# Checked against primary sources in October 2026 rather than recalled:
+# Current position checked 12 November 2026 against ORGI's official portal:
 #   Census   first census 1872 (not synchronous), first synchronous 1881; Census Act
-#            1948; permanent office decided May 1949 under the RGI, ex-officio Census
-#            Commissioner, Ministry of Home Affairs. Census 2027: Phase I houselisting
-#            Apr-Sep 2026, Phase II population enumeration Feb 2027; reference moment
-#            00:00 on 1 Mar 2027, and 00:00 on 1 Oct 2026 for Ladakh and the snow-bound
-#            areas of J&K, HP and Uttarakhand; caste enumerated (CCPA decision 30 Apr
-#            2025); first digital census with optional self-enumeration in 16 languages;
-#            about 31 lakh enumerators and supervisors; 16th census, 8th since 1947.
-#   CRS      RGI set up 1951, first annual report on civil registration data 1958; RBD
-#            Act 1969; Amendment Act 2023 (No. 20 of 2023) in force 1 Oct 2023; 21-day
-#            reporting window; CRS 2023 completeness 98.4% births, 97.2% deaths.
+#            1948; permanent office decided May 1949 under RGI/MHA. Census 2027:
+#            Phase-I HLO 1 Apr-30 Sep 2026; Phase-II dates vary by Gazette order.
+#            Goa, UP, Punjab and non-snow-bound Uttarakhand: self-enumeration 16-30
+#            Nov 2026, PE 1 Dec 2026-4 Jan 2027, revisional round 5-9 Jan 2027.
+#            Snow-bound areas and other States/UTs follow separate ORGI notifications.
+#   CRS      RBD Act 1969, amended in 2023 and 2026; usual reporting period 21 days.
+#            Official CRS 2024 registration levels: 99.1% births and 99.4% deaths
+#            (national report released July 2026).
 #   SRS      pilot 1964-65, full scale 1969-70; dual record system; 8,839 sampling units
 #            and over 8.8 million people by 2023; designed so IMR has RSE under 15%.
 #   Figures  SRS 2023: CBR 18.4, CDR 6.4, IMR 25, TFR 1.9, SRB 917 (2021-23).
@@ -98,9 +96,8 @@ SC.append(dict(
    "It is enormously expensive and therefore rare.",
    "The Civil Registration System is a flow, and in principle a complete one. Every birth and death is supposed to be "
    "registered with a local registrar within 21 days, by law. Complete registration would make a sample survey "
-   "unnecessary, and India's registration is now reported at 98.4% for births and 97.2% for deaths — but those figures "
-   "are themselves computed against survey-based estimates, the coverage varies sharply by state, and the data arrive "
-   "with about a two-year lag.",
+   "unnecessary, and the national CRS report for 2024 records 99.1% birth registration and 99.4% death registration. "
+   "These are completeness levels of event registration; SRS demographic rates remain a distinct statistical product.",
    "The Sample Registration System is the third: a flow measured on a sample, by a method designed to catch the events "
    "that registration misses. It exists because India needed reliable birth and death rates long before registration "
    "was anywhere near complete, and it is still the source of every rate you are asked to quote — CBR, CDR, IMR, TFR, "
@@ -118,7 +115,7 @@ SC.append(dict(
 
 SC.append(dict(
   kind="theory", id="s2", title="The census — history, law and the 2027 round", mins=9,
-  objective="Give the census's history, its legal and constitutional basis, its organisation, and the 2027 schedule.",
+  objective="Give the census's history, its legal and constitutional basis, its organisation, and distinguish the 2027 reference moments from region-specific fieldwork dates.",
   blocks=[
    dict(t="def", h="Origins",
      body="The first census of India was taken in 1872, but not synchronously: different parts of the country were "
@@ -131,16 +128,23 @@ SC.append(dict(
           "Census Rules, 1990 sit under it. In May 1949 the Government decided to create a permanent organisation under "
           "the Registrar General of India, who is ex-officio Census Commissioner, in the Ministry of Home Affairs. "
           "Census is a Union subject, entry 69 of the Union List in the Seventh Schedule."),
-   dict(t="def", h="Census 2027 — the schedule",
-     body="The census due in 2021 could not be held because of the pandemic, so the next round is 2027 — the 16th "
-          "census of India and the 8th since Independence. It runs in two phases. Phase I, Houselisting and Housing "
-          "Census, runs from April to September 2026, each state and union territory taking a 30-day window, preceded "
-          "by an optional 15-day self-enumeration period. Phase II, Population Enumeration, is February 2027."),
-   dict(t="formula", h="The two reference moments",
-     body="The reference moment is 00:00 hours on 1 March 2027 for the country, and 00:00 hours on 1 October 2026 for "
-          "Ladakh and the snow-bound areas of Jammu and Kashmir, Himachal Pradesh and Uttarakhand, where Phase II is "
-          "held in September 2026 instead. Two phases, two reference moments, and one of the four named areas is a "
-          "union territory — all three facts are examinable."),
+   dict(t="def", h="Census 2027 — the schedule as notified by 12 November 2026",
+     body="The census due in 2021 was postponed during the pandemic. Census 2027 is India's 16th census and the 8th "
+          "since Independence. Phase I, Houselisting and Housing Census, was notified for 1 April to 30 September "
+          "2026. Population Enumeration (Phase II) is governed by later area-specific Gazette notifications: do not "
+          "memorise 'February 2027' as one uniform window for every State and Union Territory."),
+   dict(t="formula", h="The later schedule for four election-bound States / areas",
+     body="ORGI's 5 September 2026 notification schedules Goa, Uttar Pradesh, Punjab and non-snow-bound Uttarakhand "
+          "for self-enumeration 16-30 November 2026, Population Enumeration 1 December 2026 to 4 January 2027, and "
+          "revisional round 5-9 January 2027. The ORGI Census 2027 website confirms these dates. Other regions follow "
+          "the separate Phase-II Gazette notification published in the ORGI catalogue on 2 November 2026; snow-bound "
+          "areas have a separate order. Always identify the region before quoting fieldwork dates."),
+   dict(t="step", h="Reference moments are not fieldwork windows",
+     body="The national reference moment is 00:00 hours on 1 March 2027. ORGI has separate provisions for Ladakh "
+          "and snow-bound areas of Jammu and Kashmir, Himachal Pradesh and Uttarakhand, with a 1 October 2026 "
+          "reference moment. These reference moments define the date to which population particulars refer; they "
+          "are not interchangeable with the dates on which enumerators visit households. A question may ask the "
+          "reference date, self-enumeration window, field-enumeration period or revisional round — identify which."),
    dict(t="step", h="What is new in 2027",
      body="It is India's first digital census. Houselisting uses a mobile application that works offline and uploads "
           "later; an optional self-enumeration portal is available in sixteen languages and issues an SE ID that the "
@@ -181,15 +185,14 @@ SC.append(dict(
       "That is the honest case for why the census is the foundation of the rest of Unit X rather than one more survey "
       "in it. The consumption survey can be run again; the price index can be rebased; but the denominator underneath "
       "all of them is produced once a decade and nothing substitutes for it.",
-      "For the exam, carry the facts rather than the argument: 2021 postponed owing to the pandemic, 2027 the next "
-      "round, the 16th census and the 8th since Independence, in two phases with reference moments on 1 March 2027 and "
-      "1 October 2026."),
+      "For the exam, carry the stable facts — Census 2027, 16th overall and 8th since Independence — but use the "
+      "Gazette notification for the relevant State/UT when a question asks for Phase-II fieldwork dates."),
     close="A census is the denominator the whole statistical system divides by, which is why a missed one propagates "
           "into every rate.")))
 
 SC.append(dict(
   kind="theory", id="s3", title="The Civil Registration System and the law behind it", mins=7,
-  objective="State the legal basis of registration, what the 2023 amendment changed, and the current completeness.",
+  objective="State the legal basis of registration, distinguish the 2023 and 2026 amendments, and interpret the latest official completeness figures.",
   blocks=[
    dict(t="def", h="What the CRS is",
      body="The continuous, permanent and compulsory recording of births and deaths as individual legal events. The "
@@ -201,25 +204,24 @@ SC.append(dict(
      body="The parent Act, which made registration of births and deaths compulsory throughout India. Before it, "
           "registration existed in parts of the country under provincial law and was weakly enforced. The Act is the "
           "answer whenever a question asks for the legal basis of birth and death registration in India."),
-   dict(t="def", h="The Amendment Act of 2023",
-     body="The Registration of Births and Deaths (Amendment) Act, 2023 came into force on 1 October 2023. It creates a "
-          "national database of registered births and deaths maintained by the Registrar General, with state-level "
-          "databases maintained by Chief Registrars; makes the birth certificate a single document admissible as proof "
-          "of date and place of birth for school admission, driving licences, electoral rolls, Aadhaar, marriage "
-          "registration and government employment; requires registration through the central CRS portal and the "
-          "sharing of data with the RGI; and allows the national database to be used to update the National Population "
-          "Register, electoral rolls and ration card records, with central government approval needed to share it "
-          "further."),
-   dict(t="step", h="And the smaller changes that get asked",
-     body="Reporting duties widen: jail and hotel managers must supply information for events in their charge, and "
-          "medical institutions must provide a cause-of-death certificate. The list of parents to be reported expands "
-          "to cover adoptive, surrogate, and single or unwed parents. An appeal goes to the District Registrar or Chief "
-          "Registrar within 30 days, with a decision due within 90."),
-   dict(t="formula", h="Completeness, and how the figure is made",
-     body="The CRS report for 2023 puts registration at 98.4% of births and 97.2% of deaths. Read how that is computed: "
-          "registered events are divided by ESTIMATED events, and the estimate comes from applying SRS rates to a "
-          "projected population. So the completeness of the registration system is measured against the sample survey, "
-          "which is precisely why the survey cannot be retired on the strength of it."),
+   dict(t="def", h="The 2023 amendment — national database and certificate",
+     body="The Registration of Births and Deaths (Amendment) Act, 2023 came into force on 1 October 2023. It provides "
+          "for a national database maintained by the Registrar General and state databases under Chief Registrars; "
+          "makes the birth certificate a single document admissible as proof of date and place of birth for specified "
+          "purposes including school admission, driving licences, electoral rolls, Aadhaar, marriage registration "
+          "and government employment; and provides for use of the database to update the National Population "
+          "Register, electoral rolls and ration-card records, subject to data-sharing controls."),
+   dict(t="step", h="The 2026 amendment — delayed registration",
+     body="ORGI's current Vital Statistics Division page describes the parent Act as amended in both 2023 and 2026. "
+          "The 2026 amendment changes the authority for very late registrations: where information is furnished more "
+          "than two years after the event, registration requires an order of a Judicial Magistrate of the First Class. "
+          "This is a change to the delayed-registration authority, not a new definition of the usual 21-day reporting "
+          "period."),
+   dict(t="formula", h="Current registration completeness — reference year 2024",
+     body="ORGI reports that the national Vital Statistics based on Civil Registration System report for 2024 was "
+          "released in July 2026. Registration levels are 99.1% for births and 99.4% for deaths in 2024, compared "
+          "with 82.4% and 66.4% respectively in 2011. These are completeness levels of event registration; they are "
+          "not the SRS birth rate, death rate or infant mortality rate. Keep the reference year beside every percentage."),
    dict(t="trap", h="Two bodies, two jobs, one office",
      body="The census and the CRS and the SRS all sit under the Registrar General of India in the Ministry of Home "
           "Affairs. What differs is the instrument: the Census Act, 1948 for the census, the RBD Act, 1969 for "
@@ -237,12 +239,10 @@ SC.append(dict(
    dict(q="Who conducts the census, and under which ministry?",
      a="The Registrar General of India, ex-officio Census Commissioner, in the Ministry of Home Affairs. The permanent "
        "organisation was decided on in May 1949."),
-   dict(q="Give the two reference moments for Census 2027.",
-     a="00:00 hours on 1 March 2027 for the country; 00:00 hours on 1 October 2026 for Ladakh and the snow-bound areas "
-       "of Jammu and Kashmir, Himachal Pradesh and Uttarakhand."),
-   dict(q="What did the Registration of Births and Deaths (Amendment) Act, 2023 create, and from when?",
-     a="A national database of births and deaths under the Registrar General, in force from 1 October 2023, with the "
-       "birth certificate as a single document of proof."),
+   dict(q="For the four poll-bound States/areas in ORGI's 5 September 2026 notification, give the self-enumeration and Population Enumeration dates.",
+     a="Self-enumeration 16-30 November 2026; Population Enumeration 1 December 2026 to 4 January 2027; revisional round 5-9 January 2027."),
+   dict(q="What are the key current changes in the RBD Act from the 2023 and 2026 amendments?",
+     a="The 2023 amendment provides for the national database and birth-certificate provisions. The 2026 amendment changes delayed-registration authority for information furnished more than two years after the event."),
    dict(q="Within how many days must a birth or death be reported to the registrar?",
      a="21 days, at the place where the event occurred.")]))
 
@@ -501,16 +501,16 @@ SC.append(dict(
    "events under the Registration of Births and Deaths Act, 1969, reported within 21 days, amended in 2023. SRS: a "
    "continuous sample survey giving India's vital rates, by the dual record system, with no statute behind it.",
    "Census dates. First census 1872, not synchronous; first synchronous census 1881; decennial since; permanent "
-   "organisation decided May 1949. The 2021 round was postponed owing to the pandemic. Census 2027 is the 16th and the "
-   "8th since Independence: Phase I houselisting April to September 2026, Phase II population enumeration February "
-   "2027, reference moments 00:00 on 1 March 2027 and 00:00 on 1 October 2026 for Ladakh and the snow-bound areas of "
-   "Jammu and Kashmir, Himachal Pradesh and Uttarakhand. India's first digital census, with optional self-enumeration "
-   "in sixteen languages, caste enumerated following the decision of 30 April 2025, about 31 lakh enumerators and "
-   "supervisors.",
-   "The 2023 amendment. In force 1 October 2023: a national database under the Registrar General, state databases "
-   "under Chief Registrars, the birth certificate as a single document of proof, registration through the central CRS "
-   "portal, and use of the database to update the National Population Register, electoral rolls and ration records. "
-   "CRS 2023 completeness: 98.4% of births, 97.2% of deaths — measured against SRS-based estimates.",
+   "organisation decided May 1949. The 2021 round was postponed owing to the pandemic. Census 2027 is the 16th and "
+   "8th since Independence. Phase I HLO ran 1 April to 30 September 2026. Phase-II dates vary by Gazette notification: "
+   "for Goa, Uttar Pradesh, Punjab and non-snow-bound Uttarakhand, self-enumeration is 16-30 November 2026, PE is "
+   "1 December 2026-4 January 2027 and the revisional round is 5-9 January 2027. The national reference moment is "
+   "00:00 on 1 March 2027; notified snow-bound areas have a separate 1 October 2026 reference moment. India's first "
+   "digital census includes optional self-enumeration in sixteen languages and caste enumeration.",
+   "The 2023 amendment: national database under the Registrar General and state databases under Chief Registrars; "
+   "birth certificate as single proof for specified purposes; controlled database use for other records. The 2026 "
+   "amendment changes delayed-registration authority for information furnished more than two years after an event. "
+   "CRS 2024 completeness: 99.1% birth registration and 99.4% death registration.",
    "The SRS. Pilot 1964-65, full scale 1969-70. Continuous recording by a part-time local enumerator, an independent "
    "half-yearly retrospective survey by a supervisor, matching by the Directorate of Census Operations, field "
    "verification of mismatches. 8,839 sampling units and over 8.8 million people by 2023, sized so that IMR has a "
@@ -536,10 +536,10 @@ LES = dict(
   breadcrumb="Official Statistics → Indian Statistical System → Census and vital statistics",
   engine="A", engineName="Institutions and official statistics — who counts what, how often, and on what denominator",
   estMin=sum(s["mins"] for s in SC), version="1.0", status="approved",
-  provenance="Authored for this platform in October 2026. Every institutional and numerical fact was checked against a "
+  provenance="Revised and checked on 12 November 2026. Every institutional and numerical fact was checked against a "
              "primary or official source rather than recalled, because the census schedule and the registration law "
              "both changed after most textbook material was written: the PIB release on Census 2027 for the two "
-             "phases, the two reference moments, caste enumeration and the digital operation; the census website's own "
+             "Census 2027 area-specific fieldwork dates and Gazette schedule; the census website's own "
              "history page for 1872, 1881, the Census Act 1948 and the May 1949 decision to create a permanent "
              "organisation; the Registration of Births and Deaths (Amendment) Act, 2023 for the national database and "
              "the 1 October 2023 commencement; a CRS/SRS explainer for the dual record system, the 1964-65 pilot and "
@@ -571,18 +571,19 @@ LES = dict(
     "note":"Platform settings, not an NTA rule. Ten drawn from a pool of twenty at 3 easy / 5 moderate / 2 hard; a "
            "retake draws again, holding the mix and pulling back items previously got wrong."},
   refs=[
-    dict(title="Census 2027: India's First Digital Enumeration Exercise",
-         where="Both phases, both reference moments, caste enumeration, self-enumeration and staffing",
-         site="Press Information Bureau", url="https://www.pib.gov.in/PressReleasePage.aspx?PRID=2255461&reg=48&lang=2",
-         type="Government press release", free=True, checked="2026-10-13",
-         why="The authority for the whole of the 2027 schedule in scene 3, including the 1 October 2026 reference "
-             "moment for the snow-bound areas, which most summaries omit."),
-    dict(title="How births and deaths in India are counted",
-         where="The dual record system step by step, SRS dates and sample size, CRS completeness",
-         site="Data for India", url="https://www.dataforindia.com/crs-srs-explainer/",
-         type="Explainer", free=True, checked="2026-10-13",
-         why="For scene 7's account of matching and reconciliation, and for the point that CRS completeness is itself "
-             "measured against SRS rates."),
+    dict(title="Census 2027 — Phase-II notifications and local schedules",
+         where="Population Enumeration dates by notified region; poll-bound States/areas have a separate schedule",
+         site="Office of the Registrar General and Census Commissioner, India",
+         url="https://censusindia.gov.in/census.website/en",
+         type="Official portal with Gazette notification links", free=True, checked="2026-11-12",
+         why="The ORGI portal lists the Phase-II Gazette notification published 2 November 2026, the snow-bound areas "
+             "order and the separate schedule for Goa, Uttar Pradesh, Punjab and non-snow-bound Uttarakhand."),
+    dict(title="Vital Statistics Division — Civil Registration System and current completeness",
+         where="The Act as amended in 2023 and 2026; 21-day reporting period; 2024 registration levels; SRS method",
+         site="Office of the Registrar General and Census Commissioner, India",
+         url="https://www.censusindia.gov.in/census.website/en/node/180",
+         type="Official government page", free=True, checked="2026-11-12",
+         why="Current official source for the RBD Act amendment history, 2024 CRS completeness and SRS dual-record method."),
     dict(title="Sample Registration System Statistical Report 2023",
          where="CBR, CDR, IMR, TFR and the sex ratio at birth, with state extremes",
          site="Drishti IAS", url="https://www.drishtiias.com/daily-updates/daily-news-analysis/sample-registration-system-srs-statistical-report-2023",
@@ -597,13 +598,13 @@ LES = dict(
       "Permanent census organisation decided May 1949, under the RGI, ex-officio Census Commissioner, MHA.",
       "Census is a Union subject — entry 69 of the Union List, Seventh Schedule.",
       "2021 census postponed owing to the pandemic; Census 2027 is the 16th, and the 8th since Independence.",
-      "Census 2027 Phase I (houselisting) Apr-Sep 2026; Phase II (population enumeration) Feb 2027.",
+      "Census 2027 Phase I HLO: 1 Apr-30 Sep 2026; Phase-II field dates differ by region and Gazette notification.",
       "Reference moments: 00:00 on 1 Mar 2027; 00:00 on 1 Oct 2026 for Ladakh and snow-bound J&K, HP, Uttarakhand.",
       "First digital census; optional self-enumeration in 16 languages; caste enumerated (decision 30 Apr 2025).",
       "About 31 lakh enumerators and supervisors, plus over 1 lakh functionaries.",
       "CRS: RGI set up 1951; Registration of Births and Deaths Act, 1969; report within 21 days.",
       "RBD (Amendment) Act, 2023 in force 1 Oct 2023: national database, birth certificate as single proof.",
-      "CRS 2023 completeness: 98.4% of births, 97.2% of deaths — measured against SRS-based estimates.",
+      "CRS 2024 registration completeness: 99.1% births and 99.4% deaths (national report released July 2026).",
       "SRS: pilot 1964-65, full scale 1969-70; run by the RGI; no statute behind it.",
       "SRS dual record: continuous enumeration + independent half-yearly survey, then matching and field verification.",
       "SRS 2023: 8,839 sampling units, over 8.8 million people; sized for IMR with RSE under 15%.",
@@ -616,8 +617,8 @@ LES = dict(
       ["First census, and first synchronous census", "1872 and 1881"],
       ["Act behind the census, and behind registration", "Census Act 1948; RBD Act 1969"],
       ["Who conducts the census, under which ministry", "Registrar General of India, ex-officio Census Commissioner, MHA"],
-      ["Census 2027 reference moments", "00:00 1 Mar 2027; 00:00 1 Oct 2026 for snow-bound areas and Ladakh"],
-      ["What the 2023 amendment created, and from when", "A national births and deaths database, from 1 Oct 2023"],
+      ["Census 2027 reference moments", "National: 00:00 1 Mar 2027; notified snow-bound areas: 1 Oct 2026"],
+      ["The 2023 RBD amendment", "National database and birth-certificate provisions; commenced 1 Oct 2023"],
       ["SRS pilot and full scale", "1964-65 and 1969-70"],
       ["The SRS method", "Dual record: continuous enumeration + half-yearly survey, then matching"],
       ["SRS 2023 CBR, CDR, IMR, TFR", "18.4, 6.4, 25, 1.9"],
@@ -647,7 +648,7 @@ LES = dict(
       "If a question quotes a vital RATE for India, the source is the SRS, not the CRS.",
       "If it quotes a COUNT of registered events for a named district, the source is the CRS.",
       "Any option saying a below-replacement TFR means a falling population is wrong.",
-      "If a figure for Census 2027 has only one reference moment, the snow-bound-areas moment has been dropped."],
+      "For Census 2027, separate the reference moment from the date enumerators visit; check the Gazette notice for the State/UT."],
     remember=[
       "For any rate, name the system behind the numerator and the system behind the denominator separately.",
       "Attach the period to every figure: annual for CBR, CDR, IMR and TFR; three-year for the sex ratio at birth and "
@@ -666,7 +667,7 @@ LES = dict(
     "1872 is the first census; 1881 is the first synchronous one.",
     "The census, the CRS and the SRS all sit under the RGI in the Ministry of Home Affairs, not MoSPI.",
     "IMR is per 1,000 live births, not per 1,000 population; MMR is per 1,00,000 live births.",
-    "Census 2027 has two reference moments, 1 March 2027 and 1 October 2026 for Ladakh and the snow-bound areas.",
+    "Census 2027 has area-specific fieldwork windows. Separate reference moments from fieldwork dates and use the Gazette notice for the State/UT.",
     "The SRS rests on no statute; the census has the Census Act 1948 and registration the RBD Act 1969.",
     "The proportion of births that are female is 917/1917, not 917/1000.",
     "A TFR below replacement does not mean the population is falling — population momentum.",
