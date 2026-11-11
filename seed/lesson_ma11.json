@@ -353,7 +353,94 @@
      "h": "Regularity and candidates",
      "body": "The standard method assumes ∇g≠0 at the candidate. Solve all multiplier systems, inspect exceptional points if needed, and compare objective values for global constrained extrema."
     }
-   ]
+   ],
+   "flow": {
+    "title": "Unconstrained or constrained optimisation?",
+    "alt": "Flow for choosing Hessian or Lagrange method",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Identify the objective and domain",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Equality constraint present?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Solve gradient=0",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Solve ∇f=λ∇g and g=0",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 0,
+      "label": "Classify with Hessian determinant",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 3,
+      "c": 2,
+      "label": "Check regularity and candidates",
+      "kind": "step"
+     },
+     {
+      "id": "g",
+      "r": 4,
+      "c": 1,
+      "label": "Compare feasible objective values",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "no"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "yes"
+     },
+     {
+      "from": "c",
+      "to": "e"
+     },
+     {
+      "from": "d",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "g"
+     },
+     {
+      "from": "f",
+      "to": "g"
+     }
+    ]
+   }
   },
   {
    "kind": "guided",
