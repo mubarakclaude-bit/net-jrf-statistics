@@ -121,7 +121,7 @@
       "title": "Population weights",
       "objective": "Calculate stratum population shares.",
       "viz": {
-        "type": "bar",
+        "type": "disc-pmf",
         "caption": "N₁=100 and N₂=200: population shares are 1/3 and 2/3."
       },
       "body": [
@@ -162,7 +162,55 @@
           "body": "Replace S_h² by the within-stratum sample variance s_h²: v(ȳ_st)=Σ_h W_h²(1−f_h)s_h²/n_h."
         }
       ],
-      "flow": "Partition population → sample independently within strata → calculate each ȳ_h → weight by W_h → add variance contributions.",
+      "flow": {
+        "title": "Build the stratified estimate",
+        "alt": "Partition the population, sample within each stratum, calculate stratum means and combine with population weights.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Define strata",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Select sample in each stratum",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Calculate each stratum mean",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Weight by W_h and combine",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          }
+        ],
+        "note": "Use population weights W_h=N_h/N for the overall mean."
+      },
       "ask": {
         "q": "Why are the weights W_h and not n_h/n?",
         "nudge": "The target is the population mean, so weights represent population shares."
@@ -246,40 +294,56 @@
       "problem": "N₁=100, S₁=4; N₂=200, S₂=6; n=30; equal unit costs. Complete the Neyman allocation.",
       "steps": [
         {
-          "prompt": "The allocation weight is",
-          "answer": "N_hS_h",
-          "accept": [
-            "N_hS_h",
-            "N_h S_h"
-          ],
-          "hint": "Multiply population size by standard deviation."
+          "say": "The Neyman weight for stratum h is N_hS_h.",
+          "blank": {
+            "prompt": "Allocation weight = ?",
+            "answer": "N_hS_h",
+            "accept": [
+              "N_hS_h",
+              "N_h S_h"
+            ],
+            "hint": "Multiply population size by standard deviation."
+          },
+          "why": "The weight reflects both the size of the stratum and its within-stratum variability."
         },
         {
-          "prompt": "The weights are",
-          "answer": "400 and 1200",
-          "accept": [
-            "400 and 1200",
-            "400, 1200"
-          ],
-          "hint": "Compute N₁S₁ and N₂S₂."
+          "say": "The two weights are 100×4=400 and 200×6=1200.",
+          "blank": {
+            "prompt": "Write the two weights.",
+            "answer": "400 and 1200",
+            "accept": [
+              "400 and 1200",
+              "400,1200"
+            ],
+            "hint": "Compute N₁S₁ and N₂S₂."
+          },
+          "why": "The second stratum has three times the first stratum's weight."
         },
         {
-          "prompt": "The continuous allocations are",
-          "answer": "7.5 and 22.5",
-          "accept": [
-            "7.5 and 22.5",
-            "7.5, 22.5"
-          ],
-          "hint": "Allocate 30 in the ratio 1:3."
+          "say": "Allocate 30 in the ratio 400:1200, which is 1:3.",
+          "blank": {
+            "prompt": "Find the continuous allocations.",
+            "answer": "7.5 and 22.5",
+            "accept": [
+              "7.5 and 22.5",
+              "7.5,22.5"
+            ],
+            "hint": "Divide the total sample in the ratio 1:3."
+          },
+          "why": "The continuous allocations add to 30."
         },
         {
-          "prompt": "A feasible integer allocation is",
-          "answer": "8 and 22",
-          "accept": [
-            "8 and 22",
-            "8, 22"
-          ],
-          "hint": "Preserve the total of 30."
+          "say": "Round to feasible integers while preserving the total.",
+          "blank": {
+            "prompt": "Give one feasible integer allocation.",
+            "answer": "8 and 22",
+            "accept": [
+              "8 and 22",
+              "8,22"
+            ],
+            "hint": "Round the first allocation up and the second down."
+          },
+          "why": "The rounded allocations still sum to 30 and remain below the stratum population sizes."
         }
       ],
       "after": "Check that rounded allocations sum to n and do not exceed stratum sizes.",
@@ -491,7 +555,8 @@
     ],
     "shortcuts": [
       "Proportional allocation gives equal sampling fractions.",
-      "Check that population weights sum to one."
+      "Check that population weights sum to one.",
+      "For two strata, calculate W₁ and W₂ first and confirm that they sum to one."
     ],
     "remember": [
       "Estimator weights are population shares.",
@@ -518,6 +583,16 @@
       "free": false,
       "checked": "2026-11-12",
       "why": "Modern treatment of design-based stratified estimation."
+    },
+    {
+      "title": "Sampling Theory lecture notes",
+      "where": "Stratified sampling and allocation",
+      "site": "IIT Kanpur, Shalabh",
+      "url": "https://home.iitk.ac.in/~shalab/sampling/",
+      "type": "Open lecture notes",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Open supporting material for classical sampling designs."
     }
   ],
   "mastery": {
