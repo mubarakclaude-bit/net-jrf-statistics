@@ -242,7 +242,79 @@
      "h": "Read the solution",
      "body": "Pivot variables are expressed in terms of free variables. If no contradictory row occurs, assign arbitrary values to the free variables and back-substitute."
     }
-   ]
+   ],
+   "flow": {
+    "title": "Classify a linear system",
+    "alt": "Flow for row reduction and consistency",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Form augmented matrix [A|b]",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Reduce to echelon form",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 1,
+      "label": "Compare rank(A) and rank([A|b])",
+      "kind": "dec"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Unequal: no solution",
+      "kind": "end"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 2,
+      "label": "Equal: compare rank with n",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "rank=n unique; rank<n infinite",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d",
+      "label": "unequal"
+     },
+     {
+      "from": "c",
+      "to": "e",
+      "label": "equal"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ]
+   }
   },
   {
    "kind": "worked",
