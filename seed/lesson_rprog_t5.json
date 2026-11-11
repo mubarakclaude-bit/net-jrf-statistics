@@ -165,19 +165,27 @@
       ],
       "items": [
         {
-          "ask": "What should be identified before predicting output?",
-          "recall": "Initial values and execution order.",
+          "ask": "What does an assignment do?",
+          "recall": "It updates a name-to-value binding.",
           "refresh": [
-            "Record every variable before the first statement.",
-            "Then apply each statement in source order."
+            "An assignment such as x <- 4 creates or updates the binding named x. A later expression that refers to x uses the latest value established by executed statements.",
+            "For output questions, keep a small state table. Record the value after every assignment rather than trying to remember several updates mentally; this prevents accidentally using an old value."
           ]
         },
         {
-          "ask": "Does x <- 5 automatically print 5 inside a function?",
-          "recall": "No.",
+          "ask": "What is the default order of statement evaluation?",
+          "recall": "Statements normally execute in source order.",
           "refresh": [
-            "Assignment changes a binding.",
-            "Printing and returning are separate operations."
+            "R normally evaluates expressions in the order they appear. A statement later in the same execution path sees the effects of earlier assignments and function calls.",
+            "Control-flow statements can change which lines execute, but they do not change the basic rule that the selected sequence is followed in order. Mark skipped and unselected lines explicitly."
+          ]
+        },
+        {
+          "ask": "What is the difference between break and next?",
+          "recall": "break exits the nearest loop; next skips the current iteration.",
+          "refresh": [
+            "break terminates the nearest enclosing loop immediately. next skips the remaining statements in the current iteration and proceeds to the next iteration, if one remains.",
+            "For a loop trace, check the location of break or next before applying later statements in that iteration. This is especially important when an accumulator update appears after the control statement."
           ]
         }
       ],
@@ -201,7 +209,8 @@
         "title": "An analyst updates a threshold",
         "body": [
           "An analyst begins with threshold=10, changes it to threshold+5, then compares a score with the updated threshold.",
-          "The final comparison must use 15, not the original 10."
+          "The final comparison must use 15, not the original 10.",
+          " A reliable trace records the value of every variable after each executed statement and notes the exact iteration at which a branch or loop-control command is reached. Lines that are skipped must not be included in the final calculation. The final expression is evaluated only after all earlier updates on the executed path have been applied."
         ],
         "q": "Which threshold is used after the assignment?",
         "answer": "15."
@@ -399,7 +408,24 @@
       "ask": {
         "q": "What changes if the condition is FALSE?",
         "nudge": "The else branch is selected."
-      }
+      },
+      "solution": [
+        {
+          "say": "Start with the initial binding.",
+          "math": "x = 1.",
+          "why": "Record the value before executing the conditional."
+        },
+        {
+          "say": "Evaluate the condition and follow its branch.",
+          "math": "x > 0 is TRUE, so x becomes 1 + 4 = 5.",
+          "why": "Only the selected if branch executes."
+        },
+        {
+          "say": "Read the final expression.",
+          "math": "The final value of x is 5.",
+          "why": "The last expression uses the updated binding."
+        }
+      ]
     },
     {
       "kind": "theory",
@@ -452,11 +478,29 @@
         "title": "A quality-control loop",
         "body": [
           "An analyst adds successive values to an accumulator but stops when the loop reaches a specified iteration.",
-          "The break statement exits before the update on that iteration, so the final accumulator includes only earlier additions."
+          "The break statement exits before the update on that iteration, so the final accumulator includes only earlier additions.",
+          " A reliable trace records the value of every variable after each executed statement and notes the exact iteration at which a branch or loop-control command is reached. Lines that are skipped must not be included in the final calculation. The final expression is evaluated only after all earlier updates on the executed path have been applied."
         ],
         "q": "Does the iteration that triggers break update the accumulator?",
         "answer": "No; break exits before the later update statement."
-      }
+      },
+      "solution": [
+        {
+          "say": "Trace the first two iterations.",
+          "math": "i = 1 gives x = 2; i = 2 gives x = 4.",
+          "why": "Each iteration adds i to the current accumulator."
+        },
+        {
+          "say": "Evaluate the third iteration's condition.",
+          "math": "At i = 3, the break statement executes.",
+          "why": "break exits the nearest loop before the following addition."
+        },
+        {
+          "say": "Report the retained accumulator.",
+          "math": "x remains 4.",
+          "why": "No update occurs for i=3 or for later iterations after the loop exits."
+        }
+      ]
     },
     {
       "kind": "trapcheck",
