@@ -16,12 +16,15 @@
 ## Exact worked-example checks
 - Cell means in order A−B−, A+B−, A−B+, A+B+: (9,13,11,19).
 - Main effect A=6; main effect B=4; AB interaction=4.
-- Replicated data: (8,10), (12,14), (10,12), (18,20); G=104, N=8, CF=1352, Σy²=1424, total SS=72.
-- SS_A=36; SS_B=16; SS_AB=16; pure error SS=8; decomposition 36+16+16+8=76? Recheck required: total SS must be 72. The pure error calculation is 8, so treatment SS must total 64; the contrast SS are 36,16,16 =68. This discrepancy must be resolved before approval.
-- Exact arithmetic is independently checked in `verify_design_t3.py`.
+- Replicated data: (8,10), (12,14), (10,12), (18,20); G=104, N=8, CF=1352, Σy²=1472, total SS=120.
+- SS_A=72; SS_B=32; SS_AB=8; pure error SS=8; decomposition 72+32+8+8=120.
+- Degrees of freedom: A=1, B=1, AB=1, error=4, total=7; F ratios are 36, 16 and 4.
 
 ## Assumptions and limits
 - Standard fixed-effects factorial ANOVA assumes independent errors, common variance and normality for exact finite-sample F inference.
 - Randomisation is required; balanced replication supports orthogonal contrasts.
 - A substantial interaction should be interpreted using cell means/simple effects rather than marginal main effects alone.
 - Repeated measurements on one experimental unit are not automatically independent replications.
+
+## Verification
+- `verify_design_t3.py` uses exact rational arithmetic and checks effect contrasts, SS decomposition, F ratios, df identities and mastery distributions.
