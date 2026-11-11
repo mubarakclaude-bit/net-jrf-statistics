@@ -84,8 +84,8 @@ jobs:
           def walk(o):
               if isinstance(o,dict):
                   for k,v in o.items():
-                      if k=='math' and isinstance(v,str): out.extend(x for x in v.split('\\n') if x.strip())
-                      elif k=='body' and isinstance(v,str) and o.get('t') in ('formula','step','def'): out.extend(x for x in v.split('\\n') if x.strip())
+                      if k=='math' and isinstance(v,str): out.extend(x for x in v.split('\n') if x.strip())
+                      elif k=='body' and isinstance(v,str) and o.get('t') in ('formula','step','def'): out.extend(x for x in v.split('\n') if x.strip())
                       else: walk(v)
               elif isinstance(o,list):
                   for x in o: walk(x)
