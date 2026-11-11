@@ -1,0 +1,659 @@
+{
+ "id": "mathst10",
+ "topicId": "maths-t10",
+ "moduleId": "maths",
+ "title": "Functions of Two Variables: Partial and Total Derivatives",
+ "breadcrumb": "Mathematics → Calculus → Multivariable differentiation",
+ "engine": "B",
+ "engineName": "Mathematics — partial changes, gradients and paths",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 105,
+ "objectives": [
+  "Compute first and second partial derivatives.",
+  "Apply equality of mixed partials under continuity conditions.",
+  "Use total differentials and the multivariable chain rule.",
+  "Compute gradients and directional derivatives.",
+  "Interpret gradient magnitude and direction geometrically."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Single-variable differentiation",
+   "why": "Partial derivatives apply ordinary differentiation while holding other variables fixed."
+  },
+  {
+   "id": "p2",
+   "name": "Vectors and dot products",
+   "why": "Directional derivatives are gradient dot products with unit vectors."
+  },
+  {
+   "id": "p3",
+   "name": "Chain rule",
+   "why": "Total derivatives combine the rates of changing inputs."
+  }
+ ],
+ "traps": [
+  "In fₓ, hold y fixed; in fᵧ, hold x fixed.",
+  "A partial derivative is not the total derivative when both inputs vary.",
+  "Use a unit vector for the directional derivative.",
+  "Equality of mixed partials needs continuity conditions.",
+  "Existence of partial derivatives alone does not guarantee differentiability.",
+  "The gradient magnitude is the maximum directional derivative."
+ ],
+ "revision": {
+  "sheet": [
+   "fₓ: differentiate in x with y fixed.",
+   "fᵧ: differentiate in y with x fixed.",
+   "fₓᵧ and fᵧₓ are equal when second partials are continuous.",
+   "Total differential: dz=fₓdx+fᵧdy.",
+   "Chain rule: dz/dt=fₓx′+fᵧy′.",
+   "Gradient: ∇f=(fₓ,fᵧ).",
+   "Directional derivative: Dᵤf=∇f·u for ‖u‖=1.",
+   "Maximum directional derivative equals ‖∇f‖.",
+   "Gradient is normal to a level curve.",
+   "Partial derivatives existing at a point do not alone imply differentiability."
+  ],
+  "cards": [
+   [
+    "Partial x",
+    "Hold y fixed"
+   ],
+   [
+    "Partial y",
+    "Hold x fixed"
+   ],
+   [
+    "Total differential",
+    "fₓdx+fᵧdy"
+   ],
+   [
+    "Chain rule",
+    "fₓx′+fᵧy′"
+   ],
+   [
+    "Gradient",
+    "(fₓ,fᵧ)"
+   ],
+   [
+    "Directional derivative",
+    "∇f·u"
+   ],
+   [
+    "Maximum rate",
+    "‖∇f‖"
+   ],
+   [
+    "Mixed partials",
+    "Equal if continuous"
+   ]
+  ],
+  "tricks": [
+   "Differentiate one variable at a time and annotate what is fixed.",
+   "For the total derivative, write the chain rule before substituting the path.",
+   "Normalise a direction vector before taking the dot product.",
+   "Use the gradient magnitude for the maximum rate.",
+   "Check continuity of second partials before swapping mixed derivatives."
+  ],
+  "shortcuts": [
+   "For x²y+3xy²: fₓ=2xy+3y² and fᵧ=x²+6xy.",
+   "For x=t,y=2t and z=x²+y²: dz/dt=10t.",
+   "At (1,2) for x²+y²: ∇f=(2,4), ‖∇f‖=2√5."
+  ],
+  "remember": [
+   "Partial means hold the other inputs fixed.",
+   "Total derivative includes every changing input.",
+   "Directional derivative uses a unit vector."
+  ]
+ },
+ "howto": "Differentiate one variable at a time for partials. When inputs depend on a parameter, write the chain rule explicitly. For directional derivatives, compute the gradient and normalise the direction before taking the dot product.",
+ "refs": [
+  {
+   "title": "Calculus Volume 3",
+   "where": "Functions of several variables",
+   "site": "OpenStax",
+   "url": "https://openstax.org/details/books/calculus-volume-3",
+   "type": "Open textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Partial derivatives, chain rule and directional derivatives."
+  },
+  {
+   "title": "Multivariable Calculus",
+   "where": "Partial derivatives and gradients",
+   "site": "MIT OpenCourseWare 18.02SC",
+   "url": "https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Gradient, total derivative and geometric interpretation."
+  },
+  {
+   "title": "Mathematical Analysis",
+   "where": "Differentiation in several variables",
+   "site": "Tom M. Apostol",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Rigorous multivariable differentiation."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact polynomial derivatives, chain-rule path and directional derivative anchors are verified algebraically. Not production-approved.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Foundation: functions of two variables",
+   "objective": "Recall partial changes and derivatives.",
+   "ask": {
+    "q": "For z=f(x,y), what does fₓ measure?",
+    "nudge": "Change x while holding y fixed."
+   },
+   "body": [
+    "A function of two variables assigns a scalar z=f(x,y) to each point (x,y). A partial derivative measures change in one coordinate while the other is held fixed.",
+    "The total derivative accounts for all ways the variables change along a path. It combines partial derivatives with the rates of change of the input variables."
+   ],
+   "items": [
+    {
+     "ask": "Define a partial derivative with respect to x.",
+     "recall": "fₓ(x,y)=lim h→0[f(x+h,y)−f(x,y)]/h.",
+     "refresh": [
+      "Treat y as a constant and differentiate with respect to x. The definition is a one-variable difference quotient with the other coordinate frozen.",
+      "For f=x²y+3xy², fₓ=2xy+3y². The factor y is constant during the x differentiation, while y² is also constant."
+     ]
+    },
+    {
+     "ask": "What is the gradient?",
+     "recall": "∇f=(fₓ,fᵧ) for a scalar function of two variables.",
+     "refresh": [
+      "The gradient collects all first partial derivatives into a vector. It points in the direction of steepest increase and its magnitude is the maximum directional derivative for a unit direction.",
+      "For f=x²+y², ∇f=(2x,2y). At (1,2), the gradient is (2,4)."
+     ]
+    },
+    {
+     "ask": "State the multivariable chain rule for z=f(x,y), x=x(t), y=y(t).",
+     "recall": "dz/dt=fₓ dx/dt+fᵧ dy/dt.",
+     "refresh": [
+      "The output changes because both input coordinates may change. Multiply each partial derivative by the rate of its corresponding variable, then add the contributions.",
+      "This is the total derivative along a path. It differs from a partial derivative because neither input is necessarily held fixed."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "Partial versus total change",
+   "objective": "Distinguish a coordinate derivative from a path derivative.",
+   "ask": {
+    "q": "If x and y both depend on t, is dz/dt equal to fₓ alone?",
+    "nudge": "No, the y contribution must also be included."
+   },
+   "body": [
+    "A partial derivative asks what happens if one coordinate changes and the other is frozen. A total derivative asks what happens along an actual path where several coordinates may move.",
+    "The gradient is a vector of partial derivatives. Dotting it with a direction vector gives the directional derivative, which measures change in that direction."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "First and second partial derivatives",
+   "objective": "Compute repeated and mixed partial derivatives.",
+   "ask": {
+    "q": "For f=x²y+3xy², find fₓᵧ.",
+    "nudge": "Differentiate fₓ=2xy+3y² with respect to y."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "First partials",
+     "body": "fₓ=∂f/∂x with y fixed; fᵧ=∂f/∂y with x fixed."
+    },
+    {
+     "t": "formula",
+     "h": "Second partials",
+     "body": "fₓₓ=∂²f/∂x²; fᵧᵧ=∂²f/∂y²; fₓᵧ=∂²f/(∂y∂x); fᵧₓ=∂²f/(∂x∂y)."
+    },
+    {
+     "t": "def",
+     "h": "Equality of mixed partials",
+     "body": "If the relevant second partial derivatives are continuous in a neighbourhood, Clairaut's theorem gives fₓᵧ=fᵧₓ."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Worked: differentiate a polynomial",
+   "objective": "Compute first and mixed partial derivatives.",
+   "ask": {
+    "q": "For f=x²y+3xy², what is fᵧ?",
+    "nudge": "Differentiate with respect to y and hold x constant."
+   },
+   "problem": "Find fₓ, fᵧ and fₓᵧ for f(x,y)=x²y+3xy².",
+   "steps": [
+    {
+     "say": "Differentiate with respect to x.",
+     "math": "fₓ=2xy+3y²",
+     "why": "Treat y and y² as constants."
+    },
+    {
+     "say": "Differentiate with respect to y.",
+     "math": "fᵧ=x²+6xy",
+     "why": "Treat x and x² as constants."
+    },
+    {
+     "say": "Differentiate fₓ with respect to y.",
+     "math": "fₓᵧ=2x+6y",
+     "why": "The mixed partial is the derivative of fₓ with respect to y."
+    }
+   ],
+   "scenario": {
+    "teaser": "An outcome depends on two changing inputs.",
+    "title": "Marginal effects in a two-input production function",
+    "body": [
+     "A production function Q=f(K,L) depends on capital K and labour L. The partial derivative f_K measures the marginal product of capital while labour is held fixed.",
+     "The partial derivative f_L measures the marginal product of labour while capital is held fixed. If both inputs change over time, the total derivative combines both effects.",
+     "This distinction matters in comparative statics: a partial effect is not the same as the total observed change when multiple inputs move together."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 8,
+   "title": "Total differential and chain rule",
+   "objective": "Compute change along a parameterised path.",
+   "ask": {
+    "q": "If z=f(x,y), x=x(t), y=y(t), write dz/dt.",
+    "nudge": "Use both partial derivatives and both input rates."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Total differential",
+     "body": "dz=fₓdx+fᵧdy. For small changes, Δz≈fₓΔx+fᵧΔy."
+    },
+    {
+     "t": "formula",
+     "h": "Chain rule",
+     "body": "dz/dt=fₓ dx/dt+fᵧ dy/dt."
+    },
+    {
+     "t": "step",
+     "h": "Interpretation",
+     "body": "Each partial derivative is weighted by the rate at which its input changes. The total derivative is the sum of the two input contributions."
+    }
+   ],
+   "flow": {
+    "title": "Choose the multivariable derivative",
+    "alt": "Decision flow for partial, total and directional derivatives",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Function z=f(x,y)",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Which quantity changes?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "One input frozen: partial derivative",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Path or parameter: chain rule",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 2,
+      "label": "Specified direction: gradient dot unit vector",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "Check dimensions and unit direction",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "coordinate"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "both inputs"
+     },
+     {
+      "from": "d",
+      "to": "e",
+      "label": "directional rate"
+     },
+     {
+      "from": "c",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s5",
+   "mins": 8,
+   "title": "Guided: total derivative along a path",
+   "objective": "Apply the multivariable chain rule.",
+   "problem": "Let z=x²+y², x=t and y=2t. Find dz/dt.",
+   "hints": [
+    "Find the partial derivatives fₓ=2x and fᵧ=2y.",
+    "Use dx/dt=1 and dy/dt=2.",
+    "Substitute into dz/dt=fₓx′+fᵧy′."
+   ],
+   "answer": "dz/dt=10t.",
+   "solution": "dz/dt=2x(1)+2y(2). Substituting x=t and y=2t gives 2t+8t=10t.",
+   "ask": {
+    "q": "At t=1, what is dz/dt?",
+    "nudge": "Substitute t=1 into 10t."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Gradient and directional derivatives",
+   "objective": "Find the rate of change in a specified direction.",
+   "ask": {
+    "q": "For f=x²+y² at (1,2), find the gradient.",
+    "nudge": "The partial derivatives are 2x and 2y."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Gradient",
+     "body": "∇f=(fₓ,fᵧ). It points in the direction of steepest increase."
+    },
+    {
+     "t": "formula",
+     "h": "Directional derivative",
+     "body": "For a unit vector u=(u₁,u₂), Dᵤf=∇f·u=fₓu₁+fᵧu₂."
+    },
+    {
+     "t": "step",
+     "h": "Unit-vector condition",
+     "body": "If the direction is given as a non-unit vector v, normalise it first: u=v/‖v‖. The directional derivative depends on direction, not the arbitrary length of v."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided: directional derivative",
+   "objective": "Use the gradient and a unit direction.",
+   "problem": "For f=x²+y² at (1,2), find the directional derivative in direction u=(3/5,4/5).",
+   "hints": [
+    "Compute ∇f=(2x,2y)=(2,4).",
+    "Take the dot product with the given unit vector.",
+    "Calculate 2(3/5)+4(4/5)."
+   ],
+   "answer": "Dᵤf=22/5.",
+   "solution": "The gradient is (2,4). Its dot product with (3/5,4/5) is 6/5+16/5=22/5.",
+   "ask": {
+    "q": "What is the maximum directional derivative at (1,2)?",
+    "nudge": "It is the magnitude of the gradient."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s8",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the main multivariable formulas.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "What is fₓ?",
+     "a": "Partial derivative with y held fixed."
+    },
+    {
+     "q": "Write the total differential.",
+     "a": "dz=fₓdx+fᵧdy."
+    },
+    {
+     "q": "Write the chain rule along t.",
+     "a": "dz/dt=fₓx′+fᵧy′."
+    },
+    {
+     "q": "What is the directional derivative?",
+     "a": "∇f·u for a unit direction u."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s9",
+   "mins": 8,
+   "title": "Four derivative decisions",
+   "objective": "Apply partial and total derivative formulas.",
+   "problem": "Complete each result.",
+   "steps": [
+    {
+     "say": "f=x²y+3xy².",
+     "blank": {
+      "prompt": "Find fₓ.",
+      "answer": "2xy+3y²",
+      "accept": [
+       "2xy+3y^2",
+       "2xy+3y²"
+      ],
+      "hint": "Hold y fixed."
+     },
+     "why": "Differentiate each term with respect to x."
+    },
+    {
+     "say": "For the same f.",
+     "blank": {
+      "prompt": "Find fᵧ.",
+      "answer": "x²+6xy",
+      "accept": [
+       "x^2+6xy",
+       "x²+6xy"
+      ],
+      "hint": "Hold x fixed."
+     },
+     "why": "Differentiate each term with respect to y."
+    },
+    {
+     "say": "z=f(x,y), x=t, y=2t.",
+     "blank": {
+      "prompt": "Write dz/dt for f=x²+y².",
+      "answer": "10t",
+      "accept": [
+       "10t"
+      ],
+      "hint": "Use 2x x′+2y y′."
+     },
+     "why": "Substitute x=t and y=2t."
+    },
+    {
+     "say": "For f=x²+y² at (1,2).",
+     "blank": {
+      "prompt": "What is the gradient magnitude?",
+      "answer": "2√5",
+      "accept": [
+       "2sqrt(5)",
+       "2√5"
+      ],
+      "hint": "The gradient is (2,4)."
+     },
+     "why": "‖∇f‖=√(4+16)=2√5."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s10",
+   "mins": 6,
+   "title": "The gradient is steepest ascent",
+   "objective": "Interpret gradient direction and magnitude.",
+   "ask": {
+    "q": "For a differentiable scalar function, in which direction is the directional derivative largest?",
+    "nudge": "Along the gradient direction."
+   },
+   "body": [
+    "The gradient points in the direction of the fastest local increase. Its magnitude is the maximum directional derivative over all unit directions.",
+    "A direction perpendicular to the gradient has zero first-order change. This is useful when interpreting contour maps: the gradient is normal to a level curve."
+   ],
+   "scenario": {
+    "teaser": "A response surface is explored by changing two inputs.",
+    "title": "Steepest improvement on a response surface",
+    "body": [
+     "Suppose a response z=f(x,y) represents yield, efficiency or a statistical objective. At a point, the gradient gives the direction of steepest local increase.",
+     "A unit direction u has directional derivative ∇f·u. Moving perpendicular to the gradient gives zero first-order change, which corresponds to moving along a level curve.",
+     "This local geometric interpretation supports optimisation algorithms and sensitivity analysis, but it does not by itself guarantee a global maximum."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s11",
+   "mins": 7,
+   "title": "Worked: mixed partials",
+   "objective": "Verify equality of mixed partial derivatives.",
+   "ask": {
+    "q": "For f=x²y+3xy², compare fₓᵧ and fᵧₓ.",
+    "nudge": "Both should simplify to 2x+6y."
+   },
+   "problem": "Compute fₓᵧ and fᵧₓ for f=x²y+3xy².",
+   "steps": [
+    {
+     "say": "Differentiate fₓ with respect to y.",
+     "math": "fₓ=2xy+3y² ⇒ fₓᵧ=2x+6y",
+     "why": "This is the mixed partial in y after x."
+    },
+    {
+     "say": "Differentiate fᵧ with respect to x.",
+     "math": "fᵧ=x²+6xy ⇒ fᵧₓ=2x+6y",
+     "why": "This is the mixed partial in x after y."
+    },
+    {
+     "say": "Compare.",
+     "math": "fₓᵧ=fᵧₓ=2x+6y",
+     "why": "The function is a polynomial, so its second partials are continuous and Clairaut's theorem applies."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s12",
+   "mins": 5,
+   "title": "Trap check: six statements",
+   "objective": "Avoid common partial and total derivative errors.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "In fₓ, y is held fixed.",
+     "tf": true,
+     "why": "That is the definition of a partial derivative."
+    },
+    {
+     "claim": "The total derivative includes changes in both x and y.",
+     "tf": true,
+     "why": "It combines both partial derivatives with input rates."
+    },
+    {
+     "claim": "The gradient points in the direction of steepest increase.",
+     "tf": true,
+     "why": "Its dot product with a unit direction is maximised along the gradient."
+    },
+    {
+     "claim": "A directional derivative uses any vector without normalisation.",
+     "tf": false,
+     "why": "The standard directional derivative uses a unit direction vector."
+    },
+    {
+     "claim": "Continuous second partial derivatives imply fₓᵧ=fᵧₓ.",
+     "tf": true,
+     "why": "This is Clairaut's theorem."
+    },
+    {
+     "claim": "A partial derivative existing at a point always guarantees differentiability there.",
+     "tf": false,
+     "why": "Existence of partial derivatives alone is not sufficient."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "Final multivariable-calculus checklist",
+   "objective": "Choose the correct derivative for the question.",
+   "body": [
+    "1. Partial derivative: freeze the other variables.",
+    "2. Second partials: compute fₓₓ, fᵧᵧ and mixed terms carefully.",
+    "3. If second partials are continuous, mixed partials agree.",
+    "4. Total differential: dz=fₓdx+fᵧdy.",
+    "5. Chain rule: dz/dt=fₓx′+fᵧy′.",
+    "6. Gradient: ∇f=(fₓ,fᵧ); directional derivative: ∇f·u for unit u.",
+    "7. Maximum directional derivative equals ‖∇f‖."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate partial, total and directional differentiation.",
+   "setId": "maths_t10_mastery"
+  }
+ ]
+}

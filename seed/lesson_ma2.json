@@ -1,0 +1,688 @@
+{
+ "id": "mathst2",
+ "topicId": "maths-t2",
+ "moduleId": "maths",
+ "title": "Eigenvalues, Eigenvectors, Diagonalisation and Cayley–Hamilton",
+ "breadcrumb": "Mathematics → Matrix algebra → Eigenvalues and diagonalisation",
+ "engine": "B",
+ "engineName": "Mathematics — invariant directions and matrix structure",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 105,
+ "objectives": [
+  "Compute eigenvalues from the characteristic equation.",
+  "Find eigenspaces by solving (A−λI)v=0.",
+  "Use algebraic and geometric multiplicities to decide diagonalisation.",
+  "Apply the spectral theorem to real symmetric matrices.",
+  "Use Cayley–Hamilton to reduce powers and obtain inverses."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Determinants and inverses",
+   "why": "The characteristic equation is a determinant condition."
+  },
+  {
+   "id": "p2",
+   "name": "Linear systems and null spaces",
+   "why": "Eigenvectors are non-zero solutions of a homogeneous system."
+  },
+  {
+   "id": "p3",
+   "name": "Linear independence and bases",
+   "why": "Diagonalisation requires a basis of eigenvectors."
+  }
+ ],
+ "traps": [
+  "The zero vector is not an eigenvector.",
+  "Trace is the sum and determinant the product of eigenvalues, counting multiplicity.",
+  "Repeated eigenvalues do not automatically prevent diagonalisation.",
+  "Geometric multiplicity never exceeds algebraic multiplicity.",
+  "Orthogonal diagonalisation is guaranteed for real symmetric matrices, not all matrices.",
+  "In Cayley–Hamilton, the constant term multiplies I.",
+  "An inverse formula requires a non-zero determinant."
+ ],
+ "revision": {
+  "sheet": [
+   "p_A(λ)=det(λI−A); roots are eigenvalues.",
+   "Av=λv with v≠0.",
+   "Sum eigenvalues = tr(A); product = det(A).",
+   "GM=dim null(A−λI), and 1≤GM≤AM.",
+   "Diagonalisation iff n independent eigenvectors exist.",
+   "Distinct eigenvalues guarantee diagonalisation.",
+   "Real symmetric matrices are orthogonally diagonalisable.",
+   "Cayley–Hamilton: p_A(A)=0.",
+   "For 2×2: A²−tr(A)A+det(A)I=0.",
+   "If invertible: A⁻¹=(tr(A)I−A)/det(A)."
+  ],
+  "cards": [
+   [
+    "Characteristic equation",
+    "det(λI−A)=0"
+   ],
+   [
+    "Trace",
+    "Sum of eigenvalues"
+   ],
+   [
+    "Determinant",
+    "Product of eigenvalues"
+   ],
+   [
+    "Diagonalisation",
+    "n independent eigenvectors"
+   ],
+   [
+    "AM and GM",
+    "1≤GM≤AM"
+   ],
+   [
+    "Spectral theorem",
+    "Real symmetric → orthogonal diagonalisation"
+   ],
+   [
+    "Cayley–Hamilton",
+    "p_A(A)=0"
+   ]
+  ],
+  "tricks": [
+   "Use trace and determinant to check 2×2 roots.",
+   "Solve the null-space system for eigenvectors.",
+   "For repeated roots, compute nullity of A−λI.",
+   "Use Cayley–Hamilton before multiplying large powers.",
+   "Check det(A)≠0 before finding A inverse."
+  ],
+  "shortcuts": [
+   "For 2×2: λ²−tr(A)λ+det(A).",
+   "A=[[1,1],[0,1]] has a repeated root but only one independent eigenvector.",
+   "For real symmetric matrices, the spectral theorem guarantees an orthonormal eigenbasis."
+  ],
+  "remember": [
+   "Eigenvectors are non-zero.",
+   "Diagonalise iff n independent eigenvectors.",
+   "Cayley–Hamilton: p_A(A)=0."
+  ]
+ },
+ "howto": "Start with the characteristic equation, solve the null-space system for each eigenvalue, then count independent eigenvectors. Use the spectral theorem for symmetric matrices and Cayley–Hamilton for powers and inverses.",
+ "refs": [
+  {
+   "title": "Introduction to Linear Algebra",
+   "where": "Eigenvalues and diagonalisation",
+   "site": "MIT OpenCourseWare 18.06",
+   "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Eigenvalues, eigenspaces, diagonalisation and symmetric matrices."
+  },
+  {
+   "title": "Linear Algebra",
+   "where": "Eigenvalues and Cayley–Hamilton",
+   "site": "NPTEL",
+   "url": "https://nptel.ac.in/courses/111106051",
+   "type": "Video course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "University-level linear algebra coverage."
+  },
+  {
+   "title": "Linear Algebra and Its Applications",
+   "where": "Eigenvalues, eigenvectors and diagonalisation",
+   "site": "Gilbert Strang",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Further worked examples and proofs."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact anchors are checked in verify_mathst2.py. Not production-approved. Structural review: updated to meet repository vScene house gates (15 core scenes, required scene kinds, flow, two scenarios, and three references).",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Eigenvalues as invariant directions",
+   "objective": "Understand Av=λv and the determinant condition.",
+   "ask": {
+    "q": "For A=diag(2,3), what are its eigenvalues?",
+    "nudge": "A diagonal matrix already displays its invariant coordinate directions."
+   },
+   "body": [
+    "A matrix transforms vectors. An eigenvector is a non-zero vector whose direction is unchanged by the transformation: Av=λv. The scalar λ is its eigenvalue.",
+    "Rearranging gives (A−λI)v=0. A non-zero solution exists exactly when A−λI is singular, hence det(A−λI)=0.",
+    "The zero vector is excluded because it satisfies the equation for every λ and carries no directional information."
+   ],
+   "items": [
+    {
+     "ask": "What is the determinant condition for an eigenvalue?",
+     "recall": "det(A−λI)=0.",
+     "refresh": [
+      "Start from Av=λv and move all terms to one side: (A−λI)v=0. This homogeneous system has a non-zero solution precisely when its coefficient matrix is singular, which is equivalent to determinant zero.",
+      "For a 2×2 matrix, expand the determinant and solve the resulting quadratic. Check the roots using the trace and determinant: their sum must equal tr(A), and their product must equal det(A)."
+     ]
+    },
+    {
+     "ask": "What is the null space of a matrix?",
+     "recall": "The set of all vectors x satisfying Ax=0.",
+     "refresh": [
+      "The null space is a vector subspace. Its dimension is the nullity, and a basis for it gives all independent directions sent to zero by A.",
+      "For eigenvalue λ, the eigenspace is exactly null(A−λI). The zero vector belongs to every null space, but it is excluded when naming eigenvectors."
+     ]
+    },
+    {
+     "ask": "What does linear independence mean?",
+     "recall": "Only the trivial linear combination of the vectors equals zero.",
+     "refresh": [
+      "Vectors v1,…,vk are independent when c1v1+…+ckvk=0 forces every coefficient ci to be zero. Otherwise one vector is redundant and can be written as a combination of the others.",
+      "Diagonalisation requires n independent eigenvectors in an n-dimensional space. Distinct eigenvalues guarantee independence; repeated eigenvalues require a dimension check of each eigenspace."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s1",
+   "mins": 8,
+   "title": "Characteristic polynomial and 2×2 shortcut",
+   "objective": "Compute eigenvalues and check them with trace and determinant.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Characteristic polynomial",
+     "body": "p_A(λ)=det(λI−A). Its roots are the eigenvalues, counted with algebraic multiplicity."
+    },
+    {
+     "t": "formula",
+     "h": "For a 2×2 matrix",
+     "body": "p_A(λ)=λ²−tr(A)λ+det(A). Thus the sum of roots is tr(A), and their product is det(A)."
+    }
+   ],
+   "ask": {
+    "q": "A 2×2 matrix has trace 7 and determinant 12. What are its eigenvalues if real?",
+    "nudge": "Find two numbers with sum 7 and product 12."
+   },
+   "flow": {
+    "title": "Eigenvalue and diagonalisation workflow",
+    "alt": "Decision flow for eigenvalues and diagonalisation",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Square matrix A",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Solve det(λI−A)=0",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 1,
+      "label": "Find null(A−λI)",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 1,
+      "label": "n independent eigenvectors?",
+      "kind": "dec"
+     },
+     {
+      "id": "e",
+      "r": 4,
+      "c": 0,
+      "label": "Yes: A=PDP⁻¹",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 2,
+      "label": "No: not diagonalisable",
+      "kind": "step"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     },
+     {
+      "from": "d",
+      "to": "e",
+      "label": "yes"
+     },
+     {
+      "from": "d",
+      "to": "f",
+      "label": "no"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s2",
+   "mins": 8,
+   "title": "Find the eigenvectors",
+   "objective": "Solve the homogeneous system for each eigenvalue.",
+   "problem": "Take A=[[2,1],[1,2]]. Its eigenvalues are 1 and 3.",
+   "steps": [
+    {
+     "say": "For λ=3, solve (A−3I)v=0.",
+     "blank": {
+      "prompt": "Give one eigenvector.",
+      "answer": "(1,1)",
+      "accept": [
+       "(1,1)",
+       "1,1"
+      ],
+      "hint": "The equations reduce to x=y."
+     },
+     "why": "A(1,1)=(3,3)=3(1,1). The eigenspace is span{(1,1)}."
+    },
+    {
+     "say": "For λ=1, solve (A−I)v=0.",
+     "blank": {
+      "prompt": "Give one eigenvector.",
+      "answer": "(1,−1)",
+      "accept": [
+       "(1,-1)",
+       "(1,−1)"
+      ],
+      "hint": "The equations reduce to x=−y."
+     },
+     "why": "A(1,−1)=(1,−1)."
+    }
+   ],
+   "scenario": {
+    "teaser": "Two directions scale by different factors.",
+    "title": "A diagonal transformation in two dimensions",
+    "body": [
+     "For A=[[2,1],[1,2]], the vector (1,1) is stretched by a factor of three while (1,−1) is unchanged. These are the two eigen-directions.",
+     "Because the eigenvectors are independent, they form a basis. In that basis the matrix is diagonal, with entries 3 and 1. This is the central practical meaning of diagonalisation: a complicated transformation becomes independent scaling along special directions.",
+     "In a statistical application, such directions can describe principal axes of a quadratic form or directions of changing variation. The interpretation depends on the matrix and the model, but the algebraic advantage is the same: diagonal coordinates separate the components."
+    ]
+   },
+   "hints": [
+    "Write A−3I and solve the two linear equations.",
+    "The first row gives −x+y=0, so choose x=1.",
+    "For λ=1, the equation is x+y=0; choose x=1."
+   ],
+   "answer": "For λ=3, an eigenvector is (1,1); for λ=1, an eigenvector is (1,−1).",
+   "solution": "The eigenspace for λ=3 is span{(1,1)}. The eigenspace for λ=1 is span{(1,−1)}. The two eigenvectors are independent and form the columns of an invertible P."
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 9,
+   "title": "Diagonalisation and multiplicities",
+   "objective": "Decide whether a matrix has enough independent eigenvectors.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Algebraic and geometric multiplicity",
+     "body": "Algebraic multiplicity (AM) is the root multiplicity in p_A. Geometric multiplicity (GM) is dim null(A−λI). Always 1≤GM≤AM."
+    },
+    {
+     "t": "formula",
+     "h": "Diagonalisation criterion",
+     "body": "An n×n matrix is diagonalisable iff it has n linearly independent eigenvectors. Distinct eigenvalues guarantee this; repeated eigenvalues require checking eigenspace dimensions."
+    },
+    {
+     "t": "step",
+     "h": "Counterexample",
+     "body": "A=[[1,1],[0,1]] has characteristic polynomial (λ−1)² but null(A−I) has dimension 1. It has only one independent eigenvector and is not diagonalisable."
+    }
+   ],
+   "ask": {
+    "q": "A 3×3 matrix has eigenvalues 2 (AM 2, GM 1) and 5 (AM 1, GM 1). Is it diagonalisable?",
+    "nudge": "Add the dimensions of the eigenspaces."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 7,
+   "title": "Real symmetric matrices",
+   "objective": "Apply the spectral theorem.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Spectral theorem",
+     "body": "Every real symmetric matrix has real eigenvalues and an orthonormal basis of eigenvectors. Hence A=QDQᵀ, with QᵀQ=I."
+    },
+    {
+     "t": "step",
+     "h": "What is special?",
+     "body": "A general diagonalisation uses P⁻¹. For a real symmetric matrix, P can be chosen orthogonal, so P⁻¹=Pᵀ. Eigenvectors for distinct eigenvalues are orthogonal."
+    }
+   ],
+   "ask": {
+    "q": "Does a real symmetric matrix necessarily have positive eigenvalues?",
+    "nudge": "Symmetry guarantees reality, not positivity."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 8,
+   "title": "Cayley–Hamilton theorem",
+   "objective": "Substitute a matrix into its characteristic polynomial.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "The theorem",
+     "body": "If p_A(λ)=λⁿ+c₁λⁿ⁻¹+…+cₙ, then p_A(A)=Aⁿ+c₁Aⁿ⁻¹+…+cₙI=0."
+    },
+    {
+     "t": "step",
+     "h": "Exact 2×2 example",
+     "body": "For A=[[2,1],[1,2]], p_A(λ)=λ²−4λ+3. Thus A²−4A+3I=0. Indeed A²=[[5,4],[4,5]], and the expression is the zero matrix."
+    },
+    {
+     "t": "def",
+     "h": "Why it matters",
+     "body": "Cayley–Hamilton reduces higher powers to lower powers. When det(A)≠0, it can also express A⁻¹ as a polynomial in A."
+    }
+   ],
+   "ask": {
+    "q": "If p_A(λ)=λ²−5λ+6, write the matrix identity.",
+    "nudge": "Replace λ by A and the constant 6 by 6I."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s6",
+   "mins": 7,
+   "title": "Find an inverse using Cayley–Hamilton",
+   "objective": "Derive an inverse formula without row reduction.",
+   "problem": "Suppose A²−5A+6I=0.",
+   "steps": [
+    {
+     "say": "Move the constant term to the right.",
+     "blank": {
+      "prompt": "Write the factorised left side.",
+      "answer": "A(A−5I)=−6I",
+      "accept": [
+       "A(A-5I)=-6I"
+      ],
+      "hint": "Factor A from A²−5A."
+     },
+     "why": "The non-zero constant term ensures A is invertible."
+    },
+    {
+     "say": "Multiply by A inverse and rearrange.",
+     "blank": {
+      "prompt": "Give A inverse.",
+      "answer": "(5I−A)/6",
+      "accept": [
+       "(5I-A)/6",
+       "(5I−A)/6"
+      ],
+      "hint": "A−5I=−6A⁻¹."
+     },
+     "why": "A⁻¹=(5I−A)/6."
+    }
+   ],
+   "hints": [
+    "Move 6I to the right and factor A from A²−5A.",
+    "A(A−5I)=−6I. Multiply by A⁻¹ on the left.",
+    "Rearrange A−5I=−6A⁻¹, then isolate A⁻¹."
+   ],
+   "answer": "A⁻¹=(5I−A)/6.",
+   "solution": "From A²−5A+6I=0, obtain A(A−5I)=−6I. Multiplication by A⁻¹ gives A−5I=−6A⁻¹, hence A⁻¹=(5I−A)/6."
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 7,
+   "title": "Powers and exam checks",
+   "objective": "Choose the fastest route for common matrix questions.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Powers after diagonalisation",
+     "body": "If A=PDP⁻¹, then Aᵏ=PDᵏP⁻¹. Raise each diagonal entry of D to the kth power."
+    },
+    {
+     "t": "def",
+     "h": "Invertibility",
+     "body": "A is invertible iff zero is not an eigenvalue iff det(A)≠0. The determinant is the product of eigenvalues, with multiplicity."
+    },
+    {
+     "t": "step",
+     "h": "2×2 Cayley–Hamilton shortcut",
+     "body": "A²−tr(A)A+det(A)I=0. If det(A)≠0, then A⁻¹=(tr(A)I−A)/det(A)."
+    }
+   ],
+   "ask": {
+    "q": "If eigenvalues of A are 2 and −1, what are the eigenvalues of A⁴?",
+    "nudge": "Raise each eigenvalue to the fourth power."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s11",
+   "mins": 6,
+   "title": "Why diagonalisation matters in a statistical model",
+   "objective": "Interpret eigen-directions in repeated transformations.",
+   "body": [
+    "Consider a population transition or an iterative numerical update x_(t+1)=Ax_t. An eigenvector is a direction that the update does not rotate; it only scales it by λ.",
+    "If |λ|<1, repeated updates shrink that component. If |λ|>1, it grows. If λ is negative, its sign alternates. This is why eigenvalues appear in stability and long-run behaviour."
+   ],
+   "ask": {
+    "q": "If every eigenvalue of a diagonalisable matrix has modulus less than one, what happens to A^k as k grows?",
+    "nudge": "Each diagonal entry in D^k tends to zero."
+   },
+   "scenario": {
+    "teaser": "A repeated update is applied to a vector of rates.",
+    "title": "Eigenvalues and stability of an iterative update",
+    "body": [
+     "A system updates a two-component state by x_(t+1)=Ax_t. If A is diagonalisable, A^k=P D^k P^-1.",
+     "The long-run behaviour is controlled by powers of the eigenvalues. Components with modulus below one decay; components above one grow.",
+     "This interpretation is useful in Markov-chain convergence, numerical iteration and dynamic models, while the exact stochastic interpretation depends on the model assumptions."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s12",
+   "mins": 7,
+   "title": "Worked decision: a repeated eigenvalue",
+   "objective": "Show why a repeated root needs an eigenspace check.",
+   "ask": {
+    "q": "For B=[[1,1],[0,1]], what is the dimension of null(B−I)?",
+    "nudge": "B−I has one non-zero row."
+   },
+   "problem": "Decide whether B=[[1,1],[0,1]] is diagonalisable.",
+   "steps": [
+    {
+     "say": "Find the characteristic polynomial.",
+     "math": "det(λI−B)=(λ−1)²",
+     "why": "The only eigenvalue is 1 with algebraic multiplicity 2."
+    },
+    {
+     "say": "Find the eigenspace.",
+     "math": "B−I=[[0,1],[0,0]]. The equation (B−I)(x,y)ᵀ=0 gives y=0.",
+     "why": "The eigenspace is span{(1,0)}, of dimension 1."
+    },
+    {
+     "say": "Compare multiplicities.",
+     "math": "GM(1)=1 < AM(1)=2.",
+     "why": "Only one independent eigenvector exists, so B is not diagonalisable."
+    }
+   ]
+  },
+  {
+   "kind": "recall",
+   "id": "s8",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the essential definitions.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "What equation gives eigenvalues?",
+     "a": "det(A−λI)=0."
+    },
+    {
+     "q": "What is geometric multiplicity?",
+     "a": "dim null(A−λI)."
+    },
+    {
+     "q": "When is A diagonalisable?",
+     "a": "When it has n independent eigenvectors."
+    },
+    {
+     "q": "State Cayley–Hamilton.",
+     "a": "Every square matrix satisfies its own characteristic polynomial."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s9",
+   "mins": 8,
+   "title": "Independent practice",
+   "objective": "Apply the standard exam moves.",
+   "problem": "Complete each short task.",
+   "steps": [
+    {
+     "say": "Trace 7 and determinant 10 for a 2×2 matrix.",
+     "blank": {
+      "prompt": "Give the eigenvalues.",
+      "answer": "5 and 2",
+      "accept": [
+       "5,2",
+       "2,5"
+      ],
+      "hint": "Use sum and product."
+     },
+     "why": "λ²−7λ+10=(λ−5)(λ−2)."
+    },
+    {
+     "say": "A real symmetric matrix of order 4.",
+     "blank": {
+      "prompt": "State its diagonalisation property.",
+      "answer": "Orthogonally diagonalisable with real eigenvalues",
+      "accept": [
+       "orthogonally diagonalisable",
+       "real eigenvalues and orthogonally diagonalisable"
+      ],
+      "hint": "Use the spectral theorem."
+     },
+     "why": "The theorem guarantees an orthonormal eigenbasis."
+    },
+    {
+     "say": "p_A(λ)=λ²−3λ+2.",
+     "blank": {
+      "prompt": "Write Cayley–Hamilton.",
+      "answer": "A²−3A+2I=0",
+      "accept": [
+       "A²-3A+2I=0",
+       "A^2-3A+2I=0"
+      ],
+      "hint": "Substitute A."
+     },
+     "why": "The constant is multiplied by I."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s13",
+   "mins": 5,
+   "title": "Trap check: six claims",
+   "objective": "Separate always-true theorems from common overclaims.",
+   "intro": "Judge each statement before revealing the explanation.",
+   "items": [
+    {
+     "claim": "The zero vector is an eigenvector.",
+     "tf": false,
+     "why": "Eigenvectors must be non-zero."
+    },
+    {
+     "claim": "Distinct eigenvalues have linearly independent eigenvectors.",
+     "tf": true,
+     "why": "This theorem guarantees diagonalisation when there are n distinct eigenvalues."
+    },
+    {
+     "claim": "A repeated eigenvalue means the matrix is not diagonalisable.",
+     "tf": false,
+     "why": "A repeated eigenvalue can have geometric multiplicity equal to algebraic multiplicity."
+    },
+    {
+     "claim": "Geometric multiplicity is at most algebraic multiplicity.",
+     "tf": true,
+     "why": "Always 1≤GM≤AM."
+    },
+    {
+     "claim": "Every real symmetric matrix is orthogonally diagonalisable.",
+     "tf": true,
+     "why": "This is the spectral theorem."
+    },
+    {
+     "claim": "The constant term in p_A(A) is a scalar times the identity.",
+     "tf": true,
+     "why": "A scalar matrix term is cI, not c alone."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s14",
+   "mins": 3,
+   "title": "The complete decision sequence",
+   "objective": "Leave with a reliable exam method.",
+   "body": [
+    "1. Form det(λI−A)=0 and solve for eigenvalues.",
+    "2. Check roots using their sum (trace) and product (determinant).",
+    "3. For each λ, solve (A−λI)v=0 and find the eigenspace dimension.",
+    "4. Add geometric multiplicities: n independent eigenvectors means diagonalisation.",
+    "5. If A is real symmetric, use orthogonal diagonalisation immediately.",
+    "6. For powers and inverses, consider A=PDP⁻¹ or substitute A into Cayley–Hamilton."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s10",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate independent understanding.",
+   "setId": "maths_t2_mastery"
+  }
+ ]
+}

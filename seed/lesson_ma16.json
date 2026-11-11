@@ -1,0 +1,682 @@
+{
+ "id": "mathst16",
+ "topicId": "maths-t16",
+ "moduleId": "maths",
+ "title": "Trace, Determinant and Inverse of a Matrix",
+ "breadcrumb": "Mathematics → Matrix algebra → Trace, determinant and inverse",
+ "engine": "B",
+ "engineName": "Mathematics — matrix invariants and invertibility",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 120,
+ "objectives": [
+  "Compute trace and use its linear, cyclic and similarity properties.",
+  "Apply determinant rules for products, transposes, scalar multiples and inverses.",
+  "Decide invertibility using determinant and rank.",
+  "Compute 2×2 and general inverses using adjugates.",
+  "Apply inverse product and transpose identities."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Matrix addition and multiplication",
+   "why": "Trace and product identities rely on matrix operations."
+  },
+  {
+   "id": "p2",
+   "name": "Determinants and cofactors",
+   "why": "The inverse formula uses determinant and adjugate."
+  },
+  {
+   "id": "p3",
+   "name": "Eigenvalues",
+   "why": "Trace and determinant are the sum and product of eigenvalues."
+  }
+ ],
+ "traps": [
+  "tr(AB)=tr(BA) does not imply AB=BA.",
+  "Trace cyclicity allows cyclic permutations, not arbitrary rearrangement of factors.",
+  "det(cA)=cⁿdet(A) for n×n A; it is not c det(A) unless n=1.",
+  "det(AB)=det(A)det(B), not det(A)+det(B).",
+  "(AB)⁻¹=B⁻¹A⁻¹; order reverses.",
+  "A singular matrix has no inverse; do not divide by zero determinant.",
+  "The adjugate is the transpose of the cofactor matrix."
+ ],
+ "revision": {
+  "sheet": [
+   "tr(A)=sum of diagonal entries.",
+   "tr(A+B)=tr(A)+tr(B); tr(cA)=c tr(A).",
+   "tr(AB)=tr(BA); trace is similarity-invariant.",
+   "det(AB)=det(A)det(B).",
+   "det(Aᵀ)=det(A); det(cA)=cⁿdet(A).",
+   "A invertible iff det(A)≠0 iff rank(A)=n.",
+   "det(A⁻¹)=1/det(A).",
+   "A⁻¹=adj(A)/det(A), if det(A)≠0.",
+   "(AB)⁻¹=B⁻¹A⁻¹.",
+   "(Aᵀ)⁻¹=(A⁻¹)ᵀ.",
+   "Sum of eigenvalues=trace; product=determinant."
+  ],
+  "cards": [
+   [
+    "Trace",
+    "Sum of diagonal entries"
+   ],
+   [
+    "Cyclic trace",
+    "tr(AB)=tr(BA)"
+   ],
+   [
+    "Determinant product",
+    "det(AB)=det(A)det(B)"
+   ],
+   [
+    "Scalar multiple",
+    "det(cA)=cⁿdet(A)"
+   ],
+   [
+    "Invertibility",
+    "det(A)≠0"
+   ],
+   [
+    "Adjugate formula",
+    "A⁻¹=adj(A)/det(A)"
+   ],
+   [
+    "Inverse product",
+    "(AB)⁻¹=B⁻¹A⁻¹"
+   ]
+  ],
+  "tricks": [
+   "For trace(AB), compute only diagonal entries if multiplying directly.",
+   "Use det(AB) multiplicativity rather than expanding a large determinant.",
+   "Remember the power n in det(cA).",
+   "Reverse factor order when inverting a product.",
+   "Check det(A) before using the adjugate formula."
+  ],
+  "shortcuts": [
+   "For 2×2 [[a,b],[c,d]], inverse is 1/(ad−bc)[[d,−b],[−c,a]].",
+   "If det(A)=d, det(A⁻¹)=1/d.",
+   "Similar matrices have equal trace and determinant."
+  ],
+  "remember": [
+   "Trace is additive and cyclic.",
+   "Determinant is multiplicative.",
+   "Inverse of a product reverses order."
+  ]
+ },
+ "howto": "Memorise the product and scalar rules, then practise the inverse formula on 2×2 matrices. For multi-step identities, track dimensions and order carefully. Trace cyclicity is not full commutativity.",
+ "refs": [
+  {
+   "title": "Introduction to Linear Algebra",
+   "where": "Matrix algebra, determinants and inverses",
+   "site": "MIT OpenCourseWare 18.06",
+   "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Matrix operations, determinants, inverses and invariant properties."
+  },
+  {
+   "title": "Linear Algebra",
+   "where": "Determinants and matrix inverse",
+   "site": "NPTEL",
+   "url": "https://nptel.ac.in/courses/111106051",
+   "type": "Video course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Undergraduate linear algebra and matrix identities."
+  },
+  {
+   "title": "Matrix Algebra Useful for Statistics",
+   "where": "Trace, determinant and inverse identities",
+   "site": "Searle",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Statistical matrix identities and trace manipulations."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact anchors use A=[[2,1],[1,1]], a 3×3 determinant scaling check, trace cyclicity and inverse-product identities. Requires automated and browser validation before production approval.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Matrix quantities and dimensions",
+   "objective": "Recall trace, determinant and inverse conditions.",
+   "ask": {
+    "q": "What condition makes a square matrix invertible?",
+    "nudge": "Think of its determinant."
+   },
+   "body": [
+    "For a square matrix A, the trace is the sum of diagonal entries. The determinant measures signed volume scaling and detects singularity.",
+    "A is invertible exactly when det(A) is non-zero. The inverse satisfies AA⁻¹=A⁻¹A=I. Trace is defined for every square matrix; determinant and inverse are also square-matrix concepts.",
+    "This lesson connects the computational rules with the structural identities that commonly appear in NET-JRF questions."
+   ],
+   "items": [
+    {
+     "ask": "What is the trace of a square matrix?",
+     "recall": "The sum of its diagonal entries.",
+     "refresh": [
+      "Trace is defined only for square matrices because it adds the diagonal entries from a single square array. For example, if A=[[1,2],[3,4]], then tr(A)=1+4=5; off-diagonal entries do not contribute.",
+      "Trace is linear: tr(A+B)=tr(A)+tr(B), and tr(cA)=c tr(A). These rules allow sums and scalar multiples to be simplified before calculating the diagonal.",
+      "Trace is also invariant under similarity. If B=P⁻¹AP, then tr(B)=tr(A); this is why diagonalisation preserves the trace and why trace equals the sum of eigenvalues with algebraic multiplicity."
+     ]
+    },
+    {
+     "ask": "When does a square matrix have an inverse?",
+     "recall": "Exactly when its determinant is non-zero.",
+     "refresh": [
+      "A square matrix is nonsingular exactly when its determinant is non-zero. This is equivalent to full rank and to having linearly independent columns.",
+      "If det(A)=0, the homogeneous system Ax=0 has a non-zero solution, so A cannot have a two-sided inverse. Never apply an inverse formula when the determinant vanishes.",
+      "For a 2×2 matrix [[a,b],[c,d]], the determinant is ad−bc. A non-zero value guarantees the inverse exists; a zero value means the rows or columns are dependent."
+     ]
+    },
+    {
+     "ask": "What is the determinant of a product?",
+     "recall": "det(AB)=det(A)det(B).",
+     "refresh": [
+      "The determinant is multiplicative: det(AB)=det(A)det(B). This makes a product determinant easy even when multiplying the matrices first would be tedious.",
+      "Setting B=A gives det(A²)=det(A)². If A is invertible, det(A)det(A⁻¹)=det(I)=1, so det(A⁻¹)=1/det(A).",
+      "Do not confuse multiplicativity with additivity: det(A+B) is not generally det(A)+det(B). A quick numerical counterexample is enough to rule out that false rule."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s1",
+   "mins": 8,
+   "title": "Trace: definition and identities",
+   "objective": "Use linearity and cyclic trace identities.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Trace",
+     "body": "tr(A)=Σᵢ aᵢᵢ. For compatible square products, tr(A+B)=tr(A)+tr(B), tr(cA)=c tr(A), and tr(AB)=tr(BA)."
+    },
+    {
+     "t": "step",
+     "h": "Cyclic property",
+     "body": "For compatible rectangular A and B, tr(AB)=tr(BA) whenever both products are square. For three factors, tr(ABC)=tr(BCA)=tr(CAB), but arbitrary reordering is not permitted."
+    },
+    {
+     "t": "def",
+     "h": "Important limitation",
+     "body": "In general AB≠BA. Trace equality does not mean the matrices themselves are equal. Trace is also similarity-invariant: tr(P⁻¹AP)=tr(A)."
+    }
+   ],
+   "ask": {
+    "q": "Does tr(AB)=tr(BA) imply AB=BA?",
+    "nudge": "A scalar equality is much weaker than equality of matrices."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s2",
+   "mins": 8,
+   "title": "Worked trace calculation",
+   "objective": "Calculate traces without multiplying unnecessary entries.",
+   "ask": {
+    "q": "If A=[[1,2],[3,4]] and B=[[0,1],[2,0]], find tr(AB).",
+    "nudge": "Compute the diagonal entries of AB."
+   },
+   "problem": "Compare tr(AB) and tr(BA).",
+   "steps": [
+    {
+     "say": "Compute AB.",
+     "math": "AB=[[4,1],[8,3]], so tr(AB)=7.",
+     "why": "Only the diagonal entries contribute to trace."
+    },
+    {
+     "say": "Compute BA.",
+     "math": "BA=[[3,4],[2,4]], so tr(BA)=7.",
+     "why": "The matrices differ, but their traces agree."
+    }
+   ],
+   "scenario": {
+    "teaser": "A trace identity shortens a matrix calculation.",
+    "title": "Trace shortcuts in statistical derivations",
+    "body": [
+     "Statistical expressions often contain traces of matrix products such as tr(XᵀX) or tr(AB). Direct multiplication can be lengthy and hide the structure.",
+     "The cyclic property allows factors to rotate inside a trace, such as tr(ABC)=tr(BCA). It does not permit arbitrary swapping of factors.",
+     "This is useful in simplifying quadratic forms, projection matrices and covariance expressions. Keep dimensions compatible and preserve cyclic order."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 9,
+   "title": "Determinant: core properties",
+   "objective": "Use determinant rules to simplify products and transformations.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Product and transpose",
+     "body": "det(AB)=det(A)det(B); det(Aᵀ)=det(A); det(I)=1."
+    },
+    {
+     "t": "formula",
+     "h": "Scaling and row operations",
+     "body": "For n×n A, det(cA)=cⁿdet(A). Swapping two rows changes sign; multiplying one row by c multiplies the determinant by c; adding a multiple of one row to another leaves it unchanged."
+    },
+    {
+     "t": "def",
+     "h": "Singularity",
+     "body": "det(A)=0 iff rows or columns are linearly dependent iff A is singular iff A⁻¹ does not exist."
+    }
+   ],
+   "ask": {
+    "q": "If det(A)=−2 and det(B)=3, what is det(AB)?",
+    "nudge": "Use multiplicativity."
+   },
+   "flow": {
+    "title": "Choose a matrix identity",
+    "alt": "Decision flow for trace, determinant and inverse calculations",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Identify the requested quantity",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Trace, determinant or inverse?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Use linearity and cyclic trace",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 1,
+      "label": "Use determinant properties",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 2,
+      "c": 2,
+      "label": "Check det(A)≠0, then adjugate",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 3,
+      "c": 1,
+      "label": "Preserve dimensions and product order",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "trace"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "determinant"
+     },
+     {
+      "from": "b",
+      "to": "e",
+      "label": "inverse"
+     },
+     {
+      "from": "c",
+      "to": "f"
+     },
+     {
+      "from": "d",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s4",
+   "mins": 8,
+   "title": "Guided: determinant scaling and powers",
+   "objective": "Apply determinant identities to a 3×3 matrix.",
+   "problem": "A is 3×3 and det(A)=2. Find det(3A), det(A²) and det(A inverse).",
+   "hints": [
+    "For an n×n matrix, det(cA)=cⁿdet(A).",
+    "Use det(A²)=det(A)det(A).",
+    "For an invertible matrix, det(A inverse)=1/det(A)."
+   ],
+   "answer": "det(3A)=54, det(A²)=4 and det(A inverse)=1/2.",
+   "solution": "Since A is 3×3, det(3A)=3³×2=54. Multiplicativity gives det(A²)=2²=4. Since det(A)≠0, det(A inverse)=1/2.",
+   "ask": {
+    "q": "Why is the exponent 3 used in det(3A)?",
+    "nudge": "A has three rows, each scaled by 3."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 9,
+   "title": "Inverse: definition and rules",
+   "objective": "Manipulate inverse identities correctly.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Definition",
+     "body": "AA⁻¹=A⁻¹A=I. Inverse exists iff det(A)≠0."
+    },
+    {
+     "t": "formula",
+     "h": "Rules",
+     "body": "(AB)⁻¹=B⁻¹A⁻¹; (Aᵀ)⁻¹=(A⁻¹)ᵀ; (A⁻¹)⁻¹=A."
+    },
+    {
+     "t": "step",
+     "h": "Order reversal",
+     "body": "The order reverses because (AB)(B⁻¹A⁻¹)=A(BB⁻¹)A⁻¹=I. Do not write A⁻¹B⁻¹."
+    }
+   ],
+   "ask": {
+    "q": "What is the inverse of AB?",
+    "nudge": "Reverse the order and invert each factor."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s6",
+   "mins": 8,
+   "title": "The 2×2 inverse formula",
+   "objective": "Compute an inverse using the adjugate.",
+   "ask": {
+    "q": "Find the inverse of [[2,1],[1,1]].",
+    "nudge": "Its determinant is 1."
+   },
+   "problem": "Invert A=[[2,1],[1,1]].",
+   "steps": [
+    {
+     "say": "Compute the determinant.",
+     "math": "det(A)=2(1)−1(1)=1.",
+     "why": "The determinant is non-zero, so the inverse exists."
+    },
+    {
+     "say": "Form the adjugate.",
+     "math": "adj(A)=[[1,−1],[−1,2]].",
+     "why": "Swap diagonal entries and change signs of off-diagonal entries."
+    },
+    {
+     "say": "Divide by determinant.",
+     "math": "A⁻¹=(1/det A)adj(A)=[[1,−1],[−1,2]].",
+     "why": "Here det(A)=1."
+    }
+   ],
+   "scenario": {
+    "teaser": "A determinant decides whether a model matrix can be inverted.",
+    "title": "Invertibility in a small linear model",
+    "body": [
+     "A square model matrix is invertible exactly when its determinant is non-zero. A zero determinant means the columns are dependent and the inverse does not exist.",
+     "The determinant product rule and row-operation rules can simplify this check without a full cofactor expansion. For larger matrices, row reduction or triangular structure is often more efficient.",
+     "In statistical models, singularity signals exact linear dependence or a non-identifiable parameterisation. Check rank and determinant before writing an inverse formula."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Adjugate and general inverse",
+   "objective": "State and apply the adjugate formula.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Adjugate formula",
+     "body": "For nonsingular square A, A⁻¹=adj(A)/det(A), where adj(A) is the transpose of the cofactor matrix."
+    },
+    {
+     "t": "def",
+     "h": "Cofactor signs",
+     "body": "The cofactor Cᵢⱼ=(−1)ⁱ⁺ʲMᵢⱼ, where Mᵢⱼ is the minor after deleting row i and column j. The adjugate is Cᵀ."
+    },
+    {
+     "t": "step",
+     "h": "Check the result",
+     "body": "Multiply A by the proposed inverse. The product must be I. For numerical questions, also check det(A)≠0 before applying the formula."
+    }
+   ],
+   "ask": {
+    "q": "For a nonsingular matrix, what is A adj(A)?",
+    "nudge": "It is a scalar multiple of the identity."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s8",
+   "mins": 8,
+   "title": "Trace, determinant and eigenvalues",
+   "objective": "Connect matrix invariants to eigenvalues.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Eigenvalue identities",
+     "body": "The trace equals the sum of eigenvalues and determinant equals their product, both counted with algebraic multiplicity."
+    },
+    {
+     "t": "step",
+     "h": "Similarity invariance",
+     "body": "Similar matrices have the same characteristic polynomial, trace, determinant and eigenvalues. If B=P⁻¹AP, then det(B)=det(A) and tr(B)=tr(A)."
+    }
+   ],
+   "ask": {
+    "q": "A 2×2 matrix has eigenvalues 2 and −3. Find its trace and determinant.",
+    "nudge": "Use sum and product."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s9",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the identities before the mastery test.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "State tr(AB).",
+     "a": "tr(AB)=tr(BA), for compatible products."
+    },
+    {
+     "q": "State det(AB).",
+     "a": "det(AB)=det(A)det(B)."
+    },
+    {
+     "q": "When is A invertible?",
+     "a": "Exactly when det(A)≠0."
+    },
+    {
+     "q": "What is (AB) inverse?",
+     "a": "B inverse A inverse; the order reverses."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s10",
+   "mins": 9,
+   "title": "Independent calculations",
+   "objective": "Apply determinant and inverse rules.",
+   "problem": "Complete each calculation.",
+   "steps": [
+    {
+     "say": "A is 3×3 with det(A)=−2. Find det(2A).",
+     "blank": {
+      "prompt": "Give the value.",
+      "answer": "−16",
+      "accept": [
+       "-16",
+       "−16"
+      ],
+      "hint": "Multiply determinant by 2³."
+     },
+     "why": "det(2A)=8(−2)=−16."
+    },
+    {
+     "say": "If det(A)=5, find det(A inverse).",
+     "blank": {
+      "prompt": "Give the value.",
+      "answer": "1/5",
+      "accept": [
+       "1/5",
+       "0.2"
+      ],
+      "hint": "Use det(A)det(A inverse)=1."
+     },
+     "why": "The determinant of the inverse is reciprocal."
+    },
+    {
+     "say": "If A and B are invertible, write inverse of AB.",
+     "blank": {
+      "prompt": "Give the expression.",
+      "answer": "B inverse A inverse",
+      "accept": [
+       "B^-1 A^-1",
+       "B inverse A inverse",
+       "B⁻¹A⁻¹"
+      ],
+      "hint": "Reverse order."
+     },
+     "why": "(AB)(B⁻¹A⁻¹)=I."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s15",
+   "mins": 8,
+   "title": "Guided: inverse of a product",
+   "objective": "Reverse the order correctly when inverting a product.",
+   "problem": "Let A and B be nonsingular. Verify the formula for (AB) inverse.",
+   "hints": [
+    "Start with the candidate B inverse A inverse.",
+    "Multiply AB by B inverse A inverse.",
+    "Use associativity and BB inverse=I."
+   ],
+   "answer": "(AB) inverse = B inverse A inverse.",
+   "solution": "(AB)(B⁻¹A⁻¹)=A(BB⁻¹)A⁻¹=AIA⁻¹=I. The order must reverse; A⁻¹B⁻¹ is not generally correct.",
+   "ask": {
+    "q": "Why must the order reverse?",
+    "nudge": "The middle factors must cancel as BB⁻¹."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s13",
+   "mins": 6,
+   "title": "Trace is cyclic, not commutative",
+   "objective": "Distinguish cyclic invariance from arbitrary factor reordering.",
+   "ask": {
+    "q": "Does tr(ABC)=tr(ACB) hold for all matrices?",
+    "nudge": "Only cyclic rotations are guaranteed."
+   },
+   "body": [
+    "Trace has a special cyclic property: tr(ABC)=tr(BCA)=tr(CAB), provided the products are defined. This is not the same as saying matrix multiplication is commutative.",
+    "The matrices AB and BA can be different even though their traces agree. When simplifying longer products, rotate the entire product without changing the order of the factors."
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s14",
+   "mins": 5,
+   "title": "Trap check: six matrix identities",
+   "objective": "Avoid common trace, determinant and inverse errors.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "tr(AB)=tr(BA) for compatible square products.",
+     "tf": true,
+     "why": "This is the cyclic trace identity."
+    },
+    {
+     "claim": "Trace allows arbitrary reordering of factors.",
+     "tf": false,
+     "why": "Only cyclic rotations are guaranteed."
+    },
+    {
+     "claim": "det(AB)=det(A)det(B).",
+     "tf": true,
+     "why": "Determinant is multiplicative."
+    },
+    {
+     "claim": "det(cA)=cⁿdet(A) for n×n A.",
+     "tf": true,
+     "why": "The scalar multiplies each of n rows."
+    },
+    {
+     "claim": "(AB)⁻¹=A⁻¹B⁻¹.",
+     "tf": false,
+     "why": "The correct order is B⁻¹A⁻¹."
+    },
+    {
+     "claim": "A square matrix is invertible iff det(A)≠0.",
+     "tf": true,
+     "why": "This is the standard nonsingularity criterion."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s11",
+   "mins": 4,
+   "title": "One-page matrix identity sheet",
+   "objective": "Retain the formulas that save time in the exam.",
+   "body": [
+    "Trace: tr(A+B)=tr(A)+tr(B), tr(cA)=c tr(A), tr(AB)=tr(BA), and trace is similarity-invariant.",
+    "Determinant: det(AB)=det(A)det(B), det(Aᵀ)=det(A), det(cA)=cⁿdet(A), det(A⁻¹)=1/det(A).",
+    "Invertibility: det(A)≠0 iff A⁻¹ exists. Adjugate formula: A⁻¹=adj(A)/det(A).",
+    "Inverse rules: (AB)⁻¹=B⁻¹A⁻¹ and (Aᵀ)⁻¹=(A⁻¹)ᵀ."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s12",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate independent command of trace, determinant and inverse.",
+   "setId": "maths_t16_mastery"
+  }
+ ]
+}

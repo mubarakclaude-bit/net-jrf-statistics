@@ -1,0 +1,686 @@
+{
+ "id": "mathst7",
+ "topicId": "maths-t7",
+ "moduleId": "maths",
+ "title": "Riemann Integration and Improper Integrals",
+ "breadcrumb": "Mathematics → Calculus → Definite and improper integration",
+ "engine": "B",
+ "engineName": "Mathematics — accumulation, limits and convergence",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 113,
+ "objectives": [
+  "Explain Riemann sums and standard integrability criteria.",
+  "Evaluate definite integrals using the Fundamental Theorem of Calculus.",
+  "Define improper integrals through limits at infinite or singular endpoints.",
+  "Apply p-integral convergence criteria at zero and infinity.",
+  "Use comparison tests and split at interior singularities."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Limits",
+   "why": "Improper integrals are defined by limits."
+  },
+  {
+   "id": "p2",
+   "name": "Antiderivatives",
+   "why": "The Fundamental Theorem evaluates proper definite integrals."
+  },
+  {
+   "id": "p3",
+   "name": "Power functions and logarithms",
+   "why": "The p-integral criteria follow from integrating powers and 1/x."
+  }
+ ],
+ "traps": [
+  "A function tending to zero does not guarantee convergence.",
+  "At infinity, ∫₁∞x⁻ᵖ converges for p>1.",
+  "At zero, ∫₀¹x⁻ᵖ converges for p<1.",
+  "An interior singularity requires two one-sided limits.",
+  "An antiderivative does not replace the limit.",
+  "Riemann integrability requires boundedness."
+ ],
+ "revision": {
+  "sheet": [
+   "Riemann sum: Σf(ξᵢ)Δxᵢ over a partition.",
+   "Continuous on [a,b] ⇒ Riemann integrable.",
+   "Bounded with finitely many discontinuities ⇒ Riemann integrable.",
+   "FTC: ∫ₐᵇf=F(b)−F(a), where F′=f.",
+   "Infinite endpoint: define by lim R→∞.",
+   "Unbounded endpoint: define by a one-sided cutoff limit.",
+   "∫₁∞x⁻ᵖ converges iff p>1.",
+   "∫₀¹x⁻ᵖ converges iff p<1.",
+   "p=1 gives logarithmic divergence at both boundaries.",
+   "Interior singularity: split and test both sides separately.",
+   "Direct comparison can prove convergence or divergence.",
+   "A vanishing integrand need not have finite total integral."
+  ],
+  "cards": [
+   [
+    "Riemann sum",
+    "Σf(ξᵢ)Δxᵢ"
+   ],
+   [
+    "FTC",
+    "F(b)−F(a)"
+   ],
+   [
+    "At infinity",
+    "p>1"
+   ],
+   [
+    "Near zero",
+    "p<1"
+   ],
+   [
+    "p=1",
+    "Logarithmic divergence"
+   ],
+   [
+    "Interior singularity",
+    "Split into two limits"
+   ],
+   [
+    "Comparison",
+    "Compare with x⁻ᵖ"
+   ],
+   [
+    "Vanishing rate",
+    "Not enough for convergence"
+   ]
+  ],
+  "tricks": [
+   "Check whether the problem is proper or improper before integrating.",
+   "For infinity, use R; for a singular endpoint, use ε.",
+   "The p-threshold reverses at zero and infinity.",
+   "Split at every interior singularity.",
+   "Use a benchmark power near the endpoint."
+  ],
+  "shortcuts": [
+   "∫₁∞x⁻²dx=1.",
+   "∫₀¹x⁻¹ᐟ²dx=2.",
+   "∫₀¹x⁻²dx diverges."
+  ],
+  "remember": [
+   "At infinity p>1; at zero p<1.",
+   "Check every one-sided limit.",
+   "A small tail can still have infinite area."
+  ]
+ },
+ "howto": "Separate proper evaluation from convergence analysis. For improper cases, write the defining limit first, then integrate, then take the limit. Use p-integrals as benchmarks and do not merge the two sides of an interior singularity.",
+ "refs": [
+  {
+   "title": "Calculus Volume 1",
+   "where": "Definite integrals and the Fundamental Theorem",
+   "site": "OpenStax",
+   "url": "https://openstax.org/details/books/calculus-volume-1",
+   "type": "Open textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Riemann sums, definite integrals and FTC."
+  },
+  {
+   "title": "Single Variable Calculus",
+   "where": "Integration and improper integrals",
+   "site": "MIT OpenCourseWare 18.01SC",
+   "url": "https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Improper integrals and convergence."
+  },
+  {
+   "title": "Mathematical Analysis",
+   "where": "Riemann integration",
+   "site": "Tom M. Apostol",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Rigorous Riemann integrability and improper integration."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact examples include p-integrals at zero and infinity, FTC evaluation and an interior singularity. Not production-approved.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Foundation: sums, limits and accumulation",
+   "objective": "Recall definite integrals and limits.",
+   "ask": {
+    "q": "What does ∫ₐᵇf(x)dx measure when f is non-negative?",
+    "nudge": "It accumulates area under the graph."
+   },
+   "body": [
+    "A definite integral accumulates function values over an interval. For a non-negative function it is area; for a sign-changing function it is signed area.",
+    "Riemann integration defines the integral through limits of finite sums. Improper integration extends the idea when an endpoint is infinite or the integrand is unbounded."
+   ],
+   "items": [
+    {
+     "ask": "What is a Riemann sum?",
+     "recall": "A sum Σf(ξᵢ)Δxᵢ over a partition, with a sample point in each subinterval.",
+     "refresh": [
+      "Partition the interval into small pieces. In each piece choose a sample point, multiply the function value by the width, and add the products. The result approximates the accumulated area.",
+      "When the maximum subinterval width tends to zero and the sums approach a common limit, that limit is the Riemann integral. The partition can be refined to make the approximation more accurate."
+     ]
+    },
+    {
+     "ask": "State the Fundamental Theorem of Calculus.",
+     "recall": "If F′=f, then ∫ₐᵇf(x)dx=F(b)−F(a), under the usual continuity condition.",
+     "refresh": [
+      "The theorem connects differentiation and integration. If f is continuous and F is an antiderivative, the definite integral is the difference between F at the upper and lower limits.",
+      "It also says that the derivative of the accumulation function x↦∫ₐˣf(t)dt is f(x). This is why an antiderivative evaluates a proper definite integral."
+     ]
+    },
+    {
+     "ask": "What makes an integral improper?",
+     "recall": "An infinite interval or an integrand unbounded at an endpoint or interior point.",
+     "refresh": [
+      "An infinite endpoint is handled by replacing it with a finite variable R and taking R→∞. An unbounded endpoint is handled by a cutoff ε approaching the singularity from inside.",
+      "An improper integral converges only if the defining limit exists and is finite. Writing an antiderivative without taking that limit is not a convergence proof."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "Proper versus improper accumulation",
+   "objective": "Recognise when a limiting process is needed.",
+   "ask": {
+    "q": "Is ∫₁∞x⁻²dx a proper definite integral?",
+    "nudge": "The upper endpoint is infinite."
+   },
+   "body": [
+    "A proper Riemann integral has a bounded integrand on a finite interval. Improper integrals require a limit because the interval is infinite or the integrand is unbounded.",
+    "An infinite interval can still produce finite total area. Conversely, an integrand tending to zero may have an infinite accumulated area."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Riemann integrability",
+   "objective": "Know standard conditions for integrability.",
+   "ask": {
+    "q": "Is a bounded function with finitely many discontinuities Riemann integrable on a closed interval?",
+    "nudge": "Yes, finite discontinuities are allowed."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Upper and lower sums",
+     "body": "A bounded function is Riemann integrable when upper and lower sums can be made arbitrarily close by refining the partition."
+    },
+    {
+     "t": "formula",
+     "h": "Useful sufficient conditions",
+     "body": "Every continuous function on [a,b] is Riemann integrable. A bounded function with finitely many discontinuities is also Riemann integrable."
+    },
+    {
+     "t": "step",
+     "h": "What boundedness does",
+     "body": "Boundedness is essential. An unbounded function on a finite interval may still have an improper integral, but it is not a proper Riemann integral on that interval."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Worked: evaluate a definite integral",
+   "objective": "Use the Fundamental Theorem correctly.",
+   "ask": {
+    "q": "Evaluate ∫₀¹3x²dx.",
+    "nudge": "An antiderivative is x³."
+   },
+   "problem": "Evaluate ∫₀²(2x+1)dx.",
+   "steps": [
+    {
+     "say": "Find an antiderivative.",
+     "math": "F(x)=x²+x",
+     "why": "F′(x)=2x+1."
+    },
+    {
+     "say": "Apply the endpoint formula.",
+     "math": "F(2)−F(0)=6−0=6",
+     "why": "The Fundamental Theorem converts the definite integral to an endpoint difference."
+    },
+    {
+     "say": "Check the sign.",
+     "math": "2x+1>0 on [0,2]",
+     "why": "The positive integrand gives a positive integral, which is consistent with 6."
+    }
+   ],
+   "scenario": {
+    "teaser": "A cumulative quantity is recovered from its rate.",
+    "title": "Total production from a production-rate function",
+    "body": [
+     "Suppose r(t) is a production rate. The total production between times a and b is ∫ₐᵇr(t)dt.",
+     "If R is an antiderivative of r, the Fundamental Theorem gives R(b)−R(a). The integral converts a rate into a cumulative amount.",
+     "This same structure appears in distance from velocity, total cost from marginal cost and probability from a density. Units provide a useful check: rate multiplied by time gives total amount."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 8,
+   "title": "Infinite-interval improper integrals",
+   "objective": "Define and evaluate an integral with an infinite endpoint.",
+   "ask": {
+    "q": "Does ∫₁∞x⁻²dx converge?",
+    "nudge": "Write lim R→∞∫₁ᴿx⁻²dx."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Definition",
+     "body": "∫ₐ∞f(x)dx := lim(R→∞)∫ₐᴿf(x)dx, if the limit exists and is finite."
+    },
+    {
+     "t": "formula",
+     "h": "p-integral at infinity",
+     "body": "∫₁∞x⁻ᵖdx converges iff p>1. At p=1 the antiderivative is log x and the integral diverges."
+    },
+    {
+     "t": "step",
+     "h": "Order of work",
+     "body": "First replace infinity by R, then evaluate the proper integral, and only then take R→∞. A finite antiderivative expression at R is not yet the improper integral's value."
+    }
+   ],
+   "flow": {
+    "title": "Proper or improper integral?",
+    "alt": "Decision flow for evaluating definite and improper integrals",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Identify interval and integrand",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Finite interval and bounded?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Use proper Riemann integral and FTC",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Write a limit at infinity or singularity",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 2,
+      "label": "Split at interior singularities",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "Evaluate all required one-sided limits",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "yes"
+     },
+     {
+      "id": "x",
+      "from": "b",
+      "to": "d",
+      "label": "no"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     },
+     {
+      "from": "c",
+      "to": "f"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s5",
+   "mins": 8,
+   "title": "Guided: p-integral at infinity",
+   "objective": "Find convergence and value.",
+   "problem": "Evaluate ∫₁∞x⁻³dx.",
+   "hints": [
+    "Write lim R→∞∫₁ᴿx⁻³dx.",
+    "An antiderivative is −1/(2x²).",
+    "Evaluate at R and 1, then let R tend to infinity."
+   ],
+   "answer": "The integral converges to 1/2.",
+   "solution": "lim R→∞[−1/(2R²)+1/2]=1/2. Since p=3>1, the p-integral converges.",
+   "ask": {
+    "q": "Does ∫₁∞1/x dx converge?",
+    "nudge": "The truncated integral is log R."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Singularities at endpoints and inside",
+   "objective": "Handle unbounded integrands using one-sided limits.",
+   "ask": {
+    "q": "For which p does ∫₀¹x⁻ᵖdx converge?",
+    "nudge": "The critical exponent is one, with the opposite inequality."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "p-integral near zero",
+     "body": "∫₀¹x⁻ᵖdx converges iff p<1. At p=1 it diverges logarithmically; for p>1 it diverges more strongly."
+    },
+    {
+     "t": "step",
+     "h": "Endpoint definition",
+     "body": "∫₀¹f(x)dx := lim(ε→0+)∫ε¹f(x)dx, if finite. The cutoff approaches the singular endpoint from inside the interval."
+    },
+    {
+     "t": "def",
+     "h": "Interior singularity",
+     "body": "If f is unbounded at c∈(a,b), split at c and require both one-sided improper integrals to converge separately."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided: singularity at zero",
+   "objective": "Evaluate an improper integral near zero.",
+   "problem": "Determine whether ∫₀¹x⁻¹ᐟ²dx converges and find its value.",
+   "hints": [
+    "Write lim ε→0+∫ε¹x⁻¹ᐟ²dx.",
+    "An antiderivative is 2√x.",
+    "Evaluate 2−2√ε and take the limit."
+   ],
+   "answer": "It converges to 2.",
+   "solution": "lim ε→0+[2−2√ε]=2. The exponent p=1/2 is less than one, matching the criterion near zero.",
+   "ask": {
+    "q": "Does ∫₀¹x⁻²dx converge?",
+    "nudge": "Here p=2, which is not less than one."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s8",
+   "mins": 8,
+   "title": "Comparison tests",
+   "objective": "Use standard integrals as convergence benchmarks.",
+   "ask": {
+    "q": "If 0≤f≤g and ∫g converges, what can be concluded about ∫f?",
+    "nudge": "A smaller non-negative function has no more total area."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Direct comparison",
+     "body": "For non-negative functions, 0≤f≤g and convergence of ∫g imply convergence of ∫f. If f≥g≥0 and ∫g diverges, then ∫f diverges."
+    },
+    {
+     "t": "def",
+     "h": "Limit comparison",
+     "body": "If f,g>0 and lim f(x)/g(x)=L with 0<L<∞ near the improper endpoint, both integrals have the same convergence behaviour."
+    },
+    {
+     "t": "step",
+     "h": "Select a benchmark",
+     "body": "Near infinity compare with x⁻ᵖ using p>1. Near zero compare with x⁻ᵖ using p<1. The comparison must hold sufficiently near the problematic endpoint."
+    }
+   ]
+  },
+  {
+   "kind": "recall",
+   "id": "s9",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the two p-integral thresholds.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "When does ∫₁∞x⁻ᵖdx converge?",
+     "a": "For p>1."
+    },
+    {
+     "q": "When does ∫₀¹x⁻ᵖdx converge?",
+     "a": "For p<1."
+    },
+    {
+     "q": "What is the FTC endpoint formula?",
+     "a": "F(b)−F(a), where F′=f."
+    },
+    {
+     "q": "How is an interior singularity handled?",
+     "a": "Split at the singularity and test both one-sided improper integrals."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s10",
+   "mins": 8,
+   "title": "Four convergence decisions",
+   "objective": "Apply the correct test.",
+   "problem": "Complete each conclusion.",
+   "steps": [
+    {
+     "say": "∫₁∞x⁻²dx.",
+     "blank": {
+      "prompt": "Converges or diverges?",
+      "answer": "Converges",
+      "accept": [
+       "converges"
+      ],
+      "hint": "p=2>1."
+     },
+     "why": "The integral equals 1."
+    },
+    {
+     "say": "∫₀¹x⁻²dx.",
+     "blank": {
+      "prompt": "Converges or diverges?",
+      "answer": "Diverges",
+      "accept": [
+       "diverges"
+      ],
+      "hint": "p=2 is not less than one."
+     },
+     "why": "The lower cutoff expression grows without bound."
+    },
+    {
+     "say": "∫₀¹x⁻¹ᐟ²dx.",
+     "blank": {
+      "prompt": "Find the value.",
+      "answer": "2",
+      "accept": [
+       "2"
+      ],
+      "hint": "An antiderivative is 2√x."
+     },
+     "why": "The endpoint limit is finite and equals 2."
+    },
+    {
+     "say": "A bounded function has finitely many discontinuities on [a,b].",
+     "blank": {
+      "prompt": "Is it Riemann integrable?",
+      "answer": "Yes",
+      "accept": [
+       "yes"
+      ],
+      "hint": "Use the finite-discontinuity criterion."
+     },
+     "why": "A bounded function with finitely many discontinuities is Riemann integrable."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s11",
+   "mins": 6,
+   "title": "A vanishing rate may have infinite total",
+   "objective": "Understand slow decay at infinity.",
+   "ask": {
+    "q": "Why does 1/x have a divergent integral even though it tends to zero?",
+    "nudge": "Its accumulated area is log R."
+   },
+   "body": [
+    "A function tending to zero does not guarantee a finite improper integral. The decay rate matters.",
+    "The area under 1/x from 1 to R is log R, which grows without bound. The faster-decaying 1/x² has a finite total area. This is the integral analogue of the harmonic versus p-series distinction."
+   ],
+   "scenario": {
+    "teaser": "A small rate can accumulate to an infinite total.",
+    "title": "Long-run cumulative exposure",
+    "body": [
+     "Imagine an exposure rate decreasing over time like 1/t. The instantaneous rate becomes small, but accumulated exposure from time 1 onward is ∫₁∞1/t dt.",
+     "That integral diverges logarithmically. A rate decreasing like 1/t² has a finite total accumulation instead.",
+     "The practical lesson is that a vanishing rate does not guarantee finite cumulative quantity. The tail must decay sufficiently fast, and the p-integral criterion makes the threshold precise."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s12",
+   "mins": 7,
+   "title": "Worked: an interior singularity",
+   "objective": "Split an improper integral at its singular point.",
+   "ask": {
+    "q": "How should ∫₋¹¹1/x²dx be treated?",
+    "nudge": "The integrand is unbounded at zero, inside the interval."
+   },
+   "problem": "Determine whether ∫₋¹¹x⁻²dx converges.",
+   "steps": [
+    {
+     "say": "Split at the singularity.",
+     "math": "∫₋¹⁰x⁻²dx + ∫₀¹x⁻²dx",
+     "why": "Each side is a separate one-sided improper integral."
+    },
+    {
+     "say": "Check the right-hand side.",
+     "math": "lim ε→0+∫ε¹x⁻²dx=lim(1/ε−1)=∞",
+     "why": "The right-hand integral diverges."
+    },
+    {
+     "say": "Conclude for the whole integral.",
+     "math": "The improper integral diverges.",
+     "why": "Both one-sided pieces must converge; one divergent side makes the whole integral divergent."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s13",
+   "mins": 5,
+   "title": "Trap check: six statements",
+   "objective": "Avoid common improper-integral errors.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "Every continuous function on [a,b] is Riemann integrable.",
+     "tf": true,
+     "why": "Continuity on a compact interval is sufficient."
+    },
+    {
+     "claim": "A function tending to zero at infinity has a convergent improper integral.",
+     "tf": false,
+     "why": "1/x tends to zero but its integral diverges."
+    },
+    {
+     "claim": "∫₁∞x⁻ᵖ converges for p>1.",
+     "tf": true,
+     "why": "This is the p-integral criterion at infinity."
+    },
+    {
+     "claim": "∫₀¹x⁻ᵖ converges for p>1.",
+     "tf": false,
+     "why": "Near zero it converges for p<1."
+    },
+    {
+     "claim": "An interior singularity requires two one-sided limits.",
+     "tf": true,
+     "why": "Both pieces must converge separately."
+    },
+    {
+     "claim": "An antiderivative alone proves an improper integral converges.",
+     "tf": false,
+     "why": "The limiting endpoint must still be finite."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s14",
+   "mins": 3,
+   "title": "Final integral checklist",
+   "objective": "Evaluate proper and improper integrals safely.",
+   "body": [
+    "1. Proper definite integral: find an antiderivative and use F(b)−F(a).",
+    "2. Continuous on [a,b] implies Riemann integrable.",
+    "3. Infinite endpoint: replace infinity by R and take R→∞.",
+    "4. Unbounded endpoint: replace it by ε and take ε→0 from inside.",
+    "5. ∫₁∞x⁻ᵖ converges iff p>1; ∫₀¹x⁻ᵖ converges iff p<1.",
+    "6. Interior singularity: split and test both one-sided integrals separately.",
+    "7. Use direct or limit comparison with a suitable p-integral."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s15",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate integral evaluation and convergence reasoning.",
+   "setId": "maths_t7_mastery"
+  }
+ ]
+}

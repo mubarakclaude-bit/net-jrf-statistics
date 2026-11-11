@@ -1,0 +1,687 @@
+{
+ "id": "mathst6",
+ "topicId": "maths-t6",
+ "moduleId": "maths",
+ "title": "Maxima, Minima and Local Extrema",
+ "breadcrumb": "Mathematics → Calculus → Critical points and optimisation",
+ "engine": "B",
+ "engineName": "Mathematics — classify turning points and global optima",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 112,
+ "objectives": [
+  "Identify critical numbers and stationary points.",
+  "Apply Fermat's theorem as a necessary condition.",
+  "Classify local extrema using first and second derivative tests.",
+  "Recognise stationary points that are not extrema.",
+  "Find absolute extrema on closed intervals by checking endpoints and interior candidates."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Differentiation",
+   "why": "Critical points are found from the first derivative."
+  },
+  {
+   "id": "p2",
+   "name": "Increasing and decreasing functions",
+   "why": "The first derivative sign test depends on monotonicity."
+  },
+  {
+   "id": "p3",
+   "name": "Second derivatives and concavity",
+   "why": "The second derivative test uses local curvature."
+  }
+ ],
+ "traps": [
+  "f′(c)=0 is necessary at a differentiable interior extremum, not sufficient.",
+  "A critical point may have derivative undefined but still be an extremum.",
+  "x³ has a stationary point at zero but no extremum.",
+  "f′′(c)=0 makes the second derivative test inconclusive.",
+  "Absolute extrema on a closed interval may occur at endpoints.",
+  "The Extreme Value Theorem needs continuity on a closed bounded interval."
+ ],
+ "revision": {
+  "sheet": [
+   "Critical number: f′(c)=0 or f′ undefined, with f(c) defined.",
+   "Fermat: differentiable interior local extremum ⇒ f′(c)=0.",
+   "f′: + to − gives local maximum.",
+   "f′: − to + gives local minimum.",
+   "No derivative sign change ⇒ neither by first derivative test.",
+   "f′(c)=0 and f′′(c)>0 ⇒ strict local minimum.",
+   "f′(c)=0 and f′′(c)<0 ⇒ strict local maximum.",
+   "f′′(c)=0 ⇒ test inconclusive; use another method.",
+   "x³ at zero is stationary but not an extremum.",
+   "x⁴ at zero is a strict minimum though f′′(0)=0.",
+   "Absolute extrema on [a,b]: compare endpoints and interior critical candidates.",
+   "Extreme Value Theorem: continuous on closed bounded interval ⇒ absolute max and min."
+  ],
+  "cards": [
+   [
+    "Critical number",
+    "f′=0 or undefined; f defined"
+   ],
+   [
+    "Fermat",
+    "Interior differentiable extremum ⇒ f′=0"
+   ],
+   [
+    "First derivative + to −",
+    "Local maximum"
+   ],
+   [
+    "First derivative − to +",
+    "Local minimum"
+   ],
+   [
+    "Second derivative positive",
+    "Local minimum at stationary point"
+   ],
+   [
+    "Second derivative negative",
+    "Local maximum at stationary point"
+   ],
+   [
+    "Second derivative zero",
+    "Inconclusive"
+   ],
+   [
+    "Global extrema",
+    "Check endpoints and all interior candidates"
+   ]
+  ],
+  "tricks": [
+   "Factor f′ before making a sign chart.",
+   "Test one value in each interval separated by critical numbers.",
+   "Do not call every stationary point an extremum.",
+   "When f′′=0, return to the first derivative test.",
+   "For absolute extrema, never omit endpoints."
+  ],
+  "shortcuts": [
+   "x² at zero: minimum; −x²: maximum; x³: neither; x⁴: minimum.",
+   "For x³−3x, stationary points are −1 and 1.",
+   "Closed interval global extrema require a finite candidate comparison."
+  ],
+  "remember": [
+   "Stationary does not mean extremum.",
+   "f′′=0 is inconclusive.",
+   "Check endpoints for absolute extrema."
+  ]
+ },
+ "howto": "Use a fixed sequence: find critical numbers, classify each with derivative signs or the second derivative test, then compare endpoints if the question asks for absolute extrema. Keep local and global language distinct.",
+ "refs": [
+  {
+   "title": "Single Variable Calculus",
+   "where": "Applications of derivatives and extrema",
+   "site": "MIT OpenCourseWare 18.01SC",
+   "url": "https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Critical points, derivative tests and optimisation."
+  },
+  {
+   "title": "Calculus Volume 1",
+   "where": "Applications of derivatives",
+   "site": "OpenStax",
+   "url": "https://openstax.org/details/books/calculus-volume-1",
+   "type": "Open textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Worked examples on local and absolute extrema."
+  },
+  {
+   "title": "Calculus",
+   "where": "Maxima and minima",
+   "site": "Tom M. Apostol",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Rigorous treatment of extrema and compact-interval results."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact anchors include x³−3x, x²−4x+7, x⁴ and x³ at zero. Not production-approved.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Foundation: derivatives and critical points",
+   "objective": "Recall how derivatives identify candidate extrema.",
+   "ask": {
+    "q": "What does f′(x)>0 on an interval mean?",
+    "nudge": "It describes the direction of change."
+   },
+   "body": [
+    "The derivative is the instantaneous slope. A positive derivative means increasing; a negative derivative means decreasing.",
+    "A turning point is usually associated with a derivative sign change. But f′(c)=0 alone does not prove a maximum or minimum: x³ has a stationary point at zero and keeps increasing."
+   ],
+   "items": [
+    {
+     "ask": "Define a critical number.",
+     "recall": "An interior point where f′(c)=0 or f′ does not exist, with f(c) defined.",
+     "refresh": [
+      "Critical numbers are candidates, not guaranteed extrema. A cusp such as |x| can be an extremum even though the derivative does not exist.",
+      "For absolute extrema on a closed interval, include endpoints as well as interior critical numbers. The endpoint values may be the global maximum or minimum."
+     ]
+    },
+    {
+     "ask": "What sign change gives a local maximum?",
+     "recall": "f′ changes from positive to negative.",
+     "refresh": [
+      "Positive derivative means the function rises; negative derivative means it falls. Rising then falling produces a local peak.",
+      "If the sign stays the same on both sides, the first derivative test does not give an extremum. For x³, f′=3x² is non-negative on both sides of zero."
+     ]
+    },
+    {
+     "ask": "What does f′′(c)>0 imply when f′(c)=0?",
+     "recall": "A strict local minimum, by the second derivative test.",
+     "refresh": [
+      "A positive second derivative indicates local concavity upward. At a stationary point, this produces a strict local minimum; a negative second derivative gives a strict local maximum.",
+      "When f′′(c)=0, the test is inconclusive. x⁴ has a minimum at zero, while x³ has neither a maximum nor minimum there."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "Turning points are changes of direction",
+   "objective": "Connect derivative signs with graph behaviour.",
+   "ask": {
+    "q": "For f(x)=x² at zero, how does f′ change sign?",
+    "nudge": "f′=2x is negative before zero and positive after."
+   },
+   "body": [
+    "A local maximum is a rise followed by a fall. A local minimum is a fall followed by a rise.",
+    "A stationary point only means the tangent is horizontal. It may be a stationary inflection, so always check what happens on both sides."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Local and absolute extrema",
+   "objective": "Distinguish neighbourhood comparisons from global comparisons.",
+   "ask": {
+    "q": "Can a local minimum fail to be the absolute minimum?",
+    "nudge": "Another valley elsewhere may be lower."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Local extrema",
+     "body": "A local maximum at c means f(c)≥f(x) for all x sufficiently close to c. A local minimum reverses the inequality."
+    },
+    {
+     "t": "def",
+     "h": "Absolute extrema",
+     "body": "An absolute maximum or minimum compares f(c) with every point in the domain, not merely nearby points."
+    },
+    {
+     "t": "formula",
+     "h": "Extreme Value Theorem",
+     "body": "A continuous function on a closed and bounded interval [a,b] attains both an absolute maximum and an absolute minimum."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 8,
+   "title": "Fermat's theorem and candidate points",
+   "objective": "Use the necessary condition without treating it as sufficient.",
+   "ask": {
+    "q": "At a differentiable interior local extremum, what must f′(c) be?",
+    "nudge": "A smooth peak or trough has a horizontal tangent."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Fermat's theorem",
+     "body": "If f has a local maximum or minimum at an interior point c and is differentiable there, then f′(c)=0."
+    },
+    {
+     "t": "step",
+     "h": "Candidate list",
+     "body": "Solve f′(x)=0 and include interior points where f′ is undefined but f is defined. On a closed interval, add both endpoints."
+    },
+    {
+     "t": "def",
+     "h": "Necessary, not sufficient",
+     "body": "Fermat's theorem identifies candidates only. A stationary point may be neither a maximum nor a minimum; use derivative signs or a sufficient second-derivative condition."
+    }
+   ],
+   "flow": {
+    "title": "Extrema classification sequence",
+    "alt": "Flow for local and absolute extrema",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Find critical numbers",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Derivative sign chart",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Classify local extrema",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Second derivative test",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 1,
+      "label": "Need absolute extrema?",
+      "kind": "dec"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "Compare candidates and endpoints",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "b",
+      "to": "d"
+     },
+     {
+      "from": "c",
+      "to": "e"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     },
+     {
+      "from": "e",
+      "to": "f",
+      "label": "yes"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 8,
+   "title": "Worked: classify x³−3x",
+   "objective": "Use derivative signs to identify local extrema.",
+   "ask": {
+    "q": "For f(x)=x³−3x, which stationary point is the local maximum?",
+    "nudge": "The derivative changes + to − at x=−1."
+   },
+   "problem": "Find and classify stationary points of f(x)=x³−3x.",
+   "steps": [
+    {
+     "say": "Differentiate and solve.",
+     "math": "f′(x)=3x²−3=3(x−1)(x+1); x=−1,1",
+     "why": "These are the stationary candidates."
+    },
+    {
+     "say": "Check derivative signs.",
+     "math": "At −1: + to −. At 1: − to +.",
+     "why": "The function changes from increasing to decreasing at −1 and decreasing to increasing at 1."
+    },
+    {
+     "say": "Evaluate the function.",
+     "math": "f(−1)=2; f(1)=−2",
+     "why": "There is a local maximum 2 at −1 and a local minimum −2 at 1."
+    }
+   ],
+   "scenario": {
+    "teaser": "A cost curve has a best operating point.",
+    "title": "Local optima in a production-cost curve",
+    "body": [
+     "A cost curve may rise, fall and rise again as output changes. A stationary point is a candidate operating level, but the derivative sign determines whether it is a local cost minimum or maximum.",
+     "If marginal cost changes from negative to positive, total cost has a local minimum. If it changes from positive to negative, total cost has a local maximum.",
+     "A local minimum need not be the absolute minimum over the feasible output range. Operational constraints create endpoints, and those must be compared when the question asks for a global optimum."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 8,
+   "title": "The first derivative test",
+   "objective": "Classify critical points with a sign chart.",
+   "ask": {
+    "q": "If f′ is negative on both sides of c, is c a local extremum?",
+    "nudge": "The function is decreasing on both sides."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Sign-change rule",
+     "body": "f′: + to − gives a local maximum. f′: − to + gives a local minimum. No sign change gives neither by this test."
+    },
+    {
+     "t": "step",
+     "h": "Build a sign chart",
+     "body": "Factor f′, mark its zeros and undefined points, then test one value in each interval. The sign chart is more reliable than guessing from a sketch."
+    },
+    {
+     "t": "def",
+     "h": "Stationary inflection",
+     "body": "For x³, f′(0)=0 but f′ remains positive on either side. The function keeps increasing, so zero is not a local extremum."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s6",
+   "mins": 8,
+   "title": "Guided: second derivative test",
+   "objective": "Use concavity at a stationary point.",
+   "problem": "Classify the stationary point of f(x)=x²−4x+7.",
+   "hints": [
+    "Differentiate: f′(x)=2x−4 and solve f′=0.",
+    "The stationary point is x=2. Now compute f′′.",
+    "f′′=2>0, so the graph is concave upward."
+   ],
+   "answer": "Strict local minimum at x=2, with value 3.",
+   "solution": "f′=2x−4=0 gives x=2. Since f′′=2>0, the second derivative test gives a strict local minimum. Substitution gives f(2)=4−8+7=3.",
+   "ask": {
+    "q": "What if f′′(c)=0?",
+    "nudge": "The second derivative test is inconclusive."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 7,
+   "title": "Second derivative test and its limits",
+   "objective": "Know when the concavity shortcut is conclusive.",
+   "ask": {
+    "q": "For x⁴ at zero, f′′(0)=0. Is zero still a minimum?",
+    "nudge": "Use the sign of x⁴ or the first derivative test."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Second derivative test",
+     "body": "If f′(c)=0 and f′′(c)>0, c is a strict local minimum. If f′′(c)<0, c is a strict local maximum."
+    },
+    {
+     "t": "def",
+     "h": "Inconclusive case",
+     "body": "If f′′(c)=0, no conclusion follows. x⁴ has a minimum at zero, while x³ has neither a maximum nor a minimum."
+    },
+    {
+     "t": "step",
+     "h": "Resolve the ambiguity",
+     "body": "Check the sign of f′ on both sides, compare nearby values, or use higher-order analysis when justified."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Guided: absolute extrema on [−2,2]",
+   "objective": "Compare endpoints with all interior candidates.",
+   "problem": "Find the absolute maximum and minimum of f(x)=x³−3x on [−2,2].",
+   "hints": [
+    "Solve f′(x)=3x²−3=0 to find interior critical numbers.",
+    "Evaluate f at −2, −1, 1 and 2.",
+    "Compare all four values, not just the stationary values."
+   ],
+   "answer": "Absolute maximum 2 at −1 and 2; absolute minimum −2 at −2 and 1.",
+   "solution": "Critical numbers are −1 and 1. Values are f(−2)=−2, f(−1)=2, f(1)=−2 and f(2)=2. The absolute maximum is 2 and the absolute minimum is −2.",
+   "ask": {
+    "q": "Why must both endpoints be checked?",
+    "nudge": "An absolute extremum can occur at the boundary."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s9",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the main conditions and tests.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "State Fermat's necessary condition.",
+     "a": "At a differentiable interior extremum, f′(c)=0."
+    },
+    {
+     "q": "What sign change gives a local maximum?",
+     "a": "Positive to negative."
+    },
+    {
+     "q": "What sign change gives a local minimum?",
+     "a": "Negative to positive."
+    },
+    {
+     "q": "What if f′′(c)=0?",
+     "a": "The second derivative test is inconclusive."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s10",
+   "mins": 8,
+   "title": "Four quick classifications",
+   "objective": "Choose the appropriate test.",
+   "problem": "Complete each classification.",
+   "steps": [
+    {
+     "say": "f(x)=x² at zero.",
+     "blank": {
+      "prompt": "Classify the point.",
+      "answer": "Strict local minimum",
+      "accept": [
+       "local minimum",
+       "strict local minimum"
+      ],
+      "hint": "f′′(0)=2>0."
+     },
+     "why": "The second derivative is positive."
+    },
+    {
+     "say": "f(x)=−x² at zero.",
+     "blank": {
+      "prompt": "Classify the point.",
+      "answer": "Strict local maximum",
+      "accept": [
+       "local maximum",
+       "strict local maximum"
+      ],
+      "hint": "f′′(0)=−2<0."
+     },
+     "why": "The second derivative is negative."
+    },
+    {
+     "say": "f(x)=x³ at zero.",
+     "blank": {
+      "prompt": "Is zero a local extremum?",
+      "answer": "No",
+      "accept": [
+       "no",
+       "neither"
+      ],
+      "hint": "The derivative stays positive on both sides."
+     },
+     "why": "There is no derivative sign change."
+    },
+    {
+     "say": "f is continuous on [a,b].",
+     "blank": {
+      "prompt": "Which theorem guarantees absolute extrema?",
+      "answer": "Extreme Value Theorem",
+      "accept": [
+       "extreme value theorem",
+       "weierstrass theorem"
+      ],
+      "hint": "It is also called Weierstrass's theorem."
+     },
+     "why": "Continuity on a closed bounded interval guarantees attained extrema."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s11",
+   "mins": 6,
+   "title": "Local does not mean global",
+   "objective": "Compare neighbourhood and full-domain behaviour.",
+   "ask": {
+    "q": "How do you find the absolute minimum on [a,b] when there are two local minima?",
+    "nudge": "Compare both local minima and the endpoints."
+   },
+   "body": [
+    "A local minimum is only the lowest point in a small neighbourhood. Another valley elsewhere may be lower, and an endpoint may be lower still.",
+    "On a closed interval, find every interior critical candidate, evaluate the function at each, evaluate both endpoints, and compare all values."
+   ],
+   "scenario": {
+    "teaser": "A design variable is constrained to a feasible interval.",
+    "title": "Comparing local and global engineering optima",
+    "body": [
+     "A design objective may have several stationary points inside a feasible range. One may be a local minimum but still have a larger objective value than a boundary design.",
+     "For a continuous objective on a closed bounded feasible interval, the Extreme Value Theorem guarantees global extrema. The calculation must compare every interior critical candidate with both endpoints.",
+     "This distinction matters in optimisation: a calculus stationary point is not automatically the best feasible design. Constraints can make a boundary point globally optimal."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s12",
+   "mins": 7,
+   "title": "Worked: when the second derivative test fails",
+   "objective": "Contrast x⁴ and x³ at zero.",
+   "ask": {
+    "q": "Both x⁴ and x³ have f′′(0)=0. Do they have the same classification?",
+    "nudge": "Compare the sign of the first derivative."
+   },
+   "problem": "Classify x⁴ and x³ at x=0.",
+   "steps": [
+    {
+     "say": "For x⁴.",
+     "math": "f′=4x³; f′′=12x²; f′′(0)=0",
+     "why": "The derivative changes from negative to positive, so zero is a strict minimum."
+    },
+    {
+     "say": "For x³.",
+     "math": "g′=3x²; g′′=6x; g′′(0)=0",
+     "why": "The derivative remains positive on both sides, so zero is not an extremum."
+    },
+    {
+     "say": "State the contrast.",
+     "math": "x⁴: minimum; x³: neither",
+     "why": "A zero second derivative is inconclusive, not a classification."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s13",
+   "mins": 5,
+   "title": "Trap check: six statements",
+   "objective": "Separate candidate conditions from conclusions.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "Every differentiable interior local extremum has derivative zero.",
+     "tf": true,
+     "why": "Fermat's theorem gives this necessary condition."
+    },
+    {
+     "claim": "Every stationary point is a local extremum.",
+     "tf": false,
+     "why": "x³ has a stationary inflection at zero."
+    },
+    {
+     "claim": "A positive second derivative at a stationary point gives a local minimum.",
+     "tf": true,
+     "why": "The graph is locally concave upward."
+    },
+    {
+     "claim": "If the second derivative is zero, there is no extremum.",
+     "tf": false,
+     "why": "x⁴ has a minimum at zero despite f′′(0)=0."
+    },
+    {
+     "claim": "Absolute extrema on a closed interval may occur at endpoints.",
+     "tf": true,
+     "why": "Endpoints are part of the domain and must be checked."
+    },
+    {
+     "claim": "The Extreme Value Theorem applies to every continuous function on an open interval.",
+     "tf": false,
+     "why": "The standard theorem requires a closed and bounded interval."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s14",
+   "mins": 3,
+   "title": "Final optimisation checklist",
+   "objective": "Find and classify extrema systematically.",
+   "body": [
+    "1. Find critical numbers: f′=0 or f′ undefined, with f defined.",
+    "2. First derivative test: + to − maximum; − to + minimum; no change means neither.",
+    "3. At a stationary point, f′′>0 gives a local minimum; f′′<0 gives a local maximum.",
+    "4. If f′′=0, use a sign chart or another method; the test is inconclusive.",
+    "5. For absolute extrema on [a,b], evaluate all interior critical candidates and both endpoints.",
+    "6. A continuous function on a closed bounded interval attains absolute maximum and minimum."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s15",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate independent extrema classification.",
+   "setId": "maths_t6_mastery"
+  }
+ ]
+}

@@ -1,0 +1,702 @@
+{
+ "id": "mathst5",
+ "topicId": "maths-t5",
+ "moduleId": "maths",
+ "title": "Continuity, Differentiability, Rolle's Theorem and Mean Value Theorems",
+ "breadcrumb": "Mathematics → Calculus → Continuity, derivatives and mean value theorems",
+ "engine": "B",
+ "engineName": "Mathematics — limits, slopes and existence theorems",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 113,
+ "objectives": [
+  "Test continuity at a point using two-sided limits and the assigned value.",
+  "Compute derivatives from first principles and compare one-sided derivatives.",
+  "Explain why differentiability implies continuity but not conversely.",
+  "Apply Rolle's theorem and Lagrange's Mean Value Theorem with all hypotheses checked.",
+  "State and use Cauchy's Mean Value Theorem."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Limits and one-sided limits",
+   "why": "Continuity and derivatives are defined through limits."
+  },
+  {
+   "id": "p2",
+   "name": "Algebra of functions",
+   "why": "Piecewise functions and difference quotients require careful simplification."
+  },
+  {
+   "id": "p3",
+   "name": "Basic differentiation",
+   "why": "The mean value theorems conclude statements involving f′(c)."
+  }
+ ],
+ "traps": [
+  "Continuity requires the limit to equal the assigned function value.",
+  "Differentiability implies continuity, but not conversely.",
+  "Rolle requires equal endpoint values and differentiability only in the open interval.",
+  "MVT guarantees at least one c, not necessarily a unique one.",
+  "If a hypothesis fails, the theorem is unavailable; its conclusion is not automatically false.",
+  "For piecewise continuity, compare left limit, right limit and f(a)."
+ ],
+ "revision": {
+  "sheet": [
+   "Continuity at a iff lim(x→a)f(x)=f(a).",
+   "The two-sided limit exists iff left and right limits agree.",
+   "Differentiability requires a finite two-sided difference quotient.",
+   "Differentiability ⇒ continuity; converse false (|x| at 0).",
+   "Rolle: continuous [a,b], differentiable (a,b), f(a)=f(b).",
+   "Rolle conclusion: some c∈(a,b) has f′(c)=0.",
+   "Lagrange MVT: f′(c)=[f(b)−f(a)]/(b−a).",
+   "Cauchy MVT compares f′(c)/g′(c) with endpoint change ratio.",
+   "MVT guarantees existence, not uniqueness.",
+   "Check every hypothesis before invoking a theorem."
+  ],
+  "cards": [
+   [
+    "Continuity",
+    "Limit equals function value"
+   ],
+   [
+    "Differentiability",
+    "Finite two-sided difference quotient"
+   ],
+   [
+    "Implication",
+    "Differentiability ⇒ continuity"
+   ],
+   [
+    "Rolle hypotheses",
+    "Continuous closed, differentiable open, equal endpoints"
+   ],
+   [
+    "Rolle conclusion",
+    "f′(c)=0"
+   ],
+   [
+    "Lagrange MVT",
+    "Tangent slope = secant slope"
+   ],
+   [
+    "Cauchy MVT",
+    "Ratio of derivative values = ratio of endpoint changes"
+   ],
+   [
+    "Existence",
+    "At least one c; not necessarily unique"
+   ]
+  ],
+  "tricks": [
+   "For piecewise functions, calculate left limit, right limit and f(a) separately.",
+   "At an absolute-value corner, compare one-sided derivatives.",
+   "For MVT, compute the average slope first, then solve f′(c)=slope.",
+   "For Rolle, check endpoint equality before differentiating.",
+   "Failure of a hypothesis means no theorem conclusion can be claimed."
+  ],
+  "shortcuts": [
+   "For f=x² on [1,3], MVT gives c=2.",
+   "For f=x²−1 on [−1,1], Rolle gives c=0.",
+   "|x| is the standard continuous-but-not-differentiable counterexample."
+  ],
+  "remember": [
+   "Check hypotheses before conclusions.",
+   "MVT gives existence, not uniqueness.",
+   "Differentiability is stronger than continuity."
+  ]
+ },
+ "howto": "Study the continuity and differentiability definitions first. Then learn the theorem hypotheses as a checklist, not as a memorised conclusion. In exam problems, verify the interval conditions before calculating c.",
+ "refs": [
+  {
+   "title": "Calculus",
+   "where": "Continuity and differentiability",
+   "site": "MIT OpenCourseWare",
+   "url": "https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Limits, continuity and derivatives."
+  },
+  {
+   "title": "Calculus",
+   "where": "Mean Value Theorem",
+   "site": "OpenStax",
+   "url": "https://openstax.org/details/books/calculus-volume-1",
+   "type": "Open textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Clear theorem statements and worked examples."
+  },
+  {
+   "title": "Mathematical Analysis",
+   "where": "Continuity and differential calculus",
+   "site": "Tom M. Apostol",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Rigorous treatment of continuity and mean value theorems."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact examples include |x| at zero, piecewise continuity at 2, and MVT for x² on [1,3]. Not production-approved.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Foundation: limits and function behaviour",
+   "objective": "Recall limits, continuity and derivatives before the theorems.",
+   "ask": {
+    "q": "What does lim x→a f(x)=L mean?",
+    "nudge": "Values of x close to a make f(x) close to L."
+   },
+   "body": [
+    "Continuity and differentiability are local properties. A limit describes the value approached by a function, not necessarily the value assigned at the point.",
+    "A function is continuous at a when the limit exists and equals f(a). Differentiability is stronger: it requires a finite limit of the difference quotient."
+   ],
+   "items": [
+    {
+     "ask": "State continuity at x=a.",
+     "recall": "f(a) is defined, lim x→a f(x) exists, and the limit equals f(a).",
+     "refresh": [
+      "Check the three parts separately: the function value exists, the two-sided limit exists, and both values agree. A removable hole violates the first or third part; a jump violates existence of the two-sided limit.",
+      "For a piecewise function, compute the left-hand limit, right-hand limit and the assigned value. Continuity requires all three to be equal."
+     ]
+    },
+    {
+     "ask": "Write the derivative from first principles.",
+     "recall": "f′(a)=lim h→0 [f(a+h)−f(a)]/h, when the finite limit exists.",
+     "refresh": [
+      "The numerator is the change in the function and the denominator is the change in input. The quotient is an average rate of change; its limit is the instantaneous rate.",
+      "A finite derivative implies continuity, but continuity alone does not guarantee a derivative. The absolute-value function at zero is the standard counterexample."
+     ]
+    },
+    {
+     "ask": "What does differentiability imply about continuity?",
+     "recall": "Differentiability at a point implies continuity there; the converse is false.",
+     "refresh": [
+      "If f′(a) exists, write f(a+h)−f(a)=h·[(f(a+h)−f(a))/h]. The bracket tends to a finite number and h tends to zero, so the difference tends to zero.",
+      "For f(x)=|x|, the function is continuous at zero, but the left derivative is −1 and the right derivative is +1. Hence it is not differentiable there."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "Continuity is no break; differentiability is no corner",
+   "objective": "Distinguish a connected graph from a smooth local slope.",
+   "ask": {
+    "q": "Is f(x)=|x| continuous and differentiable at zero?",
+    "nudge": "The graph has no jump, but what are the left and right slopes?"
+   },
+   "body": [
+    "Continuity rules out a jump, a hole or an infinite break at the point. Differentiability additionally requires a unique finite tangent slope.",
+    "A sharp corner can be continuous but not differentiable. A vertical tangent may also prevent a finite derivative. A discontinuous function cannot be differentiable at that point."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Continuity: algebra and composition",
+   "objective": "Use standard continuity rules and classify discontinuities.",
+   "ask": {
+    "q": "If f and g are continuous at a, when is f/g continuous at a?",
+    "nudge": "The denominator must not vanish at the point."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Continuity at a point",
+     "body": "f is continuous at a iff lim(x→a)f(x)=f(a). Left and right limits must agree with the function value."
+    },
+    {
+     "t": "formula",
+     "h": "Operations",
+     "body": "Sums, products and compositions of continuous functions are continuous where defined. A quotient is continuous wherever the denominator is non-zero."
+    },
+    {
+     "t": "step",
+     "h": "Types of discontinuity",
+     "body": "Removable: a finite limit exists but the value is missing or wrong. Jump: finite one-sided limits differ. Infinite: function grows without bound near the point."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Worked: choose a constant for continuity",
+   "objective": "Match one-sided limits and the function value.",
+   "ask": {
+    "q": "For f(x)=ax+1 when x<2 and x² when x≥2, what a gives continuity at 2?",
+    "nudge": "Set 2a+1 equal to 4."
+   },
+   "problem": "Find a so that f(x)=ax+1 for x<2 and f(x)=x² for x≥2 is continuous at x=2.",
+   "steps": [
+    {
+     "say": "Compute the left-hand limit.",
+     "math": "lim(x→2−)f(x)=2a+1",
+     "why": "Use the branch valid to the left of 2."
+    },
+    {
+     "say": "Compute the right-hand limit and point value.",
+     "math": "lim(x→2+)f(x)=f(2)=4",
+     "why": "The right branch includes x=2."
+    },
+    {
+     "say": "Equate the two sides.",
+     "math": "2a+1=4 ⇒ a=3/2",
+     "why": "The common limit now equals f(2), so continuity holds."
+    }
+   ],
+   "scenario": {
+    "teaser": "A piecewise tariff must not jump at a threshold.",
+    "title": "Choosing a threshold constant in a tariff function",
+    "body": [
+     "A utility tariff may use one linear rate below a consumption threshold and a different formula above it. If the billing rule is intended to be continuous, the two formulas must agree at the threshold.",
+     "The algebra is exactly the one-sided-limit test: evaluate the left formula at the threshold, evaluate the right formula and the assigned value, then equate them.",
+     "A continuous tariff can still have a kink at the threshold. Continuity does not require equal left and right derivatives; that stronger condition would be needed for differentiability."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 8,
+   "title": "Differentiability and one-sided derivatives",
+   "objective": "Test the derivative limit and identify corners.",
+   "ask": {
+    "q": "For f(x)=|x| at zero, what are the left and right derivatives?",
+    "nudge": "Evaluate the difference quotient on each side."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Derivative definition",
+     "body": "f′(a)=lim(h→0)[f(a+h)−f(a)]/h. The two-sided limit must exist and be finite."
+    },
+    {
+     "t": "step",
+     "h": "One-sided test",
+     "body": "The left derivative is lim(h→0−) and the right derivative is lim(h→0+). Differentiability requires them to be equal and finite."
+    },
+    {
+     "t": "def",
+     "h": "The key implication",
+     "body": "Differentiability ⇒ continuity. Continuity ⇏ differentiability. A corner, cusp, vertical tangent or discontinuity can prevent a finite derivative."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s5",
+   "mins": 8,
+   "title": "Guided: derivative from first principles",
+   "objective": "Derive the derivative of a quadratic.",
+   "problem": "Use first principles to differentiate f(x)=x² at x=a.",
+   "hints": [
+    "Start with [(a+h)²−a²]/h.",
+    "Expand the square and cancel the common factor h.",
+    "Now let h tend to zero."
+   ],
+   "answer": "f′(a)=2a.",
+   "solution": "The difference quotient is [(a+h)²−a²]/h=(2ah+h²)/h=2a+h. Its limit as h→0 is 2a.",
+   "ask": {
+    "q": "What is the derivative of x² at x=3?",
+    "nudge": "Substitute 3 into 2a."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Rolle's theorem",
+   "objective": "Recognise and apply all three hypotheses.",
+   "ask": {
+    "q": "For f(x)=x²−1 on [−1,1], find a value c guaranteed by Rolle's theorem.",
+    "nudge": "The derivative is 2x and the endpoints have equal values."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Rolle's theorem",
+     "body": "If f is continuous on [a,b], differentiable on (a,b), and f(a)=f(b), then there exists c∈(a,b) such that f′(c)=0."
+    },
+    {
+     "t": "step",
+     "h": "The hypotheses are not optional",
+     "body": "Continuity is required on the CLOSED interval; differentiability is required only on the OPEN interval; endpoint values must be equal. If any condition fails, the theorem cannot be invoked."
+    },
+    {
+     "t": "def",
+     "h": "Geometric meaning",
+     "body": "A continuous curve that starts and ends at the same height and has no interior break must have at least one horizontal tangent."
+    }
+   ],
+   "flow": {
+    "title": "Which theorem can be used?",
+    "alt": "Checklist for continuity, Rolle and the mean value theorem",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Identify interval [a,b]",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Continuous on [a,b]?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "No theorem conclusion",
+      "kind": "end"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Differentiable on (a,b)?",
+      "kind": "dec"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 1,
+      "label": "Equal endpoint values?",
+      "kind": "dec"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 0,
+      "label": "Rolle: f′(c)=0",
+      "kind": "step"
+     },
+     {
+      "id": "g",
+      "r": 4,
+      "c": 2,
+      "label": "Lagrange MVT: secant slope",
+      "kind": "step"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "no"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "yes"
+     },
+     {
+      "from": "d",
+      "to": "c",
+      "label": "no"
+     },
+     {
+      "from": "d",
+      "to": "e",
+      "label": "yes"
+     },
+     {
+      "from": "e",
+      "to": "f",
+      "label": "yes"
+     },
+     {
+      "from": "e",
+      "to": "g",
+      "label": "no"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided: apply the Mean Value Theorem",
+   "objective": "Calculate the guaranteed point c.",
+   "problem": "Apply Lagrange's Mean Value Theorem to f(x)=x² on [1,3].",
+   "hints": [
+    "The average slope is [f(3)−f(1)]/(3−1).",
+    "The average slope is (9−1)/2=4.",
+    "Set f′(c)=2c equal to 4."
+   ],
+   "answer": "c=2.",
+   "solution": "The polynomial is continuous on [1,3] and differentiable on (1,3). The average slope is 4. Since f′(x)=2x, 2c=4 gives c=2, which lies in (1,3).",
+   "ask": {
+    "q": "Does MVT guarantee exactly one such c?",
+    "nudge": "The theorem guarantees at least one, not necessarily uniqueness."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s8",
+   "mins": 8,
+   "title": "Lagrange and Cauchy Mean Value Theorems",
+   "objective": "State both theorems and distinguish their conclusions.",
+   "ask": {
+    "q": "What extra function appears in Cauchy's Mean Value Theorem?",
+    "nudge": "It compares the changes in two functions."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Lagrange MVT",
+     "body": "If f is continuous on [a,b] and differentiable on (a,b), then f′(c)=[f(b)−f(a)]/(b−a) for some c∈(a,b)."
+    },
+    {
+     "t": "formula",
+     "h": "Cauchy MVT",
+     "body": "If f,g are continuous on [a,b] and differentiable on (a,b), then [f′(c)/g′(c)]=[f(b)−f(a)]/[g(b)−g(a)] for some c, under the usual non-zero denominator conditions."
+    },
+    {
+     "t": "step",
+     "h": "Rolle as a special case",
+     "body": "Set g(x)=x in Cauchy's theorem to obtain Lagrange's MVT. Set f(a)=f(b) in Lagrange's theorem to obtain Rolle's theorem."
+    }
+   ]
+  },
+  {
+   "kind": "recall",
+   "id": "s9",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the theorem hypotheses.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "Does differentiability imply continuity?",
+     "a": "Yes; the converse is false."
+    },
+    {
+     "q": "State Rolle's endpoint condition.",
+     "a": "f(a)=f(b)."
+    },
+    {
+     "q": "Where must f be continuous for Rolle and MVT?",
+     "a": "On the closed interval [a,b]."
+    },
+    {
+     "q": "Where must f be differentiable?",
+     "a": "On the open interval (a,b)."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s10",
+   "mins": 8,
+   "title": "Four theorem decisions",
+   "objective": "Use hypotheses before calculating.",
+   "problem": "Complete each conclusion.",
+   "steps": [
+    {
+     "say": "f is continuous on [0,2], differentiable on (0,2), and f(0)=f(2).",
+     "blank": {
+      "prompt": "Which theorem guarantees f′(c)=0?",
+      "answer": "Rolle's theorem",
+      "accept": [
+       "rolle",
+       "rolle's theorem"
+      ],
+      "hint": "Equal endpoint values are the extra condition."
+     },
+     "why": "All three hypotheses of Rolle are satisfied."
+    },
+    {
+     "say": "f(x)=x² on [1,3].",
+     "blank": {
+      "prompt": "Find the MVT point c.",
+      "answer": "2",
+      "accept": [
+       "2",
+       "c=2"
+      ],
+      "hint": "Set 2c equal to the average slope 4."
+     },
+     "why": "f′(x)=2x and the average slope is 4."
+    },
+    {
+     "say": "f(x)=|x| on [−1,1].",
+     "blank": {
+      "prompt": "Can Rolle's theorem be applied?",
+      "answer": "No, not differentiable at 0",
+      "accept": [
+       "no",
+       "no, not differentiable"
+      ],
+      "hint": "Check differentiability on the open interval."
+     },
+     "why": "The function is not differentiable at the interior point zero."
+    },
+    {
+     "say": "A function is differentiable at a.",
+     "blank": {
+      "prompt": "What must be true about continuity at a?",
+      "answer": "It is continuous at a",
+      "accept": [
+       "continuous",
+       "it is continuous"
+      ],
+      "hint": "Differentiability is the stronger condition."
+     },
+     "why": "Differentiability implies continuity."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s11",
+   "mins": 6,
+   "title": "What the Mean Value Theorem really says",
+   "objective": "Interpret the theorem as matching a tangent and a secant slope.",
+   "ask": {
+    "q": "If a journey's average speed is 60 km/h, what does the MVT say about instantaneous speed?",
+    "nudge": "At some time, the instantaneous speed equals the average, under the theorem's smoothness conditions."
+   },
+   "body": [
+    "The secant line joins the two endpoint values. The MVT guarantees at least one interior tangent parallel to that secant, so the instantaneous derivative equals the average rate of change.",
+    "It does not say the point is unique, nor does it identify its location without solving an equation. It is an existence theorem, not a numerical approximation rule."
+   ],
+   "scenario": {
+    "teaser": "Average speed and instantaneous speed meet somewhere.",
+    "title": "The average-speed interpretation",
+    "body": [
+     "A vehicle travels a smooth position function s(t) over a time interval. Its average velocity is [s(b)−s(a)]/(b−a).",
+     "If s is continuous on the closed interval and differentiable inside it, the Mean Value Theorem guarantees some intermediate time c where the instantaneous velocity s′(c) equals that average velocity.",
+     "This is a mathematical existence statement. It does not mean the speed is constant, and it does not identify the time c without further information about s(t)."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s12",
+   "mins": 7,
+   "title": "Worked: when the theorem cannot be used",
+   "objective": "Reject an invalid MVT application correctly.",
+   "ask": {
+    "q": "Can MVT be applied to f(x)=1/x on [−1,1]?",
+    "nudge": "Check continuity on the whole closed interval."
+   },
+   "problem": "Decide whether Rolle's theorem applies to f(x)=1/x on [−1,1].",
+   "steps": [
+    {
+     "say": "Check endpoint values.",
+     "math": "f(−1)=−1; f(1)=1",
+     "why": "They are not equal, so the endpoint condition fails."
+    },
+    {
+     "say": "Check continuity on the closed interval.",
+     "math": "f(x)=1/x is undefined at x=0",
+     "why": "The function is not continuous on [−1,1]."
+    },
+    {
+     "say": "Conclude.",
+     "math": "Rolle's theorem cannot be applied.",
+     "why": "Two hypotheses fail. Do not claim a theorem conclusion merely because the endpoint values are available."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s13",
+   "mins": 5,
+   "title": "Trap check: six statements",
+   "objective": "Identify invalid theorem shortcuts.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "Differentiability at a point implies continuity there.",
+     "tf": true,
+     "why": "The difference quotient proof establishes this implication."
+    },
+    {
+     "claim": "Every continuous function is differentiable.",
+     "tf": false,
+     "why": "|x| is continuous but not differentiable at zero."
+    },
+    {
+     "claim": "Rolle requires differentiability at both endpoints.",
+     "tf": false,
+     "why": "Differentiability is required only on the open interval."
+    },
+    {
+     "claim": "Rolle requires equal endpoint values.",
+     "tf": true,
+     "why": "This is its third hypothesis."
+    },
+    {
+     "claim": "The MVT guarantees at least one interior point.",
+     "tf": true,
+     "why": "It is an existence theorem; uniqueness is not guaranteed."
+    },
+    {
+     "claim": "If a hypothesis fails, the theorem's conclusion must be false.",
+     "tf": false,
+     "why": "The theorem is simply unavailable; the conclusion may still happen for another reason."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s14",
+   "mins": 3,
+   "title": "Final theorem checklist",
+   "objective": "Select and apply the right theorem.",
+   "body": [
+    "1. Continuity at a: limit exists and equals f(a).",
+    "2. Differentiability: the finite two-sided difference-quotient limit exists.",
+    "3. Differentiability implies continuity; continuity does not imply differentiability.",
+    "4. Rolle: continuous [a,b], differentiable (a,b), equal endpoint values; conclude f′(c)=0.",
+    "5. Lagrange MVT: same continuity and differentiability; conclude f′(c) equals the secant slope.",
+    "6. Cauchy MVT compares the derivative ratio of two functions with their endpoint-change ratio.",
+    "7. Verify every hypothesis before invoking any theorem."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s15",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate independent theorem and continuity reasoning.",
+   "setId": "maths_t5_mastery"
+  }
+ ]
+}

@@ -1,0 +1,686 @@
+{
+ "id": "mathst3",
+ "topicId": "maths-t3",
+ "moduleId": "maths",
+ "title": "Quadratic Forms, Definiteness, Canonical Reduction and Inertia",
+ "breadcrumb": "Mathematics → Matrix algebra → Quadratic forms and definiteness",
+ "engine": "B",
+ "engineName": "Mathematics — signs, curvature and canonical forms",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 112,
+ "objectives": [
+  "Represent a quadratic form as xᵀAx with A symmetric.",
+  "Classify positive/negative definite, semidefinite and indefinite forms using eigenvalues.",
+  "Apply Sylvester's criterion using leading principal minors.",
+  "Reduce real symmetric forms to canonical diagonal form.",
+  "Use Sylvester's law of inertia under nonsingular congruence."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Matrix multiplication and transpose",
+   "why": "Quadratic forms are written xᵀAx and congruence uses PᵀAP."
+  },
+  {
+   "id": "p2",
+   "name": "Determinants and principal minors",
+   "why": "Sylvester's criterion is a sequence of determinant tests."
+  },
+  {
+   "id": "p3",
+   "name": "Eigenvalues and eigenvectors",
+   "why": "The spectral theorem gives the canonical form and sign classification."
+  }
+ ],
+ "traps": [
+  "The off-diagonal coefficient is half the displayed cross-term coefficient.",
+  "A positive determinant alone does not imply positive definiteness.",
+  "Strict Sylvester criterion uses leading principal minors, not all minors.",
+  "For semidefinite tests, all principal minors matter; do not merely replace > by ≥ in the strict test.",
+  "Zero eigenvalues rule out strict definiteness.",
+  "Inertia is invariant under nonsingular congruence, not arbitrary singular transformations."
+ ],
+ "revision": {
+  "sheet": [
+   "Q(x)=xᵀAx with A symmetric.",
+   "Positive definite iff xᵀAx>0 for every x≠0.",
+   "Positive semidefinite iff xᵀAx≥0 for all x.",
+   "Negative definite iff xᵀAx<0 for every x≠0.",
+   "Indefinite means the form takes both positive and negative values.",
+   "Real symmetric A: eigenvalues real; orthogonal diagonalisation A=QΛQᵀ.",
+   "Inertia=(p,n,z), counts of positive, negative and zero eigenvalues.",
+   "Positive definite iff all leading principal minors Δ₁,…,Δₙ are positive.",
+   "Negative definite iff (−1)^kΔ_k>0 for all k.",
+   "Semidefinite tests require all principal minors, with non-strict signed inequalities.",
+   "Sylvester's law: inertia is invariant under nonsingular congruence.",
+   "For 2×2 [[a,b],[b,c]], positive definite iff a>0 and ac−b²>0."
+  ],
+  "cards": [
+   [
+    "Quadratic form",
+    "xᵀAx, A symmetric"
+   ],
+   [
+    "Positive definite",
+    "All eigenvalues >0"
+   ],
+   [
+    "Positive semidefinite",
+    "All eigenvalues ≥0"
+   ],
+   [
+    "Negative definite",
+    "All eigenvalues <0"
+   ],
+   [
+    "Indefinite",
+    "Both positive and negative directions"
+   ],
+   [
+    "Inertia",
+    "(positive, negative, zero) counts"
+   ],
+   [
+    "Sylvester criterion",
+    "All leading minors >0"
+   ],
+   [
+    "Law of inertia",
+    "Preserved by nonsingular congruence"
+   ]
+  ],
+  "tricks": [
+   "For a cross-term 2bxy, put b in each off-diagonal entry.",
+   "Check Δ₁ before computing higher minors.",
+   "For a 2×2 form, use a and determinant together.",
+   "Do not use determinant sign alone.",
+   "For semidefinite, remember all principal minors."
+  ],
+  "shortcuts": [
+   "A real symmetric matrix is positive definite iff its smallest eigenvalue is positive.",
+   "For 2×2: Δ₁=a and Δ₂=ac−b².",
+   "A zero eigenvalue means semidefinite or indefinite, never strict definite."
+  ],
+  "remember": [
+   "Strict definiteness excludes zero eigenvalues.",
+   "Inertia is the count of positive, negative and zero directions.",
+   "Leading minors for strict tests; all principal minors for semidefinite tests."
+  ]
+ },
+ "howto": "Start by writing the symmetric matrix correctly, especially the cross-term. Use eigenvalue signs when available; otherwise apply Sylvester's leading-minor criterion for strict definiteness. Treat semidefinite cases separately, then use orthogonal diagonalisation and inertia for canonical reduction.",
+ "refs": [
+  {
+   "title": "Introduction to Linear Algebra",
+   "where": "Positive definite matrices and quadratic forms",
+   "site": "MIT OpenCourseWare 18.06",
+   "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Eigenvalue and quadratic-form foundations."
+  },
+  {
+   "title": "Matrix Analysis",
+   "where": "Definiteness and inertia",
+   "site": "Roger A. Horn and Charles R. Johnson",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Rigorous treatment of definiteness, congruence and inertia."
+  },
+  {
+   "title": "Linear Algebra",
+   "where": "Quadratic forms",
+   "site": "NPTEL",
+   "url": "https://nptel.ac.in/courses/111106051",
+   "type": "Video course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "University-level quadratic forms and canonical reduction."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Sign classifications are anchored in exact diagonal matrices and exact leading-principal-minor calculations. Not production-approved.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Foundation: quadratic forms and signs",
+   "objective": "Recall symmetric matrices, eigenvalues and definiteness.",
+   "ask": {
+    "q": "What is the quadratic form associated with a symmetric matrix A?",
+    "nudge": "It is a scalar formed from x transpose, A and x."
+   },
+   "body": [
+    "A quadratic form in x is Q(x)=xᵀAx, where A is a real symmetric matrix. For two variables it has the form ax²+2bxy+cy².",
+    "The factor 2 on the cross-term matters: xᵀ[[a,b],[b,c]]x=ax²+2bxy+cy². Any real quadratic form can be represented by a symmetric matrix, since the antisymmetric part contributes zero to xᵀAx."
+   ],
+   "items": [
+    {
+     "ask": "What does positive definite mean?",
+     "recall": "Q(x)>0 for every non-zero real vector x.",
+     "refresh": [
+      "The strict inequality applies to every non-zero vector. At x=0 the form is necessarily zero, so zero is excluded from the definition.",
+      "For a real symmetric matrix, positive definiteness is equivalent to all eigenvalues being strictly positive. It is also equivalent to positivity of all leading principal minors by Sylvester's criterion.",
+      "For a 2×2 matrix [[a,b],[b,c]], the determinant ac−b² is only one part of the test: positive definiteness requires a>0 as well as ac−b²>0. This prevents a negative definite matrix from being misclassified just because its determinant is positive."
+     ]
+    },
+    {
+     "ask": "What is a principal minor?",
+     "recall": "The determinant of a submatrix formed by selecting the same index set for rows and columns.",
+     "refresh": [
+      "A leading principal minor uses the first k rows and first k columns. For a 3×3 matrix, the leading minors have orders 1, 2 and 3.",
+      "Sylvester's criterion uses leading principal minors, not every arbitrary minor. Confusing these tests is a common exam trap."
+     ]
+    },
+    {
+     "ask": "What is an eigenvalue of a symmetric matrix?",
+     "recall": "A scalar λ for which Av=λv for some non-zero vector v.",
+     "refresh": [
+      "Real symmetric matrices have real eigenvalues and an orthonormal eigenbasis. This makes eigenvalues a direct test of the signs of the quadratic form.",
+      "Under an orthogonal change of coordinates, a symmetric quadratic form becomes a sum of eigenvalue-weighted squares. The signs of those coefficients determine definiteness."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "A quadratic surface has a signature",
+   "objective": "Interpret positive, negative and mixed curvature.",
+   "ask": {
+    "q": "What does Q(x,y)=x²−4y² tell you about the sign of the form?",
+    "nudge": "Try (1,0) and (0,1)."
+   },
+   "body": [
+    "A positive definite form is bowl-shaped: it is positive in every non-zero direction. A negative definite form is the same shape turned upside down.",
+    "An indefinite form has both positive and negative directions. For x²−4y², the x-axis gives a positive value and the y-axis a negative value. A semidefinite form allows zero along some non-zero directions but never changes sign."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "The four definiteness classes",
+   "objective": "Classify forms using eigenvalue signs.",
+   "ask": {
+    "q": "A symmetric matrix has eigenvalues 4, 1 and 0. Classify its quadratic form.",
+    "nudge": "All eigenvalues are non-negative, but one is zero."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Eigenvalue classification",
+     "body": "Positive definite: all λᵢ>0. Positive semidefinite: all λᵢ≥0. Negative definite: all λᵢ<0. Negative semidefinite: all λᵢ≤0. Indefinite: at least one positive and one negative eigenvalue."
+    },
+    {
+     "t": "step",
+     "h": "Zero eigenvalues matter",
+     "body": "A zero eigenvalue rules out strict definiteness. If the remaining eigenvalues are all positive, the form is positive semidefinite; if signs are mixed, it is indefinite."
+    },
+    {
+     "t": "def",
+     "h": "Inertia",
+     "body": "The inertia is the triple (p,n,z): number of positive, negative and zero eigenvalues, counted with multiplicity. It is invariant under nonsingular congruence transformations."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 8,
+   "title": "Sylvester's criterion",
+   "objective": "Use leading principal minors to test definiteness.",
+   "ask": {
+    "q": "For a 3×3 symmetric matrix, what signs must its three leading principal minors have for positive definiteness?",
+    "nudge": "They must all be strictly positive."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Positive definite",
+     "body": "A real symmetric A is positive definite iff Δ₁>0, Δ₂>0, …, Δₙ>0, where Δₖ is the kth leading principal minor."
+    },
+    {
+     "t": "formula",
+     "h": "Negative definite",
+     "body": "A is negative definite iff (−1)ᵏΔₖ>0 for every k. For order 3 the signs are Δ₁<0, Δ₂>0, Δ₃<0."
+    },
+    {
+     "t": "step",
+     "h": "Do not use the wrong minors",
+     "body": "The criterion uses leading principal minors in the fixed top-left sequence. Checking only det(A), or checking every principal minor without understanding the theorem, is not the intended shortcut."
+    }
+   ],
+   "flow": {
+    "title": "Classify a real symmetric quadratic form",
+    "alt": "Flow for choosing eigenvalue or minor tests",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Write Q=xᵀAx with A symmetric",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Eigenvalues available?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Count positive, negative and zero",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Use leading minors for strict tests",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 2,
+      "label": "Semidefinite? check all principal minors",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "State class and inertia",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "yes"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "no"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     },
+     {
+      "from": "c",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 8,
+   "title": "Worked: a 2×2 classification",
+   "objective": "Classify a quadratic form using its matrix and minors.",
+   "ask": {
+    "q": "For A=[[2,1],[1,2]], what are Δ₁, Δ₂ and the definiteness?",
+    "nudge": "Compute 2 and 4−1."
+   },
+   "problem": "Classify Q(x,y)=2x²+2xy+2y².",
+   "steps": [
+    {
+     "say": "Write the symmetric matrix.",
+     "math": "A=[[2,1],[1,2]]",
+     "why": "The cross-term 2xy means the off-diagonal entries are both 1."
+    },
+    {
+     "say": "Compute the leading principal minors.",
+     "math": "Δ₁=2>0; Δ₂=det(A)=4−1=3>0",
+     "why": "Both required leading minors are strictly positive."
+    },
+    {
+     "say": "Conclude using Sylvester's criterion.",
+     "math": "Q is positive definite.",
+     "why": "For a real symmetric 2×2 matrix, Δ₁>0 and Δ₂>0 are necessary and sufficient."
+    }
+   ],
+   "scenario": {
+    "teaser": "A covariance-like quadratic penalty must never be negative.",
+    "title": "Positive definiteness in a least-squares penalty",
+    "body": [
+     "A quadratic penalty xᵀAx is used to measure the cost of a parameter displacement. If A is positive definite, every non-zero displacement has strictly positive cost.",
+     "If A is only positive semidefinite, some non-zero directions have zero cost. These are flat directions and may signal an unidentified or unpenalised component.",
+     "The matrix must be symmetric for the standard real quadratic-form interpretation. The definiteness check is therefore a structural diagnostic, not just a determinant exercise.",
+     "The same reasoning applies to regularisation penalties and covariance matrices, although a covariance matrix is naturally positive semidefinite rather than necessarily positive definite when variables are linearly dependent."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 8,
+   "title": "Canonical reduction by orthogonal transformation",
+   "objective": "Reduce a symmetric form to a sum of weighted squares.",
+   "ask": {
+    "q": "If A is real symmetric, what transformation diagonalises it while preserving Euclidean lengths?",
+    "nudge": "Use an orthogonal matrix Q."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Spectral reduction",
+     "body": "A=QΛQᵀ, where QᵀQ=I and Λ=diag(λ₁,…,λₙ). With y=Qᵀx, Q(x)=yᵀΛy=Σλᵢyᵢ²."
+    },
+    {
+     "t": "step",
+     "h": "Why the signs are preserved",
+     "body": "Orthogonal transformations are invertible coordinate changes. They rotate or reflect axes but do not collapse directions. The diagonal coefficients therefore expose the positive, negative and zero directions."
+    },
+    {
+     "t": "def",
+     "h": "Congruence and inertia",
+     "body": "A and PᵀAP are congruent for nonsingular P. Sylvester's law of inertia says their counts of positive, negative and zero squares are identical, even though the numerical eigenvalues need not be identical under general congruence."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s6",
+   "mins": 8,
+   "title": "Guided: reduce a diagonal form",
+   "objective": "Read inertia and definiteness from a canonical expression.",
+   "problem": "Consider Q=3u²−2v²+0w².",
+   "hints": [
+    "The diagonal coefficients are already the eigenvalues of the diagonal matrix.",
+    "Count positive, negative and zero coefficients separately.",
+    "There is one of each sign category; the form takes both positive and negative values."
+   ],
+   "answer": "Inertia (1,1,1); the form is indefinite.",
+   "solution": "The coefficients are 3, −2 and 0. There is one positive square, one negative square and one zero square. Since both positive and negative directions occur, the form is indefinite.",
+   "ask": {
+    "q": "Can a form with inertia (2,0,1) be positive definite?",
+    "nudge": "A zero direction prevents strict positivity."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 7,
+   "title": "Principal minors: semidefinite caution",
+   "objective": "Avoid applying strict Sylvester signs to semidefinite forms.",
+   "ask": {
+    "q": "Is diag(2,0) positive definite or positive semidefinite?",
+    "nudge": "Test the non-zero vector (0,1)."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Semidefinite tests",
+     "body": "For positive semidefinite matrices, every principal minor (not merely the leading ones) must be non-negative. For negative semidefinite, principal minors of order k must have sign (−1)ᵏ or be zero."
+    },
+    {
+     "t": "step",
+     "h": "Strict versus non-strict",
+     "body": "Sylvester's strict leading-minor criterion is the fast test for positive or negative definiteness. It cannot simply be changed to ≥0 to test semidefiniteness; all principal minors matter."
+    },
+    {
+     "t": "formula",
+     "h": "A simple counterexample",
+     "body": "A=[[0,1],[1,0]] has leading minors Δ₁=0 and Δ₂=−1. It is indefinite, with eigenvalues 1 and −1. Non-negative leading minors alone would not certify semidefiniteness."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Guided: apply Sylvester's criterion",
+   "objective": "Test a 3×3 symmetric matrix systematically.",
+   "problem": "A symmetric matrix has leading principal minors Δ₁=2, Δ₂=3 and Δ₃=5.",
+   "hints": [
+    "Write down all three signs before naming the class.",
+    "All three leading minors are strictly positive.",
+    "Apply Sylvester's criterion for positive definiteness."
+   ],
+   "answer": "Positive definite.",
+   "solution": "Since Δ₁=2>0, Δ₂=3>0 and Δ₃=5>0, Sylvester's criterion gives positive definiteness.",
+   "ask": {
+    "q": "If instead Δ₁<0, Δ₂>0 and Δ₃<0, what is the class?",
+    "nudge": "For order 3, these are the alternating signs for negative definiteness."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s9",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the definitions and criteria.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "Define positive definite.",
+     "a": "xᵀAx>0 for all non-zero x."
+    },
+    {
+     "q": "What is inertia?",
+     "a": "The counts (positive, negative, zero) eigenvalues."
+    },
+    {
+     "q": "State Sylvester's positive-definite criterion.",
+     "a": "All leading principal minors are strictly positive."
+    },
+    {
+     "q": "What does Sylvester's law of inertia preserve?",
+     "a": "The counts of positive, negative and zero squares under nonsingular congruence."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s10",
+   "mins": 8,
+   "title": "Four classification decisions",
+   "objective": "Use the correct test on each example.",
+   "problem": "Classify each diagonal quadratic form.",
+   "steps": [
+    {
+     "say": "Q₁=x²+2y²+3z².",
+     "blank": {
+      "prompt": "Classify Q₁.",
+      "answer": "Positive definite",
+      "accept": [
+       "positive definite"
+      ],
+      "hint": "All three coefficients are positive."
+     },
+     "why": "Every non-zero vector gives a strictly positive value."
+    },
+    {
+     "say": "Q₂=−x²−4y².",
+     "blank": {
+      "prompt": "Classify Q₂.",
+      "answer": "Negative definite",
+      "accept": [
+       "negative definite"
+      ],
+      "hint": "All coefficients are negative."
+     },
+     "why": "Every non-zero vector gives a strictly negative value."
+    },
+    {
+     "say": "Q₃=x²+y².",
+     "blank": {
+      "prompt": "As a form on R³ with no z² term, classify it.",
+      "answer": "Positive semidefinite",
+      "accept": [
+       "positive semidefinite"
+      ],
+      "hint": "It is non-negative but vanishes for (0,0,1)."
+     },
+     "why": "There is a non-zero zero direction, so it is not positive definite."
+    },
+    {
+     "say": "Q₄=x²−y²+z².",
+     "blank": {
+      "prompt": "Classify Q₄.",
+      "answer": "Indefinite",
+      "accept": [
+       "indefinite"
+      ],
+      "hint": "There are both positive and negative coefficients."
+     },
+     "why": "The form takes both signs."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s11",
+   "mins": 6,
+   "title": "The geometry behind inertia",
+   "objective": "Connect inertia with the shape of level sets.",
+   "ask": {
+    "q": "What does one positive and one negative eigenvalue produce in two dimensions?",
+    "nudge": "The level curves are hyperbola-shaped."
+   },
+   "body": [
+    "For Q(x)=1, a positive definite form produces an ellipsoid in higher dimensions. A negative definite form has no real points at positive level 1, while an indefinite form produces hyperboloid-type geometry.",
+    "Zero eigenvalues create flat directions. In statistics these may correspond to non-identifiable directions or redundant variables. The inertia is the coordinate-free summary of these directions."
+   ],
+   "scenario": {
+    "teaser": "A flat direction appears in a quadratic penalty.",
+    "title": "A zero eigenvalue as an unpenalised direction",
+    "body": [
+     "Suppose a model uses Q(β)=βᵀAβ as a penalty. If A is positive definite, every non-zero coefficient displacement incurs a positive penalty.",
+     "If A is positive semidefinite with a zero eigenvalue, there is a non-zero direction v with Av=0 and vᵀAv=0. Moving along that direction does not change the penalty, so the quadratic form has a flat direction.",
+     "This can be intentional, as in a penalty that leaves an intercept unpenalised, or it can reveal redundancy. The inertia (p,n,z) reports how many positive, negative and flat directions exist, independent of the nonsingular coordinate change used to describe the parameters."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s12",
+   "mins": 7,
+   "title": "Worked: determinant is not enough",
+   "objective": "Show why a positive determinant alone does not imply positive definiteness.",
+   "ask": {
+    "q": "For A=[[−1,0],[0,−2]], determinant is positive. Is the form positive definite?",
+    "nudge": "Check the first leading principal minor."
+   },
+   "problem": "Compare A₁=diag(2,3) and A₂=diag(−2,−3).",
+   "steps": [
+    {
+     "say": "Compute determinants.",
+     "math": "det(A₁)=6; det(A₂)=6",
+     "why": "Both determinants are positive."
+    },
+    {
+     "say": "Check the first leading principal minor.",
+     "math": "Δ₁(A₁)=2>0; Δ₁(A₂)=−2<0",
+     "why": "The sign of the first minor distinguishes positive from negative definiteness."
+    },
+    {
+     "say": "State the lesson.",
+     "math": "det(A)>0 alone does not determine definiteness.",
+     "why": "For 2×2 matrices, positive determinant means eigenvalues have the same sign; trace or the first minor distinguishes their sign."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s13",
+   "mins": 5,
+   "title": "Trap check: six statements",
+   "objective": "Identify common errors in definiteness tests.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "A positive definite matrix has all positive eigenvalues.",
+     "tf": true,
+     "why": "For real symmetric matrices this is equivalent to positive definiteness."
+    },
+    {
+     "claim": "A positive determinant guarantees positive definiteness.",
+     "tf": false,
+     "why": "A negative definite 2×2 matrix can have a positive determinant."
+    },
+    {
+     "claim": "Sylvester's strict criterion uses leading principal minors.",
+     "tf": true,
+     "why": "All leading principal minors must be strictly positive."
+    },
+    {
+     "claim": "For semidefiniteness, checking only leading principal minors is sufficient in general.",
+     "tf": false,
+     "why": "All principal minors must be non-negative."
+    },
+    {
+     "claim": "Inertia is invariant under nonsingular congruence.",
+     "tf": true,
+     "why": "This is Sylvester's law of inertia."
+    },
+    {
+     "claim": "An indefinite form takes both positive and negative values.",
+     "tf": true,
+     "why": "That is the defining sign behaviour."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s14",
+   "mins": 3,
+   "title": "Your final definiteness checklist",
+   "objective": "Choose the right test without mixing the criteria.",
+   "body": [
+    "1. Write Q(x)=xᵀAx using a symmetric A; halve the displayed cross-term to obtain off-diagonal entries.",
+    "2. If eigenvalues are available, count their positive, negative and zero signs.",
+    "3. For positive definite: all leading principal minors >0.",
+    "4. For negative definite: (−1)^kΔ_k>0 for every k.",
+    "5. For semidefinite: use all principal minors with the appropriate non-strict signs.",
+    "6. For canonical reduction, use orthogonal diagonalisation for real symmetric A; inertia is preserved by nonsingular congruence."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s15",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate independent classification skill.",
+   "setId": "maths_t3_mastery"
+  }
+ ]
+}
