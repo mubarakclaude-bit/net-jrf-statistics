@@ -179,19 +179,27 @@
       ],
       "items": [
         {
-          "ask": "Can one list contain a numeric vector and a character string?",
-          "recall": "Yes.",
+          "ask": "What is a list?",
+          "recall": "A container that can hold objects of different types and lengths.",
           "refresh": [
-            "Lists can contain different object types.",
-            "This is a key difference from atomic vectors, whose elements share a common type."
+            "A list is a recursive R object whose elements may be numeric vectors, character strings, matrices, other lists or many other object types. It is therefore useful for storing mixed records.",
+            "Inspect a list with str() and names() before extracting an element. This reveals the nesting and element names, reducing mistakes when a question uses several levels of indexing."
           ]
         },
         {
-          "ask": "What does names(x) return for a named list?",
-          "recall": "The element names.",
+          "ask": "What is a factor?",
+          "recall": "A categorical variable represented by integer codes and levels.",
           "refresh": [
-            "Names label list elements.",
-            "Use names before choosing $ or named [[ ]] extraction."
+            "A factor stores categorical observations using integer codes associated with a levels attribute. The printed values are the labels, while the underlying codes identify positions in the level order.",
+            "The default level order is often alphabetical. If the category order has meaning, supply levels explicitly and use ordered=TRUE when the categories are ordinal."
+          ]
+        },
+        {
+          "ask": "What does x[[1]] return for a list?",
+          "recall": "The first element itself.",
+          "refresh": [
+            "Double brackets extract the selected element from a list. If the first element is a numeric vector, x[[1]] returns that vector rather than a list wrapper containing it.",
+            "Single brackets have a different purpose: x[1] returns a one-element sublist. The distinction matters when a later function expects a vector, a scalar or another list."
           ]
         }
       ],
@@ -215,7 +223,8 @@
         "title": "A tutor stores mixed information",
         "body": [
           "A tutor stores a numeric score vector and a character name in one list. The tutor needs the score vector itself rather than a one-element list wrapper.",
-          "Single-bracket extraction preserves list structure; double brackets extract the element."
+          "Single-bracket extraction preserves list structure; double brackets extract the element.",
+          " The tutor should inspect the element names and factor levels before using the stored values in a calculation or report. A numeric conversion of a factor can expose its internal codes rather than the original category labels, so it must not be interpreted as the measurement values without checking how the factor was constructed."
         ],
         "q": "Which expression extracts the score vector itself?",
         "answer": "x[[1]] or x$score."
@@ -403,7 +412,24 @@
       "ask": {
         "q": "What does as.character(f) return?",
         "nudge": "It returns the labels, not the integer codes."
-      }
+      },
+      "solution": [
+        {
+          "say": "Read the supplied level order.",
+          "math": "low = 1, medium = 2, high = 3.",
+          "why": "The integer codes follow the explicit levels argument."
+        },
+        {
+          "say": "Match each observation to its level.",
+          "math": "low, high, medium maps to 1, 3, 2.",
+          "why": "Each label is replaced by its position in the level sequence."
+        },
+        {
+          "say": "Report the internal codes.",
+          "math": "as.numeric(f) gives c(1, 3, 2).",
+          "why": "This is the factor code vector, not a numeric measurement scale."
+        }
+      ]
     },
     {
       "kind": "theory",
@@ -452,7 +478,8 @@
         "title": "A statistician formats a reported estimate",
         "body": [
           "A statistician needs to display a value with a fixed number of decimal places. The formatting function produces text for a report, while the original numeric variable remains available for calculations.",
-          "Formatting is not the same as replacing the underlying value with a rounded number."
+          "Formatting is not the same as replacing the underlying value with a rounded number.",
+          " The tutor should inspect the element names and factor levels before using the stored values in a calculation or report. A numeric conversion of a factor can expose its internal codes rather than the original category labels, so it must not be interpreted as the measurement values without checking how the factor was constructed."
         ],
         "q": "Should the formatted string be used for further arithmetic?",
         "answer": "No; retain the numeric variable for calculations."
@@ -460,7 +487,24 @@
       "ask": {
         "q": "Which function can create formatted output using a template?",
         "nudge": "It uses C-style format specifications."
-      }
+      },
+      "solution": [
+        {
+          "say": "Extract the outer list element.",
+          "math": "x[[1]] is list(b = 12).",
+          "why": "Double brackets return the selected inner list."
+        },
+        {
+          "say": "Extract the nested value.",
+          "math": "x[[1]][[1]] is 12.",
+          "why": "The second extraction reaches the numeric element stored under b."
+        },
+        {
+          "say": "Distinguish the bracket forms.",
+          "math": "x[1] is a one-element sublist.",
+          "why": "Single brackets preserve the list container."
+        }
+      ]
     },
     {
       "kind": "trapcheck",
