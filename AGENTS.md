@@ -158,15 +158,21 @@ draft pull request first. Run `npm test` before and after. The owner reviews eve
 - **A lesson PR is reviewed by the OTHER assistant before the owner merges it.** Green CI proves the lesson is well-formed;
   it cannot prove the content is right. The author never reviews its own lesson. The reviewer works from the PR alone and
   posts the checklist below as a PR comment, saying plainly what it did and did not check.
-- **Keep pushes few: Vercel allows 100 deployments a day.** Every push to a branch with an open PR builds a preview and uses
-  one, and when the limit is hit the live site cannot redeploy either. So:
-  1. One commit per push, holding every file you changed (a single multi-file commit), never file by file.
-  2. Do not push to see what happens. Re-read your files against `SPEC.md` and this file first. After a CI failure, read the
-     whole failing log, fix everything it shows in one commit, and push once.
-  3. Several related lessons go on one branch in one PR (one group per branch): author and check them all before the first push.
+- **Keep deployments few: Vercel allows 100 a day.** `vercel.json` sets `git.deploymentEnabled` so that **only the production
+  branch (`multi-author-hosting`) deploys automatically**; pushes to feature branches and PRs create no Vercel deployment, and CI
+  (`validate`, `browser`, `acceptance`) is the verification, since `browser` builds the full site. What costs a deployment is a
+  merge to the production branch, and when the limit is hit the live site cannot redeploy either. So:
+  1. **One PR per group of related lessons, one merge.** The whole Nonparametric module is one branch, one PR, one deploy.
+  2. One commit per push, holding every file you changed (a single multi-file commit), never file by file.
+  3. Do not push to see what happens. Run `npm run lesson -- check <topicId>` for each topic and `npm run check` first (a session
+     with no shell reads the files against `SPEC.md` and this file). After a CI failure, read the whole failing log, fix everything
+     it shows in one commit, and push once.
   4. Keep the PR a draft until the files are complete; never push placeholders. Never push empty commits to rerun CI
      (use "Re-run jobs" in GitHub Actions instead).
-  5. If a push fails or Vercel says "Resource is limited", stop and tell the owner. Do not retry until told.
+  5. If Vercel says "Resource is limited" or "rate limited", stop and tell the owner. Do not retry until told. The limit rolls over
+     24 hours from the first rejected deploy.
+  6. If a feature or lesson branch ever shows a Vercel check, the `**` rule did not match that branch name: tell the owner so
+     the patterns can be made explicit.
 - **Do not merge or deploy** unless the owner told you to in this task. Merging to the production branch redeploys the
   Vercel site.
 
