@@ -1,790 +1,710 @@
 {
- "id": "regressiont2",
- "topicId": "regression-t2",
- "moduleId": "regression",
- "title": "Gauss–Markov, BLUE and Estimability",
- "breadcrumb": "Regression → Properties of least squares → Gauss–Markov, BLUE, estimability",
- "engine": "B",
- "engineName": "Test unbiasedness first with c′X = ℓ′, then compare variances; the best unbiased linear rule is least squares",
- "version": "1.0",
- "status": "approved",
- "estMin": 100,
- "objectives": [
-  "State the Gauss–Markov theorem and the assumptions it needs, and say which it does not.",
-  "Test a candidate estimator for unbiasedness with c′X = ℓ′ and compute its variance as σ²c′c.",
-  "Find the BLUE and its covariance matrix in a small system such as Q11.",
-  "Decide which linear parametric functions are estimable when X is rank-deficient.",
-  "Classify omitted variables, heteroscedasticity and multicollinearity by what each breaks."
- ],
- "prereq": [
-  {
-   "id": "p1",
-   "name": "Variance of a weighted sum",
-   "why": "Var(a′y) = σ²a′a is how every competitor is compared."
-  },
-  {
-   "id": "p2",
-   "name": "The unbiasedness condition a′X = ℓ′",
-   "why": "It is the first test applied to every option."
-  },
-  {
-   "id": "p3",
-   "name": "Rank and row space",
-   "why": "Estimability is membership of the row space."
-  },
-  {
-   "id": "p4",
-   "name": "OLS and its covariance matrix",
-   "why": "The benchmark is σ²(X′X)⁻¹."
-  }
- ],
- "traps": [
-  "Swapping the divisors 6 and 2 in Q11 (the answer was 'right working, wrong quantity').",
-  "Claiming near multicollinearity biases OLS.",
-  "Requiring normality for BLUE.",
-  "Treating an unbiased rule as best: (y₁ + y₂)/3 is unbiased and worse.",
-  "Calling every parameter estimable in a rank-deficient design."
- ],
- "revision": {
-  "sheet": [
-   "BLUE = linear + unbiased + least variance.",
-   "Assumptions: E(u) = 0, Var(u) = σ²I, X fixed and full rank. No normality.",
-   "Var(β̂) = σ²(X′X)⁻¹. Unbiasedness test: c′X = ℓ′.",
-   "Proof: c = a + d with d′X = 0 and a′d = 0, so Var = σ²(a′a + d′d).",
-   "Q11: X′X = diag(6, 2); β̂₁ = (y₁ + 2y₂ + y₃)/6; β̂₂ = (y₁ − y₃)/2; variances σ²/6, σ²/2; covariance 0.",
-   "Wrong Q11 options give expectations 3β₁, 24β₁, β₂/3: all biased.",
-   "Estimable: ℓ′ in the row space of X. Two-group design: τ₁ − τ₂ and α + τ₁ yes; τ₁, α alone no.",
-   "Omitted variable: E(b₁*) = β₁ + β₂δ. 2 × 0.6 = 1.2 bias.",
-   "Heteroscedasticity: unbiased, not BLUE. Multicollinearity: unbiased, BLUE, variance × 1/(1 − r²) = 50.25 at r = 0.99."
+  "id": "regressiont2",
+  "topicId": "regression-t2",
+  "moduleId": "regression",
+  "title": "6.2 — Gauss–Markov, BLUE and Estimability",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.2 Gauss–Markov, BLUE and estimability",
+  "engine": "B",
+  "engineName": "Move from the linear model to unbiased estimators, least squares and estimable functions.",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 98,
+  "objectives": [
+    "State the Gauss–Markov assumptions and conclusion without adding a normality assumption.",
+    "Derive the OLS estimator and its variance–covariance matrix.",
+    "Explain why OLS is BLUE among linear unbiased estimators.",
+    "Determine whether a linear function of regression parameters is estimable using the row space of the design matrix.",
+    "Solve the June 2026 BLUE question and verify every coefficient and divisor."
   ],
-  "cards": [
-   [
-    "BLUE",
-    "Least variance among linear unbiased estimators"
-   ],
-   [
-    "Unbiasedness test",
-    "c′X = ℓ′"
-   ],
-   [
-    "Var(β̂)",
-    "σ²(X′X)⁻¹"
-   ],
-   [
-    "Q38 answer",
-    "Estimates are biased: NOT a consequence"
-   ],
-   [
-    "Estimable",
-    "ℓ′ in row space of X"
-   ],
-   [
-    "Variance of c′y",
-    "σ²c′c"
-   ]
-  ],
-  "tricks": [
-   "Multiply the weights into X: the target must come back.",
-   "Diagonal X′X means uncorrelated estimators.",
-   "Near collinearity hurts the variance, never the mean."
-  ],
-  "shortcuts": [
-   "Q11 divisors are 6 then 2: the diagonal of X′X.",
-   "VIF = 1/(1 − r²): 50.25 at 0.99.",
-   "(y₁ + 2y₂)/5 has variance σ²/5."
-  ],
-  "remember": [
-   "Gauss–Markov needs the first two moments only.",
-   "A wrong divisor shows up at once as a biased estimator."
-  ]
- },
- "howto": "If short of time the lesson is scenes 4 (theorem), 5 (Q11 worked) and 8 (omission, heteroscedasticity, multicollinearity). It deliberately does not cover GLS (6.7), the full treatment of multicollinearity (6.5), or restricted least squares.",
- "refs": [
-  {
-   "title": "Econometrics",
-   "where": "Chapter 4, Least Squares Regression (Gauss–Markov)",
-   "site": "Bruce Hansen",
-   "url": "",
-   "type": "Free online textbook",
-   "free": true,
-   "checked": "2026-11-06",
-   "why": "The Gauss–Markov theorem and its proof, scene 3."
-  },
-  {
-   "title": "Econometric Analysis",
-   "where": "Chapter 4, Section 4.3",
-   "site": "William Greene",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-11-06",
-   "why": "Properties of least squares and omitted-variable bias, scenes 3 and 7."
-  },
-  {
-   "title": "Linear Regression Analysis",
-   "where": "Chapter 3, Estimable functions",
-   "site": "Seber and Lee",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-11-06",
-   "why": "Estimability in the less-than-full-rank model, scene 7."
-  }
- ],
- "mastery": {
-  "minQ": 10,
-  "pass": 80,
-  "draw": 10,
-  "fmtMin": {
-   "numeric": 70,
-   "multi": 70
-  },
-  "diffMix": {
-   "easy": 3,
-   "moderate": 5,
-   "hard": 2
-  },
-  "noHints": true,
-  "retestDays": 7,
-  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
- },
- "provenance": "Anchor Q11 (key B, marked D, wrong): answered wrongly through swapped divisors; the key was re-derived. The Q38 variants (bias, heteroscedasticity, multicollinearity) are placed here because they ask which OLS properties survive; Q38 itself (multicollinearity, key C, marked B) is anchored to topic 6.5 and used here only for the 'not biased' boundary. Verified by computing in verify_regression_t1_t4.py: X′X = diag(6, 2); weights (1,2,1)/6 and (1,0,−1)/2; variances σ²/6 and σ²/2; covariance 0; every Q11 option's expectation (3β₁ and β₂/3; 3β₁ and β₁/3; 24β₁; the key unbiased); the null vector of X′ and the variance 1/6 + t²; the two-reading model (variance 0.2 against 2/9 and 0.25); estimability by rank in the two-group design, and −5 identical across two solutions. By simulation: heteroscedastic OLS mean slope 0.5017 against 0.5 with variance 1.2399 against the sandwich 1.24 (100,000 draws); near-collinear estimates 1.008 and 0.993 for true 1, 1 (20,000 draws); omitted-variable mean 2.2008 against 2.2 (40,000 draws). The variance-inflation factor at r = 0.99 is 50.25. Bank defects: variant j26v-q11-06's explanation field holds the text of an unrelated Q12; variant stems are otherwise usable.",
- "scenes": [
-  {
-   "kind": "foundation",
-   "id": "s0",
-   "mins": 7,
-   "title": "Before the lesson — four things it will assume",
-   "objective": "Check linearity, unbiasedness, the variance of a weighted sum and the rank idea behind estimability.",
-   "ask": {
-    "q": "If an estimator is a′y with fixed weights a, what is its variance when Var(y) = σ²I?",
-    "nudge": "Square each weight."
-   },
-   "body": [
-    "An estimator is a rule that turns data into a number. A linear estimator turns the data into that number by a weighted sum: a₁y₁ + a₂y₂ + … + aₙyₙ, with weights that are fixed in advance and do not depend on y. Unbiased means the rule hits the true value on average.",
-    "Among all linear unbiased rules for a parameter there are usually infinitely many. They differ in how noisy they are. The Gauss–Markov theorem says which one is least noisy: the least-squares rule. This lesson proves it, and then asks the question the June paper asked in Q11, which is to find that best rule when the model has two unknowns and three equations.",
-    "The earlier mark was lost on the divisors, not the method. The working was right and the answer was written with 2 and 6 swapped. The aim here is to check an answer by a test that takes thirty seconds: does it give the right expected value?"
-   ],
-   "items": [
+  "prereq": [
     {
-     "ask": "For fixed weights a and Var(y) = σ²I, what is Var(a′y)?",
-     "recall": "σ²a′a, which is σ² times the sum of the squared weights.",
-     "refresh": [
-      "Var(a′y) = a′Var(y)a. With Var(y) = σ²I this is σ²a′Ia = σ²a′a = σ²(a₁² + a₂² + … + aₙ²).",
-      "So the noise of a weighted sum is the sum of squared weights times σ². Big weights mean big noise. Two weights of 1/2 give (1/4 + 1/4)σ² = σ²/2; one weight of 1 gives σ². Spreading the weight reduces variance."
-     ]
+      "id": "p1",
+      "name": "Matrix multiplication and transpose",
+      "why": "OLS uses X′X and X′y."
     },
     {
-     "ask": "What does it mean for a′y to be unbiased for ℓ′β in y = Xβ + u?",
-     "recall": "E(a′y) = ℓ′β for every β, which means a′X = ℓ′.",
-     "refresh": [
-      "E(a′y) = a′E(y) = a′Xβ. For this to equal ℓ′β whatever β is, the vector multiplying β must match: a′X = ℓ′. That single equation is the unbiasedness condition.",
-      "It is a test you can run on any candidate answer: multiply the weights into the columns of X and see whether you get the target back."
-     ]
+      "id": "p2",
+      "name": "Expectation and variance of linear combinations",
+      "why": "Unbiasedness and estimator variance follow from these rules."
     },
     {
-     "ask": "What is the rank of a matrix and what is its row space?",
-     "recall": "Rank = the number of linearly independent rows (or columns); the row space is all weighted sums of the rows.",
-     "refresh": [
-      "The rows of X are vectors. Their weighted sums fill a space, the row space of X. The rank is the dimension of that space.",
-      "Example: the rows (1, 1, 0), (1, 1, 0), (1, 0, 1), (1, 0, 1) include only two different directions, so the rank is 2 even though X has 3 columns."
-     ]
-    },
-    {
-     "ask": "What is the OLS estimator and its covariance matrix?",
-     "recall": "β̂ = (X′X)⁻¹X′y and Var(β̂) = σ²(X′X)⁻¹.",
-     "refresh": [
-      "From topic 6.1: β̂ = (X′X)⁻¹X′y. It is a linear estimator, since it is a fixed matrix times y.",
-      "Var(β̂) = (X′X)⁻¹X′(σ²I)X(X′X)⁻¹ = σ²(X′X)⁻¹. If X′X is diagonal the inverse is diagonal, so the estimators are uncorrelated."
-     ]
+      "id": "p3",
+      "name": "Rank, linear independence and row space",
+      "why": "Estimability depends on the row space of X and identifiability on its rank."
     }
-   ]
-  },
-  {
-   "kind": "intuition",
-   "id": "s1",
-   "mins": 7,
-   "title": "Best means least noisy among the unbiased linear rules",
-   "objective": "State what BLUE means and why 'best' is only claimed inside a class.",
-   "body": [
-    "Best Linear Unbiased Estimator: three adjectives, each one a restriction. Linear: a weighted sum of the data. Unbiased: right on average. Best: the smallest variance. The claim is never that least squares beats every possible estimator. It is that no other rule that is linear and unbiased is less noisy.",
-    "Think of two scales weighing the same object. One reads the true weight plus noise. The other reads twice the true weight plus noise. Averaging them sensibly means trusting the second scale more, because its signal is larger relative to the same noise. The right weights come out of the algebra: (y₁ + 2y₂)/5.",
-    "Leave the class and the claim no longer holds. A rule that is slightly biased can have a much smaller variance, and so a smaller total error. That is why the theorem does not rule out shrinkage estimators; it only says that among unbiased linear rules, none beats OLS."
-   ],
-   "scenario": {
-    "teaser": "Three readings, two unknowns: how to combine them.",
-    "title": "Three equations, two unknowns",
-    "body": [
-     "A laboratory measures two quantities, β₁ and β₂, through three instruments. Instrument one reads β₁ + β₂, instrument two reads 2β₁, and instrument three reads β₁ − β₂. Each reading carries independent noise with the same variance σ².",
-     "There are three readings and only two unknowns, so the readings cannot all be matched exactly. Averaging in the obvious way, giving each reading equal weight, would treat instrument two the same as the others even though it speaks only about β₁ and speaks twice as loudly about it.",
-     "The least-squares answer weights the readings by how much information each carries about each unknown. For β₁ it turns out to be (y₁ + 2y₂ + y₃)/6, and for β₂ it is (y₁ − y₃)/2. Instrument two is ignored for β₂ because it contains no β₂ at all."
-    ],
-    "q": "Why does the estimator for β₂ give y₂ zero weight?",
-    "answer": "Because y₂ = 2β₁ + u₂ has no β₂ in it. Its weight on β₂ must be 0 for the estimator to be unbiased for β₂ whatever β₁ is."
-   },
-   "ask": {
-    "q": "Can a biased estimator ever have a smaller mean squared error than OLS?",
-    "nudge": "The theorem only compares inside one class."
-   }
-  },
-  {
-   "kind": "explore",
-   "id": "s2",
-   "mins": 7,
-   "title": "Unbiased is a restriction, not a virtue in itself",
-   "objective": "See that giving up a little bias can lower the total error, and why Gauss–Markov stays inside the unbiased class.",
-   "viz": {
-    "type": "risk-curves",
-    "caption": "Squared-error risk: the sample mean is flat and unbiased; the shrinkage estimator wins near the target and loses far from it."
-   },
-   "body": [
-    "The flat line is the risk of the sample mean, an unbiased estimator. Its risk is its variance, the same for every θ. Gauss–Markov is a statement about this kind of estimator: nothing in the same class has a lower line.",
-    "Now raise the shrinkage weight toward 0. The shrinkage estimator is biased, and its risk dips below the flat line near the target and rises above it far from the target. This is the trade the theorem does not forbid.",
-    "So the theorem is exact and narrow. Inside the unbiased linear class OLS is optimal; outside it, a different trade-off can win somewhere."
-   ],
-   "ask": {
-    "q": "Where on the θ axis does the shrinkage estimator beat the sample mean?",
-    "nudge": "Look near the constant guess."
-   }
-  },
-  {
-   "kind": "theory",
-   "id": "s3",
-   "mins": 9,
-   "title": "The Gauss–Markov theorem",
-   "objective": "State the assumptions and the conclusion, and see where each assumption is used.",
-   "blocks": [
+  ],
+  "traps": [
+    "BLUE means best (minimum variance) among linear unbiased estimators, not among all estimators.",
+    "Normality is not required for the Gauss–Markov theorem.",
+    "Under V(u)=σ²I, Var(β̂)=σ²(X′X)⁻¹ when X has full column rank.",
+    "For rank-deficient X, do not blindly invert X′X; only estimable functions have unique unbiased linear estimators.",
+    "A′β is estimable iff a lies in the row space of X (equivalently a is in C(X′)).",
+    "The June 2026 question's divisors are 6 for β̂₁ and 2 for β̂₂."
+  ],
+  "howto": "Write y=Xβ+u; check E(u|X)=0 and V(u|X)=σ²I; calculate X′X and X′y; solve β̂=(X′X)⁻¹X′y when X has full column rank; verify unbiasedness and variance; for a′β, check whether a belongs to the row space of X.",
+  "refs": [
     {
-     "t": "formula",
-     "h": "Setting",
-     "body": "y = Xβ + u,   E(u) = 0,   Var(u) = σ²I,   X fixed with full column rank"
+      "title": "The Gauss–Markov theorem",
+      "where": "Linear regression and BLUE",
+      "site": "MIT OpenCourseWare",
+      "url": "https://ocw.mit.edu/",
+      "type": "University course material",
+      "free": true,
+      "checked": "2026-11-11",
+      "why": "Background for linear models and least squares."
     },
     {
-     "t": "formula",
-     "h": "The theorem",
-     "body": "Among all estimators ℓ′β̃ = c′y that are linear in y and unbiased for ℓ′β:\n    Var(c′y) ≥ Var(ℓ′β̂) = σ²ℓ′(X′X)⁻¹ℓ\nwith equality only for c′y = ℓ′β̂."
+      "title": "Linear Models",
+      "where": "Estimability and the Gauss–Markov theorem",
+      "site": "S. R. Searle",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Classical treatment of estimable functions and linear model theory."
     },
     {
-     "t": "def",
-     "h": "What each assumption buys",
-     "body": "E(u) = 0: makes OLS unbiased.\nVar(u) = σ²I: makes Var(β̂) = σ²(X′X)⁻¹ and the proof's last step work. It means constant variance and zero correlation.\nFull column rank: makes β̂ unique. Without it use estimability.\nNormality: not needed."
-    },
-    {
-     "t": "step",
-     "h": "Proof in four lines",
-     "body": "Take any linear unbiased c′y. Unbiasedness gives c′X = ℓ′. Write c = a + d, where a′ = ℓ′(X′X)⁻¹X′ is the OLS weight vector. Then d′X = c′X − a′X = ℓ′ − ℓ′ = 0. Also a′d = ℓ′(X′X)⁻¹X′d = ℓ′(X′X)⁻¹(d′X)′ = 0. So Var(c′y) = σ²c′c = σ²(a′a + d′d) ≥ σ²a′a, with equality exactly when d = 0."
+      "title": "Linear Statistical Inference and Its Applications",
+      "where": "Linear models",
+      "site": "C. R. Rao",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Foundational reference for linear estimation."
     }
-   ],
-   "table": {
-    "caption": "What goes wrong when an assumption fails",
-    "head": [
-     "Assumption fails",
-     "Unbiased?",
-     "BLUE?",
-     "Remedy"
+  ],
+  "provenance": "Grounded in the repository's official June 2026 Paper 2 question j26-q11 and six linked variants j26v-q11-01 to j26v-q11-06. The official answer B was independently re-derived by exact matrix arithmetic: X′X=diag(6,2), β̂₁=(y₁+2y₂+y₃)/6 and β̂₂=(y₁−y₃)/2. The June 2026 response record says the candidate marked D. Practice questions in the mastery pool are original, not official PYQs.",
+  "revision": {
+    "sheet": [
+      "Linear model: y=Xβ+u.",
+      "Gauss–Markov: E(u|X)=0 and V(u|X)=σ²I, with X full column rank for the standard inverse form.",
+      "OLS: β̂=(X′X)⁻¹X′y.",
+      "Unbiasedness: E(β̂|X)=β.",
+      "Variance: Var(β̂|X)=σ²(X′X)⁻¹.",
+      "BLUE: OLS has minimum variance among linear unbiased estimators.",
+      "Normality is not required for BLUE.",
+      "a′β is estimable iff a lies in row(X), equivalently C(X′).",
+      "Full column rank makes every linear combination of β estimable.",
+      "If X′X is singular, use rank/estimability reasoning; do not apply an ordinary inverse."
     ],
-    "rows": [
-     [
-      "E(u) = 0 (omitted correlated regressor)",
-      "No",
-      "No",
-      "Add the regressor"
-     ],
-     [
-      "Var(u) not σ²I (heteroscedastic or correlated)",
-      "Yes",
-      "No",
-      "GLS (topic 6.7)"
-     ],
-     [
-      "Near multicollinearity",
-      "Yes",
-      "Yes",
-      "Accept large variance; see topic 6.5"
-     ],
-     [
-      "Errors not normal",
-      "Yes",
-      "Yes",
-      "Nothing needed for BLUE"
-     ]
+    "cards": [
+      [
+        "OLS estimator",
+        "β̂=(X′X)⁻¹X′y."
+      ],
+      [
+        "Unbiasedness",
+        "E(β̂|X)=β."
+      ],
+      [
+        "Variance",
+        "σ²(X′X)⁻¹."
+      ],
+      [
+        "BLUE",
+        "Best linear unbiased estimator."
+      ],
+      [
+        "Gauss–Markov normality",
+        "Not required."
+      ],
+      [
+        "Estimability",
+        "a′β estimable iff a∈row(X)."
+      ],
+      [
+        "Full column rank",
+        "All components and linear combinations are estimable."
+      ],
+      [
+        "Singular X′X",
+        "Check estimability; no ordinary inverse."
+      ]
+    ],
+    "tricks": [
+      "Write X explicitly from the observation equations before multiplying.",
+      "Check X′X diagonal entries by column sums of squares and off-diagonal entries by cross-products.",
+      "Verify the proposed estimator by checking its expectation and coefficient weights.",
+      "For estimability, solve X′c=a or test a against row(X)."
+    ],
+    "shortcuts": [
+      "If X′X is diagonal, invert each diagonal element separately.",
+      "A′β is estimable exactly when a is a linear combination of the rows of X.",
+      "For a full-column-rank design, every linear function of β is estimable."
+    ],
+    "remember": [
+      "BLUE is a comparison class: linear and unbiased estimators.",
+      "Equal error variances alone do not imply uncorrelated errors; σ²I is the spherical covariance assumption used here."
     ]
-   },
-   "flow": {
-    "title": "Checking that an estimator is the BLUE",
-    "alt": "A top-to-bottom flow. First check the weights are fixed. Then check unbiasedness a prime X equals l prime. Then compare variance with sigma squared l prime X prime X inverse l.",
-    "nodes": [
-     {
-      "id": "a",
-      "r": 0,
-      "c": 1,
-      "label": "Write the candidate as c′y",
-      "kind": "start"
-     },
-     {
-      "id": "b",
-      "r": 1,
-      "c": 1,
-      "label": "Test c′X = ℓ′ (unbiased?)",
-      "kind": "step"
-     },
-     {
-      "id": "c",
-      "r": 2,
-      "c": 0,
-      "label": "No: reject the candidate",
-      "kind": "end"
-     },
-     {
-      "id": "d",
-      "r": 2,
-      "c": 2,
-      "label": "Yes: compute σ²c′c",
-      "kind": "step"
-     },
-     {
-      "id": "e",
-      "r": 3,
-      "c": 2,
-      "label": "Equals σ²ℓ′(X′X)⁻¹ℓ? Then it is the BLUE",
-      "kind": "end"
-     }
-    ],
-    "edges": [
-     {
-      "from": "a",
-      "to": "b"
-     },
-     {
-      "from": "b",
-      "to": "c"
-     },
-     {
-      "from": "b",
-      "to": "d"
-     },
-     {
-      "from": "d",
-      "to": "e"
-     }
-    ],
-    "note": "The unbiasedness test eliminates most wrong answers before any variance is computed."
-   },
-   "ask": {
-    "q": "Which assumption is NOT needed for the Gauss–Markov conclusion?",
-    "nudge": "It is a distributional one."
-   }
   },
-  {
-   "kind": "worked",
-   "id": "s4",
-   "mins": 8,
-   "title": "Q11 in full",
-   "objective": "Find the BLUE of (β₁, β₂) for the three-equation model and check every option.",
-   "ask": {
-    "q": "Why are the divisors 6 and 2, and in which order?",
-    "nudge": "Read the diagonal of X′X."
-   },
-   "problem": "y₁ = β₁ + β₂ + u₁; y₂ = 2β₁ + u₂; y₃ = β₁ − β₂ + u₃, with V(uᵢ) = σ². Find the BLUE of β₁ and β₂ and the covariance matrix.",
-   "steps": [
+  "scenes": [
     {
-     "say": "Write the model as y = Xβ + u.",
-     "math": "X = [[1, 1], [2, 0], [1, −1]]",
-     "why": "Each row holds the coefficients of (β₁, β₂) in one equation."
-    },
-    {
-     "say": "Form X′X.",
-     "math": "X′X = [[1+4+1, 1+0−1], [1+0−1, 1+0+1]] = [[6, 0], [0, 2]]",
-     "why": "Entry (1,1) is the sum of squares of column one: 1² + 2² + 1² = 6. Entry (2,2) is 1² + 0² + (−1)² = 2. The off-diagonal entry is the dot product of the two columns: 1 + 0 − 1 = 0."
-    },
-    {
-     "say": "Form X′y.",
-     "math": "X′y = (y₁ + 2y₂ + y₃,  y₁ + 0·y₂ − y₃)",
-     "why": "Each entry is a column of X dotted into y."
-    },
-    {
-     "say": "Invert and solve.",
-     "math": "(X′X)⁻¹ = diag(1/6, 1/2)\nβ̂₁ = (y₁ + 2y₂ + y₃)/6\nβ̂₂ = (y₁ − y₃)/2",
-     "why": "A diagonal matrix inverts by inverting its diagonal. The larger sum of squares, 6, sits under β₁. The divisors are 6 then 2."
-    },
-    {
-     "say": "Covariance matrix.",
-     "math": "Var(β̂) = σ²·diag(1/6, 1/2)\nVar(β̂₁) = σ²/6,   Var(β̂₂) = σ²/2,   Cov = 0",
-     "why": "The zero covariance is the diagonal X′X again."
-    },
-    {
-     "say": "Test each option for unbiasedness by multiplying weights into X.",
-     "math": "Option with (1,2,1)/2 for β₁: E = (1/2)(1+4+1)β₁ = 3β₁   — biased\nOption with 6(y₁+y₂+y₃): E = 6(4β₁) = 24β₁   — biased\n(1,2,1)/6 and (1,0,−1)/2: E = β₁ and β₂   — unbiased",
-     "why": "Each wrong option fails in under a minute. The expected value of a wrong divisor is a multiple of the true value, not the true value."
-    },
-    {
-     "say": "Verify with numbers.",
-     "math": "y = (7, 4, 3):  β̂₁ = (7 + 8 + 3)/6 = 3,   β̂₂ = (7 − 3)/2 = 2",
-     "why": "Consistency check: β₁ + β₂ = 5 against y₁ = 7, 2β₁ = 6 against y₂ = 4, β₁ − β₂ = 1 against y₃ = 3. The fit is a compromise."
-    }
-   ],
-   "after": "The habit: after finding an answer, multiply its weights into the columns of X. The target must come back."
-  },
-  {
-   "kind": "recall",
-   "id": "s5",
-   "mins": 2,
-   "title": "Pause and recall",
-   "objective": "Retrieve the theorem and the checks before using them.",
-   "intro": "Answer each before revealing it.",
-   "items": [
-    {
-     "q": "What does BLUE stand for?",
-     "a": "Best linear unbiased estimator: least variance among linear unbiased rules."
-    },
-    {
-     "q": "What is the unbiasedness test for c′y as an estimator of ℓ′β?",
-     "a": "c′X = ℓ′."
-    },
-    {
-     "q": "What is Var(β̂)?",
-     "a": "σ²(X′X)⁻¹."
-    },
-    {
-     "q": "Is normality needed for Gauss–Markov?",
-     "a": "No. Only E(u) = 0 and Var(u) = σ²I."
-    },
-    {
-     "q": "What does a diagonal X′X imply about the estimators?",
-     "a": "They are uncorrelated."
-    }
-   ]
-  },
-  {
-   "kind": "completion",
-   "id": "s6",
-   "mins": 8,
-   "title": "Your turn — two readings, one unknown",
-   "objective": "Find the BLUE for y₁ = β + u₁, y₂ = 2β + u₂ and compare it with two rivals.",
-   "problem": "y₁ = β + u₁ and y₂ = 2β + u₂ with equal variances σ². Find the BLUE, its variance, and show that (y₁ + y₂)/3 is unbiased but worse.",
-   "steps": [
-    {
-     "say": "X = (1, 2)′. Compute X′X.",
-     "blank": {
-      "prompt": "What is X′X?",
-      "answer": "5",
-      "accept": [
-       "5",
-       "five",
-       "1+4"
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh the matrix tools",
+      "objective": "Rebuild the three prerequisites used in linear estimation.",
+      "body": [
+        "This lesson turns a regression model into an estimator. The algebra uses matrix products, expectations and rank. If one of these tools feels rusty, rebuild it here before moving on.",
+        "The aim is not to memorise a formula. It is to understand where each part of the OLS estimator comes from and how to check whether a parameter function can be estimated."
       ],
-      "hint": "1² + 2²."
-     },
-     "why": "1 + 4 = 5, and X′y = y₁ + 2y₂, so β̂ = (y₁ + 2y₂)/5."
-    },
-    {
-     "say": "The variance is σ²(X′X)⁻¹.",
-     "blank": {
-      "prompt": "What is Var(β̂) as a multiple of σ²?",
-      "answer": "1/5",
-      "accept": [
-       "1/5",
-       "0.2",
-       "σ²/5",
-       "0.20"
+      "items": [
+        {
+          "ask": "For A=[[1,2],[3,4]], what is A′?",
+          "recall": "A′=[[1,3],[2,4]].",
+          "refresh": [
+            "Transpose means exchange rows and columns. The first row of A becomes the first column of A′.",
+            "The second row becomes the second column. Thus [[1,2],[3,4]]′=[[1,3],[2,4]].",
+            "In regression, X′ turns the design matrix's columns into rows so X′X and X′y can be formed."
+          ]
+        },
+        {
+          "ask": "If E(X)=μ and a,b are constants, what is E(aX+b)?",
+          "recall": "aμ+b.",
+          "refresh": [
+            "Expectation is the probability-weighted average of a random quantity. For a discrete variable taking values 0 and 4 with equal probabilities, E(X)=0(1/2)+4(1/2)=2. The average is not required to be one of the values the variable can actually take.",
+            "Linearity means constants can be pulled outside expectation and sums can be separated: E(aX+b)=aE(X)+b. Here a and b are fixed numbers, so E(b)=b. For example, if E(X)=3, then E(2X+5)=2(3)+5=11.",
+            "In the OLS proof, the estimator is β̂=β+(X′X)⁻¹X′u. Taking conditional expectation gives β+(X′X)⁻¹X′E(u|X). The zero conditional mean assumption sets the final term to zero, leaving β."
+          ]
+        },
+        {
+          "ask": "What does full column rank mean for an n×k matrix X?",
+          "recall": "Its k columns are linearly independent; rank(X)=k.",
+          "refresh": [
+            "Column rank counts the number of independent columns.",
+            "Full column rank k means no column is an exact linear combination of the others.",
+            "Then X′X is invertible, allowing the ordinary OLS formula (X′X)⁻¹X′y."
+          ]
+        }
       ],
-      "hint": "Invert the scalar 5."
-     },
-     "why": "σ²/5 = 0.2σ². Also the sum of squared weights: (1² + 2²)/25 = 5/25."
+      "ask": {
+        "q": "Which two matrix/probability tools will we repeatedly use in this lesson?",
+        "nudge": "Think transpose/products, expectation/variance, and rank/row-space."
+      }
     },
     {
-     "say": "Test the rival (y₁ + y₂)/3: E = (β + 2β)/3 = β, so it is unbiased. Its variance is (1/9 + 1/9)σ².",
-     "blank": {
-      "prompt": "What is its variance as a multiple of σ²?",
-      "answer": "2/9",
-      "accept": [
-       "2/9",
-       "0.2222",
-       "0.222",
-       "0.22"
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 6,
+      "title": "What does BLUE actually promise?",
+      "objective": "Interpret the comparison behind the Gauss–Markov theorem.",
+      "body": [
+        "Suppose several methods estimate the same regression coefficient. Some are biased. Some are nonlinear. Some are linear and unbiased but have different variances.",
+        "The Gauss–Markov theorem says that, under its assumptions, ordinary least squares has the smallest variance among all linear unbiased estimators. That is the meaning of BLUE: Best Linear Unbiased Estimator.",
+        "The word best is restricted to this comparison class. It does not say OLS is best among every imaginable estimator, and it does not require normally distributed errors."
       ],
-      "hint": "Square each weight 1/3 and add."
-     },
-     "why": "2/9 = 0.222 is greater than 1/5 = 0.2, as the theorem requires."
+      "scenario": {
+        "teaser": "A policy team estimates a wage-return coefficient",
+        "title": "Why the comparison class matters",
+        "body": [
+          "A policy team uses a linear regression to estimate the association between years of training and wages. The design matrix records the intercept and training variable for each sampled worker.",
+          "The team wants an estimator that is unbiased and linear in the observed outcomes. Many weighted combinations of the outcomes may be unbiased, but their variances need not be equal.",
+          "Under the Gauss–Markov assumptions, OLS is the minimum-variance choice within that class. If the team wants likelihood-based efficiency among nonlinear estimators, or exact small-sample distributional statements, additional assumptions and theory are needed.",
+          "This is why BLUE is a precise theorem statement, not a general claim that OLS is universally optimal."
+        ],
+        "q": "What is the comparison class in BLUE?",
+        "answer": "All linear unbiased estimators of the regression parameter."
+      },
+      "ask": {
+        "q": "Does BLUE require normally distributed errors?",
+        "nudge": "Separate the first two moments used by Gauss–Markov from assumptions used for exact t and F distributions."
+      }
     },
     {
-     "say": "Test the rival y₂/2: unbiased since E = β.",
-     "blank": {
-      "prompt": "What is its variance as a multiple of σ²?",
-      "answer": "1/4",
-      "accept": [
-       "1/4",
-       "0.25",
-       "σ²/4"
+      "kind": "explore",
+      "id": "s2",
+      "mins": 6,
+      "title": "The geometry of least squares",
+      "objective": "See OLS as a projection and connect it to the normal equations.",
+      "body": [
+        "OLS chooses β̂ so that the fitted vector Xβ̂ is as close as possible to y in squared Euclidean distance. The residual e=y−Xβ̂ is orthogonal to every column of X.",
+        "That orthogonality gives the normal equations X′e=0, or X′Xβ̂=X′y. When X has full column rank, solve them by multiplying by (X′X)⁻¹."
       ],
-      "hint": "The single weight is 1/2."
-     },
-     "why": "1/4 = 0.25 > 0.2. The rival (y₁ + y₂)/2 has E = 1.5β and is not even unbiased."
+      "viz": {
+        "type": "rank-null",
+        "caption": "Projection geometry: fitted values lie in the column space of X; residuals are orthogonal to it."
+      },
+      "ask": {
+        "q": "What equation expresses the residual orthogonality condition?",
+        "nudge": "Multiply e=y−Xβ̂ by X′ and set it equal to zero."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 8,
+      "title": "Linear model and Gauss–Markov assumptions",
+      "objective": "State the assumptions before using the theorem.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Linear model",
+          "body": "y=Xβ+u, where y is n×1, X is a fixed or conditioned-on n×k design matrix, β is k×1 and u is the error vector."
+        },
+        {
+          "t": "formula",
+          "h": "Zero conditional mean",
+          "body": "E(u|X)=0. This makes OLS unbiased for β."
+        },
+        {
+          "t": "formula",
+          "h": "Spherical error covariance",
+          "body": "V(u|X)=σ²Iₙ. Errors have common variance and zero covariance across distinct observations."
+        },
+        {
+          "t": "def",
+          "h": "Full column rank",
+          "body": "rank(X)=k. This ensures X′X is invertible in the standard OLS formula."
+        },
+        {
+          "t": "note",
+          "h": "No normality assumption",
+          "body": "The Gauss–Markov theorem does not require u to be normally distributed. Normality is used for exact finite-sample t and F distribution results in the classical model."
+        }
+      ],
+      "ask": {
+        "q": "Which covariance condition is stronger than merely saying every error has variance σ²?",
+        "nudge": "It also specifies the off-diagonal covariances."
+      },
+      "flow": {
+        "caption": "Gauss–Markov route: assumptions to the BLUE conclusion",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Linear model y=Xβ+u",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Check E(u|X)=0",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Check V(u|X)=σ²I",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Check rank(X)=k",
+            "kind": "decision"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "OLS is BLUE",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked derivation: OLS is unbiased",
+      "objective": "Derive the OLS estimator and verify its expectation.",
+      "problem": "Starting from y=Xβ+u, derive β̂ and show E(β̂|X)=β.",
+      "steps": [
+        {
+          "say": "Use the normal equations from residual orthogonality.",
+          "math": "X′Xβ̂=X′y",
+          "why": "The least-squares residual is orthogonal to the columns of X."
+        },
+        {
+          "say": "Solve because X has full column rank.",
+          "math": "β̂=(X′X)⁻¹X′y",
+          "why": "Full column rank makes X′X invertible."
+        },
+        {
+          "say": "Substitute the model into the estimator.",
+          "math": "β̂=(X′X)⁻¹X′(Xβ+u)=β+(X′X)⁻¹X′u",
+          "why": "Distribute X′ and use (X′X)⁻¹X′X=I."
+        },
+        {
+          "say": "Take conditional expectation.",
+          "math": "E(β̂|X)=β+(X′X)⁻¹X′E(u|X)=β",
+          "why": "The zero conditional mean assumption removes the error term."
+        }
+      ],
+      "ask": {
+        "q": "Which assumption is used in the final equality?",
+        "nudge": "It is the condition on the conditional mean of u."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 5,
+      "title": "Recall the variance calculation",
+      "objective": "Recall the variance–covariance matrix of OLS.",
+      "intro": "Use the model and matrix variance rules to recover the result.",
+      "items": [
+        {
+          "q": "What is Var(β̂|X) under V(u|X)=σ²I?",
+          "a": "σ²(X′X)⁻¹."
+        },
+        {
+          "q": "Does Gauss–Markov require normality?",
+          "a": "No."
+        },
+        {
+          "q": "What does BLUE stand for?",
+          "a": "Best Linear Unbiased Estimator."
+        },
+        {
+          "q": "What condition makes the ordinary inverse formula valid?",
+          "a": "Full column rank of X."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 7,
+      "title": "Complete the Gauss–Markov derivation",
+      "objective": "Reconstruct the estimator variance with fewer prompts.",
+      "problem": "Given β̂=β+(X′X)⁻¹X′u and V(u|X)=σ²I, complete the variance calculation.",
+      "steps": [
+        {
+          "say": "Let A=(X′X)⁻¹X′. Then β̂−β=Au.",
+          "why": "The estimation error is a linear transformation of u."
+        },
+        {
+          "say": "Use the variance rule for a matrix times a random vector.",
+          "blank": {
+            "prompt": "V(Au|X)=A V(u|X) A′ = ?",
+            "answer": "σ²AA′",
+            "accept": [
+              "sigma^2 AA'",
+              "σ²AA′"
+            ],
+            "hint": "Substitute V(u|X)=σ²I between A and A′."
+          },
+          "why": "The scalar σ² factors out."
+        },
+        {
+          "say": "Simplify A A′.",
+          "blank": {
+            "prompt": "AA′=(X′X)⁻¹X′X(X′X)⁻¹ = ?",
+            "answer": "(X′X)⁻¹",
+            "accept": [
+              "(X'X)^-1",
+              "inverse of X'X"
+            ],
+            "hint": "X′X is symmetric, so its inverse is symmetric too."
+          },
+          "why": "The middle product cancels one inverse factor."
+        },
+        {
+          "say": "State the final covariance matrix.",
+          "math": "Var(β̂|X)=σ²(X′X)⁻¹",
+          "why": "This is the variance expression used in the BLUE comparison."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 8,
+      "title": "Why OLS is BLUE",
+      "objective": "Understand the minimum-variance argument.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Competing linear unbiased estimator",
+          "body": "Let b=Cy be another linear estimator of β. For it to be unbiased for every β, it must satisfy CX=Iₖ."
+        },
+        {
+          "t": "formula",
+          "h": "Difference from OLS",
+          "body": "Write C=(X′X)⁻¹X′+D. The unbiasedness condition implies DX=0."
+        },
+        {
+          "t": "formula",
+          "h": "Variance difference",
+          "body": "Under V(u|X)=σ²I, Var(Cy|X)−Var(β̂|X)=σ²DD′, which is positive semidefinite."
+        },
+        {
+          "t": "step",
+          "h": "Conclusion",
+          "body": "No linear unbiased estimator has smaller variance in any linear contrast than OLS. Hence OLS is BLUE."
+        }
+      ],
+      "ask": {
+        "q": "Why is σ²DD′ positive semidefinite?",
+        "nudge": "For any vector a, consider a′DD′a."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s8",
+      "mins": 6,
+      "title": "Estimability: can the data identify this function?",
+      "objective": "Distinguish estimating a parameter function from estimating every coefficient.",
+      "body": [
+        "A design matrix may fail to identify every individual coefficient. But some combinations of coefficients can still be determined by the model's observable mean Xβ.",
+        "A linear function a′β is estimable if it can be written as a linear combination of the rows of X. Equivalently, a belongs to the column space of X′, also called the row space of X.",
+        "This is a rank-space question. It is not answered by asking whether X is square."
+      ],
+      "viz": {
+        "type": "rank-null",
+        "caption": "Estimability is a row-space membership question: is a in C(X′)?"
+      },
+      "scenario": {
+        "teaser": "Two predictors are exact duplicates",
+        "title": "A coefficient pair that cannot be separated",
+        "body": [
+          "Suppose a regression has two identical predictor columns. The fitted mean depends on β₁+β₂, but the data cannot distinguish β₁ from β₂ individually.",
+          "The separate coefficients are not estimable because the corresponding coordinate vectors are not in the row space of X. Their sum is estimable because it is the combination the design actually measures.",
+          "A researcher can still estimate the common fitted contribution even though the individual parameter labels are not separately identifiable. The correct question is therefore whether the requested linear function lies in the row space.",
+          "This distinction prevents a common error: concluding that nothing can be estimated whenever X′X is singular."
+        ],
+        "q": "If two design columns are identical, which combination is naturally identified?",
+        "answer": "The sum of the two corresponding coefficients."
+      },
+      "ask": {
+        "q": "What space must contain a for a′β to be estimable?",
+        "nudge": "Use the row space of X, equivalently the column space of X′."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s9",
+      "mins": 9,
+      "title": "Worked example: test estimability",
+      "objective": "Check estimability by solving X′c=a.",
+      "problem": "Let X=[[1,1],[2,0],[1,−1]]. Determine whether β₁ and β₂ are estimable.",
+      "steps": [
+        {
+          "say": "Write the design matrix and its rank.",
+          "math": "X=[[1,1],[2,0],[1,−1]], rank(X)=2",
+          "why": "Its two columns are linearly independent."
+        },
+        {
+          "say": "A full-column-rank design has row space of dimension 2 in R².",
+          "math": "row(X)=R²",
+          "why": "The row space spans the entire parameter space."
+        },
+        {
+          "say": "Both coordinate vectors belong to the row space.",
+          "math": "(1,0)′∈row(X), (0,1)′∈row(X)",
+          "why": "Each coefficient function is a linear combination of rows."
+        },
+        {
+          "say": "Conclude that both coefficients and every linear combination are estimable.",
+          "math": "a′β estimable for every a∈R²",
+          "why": "Full column rank identifies all parameter directions."
+        }
+      ],
+      "ask": {
+        "q": "Would every linear function remain estimable if rank(X)=1?",
+        "nudge": "The row space would then be a line, not all of R²."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 8,
+      "title": "Guided problem: find the BLUEs",
+      "objective": "Apply the normal equations to a two-parameter design.",
+      "problem": "For y₁=β₁+β₂+u₁, y₂=2β₁+u₂ and y₃=β₁−β₂+u₃, derive the OLS/BLUE estimators under spherical errors.",
+      "hints": [
+        "Build X from the coefficients of β₁ and β₂ in each observation equation.",
+        "Calculate X′X and X′y, keeping the two diagonal entries separate.",
+        "Solve β̂=(X′X)⁻¹X′y and check the divisors."
+      ],
+      "answer": "β̂₁=(y₁+2y₂+y₃)/6 and β̂₂=(y₁−y₃)/2.",
+      "solution": [
+        {
+          "say": "Construct the design matrix.",
+          "math": "X=[[1,1],[2,0],[1,−1]]"
+        },
+        {
+          "say": "Multiply to obtain the cross-product matrix.",
+          "math": "X′X=[[6,0],[0,2]]"
+        },
+        {
+          "say": "Multiply X′ by y.",
+          "math": "X′y=(y₁+2y₂+y₃, y₁−y₃)′"
+        },
+        {
+          "say": "Invert the diagonal matrix and multiply.",
+          "math": "β̂₁=(y₁+2y₂+y₃)/6; β̂₂=(y₁−y₃)/2"
+        }
+      ],
+      "ask": {
+        "q": "What quick arithmetic check catches the common divisor swap?",
+        "nudge": "Check the two diagonal entries of X′X independently."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s11",
+      "mins": 6,
+      "title": "Exam traps",
+      "objective": "Separate theorem assumptions, BLUE and estimability.",
+      "intro": "Mark each statement true or false and justify the decision.",
+      "items": [
+        {
+          "claim": "Normality of errors is required for the Gauss–Markov theorem.",
+          "tf": false,
+          "why": "The theorem uses mean and covariance assumptions, not normality."
+        },
+        {
+          "claim": "BLUE means minimum variance among all unbiased estimators.",
+          "tf": false,
+          "why": "The comparison class is linear unbiased estimators."
+        },
+        {
+          "claim": "If X has full column rank, every linear function of β is estimable.",
+          "tf": true,
+          "why": "The row space of X is all of Rᵏ."
+        },
+        {
+          "claim": "Equal error variances alone guarantee V(u)=σ²I.",
+          "tf": false,
+          "why": "Off-diagonal covariances must also be zero."
+        },
+        {
+          "claim": "If X′X is singular, no linear function of β can be estimable.",
+          "tf": false,
+          "why": "Some parameter combinations may lie in row(X) even when individual coefficients are not estimable."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s12",
+      "mins": 9,
+      "title": "Transfer problem: a rank-deficient design",
+      "objective": "Use row-space reasoning in a design where individual coefficients are not separately estimable.",
+      "problem": "Let X=[[1,1],[2,2],[3,3]]. Determine which of β₁, β₂, β₁+β₂ and β₁−β₂ are estimable.",
+      "hints": [
+        "Find the row space of X; all rows are multiples of (1,1).",
+        "Test each coefficient vector a against span{(1,1)}.",
+        "A linear function is estimable exactly when its coefficient vector lies in that span."
+      ],
+      "answer": "β₁ and β₂ are not separately estimable; β₁+β₂ is estimable; β₁−β₂ is not.",
+      "solution": [
+        {
+          "say": "The row space is one-dimensional.",
+          "math": "row(X)=span{(1,1)}"
+        },
+        {
+          "say": "The coefficient vectors for β₁ and β₂ are (1,0) and (0,1).",
+          "math": "(1,0),(0,1)∉span{(1,1)}"
+        },
+        {
+          "say": "The coefficient vector for the sum is (1,1).",
+          "math": "(1,1)∈row(X)"
+        },
+        {
+          "say": "The coefficient vector for the difference is (1,−1).",
+          "math": "(1,−1)∉row(X)"
+        }
+      ],
+      "ask": {
+        "q": "What is the key difference between β₁+β₂ and β₁−β₂ here?",
+        "nudge": "One coefficient vector follows the only direction present in the rows of X."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 4,
+      "title": "Summary: the theorem and the exam workflow",
+      "objective": "Recall the Gauss–Markov and estimability decision procedures.",
+      "body": [
+        "Start with y=Xβ+u. Under E(u|X)=0, V(u|X)=σ²I and full column rank, OLS is β̂=(X′X)⁻¹X′y, is unbiased and has variance σ²(X′X)⁻¹. The Gauss–Markov theorem makes it BLUE among linear unbiased estimators. Normality is not required.",
+        "For a′β, test whether a lies in row(X), equivalently C(X′). Full column rank makes every linear function estimable; rank deficiency may leave some combinations estimable and others not.",
+        "For the June 2026 anchor, construct X carefully. The cross-product matrix is diag(6,2), so the correct divisors are 6 for β̂₁ and 2 for β̂₂. Verify the result by multiplying back."
+      ],
+      "ask": {
+        "q": "State the two central conclusions of this lesson.",
+        "nudge": "One concerns optimality among linear unbiased estimators; the other concerns row-space membership."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s14",
+      "mins": 8,
+      "ext": true,
+      "title": "Extension — the proof with Q11's numbers",
+      "objective": "See the variance split a′a + d′d numerically.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "The null direction",
+          "body": "For Q11, X′ is 2×3, so its null space is one-dimensional. The vector z = (1, −1, 1)/√3 satisfies X′z = 0: its first entry gives (1 − 2 + 1)/√3 = 0 and its second gives (1 − 1)/√3 = 0."
+        },
+        {
+          "t": "step",
+          "h": "All competitors for β₁",
+          "body": "Any linear unbiased estimator of β₁ has weights c = (1,2,1)/6 + tz. Its variance is σ²c′c = σ²(1/6 + t²), because the OLS weights are orthogonal to z."
+        },
+        {
+          "t": "step",
+          "h": "Read off",
+          "body": "At t = 0 the variance is σ²/6, the smallest. At t = 1 it is 7σ²/6, at t = 2 it is 25σ²/6. Every competitor is OLS plus a term that adds variance and nothing else."
+        }
+      ],
+      "ask": {
+        "q": "Why is the cross term 2a′d zero?",
+        "nudge": "d is built to satisfy d′X = 0."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s15",
+      "mins": 1,
+      "title": "Mastery test",
+      "setId": "regression_t2_mastery"
     }
-   ],
-   "after": "Three unbiased rules, three variances: 0.2, 0.222 and 0.25 (times σ²). The BLUE is the smallest."
-  },
-  {
-   "kind": "theory",
-   "id": "s7",
-   "mins": 7,
-   "title": "Estimability, and what breaks what",
-   "objective": "Decide which linear functions can be estimated when X is rank-deficient, and classify the Q38 statements.",
-   "blocks": [
-    {
-     "t": "def",
-     "h": "Estimable",
-     "body": "ℓ′β is estimable when some linear unbiased estimator of it exists, which holds exactly when ℓ′ lies in the row space of X. Equivalently, ℓ′ = c′X for some c."
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
     },
-    {
-     "t": "step",
-     "h": "A two-group example",
-     "body": "Two groups of two observations each, with parameters α, τ₁, τ₂. The rows of X are (1,1,0), (1,1,0), (1,0,1), (1,0,1). Rank is 2, with 3 parameters. Check τ₁ − τ₂ = (0, 1, −1): it is (1,1,0) − (1,0,1), a difference of rows, so it is estimable. α + τ₁ = (1,1,0) is a row, so it is estimable. τ₁ alone is (0,1,0), which is not a combination of the two row types, so it is not estimable."
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
     },
-    {
-     "t": "step",
-     "h": "Why estimable functions are well defined",
-     "body": "The normal equations have many solutions when X′X is singular, but an estimable ℓ′β̂ takes the same value on all of them. For group means 4 and 9, τ̂₁ − τ̂₂ = −5 for every solution, while τ̂₁ alone changes with the solution chosen."
-    },
-    {
-     "t": "formula",
-     "h": "Omitted-variable bias",
-     "body": "True model y = β₁x₁ + β₂x₂ + u. Regressing y on x₁ alone gives\n    E(b₁*) = β₁ + β₂δ,   where δ = slope of x₂ on x₁\nBias = β₂δ. It vanishes when β₂ = 0 or when x₂ is uncorrelated with x₁."
-    },
-    {
-     "t": "step",
-     "h": "Heteroscedasticity and multicollinearity",
-     "body": "Under heteroscedasticity E(β̂) = β still holds, since unbiasedness uses only E(u) = 0. But Var(β̂) ≠ σ²(X′X)⁻¹ and OLS is no longer best. Under near multicollinearity the assumptions all hold, so OLS stays unbiased and BLUE; its variance is inflated by 1/(1 − r²), which is 50.25 at r = 0.99. The estimates are unstable, not biased."
-    }
-   ],
-   "ask": {
-    "q": "Which of omission, heteroscedasticity and near multicollinearity makes OLS biased?",
-    "nudge": "Only one violates E(u) = 0 for the fitted model."
-   }
-  },
-  {
-   "kind": "guided",
-   "id": "s8",
-   "mins": 8,
-   "title": "On your own — bias from an omitted variable",
-   "objective": "Compute the expected value of a short regression when a relevant variable is left out.",
-   "problem": "True model y = 1·x₁ + 2·x₂ + u. The regression of x₂ on x₁ has slope δ = 0.6. A student regresses y on x₁ alone. Find E(b₁*) and the bias.",
-   "hints": [
-    "Direction: identify which variable has been left out and what its true coefficient is.",
-    "Method: the short-regression slope has expectation β₁ + β₂δ.",
-    "Next step: multiply β₂ by δ, then add β₁."
-   ],
-   "answer": "Bias = 2 × 0.6 = 1.2, and E(b₁*) = 1 + 1.2 = 2.2.",
-   "check": "The sign of the bias is the product of the signs of β₂ and δ, here positive, and |bias| ≤ |β₂| because |δ| < 1.",
-   "scenario": {
-    "teaser": "A regression with two nearly identical predictors, and the data are enough to estimate neither.",
-    "title": "Two predictors that move together",
-    "body": [
-     "An analyst regresses a score on two predictors whose correlation in the sample is 0.99. The overall F test is highly significant and R² is large, yet neither coefficient has a significant t statistic, and dropping one observation changes both estimates sharply.",
-     "She wonders whether the estimates are biased. They are not. Unbiasedness needs E(u) = 0 and a fixed full-rank X, and both hold. Near collinearity does not break any Gauss–Markov assumption. What it does is inflate the variance of each coefficient by the factor 1/(1 − r²) = 50.25 at r = 0.99, so the standard deviation grows by about 7.1.",
-     "In a simulation of 20,000 samples of size 50 at this correlation, the average of the two estimates was 1.008 and 0.993 for a true pair of 1 and 1, so there is no bias, but the spread of each estimate matched the formula and was about 7.9 times that of an orthogonal design with the same sample correlation removed."
-    ],
-    "q": "Which of the following is NOT a consequence of near multicollinearity: large standard errors, unstable estimates, bias, or a high R² with insignificant t values?",
-    "answer": "Bias. Near multicollinearity keeps OLS unbiased and BLUE and inflates the variance. This is the answer to Q38 of the June paper."
-   },
-   "solution": [
-    {
-     "say": "Identify the omitted variable's coefficient.",
-     "math": "β₂ = 2,   δ = 0.6",
-     "why": "x₂ is the variable left out; δ is how much of it rides on x₁."
-    },
-    {
-     "say": "Bias.",
-     "math": "bias = β₂δ = 2 × 0.6 = 1.2",
-     "why": "The short regression credits x₁ with the part of x₂'s effect that travels with it."
-    },
-    {
-     "say": "Expected slope.",
-     "math": "E(b₁*) = β₁ + β₂δ = 1 + 1.2 = 2.2",
-     "why": "Simulation with 40,000 samples gave 2.2008."
-    }
-   ]
-  },
-  {
-   "kind": "trapcheck",
-   "id": "s9",
-   "mins": 6,
-   "title": "Six statements",
-   "objective": "Separate what each assumption failure really breaks.",
-   "intro": "Decide true or false on all six before revealing any.",
-   "items": [
-    {
-     "claim": "Near multicollinearity makes the OLS estimators biased.",
-     "tf": false,
-     "why": "Unbiasedness needs only E(u) = 0 and fixed X. Multicollinearity inflates variance, not bias."
-    },
-    {
-     "claim": "Under heteroscedasticity OLS remains unbiased but is no longer BLUE.",
-     "tf": true,
-     "why": "E(β̂) = β uses only E(u) = 0. Best needs Var(u) = σ²I."
-    },
-    {
-     "claim": "Gauss–Markov requires the errors to be normally distributed.",
-     "tf": false,
-     "why": "Only the first two moments are used: mean zero and variance σ²I."
-    },
-    {
-     "claim": "Any unbiased linear estimator of β has the same variance as OLS.",
-     "tf": false,
-     "why": "OLS has the smallest. For y₁ = β + u₁, y₂ = 2β + u₂ the rule (y₁ + y₂)/3 is unbiased with variance 2σ²/9, above σ²/5."
-    },
-    {
-     "claim": "If X′X is diagonal the least squares estimators are uncorrelated.",
-     "tf": true,
-     "why": "Cov(β̂) = σ²(X′X)⁻¹ is diagonal when X′X is."
-    },
-    {
-     "claim": "In a rank-deficient design every linear function of β is estimable.",
-     "tf": false,
-     "why": "ℓ′β is estimable only if ℓ′ is in the row space of X. In the two-group design τ₁ alone is not."
-    }
-   ]
-  },
-  {
-   "kind": "guided",
-   "id": "s10",
-   "mins": 8,
-   "title": "Transfer — estimability in a two-group design",
-   "objective": "Decide estimability and estimate an estimable contrast.",
-   "problem": "Four observations: group 1 has y = 3, 5 and group 2 has y = 8, 10. The model is y = α + τ₁ (group 1) or α + τ₂ (group 2) + u. Which of τ₁ − τ₂, α + τ₁, τ₁, α are estimable, and what is the estimate of τ₁ − τ₂?",
-   "hints": [
-    "Direction: write each function as a vector over (α, τ₁, τ₂) and list the distinct rows of X.",
-    "Method: ℓ′β is estimable when ℓ′ is a weighted sum of the rows (1,1,0) and (1,0,1).",
-    "Next step: for an estimable contrast, use the group means."
-   ],
-   "answer": "τ₁ − τ₂ and α + τ₁ are estimable; τ₁ and α alone are not. The estimate of τ₁ − τ₂ is 4 − 9 = −5.",
-   "check": "The estimate −5 is the same for every solution of the normal equations; τ̂₁ alone is not.",
-   "solution": [
-    {
-     "say": "The row types.",
-     "math": "rows of X: (1,1,0) twice, (1,0,1) twice;  rank 2, 3 parameters",
-     "why": "Only two directions."
-    },
-    {
-     "say": "Test each function.",
-     "math": "τ₁ − τ₂ = (0,1,−1) = (1,1,0) − (1,0,1)   estimable\nα + τ₁ = (1,1,0)   estimable\nτ₁ = (0,1,0)   not a combination\nα = (1,0,0)   not a combination",
-     "why": "Estimable means in the row space."
-    },
-    {
-     "say": "Estimate.",
-     "math": "ȳ₁ = (3+5)/2 = 4,   ȳ₂ = (8+10)/2 = 9\nτ̂₁ − τ̂₂ = 4 − 9 = −5",
-     "why": "Two different generalised-inverse solutions gave −5 each, while their τ̂₁ values differed."
-    }
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s11",
-   "mins": 6,
-   "title": "Where this sits in the syllabus",
-   "objective": "Place Gauss–Markov against the topics that extend or test it.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "What this topic builds on",
-     "body": "Topic 6.1 supplies H and M, and HM = 0 is used in the proof. The generalised inverse behind estimability in a rank-deficient design belongs to topic 2.8."
-    },
-    {
-     "t": "step",
-     "h": "What extends it",
-     "body": "Topic 6.7 replaces Var(u) = σ²I by a general covariance matrix and obtains the BLUE by generalised least squares. Topic 6.5 treats multicollinearity as a variance problem. Topic 6.6 treats correlated errors."
-    },
-    {
-     "t": "step",
-     "h": "What it does not cover",
-     "body": "Restricted least squares is a separate estimator with its own properties and is not covered here. Nor is the choice between biased and unbiased estimators (ridge), which sits outside the Gauss–Markov class."
-    }
-   ],
-   "ask": {
-    "q": "Which later topic gives the BLUE when Var(u) is not σ²I?",
-    "nudge": "It starts with the letter G."
-   }
-  },
-  {
-   "kind": "recall",
-   "id": "s12",
-   "mins": 2,
-   "title": "Second recall",
-   "objective": "Retrieve the parts that fade first.",
-   "intro": "Answer, then reveal.",
-   "items": [
-    {
-     "q": "In Q11, what are X′X and the two BLUE formulas?",
-     "a": "X′X = diag(6, 2); β̂₁ = (y₁ + 2y₂ + y₃)/6; β̂₂ = (y₁ − y₃)/2."
-    },
-    {
-     "q": "Bias from omitting x₂?",
-     "a": "β₂δ, where δ is the slope of x₂ on x₁."
-    },
-    {
-     "q": "Which statement is not a consequence of near multicollinearity?",
-     "a": "That the estimates are biased."
-    },
-    {
-     "q": "When is ℓ′β estimable?",
-     "a": "When ℓ′ is in the row space of X."
-    },
-    {
-     "q": "What does heteroscedasticity do to OLS?",
-     "a": "It stays unbiased, but it is not BLUE."
-    }
-   ]
-  },
-  {
-   "kind": "summary",
-   "id": "s13",
-   "mins": 3,
-   "title": "What you should now be able to do",
-   "objective": "Check the lesson against its objectives.",
-   "body": [
-    "State the Gauss–Markov assumptions and conclusion, and say normality is not needed.",
-    "Test any candidate estimator for unbiasedness with c′X = ℓ′, and compute its variance as σ²c′c.",
-    "Solve a small three-equation model: X′X, X′y, the BLUE and its covariance matrix.",
-    "Decide which linear functions are estimable in a rank-deficient design.",
-    "Classify omission, heteroscedasticity and multicollinearity by what they break: bias, BLUE, or variance."
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s14",
-   "mins": 8,
-   "ext": true,
-   "title": "Extension — the proof with Q11's numbers",
-   "objective": "See the variance split a′a + d′d numerically.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "The null direction",
-     "body": "For Q11, X′ is 2×3, so its null space is one-dimensional. The vector z = (1, −1, 1)/√3 satisfies X′z = 0: its first entry gives (1 − 2 + 1)/√3 = 0 and its second gives (1 − 1)/√3 = 0."
-    },
-    {
-     "t": "step",
-     "h": "All competitors for β₁",
-     "body": "Any linear unbiased estimator of β₁ has weights c = (1,2,1)/6 + tz. Its variance is σ²c′c = σ²(1/6 + t²), because the OLS weights are orthogonal to z."
-    },
-    {
-     "t": "step",
-     "h": "Read off",
-     "body": "At t = 0 the variance is σ²/6, the smallest. At t = 1 it is 7σ²/6, at t = 2 it is 25σ²/6. Every competitor is OLS plus a term that adds variance and nothing else."
-    }
-   ],
-   "ask": {
-    "q": "Why is the cross term 2a′d zero?",
-    "nudge": "d is built to satisfy d′X = 0."
-   }
-  },
-  {
-   "kind": "quiz",
-   "id": "s15",
-   "mins": 12,
-   "title": "Mastery test",
-   "objective": "Demonstrate it independently, on questions you have not seen.",
-   "setId": "regression_t2_mastery"
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings, not an NTA rule. Ten unseen questions are drawn as 3 easy, 5 moderate and 2 hard; the pass threshold is 80% overall with 70% floors for numerical and multi-statement items. Hints are disabled and a retention retest is due after seven days."
   }
- ]
 }

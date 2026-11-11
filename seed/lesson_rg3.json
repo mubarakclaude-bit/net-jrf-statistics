@@ -1,793 +1,723 @@
 {
- "id": "regressiont3",
- "topicId": "regression-t3",
- "moduleId": "regression",
- "title": "ANOVA Decomposition and the F Test from R²",
- "breadcrumb": "Regression → Inference in the linear model → ANOVA and the overall F test",
- "engine": "B",
- "engineName": "F is a ratio of per-degree-of-freedom averages; written in R² it is [R²/(k − 1)] / [(1 − R²)/(n − k)]",
- "version": "1.0",
- "status": "approved",
- "estMin": 100,
- "objectives": [
-  "Build the ANOVA table with the correct degrees of freedom k − 1, n − k and n − 1.",
-  "Write F in terms of R², n and k, and check it against the mean-square ratio.",
-  "Use F = t² and R² = r² in simple regression, and the F-to-R² inversion.",
-  "State why the unbiased estimator of σ² is RSS/(n − k) and why TSS/(n − 1) is not.",
-  "Interpret a high R² with a non-significant F, and a low R² with a significant F."
- ],
- "prereq": [
-  {
-   "id": "p1",
-   "name": "TSS, RegSS and RSS",
-   "why": "The table is built from these three sums of squares."
-  },
-  {
-   "id": "p2",
-   "name": "The F distribution",
-   "why": "F is a ratio of independent chi-square averages."
-  },
-  {
-   "id": "p3",
-   "name": "The null hypothesis of the overall test",
-   "why": "It says the k − 1 slopes are all zero."
-  },
-  {
-   "id": "p4",
-   "name": "Residual degrees of freedom n − k",
-   "why": "The denominator uses tr(M) from topic 6.1."
-  }
- ],
- "traps": [
-  "Swapping k − 1 and n − k in the R² form (Q9 asked for exactly this form).",
-  "Leaving out the degrees-of-freedom factor and using R²/(1 − R²).",
-  "Using n − 1 in the denominator.",
-  "Reading a significant F as 'every slope is non-zero'.",
-  "Treating a high R² as significance when n is tiny."
- ],
- "revision": {
-  "sheet": [
-   "TSS = RegSS + RSS (with intercept). R² = RegSS/TSS.",
-   "df: regression k − 1, residual n − k, total n − 1; they add.",
-   "F = MSR/MSE = [R²/(k − 1)] / [(1 − R²)/(n − k)] on (k − 1, n − k) df.   [Q9: key B]",
-   "Simple regression: F = t², R² = r².",
-   "s² = RSS/(n − k) unbiased; TSS/(n − 1) is not unless slopes are zero.",
-   "Five-student data: TSS 6, RegSS 3.6, RSS 2.4, F = 4.5 < 10.128, p = 0.124.",
-   "ANOVA printout: 22290 and 334, F = 66.74, R² = 0.926.",
-   "R² = 0.9, n = 20, k = 4 gives F = 48. R² = 0.01, n = 1000 gives F = 10.08, which is significant.",
-   "Under H₀, RegSS/σ² ~ χ²(k − 1), independent of RSS/σ² ~ χ²(n − k), since (H − J)M = 0."
+  "id": "regressiont3",
+  "topicId": "regression-t3",
+  "moduleId": "regression",
+  "title": "6.3 — ANOVA Decomposition and the Overall F Test",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.3 ANOVA decomposition and overall F test",
+  "engine": "B",
+  "engineName": "Decompose total variation into explained and residual parts, then derive the overall regression F test and its expression through R².",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 100,
+  "objectives": [
+    "Derive the corrected-total sum-of-squares decomposition for regression with an intercept.",
+    "Construct the regression ANOVA table and identify degrees of freedom and mean squares.",
+    "Derive the overall F statistic for testing all slope coefficients jointly.",
+    "Express the overall F statistic in terms of R², n and k.",
+    "Distinguish the overall F test from individual t tests and partial F tests.",
+    "Interpret numerator and denominator degrees of freedom correctly."
   ],
-  "cards": [
-   [
-    "F in R² form",
-    "[R²/(k − 1)] / [(1 − R²)/(n − k)]"
-   ],
-   [
-    "Degrees of freedom of F",
-    "(k − 1, n − k)"
-   ],
-   [
-    "F in simple regression",
-    "t²"
-   ],
-   [
-    "Unbiased σ²",
-    "RSS/(n − k)"
-   ],
-   [
-    "F as R² tends to 1",
-    "tends to infinity"
-   ],
-   [
-    "Q9 answer",
-    "B: R² over k − 1, divided by 1 − R² over n − k"
-   ]
-  ],
-  "tricks": [
-   "Slopes on top, leftover below.",
-   "Rebuild F a second way before trusting it.",
-   "Sums of squares add; degrees of freedom add."
-  ],
-  "shortcuts": [
-   "F(1, 3) 5% point is 10.128.",
-   "F = (R²/(1 − R²)) · (n − k)/(k − 1).",
-   "From F: R²/(1 − R²) = F(k − 1)/(n − k)."
-  ],
-  "remember": [
-   "Divide each sum of squares by its own degrees of freedom.",
-   "A significant F says some slope is non-zero."
-  ]
- },
- "howto": "If short of time, the lesson is scenes 4 (table and R² form), 5 (worked example) and 7 (the printout). The extension can be skipped. It deliberately does not cover R² and model comparison (6.4), multicollinearity (6.5) or designed experiments.",
- "refs": [
-  {
-   "title": "Econometrics",
-   "where": "Chapter 5, Normal Regression; Chapter 9, Hypothesis Tests",
-   "site": "Bruce Hansen",
-   "url": "",
-   "type": "Free online textbook",
-   "free": true,
-   "checked": "2026-11-06",
-   "why": "The F test and its link to R², scenes 3 and 7."
-  },
-  {
-   "title": "Applied Regression Analysis",
-   "where": "Chapter 2, The F test for overall regression",
-   "site": "Draper and Smith",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-11-06",
-   "why": "The ANOVA table and its degrees of freedom, scene 3."
-  },
-  {
-   "title": "Introductory Econometrics",
-   "where": "Chapter 4, Section 4.5",
-   "site": "Jeffrey Wooldridge",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-11-06",
-   "why": "The F statistic in R² form, scenes 3 and 8."
-  }
- ],
- "mastery": {
-  "minQ": 10,
-  "pass": 80,
-  "draw": 10,
-  "fmtMin": {
-   "numeric": 70,
-   "multi": 70
-  },
-  "diffMix": {
-   "easy": 3,
-   "moderate": 5,
-   "hard": 2
-  },
-  "noHints": true,
-  "retestDays": 7,
-  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
- },
- "provenance": "Anchor Q9 (key B, marked A, wrong): F for the multiple regression model in terms of R², with k − 1 and n − k; the transcribed option text is garbled, so the key was checked by deriving F from R² here rather than from the extracted options. The backlog's note that Q9 might belong to topic 6.1 was resolved from the full stem: it is the F statistic, hence topic 6.3. Verified by computing in verify_regression_t1_t4.py: TSS 6, RegSS 3.6, RSS 2.4, R² 0.6 = r², F 4.5 by both routes, t = 2.1213 with t² = F, F(1,3) critical 10.128 = 3.1824², critical r 0.8783, p-value 0.124; the printout RegSS 66870/3 and RSS 5344/16 giving 22290, 334, F 66.7365, R² 0.926; the wrong forms on the same data (swapped 0.5, undivided 1.5, n − 1 version 6.0, k for k − 1 2.25); R² = 0.9 giving 48; R² = 0.01 and n = 1000 giving 10.08 against a critical 3.851; the inversion R² = 0.926 and its wrong form 0.807; TSS = RegSS + RSS on a random multiple regression; partial F = t² to eight digits. By simulation (200,000 draws): E(RSS/(n − k)) = 3.9993 for σ² = 4 and E(TSS/(n − 1)) = 4.626 against 4.625. Bank defects: variant stems j26v-q09-02 to -04 and -08 to -10 carry the next item's text in their explanation field; the stems were usable and the keys were checked. Scope: R² comparison is left to 6.4; designed experiments are not covered.",
- "scenes": [
-  {
-   "kind": "foundation",
-   "id": "s0",
-   "mins": 7,
-   "title": "Before the lesson — four things it will assume",
-   "objective": "Check the sums of squares, the F distribution, the null hypothesis and the residual degrees of freedom.",
-   "ask": {
-    "q": "What do TSS, RegSS and RSS each measure, and how do they relate?",
-    "nudge": "Total, explained, unexplained."
-   },
-   "body": [
-    "A regression splits the variation in y into two parts. One part is explained by the fitted line. The rest is the residual. The analysis of variance is the bookkeeping that records those two parts, divides each by its degrees of freedom, and compares them with a ratio.",
-    "Q9 of the June paper asked for that ratio written in terms of R² alone, with the degrees of freedom in the right places. The answer was marked A where the key is B. The two options differ by where k − 1 and n − k sit, which is a verification slip, not a method gap. This lesson therefore builds the F ratio from the sums of squares first, then rewrites it in R², and checks the result on numbers.",
-    "No symbol is introduced before the case it names. The five-student data of topic 6.1 are used again: x = 1, 2, 3, 4, 5 and y = 2, 4, 5, 4, 5."
-   ],
-   "items": [
+  "prereq": [
     {
-     "ask": "Define TSS, RegSS and RSS and state how they relate in a model with an intercept.",
-     "recall": "TSS = Σ(y − ȳ)², RegSS = Σ(ŷ − ȳ)², RSS = Σ(y − ŷ)², and TSS = RegSS + RSS.",
-     "refresh": [
-      "TSS is the total variation of y around its mean. RegSS is the variation of the fitted values around the same mean. RSS is what the fitted values fail to explain. For the five-student data: TSS = 6, RegSS = 3.6, RSS = 2.4.",
-      "The identity TSS = RegSS + RSS is Pythagoras on the right-angled triangle from topic 6.1. It needs the column of ones in X; without an intercept the centring no longer works."
-     ]
+      "id": "p1",
+      "name": "OLS fitted values and residuals",
+      "why": "ANOVA separates the fitted component from the residual component."
     },
     {
-     "ask": "What is an F distribution?",
-     "recall": "The ratio of two independent chi-squares, each divided by its degrees of freedom.",
-     "refresh": [
-      "If A ~ χ²(a) and B ~ χ²(b) are independent, then (A/a)/(B/b) follows an F distribution with (a, b) degrees of freedom. Numerator degrees of freedom come first.",
-      "F is never negative and is skewed to the right. A large value says the numerator average is much bigger than the denominator average."
-     ]
+      "id": "p2",
+      "name": "Hat and residual-maker matrices",
+      "why": "Orthogonal projections explain why the sums of squares add."
     },
     {
-     "ask": "What does the overall F test test?",
-     "recall": "H₀: all slope coefficients are zero, against at least one non-zero.",
-     "refresh": [
-      "The model has k coefficients, one of them the intercept. The overall test asks whether the k − 1 slopes could all be zero, which would make the regression no better than a constant.",
-      "Reject when F exceeds the upper 5% point of F(k − 1, n − k). Failing to reject means the data do not distinguish the model from a flat line; it does not prove the slopes are zero."
-     ]
-    },
-    {
-     "ask": "How many degrees of freedom does the residual sum of squares carry?",
-     "recall": "n − k.",
-     "refresh": [
-      "From topic 6.1: the residual vector lives in a space of dimension tr(M) = n − k. For five observations and two coefficients that is 3.",
-      "The regression sum of squares carries k − 1, because the fitted values around their mean live in a space of dimension tr(H) − 1 = k − 1. The total carries n − 1, and (k − 1) + (n − k) = n − 1."
-     ]
+      "id": "p3",
+      "name": "F distribution and degrees of freedom",
+      "why": "The test statistic is a ratio of independent mean squares under the null."
     }
-   ]
-  },
-  {
-   "kind": "intuition",
-   "id": "s1",
-   "mins": 7,
-   "title": "Splitting the variation, then comparing averages",
-   "objective": "Describe the ANOVA split and why the F ratio compares per-degree-of-freedom averages.",
-   "body": [
-    "The variation in y is the sum of squared distances from its mean. Fit a line and that total splits in two: what the line explains and what it leaves. If the line is useless, the explained part is only what chance would produce, and its average per degree of freedom is about the same as the residual's average per degree of freedom.",
-    "That is why the test is a ratio of averages. Each sum of squares is divided by the number of independent directions it covers: k − 1 for the regression, n − k for the residual. Under the null both averages estimate σ², so their ratio hovers around 1. A ratio well above 1 says the line is explaining more than chance would.",
-    "R² is the explained share of the total, RegSS/TSS. Because RegSS = R²·TSS and RSS = (1 − R²)·TSS, TSS cancels from the ratio. F depends on the data only through R², n and k."
-   ],
-   "scenario": {
-    "teaser": "A line that explains 60% of the variation, and still is not significant.",
-    "title": "R² of 0.6 with five points",
-    "body": [
-     "For the five-student data, x = 1, 2, 3, 4, 5 and y = 2, 4, 5, 4, 5, the total variation is TSS = 6. The fitted line explains RegSS = 3.6 of it, so R² = 3.6/6 = 0.6, and leaves RSS = 2.4.",
-     "Sixty per cent sounds like a good fit. The F ratio says otherwise. The regression carries k − 1 = 1 degree of freedom and the residual carries n − k = 3, so F = (3.6/1)/(2.4/3) = 3.6/0.8 = 4.5. The 5% critical value of F(1, 3) is 10.128. The observed 4.5 is far below it, with a p-value of 0.124.",
-     "With only five points a line can fit well by luck. The test accounts for that by asking how large a ratio chance alone produces when there are just three residual degrees of freedom. The answer is: large, so 4.5 is unremarkable."
-    ],
-    "q": "If the same R² of 0.6 came from n = 50 observations, would F be bigger or smaller than 4.5?",
-    "answer": "Bigger. F = (0.6/1)/(0.4/48) = 72, because dividing by n − k = 48 instead of 3 makes the residual average small. The same fit is far stronger evidence with more data."
-   },
-   "ask": {
-    "q": "Why can R² be high while the overall F test fails to reject?",
-    "nudge": "Count the residual degrees of freedom."
-   }
-  },
-  {
-   "kind": "explore",
-   "id": "s2",
-   "mins": 7,
-   "title": "A small sample needs a large correlation",
-   "objective": "See that in simple regression the F test is a test on r², and find how large r must be at n = 5.",
-   "viz": {
-    "type": "r-null",
-    "caption": "Set n = 5. The null density of r is a semicircle, and the 5% two-sided critical value is |r| = 0.878."
-   },
-   "body": [
-    "In simple regression R² equals the square of the correlation r between x and y, and F equals the square of the slope's t statistic. So the F test is a test on r. The picture shows the distribution of r when the true correlation is zero.",
-    "Set n = 5. The 5% critical value is |r| = 0.878, so the critical R² is 0.771. The five-student data have r = 0.775, so R² = 0.6 sits inside the acceptance region. Move n up to 20 and the critical |r| drops to about 0.44.",
-    "Nothing about the line changed between those two sample sizes. Only the amount of evidence changed."
-   ],
-   "ask": {
-    "q": "At n = 5 what R² is needed for significance at 5%?",
-    "nudge": "Square the critical |r| you read off."
-   }
-  },
-  {
-   "kind": "theory",
-   "id": "s3",
-   "mins": 9,
-   "title": "The ANOVA table and F in R² form",
-   "objective": "State the table, the F ratio and its R² form.",
-   "blocks": [
+  ],
+  "traps": [
+    "Use k as the total number of estimated parameters including the intercept; the number of tested slopes is k−1.",
+    "For the overall regression test, numerator df=k−1 and denominator df=n−k.",
+    "F=[R²/(k−1)]/[(1−R²)/(n−k)], not a product.",
+    "The overall F test tests all slope coefficients jointly; it is not the same as testing one coefficient with a t statistic.",
+    "In simple linear regression with one slope, overall F equals the square of the slope t statistic.",
+    "Corrected TSS=RegSS+RSS for OLS with an intercept.",
+    "Adding a predictor cannot increase RSS in nested OLS and cannot decrease R²; adjusted R² may move either way.",
+    "A large F is evidence against the joint null, not proof of causality or correct specification."
+  ],
+  "howto": "Identify n and k (including intercept); compute RegSS and RSS or R²; divide each sum of squares by its df; form F=MSR/MSE; compare with F critical or p-value; for an R²-only question substitute the compact formula.",
+  "refs": [
     {
-     "t": "formula",
-     "h": "The ANOVA table",
-     "body": "Source        SS       df       MS                F\nRegression    RegSS    k − 1    RegSS/(k − 1)     MSR/MSE\nResidual      RSS      n − k    RSS/(n − k) = s²\nTotal         TSS      n − 1"
+      "title": "Introduction to Linear Regression Analysis",
+      "where": "ANOVA table and overall regression significance",
+      "site": "Montgomery, Peck and Vining",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Applied regression ANOVA and F-test derivation."
     },
     {
-     "t": "formula",
-     "h": "F in terms of R²   (the form asked in Q9)",
-     "body": "F = [R²/(k − 1)] / [(1 − R²)/(n − k)]\n  = (R²/(1 − R²)) · ((n − k)/(k − 1))\nwith (k − 1, n − k) degrees of freedom."
+      "title": "Applied Linear Statistical Models",
+      "where": "Multiple regression inference and model ANOVA",
+      "site": "Kutner, Nachtsheim, Neter and Li",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Detailed treatment of overall and partial F tests."
     },
     {
-     "t": "step",
-     "h": "Why TSS cancels",
-     "body": "RegSS = R²·TSS and RSS = (1 − R²)·TSS. Substituting, the TSS in the numerator and the TSS in the denominator divide out, leaving the ratio above. The numerator is divided by k − 1, the denominator by n − k, and these must not be swapped: the first counts the slopes, the second counts the leftover."
-    },
-    {
-     "t": "def",
-     "h": "Simple regression",
-     "body": "For one regressor, k = 2: F has (1, n − 2) degrees of freedom and F = t², where t is the slope's t statistic. Also R² = r², the squared correlation of x and y."
-    },
-    {
-     "t": "step",
-     "h": "Limits of the formula",
-     "body": "If R² = 0 then F = 0. As R² approaches 1 the denominator goes to 0 and F goes to infinity. F is increasing in R² for fixed n and k."
+      "title": "Linear Models",
+      "where": "Least-squares decomposition and quadratic forms",
+      "site": "S. R. Searle",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Matrix basis for sums-of-squares decomposition."
     }
-   ],
-   "table": {
-    "caption": "Five-student data, the whole table",
-    "head": [
-     "Source",
-     "SS",
-     "df",
-     "MS",
-     "F"
+  ],
+  "provenance": "Direct anchor: June 2026 UGC NET Statistics Paper 2 Q9 (j26-q09). Official key B; response sheet Q114 records the learner marked A. The stem asks for the F statistic for significance of complete regression excluding the intercept. The printed expression is normalized as F=[R²/(k−1)]/[(1−R²)/(n−k)], with k the total number of parameters including the intercept. The ten linked variants form a mixed cluster: ANOVA/F, adjusted R², multicollinearity and residual variance. Only relevant F/ANOVA variants are treated as related practice.",
+  "revision": {
+    "sheet": [
+      "Corrected TSS=Σ(yᵢ−ȳ)²=RegSS+RSS for OLS with an intercept.",
+      "Regression df=k−1; residual df=n−k; total df=n−1.",
+      "MSR=RegSS/(k−1); MSE=RSS/(n−k).",
+      "Overall F=MSR/MSE.",
+      "For H₀:β₂=…=βₖ=0, F=[R²/(k−1)]/[(1−R²)/(n−k)].",
+      "R²=RegSS/TSS=1−RSS/TSS.",
+      "Under H₀ and classical normal-error assumptions, F follows F(k−1,n−k).",
+      "For one slope, F=t² for the same coefficient test.",
+      "A significant overall F means at least one slope is nonzero; it does not identify which one.",
+      "Nested OLS: RSS cannot increase and R² cannot decrease when predictors are added; adjusted R² can."
     ],
-    "rows": [
-     [
-      "Regression",
-      "3.6",
-      "1",
-      "3.6",
-      "4.5"
-     ],
-     [
-      "Residual",
-      "2.4",
-      "3",
-      "0.8",
-      ""
-     ],
-     [
-      "Total",
-      "6.0",
-      "4",
-      "",
-      ""
-     ]
+    "cards": [
+      [
+        "Regression SS",
+        "RegSS=Σ(ŷᵢ−ȳ)²"
+      ],
+      [
+        "Residual SS",
+        "RSS=Σ(yᵢ−ŷᵢ)²"
+      ],
+      [
+        "Total SS",
+        "TSS=Σ(yᵢ−ȳ)²"
+      ],
+      [
+        "Decomposition",
+        "TSS=RegSS+RSS"
+      ],
+      [
+        "Regression df",
+        "k−1"
+      ],
+      [
+        "Residual df",
+        "n−k"
+      ],
+      [
+        "MSR",
+        "RegSS/(k−1)"
+      ],
+      [
+        "MSE",
+        "RSS/(n−k)"
+      ],
+      [
+        "Overall F",
+        "MSR/MSE"
+      ],
+      [
+        "R² form",
+        "[R²/(k−1)]/[(1−R²)/(n−k)]"
+      ]
+    ],
+    "tricks": [
+      "If given R², n and k, use the compact formula directly.",
+      "If an ANOVA table gives sums of squares and df, compute mean squares first, then divide.",
+      "Check denominator df: n−k, not n−1.",
+      "For simple regression, overall F and slope t are linked by F=t²."
+    ],
+    "shortcuts": [
+      "Overall regression test = all slopes jointly zero.",
+      "Numerator df = number of slopes; denominator df = residual df.",
+      "The compact R² formula is a ratio of explained proportion per slope df to unexplained proportion per residual df."
+    ],
+    "remember": [
+      "The conventional ANOVA decomposition and compact R² formula assume an intercept and ordinary least squares.",
+      "If k is defined as predictors excluding the intercept, use numerator df=k and denominator df=n−k−1."
     ]
-   },
-   "flow": {
-    "title": "From R² to the decision",
-    "alt": "A top-to-bottom flow. Take R squared, n and k. Form F as R squared over k minus 1 divided by 1 minus R squared over n minus k. Compare with the upper 5 percent point of F with k minus 1 and n minus k degrees of freedom. Reject if larger.",
-    "nodes": [
-     {
-      "id": "a",
-      "r": 0,
-      "c": 1,
-      "label": "R², n, k",
-      "kind": "start"
-     },
-     {
-      "id": "b",
-      "r": 1,
-      "c": 1,
-      "label": "F = [R²/(k − 1)] / [(1 − R²)/(n − k)]",
-      "kind": "step"
-     },
-     {
-      "id": "c",
-      "r": 2,
-      "c": 1,
-      "label": "Compare with F(k − 1, n − k) upper point",
-      "kind": "step"
-     },
-     {
-      "id": "d",
-      "r": 3,
-      "c": 0,
-      "label": "F larger: reject H₀, some slope is not zero",
-      "kind": "end"
-     },
-     {
-      "id": "e",
-      "r": 3,
-      "c": 2,
-      "label": "F smaller: do not reject",
-      "kind": "end"
-     }
-    ],
-    "edges": [
-     {
-      "from": "a",
-      "to": "b"
-     },
-     {
-      "from": "b",
-      "to": "c"
-     },
-     {
-      "from": "c",
-      "to": "d"
-     },
-     {
-      "from": "c",
-      "to": "e"
-     }
-    ],
-    "note": "Two things go wrong in practice: swapped degrees of freedom, and n used where n − k belongs."
-   },
-   "ask": {
-    "q": "Which degrees of freedom divide the R² term, and which divide 1 − R²?",
-    "nudge": "Slopes versus leftover."
-   }
   },
-  {
-   "kind": "worked",
-   "id": "s4",
-   "mins": 8,
-   "title": "The full ANOVA for the five-student data",
-   "objective": "Compute every entry of the table and test it three ways.",
-   "ask": {
-    "q": "What three equivalent quantities does the test use here?",
-    "nudge": "F, t and r."
-   },
-   "problem": "x = 1, 2, 3, 4, 5 and y = 2, 4, 5, 4, 5. Build the ANOVA table, form F, and test H₀: slope = 0 at 5%.",
-   "steps": [
+  "scenes": [
     {
-     "say": "Fit and take the three sums of squares.",
-     "math": "ŷ = 2.2 + 0.6x = (2.8, 3.4, 4.0, 4.6, 5.2),   ȳ = 4\nTSS = 4 + 0 + 1 + 0 + 1 = 6\nRegSS = 1.44 + 0.36 + 0 + 0.36 + 1.44 = 3.6\nRSS = 0.64 + 0.36 + 1 + 0.36 + 0.04 = 2.4",
-     "why": "Check: 3.6 + 2.4 = 6. If the parts do not add to the total the arithmetic has slipped."
-    },
-    {
-     "say": "Degrees of freedom and mean squares.",
-     "math": "df: regression k − 1 = 1,  residual n − k = 3,  total n − 1 = 4\nMSR = 3.6/1 = 3.6,   MSE = s² = 2.4/3 = 0.8",
-     "why": "The degrees of freedom must add: 1 + 3 = 4."
-    },
-    {
-     "say": "Form F.",
-     "math": "F = 3.6/0.8 = 4.5",
-     "why": "The numerator average is 4.5 times the denominator average."
-    },
-    {
-     "say": "Re-derive F from R² alone.",
-     "math": "R² = 3.6/6 = 0.6\nF = (0.6/1)/(0.4/3) = 0.6/0.13333 = 4.5",
-     "why": "The two routes must agree. This is the arithmetic check for Q9's form."
-    },
-    {
-     "say": "Check against the slope's t statistic.",
-     "math": "se(b) = √(0.8/10) = 0.2828,   t = 0.6/0.2828 = 2.1213\nt² = 4.5 = F",
-     "why": "For one regressor F = t². Also r = 0.7746 and r² = 0.6 = R²."
-    },
-    {
-     "say": "Decide.",
-     "math": "F(1, 3) upper 5% point = 10.128 = (3.182)²\n4.5 < 10.128   ⟹   do not reject.   p = 0.124",
-     "why": "The same decision from t: 2.1213 < 3.182. The three tests are one test."
-    },
-    {
-     "say": "Tie to topic 6.1.",
-     "math": "tr(H) = 2 ⟹ k = 2;   tr(M) = 3 = n − k",
-     "why": "The degrees of freedom came from traces. RegSS = y′(H − J)y, where J averages over all five observations."
-    }
-   ],
-   "after": "Whenever you compute F, rebuild it a second way before you trust it."
-  },
-  {
-   "kind": "recall",
-   "id": "s5",
-   "mins": 2,
-   "title": "Pause and recall",
-   "objective": "Retrieve the formula and the degrees of freedom.",
-   "intro": "Answer each before revealing it.",
-   "items": [
-    {
-     "q": "Write F in terms of R², n and k.",
-     "a": "F = [R²/(k − 1)] / [(1 − R²)/(n − k)], with (k − 1, n − k) degrees of freedom."
-    },
-    {
-     "q": "What is the unbiased estimator of σ²?",
-     "a": "RSS/(n − k) = MSE."
-    },
-    {
-     "q": "In simple regression, how are F and t related?",
-     "a": "F = t²."
-    },
-    {
-     "q": "What happens to F as R² approaches 1?",
-     "a": "It tends to infinity."
-    },
-    {
-     "q": "What is the numerator degrees of freedom?",
-     "a": "k − 1, the number of slopes."
-    }
-   ]
-  },
-  {
-   "kind": "completion",
-   "id": "s6",
-   "mins": 8,
-   "title": "Your turn — an ANOVA from a printout",
-   "objective": "Complete the table from RegSS = 66870 on 3 df and RSS = 5344 on 16 df.",
-   "problem": "An ANOVA table gives RegSS = 66870 with 3 df and RSS = 5344 with 16 df. Find the mean squares, F, and R².",
-   "steps": [
-    {
-     "say": "Divide each sum of squares by its degrees of freedom.",
-     "blank": {
-      "prompt": "What is the regression mean square MSR?",
-      "answer": "22290",
-      "accept": [
-       "22290",
-       "22,290",
-       "66870/3"
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh variation and degrees of freedom",
+      "objective": "Recover the ingredients used in a regression ANOVA table.",
+      "body": [
+        "ANOVA compares variation explained by the fitted model with variation left in residuals. Before calculating F, make sure the three sums of squares and their degrees of freedom are clear.",
+        "This lesson uses k for the total number of estimated parameters, including the intercept. Therefore k−1 slope coefficients are tested in the overall regression test."
       ],
-      "hint": "66870 divided by 3."
-     },
-     "why": "66870/3 = 22290."
-    },
-    {
-     "say": "Residual mean square.",
-     "blank": {
-      "prompt": "What is MSE?",
-      "answer": "334",
-      "accept": [
-       "334",
-       "5344/16"
+      "items": [
+        {
+          "ask": "What does the sample mean represent in corrected total sum of squares?",
+          "recall": "The reference value around which response variation is measured.",
+          "refresh": [
+            "Corrected total variation measures deviations from the sample mean: TSS=Σ(yᵢ−ȳ)².",
+            "The mean is the natural baseline for a model containing an intercept.",
+            "The total degrees of freedom are n−1 because one degree of freedom is used in estimating the sample mean."
+          ]
+        },
+        {
+          "ask": "If a model has k parameters including the intercept, how many slopes does it have?",
+          "recall": "k−1 slopes.",
+          "refresh": [
+            "The intercept is one of the k parameters in the model. The other k−1 parameters are slopes attached to explanatory variables.",
+            "The overall regression test asks whether all of those slope coefficients are zero at the same time. This is a joint hypothesis with k−1 restrictions.",
+            "That is why the numerator degrees of freedom are k−1. If a question instead defines k as the number of predictors excluding the intercept, its numerator df is k and the residual df is n−k−1.",
+            "Always read the question's definition of k before substituting. This lesson consistently counts the intercept inside k."
+          ]
+        },
+        {
+          "ask": "What is a mean square?",
+          "recall": "A sum of squares divided by its degrees of freedom.",
+          "refresh": [
+            "A sum of squares measures variation on a squared scale.",
+            "Dividing by the corresponding degrees of freedom produces a mean square.",
+            "The overall F statistic is the regression mean square divided by the residual mean square."
+          ]
+        }
       ],
-      "hint": "5344 divided by 16."
-     },
-     "why": "5344/16 = 334. This is s²."
+      "ask": {
+        "q": "If k counts all parameters including the intercept, how many slope restrictions are in the overall test?",
+        "nudge": "Exclude the one intercept parameter."
+      }
     },
     {
-     "say": "Take the ratio.",
-     "blank": {
-      "prompt": "What is F, to two decimals?",
-      "answer": "66.74",
-      "accept": [
-       "66.74",
-       "66.7",
-       "66.73",
-       "66.737",
-       "66.7365"
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 6,
+      "title": "Explained variation and leftover variation",
+      "objective": "Understand the ANOVA decomposition geometrically.",
+      "body": [
+        "The fitted values are the model's projection of y onto the column space of X. Residuals are the part left after that projection.",
+        "With an intercept, fitted deviations from the sample mean and residuals are orthogonal. Their squared lengths add: TSS=RegSS+RSS.",
+        "The overall F test asks whether explained variation per fitted slope is large relative to unexplained variation per residual degree of freedom."
       ],
-      "hint": "22290 divided by 334."
-     },
-     "why": "22290/334 = 66.7365. Compare the common wrong answer 66870/5344 = 12.51, which skips the degrees of freedom."
+      "scenario": {
+        "teaser": "A regression model partitions response variation",
+        "title": "Where did the variation go?",
+        "body": [
+          "A response variable varies around its sample mean. Regression explains some of that variation through fitted values.",
+          "The explained component is RegSS. The unexplained component is RSS. For OLS with an intercept, these components are orthogonal and add to corrected TSS.",
+          "If the model explains little relative to residual noise, F tends to be small. If it explains a substantial amount relative to residual variation, F tends to be large.",
+          "The test evaluates the joint contribution of all slope terms, not one selected predictor."
+        ],
+        "q": "Which two components add to corrected total sum of squares?",
+        "answer": "Regression sum of squares and residual sum of squares."
+      },
+      "ask": {
+        "q": "What does the overall F test compare?",
+        "nudge": "Think of explained and unexplained mean squares."
+      }
     },
     {
-     "say": "TSS is the sum of the two. Then find R².",
-     "blank": {
-      "prompt": "What is R², to three decimals?",
-      "answer": "0.926",
-      "accept": [
-       "0.926",
-       "0.93",
-       "0.9260",
-       "66870/72214"
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Derive the sums-of-squares decomposition",
+      "objective": "Connect orthogonality to TSS=RegSS+RSS.",
+      "body": [
+        "Write y−ȳ1=(ŷ−ȳ1)+e. The first term is the fitted deviation from the mean; the second is the residual vector.",
+        "OLS residuals are orthogonal to the fitted space. With an intercept, e is also orthogonal to the constant vector, so e′(ŷ−ȳ1)=0.",
+        "Taking squared lengths gives (y−ȳ1)′(y−ȳ1)=(ŷ−ȳ1)′(ŷ−ȳ1)+e′e. This is TSS=RegSS+RSS."
       ],
-      "hint": "RegSS over TSS = 66870/72214."
-     },
-     "why": "R² = 0.926. Using the R² form: (0.926/3)/(0.074/16) = 0.30867/0.004625 = 66.74. Same F."
+      "viz": {
+        "type": "rank-null",
+        "caption": "Orthogonal fitted and residual components give an additive sum-of-squares decomposition."
+      },
+      "ask": {
+        "q": "Which cross-product disappears when the squared norm is expanded?",
+        "nudge": "It is twice the inner product between fitted deviations and residuals."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 8,
+      "title": "Build the regression ANOVA table",
+      "objective": "Identify sums of squares, degrees of freedom and mean squares.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "ANOVA decomposition",
+          "body": "TSS=RegSS+RSS."
+        },
+        {
+          "t": "step",
+          "h": "Degrees of freedom",
+          "body": "Regression: k−1. Residual: n−k. Total: n−1. The two component degrees of freedom add to n−1."
+        },
+        {
+          "t": "formula",
+          "h": "Mean squares",
+          "body": "MSR=RegSS/(k−1); MSE=RSS/(n−k)."
+        },
+        {
+          "t": "note",
+          "h": "ANOVA table",
+          "body": "The overall regression statistic is F=MSR/MSE. Under the joint null and classical normal-error assumptions, it has an F distribution with (k−1,n−k) degrees of freedom."
+        }
+      ],
+      "ask": {
+        "q": "For n=40 and k=5, what are regression and residual degrees of freedom?",
+        "nudge": "The numerator uses the number of slopes; the denominator uses n minus all parameters."
+      },
+      "flow": {
+        "caption": "Regression ANOVA calculation",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Start with TSS",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Split into RegSS + RSS",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Assign degrees of freedom",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Calculate MSR and MSE",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Form F = MSR / MSE",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked example: calculate F from an ANOVA table",
+      "objective": "Compute mean squares and their ratio.",
+      "problem": "An ANOVA table reports RegSS=66,870 with 3 df and RSS=5,344 with 16 df. Find F.",
+      "steps": [
+        {
+          "say": "Calculate regression mean square.",
+          "math": "MSR=66870/3=22290",
+          "why": "Divide regression sum of squares by its 3 degrees of freedom."
+        },
+        {
+          "say": "Calculate residual mean square.",
+          "math": "MSE=5344/16=334",
+          "why": "Divide residual sum of squares by its 16 degrees of freedom."
+        },
+        {
+          "say": "Form the F ratio.",
+          "math": "F=MSR/MSE=22290/334≈66.74",
+          "why": "The overall test compares explained mean square with residual mean square."
+        },
+        {
+          "say": "Interpret the direction.",
+          "math": "F≈66.74",
+          "why": "A large ratio is evidence against the joint null, subject to model assumptions."
+        }
+      ],
+      "ask": {
+        "q": "Why divide each sum of squares before taking the ratio?",
+        "nudge": "F compares mean squares, not raw sums of squares."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s5",
+      "mins": 8,
+      "title": "Derive F from R²",
+      "objective": "Express the overall F test using R², n and k.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Start with F",
+          "body": "F=[RegSS/(k−1)]/[RSS/(n−k)]."
+        },
+        {
+          "t": "step",
+          "h": "Use R²",
+          "body": "R²=RegSS/TSS and 1−R²=RSS/TSS. Hence RegSS=R²·TSS and RSS=(1−R²)·TSS."
+        },
+        {
+          "t": "step",
+          "h": "Cancel TSS",
+          "body": "F=[R²·TSS/(k−1)]/[(1−R²)·TSS/(n−k)]. The common TSS cancels."
+        },
+        {
+          "t": "formula",
+          "h": "Compact expression",
+          "body": "F=[R²/(k−1)]/[(1−R²)/(n−k)]."
+        },
+        {
+          "t": "note",
+          "h": "Definition of k",
+          "body": "Here k includes the intercept. If a question defines k as predictors excluding the intercept, equivalent df are k and n−k−1."
+        }
+      ],
+      "ask": {
+        "q": "What is denominator df in the stated convention?",
+        "nudge": "Subtract total estimated parameters from n."
+      },
+      "scenario": {
+        "teaser": "A formula can be reconstructed from its two mean squares",
+        "title": "From R² to an F statistic",
+        "body": [
+          "Suppose the output gives R² but not the raw sums of squares. You can still reconstruct the overall F ratio because R² is the explained fraction of total variation.",
+          "The unexplained fraction is 1−R². Divide the explained fraction by the number of tested slopes, and divide the unexplained fraction by residual degrees of freedom.",
+          "Taking the first quantity divided by the second gives the same F statistic as the ANOVA table. This is the algebraic shortcut used in the official June 2026 Q9."
+        ],
+        "q": "Why does total sum of squares disappear from the compact formula?",
+        "answer": "It appears in both RegSS=R²·TSS and RSS=(1−R²)·TSS, so it cancels in their ratio."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s6",
+      "mins": 9,
+      "title": "Worked example: F from R²",
+      "objective": "Apply the compact expression and keep df consistent.",
+      "problem": "A regression has n=50, k=5 total parameters including intercept, and R²=0.55. Calculate F.",
+      "steps": [
+        {
+          "say": "Identify degrees of freedom.",
+          "math": "df₁=k−1=4; df₂=n−k=45",
+          "why": "There are four slopes and 45 residual degrees of freedom."
+        },
+        {
+          "say": "Calculate explained proportion per regression df.",
+          "math": "R²/(k−1)=0.55/4=0.1375",
+          "why": "The explained proportion is spread over four tested slopes."
+        },
+        {
+          "say": "Calculate unexplained proportion per residual df.",
+          "math": "(1−R²)/(n−k)=0.45/45=0.01",
+          "why": "The unexplained proportion is divided by residual df."
+        },
+        {
+          "say": "Divide the two quantities.",
+          "math": "F=0.1375/0.01=13.75",
+          "why": "This is the overall F statistic for all four slopes jointly."
+        }
+      ],
+      "ask": {
+        "q": "If R² increases while n and k stay fixed, what happens to F?",
+        "nudge": "The numerator rises and the denominator falls."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s7",
+      "mins": 5,
+      "title": "Recall the ANOVA identities",
+      "objective": "Retrieve key formulae without looking.",
+      "intro": "Complete each statement from memory, then compare with the answer.",
+      "items": [
+        {
+          "q": "What is the corrected sum-of-squares decomposition?",
+          "a": "TSS=RegSS+RSS."
+        },
+        {
+          "q": "What is the overall F ratio?",
+          "a": "F=MSR/MSE."
+        },
+        {
+          "q": "What are the two degrees of freedom?",
+          "a": "k−1 and n−k, when k includes the intercept."
+        },
+        {
+          "q": "Write F in terms of R².",
+          "a": "F=[R²/(k−1)]/[(1−R²)/(n−k)]."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 8,
+      "title": "Guided problem: reconstruct F from R²",
+      "objective": "Choose correct df and calculate the ratio.",
+      "problem": "A model has n=30, k=4 total parameters including intercept, and R²=0.60. Find F.",
+      "hints": [
+        "There are k−1=3 slope coefficients.",
+        "Residual df are n−k=26.",
+        "Substitute into [R²/(k−1)]/[(1−R²)/(n−k)]."
+      ],
+      "answer": "F=(0.60/3)/(0.40/26)=0.20/0.0153846≈13.00.",
+      "solution": [
+        {
+          "say": "Find degrees of freedom.",
+          "math": "df₁=4−1=3; df₂=30−4=26"
+        },
+        {
+          "say": "Compute numerator.",
+          "math": "0.60/3=0.20"
+        },
+        {
+          "say": "Compute denominator.",
+          "math": "0.40/26≈0.0153846"
+        },
+        {
+          "say": "Take the ratio.",
+          "math": "F≈13.00"
+        }
+      ],
+      "ask": {
+        "q": "What is the common df error here?",
+        "nudge": "Do not count the intercept as a slope restriction."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s9",
+      "mins": 7,
+      "title": "Overall F versus individual t tests",
+      "objective": "Distinguish joint and individual hypotheses.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Overall null",
+          "body": "H₀:β₂=β₃=…=βₖ=0. The alternative is that at least one slope is nonzero."
+        },
+        {
+          "t": "note",
+          "h": "Individual t tests",
+          "body": "A t test examines one coefficient at a time. The overall F test assesses the joint contribution of all slopes."
+        },
+        {
+          "t": "step",
+          "h": "Simple regression special case",
+          "body": "With one slope, the overall F test and two-sided t test for that slope are equivalent: F=t²."
+        },
+        {
+          "t": "note",
+          "h": "Interpretation",
+          "body": "A significant overall F does not prove every slope is significant. It indicates that the full set of slopes is jointly informative under the model assumptions."
+        }
+      ],
+      "ask": {
+        "q": "If overall F is significant, must every individual t test be significant?",
+        "nudge": "The overall test says at least one slope contributes, not all."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 9,
+      "title": "Guided problem: read the ANOVA table",
+      "objective": "Interpret the test and its degrees of freedom.",
+      "problem": "A regression ANOVA table has regression df=2, residual df=27, MSR=48 and MSE=4. Find F and state the joint null.",
+      "hints": [
+        "F=MSR/MSE.",
+        "The two df values identify the F distribution.",
+        "The overall null sets all slope coefficients equal to zero."
+      ],
+      "answer": "F=12; reference distribution F(2,27). The null is that both slopes are zero jointly.",
+      "solution": [
+        {
+          "say": "Calculate F.",
+          "math": "F=48/4=12"
+        },
+        {
+          "say": "Read reference degrees of freedom.",
+          "math": "F∼F(2,27) under H₀"
+        },
+        {
+          "say": "State the joint null.",
+          "math": "H₀:β₂=β₃=0"
+        },
+        {
+          "say": "Interpret.",
+          "math": "The test evaluates both slopes jointly."
+        }
+      ],
+      "ask": {
+        "q": "What does numerator df=2 tell you?",
+        "nudge": "It counts the slope restrictions tested."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s11",
+      "mins": 6,
+      "title": "Exam traps: ANOVA and R²",
+      "objective": "Catch common errors in the F formula.",
+      "intro": "Mark each statement true or false.",
+      "items": [
+        {
+          "claim": "When k includes the intercept, overall regression numerator df is k−1.",
+          "tf": true,
+          "why": "There are k−1 slope coefficients."
+        },
+        {
+          "claim": "Residual df is n−1.",
+          "tf": false,
+          "why": "It is n−k when k parameters are estimated."
+        },
+        {
+          "claim": "The overall F statistic is MSR divided by MSE.",
+          "tf": true,
+          "why": "This is the ratio of regression and residual mean squares."
+        },
+        {
+          "claim": "F=[R²/(k−1)]×[(1−R²)/(n−k)].",
+          "tf": false,
+          "why": "The expression is a ratio, not a product."
+        },
+        {
+          "claim": "A significant overall F proves all slopes are individually significant.",
+          "tf": false,
+          "why": "It establishes joint significance of at least one slope."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s12",
+      "mins": 7,
+      "title": "Model changes and adjusted R²",
+      "objective": "Separate ordinary R² behaviour from adjusted R².",
+      "blocks": [
+        {
+          "t": "note",
+          "h": "Adding predictors",
+          "body": "For nested OLS models, adding a predictor cannot increase RSS. Therefore ordinary R² cannot decrease."
+        },
+        {
+          "t": "formula",
+          "h": "Adjusted R²",
+          "body": "Adjusted R²=1−[(RSS/(n−k))/(TSS/(n−1))], with k total parameters including intercept."
+        },
+        {
+          "t": "note",
+          "h": "Interpretation",
+          "body": "Adjusted R² penalizes model complexity. It can increase or decrease when a predictor is added, unlike ordinary R²."
+        },
+        {
+          "t": "note",
+          "h": "Scope",
+          "body": "Adjusted R² is a model-comparison measure; it is not the overall F statistic."
+        }
+      ],
+      "ask": {
+        "q": "Can adjusted R² decrease when a predictor is added?",
+        "nudge": "It includes a penalty for spending an additional parameter."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 4,
+      "title": "Summary: regression ANOVA and F",
+      "objective": "Retain decomposition, df and compact F formula.",
+      "body": [
+        "For OLS with an intercept, corrected TSS=RegSS+RSS. ANOVA uses regression df=k−1, residual df=n−k and total df=n−1, where k includes the intercept.",
+        "MSR=RegSS/(k−1), MSE=RSS/(n−k), and F=MSR/MSE. For the joint null that all slopes are zero, F follows F(k−1,n−k) under classical normal-error assumptions.",
+        "Since R²=RegSS/TSS and 1−R²=RSS/TSS, F=[R²/(k−1)]/[(1−R²)/(n−k)]. The overall F test is joint; it does not imply every individual t test is significant."
+      ],
+      "ask": {
+        "q": "State the compact F formula and define k.",
+        "nudge": "Remember k includes the intercept."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s14",
+      "mins": 8,
+      "ext": true,
+      "title": "Extension — F as a partial F for one restriction",
+      "objective": "Show that a single-restriction F equals t².",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "The restricted fit",
+          "body": "Drop the j-th regressor. The extra residual sum of squares is RSS_r − RSS_f, with one degree of freedom."
+        },
+        {
+          "t": "step",
+          "h": "The identity",
+          "body": "(RSS_r − RSS_f)/(RSS_f/(n − k)) = b_j²/(s²·c_jj), where c_jj is the j-th diagonal of (X′X)⁻¹. The right side is the square of the t statistic b_j/(s√c_jj)."
+        },
+        {
+          "t": "step",
+          "h": "Numerical check",
+          "body": "On a random data set with n = 20 and k = 4 the partial F was 3.6614 and the squared t statistic was 3.6614."
+        }
+      ],
+      "ask": {
+        "q": "Why does the t test lose its sign?",
+        "nudge": "Squaring."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s15",
+      "mins": 1,
+      "title": "6.3 mastery test",
+      "setId": "regression_t3_mastery"
     }
-   ],
-   "after": "Four numbers come out of a printout: two mean squares, their ratio and R². They must tell one story."
-  },
-  {
-   "kind": "theory",
-   "id": "s7",
-   "mins": 7,
-   "title": "Why the ratio is an F: two quadratic forms",
-   "objective": "Explain the distribution of F under H₀ and what the mean squares estimate.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "The two sums of squares as quadratic forms",
-     "body": "Let J = 11′/n be the matrix that averages. Then TSS = y′(I − J)y, RegSS = y′(H − J)y, RSS = y′My. With an intercept, J is part of H, so H − J is symmetric idempotent with trace k − 1. M has trace n − k."
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
     },
-    {
-     "t": "step",
-     "h": "Independence",
-     "body": "(H − J)M = HM − JM = 0 − 0 = 0, because HM = 0 and JM = 0 (J's direction lies in X). Two quadratic forms in normal errors whose matrices multiply to zero are independent."
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
     },
-    {
-     "t": "step",
-     "h": "Distribution under H₀",
-     "body": "When all slopes are zero, (H − J)Xβ = 0, so RegSS = u′(H − J)u, and RegSS/σ² ~ χ²(k − 1). RSS/σ² ~ χ²(n − k) always. Independent, so F = [RegSS/(k − 1)]/[RSS/(n − k)] ~ F(k − 1, n − k)."
-    },
-    {
-     "t": "formula",
-     "h": "What the mean squares estimate",
-     "body": "E(MSE) = σ² always.\nE(MSR) = σ² + β′X′(H − J)Xβ/(k − 1), which is σ² only under H₀.\nSo F is near 1 under H₀ and larger when slopes are non-zero."
-    },
-    {
-     "t": "step",
-     "h": "A trap: TSS/(n − 1)",
-     "body": "TSS/(n − 1) is not unbiased for σ² when slopes are non-zero. In the five-student set-up with σ² = 4, slope 0.5 and Sxx = 10, E(TSS/(n − 1)) = 4 + 0.25 × 10/4 = 4.625. A simulation of 200,000 samples gave 4.626."
-    },
-    {
-     "t": "step",
-     "h": "One restriction",
-     "body": "For a single coefficient the partial F equals the square of its t statistic. In a check on random data with n = 20, k = 4 the partial F and t² agreed to eight digits."
-    }
-   ],
-   "ask": {
-    "q": "Why are the numerator and denominator of F independent?",
-    "nudge": "The product of their matrices."
-   }
-  },
-  {
-   "kind": "guided",
-   "id": "s8",
-   "mins": 8,
-   "title": "On your own — F from R² with n and k",
-   "objective": "Apply the R² form to a new case and check it.",
-   "problem": "A regression with n = 20 observations and k = 4 coefficients has R² = 0.9. Find F and decide at 5%, given the upper 5% point of F(3, 16) is 3.239.",
-   "hints": [
-    "Direction: write down the degrees of freedom first: k − 1 on top, n − k below.",
-    "Method: F = [R²/(k − 1)]/[(1 − R²)/(n − k)].",
-    "Next step: compute R²/(1 − R²) = 9, then multiply by (n − k)/(k − 1) = 16/3."
-   ],
-   "answer": "F = 48, far above 3.239, so reject H₀.",
-   "check": "R²/(1 − R²) = 9; times 16/3 gives 48, and F must exceed that 9 because the factor 16/3 is above 1.",
-   "scenario": {
-    "teaser": "A fit that explains one per cent of the variation, and the test says it matters.",
-    "title": "R² of 0.01 and n = 1000",
-    "body": [
-     "A study regresses an outcome on one predictor using 1000 observations. R² is 0.01, so the predictor explains one per cent of the variation. A colleague calls the result trivial.",
-     "The overall F is (0.01/1)/(0.99/998) = 10.08. The 5% critical value of F(1, 998) is 3.85, so the test rejects comfortably. Both statements are correct. R² measures how much of the variation is explained. F measures whether the explained part could be chance.",
-     "With a thousand observations a weak but real effect is detectable. Statistical significance tells you the effect is not zero, and R² tells you how much it matters. Neither replaces the other."
-    ],
-    "q": "Which of R² and F says the effect is real, and which says it is large?",
-    "answer": "F says it is real (not zero). R² says how large a share of the variation it explains, which here is small."
-   },
-   "solution": [
-    {
-     "say": "Degrees of freedom.",
-     "math": "numerator k − 1 = 3,   denominator n − k = 16",
-     "why": "This is where Q9's options differ, so fix them first."
-    },
-    {
-     "say": "Ratio of R² terms.",
-     "math": "R²/(k − 1) = 0.9/3 = 0.3\n(1 − R²)/(n − k) = 0.1/16 = 0.00625",
-     "why": "Keep the two divisions apart."
-    },
-    {
-     "say": "Divide.",
-     "math": "F = 0.3/0.00625 = 48",
-     "why": "Reject: 48 > 3.239."
-    }
-   ]
-  },
-  {
-   "kind": "trapcheck",
-   "id": "s9",
-   "mins": 6,
-   "title": "Six statements",
-   "objective": "Spot the wrong versions of the F formula and its interpretation.",
-   "intro": "Decide true or false on all six before revealing any.",
-   "items": [
-    {
-     "claim": "With R² = 0.6, n = 5, k = 2, swapping the degrees of freedom gives the right F.",
-     "tf": false,
-     "why": "The correct F is 4.5. Swapping gives (0.6/3)/(0.4/1) = 0.5."
-    },
-    {
-     "claim": "F = R²/(1 − R²) is enough, with no degrees-of-freedom factors.",
-     "tf": false,
-     "why": "That gives 1.5 for the five-student data. It leaves out the factor (n − k)/(k − 1) = 3."
-    },
-    {
-     "claim": "In simple regression F is the square of the slope's t statistic.",
-     "tf": true,
-     "why": "For the five-student data t = 2.1213 and t² = 4.5 = F."
-    },
-    {
-     "claim": "A significant F means every slope is non-zero.",
-     "tf": false,
-     "why": "It means at least one is. The overall test cannot say which."
-    },
-    {
-     "claim": "TSS = RegSS + RSS holds even for a model with no intercept.",
-     "tf": false,
-     "why": "The centring needs the column of ones in X. Without it the decomposition does not hold in this form."
-    },
-    {
-     "claim": "The unbiased estimator of σ² is RSS/(n − k).",
-     "tf": true,
-     "why": "E(RSS) = σ²(n − k), from tr(M) in topic 6.1."
-    }
-   ]
-  },
-  {
-   "kind": "guided",
-   "id": "s10",
-   "mins": 8,
-   "title": "Transfer — recover R² from a reported F",
-   "objective": "Invert the F formula, a direction the lesson has not shown.",
-   "problem": "A report gives F = 66.7365 on (3, 16) degrees of freedom. Find R².",
-   "hints": [
-    "Direction: you know F, k − 1 = 3 and n − k = 16, and want R².",
-    "Method: write F = (R²/(1 − R²))·(16/3) and solve for R²/(1 − R²).",
-    "Next step: if R²/(1 − R²) = x, then R² = x/(1 + x)."
-   ],
-   "answer": "R² = 0.926.",
-   "check": "F is huge, so R² must be close to 1.",
-   "solution": [
-    {
-     "say": "Isolate the ratio.",
-     "math": "R²/(1 − R²) = F·(k − 1)/(n − k) = 66.7365 × 3/16 = 12.5131",
-     "why": "Undo the factor (n − k)/(k − 1)."
-    },
-    {
-     "say": "Solve.",
-     "math": "R² = 12.5131/(1 + 12.5131) = 0.9260",
-     "why": "A common wrong step is F/(F + 16) = 0.807, which forgets the (k − 1) factor."
-    }
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s11",
-   "mins": 6,
-   "title": "Where this sits in the syllabus",
-   "objective": "Place the F test against the topics around it.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "What it builds on",
-     "body": "The quadratic forms y′Hy and y′My come from topic 6.1. Their distribution under normality uses the chi-square count n − k from there."
-    },
-    {
-     "t": "step",
-     "h": "What it feeds",
-     "body": "Topic 6.4 reads R² and adjusted R² off the same table and compares nested models with an F test built the same way. Topic 6.5 explains why a significant F can sit beside insignificant t values."
-    },
-    {
-     "t": "step",
-     "h": "What it does not cover",
-     "body": "Single-factor and two-factor designed experiments use the same table but belong to the design-of-experiments module. This lesson treats only the regression case."
-    }
-   ],
-   "ask": {
-    "q": "Which topic uses R² and adjusted R² to compare models?",
-    "nudge": "The next one."
-   }
-  },
-  {
-   "kind": "recall",
-   "id": "s12",
-   "mins": 2,
-   "title": "Second recall",
-   "objective": "Retrieve the parts that fade first.",
-   "intro": "Answer, then reveal.",
-   "items": [
-    {
-     "q": "What are the five-student MSR, MSE and F?",
-     "a": "3.6, 0.8, 4.5."
-    },
-    {
-     "q": "Critical F(1, 3) at 5%?",
-     "a": "10.128, which is 3.182 squared."
-    },
-    {
-     "q": "What is F when R² = 0.9, n = 20, k = 4?",
-     "a": "48."
-    },
-    {
-     "q": "What is wrong with F = (R²/(n − k))/((1 − R²)/(k − 1))?",
-     "a": "The degrees of freedom are swapped."
-    },
-    {
-     "q": "Why can R² = 0.01 be significant?",
-     "a": "With n = 1000, F = 10.08, above 3.85."
-    }
-   ]
-  },
-  {
-   "kind": "summary",
-   "id": "s13",
-   "mins": 3,
-   "title": "What you should now be able to do",
-   "objective": "Check the lesson against its objectives.",
-   "body": [
-    "Build the ANOVA table from TSS, RegSS and RSS with k − 1, n − k and n − 1 degrees of freedom.",
-    "Write F = [R²/(k − 1)]/[(1 − R²)/(n − k)] and check it against the mean-square ratio.",
-    "Use F = t² and R² = r² in simple regression.",
-    "Recover R² from F, and F from R², without swapping degrees of freedom.",
-    "Explain why the null distribution is F, using HM = 0 and traces."
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s14",
-   "mins": 8,
-   "ext": true,
-   "title": "Extension — F as a partial F for one restriction",
-   "objective": "Show that a single-restriction F equals t².",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "The restricted fit",
-     "body": "Drop the j-th regressor. The extra residual sum of squares is RSS_r − RSS_f, with one degree of freedom."
-    },
-    {
-     "t": "step",
-     "h": "The identity",
-     "body": "(RSS_r − RSS_f)/(RSS_f/(n − k)) = b_j²/(s²·c_jj), where c_jj is the j-th diagonal of (X′X)⁻¹. The right side is the square of the t statistic b_j/(s√c_jj)."
-    },
-    {
-     "t": "step",
-     "h": "Numerical check",
-     "body": "On a random data set with n = 20 and k = 4 the partial F was 3.6614 and the squared t statistic was 3.6614."
-    }
-   ],
-   "ask": {
-    "q": "Why does the t test lose its sign?",
-    "nudge": "Squaring."
-   }
-  },
-  {
-   "kind": "quiz",
-   "id": "s15",
-   "mins": 12,
-   "title": "Mastery test",
-   "objective": "Demonstrate it independently, on questions you have not seen.",
-   "setId": "regression_t3_mastery"
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings, not an NTA rule. Ten unseen questions are drawn as 3 easy, 5 moderate and 2 hard; the pass threshold is 80% overall with 70% floors for numerical and multi-statement items. Hints are disabled and a retention retest is due after seven days."
   }
- ]
 }

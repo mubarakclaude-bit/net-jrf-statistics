@@ -113,6 +113,14 @@ jobs:
           if [ -n "$BASE" ] && git cat-file -e "$BASE" 2>/dev/null; then node tools/run-verifiers.js "$BASE"
           else echo "no base to compare with; nothing to run"; fi
 
+      - name: Regression batch serializer contract (when present)
+        run: |
+          if [ -f tools/serialize_regression_batch.py ]; then
+            python -I tools/serialize_regression_batch.py --check
+          else
+            echo "No regression batch serializer in this branch; skipping."
+          fi
+
       - name: Audit every lesson and print the seed inventory (manual run only)
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit }}
         continue-on-error: true
