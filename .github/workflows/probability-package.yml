@@ -1,0 +1,122 @@
+name: Probability package checks
+
+on:
+  push:
+    branches: [gpt/probability-unit-production]
+    paths:
+      - 'seed/lesson_pr2.json'
+      - 'seed/probability_t2_mastery.json'
+      - 'verify_probability_t2.py'
+      - 'evidence/probability-t2.md'
+      - 'reports/probability-t2-verification.md'
+      - 'seed/lesson_pr4.json'
+      - 'seed/probability_t4_mastery.json'
+      - 'verify_probability_t4.py'
+      - 'evidence/probability-t4.md'
+      - 'reports/probability-t4-verification.md'
+      - 'seed/lesson_pr6.json'
+      - 'seed/probability_t6_mastery.json'
+      - 'verify_probability_t6.py'
+      - 'evidence/probability-t6.md'
+      - 'reports/probability-t6-verification.md'
+      - 'seed/lesson_pr9.json'
+      - 'seed/probability_t9_mastery.json'
+      - 'verify_probability_t9.py'
+      - 'evidence/probability-t9.md'
+      - 'reports/probability-t9-verification.md'
+      - 'seed/lesson_pr11.json'
+      - 'seed/probability_t11_mastery.json'
+      - 'verify_probability_t11.py'
+      - 'evidence/probability-t11.md'
+      - 'reports/probability-t11-verification.md'
+      - 'seed/lesson_pr12.json'
+      - 'seed/probability_t12_mastery.json'
+      - 'verify_probability_t12.py'
+      - 'evidence/probability-t12.md'
+      - 'reports/probability-t12-verification.md'
+      - 'seed/meta_lessons.json'
+      - 'test.js'
+      - 'vcheck.js'
+      - 'src/62-gen.js'
+      - 'mathrender.js'
+      - 'src/32-math.js'
+      - 'check.sh'
+      - 'build.sh'
+      - '.github/workflows/probability-package.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lesson-and-mastery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Exact mathematical anchors and pool structure
+        run: |
+          python verify_probability_t2.py
+          python verify_probability_t4.py
+          python verify_probability_t6.py
+          python verify_probability_t9.py
+          python verify_probability_t11.py
+          python verify_probability_t12.py
+      - name: App scene schema validation
+        run: |
+          node vcheck.js seed/lesson_pr2.json
+          node vcheck.js seed/lesson_pr4.json
+          node vcheck.js seed/lesson_pr6.json
+          node vcheck.js seed/lesson_pr9.json
+          node vcheck.js seed/lesson_pr11.json
+          node vcheck.js seed/lesson_pr12.json
+      - name: Render every authored formula
+        run: |
+          mkdir -p .cache
+          python - <<'PY'
+          import json
+          out=[]
+          def walk(o):
+              if isinstance(o,dict):
+                  for k,v in o.items():
+                      if k=='math' and isinstance(v,str): out.extend(x for x in v.split('\\n') if x.strip())
+                      elif k=='body' and isinstance(v,str) and o.get('t') in ('formula','step','def'): out.extend(x for x in v.split('\\n') if x.strip())
+                      else: walk(v)
+              elif isinstance(o,list):
+                  for x in o: walk(x)
+          paths=["seed/lesson_pr2.json","seed/lesson_pr4.json","seed/lesson_pr6.json","seed/lesson_pr9.json","seed/lesson_pr11.json","seed/lesson_pr12.json"]
+          for p in paths: walk(json.load(open(p,encoding='utf-8')))
+          json.dump(out,open('.cache/probability-formulas.json','w',encoding='utf-8'),ensure_ascii=False)
+          PY
+          node mathrender.js .cache/probability-formulas.json .cache/probability-rendered.json
+          python - <<'PY'
+          import json
+          r=json.load(open('.cache/probability-rendered.json',encoding='utf-8'))
+          bad=[k for k,v in r.items() if not v.get('ok')]
+          print(f'{len(r)} formula lines; {len(bad)} parser refusals')
+          if bad: raise SystemExit('formula renderer refused: '+repr(bad[:5]))
+          PY
+      - name: Validate JSON syntax
+        run: |
+          python - <<'PY'
+          import json
+          paths=["seed/lesson_pr2.json","seed/lesson_pr4.json","seed/lesson_pr6.json","seed/lesson_pr9.json","seed/lesson_pr11.json","seed/lesson_pr12.json","seed/probability_t2_mastery.json","seed/probability_t4_mastery.json","seed/probability_t6_mastery.json","seed/probability_t9_mastery.json","seed/probability_t11_mastery.json","seed/probability_t12_mastery.json","seed/meta_lessons.json"]
+          for p in paths: json.load(open(p,encoding='utf-8'))
+          PY
+      - name: Verify seed contracts and app integration
+        run: bash check.sh
+      - name: Build application
+        run: bash build.sh
+      - name: Run browser integration suite
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          node test.js
+      - name: Click through all lesson topics
+        run: node clicktest.js
