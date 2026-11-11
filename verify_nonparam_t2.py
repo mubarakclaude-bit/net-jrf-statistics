@@ -21,7 +21,7 @@ m=6
 assert Fraction(m,2)==3 and Fraction(m,4)==Fraction(3,2)
 assert Fraction(m*(m+1),4)==Fraction(21,2)
 assert Fraction(m*(m+1)*(2*m+1),24)==Fraction(91,4)
-p=2*sum(comb(m,k) for k in range(0, min(3,m-3)+1))/(2**m)
+p=min(1, 2*sum(comb(m,k) for k in range(0, min(3,m-3)+1))/(2**m))
 assert p==1
 print("PASS worked example: 3 positive, 3 negative; W+=12, W-=9; total=21")
 print("PASS zero exclusion: m=6, positive proportion=2/3")
