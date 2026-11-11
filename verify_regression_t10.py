@@ -22,8 +22,12 @@ def slope(a,b):
     return sum((F(u)-am)*(F(v)-bm) for u,v in zip(a,b))/sum((F(u)-am)**2 for u in a)
 first=slope(z,x); reduced=slope(z,y)
 assert first==F(3,2) and reduced==F(3,1) and reduced/first==F(2,1)
-# Projection matrix properties: P_Z is symmetric and idempotent.
-assert F(3,2)/F(3,1)==F(1,2)
+# For Z=[1,z] with z=(-1,0,1), P_Z is symmetric and idempotent.
+Pz=[[F(5,6),F(1,3),F(-1,6)],[F(1,3),F(1,3),F(1,3)],[F(-1,6),F(1,3),F(5,6)]]
+for i in range(3):
+    for j in range(3):
+        assert Pz[i][j] == Pz[j][i]
+        assert sum(Pz[i][k]*Pz[k][j] for k in range(3)) == Pz[i][j]
 for q in P['items']:
     assert len(q['options'])==4 and len(q['explanation'])>=40
     if q['format']=='numeric': assert q.get('check')
