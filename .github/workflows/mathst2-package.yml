@@ -5,12 +5,16 @@ on:
     paths:
       - 'seed/lesson_ma2.json'
       - 'seed/maths_t2_mastery.json'
+      - 'seed/meta_lessons.json'
+      - 'test.js'
       - 'verify_mathst2.py'
       - '.github/workflows/mathst2-package.yml'
       - 'vcheck.js'
       - 'src/62-gen.js'
       - 'mathrender.js'
       - 'src/32-math.js'
+      - 'check.sh'
+      - 'build.sh'
   workflow_dispatch:
 jobs:
   lesson-and-mastery:
@@ -54,4 +58,14 @@ jobs:
           if bad: raise SystemExit('formula renderer refused: '+repr(bad[:5]))
           PY
       - name: Validate JSON syntax
-        run: python -c "import json; [json.load(open(p, encoding='utf-8')) for p in ['seed/lesson_ma2.json','seed/maths_t2_mastery.json']]"
+        run: python -c "import json; [json.load(open(p, encoding='utf-8')) for p in ['seed/lesson_ma2.json','seed/maths_t2_mastery.json','seed/meta_lessons.json']]"
+      - name: Verify lesson index and harness wiring
+        run: bash check.sh
+      - name: Build application
+        run: bash build.sh
+      - name: Run browser regression suite
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          node test.js
