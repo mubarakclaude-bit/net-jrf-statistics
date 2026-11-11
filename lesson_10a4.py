@@ -296,7 +296,7 @@ SC.append(dict(
           "bulk sale, and is produced by the Office of the Economic Adviser in the Department for Promotion of Industry "
           "and Internal Trade, not by MoSPI. Its base was revised from 2011-12 to 2022-23 and the basket expanded from "
           "697 to 957 items. Launched alongside it, on 15 June 2026, was the Output Producer Price Index, with a trial "
-          "Input PPI for manufacturing and a quarterly Services PPI covering seven sectors. WPI is to be discontinued "
+          "Input PPI for manufacturing and a quarterly Services PPI covering seven sectors. WPI continues to be published alongside Output PPI, trial Input PPI and phased Services PPIs; "
           "alongside Output PPI, trial Input PPI and phased Services PPIs; WPI continues to be published."),
    dict(t="def", h="IIP — Index of Industrial Production, base 2022-23=100",
      body="Produced by the NSO. The base-year report came on 25 May 2026 and the first release on the new base on 1 June "
