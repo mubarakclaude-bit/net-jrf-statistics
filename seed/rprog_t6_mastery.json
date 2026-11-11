@@ -263,23 +263,28 @@
       ],
       "answer": "A",
       "explanation": "A, B and C are true; D is false because length includes NA.",
-      "statements": null,
+      "statements": [
+        "na.rm=TRUE does not mutate the original vector.",
+        "is.na(NaN) is TRUE.",
+        "sum(is.na(x)) counts missing entries.",
+        "length(x) excludes NA positions."
+      ],
       "verdicts": {
-        "0": {
-          "tf": "na.rm=TRUE does not mutate the original vector.",
-          "why": "Correct under R missing-value semantics."
+        "A": {
+          "tf": true,
+          "why": "This statement follows the documented rule in the lesson."
         },
-        "1": {
-          "tf": "is.na(NaN) is TRUE.",
-          "why": "Correct under R missing-value semantics."
+        "B": {
+          "tf": true,
+          "why": "This statement follows the documented rule in the lesson."
         },
-        "2": {
-          "tf": "sum(is.na(x)) counts missing entries.",
-          "why": "Correct under R missing-value semantics."
+        "C": {
+          "tf": true,
+          "why": "This statement follows the documented rule in the lesson."
         },
-        "3": {
-          "tf": "length(x) excludes NA positions.",
-          "why": "Correct under R missing-value semantics."
+        "D": {
+          "tf": false,
+          "why": "This statement contradicts the documented rule in the lesson."
         }
       }
     },
@@ -297,23 +302,28 @@
       ],
       "answer": "B",
       "explanation": "A, B and C are true; D is false because na.rm does not remove Inf.",
-      "statements": null,
+      "statements": [
+        "is.na() detects NA.",
+        "is.na() also detects NaN.",
+        "na.rm=TRUE omits missing values in a summary.",
+        "na.rm=TRUE removes Inf."
+      ],
       "verdicts": {
-        "0": {
-          "tf": "is.na() detects NA.",
-          "why": "Correct under R missing-value semantics."
+        "A": {
+          "tf": true,
+          "why": "This statement follows the documented rule in the lesson."
         },
-        "1": {
-          "tf": "is.na() also detects NaN.",
-          "why": "Correct under R missing-value semantics."
+        "B": {
+          "tf": true,
+          "why": "This statement follows the documented rule in the lesson."
         },
-        "2": {
-          "tf": "na.rm=TRUE omits missing values in a summary.",
-          "why": "Correct under R missing-value semantics."
+        "C": {
+          "tf": true,
+          "why": "This statement follows the documented rule in the lesson."
         },
-        "3": {
-          "tf": "na.rm=TRUE removes Inf.",
-          "why": "Correct under R missing-value semantics."
+        "D": {
+          "tf": false,
+          "why": "This statement contradicts the documented rule in the lesson."
         }
       }
     },
@@ -347,20 +357,6 @@
       ],
       "answer": "D",
       "explanation": "The median depends on the middle ordered value rather than the magnitude of every observation."
-    },
-    {
-      "id": "rprog-t6-m-21",
-      "diff": "hard",
-      "format": "single",
-      "topic": "rprog-t6",
-      "stem": "Which expression counts observed entries in x?",
-      "options": [
-        "sum(is.na(x))",
-        "length(x)",
-        "sum(!is.na(x))",
-        "range(x)"
-      ],
-      "explanation": "The negation of is.na identifies non-missing entries."
     }
   ]
 }
