@@ -2,9 +2,11 @@
 
 Date: 12 November 2026
 
-- Lesson package: 15 scenes, including two guided practice scenes, two applied scenarios, an orthogonalisation flow and revision sheet.
-- Mastery pool: 20 items; 6 easy, 10 moderate, 4 hard; answer keys balanced A=5, B=5, C=5, D=5; 8 numeric, 10 single-choice, 2 multi-statement.
-- Exact anchors: projection and residual, Gram–Schmidt in R², orthonormal basis and orthogonal-matrix determinant.
-- Evidence map: evidence/mathst15.md.
-- App schema, formula rendering, index/harness and browser validation: included in the expanded Mathematics package workflow; final run pending.
-- Release status: DRAFT / NOT IN PRODUCTION.
+- Lesson: 15 scenes, Gram–Schmidt flow, two applied scenarios, revision sheet and three references.
+- Mastery pool: 20 questions; 6 easy, 10 moderate, 4 hard; eight numeric and two multi-statement.
+- Exact checks: projection/residual, Gram–Schmidt orthonormal basis and orthogonal-matrix determinant.
+- App scene validator: PASS; mastery pool validator: PASS; formula renderer: PASS; JSON and index/harness checks: PASS; application build: PASS; Playwright browser regression: PASS.
+
+GitHub Actions: https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43092839189
+
+Status: VALIDATED ON DEVELOPMENT BRANCH; draft pending consolidated release and human approval. Not in production.
