@@ -167,24 +167,24 @@
      "ask": "If x is p×1, what are dimensions of xx′?",
      "recall": "p×p.",
      "refresh": [
-      "A p×1 column multiplied by its 1×p transpose gives a p×p matrix.",
-      "The outer product is symmetric and positive semidefinite because a′xx′a=(x′a)²≥0."
+      "A p×1 column vector has p rows and one column. Its transpose has one row and p columns, so xx′ is a p×p matrix. This is the outer product, not the scalar inner product x′x. The dimensions matter because a covariance matrix must have one row and one column for every measured variable.",
+      "The (j,k) entry of xx′ is xⱼxₖ. Swapping j and k leaves the product unchanged, so the outer-product matrix is symmetric. For any vector a, a′xx′a=(x′a)², which cannot be negative; therefore each outer product is positive semidefinite."
      ]
     },
     {
      "ask": "What does the covariance matrix diagonal contain?",
      "recall": "Variances.",
      "refresh": [
-      "Entry (j,j) is Var(Xⱼ), the variance of coordinate j.",
-      "Off-diagonal entries are covariances; symmetry gives Cov(Xⱼ,Xₖ)=Cov(Xₖ,Xⱼ)."
+      "The jth diagonal entry of a covariance matrix is Var(Xⱼ), the variance of variable j. It describes how widely that variable varies around its population mean. Diagonal entries are nonnegative, and they are positive when the corresponding variable is non-degenerate.",
+      "The off-diagonal entry in position (j,k) is Cov(Xⱼ,Xₖ), which describes how the two variables vary together. Covariance matrices are symmetric because Cov(Xⱼ,Xₖ)=Cov(Xₖ,Xⱼ); hence entry (j,k) equals entry (k,j)."
      ]
     },
     {
      "ask": "What is the sample mean vector?",
      "recall": "x̄=(1/n)Σxᵢ.",
      "refresh": [
-      "Add observation vectors coordinate by coordinate and divide by n.",
-      "The sample mean is the multivariate normal MLE of μ."
+      "The sample mean vector is formed by averaging each coordinate across the n observations. If every observation is p×1, the resulting mean vector is also p×1. Its jth entry is the ordinary sample mean of the jth variable.",
+      "For a multivariate normal sample, maximising the likelihood with respect to the unknown mean vector gives μ̂=x̄. This estimate is then used to centre every observation before the covariance matrix MLE is calculated."
      ]
     }
    ],
