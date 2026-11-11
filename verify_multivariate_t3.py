@@ -11,7 +11,7 @@ assert L["scenes"][-1]["setId"]=="multivariate_t3_mastery"
 assert len(L["scenes"])>=12 and len(P["items"])==P["count"]==20
 assert Counter(q["diff"] for q in P["items"])=={"easy":6,"moderate":10,"hard":4}
 assert Counter(q["format"] for q in P["items"])=={"single":12,"numeric":5,"multi":3}
-assert Counter(q["answer"] for q in P["items"])=={"A":5,"B":5,"C":8,"D":2}
+assert Counter(q["answer"] for q in P["items"])=={"A":5,"B":5,"C":5,"D":5}
 for q in P["items"]:
  assert len(q["options"])==4 and q["answer"] in "ABCD" and len(q["explanation"])>=30
  if q["format"]=="numeric": assert q.get("check")
