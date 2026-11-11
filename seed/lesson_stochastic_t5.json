@@ -6,9 +6,9 @@
  "breadcrumb": "Stochastic processes → Poisson process → Counts and waiting times",
  "engine": "B",
  "engineName": "Translate between event counts, inter-arrival times and waiting-time distributions using the rate λ.",
- "version": "1.0",
+ "version": "4.1",
  "status": "approved",
- "estMin": 100,
+ "estMin": 115,
  "objectives": [
   "Recognise the defining assumptions and rate parameter of a homogeneous Poisson process.",
   "Calculate event-count probabilities using N(t) ~ Poisson(λt).",
@@ -63,6 +63,16 @@
    "free": true,
    "checked": "2026-11-11",
    "why": "Mathematical background for counting processes and exponential waiting times."
+  },
+  {
+   "title": "A First Course in Stochastic Processes",
+   "where": "Poisson processes and waiting-time distributions",
+   "site": "Samuel Karlin and Howard M. Taylor",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "A standard mathematical treatment of counting processes and inter-arrival times."
   }
  ],
  "provenance": "Original teaching material aligned to the Poisson-process, inter-arrival and waiting-time items in UGC NET Statistics Unit IX. Practice questions are original and are not represented as official UGC NET PYQs.",
@@ -147,27 +157,27 @@
      "ask": "If events occur at 8 per hour, what is the expected count in 15 minutes?",
      "recall": "2 events.",
      "refresh": [
-      "Convert 15 minutes to 1/4 hour.",
-      "Expected count is rate multiplied by duration: 8×1/4=2.",
-      "The expected count need not be an integer, although an observed count is an integer."
+      "A rate λ is measured in events per unit time. To find the expected count in a time interval, multiply the rate by the interval length after converting both to compatible units.",
+      "With 8 events per hour and a 15-minute interval, first write 15 minutes as one quarter of an hour. The expected count is therefore 8×(1/4)=2 events.",
+      "An expected count is an average over repeated intervals. It can be non-integer even though each observed count is a whole number; the Poisson distribution describes the variation around that mean."
      ]
     },
     {
      "ask": "For X~Exp(λ), what is P(X>t)?",
      "recall": "e^(−λt), for t≥0.",
      "refresh": [
-      "The exponential CDF is F(t)=1−e^(−λt).",
-      "A survival probability is one minus the CDF, so P(X>t)=e^(−λt).",
-      "The exponent λt must be dimensionless: rate times time."
+      "The exponential distribution models a nonnegative waiting time. Its cumulative distribution function is F(t)=1−e^(−λt), for t≥0, so the probability of waiting longer than t is the complement.",
+      "Subtract the CDF from one: P(X>t)=1−F(t)=1−(1−e^(−λt))=e^(−λt). This is the survival probability, not the probability of an arrival by time t.",
+      "Use the wording carefully: 'more than t' uses e^(−λt), while 'within t' uses 1−e^(−λt). The product λt must be dimensionless, so rate and time units must match."
      ]
     },
     {
      "ask": "If X~Exp(λ), what is its mean?",
      "recall": "1/λ.",
      "refresh": [
-      "λ is the rate parameter, not the mean.",
-      "A larger rate means events arrive more frequently and the average waiting time becomes shorter.",
-      "The mean waiting time is 1/λ time units."
+      "For an exponential waiting time with rate λ, the density is f(t)=λe^(−λt), t≥0. Integrating t f(t) gives the mean waiting time 1/λ; a larger rate therefore means a shorter average wait.",
+      "The rate λ is not itself the mean. If λ=4 events per hour, the mean waiting time is 1/4 hour, or 15 minutes. Always state the reciprocal in time units.",
+      "The variance is 1/λ², measured in squared time units. A useful dimensional check is that a rate has units 1/time, so its reciprocal is a time and its reciprocal square is time squared."
      ]
     }
    ],
@@ -586,6 +596,56 @@
    "ask": {
     "q": "Before submitting a numerical answer, what three checks should you make?",
     "nudge": "Distribution, units and event wording."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s12",
+   "mins": 8,
+   "title": "Guided problem: waiting for the third event",
+   "objective": "Translate a kth-arrival probability into a Poisson count.",
+   "problem": "A homogeneous Poisson process has rate 2 events per minute. Find P(T₃>1 minute), the probability that the third event has not occurred by one minute.",
+   "hints": [
+    "Translate the event: T₃>1 means fewer than three events have occurred by time 1.",
+    "Use N(1)~Poisson(2), so add the probabilities for counts 0, 1 and 2.",
+    "Substitute into e^(−2)Σₙ₌₀²2ⁿ/n!. Keep the time unit in minutes."
+   ],
+   "answer": "P(T₃>1)=P(N(1)≤2)=e^(−2)(1+2+2)=5e^(−2)≈0.6767.",
+   "solution": [
+    "The event T₃>1 is equivalent to N(1)≤2: the third arrival has not yet occurred exactly when no more than two arrivals have occurred.",
+    "The count in one minute is Poisson with mean λt=2×1=2.",
+    "Therefore P(T₃>1)=P(N(1)=0)+P(N(1)=1)+P(N(1)=2).",
+    "Evaluate the Poisson terms: e^(−2)[1+2+2²/2!]=5e^(−2)≈0.6767."
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 5,
+   "title": "Summary: counts, gaps and arrival epochs",
+   "objective": "Connect the main Poisson-process formulas before mastery practice.",
+   "body": [
+    "For a homogeneous Poisson process, N(t)~Poisson(λt), so P(N(t)=n)=e^(−λt)(λt)^n/n!. Its mean and variance are both λt.",
+    "Counts in disjoint intervals are independent, and the distribution of an increment depends only on the interval length.",
+    "Inter-arrival times are iid Exp(λ), with survival e^(−λt), mean 1/λ and variance 1/λ².",
+    "The time T_k to the kth event is Gamma/Erlang(k,λ), with mean k/λ and variance k/λ².",
+    "Use P(T_k>t)=P(N(t)≤k−1) to switch between waiting-time and count questions. Convert units before substituting."
+   ],
+   "ask": {
+    "q": "A question asks for the probability that the fourth arrival occurs after time t. Which count event is equivalent?",
+    "nudge": "The fourth arrival is still pending when at most three events have occurred."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate independent problem-solving on unseen Poisson-process questions.",
+   "setId": "stochastic_t5_mastery",
+   "ask": {
+    "q": "Ready for the unseen mastery set?",
+    "nudge": "Attempt without hints and check the units in every numerical item."
    }
   }
  ],
