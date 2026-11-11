@@ -1,0 +1,567 @@
+{
+  "id": "rprogt5",
+  "topicId": "rprog-t5",
+  "moduleId": "rprog",
+  "title": "Statement ordering and output tracing in R",
+  "breadcrumb": "Module 9 · R Programming · Statement ordering and output tracing",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "1.0",
+  "status": "review",
+  "estMin": 60,
+  "objectives": [
+    "Trace assignments and expressions in source order.",
+    "Follow conditional and loop control flow.",
+    "Distinguish printed output from returned values.",
+    "Compute final values using updated bindings."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "R assignment and arithmetic",
+      "why": "Output tracing requires tracking changing values."
+    },
+    {
+      "id": "p2",
+      "name": "Conditions and loops",
+      "why": "Control flow determines which statements execute."
+    },
+    {
+      "id": "p2",
+      "name": "Logical conditions",
+      "why": "if/else selects branches based on TRUE or FALSE."
+    },
+    {
+      "id": "p3",
+      "name": "Loop structure",
+      "why": "Loop traces require iteration-by-iteration updates."
+    }
+  ],
+  "traps": [
+    "R normally evaluates statements in source order.",
+    "A later assignment changes the value used by later expressions.",
+    "Only the selected if/else branch executes.",
+    "break exits the nearest loop; next skips the current iteration.",
+    "Assignment does not automatically print a value.",
+    "Printed output and a function's returned value are different."
+  ],
+  "revision": {
+    "sheet": [
+      "Read the snippet from top to bottom.",
+      "Record initial values before executing statements.",
+      "Apply each assignment immediately; later expressions use updated values.",
+      "Evaluate the if condition and follow only the selected branch.",
+      "Trace loops iteration by iteration; next skips and break exits.",
+      "print() displays an object; it does not reassign the name.",
+      "Check the final expression when asked for a function's return value.",
+      "For nested loops, identify which loop each break or next affects."
+    ],
+    "cards": [
+      [
+        "Assignment",
+        "Update a binding"
+      ],
+      [
+        "if/else",
+        "Select one branch"
+      ],
+      [
+        "for/while",
+        "Repeat statements"
+      ],
+      [
+        "break",
+        "Exit nearest loop"
+      ],
+      [
+        "next",
+        "Skip current iteration"
+      ],
+      [
+        "print()",
+        "Display an object"
+      ]
+    ],
+    "tricks": [
+      "Use a state table.",
+      "Write values after each assignment.",
+      "Mark the selected branch.",
+      "Do not skip loop iterations."
+    ],
+    "shortcuts": [
+      "Create one row per statement or loop iteration.",
+      "Circle the requested output.",
+      "Mark unexecuted statements explicitly."
+    ],
+    "remember": [
+      "Order matters.",
+      "Use the latest values.",
+      "Only executed statements count.",
+      "Separate print from return."
+    ]
+  },
+  "howto": "Use a trace table. Write initial bindings, process statements in source order, evaluate each condition, record loop iterations, and distinguish displayed output from the value returned by a function.",
+  "refs": [
+    {
+      "title": "R Language Definition",
+      "where": "Evaluation and expressions",
+      "site": "R Core Team",
+      "url": "https://cran.r-project.org/doc/manuals/r-release/R-lang.html",
+      "type": "Official language documentation",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Primary language semantics."
+    },
+    {
+      "title": "R Documentation: Control Flow",
+      "where": "if, for, while, break and next",
+      "site": "R Core Team",
+      "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/Control.html",
+      "type": "Official documentation",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Control-flow semantics."
+    },
+    {
+      "title": "R Documentation: function",
+      "where": "Function return values",
+      "site": "R Core Team",
+      "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/function.html",
+      "type": "Official documentation",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Function return behaviour."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings; not an NTA rule."
+  },
+  "anchors": [],
+  "provenance": "Catalog rprog-t5: Statement ordering questions. No unsupported PYQ anchor is claimed.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Read code as an ordered sequence",
+      "objective": "Understand sequential evaluation.",
+      "body": [
+        "R normally evaluates expressions in source order. A later statement uses the values established by earlier assignments.",
+        "An assignment updates a name-to-value binding. It does not automatically print the assigned value.",
+        "A reliable output trace starts with initial values and records every change."
+      ],
+      "items": [
+        {
+          "ask": "What does an assignment do?",
+          "recall": "It updates a name-to-value binding.",
+          "refresh": [
+            "An assignment such as x <- 4 creates or updates the binding named x. A later expression that refers to x uses the latest value established by executed statements.",
+            "For output questions, keep a small state table. Record the value after every assignment rather than trying to remember several updates mentally; this prevents accidentally using an old value."
+          ]
+        },
+        {
+          "ask": "What is the default order of statement evaluation?",
+          "recall": "Statements normally execute in source order.",
+          "refresh": [
+            "R normally evaluates expressions in the order they appear. A statement later in the same execution path sees the effects of earlier assignments and function calls.",
+            "Control-flow statements can change which lines execute, but they do not change the basic rule that the selected sequence is followed in order. Mark skipped and unselected lines explicitly."
+          ]
+        },
+        {
+          "ask": "What is the difference between break and next?",
+          "recall": "break exits the nearest loop; next skips the current iteration.",
+          "refresh": [
+            "break terminates the nearest enclosing loop immediately. next skips the remaining statements in the current iteration and proceeds to the next iteration, if one remains.",
+            "For a loop trace, check the location of break or next before applying later statements in that iteration. This is especially important when an accumulator update appears after the control statement."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What is the safest way to trace a multi-line snippet?",
+        "nudge": "Use a line-by-line state table."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 5,
+      "title": "Follow the state changes",
+      "objective": "Track variables after each assignment.",
+      "body": [
+        "For x <- 2; x <- x+3; x*2, the second statement changes x to 5 and the final expression is 10.",
+        "Never use an old value after a later assignment has updated the binding."
+      ],
+      "scenario": {
+        "teaser": "A data-cleaning script",
+        "title": "An analyst updates a threshold",
+        "body": [
+          "An analyst begins with threshold=10, changes it to threshold+5, then compares a score with the updated threshold.",
+          "The final comparison must use 15, not the original 10.",
+          " A reliable trace records the value of every variable after each executed statement and notes the exact iteration at which a branch or loop-control command is reached. Lines that are skipped must not be included in the final calculation. The final expression is evaluated only after all earlier updates on the executed path have been applied."
+        ],
+        "q": "Which threshold is used after the assignment?",
+        "answer": "15."
+      },
+      "ask": {
+        "q": "What should be recorded after each assignment?",
+        "nudge": "Record the new binding."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 7,
+      "title": "Assignments and expression order",
+      "objective": "Apply sequential evaluation.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Sequential execution",
+          "body": "Statements normally execute in the order written."
+        },
+        {
+          "t": "formula",
+          "h": "Updated bindings",
+          "body": "If x <- 2 and then x <- x+3, x is 5 for subsequent expressions."
+        },
+        {
+          "t": "step",
+          "h": "Trace table",
+          "body": "Record line number, expression, and current values of all variables that may change."
+        }
+      ],
+      "flow": {
+        "title": "Output tracing",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 0,
+            "label": "Write initial values",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 0,
+            "label": "Apply assignment",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 0,
+            "label": "Follow control flow",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 0,
+            "label": "Read requested output",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          }
+        ]
+      },
+      "ask": {
+        "q": "What is the first step in an output-tracing question?",
+        "nudge": "Identify the initial values."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 7,
+      "title": "Trace a worked code fragment",
+      "objective": "Compute final output.",
+      "problem": "Evaluate x <- 3; x <- x*2; x <- x-1; x.",
+      "steps": [
+        {
+          "say": "Initialise.",
+          "math": "x=3.",
+          "why": "Start from the stated value."
+        },
+        {
+          "say": "Apply multiplication assignment.",
+          "math": "x=3×2=6.",
+          "why": "The updated value is now 6."
+        },
+        {
+          "say": "Apply subtraction assignment.",
+          "math": "x=6−1=5.",
+          "why": "The next line uses 6."
+        },
+        {
+          "say": "Read final expression.",
+          "math": "5.",
+          "why": "The final expression returns the current value."
+        }
+      ],
+      "ask": {
+        "q": "Why is it unsafe to jump directly to the last line?",
+        "nudge": "Earlier statements may have changed its inputs."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 4,
+      "title": "Execution rules",
+      "objective": "Recall the core rules.",
+      "intro": "Recall each rule.",
+      "items": [
+        {
+          "q": "Assignment",
+          "a": "Updates a binding."
+        },
+        {
+          "q": "if/else",
+          "a": "Selects one branch."
+        },
+        {
+          "q": "break",
+          "a": "Exits the nearest loop."
+        },
+        {
+          "q": "next",
+          "a": "Skips the current iteration."
+        },
+        {
+          "q": "print(x)",
+          "a": "Displays x without reassigning it."
+        }
+      ],
+      "ask": {
+        "q": "What is the common source of an incorrect trace?",
+        "nudge": "Skipping a state update or branch."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s5",
+      "mins": 7,
+      "title": "Control flow changes the path",
+      "objective": "Recognise conditional and repeated execution.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Conditions",
+          "body": "if/else selects a branch based on a logical condition."
+        },
+        {
+          "t": "formula",
+          "h": "Loops",
+          "body": "for and while repeat statements; break exits the nearest loop and next skips the current iteration."
+        },
+        {
+          "t": "step",
+          "h": "Output",
+          "body": "Track which statements execute, how often, and the value after each update."
+        }
+      ],
+      "ask": {
+        "q": "Does an else branch execute when the if condition is TRUE?",
+        "nudge": "Only one branch is selected."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s6",
+      "mins": 6,
+      "title": "Guided trace",
+      "objective": "Apply sequential evaluation.",
+      "problem": "x <- 1; if(x>0) x <- x+4 else x <- x-4; x.",
+      "hints": [
+        "Evaluate x>0.",
+        "Follow the selected branch.",
+        "Read the updated x."
+      ],
+      "answer": "5",
+      "check": "The condition is TRUE; x becomes 5.",
+      "ask": {
+        "q": "What changes if the condition is FALSE?",
+        "nudge": "The else branch is selected."
+      },
+      "solution": [
+        {
+          "say": "Start with the initial binding.",
+          "math": "x = 1.",
+          "why": "Record the value before executing the conditional."
+        },
+        {
+          "say": "Evaluate the condition and follow its branch.",
+          "math": "x > 0 is TRUE, so x becomes 1 + 4 = 5.",
+          "why": "Only the selected if branch executes."
+        },
+        {
+          "say": "Read the final expression.",
+          "math": "The final value of x is 5.",
+          "why": "The last expression uses the updated binding."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 6,
+      "title": "Printed output versus returned value",
+      "objective": "Distinguish display and return.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Assignment",
+          "body": "Assignment changes a binding; it is not itself a print operation."
+        },
+        {
+          "t": "def",
+          "h": "Print",
+          "body": "print(x) displays the object. It does not assign a new value to x."
+        },
+        {
+          "t": "step",
+          "h": "Return",
+          "body": "A function returns an explicit return(value) or, otherwise, its last evaluated expression."
+        }
+      ],
+      "ask": {
+        "q": "Does print(x) change x?",
+        "nudge": "Printing displays a value; assignment changes a binding."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 6,
+      "title": "Loop trace drill",
+      "objective": "Trace loop updates and break.",
+      "problem": "x <- 1; for(i in 1:5){if(i==3) break; x <- x+i}; x.",
+      "hints": [
+        "i=1 updates x to 2.",
+        "i=2 updates x to 4.",
+        "At i=3, break exits before the addition."
+      ],
+      "answer": "4",
+      "check": "Only i=1 and i=2 update x.",
+      "ask": {
+        "q": "What does next do?",
+        "nudge": "It skips the current iteration."
+      },
+      "scenario": {
+        "teaser": "Stop a calculation at a threshold",
+        "title": "A quality-control loop",
+        "body": [
+          "An analyst adds successive values to an accumulator but stops when the loop reaches a specified iteration.",
+          "The break statement exits before the update on that iteration, so the final accumulator includes only earlier additions.",
+          " A reliable trace records the value of every variable after each executed statement and notes the exact iteration at which a branch or loop-control command is reached. Lines that are skipped must not be included in the final calculation. The final expression is evaluated only after all earlier updates on the executed path have been applied."
+        ],
+        "q": "Does the iteration that triggers break update the accumulator?",
+        "answer": "No; break exits before the later update statement."
+      },
+      "solution": [
+        {
+          "say": "Trace the first two iterations.",
+          "math": "i = 1 gives x = 2; i = 2 gives x = 4.",
+          "why": "Each iteration adds i to the current accumulator."
+        },
+        {
+          "say": "Evaluate the third iteration's condition.",
+          "math": "At i = 3, the break statement executes.",
+          "why": "break exits the nearest loop before the following addition."
+        },
+        {
+          "say": "Report the retained accumulator.",
+          "math": "x remains 4.",
+          "why": "No update occurs for i=3 or for later iterations after the loop exits."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 5,
+      "title": "Exam traps",
+      "objective": "Avoid common tracing errors.",
+      "intro": "Judge each statement.",
+      "items": [
+        {
+          "claim": "Statements normally execute in source order.",
+          "tf": true,
+          "why": "Sequential evaluation is the default."
+        },
+        {
+          "claim": "A later assignment cannot affect a later expression.",
+          "tf": false,
+          "why": "The later expression uses the updated binding."
+        },
+        {
+          "claim": "An unselected if branch still executes.",
+          "tf": false,
+          "why": "Only the selected branch runs."
+        },
+        {
+          "claim": "break exits the nearest loop.",
+          "tf": true,
+          "why": "That is the documented loop-control meaning."
+        }
+      ],
+      "ask": {
+        "q": "What should be checked before evaluating a final expression?",
+        "nudge": "The latest values and executed path."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s10",
+      "mins": 4,
+      "title": "The output-tracing checklist",
+      "objective": "Consolidate the procedure.",
+      "body": [
+        "Read the snippet from top to bottom and write initial values.",
+        "Apply assignments in order; later expressions use updated bindings.",
+        "Evaluate if conditions and follow only the selected branch.",
+        "Trace loops iteration by iteration; apply next and break exactly where encountered.",
+        "Distinguish printed output, intermediate values and a function's returned value."
+      ],
+      "ask": {
+        "q": "State the four-step tracing procedure.",
+        "nudge": "Initial state, sequential updates, control flow, requested output."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s11",
+      "mins": 2,
+      "title": "Mastery test",
+      "objective": "Demonstrate independent code-tracing skill.",
+      "setId": "rprog_t5_mastery"
+    }
+  ]
+}
