@@ -17,7 +17,7 @@ function seedDocs() {
                    'inference_t4_practice', 'inference_t4_mastery', 'inference_t1_mastery', 'inference_t2_mastery', 'inference_t3_mastery', 'inference_t6_mastery', 'inference_t5_mastery', 'inference_t9_mastery', 'inference_t7_mastery', 'inference_t8_mastery', 'inference_t12_mastery', 'inference_t10_mastery', 'inference_t13_mastery', 'inference_t17_mastery', 'inference_t15_mastery', 'inference_t14_mastery', 'inference_t16_mastery', 'inference_t11_mastery', 'timeseries_t3_mastery', 'timeseries_t5_mastery', 'official_t1_mastery', 'official_t2_mastery', 'official_t3_mastery', 'official_t4_mastery', 'official_t5_mastery', 'probability_t7_mastery', 'nonparam_t4_mastery', 'timeseries_t11_mastery', 'timeseries_t10_mastery', 'timeseries_t9_mastery', 'timeseries_t8_mastery', 'timeseries_t4_mastery', 'timeseries_t2_mastery', 'timeseries_t1_mastery', 'timeseries_t7_mastery', 'timeseries_t6_mastery', 'probability_t10_mastery', 'probability_t8_mastery', 'maths_t4_mastery', 'maths_t2_mastery', 'maths_t3_mastery', 'maths_t5_mastery', 'maths_t6_mastery', 'maths_t7_mastery', 'maths_t8_mastery', 'maths_t9_mastery', 'maths_t10_mastery', 'maths_t11_mastery', 'maths_t12_mastery', 'maths_t13_mastery', 'maths_t14_mastery', 'maths_t15_mastery', 'maths_t16_mastery', 'probability_t5_mastery', 'maths_t1_mastery', 'probability_t1_mastery', 'probability_t13_mastery', 'probability_t3_mastery',
                    'inference_pyq_variants','maths_pyq_variants','probability_pyq_variants',
                    'timeseries_pyq_variants','rprog_pyq_variants','regression_pyq_variants',
-                   'multivariate_pyq_variants','nonparam_pyq_variants','official_pyq_variants', 'stochastic_t1_mastery']) docs['qsets/' + f] = J(f);
+                   'multivariate_pyq_variants','nonparam_pyq_variants','official_pyq_variants', 'stochastic_t1_mastery', 'design_t1_mastery', 'design_t2_mastery', 'design_t3_mastery', 'design_t4_mastery', 'design_t5_mastery', 'design_t6_mastery', 'design_t7_mastery', 'design_t8_mastery']) docs['qsets/' + f] = J(f);
   docs['lessons/mle'] = J('lesson_mle');
   docs['lessons/inferencet1'] = J('lesson_t1');
   docs['lessons/inferencet2'] = J('lesson_t2');
@@ -76,6 +76,14 @@ function seedDocs() {
   docs['lessons/nonparamt4'] = J('lesson_np4');
   docs['lessons/probabilityt7'] = J('lesson_pr7');
   docs['lessons/stochastict1'] = J('lesson_stochastic_t1');
+  docs['lessons/designt1'] = J('lesson_design_t1');
+  docs['lessons/designt2'] = J('lesson_design_t2');
+  docs['lessons/designt3'] = J('lesson_design_t3');
+  docs['lessons/designt4'] = J('lesson_design_t4');
+  docs['lessons/designt5'] = J('lesson_design_t5');
+  docs['lessons/designt6'] = J('lesson_design_t6');
+  docs['lessons/designt7'] = J('lesson_design_t7');
+  docs['lessons/designt8'] = J('lesson_design_t8');
   docs['meta/lessons'] = J('meta_lessons');
   docs['meta/users'] = J('meta_users');
   docs['meta/syllabus'] = J('meta_syllabus');
