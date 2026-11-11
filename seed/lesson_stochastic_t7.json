@@ -1,0 +1,677 @@
+{
+ "id": "stochastict7",
+ "topicId": "stochastic-t7",
+ "moduleId": "stochastic",
+ "title": "Birth–Death Processes and M/M/1 Queues",
+ "breadcrumb": "Stochastic processes → Birth–death processes → M/M/1 queues",
+ "engine": "B",
+ "engineName": "Track one-step births and deaths, find equilibrium probabilities, then translate the birth–death model into queueing measures.",
+ "version": "4.1",
+ "status": "approved",
+ "estMin": 94,
+ "objectives": [
+  "Represent a birth–death process using state-dependent birth and death rates.",
+  "Write the forward balance equations and identify stationary probabilities.",
+  "Derive the stationary distribution of an M/M/1 queue and its stability condition.",
+  "Calculate utilisation, idle probability, mean queue length, mean system size and waiting times.",
+  "Distinguish customers in the queue from customers in the whole system and apply Little’s law."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Poisson process and exponential waiting times",
+   "why": "M/M/1 assumes Poisson arrivals and exponential service times."
+  },
+  {
+   "id": "p2",
+   "name": "Geometric series",
+   "why": "The stationary M/M/1 probabilities form a geometric distribution."
+  },
+  {
+   "id": "p3",
+   "name": "Expectation and Little’s law",
+   "why": "Queueing measures are long-run means linked by flow rate and time."
+  }
+ ],
+ "traps": [
+  "Birth and death rates depend on the current state; do not assume constant rates unless specified.",
+  "For M/M/1, λ is the arrival rate and μ is the service rate.",
+  "A stationary distribution exists only when λ<μ; ρ=λ/μ must be below one.",
+  "P(N=n)=(1−ρ)ρⁿ includes n=0; the queue is empty with probability 1−ρ.",
+  "L is the mean number in the whole system; Lq excludes the customer in service.",
+  "W is time in the whole system; Wq is waiting time before service.",
+  "Use the same time unit for λ and μ."
+ ],
+ "howto": "Define the state n, identify upward and downward transition rates, write local balance, normalise the stationary probabilities, check stability, and only then calculate queueing measures.",
+ "refs": [
+  {
+   "title": "Fundamentals of Queueing Theory",
+   "where": "Birth–death processes and M/M/1 queues",
+   "site": "Gross, Shortle, Thompson and Harris",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Standard derivation and performance measures for birth–death queues."
+  },
+  {
+   "title": "Introduction to Probability Models",
+   "where": "Markovian queueing models",
+   "site": "Sheldon M. Ross",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Birth–death balance equations and M/M/1 results."
+  },
+  {
+   "title": "Queueing Systems, Volume 1: Theory",
+   "where": "Birth–death queueing models and M/M/1",
+   "site": "Leonard Kleinrock",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "A foundational reference for queueing systems and steady-state performance."
+  }
+ ],
+ "provenance": "Original teaching material aligned to the Birth and death processes and M/M/1 queues items in UGC NET Statistics Unit IX. Practice questions are original and are not represented as official UGC NET PYQs. The v4.1 revision adds a third foundation check, a longer M/M/1 clinic scenario, a queue-performance transfer exercise, a summary and mastery test. Guided solutions use the repository's typed step structure.",
+ "revision": {
+  "sheet": [
+   "A birth–death process moves n→n+1 at rate λ_n and n→n−1 at rate μ_n.",
+   "For n≥1, the forward equation is p'_n(t)=λ_{n−1}p_{n−1}(t)+(μ_{n+1})p_{n+1}(t)−(λ_n+μ_n)p_n(t).",
+   "Stationary local balance: π_n λ_n=π_{n+1} μ_{n+1}.",
+   "π_n=π_0∏_{k=0}^{n−1}(λ_k/μ_{k+1}); choose π_0 so probabilities sum to one.",
+   "M/M/1: arrivals Poisson(λ), service times Exp(μ), one server, FCFS, infinite capacity and population.",
+   "ρ=λ/μ; a stationary distribution requires ρ<1.",
+   "P(N=n)=(1−ρ)ρⁿ, n=0,1,…; P(N=0)=1−ρ.",
+   "L=ρ/(1−ρ); Lq=ρ²/(1−ρ).",
+   "W=1/(μ−λ); Wq=ρ/(μ−λ)=λ/[μ(μ−λ)].",
+   "Little’s law: L=λW and Lq=λWq."
+  ],
+  "cards": [
+   [
+    "Birth rate",
+    "λ_n: transition n→n+1."
+   ],
+   [
+    "Death rate",
+    "μ_n: transition n→n−1."
+   ],
+   [
+    "Local balance",
+    "π_n λ_n=π_{n+1} μ_{n+1}."
+   ],
+   [
+    "M/M/1 stability",
+    "λ<μ, equivalently ρ<1."
+   ],
+   [
+    "Utilisation",
+    "ρ=λ/μ."
+   ],
+   [
+    "Empty system",
+    "P₀=1−ρ."
+   ],
+   [
+    "Mean in system",
+    "L=ρ/(1−ρ)."
+   ],
+   [
+    "Mean in queue",
+    "Lq=ρ²/(1−ρ)."
+   ],
+   [
+    "Mean system time",
+    "W=1/(μ−λ)."
+   ],
+   [
+    "Mean queue wait",
+    "Wq=ρ/(μ−λ)."
+   ]
+  ],
+  "tricks": [
+   "If ρ≥1, do not calculate stationary M/M/1 means as if equilibrium existed.",
+   "The probability of n customers is geometric over n=0,1,…, not a Poisson count.",
+   "Check L−Lq=ρ: on average, this is the probability that the server is busy.",
+   "Check Little’s law independently: L/λ should equal W."
+  ],
+  "shortcuts": [
+   "Given λ and μ, calculate ρ first; it decides stability and supplies every M/M/1 formula.",
+   "P(system empty)=1−ρ and P(server busy)=ρ.",
+   "As ρ approaches one from below, queue length and waiting time grow rapidly."
+  ],
+  "remember": [
+   "The first M in M/M/1 refers to Markovian (Poisson) arrivals; the second to exponential service; 1 is one server.",
+   "L and W include service; Lq and Wq exclude service."
+  ]
+ },
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 6,
+   "title": "Refresh rates, states and exponential times",
+   "objective": "Recover the tools needed to read a birth–death model.",
+   "body": [
+    "A continuous-time Markov chain changes state at random event times. In a birth–death process the state is a nonnegative integer: a birth increases it by one and a death decreases it by one.",
+    "A rate is an average event intensity per unit time. If a service rate is μ=5 per hour, the mean service time is 1/5 hour. An exponential waiting time with rate μ has survival probability e^(−μt).",
+    "The state is not necessarily a population of people: it may be customers in a system, machines operating, or another count. The meaning of a birth and death must be defined from the context."
+   ],
+   "items": [
+    {
+     "ask": "If the service rate is 4 customers per hour, what is the mean service time?",
+     "recall": "1/4 hour = 15 minutes.",
+     "refresh": [
+      "A service rate μ describes the average number of service completions per unit of time when the server is continuously busy. The corresponding exponential service time has mean 1/μ.",
+      "If μ=4 customers per hour, the mean service time is 1/4 hour. Since one hour contains 60 minutes, this is 15 minutes per customer on average.",
+      "The reciprocal relationship is essential: a higher service rate means shorter average service time. State the unit after taking the reciprocal, and do not interpret μ itself as a duration."
+     ]
+    },
+    {
+     "ask": "In a customer-count model, what does a transition n→n+1 represent?",
+     "recall": "One arrival; a birth.",
+     "refresh": [
+      "The state n records the number of customers currently in the system, including any customer in service. An arrival adds one customer, so it changes the state from n to n+1.",
+      "A service completion removes one customer from the system, changing n to n−1. These are the upward and downward transitions in a birth–death representation of a queue.",
+      "At state zero there is nobody to serve, so a service completion cannot occur. In an M/M/1 queue the death rate is μ for n≥1, while the downward rate from zero is zero."
+     ]
+    },
+    {
+     "ask": "What does ρ=λ/μ measure in an M/M/1 queue?",
+     "recall": "The traffic intensity or server utilisation.",
+     "refresh": [
+      "The arrival rate λ measures the average number of customers entering per unit time, while μ measures the service capacity of the single server in the same time unit.",
+      "Their ratio ρ=λ/μ compares offered workload with service capacity. For a stable M/M/1 queue, ρ must be strictly less than one; if ρ≥1, a stationary probability distribution does not exist.",
+      "For example, λ=3 per hour and μ=6 per hour give ρ=3/6=0.5. Under the stable model, this is also the long-run probability that the server is busy."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "Why must arrival and service rates use the same time unit?",
+    "nudge": "You will divide one rate by the other to obtain utilisation."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 5,
+   "title": "A changing population: births and deaths",
+   "objective": "Interpret state-dependent transition rates.",
+   "body": [
+    "Imagine a small population. When the process is in state n, births occur at rate λ_n and deaths occur at rate μ_n. The rates may depend on n.",
+    "A birth–death process can describe queue length: arrivals are births, service completions are deaths. In an M/M/1 queue, arrivals occur at constant rate λ and service completions occur at rate μ whenever at least one customer is present.",
+    "At state zero there is no customer to depart, so μ_0=0. This boundary condition prevents the process from moving to a negative state."
+   ],
+   "scenario": {
+    "teaser": "A repair desk",
+    "title": "The queue changes one customer at a time",
+    "body": [
+     "A repair desk has one technician. Customers arrive one at a time. When the desk is empty, an arrival changes the state from 0 to 1. When there are three customers in the system, a service completion changes the state from 3 to 2.",
+     "The arrival rate is λ=2 per hour. The technician completes service at rate μ=3 per hour whenever at least one customer is present.",
+     "This is a birth–death process with λ_n=2 for every n≥0 and μ_n=3 for n≥1, while μ_0=0."
+    ],
+    "q": "What are the possible transitions from state 2?",
+    "answer": "A birth 2→3 at rate 2 per hour and a death 2→1 at rate 3 per hour."
+   },
+   "ask": {
+    "q": "Why is there no death transition from state zero?",
+    "nudge": "A departure requires a customer to be present."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 7,
+   "title": "Forward equations and local balance",
+   "objective": "Write the probability flow equations.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Birth–death rates",
+     "body": "In state n, births occur at rate λ_n and deaths at rate μ_n; set μ_0=0."
+    },
+    {
+     "t": "formula",
+     "h": "Forward equation",
+     "body": "p′_n(t)=λ_{n−1}p_{n−1}(t)+μ_{n+1}p_{n+1}(t)−(λ_n+μ_n)p_n(t), for n≥1."
+    },
+    {
+     "t": "formula",
+     "h": "Stationary local balance",
+     "body": "π_n λ_n=π_{n+1} μ_{n+1}. Thus π_n=π_0∏_{k=0}^{n−1}(λ_k/μ_{k+1})."
+    }
+   ],
+   "ask": {
+    "q": "What must be done after obtaining the stationary probabilities up to a constant?",
+    "nudge": "Use the fact that all state probabilities sum to one."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 7,
+   "title": "Worked example: a finite birth–death chain",
+   "objective": "Use local balance and normalisation.",
+   "problem": "A birth–death chain has states 0,1,2 with λ₀=2, λ₁=1, μ₁=2 and μ₂=4. Find its stationary distribution.",
+   "steps": [
+    {
+     "say": "Apply local balance between 0 and 1.",
+     "math": "π₁=π₀(λ₀/μ₁)=π₀",
+     "why": "The upward and downward rates are both 2."
+    },
+    {
+     "say": "Apply local balance between 1 and 2.",
+     "math": "π₂=π₁(λ₁/μ₂)=π₀/4",
+     "why": "The rate ratio is 1/4."
+    },
+    {
+     "say": "Normalise.",
+     "math": "π₀+π₁+π₂=π₀(1+1+1/4)=1",
+     "why": "All three state probabilities must sum to one."
+    },
+    {
+     "say": "Solve.",
+     "math": "π₀=4/9; π₁=4/9; π₂=1/9",
+     "why": "The probabilities are nonnegative and sum to one."
+    }
+   ],
+   "ask": {
+    "q": "Which check confirms the answer is a probability distribution?",
+    "nudge": "Add all three probabilities."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 7,
+   "title": "The M/M/1 queue: assumptions and stability",
+   "objective": "Identify the M/M/1 model and its stability condition.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "M/M/1 assumptions",
+     "body": "Poisson arrivals at rate λ; independent exponential service times at rate μ; one server; usually FCFS; infinite waiting room and population."
+    },
+    {
+     "t": "formula",
+     "h": "Utilisation",
+     "body": "ρ=λ/μ. The server is busy a fraction ρ of long-run time."
+    },
+    {
+     "t": "formula",
+     "h": "Stability",
+     "body": "A stationary distribution exists only if λ<μ, equivalently ρ<1."
+    }
+   ],
+   "flow": {
+    "title": "M/M/1 decision sequence",
+    "alt": "Check model assumptions, compare arrival and service rates, then calculate equilibrium measures.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "M/M/1 model?",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Compute ρ=λ/μ",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "ρ<1: stable",
+      "kind": "end"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "ρ≥1: no stationary distribution",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "b",
+      "to": "d"
+     }
+    ]
+   },
+   "ask": {
+    "q": "If λ=5 and μ=4 per hour, can the usual stationary M/M/1 formulas be used?",
+    "nudge": "Compare ρ with one."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s5",
+   "mins": 7,
+   "title": "Worked example: stationary queue probabilities",
+   "objective": "Calculate utilisation and state probabilities.",
+   "problem": "An M/M/1 queue has λ=2 per hour and μ=3 per hour. Find ρ, P₀ and P(N=2).",
+   "steps": [
+    {
+     "say": "Check stability and utilisation.",
+     "math": "ρ=λ/μ=2/3<1",
+     "why": "The system is stable."
+    },
+    {
+     "say": "Find the empty-system probability.",
+     "math": "P₀=1−ρ=1/3",
+     "why": "For M/M/1, π₀=1−ρ."
+    },
+    {
+     "say": "Use the geometric stationary law.",
+     "math": "P(N=2)=(1−ρ)ρ²=(1/3)(4/9)=4/27",
+     "why": "The state N counts all customers in the system, including any in service."
+    }
+   ],
+   "ask": {
+    "q": "What is the probability that the server is busy?",
+    "nudge": "It is 1−P₀."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 7,
+   "title": "Mean number in the system and queue",
+   "objective": "Distinguish L from Lq.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Mean number in system",
+     "body": "L=E[N]=ρ/(1−ρ)."
+    },
+    {
+     "t": "formula",
+     "h": "Mean number waiting",
+     "body": "L_q=ρ²/(1−ρ)."
+    },
+    {
+     "t": "step",
+     "h": "Interpretation",
+     "body": "L includes the customer in service; L_q counts only customers waiting. L−L_q=ρ."
+    }
+   ],
+   "ask": {
+    "q": "Why is L larger than Lq?",
+    "nudge": "The system count includes the customer receiving service."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s7",
+   "mins": 7,
+   "title": "Worked example: average queue size",
+   "objective": "Calculate and interpret L and Lq.",
+   "problem": "For λ=2 per hour and μ=3 per hour, find L and Lq.",
+   "steps": [
+    {
+     "say": "Recall utilisation.",
+     "math": "ρ=2/3",
+     "why": "The rates are in the same units."
+    },
+    {
+     "say": "Calculate the mean number in the system.",
+     "math": "L=(2/3)/(1/3)=2",
+     "why": "On average there are two customers in the whole system."
+    },
+    {
+     "say": "Calculate the mean number waiting.",
+     "math": "Lq=(4/9)/(1/3)=4/3",
+     "why": "This excludes the customer in service."
+    },
+    {
+     "say": "Check the difference.",
+     "math": "L−Lq=2−4/3=2/3=ρ",
+     "why": "The difference equals the probability that the server is busy."
+    }
+   ],
+   "ask": {
+    "q": "Can Lq be non-integer?",
+    "nudge": "It is an expectation, not an observed count."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s8",
+   "mins": 6,
+   "title": "Waiting times and Little’s law",
+   "objective": "Calculate W and Wq and link them to mean queue sizes.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Mean time in system",
+     "body": "W=1/(μ−λ), including service time."
+    },
+    {
+     "t": "formula",
+     "h": "Mean waiting time in queue",
+     "body": "W_q=ρ/(μ−λ)=λ/[μ(μ−λ)], excluding service time."
+    },
+    {
+     "t": "formula",
+     "h": "Little’s law",
+     "body": "L=λW and L_q=λW_q, for a stable system."
+    }
+   ],
+   "ask": {
+    "q": "Which waiting-time measure includes service?",
+    "nudge": "The time in the whole system includes waiting plus service."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s9",
+   "mins": 7,
+   "title": "Guided problem: queue performance",
+   "objective": "Solve an M/M/1 numerical question with diminishing hints.",
+   "problem": "An M/M/1 queue receives 4 customers per hour and serves 6 per hour. Find the mean number in the system, mean queue length and mean time in the system.",
+   "hints": [
+    "First calculate ρ=λ/μ and check it is below one.",
+    "Use L=ρ/(1−ρ) and Lq=ρ²/(1−ρ).",
+    "Use W=1/(μ−λ); keep the time unit in hours."
+   ],
+   "answer": "ρ=2/3; L=2; Lq=4/3; W=1/2 hour = 30 minutes.",
+   "solution": [
+    {
+     "say": "ρ=4/6=2/3, so the queue is stable."
+    },
+    {
+     "say": "L=(2/3)/(1/3)=2 customers."
+    },
+    {
+     "say": "Lq=(4/9)/(1/3)=4/3 customers."
+    },
+    {
+     "say": "W=1/(6−4)=1/2 hour. Little’s law gives λW=4×1/2=2."
+    }
+   ],
+   "scenario": {
+    "teaser": "A clinic registration counter",
+    "title": "Measure congestion",
+    "body": [
+     "A community health centre operates a single registration desk. Patients arrive randomly at an average rate of 3 per hour, and the registration clerk completes service at an average rate of 5 per hour. Assume Poisson arrivals, independent exponential service times, one server and a first-come, first-served queue.",
+     "The state n is the number of patients in the centre, including the patient currently being served. An arrival changes n to n+1 at rate λ=3 per hour. A service completion changes n to n−1 at rate μ=5 per hour when n is positive; no service completion is possible from state zero.",
+     "The first question is whether a stationary distribution exists. Calculate ρ=λ/μ=3/5=0.6. Since ρ<1, the queue is stable under the M/M/1 assumptions and its stationary probabilities are π_n=(1−ρ)ρⁿ. If ρ were at least one, the usual stationary mean formulas would not apply.",
+     "Once stability is established, the same utilisation gives the empty-system probability P₀=1−ρ=0.4 and the probability that the clerk is busy, ρ=0.6. The mean number in the system and in the queue are different because the former includes the patient in service."
+    ],
+    "q": "What is the average time spent in the system?",
+    "answer": "Thirty minutes, including registration service."
+   },
+   "ask": {
+    "q": "Why is the answer an average rather than a promise about each patient?",
+    "nudge": "Queue lengths and waiting times are random."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s10",
+   "mins": 5,
+   "title": "Trap check: stability, units and definitions",
+   "objective": "Avoid common M/M/1 errors.",
+   "intro": "Mark each claim true or false, then compare the reason.",
+   "items": [
+    {
+     "claim": "An M/M/1 queue is stable when λ<μ.",
+     "tf": true,
+     "why": "The utilisation ρ=λ/μ must be below one."
+    },
+    {
+     "claim": "P₀=ρ.",
+     "tf": false,
+     "why": "P₀=1−ρ; ρ is the busy probability."
+    },
+    {
+     "claim": "Lq includes the customer currently receiving service.",
+     "tf": false,
+     "why": "Lq counts only those waiting; L counts everyone in the system."
+    },
+    {
+     "claim": "W=1/(μ−λ) includes service time.",
+     "tf": true,
+     "why": "W is time in the whole system."
+    },
+    {
+     "claim": "If λ=μ, the stationary geometric distribution is valid.",
+     "tf": false,
+     "why": "At ρ=1 the geometric probabilities cannot be normalised."
+    }
+   ],
+   "ask": {
+    "q": "Which first calculation should you always make before applying queue formulas?",
+    "nudge": "It tells you whether a stationary queue exists."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s11",
+   "mins": 4,
+   "title": "Rapid recall and exam checklist",
+   "objective": "Retrieve the main results under exam conditions.",
+   "intro": "Answer before revealing each formula.",
+   "items": [
+    {
+     "q": "What is ρ?",
+     "a": "λ/μ."
+    },
+    {
+     "q": "What is the stability condition?",
+     "a": "λ<μ."
+    },
+    {
+     "q": "What is P(N=n)?",
+     "a": "(1−ρ)ρⁿ."
+    },
+    {
+     "q": "What is Lq?",
+     "a": "ρ²/(1−ρ)."
+    },
+    {
+     "q": "What is W?",
+     "a": "1/(μ−λ). Include service time."
+    },
+    {
+     "q": "State Little’s law.",
+     "a": "L=λW and Lq=λWq."
+    }
+   ],
+   "ask": {
+    "q": "Before submitting an M/M/1 answer, what four checks should you make?",
+    "nudge": "Stability, units, definition of the measure, and Little’s law."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s12",
+   "mins": 7,
+   "title": "Guided problem: calculate queue performance",
+   "objective": "Combine utilisation, queue length and waiting-time formulas.",
+   "problem": "An M/M/1 clinic receives patients at λ=3 per hour and serves them at μ=5 per hour. Find ρ, L, Lq, W and Wq.",
+   "hints": [
+    "Check stability by calculating ρ=λ/μ before using any steady-state formula.",
+    "Use L=ρ/(1−ρ) and Lq=ρ²/(1−ρ).",
+    "Use W=1/(μ−λ) and Wq=ρ/(μ−λ); convert hours to minutes at the end."
+   ],
+   "answer": "ρ=0.6, L=1.5, Lq=0.9, W=0.5 hour=30 minutes, and Wq=0.3 hour=18 minutes.",
+   "solution": [
+    {
+     "say": "Calculate utilisation: ρ=3/5=0.6, which is below one, so the stationary M/M/1 formulas apply."
+    },
+    {
+     "say": "Mean number in the system: L=ρ/(1−ρ)=0.6/0.4=1.5 patients. Mean number waiting: Lq=ρ²/(1−ρ)=0.36/0.4=0.9 patients."
+    },
+    {
+     "say": "Mean time in the system: W=1/(μ−λ)=1/2 hour=30 minutes. Mean waiting time before service: Wq=ρ/(μ−λ)=0.6/2=0.3 hour=18 minutes."
+    },
+    {
+     "say": "Check Little’s law: λW=3×0.5=1.5=L and λWq=3×0.3=0.9=Lq. The mean number may be fractional because it is a long-run average."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 4,
+   "title": "Summary: birth–death processes and M/M/1",
+   "objective": "Consolidate local balance, stability and queue measures.",
+   "body": [
+    "A birth–death process moves n→n+1 at rate λₙ and n→n−1 at rate μₙ. In stationarity, adjacent probability flows satisfy πₙλₙ=πₙ₊₁μₙ₊₁.",
+    "For M/M/1, arrivals are Poisson with rate λ, service times are exponential with rate μ, and there is one server. Stability requires ρ=λ/μ<1.",
+    "The stationary probabilities are πₙ=(1−ρ)ρⁿ, n=0,1,…, so P₀=1−ρ and the server-busy probability is ρ.",
+    "L=ρ/(1−ρ), Lq=ρ²/(1−ρ), W=1/(μ−λ), and Wq=ρ/(μ−λ). L and W include service; Lq and Wq exclude service.",
+    "Check units, stability and Little’s law before accepting a numerical answer."
+   ],
+   "ask": {
+    "q": "Which two Little’s-law identities should agree with the M/M/1 formulas?",
+    "nudge": "Use the arrival rate λ to connect mean counts and mean times."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 8,
+   "title": "Mastery test",
+   "objective": "Apply birth–death and M/M/1 results to unseen questions.",
+   "setId": "stochastic_t7_mastery",
+   "ask": {
+    "q": "Ready for the unseen mastery set?",
+    "nudge": "Check λ and μ use the same time unit and test ρ<1 first."
+   }
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA rule."
+ }
+}
