@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """Reproducible authoring/serialization check for sampling-t6.
 
-The reviewed lesson and mastery content are explicit JSON seed sources.
-This entry point validates their contract and writes canonical UTF-8 JSON.
+Reviewed lesson and mastery content is maintained as explicit JSON seed data.
+This entry point validates the package contract and writes canonical UTF-8 JSON.
 Numerical claims are independently checked by verify_sampling_t6*.py.
 """
 import json
@@ -34,6 +34,6 @@ assert len({s["id"] for s in lesson["scenes"]}) == len(lesson["scenes"])
 assert len({q["id"] for q in pool["items"]}) == len(pool["items"])
 
 for path, data in ((LESSON, lesson), (POOL, pool)):
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\\n", encoding="utf-8")
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
 print(f"PASS: {EXPECTED_TOPIC} lesson and 20-item mastery pool serialized canonically")
