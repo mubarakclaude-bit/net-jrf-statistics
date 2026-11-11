@@ -96,9 +96,8 @@ SC.append(dict(
    "It is enormously expensive and therefore rare.",
    "The Civil Registration System is a flow, and in principle a complete one. Every birth and death is supposed to be "
    "registered with a local registrar within 21 days, by law. Complete registration would make a sample survey "
-   "unnecessary, and India's registration is now reported at 98.4% for births and 97.2% for deaths — but those figures "
-   "are themselves computed against survey-based estimates, the coverage varies sharply by state, and the data arrive "
-   "with about a two-year lag.",
+   "unnecessary, and the national CRS report for 2024 records 99.1% birth registration and 99.4% death registration. "
+   "These are completeness levels of event registration; SRS demographic rates remain a distinct statistical product.",
    "The Sample Registration System is the third: a flow measured on a sample, by a method designed to catch the events "
    "that registration misses. It exists because India needed reliable birth and death rates long before registration "
    "was anywhere near complete, and it is still the source of every rate you are asked to quote — CBR, CDR, IMR, TFR, "
@@ -540,7 +539,7 @@ LES = dict(
   provenance="Revised and checked on 12 November 2026. Every institutional and numerical fact was checked against a "
              "primary or official source rather than recalled, because the census schedule and the registration law "
              "both changed after most textbook material was written: the PIB release on Census 2027 for the two "
-             "phases, the two reference moments, caste enumeration and the digital operation; the census website's own "
+             "Census 2027 area-specific fieldwork dates and Gazette schedule; the census website's own "
              "history page for 1872, 1881, the Census Act 1948 and the May 1949 decision to create a permanent "
              "organisation; the Registration of Births and Deaths (Amendment) Act, 2023 for the national database and "
              "the 1 October 2023 commencement; a CRS/SRS explainer for the dual record system, the 1964-65 pilot and "
@@ -605,7 +604,7 @@ LES = dict(
       "About 31 lakh enumerators and supervisors, plus over 1 lakh functionaries.",
       "CRS: RGI set up 1951; Registration of Births and Deaths Act, 1969; report within 21 days.",
       "RBD (Amendment) Act, 2023 in force 1 Oct 2023: national database, birth certificate as single proof.",
-      "CRS 2023 completeness: 98.4% of births, 97.2% of deaths — measured against SRS-based estimates.",
+      "CRS 2024 registration completeness: 99.1% births and 99.4% deaths (national report released July 2026).",
       "SRS: pilot 1964-65, full scale 1969-70; run by the RGI; no statute behind it.",
       "SRS dual record: continuous enumeration + independent half-yearly survey, then matching and field verification.",
       "SRS 2023: 8,839 sampling units, over 8.8 million people; sized for IMR with RSE under 15%.",
