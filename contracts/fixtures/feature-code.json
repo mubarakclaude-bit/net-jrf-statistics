@@ -1,0 +1,142 @@
+{
+ "$comment": "Fixtures for tools/feature-code.js, with declared storage [\"items\"]. Every valid snippet must produce no problem; every invalid one must produce a problem containing 'expect'. See contracts/README.md: dynamic storage keys are not supported.",
+ "declared": [
+  "items"
+ ],
+ "valid": {
+  "literal declared key: get": "async function f(ctx){ return ctx.store.get(\"items\"); }\nreturn { render(){return \"\"} };",
+  "literal declared key: set": "async function f(ctx){ await ctx.store.set(\"items\", [1,2]); }\nreturn { render(){return \"\"} };",
+  "literal declared key: remove": "async function f(ctx){ await ctx.store.remove(\"items\"); }\nreturn { render(){return \"\"} };",
+  "the context parameter may have any name": "function wire(c, el){ c.store.get(\"items\").then(v => { el.textContent = String(v); }); }\nreturn { render(){return \"\"}, wire };",
+  "single quotes and chaining": "async function f(ctx){ const v = await ctx.store.get('items'); ctx.store.set('items', (v || []).concat([1])); }\nreturn { render(){return ''} };",
+  "a property called store on something else is not ctx.store": "function f(){ const shop = { name: \"x\" }; return shop.name; }\nreturn { render(){return \"\"} };",
+  "other ctx members are unrestricted": "function wire(ctx, el){ ctx.toast(\"hi\"); el.innerHTML = ctx.esc(\"<b>\"); ctx.rerender; return ctx.profile + ctx.uid + ctx.version; }\nreturn { render(){return \"\"}, wire };"
+ },
+ "invalid": [
+  {
+   "name": "a literal key that is not declared",
+   "code": "async function f(ctx){ await ctx.store.set(\"secret\", 1); }\nreturn { render(){return \"\"} };",
+   "expect": "does not declare in"
+  },
+  {
+   "name": "GPT's exact example: a variable holds the key",
+   "code": "async function f(ctx){ const key = \"secret\"; ctx.store.set(key, 1); }\nreturn { render(){return \"\"} };",
+   "expect": "string literal key"
+  },
+  {
+   "name": "a variable key even when its value is a declared name",
+   "code": "async function f(ctx){ const key = \"items\"; ctx.store.get(key); }\nreturn { render(){return \"\"} };",
+   "expect": "string literal key"
+  },
+  {
+   "name": "a key built by concatenation",
+   "code": "async function f(ctx){ await ctx.store.get(\"it\" + \"ems\"); }\nreturn { render(){return \"\"} };",
+   "expect": "string literal key"
+  },
+  {
+   "name": "a template literal with an expression",
+   "code": "async function f(ctx, n){ await ctx.store.get(`k${n}`); }\nreturn { render(){return \"\"} };",
+   "expect": "string literal key"
+  },
+  {
+   "name": "a key passed as a parameter",
+   "code": "async function f(ctx, k){ await ctx.store.set(k, 1); }\nreturn { render(){return \"\"} };",
+   "expect": "string literal key"
+  },
+  {
+   "name": "no key at all",
+   "code": "async function f(ctx){ await ctx.store.get(); }\nreturn { render(){return \"\"} };",
+   "expect": "string literal key"
+  },
+  {
+   "name": "spread arguments",
+   "code": "async function f(ctx, a){ await ctx.store.get(...a); }\nreturn { render(){return \"\"} };",
+   "expect": "string literal key"
+  },
+  {
+   "name": "computed method: ctx.store['set']",
+   "code": "async function f(ctx){ await ctx.store[\"set\"](\"items\", 1); }\nreturn { render(){return \"\"} };",
+   "expect": "called directly"
+  },
+  {
+   "name": "computed method through a variable",
+   "code": "async function f(ctx){ const m = \"set\"; await ctx.store[m](\"items\", 1); }\nreturn { render(){return \"\"} };",
+   "expect": "called directly"
+  },
+  {
+   "name": "computed access to the store itself: ctx['store']",
+   "code": "async function f(ctx){ await ctx[\"store\"].set(\"items\", 1); }\nreturn { render(){return \"\"} };",
+   "expect": "computed access"
+  },
+  {
+   "name": "an alias of the store",
+   "code": "async function f(ctx){ const s = ctx.store; await s.set(\"items\", 1); }\nreturn { render(){return \"\"} };",
+   "expect": "alias"
+  },
+  {
+   "name": "destructuring the store out of ctx",
+   "code": "async function f(ctx){ const { store } = ctx; await store.set(\"items\", 1); }\nreturn { render(){return \"\"} };",
+   "expect": "destructure"
+  },
+  {
+   "name": "passing the store to another function",
+   "code": "function save(s){ return s.set(\"items\", 1); }\nasync function f(ctx){ await save(ctx.store); }\nreturn { render(){return \"\"} };",
+   "expect": "called directly"
+  },
+  {
+   "name": ".call on a store method",
+   "code": "async function f(ctx){ await ctx.store.set.call(ctx.store, \"items\", 1); }\nreturn { render(){return \"\"} };",
+   "expect": "called directly"
+  },
+  {
+   "name": "an optional call with a variable key",
+   "code": "async function f(ctx, k){ await ctx.store?.set(k, 1); }\nreturn { render(){return \"\"} };",
+   "expect": "string literal key"
+  },
+  {
+   "name": "the app database reached directly",
+   "code": "async function f(){ await S.db.doc(\"meta/catalog\").get(); }\nreturn { render(){return \"\"} };",
+   "expect": "'S'"
+  },
+  {
+   "name": "localStorage reached directly",
+   "code": "function f(){ localStorage.setItem(\"a\", \"b\"); }\nreturn { render(){return \"\"} };",
+   "expect": "localStorage"
+  },
+  {
+   "name": "localStorage through window",
+   "code": "function f(){ window.localStorage.setItem(\"a\", \"b\"); }\nreturn { render(){return \"\"} };",
+   "expect": "window.localStorage"
+  },
+  {
+   "name": "localStorage through a computed window member",
+   "code": "function f(){ window[\"localStorage\"].setItem(\"a\", \"b\"); }\nreturn { render(){return \"\"} };",
+   "expect": "window.localStorage"
+  },
+  {
+   "name": "another feature's context through FEATURES",
+   "code": "async function f(){ await FEATURES[\"ref-counter\"].ctx.store.set(\"count\", 9); }\nreturn { render(){return \"\"} };",
+   "expect": "'FEATURES'"
+  },
+  {
+   "name": "eval of a string that touches the store",
+   "code": "async function f(ctx){ eval(\"ctx.store.set(\" + String.fromCharCode(34) + \"secret\" + String.fromCharCode(34) + \", 1)\"); }\nreturn { render(){return \"\"} };",
+   "expect": "'eval'"
+  },
+  {
+   "name": "the Function constructor",
+   "code": "async function f(ctx){ new Function(\"c\", \"c.store.set(1, 1)\")(ctx); }\nreturn { render(){return \"\"} };",
+   "expect": "'Function'"
+  },
+  {
+   "name": "window.eval",
+   "code": "function f(){ window.eval(\"1\"); }\nreturn { render(){return \"\"} };",
+   "expect": "'eval'"
+  },
+  {
+   "name": "code that does not parse",
+   "code": "function f( { return",
+   "expect": "does not parse"
+  }
+ ]
+}
