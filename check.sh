@@ -18,7 +18,7 @@ print(f"JSON syntax: {len(files)} seed documents parsed")
 manifest = data.get("meta_lessons", {}).get("topics", {})
 lessons = {}
 for stem, obj in data.items():
-    if isinstance(obj, dict) and obj.get("topicId"):
+    if isinstance(obj, dict) and obj.get("topicId") and isinstance(obj.get("scenes"), list):
         tid = obj["topicId"]
         if tid in lessons:
             raise SystemExit(f"DUPLICATE topicId {tid}: {lessons[tid]} and {stem}")
