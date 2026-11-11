@@ -82,7 +82,7 @@ Question bank, Mock tests and Admin, one per PR; until then two authors must not
 | Contract | `contracts/`, `tools/`, `.github/workflows/` | Changes need approval from **both** authors, because everything else depends on them. |
 
 Every PR is reviewed by a different author from the one who wrote it. The hosted site deploys from the
-production branch; the artifact is pushed separately and is never authoritative.
+production branch; the Claude artifact is retired and no separate publishing step exists.
 
 ## Related documents
 
