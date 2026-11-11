@@ -242,7 +242,79 @@
      "h": "Fast rejection",
      "body": "Every subspace contains the zero vector. A line or plane not passing through the origin cannot be a subspace."
     }
-   ]
+   ],
+   "flow": {
+    "title": "Test a subset and find its dimension",
+    "alt": "Flow for subspace and basis questions",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Proposed subset W",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Does W contain zero?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Not a subspace",
+      "kind": "end"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Check closure under linear combinations",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 1,
+      "label": "Find independent spanning vectors",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "Count basis vectors = dimension",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "no"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "yes"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ]
+   }
   },
   {
    "kind": "worked",
