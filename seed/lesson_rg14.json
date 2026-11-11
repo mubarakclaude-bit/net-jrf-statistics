@@ -1,0 +1,690 @@
+{
+  "id": "regressiont14",
+  "topicId": "regression-t14",
+  "moduleId": "regression",
+  "title": "6.14 — Errors in Variables and Measurement Error",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.14 Errors in variables",
+  "engine": "B",
+  "engineName": "Distinguish measurement error in regressors and outcomes, derive attenuation and understand IV correction.",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 94,
+  "objectives": [
+    "Distinguish classical measurement error in a regressor from measurement error in the response.",
+    "Derive the attenuation factor in a simple regression with classical regressor measurement error.",
+    "Interpret the reliability ratio and calculate the attenuated probability limit.",
+    "Distinguish classical measurement error from Berkson measurement error.",
+    "Explain how a valid instrument can address measurement error in an endogenous regressor.",
+    "Recognise why multivariate measurement error can affect several coefficients and not merely attenuate one slope."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Simple linear regression and OLS probability limits",
+      "why": "The attenuation result follows from the covariance-form population regression slope."
+    },
+    {
+      "id": "p2",
+      "name": "Variance, covariance and independence",
+      "why": "Classical measurement error assumptions specify zero covariance with the true regressor and structural disturbance."
+    },
+    {
+      "id": "p3",
+      "name": "Instrumental variables",
+      "why": "A valid instrument can isolate variation in the true regressor that is not contaminated by measurement error."
+    }
+  ],
+  "traps": [
+    "Classical regressor measurement error is W=X+v, where v is mean-zero and independent of X and u.",
+    "In a simple regression, classical measurement error in X attenuates the slope toward zero under the standard assumptions.",
+    "The reliability ratio is λ=Var(X)/[Var(X)+Var(v)], between zero and one.",
+    "The probability limit of the naive slope is λβ, not β, under the classical single-regressor setup.",
+    "Independent mean-zero measurement error in Y increases residual variance but does not bias the slope under standard assumptions.",
+    "Berkson error is often represented as X=W+v, the reverse conditioning structure from classical error W=X+v.",
+    "An IV correction requires an instrument correlated with the true regressor but uncorrelated with the measurement error and structural disturbance.",
+    "With multiple regressors, measurement error can bias several coefficients in directions that are not all simple attenuation."
+  ],
+  "howto": "Write the measurement equation before calculating anything. For classical error in a single regressor, use λ=σ_X²/(σ_X²+σ_v²) and plim(b)=λβ. For error in the response, distinguish coefficient bias from increased variance. For Berkson error, state the alternative conditioning structure. If using IV, state relevance with the true regressor and exclusion from both structural and measurement disturbances.",
+  "refs": [
+    {
+      "title": "Introductory Econometrics: A Modern Approach",
+      "where": "Measurement error and instrumental variables",
+      "site": "Jeffrey M. Wooldridge",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Classical measurement error assumptions and attenuation bias."
+    },
+    {
+      "title": "Econometric Analysis",
+      "where": "Errors-in-variables models",
+      "site": "William H. Greene",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Formal treatment of measurement-error models and IV identification."
+    },
+    {
+      "title": "Econometric Methods",
+      "where": "Errors in variables",
+      "site": "Jack Johnston and John DiNardo",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Classical and alternative measurement-error formulations."
+    }
+  ],
+  "provenance": "Authored for UGC NET Statistics Paper 2 Unit VI. The reliability-ratio and attenuation examples are original practice material and are verified exactly in verify_regression_t14.py. No June 2026 question is claimed as a direct errors-in-variables PYQ.",
+  "revision": {
+    "sheet": [
+      "Classical measurement error in a regressor: W=X+v, with v mean zero and independent of X and u.",
+      "Reliability ratio: λ=Var(X)/[Var(X)+Var(v)].",
+      "For a simple regression, plim(b_W)=λβ under classical measurement-error assumptions.",
+      "Since 0<λ<1 when measurement-error variance is positive, the slope is attenuated toward zero.",
+      "More measurement-error variance lowers λ and increases attenuation.",
+      "Independent mean-zero measurement error in Y increases residual variance but does not bias the slope under standard assumptions.",
+      "Berkson error is often written X=W+v; it reverses the conditioning direction from classical W=X+v.",
+      "A valid instrument must predict the true regressor and be uncorrelated with measurement error and the structural disturbance.",
+      "In multivariate regressions, measurement error can affect several coefficients and need not create simple attenuation in every coefficient.",
+      "Reliability is higher when true signal variance is large relative to measurement-error variance."
+    ],
+    "cards": [
+      [
+        "Classical error",
+        "W=X+v"
+      ],
+      [
+        "Reliability ratio",
+        "λ=σ_X²/(σ_X²+σ_v²)"
+      ],
+      [
+        "Attenuated slope",
+        "plim(b)=λβ"
+      ],
+      [
+        "Error in Y",
+        "Raises variance; no slope bias under classical independence"
+      ],
+      [
+        "Berkson error",
+        "X=W+v"
+      ],
+      [
+        "IV relevance",
+        "Instrument predicts true X"
+      ],
+      [
+        "IV exclusion",
+        "Instrument uncorrelated with u and v"
+      ],
+      [
+        "Multivariate error",
+        "Can bias several coefficients"
+      ]
+    ],
+    "tricks": [
+      "Classical error in X attenuates; independent classical error in Y mainly inflates variance.",
+      "Compute the reliability ratio before the attenuated slope.",
+      "If measurement-error variance doubles, reliability falls; it does not rise.",
+      "Do not apply the simple scalar attenuation formula blindly to multiple-regressor models."
+    ],
+    "shortcuts": [
+      "W=X+v → classical error in regressor.",
+      "λ=signal variance / observed variance.",
+      "β_naive=λβ_true."
+    ],
+    "remember": [
+      "Berkson error and classical error use different conditioning structures.",
+      "An instrument that predicts the noisy observed regressor only through measurement error may not identify the true structural effect."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh covariance and regression slopes",
+      "objective": "Recover the covariance tools needed for attenuation bias.",
+      "body": [
+        "Measurement error changes what is observed, not necessarily the true economic or scientific regressor. The direction of the measurement equation determines the statistical consequences.",
+        "The classical attenuation result follows from the population slope Cov(W,Y)/Var(W), so recall covariance and independence first."
+      ],
+      "items": [
+        {
+          "ask": "What is the population simple-regression slope?",
+          "recall": "Cov(X,Y)/Var(X).",
+          "refresh": [
+            "The population least-squares slope is the covariance between regressor and response divided by regressor variance.",
+            "Substituting a noisy regressor changes both the covariance numerator and the variance denominator.",
+            "The reliability ratio appears because independent measurement noise increases the denominator but not the covariance with the true signal."
+          ]
+        },
+        {
+          "ask": "What does independence imply for covariance?",
+          "recall": "If variables have finite second moments and are independent, their covariance is zero.",
+          "refresh": [
+            "Classical measurement error assumes the noise is independent of the true regressor and the structural disturbance.",
+            "That assumption makes Cov(v,X)=0 and Cov(v,u)=0.",
+            "If measurement error is systematic or correlated with the true value, the simple attenuation formula may not apply."
+          ]
+        },
+        {
+          "ask": "What is the difference between signal and noise?",
+          "recall": "Signal is the true regressor; noise is the measurement-error component.",
+          "refresh": [
+            "The observed variable combines the true quantity and an error component under classical measurement error.",
+            "The signal variance is Var(X); the noise variance is Var(v).",
+            "The reliability ratio measures the fraction of observed regressor variance attributable to the true signal."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Why does independent measurement noise weaken the observed regression slope?",
+        "nudge": "It increases the variance of the observed regressor without adding covariance with the outcome."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "A noisy regressor dilutes the relationship",
+      "objective": "Build an intuitive picture of attenuation bias.",
+      "body": [
+        "Suppose a survey records hours of study with random reporting error. The observed hours contain the true study time plus noise. The noise makes people with similar true study time look more different, and it weakens the observed covariance with exam performance relative to the observed variance.",
+        "The fitted slope therefore moves toward zero under the classical assumptions. This is attenuation bias, not merely a larger standard error."
+      ],
+      "scenario": {
+        "teaser": "Self-reported study hours",
+        "title": "Signal diluted by noise",
+        "body": [
+          "A researcher wants the effect of true weekly study hours X on exam score Y. The survey records W=X+v, where v is random reporting error independent of true study time and the outcome disturbance.",
+          "The observed regressor has more variance than the true study time because it includes the noise variance. But the covariance of W with Y is unchanged under the classical assumptions because the noise is independent.",
+          "The ratio Cov(W,Y)/Var(W) is therefore smaller in magnitude than the true slope. More reporting noise lowers the reliability ratio and pushes the naive OLS coefficient closer to zero.",
+          "The result is systematic attenuation in the coefficient, not simply wider confidence intervals around an unbiased estimate."
+        ],
+        "q": "What does random reporting error do to the naive slope?",
+        "answer": "It attenuates the slope toward zero under the classical measurement-error assumptions."
+      },
+      "ask": {
+        "q": "Which part of the observed regressor variance is extra noise?",
+        "nudge": "It is the variance of v in W=X+v."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "Derive the reliability ratio",
+      "objective": "Derive the attenuation factor from the population slope.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Classical measurement equation",
+          "body": "W=X+v, with E(v)=0, Cov(X,v)=0 and Cov(v,u)=0. The true outcome equation is Y=α+βX+u."
+        },
+        {
+          "t": "step",
+          "h": "Covariance numerator",
+          "body": "Cov(W,Y)=Cov(X+v,βX+u)=βVar(X) under the classical independence and exogeneity assumptions."
+        },
+        {
+          "t": "step",
+          "h": "Observed-regressor variance",
+          "body": "Var(W)=Var(X+v)=Var(X)+Var(v), because Cov(X,v)=0."
+        },
+        {
+          "t": "formula",
+          "h": "Attenuation",
+          "body": "The population slope using W is βVar(X)/[Var(X)+Var(v)]=λβ, where λ=Var(X)/[Var(X)+Var(v)] lies between zero and one."
+        }
+      ],
+      "flow": {
+        "caption": "How classical measurement error attenuates the slope",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Observed W = X + v",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Noise raises Var(W)",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Cov(W,Y) retains βVar(X)",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Slope multiplied by λ<1",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "a",
+            "to": "c"
+          },
+          {
+            "from": "b",
+            "to": "d"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          }
+        ]
+      },
+      "ask": {
+        "q": "What is the reliability ratio λ?",
+        "nudge": "Divide true signal variance by total observed regressor variance."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example: calculate attenuation",
+      "objective": "Compute the reliability ratio and naive OLS probability limit.",
+      "problem": "The true regressor variance is 9 and classical measurement-error variance is 3. If the true slope is β=2, find the reliability ratio and the probability limit of the naive slope.",
+      "steps": [
+        {
+          "say": "Write the reliability ratio.",
+          "math": "λ=Var(X)/[Var(X)+Var(v)]",
+          "why": "The denominator is the observed regressor variance."
+        },
+        {
+          "say": "Substitute the variances.",
+          "math": "λ=9/(9+3)=9/12=0.75",
+          "why": "Three quarters of the observed variance is true signal."
+        },
+        {
+          "say": "Multiply the true slope by λ.",
+          "math": "plim(b_W)=0.75×2=1.5",
+          "why": "The naive slope is attenuated toward zero."
+        },
+        {
+          "say": "Compare with the true value.",
+          "math": "1.5<2",
+          "why": "The measurement error reduces the magnitude of the positive slope."
+        }
+      ],
+      "ask": {
+        "q": "What happens to λ if measurement-error variance increases while Var(X) stays fixed?",
+        "nudge": "The denominator grows while the numerator stays fixed."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 5,
+      "title": "Recall classical and Berkson error",
+      "objective": "Retrieve the different measurement structures.",
+      "intro": "Answer before reading the explanation.",
+      "items": [
+        {
+          "q": "What is classical measurement error in X?",
+          "a": "The observed regressor W equals the true X plus error v: W=X+v."
+        },
+        {
+          "q": "What is the reliability ratio?",
+          "a": "Var(X)/[Var(X)+Var(v)]."
+        },
+        {
+          "q": "What is Berkson error commonly written as?",
+          "a": "The true value X equals the assigned or observed value W plus error v: X=W+v."
+        },
+        {
+          "q": "What does independent error in Y do under classical assumptions?",
+          "a": "It increases residual variance but does not bias the slope."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 6,
+      "title": "Complete the attenuation result",
+      "objective": "Reconstruct the reliability ratio and slope limit.",
+      "problem": "Complete the classical measurement-error result.",
+      "steps": [
+        {
+          "say": "The observed regressor is true X plus noise.",
+          "blank": {
+            "prompt": "W = X + _____.",
+            "answer": "v",
+            "accept": [
+              "measurement error"
+            ],
+            "hint": "Use v for the error component."
+          }
+        },
+        {
+          "say": "The reliability ratio is the true variance divided by observed variance.",
+          "blank": {
+            "prompt": "λ=Var(X)/[Var(X)+Var(_____)].",
+            "answer": "v",
+            "accept": [
+              "measurement error"
+            ],
+            "hint": "The denominator includes the noise variance."
+          }
+        },
+        {
+          "say": "The naive slope is attenuated.",
+          "blank": {
+            "prompt": "plim(b_W)=λ times _____.",
+            "answer": "β",
+            "accept": [
+              "beta"
+            ],
+            "hint": "Multiply the reliability ratio by the true slope."
+          }
+        },
+        {
+          "say": "The reliability ratio lies below one when error variance is positive.",
+          "blank": {
+            "prompt": "The naive coefficient is biased toward _____.",
+            "answer": "zero",
+            "accept": [
+              "0"
+            ],
+            "hint": "Its magnitude is reduced."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Error in the outcome versus error in the regressor",
+      "objective": "Separate coefficient bias from increased residual variance.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Measurement error in X",
+          "body": "Classical noise in an explanatory variable changes the covariance-to-variance ratio and attenuates the simple-regression slope toward zero."
+        },
+        {
+          "t": "def",
+          "h": "Measurement error in Y",
+          "body": "If the observed response is Y*=Y+e, with e independent, mean zero and uncorrelated with X, then Cov(X,Y*)=Cov(X,Y). The slope remains unbiased, while the residual variance increases."
+        },
+        {
+          "t": "note",
+          "h": "The distinction",
+          "body": "Regressor error changes the explanatory variable used in the slope denominator. Independent outcome error adds noise to the response but does not change the expected covariance with X."
+        },
+        {
+          "t": "step",
+          "h": "Multiple regressors",
+          "body": "With several correlated regressors, measurement error in one variable can affect multiple coefficient estimates. The scalar reliability-ratio attenuation result is not a general multivariate formula."
+        }
+      ],
+      "ask": {
+        "q": "Which type of classical measurement error directly attenuates the simple-regression slope?",
+        "nudge": "It is error in the explanatory variable."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s7",
+      "mins": 7,
+      "title": "Classical error and Berkson error are not the same",
+      "objective": "Understand the difference between two measurement structures.",
+      "body": [
+        "Classical error treats the observed measure as true value plus noise: W=X+v. Berkson error often treats the true value as an assigned or observed value plus deviation: X=W+v.",
+        "In a simple linear model with independent mean-zero Berkson error, regression on W need not have the same attenuation bias as classical error. The conditional structure differs, so the formulas must not be interchanged."
+      ],
+      "scenario": {
+        "teaser": "Assigned exposure level versus noisy self-report",
+        "title": "Two directions of measurement error",
+        "body": [
+          "A laboratory assigns participants a target exposure W, but each participant's actual exposure is X=W+v because of random deviations from the target. This is a Berkson-type structure.",
+          "That differs from a self-report where the observed W is the true exposure X plus reporting noise v. The latter is classical measurement error.",
+          "For a simple linear regression with independent mean-zero Berkson deviation, the slope on assigned W can remain unbiased, although the residual variance increases. Classical error in the observed regressor instead produces attenuation under its assumptions.",
+          "Always write the measurement equation first. The symbols alone do not determine the model; the direction of conditioning does."
+        ],
+        "q": "Which equation represents Berkson-type error here?",
+        "answer": "X=W+v, where W is the assigned exposure."
+      },
+      "ask": {
+        "q": "Why should the classical attenuation formula not be applied automatically to Berkson error?",
+        "nudge": "The observed and true variables enter the measurement equation in the opposite order."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 8,
+      "title": "Worked example: error in Y does not attenuate the slope",
+      "objective": "Show why independent outcome noise changes variance but not the population slope.",
+      "problem": "The true model is Y=1+2X+u. The observed outcome is Y*=Y+e, where e is independent of X and u with mean zero. What is the population slope of Y* on X?",
+      "steps": [
+        {
+          "say": "Write the observed outcome.",
+          "math": "Y*=1+2X+u+e",
+          "why": "The new error is added to the response."
+        },
+        {
+          "say": "Compute the covariance with X.",
+          "math": "Cov(X,Y*)=2Var(X)",
+          "why": "The independent mean-zero errors have zero covariance with X."
+        },
+        {
+          "say": "Divide by Var(X).",
+          "math": "b*=2Var(X)/Var(X)=2",
+          "why": "The population slope remains the true value."
+        },
+        {
+          "say": "State the remaining consequence.",
+          "math": "Var(u+e)>Var(u) when Var(e)>0",
+          "why": "The residual noise increases, which can reduce precision."
+        }
+      ],
+      "ask": {
+        "q": "What changes when e is added to Y?",
+        "nudge": "The slope remains two, but the unexplained variance increases."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Guided problem: compute a reliability ratio",
+      "objective": "Calculate attenuation from signal and noise variances.",
+      "problem": "A true regressor has variance 4 and its classical measurement error has variance 1. The true slope is 3. Find λ and the probability limit of the naive slope.",
+      "hints": [
+        "Add the signal and noise variances for the observed variance.",
+        "Divide signal variance by total variance.",
+        "Multiply the true slope by the reliability ratio."
+      ],
+      "answer": "λ=4/(4+1)=0.8 and plim(b_W)=0.8×3=2.4.",
+      "solution": [
+        {
+          "say": "Observed regressor variance.",
+          "math": "Var(W)=4+1=5",
+          "why": "Independent classical noise adds its variance."
+        },
+        {
+          "say": "Reliability ratio.",
+          "math": "λ=4/5=0.8",
+          "why": "Eighty per cent of the observed variance is signal."
+        },
+        {
+          "say": "Attenuated slope.",
+          "math": "0.8×3=2.4",
+          "why": "The naive slope is smaller in magnitude than the true slope."
+        },
+        {
+          "say": "Interpret the result.",
+          "math": "2.4<3",
+          "why": "The coefficient is attenuated toward zero."
+        }
+      ],
+      "ask": {
+        "q": "What would λ be if the measurement-error variance were zero?",
+        "nudge": "The observed measure would equal the true regressor."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s10",
+      "mins": 6,
+      "title": "Exam traps: classical error, Berkson error and IV",
+      "objective": "Avoid confusing measurement-error models.",
+      "intro": "Mark each statement true or false.",
+      "items": [
+        {
+          "claim": "Classical regressor error is often written W=X+v.",
+          "tf": true,
+          "why": "The observed regressor equals the true value plus measurement noise."
+        },
+        {
+          "claim": "Classical regressor error attenuates the simple OLS slope under the standard assumptions.",
+          "tf": true,
+          "why": "The reliability ratio multiplies the true slope."
+        },
+        {
+          "claim": "Independent measurement error in Y necessarily biases the slope.",
+          "tf": false,
+          "why": "It raises residual variance but leaves Cov(X,Y*) unchanged under the stated assumptions."
+        },
+        {
+          "claim": "Berkson error is often written X=W+v.",
+          "tf": true,
+          "why": "The true value varies around an assigned or observed value."
+        },
+        {
+          "claim": "A valid IV correction can ignore correlation with measurement error.",
+          "tf": false,
+          "why": "The instrument must be uncorrelated with both the structural disturbance and measurement error."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "mins": 8,
+      "title": "Transfer problem: use an instrument to correct measurement error",
+      "objective": "State the IV requirements for a noisy regressor.",
+      "problem": "Observed schooling W=X+v is measured with classical error. A proposed instrument Z predicts true schooling X. What additional conditions are needed for IV to identify the structural slope?",
+      "hints": [
+        "Relevance must concern the true regressor, not only the noise.",
+        "Exclusion requires no correlation with the structural disturbance.",
+        "The instrument must also be uncorrelated with measurement error v."
+      ],
+      "answer": "Z must be relevant for true X and uncorrelated with both the structural disturbance u and measurement error v, conditional on included controls.",
+      "solution": [
+        {
+          "say": "Relevance must provide variation in the true regressor.",
+          "math": "Cov(Z,X)≠0"
+        },
+        {
+          "say": "The instrument must be orthogonal to the structural disturbance.",
+          "math": "Cov(Z,u)=0"
+        },
+        {
+          "say": "The instrument must not predict measurement noise.",
+          "math": "Cov(Z,v)=0"
+        },
+        {
+          "say": "Then Z can isolate variation in X not contaminated by v.",
+          "math": "IV moment condition E[Z(Y−βX)]=0"
+        }
+      ],
+      "ask": {
+        "q": "Why is Cov(Z,v)=0 needed?",
+        "nudge": "If Z predicts the measurement error, it may not isolate true X variation."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s12",
+      "mins": 5,
+      "title": "Summary: write the measurement equation first",
+      "objective": "Compress measurement-error logic into an exam-ready checklist.",
+      "body": [
+        "Classical error in a regressor is W=X+v. Under independence, Var(W)=Var(X)+Var(v) while Cov(W,Y)=βVar(X). The naive slope is therefore λβ, where λ=Var(X)/[Var(X)+Var(v)] is the reliability ratio.",
+        "Independent mean-zero error in the response raises residual variance but does not bias the slope under the standard assumptions. Berkson error is often X=W+v and has a different conditional structure; do not apply the classical attenuation formula automatically.",
+        "A valid IV correction must predict the true regressor and be uncorrelated with both the structural disturbance and measurement error. In multivariate models, measurement error can affect several coefficients."
+      ],
+      "ask": {
+        "q": "What is the first step in any measurement-error question?",
+        "nudge": "Write whether the observed variable equals true value plus error or vice versa."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s13",
+      "mins": 8,
+      "ext": true,
+      "title": "Extension — reliability and multivariate measurement error",
+      "objective": "Understand the limits of the scalar attenuation formula.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Reliability ratio",
+          "body": "λ=σ_X²/(σ_X²+σ_v²). It is the signal share of the observed regressor variance under classical additive error."
+        },
+        {
+          "t": "step",
+          "h": "More noise",
+          "body": "Holding σ_X² fixed, increasing σ_v² lowers λ. If the true slope is positive, the naive slope moves downward toward zero; if the true slope is negative, it moves upward toward zero."
+        },
+        {
+          "t": "note",
+          "h": "Several regressors",
+          "body": "When regressors are correlated, measurement error in one column changes the matrix of covariances and can bias several coefficients. There is generally no single scalar λ that multiplies every coefficient."
+        }
+      ],
+      "ask": {
+        "q": "Why is the scalar reliability ratio not a universal multivariate correction?",
+        "nudge": "The regressors can be correlated, so errors change a matrix of cross-products."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 0,
+      "title": "6.14 mastery test",
+      "setId": "regression_t14_mastery",
+      "objective": "Demonstrate measurement-error reasoning independently."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings, not an NTA rule. Ten unseen questions are drawn as 3 easy, 5 moderate and 2 hard; the pass threshold is 80% overall with 70% floors for numerical and multi-statement items."
+  }
+}
