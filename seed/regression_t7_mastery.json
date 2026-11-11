@@ -1,0 +1,389 @@
+{
+  "moduleId": "regression",
+  "topicId": "regression-t7",
+  "source": "mastery",
+  "label": "6.6 Heteroscedasticity and GLS — mastery test",
+  "count": 20,
+  "items": [
+    {
+      "id": "regression-t7-m-01",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "What is heteroscedasticity?",
+      "options": [
+        "Non-constant conditional error variance",
+        "Nonzero conditional mean",
+        "Perfect multicollinearity",
+        "Autocorrelation only"
+      ],
+      "answer": "A",
+      "explanation": "It means Var(uᵢ|X) varies across observations."
+    },
+    {
+      "id": "regression-t7-m-02",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "Homoscedasticity is the condition:",
+      "options": [
+        "E(u|X)=1",
+        "Var(uᵢ|X)=σ² for all i",
+        "Var(uᵢ|X)=0",
+        "Cov(X,u)=1"
+      ],
+      "answer": "B",
+      "explanation": "The conditional error variance is constant."
+    },
+    {
+      "id": "regression-t7-m-03",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "If E(u|X)=0 but errors are heteroscedastic, OLS coefficients are:",
+      "options": [
+        "Necessarily biased",
+        "Always inconsistent",
+        "Potentially unbiased/consistent under regularity conditions",
+        "Always zero"
+      ],
+      "answer": "C",
+      "explanation": "Heteroscedasticity alone does not violate exogeneity."
+    },
+    {
+      "id": "regression-t7-m-04",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "The conventional OLS covariance formula under spherical errors is:",
+      "options": [
+        "(X′X)⁻¹",
+        "σ²(X′X)⁻¹",
+        "σ²X′X",
+        "ΩX′X"
+      ],
+      "answer": "B",
+      "explanation": "Under Var(u|X)=σ²I, Var(β̂|X)=σ²(X′X)⁻¹."
+    },
+    {
+      "id": "regression-t7-m-05",
+      "diff": "easy",
+      "format": "numeric",
+      "topic": "regression-t7",
+      "stem": "If Var(uᵢ|X)=σ²hᵢ and hᵢ=4, what is the relative WLS weight 1/hᵢ? ",
+      "options": [
+        "4",
+        "2",
+        "0.25",
+        "0.5"
+      ],
+      "answer": "C",
+      "explanation": "When Var(u_i|X)=σ²h_i, the WLS criterion uses weights proportional to 1/h_i. A larger variance multiplier therefore receives a smaller weight.",
+      "check": "0.25"
+    },
+    {
+      "id": "regression-t7-m-06",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "Heteroscedasticity primarily violates which classical condition?",
+      "options": [
+        "Constant conditional error variance",
+        "Zero conditional mean",
+        "Full column rank",
+        "Random sampling"
+      ],
+      "answer": "A",
+      "explanation": "Heteroscedasticity means the conditional error variance is not constant across observations; it is a violation of the homoscedasticity assumption."
+    },
+    {
+      "id": "regression-t7-m-07",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "Under heteroscedasticity, conventional OLS standard errors are:",
+      "options": [
+        "Always too large",
+        "Always too small",
+        "Identical to robust SE",
+        "Generally unreliable; direction can vary"
+      ],
+      "answer": "D",
+      "explanation": "The variance function may rise or fall with a predictor. Heteroscedasticity is about non-constant variance, not a required positive direction."
+    },
+    {
+      "id": "regression-t7-m-08",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "Heteroscedasticity-robust standard errors:",
+      "options": [
+        "Change OLS coefficients",
+        "Change the design matrix",
+        "Guarantee exogeneity",
+        "Change estimated covariance, not OLS coefficients"
+      ],
+      "answer": "D",
+      "explanation": "The coefficient estimates remain OLS; the covariance estimate changes."
+    },
+    {
+      "id": "regression-t7-m-09",
+      "diff": "moderate",
+      "format": "numeric",
+      "topic": "regression-t7",
+      "stem": "For n=80 and auxiliary R²=0.12, the BP LM statistic nR² is:",
+      "options": [
+        "6.4",
+        "9.6",
+        "12",
+        "0.096"
+      ],
+      "answer": "B",
+      "explanation": "The LM statistic is nR² from the auxiliary regression: 80×0.12=9.6. Its reference degrees of freedom depend on the number of tested variance terms.",
+      "check": "9.6"
+    },
+    {
+      "id": "regression-t7-m-10",
+      "diff": "moderate",
+      "format": "multi",
+      "topic": "regression-t7",
+      "stem": "Which statements are true? A. Heteroscedasticity means non-constant variance. B. OLS coefficients must be biased. C. Conventional SE may be invalid. D. Robust SE change the OLS coefficients.",
+      "options": [
+        "A and C only",
+        "A and B only",
+        "B and D only",
+        "All four"
+      ],
+      "answer": "A",
+      "explanation": "Statements A and C are true, while B and D are false. The variance can depend on regressors, and a robust covariance estimator changes inference rather than the OLS point estimate.",
+      "statements": [
+        "Heteroscedasticity means non-constant variance",
+        "OLS coefficients must be biased",
+        "Conventional SE may be invalid",
+        "Robust SE change the OLS coefficients"
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "This statement is valid under the stated regression assumptions."
+        },
+        "B": {
+          "tf": false,
+          "why": "This statement is not generally valid under the stated assumptions."
+        },
+        "C": {
+          "tf": true,
+          "why": "This statement is valid under the stated regression assumptions."
+        },
+        "D": {
+          "tf": false,
+          "why": "This statement is not generally valid under the stated assumptions."
+        }
+      },
+      "check": "A:true;B:false;C:true;D:false"
+    },
+    {
+      "id": "regression-t7-m-11",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "If Ω is known and positive definite, GLS uses:",
+      "options": [
+        "Ω",
+        "I−Ω",
+        "Ω²",
+        "Ω⁻¹"
+      ],
+      "answer": "D",
+      "explanation": "GLS weights by the inverse disturbance covariance."
+    },
+    {
+      "id": "regression-t7-m-12",
+      "diff": "moderate",
+      "format": "numeric",
+      "topic": "regression-t7",
+      "stem": "If Var(uᵢ|X)=σ²hᵢ and hᵢ=9, the row multiplier is:",
+      "options": [
+        "9",
+        "1/9",
+        "1/3",
+        "3"
+      ],
+      "answer": "C",
+      "explanation": "If h_i=9, the standard-deviation factor is √h_i=3. Dividing the transformed observation by three standardises its error variance under the stated model.",
+      "check": "0.3333"
+    },
+    {
+      "id": "regression-t7-m-13",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "For diagonal Ω=diag(σ₁²,…,σₙ²), WLS criterion weights are proportional to:",
+      "options": [
+        "σᵢ²",
+        "1/σᵢ",
+        "σᵢ",
+        "1/σᵢ²"
+      ],
+      "answer": "D",
+      "explanation": "Weighted least squares gives less weight to observations with larger error variances and more weight to observations measured more precisely."
+    },
+    {
+      "id": "regression-t7-m-14",
+      "diff": "moderate",
+      "format": "multi",
+      "topic": "regression-t7",
+      "stem": "Which are appropriate? A. Residual plots can help diagnose spread. B. BP tests a specified variance relation. C. White test is more general. D. A plot alone proves the exact variance function.",
+      "options": [
+        "A, B and C only",
+        "A and D only",
+        "B and D only",
+        "All four"
+      ],
+      "answer": "A",
+      "explanation": "A, B and C are true; a plot does not prove the exact function.",
+      "statements": [
+        "Residual plots can help diagnose spread",
+        "BP tests a specified variance relation",
+        "White test is more general",
+        "A plot alone proves the exact variance function"
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "This statement is valid under the stated regression assumptions."
+        },
+        "B": {
+          "tf": true,
+          "why": "This statement is valid under the stated regression assumptions."
+        },
+        "C": {
+          "tf": true,
+          "why": "This statement is valid under the stated regression assumptions."
+        },
+        "D": {
+          "tf": false,
+          "why": "This statement is not generally valid under the stated assumptions."
+        }
+      },
+      "check": "A:true;B:true;C:true;D:false"
+    },
+    {
+      "id": "regression-t7-m-15",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "FGLS differs from GLS because FGLS:",
+      "options": [
+        "Uses no covariance matrix",
+        "Requires normal errors",
+        "Always equals OLS",
+        "Estimates the covariance structure before weighting"
+      ],
+      "answer": "D",
+      "explanation": "FGLS substitutes an estimated covariance structure."
+    },
+    {
+      "id": "regression-t7-m-16",
+      "diff": "moderate",
+      "format": "numeric",
+      "topic": "regression-t7",
+      "stem": "With Ω=diag(1,4), X=(1,1)′ and y=(2,4)′, the GLS estimate of common β is:",
+      "options": [
+        "2.4",
+        "3.0",
+        "2.8",
+        "3.2"
+      ],
+      "answer": "A",
+      "explanation": "Weighted mean=(2+0.25×4)/(1+0.25)=3/1.25=2.4.",
+      "check": "2.4"
+    },
+    {
+      "id": "regression-t7-m-17",
+      "diff": "hard",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "For Var(u|X)=σ²H with known positive definite H, the GLS coefficient estimator is:",
+      "options": [
+        "(X′HX)⁻¹X′Hy",
+        "(X′H⁻¹X)⁻¹X′H⁻¹y",
+        "(X′X)⁻¹X′Hy",
+        "(X′H X)X′y"
+      ],
+      "answer": "B",
+      "explanation": "When the common scale parameter σ² is factored out of the GLS covariance expression, the remaining matrix factor is H⁻¹."
+    },
+    {
+      "id": "regression-t7-m-18",
+      "diff": "hard",
+      "format": "numeric",
+      "topic": "regression-t7",
+      "stem": "A model has n=60 and the BP auxiliary regression has R²=0.15 with 3 tested slopes. The LM statistic is:",
+      "options": [
+        "4.5",
+        "9",
+        "12",
+        "15"
+      ],
+      "answer": "B",
+      "explanation": "The LM statistic is nR²=60×0.15=9. The stated test has three restrictions, so the reference chi-square degrees of freedom are three.",
+      "check": "9"
+    },
+    {
+      "id": "regression-t7-m-19",
+      "diff": "hard",
+      "format": "multi",
+      "topic": "regression-t7",
+      "stem": "Which conclusions are valid? A. Robust SE fix endogeneity. B. Correct WLS weights can improve efficiency. C. FGLS depends on variance-model quality. D. Heteroscedasticity and autocorrelation are identical.",
+      "options": [
+        "A and B only",
+        "A, B and C only",
+        "B and C only",
+        "All four"
+      ],
+      "answer": "C",
+      "explanation": "B and C are valid; robust SE do not fix endogeneity, and heteroscedasticity differs from autocorrelation.",
+      "statements": [
+        "Robust SE fix endogeneity",
+        "Correct WLS weights can improve efficiency",
+        "FGLS depends on variance-model quality",
+        "Heteroscedasticity and autocorrelation are identical"
+      ],
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "This statement is not generally valid under the stated assumptions."
+        },
+        "B": {
+          "tf": true,
+          "why": "This statement is valid under the stated regression assumptions."
+        },
+        "C": {
+          "tf": true,
+          "why": "This statement is valid under the stated regression assumptions."
+        },
+        "D": {
+          "tf": false,
+          "why": "This statement is not generally valid under the stated assumptions."
+        }
+      },
+      "check": "A:false;B:true;C:true;D:false"
+    },
+    {
+      "id": "regression-t7-m-20",
+      "diff": "hard",
+      "format": "single",
+      "topic": "regression-t7",
+      "stem": "When Ω is estimated rather than known, a careful FGLS analysis should:",
+      "options": [
+        "Ignore variance-model uncertainty",
+        "Claim finite-sample optimality",
+        "Check the variance model and sensitivity of results",
+        "Use ordinary SE automatically"
+      ],
+      "answer": "C",
+      "explanation": "FGLS relies on estimated weights and is not automatically optimal in finite samples."
+    }
+  ]
+}
