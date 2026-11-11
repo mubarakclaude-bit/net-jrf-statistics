@@ -1,0 +1,687 @@
+{
+  "id": "regressiont8",
+  "topicId": "regression-t8",
+  "moduleId": "regression",
+  "title": "6.8 — Endogeneity and Instrumental Variables",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.8 Endogeneity and instrumental variables",
+  "engine": "B",
+  "engineName": "Diagnose endogeneity and use valid instruments to identify a causal regression coefficient.",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 98,
+  "objectives": [
+    "Explain why correlation between a regressor and the disturbance invalidates the usual OLS argument.",
+    "Distinguish exogeneity, relevance and exclusion in an instrumental-variable design.",
+    "Derive the just-identified IV estimator as a ratio of reduced-form and first-stage effects.",
+    "Interpret the direction of OLS bias in a simple omitted-confounder or simultaneity setting.",
+    "Recognise weak-instrument symptoms and distinguish them from invalid instruments.",
+    "Choose an IV design and state the assumptions that make its causal interpretation credible."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Conditional expectation and covariance",
+      "why": "Endogeneity is expressed through E(u|X) or Cov(X,u), so the learner must distinguish zero mean from zero covariance."
+    },
+    {
+      "id": "p2",
+      "name": "Simple linear regression and OLS",
+      "why": "The bias argument starts from the OLS slope and its covariance with the disturbance."
+    },
+    {
+      "id": "p3",
+      "name": "Covariance and regression slopes",
+      "why": "The IV ratio is a ratio of two covariances or reduced-form slopes."
+    }
+  ],
+  "traps": [
+    "A regressor is endogenous when it is correlated with the structural disturbance; this is not the same as saying the regressor is random.",
+    "OLS exogeneity is E(u|X)=0 in the conditional formulation; zero unconditional mean E(u)=0 alone is not enough.",
+    "Instrument relevance requires a nonzero relationship with the endogenous regressor, conditional on included exogenous controls.",
+    "Instrument exclusion requires that the instrument affect the outcome only through the endogenous regressor; relevance does not establish exclusion.",
+    "The just-identified IV estimator is the reduced-form effect divided by the first-stage effect.",
+    "A weak instrument can make IV estimates noisy and conventional large-sample approximations unreliable; it is not the same as an invalid instrument.",
+    "Overidentification tests assess joint restrictions under maintained assumptions; they do not prove every instrument is valid.",
+    "Adding controls does not automatically remove endogeneity if unobserved confounding, simultaneity or measurement error remains."
+  ],
+  "howto": "Start by writing the structural equation and identifying the suspected endogenous regressor. State why OLS exogeneity fails. Then assess the proposed instrument separately for relevance and exclusion, derive the first stage and reduced form, and compute the IV ratio. Finally discuss instrument strength, the population being identified and the limits of the causal claim.",
+  "refs": [
+    {
+      "title": "Introductory Econometrics: A Modern Approach",
+      "where": "Instrumental variables and two-stage least squares",
+      "site": "Jeffrey M. Wooldridge",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Clear treatment of endogeneity, IV assumptions, first-stage diagnostics and 2SLS."
+    },
+    {
+      "title": "Econometric Analysis",
+      "where": "Instrumental variables and simultaneous equations",
+      "site": "William H. Greene",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Formal matrix and asymptotic treatment of IV estimation."
+    },
+    {
+      "title": "Mostly Harmless Econometrics",
+      "where": "Instrumental variables: a practitioner's guide",
+      "site": "Joshua D. Angrist and Jörn-Steffen Pischke",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Applied interpretation of instrument relevance, exclusion and local causal effects."
+    }
+  ],
+  "provenance": "Authored for UGC NET Statistics Paper 2 Unit VI. The lesson separates the two testable IV requirements: relevance and exclusion. The worked numerical anchors are original practice examples and are verified exactly in verify_regression_t8.py. The June 2026 regression bank contains Q9, Q11 and Q38 clusters; none is represented as a direct endogeneity/IV PYQ. Mastery questions are original practice.",
+  "revision": {
+    "sheet": [
+      "OLS requires exogeneity: E(u|X)=0; E(u)=0 alone is insufficient.",
+      "Endogeneity can arise from omitted variables, simultaneity, measurement error or selection.",
+      "In a simple model, plim(b_OLS)=β+Cov(X,u)/Var(X).",
+      "An instrument Z must be relevant: Cov(Z,X)≠0 after conditioning on included exogenous controls.",
+      "Exclusion requires Cov(Z,u)=0 and a defensible argument that Z has no direct path to Y.",
+      "Just-identified IV: β_IV=Cov(Z,Y)/Cov(Z,X)=reduced-form slope / first-stage slope.",
+      "For multiple endogenous regressors, use enough linearly independent excluded instruments and the rank condition.",
+      "Weak instruments create imprecision and nonstandard finite-sample behaviour; report first-stage diagnostics.",
+      "Overidentification tests are joint specification checks, not certificates of instrument validity.",
+      "Interpret IV as an effect for the variation and population induced by the instrument; do not overgeneralise automatically."
+    ],
+    "cards": [
+      [
+        "OLS exogeneity",
+        "E(u|X)=0"
+      ],
+      [
+        "Endogeneity",
+        "Cov(X,u)≠0"
+      ],
+      [
+        "Relevance",
+        "Cov(Z,X)≠0"
+      ],
+      [
+        "Exclusion",
+        "Cov(Z,u)=0; no direct Z→Y path"
+      ],
+      [
+        "Just-identified IV",
+        "Cov(Z,Y)/Cov(Z,X)"
+      ],
+      [
+        "Wald ratio",
+        "Reduced form ÷ first stage"
+      ],
+      [
+        "Weak IV",
+        "Small first-stage signal"
+      ],
+      [
+        "Overidentification",
+        "Joint restrictions when instruments exceed endogenous regressors"
+      ]
+    ],
+    "tricks": [
+      "Write the causal path before writing the estimator: Z→X→Y is allowed; a direct Z→Y path violates exclusion.",
+      "Compute the reduced form and first stage with the same controls; their slope ratio is the just-identified IV estimate.",
+      "Do not infer instrument validity from a large first-stage F statistic; strength and exclusion are different questions.",
+      "If Cov(X,u) is positive, the simple OLS probability limit lies above β; if it is negative, it lies below."
+    ],
+    "shortcuts": [
+      "Relevance asks whether Z moves X; exclusion asks whether Z affects Y only through X.",
+      "A ratio of reduced-form to first-stage effects gives the Wald IV estimate.",
+      "A weak instrument is relevant but only weakly so; an invalid instrument violates the identifying assumptions."
+    ],
+    "remember": [
+      "The exclusion restriction is substantive and cannot be established by a first-stage regression alone.",
+      "With heterogeneous effects, IV may identify a local average treatment effect under additional assumptions, not necessarily the population average effect."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh the regression and covariance tools",
+      "objective": "Recover the ideas needed to understand endogeneity and IV.",
+      "body": [
+        "A regression coefficient has a causal interpretation only when the assumptions connect the observed regressors to the unobserved disturbance in the required way.",
+        "This lesson uses conditional means, covariance and simple regression slopes. Rebuild those first; then the source of OLS bias and the role of an instrument will be easier to follow."
+      ],
+      "items": [
+        {
+          "ask": "In y=βx+u, what does E(u|x)=0 say?",
+          "recall": "The disturbance has conditional mean zero at every value of x.",
+          "refresh": [
+            "It says the unobserved part of the outcome does not systematically vary with the regressor after conditioning on x.",
+            "It is stronger than merely requiring E(u)=0. The unconditional mean can be zero even when high x values tend to occur with positive disturbances.",
+            "This conditional restriction is the standard exogeneity condition behind the OLS unbiasedness argument."
+          ]
+        },
+        {
+          "ask": "What is Cov(X,u)?",
+          "recall": "E[(X−E X)(u−E u)], the covariance between the regressor and disturbance.",
+          "refresh": [
+            "Covariance measures whether deviations of X and u tend to move together.",
+            "If Cov(X,u) is nonzero, the regressor contains information about the disturbance. In a simple regression this enters the probability limit of the OLS slope.",
+            "A random regressor is not automatically endogenous; the issue is its relationship with the disturbance."
+          ]
+        },
+        {
+          "ask": "What is a simple-regression slope in covariance form?",
+          "recall": "Cov(X,Y)/Var(X), when Var(X)>0.",
+          "refresh": [
+            "The population least-squares slope is the covariance of X and Y divided by the variance of X.",
+            "If Y=βX+u, substitute to get Cov(X,Y)/Var(X)=β+Cov(X,u)/Var(X).",
+            "The extra covariance term is the source of the simple OLS asymptotic bias when X is endogenous."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Which condition is central to the usual OLS unbiasedness argument?",
+        "nudge": "It concerns the conditional mean of the disturbance given the regressors."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Why a regressor can carry hidden disturbance",
+      "objective": "Build an intuitive picture of endogeneity before using an instrument.",
+      "body": [
+        "Suppose we estimate the effect of education on earnings. Ability may affect both years of education and earnings. If ability is not adequately controlled, it sits inside the disturbance and is correlated with education.",
+        "The regression then compares people who differ in education and in hidden ability. OLS attributes part of the ability-related earnings difference to education.",
+        "An instrument is a source of variation in education that is related to education but, under a defensible exclusion argument, unrelated to the hidden ability component."
+      ],
+      "scenario": {
+        "teaser": "Education and unobserved ability",
+        "title": "The omitted-confounder path",
+        "body": [
+          "An analyst regresses earnings on years of education but cannot observe ability. People with higher ability may choose more schooling, and ability may also raise earnings directly.",
+          "The omitted ability component enters the disturbance. Because schooling and ability move together, the schooling regressor is correlated with the disturbance. The OLS slope combines the schooling effect with the omitted ability association.",
+          "A proposed instrument might be a policy-driven change in access to schooling. It is useful only if it shifts education and has no separate route to earnings once the model's controls are considered.",
+          "The story therefore has two separate questions: does the policy shift schooling, and can we defend that the policy affects earnings only through schooling?"
+        ],
+        "q": "What makes the OLS regressor endogenous here?",
+        "answer": "Unobserved ability affects earnings and is correlated with years of education."
+      },
+      "ask": {
+        "q": "Why does random sampling alone not remove this problem?",
+        "nudge": "Sampling from a population does not make an omitted confounder disappear."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "The OLS bias term and common sources",
+      "objective": "Derive the simple-regression bias term and classify its sources.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Simple-regression probability limit",
+          "body": "For Y=βX+u with Var(X)>0, plim(b_OLS)=β+Cov(X,u)/Var(X). The second term vanishes only when the regressor is uncorrelated with the disturbance."
+        },
+        {
+          "t": "step",
+          "h": "Omitted variables",
+          "body": "An omitted variable that affects Y and is correlated with X enters u. The resulting covariance term is generally nonzero. The sign depends on both the omitted variable's outcome effect and its correlation with X."
+        },
+        {
+          "t": "step",
+          "h": "Simultaneity",
+          "body": "When X and Y are jointly determined, shocks to Y can feed back into X. The regressor then responds to part of the structural disturbance, violating exogeneity."
+        },
+        {
+          "t": "def",
+          "h": "Measurement error and selection",
+          "body": "Classical measurement error in a regressor can create attenuation bias. Sample selection can also make the observed regressor correlated with the unobserved outcome component."
+        }
+      ],
+      "flow": {
+        "caption": "From a hidden cause to an OLS identification failure",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Omitted cause / feedback / measurement error",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Regressor correlated with disturbance",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "OLS exogeneity fails",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "OLS slope mixes β with covariance term",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          }
+        ]
+      },
+      "ask": {
+        "q": "Which part of the simple OLS probability limit records the endogeneity problem?",
+        "nudge": "It is the covariance divided by the regressor variance."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example: direction of OLS bias",
+      "objective": "Calculate the bias term and interpret its sign.",
+      "problem": "Suppose the true slope is β=2, Var(X)=4 and Cov(X,u)=1.2. Find the probability limit of the OLS slope.",
+      "steps": [
+        {
+          "say": "Write the simple-regression probability limit.",
+          "math": "plim(b_OLS)=β+Cov(X,u)/Var(X)",
+          "why": "The expression separates the target slope from the endogeneity term."
+        },
+        {
+          "say": "Substitute the supplied values.",
+          "math": "2+1.2/4",
+          "why": "The covariance is divided by the regressor variance."
+        },
+        {
+          "say": "Evaluate the ratio.",
+          "math": "2+0.3=2.3",
+          "why": "The covariance term is positive."
+        },
+        {
+          "say": "Interpret the result.",
+          "math": "plim(b_OLS)=2.3 > β=2",
+          "why": "Positive Cov(X,u) pushes the simple OLS slope upward in this example."
+        }
+      ],
+      "ask": {
+        "q": "If Cov(X,u) were negative with the same magnitude, what would happen?",
+        "nudge": "The sign of the bias term would reverse."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 5,
+      "title": "Recall the IV identification conditions",
+      "objective": "Retrieve relevance, exclusion and exogeneity distinctly.",
+      "intro": "Answer each item before opening its explanation.",
+      "items": [
+        {
+          "q": "What is instrument relevance?",
+          "a": "The instrument predicts or shifts the endogenous regressor, conditional on included exogenous controls."
+        },
+        {
+          "q": "What is the exclusion restriction?",
+          "a": "The instrument has no direct effect on the outcome and is uncorrelated with the structural disturbance, conditional on controls."
+        },
+        {
+          "q": "Can a strong first stage prove exclusion?",
+          "a": "No. It is evidence about relevance, not the validity of the exclusion restriction."
+        },
+        {
+          "q": "What is the just-identified IV ratio?",
+          "a": "The reduced-form effect of Z on Y divided by the first-stage effect of Z on X."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 6,
+      "title": "Complete the IV ratio",
+      "objective": "Reconstruct the just-identified estimator from two regressions.",
+      "problem": "Complete the ratio that turns an instrument's effect on the outcome into an effect per unit change in the endogenous regressor.",
+      "steps": [
+        {
+          "say": "The reduced form regresses Y on Z (and the included exogenous controls).",
+          "blank": {
+            "prompt": "Its coefficient is the _____ effect of Z on Y.",
+            "answer": "reduced-form",
+            "accept": [
+              "reduced form",
+              "reduced-form"
+            ],
+            "hint": "It is the numerator of the Wald ratio."
+          }
+        },
+        {
+          "say": "The first stage regresses X on Z and the included exogenous controls.",
+          "blank": {
+            "prompt": "Its coefficient measures the _____ of Z on X.",
+            "answer": "first-stage",
+            "accept": [
+              "first stage",
+              "first-stage"
+            ],
+            "hint": "It is the denominator of the Wald ratio."
+          }
+        },
+        {
+          "say": "Divide the two effects in the just-identified case.",
+          "blank": {
+            "prompt": "β_IV = reduced form divided by the _____.",
+            "answer": "first stage",
+            "accept": [
+              "first-stage",
+              "first stage"
+            ],
+            "hint": "The denominator records how strongly the instrument moves X."
+          }
+        },
+        {
+          "say": "State the identifying requirements.",
+          "blank": {
+            "prompt": "The instrument must be relevant and satisfy the _____ restriction.",
+            "answer": "exclusion",
+            "accept": [
+              "exclusion"
+            ],
+            "hint": "It rules out a direct instrument-to-outcome path."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Instrument relevance and exclusion",
+      "objective": "Evaluate the two identifying conditions separately.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Relevance",
+          "body": "For one endogenous regressor, relevance requires Cov(Z,X)≠0 after partialling out included exogenous controls. In a first-stage regression, the excluded instrument coefficients must contain predictive variation."
+        },
+        {
+          "t": "def",
+          "h": "Exclusion",
+          "body": "The instrument must be independent of the structural disturbance conditional on the controls, and must not affect Y through a route other than X. This is an economic or design argument, not a consequence of a large first-stage statistic."
+        },
+        {
+          "t": "step",
+          "h": "The two conditions answer different questions",
+          "body": "A variable can strongly predict X but also directly affect Y; that instrument is relevant but invalid. A variable may be plausibly excluded but have almost no effect on X; it is weak and uninformative in finite samples."
+        },
+        {
+          "t": "note",
+          "h": "Controls and conditional statements",
+          "body": "With included exogenous controls W, formulate relevance and exclusion conditional on W. The excluded instrument must add independent variation beyond W."
+        }
+      ],
+      "ask": {
+        "q": "Why should relevance and exclusion never be treated as the same condition?",
+        "nudge": "One is about the first stage; the other is about the structural disturbance and direct outcome paths."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s7",
+      "mins": 7,
+      "title": "A policy instrument: what must be defended?",
+      "objective": "Apply IV assumptions to a realistic policy setting.",
+      "body": [
+        "A policy rule can create variation in an endogenous treatment. For example, distance to a college may predict schooling. But distance may also proxy for local labour markets, urban amenities or family background.",
+        "The instrument argument is credible only if those other routes are addressed by the design and controls. Relevance is an empirical first-stage question; exclusion is a substantive identifying assumption.",
+        "The IV estimate uses the part of schooling moved by the instrument. If treatment effects vary, the interpretation may be local to people whose schooling responds to that instrument."
+      ],
+      "scenario": {
+        "teaser": "Distance as an instrument for schooling",
+        "title": "Relevance is not enough",
+        "body": [
+          "A researcher uses distance to the nearest college as an instrument for years of schooling. The first-stage coefficient is large and precisely estimated, so distance is clearly relevant in the sample.",
+          "But distance may also be associated with urban access, local wages, transport infrastructure or family location choices. Any such path from distance to earnings that does not operate through schooling threatens exclusion.",
+          "Adding regional controls can help only if they address the relevant confounding paths without removing the instrument's useful variation. The exclusion argument must be explained from the institutional setting, not inferred from the first-stage p-value.",
+          "The final estimate is therefore conditional on both the statistical first stage and the substantive design assumptions."
+        ],
+        "q": "What does the strong first stage establish, and what does it not establish?",
+        "answer": "It supports relevance, but it does not establish the exclusion restriction."
+      },
+      "ask": {
+        "q": "Which claim is justified by a strong first stage alone?",
+        "nudge": "Limit the claim to the instrument's predictive relationship with the endogenous regressor."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 8,
+      "title": "Worked example: compute a Wald IV estimate",
+      "objective": "Compute an IV slope from reduced-form and first-stage effects.",
+      "problem": "A binary instrument changes the treatment rate by 0.30 and changes the outcome mean by 0.60. Compute the just-identified Wald estimate.",
+      "steps": [
+        {
+          "say": "Identify the reduced-form effect on Y.",
+          "math": "ΔY=0.60",
+          "why": "This is the numerator: the instrument's outcome effect."
+        },
+        {
+          "say": "Identify the first-stage effect on X.",
+          "math": "ΔX=0.30",
+          "why": "This is the denominator: the instrument's treatment effect."
+        },
+        {
+          "say": "Divide the two effects.",
+          "math": "β_IV=ΔY/ΔX=0.60/0.30=2",
+          "why": "The estimate is the outcome change per unit treatment change induced by Z."
+        },
+        {
+          "say": "State the interpretation carefully.",
+          "math": "β_IV=2",
+          "why": "Under the relevant assumptions, this is the causal effect for the variation induced by the instrument, not automatically every person's effect."
+        }
+      ],
+      "ask": {
+        "q": "If the first stage were only 0.03 with the same reduced form, what would happen to the ratio?",
+        "nudge": "A small denominator magnifies the ratio and signals a weak first stage."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Guided problem: diagnose an instrument",
+      "objective": "Separate relevance from exclusion in a proposed design.",
+      "problem": "A training programme is instrumented by a local training-centre opening. The opening strongly predicts participation, but it also increases local employment directly. Is it a valid instrument?",
+      "hints": [
+        "List the two IV conditions before deciding.",
+        "Use the first-stage fact to assess relevance.",
+        "Check whether the centre opening has a direct route to the outcome."
+      ],
+      "answer": "It is relevant but not valid under the stated direct-employment channel; exclusion fails.",
+      "solution": [
+        {
+          "say": "The opening strongly predicts participation, so it satisfies the relevance part in this example.",
+          "math": "Cov(Z,X)≠0"
+        },
+        {
+          "say": "The opening also increases local employment directly.",
+          "math": "Z→Y path not through X"
+        },
+        {
+          "say": "That direct route violates the exclusion restriction.",
+          "math": "Cov(Z,u)≠0 under the stated model"
+        },
+        {
+          "say": "Do not call it a valid IV merely because the first stage is strong.",
+          "math": "Relevance ≠ validity"
+        }
+      ],
+      "ask": {
+        "q": "Which condition fails in the stated design?",
+        "nudge": "Look for the direct path from the instrument to the outcome."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s10",
+      "mins": 6,
+      "title": "Exam traps: endogeneity and IV",
+      "objective": "Avoid confusing relevance, exclusion, weakness and randomness.",
+      "intro": "Mark each statement true or false.",
+      "items": [
+        {
+          "claim": "A random regressor is automatically exogenous.",
+          "tf": false,
+          "why": "Randomness of X does not rule out correlation with the disturbance in the joint data-generating process."
+        },
+        {
+          "claim": "A relevant instrument must predict the endogenous regressor conditional on included controls.",
+          "tf": true,
+          "why": "That is the first-stage relevance condition."
+        },
+        {
+          "claim": "A high first-stage F statistic proves the exclusion restriction.",
+          "tf": false,
+          "why": "It speaks to instrument strength, not to a direct effect or correlation with the structural error."
+        },
+        {
+          "claim": "An instrument can be relevant but invalid.",
+          "tf": true,
+          "why": "It may predict X while also affecting Y directly or being correlated with u."
+        },
+        {
+          "claim": "The just-identified IV estimator is the reduced-form coefficient divided by the first-stage coefficient.",
+          "tf": true,
+          "why": "The ratio converts the instrument-induced change in Y into a change per unit of X."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "mins": 8,
+      "title": "Transfer problem: interpret a weak first stage",
+      "objective": "Explain why weak instruments threaten inference.",
+      "problem": "An instrument has a positive first-stage coefficient, but the excluded-instrument F statistic is 3.2. The IV estimate is 5.8 while OLS is 2.1. What should the analyst conclude?",
+      "hints": [
+        "A nonzero estimate does not by itself imply a strong first stage.",
+        "Interpret the first-stage statistic as evidence about instrument strength.",
+        "Do not choose between OLS and IV from the size of the two point estimates alone."
+      ],
+      "answer": "The instrument may be weak; IV inference can be unstable and the large IV–OLS gap is not proof that IV is correct.",
+      "solution": [
+        {
+          "say": "The first-stage F statistic is low by common diagnostic rules of thumb.",
+          "math": "F=3.2"
+        },
+        {
+          "say": "Weak first-stage variation can make IV estimates imprecise and finite-sample biased toward OLS in many settings.",
+          "math": "Weak relevance → unstable IV"
+        },
+        {
+          "say": "The difference between 5.8 and 2.1 does not identify which estimate is valid.",
+          "math": "Point-estimate gap ≠ validity test"
+        },
+        {
+          "say": "Report weak-IV-robust inference and revisit the design and instrument strength.",
+          "math": "Use robust diagnostics and sensitivity analysis"
+        }
+      ],
+      "ask": {
+        "q": "What is the main concern raised by F=3.2?",
+        "nudge": "It concerns the strength of the first-stage relationship."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s12",
+      "mins": 5,
+      "title": "Summary: the two IV gates",
+      "objective": "Compress the identification logic into an exam-ready checklist.",
+      "body": [
+        "OLS endogeneity means a regressor is correlated with the structural disturbance. In a simple regression, plim(b_OLS)=β+Cov(X,u)/Var(X), so the covariance term is the source of the bias.",
+        "An instrument must pass two separate gates. Relevance: it predicts the endogenous regressor. Exclusion: it affects the outcome only through that regressor and is uncorrelated with the structural disturbance conditional on controls.",
+        "For one endogenous regressor and one excluded instrument, β_IV is the reduced-form effect divided by the first-stage effect. A weak first stage creates unstable inference; a direct effect violates exclusion. Neither issue is repaired by merely labelling a variable an instrument."
+      ],
+      "ask": {
+        "q": "State the two IV requirements in one sentence.",
+        "nudge": "One concerns prediction of X; the other concerns the path to Y."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s13",
+      "mins": 8,
+      "ext": true,
+      "title": "Extension — matrix form and overidentification",
+      "objective": "Connect the scalar IV ratio to the general moment-condition view.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Just-identified moment condition",
+          "body": "With one endogenous regressor and one excluded instrument, E[Z(Y−βX)]=0 gives β=E[ZY]/E[ZX] when E[ZX]≠0, after centring or conditioning on included exogenous controls."
+        },
+        {
+          "t": "step",
+          "h": "Multiple instruments",
+          "body": "With more excluded instruments than endogenous regressors, the model is overidentified. 2SLS combines the instrument-predicted component of X using the projection onto the full instrument space."
+        },
+        {
+          "t": "note",
+          "h": "Overidentification tests",
+          "body": "A Sargan or Hansen J test evaluates whether the overidentifying moment restrictions are jointly compatible with the data under the maintained model. Failure to reject does not prove validity, and rejection can reflect any invalid instrument or misspecification."
+        }
+      ],
+      "ask": {
+        "q": "What does an overidentification test assess?",
+        "nudge": "It tests the joint restrictions created by having more instruments than endogenous regressors."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 0,
+      "title": "6.8 mastery test",
+      "setId": "regression_t8_mastery",
+      "objective": "Demonstrate the method independently on unseen mastery questions."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings, not an NTA rule. Ten unseen questions are drawn as 3 easy, 5 moderate and 2 hard; the pass threshold is 80% overall with 70% floors for numerical and multi-statement items. Hints are disabled and a retention retest is due after seven days."
+  }
+}
