@@ -10,9 +10,10 @@ correctly, because the variant bank then doubles as a diagnosis.
 > `npm run content -- gaps` (or read `CONTENT_MAP.md` on the `content-map` branch): it recomputes lessons, coverage and the
 > topics with the most marks still unbuilt from the files themselves. Use this file for the reasoning, not the numbers.
 
-Current state (at the time of writing): **43 lessons live**, page Version 48, store 114 documents.
-Figures below come from `seed/catalog.json` (marks, baseline), `seed/meta_lessons.json` (coverage)
-and `seed/pyq_j26_full.json` (what was answered correctly).
+Current state: the live lesson count is `counts.lessons` in `site/manifest.json` (`npm run build`, or `/manifest.json` on the deployed site).
+The older 43-lesson snapshot and the artifact page and store figures are retired.
+Figures below come from `seed/catalog.json` (marks, baseline), the lesson index generated from `seed/lesson_*.json`
+(`node tools/gen-index.js`; it is never committed) and `seed/pyq_j26_full.json` (what was answered correctly).
 
 ---
 
