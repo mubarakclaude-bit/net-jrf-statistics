@@ -151,7 +151,7 @@
         "L",
         "Lq",
         "W",
-        "W"
+        "Wq"
       ],
       "answer": "B",
       "explanation": "Lq counts only customers waiting in the queue."
@@ -171,27 +171,27 @@
       "answer": "C",
       "explanation": "A, B and C are true; stability requires λ<μ.",
       "statements": [
-        "Arrivals are Poisson.",
-        "Service times are exponential.",
-        "There is one server.",
-        "The stated incorrect stability/waiting-time claim is true."
+        "Arrivals follow a Poisson process.",
+        "Service times are independent exponential variables.",
+        "There is exactly one server.",
+        "Stability requires the arrival rate λ to exceed the service rate μ."
       ],
       "verdicts": {
         "A": {
           "tf": true,
-          "why": "First statement is true."
+          "why": "The first M in M/M/1 specifies Markovian, or Poisson, arrivals."
         },
         "B": {
           "tf": true,
-          "why": "Second statement is true."
+          "why": "The second M specifies exponentially distributed service times."
         },
         "C": {
           "tf": true,
-          "why": "Third statement is true."
+          "why": "The final 1 denotes a single server."
         },
         "D": {
           "tf": false,
-          "why": "The final statement contradicts the M/M/1 condition or definition."
+          "why": "Stability requires λ<μ, equivalently utilisation ρ=λ/μ<1."
         }
       },
       "check": "A:true;B:true;C:true;D:false"
@@ -258,27 +258,27 @@
       "answer": "C",
       "explanation": "A, B and C are true; Wq is waiting time before service.",
       "statements": [
-        "Arrivals are Poisson.",
-        "Service times are exponential.",
-        "There is one server.",
-        "The stated incorrect stability/waiting-time claim is true."
+        "L is the mean number in the system, including the customer in service.",
+        "Lq is the mean number waiting in the queue, excluding the customer in service.",
+        "W is the mean total time in the system, including service.",
+        "Wq is the mean waiting time before service begins, including service time."
       ],
       "verdicts": {
         "A": {
           "tf": true,
-          "why": "First statement is true."
+          "why": "L counts everyone in the system, both waiting and in service."
         },
         "B": {
           "tf": true,
-          "why": "Second statement is true."
+          "why": "Lq counts only the queue and excludes the customer currently receiving service."
         },
         "C": {
           "tf": true,
-          "why": "Third statement is true."
+          "why": "W includes queueing time plus the service time."
         },
         "D": {
           "tf": false,
-          "why": "The final statement contradicts the M/M/1 condition or definition."
+          "why": "Wq ends when service begins; it does not include service time."
         }
       },
       "check": "A:true;B:true;C:true;D:false"
@@ -345,27 +345,27 @@
       "answer": "D",
       "explanation": "A, B and C hold; W−Wq is mean service time 1/μ, not 1/λ.",
       "statements": [
-        "Arrivals are Poisson.",
-        "Service times are exponential.",
-        "There is one server.",
-        "The stated incorrect stability/waiting-time claim is true."
+        "Little's law for the whole system is L=λW.",
+        "Little's law for the queue is Lq=λWq.",
+        "The mean number in service is L−Lq=ρ.",
+        "The difference W−Wq equals 1/λ."
       ],
       "verdicts": {
         "A": {
           "tf": true,
-          "why": "First statement is true."
+          "why": "Little's law relates system population L to arrival rate λ and total system time W."
         },
         "B": {
           "tf": true,
-          "why": "Second statement is true."
+          "why": "The queue-only form of Little's law is Lq=λWq."
         },
         "C": {
           "tf": true,
-          "why": "Third statement is true."
+          "why": "For a single-server M/M/1 queue, the mean number in service is the busy probability ρ."
         },
         "D": {
           "tf": false,
-          "why": "The final statement contradicts the M/M/1 condition or definition."
+          "why": "W−Wq is mean service time 1/μ, not 1/λ."
         }
       },
       "check": "A:true;B:true;C:true;D:false"
