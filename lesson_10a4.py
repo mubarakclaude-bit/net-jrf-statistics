@@ -132,9 +132,9 @@ SC.append(dict(
           "non-agricultural economy."),
    dict(t="step", h="Surveys outside MoSPI",
      body="Two major surveys belong to other ministries and are examined all the same. The National Family Health Survey "
-          "is run by the Ministry of Health and Family Welfare with the International Institute for Population Sciences, "
-          "Mumbai, as nodal agency; NFHS-6 results are not quoted here without the corresponding official report; the survey is conducted by MoHFW with IIPS Mumbai as "
-          "households across 715 districts and reported a total fertility rate of 2.0. The Annual Health Survey and the "
+          "is conducted by the Ministry of Health and Family Welfare with the International Institute for Population "
+          "Sciences, Mumbai, as nodal agency. Quote NFHS indicators only with the published round and reference period; "
+          "do not infer NFHS-6 results without the corresponding official report. The Annual Health Survey and the "
           "Sample Registration System belong to the civil registration side and are the next topic's business."),
    dict(t="trap", h="The 2017-18 round that was never published",
      body="A consumption round was fielded in 2017-18 and its results were withheld in November 2019 on stated grounds "
@@ -142,8 +142,9 @@ SC.append(dict(
           "2022-23, and why the 2022-23 and 2023-24 rounds are not directly comparable with 2011-12 either. A question "
           "asking for 'the previous consumption survey before 2022-23' wants 2011-12, not 2017-18."),
    dict(t="note", h="The NFHS rounds, since they are asked plainly",
-     body="NFHS-1 1992-93, NFHS-2 1998-99, NFHS-3 2005-06, NFHS-4 2015-16, NFHS-5 2019-21, NFHS-6 2023-24. Six rounds, "
-          "and the gap between 3 and 4 is the long one.")],
+     body="The five published rounds are NFHS-1 (1992-93), NFHS-2 (1998-99), NFHS-3 (2005-06), NFHS-4 (2015-16) and "
+          "NFHS-5 (2019-21). The long gap is between rounds 3 and 4. Do not treat an announced or ongoing round as a "
+          "published source of indicators.")],
   flow=dict(caption="From one survey programme to the surveys and indices in use today",
     nodes=[
       dict(id="n", r=0, c=1, w=2, label="National Sample Survey, 1950", kind="start"),
