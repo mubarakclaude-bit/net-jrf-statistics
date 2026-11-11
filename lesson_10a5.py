@@ -316,7 +316,7 @@ SC.append(dict(
           "measure of how incomplete a single pass would have been. That is the whole logic of the method, and it is "
           "the standard answer to 'why not simply use the register'."),
    dict(t="formula", h="Size and precision",
-     body="By 2023 the SRS covered 8,839 sampling units and over 8.8 million people. The sample is designed so that the "
+     body="In 2024 the SRS covered 8,839 sampling units and 8.981 million people. The sample is designed so that the "
           "infant mortality rate can be estimated with a relative standard error below 15% — a design criterion worth "
           "quoting, because it shows the sample size was chosen for a stated precision on a specific indicator rather "
           "than picked for convenience."),
@@ -516,7 +516,7 @@ SC.append(dict(
    "verification of mismatches. 8,839 sampling units and 8.981 million people in 2024, sized so that IMR has a "
    "relative standard error below 15%. Publishes the annual bulletin, the Statistical Report, special bulletins on "
    "maternal mortality and causes of death, and abridged life tables.",
-   "The figures, with their periods. SRS 2023: CBR 18.3, CDR 6.4, natural growth rate 12.0, IMR 25, TFR 1.9. Sex ratio "
+   "The figures, with their periods. SRS 2024: CBR 18.3, CDR 6.4, natural growth rate 11.9, IMR 24, TFR 1.9. Sex ratio "
    "at birth 918 for 2022-24, females per 1,000 males. MMR 87 per 1,00,000 live births for 2022-24, from 130 for "
    "2014-16, against an SDG target of 70 by 2030.",
    "The formulae. CBR and CDR per 1,000 mid-year population; IMR per 1,000 live births; MMR per 1,00,000 live births. "
@@ -608,7 +608,7 @@ LES = dict(
       "SRS: pilot 1964-65, full scale 1969-70; run by the RGI; no statute behind it.",
       "SRS dual record: continuous enumeration + independent half-yearly survey, then matching and field verification.",
       "SRS 2024: 8,839 sampling units and 8.981 million people; sized for IMR with RSE under 15%.",
-      "SRS 2023 rates: CBR 18.3, CDR 6.4, natural growth 12.0, IMR 25, TFR 1.9.",
+      "SRS 2024 rates: CBR 18.3, CDR 6.4, natural growth 11.9, IMR 24, TFR 1.9.",
       "Sex ratio at birth 918 (2022-24), females per 1,000 males; Chhattisgarh 978 and Kerala 974 highest, Uttarakhand 872 lowest.",
       "MMR 87 per 1,00,000 live births (2022-24), down from 88 (2021-23) and 130 (2014-16); SDG target 70 by 2030.",
       "TFR = 5 × Σ ASFR (five-year groups, rates per woman); GRR = TFR × proportion female; NRR = GRR × survival.",
