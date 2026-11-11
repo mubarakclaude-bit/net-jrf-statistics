@@ -7,6 +7,10 @@ L=json.loads((R/"seed/lesson_multivariate_t9.json").read_text())
 P=json.loads((R/"seed/multivariate_t9_mastery.json").read_text())
 assert L["id"]=="multivariatet9" and L["topicId"]=="multivariate-t9" and len(L["scenes"])==13
 assert L["scenes"][-1]["setId"]=="multivariate_t9_mastery" and L["anchors"]==[]
+assert sum(s["kind"]=="guided" for s in L["scenes"])>=2
+assert sum("scenario" in s for s in L["scenes"])>=2
+assert any("flow" in s for s in L["scenes"])
+assert all(len(t)>=140 for it in L["scenes"][0]["items"] for t in it["refresh"])
 assert len(P["items"])==P["count"]==20
 assert Counter(x["diff"] for x in P["items"])=={"easy":6,"moderate":10,"hard":4}
 assert Counter(x["format"] for x in P["items"])=={"single":12,"numeric":5,"multi":3}

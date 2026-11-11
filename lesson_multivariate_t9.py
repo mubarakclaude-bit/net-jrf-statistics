@@ -7,6 +7,9 @@ L=R/"seed/lesson_multivariate_t9.json"; P=R/"seed/multivariate_t9_mastery.json"
 lesson=json.loads(L.read_text()); pool=json.loads(P.read_text())
 assert lesson["id"]=="multivariatet9" and lesson["topicId"]=="multivariate-t9"
 assert lesson["scenes"][-1]["setId"]==P.stem and len(lesson["scenes"])==13
+assert sum(s["kind"]=="guided" for s in lesson["scenes"])>=2
+assert sum("scenario" in s for s in lesson["scenes"])>=2
+assert any("flow" in s for s in lesson["scenes"])
 assert len(pool["items"])==20
 assert Counter(x["diff"] for x in pool["items"])=={"easy":6,"moderate":10,"hard":4}
 assert Counter(x["format"] for x in pool["items"])=={"single":12,"numeric":5,"multi":3}

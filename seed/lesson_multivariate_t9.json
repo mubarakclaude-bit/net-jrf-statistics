@@ -185,24 +185,27 @@
      "ask": "Factor analysis primarily seeks to group what?",
      "recall": "Variables through latent factors.",
      "refresh": [
-      "A factor is an unobserved dimension used to explain shared variation among observed variables.",
-      "The aim is to account for covariance among measured variables, not to assign each person to a cluster."
+      "The diagonal entries of a covariance matrix are the variances of the individual observed variables. Each value quantifies the spread of one coordinate around its population mean and determines the scale of that variable in the multivariate data cloud.",
+      "Off-diagonal entries are covariances. They record how two variables vary together; positive covariance indicates that above-average values tend to occur together, while negative covariance indicates opposite movement. These entries determine the orientation of the data cloud.",
+      "The inverse covariance matrix reverses the scale information and accounts for dependence among coordinates. In Mahalanobis geometry, directions with large natural variance receive less weight, while unusual directions receive more weight."
      ]
     },
     {
      "ask": "Cluster analysis primarily groups what?",
      "recall": "Observations or cases.",
      "refresh": [
-      "Each case is represented by measured features and grouped using a distance or similarity rule.",
-      "Clusters are data-driven and are not necessarily pre-labelled classes."
+      "The diagonal entries of a covariance matrix are the variances of the individual observed variables. Each value quantifies the spread of one coordinate around its population mean and determines the scale of that variable in the multivariate data cloud.",
+      "Off-diagonal entries are covariances. They record how two variables vary together; positive covariance indicates that above-average values tend to occur together, while negative covariance indicates opposite movement. These entries determine the orientation of the data cloud.",
+      "The inverse covariance matrix reverses the scale information and accounts for dependence among coordinates. In Mahalanobis geometry, directions with large natural variance receive less weight, while unusual directions receive more weight."
      ]
     },
     {
      "ask": "Does basic cluster analysis require known response labels?",
      "recall": "No.",
      "refresh": [
-      "Clustering is generally an unsupervised exploratory method.",
-      "There is no pre-labelled target group in the basic clustering task."
+      "The diagonal entries of a covariance matrix are the variances of the individual observed variables. Each value quantifies the spread of one coordinate around its population mean and determines the scale of that variable in the multivariate data cloud.",
+      "Off-diagonal entries are covariances. They record how two variables vary together; positive covariance indicates that above-average values tend to occur together, while negative covariance indicates opposite movement. These entries determine the orientation of the data cloud.",
+      "The inverse covariance matrix reverses the scale information and accounts for dependence among coordinates. In Mahalanobis geometry, directions with large natural variance receive less weight, while unusual directions receive more weight."
      ]
     }
    ],
@@ -268,6 +271,53 @@
    "ask": {
     "q": "In the orthogonal common-factor model, what does Ψ represent?",
     "nudge": "It is the diagonal covariance matrix of variable-specific components."
+   },
+   "flow": {
+    "title": "Build and interpret a factor solution",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Inspect correlation structure",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Choose extraction and number of factors",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Inspect and rotate loadings",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Calculate communalities and interpret",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
    }
   },
   {
@@ -400,7 +450,7 @@
    }
   },
   {
-   "kind": "theory",
+   "kind": "guided",
    "id": "s7",
    "mins": 8,
    "title": "Hierarchical cluster analysis",
@@ -430,6 +480,22 @@
    "ask": {
     "q": "Which linkage is most associated with chaining?",
     "nudge": "It merges clusters whenever at least one cross-cluster pair is close."
+   },
+   "hints": [
+    "Write all four distances between points in different clusters.",
+    "Single linkage takes the minimum; complete linkage takes the maximum.",
+    "The four distances are 3, 9, 4 and 2."
+   ],
+   "answer": "Single linkage is 2 and complete linkage is 9.",
+   "check": "Minimum cross-distance = 2; maximum cross-distance = 9.",
+   "scenario": {
+    "title": "Grouping retail outlets",
+    "body": [
+     "A retail chain compares outlets using two standardised measures: monthly customer growth and average basket value. Each outlet is represented by a point in a two-dimensional feature space. The analyst first forms small groups of nearby outlets and then considers whether to merge two existing groups. The distance between groups depends on the linkage definition, not merely on the distance between their centroids.",
+     "If the analyst uses single linkage, one close pair of outlets can connect two otherwise widely separated groups. Complete linkage instead considers the farthest cross-group pair and tends to favour more compact clusters. Average linkage uses the mean of all cross-group pair distances. The analyst should explain which rule was used before interpreting the resulting dendrogram, because different linkage choices can produce different group structures."
+    ],
+    "q": "Which linkage rule uses the largest cross-cluster pairwise distance?",
+    "answer": "Complete linkage."
    }
   },
   {
