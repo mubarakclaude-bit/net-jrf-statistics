@@ -6,7 +6,11 @@ their work merges without either author reading the other's tooling.** Everythin
 Decisions (made by the owner, 2026-11-07):
 1. **The hosted site is the primary product.** The repo is the only source of truth. The Claude
    artifact becomes an optional, *generated* copy; it is never an authoring surface.
-2. **A light bundler (esbuild) replaces shell-script concatenation** when the features are split (phase 4).
+2. **Decision 2026-11-12: the Claude artifact database is no longer a publishing target.** GitHub + Vercel are the only
+   publishing system. Lesson content and pools live in `seed/`, the build emits `site/manifest.json` as the record of what
+   is deployed, and learner progress is stored separately from lesson content. `tools/lesson.js` derives a lesson's wiring
+   from its topic id so an author, or an assistant with no shell, cannot get the store ids wrong.
+3. **A light bundler (esbuild) replaces shell-script concatenation** when the features are split (phase 4).
 
 ## What was blocking independent work
 

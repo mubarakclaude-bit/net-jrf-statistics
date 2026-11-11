@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # One call for the mechanical half of adding a lesson, replacing four separate steps.
-#   ./addlesson.sh <authoring.py> <seed-stem> <topicId> <storeDocId> <masterySetStem>
+#   ./addlesson.sh <authoring.py> <seed-stem>                      (topic id, lesson id and pool are read from the seed it writes)
+#   ./addlesson.sh <authoring.py> <seed-stem> <topicId> <lessonId> <masterySetStem>   (older form: asserts all three)
 # Generates, validates, checks every formula through the renderer and asserts the lesson is wired.
 # It edits NO shared file: the lesson index and the test harness are generated from seed/ by
 # tools/seed-docs.js. Prints only what changed or what failed.
@@ -17,7 +18,8 @@ for c in python3 python; do
   fi
 done
 [ -n "$PYBIN" ] || { echo "FAILED: no working Python 3 found (tried python3, python)"; exit 1; }
-PY=$1; STEM=$2; TID=$3; DOC=$4; SET=$5
+[ $# -ge 2 ] || { echo "usage: ./addlesson.sh <authoring.py> <seed-stem> [<topicId> <lessonId> <masterySetStem>]"; exit 1; }
+PY=$1; STEM=$2; TID=${3:-}; DOC=${4:-}; SET=${5:-}
 # Once a lesson is merged, its seed JSON is the source of truth (docs/CONTENT_GUIDE.md, 3a). Running its generator script
 # again would overwrite every later edit made to the JSON, so that needs an explicit REGENERATE=1. A lesson that is new in
 # this branch is not on the base branch yet, so it is never blocked: the usual "run until clean" loop is unchanged.
@@ -55,4 +57,9 @@ node vcheck.js "seed/$STEM.json" 2>&1 | grep -vE '^seed/' | head -12
 # The lesson index and the test harness are GENERATED from seed/ by tools/seed-docs.js, so this script
 # no longer edits test.js or seed/meta_lessons.json (the two files every parallel author used to collide
 # in). It only asserts that the lesson is wired the way you said: topic id, store doc id, quiz set, 20 items.
+# With only two arguments the wiring is read from the seed itself, so there is nothing to get wrong; the checks that matter
+# (unique ids, quiz pool exists with 20 items, topic in the catalog) still run. Pass all five to assert a specific wiring.
+if [ -z "$TID" ]; then
+  eval "$(node -e 'const d=require("./seed/"+process.argv[1]+".json");const q=(d.scenes||[]).find(s=>s.kind==="quiz")||{};console.log("TID="+JSON.stringify(d.topicId||"")+"; DOC="+JSON.stringify(d.id||"")+"; SET="+JSON.stringify(q.setId||""))' "$STEM")"
+fi
 node tools/gen-index.js --expect "$TID" "$DOC" "$SET"

@@ -54,9 +54,9 @@ Three routes, in increasing order of what they can do:
 3. **An issue here** — open one from the *Author a lesson* template, then paste the one-line
    instruction it contains into a new chat.
 
-A GitHub Action cannot finish the job: lessons live in the artifact's database, which is reachable
-only through a Claude session tied to the owner's account. GitHub holds the queue and the spec;
-a session does the authoring and the store write.
+Any session that can write to this repository can finish a lesson: it commits the seed files, CI verifies
+them, and merging publishes them through Vercel. No artifact or store write is involved.
+`npm run lesson -- brief <topicId>` prints the work order for a topic.
 
 ## Current state
 

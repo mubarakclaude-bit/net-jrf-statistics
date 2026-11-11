@@ -54,8 +54,11 @@ the top unchecked item unless told otherwise).
 **The loop**
 
 ```sh
+npm run lesson -- queue <module>               # what is left to write, highest marks first
+npm run lesson -- brief <topicId>              # the work order: ids, file names, previous-year items, steps
 python verify_<group>.py                       # ONE verification script for the whole group, written BEFORE any prose
-./addlesson.sh <authoring.py> <seed-stem> <topicId> <storeDocId> <masterySetStem>   # repeat until clean
+./addlesson.sh <authoring.py> <seed-stem>      # repeat until clean; the wiring is read from the seed
+npm run lesson -- check <topicId>              # every validator for that topic, in one command
 npm run check
 ```
 
@@ -210,14 +213,15 @@ Local commands are useful, not mandatory. The mandatory part is that CI passes.
 4. Read the failing step in the Actions log, fix the files, push again. Repeat until all three jobs are green.
 5. Mark the PR ready, put the CI run link in the description, and stop. The owner or the other assistant reviews and merges.
 
-CI cannot judge whether a verification script checks the right thing, and it does not push to the Claude artifact (optional;
-Claude sessions with `ArtifactData` only).
+CI cannot judge whether a verification script checks the right thing. Nothing needs the Claude artifact: publishing is the merge.
 
 ## Where things go live
 
 - **Vercel site (primary):** merging to the production branch, `multi-author-hosting`, rebuilds and redeploys it from the repository.
-- **Claude artifact (optional, generated):** pushed separately from a Claude session. It can lag the site; nothing here
-  requires it.
+- **What is live:** `/manifest.json` on the deployed site lists every lesson, its version, pool size and content hash, plus
+  the commit. Compare it with `seed/` to confirm a merge is published.
+- **Claude artifact: retired** as a publishing target (decision 2026-11-12). Do not write to it. The `ArtifactData` push
+  steps in older notes are obsolete.
 
 See `ARCHITECTURE.md` for the phase plan, `contracts/README.md` for what a valid contribution is, and
 `docs/PHASE2_REVIEW.md` for why.
