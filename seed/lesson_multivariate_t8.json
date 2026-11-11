@@ -47,7 +47,10 @@
    "LDA: multivariate normal groups with a common covariance matrix; linear boundary.",
    "QDA: group-specific covariance matrices; boundaries generally quadratic.",
    "MANOVA tests H₀: μ₁=…=μg for a vector-valued response.",
-   "Common criteria: Wilks' lambda, Pillai's trace, Hotelling–Lawley trace and Roy's largest root."
+   "Common criteria: Wilks' lambda, Pillai's trace, Hotelling–Lawley trace and Roy's largest root.",
+   "With H and E denoting hypothesis and error sum-of-products matrices, Wilks' Λ=|E|/|E+H|.",
+   "Pillai's trace, Hotelling–Lawley trace and Roy's largest root are alternative MANOVA criteria.",
+   "Ordinary ANOVA has one response; MANOVA tests a response vector and its joint group effect."
   ],
   "cards": [
    [
@@ -177,8 +180,8 @@
      "ask": "What is the dimension of the final quadratic form?",
      "recall": "A scalar.",
      "refresh": [
-      "The displacement is p×1, its transpose is 1×p, and the inverse covariance is p×p.",
-      "Multiplication gives a 1×1 scalar, the squared distance from the reference centre."
+      "The sample mean vector is formed by averaging each coordinate across all n observations. If each observation is p×1, the mean vector is also p×1; its jth coordinate is the ordinary sample mean of variable j. It provides the centre from which multivariate deviations are measured.",
+      "In the multivariate normal likelihood, differentiating with respect to the unknown mean vector gives the sample mean vector as the maximum-likelihood estimate. Each observation is then centred by subtracting this vector before the covariance matrix is estimated. This centring is essential: using uncentred observations would mix location with spread."
      ]
     }
    ],
@@ -202,7 +205,8 @@
     "teaser": "Two correlated measurements",
     "title": "Height and weight",
     "body": [
-     "A tall and correspondingly heavy person may be ordinary relative to a positively correlated population. A tall but unusually light person may be more atypical. Mahalanobis distance uses the joint covariance pattern to distinguish these cases."
+     "Suppose height and weight are measured for a group of adults. These variables tend to be positively correlated, so the data cloud is elongated along a rising diagonal. A person who is tall and correspondingly heavy may lie far from the coordinate-wise average in raw units but still follow the usual population pattern. Another person with the same height but unusually low weight may depart sharply from that pattern.",
+     "Mahalanobis distance evaluates the displacement using the inverse covariance matrix. The covariance structure downweights directions in which observations naturally vary widely and gives more weight to unusual directions. This is why it can identify multivariate outliers that are not obvious from separate one-variable comparisons."
     ],
     "q": "What extra information does Mahalanobis distance use?",
     "answer": "The covariance structure, including variances and correlations."
@@ -450,7 +454,8 @@
    "problem": "Two multivariate normal populations have different mean vectors but are assumed to share the same covariance matrix. Which classical discriminant method fits?",
    "hints": [
     "Focus on the covariance assumption.",
-    "A common covariance leads to a linear discriminant score."
+    "A common covariance leads to a linear discriminant score.",
+    "Remember that LDA pools the within-group covariance information."
    ],
    "answer": "Linear discriminant analysis (LDA).",
    "check": "Common covariance → LDA.",
@@ -469,11 +474,12 @@
    "scenario": {
     "title": "A second classification study",
     "body": [
-     "A dataset suggests that diagnostic groups have substantially different covariance structures. Forcing a common covariance may be too restrictive."
+     "A bank builds a classifier using two financial ratios to distinguish low-risk and high-risk borrowers. Initial plots suggest that both groups have different spreads and different covariance patterns: one group is widely dispersed along a diagonal, while the other is more compact and nearly circular. A single pooled covariance matrix may conceal this important group-specific structure.",
+     "QDA can represent this difference by estimating a covariance matrix separately for each group. This flexibility comes at a cost: more parameters must be estimated, so a sufficiently large sample in each group is important. The choice between LDA and QDA is therefore a modelling decision, not merely a preference for a more complicated formula."
     ],
     "q": "Which alternative allows each group its own covariance matrix?",
     "answer": "Quadratic discriminant analysis (QDA).",
-    "teaser": "A second classification study"
+    "teaser": "When a shared covariance assumption fails"
    },
    "ask": {
     "q": "What is one cost of QDA?",
@@ -523,7 +529,8 @@
    "problem": "Three groups are compared on two response variables. The question is whether their population mean response vectors are equal. Which method is appropriate?",
    "hints": [
     "There are multiple dependent variables.",
-    "The null concerns the whole vector of means."
+    "The null concerns the whole vector of means.",
+    "The four named criteria are alternative ways to summarise the H and E matrices."
    ],
    "answer": "MANOVA: H₀: μ₁=μ₂=μ₃.",
    "check": "Several responses and a joint group-mean hypothesis → MANOVA.",
