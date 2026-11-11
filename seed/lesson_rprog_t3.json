@@ -182,21 +182,24 @@
      "ask": "Where does name lookup begin?",
      "recall": "The current evaluation environment.",
      "refresh": [
-      "R first checks the current evaluation environment, then follows its parent if the name is absent."
+      "R begins by checking the environment in which the expression is currently evaluated. If the name is absent, it follows the parent link to the next environment and continues outward. This ordered search is the basis of lexical name resolution, and it stops as soon as a matching binding is found.",
+      "An environment is more than a list of variable names: it stores bindings from names to objects and records a parent environment. The parent relationship forms a chain that R follows when a name is not found locally. To solve exam traces, write the environments in order and mark the first one containing the requested name."
      ]
     },
     {
      "ask": "What is masking?",
      "recall": "A nearer binding hides a same-named parent binding.",
      "refresh": [
-      "The first matching binding is used; farther bindings remain but are masked."
+      "A binding in the current environment takes precedence over a same-named binding in a parent environment. The parent value is not deleted or overwritten; it is simply masked for this lookup. When the local environment is no longer the active evaluation context, the parent binding can be visible again.",
+      "R begins by checking the environment in which the expression is currently evaluated. If the name is absent, it follows the parent link to the next environment and continues outward. This ordered search is the basis of lexical name resolution, and it stops as soon as a matching binding is found."
      ]
     },
     {
      "ask": "What does an environment contain?",
      "recall": "Name–value bindings and a parent relationship.",
      "refresh": [
-      "Bindings connect names to objects; the parent link defines the next lookup location."
+      "An environment is more than a list of variable names: it stores bindings from names to objects and records a parent environment. The parent relationship forms a chain that R follows when a name is not found locally. To solve exam traces, write the environments in order and mark the first one containing the requested name.",
+      "R begins by checking the environment in which the expression is currently evaluated. If the name is absent, it follows the parent link to the next environment and continues outward. This ordered search is the basis of lexical name resolution, and it stops as soon as a matching binding is found."
      ]
     }
    ],
@@ -218,8 +221,8 @@
     "teaser": "A reusable pricing function",
     "title": "A function called from a temporary workspace",
     "body": [
-     "A pricing function is created where tax_rate=0.05. Later it is called from another function where tax_rate=0.10. The pricing function does not receive tax_rate as an argument or define it locally.",
-     "Lexical scoping means it finds the binding in its own enclosing environment, not the caller's local workspace."
+     "A pricing function is created in an environment where tax_rate=0.05. Later, another function is called from a temporary workspace where tax_rate=0.10. The pricing function refers to tax_rate but does not receive it as an argument and does not create a local binding with that name. The two values are deliberately different so that the lookup rule can be observed.",
+     "R uses lexical scoping. The function remembers the environment in which it was created, and that environment is the starting point for resolving its free variables after local arguments and assignments are checked. The caller's temporary tax_rate is not automatically inserted into this lookup chain, so it cannot replace the function's enclosing binding."
     ],
     "q": "Which tax_rate is found if no nearer binding exists?",
     "answer": "0.05."
@@ -475,8 +478,8 @@
     "teaser": "A nested counter",
     "title": "A counter retained by a closure",
     "body": [
-     "A factory creates a local counter and returns an inner function. The inner function uses <<- to update counter. Each call changes the binding in the retained factory environment.",
-     "The inner function remains able to access that environment after the factory call has returned."
+     "A factory function creates a local variable named counter and then returns an inner function. The inner function uses counter <<- counter+1 and then returns counter. The factory has already finished executing by the time the learner calls the returned function several times, so the example tests whether the inner function retains access to its creation environment.",
+     "The returned inner function is a closure: it retains its enclosing environment while it remains reachable. The counter binding is stored in that retained environment, and superassignment searches outward from the inner function's evaluation environment to find and update it. Each call therefore sees the value left by the previous call, even though the factory call has returned."
     ],
     "q": "Why can the returned function still access counter?",
     "answer": "It retains the factory environment as its enclosing environment."
