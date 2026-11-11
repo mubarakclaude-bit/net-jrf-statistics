@@ -1,0 +1,649 @@
+{
+  "id": "designt6",
+  "topicId": "design-t6",
+  "moduleId": "design",
+  "title": "Confounding, Split-Plot Designs and PBIBD",
+  "breadcrumb": "Unit III · Design of Experiments · Advanced layouts",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 104,
+  "objectives": [
+    "Explain complete and partial confounding of factorial effects with blocks.",
+    "Identify which factorial effect is confounded with blocks in a specified layout.",
+    "Explain split-plot randomisation, whole plots and subplots.",
+    "Use the correct whole-plot and subplot error strata for tests.",
+    "Distinguish PBIBD from BIBD using associate classes and concurrence numbers."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Factorial effects and block designs",
+      "why": "Confounding aliases selected factorial effects with block contrasts."
+    },
+    {
+      "id": "p2",
+      "name": "ANOVA and error strata",
+      "why": "Split-plot designs have separate whole-plot and subplot error terms."
+    },
+    {
+      "id": "p3",
+      "name": "BIBD parameters and pair concurrence",
+      "why": "PBIBD generalises pair balance by associate classes."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule. Ten items are drawn with a 3/5/2 difficulty mix; retakes draw again."
+  },
+  "refs": [
+    {
+      "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+      "where": "Factorial and split-plot designs",
+      "site": "NIST",
+      "url": "https://www.itl.nist.gov/div898/handbook/",
+      "type": "reference",
+      "free": true,
+      "why": "Open design and analysis reference."
+    },
+    {
+      "title": "Montgomery, Design and Analysis of Experiments",
+      "where": "Confounding and split-plot experiments",
+      "site": "Wiley",
+      "url": "https://www.wiley.com/",
+      "type": "book",
+      "free": false,
+      "why": "Standard reference for factorial and split-plot designs."
+    },
+    {
+      "title": "Raghavarao and Padgett, Block Designs",
+      "where": "Partially balanced incomplete block designs",
+      "site": "World Scientific",
+      "url": "https://www.worldscientific.com/",
+      "type": "book",
+      "free": false,
+      "why": "Reference for association schemes and PBIBD."
+    }
+  ],
+  "traps": [
+    "Confounding means a treatment effect cannot be separated from a block effect in that arrangement; it is not ordinary random error.",
+    "In a 2³ design split into two blocks of four, one 1-df factorial effect can be confounded with blocks.",
+    "Partial confounding rotates the confounded effect across replications so every effect can be estimated from some replications.",
+    "Split-plot randomisation is restricted: whole-plot treatments are randomised to whole plots, then subplot treatments within each whole plot.",
+    "The whole-plot factor is tested against whole-plot error; subplot factor and interaction use subplot error in the standard balanced split-plot ANOVA.",
+    "PBIBD pairs are divided into associate classes with different concurrence numbers λ₁, λ₂, …; not all pairs need occur equally often.",
+    "PBIBD is not simply a BIBD with unequal block sizes; its balance is defined through association classes."
+  ],
+  "howto": "For confounding, list treatment combinations and block generators, then identify the factorial effect whose signs are constant within blocks. For split plots, mark the hard-to-change whole-plot factor and easy-to-change subplot factor, then identify the two error strata before testing. For PBIBD, classify pairs into associate classes and state the corresponding concurrence numbers.",
+  "revision": {
+    "sheet": [
+      "Confounding aliases a factorial effect with block effects in a chosen layout.",
+      "In 2³ split into two blocks of four, ABC may be confounded with blocks using the ABC sign generator.",
+      "Complete confounding repeats the same confounded effect in every replication.",
+      "Partial confounding changes the confounded effect across replications.",
+      "Split plot: whole-plot factor is harder to change; subplot factor is easier.",
+      "Randomise whole-plot treatments among whole plots, then subplot treatments within each whole plot.",
+      "Whole-plot factor uses whole-plot error; subplot factor and interaction use subplot error in the standard balanced model.",
+      "PBIBD classifies treatment pairs into associate classes with concurrence λ₁, λ₂, etc.",
+      "BIBD has one common λ for every distinct pair; PBIBD permits class-specific concurrence."
+    ],
+    "cards": [
+      [
+        "Confounding",
+        "Factorial effect aliased with blocks"
+      ],
+      [
+        "Complete confounding",
+        "Same effect confounded in all replicates"
+      ],
+      [
+        "Partial confounding",
+        "Rotate the confounded effect across replicates"
+      ],
+      [
+        "Whole plot",
+        "Large unit assigned hard-to-change factor"
+      ],
+      [
+        "Subplot",
+        "Smaller unit assigned easy-to-change factor"
+      ],
+      [
+        "Error strata",
+        "Separate whole-plot and subplot errors"
+      ],
+      [
+        "PBIBD",
+        "Pair concurrence depends on associate class"
+      ],
+      [
+        "BIBD",
+        "One common λ for all treatment pairs"
+      ]
+    ],
+    "tricks": [
+      {
+        "hook": "Block generator",
+        "why": "The defining sign pattern identifies the effect confounded with blocks."
+      },
+      {
+        "hook": "Hard-to-change = whole plot",
+        "why": "It receives the larger experimental unit and has its own error stratum."
+      },
+      {
+        "hook": "PBIBD = pair classes",
+        "why": "Different associate classes may have different concurrence numbers."
+      }
+    ],
+    "shortcuts": [
+      "Write the block defining contrast before claiming an effect is confounded.",
+      "Draw the randomisation hierarchy before writing split-plot ANOVA.",
+      "Ask whether every pair has the same concurrence; if not, identify associate classes."
+    ],
+    "remember": [
+      "A split-plot design is not analysed as an ordinary factorial CRD because randomisation is restricted.",
+      "PBIBD is partially balanced through association classes, not universally pair-balanced."
+    ],
+    "traps": [
+      "Testing whole-plot factor against subplot error.",
+      "Calling partial confounding complete confounding.",
+      "Using one λ for every pair in a PBIBD."
+    ]
+  },
+  "provenance": "Original GPT-authored lesson for design-t6. No official PYQ is claimed. Covers factorial confounding with blocks, complete versus partial confounding, split-plot randomisation and error strata, and PBIBD associate classes. The lesson distinguishes the design hierarchy and does not imply that all PBIBD concurrence values are equal.",
+  "anchors": [],
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Why advanced layouts are needed",
+      "objective": "Motivate confounding, split plots and partial balance.",
+      "body": [
+        "Some experiments have many factorial combinations, hard-to-change factors, or block structures that cannot make every treatment pair equally frequent.",
+        "Confounding allocates block degrees of freedom to selected factorial effects. Split plots use two levels of experimental units and restricted randomisation. PBIBD uses associate classes to achieve partial balance when full pair balance is unsuitable."
+      ],
+      "items": [
+        {
+          "ask": "Name the three advanced design ideas in this lesson.",
+          "recall": "Confounding, split-plot designs and PBIBD.",
+          "refresh": [
+            "Confounding concerns aliasing with blocks.",
+            "Split plots have whole-plot and subplot units.",
+            "PBIBD balances pairs by associate class.  This rebuild makes the prerequisite explicit before the new design method is used. Identify what is being counted, which units are independent, and which assumptions allow the calculation. Then explain how that idea supports the next step rather than memorising the symbol alone."
+          ]
+        },
+        {
+          "ask": "What is randomisation?",
+          "recall": "Allocating treatments to experimental units by a chance mechanism.",
+          "refresh": [
+            "Randomisation protects treatment comparisons against systematic allocation choices.",
+            "In a split-plot design randomisation is restricted and occurs at two levels.",
+            "Whole-plot treatments are randomised among whole plots, then subplot treatments within each whole plot.",
+            "The analysis must respect the level at which each treatment was randomised."
+          ]
+        },
+        {
+          "ask": "What is an interaction contrast?",
+          "recall": "A comparison showing how one factor's effect changes across another factor's levels.",
+          "refresh": [
+            "In a two-factor experiment, calculate the simple effect of A at each level of B.",
+            "Subtract one simple effect from the other to obtain a difference-in-differences contrast.",
+            "Confounding can make a selected factorial contrast indistinguishable from a block contrast.",
+            "This is why block generators and factorial sign columns matter."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What is the main decision or result in “Why advanced layouts are needed”?",
+        "nudge": "State the rule in your own words, then connect it to the calculation or design example in this scene."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Confounding a factorial effect with blocks",
+      "objective": "Explain aliasing between a factorial contrast and block contrast.",
+      "body": [
+        "When a full factorial experiment is divided into blocks, some treatment contrasts may be indistinguishable from block differences. The effect is then confounded with blocks in that replication.",
+        "This is a deliberate trade-off: block variation is controlled, but the confounded effect cannot be estimated separately from the block effect in that arrangement."
+      ],
+      "scenario": {
+        "teaser": "A 2³ factorial experiment must be run in two blocks of four units.",
+        "title": "Identify the block contrast",
+        "body": [
+          "The eight combinations have signs for A, B, C and their interactions. Suppose the blocks are formed using the ABC sign: combinations with ABC=− go to one block and ABC=+ to the other.",
+          "The ABC contrast is constant within each block and coincides with the block contrast.",
+          "The key is to write down the allocation hierarchy before choosing an analysis. A block contrast can absorb a factorial effect, while a split-plot factor is randomised at a different physical level from its subplot factor. PBIBD is a third idea: it defines pair balance through association classes. These structures should not be collapsed into one generic ANOVA rule."
+        ],
+        "q": "Which factorial effect is confounded with blocks?",
+        "answer": "The three-factor interaction ABC."
+      },
+      "ask": {
+        "q": "What is the consequence of confounding an effect with blocks?",
+        "nudge": "Can its effect be separated from the block effect in that replication?"
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 7,
+      "title": "Complete versus partial confounding",
+      "objective": "Distinguish fixed and rotating confounding.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Complete confounding",
+          "body": "The same factorial effect is confounded with blocks in every replication. That effect is not separately estimable from those block effects."
+        },
+        {
+          "t": "formula",
+          "h": "Partial confounding",
+          "body": "Different effects are confounded in different replications. An effect may be estimable from replications in which it is not confounded."
+        },
+        {
+          "t": "assume",
+          "h": "Design trade-off",
+          "body": "Partial confounding spreads information loss across effects, instead of permanently sacrificing the same effect in every replication."
+        }
+      ],
+      "ask": {
+        "q": "Why can partial confounding be preferable to complete confounding?",
+        "nudge": "It rotates which effect is sacrificed across replications."
+      },
+      "flow": {
+        "title": "Match design constraint to analysis",
+        "alt": "Match design constraint to analysis",
+        "nodes": [
+          {
+            "id": "n0",
+            "r": 0,
+            "c": 0,
+            "label": "Identify block or hard-to-change constraint",
+            "kind": "start"
+          },
+          {
+            "id": "n1",
+            "r": 1,
+            "c": 0,
+            "label": "Choose confounding, split plot or PBIBD",
+            "kind": "step"
+          },
+          {
+            "id": "n2",
+            "r": 2,
+            "c": 0,
+            "label": "Write the randomisation hierarchy",
+            "kind": "step"
+          },
+          {
+            "id": "n3",
+            "r": 3,
+            "c": 0,
+            "label": "Select the correct error or concurrence rule",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "n0",
+            "to": "n1"
+          },
+          {
+            "from": "n1",
+            "to": "n2"
+          },
+          {
+            "from": "n2",
+            "to": "n3"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s3",
+      "mins": 8,
+      "title": "Count blocks and block degrees of freedom",
+      "objective": "Calculate block size and df for a 2³ factorial.",
+      "problem": "A 2³ factorial has eight combinations and is arranged in two equal blocks. Find block size and block df.",
+      "hints": [
+        "Divide total combinations by number of blocks.",
+        "Block df equals number of blocks minus one.",
+        "Use the formula for this layout, then verify the result against the design identity."
+      ],
+      "answer": "Four combinations per block and one block degree of freedom.",
+      "check": "2 blocks × 4 combinations = 8; block df=1.",
+      "ask": {
+        "q": "If 16 combinations are arranged in four equal blocks, find block df.",
+        "nudge": "4−1."
+      },
+      "steps": [
+        {
+          "say": "Block size.",
+          "math": "8/2=4 combinations per block.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Block degrees of freedom.",
+          "math": "2−1=1 block df; one independent 1-df contrast can be confounded.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ],
+      "solution": [
+        {
+          "say": "Identify the structure.",
+          "math": "Four combinations per block and one block degree of freedom."
+        },
+        {
+          "say": "Apply the rule.",
+          "math": "2 blocks × 4 combinations = 8; block df=1."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s4",
+      "mins": 7,
+      "title": "Read a defining contrast",
+      "objective": "Use factorial signs to identify the confounded effect.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Sign generator",
+          "body": "In a two-level factorial, multiply the coded signs for the factors in an interaction. The product gives the sign column for that effect."
+        },
+        {
+          "t": "formula",
+          "h": "Block allocation",
+          "body": "If blocks are formed by the sign of ABC, the ABC contrast separates the two blocks. Thus ABC is confounded with the block effect."
+        },
+        {
+          "t": "assume",
+          "h": "Not all effects disappear",
+          "body": "Other factorial contrasts can still be estimated if they vary within blocks and are not aliased with the block contrast."
+        }
+      ],
+      "ask": {
+        "q": "If blocks are formed using the AB sign in a 2² factorial, which effect is confounded?",
+        "nudge": "The defining product of A and B."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s5",
+      "mins": 7,
+      "title": "Split-plot designs: two experimental-unit sizes",
+      "objective": "Distinguish whole plots and subplots.",
+      "body": [
+        "A split-plot design is useful when one factor is difficult or expensive to change and another is easy to change. The hard-to-change factor is assigned to larger whole plots; the easy-to-change factor is assigned within subplots.",
+        "Because the two factors are randomised at different levels, the design has separate error strata and different precision for the two factor effects."
+      ],
+      "scenario": {
+        "teaser": "Irrigation is hard to change; seed variety is easy to change.",
+        "title": "Assign factors to units",
+        "body": [
+          "Assign irrigation levels to whole plots. Within each whole plot, divide the area into subplots and randomise seed varieties among them.",
+          "Whole plots are the units for irrigation assignment; subplots are the units for variety assignment.",
+          "The key is to write down the allocation hierarchy before choosing an analysis. A block contrast can absorb a factorial effect, while a split-plot factor is randomised at a different physical level from its subplot factor. PBIBD is a third idea: it defines pair balance through association classes. These structures should not be collapsed into one generic ANOVA rule."
+        ],
+        "q": "Which factor is the whole-plot factor?",
+        "answer": "Irrigation, because it is harder to change."
+      },
+      "ask": {
+        "q": "Which factor normally receives the larger experimental unit?",
+        "nudge": "The factor that is difficult to change."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Restricted randomisation",
+      "objective": "Explain the two-stage allocation process.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Stage 1: whole plots",
+          "body": "Randomise levels of the hard-to-change factor among whole plots within the permitted replication or block structure."
+        },
+        {
+          "t": "formula",
+          "h": "Stage 2: subplots",
+          "body": "Within each whole plot, randomise levels of the easy-to-change factor among its subplots."
+        },
+        {
+          "t": "assume",
+          "h": "Why hierarchy matters",
+          "body": "Subplots within the same whole plot share whole-plot conditions. They are not independent whole-plot replicates for the hard-to-change factor."
+        }
+      ],
+      "ask": {
+        "q": "Why is a subplot not an independent whole-plot replicate?",
+        "nudge": "It shares the whole-plot treatment and environment."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s7",
+      "mins": 9,
+      "title": "Split-plot error strata",
+      "objective": "Match factor tests to the correct error terms.",
+      "problem": "Factor A is assigned to whole plots and factor B to subplots in a standard balanced split-plot design. Which error terms are used for A, B and AB?",
+      "hints": [
+        "Follow the randomisation level.",
+        "A is assigned to whole plots; B within each whole plot.",
+        "Use the formula for this layout, then verify the result against the design identity."
+      ],
+      "answer": "A uses whole-plot error; B and AB use subplot error.",
+      "check": "The denominator follows the level at which each factor is randomised.",
+      "ask": {
+        "q": "Which error term is the denominator for the hard-to-change whole-plot factor?",
+        "nudge": "The whole-plot error."
+      },
+      "steps": [
+        {
+          "say": "Whole-plot factor A.",
+          "math": "Test A against the whole-plot error stratum.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Subplot factor B.",
+          "math": "Test B against subplot error.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Interaction AB.",
+          "math": "In the standard balanced split-plot ANOVA, AB is tested against subplot error.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ],
+      "solution": [
+        {
+          "say": "Identify the structure.",
+          "math": "A uses whole-plot error; B and AB use subplot error."
+        },
+        {
+          "say": "Apply the rule.",
+          "math": "The denominator follows the level at which each factor is randomised."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s8",
+      "mins": 7,
+      "title": "Why split-plot precision differs",
+      "objective": "Explain why whole-plot effects are often less precise.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Different error sizes",
+          "body": "Whole plots are fewer and larger; their error stratum may have fewer degrees of freedom and larger variability."
+        },
+        {
+          "t": "formula",
+          "h": "Precision implication",
+          "body": "The whole-plot factor is often estimated less precisely than the subplot factor, though the actual precision depends on variance components and replication."
+        },
+        {
+          "t": "assume",
+          "h": "Analysis warning",
+          "body": "Treating all subplot observations as independent replicates for the whole-plot factor ignores the randomisation hierarchy and gives an incorrect error term."
+        }
+      ],
+      "ask": {
+        "q": "Why is an ordinary two-way factorial ANOVA generally unsuitable for split plots?",
+        "nudge": "It ignores the two-stage randomisation and separate error strata."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s9",
+      "mins": 7,
+      "title": "PBIBD: balance through associate classes",
+      "objective": "Define partially balanced incomplete block designs.",
+      "body": [
+        "A BIBD requires every pair of distinct treatments to occur together exactly λ times. Some practical designs cannot achieve that uniform pair balance.",
+        "A partially balanced incomplete block design (PBIBD) classifies pairs into associate classes. Pairs in class 1 occur together λ₁ times, pairs in class 2 λ₂ times, and so on. The concurrence depends on the associate class."
+      ],
+      "scenario": {
+        "teaser": "Treatment pairs fall into two predefined association classes.",
+        "title": "Read partial balance",
+        "body": [
+          "Suppose every pair belongs to either class 1 or class 2. Each class-1 pair occurs together λ₁=2 times; each class-2 pair occurs λ₂=1 time.",
+          "The design is not a BIBD because pair concurrence is not common to all pairs, but it has a structured partial balance.",
+          "The key is to write down the allocation hierarchy before choosing an analysis. A block contrast can absorb a factorial effect, while a split-plot factor is randomised at a different physical level from its subplot factor. PBIBD is a third idea: it defines pair balance through association classes. These structures should not be collapsed into one generic ANOVA rule."
+        ],
+        "q": "What determines the concurrence of a pair?",
+        "answer": "Its associate class: λ₁ or λ₂ in this two-class example."
+      },
+      "ask": {
+        "q": "What is the key difference between BIBD and PBIBD pair concurrence?",
+        "nudge": "One common λ versus class-specific λ values."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s10",
+      "mins": 7,
+      "title": "Associate classes and concurrence numbers",
+      "objective": "Interpret λ₁, λ₂ and association classes.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Associate classes",
+          "body": "For each treatment, other treatments are classified as first associates, second associates, and so on according to a specified association scheme."
+        },
+        {
+          "t": "formula",
+          "h": "Class-specific concurrence",
+          "body": "A PBIBD has λᵢ as the number of blocks containing a pair of i-th associates. The numbers may differ across classes."
+        },
+        {
+          "t": "assume",
+          "h": "Partial balance",
+          "body": "The design is structured rather than arbitrary: pair concurrence is governed by the association scheme."
+        }
+      ],
+      "ask": {
+        "q": "If first associates occur together twice and second associates once, what are λ₁ and λ₂?",
+        "nudge": "Read the concurrence values by class."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s11",
+      "mins": 6,
+      "title": "Advanced design examination traps",
+      "objective": "Avoid errors in confounding, split plots and PBIBD.",
+      "intro": "Mark each statement TRUE or FALSE. Read the reason after submitting all verdicts.",
+      "items": [
+        {
+          "claim": "Confounding aliases a factorial effect with a block contrast.",
+          "tf": true,
+          "why": "The effect cannot be separated from the block effect in that arrangement."
+        },
+        {
+          "claim": "Partial confounding can rotate the confounded effect across replications.",
+          "tf": true,
+          "why": "Different effects are sacrificed in different replications."
+        },
+        {
+          "claim": "The whole-plot factor in a split-plot design is tested against subplot error.",
+          "tf": false,
+          "why": "The whole-plot factor uses the whole-plot error stratum."
+        },
+        {
+          "claim": "PBIBD pair concurrence may differ by associate class.",
+          "tf": true,
+          "why": "The class-specific concurrence values are λ₁, λ₂ and so on."
+        }
+      ]
+    },
+    {
+      "kind": "worked",
+      "id": "s12",
+      "mins": 7,
+      "title": "Classify a design statement",
+      "objective": "Distinguish BIBD and PBIBD.",
+      "problem": "A design classifies treatment pairs into two associate classes. First associates occur together in two blocks and second associates in one block. Is this pair balance of BIBD type?",
+      "hints": [
+        "Check whether all pairs share one concurrence value.",
+        "Identify the class-specific values."
+      ],
+      "answer": "PBIBD-type partial balance, not BIBD pair balance.",
+      "check": "A BIBD has λ₁=λ₂=…=λ for all pairs.",
+      "ask": {
+        "q": "If all associate classes have the same concurrence, what special pair-balance property is recovered?",
+        "nudge": "One common λ for all pairs."
+      },
+      "steps": [
+        {
+          "say": "Read concurrence.",
+          "math": "λ₁=2 and λ₂=1.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Classify.",
+          "math": "Since the concurrence differs by associate class, it is partially balanced, not a BIBD with one common λ.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 5,
+      "title": "Confounding, split plots and PBIBD mastery",
+      "objective": "Consolidate advanced design structures.",
+      "body": [
+        "Confounding aliases a factorial effect with blocks; partial confounding rotates the sacrificed effect across replications. Split plots use restricted two-stage randomisation and separate whole-plot and subplot error strata.",
+        "PBIBD uses associate classes with class-specific concurrence λᵢ, unlike BIBD's common λ. Always identify the allocation hierarchy and the pair-balance definition before analysing."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 2,
+      "title": "Unseen mastery test",
+      "objective": "Demonstrate that you can reconstruct and apply the design methods without hints.",
+      "setId": "design_t6_mastery"
+    }
+  ]
+}
