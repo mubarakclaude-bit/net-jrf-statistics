@@ -1,0 +1,698 @@
+{
+  "id": "regressiont11",
+  "topicId": "regression-t11",
+  "moduleId": "regression",
+  "title": "6.11 — Dummy Variables and Qualitative Regressors",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.11 Dummy variables and qualitative regressors",
+  "engine": "B",
+  "engineName": "Encode categories, choose reference groups and interpret indicator and interaction coefficients.",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 94,
+  "objectives": [
+    "Represent qualitative categories using indicator variables in a regression model.",
+    "Choose and interpret a reference category and avoid the dummy-variable trap.",
+    "Determine the number of dummy variables needed for a categorical predictor.",
+    "Interpret intercept shifts and slope changes using interaction terms.",
+    "Use seasonal or group indicators correctly in regression models.",
+    "Interpret dummy coefficients in level-log and log-level settings with appropriate care."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Multiple linear regression",
+      "why": "Dummy variables enter the regression design matrix like other regressors."
+    },
+    {
+      "id": "p2",
+      "name": "Intercept and slope interpretation",
+      "why": "The reference group determines the baseline intercept and slope."
+    },
+    {
+      "id": "p3",
+      "name": "Logarithms and percentage changes",
+      "why": "Dummy coefficients in log-linear models require an exponential transformation for exact percentage interpretation."
+    }
+  ],
+  "traps": [
+    "With an intercept and k mutually exclusive categories, include k−1 dummy variables.",
+    "The omitted category is the reference group; its effect is absorbed into the intercept.",
+    "Including all k category dummies with an intercept creates exact linear dependence.",
+    "A dummy coefficient without an interaction is an intercept difference, holding other regressors fixed.",
+    "A dummy-by-continuous-variable interaction allows the slope to differ across groups.",
+    "The group-specific slope is the base slope plus the interaction coefficient.",
+    "For monthly seasonal indicators with an intercept, use 11 dummies and choose one reference month.",
+    "In a log-linear model, 100β is an approximation; the exact percentage difference is 100(exp(β)−1)."
+  ],
+  "howto": "Identify the categories, choose a meaningful reference group and create one indicator for each remaining category. Interpret each coefficient relative to the omitted category. If the effect of a continuous regressor may differ by group, include a dummy-by-regressor interaction and compute both group-specific intercepts and slopes. Check that the design matrix does not contain all category dummies together with an intercept.",
+  "refs": [
+    {
+      "title": "Introductory Econometrics: A Modern Approach",
+      "where": "Qualitative information and dummy variables",
+      "site": "Jeffrey M. Wooldridge",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Clear interpretation of categorical regressors, interactions and reference groups."
+    },
+    {
+      "title": "Econometric Analysis",
+      "where": "Regression with qualitative variables",
+      "site": "William H. Greene",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Formal treatment of dummy coding and interaction models."
+    },
+    {
+      "title": "Introduction to Econometrics",
+      "where": "Multiple regression with qualitative information",
+      "site": "James H. Stock and Mark W. Watson",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Applied examples of indicator variables and group comparisons."
+    }
+  ],
+  "provenance": "Authored for UGC NET Statistics Paper 2 Unit VI. Category-count, fitted-value and interaction examples are original practice items; exact integer anchors are checked in verify_regression_t11.py. No June 2026 question is claimed as a direct dummy-variable PYQ.",
+  "revision": {
+    "sheet": [
+      "A dummy variable is an indicator taking values 0 or 1.",
+      "With an intercept and k categories, use k−1 dummies and omit one reference category.",
+      "The omitted category's mean or intercept is represented by the regression intercept, conditional on other regressors.",
+      "A dummy coefficient is the difference from the reference group, holding other variables fixed.",
+      "Including all k dummies with an intercept creates the dummy-variable trap: exact multicollinearity.",
+      "A dummy-by-x interaction allows the slope on x to differ by group.",
+      "Group 0 slope is β₁; group 1 slope is β₁+γ when D×x is included.",
+      "With an interaction, the dummy main effect δ is the group difference at x=0.",
+      "With 12 monthly categories and an intercept, use 11 seasonal dummies.",
+      "In log-linear models, exact percentage effect is 100(exp(β)−1), not exactly 100β."
+    ],
+    "cards": [
+      [
+        "Indicator",
+        "1 for category membership; 0 otherwise"
+      ],
+      [
+        "Reference group",
+        "Omitted category"
+      ],
+      [
+        "Number of dummies",
+        "k−1 with an intercept"
+      ],
+      [
+        "Dummy trap",
+        "All k dummies + intercept"
+      ],
+      [
+        "Dummy coefficient",
+        "Difference from reference group"
+      ],
+      [
+        "Interaction",
+        "Allows group-specific slope"
+      ],
+      [
+        "Group 1 slope",
+        "β₁+γ"
+      ],
+      [
+        "Log-linear exact effect",
+        "100(exp(β)−1)%"
+      ]
+    ],
+    "tricks": [
+      "Always name the reference category before interpreting a dummy coefficient.",
+      "For k categories, count k−1 indicators when an intercept is present.",
+      "With an interaction, the dummy main effect is the group difference at x=0, not at every x.",
+      "Use exp(β)−1 for an exact percentage effect in a log-linear model."
+    ],
+    "shortcuts": [
+      "k groups → k−1 dummies + intercept.",
+      "No interaction: intercept shift only; interaction: slope can change.",
+      "Seasonal month indicators with intercept: 11, not 12."
+    ],
+    "remember": [
+      "Changing the reference group changes coefficient labels but not fitted values or overall model fit.",
+      "A dummy coefficient is conditional on the other regressors included in the model."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh indicators and regression baselines",
+      "objective": "Recover the ideas needed to encode qualitative categories.",
+      "body": [
+        "A regression model can include categories such as region, treatment group, month or education level. These categories are represented numerically by indicator variables.",
+        "The key is to choose a reference group and interpret every indicator relative to it. The intercept and the omitted category work together."
+      ],
+      "items": [
+        {
+          "ask": "What values does a binary indicator take?",
+          "recall": "Zero or one.",
+          "refresh": [
+            "An indicator equals one when the observation belongs to a specified category and zero otherwise.",
+            "The indicator is a numerical code for membership, not a quantitative measurement of how much category membership changes.",
+            "Its coefficient compares the indicated group with the reference group, conditional on the other regressors."
+          ]
+        },
+        {
+          "ask": "What does the intercept represent in a linear regression?",
+          "recall": "The predicted outcome when all regressors equal zero, subject to the model coding.",
+          "refresh": [
+            "With a reference category, the intercept is the baseline group's intercept when the continuous regressors are zero.",
+            "The choice of reference group determines which category is absorbed into the intercept.",
+            "If continuous regressors are not centred, the intercept may refer to x=0 even when that value is outside the practical data range."
+          ]
+        },
+        {
+          "ask": "What happens when a design matrix has exact linear dependence?",
+          "recall": "It loses full column rank and the ordinary unique OLS coefficient vector is not identified.",
+          "refresh": [
+            "Exact linear dependence means one column is a linear combination of other columns.",
+            "The inverse of X′X does not exist when the columns are not full rank.",
+            "Including all category dummies with an intercept creates exactly this problem because the indicators sum to one."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Why must one category be omitted when a regression has an intercept?",
+        "nudge": "The category indicators otherwise add up to the intercept column."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Choose a reference group",
+      "objective": "Build an intuitive picture of category coding.",
+      "body": [
+        "Suppose a wage model compares workers in four regions. One region is selected as the reference category; the other three regions receive indicators.",
+        "The intercept describes the reference region, and each dummy coefficient measures a conditional difference from that region. The reference choice changes the parameterisation, not the fitted values.",
+        "This coding lets a regression use qualitative information without treating region labels as if they were a numeric scale."
+      ],
+      "scenario": {
+        "teaser": "Four regions in a wage model",
+        "title": "Three dummies, one reference",
+        "body": [
+          "A researcher compares wages across North, South, East and West. The model includes an intercept and uses West as the reference region.",
+          "Three indicators are created: North, South and East. An observation in West has all three indicators equal to zero; an observation in North has North=1 and the other two equal to zero.",
+          "The intercept is the conditional baseline for West. The North coefficient is the difference between North and West, holding the other regressors fixed. No numerical ordering of the region names is implied.",
+          "If all four indicators were included with the intercept, their row-wise sum would equal the intercept column, producing exact collinearity."
+        ],
+        "q": "How many region indicators are needed with an intercept?",
+        "answer": "Three, with West omitted as the reference category."
+      },
+      "ask": {
+        "q": "What does a positive North dummy coefficient mean?",
+        "nudge": "Compare North with the omitted West category, holding other regressors fixed."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "The k−1 rule and dummy-variable trap",
+      "objective": "Determine the number of indicators and explain exact collinearity.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Number of dummies",
+          "body": "For a qualitative variable with k mutually exclusive and exhaustive categories, include k−1 dummy variables when the regression contains an intercept."
+        },
+        {
+          "t": "step",
+          "h": "Why one category is omitted",
+          "body": "For every observation, the k category indicators sum to one. With an intercept column of ones, including all k indicators creates an exact linear relationship."
+        },
+        {
+          "t": "note",
+          "h": "Reference coding",
+          "body": "The omitted category is the reference group. Its conditional intercept is the regression intercept; the included dummy coefficients are differences from it."
+        },
+        {
+          "t": "def",
+          "h": "Changing the reference",
+          "body": "Choosing another reference changes the coefficient representation but not the fitted values, residuals or overall explanatory content of the model."
+        }
+      ],
+      "flow": {
+        "caption": "Encode categories without exact collinearity",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "k categories",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Choose a reference group",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Create k−1 indicators",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Include an intercept",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Interpret coefficients vs reference",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      },
+      "ask": {
+        "q": "What exact relation creates the dummy-variable trap?",
+        "nudge": "The sum of all k category indicators equals the intercept column."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example: encode four categories",
+      "objective": "Construct the dummy variables for a four-category factor.",
+      "problem": "A regression includes an intercept and a categorical variable with categories A, B, C and D. Choose A as the reference and write the dummy coding for each category.",
+      "steps": [
+        {
+          "say": "There are four mutually exclusive categories.",
+          "math": "k=4",
+          "why": "The number of required indicators depends on the number of categories."
+        },
+        {
+          "say": "Use one fewer indicator than categories.",
+          "math": "k−1=3",
+          "why": "The omitted category is represented by all zero indicators."
+        },
+        {
+          "say": "Define the indicators.",
+          "math": "D_B, D_C, D_D",
+          "why": "A is the reference group."
+        },
+        {
+          "say": "Write the coding pattern.",
+          "math": "A:(0,0,0); B:(1,0,0); C:(0,1,0); D:(0,0,1)",
+          "why": "Each non-reference group activates exactly one indicator."
+        }
+      ],
+      "ask": {
+        "q": "What coding vector represents the reference group A?",
+        "nudge": "All included indicators equal zero for the omitted category."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 5,
+      "title": "Recall reference-group interpretation",
+      "objective": "Retrieve the meaning of dummy coefficients.",
+      "intro": "Answer before reading the explanation.",
+      "items": [
+        {
+          "q": "With four categories and an intercept, how many dummies are included?",
+          "a": "Three."
+        },
+        {
+          "q": "What does the intercept represent?",
+          "a": "The reference group's conditional intercept when other continuous regressors are zero."
+        },
+        {
+          "q": "What does a dummy coefficient measure?",
+          "a": "The conditional difference from the reference category."
+        },
+        {
+          "q": "What is the dummy-variable trap?",
+          "a": "Including all category indicators together with an intercept, creating exact linear dependence."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 6,
+      "title": "Complete the category coding",
+      "objective": "Reconstruct the dummy count and interpretation.",
+      "problem": "Complete the coding rules for a categorical variable.",
+      "steps": [
+        {
+          "say": "There are k categories and an intercept.",
+          "blank": {
+            "prompt": "The number of included dummy variables is _____.",
+            "answer": "k−1",
+            "accept": [
+              "k-1"
+            ],
+            "hint": "Omit one category as the baseline."
+          }
+        },
+        {
+          "say": "The omitted category is the baseline.",
+          "blank": {
+            "prompt": "It is called the _____ group.",
+            "answer": "reference",
+            "accept": [
+              "reference category"
+            ],
+            "hint": "All included indicators are zero for this group."
+          }
+        },
+        {
+          "say": "The included indicator coefficient compares its group with the baseline.",
+          "blank": {
+            "prompt": "It is a conditional _____ from the reference group.",
+            "answer": "difference",
+            "accept": [
+              "effect difference",
+              "difference"
+            ],
+            "hint": "It is not the absolute group mean."
+          }
+        },
+        {
+          "say": "Including every indicator and an intercept creates a linear dependence.",
+          "blank": {
+            "prompt": "This is the dummy-variable _____.",
+            "answer": "trap",
+            "accept": [
+              "dummy trap"
+            ],
+            "hint": "The indicators sum to one."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Interactions: allow slopes to differ",
+      "objective": "Interpret group-specific intercepts and slopes.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Binary group interaction",
+          "body": "For y=β₀+β₁x+δD+γ(Dx)+u, group D=0 has intercept β₀ and slope β₁; group D=1 has intercept β₀+δ and slope β₁+γ."
+        },
+        {
+          "t": "step",
+          "h": "Main effect of D",
+          "body": "The coefficient δ is the difference between groups at x=0. If x is centred, this can be made the difference at a meaningful reference value."
+        },
+        {
+          "t": "step",
+          "h": "Interaction coefficient",
+          "body": "The coefficient γ is the difference in slopes between D=1 and D=0. A negative γ means the slope is smaller in group 1."
+        },
+        {
+          "t": "note",
+          "h": "Do not interpret coefficients separately",
+          "body": "With an interaction, the group difference at a value x is δ+γx. The dummy main effect alone is not the group difference at every x."
+        }
+      ],
+      "ask": {
+        "q": "What is the group-1 slope when the interaction coefficient is γ?",
+        "nudge": "Add the interaction coefficient to the baseline slope."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s7",
+      "mins": 7,
+      "title": "When the effect of experience differs by group",
+      "objective": "Interpret a group-by-continuous-variable interaction.",
+      "body": [
+        "A wage model may allow experience to have a different slope for two groups. A group dummy shifts the intercept, while the interaction lets the return to experience vary.",
+        "Without the interaction, the model forces parallel regression lines. With it, the two groups can have both different starting levels and different slopes."
+      ],
+      "scenario": {
+        "teaser": "Two groups, different experience returns",
+        "title": "Parallel lines or different slopes?",
+        "body": [
+          "A researcher models wages using experience and a group indicator D. The baseline group has an intercept of 5 and an experience slope of 2.",
+          "The model adds a group dummy coefficient of 3 and an interaction coefficient of −0.5. The second group therefore starts 3 units higher at zero experience, but its experience slope is 1.5 rather than 2.",
+          "At four years of experience, the baseline prediction is 5+2×4=13. The second-group prediction is 5+3+(2−0.5)×4=14.",
+          "The interaction coefficient is the slope difference, not the second group's full slope. Add it to the baseline slope to obtain the group-specific effect."
+        ],
+        "q": "What is the experience slope for group D=1?",
+        "answer": "1.5, obtained as 2−0.5."
+      },
+      "ask": {
+        "q": "What does γ=−0.5 mean in this model?",
+        "nudge": "It is the change in the slope from the baseline group to D=1."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 8,
+      "title": "Worked example: compute group-specific predictions",
+      "objective": "Calculate group intercepts, slopes and fitted values.",
+      "problem": "Consider y=5+2x+3D−0.5(Dx). Find the intercept and slope for D=0 and D=1, then predict y at x=4 for both groups.",
+      "steps": [
+        {
+          "say": "For D=0, both dummy terms vanish.",
+          "math": "y₀=5+2x; intercept=5, slope=2",
+          "why": "The baseline group defines the reference line."
+        },
+        {
+          "say": "For D=1, add the dummy main effect and interaction.",
+          "math": "y₁=5+3+(2−0.5)x=8+1.5x",
+          "why": "The group-1 intercept is 8 and its slope is 1.5."
+        },
+        {
+          "say": "Predict the baseline group at x=4.",
+          "math": "5+2(4)=13",
+          "why": "Substitute x into the baseline line."
+        },
+        {
+          "say": "Predict group 1 at x=4.",
+          "math": "8+1.5(4)=14",
+          "why": "The second group has a higher intercept and a lower slope."
+        }
+      ],
+      "ask": {
+        "q": "What is the group difference at x=4?",
+        "nudge": "Subtract the two fitted values or calculate δ+γx."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Guided problem: identify the dummy trap",
+      "objective": "Diagnose exact collinearity from a full set of indicators.",
+      "problem": "A model has an intercept and four indicators for four exhaustive regions. For every observation, exactly one indicator equals one. What is the problem and the standard repair?",
+      "hints": [
+        "Write the sum of the four indicators for one observation.",
+        "Compare that sum with the intercept column.",
+        "Remove one category indicator and treat it as the reference."
+      ],
+      "answer": "The four indicators sum to the intercept, creating exact multicollinearity. Drop one indicator and use that category as the reference group.",
+      "solution": [
+        {
+          "say": "The categories are exhaustive and mutually exclusive.",
+          "math": "D_A+D_B+D_C+D_D=1"
+        },
+        {
+          "say": "The intercept column is also one for every observation.",
+          "math": "1=D_A+D_B+D_C+D_D"
+        },
+        {
+          "say": "There is exact linear dependence.",
+          "math": "rank(X) is deficient"
+        },
+        {
+          "say": "Omit one indicator and interpret it as the reference.",
+          "math": "Use 3 dummies + intercept"
+        }
+      ],
+      "ask": {
+        "q": "What is the simplest repair?",
+        "nudge": "Use one fewer dummy variable than categories."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s10",
+      "mins": 6,
+      "title": "Exam traps: reference groups and interactions",
+      "objective": "Avoid common interpretation errors.",
+      "intro": "Mark each statement true or false.",
+      "items": [
+        {
+          "claim": "With k categories and an intercept, k−1 indicators are used.",
+          "tf": true,
+          "why": "One category is omitted as the reference group."
+        },
+        {
+          "claim": "The omitted category is excluded from the model entirely.",
+          "tf": false,
+          "why": "Its effect is represented by the intercept and the zero-indicator pattern."
+        },
+        {
+          "claim": "The dummy main effect in an interaction model is the group difference at x=0.",
+          "tf": true,
+          "why": "The difference at x is δ+γx."
+        },
+        {
+          "claim": "The group-1 slope equals β₁+γ.",
+          "tf": true,
+          "why": "The interaction adds γ to the baseline slope."
+        },
+        {
+          "claim": "Including all k indicators with an intercept is harmless if the sample is large.",
+          "tf": false,
+          "why": "It creates exact linear dependence regardless of sample size."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "mins": 8,
+      "title": "Transfer problem: interpret a log-linear dummy",
+      "objective": "Use the exact exponential percentage transformation.",
+      "problem": "A log-wage regression has a group dummy coefficient of 0.20. What is the exact percentage difference in wages, and why is 20% only an approximation?",
+      "hints": [
+        "The dependent variable is in logarithms.",
+        "Use the exponential transformation for a dummy coefficient.",
+        "Compare 100β with 100(exp(β)−1)."
+      ],
+      "answer": "The exact percentage difference is 100(exp(0.20)−1) ≈ 22.14%; 20% is the small-coefficient approximation.",
+      "solution": [
+        {
+          "say": "The model is log(y)=…+0.20D+u.",
+          "math": "β_D=0.20"
+        },
+        {
+          "say": "Exponentiate the dummy coefficient.",
+          "math": "exp(0.20)≈1.2214",
+          "why": "This is the multiplicative ratio between groups."
+        },
+        {
+          "say": "Convert the ratio to a percentage difference.",
+          "math": "100(1.2214−1)=22.14%",
+          "why": "The exact percentage difference is about 22.14%."
+        },
+        {
+          "say": "State the approximation.",
+          "math": "100β=20%",
+          "why": "This is close for small β but is not exact."
+        }
+      ],
+      "ask": {
+        "q": "Which expression gives the exact percentage difference?",
+        "nudge": "Use the exponential of the dummy coefficient minus one."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s12",
+      "mins": 5,
+      "title": "Summary: encode, compare and interact",
+      "objective": "Compress dummy-variable rules into an exam-ready checklist.",
+      "body": [
+        "For k exhaustive categories and an intercept, include k−1 indicators. The omitted category is the reference group; each dummy coefficient is a conditional difference from that baseline. Including all k indicators with an intercept creates exact collinearity.",
+        "A dummy without an interaction shifts the intercept. In y=β₀+β₁x+δD+γDx, the baseline slope is β₁, the group-1 slope is β₁+γ, and the group difference at x is δ+γx.",
+        "For a dummy in a log-linear model, the exact percentage effect is 100(exp(β)−1), while 100β is an approximation. Always name the reference group and state whether the model includes an interaction."
+      ],
+      "ask": {
+        "q": "What three things should you state when interpreting a dummy coefficient?",
+        "nudge": "Name the reference group, the conditional difference and whether an interaction is present."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s13",
+      "mins": 8,
+      "ext": true,
+      "title": "Extension — multiple categories and seasonal indicators",
+      "objective": "Apply reference coding to seasonal and multi-category models.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "Seasonal indicators",
+          "body": "For 12 months with an intercept, include 11 monthly indicators and omit one reference month. Each coefficient measures the conditional difference from that month."
+        },
+        {
+          "t": "step",
+          "h": "Multiple qualitative variables",
+          "body": "If a model includes region and education categories, create separate k−1 indicator sets for each factor, with a clearly stated reference for each."
+        },
+        {
+          "t": "note",
+          "h": "Interactions across categories",
+          "body": "Interactions between two factors allow the difference for one category to vary across the other factor. Interpret the relevant sums of main and interaction coefficients."
+        }
+      ],
+      "ask": {
+        "q": "How many monthly indicators are used with an intercept?",
+        "nudge": "Omit one of the twelve months."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 0,
+      "title": "6.11 mastery test",
+      "setId": "regression_t11_mastery",
+      "objective": "Demonstrate dummy-variable coding and interpretation independently."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings, not an NTA rule. Ten unseen questions are drawn as 3 easy, 5 moderate and 2 hard; the pass threshold is 80% overall with 70% floors for numerical and multi-statement items."
+  }
+}
