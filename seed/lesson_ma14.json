@@ -1,0 +1,585 @@
+{
+ "id": "mathst14",
+ "topicId": "maths-t14",
+ "moduleId": "maths",
+ "title": "Linear Systems, Consistency, Rank Criterion and RREF",
+ "breadcrumb": "Mathematics → Linear algebra → Linear systems and row reduction",
+ "engine": "B",
+ "engineName": "Mathematics — pivots, rank and solution structure",
+ "version": "1.0",
+ "status": "draft",
+ "estMin": 105,
+ "objectives": [
+  "Use elementary row operations to obtain echelon and reduced echelon forms.",
+  "Determine rank from pivot positions.",
+  "Apply the rank criterion to test consistency.",
+  "Distinguish unique, infinite and no-solution cases.",
+  "Count free variables and describe homogeneous solution spaces."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Matrix operations",
+   "why": "A linear system is represented by its coefficient and augmented matrices."
+  },
+  {
+   "id": "p2",
+   "name": "Rank and nullity",
+   "why": "The number of pivots determines solution dimension."
+  },
+  {
+   "id": "p3",
+   "name": "Linear independence",
+   "why": "Pivot columns identify independent equations and variables."
+  }
+ ],
+ "traps": [
+  "Compare rank(A) with rank([A|b]), not with the number of equations.",
+  "A pivot in the augmented column signals inconsistency.",
+  "A consistent system with rank below n has infinitely many solutions.",
+  "The number of free variables is n−rank(A), where n is the number of unknowns.",
+  "Homogeneous systems are always consistent.",
+  "Elementary row operations preserve the solution set."
+ ],
+ "revision": {
+  "sheet": [
+   "REF: non-zero rows at top; pivots move right as rows descend.",
+   "RREF: pivot entries are one and their columns are otherwise zero.",
+   "Rank = number of pivots.",
+   "Ax=b consistent iff rank(A)=rank([A|b]).",
+   "Unique solution iff consistent and rank(A)=n.",
+   "Infinitely many iff consistent and rank(A)<n.",
+   "No solution iff rank(A)<rank([A|b]).",
+   "Free variables = n−rank(A).",
+   "Ax=0 is always consistent.",
+   "Ax=0 has non-trivial solutions iff rank(A)<n.",
+   "A contradictory row [0 … 0 | c], c≠0, means inconsistency.",
+   "Elementary row operations preserve solutions and rank."
+  ],
+  "cards": [
+   [
+    "Rank",
+    "Number of pivots"
+   ],
+   [
+    "Consistency",
+    "rank A = rank augmented"
+   ],
+   [
+    "Unique",
+    "Consistent and rank=n"
+   ],
+   [
+    "Infinite",
+    "Consistent and rank<n"
+   ],
+   [
+    "No solution",
+    "rank A < rank augmented"
+   ],
+   [
+    "Free variables",
+    "n−rank(A)"
+   ],
+   [
+    "Homogeneous",
+    "Always consistent"
+   ],
+   [
+    "Contradiction",
+    "0=c, c≠0"
+   ]
+  ],
+  "tricks": [
+   "Look for a contradictory augmented row first.",
+   "Count pivots only in coefficient columns to find rank(A).",
+   "Count all pivots to find augmented rank.",
+   "Use number of unknowns, not equations, in the uniqueness test.",
+   "For homogeneous systems, check whether rank is below n for non-trivial solutions."
+  ],
+  "shortcuts": [
+   "Two pivots for two unknowns and equal ranks means unique.",
+   "Two pivots for three unknowns and equal ranks means one free variable.",
+   "An augmented-only pivot means no solution."
+  ],
+  "remember": [
+   "Compare coefficient and augmented ranks.",
+   "Unique needs rank=n.",
+   "Free variables=n−rank."
+  ]
+ },
+ "howto": "Reduce the augmented matrix and count pivots. First compare coefficient and augmented ranks for consistency; only then compare rank with the number of unknowns to distinguish unique from infinitely many solutions.",
+ "refs": [
+  {
+   "title": "Introduction to Linear Algebra",
+   "where": "Gaussian elimination and linear systems",
+   "site": "MIT OpenCourseWare 18.06",
+   "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Row reduction, rank and solution structure."
+  },
+  {
+   "title": "Linear Algebra and Its Applications",
+   "where": "Systems of linear equations",
+   "site": "Gilbert Strang",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Rank criterion and RREF."
+  },
+  {
+   "title": "Linear Algebra",
+   "where": "Systems and matrices",
+   "site": "NPTEL",
+   "url": "https://nptel.ac.in/courses/111106051",
+   "type": "Video course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "University-level matrix methods."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact examples include a unique 2×2 system, contradictory augmented row and rank-nullity solution count. Not production-approved.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Foundation: systems and row operations",
+   "objective": "Recall matrix form and elementary row operations.",
+   "ask": {
+    "q": "How is a linear system written in matrix form?",
+    "nudge": "Use A for coefficients, x for unknowns and b for constants."
+   },
+   "body": [
+    "A system of m linear equations in n unknowns can be written Ax=b. The coefficient matrix A and augmented matrix [A|b] contain the information needed for consistency and solution structure.",
+    "Gaussian elimination uses elementary row operations to simplify the system without changing its solution set. Pivot positions reveal rank and the number of free variables."
+   ],
+   "items": [
+    {
+     "ask": "What is row echelon form?",
+     "recall": "A form where non-zero rows are above zero rows and each leading entry moves right as you go down.",
+     "refresh": [
+      "The leading non-zero entry of each non-zero row is a pivot. Rows of zeros, if any, appear at the bottom, and pivot positions move strictly right in successive rows.",
+      "Echelon form is enough to read rank and perform back-substitution. Reduced row echelon form goes further by making each pivot one and clearing its column above and below."
+     ]
+    },
+    {
+     "ask": "What is the rank of a matrix?",
+     "recall": "The number of pivots, equivalently the number of non-zero rows in echelon form.",
+     "refresh": [
+      "Rank is the dimension of the row space and column space. Elementary row operations preserve rank, so row reduction is a valid way to calculate it.",
+      "For an augmented system, compare rank(A) with rank([A|b]). The extra column may create a new pivot and make the system inconsistent."
+     ]
+    },
+    {
+     "ask": "What is a free variable?",
+     "recall": "A variable corresponding to a non-pivot column.",
+     "refresh": [
+      "Each pivot column gives a leading variable. Non-pivot columns correspond to free variables that can be assigned arbitrary values in a consistent system.",
+      "If there are n unknowns and rank r, a consistent system has n−r free variables. Thus r=n gives a unique solution, while r<n gives infinitely many solutions."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "Consistency is about the augmented column",
+   "objective": "Understand why the right-hand side matters.",
+   "ask": {
+    "q": "Can Ax=b be inconsistent even when A has full column rank?",
+    "nudge": "Yes, if b is not in the column space of A."
+   },
+   "body": [
+    "The equation Ax=b is consistent exactly when b belongs to the column space of A. Row reduction detects the failure as a row [0 … 0 | c] with c≠0.",
+    "The augmented matrix records the right-hand side. A new pivot in the augmented column increases the rank and signals inconsistency."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Gaussian elimination and RREF",
+   "objective": "Recognise echelon and reduced echelon forms.",
+   "ask": {
+    "q": "What is the rank of a matrix in row echelon form?",
+    "nudge": "Count the non-zero rows or pivots."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Elementary row operations",
+     "body": "Swap rows, multiply a row by a non-zero scalar, or add a multiple of one row to another. These operations preserve the solution set and rank."
+    },
+    {
+     "t": "formula",
+     "h": "REF and RREF",
+     "body": "REF has staircase pivots. RREF additionally has leading ones and zeros everywhere else in each pivot column."
+    },
+    {
+     "t": "step",
+     "h": "Read the solution",
+     "body": "Pivot variables are expressed in terms of free variables. If no contradictory row occurs, assign arbitrary values to the free variables and back-substitute."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Worked: solve a consistent system",
+   "objective": "Use row reduction to obtain a unique solution.",
+   "ask": {
+    "q": "Solve x+y=3 and x−y=1.",
+    "nudge": "Add the equations to find x."
+   },
+   "problem": "Solve x+y=3, x−y=1 using elimination.",
+   "steps": [
+    {
+     "say": "Write the augmented matrix.",
+     "math": "[[1,1|3],[1,−1|1]]",
+     "why": "The coefficients and right-hand side form the augmented system."
+    },
+    {
+     "say": "Eliminate the first entry in row two.",
+     "math": "R₂←R₂−R₁ gives [[1,1|3],[0,−2|−2]]",
+     "why": "This is an elementary row operation and preserves the solution set."
+    },
+    {
+     "say": "Back-substitute.",
+     "math": "y=1; x=2",
+     "why": "There are two pivots for two unknowns, so the solution is unique."
+    }
+   ],
+   "scenario": {
+    "teaser": "A set of simultaneous balance equations is solved by elimination.",
+    "title": "Solving a small balance model",
+    "body": [
+     "A simple resource or accounting model can produce several simultaneous linear equations. Writing them as Ax=b makes the coefficient structure explicit.",
+     "Gaussian elimination transforms the augmented matrix into an equivalent system that is easier to solve. Each row operation preserves the solution set.",
+     "The pivot pattern then reveals whether the model has one solution, infinitely many solutions or no solution. This structural diagnosis is often more important than the arithmetic alone."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 8,
+   "title": "Rank criterion for consistency",
+   "objective": "Apply the rank comparison theorem.",
+   "ask": {
+    "q": "What is the consistency criterion for Ax=b?",
+    "nudge": "Compare the coefficient and augmented ranks."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Rouché–Capelli theorem",
+     "body": "Ax=b is consistent iff rank(A)=rank([A|b])."
+    },
+    {
+     "t": "formula",
+     "h": "Unique versus infinitely many",
+     "body": "If consistent and rank(A)=n, the solution is unique. If consistent and rank(A)<n, there are infinitely many solutions."
+    },
+    {
+     "t": "step",
+     "h": "Inconsistent case",
+     "body": "If rank(A)<rank([A|b]), a contradictory row appears in the reduced augmented matrix, such as 0=non-zero."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s5",
+   "mins": 8,
+   "title": "Guided: identify inconsistency",
+   "objective": "Use an augmented pivot to reject a system.",
+   "problem": "A row-reduced augmented matrix contains [0,0,0|5]. Is the system consistent?",
+   "hints": [
+    "The row represents 0x+0y+0z=5.",
+    "No values of the variables can satisfy 0=5.",
+    "The augmented rank exceeds the coefficient rank."
+   ],
+   "answer": "The system is inconsistent.",
+   "solution": "The row [0,0,0|5] represents 0=5, a contradiction. Therefore rank([A|b])>rank(A), and no solution exists.",
+   "ask": {
+    "q": "Would the homogeneous system Ax=0 ever be inconsistent?",
+    "nudge": "The zero vector is always a solution."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Homogeneous systems and solution dimension",
+   "objective": "Count free variables in Ax=0.",
+   "ask": {
+    "q": "For an n-unknown homogeneous system with rank r, what is the dimension of its solution space?",
+    "nudge": "Use rank-nullity."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Homogeneous system",
+     "body": "Ax=0 is always consistent because x=0 is a solution."
+    },
+    {
+     "t": "formula",
+     "h": "Nullity",
+     "body": "For A with n columns, dim Null(A)=n−rank(A). This is the number of free variables in the reduced system."
+    },
+    {
+     "t": "step",
+     "h": "Non-trivial solutions",
+     "body": "A homogeneous system has a non-zero solution iff rank(A)<n. If rank(A)=n, the zero solution is unique."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided: count solutions",
+   "objective": "Use rank and number of unknowns.",
+   "problem": "A consistent system has 5 unknowns and rank 3. How many free variables does it have?",
+   "hints": [
+    "The number of pivot variables equals rank.",
+    "There are 5 unknowns and 3 pivots.",
+    "Subtract rank from the number of columns."
+   ],
+   "answer": "2 free variables; infinitely many solutions.",
+   "solution": "The nullity is 5−3=2. Since the system is consistent and has free variables, it has infinitely many solutions.",
+   "ask": {
+    "q": "If the system were homogeneous, would it be consistent?",
+    "nudge": "Yes, the zero vector always solves it."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s8",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the rank tests.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "When is Ax=b consistent?",
+     "a": "rank(A)=rank([A|b])."
+    },
+    {
+     "q": "When is a consistent solution unique?",
+     "a": "When rank(A)=n, the number of unknowns."
+    },
+    {
+     "q": "How many free variables?",
+     "a": "n−rank(A)."
+    },
+    {
+     "q": "Is Ax=0 always consistent?",
+     "a": "Yes, x=0 is always a solution."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s9",
+   "mins": 8,
+   "title": "Four system decisions",
+   "objective": "Classify systems from rank information.",
+   "problem": "Complete each conclusion.",
+   "steps": [
+    {
+     "say": "rank(A)=rank([A|b])=n.",
+     "blank": {
+      "prompt": "How many solutions?",
+      "answer": "Unique",
+      "accept": [
+       "unique",
+       "one"
+      ],
+      "hint": "There are n pivots for n unknowns."
+     },
+     "why": "No free variables remain."
+    },
+    {
+     "say": "rank(A)=rank([A|b])<n.",
+     "blank": {
+      "prompt": "How many solutions?",
+      "answer": "Infinitely many",
+      "accept": [
+       "infinite",
+       "infinitely many"
+      ],
+      "hint": "The system is consistent and has free variables."
+     },
+     "why": "At least one free variable can vary."
+    },
+    {
+     "say": "rank(A)<rank([A|b]).",
+     "blank": {
+      "prompt": "How many solutions?",
+      "answer": "None",
+      "accept": [
+       "none",
+       "no solution",
+       "inconsistent"
+      ],
+      "hint": "The augmented matrix has an extra pivot."
+     },
+     "why": "The rank criterion fails, so the system is inconsistent."
+    },
+    {
+     "say": "A has 6 columns and rank 4.",
+     "blank": {
+      "prompt": "What is nullity?",
+      "answer": "2",
+      "accept": [
+       "2"
+      ],
+      "hint": "Subtract rank from the number of columns."
+     },
+     "why": "Rank-nullity gives 6−4=2."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s10",
+   "mins": 6,
+   "title": "Pivots reveal the geometry of solutions",
+   "objective": "Interpret unique, infinite and no-solution cases.",
+   "ask": {
+    "q": "What does a free variable mean geometrically?",
+    "nudge": "The solution set has a direction of freedom."
+   },
+   "body": [
+    "A unique solution is a single point. One free variable typically gives a line of solutions; two free variables typically give a plane, subject to the system being consistent.",
+    "An inconsistent system has no point satisfying all equations. The rank comparison distinguishes this from a non-unique but consistent solution set."
+   ],
+   "scenario": {
+    "teaser": "A model may have redundant equations or incompatible measurements.",
+    "title": "Consistency checks in a data-balance system",
+    "body": [
+     "A set of balance equations may contain redundant relationships. Row reduction identifies redundant rows as zero rows and shows how many independent equations remain.",
+     "If a measurement or right-hand side conflicts with the coefficient relationships, the augmented matrix gains an extra pivot and the system becomes inconsistent.",
+     "This diagnosis separates lack of information (free variables) from contradictory information (no solution). It is a useful first check before interpreting estimated parameters."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s11",
+   "mins": 7,
+   "title": "Worked: rank comparison",
+   "objective": "Classify a system from its reduced augmented matrix.",
+   "ask": {
+    "q": "What does [0,0|0] indicate in an augmented row?",
+    "nudge": "It is a redundant equation, not a contradiction."
+   },
+   "problem": "A reduced augmented matrix has two pivots in coefficient columns and no contradictory row, for a system with three unknowns.",
+   "steps": [
+    {
+     "say": "Read the coefficient rank.",
+     "math": "rank(A)=2",
+     "why": "There are two pivot columns in A."
+    },
+    {
+     "say": "Read the augmented rank.",
+     "math": "rank([A|b])=2",
+     "why": "There is no pivot in the augmented column and no inconsistent row."
+    },
+    {
+     "say": "Classify.",
+     "math": "Consistent; 3−2=1 free variable; infinitely many solutions.",
+     "why": "Equal ranks give consistency, and rank below the number of unknowns gives infinitely many solutions."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s12",
+   "mins": 5,
+   "title": "Trap check: six statements",
+   "objective": "Avoid common rank and consistency errors.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "Every homogeneous system is consistent.",
+     "tf": true,
+     "why": "The zero vector is always a solution."
+    },
+    {
+     "claim": "Ax=b is consistent iff rank(A)=rank([A|b]).",
+     "tf": true,
+     "why": "This is the rank criterion."
+    },
+    {
+     "claim": "A consistent system with rank below n has a unique solution.",
+     "tf": false,
+     "why": "It has at least one free variable and infinitely many solutions."
+    },
+    {
+     "claim": "A row [0 … 0 | c] with c≠0 signals inconsistency.",
+     "tf": true,
+     "why": "It represents the contradiction 0=c."
+    },
+    {
+     "claim": "The number of free variables is n−rank(A).",
+     "tf": true,
+     "why": "This is rank-nullity for the coefficient matrix."
+    },
+    {
+     "claim": "Row operations can change the solution set.",
+     "tf": false,
+     "why": "Elementary row operations preserve the solution set."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "Final linear-systems checklist",
+   "objective": "Use RREF and rank to classify a system.",
+   "body": [
+    "1. Write Ax=b and form the augmented matrix [A|b].",
+    "2. Use elementary row operations to reach echelon form or RREF.",
+    "3. Rank(A) is the number of coefficient pivots; rank([A|b]) includes any augmented pivot.",
+    "4. Consistent iff the two ranks are equal.",
+    "5. Unique iff consistent and rank(A)=n.",
+    "6. Infinitely many iff consistent and rank(A)<n; free variables=n−rank(A).",
+    "7. Homogeneous systems are always consistent; non-trivial solutions exist iff rank(A)<n."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate row-reduction and rank-criterion reasoning.",
+   "setId": "maths_t14_mastery"
+  }
+ ]
+}
