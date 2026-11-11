@@ -1,0 +1,584 @@
+{
+ "id": "mathst15",
+ "topicId": "maths-t15",
+ "moduleId": "maths",
+ "title": "Gram–Schmidt, Orthogonality and Orthogonal Matrices",
+ "breadcrumb": "Mathematics → Linear algebra → Orthogonality and orthonormal bases",
+ "engine": "B",
+ "engineName": "Mathematics — projections and orthogonal coordinates",
+ "version": "1.0",
+ "status": "draft",
+ "estMin": 105,
+ "objectives": [
+  "Compute inner products, norms and projections.",
+  "Apply Gram–Schmidt to an independent set.",
+  "Construct an orthonormal basis for a span.",
+  "Verify whether a square matrix is orthogonal.",
+  "Use norm, inner-product and determinant properties of orthogonal matrices."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Vectors and dot products",
+   "why": "Orthogonality is defined by the inner product."
+  },
+  {
+   "id": "p2",
+   "name": "Linear independence and bases",
+   "why": "Gram–Schmidt starts from an independent generating set."
+  },
+  {
+   "id": "p3",
+   "name": "Matrix transpose and inverse",
+   "why": "Orthogonal matrices satisfy QᵀQ=I."
+  }
+ ],
+ "traps": [
+  "Projection denominator is u·u; it is one only when u is a unit vector.",
+  "Gram–Schmidt preserves span but changes the basis vectors.",
+  "Normalise only after orthogonalising.",
+  "Orthogonal means QᵀQ=I, not Qᵀ=Q.",
+  "Orthogonal matrices have determinant ±1.",
+  "A direction vector is not automatically unit length."
+ ],
+ "revision": {
+  "sheet": [
+   "Inner product u·v=Σuᵢvᵢ.",
+   "Norm ‖u‖=√(u·u).",
+   "Orthogonal iff u·v=0.",
+   "Orthonormal means pairwise orthogonal and unit length.",
+   "projᵤ(v)=((v·u)/(u·u))u.",
+   "Gram–Schmidt: subtract projections onto earlier orthogonal vectors.",
+   "Normalise qᵢ=uᵢ/‖uᵢ‖.",
+   "Orthogonal Q: QᵀQ=I and Q⁻¹=Qᵀ.",
+   "Orthogonal matrices preserve norms and inner products.",
+   "det(Q)=±1.",
+   "For an orthonormal basis, coordinates are dot products.",
+   "Gram–Schmidt preserves the original span."
+  ],
+  "cards": [
+   [
+    "Orthogonal",
+    "u·v=0"
+   ],
+   [
+    "Orthonormal",
+    "Orthogonal and unit"
+   ],
+   [
+    "Projection",
+    "(v·u)/(u·u) u"
+   ],
+   [
+    "Gram–Schmidt",
+    "Subtract earlier projections"
+   ],
+   [
+    "Orthogonal Q",
+    "QᵀQ=I"
+   ],
+   [
+    "Inverse",
+    "Q⁻¹=Qᵀ"
+   ],
+   [
+    "Norm",
+    "Preserved by Q"
+   ],
+   [
+    "Determinant",
+    "±1"
+   ]
+  ],
+  "tricks": [
+   "Compute dot products before normalising.",
+   "Subtract the projection, not the whole vector.",
+   "Check the residual dot product is zero.",
+   "Use column inner products to verify QᵀQ=I.",
+   "Remember the determinant sign can be −1 for a reflection."
+  ],
+  "shortcuts": [
+   "For (1,1),(1,0), Gram–Schmidt gives (1,1) and (1/2,−1/2).",
+   "Normalised basis: (1,1)/√2 and (1,−1)/√2.",
+   "For an orthogonal matrix, transpose is inverse."
+  ],
+  "remember": [
+   "Projection uses u·u in the denominator.",
+   "Gram–Schmidt preserves span.",
+   "Q inverse equals Q transpose."
+  ]
+ },
+ "howto": "Compute the projection coefficient carefully, subtract it to remove the component along earlier vectors, then normalise. To verify an orthogonal matrix, check that its columns are orthonormal or compute QᵀQ.",
+ "refs": [
+  {
+   "title": "Introduction to Linear Algebra",
+   "where": "Orthogonality and Gram–Schmidt",
+   "site": "MIT OpenCourseWare 18.06",
+   "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Projections, orthonormal bases and orthogonal matrices."
+  },
+  {
+   "title": "Linear Algebra and Its Applications",
+   "where": "Orthogonal vectors and QR",
+   "site": "Gilbert Strang",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Gram–Schmidt and QR factorisation."
+  },
+  {
+   "title": "Linear Algebra",
+   "where": "Orthogonality",
+   "site": "NPTEL",
+   "url": "https://nptel.ac.in/courses/111106051",
+   "type": "Video course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Indian university-level orthogonality topics."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact anchors include projection, Gram–Schmidt in R² and orthogonal-matrix verification. Not production-approved.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Foundation: inner products and norms",
+   "objective": "Recall dot products and orthogonality.",
+   "ask": {
+    "q": "When are two real vectors orthogonal?",
+    "nudge": "Their inner product must be zero."
+   },
+   "body": [
+    "The Euclidean inner product is u·v=Σuᵢvᵢ. The norm is ‖u‖=√(u·u), and two vectors are orthogonal when their inner product is zero.",
+    "An orthonormal set is both orthogonal and made of unit vectors. Gram–Schmidt converts an independent set into an orthonormal basis for the same span."
+   ],
+   "items": [
+    {
+     "ask": "What is the projection of v onto a non-zero vector u?",
+     "recall": "projᵤ(v)=(v·u)/(u·u) u.",
+     "refresh": [
+      "The projection is the component of v in the direction of u. Subtracting it from v leaves a vector orthogonal to u.",
+      "If u is already a unit vector, the denominator u·u is one. The projection becomes (v·u)u."
+     ]
+    },
+    {
+     "ask": "What does orthonormal mean?",
+     "recall": "Vectors are pairwise orthogonal and each has norm one.",
+     "refresh": [
+      "Orthogonality means pairwise dot products are zero. Normalisation means every vector has unit length.",
+      "An orthonormal basis makes coordinates especially simple: the coordinate of v along basis vector qᵢ is v·qᵢ."
+     ]
+    },
+    {
+     "ask": "What is an orthogonal matrix?",
+     "recall": "A square matrix Q satisfying QᵀQ=I.",
+     "refresh": [
+      "Its columns form an orthonormal basis. Since QᵀQ=I, its inverse is Qᵀ, which makes calculations and coordinate changes efficient.",
+      "Orthogonal matrices preserve inner products and lengths: ‖Qx‖=‖x‖. Their determinant is either +1 or −1."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "Orthogonal directions separate components",
+   "objective": "Interpret projection and orthonormal coordinates.",
+   "ask": {
+    "q": "Why are orthonormal coordinates convenient?",
+    "nudge": "The coordinates are obtained by simple dot products."
+   },
+   "body": [
+    "Orthogonal directions do not overlap in their inner-product contribution. Projecting onto each basis vector isolates one component.",
+    "Normalising the directions makes the coordinate formulas even simpler. This is why orthonormal bases appear in least squares, spectral decomposition and numerical linear algebra."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Projection and orthogonal decomposition",
+   "objective": "Compute a projection and residual.",
+   "ask": {
+    "q": "Project v=(3,1) onto u=(1,1).",
+    "nudge": "The scalar is (v·u)/(u·u)=4/2=2."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Projection",
+     "body": "projᵤ(v)=((v·u)/(u·u))u, for u≠0."
+    },
+    {
+     "t": "formula",
+     "h": "Orthogonal residual",
+     "body": "v=projᵤ(v)+[v−projᵤ(v)], and the residual is orthogonal to u."
+    },
+    {
+     "t": "step",
+     "h": "Projection onto a subspace",
+     "body": "For an orthonormal basis q₁,…,qₖ, the projection is Σ(v·qᵢ)qᵢ. The residual is orthogonal to the whole subspace."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Worked: project onto a line",
+   "objective": "Calculate a projection and verify orthogonality.",
+   "ask": {
+    "q": "For v=(3,1) and u=(1,1), what is the projection?",
+    "nudge": "The projection is 2(1,1)."
+   },
+   "problem": "Find projᵤ(v) and the residual for v=(3,1), u=(1,1).",
+   "steps": [
+    {
+     "say": "Compute the projection coefficient.",
+     "math": "(v·u)/(u·u)=(3+1)/(1+1)=2",
+     "why": "The inner products are 4 and 2."
+    },
+    {
+     "say": "Find the projection.",
+     "math": "projᵤ(v)=2(1,1)=(2,2)",
+     "why": "Multiply u by the scalar coefficient."
+    },
+    {
+     "say": "Find and check the residual.",
+     "math": "r=(1,−1); r·u=1−1=0",
+     "why": "The residual is orthogonal to the projection direction."
+    }
+   ],
+   "scenario": {
+    "teaser": "A vector is decomposed into fitted and residual components.",
+    "title": "Projection as the geometry of least squares",
+    "body": [
+     "Least squares projects an observed vector onto the column space of a design matrix. The fitted component lies in the model space, and the residual is orthogonal to that space.",
+     "For a one-dimensional subspace spanned by u, the projection formula is ((v·u)/(u·u))u. The residual is the part that cannot be explained along u.",
+     "With an orthonormal basis, the projection is a sum of simple dot-product components. This is the geometric reason orthonormal bases are useful in regression and numerical computation."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 8,
+   "title": "Gram–Schmidt orthogonalisation",
+   "objective": "State the algorithm for an independent set.",
+   "ask": {
+    "q": "What do you subtract from v₂ to make it orthogonal to v₁?",
+    "nudge": "Subtract its projection onto v₁."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Two-vector step",
+     "body": "u₁=v₁; u₂=v₂−projᵤ₁(v₂). Then u₁·u₂=0."
+    },
+    {
+     "t": "formula",
+     "h": "General step",
+     "body": "uₖ=vₖ−Σⱼ₌₁ᵏ⁻¹projᵤⱼ(vₖ), where u₁,…,uₖ₋₁ are mutually orthogonal."
+    },
+    {
+     "t": "step",
+     "h": "Normalise",
+     "body": "After obtaining non-zero orthogonal vectors uᵢ, set qᵢ=uᵢ/‖uᵢ‖. The qᵢ form an orthonormal basis for the original span."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s5",
+   "mins": 8,
+   "title": "Guided: Gram–Schmidt in R²",
+   "objective": "Orthogonalise two independent vectors.",
+   "problem": "Apply Gram–Schmidt to v₁=(1,1), v₂=(1,0).",
+   "hints": [
+    "Take u₁=v₁=(1,1).",
+    "Compute projᵤ₁(v₂)=(1/2)(1,1).",
+    "Subtract to obtain u₂=(1/2,−1/2), then normalise."
+   ],
+   "answer": "An orthonormal basis is ((1,1)/√2,(1,−1)/√2).",
+   "solution": "u₁=(1,1), u₂=(1,0)−(1/2)(1,1)=(1/2,−1/2). Both norms are 1 and 1/√2 respectively, giving q₁=(1,1)/√2 and q₂=(1,−1)/√2.",
+   "ask": {
+    "q": "What is q₁·q₂?",
+    "nudge": "The dot product is (1−1)/2=0."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Orthogonal matrices and their properties",
+   "objective": "Use QᵀQ=I and geometric invariance.",
+   "ask": {
+    "q": "What is the inverse of an orthogonal matrix Q?",
+    "nudge": "Transpose equals inverse."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Definition",
+     "body": "Q is orthogonal iff QᵀQ=QQᵀ=I. Hence Q⁻¹=Qᵀ."
+    },
+    {
+     "t": "formula",
+     "h": "Preserved quantities",
+     "body": "‖Qx‖=‖x‖ and (Qx)·(Qy)=x·y. Orthogonal transformations preserve lengths, angles and inner products."
+    },
+    {
+     "t": "def",
+     "h": "Determinant",
+     "body": "det(Q)²=1, so det(Q)=±1. A real orthogonal matrix represents a rotation or reflection, or a combination."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided: test an orthogonal matrix",
+   "objective": "Verify the defining identity.",
+   "problem": "Check whether Q=(1/√2)[[1,−1],[1,1]] is orthogonal.",
+   "hints": [
+    "Compute the inner products of the two columns.",
+    "Each column has squared norm (1+1)/2=1.",
+    "Their dot product is (−1+1)/2=0."
+   ],
+   "answer": "QᵀQ=I, so Q is orthogonal.",
+   "solution": "The columns are unit vectors and mutually orthogonal. Therefore QᵀQ=I and Q is orthogonal.",
+   "ask": {
+    "q": "What is Q inverse?",
+    "nudge": "It is Q transpose."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s8",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall projection and orthogonality formulas.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "When are vectors orthogonal?",
+     "a": "Their dot product is zero."
+    },
+    {
+     "q": "Write the projection formula.",
+     "a": "((v·u)/(u·u))u."
+    },
+    {
+     "q": "What does Gram–Schmidt produce?",
+     "a": "An orthogonal or orthonormal basis for the same span."
+    },
+    {
+     "q": "What is Q inverse for orthogonal Q?",
+     "a": "Qᵀ."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s9",
+   "mins": 8,
+   "title": "Four orthogonality decisions",
+   "objective": "Apply projection and orthogonal-matrix properties.",
+   "problem": "Complete each calculation.",
+   "steps": [
+    {
+     "say": "For v=(3,1), u=(1,1).",
+     "blank": {
+      "prompt": "Find the projection coefficient.",
+      "answer": "2",
+      "accept": [
+       "2"
+      ],
+      "hint": "Compute 4/2."
+     },
+     "why": "The scalar projection coefficient is two."
+    },
+    {
+     "say": "For the same vectors.",
+     "blank": {
+      "prompt": "Find the residual.",
+      "answer": "(1,−1)",
+      "accept": [
+       "(1,-1)",
+       "(1,−1)"
+      ],
+      "hint": "Subtract (2,2) from (3,1)."
+     },
+     "why": "The residual is orthogonal to u."
+    },
+    {
+     "say": "Q is orthogonal.",
+     "blank": {
+      "prompt": "Write Q inverse.",
+      "answer": "Qᵀ",
+      "accept": [
+       "Q^T",
+       "Qᵀ"
+      ],
+      "hint": "Use QᵀQ=I."
+     },
+     "why": "The transpose is the inverse."
+    },
+    {
+     "say": "An orthogonal matrix acts on x.",
+     "blank": {
+      "prompt": "What happens to ‖x‖?",
+      "answer": "It is preserved",
+      "accept": [
+       "preserved",
+       "unchanged"
+      ],
+      "hint": "Orthogonal transformations preserve length."
+     },
+     "why": "‖Qx‖²=xᵀQᵀQx=‖x‖²."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s10",
+   "mins": 6,
+   "title": "Gram–Schmidt preserves the span",
+   "objective": "Understand why orthogonalisation does not change the subspace.",
+   "ask": {
+    "q": "Why does replacing v₂ by v₂−projᵤ₁(v₂) preserve the span?",
+    "nudge": "The new vector is a linear combination of the old vectors."
+   },
+   "body": [
+    "Each Gram–Schmidt vector is obtained by subtracting combinations of earlier vectors. Therefore the new vectors span the same space as the original independent set.",
+    "The procedure changes the basis, not the subspace. Normalisation also preserves span because it only multiplies a non-zero vector by a non-zero scalar."
+   ],
+   "scenario": {
+    "teaser": "A numerical algorithm improves stability by using orthogonal directions.",
+    "title": "Orthogonal bases in numerical computation",
+    "body": [
+     "A set of nearly dependent vectors can be difficult to use directly in numerical calculations. Orthogonalisation produces directions with zero pairwise inner products, reducing interference between components.",
+     "Gram–Schmidt preserves the span while replacing the original generators by orthogonal vectors. Normalising them gives an orthonormal basis that is convenient for projections and coordinate calculations.",
+     "In numerical practice, modified Gram–Schmidt or QR methods may be preferred for better numerical stability, but the classical process is the conceptual foundation."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s11",
+   "mins": 7,
+   "title": "Worked: verify the orthogonal basis",
+   "objective": "Check norms and dot products after Gram–Schmidt.",
+   "ask": {
+    "q": "Are (1,1)/√2 and (1,−1)/√2 orthonormal?",
+    "nudge": "Each norm is one and their dot product is zero."
+   },
+   "problem": "Verify q₁=(1,1)/√2 and q₂=(1,−1)/√2 form an orthonormal basis of R².",
+   "steps": [
+    {
+     "say": "Check the norms.",
+     "math": "‖q₁‖²=(1+1)/2=1; ‖q₂‖²=(1+1)/2=1",
+     "why": "Both vectors have unit length."
+    },
+    {
+     "say": "Check orthogonality.",
+     "math": "q₁·q₂=(1−1)/2=0",
+     "why": "The vectors are perpendicular."
+    },
+    {
+     "say": "Check they span R².",
+     "math": "Two non-zero orthogonal vectors in R² are independent, hence form a basis.",
+     "why": "The set is orthonormal and spans the full plane."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s12",
+   "mins": 5,
+   "title": "Trap check: six statements",
+   "objective": "Avoid common projection and orthogonal-matrix errors.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "Orthogonal vectors have zero inner product.",
+     "tf": true,
+     "why": "This is the definition."
+    },
+    {
+     "claim": "An orthonormal set has unit vectors.",
+     "tf": true,
+     "why": "Every vector has norm one."
+    },
+    {
+     "claim": "Gram–Schmidt changes the span.",
+     "tf": false,
+     "why": "It replaces generators by combinations in the same span."
+    },
+    {
+     "claim": "For orthogonal Q, Q inverse equals Q transpose.",
+     "tf": true,
+     "why": "QᵀQ=I."
+    },
+    {
+     "claim": "An orthogonal matrix can have determinant 2.",
+     "tf": false,
+     "why": "Its determinant is ±1."
+    },
+    {
+     "claim": "Orthogonal matrices preserve Euclidean norms.",
+     "tf": true,
+     "why": "‖Qx‖²=xᵀQᵀQx=‖x‖²."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "Final orthogonality checklist",
+   "objective": "Apply projection, Gram–Schmidt and orthogonal matrices.",
+   "body": [
+    "1. Inner product u·v; norm ‖u‖=√(u·u).",
+    "2. Orthogonal iff u·v=0; orthonormal means orthogonal and unit length.",
+    "3. Projection: ((v·u)/(u·u))u.",
+    "4. Gram–Schmidt subtracts projections onto earlier orthogonal vectors.",
+    "5. Normalise each non-zero orthogonal vector to obtain an orthonormal basis.",
+    "6. Orthogonal matrix: QᵀQ=I, so Q⁻¹=Qᵀ.",
+    "7. Orthogonal transformations preserve lengths, angles and inner products; det(Q)=±1."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate projection, Gram–Schmidt and orthogonal-matrix reasoning.",
+   "setId": "maths_t15_mastery"
+  }
+ ]
+}
