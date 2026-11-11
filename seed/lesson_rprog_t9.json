@@ -181,19 +181,27 @@
       ],
       "items": [
         {
-          "ask": "What is the usual source-file extension for LaTeX?",
-          "recall": ".tex.",
+          "ask": "What is the difference between a .tex file and a PDF?",
+          "recall": "The .tex file is source; PDF is a common compiled output.",
           "refresh": [
-            "A .tex file contains the source commands and content.",
-            "The compiled PDF is an output file, not the editable source."
+            "A .tex file contains editable LaTeX commands and document content. A compiler processes this source to create a typeset output, commonly a PDF file.",
+            "Keep the source file when sharing a finished document. A PDF preserves layout for reading and printing, but it is not a replacement for the editable source used to revise and rebuild the document."
           ]
         },
         {
-          "ask": "What does a LaTeX compiler produce?",
-          "recall": "A typeset output such as PDF.",
+          "ask": "What is an environment in LaTeX?",
+          "recall": "A named region opened by begin and closed by end commands.",
           "refresh": [
-            "The compiler processes source commands and document content.",
-            "Keep the .tex source so the document can be revised and rebuilt."
+            "LaTeX environments group content with a particular structure or formatting rule. The usual pattern is a matching begin command and end command using the same environment name.",
+            "For example, the document environment contains the main document content. Other environments can format equations, tables, lists and other structured material; matching the opening and closing names is essential."
+          ]
+        },
+        {
+          "ask": "Why use heading styles in a word processor?",
+          "recall": "They provide consistent structure and support navigation and automatic contents.",
+          "refresh": [
+            "Heading styles apply a consistent visual treatment and a semantic level to each heading. This makes a long report easier to navigate and helps keep the hierarchy consistent when sections are moved or revised.",
+            "Automatic tables of contents can be generated from those heading levels and updated after edits. Manually enlarging and bolding text may look similar, but it does not reliably provide the same document structure."
           ]
         }
       ],
@@ -217,7 +225,8 @@
         "title": "A scholar creates an equation-rich note",
         "body": [
           "A scholar needs a document with numbered sections, equations and references. A LaTeX source file provides a reproducible structure and can be compiled to PDF.",
-          "The document class controls the overall document type and layout."
+          "The document class controls the overall document type and layout.",
+          " The scholar should keep the editable source, bibliography data and any required supporting files together with the final output. Before submission, the document should be compiled or exported again after the last revision, and the headings, equation layout, page numbers, cross-references and bibliography should be checked in the final reading copy."
         ],
         "q": "Which command selects the document class?",
         "answer": "\\documentclass{...}."
@@ -301,15 +310,18 @@
       "steps": [
         {
           "say": "The command \\documentclass{article} selects the article document class.",
-          "why": "The class declaration determines the document type and layout."
+          "why": "The class declaration determines the document type and layout.",
+          "math": "article"
         },
         {
           "say": "The command \\section{Methods} creates a structured section heading.",
-          "why": "The section command creates a numbered or otherwise styled section heading."
+          "why": "The section command creates a numbered or otherwise styled section heading.",
+          "math": "Methods"
         },
         {
           "say": "The command \\end{document} marks the end of document content.",
-          "why": "The document environment is closed by the matching end command."
+          "why": "The document environment is closed by the matching end command.",
+          "math": "end"
         }
       ],
       "ask": {
@@ -385,7 +397,24 @@
       "ask": {
         "q": "What does \\frac{a}{b} produce?",
         "nudge": "A fraction."
-      }
+      },
+      "solution": [
+        {
+          "say": "Identify the editable source.",
+          "math": "The .tex file contains the source commands.",
+          "why": "The source is the file that can be edited and compiled again."
+        },
+        {
+          "say": "Identify the compiled output.",
+          "math": "PDF is a common typeset output.",
+          "why": "The compiler processes the source and creates the reading copy."
+        },
+        {
+          "say": "Keep both roles distinct.",
+          "math": "Retain source for revision and PDF for distribution.",
+          "why": "A PDF does not replace the editable source file."
+        }
+      ]
     },
     {
       "kind": "theory",
@@ -422,7 +451,8 @@
         "teaser": "Revise a thesis chapter",
         "title": "A supervisor and scholar collaborate",
         "body": [
-          "A supervisor needs to see edits, leave review notes and ensure references are consistently formatted. Track Changes records modifications; comments capture feedback; citation tools manage source metadata and bibliography output."
+          "A supervisor needs to see edits, leave review notes and ensure references are consistently formatted. Track Changes records modifications; comments capture feedback; citation tools manage source metadata and bibliography output.",
+          " The scholar should keep the editable source, bibliography data and any required supporting files together with the final output. Before submission, the document should be compiled or exported again after the last revision, and the headings, equation layout, page numbers, cross-references and bibliography should be checked in the final reading copy."
         ],
         "q": "Which feature records edits made to the document?",
         "answer": "Track Changes."
@@ -430,7 +460,24 @@
       "ask": {
         "q": "What is the purpose of a citation manager?",
         "nudge": "It organises references and bibliography data."
-      }
+      },
+      "solution": [
+        {
+          "say": "Choose the math mode for the in-text symbol.",
+          "math": "Use inline math for beta within a sentence.",
+          "why": "Inline mathematics remains part of the paragraph flow."
+        },
+        {
+          "say": "Choose the mode for the standalone equation.",
+          "math": "Use display math for the sample-mean equation.",
+          "why": "Display mathematics sets the equation apart from surrounding prose."
+        },
+        {
+          "say": "Apply the appropriate delimiters.",
+          "math": "Inline: \\( ... \\); display: \\[ ... \\].",
+          "why": "The delimiters signal how the mathematics should be placed in the document."
+        }
+      ]
     },
     {
       "kind": "trapcheck",
