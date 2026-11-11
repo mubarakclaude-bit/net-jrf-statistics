@@ -180,19 +180,27 @@
       ],
       "items": [
         {
-          "ask": "What does mean() calculate?",
-          "recall": "The arithmetic average.",
+          "ask": "What does NA represent?",
+          "recall": "A missing or unavailable value.",
           "refresh": [
-            "Add the observations and divide by their count.",
-            "Missing values affect the result unless they are removed for that calculation."
+            "NA is R's marker for a missing value. Many arithmetic summaries propagate NA by default because the missing observation prevents the complete calculation from being determined.",
+            "Do not silently replace NA with zero. Decide whether the question asks for a missingness count, a complete-case summary, or a different missing-data treatment, and state the rule being used."
           ]
         },
         {
-          "ask": "What does range(x) return?",
-          "recall": "The minimum and maximum.",
+          "ask": "What does na.rm=TRUE mean?",
+          "recall": "Omit missing values for that calculation.",
           "refresh": [
-            "range() returns two endpoints.",
-            "Subtract the first from the second to obtain the statistical range."
+            "The argument na.rm=TRUE tells a summary function to omit missing values while performing that particular calculation. It does not rewrite the vector or permanently delete any observations.",
+            "If the original vector contains five positions including two NA entries, length remains five after a mean call with na.rm=TRUE. A later function call still sees the original missing entries."
+          ]
+        },
+        {
+          "ask": "How do you count observed entries?",
+          "recall": "Use sum(!is.na(x)).",
+          "refresh": [
+            "is.na(x) creates a logical indicator for missing values. Negating that indicator identifies observed entries, and sum counts the TRUE values as one each.",
+            "Keep the three counts distinct: length(x) counts all positions, sum(is.na(x)) counts missing positions, and sum(!is.na(x)) counts observed positions. These quantities add to the vector length."
           ]
         }
       ],
@@ -217,7 +225,8 @@
         "title": "A researcher summarises a partial response vector",
         "body": [
           "A researcher has responses 2, NA and 6. The mean is unavailable under the default missing-value rule, but can be computed from observed responses with na.rm=TRUE.",
-          "The number of observed responses is two, while length(x) remains three."
+          "The number of observed responses is two, while length(x) remains three.",
+          " The analyst should report the number of observed responses alongside the summary so readers can see how many values contributed to it. Missingness counts should be calculated separately from the statistic itself. The original vector should remain intact, because a later analysis may need to inspect which observations were missing or apply a different treatment."
         ],
         "q": "What is the mean of observed values?",
         "answer": "4."
@@ -415,7 +424,24 @@
       "ask": {
         "q": "What is sum(is.na(x))?",
         "nudge": "There are two missing entries."
-      }
+      },
+      "solution": [
+        {
+          "say": "Identify the observed values.",
+          "math": "The non-missing values are 2, 6 and 10.",
+          "why": "na.rm=TRUE omits the two missing entries for this calculation."
+        },
+        {
+          "say": "Calculate the mean.",
+          "math": "(2 + 6 + 10) / 3 = 6.",
+          "why": "Add the three observed values and divide by their count."
+        },
+        {
+          "say": "Keep the counts separate.",
+          "math": "length = 5; missing = 2; observed = 3.",
+          "why": "The original vector still has five positions."
+        }
+      ]
     },
     {
       "kind": "theory",
@@ -468,11 +494,29 @@
         "title": "A field survey with missing entries",
         "body": [
           "A field survey records 5, 7, NA, 9 and NA. The analyst needs the mean of observed values and the number of missing responses.",
-          "The observed mean uses na.rm=TRUE; the missing count uses sum(is.na(x))."
+          "The observed mean uses na.rm=TRUE; the missing count uses sum(is.na(x)).",
+          " The analyst should report the number of observed responses alongside the summary so readers can see how many values contributed to it. Missingness counts should be calculated separately from the statistic itself. The original vector should remain intact, because a later analysis may need to inspect which observations were missing or apply a different treatment."
         ],
         "q": "How many observations are available for the mean?",
         "answer": "3."
-      }
+      },
+      "solution": [
+        {
+          "say": "Count all positions.",
+          "math": "length(x) = 5.",
+          "why": "Missing values still occupy positions in the vector."
+        },
+        {
+          "say": "Count the missing entries.",
+          "math": "sum(is.na(x)) = 2.",
+          "why": "Two logical indicators are TRUE."
+        },
+        {
+          "say": "Count the observed entries.",
+          "math": "sum(!is.na(x)) = 3.",
+          "why": "Three indicators are TRUE after negating the missingness flags."
+        }
+      ]
     },
     {
       "kind": "trapcheck",
