@@ -77,6 +77,24 @@
    "Largest eigenvalue gives maximum variance.",
    "Eigenvectors are directions; eigenvalues are variances.",
    "Uncorrelated does not automatically mean independent."
+  ],
+  "sheet": [
+   "PC direction: aⱼ is a unit eigenvector of Σ (or R when standardising).",
+   "PC score: zⱼ=aⱼᵀx for a centred observation x; its variance is λⱼ.",
+   "Eigenvalue check: Σλⱼ=tr(Σ), total variance. For a p×p correlation matrix, the sum is p.",
+   "Explained proportion: λⱼ/Σλᵢ. Cumulative first k: (λ₁+…+λₖ)/Σλᵢ.",
+   "June 2026 Q2 equicorrelation ρ=1/2: eigenvalues 2, 1/2, 1/2; first direction (1,1,1)/√3; PC1 explains 2/3.",
+   "Covariance PCA retains original scale; correlation PCA standardises variables before extraction.",
+   "Repeated eigenvalue: eigenspace is fixed, but an orthonormal basis within it is not unique.",
+   "PC scores are uncorrelated. Do not claim independence without additional assumptions."
+  ],
+  "shortcuts": [
+   "Equicorrelation matrix: test the all-ones vector first; the eigenvalue is the common row sum.",
+   "Use trace as a fast check before accepting a list of eigenvalues.",
+   "For a correlation matrix, the eigenvalue sum equals the number of variables.",
+   "Explained variance is a ratio: selected eigenvalue sum divided by total eigenvalue sum.",
+   "Signs of eigenvectors are arbitrary; flipping all signs does not change variance.",
+   "Repeated eigenvalues identify a subspace rather than one unique direction."
   ]
  },
  "howto": "Centre the data and decide whether raw scales are meaningful. Form the covariance matrix or, after standardisation, the correlation matrix. Find eigenvalues and orthonormal eigenvectors, order them from largest to smallest, and interpret the eigenvectors as component directions. Each eigenvalue is the variance of its score. Divide by the trace to obtain explained-variance proportions. For June 2026 Q2, use the all-ones vector to obtain the largest eigenvalue, then use the trace to check the remaining eigenvalues.",
@@ -319,7 +337,11 @@
      "blank": {
       "prompt": "Expand |Σ−λI|=0.",
       "answer": "(4−λ)²−4=0, so λ²−8λ+12=0.",
-      "hint": "For a 2×2 determinant, multiply diagonal entries and subtract the off-diagonal product."
+      "hint": "For a 2×2 determinant, multiply diagonal entries and subtract the off-diagonal product.",
+      "accept": [
+       "(4-lambda)^2-4=0; lambda^2-8lambda+12=0",
+       "(4−λ)²−4=0, λ²−8λ+12=0"
+      ]
      },
      "why": "The roots are 6 and 2; their sum is the trace 8."
     },
@@ -328,7 +350,12 @@
      "blank": {
       "prompt": "Give a unit eigenvector for λ=6.",
       "answer": "(1,1)ᵀ/√2.",
-      "hint": "Try equal coordinates because the rows are symmetric."
+      "hint": "Try equal coordinates because the rows are symmetric.",
+      "accept": [
+       "(1,1)/sqrt(2)",
+       "(1,1)ᵀ/√2",
+       "(1/sqrt(2),1/sqrt(2))"
+      ]
      },
      "why": "The common direction is stretched by 6."
     },
