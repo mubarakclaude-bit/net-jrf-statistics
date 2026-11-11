@@ -1,0 +1,527 @@
+{
+  "id": "designt4",
+  "topicId": "design-t4",
+  "moduleId": "design",
+  "title": "Balanced Incomplete Block Designs and Incidence Matrices",
+  "breadcrumb": "Unit III · Design of Experiments · Incomplete block designs",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 92,
+  "objectives": [
+    "Define BIBD parameters v, b, r, k and λ.",
+    "Apply bk=vr and λ(v−1)=r(k−1).",
+    "Construct and interpret the v×b incidence matrix.",
+    "Verify NN′=(r−λ)I+λJ and pair concurrence.",
+    "Distinguish necessary parameter conditions from existence."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Complete block designs",
+      "why": "BIBDs extend blocking when a block cannot contain every treatment."
+    },
+    {
+      "id": "p2",
+      "name": "Matrix multiplication",
+      "why": "NN′ records replications and pair concurrence."
+    },
+    {
+      "id": "p3",
+      "name": "Combinatorial counting",
+      "why": "The identities count placements and pairs."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule. Ten items are drawn with a 3/5/2 difficulty mix; retakes draw again."
+  },
+  "refs": [
+    {
+      "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+      "where": "Design of experiments",
+      "site": "NIST",
+      "url": "https://www.itl.nist.gov/div898/handbook/",
+      "type": "reference",
+      "free": true,
+      "why": "Open reference for experimental design."
+    },
+    {
+      "title": "Cochran and Cox, Experimental Designs",
+      "where": "Incomplete block designs",
+      "site": "Wiley",
+      "url": "https://www.wiley.com/",
+      "type": "book",
+      "free": false,
+      "why": "Classical reference for block-design analysis."
+    }
+  ],
+  "traps": [
+    "Incomplete means k<v.",
+    "r counts blocks containing one treatment; k counts treatments per block.",
+    "λ counts blocks containing a fixed pair, not one treatment.",
+    "bk=vr counts placements in two ways.",
+    "λ(v−1)=r(k−1) fixes one treatment and counts its partners.",
+    "With treatment rows, NN′=(r−λ)I+λJ.",
+    "Integer identities are necessary, not sufficient, for existence."
+  ],
+  "howto": "Write v,b,r,k,λ and their meanings. Check bk=vr and λ(v−1)=r(k−1). Build N with treatments as rows and blocks as columns; row sums are r and column sums k. Check NN′: diagonal r, off-diagonal λ.",
+  "revision": {
+    "sheet": [
+      "v treatments; b blocks; r blocks per treatment.",
+      "k treatments per block; λ blocks containing each pair.",
+      "Incomplete means k<v.",
+      "bk=vr counts all placements.",
+      "λ(v−1)=r(k−1) counts partners of a fixed treatment.",
+      "N is v×b: treatments in rows, blocks in columns.",
+      "Row sums r; column sums k.",
+      "NN′=(r−λ)I_v+λJ_v.",
+      "Necessary identities do not prove existence."
+    ],
+    "cards": [
+      [
+        "v",
+        "Number of treatments"
+      ],
+      [
+        "b",
+        "Number of blocks"
+      ],
+      [
+        "r",
+        "Replications per treatment"
+      ],
+      [
+        "k",
+        "Treatments per block"
+      ],
+      [
+        "λ",
+        "Pair concurrence"
+      ],
+      [
+        "N",
+        "v×b incidence matrix"
+      ],
+      [
+        "bk=vr",
+        "Count placements"
+      ],
+      [
+        "λ(v−1)=r(k−1)",
+        "Count partners"
+      ]
+    ],
+    "tricks": [
+      {
+        "hook": "Rows are treatments",
+        "why": "Each row sums to r."
+      },
+      {
+        "hook": "Columns are blocks",
+        "why": "Each column sums to k."
+      },
+      {
+        "hook": "Fix one treatment",
+        "why": "It meets v−1 others, each λ times."
+      }
+    ],
+    "shortcuts": [
+      "Check bk=vr first; both sides count ones in N.",
+      "Compute λ=r(k−1)/(v−1), then check integrality.",
+      "NN′ diagonal entries are r; off-diagonal entries are λ."
+    ],
+    "remember": [
+      "Every pair occurs together in exactly λ blocks.",
+      "N verifies replication, block size and pair balance."
+    ],
+    "traps": [
+      "Swapping r and k.",
+      "Treating λ as individual replication.",
+      "Assuming equations guarantee existence."
+    ]
+  },
+  "provenance": "Original GPT-authored lesson for design-t4. No official PYQ is claimed. The incidence-matrix example and parameter identities are checked in verify_design_t4.py. Scope: BIBD parameters, incidence matrices, pair concurrence and necessary feasibility identities; connectedness and efficiency are reserved for design-t8.",
+  "anchors": [],
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Why incomplete blocks?",
+      "objective": "Explain incomplete block designs.",
+      "body": [
+        "A complete block contains all v treatments. When a block cannot accommodate every treatment, an incomplete block contains k treatments, with k<v.",
+        "A BIBD has equal block size k, equal replication r for each treatment, and equal pair concurrence λ for every distinct pair."
+      ],
+      "items": [
+        {
+          "ask": "What makes a block design incomplete?",
+          "recall": "Each block contains fewer than all treatments: k<v.",
+          "refresh": [
+            "A complete block contains all v treatments.",
+            "An incomplete block has k<v.",
+            "Balance is an additional property."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "The five BIBD parameters",
+      "objective": "Define v,b,r,k,λ.",
+      "body": [
+        "v is treatments; b is blocks; r is blocks containing each treatment; k is treatments per block; λ is blocks containing each pair.",
+        "These parameters describe treatment, block and pair counts."
+      ],
+      "scenario": {
+        "teaser": "A trial has five varieties and blocks of size three.",
+        "title": "Translate the design into symbols",
+        "body": [
+          "There are v=5 varieties, b=10 blocks, k=3 varieties per block, r=6 appearances per variety, and λ=3 blocks per pair.",
+          "λ refers to a pair, not a single variety."
+        ],
+        "q": "Which parameter counts blocks containing a fixed pair?",
+        "answer": "λ, the pair concurrence."
+      },
+      "ask": {
+        "q": "A treatment occurs in six blocks. Which parameter is six?",
+        "nudge": "Replication per treatment."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 7,
+      "title": "First identity: bk=vr",
+      "objective": "Derive the placement identity.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Count by blocks",
+          "body": "b blocks with k treatments each give bk placements."
+        },
+        {
+          "t": "formula",
+          "h": "Count by treatments",
+          "body": "v treatments appearing r times each give vr placements. Hence bk=vr."
+        },
+        {
+          "t": "assume",
+          "h": "Consistency check",
+          "body": "If totals differ, the parameters cannot describe a BIBD. This does not check pair balance."
+        }
+      ],
+      "ask": {
+        "q": "Why must bk equal vr?",
+        "nudge": "Count the 1s in N by columns and rows."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Find a missing replication",
+      "objective": "Use bk=vr.",
+      "problem": "A design has v=7, b=14 and k=3. Find r.",
+      "hints": [
+        "Use bk=vr.",
+        "Substitute."
+      ],
+      "solution": [
+        {
+          "say": "Count placements.",
+          "math": "14×3=7r, so 42=7r."
+        },
+        {
+          "say": "Solve.",
+          "math": "r=6."
+        }
+      ],
+      "answer": "Each treatment appears in six blocks.",
+      "check": "bk=42=vr.",
+      "ask": {
+        "q": "If b=8,k=3,v=4, find r.",
+        "nudge": "24=4r."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s4",
+      "mins": 8,
+      "title": "Second identity: λ(v−1)=r(k−1)",
+      "objective": "Derive pair concurrence identity.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Fix a treatment",
+          "body": "It appears in r blocks, with k−1 other treatments in each: r(k−1) co-occurrence counts."
+        },
+        {
+          "t": "formula",
+          "h": "Count its partners",
+          "body": "There are v−1 other treatments, each paired with it λ times: λ(v−1). Equate the counts."
+        },
+        {
+          "t": "assume",
+          "h": "Meaning of λ",
+          "body": "λ counts shared blocks for a pair; r counts blocks for one treatment."
+        }
+      ],
+      "ask": {
+        "q": "For v=7,r=6,k=3, find λ.",
+        "nudge": "6λ=6×2."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s5",
+      "mins": 8,
+      "title": "Solve λ and b",
+      "objective": "Use both identities.",
+      "problem": "Let v=6,r=5,k=3. Determine λ and b.",
+      "hints": [
+        "Use pair identity.",
+        "Then use placement identity."
+      ],
+      "solution": [
+        {
+          "say": "Find λ.",
+          "math": "5λ=5×2=10, so λ=2."
+        },
+        {
+          "say": "Find b.",
+          "math": "3b=6×5=30, so b=10."
+        }
+      ],
+      "answer": "λ=2 and b=10.",
+      "check": "λ(v−1)=10=r(k−1); bk=30=vr.",
+      "ask": {
+        "q": "For v=5,r=4,k=2, find λ.",
+        "nudge": "4λ=4."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s6",
+      "mins": 7,
+      "title": "Construct the incidence matrix",
+      "objective": "Interpret matrix orientation.",
+      "body": [
+        "Define N as a v×b binary matrix. Rows are treatments; columns are blocks. Nᵢⱼ=1 if treatment i occurs in block j.",
+        "Each row sums to r; each column sums to k. Total ones=vr=bk."
+      ],
+      "scenario": {
+        "teaser": "Four treatments are arranged in six pair-blocks.",
+        "title": "Read the incidence matrix",
+        "body": [
+          "Take blocks 12,13,14,23,24,34. Four rows represent treatments and six columns represent blocks.",
+          "Each row sums to three and each column to two."
+        ],
+        "q": "What are the dimensions of N?",
+        "answer": "4×6."
+      },
+      "ask": {
+        "q": "What does each column sum equal?",
+        "nudge": "One column represents one block."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s7",
+      "mins": 10,
+      "title": "Worked BIBD with four treatments",
+      "objective": "Verify incidence and pair balance.",
+      "problem": "Use blocks 12,13,14,23,24,34 for treatments 1–4.",
+      "hints": [
+        "Write one column per block.",
+        "Check row and column sums.",
+        "Check pair concurrence."
+      ],
+      "solution": [
+        {
+          "say": "Incidence matrix.",
+          "math": "N=[[1,1,1,0,0,0],[1,0,0,1,1,0],[0,1,0,1,0,1],[0,0,1,0,1,1]]."
+        },
+        {
+          "say": "Replication and block size.",
+          "math": "Every row sums to 3, so r=3; every column to 2, so k=2."
+        },
+        {
+          "say": "Pair concurrence.",
+          "math": "Every pair occurs once, so λ=1. NN′ has diagonal 3 and off-diagonal 1: NN′=2I₄+J₄."
+        },
+        {
+          "say": "Parameter identities.",
+          "math": "bk=12=vr and λ(v−1)=3=r(k−1)."
+        }
+      ],
+      "answer": "BIBD parameters: v=4,b=6,r=3,k=2,λ=1.",
+      "check": "There are 12 ones; each pair occurs once.",
+      "ask": {
+        "q": "What are diagonal and off-diagonal entries of NN′?",
+        "nudge": "Self-co-occurrence versus pair concurrence."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s8",
+      "mins": 7,
+      "title": "The identity NN′=(r−λ)I+λJ",
+      "objective": "Interpret matrix products.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Diagonal",
+          "body": "The (i,i) entry is a row's dot product with itself, equal to r."
+        },
+        {
+          "t": "formula",
+          "h": "Off diagonal",
+          "body": "For i≠j, the dot product counts blocks containing both treatments, equal to λ."
+        },
+        {
+          "t": "assume",
+          "h": "Matrix form",
+          "body": "A matrix with diagonal r and off-diagonal λ is (r−λ)I_v+λJ_v."
+        }
+      ],
+      "ask": {
+        "q": "What does an off-diagonal entry of NN′ represent?",
+        "nudge": "Common blocks for two distinct treatments."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s9",
+      "mins": 6,
+      "title": "Necessary conditions are not existence proofs",
+      "objective": "Distinguish feasibility from construction.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Necessary conditions",
+          "body": "A nontrivial BIBD must satisfy positive integer parameters, k<v, bk=vr and λ(v−1)=r(k−1)."
+        },
+        {
+          "t": "assume",
+          "h": "Do not overclaim",
+          "body": "Passing these equations does not automatically prove a design exists. A construction or existence theorem may be needed."
+        }
+      ],
+      "ask": {
+        "q": "Do the two identities alone prove that a BIBD exists?",
+        "nudge": "They are necessary arithmetic conditions."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 7,
+      "title": "Diagnose a parameter interpretation",
+      "objective": "Separate r from λ.",
+      "problem": "A student says λ=2 means each treatment appears in two blocks for v=7,b=14,r=6,k=3,λ=2.",
+      "hints": [
+        "Separate individual and pair counts.",
+        "Check both identities."
+      ],
+      "solution": [
+        {
+          "say": "Correct the interpretation.",
+          "math": "r=6 counts blocks containing one treatment; λ=2 counts blocks containing a pair."
+        },
+        {
+          "say": "Check feasibility.",
+          "math": "bk=42=vr; λ(v−1)=12=r(k−1)."
+        }
+      ],
+      "answer": "The parameters pass both arithmetic checks, but λ was misinterpreted.",
+      "check": "r is individual replication; λ is pair concurrence.",
+      "ask": {
+        "q": "Which parameter counts blocks containing one treatment?",
+        "nudge": "Use r."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s11",
+      "mins": 6,
+      "title": "Common BIBD examination traps",
+      "objective": "Avoid symbol swaps and false existence claims.",
+      "traps": [
+        {
+          "q": "If k=v, is the design incomplete?",
+          "a": "No; incomplete requires k<v."
+        },
+        {
+          "q": "Does λ count blocks containing one treatment?",
+          "a": "No; r does. λ is for a pair."
+        },
+        {
+          "q": "Do parameter identities prove existence?",
+          "a": "No; they are necessary, not sufficient."
+        },
+        {
+          "q": "If treatments are rows, what is N's size?",
+          "a": "v×b."
+        }
+      ]
+    },
+    {
+      "kind": "worked",
+      "id": "s12",
+      "mins": 7,
+      "title": "A second parameter calculation",
+      "objective": "Combine identities.",
+      "problem": "A candidate has v=9,k=3,r=4. Find λ and b.",
+      "hints": [
+        "Use pair identity.",
+        "Then use bk=vr."
+      ],
+      "solution": [
+        {
+          "say": "Find λ.",
+          "math": "8λ=4×2=8, so λ=1."
+        },
+        {
+          "say": "Find b.",
+          "math": "3b=9×4=36, so b=12."
+        }
+      ],
+      "answer": "λ=1 and b=12.",
+      "check": "8=8 and 36=36.",
+      "ask": {
+        "q": "For v=8,r=7,k=4, find b.",
+        "nudge": "4b=56."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 5,
+      "title": "BIBD mastery checkpoint",
+      "objective": "Consolidate parameters and matrix identities.",
+      "body": [
+        "Remember v treatments, b blocks, r replications, k block size and λ pair concurrence.",
+        "Check bk=vr and λ(v−1)=r(k−1). For treatment-row N, row sums are r, column sums k and NN′=(r−λ)I+λJ. Feasibility is not proof of existence."
+      ],
+      "setId": "design_t4_mastery"
+    }
+  ]
+}
