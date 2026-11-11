@@ -1,0 +1,719 @@
+{
+ "id": "nonparamt1",
+ "topicId": "nonparam-t1",
+ "moduleId": "nonparam",
+ "title": "Mann–Whitney U test",
+ "breadcrumb": "Non-parametric methods → Two independent samples → Mann–Whitney U",
+ "engine": "B",
+ "engineName": "Pool observations, rank together, compare rank sums.",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 96,
+ "objectives": [
+  "Choose Mann–Whitney U for two independent ordinal-or-higher samples.",
+  "Pool observations and assign average ranks to ties.",
+  "Calculate both U statistics from pooled rank sums and verify their relationship.",
+  "State the null mean and variance, including the tie correction.",
+  "Interpret rejection without automatically claiming a median difference."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Independent samples",
+   "why": "The groups contain different, unrelated observational units."
+  },
+  {
+   "id": "p2",
+   "name": "Ordering and ranks",
+   "why": "The procedure replaces observations with positions in a pooled ordering."
+  },
+  {
+   "id": "p3",
+   "name": "Mean and variance",
+   "why": "Large-sample inference standardises U using its null moments."
+  }
+ ],
+ "traps": [
+  "Mann–Whitney is for independent groups; signed-rank is for paired observations.",
+  "Pool observations before ranking; do not rank groups separately.",
+  "U is not the rank sum R; subtract n(n+1)/2.",
+  "Tied observations receive average occupied ranks.",
+  "U₁+U₂=n₁n₂; this is not either individual U.",
+  "Rejection compares distributions generally; it is not always a median test."
+ ],
+ "howto": "First pass: complete the pooled-rank worked example and both guided scenes. Revision: use the formulas, traps and revision sheet. Scope is two independent groups; paired observations belong to signed-rank/sign test, and three or more independent groups belong to Kruskal–Wallis.",
+ "revision": {
+  "sheet": [
+   "Design: two independent samples; response at least ordinal; observations independent.",
+   "Pool N=n₁+n₂ observations and rank the combined list.",
+   "A tie occupying positions r,…,s receives average rank (r+s)/2.",
+   "R₁+R₂=N(N+1)/2.",
+   "U₁=R₁−n₁(n₁+1)/2; U₂=R₂−n₂(n₂+1)/2.",
+   "U₁+U₂=n₁n₂; conventional two-sided statistic is min(U₁,U₂).",
+   "E(U)=n₁n₂/2; no-tie Var(U)=n₁n₂(N+1)/12.",
+   "Tie correction factor: 1−Σ(t³−t)/(N³−N).",
+   "Z=(U−E(U))/√Var(U), with continuity correction if specified.",
+   "Median/location interpretation needs similarly shaped distributions."
+  ],
+  "cards": [
+   [
+    "Design",
+    "Two independent samples"
+   ],
+   [
+    "Minimum scale",
+    "Ordinal"
+   ],
+   [
+    "Ties",
+    "Average occupied ranks"
+   ],
+   [
+    "U from R",
+    "U₁=R₁−n₁(n₁+1)/2"
+   ],
+   [
+    "U sum",
+    "U₁+U₂=n₁n₂"
+   ],
+   [
+    "Null mean",
+    "n₁n₂/2"
+   ],
+   [
+    "No-tie variance",
+    "n₁n₂(N+1)/12"
+   ],
+   [
+    "Interpretation",
+    "Distributional comparison; median shift needs common shape"
+   ]
+  ],
+  "tricks": [
+   "Pool first, rank second, split rank sums last.",
+   "Check U₁+U₂=n₁n₂.",
+   "Check pooled rank sum N(N+1)/2."
+  ],
+  "shortcuts": [
+   "Σ ranks 1…N=N(N+1)/2.",
+   "E(U)=n₁n₂/2.",
+   "Var(U)=n₁n₂(N+1)/12 before tie correction."
+  ],
+  "remember": [
+   "Independent groups → Mann–Whitney; paired measurements → signed-rank/sign test.",
+   "Do not interpret every rejection as a median difference."
+  ]
+ },
+ "refs": [
+  {
+   "title": "Nonparametric Statistical Methods",
+   "where": "Two-sample location problems",
+   "site": "Hollander, Wolfe and Chicken",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Rank-sum theory, ties and assumptions."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+   "where": "Nonparametric methods",
+   "site": "NIST",
+   "url": "https://www.itl.nist.gov/div898/handbook/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Applied context for distribution-free procedures."
+  },
+  {
+   "title": "Penn State STAT 415",
+   "where": "Nonparametric tests",
+   "site": "Penn State",
+   "url": "https://online.stat.psu.edu/stat415/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Accessible explanation of rank-based inference."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints."
+ },
+ "provenance": "June 2026 Paper 2 Q42 anchor: two independent groups of 15 executives. Full 30 scores are ranked together using average ranks for ties. Exact-rank computation gives R_ES=152.5, R_LC=312.5, U_ES=32.5, U_LC=192.5 and min(U)=32.5. Checks: pooled rank total 465 and U sum 225. Verification independently sorts and assigns rational average ranks. Null mean, no-tie variance and tie correction are asserted. Candidate response details are excluded. Q33/Q42 variants cover test selection, U sum, null moments, ties, rank total, paired-test contrast, Kruskal–Wallis contrast, rank-sum conversion and ordinal scale.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Start with the design",
+   "objective": "Identify the sample structure before choosing a test.",
+   "ask": {
+    "q": "Two different classes use two teaching methods. Independent or paired?",
+    "nudge": "Does any student appear in both groups?"
+   },
+   "body": [
+    "A test is chosen from how observations were collected. First decide whether groups are independent or whether each observation is linked to another. Then check whether the response has a meaningful order.",
+    "Mann–Whitney U compares two independent groups using the ordering of all observations. It does not require normal populations, but it does require independent observations and an ordinal-or-higher outcome."
+   ],
+   "items": [
+    {
+     "ask": "Two separate classes each use one method. What is the design?",
+     "recall": "Two independent groups, if no student appears in both.",
+     "refresh": [
+      "Independent groups contain different units.",
+      "Paired data contain a one-to-one link, such as the same person measured twice."
+     ]
+    },
+    {
+     "ask": "What information does a rank preserve?",
+     "recall": "Order, not numerical distance.",
+     "refresh": [
+      "Sort observations from smallest to largest.",
+      "Replace each value by its position."
+     ]
+    },
+    {
+     "ask": "Can nominal categories be ranked meaningfully?",
+     "recall": "No. Nominal categories have no natural order.",
+     "refresh": [
+      "Ordinal categories have a meaningful order.",
+      "Mann–Whitney needs at least ordinal information."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "Compare ordering rather than averages",
+   "objective": "Explain why pooled ranks can compare two groups.",
+   "ask": {
+    "q": "If group 1 tends to have larger observations, where will its ranks lie?",
+    "nudge": "Think about the combined ordered list."
+   },
+   "body": [
+    "A few long waiting times can dominate an average. A rank procedure asks whether observations from one group tend to appear higher in the combined ordering than observations from the other group."
+   ],
+   "scenario": {
+    "teaser": "Two independent groups receive different teaching methods.",
+    "title": "An executive training comparison",
+    "body": [
+     "A training manager randomly assigns executives to two teaching methods. Each executive contributes one final score, and no executive appears in both groups. The samples are independent. Scores may be skewed and a few unusually high values could distort a mean-based comparison. A rank procedure uses the ordering of all scores without requiring normal populations. Independence remains essential, and the result must be interpreted with attention to the shapes of the two distributions."
+    ],
+    "q": "What feature makes a two-independent-sample rank test relevant?",
+    "answer": "Different executives appear in the two groups, so the samples are independent."
+   }
+  },
+  {
+   "kind": "explore",
+   "id": "s2",
+   "mins": 6,
+   "title": "See the pooled ranking",
+   "objective": "Assign pooled ranks and handle a tie.",
+   "ask": {
+    "q": "What rank do both tied values 8 receive?",
+    "nudge": "Average positions 3 and 4."
+   },
+   "viz": {
+    "type": "rank-null",
+    "caption": "Pooled ranks are assigned across both groups; tied observations share the average occupied rank."
+   },
+   "body": [
+    "Group 1 values are 4, 8 and 10. Group 2 values are 5, 8 and 12. Pool them: 4, 5, 8, 8, 10, 12. Positions are 1, 2, 3, 4, 5, 6. The tied values occupy positions 3 and 4, so each receives rank 3.5.",
+    "Ranking each group separately would give each group ranks 1, 2 and 3 regardless of how high its values were. That destroys cross-group ordering."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 9,
+   "title": "The rank-sum and U formulas",
+   "objective": "Derive U from a group's pooled rank sum.",
+   "ask": {
+    "q": "Why does U₁+U₂ equal n₁n₂?",
+    "nudge": "Use the total rank sum and subtract both minimum rank sums."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Notation",
+     "body": "Let n₁ and n₂ be sample sizes, N=n₁+n₂, and R₁ and R₂ the pooled rank sums."
+    },
+    {
+     "t": "formula",
+     "h": "Convert rank sums to U",
+     "body": "U₁=R₁−n₁(n₁+1)/2; U₂=R₂−n₂(n₂+1)/2."
+    },
+    {
+     "t": "step",
+     "h": "Why subtract the first ranks?",
+     "body": "The smallest possible rank sum for n₁ observations is 1+2+…+n₁=n₁(n₁+1)/2."
+    },
+    {
+     "t": "formula",
+     "h": "Fixed sum",
+     "body": "U₁+U₂=n₁n₂. The conventional two-sided statistic is min(U₁,U₂); retain direction separately."
+    }
+   ],
+   "table": {
+    "caption": "Symbols",
+    "head": [
+     "Symbol",
+     "Meaning"
+    ],
+    "rows": [
+     [
+      "N",
+      "n₁+n₂"
+     ],
+     [
+      "R₁, R₂",
+      "Pooled rank sums"
+     ],
+     [
+      "U₁, U₂",
+      "Group-specific U statistics"
+     ],
+     [
+      "U",
+      "min(U₁,U₂) for conventional two-sided test"
+     ]
+    ]
+   },
+   "flow": {
+    "title": "Mann–Whitney workflow",
+    "alt": "Check design; pool observations; rank with average ranks for ties; calculate rank sums; calculate both U statistics; infer and interpret.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Check design",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Pool observations",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 1,
+      "label": "Assign pooled ranks",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 1,
+      "label": "Find rank sums",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 4,
+      "c": 1,
+      "label": "Calculate U values",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 5,
+      "c": 1,
+      "label": "Infer and interpret",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ],
+    "note": "Check the pooled rank total and U₁+U₂=n₁n₂."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 10,
+   "title": "June 2026 Q42: the full calculation",
+   "objective": "Calculate the Mann–Whitney statistic from the actual exam samples.",
+   "ask": {
+    "q": "After calculating rank sums, which checks should you make?",
+    "nudge": "Check pooled rank total and the sum of the two U values."
+   },
+   "problem": "June 2026 Paper 2 Q42: ES scores 65, 57, 74, 43, 39, 88, 62, 69, 70, 72, 59, 60, 80, 83, 50. LC scores 85, 87, 92, 98, 90, 88, 75, 72, 60, 93, 88, 89, 96, 73, 62. Calculate U.",
+   "steps": [
+    {
+     "say": "Pool all 30 observations and rank them together.",
+     "math": "N=15+15=30",
+     "why": "All observations share one ordered list. Tied scores receive average pooled ranks."
+    },
+    {
+     "say": "Add the pooled ranks for ES.",
+     "math": "R_ES=152.5",
+     "why": "The rank sum is calculated after average-rank assignment for tied scores."
+    },
+    {
+     "say": "Convert the ES rank sum to U.",
+     "math": "U_ES=152.5−15(16)/2=152.5−120=32.5",
+     "why": "The first 15 ranks sum to 15×16/2=120."
+    },
+    {
+     "say": "Use the fixed-sum identity.",
+     "math": "U_LC=15×15−32.5=225−32.5=192.5",
+     "why": "U_ES+U_LC must equal n_ES n_LC=225."
+    },
+    {
+     "say": "Report the conventional two-sided statistic.",
+     "math": "U=min(32.5,192.5)=32.5",
+     "why": "This matches the 32.5 option in June 2026 Q42. ES has the lower rank sum."
+    }
+   ],
+   "after": "Checks: pooled ranks sum to 30×31/2=465, and U values sum to 225."
+  },
+  {
+   "kind": "recall",
+   "id": "s5",
+   "mins": 3,
+   "title": "Pause and recall",
+   "objective": "Retrieve the core relationships.",
+   "intro": "Answer each before revealing it.",
+   "items": [
+    {
+     "q": "Minimum rank sum for n observations?",
+     "a": "n(n+1)/2."
+    },
+    {
+     "q": "What is U₁+U₂?",
+     "a": "n₁n₂."
+    },
+    {
+     "q": "How are ties ranked?",
+     "a": "Average of occupied positions."
+    },
+    {
+     "q": "Conventional two-sided U?",
+     "a": "The smaller of U₁ and U₂."
+    },
+    {
+     "q": "Minimum measurement scale?",
+     "a": "Ordinal."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s6",
+   "mins": 8,
+   "title": "Complete a rank-sum calculation",
+   "objective": "Fill the missing steps in a U calculation.",
+   "problem": "A group of size 4 has pooled rank sum R₁=30. Find U₁.",
+   "steps": [
+    {
+     "say": "Write the conversion formula.",
+     "blank": {
+      "prompt": "U₁=R₁−…",
+      "answer": "n₁(n₁+1)/2",
+      "accept": [
+       "4(5)/2"
+      ],
+      "hint": "Subtract the sum of the first four positive integers."
+     },
+     "why": "This removes the group's minimum possible rank sum."
+    },
+    {
+     "say": "Substitute n₁=4.",
+     "blank": {
+      "prompt": "4×5/2 equals …",
+      "answer": "10",
+      "accept": [
+       "10.0"
+      ],
+      "hint": "Multiply 4 and 5, then divide by 2."
+     },
+     "why": "The first four ranks sum to 10."
+    },
+    {
+     "say": "Finish.",
+     "blank": {
+      "prompt": "U₁=30−10=…",
+      "answer": "20",
+      "accept": [
+       "20.0"
+      ],
+      "hint": "Subtract 10 from 30."
+     },
+     "why": "The result is U₁, not the rank sum."
+    }
+   ],
+   "after": "Keep R₁ and U₁ distinct: subtract the minimum rank sum."
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Null distribution and ties",
+   "objective": "State the null moments and tie correction.",
+   "ask": {
+    "q": "Which quantity is adjusted by the tie correction?",
+    "nudge": "The correction changes the variance, not the null mean."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Null mean",
+     "body": "E(U)=n₁n₂/2."
+    },
+    {
+     "t": "formula",
+     "h": "Variance without ties",
+     "body": "Var(U)=n₁n₂(N+1)/12."
+    },
+    {
+     "t": "formula",
+     "h": "Variance with ties",
+     "body": "Var(U)=[n₁n₂/12]×[N+1−Σ(t³−t)/(N(N−1))], where t runs over tied-group sizes."
+    },
+    {
+     "t": "step",
+     "h": "Large-sample standardisation",
+     "body": "Z=(U−E(U))/√Var(U). A continuity correction may subtract 0.5 from |U−E(U)| before division; follow the question's convention."
+    },
+    {
+     "t": "def",
+     "h": "Interpretation",
+     "body": "The general null compares the two distributions. A pure location or median interpretation requires similarly shaped distributions differing only by a location shift."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Guided calculation with unequal sizes",
+   "objective": "Use the fixed-sum identity to find the second U.",
+   "problem": "Two independent groups have n₁=8 and n₂=7. A calculation gives U₁=42. Find U₂ and the smaller U.",
+   "hints": [
+    "Start with U₁+U₂=n₁n₂.",
+    "Calculate 8×7.",
+    "Subtract U₁ and compare."
+   ],
+   "answer": "U₁+U₂=56, so U₂=14 and the smaller U is 14.",
+   "check": "The two values add to 56, equal to n₁n₂.",
+   "scenario": {
+    "teaser": "An ordinal outcome in two independent treatment groups.",
+    "title": "A clinical comparison",
+    "body": [
+     "A researcher allocates different patients to two independent treatment groups and records an ordinal symptom score after treatment. Each patient contributes one score and no patient appears in both groups. The response has a meaningful order, but equal numerical gaps between categories are not guaranteed. A rank-sum procedure is a reasonable candidate for a distributional comparison. If the same patients were measured before and after treatment, the data would be paired and Mann–Whitney would not respect that pairing."
+    ],
+    "q": "What design change would make Mann–Whitney inappropriate?",
+    "answer": "Using the same patients for both measurements would make the data paired."
+   },
+   "solution": [
+    {
+     "say": "Find the fixed total.",
+     "math": "n₁n₂=8×7=56",
+     "why": "The two U statistics must sum to this value."
+    },
+    {
+     "say": "Find U₂.",
+     "math": "U₂=56−42=14",
+     "why": "Subtract U₁ from the fixed total."
+    },
+    {
+     "say": "Select the smaller statistic.",
+     "math": "min(42,14)=14",
+     "why": "The conventional two-sided statistic is 14."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 6,
+   "title": "Six statements to challenge",
+   "objective": "Detect common design and calculation errors.",
+   "intro": "Decide true or false on all six before revealing.",
+   "items": [
+    {
+     "claim": "Mann–Whitney is designed for two independent samples.",
+     "tf": true,
+     "why": "True. Paired samples need a paired procedure."
+    },
+    {
+     "claim": "Each sample should be ranked separately.",
+     "tf": false,
+     "why": "False. Pool first so ranks preserve cross-group ordering."
+    },
+    {
+     "claim": "The two U statistics add to n₁n₂.",
+     "tf": true,
+     "why": "True. This is a useful arithmetic check."
+    },
+    {
+     "claim": "Tied observations should receive arbitrary distinct ranks.",
+     "tf": false,
+     "why": "False. Assign the average of occupied positions."
+    },
+    {
+     "claim": "The test always tests equality of medians regardless of distribution shape.",
+     "tf": false,
+     "why": "False. It compares distributions; a median interpretation needs common-shape assumptions."
+    },
+    {
+     "claim": "The data must be at least ordinal.",
+     "tf": true,
+     "why": "True. The ordering must be meaningful."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 8,
+   "title": "Transfer: choose the test first",
+   "objective": "Select the correct rank procedure from a paired design.",
+   "problem": "A company measures satisfaction for the same 12 employees before and after training. The response is an ordered five-category rating. Which procedure is appropriate, and why is Mann–Whitney not?",
+   "hints": [
+    "Identify whether the same people appear twice.",
+    "A paired rank test uses within-person differences.",
+    "Mann–Whitney assumes independent groups."
+   ],
+   "answer": "Wilcoxon signed-rank is a paired rank procedure when assumptions are appropriate; the sign test is a more assumption-light alternative. Mann–Whitney ignores the pairing.",
+   "check": "The cue is the same 12 employees measured twice.",
+   "solution": [
+    {
+     "say": "Identify the unit.",
+     "math": "12 employees, each measured twice",
+     "why": "The two observations from one employee are linked."
+    },
+    {
+     "say": "Choose a paired method.",
+     "math": "Within-person differences → signed-rank or sign test",
+     "why": "The analysis must preserve pairing."
+    },
+    {
+     "say": "Reject the independent-sample method.",
+     "math": "Mann–Whitney requires independent groups",
+     "why": "Treating paired observations as independent discards the design."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s11",
+   "mins": 6,
+   "title": "Assumptions and interpretation",
+   "objective": "Interpret rejection with appropriate qualifications.",
+   "ask": {
+    "q": "Why is 'the medians differ' too strong as a universal interpretation?",
+    "nudge": "Two distributions can have different spreads but the same median."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Core conditions",
+     "body": "Independent observations within and across groups; an outcome that can be ordered; and a sampling or randomisation design supporting the chosen reference distribution."
+    },
+    {
+     "t": "step",
+     "h": "What rejection supports",
+     "body": "Evidence that the two population distributions differ under the null model. The difference may involve location, spread or other distributional features."
+    },
+    {
+     "t": "step",
+     "h": "When a median statement is justified",
+     "body": "If the distributions have the same shape and spread and differ only by a location shift, rejection supports a location and median difference. State this condition explicitly."
+    }
+   ]
+  },
+  {
+   "kind": "recall",
+   "id": "s12",
+   "mins": 3,
+   "title": "Second recall",
+   "objective": "Consolidate formulas and design cues.",
+   "intro": "Answer, then reveal.",
+   "items": [
+    {
+     "q": "Which test for two independent groups?",
+     "a": "Mann–Whitney U."
+    },
+    {
+     "q": "How are tied pooled ranks assigned?",
+     "a": "Average ranks."
+    },
+    {
+     "q": "What is E(U) under H₀?",
+     "a": "n₁n₂/2."
+    },
+    {
+     "q": "No-tie variance?",
+     "a": "n₁n₂(N+1)/12."
+    },
+    {
+     "q": "What does U₁+U₂ equal?",
+     "a": "n₁n₂."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "What you should now be able to do",
+   "objective": "Perform and interpret a two-independent-sample rank test.",
+   "body": [
+    "Choose Mann–Whitney from the independent-sample design and ordinal measurement scale.",
+    "Pool observations and assign average ranks to ties.",
+    "Calculate R₁, R₂, U₁ and U₂, then verify both totals.",
+    "Use the null mean, variance and tie correction for large-sample inference.",
+    "Interpret rejection as a distributional difference; claim a median shift only with common-shape assumptions."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 4,
+   "title": "Mastery test",
+   "objective": "Demonstrate the skill independently on unseen questions.",
+   "setId": "nonparam_t1_mastery"
+  }
+ ]
+}
