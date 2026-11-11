@@ -180,19 +180,27 @@
       ],
       "items": [
         {
-          "ask": "What must be true of data-frame columns?",
-          "recall": "They must have compatible equal lengths.",
+          "ask": "What is a data frame?",
+          "recall": "A rectangular object whose columns have compatible equal lengths.",
           "refresh": [
-            "A data frame is rectangular, so each column has one value per row.",
-            "Incompatible column lengths cause construction to fail."
+            "A data frame is a list-like rectangular structure in which each variable is stored as a column. Each column has one entry per row, although different columns can have different data types.",
+            "Use dim(), nrow(), ncol(), names() and str() to inspect the object before selecting observations. This confirms the dimensions, variables and storage types used in subsequent expressions."
           ]
         },
         {
-          "ask": "Which function gives row and column counts together?",
-          "recall": "dim().",
+          "ask": "In df[i,j], what is indexed first?",
+          "recall": "Rows are indexed first, then columns.",
           "refresh": [
-            "dim(df) returns the number of rows followed by the number of columns.",
-            "nrow() and ncol() return each dimension separately."
+            "The first subscript in df[i,j] selects rows and the second selects columns. A blank row or column position means that all entries in that dimension are retained.",
+            "For a logical filter, construct the condition from a column and place it in the row position, such as df[df$score>50,]. This returns the observations satisfying the condition."
+          ]
+        },
+        {
+          "ask": "Which function imports a comma-separated file?",
+          "recall": "read.csv().",
+          "refresh": [
+            "read.csv() reads a comma-separated values file and returns a data frame by default. It is a convenient choice when the first line contains variable names.",
+            "The corresponding export function is write.csv(). When exporting a data frame for reuse, consider row.names=FALSE so that row numbers are not written as an additional data column."
           ]
         }
       ],
@@ -216,7 +224,8 @@
         "title": "A tutor selects qualifying students",
         "body": [
           "A tutor has a data frame with name and score columns. To select students scoring above 50, the row condition is applied to the score column.",
-          "The result contains complete rows for qualifying students, not just the score values."
+          "The result contains complete rows for qualifying students, not just the score values.",
+          " Before sharing the result, the analyst should inspect the dimensions and variable names, check that the filter selects the intended records, and label the graph so its variables and units are clear. The chosen plot should answer the analytical question rather than simply display whatever data structure is easiest to pass to a plotting function."
         ],
         "q": "Which expression selects rows with score above 50?",
         "answer": "df[df$score>50,]."
@@ -409,7 +418,24 @@
       "ask": {
         "q": "What does read.table(...,header=TRUE) indicate?",
         "nudge": "The first row contains column names."
-      }
+      },
+      "solution": [
+        {
+          "say": "Inspect the dimensions.",
+          "math": "There are 3 rows and 2 columns.",
+          "why": "The id and score vectors each contain three entries."
+        },
+        {
+          "say": "Evaluate the row condition.",
+          "math": "score > 50 gives FALSE, TRUE, TRUE.",
+          "why": "Only the second and third scores exceed 50."
+        },
+        {
+          "say": "Read the qualifying ids.",
+          "math": "The selected ids are 2 and 3.",
+          "why": "The logical condition selects complete rows two and three."
+        }
+      ]
     },
     {
       "kind": "theory",
@@ -458,7 +484,8 @@
         "title": "An analyst studies age and income",
         "body": [
           "An analyst wants to examine whether income changes with age. Both variables are numeric, so paired observations should be displayed in a scatter plot.",
-          "A meaningful title and axis labels make the graph interpretable."
+          "A meaningful title and axis labels make the graph interpretable.",
+          " Before sharing the result, the analyst should inspect the dimensions and variable names, check that the filter selects the intended records, and label the graph so its variables and units are clear. The chosen plot should answer the analytical question rather than simply display whatever data structure is easiest to pass to a plotting function."
         ],
         "q": "Which plot function is suitable?",
         "answer": "plot(age,income)."
@@ -466,7 +493,24 @@
       "ask": {
         "q": "Which argument sets the y-axis label?",
         "nudge": "ylab."
-      }
+      },
+      "solution": [
+        {
+          "say": "Identify the variable types.",
+          "math": "age and income are both numeric vectors.",
+          "why": "The question asks about paired observations on two quantitative variables."
+        },
+        {
+          "say": "Choose the plot.",
+          "math": "Use plot(age, income).",
+          "why": "The default plot for two numeric vectors is a scatter plot."
+        },
+        {
+          "say": "Add labels for interpretation.",
+          "math": "Set main, xlab and ylab.",
+          "why": "A title and axis labels make the variables and relationship clear."
+        }
+      ]
     },
     {
       "kind": "trapcheck",
