@@ -19,4 +19,7 @@ assert Counter(x["diff"] for x in Q)=={"easy":6,"moderate":10,"hard":4}
 assert Counter(x["format"] for x in Q)=={"single":12,"numeric":5,"multi":3}
 assert Counter(x["answer"] for x in Q)=={"A":5,"B":5,"C":5,"D":5}
 assert all(len(x.get("statements",[]))==4 and set(x.get("verdicts",{}))=={"A","B","C","D"} for x in Q if x["format"]=="multi")
+# Ensure multi-statement assessment metadata is specific to its displayed stem.
+assert all("stated incorrect" not in s.lower() for q in P["items"] for s in q.get("statements", []))
+assert all(len(v.get("why", "")) >= 20 for q in P["items"] if q["format"] == "multi" for v in q["verdicts"].values())
 print("T9 renewal-process exact arithmetic and pool checks: PASS")
