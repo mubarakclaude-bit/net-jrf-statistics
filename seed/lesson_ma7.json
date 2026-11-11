@@ -308,7 +308,84 @@
      "h": "Order of work",
      "body": "First replace infinity by R, then evaluate the proper integral, and only then take R→∞. A finite antiderivative expression at R is not yet the improper integral's value."
     }
-   ]
+   ],
+   "flow": {
+    "title": "Proper or improper integral?",
+    "alt": "Decision flow for evaluating definite and improper integrals",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Identify interval and integrand",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Finite interval and bounded?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Use proper Riemann integral and FTC",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Write a limit at infinity or singularity",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 2,
+      "label": "Split at interior singularities",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "Evaluate all required one-sided limits",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "yes"
+     },
+     {
+      "id": "x",
+      "from": "b",
+      "to": "d",
+      "label": "no"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     },
+     {
+      "from": "c",
+      "to": "f"
+     }
+    ]
+   }
   },
   {
    "kind": "guided",
