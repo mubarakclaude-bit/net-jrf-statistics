@@ -1,0 +1,664 @@
+{
+  "id": "probabilityt4",
+  "topicId": "probability-t4",
+  "moduleId": "probability",
+  "title": "MGFs, Cumulants and Central Moments",
+  "breadcrumb": "Probability → MGFs, cumulants and central moments",
+  "engine": "B",
+  "engineName": "Probability — moments and generating functions",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 100,
+  "objectives": [
+    "Define an MGF and identify its interval of existence around zero.",
+    "Obtain raw moments by differentiating the MGF at zero.",
+    "Use products and substitutions for independent sums and affine transformations.",
+    "Derive cumulants from the log-MGF and use additivity.",
+    "Convert raw moments, central moments and cumulants correctly."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Expectation and variance",
+      "why": "Interpret derivatives as expectations."
+    },
+    {
+      "id": "p2",
+      "name": "Differentiation and Taylor series",
+      "why": "Differentiate generating functions."
+    },
+    {
+      "id": "p3",
+      "name": "Independence and sums of random variables",
+      "why": "Apply product and additivity rules."
+    }
+  ],
+  "traps": [
+    "M''(0) is E(X²), not Var(X).",
+    "An MGF must exist near zero for the usual uniqueness result.",
+    "Independent MGFs multiply; cumulant functions add.",
+    "κ₄=μ₄−3σ⁴, not μ₄.",
+    "For aX+b, κ_r=aʳκ_r(X) for r≥2; translation changes only κ₁.",
+    "The lognormal has no finite MGF for positive t."
+  ],
+  "revision": {
+    "sheet": [
+      "M(t)=E(e^{tX}); check existence near zero.",
+      "M^(r)(0)=E(X^r), raw moments.",
+      "K(t)=log M(t); κ_r=K^(r)(0).",
+      "Independent sums: MGFs multiply, cumulants add.",
+      "κ₁=μ; κ₂=σ²; κ₃=μ₃; κ₄=μ₄−3σ⁴.",
+      "μ₄=κ₄+3κ₂².",
+      "M_{aX+b}(t)=e^{bt}M_X(at).",
+      "Poisson cumulants all equal λ."
+    ],
+    "cards": [
+      [
+        "MGF",
+        "E(e^{tX})"
+      ],
+      [
+        "Raw moment",
+        "M^(r)(0)=E(X^r)"
+      ],
+      [
+        "Cumulant function",
+        "K=log M"
+      ],
+      [
+        "Additivity",
+        "Independent cumulants add"
+      ],
+      [
+        "Second cumulant",
+        "Variance"
+      ],
+      [
+        "Fourth cumulant",
+        "μ₄−3σ⁴"
+      ]
+    ],
+    "tricks": [
+      "M''(0) is not variance.",
+      "Take log M before differentiating cumulants.",
+      "Check the MGF domain."
+    ],
+    "shortcuts": [
+      "Poisson cumulants all equal λ.",
+      "Add independent cumulants order by order.",
+      "Normal cumulants above order two vanish."
+    ],
+    "remember": [
+      "Raw moments are about zero; central moments are about μ.",
+      "The fourth cumulant is not the fourth central moment."
+    ]
+  },
+  "howto": "Differentiate M for raw moments, but take its logarithm first for cumulants. Work the Poisson and binomial examples, then compare the fourth cumulant with the fourth central moment. Check the MGF existence condition.",
+  "refs": [
+    {
+      "title": "Statistical Inference",
+      "where": "Moments and generating functions",
+      "site": "Casella and Berger",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "MGFs, moments and cumulants."
+    },
+    {
+      "title": "Introduction to Mathematical Statistics",
+      "where": "Moments and cumulants",
+      "site": "Hogg, McKean and Craig",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Derivations for standard distributions."
+    },
+    {
+      "title": "A First Course in Probability",
+      "where": "Moment generating functions",
+      "site": "Sheldon Ross",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Worked MGF examples."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Proposed platform settings, not an NTA rule."
+  },
+  "provenance": "Original syllabus-aligned lesson authored 12 November 2026. Poisson, binomial, exponential and normal anchors were derived by differentiating the relevant log-MGFs. No PYQ attribution is claimed.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Before the lesson — four foundations",
+      "objective": "Retrieve expectation, variance and differentiation.",
+      "body": [
+        "An MGF stores raw moments; the cumulant function simplifies independent sums.",
+        "The distinction matters: M''(0) is a raw second moment, not a variance."
+      ],
+      "ask": {
+        "q": "What does M''(0) give?",
+        "nudge": "It is not yet centred at the mean."
+      },
+      "items": [
+        {
+          "ask": "What is E(X)?",
+          "recall": "The first raw moment.",
+          "refresh": [
+            "It is M'(0) when the MGF exists."
+          ]
+        },
+        {
+          "ask": "Define variance.",
+          "recall": "E(X²)−[E(X)]².",
+          "refresh": [
+            "Subtract the squared mean from the raw second moment."
+          ]
+        },
+        {
+          "ask": "What is the MGF of an independent sum?",
+          "recall": "The product of individual MGFs.",
+          "refresh": [
+            "Independence permits factorisation."
+          ]
+        },
+        {
+          "ask": "What is K(t)?",
+          "recall": "log M(t), the cumulant generating function.",
+          "refresh": [
+            "Its derivatives at zero are cumulants."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Why the logarithm helps",
+      "objective": "See why cumulants add.",
+      "body": [
+        "An MGF stores moments in one function. Repeated differentiation can become algebraically messy.",
+        "For independent variables, the MGF of a sum is a product. Taking logarithms turns that product into a sum.",
+        "At orders three and four, central moments and cumulants no longer coincide."
+      ],
+      "scenario": {
+        "teaser": "A risk analyst needs the skewness of a total count from independent portfolios.",
+        "title": "Cumulants turn convolution into addition",
+        "body": [
+          "Two independent claim-count portfolios are Poisson with rates 2 and 3 per month.",
+          "Their MGFs multiply to exp{2(eᵗ−1)}exp{3(eᵗ−1)}=exp{5(eᵗ−1)}, the MGF of Poisson(5).",
+          "The cumulant functions add; every cumulant of the total is 5.",
+          "This avoids a convolution and works at every cumulant order."
+        ],
+        "q": "Why are cumulants easier for independent sums?",
+        "answer": "The log-MGF turns products into sums, so cumulants add."
+      },
+      "ask": {
+        "q": "Which operation converts products of independent MGFs into addition?",
+        "nudge": "It is the operation that turns multiplication into addition."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 10,
+      "title": "MGFs and raw moments",
+      "objective": "Define MGFs and obtain moments.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Definition and existence",
+          "body": "M_X(t)=E(e^{tX}). If finite on an open interval containing zero, derivatives at zero give raw moments and the MGF uniquely determines the law. The lognormal has no finite MGF for positive t."
+        },
+        {
+          "t": "def",
+          "h": "Raw moments",
+          "body": "M'(0)=E(X), M''(0)=E(X²), M'''(0)=E(X³). These are moments about zero, not about the mean."
+        },
+        {
+          "t": "step",
+          "h": "Independent sums",
+          "body": "For independent X,Y, M_{X+Y}=M_XM_Y. For aX+b, M_{aX+b}(t)=e^{bt}M_X(at)."
+        },
+        {
+          "t": "step",
+          "h": "Cumulants",
+          "body": "K(t)=log M(t); κ_r=K^(r)(0). For independent sums, K_{X+Y}=K_X+K_Y, so cumulants add."
+        },
+        {
+          "t": "step",
+          "h": "First four cumulants",
+          "body": "κ₁=μ; κ₂=σ²; κ₃=μ₃; κ₄=μ₄−3σ⁴. Thus μ₄=κ₄+3κ₂²."
+        },
+        {
+          "t": "step",
+          "h": "Standard families",
+          "body": "Poisson(λ): K=λ(eᵗ−1), every cumulant λ. Binomial(n,p): κ₃=np(1−p)(1−2p). Exponential(rate λ): M(t)=λ/(λ−t), t<λ."
+        }
+      ],
+      "table": {
+        "caption": "MGFs and first cumulants",
+        "head": [
+          "Law",
+          "MGF",
+          "κ₁",
+          "κ₂"
+        ],
+        "rows": [
+          [
+            "Bernoulli(p)",
+            "1−p+peᵗ",
+            "p",
+            "p(1−p)"
+          ],
+          [
+            "Binomial(n,p)",
+            "(1−p+peᵗ)ⁿ",
+            "np",
+            "np(1−p)"
+          ],
+          [
+            "Poisson(λ)",
+            "exp{λ(eᵗ−1)}",
+            "λ",
+            "λ"
+          ],
+          [
+            "Exponential(rate λ)",
+            "λ/(λ−t)",
+            "1/λ",
+            "1/λ²"
+          ],
+          [
+            "Normal(μ,σ²)",
+            "exp(μt+σ²t²/2)",
+            "μ",
+            "σ²"
+          ]
+        ]
+      },
+      "flow": {
+        "title": "From MGF to central moments",
+        "alt": "Moment and cumulant workflow",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Write M_X(t)",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Check existence near 0",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Differentiate M: raw moments",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Take log M: cumulants",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Convert to central moments",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ],
+        "note": "For independent sums use cumulants; for direct raw moments differentiate M."
+      },
+      "ask": {
+        "q": "Why must the MGF exist near zero?",
+        "nudge": "The derivatives and uniqueness result require finite exponential moments around zero."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example — Poisson cumulants",
+      "objective": "Derive the first four cumulants.",
+      "problem": "Let X~Poisson(3). Find its first four cumulants, mean, variance and third central moment.",
+      "steps": [
+        {
+          "say": "Write K(t)",
+          "math": "M(t)=exp{3(eᵗ−1)}; K(t)=3(eᵗ−1).",
+          "why": "Taking log makes differentiation straightforward."
+        },
+        {
+          "say": "Differentiate K",
+          "math": "K'(0)=K''(0)=K'''(0)=K''''(0)=3.",
+          "why": "Every derivative of eᵗ at zero equals one."
+        },
+        {
+          "say": "Interpret",
+          "math": "κ₁=κ₂=κ₃=κ₄=3; E(X)=3, Var(X)=3 and μ₃=3.",
+          "why": "The fourth central moment is κ₄+3κ₂²=30."
+        }
+      ],
+      "after": "The fourth central moment is κ₄+3κ₂², not κ₄.",
+      "ask": {
+        "q": "What is the fourth central moment of Poisson(3)?",
+        "nudge": "Use μ₄=κ₄+3κ₂²."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 3,
+      "title": "Pause and retrieve",
+      "objective": "Retrieve central identities.",
+      "intro": "Answer before revealing.",
+      "items": [
+        {
+          "q": "What is M''(0)?",
+          "a": "E(X²), the raw second moment."
+        },
+        {
+          "q": "What is K(t)?",
+          "a": "log M(t), the cumulant generating function."
+        },
+        {
+          "q": "What is κ₂?",
+          "a": "The variance."
+        },
+        {
+          "q": "What is κ₄?",
+          "a": "μ₄−3σ⁴."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 7,
+      "title": "Complete the binomial cumulants",
+      "objective": "Fill the first three binomial cumulants.",
+      "problem": "For Binomial(n,p), complete the first three cumulants.",
+      "steps": [
+        {
+          "say": "First cumulant.",
+          "blank": {
+            "prompt": "κ₁=?",
+            "answer": "np",
+            "accept": [
+              "np"
+            ],
+            "hint": "It is the mean."
+          },
+          "why": "κ₁=np."
+        },
+        {
+          "say": "Second cumulant.",
+          "blank": {
+            "prompt": "κ₂=?",
+            "answer": "np(1−p)",
+            "accept": [
+              "np(1-p)",
+              "npq"
+            ],
+            "hint": "It is the variance."
+          },
+          "why": "κ₂=npq."
+        },
+        {
+          "say": "Third cumulant.",
+          "blank": {
+            "prompt": "κ₃=?",
+            "answer": "np(1−p)(1−2p)",
+            "accept": [
+              "np(1-p)(1-2p)",
+              "npq(1-2p)"
+            ],
+            "hint": "It equals the third central moment."
+          },
+          "why": "The sign changes at p=1/2."
+        }
+      ],
+      "after": "The third cumulant vanishes for the symmetric binomial case p=1/2."
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Cumulants, central moments and transformations",
+      "objective": "Convert cumulants and apply scaling.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Fourth-order conversion",
+          "body": "κ₄=μ₄−3σ⁴; μ₄=κ₄+3κ₂²."
+        },
+        {
+          "t": "step",
+          "h": "Affine transformations",
+          "body": "For Y=aX+b: κ₁(Y)=aκ₁(X)+b; κ_r(Y)=aʳκ_r(X) for r≥2."
+        },
+        {
+          "t": "def",
+          "h": "Normal distribution",
+          "body": "For a normal law K(t)=μt+σ²t²/2. Thus κ₁=μ, κ₂=σ² and every cumulant of order r≥3 is zero."
+        }
+      ],
+      "ask": {
+        "q": "Why is κ₄=0 for a normal law although μ₄ is positive?",
+        "nudge": "For a normal law μ₄=3σ⁴."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s7",
+      "mins": 9,
+      "title": "On your own — exponential cumulants",
+      "objective": "Differentiate the log-MGF.",
+      "problem": "For X~Exponential(rate 2), find M(t), E(X), Var(X), κ₃ and μ₃.",
+      "hints": [
+        "M(t)=2/(2−t), t<2.",
+        "K(t)=log 2−log(2−t).",
+        "Differentiate K three times."
+      ],
+      "answer": "M(t)=2/(2−t); E(X)=1/2; Var(X)=1/4; κ₃=μ₃=1/4.",
+      "check": "Rate 2 gives mean 1/2, not 2.",
+      "scenario": {
+        "teaser": "A student mistakes the second raw moment for the variance.",
+        "title": "Raw, central and cumulant quantities differ",
+        "body": [
+          "For N(2,3), M(t)=exp(2t+3t²/2).",
+          "M''(0)=E(X²)=7, while Var(X)=7−2²=3.",
+          "At fourth order μ₄ and κ₄ also differ: μ₄=κ₄+3σ⁴.",
+          "Label every result: raw moment, central moment or cumulant."
+        ],
+        "q": "For N(2,3), what is M''(0) and the variance?",
+        "answer": "M''(0)=7 and variance=3."
+      },
+      "solution": [
+        {
+          "say": "Write the MGF",
+          "math": "M(t)=2/(2−t), t<2",
+          "why": "The parameter is a rate."
+        },
+        {
+          "say": "Take logarithms",
+          "math": "K(t)=log 2−log(2−t)",
+          "why": "Differentiate K for cumulants."
+        },
+        {
+          "say": "Read cumulants",
+          "math": "κ₁=.5; κ₂=.25; κ₃=.25",
+          "why": "The third cumulant equals μ₃."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s8",
+      "mins": 6,
+      "title": "Six claims — decide before revealing",
+      "objective": "Avoid moment and cumulant errors.",
+      "intro": "Decide true or false.",
+      "items": [
+        {
+          "claim": "M''(0) is the variance.",
+          "tf": false,
+          "why": "False: it is E(X²); subtract the squared mean."
+        },
+        {
+          "claim": "Cumulants of independent sums add.",
+          "tf": true,
+          "why": "True: log-MGFs add under independence."
+        },
+        {
+          "claim": "The fourth cumulant equals the fourth central moment.",
+          "tf": false,
+          "why": "False: κ₄=μ₄−3σ⁴."
+        },
+        {
+          "claim": "For a normal law, cumulants above order two vanish.",
+          "tf": true,
+          "why": "True: the log-MGF is quadratic."
+        },
+        {
+          "claim": "The lognormal MGF is finite for every positive t.",
+          "tf": false,
+          "why": "False: positive exponential moments diverge."
+        },
+        {
+          "claim": "M'(0)=E(X) when the MGF exists near zero.",
+          "tf": true,
+          "why": "True: the first derivative is the first raw moment."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Transfer problem — binomial cumulants",
+      "objective": "Use the first three cumulants.",
+      "problem": "For X~Binomial(5,0.2), find M(t), mean, variance and third cumulant.",
+      "hints": [
+        "M(t)=(0.8+0.2eᵗ)^5.",
+        "κ₁=np and κ₂=np(1−p).",
+        "κ₃=np(1−p)(1−2p)."
+      ],
+      "answer": "M(t)=(0.8+0.2eᵗ)^5; mean=1; variance=0.8; κ₃=μ₃=0.48.",
+      "check": "The third cumulant contains the factor (1−2p).",
+      "solution": [
+        {
+          "say": "Write the MGF",
+          "math": "M(t)=(.8+.2eᵗ)^5",
+          "why": "Use the binomial MGF."
+        },
+        {
+          "say": "Read mean and variance",
+          "math": "κ₁=5(.2)=1; κ₂=5(.2)(.8)=.8",
+          "why": "The first two cumulants are mean and variance."
+        },
+        {
+          "say": "Compute third cumulant",
+          "math": "κ₃=5(.2)(.8)(.6)=.48",
+          "why": "The third cumulant equals the third central moment."
+        }
+      ]
+    },
+    {
+      "kind": "recall",
+      "id": "s10",
+      "mins": 3,
+      "title": "Second recall — exam-critical distinctions",
+      "objective": "Retrieve formulas.",
+      "intro": "State each in one line.",
+      "items": [
+        {
+          "q": "What is the third binomial cumulant?",
+          "a": "np(1−p)(1−2p)."
+        },
+        {
+          "q": "What is the fourth cumulant?",
+          "a": "μ₄−3σ⁴."
+        },
+        {
+          "q": "What happens to independent cumulants?",
+          "a": "They add order by order."
+        },
+        {
+          "q": "Does every distribution have an MGF?",
+          "a": "No; the lognormal has no finite MGF for positive t."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 3,
+      "title": "What you should now do unaided",
+      "objective": "Summarise the MGF workflow.",
+      "body": [
+        "Define an MGF and identify its interval of existence around zero.",
+        "Obtain raw moments by differentiating the MGF at zero.",
+        "Use products and substitutions for independent sums and affine transformations.",
+        "Derive cumulants from the log-MGF and use additivity.",
+        "Convert raw moments, central moments and cumulants correctly.",
+        "Label every result as raw moment, central moment or cumulant."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 12,
+      "title": "Mastery test",
+      "objective": "Demonstrate independent understanding.",
+      "setId": "probability_t4_mastery"
+    }
+  ]
+}

@@ -1,0 +1,682 @@
+{
+  "id": "probabilityt2",
+  "topicId": "probability-t2",
+  "moduleId": "probability",
+  "title": "Conditional Distributions",
+  "breadcrumb": "Probability → Conditional distributions",
+  "engine": "B",
+  "engineName": "Probability — conditional laws after observing a variable",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 95,
+  "objectives": [
+    "Derive conditional pmfs and densities from joint and marginal distributions.",
+    "Determine conditional support from the joint support.",
+    "Recognise independence through conditional and marginal laws.",
+    "Compute conditional expectations and variances.",
+    "Use the conditional bivariate normal distribution."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Joint pmfs and joint densities",
+      "why": "Specify the joint model before conditioning."
+    },
+    {
+      "id": "p2",
+      "name": "Marginalisation by summation and integration",
+      "why": "Obtain the denominator by marginalisation."
+    },
+    {
+      "id": "p3",
+      "name": "Conditional probability and expectation",
+      "why": "Interpret conditional laws and moments."
+    }
+  ],
+  "traps": [
+    "Use the marginal of the variable being conditioned on.",
+    "Write the conditional support before dividing.",
+    "A conditional density must integrate to one on its support.",
+    "f(X|Y) and f(Y|X) are directional and generally differ.",
+    "For a bivariate normal pair, conditional variance is independent of y.",
+    "Independence requires conditional law to equal marginal law almost everywhere."
+  ],
+  "revision": {
+    "sheet": [
+      "p(X|Y)=p(X,Y)/p_Y(Y); f(X|Y)=f(X,Y)/f_Y(Y).",
+      "The conditional support is the joint support sliced at the observed value.",
+      "For each y, the conditional pmf sums or density integrates to one.",
+      "Independence iff conditional law equals marginal law almost everywhere.",
+      "E[g(X)|Y=y]=∫g(x)f(x|y)dx.",
+      "Var(X|Y)=E(X²|Y)−E(X|Y)².",
+      "For bivariate normal, conditional mean is linear in y.",
+      "For bivariate normal, Var(X|Y)=σ_X²(1−ρ²)."
+    ],
+    "cards": [
+      [
+        "Conditional law",
+        "Joint ÷ marginal of observed variable"
+      ],
+      [
+        "Conditional support",
+        "Slice the joint support"
+      ],
+      [
+        "Normalisation",
+        "Conditional law totals one"
+      ],
+      [
+        "Independence",
+        "Conditional law equals marginal"
+      ],
+      [
+        "Conditional mean",
+        "Integrate x against conditional density"
+      ],
+      [
+        "Normal conditional mean",
+        "μ_X+ρ(σ_X/σ_Y)(y−μ_Y)"
+      ],
+      [
+        "Normal conditional variance",
+        "σ_X²(1−ρ²)"
+      ]
+    ],
+    "tricks": [
+      "Write support before integrating.",
+      "Check the conditional density integrates to one.",
+      "Use the marginal of the observed variable."
+    ],
+    "shortcuts": [
+      "Constant density on a slice gives a uniform conditional law.",
+      "Bivariate normal variance is constant in the conditioning value.",
+      "Reverse conditioning requires a new marginal."
+    ],
+    "remember": [
+      "Conditioning changes both denominator and support.",
+      "Conditional distributions are directional."
+    ]
+  },
+  "howto": "Work through the triangular-support derivation first. In every question write the joint support, fix the observed coordinate, compute the marginal of that coordinate, divide, and check normalisation. Finish with the bivariate normal formulas and the transfer exercise.",
+  "refs": [
+    {
+      "title": "Statistical Inference",
+      "where": "Conditional distributions",
+      "site": "Casella and Berger",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Formal conditional laws and joint-density derivations."
+    },
+    {
+      "title": "A First Course in Probability",
+      "where": "Conditional distributions and expectation",
+      "site": "Sheldon Ross",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Discrete and continuous conditional examples."
+    },
+    {
+      "title": "Introduction to Mathematical Statistics",
+      "where": "Joint and conditional distributions",
+      "site": "Hogg, McKean and Craig",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Conditional normal distributions and joint-density methods."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Proposed platform settings, not an NTA rule."
+  },
+  "provenance": "Original syllabus-aligned lesson authored 12 November 2026. The triangular-support densities and conditional means were derived by direct integration. Bivariate-normal values were checked algebraically. No PYQ attribution is claimed.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Before the lesson — four foundations",
+      "objective": "Retrieve joint laws, marginals and conditional expectation.",
+      "body": [
+        "A conditional distribution is the law of one random variable after another has been observed. The denominator is the marginal law of the observed variable; the support is the original joint support sliced at that value. Most errors are support errors, not integration errors.",
+        "A conditional distribution is a complete probability law. Its support and normalisation are part of the answer."
+      ],
+      "ask": {
+        "q": "Which marginal belongs in the denominator of f(X|Y=y)?",
+        "nudge": "Use the marginal of the variable whose value is observed."
+      },
+      "items": [
+        {
+          "ask": "How is f_Y(y) obtained?",
+          "recall": "Integrate the joint density over x on the joint support.",
+          "refresh": [
+            "Limits depend on the joint support.",
+            "The marginal density must integrate to one."
+          ]
+        },
+        {
+          "ask": "Define P(A|B).",
+          "recall": "P(A∩B)/P(B), when P(B)>0.",
+          "refresh": [
+            "The denominator is the probability of the known event."
+          ]
+        },
+        {
+          "ask": "How is E[g(X)|Y=y] computed?",
+          "recall": "Integrate g(x) against f_{X|Y}(x|y).",
+          "refresh": [
+            "Use the conditional support."
+          ]
+        },
+        {
+          "ask": "What characterises independence?",
+          "recall": "The conditional law equals the marginal law almost everywhere.",
+          "refresh": [
+            "The conditional law must not change with the observed value."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "The support is a moving slice",
+      "objective": "Understand why conditioning changes support.",
+      "body": [
+        "A joint density lives on a region in the plane. Conditioning fixes one coordinate and leaves a one-dimensional slice.",
+        "The joint density is divided by the marginal density of the fixed coordinate. This rescales the slice so its total probability is one.",
+        "When the support is triangular, the slice changes with the observed value. That is why support must be written explicitly."
+      ],
+      "scenario": {
+        "teaser": "A technician observes a batch score and updates an individual measurement.",
+        "title": "Conditioning changes the range",
+        "body": [
+          "The joint model has density 2 on 0<y<x<1. Observing X=x cuts the triangle to 0<Y<x.",
+          "The marginal is f_X(x)=2x, so the conditional density is 1/x on (0,x). It is uniform, with mean x/2.",
+          "Reversing the condition gives X|Y=y uniform on (y,1), with mean (1+y)/2. The direction matters: the two laws are not interchangeable.",
+          "The lesson is operational: identify the observed variable, slice the joint support, compute its marginal and only then divide."
+        ],
+        "q": "Why are the two conditional supports different?",
+        "answer": "Fixing X=x leaves 0<Y<x; fixing Y=y leaves y<X<1. Each condition slices the triangle in a different direction."
+      },
+      "ask": {
+        "q": "What is the most common source of error in a conditional-density derivation?",
+        "nudge": "The ratio is short; the support limits are where the problem changes."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 10,
+      "title": "The construction, support and moments",
+      "objective": "Derive and verify conditional laws.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Conditional law",
+          "body": "p_{X|Y}(x|y)=p(x,y)/p_Y(y); f_{X|Y}(x|y)=f(x,y)/f_Y(y). Divide by the marginal of the variable being conditioned on."
+        },
+        {
+          "t": "def",
+          "h": "Support slice",
+          "body": "For 0<y<x<1, fixing X=x leaves 0<Y<x; fixing Y=y leaves y<X<1. The two conditional laws are directional."
+        },
+        {
+          "t": "step",
+          "h": "Normalisation",
+          "body": "For every admissible y, ∫f_{X|Y}(x|y)dx=1 over the conditional support. This is the fastest check for an algebra or support error."
+        },
+        {
+          "t": "step",
+          "h": "Independence",
+          "body": "X and Y are independent iff f_{X|Y}(x|y)=f_X(x) almost everywhere (or the pmf analogue). A conditional law that changes with y signals dependence."
+        },
+        {
+          "t": "step",
+          "h": "Conditional moments",
+          "body": "E[g(X)|Y=y]=∫g(x)f_{X|Y}(x|y)dx; Var(X|Y)=E(X²|Y)−E(X|Y)²."
+        },
+        {
+          "t": "step",
+          "h": "Bivariate normal",
+          "body": "X|Y=y is normal with mean μ_X+ρ(σ_X/σ_Y)(y−μ_Y) and variance σ_X²(1−ρ²). The variance does not depend on y."
+        }
+      ],
+      "table": {
+        "caption": "Conditional support is the slice of the joint support",
+        "head": [
+          "Joint support",
+          "Condition",
+          "Conditional support",
+          "Law"
+        ],
+        "rows": [
+          [
+            "0<y<x<1",
+            "X=x",
+            "0<y<x",
+            "Y|X=x ~ U(0,x)"
+          ],
+          [
+            "0<y<x<1",
+            "Y=y",
+            "y<x<1",
+            "X|Y=y ~ U(y,1)"
+          ],
+          [
+            "Bivariate normal",
+            "Y=y",
+            "x∈R",
+            "Normal conditional law"
+          ]
+        ]
+      },
+      "flow": {
+        "title": "Construct the conditional law",
+        "alt": "Conditional distribution derivation",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Joint pmf / density",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Marginal of observed variable",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Fix value and slice support",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Divide joint by marginal",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Check integral / sum = 1",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ],
+        "note": "The conditioning variable determines both the denominator and the support slice."
+      },
+      "ask": {
+        "q": "Why integrate over the slice rather than the entire marginal support?",
+        "nudge": "Some points in the original support are impossible after fixing the conditioning value."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example — condition on X",
+      "objective": "Derive a conditional uniform law and its mean.",
+      "problem": "Let f(x,y)=2 on 0<y<x<1. Find f_{Y|X}(y|x) and E(Y|X=x).",
+      "steps": [
+        {
+          "say": "Marginalise X",
+          "math": "f_X(x)=∫₀ˣ2dy=2x, 0<x<1.",
+          "why": "The joint support gives 0<y<x."
+        },
+        {
+          "say": "Divide by the marginal",
+          "math": "f_{Y|X}(y|x)=2/(2x)=1/x, 0<y<x.",
+          "why": "The integral over (0,x) is one."
+        },
+        {
+          "say": "Compute the mean",
+          "math": "E(Y|X=x)=∫₀ˣy/x dy=x/2.",
+          "why": "The conditional law is Uniform(0,x)."
+        }
+      ],
+      "after": "Check normalisation on the conditional support before computing a conditional moment.",
+      "ask": {
+        "q": "What check confirms that the conditional density is valid?",
+        "nudge": "Integrate it over the support after fixing the conditioning variable."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 3,
+      "title": "Pause and retrieve",
+      "objective": "Recall the construction.",
+      "intro": "Answer before revealing.",
+      "items": [
+        {
+          "q": "What is f(X|Y=y)?",
+          "a": "f(X,Y)/f_Y(y)."
+        },
+        {
+          "q": "How do you find f_Y(y)?",
+          "a": "Integrate the joint density over x on its support."
+        },
+        {
+          "q": "What is the independence criterion?",
+          "a": "The conditional law equals the marginal law almost everywhere."
+        },
+        {
+          "q": "How do you compute E(X|Y=y)?",
+          "a": "Integrate x against the conditional density over its support."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 7,
+      "title": "Your turn — complete the derivation",
+      "objective": "Fill the steps in the reverse conditional law.",
+      "problem": "For f(x,y)=2 on 0<y<x<1, derive f(X|Y=y).",
+      "steps": [
+        {
+          "say": "Find the marginal of Y.",
+          "blank": {
+            "prompt": "f_Y(y)=?",
+            "answer": "2(1−y)",
+            "accept": [
+              "2(1-y)",
+              "2 - 2y"
+            ],
+            "hint": "Integrate 2 over x from y to 1."
+          },
+          "why": "The x-slice runs from y to 1."
+        },
+        {
+          "say": "Divide by the marginal.",
+          "blank": {
+            "prompt": "f(X|Y=y)=?",
+            "answer": "1/(1−y)",
+            "accept": [
+              "1/(1-y)"
+            ],
+            "hint": "Divide 2 by 2(1−y)."
+          },
+          "why": "The conditional density is constant on y<x<1."
+        },
+        {
+          "say": "Name the conditional law.",
+          "blank": {
+            "prompt": "X|Y=y follows?",
+            "answer": "Uniform(y,1)",
+            "accept": [
+              "uniform(y,1)",
+              "u(y,1)"
+            ],
+            "hint": "A constant density on an interval is uniform."
+          },
+          "why": "Its support is (y,1)."
+        }
+      ],
+      "after": "The direction of conditioning determines the slice and denominator."
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Conditional normal distributions",
+      "objective": "Use the bivariate normal conditional formulas.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Conditional mean",
+          "body": "E(X|Y=y)=μ_X+ρ(σ_X/σ_Y)(y−μ_Y). The conditional mean shifts linearly with y."
+        },
+        {
+          "t": "formula",
+          "h": "Conditional variance",
+          "body": "Var(X|Y=y)=σ_X²(1−ρ²). It does not depend on y."
+        },
+        {
+          "t": "def",
+          "h": "Conditional law",
+          "body": "For a jointly normal pair, X|Y=y is normal with the mean and variance above. Zero correlation implies independence within the bivariate normal family."
+        }
+      ],
+      "table": {
+        "caption": "Bivariate normal conditional law",
+        "head": [
+          "Quantity",
+          "Formula"
+        ],
+        "rows": [
+          [
+            "Mean X|Y=y",
+            "μ_X+ρ(σ_X/σ_Y)(y−μ_Y)"
+          ],
+          [
+            "Variance X|Y=y",
+            "σ_X²(1−ρ²)"
+          ],
+          [
+            "Mean Y|X=x",
+            "μ_Y+ρ(σ_Y/σ_X)(x−μ_X)"
+          ],
+          [
+            "Variance Y|X=x",
+            "σ_Y²(1−ρ²)"
+          ]
+        ]
+      },
+      "ask": {
+        "q": "Which parameter changes with y?",
+        "nudge": "Compare the conditional mean and variance."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s7",
+      "mins": 9,
+      "title": "On your own — bivariate normal conditioning",
+      "objective": "Compute a conditional probability.",
+      "problem": "For a bivariate normal pair with μ_X=10, μ_Y=20, σ_X=4, σ_Y=5, ρ=0.6, find X|Y=15 and P(X≤10|Y=15).",
+      "hints": [
+        "Conditional mean is μ_X+ρ(σ_X/σ_Y)(y−μ_Y).",
+        "Conditional variance is σ_X²(1−ρ²).",
+        "Standardise with the conditional SD."
+      ],
+      "answer": "Mean=7.6; variance=10.24; SD=3.2; probability=Φ(0.75)≈0.7734.",
+      "check": "The conditional mean is 7.6, not the marginal mean 10. The conditional variance remains 10.24.",
+      "scenario": {
+        "teaser": "A researcher inserts the observed value into the conditional variance formula.",
+        "title": "Conditional normal distribution",
+        "body": [
+          "For a bivariate normal pair, the conditional mean shifts linearly with the observed value.",
+          "With the stated parameters and Y=15, the mean is 7.6. The variance is 16(1−0.36)=10.24 and is constant in y.",
+          "Thus X|Y=15 is N(7.6,10.24), and P(X≤10|Y=15)=Φ(0.75)≈0.7734.",
+          "This is a special property of the bivariate normal family; do not generalise constant conditional variance to arbitrary joint distributions."
+        ],
+        "q": "What changes with y in the bivariate normal conditional law?",
+        "answer": "The conditional mean changes linearly with y; the conditional variance is constant in y."
+      },
+      "solution": [
+        {
+          "say": "Find the conditional mean.",
+          "math": "10+0.6(4/5)(15−20)=7.6",
+          "why": "The conditional mean changes with observed Y."
+        },
+        {
+          "say": "Find variance and SD.",
+          "math": "16(1−0.36)=10.24; SD=3.2",
+          "why": "The conditional variance is constant in y."
+        },
+        {
+          "say": "Standardise.",
+          "math": "P(X≤10|Y=15)=Φ((10−7.6)/3.2)=Φ(0.75)≈0.7734",
+          "why": "Use conditional, not marginal, parameters."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s8",
+      "mins": 6,
+      "title": "Six claims — decide before revealing",
+      "objective": "Catch support, denominator and independence errors.",
+      "intro": "Decide true or false.",
+      "items": [
+        {
+          "claim": "The denominator of f(X|Y=y) is f_X(x).",
+          "tf": false,
+          "why": "False: it is f_Y(y), the marginal of the conditioning variable."
+        },
+        {
+          "claim": "Conditional support is the joint support sliced at the observed value.",
+          "tf": true,
+          "why": "True: fixing Y=y leaves only compatible x-values."
+        },
+        {
+          "claim": "A conditional density integrates to one over its conditional support.",
+          "tf": true,
+          "why": "True: this is its normalisation."
+        },
+        {
+          "claim": "f(X|Y) and f(Y|X) are interchangeable.",
+          "tf": false,
+          "why": "False: the conditioning variables and supports differ."
+        },
+        {
+          "claim": "For a bivariate normal pair, Var(X|Y=y) depends on y.",
+          "tf": false,
+          "why": "False: it is σ_X²(1−ρ²), independent of y."
+        },
+        {
+          "claim": "Independence is equivalent to conditional law equalling marginal law almost everywhere.",
+          "tf": true,
+          "why": "True: this characterises independence."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Transfer problem — reverse the conditioning",
+      "objective": "Apply marginalisation and normalisation to a new slice.",
+      "problem": "For f(x,y)=2 on 0<y<x<1, find f_{X|Y}(x|y) and E(X|Y=y).",
+      "hints": [
+        "Integrate over x from y to 1 to obtain f_Y(y).",
+        "At fixed y, x ranges from y to 1.",
+        "Integrate x times the conditional density."
+      ],
+      "answer": "f_Y(y)=2(1−y); f_{X|Y}=1/(1−y) on y<x<1; X|Y=y~Uniform(y,1), so E(X|Y=y)=(1+y)/2.",
+      "check": "The density integrates to one over an interval of length 1−y. Do not use support 0<x<y.",
+      "solution": [
+        {
+          "say": "Marginalise Y.",
+          "math": "f_Y(y)=∫_y^1 2dx=2(1−y)",
+          "why": "The support is y<x<1."
+        },
+        {
+          "say": "Construct conditional density.",
+          "math": "f(X|Y=y)=2/[2(1−y)]=1/(1−y)",
+          "why": "It integrates to one over length 1−y."
+        },
+        {
+          "say": "Compute the mean.",
+          "math": "E(X|Y=y)=(1+y)/2",
+          "why": "The mean of a uniform law is its interval midpoint."
+        }
+      ]
+    },
+    {
+      "kind": "recall",
+      "id": "s10",
+      "mins": 3,
+      "title": "Second recall — exam-critical distinctions",
+      "objective": "Retrieve the key identities.",
+      "intro": "State each in one line.",
+      "items": [
+        {
+          "q": "What is the denominator of f(X|Y)?",
+          "a": "f_Y(y)."
+        },
+        {
+          "q": "What is the conditional support?",
+          "a": "The x-values compatible with the joint support when Y=y."
+        },
+        {
+          "q": "When are X and Y independent?",
+          "a": "When the conditional law equals the marginal law almost everywhere."
+        },
+        {
+          "q": "What is Var(X|Y=y) for a bivariate normal pair?",
+          "a": "σ_X²(1−ρ²), independent of y."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 3,
+      "title": "What you should now do unaided",
+      "objective": "Summarise the workflow.",
+      "body": [
+        "Derive conditional pmfs and densities from joint and marginal distributions.",
+        "Determine conditional support from the joint support.",
+        "Recognise independence through conditional and marginal laws.",
+        "Compute conditional expectations and variances.",
+        "Use the conditional bivariate normal distribution.",
+        "State the conditional support and verify normalisation."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 12,
+      "title": "Mastery test",
+      "objective": "Demonstrate independent understanding.",
+      "setId": "probability_t2_mastery"
+    }
+  ]
+}
