@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://net-jrf-statistics/contracts/lesson.schema.json",
+  "title": "Lesson seed (contract v1)",
+  "$comment": "STRUCTURE only: types, required fields, enums. House quality rules (>=3 refs, howto, scene counts, pool mix) stay in vcheck.js and are not duplicated here. Unknown extra fields are allowed on content objects so teaching extensions do not need a contract change; the typed fields below are what every reader may rely on. Every required field here is present in all 48 lessons at the time this contract was promoted.",
+  "type": "object",
+  "required": ["id", "moduleId", "topicId", "title", "breadcrumb", "engine", "engineName", "estMin", "version", "status",
+               "provenance", "objectives", "prereq", "mastery", "refs", "revision", "traps", "scenes"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+$", "$comment": "store document id: lessons/<id>" },
+    "moduleId": { "type": "string", "pattern": "^[a-z0-9]+$", "$comment": "must exist in seed/catalog.json (checked by tools/validate-contracts.js)" },
+    "topicId": { "type": "string", "pattern": "^[a-z0-9]+-[a-z0-9]+$" },
+    "title": { "type": "string", "minLength": 1 },
+    "breadcrumb": { "type": "string" },
+    "engine": { "enum": ["A", "B", "C"] },
+    "engineName": { "type": "string" },
+    "estMin": { "type": "integer", "minimum": 1 },
+    "version": { "type": "string", "pattern": "^[0-9]+(\\.[0-9]+)+$" },
+    "status": { "enum": ["draft", "review", "approved"], "$comment": "only 'approved' lessons are indexed for learners" },
+    "howto": { "type": "string" },
+    "anchors": {
+      "type": "array",
+      "items": { "type": "object", "required": ["paper", "q"], "additionalProperties": false,
+                 "properties": { "paper": { "type": "string", "pattern": "^[a-z0-9]+$" }, "q": { "type": "integer", "minimum": 1 } } },
+      "$comment": "optional. The past-paper questions this lesson is built on, for example [{ \"paper\": \"j26\", \"q\": 38 }], where paper is the id in seed/pyq_<paper>_full.json. tools/content.js (run by npm run check) fails an anchor whose paper or question does not exist. Older lessons name them only in provenance prose, which is read as paper j26."
+    },
+    "provenance": { "type": "string", "minLength": 1 },
+    "objectives": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "prereq": { "type": "array", "items": { "$ref": "#/$defs/prereq" } },
+    "traps": { "type": "array", "items": { "type": "string" } },
+    "refs": { "type": "array", "items": { "$ref": "#/$defs/ref" } },
+    "revision": { "$ref": "#/$defs/revision" },
+    "mastery": { "$ref": "#/$defs/mastery" },
+    "scenes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/scene" } }
+  },
+  "$defs": {
+    "str": { "type": "string" },
+    "strs": { "type": "array", "items": { "type": "string" } },
+    "prereq": { "type": "object", "required": ["id", "name", "why"], "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "why": { "type": "string" } } },
+    "ref": {
+      "type": "object",
+      "required": ["title", "where", "site", "url", "type", "free", "checked", "why"],
+      "properties": {
+        "title": { "type": "string" }, "where": { "type": "string" }, "site": { "type": "string" }, "url": { "type": "string" },
+        "type": { "type": "string" }, "free": { "type": "boolean" }, "checked": { "type": "string" }, "why": { "type": "string" }, "isbn": { "type": "string" }
+      }
+    },
+    "revision": {
+      "type": "object",
+      "required": ["sheet", "cards", "tricks", "shortcuts", "remember"],
+      "properties": {
+        "sheet": { "$ref": "#/$defs/strs" },
+        "cards": { "type": "array", "items": { "type": "array", "minItems": 2, "maxItems": 2, "items": { "type": "string" } } },
+        "tricks": { "type": "array", "items": { "oneOf": [ { "type": "string" }, { "type": "object", "required": ["hook", "why"], "properties": { "hook": { "type": "string" }, "why": { "type": "string" } } } ] }, "$comment": "a string is the current standard (lessons/TEMPLATE.py); {hook, why} is the older shape 15 lessons use and src/45-learn.js still renders" }, "shortcuts": { "$ref": "#/$defs/strs" }, "remember": { "$ref": "#/$defs/strs" }, "traps": { "$ref": "#/$defs/strs" }
+      }
+    },
+    "mastery": {
+      "type": "object",
+      "required": ["minQ", "pass", "draw", "fmtMin", "diffMix", "noHints", "retestDays", "note"],
+      "properties": {
+        "minQ": { "type": "integer" }, "pass": { "type": "number" }, "draw": { "type": "integer" },
+        "fmtMin": { "type": "object", "additionalProperties": { "type": "number" } },
+        "diffMix": { "type": "object", "additionalProperties": { "type": "integer" } },
+        "noHints": { "type": "boolean" }, "retestDays": { "type": "integer" }, "note": { "type": "string" }
+      }
+    },
+    "ask": {
+      "type": "object",
+      "properties": { "q": { "type": "string" }, "nudge": { "type": "string" }, "label": { "type": "string" }, "prompt": { "type": "string" }, "tier": { "type": "string" } },
+      "anyOf": [ { "required": ["q", "nudge"] }, { "required": ["label", "prompt"] } ],
+      "$comment": "{q, nudge} is the self-check prompt every scene carries (the standard). {label, prompt, tier} is an older 'ask the AI' button config that two lessons use; the AI feature is off on the hosted site, so the button is simply not shown there."
+    },
+    "scenario": {
+      "type": "object",
+      "required": ["teaser", "title", "body"],
+      "properties": {
+        "teaser": { "type": "string" }, "title": { "type": "string" }, "body": { "$ref": "#/$defs/strs" },
+        "q": { "type": "string" }, "answer": { "type": "string" }, "close": { "type": "string" }, "link": { "type": "string" }
+      }
+    },
+    "flow": {
+      "type": "object",
+      "required": ["nodes", "edges"],
+      "properties": {
+        "title": { "type": "string" }, "alt": { "type": "string" }, "note": { "type": "string" }, "caption": { "type": "string" },
+        "nodes": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object", "required": ["id", "r", "c", "label", "kind"],
+            "properties": {
+              "id": { "type": "string" }, "r": { "type": "number" }, "c": { "type": "number" }, "w": { "type": "number" }, "label": { "type": "string" },
+              "kind": { "enum": ["start", "step", "note", "end", "decision", "dec"] }
+            }
+          }
+        },
+        "edges": { "type": "array", "items": { "type": "object", "required": ["from", "to"], "properties": { "from": { "type": "string" }, "to": { "type": "string" }, "label": { "type": "string" } } } }
+      }
+    },
+    "table": {
+      "type": "object",
+      "required": ["head", "rows"],
+      "properties": { "caption": { "type": "string" }, "head": { "$ref": "#/$defs/strs" }, "rows": { "type": "array", "items": { "$ref": "#/$defs/strs" } } }
+    },
+    "viz": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["exp-likelihood", "mle-sampling", "unif-likelihood", "np-power", "beta-posterior", "chisq-tail", "risk-curves", "sprt", "ci-coverage",
+                           "ar-acf", "r-null", "ord-beta", "disc-pmf", "series-conv", "gamma-sum", "spectral", "ineq-bounds", "rank-null"],
+                 "$comment": "must equal VIZ_OK in src/62-gen.js; tools/validate-contracts.js fails on drift" },
+        "caption": { "type": "string" }
+      },
+      "$comment": "extra numeric parameters (n, k, rho, alpha, ...) are viz settings, passed through to src/30-viz.js"
+    },
+    "blank": {
+      "type": "object", "required": ["prompt", "answer", "accept", "hint"],
+      "properties": { "prompt": { "type": "string" }, "answer": { "type": "string" }, "accept": { "$ref": "#/$defs/strs" }, "hint": { "type": "string" } }
+    },
+    "step": { "type": "object", "required": ["say"], "properties": { "say": { "type": "string" }, "math": { "type": "string" }, "why": { "type": "string" } } },
+    "scene": {
+      "type": "object",
+      "required": ["kind", "id", "title", "mins", "objective"],
+      "properties": {
+        "kind": { "enum": ["foundation", "intuition", "explore", "theory", "worked", "recall", "completion", "guided", "trapcheck", "summary", "quiz"] },
+        "id": { "type": "string" }, "title": { "type": "string" }, "mins": { "type": "integer", "minimum": 0 }, "objective": { "type": "string" },
+        "ext": { "type": "boolean", "$comment": "optional scene: excluded from the core count and from estMin" },
+        "ask": { "$ref": "#/$defs/ask" }, "scenario": { "$ref": "#/$defs/scenario" }, "flow": { "$ref": "#/$defs/flow" }, "table": { "$ref": "#/$defs/table" },
+        "aside": { "type": "object" }
+      },
+      "allOf": [
+        { "if": { "properties": { "kind": { "const": "foundation" } }, "required": ["kind"] },
+          "then": { "required": ["body", "items"], "properties": { "body": { "$ref": "#/$defs/strs" },
+            "items": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["ask", "recall", "refresh"],
+              "properties": { "ask": { "type": "string" }, "recall": { "type": "string" }, "refresh": { "$ref": "#/$defs/strs" } } } } } } },
+        { "if": { "properties": { "kind": { "const": "intuition" } }, "required": ["kind"] },
+          "then": { "required": ["body"], "properties": { "body": { "$ref": "#/$defs/strs" } } } },
+        { "if": { "properties": { "kind": { "const": "explore" } }, "required": ["kind"] },
+          "then": { "required": ["body", "viz"], "properties": { "body": { "$ref": "#/$defs/strs" }, "viz": { "$ref": "#/$defs/viz" } } } },
+        { "if": { "properties": { "kind": { "const": "theory" } }, "required": ["kind"] },
+          "then": { "required": ["blocks"], "properties": { "blocks": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["t", "h", "body"],
+            "properties": { "t": { "enum": ["formula", "step", "def", "note", "trap", "assume"] }, "h": { "type": "string" }, "body": { "type": "string" } } } } } } },
+        { "if": { "properties": { "kind": { "const": "worked" } }, "required": ["kind"] },
+          "then": { "required": ["problem", "steps"], "properties": { "problem": { "type": "string" }, "after": { "type": "string" },
+            "steps": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/step" } } } } },
+        { "if": { "properties": { "kind": { "const": "recall" } }, "required": ["kind"] },
+          "then": { "required": ["intro", "items"], "properties": { "intro": { "type": "string" },
+            "items": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["q", "a"], "properties": { "q": { "type": "string" }, "a": { "type": "string" } } } } } } },
+        { "if": { "properties": { "kind": { "const": "completion" } }, "required": ["kind"] },
+          "then": { "required": ["problem", "steps"], "properties": { "problem": { "type": "string" }, "after": { "type": "string" },
+            "steps": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["say"],
+              "properties": { "say": { "type": "string" }, "math": { "type": "string" }, "why": { "type": "string" }, "blank": { "$ref": "#/$defs/blank" } } } } } } },
+        { "if": { "properties": { "kind": { "const": "guided" } }, "required": ["kind"] },
+          "then": { "required": ["problem", "hints", "answer", "solution"], "properties": { "problem": { "type": "string" }, "answer": { "type": "string" }, "check": { "type": "string" },
+            "hints": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+            "solution": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/step" } } } } },
+        { "if": { "properties": { "kind": { "const": "trapcheck" } }, "required": ["kind"] },
+          "then": { "required": ["intro", "items"], "properties": { "intro": { "type": "string" },
+            "items": { "type": "array", "minItems": 1, "items": { "type": "object", "required": ["claim", "tf", "why"],
+              "properties": { "claim": { "type": "string" }, "tf": { "type": "boolean" }, "why": { "type": "string" } } } } } } },
+        { "if": { "properties": { "kind": { "const": "summary" } }, "required": ["kind"] },
+          "then": { "required": ["body"], "properties": { "body": { "$ref": "#/$defs/strs" } } } },
+        { "if": { "properties": { "kind": { "const": "quiz" } }, "required": ["kind"] },
+          "then": { "required": ["setId"], "properties": { "setId": { "type": "string", "pattern": "^[a-z0-9_]+$" } } } }
+      ]
+    }
+  }
+}
