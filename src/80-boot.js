@@ -11,8 +11,8 @@
 })();
 window.addEventListener("hashchange",()=>{
   const h=(location.hash||"").replace("#","");
-  if(TABS.some(([k])=>k===h)&&h!==S.route){S.route=h;S.drill=null;render()}});
-(function(){const h=(location.hash||"").replace("#","");if(TABS.some(([k])=>k===h))S.route=h})();
+  if(routeKnown(h)&&h!==S.route){S.route=h;S.drill=null;render()}});
+(function(){const h=(location.hash||"").replace("#","");if(routeKnown(h))S.route=h})();
 loadPanels();
 render();
 boot();
