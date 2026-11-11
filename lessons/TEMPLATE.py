@@ -128,7 +128,7 @@ S.append({"kind":"quiz","id":"s15","mins":12,"title":"Mastery test",
 CORE = [s for s in S if not s.get("ext")]
 
 LES = {
- "id":"<storeDocId>", "topicId":"<module>-t<n>", "moduleId":"<module>",
+ "id":"<module><n>",   # topic id without the dash, e.g. nonparamt1 "topicId":"<module>-t<n>", "moduleId":"<module>",
  "title":"<...>", "breadcrumb":"<Module> → <area> → <this topic>",
  "engine":"B", "engineName":"<one line: the one move this topic is about>",
  "version":"1.0", "status":"approved",

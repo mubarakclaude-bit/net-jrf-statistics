@@ -3,9 +3,9 @@
 Read this before writing anything. It is the whole house standard; the validators in this repo
 enforce most of it, and `addlesson.sh` will refuse a lesson that breaks the rest.
 
-The app is a Claude artifact: **https://claude.ai/artifact/4Bms3mCU8e32yxNuFZy1Ft**
-Lessons live in its shared database, not in this repo. This repo builds the app and authors
-the content that goes into it.
+This repository is the only source of truth. A lesson is a file in `seed/`; merging it to the production
+branch publishes it, because Vercel builds the site from `seed/`. There is no separate store to write to,
+and the old Claude artifact (`ArtifactData`) is retired as a publishing target.
 
 ---
 
@@ -209,7 +209,9 @@ n(1−φ)/(1+φ) gives 10.5 at n = 200, φ = 0.9, where the exact figure is 11.0
 
 ```sh
 ./build.sh      # src/ -> app.html, then node --check
-./addlesson.sh <authoring.py> <seed-stem> <topicId> <storeDocId> <masterySetStem>
+node tools/lesson.js brief <topicId>   # the work order: ids, files, previous-year items
+./addlesson.sh <authoring.py> <seed-stem>   # the topic, lesson id and pool are read from the seed
+node tools/lesson.js check <topicId>   # every validator for one topic; CI repeats it
 node test.js    # FIRST — it rebuilds the harness
 node clicktest.js
 ```
@@ -224,7 +226,7 @@ wiring, and updates both copies of the index. It uses an exact-line match for th
 because a substring test once matched `probabilityt1` against `probabilityt13` and silently
 skipped a lesson that would have been pushed while invisible to every test.
 
-Republish the artifact page **only when `src/` changed**. Content changes go to the store alone.
+Content changes need no deploy step of their own: merge the PR and Vercel rebuilds. `site/manifest.json` on the deployed site lists every lesson, its version, pool size and content hash.
 
 ### Two traps in the pipeline itself
 
@@ -260,7 +262,7 @@ takes its root from `__dirname`. The repo was pushed once with `/tmp/claude-0/..
 
 ---
 
-## 8. The store
+## 8. The documents (generated from `seed/`)
 
 | Collection | Document | Holds |
 |---|---|---|
@@ -269,12 +271,9 @@ takes its root from `__dirname`. The repo was pushed once with `/tmp/claude-0/..
 | `meta` | `lessons` | the index — **pin `if_version`** |
 | `meta` | `catalog` | 167 topics across 21 modules |
 
-Push the lesson, its question set and `meta/lessons` in **one** `ArtifactData` batch, using
-`file_path` so a large document never passes through the conversation, and pinning
-`meta/lessons` with the `if_version` you last read. Read large documents back with `out_dir`
-so they land on disk rather than in context.
-
-Republishing the page: omit `capabilities` so the stored `db` rules carry forward.
+These documents are generated into `site/data.json` by `tools/seed-docs.js`; nothing is pushed anywhere by hand,
+and `meta/lessons` is computed, never committed. Learner progress is stored separately per learner and never
+touches lesson content.
 
 ---
 
