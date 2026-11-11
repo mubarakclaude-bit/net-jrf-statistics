@@ -508,8 +508,8 @@ LES = dict(
              "base 2024=100 (MoSPI first release 12 February 2026, and the CPI 2024 FAQ for the linking factors and "
              "the worked linking example); the IIP series on base 2022-23 (base report 25 May 2026, first release "
              "1 June 2026); the WPI base revision to 2022-23 and the Output PPI launched 15 June 2026; the PLFS "
-             "redesign of January 2025 (MoSPI press note on changes in sample design); HCES 2023-24; NFHS-6 (released "
-             "29 May 2026); and ASI 2023-24 (released 27 August 2025). Where a source did not state something "
+             "redesign of January 2025 (MoSPI press note on changes in sample design); HCES 2023-24; NFHS institutional responsibility "
+             "(without unsupported round-release claims); and ASI 2023-24 (released 27 August 2025). Where a source did not state something "
              "explicitly — the direction in which the IIP linking factor is applied — the lesson derives it from the "
              "published definition and says so, and no question tests it.",
   objectives=[
