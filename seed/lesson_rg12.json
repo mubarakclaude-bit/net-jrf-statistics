@@ -1,0 +1,701 @@
+{
+  "id": "regressiont12",
+  "topicId": "regression-t12",
+  "moduleId": "regression",
+  "title": "6.12 — Logistic Regression for Binary Responses",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.12 Logistic regression",
+  "engine": "B",
+  "engineName": "Model binary outcomes through log-odds, odds ratios, fitted probabilities and likelihood-based inference.",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 94,
+  "objectives": [
+    "Explain why the linear probability model can produce probabilities outside the unit interval and heteroscedastic errors.",
+    "Write the logistic regression model using the logit link and convert a linear predictor into a probability.",
+    "Interpret logistic coefficients as changes in log-odds and exponentiated coefficients as odds ratios.",
+    "Calculate fitted probabilities and marginal effects at specified covariate values.",
+    "Describe maximum-likelihood estimation, likelihood-ratio tests and deviance.",
+    "Recognise complete separation, classification thresholds and the distinction between probability and odds."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Binary outcomes and conditional probability",
+      "why": "Logistic regression models P(Y=1|X) for a binary response."
+    },
+    {
+      "id": "p2",
+      "name": "Odds, logarithms and exponential functions",
+      "why": "The logit link is the logarithm of odds, and odds ratios are exponentiated coefficients."
+    },
+    {
+      "id": "p3",
+      "name": "Maximum likelihood estimation",
+      "why": "Logistic coefficients are estimated by maximising the Bernoulli likelihood."
+    }
+  ],
+  "traps": [
+    "The logistic model is linear in the log-odds, not in the probability.",
+    "The fitted probability is exp(η)/(1+exp(η)), which always lies strictly between zero and one for finite η.",
+    "A coefficient β_j changes log-odds per unit x_j; exp(β_j) is the multiplicative change in odds.",
+    "An odds ratio is not a probability ratio or a percentage-point change in probability.",
+    "The marginal effect in a simple logit model is βp(1−p), so it depends on the covariate values through p.",
+    "Logistic coefficients are estimated by maximum likelihood, not ordinary least squares.",
+    "Deviance is based on log-likelihood; a smaller deviance indicates better fit relative to the saturated model.",
+    "Complete separation can make ordinary maximum-likelihood estimates diverge."
+  ],
+  "howto": "Write η=X′β, then convert to p=1/(1+exp(−η)). Interpret β as a log-odds coefficient and exp(β) as an odds ratio. For a fitted probability, calculate η first and apply the logistic transformation. For a continuous regressor, the marginal effect is βp(1−p), evaluated at the stated covariate values. Keep probability, odds and odds ratio distinct.",
+  "refs": [
+    {
+      "title": "Introductory Econometrics: A Modern Approach",
+      "where": "Binary response models and logit",
+      "site": "Jeffrey M. Wooldridge",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Applied derivation and interpretation of logistic regression."
+    },
+    {
+      "title": "Econometric Analysis",
+      "where": "Qualitative and limited dependent variable models",
+      "site": "William H. Greene",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Likelihood, marginal effects, separation and inference."
+    },
+    {
+      "title": "An Introduction to Categorical Data Analysis",
+      "where": "Logistic regression",
+      "site": "Alan Agresti",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Clear treatment of odds, odds ratios and binary-response likelihood."
+    }
+  ],
+  "provenance": "Authored for UGC NET Statistics Paper 2 Unit VI. All numerical probability, odds-ratio and marginal-effect anchors are original practice examples and are checked in verify_regression_t12.py. No June 2026 question is claimed as a direct logistic-regression PYQ.",
+  "revision": {
+    "sheet": [
+      "For binary Y, logistic regression models p(x)=P(Y=1|X=x).",
+      "Logit link: log[p/(1−p)]=η=X′β.",
+      "Inverse logit: p=exp(η)/(1+exp(η))=1/(1+exp(−η)).",
+      "For finite η, fitted probabilities lie strictly between zero and one.",
+      "A coefficient β_j changes log-odds by β_j per unit increase in x_j, holding other regressors fixed.",
+      "The odds ratio for a one-unit increase in x_j is exp(β_j).",
+      "Odds are p/(1−p); odds are not the same as probability.",
+      "For a continuous regressor in a simple logit, marginal effect is βp(1−p).",
+      "Coefficients are estimated by maximum likelihood under the Bernoulli model.",
+      "Deviance compares fitted and saturated log-likelihoods; separation can cause diverging estimates."
+    ],
+    "cards": [
+      [
+        "Logit",
+        "log[p/(1−p)]"
+      ],
+      [
+        "Inverse logit",
+        "1/(1+e^(−η))"
+      ],
+      [
+        "Odds",
+        "p/(1−p)"
+      ],
+      [
+        "Odds ratio",
+        "e^β"
+      ],
+      [
+        "Log-odds coefficient",
+        "β per unit x"
+      ],
+      [
+        "Marginal effect",
+        "βp(1−p)"
+      ],
+      [
+        "Estimation",
+        "Maximum likelihood"
+      ],
+      [
+        "Separation",
+        "No finite ordinary MLE in complete separation"
+      ]
+    ],
+    "tricks": [
+      "Convert η to p only after calculating the full linear predictor.",
+      "Exponentiate β to get the odds ratio; do not call β itself a percentage change in probability.",
+      "At p=0.5, p(1−p)=0.25 and the simple-logit marginal effect is β/4.",
+      "For large |η|, p is near zero or one and the marginal effect becomes small."
+    ],
+    "shortcuts": [
+      "η=0 gives p=0.5.",
+      "OR>1 when β>0; OR<1 when β<0.",
+      "Probability p and odds p/(1−p) are different scales."
+    ],
+    "remember": [
+      "An odds ratio of 2 means the odds double; it does not mean the probability doubles.",
+      "The logistic curve is S-shaped and its slope depends on the covariate value."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh binary outcomes, odds and likelihood",
+      "objective": "Recover the probability tools needed for logistic regression.",
+      "body": [
+        "A binary response takes values zero and one. The quantity of interest is the conditional probability that the response equals one, given the regressors.",
+        "Logistic regression keeps the fitted probability in the unit interval by modelling the log-odds as a linear function of the predictors."
+      ],
+      "items": [
+        {
+          "ask": "What is the odds corresponding to probability p?",
+          "recall": "p/(1−p).",
+          "refresh": [
+            "Probability is the chance of success; odds compare the chance of success with the chance of failure.",
+            "If p=0.8, the odds are 0.8/0.2=4, meaning four successes per failure in odds terms.",
+            "Odds are not themselves probabilities and can exceed one."
+          ]
+        },
+        {
+          "ask": "What is the logit of a probability?",
+          "recall": "log[p/(1−p)], the logarithm of the odds.",
+          "refresh": [
+            "The logit transforms probabilities in (0,1) to the whole real line.",
+            "The logistic regression linear predictor η is modelled as the logit of the conditional success probability.",
+            "The inverse-logit transformation maps any finite η back into a probability strictly between zero and one."
+          ]
+        },
+        {
+          "ask": "What is maximum likelihood estimation?",
+          "recall": "Choose parameter values that maximise the likelihood of the observed data.",
+          "refresh": [
+            "For independent binary observations, the likelihood is the product of Bernoulli probabilities.",
+            "The log-likelihood is easier to optimise because it converts the product into a sum.",
+            "Logistic regression coefficients are obtained by maximising this log-likelihood, usually numerically."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Why is the logit link useful for a binary response?",
+        "nudge": "It maps an unrestricted linear predictor to a probability between zero and one."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Why not use an unrestricted straight line for probability?",
+      "objective": "Build an intuitive reason for the logistic curve.",
+      "body": [
+        "A linear probability model uses E(Y|X)=X′β. It is simple to estimate, but fitted values can be negative or exceed one, and its Bernoulli error variance depends on the probability.",
+        "The logistic model instead lets a linear predictor act on the log-odds. The inverse-logit curve is S-shaped and remains between zero and one.",
+        "The curve is steepest near p=0.5 and flattens near zero and one, so the same coefficient produces different probability changes at different covariate values."
+      ],
+      "scenario": {
+        "teaser": "Predicting whether a borrower defaults",
+        "title": "Keep fitted probabilities valid",
+        "body": [
+          "A bank predicts whether a borrower defaults using income, debt and credit history. A linear probability model can produce a fitted value of 1.12 for a high-risk borrower or −0.08 for a low-risk borrower.",
+          "Those numbers cannot be interpreted as probabilities. The logistic model constructs a linear predictor η and converts it through p=1/(1+exp(−η)).",
+          "For every finite η the fitted probability lies between zero and one. The effect of a predictor on probability is not constant: it depends on the current fitted probability.",
+          "This makes logistic regression a natural model for binary outcomes, while still requiring attention to calibration, specification and the assumptions behind the likelihood."
+        ],
+        "q": "What guarantees that a finite linear predictor gives a valid probability?",
+        "answer": "The inverse-logit transformation maps every finite η into (0,1)."
+      },
+      "ask": {
+        "q": "Where is the logistic curve steepest?",
+        "nudge": "Consider the factor p(1−p)."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "The logit model and inverse-logit probability",
+      "objective": "Write and transform the logistic regression equation.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Logit specification",
+          "body": "log[p_i/(1−p_i)]=η_i=β₀+β₁x_{i1}+…+β_kx_{ik}. The linear predictor is a model for log-odds."
+        },
+        {
+          "t": "step",
+          "h": "Invert the logit",
+          "body": "Solving for p gives p_i=exp(η_i)/(1+exp(η_i))=1/(1+exp(−η_i)). This is always between zero and one for finite η_i."
+        },
+        {
+          "t": "note",
+          "h": "Probability and odds",
+          "body": "Odds are p/(1−p). If p=0.8, odds are 4; if odds are 4, probability is 4/(1+4)=0.8."
+        },
+        {
+          "t": "def",
+          "h": "Linear probability model contrast",
+          "body": "The linear probability model has a constant probability slope but may leave [0,1]. Logistic regression has a nonlinear probability curve and a linear log-odds index."
+        }
+      ],
+      "flow": {
+        "caption": "From predictors to a valid fitted probability",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Regressors X",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Linear predictor η=X′β",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Log-odds η",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Inverse logit",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Probability p in (0,1)",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      },
+      "ask": {
+        "q": "What probability corresponds to η=0?",
+        "nudge": "The odds are exp(0)=1, so success and failure are equally likely."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example: calculate a fitted probability",
+      "objective": "Convert a logit linear predictor into a probability.",
+      "problem": "A fitted model has η=−1 for a borrower. Calculate the fitted probability of default.",
+      "steps": [
+        {
+          "say": "Write the inverse-logit formula.",
+          "math": "p=1/(1+e^(−η))",
+          "why": "This converts log-odds into probability."
+        },
+        {
+          "say": "Substitute η=−1.",
+          "math": "p=1/(1+e)",
+          "why": "The negative predictor gives odds below one."
+        },
+        {
+          "say": "Evaluate the exponential.",
+          "math": "e≈2.71828",
+          "why": "The calculation is numerical after the exact transformation."
+        },
+        {
+          "say": "Compute the probability.",
+          "math": "p≈1/3.71828≈0.2689",
+          "why": "The fitted probability is about 26.9%, safely between zero and one."
+        }
+      ],
+      "ask": {
+        "q": "What would the fitted probability be if η=0?",
+        "nudge": "The inverse logit of zero is one half."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 5,
+      "title": "Recall odds ratios and coefficients",
+      "objective": "Retrieve the interpretation of logistic coefficients.",
+      "intro": "Answer before reading the explanation.",
+      "items": [
+        {
+          "q": "What does β_j represent in a logit model?",
+          "a": "The change in log-odds for a one-unit increase in x_j, holding other regressors fixed."
+        },
+        {
+          "q": "What is the odds ratio for a one-unit increase in x_j?",
+          "a": "exp(β_j)."
+        },
+        {
+          "q": "Does an odds ratio of 2 mean the probability doubles?",
+          "a": "No. It means the odds double; the probability change depends on the baseline probability."
+        },
+        {
+          "q": "What is the marginal effect for a continuous x in a simple logit model?",
+          "a": "βp(1−p), evaluated at the specified covariate values."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 6,
+      "title": "Complete the coefficient interpretation",
+      "objective": "Reconstruct the odds-ratio and marginal-effect relationships.",
+      "problem": "Complete the main interpretation rules.",
+      "steps": [
+        {
+          "say": "The logit coefficient changes log-odds.",
+          "blank": {
+            "prompt": "A one-unit increase in x changes log-odds by _____.",
+            "answer": "β",
+            "accept": [
+              "beta",
+              "β_j"
+            ],
+            "hint": "It is the coefficient multiplying x."
+          }
+        },
+        {
+          "say": "Exponentiate the coefficient to obtain an odds multiplier.",
+          "blank": {
+            "prompt": "The odds ratio is _____.",
+            "answer": "exp(β)",
+            "accept": [
+              "e^β",
+              "exp(beta)",
+              "e^beta"
+            ],
+            "hint": "Take the exponential of the log-odds coefficient."
+          }
+        },
+        {
+          "say": "The continuous-variable probability derivative depends on p.",
+          "blank": {
+            "prompt": "The marginal effect is β times p times _____.",
+            "answer": "1−p",
+            "accept": [
+              "1-p"
+            ],
+            "hint": "The product p(1−p) is largest at one half."
+          }
+        },
+        {
+          "say": "The coefficients are fitted by maximising the Bernoulli likelihood.",
+          "blank": {
+            "prompt": "The estimation method is maximum _____.",
+            "answer": "likelihood",
+            "accept": [
+              "maximum likelihood"
+            ],
+            "hint": "It chooses parameters that make the observed binary outcomes most likely."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Odds ratios, marginal effects and likelihood",
+      "objective": "Interpret coefficients and describe estimation and inference.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Odds ratio",
+          "body": "A one-unit increase in x_j multiplies the odds by exp(β_j), holding other regressors fixed. If β_j>0, the odds ratio exceeds one; if β_j<0, it is below one."
+        },
+        {
+          "t": "formula",
+          "h": "Marginal effect",
+          "body": "For a continuous regressor in a simple logit model, ∂p/∂x=βp(1−p). The marginal effect depends on x through p and is largest in magnitude near p=0.5."
+        },
+        {
+          "t": "step",
+          "h": "Maximum likelihood",
+          "body": "The Bernoulli log-likelihood is Σ[y_i log(p_i)+(1−y_i)log(1−p_i)]. The coefficient estimates maximise this function, usually by iterative numerical methods."
+        },
+        {
+          "t": "note",
+          "h": "Deviance and tests",
+          "body": "Deviance is −2 times the log-likelihood ratio between the fitted model and the saturated model. Likelihood-ratio tests compare nested models using differences in deviance."
+        }
+      ],
+      "ask": {
+        "q": "Why is exp(β) an odds ratio rather than a probability ratio?",
+        "nudge": "The coefficient is linear in log[p/(1−p)], not in p."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s7",
+      "mins": 7,
+      "title": "The same odds ratio, different probability changes",
+      "objective": "Understand why a logistic marginal effect varies with baseline risk.",
+      "body": [
+        "A coefficient shifts log-odds by a fixed amount. But the probability scale is nonlinear, so the probability change from the same coefficient depends on the starting probability.",
+        "Near p=0.5, the logistic curve is steep. Near p=0 or p=1, it is flat. This is why reporting an odds ratio does not fully describe the probability change for every person."
+      ],
+      "scenario": {
+        "teaser": "Same coefficient, different baseline risks",
+        "title": "Odds are not probability points",
+        "body": [
+          "A one-unit predictor increase has an odds ratio of 2. For a person whose baseline probability is 0.10, the baseline odds are 0.10/0.90=1/9. Doubling the odds gives 2/9 and a new probability of 2/11≈0.182.",
+          "For a person whose baseline probability is 0.50, the baseline odds are 1. Doubling the odds gives odds 2 and a new probability of 2/3≈0.667.",
+          "The same odds ratio therefore produces different probability changes: about 8.2 percentage points in the first case and 16.7 points in the second.",
+          "An odds ratio is constant for a one-unit change in x in the model, but the marginal effect on probability varies with the covariates."
+        ],
+        "q": "Why are the probability changes different even though the odds ratio is the same?",
+        "answer": "The inverse-logit transformation is nonlinear and depends on the baseline probability."
+      },
+      "ask": {
+        "q": "What does a constant odds ratio imply about probability changes?",
+        "nudge": "It does not imply a constant percentage-point change."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 8,
+      "title": "Worked example: calculate an odds ratio and marginal effect",
+      "objective": "Interpret a coefficient on both the odds and probability scales.",
+      "problem": "A logit model has β=ln(2) for x. At a covariate value where p=0.5, calculate the odds ratio and marginal effect.",
+      "steps": [
+        {
+          "say": "Exponentiate the coefficient.",
+          "math": "OR=e^(ln 2)=2",
+          "why": "A one-unit increase doubles the odds."
+        },
+        {
+          "say": "Write the marginal-effect formula.",
+          "math": "ME=βp(1−p)",
+          "why": "The probability derivative depends on the current fitted probability."
+        },
+        {
+          "say": "Substitute p=0.5.",
+          "math": "ME=ln(2)×0.5×0.5",
+          "why": "At p=0.5, p(1−p)=0.25."
+        },
+        {
+          "say": "Evaluate.",
+          "math": "ME≈0.6931×0.25≈0.1733",
+          "why": "The local probability slope is about 0.173 per unit x at this point."
+        }
+      ],
+      "ask": {
+        "q": "Would the marginal effect be as large near p=0.02?",
+        "nudge": "The product p(1−p) is much smaller near zero."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Guided problem: distinguish odds from probability",
+      "objective": "Convert between probability and odds without mixing scales.",
+      "problem": "A borrower has predicted default probability p=0.8. What are the odds of default, and what probability corresponds to odds of 4?",
+      "hints": [
+        "Odds equal p divided by one minus p.",
+        "To reverse odds o into probability, use o/(1+o).",
+        "Check that the two calculations are inverse transformations."
+      ],
+      "answer": "Odds are 0.8/0.2=4; odds of 4 correspond to probability 4/(1+4)=0.8.",
+      "solution": [
+        {
+          "say": "Calculate the failure probability.",
+          "math": "1−p=0.2",
+          "why": "The denominator in odds is the probability of no default."
+        },
+        {
+          "say": "Divide probability by its complement.",
+          "math": "0.8/0.2=4",
+          "why": "The odds are four to one."
+        },
+        {
+          "say": "Invert odds o to probability.",
+          "math": "p=o/(1+o)",
+          "why": "This is the inverse odds transformation."
+        },
+        {
+          "say": "Substitute o=4.",
+          "math": "4/5=0.8",
+          "why": "The two transformations recover the original probability."
+        }
+      ],
+      "ask": {
+        "q": "Why can odds exceed one while probabilities cannot?",
+        "nudge": "Odds divide p by 1−p; the denominator can be smaller than the numerator."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s10",
+      "mins": 6,
+      "title": "Exam traps: logit, odds and inference",
+      "objective": "Avoid common logistic-regression interpretation errors.",
+      "intro": "Mark each statement true or false.",
+      "items": [
+        {
+          "claim": "The logistic model is linear in the log-odds.",
+          "tf": true,
+          "why": "The logit is the linear predictor X′β."
+        },
+        {
+          "claim": "The fitted probability can exceed one for a finite linear predictor.",
+          "tf": false,
+          "why": "The inverse-logit maps finite η into (0,1)."
+        },
+        {
+          "claim": "exp(β) is the odds ratio for a one-unit increase in x.",
+          "tf": true,
+          "why": "Exponentiating a log-odds change gives the multiplicative odds change."
+        },
+        {
+          "claim": "An odds ratio of two means the probability doubles.",
+          "tf": false,
+          "why": "The probability change depends on the baseline probability."
+        },
+        {
+          "claim": "Complete separation can prevent finite ordinary maximum-likelihood estimates.",
+          "tf": true,
+          "why": "The likelihood can increase as a coefficient diverges."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "mins": 8,
+      "title": "Transfer problem: identify separation and deviance",
+      "objective": "Interpret likelihood-based diagnostics.",
+      "problem": "A predictor perfectly separates all Y=1 observations from all Y=0 observations. What happens to ordinary logistic maximum-likelihood estimates, and what does a likelihood-ratio test compare?",
+      "hints": [
+        "Think about whether a finite coefficient can perfectly separate the outcomes.",
+        "Recall the direction of the likelihood as the coefficient grows.",
+        "A likelihood-ratio test compares nested models through their log-likelihoods or deviances."
+      ],
+      "answer": "Complete separation can make ordinary MLE coefficients diverge; a likelihood-ratio test compares the fit of nested models using a deviance difference.",
+      "solution": [
+        {
+          "say": "Perfect separation means a predictor divides the two outcome classes without overlap.",
+          "math": "P(Y=1|x) approaches 1 or 0"
+        },
+        {
+          "say": "The likelihood can improve as the separating coefficient grows in magnitude.",
+          "math": "|β̂|→∞"
+        },
+        {
+          "say": "A finite ordinary MLE may not exist.",
+          "math": "Complete separation"
+        },
+        {
+          "say": "Nested models are compared using twice the log-likelihood difference.",
+          "math": "LR = D_restricted − D_full"
+        }
+      ],
+      "ask": {
+        "q": "What is the key warning from complete separation?",
+        "nudge": "The coefficient estimate may not converge to a finite value."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s12",
+      "mins": 5,
+      "title": "Summary: log-odds, odds ratio and probability",
+      "objective": "Compress the logistic model into an exam-ready checklist.",
+      "body": [
+        "Logistic regression models log[p/(1−p)]=X′β. The inverse-logit p=1/(1+exp(−X′β)) keeps fitted probabilities between zero and one.",
+        "A coefficient is a change in log-odds; exp(β) is the odds ratio. An odds ratio of two doubles odds, not probability. For a continuous regressor, the simple-logit marginal effect is βp(1−p) and varies with the covariate values.",
+        "Coefficients are estimated by maximum likelihood. Deviance and likelihood-ratio tests compare model fit. Complete separation can make ordinary maximum-likelihood estimates diverge."
+      ],
+      "ask": {
+        "q": "What is the safest three-step interpretation of a logit coefficient?",
+        "nudge": "State the log-odds change, exponentiate for the odds ratio, then calculate a marginal effect if a probability change is requested."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s13",
+      "mins": 8,
+      "ext": true,
+      "title": "Extension — likelihood and deviance",
+      "objective": "Connect logistic estimation to likelihood-based model comparison.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Bernoulli log-likelihood",
+          "body": "ℓ(β)=Σ[y_i log(p_i)+(1−y_i)log(1−p_i)], with p_i=1/(1+exp(−x_i′β)). The MLE maximises this log-likelihood."
+        },
+        {
+          "t": "step",
+          "h": "Deviance",
+          "body": "D=−2[ℓ(fitted)−ℓ(saturated)]. A smaller deviance indicates a closer fit to the saturated model."
+        },
+        {
+          "t": "note",
+          "h": "Likelihood-ratio test",
+          "body": "For nested models, LR=2(ℓ_full−ℓ_restricted)=D_restricted−D_full. Under regularity conditions and the null, it is asymptotically chi-square with degrees of freedom equal to the number of restrictions."
+        }
+      ],
+      "ask": {
+        "q": "What does a deviance difference measure for nested models?",
+        "nudge": "It is twice the log-likelihood gain from the larger model."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 0,
+      "title": "6.12 mastery test",
+      "setId": "regression_t12_mastery",
+      "objective": "Demonstrate logistic-regression interpretation independently."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings, not an NTA rule. Ten unseen questions are drawn as 3 easy, 5 moderate and 2 hard; the pass threshold is 80% overall with 70% floors for numerical and multi-statement items."
+  }
+}
