@@ -1,0 +1,38 @@
+name: Regression T11 indicator and dummy variables validation
+on:
+  pull_request:
+    branches: [main, gpt/regression-t6-autocorrelation-dw]
+  push:
+    branches: [gpt/fix-regression-mastery-contract]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate-regression-t11:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Verify indicator-variable calculations and mastery pool
+        run: python verify_regression_t11.py
+      - name: Validate regression lesson structures and pools
+        run: |
+          for f in seed/lesson_regression_t{1,2,3,4,5,6,7,11}.json; do
+            node vcheck.js "$f"
+          done
+      - name: Build app
+        run: bash build.sh
+      - name: Install browser-test dependency
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run browser integration suite
+        run: |
+          node test.js
+          node clicktest.js

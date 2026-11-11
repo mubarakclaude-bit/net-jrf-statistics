@@ -1,0 +1,524 @@
+{
+  "id": "regressiont11",
+  "topicId": "regression-t11",
+  "moduleId": "regression",
+  "title": "6.8 — Indicator and Dummy Variables",
+  "breadcrumb": "Regression · Categorical predictors",
+  "engine": "B",
+  "engineName": "Guided lesson",
+  "version": "1.0",
+  "status": "draft",
+  "estMin": 94,
+  "objectives": [
+    "Encode a K-category predictor using K−1 indicators with an intercept.",
+    "Interpret an intercept and dummy coefficients relative to a reference category.",
+    "Detect the dummy-variable trap using a linear-dependence argument.",
+    "Distinguish level shifts from slope changes using interaction terms.",
+    "Set up joint tests and calculate residual degrees of freedom."
+  ],
+  "prereq": [
+    "Interpret an intercept and slope in a linear regression.",
+    "Substitute values into a fitted regression equation.",
+    "Recognise categories and distinguish them from quantitative measurements."
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule. Ten questions are drawn with a 3/5/2 difficulty mix; retakes draw again."
+  },
+  "howto": "Work through the group examples before memorising the coding rule. In every calculation, write the indicator values first, substitute them into the fitted equation, and then interpret the coefficient in words. Finish by counting estimated coefficients before writing degrees of freedom.",
+  "traps": [
+    "Do not code unordered labels as 1, 2, 3 and interpret the spacing as quantitative.",
+    "With an intercept, do not include all K mutually exclusive category indicators.",
+    "A level dummy changes the intercept; a slope change requires an interaction.",
+    "A coefficient is a contrast with the chosen reference category, not an absolute group mean unless it is the intercept.",
+    "A joint hypothesis about several categories needs a joint test."
+  ],
+  "refs": [
+    "Gujarati and Porter, Basic Econometrics, chapters on qualitative variables and dummy-variable regression.",
+    "Wooldridge, Introductory Econometrics, sections on qualitative information and interaction terms.",
+    "NIST/SEMATECH e-Handbook of Statistical Methods, regression and categorical-variable modelling (conceptual reference)."
+  ],
+  "provenance": "Authored as a syllabus-audit lesson for catalogue topic regression-t11. The local June 2026 PYQ archive was searched for dummy, indicator, qualitative and seasonal-variable wording; no direct matching question was found. Numerical examples and the mastery pool were independently checked with verify_regression_t11.py. No item is represented as a June 2026 PYQ.",
+  "revision": {
+    "sheet": [
+      "K categories + intercept → K−1 indicators.",
+      "Omitted category = reference group.",
+      "Intercept = reference-group fitted mean at zero numerical predictors.",
+      "Dummy coefficient = adjusted group difference.",
+      "All K dummies + intercept → exact dependence.",
+      "Level dummy shifts intercept.",
+      "xD interaction can change slope.",
+      "Joint group restrictions → F test.",
+      "Residual df = n−p when rank is full."
+    ],
+    "cards": [
+      [
+        "Coding",
+        "K−1 indicators with an intercept"
+      ],
+      [
+        "Reference",
+        "All included indicators are zero"
+      ],
+      [
+        "Intercept",
+        "Reference-group baseline"
+      ],
+      [
+        "Dummy coefficient",
+        "Difference from reference"
+      ],
+      [
+        "Trap",
+        "Intercept equals sum of K indicators"
+      ],
+      [
+        "Interaction",
+        "Allows a slope difference"
+      ]
+    ],
+    "tricks": [
+      "Write the 0/1 pattern before substituting.",
+      "For K groups, count K−1 contrasts.",
+      "For group-line equality, test intercept and slope differences jointly."
+    ],
+    "shortcuts": [
+      "Predicted reference group: set every dummy to zero.",
+      "Predicted category: set its indicator to one and the others to zero.",
+      "Residual df: n minus all estimated coefficients."
+    ],
+    "remember": [
+      "Changing the reference changes coefficient interpretation, not fitted group predictions.",
+      "A dummy is not an ordinal score."
+    ]
+  },
+  "scenes": [
+    {
+      "id": "t11-foundation",
+      "kind": "foundation",
+      "mins": 7,
+      "body": "Before adding categories to a regression, recall three building blocks. A regression equation predicts a numerical response. An intercept is the predicted response when every predictor is zero. A coefficient is a change in the prediction for a one-unit change in its predictor, holding the other predictors fixed.",
+      "items": [
+        {
+          "ask": "In y = 4 + 2x, what is the intercept?",
+          "recall": "The intercept is 4.",
+          "refresh": "The intercept is the constant term. It is the model's predicted value when x is zero."
+        },
+        {
+          "ask": "What does the slope 2 mean?",
+          "recall": "A one-unit increase in x raises the fitted mean by 2.",
+          "refresh": "The slope is a conditional change in the fitted response for a one-unit increase in x, with other predictors held fixed."
+        },
+        {
+          "ask": "If a variable has levels A, B and C, is it numerical?",
+          "recall": "Not automatically; these are categories.",
+          "refresh": "A category label identifies a group. Coding A=1, B=2, C=3 does not make the gaps quantitatively meaningful."
+        }
+      ],
+      "ask": {
+        "q": "Why might entering A, B and C as 1, 2 and 3 be misleading?",
+        "nudge": "Ask whether the difference B−A has a meaningful numerical size."
+      }
+    },
+    {
+      "id": "t11-intuition",
+      "kind": "intuition",
+      "mins": 7,
+      "body": "Imagine a college comparing average examination scores across three teaching formats: classroom, online and blended. The response, score, is numerical. Teaching format is categorical. A regression still needs numerical columns, so we represent group membership with indicator variables. Each indicator is 1 when a student belongs to a named group and 0 otherwise. The model then estimates group differences without pretending that the labels have a natural order.",
+      "scenario": {
+        "title": "Three teaching formats",
+        "teaser": "A college wants to compare scores across classroom, online and blended teaching.",
+        "body": [
+          "The college records each student's score and teaching format. The formats are names, not measurements. Coding classroom=1, online=2 and blended=3 would impose an artificial ordering and equal spacing.",
+          "Instead, create indicators that record membership. Choose one format as the reference group. The intercept describes that group, and the other indicator coefficients describe differences from it. The choice of reference changes the coefficient labels, not the fitted group means or predictions."
+        ],
+        "q": "What does the coefficient of the online indicator compare?",
+        "answer": "The online group mean with the classroom reference-group mean."
+      },
+      "ask": {
+        "q": "Which part of the example is categorical?",
+        "nudge": "Identify the variable whose values are group names."
+      }
+    },
+    {
+      "id": "t11-explore",
+      "kind": "explore",
+      "mins": 5,
+      "body": "For three categories, use two indicators when the model includes an intercept. Let classroom be the reference group. D₁ marks online students and D₂ marks blended students. A classroom student has (D₁,D₂)=(0,0); an online student has (1,0); a blended student has (0,1). The pair of indicators identifies all three groups.",
+      "viz": {
+        "type": "rank-null",
+        "caption": "The dummy-variable trap is a rank problem: intercept plus all category indicators creates exact linear dependence."
+      },
+      "ask": {
+        "q": "What indicator pair represents the blended group?",
+        "nudge": "Only the blended indicator is 1."
+      }
+    },
+    {
+      "id": "t11-theory1",
+      "kind": "theory",
+      "mins": 8,
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Indicator variable",
+          "body": "An indicator (dummy) variable equals 1 when a stated condition holds and 0 otherwise."
+        },
+        {
+          "t": "formula",
+          "h": "K categories with an intercept",
+          "body": "Use K−1 indicators and select one category as the reference. This avoids exact dependence between the intercept and all K indicators."
+        },
+        {
+          "t": "step",
+          "h": "Interpretation",
+          "body": "In y = β₀ + β₁D₁ + β₂D₂ + u, β₀ is the reference-group mean, β₁ is the online-minus-reference difference, and β₂ is the blended-minus-reference difference, under the conditional-mean model."
+        }
+      ],
+      "ask": {
+        "q": "With K=5 categories and an intercept, how many indicators are normally included?",
+        "nudge": "Keep one category as the reference."
+      }
+    },
+    {
+      "id": "t11-worked1",
+      "kind": "worked",
+      "mins": 8,
+      "problem": "A fitted score model is ŷ = 52 + 6D_online + 3D_blended, with classroom as the reference. Find the fitted score for each format and interpret the online coefficient.",
+      "steps": [
+        {
+          "say": "For classroom, both indicators are zero.",
+          "math": "ŷ = 52 + 6(0) + 3(0) = 52",
+          "why": "The intercept is the fitted mean for the reference category."
+        },
+        {
+          "say": "For online, set D_online=1 and D_blended=0.",
+          "math": "ŷ = 52 + 6(1) + 3(0) = 58",
+          "why": "The online fitted mean is six points above classroom."
+        },
+        {
+          "say": "For blended, set D_online=0 and D_blended=1.",
+          "math": "ŷ = 52 + 6(0) + 3(1) = 55",
+          "why": "The blended fitted mean is three points above classroom."
+        }
+      ],
+      "ask": {
+        "q": "What is the fitted difference between online and blended?",
+        "nudge": "Subtract their fitted means, 58−55."
+      }
+    },
+    {
+      "id": "t11-recall",
+      "kind": "recall",
+      "mins": 4,
+      "intro": "Retrieve the coding rules before moving to model restrictions.",
+      "items": [
+        {
+          "q": "How many indicators for K groups with an intercept?",
+          "a": "K−1."
+        },
+        {
+          "q": "What does the intercept represent?",
+          "a": "The reference-group conditional mean when other numerical predictors are zero."
+        },
+        {
+          "q": "What is the dummy-variable trap?",
+          "a": "Perfect multicollinearity from including the intercept and all K category indicators."
+        }
+      ],
+      "ask": {
+        "q": "Why is one category omitted?",
+        "nudge": "Think of the sum of all K indicators."
+      }
+    },
+    {
+      "id": "t11-completion",
+      "kind": "completion",
+      "mins": 6,
+      "problem": "Complete the fitted-value calculation for a model with reference group A: ŷ = 10 + 4D_B + 7D_C.",
+      "steps": [
+        {
+          "blank": {
+            "prompt": "For group A, both indicators are zero, so ŷ = ___.",
+            "answer": "10",
+            "accept": [
+              "10",
+              "10.0"
+            ],
+            "hint": "Set D_B=D_C=0."
+          }
+        },
+        {
+          "blank": {
+            "prompt": "For group B, the fitted value is ___.",
+            "answer": "14",
+            "accept": [
+              "14",
+              "14.0"
+            ],
+            "hint": "Set D_B=1 and D_C=0."
+          }
+        },
+        {
+          "blank": {
+            "prompt": "The fitted difference C−A is ___.",
+            "answer": "7",
+            "accept": [
+              "7",
+              "7.0"
+            ],
+            "hint": "The C indicator coefficient is the difference from A."
+          }
+        }
+      ],
+      "ask": {
+        "q": "What is the fitted value for group C?",
+        "nudge": "Use D_C=1 and D_B=0."
+      }
+    },
+    {
+      "id": "t11-theory2",
+      "kind": "theory",
+      "mins": 8,
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "The dummy-variable trap",
+          "body": "For every observation, D₁ + ⋯ + D_K = 1. If the model also contains an intercept column of ones, the columns are exactly linearly dependent. The design matrix loses full column rank and OLS coefficients are not uniquely identified."
+        },
+        {
+          "t": "step",
+          "h": "Ways to code categories",
+          "body": "Use K−1 indicators with an intercept; or use all K indicators and omit the intercept. Do not include both the intercept and all K indicators."
+        },
+        {
+          "t": "def",
+          "h": "Reference category",
+          "body": "The omitted category is the comparison baseline. Changing the reference category changes the parameterisation, not the fitted values from the same full group-means model."
+        }
+      ],
+      "flow": {
+        "caption": "Choose a valid coding scheme",
+        "nodes": [
+          "K categories",
+          "Intercept included?",
+          "Use K−1 indicators",
+          "No intercept: K indicators"
+        ],
+        "edges": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ]
+        ]
+      },
+      "ask": {
+        "q": "What algebraic relation causes the trap?",
+        "nudge": "The indicators add to the intercept column."
+      }
+    },
+    {
+      "id": "t11-scenario2",
+      "kind": "intuition",
+      "mins": 7,
+      "body": "A retailer studies monthly sales across four seasons. Winter is the reference season, and the model includes a linear time trend. Three seasonal indicators allow the average level to differ by season while keeping winter as the baseline. If the indicators are coded correctly, the coefficient for summer is the conditional difference between summer and winter at the same value of the trend variable.",
+      "scenario": {
+        "title": "Seasonal sales",
+        "teaser": "A retailer wants to separate seasonal level shifts from a long-run trend.",
+        "body": [
+          "The response is monthly sales. The season variable has four categories: winter, spring, summer and autumn. A trend variable records time. The model includes the trend and three seasonal indicators, with winter omitted as the reference.",
+          "The trend coefficient describes the common change associated with one time unit, while each seasonal coefficient shifts the fitted level relative to winter. These are level shifts only. To allow the trend itself to differ by season, the model needs interactions between the trend and seasonal indicators."
+        ],
+        "q": "How many seasonal indicators are used with an intercept?",
+        "answer": "Three, because one of four seasons is the reference."
+      },
+      "ask": {
+        "q": "Does a seasonal indicator by itself change the trend slope?",
+        "nudge": "It adds a constant group shift unless an interaction is included."
+      }
+    },
+    {
+      "id": "t11-worked2",
+      "kind": "worked",
+      "mins": 8,
+      "problem": "Let ŷ = 20 + 1.5x + 4D, where D=1 for group B and 0 for group A. Find the fitted values at x=3 and interpret the dummy coefficient.",
+      "steps": [
+        {
+          "say": "For group A, D=0.",
+          "math": "ŷ_A = 20 + 1.5(3) + 4(0) = 24.5",
+          "why": "The reference group has no dummy shift."
+        },
+        {
+          "say": "For group B, D=1.",
+          "math": "ŷ_B = 20 + 1.5(3) + 4(1) = 28.5",
+          "why": "The group B fitted value is four units higher at the same x."
+        },
+        {
+          "say": "Compare the groups at the same x.",
+          "math": "ŷ_B − ŷ_A = 4",
+          "why": "The dummy coefficient is an adjusted intercept difference, not a slope difference."
+        }
+      ],
+      "ask": {
+        "q": "What extra term would allow group B to have a different slope?",
+        "nudge": "Multiply x by the indicator."
+      }
+    },
+    {
+      "id": "t11-theory3",
+      "kind": "theory",
+      "mins": 8,
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Interaction or slope dummy",
+          "body": "In y = β₀ + β₁x + β₂D + β₃(xD) + u, group A (D=0) has intercept β₀ and slope β₁. Group B (D=1) has intercept β₀+β₂ and slope β₁+β₃."
+        },
+        {
+          "t": "step",
+          "h": "Testing group differences",
+          "body": "H₀: β₂=0 tests equal intercepts when the slope is common. H₀: β₂=β₃=0 tests whether the two regression lines are identical. Use a joint F test for the two restrictions."
+        },
+        {
+          "t": "def",
+          "h": "Degrees of freedom",
+          "body": "For n observations and p estimated coefficients including the intercept, the residual degrees of freedom are n−p, provided the design matrix has full column rank."
+        }
+      ],
+      "ask": {
+        "q": "Which coefficient captures the slope difference in the interaction model?",
+        "nudge": "Look at the coefficient multiplying xD."
+      }
+    },
+    {
+      "id": "t11-guided1",
+      "kind": "guided",
+      "mins": 7,
+      "problem": "A model uses an intercept and indicators for three of four regions. Explain why the omitted region is not lost from the analysis.",
+      "hints": [
+        {
+          "level": "direction",
+          "text": "Write the indicator values for the omitted region."
+        },
+        {
+          "level": "method",
+          "text": "Use the intercept as that region's baseline."
+        },
+        {
+          "level": "next step",
+          "text": "Compare the other three region coefficients with this baseline."
+        }
+      ],
+      "answer": "The omitted region is the reference group: all its indicators are zero, so its fitted mean is the intercept. The other coefficients measure differences from it.",
+      "solution": [
+        "The omitted region has all included indicators equal to zero.",
+        "Its fitted mean is therefore the intercept (at zero for other regressors).",
+        "Each included region coefficient is its adjusted difference from the reference region."
+      ],
+      "ask": {
+        "q": "If the reference changes, must the fitted values change?",
+        "nudge": "The same group means can be represented with a different baseline."
+      }
+    },
+    {
+      "id": "t11-trapcheck",
+      "kind": "trapcheck",
+      "mins": 5,
+      "intro": "Check the errors that commonly cost marks.",
+      "items": [
+        {
+          "claim": "With an intercept and four categories, include four indicators.",
+          "tf": false,
+          "why": "The intercept equals the sum of the four mutually exclusive indicators, creating perfect multicollinearity."
+        },
+        {
+          "claim": "The coefficient of a dummy is interpreted relative to the reference category.",
+          "tf": true,
+          "why": "The omitted category supplies the baseline for the included category contrasts."
+        },
+        {
+          "claim": "A dummy variable for group B automatically allows a different slope for B.",
+          "tf": false,
+          "why": "A level dummy shifts the intercept; a product of the dummy and x is needed for a slope change."
+        },
+        {
+          "claim": "A joint test of all seasonal coefficients can test whether seasonal effects are present.",
+          "tf": true,
+          "why": "The joint null sets all seasonal contrast coefficients to zero."
+        }
+      ],
+      "ask": {
+        "q": "Which model term creates a slope difference?",
+        "nudge": "It is the interaction x multiplied by the indicator."
+      }
+    },
+    {
+      "id": "t11-guided2",
+      "kind": "guided",
+      "mins": 7,
+      "problem": "A study has n=60 observations, an intercept, two numerical predictors, and indicators for four regions using one reference region. What are the residual degrees of freedom, and how many restrictions test equality of all four regional effects?",
+      "hints": [
+        {
+          "level": "direction",
+          "text": "Count estimated coefficients, including the intercept and the three region indicators."
+        },
+        {
+          "level": "method",
+          "text": "Residual degrees of freedom equal n minus the number of estimated coefficients."
+        },
+        {
+          "level": "next step",
+          "text": "The equality-of-region null sets all three regional contrast coefficients to zero."
+        }
+      ],
+      "answer": "There are 1+2+3=6 coefficients, so residual df=60−6=54. Testing no regional differences imposes 3 restrictions.",
+      "solution": [
+        "There are three region indicators because one of four regions is the reference.",
+        "The total number of coefficients is 1 intercept + 2 slopes + 3 indicators = 6.",
+        "Residual degrees of freedom are 60−6=54.",
+        "The joint test has 3 restrictions, one for each regional contrast."
+      ],
+      "ask": {
+        "q": "Would testing only one regional coefficient establish equality across all four regions?",
+        "nudge": "A single coefficient compares only one region with the reference."
+      }
+    },
+    {
+      "id": "t11-summary",
+      "kind": "summary",
+      "mins": 4,
+      "body": "For K categories and an intercept, use K−1 indicators. The intercept is the reference-group baseline. Each dummy coefficient is a conditional difference from that baseline. Including all K indicators with an intercept creates exact multicollinearity. A dummy shifts the intercept; an interaction with a numerical predictor can change the slope. Test several group effects jointly with an F test. Count coefficients before calculating residual degrees of freedom.",
+      "ask": {
+        "q": "State the three checks before finalising a dummy-variable regression.",
+        "nudge": "Check coding, interpretation and degrees of freedom."
+      }
+    },
+    {
+      "id": "t11-quiz",
+      "kind": "quiz",
+      "mins": 4,
+      "setId": "regression_t11_mastery"
+    }
+  ]
+}
