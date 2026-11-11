@@ -175,10 +175,34 @@
           "refresh": [
             "A complete block contains all v treatments.",
             "An incomplete block has k<v.",
-            "Balance is an additional property."
+            "Balance is an additional property.  This rebuild makes the prerequisite explicit before the new design method is used. Identify what is being counted, which units are independent, and which assumptions allow the calculation. Then explain how that idea supports the next step rather than memorising the symbol alone."
+          ]
+        },
+        {
+          "ask": "What does an incidence-matrix entry represent?",
+          "recall": "A one records that a treatment occurs in a block; zero records absence.",
+          "refresh": [
+            "Rows represent treatments and columns represent blocks in the convention used here.",
+            "The matrix is a compact record of which treatment is allocated to each block.",
+            "Row sums count treatment replications, while column sums count block sizes.",
+            "This makes matrix multiplication useful for counting pair concurrence."
+          ]
+        },
+        {
+          "ask": "What is pair concurrence?",
+          "recall": "The number of blocks containing a specified pair of distinct treatments.",
+          "refresh": [
+            "Replication r counts blocks containing one treatment; concurrence λ counts blocks containing a pair.",
+            "A BIBD requires the same λ for every distinct treatment pair.",
+            "The pair count is read from an off-diagonal entry of NN′.",
+            "Keeping r and λ separate prevents a common parameter-interpretation error."
           ]
         }
-      ]
+      ],
+      "ask": {
+        "q": "What is the main decision or result in “Why incomplete blocks?”?",
+        "nudge": "State the rule in your own words, then connect it to the calculation or design example in this scene."
+      }
     },
     {
       "kind": "intuition",
@@ -195,7 +219,8 @@
         "title": "Translate the design into symbols",
         "body": [
           "There are v=5 varieties, b=10 blocks, k=3 varieties per block, r=6 appearances per variety, and λ=3 blocks per pair.",
-          "λ refers to a pair, not a single variety."
+          "λ refers to a pair, not a single variety.",
+          "The incidence matrix is more than a display: its row totals, column totals and cross-products encode the design's replication, block size and pair concurrence. Check each quantity against the design definition before using a parameter identity. A feasible set of integers is a necessary arithmetic check, not a construction or proof that a design exists."
         ],
         "q": "Which parameter counts blocks containing a fixed pair?",
         "answer": "λ, the pair concurrence."
@@ -231,10 +256,58 @@
       "ask": {
         "q": "Why must bk equal vr?",
         "nudge": "Count the 1s in N by columns and rows."
+      },
+      "flow": {
+        "title": "From incidence matrix to BIBD checks",
+        "alt": "From incidence matrix to BIBD checks",
+        "nodes": [
+          {
+            "id": "n0",
+            "r": 0,
+            "c": 0,
+            "label": "Construct treatment-by-block matrix N",
+            "kind": "start"
+          },
+          {
+            "id": "n1",
+            "r": 1,
+            "c": 0,
+            "label": "Check row sums r and column sums k",
+            "kind": "step"
+          },
+          {
+            "id": "n2",
+            "r": 2,
+            "c": 0,
+            "label": "Compute pair concurrence NN′",
+            "kind": "step"
+          },
+          {
+            "id": "n3",
+            "r": 3,
+            "c": 0,
+            "label": "Verify parameter identities",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "n0",
+            "to": "n1"
+          },
+          {
+            "from": "n1",
+            "to": "n2"
+          },
+          {
+            "from": "n2",
+            "to": "n3"
+          }
+        ]
       }
     },
     {
-      "kind": "worked",
+      "kind": "guided",
       "id": "s3",
       "mins": 8,
       "title": "Find a missing replication",
@@ -242,24 +315,37 @@
       "problem": "A design has v=7, b=14 and k=3. Find r.",
       "hints": [
         "Use bk=vr.",
-        "Substitute."
-      ],
-      "solution": [
-        {
-          "say": "Count placements.",
-          "math": "14×3=7r, so 42=7r."
-        },
-        {
-          "say": "Solve.",
-          "math": "r=6."
-        }
+        "Substitute.",
+        "Use the formula for this layout, then verify the result against the design identity."
       ],
       "answer": "Each treatment appears in six blocks.",
       "check": "bk=42=vr.",
       "ask": {
         "q": "If b=8,k=3,v=4, find r.",
         "nudge": "24=4r."
-      }
+      },
+      "steps": [
+        {
+          "say": "Count placements.",
+          "math": "14×3=7r, so 42=7r.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Solve.",
+          "math": "r=6.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ],
+      "solution": [
+        {
+          "say": "Identify the structure.",
+          "math": "Each treatment appears in six blocks."
+        },
+        {
+          "say": "Apply the rule.",
+          "math": "bk=42=vr."
+        }
+      ]
     },
     {
       "kind": "theory",
@@ -300,22 +386,24 @@
         "Use pair identity.",
         "Then use placement identity."
       ],
-      "solution": [
-        {
-          "say": "Find λ.",
-          "math": "5λ=5×2=10, so λ=2."
-        },
-        {
-          "say": "Find b.",
-          "math": "3b=6×5=30, so b=10."
-        }
-      ],
       "answer": "λ=2 and b=10.",
       "check": "λ(v−1)=10=r(k−1); bk=30=vr.",
       "ask": {
         "q": "For v=5,r=4,k=2, find λ.",
         "nudge": "4λ=4."
-      }
+      },
+      "steps": [
+        {
+          "say": "Find λ.",
+          "math": "5λ=5×2=10, so λ=2.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Find b.",
+          "math": "3b=6×5=30, so b=10.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ]
     },
     {
       "kind": "intuition",
@@ -332,7 +420,8 @@
         "title": "Read the incidence matrix",
         "body": [
           "Take blocks 12,13,14,23,24,34. Four rows represent treatments and six columns represent blocks.",
-          "Each row sums to three and each column to two."
+          "Each row sums to three and each column to two.",
+          "The incidence matrix is more than a display: its row totals, column totals and cross-products encode the design's replication, block size and pair concurrence. Check each quantity against the design definition before using a parameter identity. A feasible set of integers is a necessary arithmetic check, not a construction or proof that a design exists."
         ],
         "q": "What are the dimensions of N?",
         "answer": "4×6."
@@ -354,30 +443,34 @@
         "Check row and column sums.",
         "Check pair concurrence."
       ],
-      "solution": [
-        {
-          "say": "Incidence matrix.",
-          "math": "N=[[1,1,1,0,0,0],[1,0,0,1,1,0],[0,1,0,1,0,1],[0,0,1,0,1,1]]."
-        },
-        {
-          "say": "Replication and block size.",
-          "math": "Every row sums to 3, so r=3; every column to 2, so k=2."
-        },
-        {
-          "say": "Pair concurrence.",
-          "math": "Every pair occurs once, so λ=1. NN′ has diagonal 3 and off-diagonal 1: NN′=2I₄+J₄."
-        },
-        {
-          "say": "Parameter identities.",
-          "math": "bk=12=vr and λ(v−1)=3=r(k−1)."
-        }
-      ],
       "answer": "BIBD parameters: v=4,b=6,r=3,k=2,λ=1.",
       "check": "There are 12 ones; each pair occurs once.",
       "ask": {
         "q": "What are diagonal and off-diagonal entries of NN′?",
         "nudge": "Self-co-occurrence versus pair concurrence."
-      }
+      },
+      "steps": [
+        {
+          "say": "Incidence matrix.",
+          "math": "N=[[1,1,1,0,0,0],[1,0,0,1,1,0],[0,1,0,1,0,1],[0,0,1,0,1,1]].",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Replication and block size.",
+          "math": "Every row sums to 3, so r=3; every column to 2, so k=2.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Pair concurrence.",
+          "math": "Every pair occurs once, so λ=1. NN′ has diagonal 3 and off-diagonal 1: NN′=2I₄+J₄.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Parameter identities.",
+          "math": "bk=12=vr and λ(v−1)=3=r(k−1).",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ]
     },
     {
       "kind": "theory",
@@ -439,7 +532,8 @@
       "problem": "A student says λ=2 means each treatment appears in two blocks for v=7,b=14,r=6,k=3,λ=2.",
       "hints": [
         "Separate individual and pair counts.",
-        "Check both identities."
+        "Check both identities.",
+        "Identify the design structure, apply the relevant relationship, and check the interpretation."
       ],
       "solution": [
         {
@@ -464,22 +558,27 @@
       "mins": 6,
       "title": "Common BIBD examination traps",
       "objective": "Avoid symbol swaps and false existence claims.",
-      "traps": [
+      "intro": "Mark each statement TRUE or FALSE. Read the reason after submitting all verdicts.",
+      "items": [
         {
-          "q": "If k=v, is the design incomplete?",
-          "a": "No; incomplete requires k<v."
+          "claim": "A BIBD has one common concurrence λ for every distinct treatment pair.",
+          "tf": true,
+          "why": "Uniform pair concurrence is part of the BIBD definition."
         },
         {
-          "q": "Does λ count blocks containing one treatment?",
-          "a": "No; r does. λ is for a pair."
+          "claim": "The identity bk=vr counts placements by blocks and by treatments.",
+          "tf": true,
+          "why": "Both sides count the total number of ones in the incidence matrix."
         },
         {
-          "q": "Do parameter identities prove existence?",
-          "a": "No; they are necessary, not sufficient."
+          "claim": "The identity λ(v−1)=r(k−1) proves that a BIBD exists.",
+          "tf": false,
+          "why": "The parameter identities are necessary feasibility conditions, not general existence proofs."
         },
         {
-          "q": "If treatments are rows, what is N's size?",
-          "a": "v×b."
+          "claim": "With treatments as rows and blocks as columns, N has dimension v×b.",
+          "tf": true,
+          "why": "Each row indexes one treatment and each column one block."
         }
       ]
     },
@@ -494,22 +593,24 @@
         "Use pair identity.",
         "Then use bk=vr."
       ],
-      "solution": [
-        {
-          "say": "Find λ.",
-          "math": "8λ=4×2=8, so λ=1."
-        },
-        {
-          "say": "Find b.",
-          "math": "3b=9×4=36, so b=12."
-        }
-      ],
       "answer": "λ=1 and b=12.",
       "check": "8=8 and 36=36.",
       "ask": {
         "q": "For v=8,r=7,k=4, find b.",
         "nudge": "4b=56."
-      }
+      },
+      "steps": [
+        {
+          "say": "Find λ.",
+          "math": "8λ=4×2=8, so λ=1.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Find b.",
+          "math": "3b=9×4=36, so b=12.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ]
     },
     {
       "kind": "summary",
@@ -520,7 +621,14 @@
       "body": [
         "Remember v treatments, b blocks, r replications, k block size and λ pair concurrence.",
         "Check bk=vr and λ(v−1)=r(k−1). For treatment-row N, row sums are r, column sums k and NN′=(r−λ)I+λJ. Feasibility is not proof of existence."
-      ],
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 2,
+      "title": "Unseen mastery test",
+      "objective": "Demonstrate that you can reconstruct and apply the design methods without hints.",
       "setId": "design_t4_mastery"
     }
   ]

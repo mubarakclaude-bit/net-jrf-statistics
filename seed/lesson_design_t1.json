@@ -1,770 +1,774 @@
 {
- "id": "designt1",
- "topicId": "design-t1",
- "moduleId": "design",
- "title": "ANOVA Tables and Degrees of Freedom in Experimental Designs",
- "breadcrumb": "Unit III · Design of Experiments · ANOVA",
- "engine": "B",
- "engineName": "NET JRF Statistics lesson engine",
- "version": "4.1",
- "status": "approved",
- "estMin": 96,
- "objectives": [
-  "Separate treatment, block and experimental error variation in a one-way and blocked experiment.",
-  "Construct the ANOVA table for a balanced completely randomised design and a randomised block design.",
-  "Derive and use the degrees-of-freedom identities for treatments, blocks, error and total.",
-  "Calculate correction factor, total, treatment and residual sums of squares from treatment totals.",
-  "Form mean squares and the appropriate F statistic, then state the conclusion without confusing statistical and practical significance."
- ],
- "prereq": [
-  {
-   "id": "p1",
-   "name": "Sample mean and deviations",
-   "why": "ANOVA compares group means through deviations from the grand mean."
-  },
-  {
-   "id": "p2",
-   "name": "Sum of squares and algebraic expansion",
-   "why": "The ANOVA decomposition is an identity that separates total variation into components."
-  },
-  {
-   "id": "p3",
-   "name": "Chi-square and F distributions",
-   "why": "Under the normal-error model, the ratio of independent mean squares has an F distribution under the null."
-  },
-  {
-   "id": "p4",
-   "name": "Independent observations and random sampling",
-   "why": "The usual fixed-effects F test relies on a correctly specified error structure and independent experimental errors."
-  }
- ],
- "mastery": {
-  "minQ": 10,
-  "pass": 80,
-  "draw": 10,
-  "fmtMin": {
-   "numeric": 70,
-   "multi": 70
-  },
-  "diffMix": {
-   "easy": 3,
-   "moderate": 5,
-   "hard": 2
-  },
-  "noHints": true,
-  "retestDays": 7,
-  "note": "Platform settings, not an NTA rule. Ten items are drawn with a 3/5/2 difficulty mix; retakes draw again."
- },
- "refs": [
-  {
-   "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
-   "where": "One-way ANOVA and analysis of variance",
-   "site": "NIST",
-   "url": "https://www.itl.nist.gov/div898/handbook/",
-   "type": "reference",
-   "free": true,
-   "why": "Accessible reference for ANOVA assumptions, sums of squares and F tests.",
-   "checked": "stable handbook landing page; section path should be opened by learner",
-   "unverified": true
-  },
-  {
-   "title": "Penn State STAT 502",
-   "where": "Analysis of Variance, one-way and randomized block designs",
-   "site": "Penn State Eberly College of Science",
-   "url": "https://online.stat.psu.edu/stat502/",
-   "type": "course",
-   "free": true,
-   "why": "Worked teaching material on linear models and ANOVA.",
-   "checked": "course landing page; exact lesson page not link-checked",
-   "unverified": true
-  },
-  {
-   "title": "Montgomery, Design and Analysis of Experiments",
-   "where": "One-factor experiments and blocking",
-   "site": "Wiley",
-   "url": "https://www.wiley.com/en-us/Design+and+Analysis+of+Experiments%2C+10th+Edition-p-9781119492443",
-   "type": "book",
-   "free": false,
-   "why": "Standard experimental-design text for the design-specific interpretation."
-  }
- ],
- "traps": [
-  "Degrees of freedom count independent pieces of information after estimating parameters; they are not the number of observations in each source.",
-  "Treatment SS is measured around the grand mean; within-group error SS is measured around each treatment mean.",
-  "In a balanced CRD with a treatments, N observations: treatment df=a−1, error df=N−a, total df=N−1.",
-  "In a complete RBD with a treatments and b blocks: treatment df=a−1, block df=b−1, error df=(a−1)(b−1), total df=ab−1.",
-  "The F statistic is MS treatment divided by MS error, not by SS error.",
-  "A significant treatment F says at least one treatment mean differs; it does not say every pair differs or that the effect is practically important.",
-  "Blocking removes predictable nuisance variation from the residual; it does not increase the number of treatment replications."
- ],
- "howto": "Read in order. Work through the two numerical examples with a pen. In each ANOVA table, check that the degrees of freedom and sums of squares add back to their totals before interpreting F. Then attempt the unseen mastery test without hints.",
- "revision": {
-  "sheet": [
-   "Correction factor: CF=G²/N, where G is the grand total and N is the number of observations.",
-   "Total SS: Σyᵢⱼ²−CF.",
-   "CRD treatment SS: ΣTᵢ²/nᵢ−CF; error SS=total SS−treatment SS.",
-   "CRD df: treatment a−1; error N−a; total N−1.",
-   "RBD treatment SS: ΣTᵢ²/b−CF; block SS=ΣBⱼ²/a−CF.",
-   "RBD error SS=total SS−treatment SS−block SS.",
-   "RBD df: treatment a−1; blocks b−1; error (a−1)(b−1); total ab−1.",
-   "Mean square: MS=SS/df; F=MS treatment/MS error.",
-   "Under H₀ and model assumptions, treatment F has F(df treatment, df error).",
-   "Check: component SS add to total SS; component df add to total df."
+  "id": "designt1",
+  "topicId": "design-t1",
+  "moduleId": "design",
+  "title": "ANOVA Tables and Degrees of Freedom in Experimental Designs",
+  "breadcrumb": "Unit III · Design of Experiments · ANOVA",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 96,
+  "objectives": [
+    "Separate treatment, block and experimental error variation in a one-way and blocked experiment.",
+    "Construct the ANOVA table for a balanced completely randomised design and a randomised block design.",
+    "Derive and use the degrees-of-freedom identities for treatments, blocks, error and total.",
+    "Calculate correction factor, total, treatment and residual sums of squares from treatment totals.",
+    "Form mean squares and the appropriate F statistic, then state the conclusion without confusing statistical and practical significance."
   ],
-  "cards": [
-   [
-    "Correction factor",
-    "G²/N"
-   ],
-   [
-    "Total SS",
-    "Σy²−CF"
-   ],
-   [
-    "CRD treatment SS",
-    "ΣTᵢ²/nᵢ−CF"
-   ],
-   [
-    "RBD block SS",
-    "ΣBⱼ²/a−CF"
-   ],
-   [
-    "Treatment df",
-    "a−1"
-   ],
-   [
-    "CRD error df",
-    "N−a"
-   ],
-   [
-    "RBD error df",
-    "(a−1)(b−1)"
-   ],
-   [
-    "F ratio",
-    "MS treatment / MS error"
-   ]
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Sample mean and deviations",
+      "why": "ANOVA compares group means through deviations from the grand mean."
+    },
+    {
+      "id": "p2",
+      "name": "Sum of squares and algebraic expansion",
+      "why": "The ANOVA decomposition is an identity that separates total variation into components."
+    },
+    {
+      "id": "p3",
+      "name": "Chi-square and F distributions",
+      "why": "Under the normal-error model, the ratio of independent mean squares has an F distribution under the null."
+    },
+    {
+      "id": "p4",
+      "name": "Independent observations and random sampling",
+      "why": "The usual fixed-effects F test relies on a correctly specified error structure and independent experimental errors."
+    }
   ],
-  "tricks": [
-   {
-    "hook": "CF first",
-    "why": "Every corrected sum of squares in the balanced computational formulas subtracts the same G²/N."
-   },
-   {
-    "hook": "T-B-E-T",
-    "why": "In an RBD table, treatments, blocks, error, total; check df and SS down their columns."
-   },
-   {
-    "hook": "Mean before F",
-    "why": "Divide each SS by its own df before forming the F ratio."
-   }
-  ],
-  "shortcuts": [
-   "Use the grand total once: CF=G²/N. Do not recompute a separate correction factor for treatments or blocks.",
-   "For a balanced RBD, compute treatment and block SS from their totals, then obtain error SS by subtraction.",
-   "Use the df identity as an error detector before computing any mean square."
-  ],
-  "remember": [
-   "ANOVA partitions variation; the F ratio compares signal per degree of freedom with unexplained variation per degree of freedom.",
-   "Blocking accounts for a nuisance source only when the block structure is part of the design and the model is appropriate."
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule. Ten items are drawn with a 3/5/2 difficulty mix; retakes draw again."
+  },
+  "refs": [
+    {
+      "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+      "where": "One-way ANOVA and analysis of variance",
+      "site": "NIST",
+      "url": "https://www.itl.nist.gov/div898/handbook/",
+      "type": "reference",
+      "free": true,
+      "why": "Accessible reference for ANOVA assumptions, sums of squares and F tests.",
+      "checked": "stable handbook landing page; section path should be opened by learner",
+      "unverified": true
+    },
+    {
+      "title": "Penn State STAT 502",
+      "where": "Analysis of Variance, one-way and randomized block designs",
+      "site": "Penn State Eberly College of Science",
+      "url": "https://online.stat.psu.edu/stat502/",
+      "type": "course",
+      "free": true,
+      "why": "Worked teaching material on linear models and ANOVA.",
+      "checked": "course landing page; exact lesson page not link-checked",
+      "unverified": true
+    },
+    {
+      "title": "Montgomery, Design and Analysis of Experiments",
+      "where": "One-factor experiments and blocking",
+      "site": "Wiley",
+      "url": "https://www.wiley.com/en-us/Design+and+Analysis+of+Experiments%2C+10th+Edition-p-9781119492443",
+      "type": "book",
+      "free": false,
+      "why": "Standard experimental-design text for the design-specific interpretation."
+    }
   ],
   "traps": [
-   "Using N−a−1 instead of N−a as CRD error df.",
-   "Using SS rather than MS in the F ratio.",
-   "Treating a significant omnibus F as proof that all pairs differ.",
-   "Subtracting CF more than once from a component sum of squares."
+    "Degrees of freedom count independent pieces of information after estimating parameters; they are not the number of observations in each source.",
+    "Treatment SS is measured around the grand mean; within-group error SS is measured around each treatment mean.",
+    "In a balanced CRD with a treatments, N observations: treatment df=a−1, error df=N−a, total df=N−1.",
+    "In a complete RBD with a treatments and b blocks: treatment df=a−1, block df=b−1, error df=(a−1)(b−1), total df=ab−1.",
+    "The F statistic is MS treatment divided by MS error, not by SS error.",
+    "A significant treatment F says at least one treatment mean differs; it does not say every pair differs or that the effect is practically important.",
+    "Blocking removes predictable nuisance variation from the residual; it does not increase the number of treatment replications."
+  ],
+  "howto": "Read in order. Work through the two numerical examples with a pen. In each ANOVA table, check that the degrees of freedom and sums of squares add back to their totals before interpreting F. Then attempt the unseen mastery test without hints.",
+  "revision": {
+    "sheet": [
+      "Correction factor: CF=G²/N, where G is the grand total and N is the number of observations.",
+      "Total SS: Σyᵢⱼ²−CF.",
+      "CRD treatment SS: ΣTᵢ²/nᵢ−CF; error SS=total SS−treatment SS.",
+      "CRD df: treatment a−1; error N−a; total N−1.",
+      "RBD treatment SS: ΣTᵢ²/b−CF; block SS=ΣBⱼ²/a−CF.",
+      "RBD error SS=total SS−treatment SS−block SS.",
+      "RBD df: treatment a−1; blocks b−1; error (a−1)(b−1); total ab−1.",
+      "Mean square: MS=SS/df; F=MS treatment/MS error.",
+      "Under H₀ and model assumptions, treatment F has F(df treatment, df error).",
+      "Check: component SS add to total SS; component df add to total df."
+    ],
+    "cards": [
+      [
+        "Correction factor",
+        "G²/N"
+      ],
+      [
+        "Total SS",
+        "Σy²−CF"
+      ],
+      [
+        "CRD treatment SS",
+        "ΣTᵢ²/nᵢ−CF"
+      ],
+      [
+        "RBD block SS",
+        "ΣBⱼ²/a−CF"
+      ],
+      [
+        "Treatment df",
+        "a−1"
+      ],
+      [
+        "CRD error df",
+        "N−a"
+      ],
+      [
+        "RBD error df",
+        "(a−1)(b−1)"
+      ],
+      [
+        "F ratio",
+        "MS treatment / MS error"
+      ]
+    ],
+    "tricks": [
+      {
+        "hook": "CF first",
+        "why": "Every corrected sum of squares in the balanced computational formulas subtracts the same G²/N."
+      },
+      {
+        "hook": "T-B-E-T",
+        "why": "In an RBD table, treatments, blocks, error, total; check df and SS down their columns."
+      },
+      {
+        "hook": "Mean before F",
+        "why": "Divide each SS by its own df before forming the F ratio."
+      }
+    ],
+    "shortcuts": [
+      "Use the grand total once: CF=G²/N. Do not recompute a separate correction factor for treatments or blocks.",
+      "For a balanced RBD, compute treatment and block SS from their totals, then obtain error SS by subtraction.",
+      "Use the df identity as an error detector before computing any mean square."
+    ],
+    "remember": [
+      "ANOVA partitions variation; the F ratio compares signal per degree of freedom with unexplained variation per degree of freedom.",
+      "Blocking accounts for a nuisance source only when the block structure is part of the design and the model is appropriate."
+    ],
+    "traps": [
+      "Using N−a−1 instead of N−a as CRD error df.",
+      "Using SS rather than MS in the F ratio.",
+      "Treating a significant omnibus F as proof that all pairs differ.",
+      "Subtracting CF more than once from a component sum of squares."
+    ]
+  },
+  "provenance": "Original GPT-authored teaching package for the repository's catalog topic design-t1. No official June 2026 PYQ is claimed. Formula derivations and all arithmetic examples are checked by verify_design_t1.py using exact integer/rational arithmetic. The lesson distinguishes balanced CRD and complete RBD. Unbalanced, missing-cell, factorial and Latin-square analyses are outside this topic's scope and are handled by adjacent catalog lessons.",
+  "anchors": [],
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Before you start — four tools this lesson uses",
+      "objective": "Refresh the small set of ideas needed to read an ANOVA table.",
+      "body": [
+        "ANOVA is not a new kind of arithmetic. It organises means, deviations and sums of squares into a table, then compares mean squares using an F distribution. The common errors are usually not in the central idea. They are in the denominator, the degrees of freedom or the name of the variation being measured.",
+        "The checks below are short. Mark a check as shaky and read its rebuild before continuing; later calculations use these ideas directly."
+      ],
+      "items": [
+        {
+          "ask": "For observations 4, 6 and 8, what is the sample mean?",
+          "recall": "The mean is 6.",
+          "refresh": [
+            "Add the observations: 4+6+8=18. Divide by the number of observations, 3. The sample mean is 18/3=6.",
+            "A mean is the balance point of the observations. The deviations from it are −2, 0 and +2, and they add to zero.",
+            "In ANOVA, the same idea is applied within each treatment group and across all observations to obtain treatment means and the grand mean."
+          ]
+        },
+        {
+          "ask": "What is the sum of squared deviations from the mean for 4, 6 and 8?",
+          "recall": "(4−6)²+(6−6)²+(8−6)²=8.",
+          "refresh": [
+            "First calculate the mean, 6. Subtract it from each observation: −2, 0 and 2.",
+            "Square before adding: 4+0+4=8. Squaring prevents positive and negative deviations from cancelling.",
+            "This is a sum of squares. ANOVA partitions such sums into treatment, block and error components."
+          ]
+        },
+        {
+          "ask": "If a sample has N observations and one mean is estimated, how many residual degrees of freedom remain?",
+          "recall": "N−1.",
+          "refresh": [
+            "There are N observed values, but their deviations from the fitted mean must sum to zero. Once N−1 deviations are chosen, the last is forced.",
+            "That is why estimating one mean costs one degree of freedom. In a CRD with a treatment means, a parameters are estimated and the residual degrees of freedom are N−a.",
+            "The same counting principle will produce the treatment, block and error degrees of freedom for a randomised block design."
+          ]
+        },
+        {
+          "ask": "What does an F statistic compare in an ANOVA?",
+          "recall": "A ratio of two independent mean-square estimates of variance under the null model.",
+          "refresh": [
+            "A sum of squares grows with its degrees of freedom. Dividing by df gives a mean square, so the components are on a comparable variance scale.",
+            "For a treatment test, the numerator is the treatment mean square and the denominator is the error mean square.",
+            "When the null is true and the model assumptions hold, that ratio follows an F distribution with the corresponding numerator and denominator degrees of freedom."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What is the main decision or result in “Before you start — four tools this lesson uses”?",
+        "nudge": "State the rule in your own words, then connect it to the calculation or design example in this scene."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Why a table is needed: treatment signal versus background variation",
+      "objective": "Explain what experimental ANOVA separates and what the test can conclude.",
+      "body": [
+        "Imagine comparing four fertiliser treatments on crop yield. Plots differ even under the same treatment because of soil, seed, weather and measurement. The treatment means are the signal of interest; plot-to-plot variation within a treatment is the background used to judge how large that signal is.",
+        "ANOVA asks whether the observed differences among treatment means are large relative to the variation among experimental units that received the same treatment. A large numerator mean square compared with the error mean square produces a large F statistic. This does not prove that every pair of treatments differs. It is an omnibus test of equal treatment means.",
+        "The design determines which nuisance variation is separately accounted for. In a completely randomised design, there is no block term. In a randomised block design, a known source such as field position is modelled as blocks, so it is removed from the residual before the treatment test."
+      ],
+      "scenario": {
+        "teaser": "A field trial compares fertilisers across a slope where soil fertility changes from one end to the other.",
+        "title": "Why randomisation alone may not be enough",
+        "body": [
+          "An agronomist wants to compare four fertiliser treatments. The field has a fertility gradient: plots closer to the irrigation channel tend to yield more, whatever fertiliser they receive. If treatments are assigned without recognising the gradient, the observed yield variation mixes fertiliser differences with location differences.",
+          "A randomised block design groups plots into relatively homogeneous strips or blocks along the gradient. Within each block, all four treatments are represented and their positions are randomised. The block term accounts for systematic location differences; the treatment comparison is then made against the remaining plot-to-plot error.",
+          "The block is not a treatment and the block effect is not the scientific target. It is a nuisance source included because it is predictable and can be separated. If the block effect is negligible, blocking may gain little; if it is substantial, the residual mean square can fall and the treatment comparison can become more precise.",
+          "The design does not magically remove every source of noise. It controls only the structured source represented by the blocks, and it relies on the model's additivity assumption for the ordinary RBD ANOVA.",
+          "Before analysis, the agronomist records the blocking variable, confirms that every block contains every treatment, and randomises treatment positions within blocks. If treatments were assigned systematically from one side of the field to the other, the block adjustment would not rescue a confounded comparison. Randomisation within each block protects the treatment comparison from hidden position patterns, while the block row captures the planned, measured gradient."
+        ],
+        "q": "In this example, why does the analysis contain a block row even though the agronomist is not interested in comparing blocks?",
+        "answer": "The block row accounts for a known nuisance source of variation associated with field position. It prevents that variation from remaining in the error term, improving precision when the block effect is real. The target comparison remains among fertiliser treatment means."
+      },
+      "ask": {
+        "q": "A treatment F test is significant. What has been established, and what has not?",
+        "nudge": "Think of the null as equality of all treatment means. Does rejecting that single null identify every pair?"
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s2",
+      "mins": 7,
+      "title": "How a balanced CRD partitions the total variation",
+      "objective": "Connect group totals and within-group variation to the ANOVA rows.",
+      "body": [
+        "A completely randomised design (CRD) assigns the N experimental units to a treatment groups entirely at random. Suppose treatment i has nᵢ observations and total Tᵢ. The grand total is G and the grand mean is G/N.",
+        "The corrected total sum of squares is the sum of squared observations minus the correction factor. Treatment sum of squares measures the variation among treatment means, weighted by their group sizes. Error sum of squares is what remains within groups after fitting the treatment means.",
+        "For a balanced design, all nᵢ=n and N=an. The same formulas are used in an unbalanced one-way model with the proper nᵢ, but this lesson's worked RBD extension assumes a complete balanced layout. The ANOVA table is built from corrected SS, not uncorrected raw totals."
+      ],
+      "ask": {
+        "q": "In a CRD, why is the total sum of squares split into treatment and error components?",
+        "nudge": "Separate differences among fitted treatment means from variation left within groups."
+      },
+      "flow": {
+        "title": "Build the CRD ANOVA table",
+        "caption": "Start from the observations, then check the two decompositions before interpreting F.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "N observations in a treatments",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Calculate G, Σy² and CF=G²/N",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Find total SS = Σy²−CF",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 0,
+            "label": "Treatment SS from treatment totals",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 3,
+            "c": 2,
+            "label": "Error SS = total SS−treatment SS",
+            "kind": "step"
+          },
+          {
+            "id": "f",
+            "r": 4,
+            "c": 1,
+            "label": "Check SS and df add to totals",
+            "kind": "decision"
+          },
+          {
+            "id": "g",
+            "r": 5,
+            "c": 1,
+            "label": "Divide by df; F=MS_T/MS_E",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "c",
+            "to": "e"
+          },
+          {
+            "from": "d",
+            "to": "f"
+          },
+          {
+            "from": "e",
+            "to": "f"
+          },
+          {
+            "from": "f",
+            "to": "g"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 9,
+      "title": "The one-way CRD ANOVA table",
+      "objective": "Use the correction factor and degrees of freedom correctly.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Notation",
+          "body": "a = number of treatments; nᵢ = observations in treatment i; N = Σnᵢ; Tᵢ = treatment total; G = grand total. For a balanced CRD, nᵢ=n and N=an."
+        },
+        {
+          "t": "formula",
+          "h": "Correction factor and total SS",
+          "body": "CF = G²/N.\\nSS_Total = ΣᵢΣⱼ yᵢⱼ² − CF.\\nThe correction factor centres the raw sum of squares around the grand mean."
+        },
+        {
+          "t": "formula",
+          "h": "Treatment and error SS",
+          "body": "SS_Treatment = Σᵢ (Tᵢ²/nᵢ) − CF.\\nSS_Error = SS_Total − SS_Treatment.\\nFor balanced CRD, replace every nᵢ by n."
+        },
+        {
+          "t": "formula",
+          "h": "Degrees of freedom",
+          "body": "df_Treatment = a−1.\\ndf_Error = N−a.\\ndf_Total = N−1.\\nCheck: (a−1)+(N−a)=N−1."
+        },
+        {
+          "t": "formula",
+          "h": "Mean squares and F test",
+          "body": "MS_Treatment = SS_Treatment/(a−1).\\nMS_Error = SS_Error/(N−a).\\nF = MS_Treatment/MS_Error, with numerator df a−1 and denominator df N−a under H₀."
+        },
+        {
+          "t": "assume",
+          "h": "Model and assumptions",
+          "body": "The fixed-effects one-way model is Yᵢⱼ=μ+τᵢ+εᵢⱼ, with Στᵢ=0 for identifiability. The ordinary F test assumes independent errors with common variance σ² and (for exact finite-sample inference) normally distributed errors. Randomisation supports independence; equal variance and normality concern the error model."
+        }
+      ],
+      "ask": {
+        "q": "Why does the one-way CRD error sum of squares measure variation within treatment groups?",
+        "nudge": "Once each treatment mean has been fitted, which departures are left unexplained?"
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked CRD: calculate every row before interpreting F",
+      "objective": "Construct the one-way ANOVA table from a small balanced experiment.",
+      "problem": "Three treatments are each applied to four independent plots. Their observed yields are: A: 8, 9, 6, 7; B: 10, 12, 9, 11; C: 7, 8, 5, 6. Construct the ANOVA table and calculate F.",
+      "steps": [
+        {
+          "say": "Find treatment totals and the grand total.",
+          "math": "T_A=30, T_B=42, T_C=26; G=98; N=12; Σy²=834.",
+          "why": "The treatment totals preserve the group information needed for treatment SS; the raw squared total is needed for total SS."
+        },
+        {
+          "say": "Calculate the correction factor.",
+          "math": "CF=98²/12=9604/12=800.3333.",
+          "why": "The correction factor converts uncorrected sums of squares into deviations around the grand mean."
+        },
+        {
+          "say": "Calculate total and treatment sums of squares.",
+          "math": "SS_Total=834−800.3333=33.6667.\\nSS_Treatment=(30²+42²+26²)/4−800.3333=32.6667.",
+          "why": "Treatment SS is the between-group variation. It uses each treatment total squared and divided by its replication count."
+        },
+        {
+          "say": "Obtain error SS by subtraction.",
+          "math": "SS_Error=33.6667−32.6667=1.0000.",
+          "why": "The decomposition must add: treatment SS plus error SS equals total SS."
+        },
+        {
+          "say": "Allocate degrees of freedom.",
+          "math": "df_T=3−1=2; df_E=12−3=9; df_Total=12−1=11.",
+          "why": "Three fitted treatment means use three parameters; the grand mean constraint leaves two treatment contrasts."
+        },
+        {
+          "say": "Divide each SS by its own df and form F.",
+          "math": "MS_T=32.6667/2=16.3333; MS_E=1/9=0.1111; F=16.3333/0.1111=147.0.",
+          "why": "The test compares average variation per degree of freedom, not raw sums of squares."
+        }
+      ],
+      "after": "The treatment F is 147.0 with df (2,9), extremely large. Reject equal treatment means at conventional significance levels. This omnibus result establishes that at least one mean differs; a post-hoc procedure is needed to identify which pairs.",
+      "ask": {
+        "q": "Which check would catch an error in either SS calculation before you form F?",
+        "nudge": "Add the treatment and error components and compare them with total SS."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 5,
+      "title": "Retrieve the table without looking",
+      "objective": "Recall the exact structure of a CRD ANOVA.",
+      "intro": "Answer from memory, then compare with the table you built.",
+      "items": [
+        {
+          "q": "What is the correction factor?",
+          "a": "G²/N."
+        },
+        {
+          "q": "What are the CRD treatment and error degrees of freedom?",
+          "a": "a−1 and N−a."
+        },
+        {
+          "q": "Which ratio is tested?",
+          "a": "MS treatment divided by MS error."
+        },
+        {
+          "q": "What must add to total SS?",
+          "a": "Treatment SS plus error SS in a CRD."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 6,
+      "title": "Complete the ANOVA table logic",
+      "objective": "Fill the missing quantities in the one-way table.",
+      "problem": "A CRD has a=4 treatments and N=20 observations. Fill the treatment, error and total degrees of freedom.",
+      "steps": [
+        {
+          "say": "Treatment df equals the number of treatment means minus one.",
+          "blank": {
+            "prompt": "Enter treatment df",
+            "answer": "3",
+            "accept": [
+              "3"
+            ],
+            "hint": "Subtract one from a=4."
+          },
+          "why": "The overall mean is already represented by the grand mean, leaving three independent treatment contrasts."
+        },
+        {
+          "say": "Error df equals N minus the number of fitted treatment means.",
+          "blank": {
+            "prompt": "Enter error df",
+            "answer": "16",
+            "accept": [
+              "16"
+            ],
+            "hint": "Use N−a."
+          },
+          "why": "The four treatment means consume four degrees of freedom from the total 19."
+        },
+        {
+          "say": "Total df is N minus one.",
+          "blank": {
+            "prompt": "Enter total df",
+            "answer": "19",
+            "accept": [
+              "19"
+            ],
+            "hint": "Use 20−1."
+          },
+          "why": "The three component df must add: 3+16=19."
+        }
+      ],
+      "after": "The degree-of-freedom identity is an immediate diagnostic. If 3+16 did not equal 19, at least one row was wrong."
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 9,
+      "title": "Randomised block design: remove one nuisance source",
+      "objective": "Derive the complete RBD sum-of-squares and df rows.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Complete RBD layout",
+          "body": "There are a treatments and b blocks. Each treatment appears exactly once in every block, so N=ab. Blocks are groups expected to be relatively homogeneous internally."
+        },
+        {
+          "t": "formula",
+          "h": "Sums of squares",
+          "body": "CF=G²/(ab).\\nSS_Total=ΣᵢΣⱼ yᵢⱼ²−CF.\\nSS_Treatment=Σᵢ Tᵢ²/b−CF.\\nSS_Block=Σⱼ Bⱼ²/a−CF.\\nSS_Error=SS_Total−SS_Treatment−SS_Block."
+        },
+        {
+          "t": "formula",
+          "h": "Degrees of freedom",
+          "body": "df_T=a−1; df_Block=b−1; df_Error=(a−1)(b−1); df_Total=ab−1.\\nCheck: (a−1)+(b−1)+(a−1)(b−1)=ab−1."
+        },
+        {
+          "t": "formula",
+          "h": "The treatment F test",
+          "body": "MS_T=SS_T/(a−1).\\nMS_E=SS_E/[(a−1)(b−1)].\\nF_T=MS_T/MS_E, with df (a−1, (a−1)(b−1)).\\nA separate block F may be formed if block inference is of interest; treatment remains the primary test."
+        },
+        {
+          "t": "assume",
+          "h": "Additive block model",
+          "body": "Yᵢⱼ=μ+τᵢ+βⱼ+εᵢⱼ. The ordinary RBD ANOVA assumes treatment and block effects are additive, with independent, homoscedastic normal errors for exact F inference. With one observation per treatment-block cell, treatment-by-block interaction cannot be estimated separately from error."
+        }
+      ],
+      "ask": {
+        "q": "Why is the denominator df in an RBD equal to (a−1)(b−1), rather than ab−a?",
+        "nudge": "Count total df, then remove independent treatment and block contrasts."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 9,
+      "title": "Worked RBD: treatments, blocks and residual error",
+      "objective": "Build a complete randomised block ANOVA and verify each decomposition.",
+      "problem": "Four treatments are tested in three blocks. The response table is: Block 1: 8, 10, 9, 13; Block 2: 9, 11, 10, 14; Block 3: 7, 9, 8, 12. Rows are blocks and columns are treatments. Construct the ANOVA table.",
+      "table": {
+        "caption": "Observed responses: blocks by treatments",
+        "head": [
+          "Block",
+          "A",
+          "B",
+          "C",
+          "D",
+          "Block total"
+        ],
+        "rows": [
+          [
+            "1",
+            "8",
+            "10",
+            "9",
+            "13",
+            "40"
+          ],
+          [
+            "2",
+            "9",
+            "11",
+            "10",
+            "14",
+            "44"
+          ],
+          [
+            "3",
+            "7",
+            "9",
+            "8",
+            "12",
+            "36"
+          ],
+          [
+            "Treatment total",
+            "24",
+            "30",
+            "27",
+            "39",
+            "120"
+          ]
+        ]
+      },
+      "steps": [
+        {
+          "say": "Count the layout and calculate the correction factor.",
+          "math": "a=4; b=3; N=12; G=120; CF=120²/12=1200.",
+          "why": "Each block has all four treatments, so this is a complete RBD with one observation per cell."
+        },
+        {
+          "say": "Calculate total SS from the twelve squared responses.",
+          "math": "Σy²=8²+10²+9²+13²+9²+11²+10²+14²+7²+9²+8²+12²=1244.\\nSS_Total=1244−1200=44.",
+          "why": "This measures every response's squared deviation from the grand mean."
+        },
+        {
+          "say": "Calculate treatment and block SS separately.",
+          "math": "T=(24,30,27,39); SS_T=(24²+30²+27²+39²)/3−1200=34.\\nB=(40,44,36); SS_B=(40²+44²+36²)/4−1200=6.6667.",
+          "why": "Treatment totals are divided by the number of blocks, three; block totals are divided by the number of treatments, four."
+        },
+        {
+          "say": "Find error SS and check the decomposition.",
+          "math": "SS_E=44−34−6.6667=3.3333.\\nCheck: 34+6.6667+3.3333=44.",
+          "why": "Once treatment and block effects are removed, the remaining sum of squares is the residual error."
+        },
+        {
+          "say": "Calculate degrees of freedom and mean squares.",
+          "math": "df_T=3; df_B=2; df_E=6; df_Total=11.\\nMS_T=34/3=11.3333; MS_E=3.3333/6=0.5556.",
+          "why": "The df add 3+2+6=11. That verifies the allocation."
+        },
+        {
+          "say": "Form the treatment F statistic.",
+          "math": "F_T=11.3333/0.5556=20.4, with df (3,6).",
+          "why": "The denominator is the residual mean square after block variation has been removed."
+        }
+      ],
+      "after": "The treatment F is 20.4 with df (3,6). The block SS is real and accounts for variation aligned with the three blocks. For treatment comparisons, do not use the block MS as the denominator; use residual MS.",
+      "ask": {
+        "q": "In this RBD, why is the block sum of squares divided by four while treatment SS is divided by three?",
+        "nudge": "Each block total contains four observations; each treatment total contains three."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Guided problem: recover error df and F from a table",
+      "objective": "Move from an ANOVA table to the correct inferential quantity.",
+      "problem": "A complete RBD has 5 treatments and 4 blocks. The treatment SS is 80 and residual SS is 20. Find treatment and error degrees of freedom, both mean squares and the treatment F.",
+      "hints": [
+        "Direction: identify a=5 and b=4; this is a complete RBD, not a CRD.",
+        "Method: use df_T=a−1 and df_E=(a−1)(b−1), then divide each SS by its df.",
+        "Next step: compute MS_T=80/4 and MS_E=20/12, then take their ratio."
+      ],
+      "solution": [
+        {
+          "say": "Treatment df is 5−1=4; error df is (5−1)(4−1)=12.",
+          "math": "df_T=4; df_E=12."
+        },
+        {
+          "say": "Calculate the mean squares.",
+          "math": "MS_T=80/4=20; MS_E=20/12=5/3."
+        },
+        {
+          "say": "Divide the mean squares.",
+          "math": "F_T=20/(5/3)=12."
+        }
+      ],
+      "answer": "F=12 with numerator df 4 and denominator df 12.",
+      "check": "The RBD total df is 20−1=19; treatment + block + error df = 4+3+12=19.",
+      "scenario": {
+        "teaser": "A quality engineer compares three machine settings across five production shifts.",
+        "title": "Separating setting effects from shift-to-shift variation",
+        "body": [
+          "A factory wants to compare three machine settings. Output quality varies between shifts because operators, ambient temperature and incoming material batches change. The engineer decides that each of five shifts will test all three settings once, with the setting order randomised within each shift.",
+          "That layout is a complete randomised block design: settings are treatments, shifts are blocks, and each treatment appears once in every block. The shift row accounts for systematic differences among shifts without changing the scientific question, which is whether the machine settings have equal mean quality.",
+          "The treatment test uses MS settings divided by MS residual. The block mean square describes variation among shifts; it is not the denominator for the treatment test. With one observation per setting-by-shift cell, a setting-by-shift interaction cannot be estimated separately from residual error.",
+          "This example is a transfer from a field trial to an industrial process. The word block changes, but the design logic and the ANOVA table remain the same."
+        ],
+        "q": "What is the correct denominator for the machine-setting F test, and why is the shift mean square not used?",
+        "answer": "Use the residual mean square. Shift is a nuisance block term whose variation has already been accounted for. The setting test compares treatment variation with remaining within-cell error, not with the variation among the blocks."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s10",
+      "mins": 6,
+      "title": "Four errors that cost marks",
+      "objective": "Recognise the common table and interpretation mistakes.",
+      "intro": "Mark each claim true or false, then read why the tempting version fails.",
+      "items": [
+        {
+          "claim": "In a CRD with 4 treatments and 20 observations, error df is 15.",
+          "tf": false,
+          "why": "Error df is N−a=20−4=16. The value 15 is total df N−1."
+        },
+        {
+          "claim": "The treatment F ratio uses MS treatment divided by MS error.",
+          "tf": true,
+          "why": "Mean squares, not raw sums of squares, are compared. Their df are the numerator and denominator df."
+        },
+        {
+          "claim": "A significant omnibus treatment F proves every pair of treatment means differs.",
+          "tf": false,
+          "why": "It rejects the joint equality null. At least one mean differs; post-hoc comparisons are needed to locate differences."
+        },
+        {
+          "claim": "For a complete RBD with a treatments and b blocks, the error df is (a−1)(b−1).",
+          "tf": true,
+          "why": "The interaction-like treatment-by-block cell residual degrees of freedom are left after estimating treatment and block main effects."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "mins": 8,
+      "title": "Transfer problem: decide what the denominator should be",
+      "objective": "Choose and verify the appropriate ANOVA denominator in an unfamiliar context.",
+      "problem": "A laboratory compares 3 machine settings across 5 shifts. Each shift tests every setting once. Treatment SS=48, shift SS=30 and residual SS=12. Find the setting F statistic and its degrees of freedom. Explain why shift MS is not the denominator.",
+      "hints": [
+        "Direction: identify the experimental layout and distinguish settings from shifts.",
+        "Method: use the complete randomised block design degrees of freedom.",
+        "Next step: divide treatment SS by treatment df; divide residual SS by error df; form their ratio."
+      ],
+      "solution": [
+        {
+          "say": "This is a complete RBD with a=3 settings and b=5 shifts.",
+          "math": "N=15; df_T=2; df_Block=4; df_E=8; df_Total=14."
+        },
+        {
+          "say": "Calculate the two mean squares for the treatment test.",
+          "math": "MS_T=48/2=24; MS_E=12/8=1.5."
+        },
+        {
+          "say": "Form the statistic and compare the denominator choice.",
+          "math": "F_T=24/1.5=16, df=(2,8). MS_Block=30/4=7.5 is not the residual variance estimate."
+        }
+      ],
+      "answer": "F=16 with df (2,8). The treatment test uses residual MS, not block MS; shifts are nuisance blocks rather than the error term.",
+      "check": "df sum: 2+4+8=14. SS sum: 48+30+12=90."
+    },
+    {
+      "kind": "summary",
+      "id": "s12",
+      "mins": 4,
+      "title": "The ANOVA table is a set of accounting identities",
+      "objective": "Leave with the formulas and the two checks that prevent most errors.",
+      "body": [
+        "In a CRD, total variation is split into treatment and error. In a complete RBD, it is split into treatment, block and error. The table records each source's SS, df and MS; the treatment F is MS treatment divided by MS error.",
+        "The two most useful checks are independent. The component degrees of freedom must add to N−1. The component sums of squares must add to total SS. Run both checks before reading the F ratio.",
+        "A correct F ratio still needs a correct interpretation. Rejecting equal treatment means establishes that at least one mean differs. It does not identify every pair and it does not measure practical importance. The randomised design and error assumptions remain part of the conclusion."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s13",
+      "mins": 2,
+      "title": "Unseen mastery test",
+      "objective": "Demonstrate that you can reconstruct and verify ANOVA calculations without hints.",
+      "setId": "design_t1_mastery"
+    }
   ]
- },
- "provenance": "Original GPT-authored teaching package for the repository's catalog topic design-t1. No official June 2026 PYQ is claimed. Formula derivations and all arithmetic examples are checked by verify_design_t1.py using exact integer/rational arithmetic. The lesson distinguishes balanced CRD and complete RBD. Unbalanced, missing-cell, factorial and Latin-square analyses are outside this topic's scope and are handled by adjacent catalog lessons.",
- "anchors": [],
- "scenes": [
-  {
-   "kind": "foundation",
-   "id": "s0",
-   "mins": 7,
-   "title": "Before you start — four tools this lesson uses",
-   "objective": "Refresh the small set of ideas needed to read an ANOVA table.",
-   "body": [
-    "ANOVA is not a new kind of arithmetic. It organises means, deviations and sums of squares into a table, then compares mean squares using an F distribution. The common errors are usually not in the central idea. They are in the denominator, the degrees of freedom or the name of the variation being measured.",
-    "The checks below are short. Mark a check as shaky and read its rebuild before continuing; later calculations use these ideas directly."
-   ],
-   "items": [
-    {
-     "ask": "For observations 4, 6 and 8, what is the sample mean?",
-     "recall": "The mean is 6.",
-     "refresh": [
-      "Add the observations: 4+6+8=18. Divide by the number of observations, 3. The sample mean is 18/3=6.",
-      "A mean is the balance point of the observations. The deviations from it are −2, 0 and +2, and they add to zero.",
-      "In ANOVA, the same idea is applied within each treatment group and across all observations to obtain treatment means and the grand mean."
-     ]
-    },
-    {
-     "ask": "What is the sum of squared deviations from the mean for 4, 6 and 8?",
-     "recall": "(4−6)²+(6−6)²+(8−6)²=8.",
-     "refresh": [
-      "First calculate the mean, 6. Subtract it from each observation: −2, 0 and 2.",
-      "Square before adding: 4+0+4=8. Squaring prevents positive and negative deviations from cancelling.",
-      "This is a sum of squares. ANOVA partitions such sums into treatment, block and error components."
-     ]
-    },
-    {
-     "ask": "If a sample has N observations and one mean is estimated, how many residual degrees of freedom remain?",
-     "recall": "N−1.",
-     "refresh": [
-      "There are N observed values, but their deviations from the fitted mean must sum to zero. Once N−1 deviations are chosen, the last is forced.",
-      "That is why estimating one mean costs one degree of freedom. In a CRD with a treatment means, a parameters are estimated and the residual degrees of freedom are N−a.",
-      "The same counting principle will produce the treatment, block and error degrees of freedom for a randomised block design."
-     ]
-    },
-    {
-     "ask": "What does an F statistic compare in an ANOVA?",
-     "recall": "A ratio of two independent mean-square estimates of variance under the null model.",
-     "refresh": [
-      "A sum of squares grows with its degrees of freedom. Dividing by df gives a mean square, so the components are on a comparable variance scale.",
-      "For a treatment test, the numerator is the treatment mean square and the denominator is the error mean square.",
-      "When the null is true and the model assumptions hold, that ratio follows an F distribution with the corresponding numerator and denominator degrees of freedom."
-     ]
-    }
-   ]
-  },
-  {
-   "kind": "intuition",
-   "id": "s1",
-   "mins": 7,
-   "title": "Why a table is needed: treatment signal versus background variation",
-   "objective": "Explain what experimental ANOVA separates and what the test can conclude.",
-   "body": [
-    "Imagine comparing four fertiliser treatments on crop yield. Plots differ even under the same treatment because of soil, seed, weather and measurement. The treatment means are the signal of interest; plot-to-plot variation within a treatment is the background used to judge how large that signal is.",
-    "ANOVA asks whether the observed differences among treatment means are large relative to the variation among experimental units that received the same treatment. A large numerator mean square compared with the error mean square produces a large F statistic. This does not prove that every pair of treatments differs. It is an omnibus test of equal treatment means.",
-    "The design determines which nuisance variation is separately accounted for. In a completely randomised design, there is no block term. In a randomised block design, a known source such as field position is modelled as blocks, so it is removed from the residual before the treatment test."
-   ],
-   "scenario": {
-    "teaser": "A field trial compares fertilisers across a slope where soil fertility changes from one end to the other.",
-    "title": "Why randomisation alone may not be enough",
-    "body": [
-     "An agronomist wants to compare four fertiliser treatments. The field has a fertility gradient: plots closer to the irrigation channel tend to yield more, whatever fertiliser they receive. If treatments are assigned without recognising the gradient, the observed yield variation mixes fertiliser differences with location differences.",
-     "A randomised block design groups plots into relatively homogeneous strips or blocks along the gradient. Within each block, all four treatments are represented and their positions are randomised. The block term accounts for systematic location differences; the treatment comparison is then made against the remaining plot-to-plot error.",
-     "The block is not a treatment and the block effect is not the scientific target. It is a nuisance source included because it is predictable and can be separated. If the block effect is negligible, blocking may gain little; if it is substantial, the residual mean square can fall and the treatment comparison can become more precise.",
-     "The design does not magically remove every source of noise. It controls only the structured source represented by the blocks, and it relies on the model's additivity assumption for the ordinary RBD ANOVA.",
-     "Before analysis, the agronomist records the blocking variable, confirms that every block contains every treatment, and randomises treatment positions within blocks. If treatments were assigned systematically from one side of the field to the other, the block adjustment would not rescue a confounded comparison. Randomisation within each block protects the treatment comparison from hidden position patterns, while the block row captures the planned, measured gradient."
-    ],
-    "q": "In this example, why does the analysis contain a block row even though the agronomist is not interested in comparing blocks?",
-    "answer": "The block row accounts for a known nuisance source of variation associated with field position. It prevents that variation from remaining in the error term, improving precision when the block effect is real. The target comparison remains among fertiliser treatment means."
-   },
-   "ask": {
-    "q": "A treatment F test is significant. What has been established, and what has not?",
-    "nudge": "Think of the null as equality of all treatment means. Does rejecting that single null identify every pair?"
-   }
-  },
-  {
-   "kind": "intuition",
-   "id": "s2",
-   "mins": 7,
-   "title": "How a balanced CRD partitions the total variation",
-   "objective": "Connect group totals and within-group variation to the ANOVA rows.",
-   "body": [
-    "A completely randomised design (CRD) assigns the N experimental units to a treatment groups entirely at random. Suppose treatment i has nᵢ observations and total Tᵢ. The grand total is G and the grand mean is G/N.",
-    "The corrected total sum of squares is the sum of squared observations minus the correction factor. Treatment sum of squares measures the variation among treatment means, weighted by their group sizes. Error sum of squares is what remains within groups after fitting the treatment means.",
-    "For a balanced design, all nᵢ=n and N=an. The same formulas are used in an unbalanced one-way model with the proper nᵢ, but this lesson's worked RBD extension assumes a complete balanced layout. The ANOVA table is built from corrected SS, not uncorrected raw totals."
-   ],
-   "ask": {
-    "q": "In a CRD, why is the total sum of squares split into treatment and error components?",
-    "nudge": "Separate differences among fitted treatment means from variation left within groups."
-   },
-   "flow": {
-    "title": "Build the CRD ANOVA table",
-    "caption": "Start from the observations, then check the two decompositions before interpreting F.",
-    "nodes": [
-     {
-      "id": "a",
-      "r": 0,
-      "c": 1,
-      "label": "N observations in a treatments",
-      "kind": "start"
-     },
-     {
-      "id": "b",
-      "r": 1,
-      "c": 1,
-      "label": "Calculate G, Σy² and CF=G²/N",
-      "kind": "step"
-     },
-     {
-      "id": "c",
-      "r": 2,
-      "c": 1,
-      "label": "Find total SS = Σy²−CF",
-      "kind": "step"
-     },
-     {
-      "id": "d",
-      "r": 3,
-      "c": 0,
-      "label": "Treatment SS from treatment totals",
-      "kind": "step"
-     },
-     {
-      "id": "e",
-      "r": 3,
-      "c": 2,
-      "label": "Error SS = total SS−treatment SS",
-      "kind": "step"
-     },
-     {
-      "id": "f",
-      "r": 4,
-      "c": 1,
-      "label": "Check SS and df add to totals",
-      "kind": "decision"
-     },
-     {
-      "id": "g",
-      "r": 5,
-      "c": 1,
-      "label": "Divide by df; F=MS_T/MS_E",
-      "kind": "end"
-     }
-    ],
-    "edges": [
-     {
-      "from": "a",
-      "to": "b"
-     },
-     {
-      "from": "b",
-      "to": "c"
-     },
-     {
-      "from": "c",
-      "to": "d"
-     },
-     {
-      "from": "c",
-      "to": "e"
-     },
-     {
-      "from": "d",
-      "to": "f"
-     },
-     {
-      "from": "e",
-      "to": "f"
-     },
-     {
-      "from": "f",
-      "to": "g"
-     }
-    ]
-   }
-  },
-  {
-   "kind": "theory",
-   "id": "s3",
-   "mins": 9,
-   "title": "The one-way CRD ANOVA table",
-   "objective": "Use the correction factor and degrees of freedom correctly.",
-   "blocks": [
-    {
-     "t": "def",
-     "h": "Notation",
-     "body": "a = number of treatments; nᵢ = observations in treatment i; N = Σnᵢ; Tᵢ = treatment total; G = grand total. For a balanced CRD, nᵢ=n and N=an."
-    },
-    {
-     "t": "formula",
-     "h": "Correction factor and total SS",
-     "body": "CF = G²/N.\\nSS_Total = ΣᵢΣⱼ yᵢⱼ² − CF.\\nThe correction factor centres the raw sum of squares around the grand mean."
-    },
-    {
-     "t": "formula",
-     "h": "Treatment and error SS",
-     "body": "SS_Treatment = Σᵢ (Tᵢ²/nᵢ) − CF.\\nSS_Error = SS_Total − SS_Treatment.\\nFor balanced CRD, replace every nᵢ by n."
-    },
-    {
-     "t": "formula",
-     "h": "Degrees of freedom",
-     "body": "df_Treatment = a−1.\\ndf_Error = N−a.\\ndf_Total = N−1.\\nCheck: (a−1)+(N−a)=N−1."
-    },
-    {
-     "t": "formula",
-     "h": "Mean squares and F test",
-     "body": "MS_Treatment = SS_Treatment/(a−1).\\nMS_Error = SS_Error/(N−a).\\nF = MS_Treatment/MS_Error, with numerator df a−1 and denominator df N−a under H₀."
-    },
-    {
-     "t": "assume",
-     "h": "Model and assumptions",
-     "body": "The fixed-effects one-way model is Yᵢⱼ=μ+τᵢ+εᵢⱼ, with Στᵢ=0 for identifiability. The ordinary F test assumes independent errors with common variance σ² and (for exact finite-sample inference) normally distributed errors. Randomisation supports independence; equal variance and normality concern the error model."
-    }
-   ],
-   "ask": {
-    "q": "Why does the one-way CRD error sum of squares measure variation within treatment groups?",
-    "nudge": "Once each treatment mean has been fitted, which departures are left unexplained?"
-   }
-  },
-  {
-   "kind": "worked",
-   "id": "s4",
-   "mins": 9,
-   "title": "Worked CRD: calculate every row before interpreting F",
-   "objective": "Construct the one-way ANOVA table from a small balanced experiment.",
-   "problem": "Three treatments are each applied to four independent plots. Their observed yields are: A: 8, 9, 6, 7; B: 10, 12, 9, 11; C: 7, 8, 5, 6. Construct the ANOVA table and calculate F.",
-   "steps": [
-    {
-     "say": "Find treatment totals and the grand total.",
-     "math": "T_A=30, T_B=42, T_C=26; G=98; N=12; Σy²=834.",
-     "why": "The treatment totals preserve the group information needed for treatment SS; the raw squared total is needed for total SS."
-    },
-    {
-     "say": "Calculate the correction factor.",
-     "math": "CF=98²/12=9604/12=800.3333.",
-     "why": "The correction factor converts uncorrected sums of squares into deviations around the grand mean."
-    },
-    {
-     "say": "Calculate total and treatment sums of squares.",
-     "math": "SS_Total=834−800.3333=33.6667.\\nSS_Treatment=(30²+42²+26²)/4−800.3333=32.6667.",
-     "why": "Treatment SS is the between-group variation. It uses each treatment total squared and divided by its replication count."
-    },
-    {
-     "say": "Obtain error SS by subtraction.",
-     "math": "SS_Error=33.6667−32.6667=1.0000.",
-     "why": "The decomposition must add: treatment SS plus error SS equals total SS."
-    },
-    {
-     "say": "Allocate degrees of freedom.",
-     "math": "df_T=3−1=2; df_E=12−3=9; df_Total=12−1=11.",
-     "why": "Three fitted treatment means use three parameters; the grand mean constraint leaves two treatment contrasts."
-    },
-    {
-     "say": "Divide each SS by its own df and form F.",
-     "math": "MS_T=32.6667/2=16.3333; MS_E=1/9=0.1111; F=16.3333/0.1111=147.0.",
-     "why": "The test compares average variation per degree of freedom, not raw sums of squares."
-    }
-   ],
-   "after": "The treatment F is 147.0 with df (2,9), extremely large. Reject equal treatment means at conventional significance levels. This omnibus result establishes that at least one mean differs; a post-hoc procedure is needed to identify which pairs.",
-   "ask": {
-    "q": "Which check would catch an error in either SS calculation before you form F?",
-    "nudge": "Add the treatment and error components and compare them with total SS."
-   }
-  },
-  {
-   "kind": "recall",
-   "id": "s5",
-   "mins": 5,
-   "title": "Retrieve the table without looking",
-   "objective": "Recall the exact structure of a CRD ANOVA.",
-   "intro": "Answer from memory, then compare with the table you built.",
-   "items": [
-    {
-     "q": "What is the correction factor?",
-     "a": "G²/N."
-    },
-    {
-     "q": "What are the CRD treatment and error degrees of freedom?",
-     "a": "a−1 and N−a."
-    },
-    {
-     "q": "Which ratio is tested?",
-     "a": "MS treatment divided by MS error."
-    },
-    {
-     "q": "What must add to total SS?",
-     "a": "Treatment SS plus error SS in a CRD."
-    }
-   ]
-  },
-  {
-   "kind": "completion",
-   "id": "s6",
-   "mins": 6,
-   "title": "Complete the ANOVA table logic",
-   "objective": "Fill the missing quantities in the one-way table.",
-   "problem": "A CRD has a=4 treatments and N=20 observations. Fill the treatment, error and total degrees of freedom.",
-   "steps": [
-    {
-     "say": "Treatment df equals the number of treatment means minus one.",
-     "blank": {
-      "prompt": "Enter treatment df",
-      "answer": "3",
-      "accept": [
-       "3"
-      ],
-      "hint": "Subtract one from a=4."
-     },
-     "why": "The overall mean is already represented by the grand mean, leaving three independent treatment contrasts."
-    },
-    {
-     "say": "Error df equals N minus the number of fitted treatment means.",
-     "blank": {
-      "prompt": "Enter error df",
-      "answer": "16",
-      "accept": [
-       "16"
-      ],
-      "hint": "Use N−a."
-     },
-     "why": "The four treatment means consume four degrees of freedom from the total 19."
-    },
-    {
-     "say": "Total df is N minus one.",
-     "blank": {
-      "prompt": "Enter total df",
-      "answer": "19",
-      "accept": [
-       "19"
-      ],
-      "hint": "Use 20−1."
-     },
-     "why": "The three component df must add: 3+16=19."
-    }
-   ],
-   "after": "The degree-of-freedom identity is an immediate diagnostic. If 3+16 did not equal 19, at least one row was wrong."
-  },
-  {
-   "kind": "theory",
-   "id": "s7",
-   "mins": 9,
-   "title": "Randomised block design: remove one nuisance source",
-   "objective": "Derive the complete RBD sum-of-squares and df rows.",
-   "blocks": [
-    {
-     "t": "def",
-     "h": "Complete RBD layout",
-     "body": "There are a treatments and b blocks. Each treatment appears exactly once in every block, so N=ab. Blocks are groups expected to be relatively homogeneous internally."
-    },
-    {
-     "t": "formula",
-     "h": "Sums of squares",
-     "body": "CF=G²/(ab).\\nSS_Total=ΣᵢΣⱼ yᵢⱼ²−CF.\\nSS_Treatment=Σᵢ Tᵢ²/b−CF.\\nSS_Block=Σⱼ Bⱼ²/a−CF.\\nSS_Error=SS_Total−SS_Treatment−SS_Block."
-    },
-    {
-     "t": "formula",
-     "h": "Degrees of freedom",
-     "body": "df_T=a−1; df_Block=b−1; df_Error=(a−1)(b−1); df_Total=ab−1.\\nCheck: (a−1)+(b−1)+(a−1)(b−1)=ab−1."
-    },
-    {
-     "t": "formula",
-     "h": "The treatment F test",
-     "body": "MS_T=SS_T/(a−1).\\nMS_E=SS_E/[(a−1)(b−1)].\\nF_T=MS_T/MS_E, with df (a−1, (a−1)(b−1)).\\nA separate block F may be formed if block inference is of interest; treatment remains the primary test."
-    },
-    {
-     "t": "assume",
-     "h": "Additive block model",
-     "body": "Yᵢⱼ=μ+τᵢ+βⱼ+εᵢⱼ. The ordinary RBD ANOVA assumes treatment and block effects are additive, with independent, homoscedastic normal errors for exact F inference. With one observation per treatment-block cell, treatment-by-block interaction cannot be estimated separately from error."
-    }
-   ],
-   "ask": {
-    "q": "Why is the denominator df in an RBD equal to (a−1)(b−1), rather than ab−a?",
-    "nudge": "Count total df, then remove independent treatment and block contrasts."
-   }
-  },
-  {
-   "kind": "worked",
-   "id": "s8",
-   "mins": 9,
-   "title": "Worked RBD: treatments, blocks and residual error",
-   "objective": "Build a complete randomised block ANOVA and verify each decomposition.",
-   "problem": "Four treatments are tested in three blocks. The response table is: Block 1: 8, 10, 9, 13; Block 2: 9, 11, 10, 14; Block 3: 7, 9, 8, 12. Rows are blocks and columns are treatments. Construct the ANOVA table.",
-   "table": {
-    "caption": "Observed responses: blocks by treatments",
-    "head": [
-     "Block",
-     "A",
-     "B",
-     "C",
-     "D",
-     "Block total"
-    ],
-    "rows": [
-     [
-      "1",
-      "8",
-      "10",
-      "9",
-      "13",
-      "40"
-     ],
-     [
-      "2",
-      "9",
-      "11",
-      "10",
-      "14",
-      "44"
-     ],
-     [
-      "3",
-      "7",
-      "9",
-      "8",
-      "12",
-      "36"
-     ],
-     [
-      "Treatment total",
-      "24",
-      "30",
-      "27",
-      "39",
-      "120"
-     ]
-    ]
-   },
-   "steps": [
-    {
-     "say": "Count the layout and calculate the correction factor.",
-     "math": "a=4; b=3; N=12; G=120; CF=120²/12=1200.",
-     "why": "Each block has all four treatments, so this is a complete RBD with one observation per cell."
-    },
-    {
-     "say": "Calculate total SS from the twelve squared responses.",
-     "math": "Σy²=8²+10²+9²+13²+9²+11²+10²+14²+7²+9²+8²+12²=1244.\\nSS_Total=1244−1200=44.",
-     "why": "This measures every response's squared deviation from the grand mean."
-    },
-    {
-     "say": "Calculate treatment and block SS separately.",
-     "math": "T=(24,30,27,39); SS_T=(24²+30²+27²+39²)/3−1200=34.\\nB=(40,44,36); SS_B=(40²+44²+36²)/4−1200=6.6667.",
-     "why": "Treatment totals are divided by the number of blocks, three; block totals are divided by the number of treatments, four."
-    },
-    {
-     "say": "Find error SS and check the decomposition.",
-     "math": "SS_E=44−34−6.6667=3.3333.\\nCheck: 34+6.6667+3.3333=44.",
-     "why": "Once treatment and block effects are removed, the remaining sum of squares is the residual error."
-    },
-    {
-     "say": "Calculate degrees of freedom and mean squares.",
-     "math": "df_T=3; df_B=2; df_E=6; df_Total=11.\\nMS_T=34/3=11.3333; MS_E=3.3333/6=0.5556.",
-     "why": "The df add 3+2+6=11. That verifies the allocation."
-    },
-    {
-     "say": "Form the treatment F statistic.",
-     "math": "F_T=11.3333/0.5556=20.4, with df (3,6).",
-     "why": "The denominator is the residual mean square after block variation has been removed."
-    }
-   ],
-   "after": "The treatment F is 20.4 with df (3,6). The block SS is real and accounts for variation aligned with the three blocks. For treatment comparisons, do not use the block MS as the denominator; use residual MS.",
-   "ask": {
-    "q": "In this RBD, why is the block sum of squares divided by four while treatment SS is divided by three?",
-    "nudge": "Each block total contains four observations; each treatment total contains three."
-   }
-  },
-  {
-   "kind": "guided",
-   "id": "s9",
-   "mins": 8,
-   "title": "Guided problem: recover error df and F from a table",
-   "objective": "Move from an ANOVA table to the correct inferential quantity.",
-   "problem": "A complete RBD has 5 treatments and 4 blocks. The treatment SS is 80 and residual SS is 20. Find treatment and error degrees of freedom, both mean squares and the treatment F.",
-   "hints": [
-    "Direction: identify a=5 and b=4; this is a complete RBD, not a CRD.",
-    "Method: use df_T=a−1 and df_E=(a−1)(b−1), then divide each SS by its df.",
-    "Next step: compute MS_T=80/4 and MS_E=20/12, then take their ratio."
-   ],
-   "solution": [
-    {
-     "say": "Treatment df is 5−1=4; error df is (5−1)(4−1)=12.",
-     "math": "df_T=4; df_E=12."
-    },
-    {
-     "say": "Calculate the mean squares.",
-     "math": "MS_T=80/4=20; MS_E=20/12=5/3."
-    },
-    {
-     "say": "Divide the mean squares.",
-     "math": "F_T=20/(5/3)=12."
-    }
-   ],
-   "answer": "F=12 with numerator df 4 and denominator df 12.",
-   "check": "The RBD total df is 20−1=19; treatment + block + error df = 4+3+12=19.",
-   "scenario": {
-    "teaser": "A quality engineer compares three machine settings across five production shifts.",
-    "title": "Separating setting effects from shift-to-shift variation",
-    "body": [
-     "A factory wants to compare three machine settings. Output quality varies between shifts because operators, ambient temperature and incoming material batches change. The engineer decides that each of five shifts will test all three settings once, with the setting order randomised within each shift.",
-     "That layout is a complete randomised block design: settings are treatments, shifts are blocks, and each treatment appears once in every block. The shift row accounts for systematic differences among shifts without changing the scientific question, which is whether the machine settings have equal mean quality.",
-     "The treatment test uses MS settings divided by MS residual. The block mean square describes variation among shifts; it is not the denominator for the treatment test. With one observation per setting-by-shift cell, a setting-by-shift interaction cannot be estimated separately from residual error.",
-     "This example is a transfer from a field trial to an industrial process. The word block changes, but the design logic and the ANOVA table remain the same."
-    ],
-    "q": "What is the correct denominator for the machine-setting F test, and why is the shift mean square not used?",
-    "answer": "Use the residual mean square. Shift is a nuisance block term whose variation has already been accounted for. The setting test compares treatment variation with remaining within-cell error, not with the variation among the blocks."
-   }
-  },
-  {
-   "kind": "trapcheck",
-   "id": "s10",
-   "mins": 6,
-   "title": "Four errors that cost marks",
-   "objective": "Recognise the common table and interpretation mistakes.",
-   "intro": "Mark each claim true or false, then read why the tempting version fails.",
-   "items": [
-    {
-     "claim": "In a CRD with 4 treatments and 20 observations, error df is 15.",
-     "tf": false,
-     "why": "Error df is N−a=20−4=16. The value 15 is total df N−1."
-    },
-    {
-     "claim": "The treatment F ratio uses MS treatment divided by MS error.",
-     "tf": true,
-     "why": "Mean squares, not raw sums of squares, are compared. Their df are the numerator and denominator df."
-    },
-    {
-     "claim": "A significant omnibus treatment F proves every pair of treatment means differs.",
-     "tf": false,
-     "why": "It rejects the joint equality null. At least one mean differs; post-hoc comparisons are needed to locate differences."
-    },
-    {
-     "claim": "For a complete RBD with a treatments and b blocks, the error df is (a−1)(b−1).",
-     "tf": true,
-     "why": "The interaction-like treatment-by-block cell residual degrees of freedom are left after estimating treatment and block main effects."
-    }
-   ]
-  },
-  {
-   "kind": "guided",
-   "id": "s11",
-   "mins": 8,
-   "title": "Transfer problem: decide what the denominator should be",
-   "objective": "Choose and verify the appropriate ANOVA denominator in an unfamiliar context.",
-   "problem": "A laboratory compares 3 machine settings across 5 shifts. Each shift tests every setting once. Treatment SS=48, shift SS=30 and residual SS=12. Find the setting F statistic and its degrees of freedom. Explain why shift MS is not the denominator.",
-   "hints": [
-    "Direction: identify the experimental layout and distinguish settings from shifts.",
-    "Method: use the complete randomised block design degrees of freedom.",
-    "Next step: divide treatment SS by treatment df; divide residual SS by error df; form their ratio."
-   ],
-   "solution": [
-    {
-     "say": "This is a complete RBD with a=3 settings and b=5 shifts.",
-     "math": "N=15; df_T=2; df_Block=4; df_E=8; df_Total=14."
-    },
-    {
-     "say": "Calculate the two mean squares for the treatment test.",
-     "math": "MS_T=48/2=24; MS_E=12/8=1.5."
-    },
-    {
-     "say": "Form the statistic and compare the denominator choice.",
-     "math": "F_T=24/1.5=16, df=(2,8). MS_Block=30/4=7.5 is not the residual variance estimate."
-    }
-   ],
-   "answer": "F=16 with df (2,8). The treatment test uses residual MS, not block MS; shifts are nuisance blocks rather than the error term.",
-   "check": "df sum: 2+4+8=14. SS sum: 48+30+12=90."
-  },
-  {
-   "kind": "summary",
-   "id": "s12",
-   "mins": 4,
-   "title": "The ANOVA table is a set of accounting identities",
-   "objective": "Leave with the formulas and the two checks that prevent most errors.",
-   "body": [
-    "In a CRD, total variation is split into treatment and error. In a complete RBD, it is split into treatment, block and error. The table records each source's SS, df and MS; the treatment F is MS treatment divided by MS error.",
-    "The two most useful checks are independent. The component degrees of freedom must add to N−1. The component sums of squares must add to total SS. Run both checks before reading the F ratio.",
-    "A correct F ratio still needs a correct interpretation. Rejecting equal treatment means establishes that at least one mean differs. It does not identify every pair and it does not measure practical importance. The randomised design and error assumptions remain part of the conclusion."
-   ]
-  },
-  {
-   "kind": "quiz",
-   "id": "s13",
-   "mins": 2,
-   "title": "Unseen mastery test",
-   "objective": "Demonstrate that you can reconstruct and verify ANOVA calculations without hints.",
-   "setId": "design_t1_mastery"
-  }
- ]
 }

@@ -184,10 +184,34 @@
           "refresh": [
             "The original design expects a value in every planned cell.",
             "The missing cell changes treatment and block totals.",
-            "A classical estimate allows a model-based ANOVA completion."
+            "A classical estimate allows a model-based ANOVA completion.  This rebuild makes the prerequisite explicit before the new design method is used. Identify what is being counted, which units are independent, and which assumptions allow the calculation. Then explain how that idea supports the next step rather than memorising the symbol alone."
+          ]
+        },
+        {
+          "ask": "What is a treatment total?",
+          "recall": "The sum of observed responses assigned to one treatment.",
+          "refresh": [
+            "In a complete block design each treatment appears once in every block.",
+            "If one response is missing, calculate the treatment total from the observed cells only.",
+            "The same exclusion applies to the affected block total and grand total in the RBD estimator.",
+            "Do not insert a guessed value before solving for the missing observation."
+          ]
+        },
+        {
+          "ask": "What is an error degree of freedom?",
+          "recall": "The number of independent residual contrasts remaining after fitting the design model.",
+          "refresh": [
+            "Degrees of freedom count independent pieces of information, not just the number of rows in a table.",
+            "Estimating an additional parameter uses information that would otherwise contribute to residual variation.",
+            "For one classically estimated missing plot, reduce the error degrees of freedom by one.",
+            "The estimate completes the ANOVA but is not an independently observed replicate."
           ]
         }
-      ]
+      ],
+      "ask": {
+        "q": "What is the main decision or result in “Why a plot value may be missing”?",
+        "nudge": "State the rule in your own words, then connect it to the calculation or design example in this scene."
+      }
     },
     {
       "kind": "intuition",
@@ -204,7 +228,8 @@
         "title": "Identify the required totals",
         "body": [
           "The missing observation lies in treatment i and block j. Let t be the number of treatments and r the number of blocks. Let B be the affected block total, T the affected treatment total and G the grand total, each excluding the missing value.",
-          "The RBD estimator combines these totals with the design dimensions."
+          "The RBD estimator combines these totals with the design dimensions.",
+          "The estimator is derived for a particular layout and uses only observed totals. Once the value is estimated, the completed table supports recalculation of the design sums of squares, but the estimate does not become a new independent observation. State the design, define each total, and apply the degrees-of-freedom adjustment explicitly."
         ],
         "q": "Which two totals correspond to the missing cell's row and column in an RBD?",
         "answer": "Its treatment total T and its block total B."
@@ -240,10 +265,58 @@
       "ask": {
         "q": "In the RBD formula, what does t represent?",
         "nudge": "Count the treatments, not the blocks."
+      },
+      "flow": {
+        "title": "Single missing-plot analysis",
+        "alt": "Single missing-plot analysis",
+        "nodes": [
+          {
+            "id": "n0",
+            "r": 0,
+            "c": 0,
+            "label": "Identify RBD or Latin square",
+            "kind": "start"
+          },
+          {
+            "id": "n1",
+            "r": 1,
+            "c": 0,
+            "label": "Compute totals excluding missing value",
+            "kind": "step"
+          },
+          {
+            "id": "n2",
+            "r": 2,
+            "c": 0,
+            "label": "Apply the matching estimator",
+            "kind": "step"
+          },
+          {
+            "id": "n3",
+            "r": 3,
+            "c": 0,
+            "label": "Recompute ANOVA and reduce error df",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "n0",
+            "to": "n1"
+          },
+          {
+            "from": "n1",
+            "to": "n2"
+          },
+          {
+            "from": "n2",
+            "to": "n3"
+          }
+        ]
       }
     },
     {
-      "kind": "worked",
+      "kind": "guided",
       "id": "s3",
       "mins": 9,
       "title": "Worked RBD missing plot estimate",
@@ -251,24 +324,37 @@
       "problem": "An RBD has t=3 treatments and r=3 blocks. For one missing value, the affected block total is B=20, affected treatment total T=18 and grand total G=48, all excluding the missing value. Estimate x.",
       "hints": [
         "Write the formula first.",
-        "Substitute the dimensions and totals."
-      ],
-      "solution": [
-        {
-          "say": "Write the RBD estimator.",
-          "math": "x̂=(tB+rT−G)/[(t−1)(r−1)]."
-        },
-        {
-          "say": "Substitute.",
-          "math": "x̂=(3×20+3×18−48)/[(2)(2)]=(60+54−48)/4=66/4=16.5."
-        }
+        "Substitute the dimensions and totals.",
+        "Use the formula for this layout, then verify the result against the design identity."
       ],
       "answer": "The estimated missing value is 16.5.",
       "check": "Numerator 66; denominator 4; x̂=16.5.",
       "ask": {
         "q": "If t=4,r=3,B=22,T=18,G=60, calculate the numerator.",
         "nudge": "4×22+3×18−60."
-      }
+      },
+      "steps": [
+        {
+          "say": "Write the RBD estimator.",
+          "math": "x̂=(tB+rT−G)/[(t−1)(r−1)].",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Substitute.",
+          "math": "x̂=(3×20+3×18−48)/[(2)(2)]=(60+54−48)/4=66/4=16.5.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ],
+      "solution": [
+        {
+          "say": "Identify the structure.",
+          "math": "The estimated missing value is 16.5."
+        },
+        {
+          "say": "Apply the rule.",
+          "math": "Numerator 66; denominator 4; x̂=16.5."
+        }
+      ]
     },
     {
       "kind": "theory",
@@ -309,22 +395,24 @@
         "Use the Latin-square formula.",
         "Keep the factor 2G in the numerator."
       ],
-      "solution": [
-        {
-          "say": "Write the formula.",
-          "math": "x̂=[p(R+C+T)−2G]/[(p−1)(p−2)]."
-        },
-        {
-          "say": "Substitute.",
-          "math": "x̂=[3(14+12+13)−2(30)]/[(2)(1)]=(117−60)/2=28.5."
-        }
-      ],
       "answer": "The estimated missing value is 28.5.",
       "check": "Numerator 57; denominator 2.",
       "ask": {
         "q": "For p=4,R=25,C=23,T=24,G=80, what is the numerator?",
         "nudge": "4(25+23+24)−2×80."
-      }
+      },
+      "steps": [
+        {
+          "say": "Write the formula.",
+          "math": "x̂=[p(R+C+T)−2G]/[(p−1)(p−2)].",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Substitute.",
+          "math": "x̂=[3(14+12+13)−2(30)]/[(2)(1)]=(117−60)/2=28.5.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ]
     },
     {
       "kind": "intuition",
@@ -341,7 +429,8 @@
         "title": "Spot the double count",
         "body": [
           "The classical formula is derived with the missing cell removed from each relevant total. Adding a guessed x to G before substitution violates that definition.",
-          "The correct procedure is to compute totals from observed entries, solve for x, then insert the estimate for the ANOVA completion."
+          "The correct procedure is to compute totals from observed entries, solve for x, then insert the estimate for the ANOVA completion.",
+          "The estimator is derived for a particular layout and uses only observed totals. Once the value is estimated, the completed table supports recalculation of the design sums of squares, but the estimate does not become a new independent observation. State the design, define each total, and apply the degrees-of-freedom adjustment explicitly."
         ],
         "q": "Should the missing value be included in G when calculating the estimate?",
         "answer": "No. G must exclude the missing observation."
@@ -389,22 +478,24 @@
       "hints": [
         "One estimated missing value costs one error df."
       ],
-      "solution": [
-        {
-          "say": "Apply the adjustment.",
-          "math": "Adjusted error df=12−1=11."
-        },
-        {
-          "say": "Interpret.",
-          "math": "The estimated value is not an extra independent observation."
-        }
-      ],
       "answer": "Adjusted error df is 11.",
       "check": "One estimated value; reduce error df by one.",
       "ask": {
         "q": "If the original error df is 17, what is the adjusted df after one estimate?",
         "nudge": "17−1."
-      }
+      },
+      "steps": [
+        {
+          "say": "Apply the adjustment.",
+          "math": "Adjusted error df=12−1=11.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Interpret.",
+          "math": "The estimated value is not an extra independent observation.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ]
     },
     {
       "kind": "theory",
@@ -443,7 +534,8 @@
       "problem": "A missing observation occurs in a p×p Latin square. A student proposes the RBD formula because both designs are blocked. Is that correct?",
       "hints": [
         "Identify all balancing classifications.",
-        "Count the totals required by each formula."
+        "Count the totals required by each formula.",
+        "Identify the design structure, apply the relevant relationship, and check the interpretation."
       ],
       "solution": [
         {
@@ -468,22 +560,27 @@
       "mins": 6,
       "title": "Missing plot examination traps",
       "objective": "Avoid formula and inference errors.",
-      "traps": [
+      "intro": "Mark each statement TRUE or FALSE. Read the reason after submitting all verdicts.",
+      "items": [
         {
-          "q": "In the RBD formula, what does t denote?",
-          "a": "Number of treatments; r is number of blocks."
+          "claim": "The totals in the one-missing-value estimator exclude the missing observation.",
+          "tf": true,
+          "why": "Including a guessed value would double-count the unknown."
         },
         {
-          "q": "Should totals include the missing value?",
-          "a": "No; all relevant totals exclude it."
+          "claim": "In the RBD formula, t is the number of treatments and r is the number of blocks.",
+          "tf": true,
+          "why": "The symbols describe the two design dimensions."
         },
         {
-          "q": "What happens to error df after one estimate?",
-          "a": "Reduce it by one."
+          "claim": "One estimated missing value reduces the classical error degrees of freedom by one.",
+          "tf": true,
+          "why": "The estimate consumes one residual degree of freedom."
         },
         {
-          "q": "Is the estimate a recovered observation?",
-          "a": "No; it is a model-based estimate used for ANOVA completion."
+          "claim": "The estimated missing value is a recovered observed response.",
+          "tf": false,
+          "why": "It is a model-based estimate used to complete the analysis."
         }
       ]
     },
@@ -498,22 +595,24 @@
         "RBD has treatment and block totals.",
         "Latin square has row, column and treatment totals."
       ],
-      "solution": [
-        {
-          "say": "RBD.",
-          "math": "x̂=(tB+rT−G)/[(t−1)(r−1)]."
-        },
-        {
-          "say": "Latin square.",
-          "math": "x̂=[p(R+C+T)−2G]/[(p−1)(p−2)]."
-        }
-      ],
       "answer": "RBD uses t,r,B,T,G; Latin square uses p,R,C,T,G.",
       "check": "Use the estimator that matches the layout.",
       "ask": {
         "q": "Which design estimator contains the factor 2G?",
         "nudge": "Latin square."
-      }
+      },
+      "steps": [
+        {
+          "say": "RBD.",
+          "math": "x̂=(tB+rT−G)/[(t−1)(r−1)].",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Latin square.",
+          "math": "x̂=[p(R+C+T)−2G]/[(p−1)(p−2)].",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ]
     },
     {
       "kind": "summary",
@@ -524,7 +623,14 @@
       "body": [
         "For one RBD omission use x̂=(tB+rT−G)/[(t−1)(r−1)]. For one Latin-square omission use x̂=[p(R+C+T)−2G]/[(p−1)(p−2)]. All totals exclude the missing cell.",
         "Insert the estimate, recompute the ANOVA components and reduce error df by one. Multiple omissions generally need simultaneous or iterative estimation; the estimate is not a recovered observation."
-      ],
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 2,
+      "title": "Unseen mastery test",
+      "objective": "Demonstrate that you can reconstruct and apply the design methods without hints.",
       "setId": "design_t7_mastery"
     }
   ]

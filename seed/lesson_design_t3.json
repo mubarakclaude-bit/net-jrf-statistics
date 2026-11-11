@@ -196,8 +196,22 @@
             "A factorial layout allows main effects and interactions to be estimated from one coordinated experiment.",
             "Efficiency depends on the design, resources and scientific question."
           ]
+        },
+        {
+          "ask": "What is an interaction between two factors?",
+          "recall": "The effect of one factor changes across levels of the other factor.",
+          "refresh": [
+            "Compare the simple effect of A at each level of B.",
+            "If those simple effects differ, the additive model does not describe the response pattern fully.",
+            "The interaction contrast is the difference between the simple effects; it is not the same as either marginal main effect.",
+            "This distinction is essential before interpreting a factorial ANOVA table."
+          ]
         }
-      ]
+      ],
+      "ask": {
+        "q": "What is the main decision or result in “Why study factors together?”?",
+        "nudge": "State the rule in your own words, then connect it to the calculation or design example in this scene."
+      }
     },
     {
       "kind": "intuition",
@@ -294,6 +308,54 @@
       "ask": {
         "q": "How many non-empty factorial effects occur in a full 2³ design?",
         "nudge": "Eight treatment combinations minus one grand-mean degree of freedom."
+      },
+      "flow": {
+        "title": "From factorial layout to interpretation",
+        "alt": "From factorial layout to interpretation",
+        "nodes": [
+          {
+            "id": "n0",
+            "r": 0,
+            "c": 0,
+            "label": "List all factor-level combinations",
+            "kind": "start"
+          },
+          {
+            "id": "n1",
+            "r": 1,
+            "c": 0,
+            "label": "Compute cell and marginal means",
+            "kind": "step"
+          },
+          {
+            "id": "n2",
+            "r": 2,
+            "c": 0,
+            "label": "Estimate main effects",
+            "kind": "step"
+          },
+          {
+            "id": "n3",
+            "r": 3,
+            "c": 0,
+            "label": "Compare simple effects for interaction",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "n0",
+            "to": "n1"
+          },
+          {
+            "from": "n1",
+            "to": "n2"
+          },
+          {
+            "from": "n2",
+            "to": "n3"
+          }
+        ]
       }
     },
     {
@@ -308,22 +370,29 @@
         "Compute B marginal means similarly.",
         "Compare the simple A effects at B− and B+."
       ],
-      "solution": [
+      "answer": "The marginal main effects are A=6 and B=4; the AB difference-in-differences is 4.",
+      "check": "The A effect changes from 4 at B− to 8 at B+; hence the interaction is non-zero.",
+      "ask": {
+        "q": "What is the main decision or result in “Worked 2² example: calculate the effects”?",
+        "nudge": "State the rule in your own words, then connect it to the calculation or design example in this scene."
+      },
+      "steps": [
         {
           "say": "Main effect A.",
-          "math": "A effect = (13+19)/2 − (9+11)/2 = 16−10 = 6."
+          "math": "A effect = (13+19)/2 − (9+11)/2 = 16−10 = 6.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
         },
         {
           "say": "Main effect B.",
-          "math": "B effect = (11+19)/2 − (9+13)/2 = 15−11 = 4."
+          "math": "B effect = (11+19)/2 − (9+13)/2 = 15−11 = 4.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
         },
         {
           "say": "Interaction AB.",
-          "math": "A effect at B− = 13−9=4; at B+ = 19−11=8. AB = 8−4=4."
+          "math": "A effect at B− = 13−9=4; at B+ = 19−11=8. AB = 8−4=4.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
         }
-      ],
-      "answer": "The marginal main effects are A=6 and B=4; the AB difference-in-differences is 4.",
-      "check": "The A effect changes from 4 at B− to 8 at B+; hence the interaction is non-zero."
+      ]
     },
     {
       "kind": "theory",
@@ -365,30 +434,34 @@
         "Grand mean is 13; each cell has two observations.",
         "Within-cell deviations are −1 and +1."
       ],
-      "solution": [
-        {
-          "say": "Find the grand total and total SS.",
-          "math": "G=104; N=8; CF=104²/8=1352. Σy²=1472; SS_Total=1472−1352=120."
-        },
-        {
-          "say": "Use the orthogonal factorial contrasts.",
-          "math": "SS_A=72; SS_B=32; SS_AB=8; therefore SS_Treat=112."
-        },
-        {
-          "say": "Find pure error.",
-          "math": "Each of four cells contributes (−1)²+(1)²=2, so SS_E=8. Check: 72+32+8+8=120."
-        },
-        {
-          "say": "Complete the F tests.",
-          "math": "df A=B=AB=1; error df=4; total df=7. MS_E=8/4=2, so F_A=36, F_B=16, F_AB=4."
-        }
-      ],
       "answer": "The ANOVA decomposition is 120=72+32+8+8; with df (1,1,1,4,7), the F ratios are 36, 16 and 4.",
       "check": "All sums of squares add to 120; all degrees of freedom add to 7.",
       "ask": {
         "q": "Why does the treatment SS equal 112 in the worked example?",
         "nudge": "Add the three orthogonal effect components: 72, 32 and 8."
-      }
+      },
+      "steps": [
+        {
+          "say": "Find the grand total and total SS.",
+          "math": "G=104; N=8; CF=104²/8=1352. Σy²=1472; SS_Total=1472−1352=120.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Use the orthogonal factorial contrasts.",
+          "math": "SS_A=72; SS_B=32; SS_AB=8; therefore SS_Treat=112.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Find pure error.",
+          "math": "Each of four cells contributes (−1)²+(1)²=2, so SS_E=8. Check: 72+32+8+8=120.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        },
+        {
+          "say": "Complete the F tests.",
+          "math": "df A=B=AB=1; error df=4; total df=7. MS_E=8/4=2, so F_A=36, F_B=16, F_AB=4.",
+          "why": "This step applies the stated design rule to the quantities in the problem and keeps the calculation aligned with the experimental layout."
+        }
+      ]
     },
     {
       "kind": "guided",
@@ -480,7 +553,8 @@
           "tf": false,
           "why": "Independent treatment assignment to experimental units, not repeated readings, defines replication."
         }
-      ]
+      ],
+      "intro": "Mark each statement TRUE or FALSE. Read the reason after submitting all verdicts."
     },
     {
       "kind": "guided",
@@ -498,7 +572,28 @@
         ],
         "q": "Which design and which effect should receive special attention?",
         "answer": "A replicated 2² factorial design; examine the training-by-reminder interaction and then interpret simple effects."
-      }
+      },
+      "hints": [
+        "Identify the number of factors and the levels of each factor.",
+        "Compare the effect of training at each reminder level.",
+        "If the simple effects differ, interpret the interaction before relying on marginal effects."
+      ],
+      "problem": "A hospital compares two training methods and two reminder systems. The intensive method improves performance substantially when text reminders are absent, but adds little when reminders are present. Identify the factorial design and the effect that needs careful interpretation.",
+      "solution": [
+        {
+          "say": "Identify the layout.",
+          "math": "Two factors, each at two levels: a replicated 2² factorial."
+        },
+        {
+          "say": "Compare simple effects.",
+          "math": "The training effect is large without reminders and small with reminders."
+        },
+        {
+          "say": "Interpret.",
+          "math": "The training-by-reminder interaction matters; report simple effects and cell means."
+        }
+      ],
+      "answer": "Use a replicated 2² factorial and interpret the training-by-reminder interaction through simple effects."
     },
     {
       "kind": "summary",
