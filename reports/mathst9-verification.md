@@ -3,21 +3,23 @@
 Date: 12 November 2026
 
 ## Package
-- 15 core scenes, required app scene types, two applied scenarios, analysis-tool flow, revision sheet and three references.
-- 20 mastery questions: 6 easy, 10 moderate, 4 hard; 7 numeric and 2 multi-statement.
-- Answer key spread: A=5, B=5, C=5, D=5.
-- Evidence map: evidence/mathst9.md.
+- Lesson: Taylor's Theorem, L'Hôpital's Rule and Uniform Continuity.
+- 15 validated app scenes; estimated study time 105 minutes.
+- Mastery pool: 20 questions; 6 easy, 10 moderate, 4 hard; answer keys within the app's 40% cap; at least 4 numerical and 2 multi-statement items.
+- Evidence map: `evidence/mathst9.md`.
+- Exact verification: `verify_mathst9.py`.
 
-## Automated verification — PASS
-- Exact anchors: Maclaurin approximation, standard L'Hôpital limits and sequence proof that x² is not uniformly continuous on R.
-- App vScene validator: PASS.
-- Mastery pool validator: PASS.
-- Formula renderer: 118 formula lines across T2/T3/T5/T6/T7/T8/T9, zero parser refusals.
+## Consolidated automated verification — PASS
+- Topic-specific mathematical anchor script: PASS.
+- App `vScene` schema and lesson-quality checks: PASS.
+- Mastery pool schema, difficulty mix, answer spread, numerical checks and multi-statement verdicts: PASS.
+- Formula renderer: PASS; no parser refusals.
 - JSON syntax: PASS.
-- Lesson index and test harness consistency: PASS; 51 lesson seeds indexed and wired.
+- Lesson index and test-harness wiring: PASS.
 - Application build: PASS.
-- Full Playwright browser regression suite: PASS; no harness errors.
+- Full Playwright browser regression suite: PASS; no reported browser/harness errors.
 
-GitHub Actions run: https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43090860027
+GitHub Actions run: https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43093867214
 
-Status: VALIDATED ON DEVELOPMENT BRANCH. Kept as draft pending consolidated Mathematics release and final human approval. Not yet in production.
+## Release state
+APPROVED FOR CONSOLIDATED RELEASE PR. Not production-deployed until the PR is merged to `main` and the Vercel deployment completes.

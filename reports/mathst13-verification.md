@@ -3,20 +3,23 @@
 Date: 12 November 2026
 
 ## Package
-- 15 core scenes, required app scene types, two applied scenarios, subspace/basis flow, revision sheet and three references.
-- 20 mastery questions: 6 easy, 10 moderate, 4 hard; balanced answer key.
-- Evidence map: evidence/mathst13.md.
+- Lesson: Vector Spaces, Subspaces, Span, Basis and Dimension.
+- 15 validated app scenes; estimated study time 105 minutes.
+- Mastery pool: 20 questions; 6 easy, 10 moderate, 4 hard; answer keys within the app's 40% cap; at least 4 numerical and 2 multi-statement items.
+- Evidence map: `evidence/mathst13.md`.
+- Exact verification: `verify_mathst13.py`.
 
-## Automated verification — PASS
-- Exact anchors: subspace tests, P₂/P₃ dimensions, basis extraction and dimension formula.
-- App vScene validator: PASS.
-- Mastery pool validator: PASS; 20 items and target difficulty distribution.
-- Formula renderer: 178 formula lines across T2/T3/T5–T13, zero parser refusals.
+## Consolidated automated verification — PASS
+- Topic-specific mathematical anchor script: PASS.
+- App `vScene` schema and lesson-quality checks: PASS.
+- Mastery pool schema, difficulty mix, answer spread, numerical checks and multi-statement verdicts: PASS.
+- Formula renderer: PASS; no parser refusals.
 - JSON syntax: PASS.
-- Lesson index and test harness consistency: PASS; 55 lesson seeds indexed and wired.
+- Lesson index and test-harness wiring: PASS.
 - Application build: PASS.
-- Full Playwright browser regression suite: PASS; no harness errors.
+- Full Playwright browser regression suite: PASS; no reported browser/harness errors.
 
-GitHub Actions run: https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43092589470
+GitHub Actions run: https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43093867214
 
-Status: VALIDATED ON DEVELOPMENT BRANCH. Kept as draft pending consolidated Mathematics release and final human approval. Not yet in production.
+## Release state
+APPROVED FOR CONSOLIDATED RELEASE PR. Not production-deployed until the PR is merged to `main` and the Vercel deployment completes.
