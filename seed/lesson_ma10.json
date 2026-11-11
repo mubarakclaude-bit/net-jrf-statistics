@@ -306,7 +306,84 @@
      "h": "Interpretation",
      "body": "Each partial derivative is weighted by the rate at which its input changes. The total derivative is the sum of the two input contributions."
     }
-   ]
+   ],
+   "flow": {
+    "title": "Choose the multivariable derivative",
+    "alt": "Decision flow for partial, total and directional derivatives",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Function z=f(x,y)",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Which quantity changes?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "One input frozen: partial derivative",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Path or parameter: chain rule",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 2,
+      "label": "Specified direction: gradient dot unit vector",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "Check dimensions and unit direction",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "coordinate"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "both inputs"
+     },
+     {
+      "from": "d",
+      "to": "e",
+      "label": "directional rate"
+     },
+     {
+      "from": "c",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ]
+   }
   },
   {
    "kind": "guided",
