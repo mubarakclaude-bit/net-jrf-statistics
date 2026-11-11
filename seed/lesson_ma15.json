@@ -308,7 +308,83 @@
      "h": "Normalise",
      "body": "After obtaining non-zero orthogonal vectors uᵢ, set qᵢ=uᵢ/‖uᵢ‖. The qᵢ form an orthonormal basis for the original span."
     }
-   ]
+   ],
+   "flow": {
+    "title": "Orthogonalise and normalise a basis",
+    "alt": "Flow for Gram–Schmidt and orthogonal matrices",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Start with an independent set",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Subtract projections onto earlier vectors",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 1,
+      "label": "Check pairwise orthogonality",
+      "kind": "dec"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Recompute projection",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 2,
+      "label": "Normalise each vector",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "Orthonormal basis for the same span",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d",
+      "label": "no"
+     },
+     {
+      "from": "c",
+      "to": "e",
+      "label": "yes"
+     },
+     {
+      "from": "d",
+      "to": "c"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ]
+   }
   },
   {
    "kind": "guided",
