@@ -1,520 +1,537 @@
 {
-  "id": "stochastict3",
-  "topicId": "stochastic-t3",
-  "moduleId": "stochastic",
-  "title": "First Passage and First Return Times",
-  "breadcrumb": "Stochastic processes → Markov chains → First Passage and First Return Times",
-  "engine": "B",
-  "engineName": "Use state diagrams, first-step equations and exact checks to solve Markov-chain problems.",
-  "version": "4.1",
-  "status": "approved",
-  "estMin": 82,
-  "objectives": [
-    "Define the relevant Markov-chain quantity and interpret it correctly.",
-    "Set up equations using the transition matrix and the correct boundary conditions.",
-    "Solve finite-state examples exactly and verify the result.",
-    "Recognise assumptions, limiting cases and common UGC NET examination traps."
-  ],
-  "prereq": [
-    {
-      "id": "p1",
-      "name": "Markov property",
-      "why": "The conditional future depends on the present state."
-    },
-    {
-      "id": "p2",
-      "name": "Transition matrices",
-      "why": "Rows encode one-step transition probabilities."
-    },
-    {
-      "id": "p3",
-      "name": "Linear equations and gcd",
-      "why": "First-step equations and period calculations use these tools."
-    }
-  ],
-  "traps": [
-    "Do not confuse first passage with occupancy at a fixed time.",
-    "Do not forget that the target has zero remaining hitting time.",
-    "A hitting probability must lie in [0,1]; a mean time need not be an integer.",
-    "Communication is mutual reachability; a one-way path is insufficient.",
-    "A closed class has no outgoing transition.",
-    "Period is a gcd, not the smallest return time."
-  ],
-  "howto": "Draw the transition graph first. Mark the target or communicating class, write the relevant definition, and then calculate. Try each scene's question before opening its explanation. Finish by checking the result against the original transition structure.",
-  "refs": [
-    {
-      "title": "Introduction to Probability Models",
-      "where": "Markov chains and hitting times",
-      "site": "Sheldon M. Ross",
-      "url": "",
-      "type": "Textbook",
-      "free": false,
-      "checked": "2026-11-11",
-      "why": "First-step equations, hitting probabilities and expected hitting times."
-    },
-    {
-      "title": "Markov Chains",
-      "where": "Finite-state chains, recurrence and periodicity",
-      "site": "J. R. Norris",
-      "url": "",
-      "type": "Textbook",
-      "free": false,
-      "checked": "2026-11-11",
-      "why": "Formal definitions of communication, recurrence, transience and period."
-    },
-    {
-      "title": "Introduction to Stochastic Processes",
-      "where": "Discrete-time Markov chains",
-      "site": "Gregory F. Lawler",
-      "url": "https://www.math.uchicago.edu/~lawler/",
-      "type": "Free online textbook",
-      "free": true,
-      "checked": "2026-11-11",
-      "why": "Mathematical background for finite-state Markov chains."
-    }
-  ],
-  "provenance": "Original teaching material aligned to stochastic-t3 in the repository syllabus. Examples and mastery items are original practice questions, not represented as official UGC NET PYQs. Exact arithmetic and graph properties are checked by the accompanying verifier.",
-  "revision": {
-    "sheet": [
-      "First passage is the first arrival at a target state.",
-      "First return starts in the target and requires n≥1.",
-      "Expected hitting time has boundary hⱼ=0.",
-      "Hitting probability has boundary gⱼ=1.",
-      "The first-step equation counts the transition taken now.",
-      "A self-loop consumes one step.",
-      "A probability lies in [0,1].",
-      "An expected time can be non-integer or infinite."
-    ],
-    "cards": [
-      [
-        "Define the event",
-        "Specify the target state and stopping rule."
-      ],
-      [
-        "First-step analysis",
-        "Condition on the state after one transition."
-      ],
-      [
-        "Boundary condition",
-        "Remaining hitting time at the target is zero."
-      ],
-      [
-        "Communication",
-        "Each state must be reachable from the other."
-      ],
-      [
-        "Closed class",
-        "No transition leaves the class."
-      ],
-      [
-        "Period",
-        "GCD of possible positive return times."
-      ]
-    ],
-    "tricks": [
-      "Draw arrows before classifying states.",
-      "For a hitting-time equation, count the first step explicitly.",
-      "Use gcd for periodicity; do not use the minimum return time."
-    ],
-    "shortcuts": [
-      "A self-loop makes the period one.",
-      "An absorbing state is a closed singleton class.",
-      "In a finite chain, closed communicating classes are recurrent."
-    ],
-    "remember": [
-      "First-passage probability and expected first-passage time are different quantities.",
-      "Recurrence and aperiodicity are separate properties."
-    ]
+ "id": "stochastict3",
+ "topicId": "stochastic-t3",
+ "moduleId": "stochastic",
+ "title": "First Passage and First Return Times",
+ "breadcrumb": "Stochastic processes → Markov chains → First Passage and First Return Times",
+ "engine": "B",
+ "engineName": "Use state diagrams, first-step equations and exact checks to solve Markov-chain problems.",
+ "version": "4.1",
+ "status": "approved",
+ "estMin": 82,
+ "objectives": [
+  "Define the relevant Markov-chain quantity and interpret it correctly.",
+  "Set up equations using the transition matrix and the correct boundary conditions.",
+  "Solve finite-state examples exactly and verify the result.",
+  "Recognise assumptions, limiting cases and common UGC NET examination traps."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Markov property",
+   "why": "The conditional future depends on the present state."
   },
-  "scenes": [
-    {
-      "kind": "foundation",
-      "id": "s0",
-      "mins": 7,
-      "title": "Tools and notation",
-      "objective": "Refresh the probability and algebra needed for first-step analysis.",
-      "body": [
-        "A Markov chain moves between states according to its transition matrix. A hitting-time question asks when a specified target is reached, not merely where the chain is at a selected time.",
-        "For expected hitting time hᵢ, count the transition taken now, then add the expected remaining time from the next state."
-      ],
-      "items": [
-        {
-          "ask": "What does pᵢⱼ represent?",
-          "recall": "The probability that the next state is j given that the current state is i.",
-          "refresh": [
-            "A transition probability pᵢⱼ is the chance that the next state is j when the current state is i. It is conditional on the present state, not on the entire path already travelled.",
-            "For a fixed current state i, the possible next states are mutually exclusive and exhaustive. Therefore the probabilities across row i add to one; this is a useful check before writing any first-step equation."
-          ]
-        },
-        {
-          "ask": "Why condition on the first transition?",
-          "recall": "It separates mutually exclusive next-state possibilities.",
-          "refresh": [
-            "Condition on the first transition by splitting the experiment into the possible destinations k. These branches are mutually exclusive, so their contributions can be added.",
-            "For an expected remaining time, each branch contributes its probability multiplied by the expected time from the destination. Remember that one transition has already been used, so the equation includes a leading 1."
-          ]
-        },
-        {
-          "ask": "What is the remaining hitting time when the target is already reached?",
-          "recall": "Zero.",
-          "refresh": [
-            "A hitting time stops the first time the target is reached. If the chain is already in that target state, the stopping condition has been met and no further transitions are needed.",
-            "Thus the boundary condition for the expected hitting time is hⱼ=0. For a hitting probability the corresponding boundary value is instead gⱼ=1, because the target has already been hit with certainty."
-          ]
-        }
-      ],
-      "ask": {
-        "q": "What must be identified before writing a hitting-time equation?",
-        "nudge": "Name the target and define exactly when the experiment stops."
-      }
-    },
-    {
-      "kind": "intuition",
-      "id": "s1",
-      "mins": 7,
-      "title": "First arrival is not ordinary occupancy",
-      "objective": "Distinguish first passage from being in a state at a fixed time.",
-      "body": [
-        "A system may enter a target state, leave it, and later return. The first-passage time records the first arrival only.",
-        "A return time starts in the state of interest and asks for the first positive time at which the chain returns."
-      ],
-      "scenario": {
-        "teaser": "A machine reaches a repair-complete state",
-        "title": "When does the machine first become ready?",
-        "body": [
-          "A maintenance process can occupy several operating states before reaching the repair-complete state. At each inspection the machine either remains in its current condition or moves to another condition according to a transition matrix.",
-          "The manager asks for the number of transitions until the first arrival at repair-complete. The clock stops at that first arrival. If the machine later leaves the repair-complete state and returns, that later movement does not alter the first-passage time already recorded.",
-          "This distinction matters operationally: first arrival measures time to initial readiness, while a return-time question would begin at readiness and measure the time until the process comes back after at least one transition."
-        ],
-        "q": "Does a later departure change the first-passage time?",
-        "answer": "No. The first-passage time is fixed at the first arrival."
-      },
-      "ask": {
-        "q": "How does a first-return time differ from first passage from outside the target?",
-        "nudge": "A return starts in the target and uses a positive time index."
-      }
-    },
-    {
-      "kind": "theory",
-      "id": "s2",
-      "mins": 8,
-      "title": "Definitions and first-step equations",
-      "objective": "Write the first-passage probability and expected-time equations.",
-      "blocks": [
-        {
-          "t": "def",
-          "h": "First hitting time",
-          "body": "Tⱼ=inf{n≥0:Xₙ=j} when the chain starts outside the target."
-        },
-        {
-          "t": "formula",
-          "h": "Expected hitting time",
-          "body": "hⱼ=0; for i≠j, hᵢ=1+Σₖpᵢₖhₖ, when the expectation is finite."
-        },
-        {
-          "t": "step",
-          "h": "Hitting probability",
-          "body": "For gᵢ=Pᵢ(Tⱼ<∞), set gⱼ=1 and gᵢ=Σₖpᵢₖgₖ for i≠j."
-        }
-      ],
-      "flow": {
-        "title": "First-step workflow",
-        "alt": "Define target, condition on next state, solve and check.",
-        "nodes": [
-          {
-            "id": "a",
-            "r": 0,
-            "c": 1,
-            "label": "Define target",
-            "kind": "start"
-          },
-          {
-            "id": "b",
-            "r": 1,
-            "c": 1,
-            "label": "Condition on first step",
-            "kind": "step"
-          },
-          {
-            "id": "c",
-            "r": 2,
-            "c": 1,
-            "label": "Apply boundary value",
-            "kind": "step"
-          },
-          {
-            "id": "d",
-            "r": 3,
-            "c": 1,
-            "label": "Solve and interpret",
-            "kind": "end"
-          }
-        ],
-        "edges": [
-          {
-            "from": "a",
-            "to": "b"
-          },
-          {
-            "from": "b",
-            "to": "c"
-          },
-          {
-            "from": "c",
-            "to": "d"
-          }
-        ]
-      },
-      "ask": {
-        "q": "What is the boundary value for expected remaining time at the target?",
-        "nudge": "The target has already been reached."
-      }
-    },
-    {
-      "kind": "worked",
-      "id": "s3",
-      "mins": 9,
-      "title": "Worked example: a symmetric two-state route",
-      "objective": "Solve expected time to an absorbing target.",
-      "problem": "From state 1 the chain moves to state 2 with probability 1/2 and to absorbing target 3 with probability 1/2. From state 2 it moves to state 1 with probability 1/2 and to state 3 with probability 1/2. Find the mean time to hit 3.",
-      "steps": [
-        {
-          "say": "Set the target boundary value.",
-          "math": "h₃=0",
-          "why": "No remaining transitions are needed at the target."
-        },
-        {
-          "say": "Condition on the first step from state 1.",
-          "math": "h₁=1+(1/2)h₂+(1/2)h₃=1+(1/2)h₂",
-          "why": "The first transition is counted even when the target is reached immediately."
-        },
-        {
-          "say": "Write the equation from state 2.",
-          "math": "h₂=1+(1/2)h₁",
-          "why": "The transition structure is symmetric."
-        },
-        {
-          "say": "Solve the two equations.",
-          "math": "h₁=h₂=2",
-          "why": "Substitution gives h₁=1+h₁/2."
-        }
-      ],
-      "ask": {
-        "q": "What is the expected hitting time from state 1?",
-        "nudge": "Identify the definition first, then use the transition structure to justify your answer."
-      }
-    },
-    {
-      "kind": "guided",
-      "id": "s4",
-      "mins": 8,
-      "title": "Guided example: a self-loop",
-      "objective": "Account for time spent in a non-target state.",
-      "problem": "From state 1, move to target 3 with probability 1/4 and to state 2 with probability 3/4. From state 2, move to target 3 with probability 1/2 and remain at 2 with probability 1/2. Find h₁ and h₂.",
-      "steps": [
-        {
-          "say": "Set the boundary value.",
-          "math": "h₃=0",
-          "why": "The target has been reached."
-        },
-        {
-          "say": "Write the state-2 equation.",
-          "math": "h₂=1+(1/2)h₂",
-          "why": "A self-loop still consumes one step."
-        },
-        {
-          "say": "Solve for h₂.",
-          "math": "h₂=2",
-          "why": "Subtract h₂/2 from both sides."
-        },
-        {
-          "say": "Write the state-1 equation.",
-          "math": "h₁=1+(3/4)h₂+(1/4)h₃=5/2",
-          "why": "Substitute h₂=2 and h₃=0."
-        }
-      ],
-      "ask": {
-        "q": "Why does the self-loop increase the expected time?"
-      },
-      "hints": [
-        "First write the boundary value for the target state 3.",
-        "Use hᵢ=1+Σₖpᵢₖhₖ for each non-target state; include the self-loop term.",
-        "Solve the state-2 equation first, then substitute its value into the state-1 equation."
-      ],
-      "solution": [
-        {
-          "say": "Set the boundary value.",
-          "math": "h₃=0"
-        },
-        {
-          "say": "Write the state-2 equation.",
-          "math": "h₂=1+(1/2)h₂"
-        },
-        {
-          "say": "Solve for h₂.",
-          "math": "h₂=2"
-        },
-        {
-          "say": "Write the state-1 equation.",
-          "math": "h₁=1+(3/4)h₂+(1/4)h₃=5/2"
-        }
-      ],
-      "answer": "h₂=2 transitions and h₁=5/2 transitions."
-    },
-    {
-      "kind": "guided",
-      "id": "s5",
-      "mins": 8,
-      "title": "Probability of hitting versus expected time",
-      "objective": "Distinguish a hitting probability from a mean hitting time.",
-      "body": [
-        "A hitting probability is between zero and one. An expected hitting time is measured in transitions and may be non-integer or infinite.",
-        "For a hitting probability gᵢ, the target boundary is gⱼ=1. For expected remaining time hᵢ, the target boundary is hⱼ=0."
-      ],
-      "scenario": {
-        "teaser": "A short route to a target",
-        "title": "Guaranteed arrival within two steps",
-        "body": [
-          "A delivery network has a starting depot, an intermediate hub and a destination. From the depot, a parcel goes directly to the destination with probability 2/3, or goes to the hub with probability 1/3. From the hub, the next transition always takes the parcel to the destination.",
-          "The route is guaranteed to reach the destination within two transitions, but the travel time is not always two. On the direct branch it takes one transition; on the hub branch it takes two. This is why a probability-of-arrival question and an expected-time question ask for different quantities.",
-          "The probability of arriving within two steps is one because both branches arrive by then. The expected number of transitions is the probability-weighted average: (2/3)×1+(1/3)×2=4/3. A mean can be fractional even though every realised path uses a whole number of transitions."
-        ],
-        "q": "What is the probability of hitting 3 within two steps?",
-        "answer": "One, because both possible first-step branches reach 3 by the second transition."
-      },
-      "ask": {
-        "q": "Which boundary value belongs to a hitting probability at the target?",
-        "nudge": "The event of having hit the target is certain there."
-      },
-      "problem": "From state 1 the chain moves to state 2 with probability 1/3 and to target 3 with probability 2/3. State 2 moves to state 3 with probability one. Find the probability of hitting 3 within two transitions and the expected time to hit 3.",
-      "hints": [
-        "List the two possible first transitions from state 1.",
-        "Both branches reach state 3 by the second transition; for the mean, write the first-step equation.",
-        "Set h₃=0, h₂=1, and calculate h₁=1+(1/3)h₂+(2/3)h₃."
-      ],
-      "solution": [
-        {
-          "say": "The direct branch reaches 3 in one step; the other branch reaches 2 and then 3 in a second step.",
-          "math": "P(T₃≤2)=2/3+1/3=1"
-        },
-        {
-          "say": "For the mean time, use the boundary value and first-step equation.",
-          "math": "h₃=0, h₂=1, h₁=1+(1/3)(1)+(2/3)(0)=4/3"
-        }
-      ],
-      "answer": "The hitting probability within two steps is 1 and the expected hitting time from state 1 is 4/3 transitions."
-    },
-    {
-      "kind": "trapcheck",
-      "id": "s6",
-      "mins": 6,
-      "title": "Common first-passage traps",
-      "objective": "Avoid boundary, indexing and interpretation errors.",
-      "items": [
-        {
-          "claim": "For an expected hitting time, the target boundary value is hⱼ=0.",
-          "tf": true,
-          "why": "Once the target is reached, no additional transitions are required."
-        },
-        {
-          "claim": "For the probability of ever hitting the target, the target boundary value is gⱼ=0.",
-          "tf": false,
-          "why": "At the target the event has occurred with certainty, so gⱼ=1."
-        },
-        {
-          "claim": "A self-loop consumes one transition and must be counted in an expected hitting-time equation.",
-          "tf": true,
-          "why": "The first-step equation includes one step before adding the expected continuation."
-        }
-      ],
-      "ask": {
-        "q": "What range check applies to a hitting probability?",
-        "nudge": "It is a probability, so it cannot exceed one or be negative."
-      },
-      "intro": "Check whether each statement confuses the event of first reaching a target with ordinary occupancy, or mixes the boundary values for a probability and an expected time."
-    },
-    {
-      "kind": "recall",
-      "id": "s7",
-      "mins": 5,
-      "title": "Recall the method",
-      "objective": "Recall definitions and equations without looking back.",
-      "items": [
-        {
-          "q": "State the expected hitting-time first-step equation.",
-          "a": "hᵢ=1+Σₖpᵢₖhₖ for non-target i, with hⱼ=0."
-        },
-        {
-          "q": "State the hitting-probability equation.",
-          "a": "gᵢ=Σₖpᵢₖgₖ for non-target i, with gⱼ=1."
-        },
-        {
-          "q": "What is a first-return time?",
-          "a": "The first positive time n≥1 at which the chain returns to its starting state."
-        }
-      ],
-      "ask": {
-        "q": "Which equation would you use if the question asks for a mean number of steps?",
-        "nudge": "Use h, include the first step, and set the target value to zero."
-      },
-      "intro": "Retrieve the definition, boundary conditions and first-step equations from memory before attempting the mastery questions."
-    },
-    {
-      "kind": "worked",
-      "id": "s8",
-      "mins": 8,
-      "title": "Worked example: guaranteed arrival",
-      "objective": "Verify a simple exact hitting-time result.",
-      "problem": "From state 1, move to state 2 with probability 1/3 and to target 3 with probability 2/3. State 2 moves to 3 with probability one. Find the mean hitting time from state 1.",
-      "steps": [
-        {
-          "say": "Write the target and intermediate equations.",
-          "math": "h₃=0; h₂=1",
-          "why": "State 2 moves directly to target."
-        },
-        {
-          "say": "Condition on the first step from state 1.",
-          "math": "h₁=1+(1/3)h₂+(2/3)h₃",
-          "why": "The two branches have probabilities 1/3 and 2/3."
-        },
-        {
-          "say": "Substitute boundary values.",
-          "math": "h₁=1+1/3=4/3",
-          "why": "The direct-hit branch has zero remaining time."
-        }
-      ],
-      "ask": {
-        "q": "Why is the answer not an integer?",
-        "nudge": "It is an expectation over paths of different lengths."
-      }
-    },
-    {
-      "kind": "summary",
-      "id": "s9",
-      "mins": 6,
-      "title": "Exam summary",
-      "objective": "Consolidate the equations and boundary values.",
-      "body": [
-        "First-passage time is the first arrival at a target; first-return time starts in the target and requires n≥1.",
-        "For expected hitting time: hⱼ=0 and hᵢ=1+Σₖpᵢₖhₖ. For hitting probability: gⱼ=1 and gᵢ=Σₖpᵢₖgₖ.",
-        "Check that probabilities lie in [0,1], expected times are nonnegative, and every equation matches the transition graph."
-      ],
-      "ask": {
-        "q": "What is the key difference between the two boundary values?",
-        "nudge": "Expected remaining time is zero; probability of having hit is one."
-      }
-    },
-    {
-      "kind": "quiz",
-      "id": "s10",
-      "mins": 10,
-      "title": "Mastery practice",
-      "objective": "Test independent application of first-step analysis.",
-      "setId": "stochastic_t3_mastery",
-      "ask": {
-        "q": "Are you ready for the unseen mastery set?",
-        "nudge": "Attempt without hints first."
-      }
-    }
+  {
+   "id": "p2",
+   "name": "Transition matrices",
+   "why": "Rows encode one-step transition probabilities."
+  },
+  {
+   "id": "p3",
+   "name": "Linear equations and gcd",
+   "why": "First-step equations and period calculations use these tools."
+  }
+ ],
+ "traps": [
+  "Do not confuse first passage with occupancy at a fixed time.",
+  "Do not forget that the target has zero remaining hitting time.",
+  "A hitting probability must lie in [0,1]; a mean time need not be an integer.",
+  "Communication is mutual reachability; a one-way path is insufficient.",
+  "A closed class has no outgoing transition.",
+  "Period is a gcd, not the smallest return time."
+ ],
+ "howto": "Draw the transition graph first. Mark the target or communicating class, write the relevant definition, and then calculate. Try each scene's question before opening its explanation. Finish by checking the result against the original transition structure.",
+ "refs": [
+  {
+   "title": "Introduction to Probability Models",
+   "where": "Markov chains and hitting times",
+   "site": "Sheldon M. Ross",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "First-step equations, hitting probabilities and expected hitting times."
+  },
+  {
+   "title": "Markov Chains",
+   "where": "Finite-state chains, recurrence and periodicity",
+   "site": "J. R. Norris",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Formal definitions of communication, recurrence, transience and period."
+  },
+  {
+   "title": "Introduction to Stochastic Processes",
+   "where": "Discrete-time Markov chains",
+   "site": "Gregory F. Lawler",
+   "url": "https://www.math.uchicago.edu/~lawler/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Mathematical background for finite-state Markov chains."
+  }
+ ],
+ "provenance": "Original teaching material aligned to stochastic-t3 in the repository syllabus. Examples and mastery items are original practice questions, not represented as official UGC NET PYQs. Exact arithmetic and graph properties are checked by the accompanying verifier.",
+ "revision": {
+  "sheet": [
+   "First passage is the first arrival at a target state.",
+   "First return starts in the target and requires n≥1.",
+   "Expected hitting time has boundary hⱼ=0.",
+   "Hitting probability has boundary gⱼ=1.",
+   "The first-step equation counts the transition taken now.",
+   "A self-loop consumes one step.",
+   "A probability lies in [0,1].",
+   "An expected time can be non-integer or infinite."
+  ],
+  "cards": [
+   [
+    "Define the event",
+    "Specify the target state and stopping rule."
+   ],
+   [
+    "First-step analysis",
+    "Condition on the state after one transition."
+   ],
+   [
+    "Boundary condition",
+    "Remaining hitting time at the target is zero."
+   ],
+   [
+    "Communication",
+    "Each state must be reachable from the other."
+   ],
+   [
+    "Closed class",
+    "No transition leaves the class."
+   ],
+   [
+    "Period",
+    "GCD of possible positive return times."
+   ]
+  ],
+  "tricks": [
+   "Draw arrows before classifying states.",
+   "For a hitting-time equation, count the first step explicitly.",
+   "Use gcd for periodicity; do not use the minimum return time."
+  ],
+  "shortcuts": [
+   "A self-loop makes the period one.",
+   "An absorbing state is a closed singleton class.",
+   "In a finite chain, closed communicating classes are recurrent."
+  ],
+  "remember": [
+   "First-passage probability and expected first-passage time are different quantities.",
+   "Recurrence and aperiodicity are separate properties."
   ]
+ },
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Tools and notation",
+   "objective": "Refresh the probability and algebra needed for first-step analysis.",
+   "body": [
+    "A Markov chain moves between states according to its transition matrix. A hitting-time question asks when a specified target is reached, not merely where the chain is at a selected time.",
+    "For expected hitting time hᵢ, count the transition taken now, then add the expected remaining time from the next state."
+   ],
+   "items": [
+    {
+     "ask": "What does pᵢⱼ represent?",
+     "recall": "The probability that the next state is j given that the current state is i.",
+     "refresh": [
+      "A transition probability pᵢⱼ is the chance that the next state is j when the current state is i. It is conditional on the present state, not on the entire path already travelled.",
+      "For a fixed current state i, the possible next states are mutually exclusive and exhaustive. Therefore the probabilities across row i add to one; this is a useful check before writing any first-step equation."
+     ]
+    },
+    {
+     "ask": "Why condition on the first transition?",
+     "recall": "It separates mutually exclusive next-state possibilities.",
+     "refresh": [
+      "Condition on the first transition by splitting the experiment into the possible destinations k. These branches are mutually exclusive, so their contributions can be added.",
+      "For an expected remaining time, each branch contributes its probability multiplied by the expected time from the destination. Remember that one transition has already been used, so the equation includes a leading 1."
+     ]
+    },
+    {
+     "ask": "What is the remaining hitting time when the target is already reached?",
+     "recall": "Zero.",
+     "refresh": [
+      "A hitting time stops the first time the target is reached. If the chain is already in that target state, the stopping condition has been met and no further transitions are needed.",
+      "Thus the boundary condition for the expected hitting time is hⱼ=0. For a hitting probability the corresponding boundary value is instead gⱼ=1, because the target has already been hit with certainty."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "What must be identified before writing a hitting-time equation?",
+    "nudge": "Name the target and define exactly when the experiment stops."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "First arrival is not ordinary occupancy",
+   "objective": "Distinguish first passage from being in a state at a fixed time.",
+   "body": [
+    "A system may enter a target state, leave it, and later return. The first-passage time records the first arrival only.",
+    "A return time starts in the state of interest and asks for the first positive time at which the chain returns."
+   ],
+   "scenario": {
+    "teaser": "A machine reaches a repair-complete state",
+    "title": "When does the machine first become ready?",
+    "body": [
+     "A maintenance process can occupy several operating states before reaching the repair-complete state. At each inspection the machine either remains in its current condition or moves to another condition according to a transition matrix.",
+     "The manager asks for the number of transitions until the first arrival at repair-complete. The clock stops at that first arrival. If the machine later leaves the repair-complete state and returns, that later movement does not alter the first-passage time already recorded.",
+     "This distinction matters operationally: first arrival measures time to initial readiness, while a return-time question would begin at readiness and measure the time until the process comes back after at least one transition."
+    ],
+    "q": "Does a later departure change the first-passage time?",
+    "answer": "No. The first-passage time is fixed at the first arrival."
+   },
+   "ask": {
+    "q": "How does a first-return time differ from first passage from outside the target?",
+    "nudge": "A return starts in the target and uses a positive time index."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Definitions and first-step equations",
+   "objective": "Write the first-passage probability and expected-time equations.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "First hitting time",
+     "body": "Tⱼ=inf{n≥0:Xₙ=j} when the chain starts outside the target."
+    },
+    {
+     "t": "formula",
+     "h": "Expected hitting time",
+     "body": "hⱼ=0; for i≠j, hᵢ=1+Σₖpᵢₖhₖ, when the expectation is finite."
+    },
+    {
+     "t": "step",
+     "h": "Hitting probability",
+     "body": "For gᵢ=Pᵢ(Tⱼ<∞), set gⱼ=1 and gᵢ=Σₖpᵢₖgₖ for i≠j."
+    }
+   ],
+   "flow": {
+    "title": "First-step workflow",
+    "alt": "Define target, condition on next state, solve and check.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Define target",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Condition on first step",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 1,
+      "label": "Apply boundary value",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 1,
+      "label": "Solve and interpret",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
+   },
+   "ask": {
+    "q": "What is the boundary value for expected remaining time at the target?",
+    "nudge": "The target has already been reached."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 9,
+   "title": "Worked example: a symmetric two-state route",
+   "objective": "Solve expected time to an absorbing target.",
+   "problem": "From state 1 the chain moves to state 2 with probability 1/2 and to absorbing target 3 with probability 1/2. From state 2 it moves to state 1 with probability 1/2 and to state 3 with probability 1/2. Find the mean time to hit 3.",
+   "steps": [
+    {
+     "say": "Set the target boundary value.",
+     "math": "h₃=0",
+     "why": "No remaining transitions are needed at the target."
+    },
+    {
+     "say": "Condition on the first step from state 1.",
+     "math": "h₁=1+(1/2)h₂+(1/2)h₃=1+(1/2)h₂",
+     "why": "The first transition is counted even when the target is reached immediately."
+    },
+    {
+     "say": "Write the equation from state 2.",
+     "math": "h₂=1+(1/2)h₁",
+     "why": "The transition structure is symmetric."
+    },
+    {
+     "say": "Solve the two equations.",
+     "math": "h₁=h₂=2",
+     "why": "Substitution gives h₁=1+h₁/2."
+    }
+   ],
+   "ask": {
+    "q": "What is the expected hitting time from state 1?",
+    "nudge": "Identify the definition first, then use the transition structure to justify your answer."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s4",
+   "mins": 8,
+   "title": "Guided example: a self-loop",
+   "objective": "Account for time spent in a non-target state.",
+   "problem": "From state 1, move to target 3 with probability 1/4 and to state 2 with probability 3/4. From state 2, move to target 3 with probability 1/2 and remain at 2 with probability 1/2. Find h₁ and h₂.",
+   "steps": [
+    {
+     "say": "Set the boundary value.",
+     "math": "h₃=0",
+     "why": "The target has been reached."
+    },
+    {
+     "say": "Write the state-2 equation.",
+     "math": "h₂=1+(1/2)h₂",
+     "why": "A self-loop still consumes one step."
+    },
+    {
+     "say": "Solve for h₂.",
+     "math": "h₂=2",
+     "why": "Subtract h₂/2 from both sides."
+    },
+    {
+     "say": "Write the state-1 equation.",
+     "math": "h₁=1+(3/4)h₂+(1/4)h₃=5/2",
+     "why": "Substitute h₂=2 and h₃=0."
+    }
+   ],
+   "ask": {
+    "q": "Why does the self-loop increase the expected time?"
+   },
+   "hints": [
+    "First write the boundary value for the target state 3.",
+    "Use hᵢ=1+Σₖpᵢₖhₖ for each non-target state; include the self-loop term.",
+    "Solve the state-2 equation first, then substitute its value into the state-1 equation."
+   ],
+   "solution": [
+    {
+     "say": "Set the boundary value.",
+     "math": "h₃=0"
+    },
+    {
+     "say": "Write the state-2 equation.",
+     "math": "h₂=1+(1/2)h₂"
+    },
+    {
+     "say": "Solve for h₂.",
+     "math": "h₂=2"
+    },
+    {
+     "say": "Write the state-1 equation.",
+     "math": "h₁=1+(3/4)h₂+(1/4)h₃=5/2"
+    }
+   ],
+   "answer": "h₂=2 transitions and h₁=5/2 transitions."
+  },
+  {
+   "kind": "guided",
+   "id": "s5",
+   "mins": 8,
+   "title": "Probability of hitting versus expected time",
+   "objective": "Distinguish a hitting probability from a mean hitting time.",
+   "body": [
+    "A hitting probability is between zero and one. An expected hitting time is measured in transitions and may be non-integer or infinite.",
+    "For a hitting probability gᵢ, the target boundary is gⱼ=1. For expected remaining time hᵢ, the target boundary is hⱼ=0."
+   ],
+   "scenario": {
+    "teaser": "A short route to a target",
+    "title": "Guaranteed arrival within two steps",
+    "body": [
+     "A delivery network has a starting depot, an intermediate hub and a destination. From the depot, a parcel goes directly to the destination with probability 2/3, or goes to the hub with probability 1/3. From the hub, the next transition always takes the parcel to the destination.",
+     "The route is guaranteed to reach the destination within two transitions, but the travel time is not always two. On the direct branch it takes one transition; on the hub branch it takes two. This is why a probability-of-arrival question and an expected-time question ask for different quantities.",
+     "The probability of arriving within two steps is one because both branches arrive by then. The expected number of transitions is the probability-weighted average: (2/3)×1+(1/3)×2=4/3. A mean can be fractional even though every realised path uses a whole number of transitions."
+    ],
+    "q": "What is the probability of hitting 3 within two steps?",
+    "answer": "One, because both possible first-step branches reach 3 by the second transition."
+   },
+   "ask": {
+    "q": "Which boundary value belongs to a hitting probability at the target?",
+    "nudge": "The event of having hit the target is certain there."
+   },
+   "problem": "From state 1 the chain moves to state 2 with probability 1/3 and to target 3 with probability 2/3. State 2 moves to state 3 with probability one. Find the probability of hitting 3 within two transitions and the expected time to hit 3.",
+   "hints": [
+    "List the two possible first transitions from state 1.",
+    "Both branches reach state 3 by the second transition; for the mean, write the first-step equation.",
+    "Set h₃=0, h₂=1, and calculate h₁=1+(1/3)h₂+(2/3)h₃."
+   ],
+   "solution": [
+    {
+     "say": "The direct branch reaches 3 in one step; the other branch reaches 2 and then 3 in a second step.",
+     "math": "P(T₃≤2)=2/3+1/3=1"
+    },
+    {
+     "say": "For the mean time, use the boundary value and first-step equation.",
+     "math": "h₃=0, h₂=1, h₁=1+(1/3)(1)+(2/3)(0)=4/3"
+    }
+   ],
+   "answer": "The hitting probability within two steps is 1 and the expected hitting time from state 1 is 4/3 transitions."
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s6",
+   "mins": 6,
+   "title": "Common first-passage traps",
+   "objective": "Avoid boundary, indexing and interpretation errors.",
+   "items": [
+    {
+     "claim": "For an expected hitting time, the target boundary value is hⱼ=0.",
+     "tf": true,
+     "why": "Once the target is reached, no additional transitions are required."
+    },
+    {
+     "claim": "For the probability of ever hitting the target, the target boundary value is gⱼ=0.",
+     "tf": false,
+     "why": "At the target the event has occurred with certainty, so gⱼ=1."
+    },
+    {
+     "claim": "A self-loop consumes one transition and must be counted in an expected hitting-time equation.",
+     "tf": true,
+     "why": "The first-step equation includes one step before adding the expected continuation."
+    }
+   ],
+   "ask": {
+    "q": "What range check applies to a hitting probability?",
+    "nudge": "It is a probability, so it cannot exceed one or be negative."
+   },
+   "intro": "Check whether each statement confuses the event of first reaching a target with ordinary occupancy, or mixes the boundary values for a probability and an expected time."
+  },
+  {
+   "kind": "recall",
+   "id": "s7",
+   "mins": 5,
+   "title": "Recall the method",
+   "objective": "Recall definitions and equations without looking back.",
+   "items": [
+    {
+     "q": "State the expected hitting-time first-step equation.",
+     "a": "hᵢ=1+Σₖpᵢₖhₖ for non-target i, with hⱼ=0."
+    },
+    {
+     "q": "State the hitting-probability equation.",
+     "a": "gᵢ=Σₖpᵢₖgₖ for non-target i, with gⱼ=1."
+    },
+    {
+     "q": "What is a first-return time?",
+     "a": "The first positive time n≥1 at which the chain returns to its starting state."
+    }
+   ],
+   "ask": {
+    "q": "Which equation would you use if the question asks for a mean number of steps?",
+    "nudge": "Use h, include the first step, and set the target value to zero."
+   },
+   "intro": "Retrieve the definition, boundary conditions and first-step equations from memory before attempting the mastery questions."
+  },
+  {
+   "kind": "worked",
+   "id": "s8",
+   "mins": 8,
+   "title": "Worked example: guaranteed arrival",
+   "objective": "Verify a simple exact hitting-time result.",
+   "problem": "From state 1, move to state 2 with probability 1/3 and to target 3 with probability 2/3. State 2 moves to 3 with probability one. Find the mean hitting time from state 1.",
+   "steps": [
+    {
+     "say": "Write the target and intermediate equations.",
+     "math": "h₃=0; h₂=1",
+     "why": "State 2 moves directly to target."
+    },
+    {
+     "say": "Condition on the first step from state 1.",
+     "math": "h₁=1+(1/3)h₂+(2/3)h₃",
+     "why": "The two branches have probabilities 1/3 and 2/3."
+    },
+    {
+     "say": "Substitute boundary values.",
+     "math": "h₁=1+1/3=4/3",
+     "why": "The direct-hit branch has zero remaining time."
+    }
+   ],
+   "ask": {
+    "q": "Why is the answer not an integer?",
+    "nudge": "It is an expectation over paths of different lengths."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s9",
+   "mins": 6,
+   "title": "Exam summary",
+   "objective": "Consolidate the equations and boundary values.",
+   "body": [
+    "First-passage time is the first arrival at a target; first-return time starts in the target and requires n≥1.",
+    "For expected hitting time: hⱼ=0 and hᵢ=1+Σₖpᵢₖhₖ. For hitting probability: gⱼ=1 and gᵢ=Σₖpᵢₖgₖ.",
+    "Check that probabilities lie in [0,1], expected times are nonnegative, and every equation matches the transition graph."
+   ],
+   "ask": {
+    "q": "What is the key difference between the two boundary values?",
+    "nudge": "Expected remaining time is zero; probability of having hit is one."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s10",
+   "mins": 10,
+   "title": "Mastery practice",
+   "objective": "Test independent application of first-step analysis.",
+   "setId": "stochastic_t3_mastery",
+   "ask": {
+    "q": "Are you ready for the unseen mastery set?",
+    "nudge": "Attempt without hints first."
+   }
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA rule."
+ }
 }
