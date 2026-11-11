@@ -149,7 +149,7 @@ q(14, "numeric", "moderate",
 q(15, "numeric", "moderate",
   "According to ORGI's national Vital Statistics based on CRS report for 2024, released in July 2026, birth registration "
   "completeness was:",
-  ["82.4% (2011)", "Older reported value (2023)", "99.1% (2024)", "99.4% (2024)"], "C",
+  ["82.4% (2011)", "Earlier reported value (2023)", "99.1% (2024)", "99.4% (2024)"], "C",
   "ORGI reports birth-registration completeness of 99.1% in 2024, up from 82.4% in 2011. Death registration was 99.4% "
   "in 2024, up from 66.4% in 2011. These percentages describe completeness of registration, not demographic rates "
   "such as CBR or IMR.",
