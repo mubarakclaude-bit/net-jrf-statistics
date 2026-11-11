@@ -22,9 +22,16 @@ EXPECTED_FORMATS = {
     4: {"single": 9, "numeric": 9, "multi": 2},
     5: {"single": 10, "numeric": 8, "multi": 2},
     6: {"single": 12, "numeric": 6, "multi": 2},
-    7: {"single": 12, "numeric": 5, "multi": 3},
+    7: {"single": 12, "numeric": 6, "multi": 2},
+    8: {"single": 12, "numeric": 6, "multi": 2},
+    9: {"single": 12, "numeric": 6, "multi": 2},
+    10: {"single": 12, "numeric": 6, "multi": 2},
+    11: {"single": 12, "numeric": 6, "multi": 2},
+    12: {"single": 12, "numeric": 6, "multi": 2},
+    13: {"single": 12, "numeric": 6, "multi": 2},
+    14: {"single": 12, "numeric": 6, "multi": 2},
+    15: {"single": 12, "numeric": 6, "multi": 2},
 }
-
 
 def read(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
