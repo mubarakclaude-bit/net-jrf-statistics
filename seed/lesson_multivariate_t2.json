@@ -47,7 +47,9 @@
       "Interpretation: remove the linear effect of X3 from X1 and X2 separately, then correlate the two residuals.",
       "Multiple correlation of Y with X1,…,Xp: R²Y·X = r′RXX⁻¹r, where r is the vector of correlations between Y and the predictors.",
       "For one predictor, R²=r² and R=|r|. For several predictors, 0≤R≤1.",
-      "For a non-singular multivariate normal vector, partial correlations are related to the precision matrix K=Σ⁻¹: ρij·rest=−Kij/√(KiiKjj)."
+      "For a non-singular multivariate normal vector, partial correlations are related to the precision matrix K=Σ⁻¹: ρij·rest=−Kij/√(KiiKjj).",
+      "The two-predictor formula requires |r₁₂|<1; perfect predictor correlation makes the predictor matrix singular.",
+      "For Gaussian variables, a zero precision-matrix off-diagonal entry corresponds to conditional independence given the remaining coordinates."
     ],
     "cards": [
       [
@@ -87,7 +89,8 @@
     ],
     "shortcuts": [
       "For r12·3, subtract r13r23 from r12, then divide by the square-root product.",
-      "For multiple R², arrange predictor correlations in RXX, response correlations in r, then compute r′RXX⁻¹r."
+      "For multiple R², arrange predictor correlations in RXX, response correlations in r, then compute r′RXX⁻¹r.",
+      "If the predictors are uncorrelated, the two-predictor multiple R² is the sum rY1²+rY2²."
     ]
   },
   "howto": "First identify the response and the variables to be controlled or combined. For a first-order partial correlation, use the three simple correlations in the standard formula. For a multiple correlation, build the predictor correlation matrix RXX and the response-correlation vector r, then calculate r′RXX⁻¹r. Finally take the non-negative square root if the question asks for R rather than R².",
@@ -159,27 +162,34 @@
           "ask": "What does ordinary Pearson correlation measure?",
           "recall": "The linear association between two variables.",
           "refresh": [
-            "It is a standardised covariance, lying between −1 and 1.",
-            "It does not automatically control for other variables."
+            "A covariance is a measure of how two variables vary together. Correlation divides covariance by the product of their standard deviations, so its value is unit-free and lies between −1 and 1.",
+            "The sign of correlation describes direction: positive values indicate that larger values of one variable tend to accompany larger values of the other; negative values indicate an opposite linear tendency.",
+            "A correlation is not automatically causal. A third variable can influence both variables and create a pairwise association even when the remaining relationship is weak."
           ]
         },
         {
           "ask": "What does the word partial signal?",
           "recall": "Some other variable or variables are held constant statistically.",
           "refresh": [
-            "Partial correlation removes linear effects of the controlled variables from both variables of interest.",
-            "The remaining residuals are then correlated."
+            "A regression residual is the observed value minus the value predicted by the fitted regression line. Residuals represent the part of the response not explained by the included predictor.",
+            "To control X₃, regress X₁ on X₃ and retain its residuals. Separately regress X₂ on X₃ and retain those residuals; the two residual series contain the unexplained linear components.",
+            "The partial correlation is the ordinary correlation between those two residual series. This residual interpretation is the key to understanding why the coefficient is adjusted."
           ]
         },
         {
           "ask": "Can a multiple correlation coefficient be negative?",
           "recall": "No. Multiple R is non-negative.",
           "refresh": [
-            "R² is a proportion of variation explained by the best linear prediction from the predictor set.",
-            "By convention R is the non-negative square root of R²."
+            "A correlation matrix places one on every diagonal because each variable is perfectly correlated with itself. Its off-diagonal entries are the pairwise correlations between distinct variables.",
+            "For two standardised predictors, the correlation matrix is [[1,r],[r,1]]. Its determinant is 1−r², so it is invertible whenever the absolute correlation is below one.",
+            "The inverse matrix is needed when combining predictors in the general multiple-correlation formula. A perfect correlation makes the matrix singular and signals redundant predictor information."
           ]
         }
-      ]
+      ],
+      "ask": {
+        "q": "What does a partial correlation attempt to remove?",
+        "nudge": "Think of the linear influence of a third variable."
+      }
     },
     {
       "kind": "intuition",
@@ -199,6 +209,10 @@
           "A college analyst observes a strong positive correlation between weekly study hours and examination score. Students who entered with stronger prior preparation also tend to study more and score higher. The analyst therefore calculates the partial correlation between study hours and score while controlling prior preparation.",
           "If the partial correlation is smaller than the simple correlation, part of the original association was shared with prior preparation. The remaining coefficient describes the linear relationship between the residual parts of study hours and score. It should not be interpreted as a causal effect."
         ]
+      },
+      "ask": {
+        "q": "Why might the simple correlation be larger than the partial correlation?",
+        "nudge": "Consider a variable that influences both quantities."
       }
     },
     {
@@ -237,6 +251,82 @@
       "ask": {
         "q": "Which term is subtracted from r₁₂ in the numerator?",
         "nudge": "Multiply the two correlations involving the controlled variable."
+      },
+      "flow": {
+        "caption": "Choose the correlation measure from the question being asked.",
+        "nodes": [
+          {
+            "id": "start",
+            "r": 0,
+            "c": 1,
+            "label": "Identify the response and variables",
+            "kind": "start"
+          },
+          {
+            "id": "q",
+            "r": 1,
+            "c": 1,
+            "label": "What relationship is requested?",
+            "kind": "decision"
+          },
+          {
+            "id": "pair",
+            "r": 2,
+            "c": 0,
+            "label": "Two variables, no controls: simple r",
+            "kind": "step"
+          },
+          {
+            "id": "control",
+            "r": 2,
+            "c": 2,
+            "label": "Control other variables: partial r",
+            "kind": "step"
+          },
+          {
+            "id": "set",
+            "r": 3,
+            "c": 2,
+            "label": "One response with predictor set: multiple R",
+            "kind": "step"
+          },
+          {
+            "id": "end",
+            "r": 4,
+            "c": 1,
+            "label": "Report the requested coefficient",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "start",
+            "to": "q"
+          },
+          {
+            "from": "q",
+            "to": "pair",
+            "label": "Unadjusted pair"
+          },
+          {
+            "from": "q",
+            "to": "control",
+            "label": "Adjusted pair"
+          },
+          {
+            "from": "control",
+            "to": "set",
+            "label": "Whole predictor set instead?"
+          },
+          {
+            "from": "pair",
+            "to": "end"
+          },
+          {
+            "from": "set",
+            "to": "end"
+          }
+        ]
       }
     },
     {
@@ -376,7 +466,8 @@
       "ask": {
         "q": "What is the denominator in the two-predictor R² formula?",
         "nudge": "It is one minus the squared correlation between the predictors."
-      }
+      },
+      "ext": true
     },
     {
       "kind": "worked",
@@ -551,7 +642,21 @@
         "The analyst separately predicts blood pressure using exercise, age and diet together. The multiple correlation measures the association between observed blood pressure and its fitted values from the whole predictor set. The two coefficients answer different questions and need not be equal."
       ],
       "question": "Which statistic answers the question about the combined predictor set?",
-      "answer": "The multiple correlation R (or R² if the question asks for explained variation)."
+      "answer": "The multiple correlation R (or R² if the question asks for explained variation).",
+      "ask": {
+        "q": "Which statistic describes the association of Y with the predictor set as a whole?",
+        "nudge": "It is the multiple correlation coefficient."
+      },
+      "scenario": {
+        "teaser": "Exercise, age and blood-pressure modelling.",
+        "title": "A health study compares adjusted and combined associations.",
+        "body": [
+          "A public-health team studies blood pressure using measurements of exercise, age and diet. The team first asks whether exercise and blood pressure remain linearly associated after controlling age. This is a partial-correlation question: age is removed linearly from both exercise and blood pressure, and the two residual series are correlated.",
+          "The team then fits a prediction model using exercise, age and diet together. The multiple correlation compares observed blood pressure with the fitted values from the entire predictor set. It summarises how strongly the predictors, taken together, linearly track the response.",
+          "These statistics are not interchangeable. The partial coefficient isolates one pair after specified controls, while multiple R measures the combined predictive association of a set. Neither coefficient alone proves that changing exercise or diet causes a change in blood pressure."
+        ],
+        "close": "The analyst chooses partial correlation for a controlled pair and multiple correlation for the whole predictor set."
+      }
     },
     {
       "kind": "trapcheck",
