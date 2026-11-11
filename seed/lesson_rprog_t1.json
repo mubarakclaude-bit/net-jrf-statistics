@@ -468,7 +468,7 @@
    }
   },
   {
-   "kind": "worked",
+   "kind": "guided",
    "id": "s8",
    "mins": 6,
    "title": "which() versus values",
@@ -494,6 +494,40 @@
    "ask": {
     "q": "What does which.max(c(3,8,5)) return?",
     "nudge": "The maximum 8 occurs at position 2."
+   },
+   "hints": [
+    "Mark each value's position and test whether it is negative.",
+    "which() returns positions; logical indexing returns the values.",
+    "The negative entries are at positions 3 and 4, with values -14 and -154."
+   ],
+   "answer": "which(x<0)=c(3,4); x[x<0]=c(-14,-154).",
+   "check": "Indices 3 and 4; values -14 and -154.",
+   "solution": [
+    {
+     "say": "Evaluate the condition.",
+     "math": "FALSE, FALSE, TRUE, TRUE, FALSE.",
+     "why": "Only the third and fourth entries are negative."
+    },
+    {
+     "say": "Apply which().",
+     "math": "which(x<0)=c(3,4).",
+     "why": "which returns positions of TRUE values."
+    },
+    {
+     "say": "Use logical indexing.",
+     "math": "x[x<0]=c(-14,-154).",
+     "why": "Logical indexing extracts the matching data values."
+    }
+   ],
+   "scenario": {
+    "teaser": "Find negative transactions",
+    "title": "A quick audit of account adjustments",
+    "body": [
+     "An analyst receives a numeric vector of account adjustments: x=c(1,6,-14,-154,0). The analyst needs to locate every negative adjustment and then inspect the corresponding amounts. The first request is about the positions of the negative entries; the second request is about the values themselves.",
+     "The analyst can evaluate x<0 to create a logical vector. which(x<0) reports the positions where the condition is TRUE, while x[x<0] extracts the negative amounts. These outputs answer different questions and should not be confused when preparing a data audit."
+    ],
+    "q": "Which expression returns the negative adjustment amounts rather than their positions?",
+    "answer": "x[x<0]."
    }
   },
   {

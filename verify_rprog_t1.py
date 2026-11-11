@@ -16,8 +16,8 @@ for x in P["items"]:
  assert len(x["options"])==4 and len(x["explanation"])>=40
  if x["format"]=="numeric": assert x.get("check")
  if x["format"]=="multi": assert len(x["statements"])==4 and set(x["verdicts"])==set("ABCD")
-assert sum(s["kind"]=="guided" for s in L["scenes"])>=1
-assert sum("scenario" in s for s in L["scenes"])>=1
+assert sum(s["kind"]=="guided" for s in L["scenes"])>=2
+assert sum("scenario" in s for s in L["scenes"])>=2
 assert any("flow" in s for s in L["scenes"])
 assert all(len(t)>=140 for it in L["scenes"][0]["items"] for t in it["refresh"])
 print("PASS: R vector function semantics and June 2026 Q16 anchor; 13 scenes.")

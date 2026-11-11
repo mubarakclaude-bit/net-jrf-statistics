@@ -7,6 +7,8 @@ L=R/"seed/lesson_rprog_t1.json"; P=R/"seed/rprog_t1_mastery.json"
 lesson=json.loads(L.read_text()); pool=json.loads(P.read_text())
 assert lesson["id"]=="rprogt1" and lesson["topicId"]=="rprog-t1"
 assert len(lesson["scenes"])==13 and lesson["scenes"][-1]["setId"]==P.stem
+assert sum(s["kind"]=="guided" for s in lesson["scenes"])>=2
+assert sum("scenario" in s for s in lesson["scenes"])>=2
 assert lesson["anchors"]==[{"paper":"j26","q":16}]
 assert len(pool["items"])==20
 assert Counter(x["diff"] for x in pool["items"])=={"easy":6,"moderate":10,"hard":4}
