@@ -115,23 +115,36 @@
         {
           "ask": "In y = 4 + 2x, what is the intercept?",
           "recall": "The intercept is 4.",
-          "refresh": "The intercept is the constant term. It is the model's predicted value when x is zero."
+          "refresh": [
+            "The intercept is the constant term in a fitted regression equation.",
+            "It gives the fitted conditional mean when all numerical predictors are zero and the indicators are zero.",
+            "With a reference category, all included category indicators are zero for that group, so the intercept is its baseline."
+          ]
         },
         {
           "ask": "What does the slope 2 mean?",
           "recall": "A one-unit increase in x raises the fitted mean by 2.",
-          "refresh": "The slope is a conditional change in the fitted response for a one-unit increase in x, with other predictors held fixed."
+          "refresh": [
+            "A slope is the coefficient multiplying a numerical predictor.",
+            "It measures the change in the fitted conditional mean for a one-unit increase in that predictor, holding other predictors fixed.",
+            "In a model with an interaction, the slope can depend on the value of the indicator."
+          ]
         },
         {
           "ask": "If a variable has levels A, B and C, is it numerical?",
           "recall": "Not automatically; these are categories.",
-          "refresh": "A category label identifies a group. Coding A=1, B=2, C=3 does not make the gaps quantitatively meaningful."
+          "refresh": [
+            "A categorical variable records membership in a group, such as classroom, online or blended.",
+            "The labels do not automatically have numerical distances or a meaningful order.",
+            "Indicator variables represent membership with zero and one, avoiding an artificial numeric ordering."
+          ]
         }
       ],
       "ask": {
         "q": "Why might entering A, B and C as 1, 2 and 3 be misleading?",
         "nudge": "Ask whether the difference B−A has a meaningful numerical size."
-      }
+      },
+      "title": "Rebuild the regression building blocks"
     },
     {
       "id": "t11-intuition",
@@ -151,7 +164,8 @@
       "ask": {
         "q": "Which part of the example is categorical?",
         "nudge": "Identify the variable whose values are group names."
-      }
+      },
+      "title": "Recognise categorical predictors"
     },
     {
       "id": "t11-explore",
@@ -165,7 +179,8 @@
       "ask": {
         "q": "What indicator pair represents the blended group?",
         "nudge": "Only the blended indicator is 1."
-      }
+      },
+      "title": "Code three teaching groups"
     },
     {
       "id": "t11-theory1",
@@ -191,7 +206,8 @@
       "ask": {
         "q": "With K=5 categories and an intercept, how many indicators are normally included?",
         "nudge": "Keep one category as the reference."
-      }
+      },
+      "title": "Interpret group-specific fitted means"
     },
     {
       "id": "t11-worked1",
@@ -218,7 +234,8 @@
       "ask": {
         "q": "What is the fitted difference between online and blended?",
         "nudge": "Subtract their fitted means, 58−55."
-      }
+      },
+      "title": "Calculate dummy-variable predictions"
     },
     {
       "id": "t11-recall",
@@ -242,7 +259,8 @@
       "ask": {
         "q": "Why is one category omitted?",
         "nudge": "Think of the sum of all K indicators."
-      }
+      },
+      "title": "Retrieve the coding rules"
     },
     {
       "id": "t11-completion",
@@ -287,7 +305,8 @@
       "ask": {
         "q": "What is the fitted value for group C?",
         "nudge": "Use D_C=1 and D_B=0."
-      }
+      },
+      "title": "Complete a group prediction"
     },
     {
       "id": "t11-theory2",
@@ -313,30 +332,66 @@
       "flow": {
         "caption": "Choose a valid coding scheme",
         "nodes": [
-          "K categories",
-          "Intercept included?",
-          "Use K−1 indicators",
-          "No intercept: K indicators"
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "K mutually exclusive categories",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "K indicators sum to one",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Intercept is a column of ones",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Exact linear dependence",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Use K−1 indicators with intercept",
+            "kind": "end"
+          }
         ],
         "edges": [
-          [
-            0,
-            1
-          ],
-          [
-            1,
-            2
-          ],
-          [
-            1,
-            3
-          ]
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
         ]
       },
       "ask": {
         "q": "What algebraic relation causes the trap?",
         "nudge": "The indicators add to the intercept column."
-      }
+      },
+      "title": "Diagnose the dummy-variable trap"
     },
     {
       "id": "t11-scenario2",
@@ -356,7 +411,8 @@
       "ask": {
         "q": "Does a seasonal indicator by itself change the trend slope?",
         "nudge": "It adds a constant group shift unless an interaction is included."
-      }
+      },
+      "title": "Separate seasonal shifts from trends"
     },
     {
       "id": "t11-worked2",
@@ -383,7 +439,8 @@
       "ask": {
         "q": "What extra term would allow group B to have a different slope?",
         "nudge": "Multiply x by the indicator."
-      }
+      },
+      "title": "Work with a level dummy"
     },
     {
       "id": "t11-theory3",
@@ -409,7 +466,8 @@
       "ask": {
         "q": "Which coefficient captures the slope difference in the interaction model?",
         "nudge": "Look at the coefficient multiplying xD."
-      }
+      },
+      "title": "Model a slope difference"
     },
     {
       "id": "t11-guided1",
@@ -439,7 +497,8 @@
       "ask": {
         "q": "If the reference changes, must the fitted values change?",
         "nudge": "The same group means can be represented with a different baseline."
-      }
+      },
+      "title": "Use the reference category"
     },
     {
       "id": "t11-trapcheck",
@@ -471,7 +530,8 @@
       "ask": {
         "q": "Which model term creates a slope difference?",
         "nudge": "It is the interaction x multiplied by the indicator."
-      }
+      },
+      "title": "Check common dummy-variable errors"
     },
     {
       "id": "t11-guided2",
@@ -502,7 +562,8 @@
       "ask": {
         "q": "Would testing only one regional coefficient establish equality across all four regions?",
         "nudge": "A single coefficient compares only one region with the reference."
-      }
+      },
+      "title": "Transfer the coding and df rules"
     },
     {
       "id": "t11-summary",
@@ -512,13 +573,15 @@
       "ask": {
         "q": "State the three checks before finalising a dummy-variable regression.",
         "nudge": "Check coding, interpretation and degrees of freedom."
-      }
+      },
+      "title": "Consolidate the decision rules"
     },
     {
       "id": "t11-quiz",
       "kind": "quiz",
       "mins": 4,
-      "setId": "regression_t11_mastery"
+      "setId": "regression_t11_mastery",
+      "title": "Test your mastery"
     }
   ]
 }
