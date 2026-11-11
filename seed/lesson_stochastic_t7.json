@@ -6,9 +6,9 @@
  "breadcrumb": "Stochastic processes → Birth–death processes → M/M/1 queues",
  "engine": "B",
  "engineName": "Track one-step births and deaths, find equilibrium probabilities, then translate the birth–death model into queueing measures.",
- "version": "1.0",
+ "version": "4.1",
  "status": "approved",
- "estMin": 105,
+ "estMin": 115,
  "objectives": [
   "Represent a birth–death process using state-dependent birth and death rates.",
   "Write the forward balance equations and identify stationary probabilities.",
@@ -63,6 +63,16 @@
    "free": false,
    "checked": "2026-11-11",
    "why": "Birth–death balance equations and M/M/1 results."
+  },
+  {
+   "title": "Queueing Systems, Volume 1: Theory",
+   "where": "Birth–death queueing models and M/M/1",
+   "site": "Leonard Kleinrock",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "A foundational reference for queueing systems and steady-state performance."
   }
  ],
  "provenance": "Original teaching material aligned to the Birth and death processes and M/M/1 queues items in UGC NET Statistics Unit IX. Practice questions are original and are not represented as official UGC NET PYQs.",
@@ -154,18 +164,27 @@
      "ask": "If the service rate is 4 customers per hour, what is the mean service time?",
      "recall": "1/4 hour = 15 minutes.",
      "refresh": [
-      "The mean of Exp(μ) is 1/μ.",
-      "Substitute μ=4 per hour.",
-      "The reciprocal has units of hours."
+      "A service rate μ describes the average number of service completions per unit of time when the server is continuously busy. The corresponding exponential service time has mean 1/μ.",
+      "If μ=4 customers per hour, the mean service time is 1/4 hour. Since one hour contains 60 minutes, this is 15 minutes per customer on average.",
+      "The reciprocal relationship is essential: a higher service rate means shorter average service time. State the unit after taking the reciprocal, and do not interpret μ itself as a duration."
      ]
     },
     {
      "ask": "In a customer-count model, what does a transition n→n+1 represent?",
      "recall": "One arrival; a birth.",
      "refresh": [
-      "The state records the number of customers.",
-      "An arrival increases that count by one.",
-      "A departure decreases it by one."
+      "The state n records the number of customers currently in the system, including any customer in service. An arrival adds one customer, so it changes the state from n to n+1.",
+      "A service completion removes one customer from the system, changing n to n−1. These are the upward and downward transitions in a birth–death representation of a queue.",
+      "At state zero there is nobody to serve, so a service completion cannot occur. In an M/M/1 queue the death rate is μ for n≥1, while the downward rate from zero is zero."
+     ]
+    },
+    {
+     "ask": "What does ρ=λ/μ measure in an M/M/1 queue?",
+     "recall": "The traffic intensity or server utilisation.",
+     "refresh": [
+      "The arrival rate λ measures the average number of customers entering per unit time, while μ measures the service capacity of the single server in the same time unit.",
+      "Their ratio ρ=λ/μ compares offered workload with service capacity. For a stable M/M/1 queue, ρ must be strictly less than one; if ρ≥1, a stationary probability distribution does not exist.",
+      "For example, λ=3 per hour and μ=6 per hour give ρ=3/6=0.5. Under the stable model, this is also the long-run probability that the server is busy."
      ]
     }
    ],
@@ -568,6 +587,56 @@
    "ask": {
     "q": "Before submitting an M/M/1 answer, what four checks should you make?",
     "nudge": "Stability, units, definition of the measure, and Little’s law."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s12",
+   "mins": 8,
+   "title": "Guided problem: calculate queue performance",
+   "objective": "Combine utilisation, queue length and waiting-time formulas.",
+   "problem": "An M/M/1 clinic receives patients at λ=3 per hour and serves them at μ=5 per hour. Find ρ, L, Lq, W and Wq.",
+   "hints": [
+    "Check stability by calculating ρ=λ/μ before using any steady-state formula.",
+    "Use L=ρ/(1−ρ) and Lq=ρ²/(1−ρ).",
+    "Use W=1/(μ−λ) and Wq=ρ/(μ−λ); convert hours to minutes at the end."
+   ],
+   "answer": "ρ=0.6, L=1.5, Lq=0.9, W=0.5 hour=30 minutes, and Wq=0.3 hour=18 minutes.",
+   "solution": [
+    "Calculate utilisation: ρ=3/5=0.6, which is below one, so the stationary M/M/1 formulas apply.",
+    "Mean number in the system: L=ρ/(1−ρ)=0.6/0.4=1.5 patients. Mean number waiting: Lq=ρ²/(1−ρ)=0.36/0.4=0.9 patients.",
+    "Mean time in the system: W=1/(μ−λ)=1/2 hour=30 minutes. Mean waiting time before service: Wq=ρ/(μ−λ)=0.6/2=0.3 hour=18 minutes.",
+    "Check Little’s law: λW=3×0.5=1.5=L and λWq=3×0.3=0.9=Lq. The mean number may be fractional because it is a long-run average."
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 5,
+   "title": "Summary: birth–death processes and M/M/1",
+   "objective": "Consolidate local balance, stability and queue measures.",
+   "body": [
+    "A birth–death process moves n→n+1 at rate λₙ and n→n−1 at rate μₙ. In stationarity, adjacent probability flows satisfy πₙλₙ=πₙ₊₁μₙ₊₁.",
+    "For M/M/1, arrivals are Poisson with rate λ, service times are exponential with rate μ, and there is one server. Stability requires ρ=λ/μ<1.",
+    "The stationary probabilities are πₙ=(1−ρ)ρⁿ, n=0,1,…, so P₀=1−ρ and the server-busy probability is ρ.",
+    "L=ρ/(1−ρ), Lq=ρ²/(1−ρ), W=1/(μ−λ), and Wq=ρ/(μ−λ). L and W include service; Lq and Wq exclude service.",
+    "Check units, stability and Little’s law before accepting a numerical answer."
+   ],
+   "ask": {
+    "q": "Which two Little’s-law identities should agree with the M/M/1 formulas?",
+    "nudge": "Use the arrival rate λ to connect mean counts and mean times."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Apply birth–death and M/M/1 results to unseen questions.",
+   "setId": "stochastic_t7_mastery",
+   "ask": {
+    "q": "Ready for the unseen mastery set?",
+    "nudge": "Check λ and μ use the same time unit and test ρ<1 first."
    }
   }
  ],

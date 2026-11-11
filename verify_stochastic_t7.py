@@ -7,7 +7,7 @@ from collections import Counter
 ROOT=Path(__file__).resolve().parent
 lesson=json.loads((ROOT/"seed/lesson_stochastic_t7.json").read_text())
 pool=json.loads((ROOT/"seed/stochastic_t7_mastery.json").read_text())
-assert lesson["topicId"]=="stochastic-t7" and len(lesson["scenes"])==12
+assert lesson["topicId"]=="stochastic-t7" and len(lesson["scenes"])==15
 assert sum(bool(s.get("scenario")) for s in lesson["scenes"])==2
 assert len(pool["items"])==20
 # Finite birth-death chain in worked example: unnormalised weights 1,1,1/4.
