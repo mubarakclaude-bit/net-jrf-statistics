@@ -14,5 +14,5 @@ for x in pool["items"]:
  assert len(x["options"])==4 and len(x["explanation"])>=40
  if x["format"]=="numeric": assert x.get("check")
  if x["format"]=="multi": assert len(x["statements"])==4 and set(x["verdicts"])==set("ABCD")
-for path,obj in ((L,lesson),(P,pool)): path.write_text(json.dumps(obj,ensure_ascii=False,indent=1)+"\\n")
+for path,obj in ((L,lesson),(P,pool)): path.write_text(json.dumps(obj,ensure_ascii=False,indent=1)+"\n")
 print("Canonical correlation authoring contract passes.")
