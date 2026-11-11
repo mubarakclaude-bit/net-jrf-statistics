@@ -66,42 +66,38 @@ q(6, "numeric", "easy",
   check="21 days to report; 30 days to appeal; 90 days for the appeal to be decided. The question asks about reporting.")
 
 # ------------------------------------------------------------------ moderate (10)
-q(7, "numeric", "moderate",
-  "The reference moment for Census 2027, for the country as a whole, is 00:00 hours on:",
-  ["1 October 2026", "1 February 2027", "1 March 2027", "1 April 2026"], "C",
-  "00:00 hours on 1 March 2027. The date 1 October 2026 is the separate reference moment for Ladakh and the snow-bound "
-  "areas of Jammu and Kashmir, Himachal Pradesh and Uttarakhand; February 2027 is when Phase II enumeration is carried "
-  "out; and April 2026 is when Phase I houselisting begins.",
-  check="Houselisting Apr-Sep 2026; enumeration Feb 2027; reference moments 1 Mar 2027 and 1 Oct 2026. The question "
-        "asks for the national reference moment.")
+q(7, "single", "moderate",
+  "For the four poll-bound States/areas named in ORGI's 5 September 2026 notification, the self-enumeration window is:",
+  ["1-15 November 2026", "16-30 November 2026", "1-15 December 2026", "16-31 December 2026"], "B",
+  "ORGI's schedule for Goa, Uttar Pradesh, Punjab and non-snow-bound Uttarakhand provides self-enumeration 16-30 "
+  "November, Population Enumeration 1 December 2026-4 January 2027 and revisional round 5-9 January 2027.",
+  check="Self-enumeration in November; door-to-door enumeration across December and early January; revisional round immediately afterwards.")
 
 q(8, "single", "moderate",
-  "Which of the following is NOT a feature announced for Census 2027?",
-  ["Enumeration of caste",
-   "Optional self-enumeration through a portal",
-   "Collection of houselisting data on a mobile application",
-   "A single reference moment for the whole country"], "D",
-  "There are two reference moments, not one: 1 March 2027 for the country and 1 October 2026 for Ladakh and the "
-  "snow-bound areas of Jammu and Kashmir, Himachal Pradesh and Uttarakhand, where Phase II is held in September 2026. "
-  "Caste enumeration, self-enumeration in sixteen languages and the offline-capable mobile app are all genuine "
-  "features of India's first digital census.")
+  "Which statement about the Population Enumeration schedule of Census 2027 is correct?",
+  ["All States and UTs use one identical fieldwork window in February 2027",
+   "Goa, Uttar Pradesh, Punjab and non-snow-bound Uttarakhand have a separate notified schedule",
+   "The self-enumeration window for the four poll-bound areas is 1-15 November 2026",
+   "The revisional round for the four poll-bound areas ends on 30 November 2026"], "B",
+  "ORGI's current portal lists a separate schedule for these four States/areas: self-enumeration 16-30 November "
+  "2026, Population Enumeration 1 December 2026-4 January 2027 and revisional round 5-9 January 2027. Fieldwork "
+  "dates must not be confused with the national reference moment.")
 
 q(9, "multi", "moderate",
-  "Consider the following statements about the Registration of Births and Deaths (Amendment) Act, 2023.",
-  ["A and B only", "A, B and C only", "B, C and D only", "A, B, C and D"], "D",
-  "All four hold. The Act came into force on 1 October 2023; it creates a national database of registered births and "
-  "deaths maintained by the Registrar General, with state databases under Chief Registrars; it makes the birth "
-  "certificate a single document admissible as proof of date and place of birth for a listed set of purposes; and it "
-  "permits the database to be used to update the National Population Register and electoral rolls, with central "
-  "approval needed for wider sharing.",
-  statements=["It came into force on 1 October 2023.",
-              "It creates a national database of registered births and deaths under the Registrar General.",
-              "It makes the birth certificate a single document of proof of date and place of birth.",
-              "It allows the database to be used to update the National Population Register and electoral rolls."],
-  verdicts={"A": dict(tf=True,  why="Act No. 20 of 2023, commencing 1 October 2023."),
-            "B": dict(tf=True,  why="With Chief Registrars maintaining the corresponding state-level databases."),
-            "C": dict(tf=True,  why="For school admission, driving licences, electoral rolls, Aadhaar, marriage registration and government employment."),
-            "D": dict(tf=True,  why="Central government approval is needed to share it beyond those uses.")})
+  "Consider the following statements about amendments to the Registration of Births and Deaths Act, 1969.",
+  ["A and B only", "A, C and D only", "B and C only", "A, B, C and D"], "B",
+  "A is correct: the 2023 amendment provides for the national database and birth-certificate provisions. B is incorrect: "
+  "the delayed-registration magistrate change belongs to the 2026 amendment, not the 2023 Act. C is correct: ORGI's "
+  "current page describes the parent Act as amended in both 2023 and 2026. D is correct: for information furnished "
+  "more than two years after the event, the 2026 amendment requires an order of a Judicial Magistrate First Class.",
+  statements=["The 2023 amendment provides for a national database of registered births and deaths under the Registrar General.",
+              "The 2026 delayed-registration change was already part of the 2023 amendment.",
+              "ORGI's current Vital Statistics Division page identifies amendments in both 2023 and 2026.",
+              "For information furnished more than two years after the event, the 2026 change requires an order of a Judicial Magistrate First Class."],
+  verdicts={"A": dict(tf=True, why="The 2023 amendment provides for the national database under the Registrar General."),
+            "B": dict(tf=False, why="The delayed-registration magistrate change is in the 2026 amendment, not the 2023 amendment."),
+            "C": dict(tf=True, why="ORGI's current page identifies amendments in 2023 and 2026."),
+            "D": dict(tf=True, why="The 2026 amendment provides for a Judicial Magistrate First Class order after two years.")})
 
 q(10, "single", "moderate",
   "The Sample Registration System began full-scale operations in:",
@@ -150,16 +146,14 @@ q(14, "numeric", "moderate",
   "excludes migration. The option 24.8 adds the two rates and 2.88 divides them, both of which are meaningless here.",
   check="Natural growth is a difference, not a sum or a ratio, and it excludes migration entirely.")
 
-q(15, "single", "moderate",
-  "The completeness of India's Civil Registration System — 98.4% of births in 2023 — is computed by dividing registered "
-  "events by:",
-  ["The number of events reported by medical institutions",
-   "Events estimated by applying SRS rates to a projected population",
-   "Events counted in the most recent census",
-   "The number of certificates issued"], "B",
-  "Registered events are divided by estimated events, and the estimate comes from applying SRS rates to a projected "
-  "population. That is why a high completeness figure cannot by itself justify retiring the SRS: the measure of the "
-  "register's completeness is derived from the survey the register would be replacing.")
+q(15, "numeric", "moderate",
+  "According to ORGI's national Vital Statistics based on CRS report for 2024, released in July 2026, birth registration "
+  "completeness was:",
+  ["82.4%", "98.4%", "99.1%", "99.4%"], "C",
+  "ORGI reports birth-registration completeness of 99.1% in 2024, up from 82.4% in 2011. Death registration was 99.4% "
+  "in 2024, up from 66.4% in 2011. These percentages describe completeness of registration, not demographic rates "
+  "such as CBR or IMR.",
+  check="Attach the year: 2024 birth registration 99.1%; death registration 99.4%.")
 
 q(16, "multi", "moderate",
   "Consider the following statements about the Sample Registration System.",
@@ -225,7 +219,7 @@ q(20, "single", "hard",
   "indicator in the set that does not fit a pattern of steady improvement.")
 
 BODY = dict(moduleId="official", source="mastery", topicId="official-t5",
-            label="Census and Vital Statistics — mastery test (unseen)",
+            label="Census and Vital Statistics — mastery test (unseen; refreshed 12 November 2026)",
             count=len(I), items=I)
 json.dump(BODY, io.open("seed/official_t5_mastery.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 d = collections.Counter(x["diff"] for x in I); k = collections.Counter(x["answer"] for x in I)
