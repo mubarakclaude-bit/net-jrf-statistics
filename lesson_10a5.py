@@ -362,7 +362,7 @@ SC.append(dict(
           "females per 1,000 males, while much international work reports males per 100 females. A question that gives "
           "a figure near 1,050 is using the other convention."),
    dict(t="def", h="Maternal mortality",
-     body="87 per 1,00,000 live births for 2022-24, down from 130 for 2014-16. The SDG target is 70 or below by 2030. "
+     body="87 per 1,00,000 live births for 2022-24, down from 88 for 2021-23 and 130 for 2014-16. The SDG target is 70 or below by 2030. "
           "MMR is published for three-year periods, not single years, because maternal deaths are too rare for an "
           "annual sample estimate to be stable — the same reason the multiplier is a lakh rather than a thousand."),
    dict(t="step", h="Reading the figures together",
@@ -664,7 +664,7 @@ LES = dict(
       "Dating the permanent census organisation to 1948 or 1951 instead of the May 1949 decision.",
       "Putting the census or the SRS under MoSPI rather than the RGI in the Ministry of Home Affairs.",
       "Quoting MMR per 1,000 live births, or against a single year rather than 2022-24.",
-      "Quoting the sex ratio at birth as a 2023 figure; it is a 2021-23 average.",
+      "Quoting the sex ratio at birth as a 2023 figure; it is a 2022-24 average.",
       "Forgetting the factor of 5 or the per-1,000 scale when computing TFR from five-year ASFRs.",
       "Taking the proportion of female births as 918/1000 rather than 918/1918.",
       "Treating a TFR below 2.1 as proof that the population is already declining.",
