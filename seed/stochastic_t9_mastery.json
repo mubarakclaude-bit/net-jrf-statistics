@@ -172,27 +172,27 @@
       "answer": "C",
       "explanation": "A, B and C are true; long-run rate is reciprocal mean gap.",
       "statements": [
-        "Renewal epochs are cumulative sums.",
-        "Renewal counts are random for random gaps.",
-        "The renewal function is expected renewal count.",
-        "Mean gap itself is the long-run rate."
+        "Renewal epochs are cumulative sums of the inter-renewal times.",
+        "The renewal count N(t) is random when the gaps are random.",
+        "The renewal function is m(t)=E[N(t)].",
+        "The mean inter-renewal time itself is the long-run renewal rate."
       ],
       "verdicts": {
         "A": {
           "tf": true,
-          "why": "Sₙ is the cumulative sum of gaps."
+          "why": "The nth renewal epoch is Sₙ=X₁+⋯+Xₙ."
         },
         "B": {
           "tf": true,
-          "why": "The count depends on random epochs."
+          "why": "The number of epochs completed by t depends on the random gaps."
         },
         "C": {
           "tf": true,
-          "why": "m(t)=E[N(t)] by definition."
+          "why": "This expectation defines the renewal function."
         },
         "D": {
           "tf": false,
-          "why": "The rate is reciprocal mean gap."
+          "why": "The elementary renewal theorem gives long-run rate 1/E[X], not E[X]."
         }
       },
       "check": "A:true;B:true;C:true;D:false"
@@ -244,27 +244,27 @@
       "answer": "C",
       "explanation": "A, B and C are true; general renewal processes need not be Poisson.",
       "statements": [
-        "Renewal epochs are cumulative sums.",
-        "Renewal counts are random for random gaps.",
-        "The renewal function is expected renewal count.",
-        "Mean gap itself is the long-run rate."
+        "The inter-arrival gaps are independent and identically distributed.",
+        "The gaps have an exponential distribution.",
+        "The expected count is E[N(t)]=λt.",
+        "Every renewal process is a Poisson process."
       ],
       "verdicts": {
         "A": {
           "tf": true,
-          "why": "Sₙ is the cumulative sum of gaps."
+          "why": "A Poisson process has iid inter-arrival times."
         },
         "B": {
           "tf": true,
-          "why": "The count depends on random epochs."
+          "why": "Its inter-arrival times are exponential with rate λ."
         },
         "C": {
           "tf": true,
-          "why": "m(t)=E[N(t)] by definition."
+          "why": "The Poisson count has mean λt."
         },
         "D": {
           "tf": false,
-          "why": "The rate is reciprocal mean gap."
+          "why": "A general renewal process permits non-exponential iid gaps and is not necessarily Poisson."
         }
       },
       "check": "A:true;B:true;C:true;D:false"
@@ -345,27 +345,27 @@
       "answer": "D",
       "explanation": "A, B and C are true; the ratio is E[R]/E[X].",
       "statements": [
-        "Renewal epochs are cumulative sums.",
-        "Renewal counts are random for random gaps.",
-        "The renewal function is expected renewal count.",
-        "Mean gap itself is the long-run rate."
+        "The long-run reward rate uses the expected reward earned per cycle.",
+        "The expected reward per cycle is divided by the expected cycle duration.",
+        "The renewal-reward theorem gives a long-run average rate.",
+        "The reward rate is E[X]/E[R], where X is cycle length and R is reward."
       ],
       "verdicts": {
         "A": {
           "tf": true,
-          "why": "Sₙ is the cumulative sum of gaps."
+          "why": "The numerator is the expected reward R earned in one renewal cycle."
         },
         "B": {
           "tf": true,
-          "why": "The count depends on random epochs."
+          "why": "The denominator is the expected cycle duration X."
         },
         "C": {
           "tf": true,
-          "why": "m(t)=E[N(t)] by definition."
+          "why": "Under the renewal-reward conditions, the ratio is the almost-sure long-run reward per unit time."
         },
         "D": {
           "tf": false,
-          "why": "The rate is reciprocal mean gap."
+          "why": "The ratio is E[R]/E[X], not its reciprocal."
         }
       },
       "check": "A:true;B:true;C:true;D:false"
