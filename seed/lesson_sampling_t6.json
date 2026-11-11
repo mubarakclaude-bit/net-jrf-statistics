@@ -1,0 +1,647 @@
+{
+  "id": "samplingt6",
+  "topicId": "sampling-t6",
+  "moduleId": "sampling",
+  "title": "PPS Schemes and Their Estimators",
+  "breadcrumb": "Sampling theory → Unequal probability sampling → PPS methods and estimators",
+  "engine": "B",
+  "engineName": "Use size-related selection chances with the estimator matched to replacement status.",
+  "version": "1.0",
+  "status": "review",
+  "estMin": 95,
+  "objectives": [
+    "Distinguish PPS with and without replacement.",
+    "Calculate draw probabilities from size measures.",
+    "Construct Hansen–Hurwitz and Horvitz–Thompson estimators.",
+    "State the corresponding variance expressions and probability requirements.",
+    "Describe cumulative-total and Lahiri selection procedures."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Probability and expectation",
+      "why": "PPS estimators are expectations over draws or samples."
+    },
+    {
+      "id": "p2",
+      "name": "Inclusion probabilities",
+      "why": "HT requires first- and second-order inclusion probabilities."
+    },
+    {
+      "id": "p3",
+      "name": "Finite population totals",
+      "why": "The estimators target a fixed finite-population total."
+    }
+  ],
+  "traps": [
+    "HH uses draw probabilities p_i and averages over draws.",
+    "HT uses final inclusion probabilities π_i under without-replacement designs.",
+    "PPSWR can select a unit more than once.",
+    "PPSWOR draw probabilities do not generally equal final inclusion probabilities.",
+    "Selection method names do not by themselves identify replacement status."
+  ],
+  "howto": "First identify whether repeats are possible. If the design is independent PPSWR, calculate each draw probability from the size measure and use Hansen–Hurwitz. If distinct units are sampled, obtain final inclusion probabilities and use Horvitz–Thompson. For variance, use the matching draw or joint-inclusion probability structure.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Size measures and selection probabilities",
+      "objective": "Distinguish size measures, draw probabilities and inclusion probabilities.",
+      "body": [
+        "Probability proportional to size (PPS) sampling gives units selection chances related to a measure of size, such as population, acreage, turnover or number of employees.",
+        "With-replacement PPS selects a unit independently at each draw according to draw probabilities p_i. A unit may appear more than once. Without-replacement PPS selects distinct units; its first-order inclusion probability π_i is the chance that unit i appears in the final sample.",
+        "Do not automatically treat p_i as π_i. In a with-replacement design, p_i is a per-draw probability. In a without-replacement design, π_i refers to inclusion in the final sample."
+      ],
+      "items": [
+        {
+          "ask": "What is a measure of size?",
+          "recall": "An auxiliary measure used to assign selection probabilities.",
+          "refresh": [
+            "A measure of size may be population, acreage, sales or number of employees.",
+            "The PPS design uses this measure to give larger units higher selection chances.",
+            "The measure of size need not be the study variable being estimated."
+          ]
+        },
+        {
+          "ask": "What does p_i represent in PPS with replacement?",
+          "recall": "The probability that unit i is selected on one draw.",
+          "refresh": [
+            "Each draw is made according to the draw probabilities.",
+            "The same unit may be selected again on another draw.",
+            "For independent draws, the draw probability remains p_i on each draw."
+          ]
+        },
+        {
+          "ask": "What does π_i represent in PPS without replacement?",
+          "recall": "The probability that unit i appears in the final sample.",
+          "refresh": [
+            "The final sample contains distinct units.",
+            "The inclusion probability concerns membership in the final sample, not a particular draw.",
+            "In general, π_i is not the same as a first-draw probability."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Why must draw probabilities and inclusion probabilities be kept distinct?",
+        "nudge": "They refer to different events: selection on one draw versus appearing in the final sample."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 8,
+      "title": "Why probability proportional to size?",
+      "objective": "Explain how PPS improves representation when size predicts the study total.",
+      "body": [
+        "Suppose a survey estimates total employment across firms. A firm with 1,000 employees contributes more to the total than a firm with 10 employees. Sampling larger firms more often can improve efficiency when the measure of size is related to the study variable.",
+        "PPS is not automatically better for every variable. Its performance depends on the relationship between the size measure and the study variable and on the estimator used to correct unequal selection chances.",
+        "With replacement, the Hansen–Hurwitz estimator uses the draw probability. Without replacement, the Horvitz–Thompson estimator uses the final inclusion probability."
+      ],
+      "scenario": {
+        "teaser": "A business survey with highly unequal firm sizes",
+        "title": "Large firms and employment totals",
+        "body": [
+          "A business register contains firms ranging from a few workers to several thousand. A simple random sample of firms may include many small firms and miss some large contributors to national employment. The survey therefore assigns draw probabilities proportional to the number of employees on the register. A selected firm contributes its observed employment divided by its draw probability in the Hansen–Hurwitz estimator when draws are made with replacement. This weighting corrects the unequal draw chances. If the design instead samples distinct firms without replacement, the estimator must use each firm's first-order inclusion probability in the final sample. The analyst must know which design was actually used before choosing the estimator."
+        ],
+        "q": "Which estimator is used for independent PPS draws with replacement?",
+        "answer": "The Hansen–Hurwitz estimator."
+      },
+      "ask": {
+        "q": "Does PPS itself remove the need for weights?",
+        "nudge": "No. Unequal selection chances must be accounted for by the appropriate estimator."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Compare PPS draw probabilities",
+      "objective": "Calculate probabilities from a size measure.",
+      "viz": {
+        "type": "disc-pmf",
+        "caption": "Size measures 1, 2 and 3 produce PPS draw probabilities 1/6, 1/3 and 1/2."
+      },
+      "body": [
+        "If size measures are 1, 2 and 3, their total is six. The PPS draw probabilities are 1/6, 2/6 and 3/6.",
+        "The probabilities sum to one. The largest unit has three times the draw probability of the smallest unit.",
+        "With replacement, each draw uses these probabilities and a unit may be drawn repeatedly. A without-replacement procedure has a different final inclusion probability structure."
+      ],
+      "ask": {
+        "q": "If the measure of size doubles while all other sizes remain fixed, what happens to its PPS draw probability?",
+        "nudge": "Its probability rises according to its new share of the total size."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 10,
+      "title": "Hansen–Hurwitz and Horvitz–Thompson",
+      "objective": "State estimators and variance formulas for PPSWR and PPSWOR.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "PPS with replacement",
+          "body": "For n independent draws with draw probabilities p_i, the Hansen–Hurwitz estimator is Ŷ_HH=(1/n)Σ_{d=1}^n y_{i_d}/p_{i_d}. Repeated selections are counted once per draw."
+        },
+        {
+          "t": "formula",
+          "h": "HH variance",
+          "body": "Let z_d=y_{i_d}/p_{i_d}. Under independent draws, V(Ŷ_HH)=V(z_d)/n, where V(z_d)=Σ_i p_i(y_i/p_i)^2−Y²."
+        },
+        {
+          "t": "formula",
+          "h": "PPS without replacement",
+          "body": "For distinct selected units with first-order inclusion probabilities π_i, the Horvitz–Thompson total is Ŷ_HT=Σ_{i∈s} y_i/π_i."
+        },
+        {
+          "t": "formula",
+          "h": "HT variance",
+          "body": "V(Ŷ_HT)=Σ_iΣ_j(π_ij−π_iπ_j)(y_i/π_i)(y_j/π_j), with π_ii=π_i. An unbiased variance estimator requires the relevant pairwise inclusion probabilities and positive denominators."
+        },
+        {
+          "t": "def",
+          "h": "Estimator choice",
+          "body": "Use HH when the design is PPS with replacement and the draw probabilities are known. Use HT when the design is without replacement and final inclusion probabilities are known. A first-draw probability is not a substitute for π_i."
+        }
+      ],
+      "flow": {
+        "title": "Choose the PPS estimator",
+        "alt": "Identify whether selection is with replacement or without replacement. For independent draws with replacement use Hansen–Hurwitz and draw probabilities; for distinct units use Horvitz–Thompson and final inclusion probabilities.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Identify PPS design",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "With replacement?",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 0,
+            "label": "HH: use pᵢ per draw",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 2,
+            "c": 2,
+            "label": "HT: use πᵢ final inclusion",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 3,
+            "c": 1,
+            "label": "Estimate total and variance",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "b",
+            "to": "d"
+          },
+          {
+            "from": "c",
+            "to": "e"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ],
+        "note": "The estimator is determined by the actual selection design."
+      },
+      "ask": {
+        "q": "What probability appears in the HH estimator?",
+        "nudge": "The draw probability p_i for each draw."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked PPS with-replacement estimate",
+      "objective": "Calculate HH contributions, expectation and variance.",
+      "problem": "Three units have PPS draw probabilities (1/6,1/3,1/2) and values (10,30,30). Calculate the HH contribution for each possible draw, its expectation and the variance of the mean estimator for n draws.",
+      "steps": [
+        {
+          "say": "Divide each value by its draw probability.",
+          "math": "z=(10/(1/6),30/(1/3),30/(1/2))=(60,90,60)",
+          "why": "Each draw contributes its observed value divided by its draw probability."
+        },
+        {
+          "say": "Calculate the expectation of one draw contribution.",
+          "math": "E(z)=⅙(60)+⅓(90)+½(60)=70",
+          "why": "Weight each possible contribution by its draw probability."
+        },
+        {
+          "say": "Calculate the second moment.",
+          "math": "E(z²)=⅙(3600)+⅓(8100)+½(3600)=5100",
+          "why": "Square the draw contributions before averaging."
+        },
+        {
+          "say": "Subtract the squared expectation.",
+          "math": "V(z)=5100−70²=200",
+          "why": "Variance is the second moment minus the squared mean."
+        },
+        {
+          "say": "For n independent draws, divide by n.",
+          "math": "V(Ŷ_HH)=200/n",
+          "why": "The mean of n independent draw contributions has one-nth the single-draw variance."
+        }
+      ],
+      "ask": {
+        "q": "What is the HH estimate if the observed draw contributions are 60, 90 and 60?",
+        "nudge": "Their average is 70."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 3,
+      "title": "Recall PPS estimator rules",
+      "objective": "Retrieve estimator forms and probability meanings.",
+      "intro": "Try each prompt before revealing the answer.",
+      "items": [
+        {
+          "q": "HH total estimator?",
+          "a": "(1/n)Σ_d y_{i_d}/p_{i_d}."
+        },
+        {
+          "q": "HT total estimator?",
+          "a": "Σ_{i∈s}y_i/π_i."
+        },
+        {
+          "q": "What does p_i mean in PPSWR?",
+          "a": "Per-draw selection probability."
+        },
+        {
+          "q": "What does π_i mean in PPSWOR?",
+          "a": "Final-sample inclusion probability."
+        },
+        {
+          "q": "Can a PPSWR sample contain repeats?",
+          "a": "Yes, a unit can be selected on multiple independent draws."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 8,
+      "title": "Complete a PPS calculation",
+      "objective": "Calculate size probabilities and HH estimate.",
+      "problem": "Three units have size measures 2, 3 and 5, with study values 12, 18 and 20. Two independent PPS draws with replacement produce observed units 1 and 3. Complete the HH estimate.",
+      "steps": [
+        {
+          "say": "Calculate the total size measure.",
+          "blank": {
+            "prompt": "Find the sum of size measures.",
+            "answer": "10",
+            "accept": [
+              "10"
+            ],
+            "hint": "Add 2, 3 and 5."
+          },
+          "why": "PPS draw probabilities are each size divided by this total."
+        },
+        {
+          "say": "Find the draw probabilities.",
+          "blank": {
+            "prompt": "Write p₁ and p₃.",
+            "answer": "1/5 and 1/2",
+            "accept": [
+              "1/5,1/2",
+              "0.2,0.5"
+            ],
+            "hint": "Divide 2 and 5 by 10."
+          },
+          "why": "Each draw probability is the unit size divided by total size."
+        },
+        {
+          "say": "Calculate the draw contributions.",
+          "blank": {
+            "prompt": "Find y₁/p₁ and y₃/p₃.",
+            "answer": "60 and 40",
+            "accept": [
+              "60,40",
+              "60 and 40"
+            ],
+            "hint": "12/(1/5) and 20/(1/2)."
+          },
+          "why": "Inverse draw-probability weighting corrects unequal selection chances."
+        },
+        {
+          "say": "Average the two contributions.",
+          "blank": {
+            "prompt": "Find the HH estimate.",
+            "answer": "50",
+            "accept": [
+              "50",
+              "50.0"
+            ],
+            "hint": "Average 60 and 40."
+          },
+          "why": "HH averages contributions over draws, counting repeated draws if they occur."
+        }
+      ],
+      "ask": {
+        "q": "Why is the denominator the number of draws, not the number of distinct sampled units?",
+        "nudge": "HH averages one contribution per draw, including repeated selections."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 8,
+      "title": "PPS selection procedures",
+      "objective": "Describe cumulative-total and Lahiri selection methods.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "Cumulative-total method",
+          "body": "Compute cumulative size totals C_i=Σ_{j≤i}M_j. For each draw, generate a random number uniformly over the total size range and select the unit whose cumulative interval contains it. This gives draw probability p_i=M_i/ΣM_j."
+        },
+        {
+          "t": "step",
+          "h": "Lahiri method",
+          "body": "Choose a unit index uniformly from the frame and a random number uniformly between zero and the maximum size M_max. Accept the chosen unit if the random number is no greater than its size; otherwise repeat. Conditional on acceptance, the accepted unit probability is proportional to its size."
+        },
+        {
+          "t": "def",
+          "h": "Replacement convention",
+          "body": "If each draw repeats the procedure independently and does not exclude previously selected units, the method is PPS with replacement. To construct a without-replacement design, an explicit rule for removing or adjusting selected units is required."
+        },
+        {
+          "t": "def",
+          "h": "Practical caution",
+          "body": "Check the actual algorithm. The phrase 'PPS sampling' alone does not identify replacement status, draw probabilities or final inclusion probabilities."
+        }
+      ],
+      "ask": {
+        "q": "What does the cumulative-total random number select?",
+        "nudge": "The unit whose cumulative size interval contains the random number."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 9,
+      "title": "Guided practice: select the estimator",
+      "objective": "Match estimator to replacement status.",
+      "problem": "A design selects distinct primary units with unequal probabilities. The final first-order inclusion probabilities π_i are supplied. Which estimator is appropriate and why?",
+      "hints": [
+        "Check whether units can repeat.",
+        "Identify whether probabilities refer to the final sample.",
+        "Select the estimator using those probabilities."
+      ],
+      "answer": "Use the Horvitz–Thompson estimator Ŷ_HT=Σ_{i∈s}y_i/π_i because the design samples distinct units and supplies final inclusion probabilities.",
+      "check": "The key clue is distinct units and final-sample π_i.",
+      "scenario": {
+        "teaser": "A without-replacement area survey",
+        "title": "Final inclusion probabilities matter",
+        "body": [
+          "A regional agricultural survey samples villages without replacement, assigning larger villages higher chances of inclusion. The design documentation supplies each village's first-order inclusion probability in the final sample. The analyst observes crop production totals for selected villages and wants the region-wide total. Because villages cannot appear twice, the estimator must add each selected village's production divided by its final inclusion probability. Using the original PPS draw probability in place of the final π_i would generally be wrong: after each selection, the without-replacement design changes the remaining selection process. The survey's probability documentation, not merely the phrase 'PPS', determines the correct weights."
+        ],
+        "q": "Which probability is used in the estimator?",
+        "answer": "The final first-order inclusion probability π_i."
+      },
+      "solution": [
+        {
+          "say": "The sample contains distinct units, so the design is without replacement."
+        },
+        {
+          "say": "The supplied π_i values are final inclusion probabilities."
+        },
+        {
+          "say": "Use the HT total estimator and weight each selected value by 1/π_i."
+        }
+      ],
+      "ask": {
+        "q": "Why not use p_i from the first draw?",
+        "nudge": "Because p_i is a draw probability and need not equal the final inclusion probability under PPSWOR."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 7,
+      "title": "Avoid PPS estimator traps",
+      "objective": "Distinguish HH, HT and selection algorithms.",
+      "intro": "Judge each statement.",
+      "items": [
+        {
+          "claim": "HH uses the draw probability p_i for each with-replacement draw.",
+          "tf": true,
+          "why": "The contribution is y_i/p_i for each draw."
+        },
+        {
+          "claim": "A PPSWR sample may contain the same unit more than once.",
+          "tf": true,
+          "why": "Independent draws are made with replacement."
+        },
+        {
+          "claim": "HT under PPSWOR uses final inclusion probabilities π_i.",
+          "tf": true,
+          "why": "The estimator weights distinct sampled units by their final inclusion chances."
+        },
+        {
+          "claim": "The PPS draw probability always equals the final inclusion probability under without-replacement sampling.",
+          "tf": false,
+          "why": "The final probability depends on the complete without-replacement design."
+        },
+        {
+          "claim": "The HH estimator averages over draws, including repeats.",
+          "tf": true,
+          "why": "Each draw contributes once to the estimator."
+        },
+        {
+          "claim": "The cumulative-total method selects the interval containing a uniform random number on the total-size scale.",
+          "tf": true,
+          "why": "Cumulative size intervals have lengths proportional to unit sizes."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 9,
+      "title": "Transfer: compare HH and HT weights",
+      "objective": "Choose weights correctly in a changed design.",
+      "problem": "A survey first used PPSWR with draw probability p_i=0.2 for a selected unit. A later design selects units without replacement and reports final π_i=0.35. For observed value y_i=70, calculate the corresponding HH draw contribution in the first design and HT contribution in the second.",
+      "hints": [
+        "Use y_i/p_i for the with-replacement draw.",
+        "Use y_i/π_i for the without-replacement sample.",
+        "Do not interchange the probabilities."
+      ],
+      "answer": "HH contribution=70/0.2=350. HT contribution=70/0.35=200.",
+      "check": "The weights differ because the probability definitions and designs differ.",
+      "solution": [
+        {
+          "say": "For PPSWR, divide by the per-draw probability.",
+          "math": "70/0.2=350",
+          "why": "HH uses draw probabilities."
+        },
+        {
+          "say": "For PPSWOR, divide by final inclusion probability.",
+          "math": "70/0.35=200",
+          "why": "HT uses the probability that the unit appears in the final sample."
+        },
+        {
+          "say": "Compare the results.",
+          "math": "350≠200",
+          "why": "The two probabilities describe different events and need not be equal."
+        }
+      ],
+      "ask": {
+        "q": "What is the most important information to verify before choosing the estimator?",
+        "nudge": "Whether sampling is with or without replacement and which probabilities are supplied."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 6,
+      "title": "PPS estimator checklist",
+      "objective": "Summarise probabilities, estimators and algorithms.",
+      "body": [
+        "PPS assigns selection chances in proportion to a measure of size. The measure of size should be relevant to the study objective.",
+        "PPSWR: independent draws, repeats possible, draw probability p_i, Hansen–Hurwitz estimator (1/n)Σ_d y_{i_d}/p_{i_d}.",
+        "PPSWOR: distinct units, final inclusion probability π_i, Horvitz–Thompson estimator Σ_{i∈s}y_i/π_i.",
+        "For HH, V(Ŷ_HH)=V(y_i/p_i)/n under independent draws. For HT, variance uses first- and second-order inclusion probabilities.",
+        "Cumulative-total selection uses a random number on the cumulative size scale. Lahiri accepts a randomly proposed unit when a random ordinate is no greater than its size.",
+        "Never substitute p_i for π_i without proving they coincide under the stated design."
+      ],
+      "ask": {
+        "q": "Which estimator and key design condition should you remember for PPS Schemes and Their Estimators?",
+        "nudge": "State the estimator, its weighting or expansion rule, and the assumptions behind its variance."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 4,
+      "title": "Mastery check",
+      "objective": "Demonstrate independent command of PPS schemes and estimators.",
+      "setId": "sampling_t6_mastery"
+    }
+  ],
+  "revision": {
+    "sheet": [
+      "PPS draw probability p_i=M_i/ΣM.",
+      "HH: (1/n)Σ_d y_{i_d}/p_{i_d}.",
+      "V(HH)=V(y_i/p_i)/n for independent draws.",
+      "HT: Σ_{i∈s}y_i/π_i.",
+      "V(HT)=Σ_iΣ_j(π_ij−π_iπ_j)(y_i/π_i)(y_j/π_j).",
+      "PPSWR permits repeats; PPSWOR does not.",
+      "Cumulative-total and Lahiri methods generate PPS draws."
+    ],
+    "cards": [
+      [
+        "PPSWR",
+        "HH; use p_i"
+      ],
+      [
+        "PPSWOR",
+        "HT; use π_i"
+      ],
+      [
+        "HH variance",
+        "V(z)/n"
+      ],
+      [
+        "HT variance",
+        "Uses π_ij"
+      ],
+      [
+        "Cumulative total",
+        "Random point in size scale"
+      ],
+      [
+        "Lahiri",
+        "Accept if u≤M_i"
+      ]
+    ],
+    "tricks": [
+      "Write WR or WOR before writing an estimator.",
+      "Check whether the probability is per draw or final inclusion.",
+      "HH counts each draw, including repeats."
+    ],
+    "shortcuts": [
+      "Independent PPSWR draws imply variance of mean = single-draw variance/n.",
+      "HT weights selected units by inverse final inclusion probability."
+    ],
+    "remember": [
+      "Size measure is auxiliary information.",
+      "Replacement status changes the estimator and probability definitions."
+    ]
+  },
+  "refs": [
+    {
+      "title": "Sampling Techniques",
+      "where": "Unequal probability sampling; Hansen–Hurwitz and Horvitz–Thompson estimators",
+      "site": "William G. Cochran",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Classical probability-proportional-to-size sampling and estimator treatment."
+    },
+    {
+      "title": "Sampling Theory, varying probability sampling",
+      "where": "PPS with and without replacement",
+      "site": "IIT Kanpur, Shalabh",
+      "url": "https://home.iitk.ac.in/~shalab/sampling/chapter7-sampling-varying-probability-sampling.pdf",
+      "type": "Open lecture notes",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Open notes on varying-probability sampling and PPS estimators."
+    },
+    {
+      "title": "Sampling: Design and Analysis",
+      "where": "Unequal probability sampling",
+      "site": "Sharon L. Lohr",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Modern survey-sampling treatment of unequal probability designs."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule."
+  },
+  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t6. Practice items are original, not official PYQs. PPSWR worked arithmetic is independently recomputed in verify_sampling_t6.py. The HH variance assumes independent draws with replacement; the HT variance is stated in terms of final first- and second-order inclusion probabilities."
+}
