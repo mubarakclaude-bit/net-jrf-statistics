@@ -14,13 +14,10 @@ const built = buildDocs();
 if (built.problems.length) { built.problems.forEach(p => console.error("PROBLEM " + p)); console.error("FAILED: the seeds have problems"); process.exit(1); }
 const docs = built.docs;
 
-// scrub the candidate's own answers out of the previous-year paper
-const pq = docs["qsets/pyq_j26_full"];
-if (pq) pq.items.forEach(it => {
-  delete it.youMarked; delete it.responseSheet;
-  if (typeof it.explanation === "string")
-    it.explanation = it.explanation.replace(/\s*Response sheet Q\d+;[^]*$/, "").trim();
-});
+// scrub the candidate's own answers out of EVERY previous-year paper (source "pyq"), not one named file: a paper added later
+// is covered the moment its file exists (tools/papers.js).
+const { scrubPaper } = require("./tools/papers");
+for (const k of Object.keys(docs)) if (/^qsets\//.test(k) && docs[k] && docs[k].source === "pyq") scrubPaper(docs[k]);
 // The candidate's per-module June scores ("3/11") and the "projected" figure built from them are
 // personal. The hosted copy starts everyone at zero: keep the denominator, drop the numerator.
 docs["meta/catalog"].modules.forEach(m => {

@@ -23,3 +23,5 @@ out=$(node tests/changed-topics.test.js) || { echo "$out"; exit 1; }   # which l
 echo "$out" | tail -1
 out=$(node tests/check-ids.test.js) || { echo "$out"; exit 1; }   # the id-stability tool, in a throwaway git repo
 echo "$out" | tail -1
+out=$(node tests/papers.test.js) || { echo "$out"; exit 1; }   # finding past papers by file name, and scrubbing the candidate's answers
+echo "$out" | tail -1

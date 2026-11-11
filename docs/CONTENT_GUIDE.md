@@ -38,8 +38,8 @@ seed/lesson_<stem>.json   the lesson: scenes, objectives, traps, prerequisites, 
         │  its quiz scene's setId
         ▼
 seed/<topic>_mastery.json 20 questions that test the lesson
-seed/<module>_pyq_variants.json   variants of real June 2026 questions; each item's srcQ is the question number
-seed/pyq_j26_full.json    the real June 2026 Paper 2: key, and what the candidate marked
+seed/<module>_pyq_variants.json   variants of real past questions; each item's srcQ is the question number (srcPaper if not j26)
+seed/pyq_<paper>_full.json  a real past paper (j26 = June 2026 Paper 2): key, and what the candidate marked
 seed/*_practice.json, inference_*_1.json   other practice sets
 ```
 
@@ -48,7 +48,8 @@ seed/*_practice.json, inference_*_1.json   other practice sets
 | A lesson and its mastery pool, **once merged** | the seed JSON: `seed/lesson_<stem>.json` and `seed/<topic>_mastery.json` | edit the JSON directly; see 3a |
 | A **new** lesson, before its first merge | `lesson_<stem>.py`, built from `lessons/TEMPLATE.py` | the script, then `./addlesson.sh`; see `AGENTS.md`, section A |
 | A PYQ variant bank, a practice set | the JSON file | edit the JSON; `npm run check` validates it |
-| The June 2026 paper | `seed/pyq_j26_full.json` | almost never: keys and marks are facts |
+| A past paper | `seed/pyq_<paper>_full.json` (`"source": "pyq"`) | almost never: keys and marks are facts. A new paper is a new file; see 3d |
+| Which past questions a lesson is built on | the lesson's `anchors` field | edit the lesson JSON; CI checks every anchor exists |
 | Modules, topics, marks | `seed/catalog.json` | the owner only; it moves every projection in the app |
 | The numbers a lesson uses | `verify_<group>.py` | the lesson's author |
 
@@ -92,13 +93,23 @@ The script is the generator for the lesson's first version; from its first merge
 missing option fails `npm run check`.
 
 **3d. Extend previous-year material.**
-- *More variants of a June 2026 question:* add items to `seed/<module>_pyq_variants.json` with ids `j26v-qNN-MM` and
-  `srcQ: NN`. The map then shows the question as covered. Start from `npm run content -- gaps`: questions the candidate
-  answered wrongly and that no lesson names are worth the most.
-- *Anchor a lesson to a question:* name it in the lesson's `provenance` (`Anchor: Q38`); the map reads it from there.
-- *A second paper or another year:* **not supported yet.** The June 2026 paper is the single reference (`pyq_j26_full.json`)
-  and the map, the catalog weights and the app's progress projection all key on it. Adding a year means a small core change
-  to how the paper is identified. Propose it as a core change (`AGENTS.md`, section C) before adding files.
+- *More variants of a past question:* add items to `seed/<module>_pyq_variants.json` with `srcQ: NN` (and `srcPaper: "<paper>"`
+  when it is not the June 2026 paper, `j26`). `npm run check` fails a `srcQ` or `srcPaper` that does not exist. Start from
+  `npm run content -- gaps`: questions the candidate answered wrongly and that no lesson names are worth the most.
+- *Anchor a lesson to a question:* add `"anchors": [{ "paper": "j26", "q": 38 }]` to the lesson JSON. It is validated by the
+  lesson contract and by `npm run check` (the paper and question must exist), so it cannot go stale. Older lessons name
+  the question only in their `provenance` prose (`Anchor: Q38`); the map still reads that, as paper `j26`.
+- *Another year's paper:* add **one new file**, `seed/pyq_<paper>_full.json` (for example `pyq_d25_full.json`), shaped like
+  `pyq_j26_full.json` (ids `<paper>-qNN`, a topic label ending `· QNN`, `"source": "pyq"`, a `moduleId`). Nothing else lists
+  papers: the content map, `npm run content -- papers` and the checks find it by its name, and the public build removes the
+  candidate's own marked answers (`youMarked`, `responseSheet`) from every file whose source is `pyq`. A paper whose
+  `source` is not `pyq` fails `npm run check`, because that mark is what protects those answers.
+
+  What the app does with a new paper today (tested, no page errors): its questions join the Question bank of the module its
+  `moduleId` names, so that module's bank grows by the paper's size. What it does **not** do: the "June 2026 actual" baseline
+  and the projection are one `baseline` figure per module in `seed/catalog.json`, so a second paper does not add a second
+  baseline, and its questions count towards that module's accuracy like any bank question. Whether they should is an owner
+  decision; make it before adding a paper, and propose any change to the baseline as a core change (`AGENTS.md`, section C).
 
 **3e. Guides and revision notes.** Each lesson carries its own `howto`, `refs` and `revision` material; edit those with the
 lesson. `mod.md`, `sec13.md` and the other long notes in the repository root are study material written outside the app; the
