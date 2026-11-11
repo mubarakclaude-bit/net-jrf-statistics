@@ -20,7 +20,7 @@ for x in P["items"]:
  if x["format"]=="numeric": assert x.get("check")
  if x["format"]=="multi": assert len(x["statements"])==4 and set(x["verdicts"])==set("ABCD")
 assert "X=μ+ΛF+ε" in L["revision"]["sheet"][0]
-assert "communality" in L["revision"]["sheet"][2]
+assert "Communality" in L["revision"]["sheet"][2]
 assert "Ward" in L["revision"]["sheet"][8]
 assert "k-means" in L["revision"]["sheet"][9]
 print("PASS: 13 scenes; factor model, loadings, rotation, PCA, hierarchical and k-means coverage.")
