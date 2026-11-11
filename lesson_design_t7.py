@@ -5,7 +5,7 @@ R=Path(__file__).resolve().parent
 L=json.loads((R/"seed/lesson_design_t7.json").read_text())
 P=json.loads((R/"seed/design_t7_mastery.json").read_text())
 assert L["id"]=="designt7" and L["topicId"]=="design-t7"
-assert len(L["scenes"])==14 and L["scenes"][-1]["setId"]=="design_t7_mastery"
+assert len(L["scenes"])==15 and L["scenes"][-1]["kind"]=="quiz" and L["scenes"][-1]["setId"]=="design_t7_mastery"
 assert len(P["items"])==20
 assert Counter(x["diff"] for x in P["items"])=={"easy":6,"moderate":10,"hard":4}
 assert Counter(x["format"] for x in P["items"])=={"single":9,"numeric":8,"multi":3}
