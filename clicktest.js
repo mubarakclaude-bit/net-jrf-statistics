@@ -13,7 +13,19 @@ const { chromium } = require('playwright');
   await p.click('[data-tab="learn"]'); await p.waitForTimeout(400);
 
   await p.waitForFunction(() => !!(S.lessonIdx && S.lessonIdx.topics), null, { timeout: 15000 });
-  const topics = await p.evaluate(() => Object.keys(S.lessonIdx.topics).sort());
+  let topics = await p.evaluate(() => Object.keys(S.lessonIdx.topics).sort());
+  // CLICKTEST_SHARD="i/n" (1-based) runs every n-th lesson, so CI can run n copies at once. Unset runs all of them.
+  const shard = /^(\d+)\/(\d+)$/.exec(process.env.CLICKTEST_SHARD || '');
+  if (shard) { const i = +shard[1] - 1, n = +shard[2]; topics = topics.filter((_, k) => k % n === i); console.log('shard ' + shard[1] + '/' + n + ': ' + topics.length + ' lessons'); }
+  // CLICKTEST_TOPICS="a,b" runs only those topic ids (CI passes the lessons a pull request changed); an unknown id fails.
+  // CLICKTEST_LIMIT=n runs only the first n (a smoke run when no lesson changed).
+  const only = (process.env.CLICKTEST_TOPICS || '').split(',').filter(Boolean);
+  if (only.length) {
+    const missing = only.filter(t => !topics.includes(t));
+    if (missing.length) { console.log('   FAIL unknown topic id(s): ' + missing.join(', ')); await b.close(); process.exit(1); }
+    topics = topics.filter(t => only.includes(t)); console.log('only ' + topics.length + ' changed lesson(s): ' + topics.join(', '));
+  }
+  if (+process.env.CLICKTEST_LIMIT > 0) { topics = topics.slice(0, +process.env.CLICKTEST_LIMIT); console.log('smoke run: first ' + topics.length + ' lesson(s)'); }
   let fails = 0; const bad = m => { fails++; console.log('   FAIL ' + m); };
 
   for (const tid of topics) {
