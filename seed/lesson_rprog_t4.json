@@ -610,16 +610,33 @@
       "mins": 5,
       "title": "Exam traps",
       "objective": "Interpret R matrix construction, dimensions and operators.",
-      "body": [
-        "Default matrix filling is column-wise, not row-wise.",
-        "* is element-wise and %*% is matrix multiplication.",
-        "Matrix multiplication requires matching inner dimensions; det() requires a square matrix.",
-        "Use drop=FALSE when a selected row or column must remain a matrix."
-      ],
       "ask": {
         "q": "What is the key output rule to check in this section?",
         "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
-      }
+      },
+      "intro": "Judge each statement about matrix construction and operators.",
+      "items": [
+        {
+          "claim": "matrix() fills values down columns by default.",
+          "tf": true,
+          "why": "R uses column-major filling unless byrow=TRUE is specified."
+        },
+        {
+          "claim": "The * operator performs matrix multiplication.",
+          "tf": false,
+          "why": "The * operator multiplies corresponding entries; %*% is matrix multiplication."
+        },
+        {
+          "claim": "Matrix multiplication requires matching inner dimensions.",
+          "tf": true,
+          "why": "The column count of the left matrix must equal the row count of the right matrix."
+        },
+        {
+          "claim": "det() is defined for every rectangular matrix.",
+          "tf": false,
+          "why": "A determinant is defined only for square matrices."
+        }
+      ]
     },
     {
       "kind": "summary",
