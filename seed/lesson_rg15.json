@@ -1,0 +1,693 @@
+{
+  "id": "regressiont15",
+  "topicId": "regression-t15",
+  "moduleId": "regression",
+  "title": "6.15 — k-Class Estimators, LIML and Fuller Estimation",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.15 k-class estimators",
+  "engine": "B",
+  "engineName": "Connect OLS, 2SLS and LIML through the k-class estimator family.",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 94,
+  "objectives": [
+    "Write the general k-class estimator using the instrument residual-maker matrix.",
+    "Show that the k-class estimator reduces to OLS at κ=0 and 2SLS at κ=1.",
+    "Interpret the role of the projection and residual-maker matrices in the estimator.",
+    "Calculate a simple scalar k-class estimate for specified cross-products.",
+    "Explain how LIML chooses its k-class parameter and how Fuller modifies LIML.",
+    "Compare OLS, 2SLS and LIML while recognising that no estimator repairs invalid instruments."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "OLS and 2SLS matrix estimators",
+      "why": "The k-class family contains OLS and 2SLS as special cases."
+    },
+    {
+      "id": "p2",
+      "name": "Projection and residual-maker matrices",
+      "why": "The estimator uses P_Z and M_Z=I−P_Z."
+    },
+    {
+      "id": "p3",
+      "name": "Instrument relevance and identification",
+      "why": "The consistency of IV-based k-class estimators depends on valid and sufficiently informative instruments."
+    }
+  ],
+  "traps": [
+    "The k-class parameter κ is not the number of regressors or restrictions.",
+    "M_Z=I−P_Z is the residual-maker matrix for projection onto the instrument space.",
+    "The general estimator is [X′(I−κM_Z)X]⁻¹X′(I−κM_Z)Y.",
+    "At κ=0, I−κM_Z=I and the estimator is OLS.",
+    "At κ=1, I−M_Z=P_Z and the estimator is 2SLS.",
+    "LIML selects κ from the likelihood/eigenvalue formulation; it is a member of the k-class family.",
+    "Fuller estimation applies a finite-sample adjustment to LIML.",
+    "LIML can have favourable finite-sample bias properties with many or weak instruments, but it does not eliminate weak-identification or invalid-instrument problems."
+  ],
+  "howto": "Write M_Z=I−P_Z, then substitute the required κ into the k-class formula. Check the endpoints: κ=0 must give OLS and κ=1 must give 2SLS. For a scalar worked example, compute the adjusted cross-product numerator and denominator separately. Describe LIML as choosing κ through its likelihood/eigenvalue criterion and Fuller as a finite-sample adjustment.",
+  "refs": [
+    {
+      "title": "Econometric Analysis",
+      "where": "Limited-information and k-class estimation",
+      "site": "William H. Greene",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Formal treatment of LIML and k-class estimators."
+    },
+    {
+      "title": "Econometric Methods",
+      "where": "Simultaneous equations and limited-information estimators",
+      "site": "Jack Johnston and John DiNardo",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Classical derivations of 2SLS, LIML and related estimators."
+    },
+    {
+      "title": "Introductory Econometrics: A Modern Approach",
+      "where": "Instrumental variables and weak instruments",
+      "site": "Jeffrey M. Wooldridge",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Applied discussion of IV estimator behaviour and instrument strength."
+    }
+  ],
+  "provenance": "Authored for UGC NET Statistics Paper 2 Unit VI. The scalar k-class cross-product example is original practice material and is verified exactly in verify_regression_t15.py. No June 2026 question is claimed as a direct k-class/LIML PYQ.",
+  "revision": {
+    "sheet": [
+      "M_Z=I−P_Z is the residual-maker matrix for the instrument space.",
+      "The k-class estimator is β̂(κ)=[X′(I−κM_Z)X]⁻¹X′(I−κM_Z)Y.",
+      "At κ=0, the estimator is OLS.",
+      "At κ=1, I−M_Z=P_Z and the estimator is 2SLS.",
+      "The parameter κ is not the number of regressors.",
+      "LIML chooses κ through a likelihood or generalized eigenvalue criterion.",
+      "Fuller estimation applies a finite-sample adjustment to LIML.",
+      "With valid and relevant instruments, 2SLS and LIML are consistent under the standard model conditions.",
+      "LIML can have better finite-sample bias behaviour than 2SLS in some many/weak-instrument settings.",
+      "Neither LIML nor Fuller makes an invalid instrument valid."
+    ],
+    "cards": [
+      [
+        "Residual maker",
+        "M_Z=I−P_Z"
+      ],
+      [
+        "k-class",
+        "[X′(I−κM_Z)X]⁻¹X′(I−κM_Z)Y"
+      ],
+      [
+        "κ=0",
+        "OLS"
+      ],
+      [
+        "κ=1",
+        "2SLS"
+      ],
+      [
+        "LIML",
+        "k-class estimator with κ selected by likelihood/eigenvalue criterion"
+      ],
+      [
+        "Fuller",
+        "Finite-sample adjustment to LIML"
+      ],
+      [
+        "κ",
+        "Estimator parameter, not number of regressors"
+      ],
+      [
+        "Weak instruments",
+        "Remain a concern for all IV-based estimators"
+      ]
+    ],
+    "tricks": [
+      "Substitute κ=0 to recover OLS; substitute κ=1 to recover 2SLS.",
+      "Use M_Z=I−P_Z; therefore I−M_Z=P_Z.",
+      "In a scalar example, compute numerator and denominator separately before dividing.",
+      "LIML and Fuller do not remove the need for relevance and exclusion."
+    ],
+    "shortcuts": [
+      "κ=0 → OLS.",
+      "κ=1 → 2SLS.",
+      "LIML chooses κ; Fuller adjusts LIML."
+    ],
+    "remember": [
+      "The k in k-class is a tuning parameter, not the number of regressors k used in residual degrees of freedom.",
+      "Estimator choice cannot compensate for an invalid exclusion restriction."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh OLS, 2SLS and projection matrices",
+      "objective": "Recover the estimators that appear as k-class special cases.",
+      "body": [
+        "The k-class family connects several estimators used in simultaneous-equation models. OLS and 2SLS appear at particular values of a scalar parameter κ.",
+        "To understand the family, recall the instrument projection P_Z and its residual-maker complement M_Z."
+      ],
+      "items": [
+        {
+          "ask": "What is P_Z?",
+          "recall": "The projection matrix onto the column space of the instrument matrix Z.",
+          "refresh": [
+            "For full-column-rank Z, P_Z=Z(Z′Z)⁻¹Z′.",
+            "It is symmetric and idempotent, so it projects vectors onto the instrument space.",
+            "The fitted component is P_Z times the vector being projected."
+          ]
+        },
+        {
+          "ask": "What is M_Z?",
+          "recall": "The residual-maker matrix I−P_Z.",
+          "refresh": [
+            "M_Z removes the component explained by the instrument space.",
+            "It is also symmetric and idempotent when P_Z is a projection matrix.",
+            "The identity I−M_Z=P_Z is the key step in showing that κ=1 gives 2SLS."
+          ]
+        },
+        {
+          "ask": "What is the 2SLS matrix estimator?",
+          "recall": "(X′P_ZX)⁻¹X′P_ZY.",
+          "refresh": [
+            "2SLS projects the structural regressors through the instrument space.",
+            "The projected cross-products replace the ordinary OLS cross-products.",
+            "The k-class formula contains this expression at κ=1."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What identity connects the projection and residual-maker matrices?",
+        "nudge": "The projection plus its residual-maker equals the identity matrix."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "One estimator family, different values of κ",
+      "objective": "Build an intuitive picture of the k-class continuum.",
+      "body": [
+        "The k-class estimator changes how much of the instrument-residual component is removed from the cross-products. At κ=0, nothing is removed and the estimator is OLS. At κ=1, the full instrument projection remains and the estimator is 2SLS.",
+        "Other values of κ generate other members of the family. LIML chooses a value using a likelihood/eigenvalue criterion rather than setting κ mechanically to zero or one."
+      ],
+      "scenario": {
+        "teaser": "OLS and 2SLS as endpoints",
+        "title": "Check the two special cases",
+        "body": [
+          "An analyst has a structural regressor matrix X and an instrument projection P_Z. Define M_Z=I−P_Z and consider the k-class estimator.",
+          "At κ=0, the factor I−κM_Z equals I, so the formula reduces to (X′X)⁻¹X′Y, the OLS estimator.",
+          "At κ=1, the factor becomes I−M_Z=P_Z, so the estimator is (X′P_ZX)⁻¹X′P_ZY, the 2SLS estimator.",
+          "These endpoint checks are the fastest way to verify whether a proposed k-class formula has been written correctly."
+        ],
+        "q": "Which estimator is obtained at κ=1?",
+        "answer": "2SLS, because I−M_Z=P_Z."
+      },
+      "ask": {
+        "q": "What is the estimator at κ=0?",
+        "nudge": "The adjustment term κM_Z disappears."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "The general k-class formula",
+      "objective": "Write and interpret the estimator using M_Z.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "k-class estimator",
+          "body": "β̂(κ)=[X′(I−κM_Z)X]⁻¹X′(I−κM_Z)Y, where M_Z=I−P_Z and P_Z is the projection onto the instrument space."
+        },
+        {
+          "t": "step",
+          "h": "OLS endpoint",
+          "body": "At κ=0, I−κM_Z=I. The estimator becomes (X′X)⁻¹X′Y, the ordinary least-squares estimator."
+        },
+        {
+          "t": "step",
+          "h": "2SLS endpoint",
+          "body": "At κ=1, I−M_Z=P_Z. The estimator becomes (X′P_ZX)⁻¹X′P_ZY, the two-stage least-squares estimator."
+        },
+        {
+          "t": "note",
+          "h": "Interpret κ carefully",
+          "body": "The parameter κ indexes the estimator within the k-class family. It is not the number of regressors, the number of instruments or the number of restrictions."
+        }
+      ],
+      "flow": {
+        "caption": "Recover OLS and 2SLS from the k-class formula",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Start with k-class formula",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Set κ = 0",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "I−κM_Z = I → OLS",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Set κ = 1",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "I−M_Z = P_Z → 2SLS",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      },
+      "ask": {
+        "q": "Which matrix replaces I−κM_Z at κ=1?",
+        "nudge": "Use M_Z=I−P_Z."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example: calculate a scalar k-class estimate",
+      "objective": "Compute the estimator for κ=0, 0.5 and 1 from cross-products.",
+      "problem": "Suppose X′X=10, X′M_ZX=4, X′Y=20 and X′M_ZY=5. Calculate the scalar k-class estimate at κ=0, κ=0.5 and κ=1.",
+      "steps": [
+        {
+          "say": "Rewrite the scalar estimator.",
+          "math": "β̂(κ)=(X′Y−κX′M_ZY)/(X′X−κX′M_ZX)",
+          "why": "Distribute I−κM_Z through the cross-products."
+        },
+        {
+          "say": "At κ=0, use the OLS endpoint.",
+          "math": "β̂(0)=20/10=2",
+          "why": "The residual-maker terms vanish."
+        },
+        {
+          "say": "At κ=0.5, adjust numerator and denominator.",
+          "math": "(20−0.5×5)/(10−0.5×4)=17.5/8=2.1875",
+          "why": "Both cross-products are adjusted by the same κ."
+        },
+        {
+          "say": "At κ=1, use the 2SLS endpoint.",
+          "math": "(20−5)/(10−4)=15/6=2.5",
+          "why": "I−M_Z=P_Z, so this is the 2SLS estimate."
+        }
+      ],
+      "ask": {
+        "q": "Which endpoint corresponds to OLS and which to 2SLS?",
+        "nudge": "Check κ=0 and κ=1."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 5,
+      "title": "Recall LIML and Fuller",
+      "objective": "Retrieve the relationship between the k-class family and limited-information estimators.",
+      "intro": "Answer before reading the explanation.",
+      "items": [
+        {
+          "q": "What is the k-class value for OLS?",
+          "a": "κ=0."
+        },
+        {
+          "q": "What is the k-class value for 2SLS?",
+          "a": "κ=1."
+        },
+        {
+          "q": "How is LIML related to k-class estimators?",
+          "a": "LIML selects κ using a likelihood or generalized eigenvalue criterion."
+        },
+        {
+          "q": "What is Fuller estimation?",
+          "a": "A finite-sample adjustment to LIML."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 6,
+      "title": "Complete the k-class endpoints",
+      "objective": "Reconstruct the two special cases from the general formula.",
+      "problem": "Complete the algebra that recovers OLS and 2SLS.",
+      "steps": [
+        {
+          "say": "At κ=0, the residual-maker term disappears.",
+          "blank": {
+            "prompt": "I−0×M_Z equals _____.",
+            "answer": "I",
+            "accept": [
+              "identity"
+            ],
+            "hint": "The adjustment is zero."
+          }
+        },
+        {
+          "say": "The resulting estimator is the ordinary least-squares formula.",
+          "blank": {
+            "prompt": "β̂(0)=(X′X)⁻¹X′_____.",
+            "answer": "Y",
+            "accept": [
+              "y"
+            ],
+            "hint": "Use the observed response vector."
+          }
+        },
+        {
+          "say": "At κ=1, use M_Z=I−P_Z.",
+          "blank": {
+            "prompt": "I−M_Z equals _____.",
+            "answer": "P_Z",
+            "accept": [
+              "Pz"
+            ],
+            "hint": "It is the instrument projection matrix."
+          }
+        },
+        {
+          "say": "The resulting estimator is 2SLS.",
+          "blank": {
+            "prompt": "β̂(1)=(X′P_ZX)⁻¹X′P_Z_____.",
+            "answer": "Y",
+            "accept": [
+              "y"
+            ],
+            "hint": "The response is also projected through the instrument space."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "LIML and the Fuller adjustment",
+      "objective": "Explain how LIML and Fuller fit into the k-class family.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Limited-information maximum likelihood",
+          "body": "LIML is a k-class estimator whose κ is selected from a likelihood or generalized eigenvalue criterion associated with the structural equation and instrument set."
+        },
+        {
+          "t": "step",
+          "h": "Why use LIML?",
+          "body": "In some finite-sample settings, especially with many or weak instruments, LIML can have more favourable median-bias behaviour than 2SLS. It still depends on valid instruments and adequate identification."
+        },
+        {
+          "t": "def",
+          "h": "Fuller modification",
+          "body": "Fuller estimation adjusts the LIML parameter to improve finite-sample behaviour. The adjustment depends on a chosen constant and sample degrees of freedom."
+        },
+        {
+          "t": "note",
+          "h": "Not a validity repair",
+          "body": "Neither LIML nor Fuller makes an instrument relevant or restores exclusion. Weak-identification-robust inference and a credible instrument design remain important."
+        }
+      ],
+      "ask": {
+        "q": "What does LIML choose within the k-class family?",
+        "nudge": "It selects the value of the k-class parameter κ."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s7",
+      "mins": 7,
+      "title": "Why estimator choice does not replace instrument validity",
+      "objective": "Separate finite-sample estimator properties from identification assumptions.",
+      "body": [
+        "OLS, 2SLS and LIML differ in how they use the regressor and instrument information. But an IV-based estimator still needs instruments that predict endogenous regressors and satisfy exclusion.",
+        "A different κ may improve finite-sample behaviour in some settings, but it cannot remove a direct instrument-to-outcome path or create strong first-stage variation."
+      ],
+      "scenario": {
+        "teaser": "Many weak instruments in a small sample",
+        "title": "LIML is not a magic fix",
+        "body": [
+          "A researcher has many excluded instruments relative to the sample size. The first stages are weak, and 2SLS estimates are highly variable.",
+          "LIML may have more favourable finite-sample median bias in some such designs, and a Fuller adjustment may further improve finite-sample behaviour.",
+          "However, if an instrument directly affects the outcome or is correlated with the structural disturbance, LIML remains inconsistent. If the instruments are weak, inference can still be unreliable.",
+          "The estimator choice should be accompanied by first-stage diagnostics, weak-instrument-robust inference and a substantive exclusion argument."
+        ],
+        "q": "What problem can LIML not solve?",
+        "answer": "It cannot repair invalid exclusion or eliminate weak identification."
+      },
+      "ask": {
+        "q": "What is the key distinction between LIML's finite-sample property and instrument validity?",
+        "nudge": "One concerns estimator behaviour; the other concerns identifying assumptions."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 8,
+      "title": "Worked example: verify the OLS and 2SLS endpoints",
+      "objective": "Use the projection-residual identity to check the formula.",
+      "problem": "Suppose P_Z is the instrument projection and M_Z=I−P_Z. Show algebraically what the k-class weight becomes at κ=0 and κ=1.",
+      "steps": [
+        {
+          "say": "Substitute κ=0.",
+          "math": "I−0M_Z=I",
+          "why": "The instrument residual-maker has no effect."
+        },
+        {
+          "say": "Insert into the estimator.",
+          "math": "(X′X)⁻¹X′Y",
+          "why": "This is OLS."
+        },
+        {
+          "say": "Substitute κ=1.",
+          "math": "I−M_Z=I−(I−P_Z)=P_Z",
+          "why": "The residual-maker complement is the instrument projection."
+        },
+        {
+          "say": "Insert into the estimator.",
+          "math": "(X′P_ZX)⁻¹X′P_ZY",
+          "why": "This is 2SLS."
+        }
+      ],
+      "ask": {
+        "q": "What identity should you use to simplify κ=1?",
+        "nudge": "Replace M_Z by I−P_Z."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Guided problem: classify an estimator from κ",
+      "objective": "Identify the estimator at specified k-class values.",
+      "problem": "A k-class estimator is defined by β̂(κ). Which estimator is obtained at κ=0, and which at κ=1?",
+      "hints": [
+        "At κ=0 the residual-maker term is multiplied by zero.",
+        "At κ=1 replace I−M_Z by P_Z.",
+        "Compare the resulting formulas with OLS and 2SLS."
+      ],
+      "answer": "κ=0 gives OLS; κ=1 gives 2SLS.",
+      "solution": [
+        {
+          "say": "At κ=0, the matrix factor is I.",
+          "math": "I−0M_Z=I"
+        },
+        {
+          "say": "The estimator becomes the ordinary OLS expression.",
+          "math": "(X′X)⁻¹X′Y"
+        },
+        {
+          "say": "At κ=1, use I−M_Z=P_Z.",
+          "math": "I−M_Z=P_Z"
+        },
+        {
+          "say": "The estimator becomes 2SLS.",
+          "math": "(X′P_ZX)⁻¹X′P_ZY"
+        }
+      ],
+      "ask": {
+        "q": "What is the κ value for the 2SLS endpoint?",
+        "nudge": "It is the value that leaves P_Z in the formula."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s10",
+      "mins": 6,
+      "title": "Exam traps: k-class, LIML and Fuller",
+      "objective": "Avoid common endpoint and interpretation errors.",
+      "intro": "Mark each statement true or false.",
+      "items": [
+        {
+          "claim": "The k-class parameter κ is the number of regressors.",
+          "tf": false,
+          "why": "κ indexes the estimator within the family; it is not the model dimension."
+        },
+        {
+          "claim": "At κ=0, the k-class estimator is OLS.",
+          "tf": true,
+          "why": "The matrix factor becomes the identity."
+        },
+        {
+          "claim": "At κ=1, the k-class estimator is 2SLS.",
+          "tf": true,
+          "why": "I−M_Z=P_Z."
+        },
+        {
+          "claim": "LIML chooses a k-class parameter using a likelihood/eigenvalue criterion.",
+          "tf": true,
+          "why": "LIML is a member of the k-class family with data-dependent κ."
+        },
+        {
+          "claim": "Fuller estimation makes invalid instruments valid.",
+          "tf": false,
+          "why": "A finite-sample adjustment cannot repair exclusion or relevance failures."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "mins": 8,
+      "title": "Transfer problem: compute an intermediate k-class value",
+      "objective": "Calculate a k-class estimate from cross-products.",
+      "problem": "Use X′X=10, X′M_ZX=4, X′Y=20 and X′M_ZY=5. Calculate β̂(0.5) and explain how it lies between the OLS and 2SLS endpoint values in this example.",
+      "hints": [
+        "Write the scalar numerator and denominator.",
+        "Substitute κ=0.5 into both.",
+        "Compare the result with κ=0 and κ=1."
+      ],
+      "answer": "β̂(0.5)=(20−2.5)/(10−2)=17.5/8=2.1875; it lies between OLS 2 and 2SLS 2.5 in this example.",
+      "solution": [
+        {
+          "say": "Adjust the numerator.",
+          "math": "20−0.5×5=17.5"
+        },
+        {
+          "say": "Adjust the denominator.",
+          "math": "10−0.5×4=8"
+        },
+        {
+          "say": "Divide.",
+          "math": "17.5/8=2.1875"
+        },
+        {
+          "say": "Compare endpoints.",
+          "math": "2 < 2.1875 < 2.5"
+        }
+      ],
+      "ask": {
+        "q": "Does an intermediate κ always produce a coefficient between OLS and 2SLS?",
+        "nudge": "This is true for the supplied scalar example, not a universal monotonicity theorem."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s12",
+      "mins": 5,
+      "title": "Summary: the k-class family",
+      "objective": "Compress the estimator relationships into an exam-ready checklist.",
+      "body": [
+        "The k-class estimator is β̂(κ)=[X′(I−κM_Z)X]⁻¹X′(I−κM_Z)Y, where M_Z=I−P_Z. At κ=0 it becomes OLS; at κ=1 it becomes 2SLS.",
+        "LIML chooses κ through a likelihood or generalized eigenvalue criterion. Fuller estimation adjusts LIML for finite-sample behaviour. In some many/weak-instrument settings, LIML may have more favourable median bias than 2SLS.",
+        "All IV-based estimators still require relevant and valid instruments. Neither LIML nor Fuller repairs exclusion failure or removes weak-identification concerns."
+      ],
+      "ask": {
+        "q": "What are the two endpoint checks for a k-class formula?",
+        "nudge": "Set κ to zero and one."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s13",
+      "mins": 8,
+      "ext": true,
+      "title": "Extension — scalar k-class algebra",
+      "objective": "Derive the scalar cross-product expression used in calculations.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Scalar form",
+          "body": "For one coefficient, β̂(κ)=(X′Y−κX′M_ZY)/(X′X−κX′M_ZX). This is obtained by expanding the general matrix formula."
+        },
+        {
+          "t": "step",
+          "h": "Endpoint check",
+          "body": "At κ=0, β̂=X′Y/X′X. At κ=1, subtract the residual-maker cross-products, leaving the projected instrument-space cross-products."
+        },
+        {
+          "t": "note",
+          "h": "Numerical care",
+          "body": "The denominator must be nonzero for the scalar estimator to exist. In the matrix case, X′(I−κM_Z)X must be nonsingular."
+        }
+      ],
+      "ask": {
+        "q": "What condition is needed for the scalar k-class ratio to exist?",
+        "nudge": "Its denominator cannot be zero."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 0,
+      "title": "6.15 mastery test",
+      "setId": "regression_t15_mastery",
+      "objective": "Demonstrate k-class and LIML understanding independently."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings, not an NTA rule. Ten unseen questions are drawn as 3 easy, 5 moderate and 2 hard; the pass threshold is 80% overall with 70% floors for numerical and multi-statement items."
+  }
+}
