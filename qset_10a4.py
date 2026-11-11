@@ -172,7 +172,7 @@ q(16, "multi", "moderate",
   verdicts={"A": dict(tf=True,  why="The same financial year the IIP moved to."),
             "B": dict(tf=True,  why="957 items on the revised base, against 697 before."),
             "C": dict(tf=True,  why="Launched 15 June 2026, with a trial Input PPI for manufacturing and a quarterly Services PPI."),
-            "D": dict(tf=False, why="A five-year transition window was announced; the WPI continues to be published through it.")})
+            "D": dict(tf=False, why="OEA continues to publish WPI base 2022-23 alongside Output PPI, trial Input PPI and phased Services PPIs.")})
 
 # ------------------------------------------------------------------ hard (4)
 q(17, "numeric", "hard",
