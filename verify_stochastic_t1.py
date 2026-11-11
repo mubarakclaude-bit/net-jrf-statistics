@@ -31,4 +31,18 @@ print("PASS: stochastic rows; exact P^2 and P^3; Chapman–Kolmogorov both order
 print("PASS: two-step probabilities; stationary distribution; absorbing-state example.")
 print("P^2 =", P2)
 print("P^3 =", P3)
+
+# Lesson and mastery-pool production contract.
+import json
+from pathlib import Path
+from collections import Counter
+ROOT = Path(__file__).resolve().parent
+L = json.loads((ROOT / "seed/lesson_stochastic_t1.json").read_text(encoding="utf-8"))
+Q = json.loads((ROOT / "seed/stochastic_t1_mastery.json").read_text(encoding="utf-8"))
+assert L["topicId"] == "stochastic-t1" and L["scenes"][-1]["setId"] == "stochastic_t1_mastery"
+assert len(Q["items"]) == Q["count"] == 20
+assert Counter(x["answer"] for x in Q["items"]) == {"A":5,"B":5,"C":5,"D":5}
+assert all(len(x.get("explanation","")) >= 40 and len(x.get("options",[])) == 4 for x in Q["items"])
+assert all(x.get("check") for x in Q["items"] if x["format"] == "numeric")
+assert all(len(x.get("statements",[])) == 4 and set(x.get("verdicts",{})) == set("ABCD") for x in Q["items"] if x["format"] == "multi")
 print("pi =", pi)
