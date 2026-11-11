@@ -8,7 +8,7 @@
  "engineName": "Mathematics — invariant directions and matrix structure",
  "version": "1.0",
  "status": "draft",
- "estMin": 82,
+ "estMin": 105,
  "objectives": [
   "Compute eigenvalues from the characteristic equation.",
   "Find eigenspaces by solving (A−λI)v=0.",
@@ -124,6 +124,16 @@
    "free": true,
    "checked": "2026-11-12",
    "why": "University-level linear algebra coverage."
+  },
+  {
+   "title": "Linear Algebra and Its Applications",
+   "where": "Eigenvalues, eigenvectors and diagonalisation",
+   "site": "Gilbert Strang",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Further worked examples and proofs."
   }
  ],
  "mastery": {
@@ -143,7 +153,7 @@
   "retestDays": 7,
   "note": "Platform settings, not an NTA-prescribed difficulty distribution."
  },
- "provenance": "GPT-authored draft, 12 November 2026. Exact anchors are checked in verify_mathst2.py. Not production-approved.",
+ "provenance": "GPT-authored draft, 12 November 2026. Exact anchors are checked in verify_mathst2.py. Not production-approved. Structural review: updated to meet repository vScene house gates (15 core scenes, required scene kinds, flow, two scenarios, and three references).",
  "scenes": [
   {
    "kind": "foundation",
@@ -182,6 +192,78 @@
    "ask": {
     "q": "A 2×2 matrix has trace 7 and determinant 12. What are its eigenvalues if real?",
     "nudge": "Find two numbers with sum 7 and product 12."
+   },
+   "flow": {
+    "title": "Eigenvalue and diagonalisation workflow",
+    "alt": "Decision flow for eigenvalues and diagonalisation",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Square matrix A",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Solve det(λI−A)=0",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 1,
+      "label": "Find null(A−λI)",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 1,
+      "label": "n independent eigenvectors?",
+      "kind": "dec"
+     },
+     {
+      "id": "e",
+      "r": 4,
+      "c": 0,
+      "label": "Yes: A=PDP⁻¹",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 2,
+      "label": "No: not diagonalisable",
+      "kind": "step"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     },
+     {
+      "from": "d",
+      "to": "e",
+      "label": "yes"
+     },
+     {
+      "from": "d",
+      "to": "f",
+      "label": "no"
+     }
+    ]
    }
   },
   {
@@ -218,7 +300,16 @@
      },
      "why": "A(1,−1)=(1,−1)."
     }
-   ]
+   ],
+   "scenario": {
+    "teaser": "Two directions scale by different factors.",
+    "title": "A diagonal transformation in two dimensions",
+    "body": [
+     "For A=diag(2,3), the coordinate axes are invariant directions.",
+     "The first component doubles and the second triples. These scale factors are the eigenvalues.",
+     "The same idea extends to non-diagonal matrices after changing to an eigenvector basis."
+    ]
+   }
   },
   {
    "kind": "theory",
@@ -363,6 +454,59 @@
    }
   },
   {
+   "kind": "intuition",
+   "id": "s11",
+   "mins": 6,
+   "title": "Why diagonalisation matters in a statistical model",
+   "objective": "Interpret eigen-directions in repeated transformations.",
+   "body": [
+    "Consider a population transition or an iterative numerical update x_(t+1)=Ax_t. An eigenvector is a direction that the update does not rotate; it only scales it by λ.",
+    "If |λ|<1, repeated updates shrink that component. If |λ|>1, it grows. If λ is negative, its sign alternates. This is why eigenvalues appear in stability and long-run behaviour."
+   ],
+   "ask": {
+    "q": "If every eigenvalue of a diagonalisable matrix has modulus less than one, what happens to A^k as k grows?",
+    "nudge": "Each diagonal entry in D^k tends to zero."
+   },
+   "scenario": {
+    "teaser": "A repeated update is applied to a vector of rates.",
+    "title": "Eigenvalues and stability of an iterative update",
+    "body": [
+     "A system updates a two-component state by x_(t+1)=Ax_t. If A is diagonalisable, A^k=P D^k P^-1.",
+     "The long-run behaviour is controlled by powers of the eigenvalues. Components with modulus below one decay; components above one grow.",
+     "This interpretation is useful in Markov-chain convergence, numerical iteration and dynamic models, while the exact stochastic interpretation depends on the model assumptions."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s12",
+   "mins": 7,
+   "title": "Worked decision: a repeated eigenvalue",
+   "objective": "Show why a repeated root needs an eigenspace check.",
+   "ask": {
+    "q": "For B=[[1,1],[0,1]], what is the dimension of null(B−I)?",
+    "nudge": "B−I has one non-zero row."
+   },
+   "problem": "Decide whether B=[[1,1],[0,1]] is diagonalisable.",
+   "steps": [
+    {
+     "say": "Find the characteristic polynomial.",
+     "math": "det(λI−B)=(λ−1)²",
+     "why": "The only eigenvalue is 1 with algebraic multiplicity 2."
+    },
+    {
+     "say": "Find the eigenspace.",
+     "math": "B−I=[[0,1],[0,0]]. The equation (B−I)(x,y)ᵀ=0 gives y=0.",
+     "why": "The eigenspace is span{(1,0)}, of dimension 1."
+    },
+    {
+     "say": "Compare multiplicities.",
+     "math": "GM(1)=1 < AM(1)=2.",
+     "why": "Only one independent eigenvector exists, so B is not diagonalisable."
+    }
+   ]
+  },
+  {
    "kind": "recall",
    "id": "s8",
    "mins": 3,
@@ -435,6 +579,61 @@
      },
      "why": "The constant is multiplied by I."
     }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s13",
+   "mins": 5,
+   "title": "Trap check: six claims",
+   "objective": "Separate always-true theorems from common overclaims.",
+   "intro": "Judge each statement before revealing the explanation.",
+   "items": [
+    {
+     "claim": "The zero vector is an eigenvector.",
+     "tf": false,
+     "why": "Eigenvectors must be non-zero."
+    },
+    {
+     "claim": "Distinct eigenvalues have linearly independent eigenvectors.",
+     "tf": true,
+     "why": "This theorem guarantees diagonalisation when there are n distinct eigenvalues."
+    },
+    {
+     "claim": "A repeated eigenvalue means the matrix is not diagonalisable.",
+     "tf": false,
+     "why": "A repeated eigenvalue can have geometric multiplicity equal to algebraic multiplicity."
+    },
+    {
+     "claim": "Geometric multiplicity is at most algebraic multiplicity.",
+     "tf": true,
+     "why": "Always 1≤GM≤AM."
+    },
+    {
+     "claim": "Every real symmetric matrix is orthogonally diagonalisable.",
+     "tf": true,
+     "why": "This is the spectral theorem."
+    },
+    {
+     "claim": "The constant term in p_A(A) is a scalar times the identity.",
+     "tf": true,
+     "why": "A scalar matrix term is cI, not c alone."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s14",
+   "mins": 3,
+   "title": "The complete decision sequence",
+   "objective": "Leave with a reliable exam method.",
+   "body": [
+    "1. Form det(λI−A)=0 and solve for eigenvalues.",
+    "2. Check roots using their sum (trace) and product (determinant).",
+    "3. For each λ, solve (A−λI)v=0 and find the eigenspace dimension.",
+    "4. Add geometric multiplicities: n independent eigenvectors means diagonalisation.",
+    "5. If A is real symmetric, use orthogonal diagonalisation immediately.",
+    "6. For powers and inverses, consider A=PDP⁻¹ or substitute A into Cayley–Hamilton."
    ]
   },
   {
