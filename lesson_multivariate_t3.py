@@ -8,6 +8,8 @@ lesson=json.loads(L.read_text(encoding="utf-8")); pool=json.loads(P.read_text(en
 assert lesson["id"]=="multivariatet3" and lesson["topicId"]=="multivariate-t3"
 assert lesson["scenes"][-1]["setId"]==P.stem and len(pool["items"])==pool["count"]==20
 assert Counter(q["diff"] for q in pool["items"])=={"easy":6,"moderate":10,"hard":4}
+assert Counter(q["format"] for q in pool["items"])=={"single":12,"numeric":5,"multi":3}
+assert Counter(q["answer"] for q in pool["items"])=={"A":4,"B":5,"C":8,"D":3}
 for path,data in ((L,lesson),(P,pool)):
  path.write_text(json.dumps(data,ensure_ascii=False,indent=1)+"\n",encoding="utf-8")
 print("Wrote reviewed PCA lesson and mastery seeds.")
