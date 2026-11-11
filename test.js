@@ -53,6 +53,13 @@ function seedDocs() {
   docs['lessons/mathst7'] = J('lesson_ma7');
   docs['lessons/mathst8'] = J('lesson_ma8');
   docs['lessons/mathst9'] = J('lesson_ma9');
+  docs['lessons/mathst10'] = J('lesson_ma10');
+  docs['lessons/mathst11'] = J('lesson_ma11');
+  docs['lessons/mathst12'] = J('lesson_ma12');
+  docs['lessons/mathst13'] = J('lesson_ma13');
+  docs['lessons/mathst14'] = J('lesson_ma14');
+  docs['lessons/mathst15'] = J('lesson_ma15');
+  docs['lessons/mathst16'] = J('lesson_ma16');
   docs['lessons/probabilityt5'] = J('lesson_pr5');
   docs['lessons/mathst4'] = J('lesson_ma4');
   docs['lessons/probabilityt8'] = J('lesson_pr8');
