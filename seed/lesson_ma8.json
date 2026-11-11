@@ -1,0 +1,584 @@
+{
+ "id": "mathst8",
+ "topicId": "maths-t8",
+ "moduleId": "maths",
+ "title": "Generalized Inverses, Moore–Penrose Inverse and Estimability",
+ "breadcrumb": "Mathematics → Matrix algebra → Generalized inverses and linear models",
+ "engine": "B",
+ "engineName": "Mathematics — inverse identities beyond full rank",
+ "version": "1.0",
+ "status": "draft",
+ "estMin": 105,
+ "objectives": [
+  "Define generalized and reflexive generalized inverses.",
+  "State and apply the four Moore–Penrose equations.",
+  "Use full-column-rank and full-row-rank formulas.",
+  "Interpret AA⁺ and A⁺A as orthogonal projections.",
+  "Determine estimability using row-space and null-space criteria."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Matrix rank and null space",
+   "why": "Generalized inverses extend inverse ideas to rank-deficient matrices."
+  },
+  {
+   "id": "p2",
+   "name": "Transpose and symmetric matrices",
+   "why": "The Penrose conditions require symmetric products."
+  },
+  {
+   "id": "p3",
+   "name": "Linear models and least squares",
+   "why": "The inverse is used to obtain fitted values and estimable functions."
+  }
+ ],
+ "traps": [
+  "AGA=A alone does not define the unique Moore–Penrose inverse.",
+  "The full-column-rank and full-row-rank formulas are different.",
+  "Do not use (AᵀA)⁻¹Aᵀ unless A has full column rank.",
+  "AA⁺ projects onto Col(A); A⁺A projects onto Row(A).",
+  "Rank-deficient coefficients may be non-unique even when fitted values are unique.",
+  "cᵀβ is estimable iff c lies in Row(X), equivalently is orthogonal to Null(X)."
+ ],
+ "revision": {
+  "sheet": [
+   "Generalized inverse G: AGA=A.",
+   "Reflexive generalized inverse: AGA=A and GAG=G.",
+   "Moore–Penrose inverse satisfies four Penrose equations and is unique.",
+   "(AA⁺)ᵀ=AA⁺; (A⁺A)ᵀ= A⁺A.",
+   "AA⁺ projects onto Col(A); A⁺A projects onto Row(A).",
+   "Full column rank: A⁺=(AᵀA)⁻¹Aᵀ.",
+   "Full row rank: A⁺=Aᵀ(AAᵀ)⁻¹.",
+   "For invertible square A, A⁺=A⁻¹.",
+   "Least-squares solution β̂=X⁺y gives fitted vector XX⁺y.",
+   "Residual y−XX⁺y is orthogonal to Col(X).",
+   "cᵀβ estimable iff c∈Row(X).",
+   "Equivalent estimability test: c is orthogonal to Null(X)."
+  ],
+  "cards": [
+   [
+    "Generalized inverse",
+    "AGA=A"
+   ],
+   [
+    "Reflexive inverse",
+    "AGA=A and GAG=G"
+   ],
+   [
+    "Moore–Penrose",
+    "Four equations; unique"
+   ],
+   [
+    "Full column rank",
+    "(AᵀA)⁻¹Aᵀ"
+   ],
+   [
+    "Full row rank",
+    "Aᵀ(AAᵀ)⁻¹"
+   ],
+   [
+    "AA⁺",
+    "Projection onto Col(A)"
+   ],
+   [
+    "A⁺A",
+    "Projection onto Row(A)"
+   ],
+   [
+    "Estimability",
+    "c∈Row(X)"
+   ]
+  ],
+  "tricks": [
+   "Check rank before choosing a simplified A⁺ formula.",
+   "Write the four Penrose equations in order.",
+   "Use the null-space orthogonality test for estimability.",
+   "Separate coefficient uniqueness from fitted-value uniqueness.",
+   "Check whether the matrix is square and nonsingular before using an ordinary inverse."
+  ],
+  "shortcuts": [
+   "For diagonal matrices, invert non-zero diagonal entries and leave zeros as zero.",
+   "If X has full column rank, X⁺X=I.",
+   "A contrast orthogonal to every null-space vector is estimable."
+  ],
+  "remember": [
+   "Generalized inverse is not necessarily unique.",
+   "Moore–Penrose inverse is unique.",
+   "Estimable contrasts belong to Row(X)."
+  ]
+ },
+ "howto": "Start by checking rank and matrix dimensions. Choose the full-column-rank or full-row-rank formula only when its condition holds; otherwise use the four Penrose equations or an SVD. For estimability, the row-space/null-space criterion is usually the fastest route.",
+ "refs": [
+  {
+   "title": "Matrix Algebra Useful for Statistics",
+   "where": "Generalized inverses and estimability",
+   "site": "Searle",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Statistical applications of generalized inverses."
+  },
+  {
+   "title": "Linear Algebra",
+   "where": "Pseudoinverse and least squares",
+   "site": "MIT OpenCourseWare 18.06",
+   "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Projection and least-squares foundations."
+  },
+  {
+   "title": "Linear Models",
+   "where": "Estimable functions",
+   "site": "Searle, Casella and McCulloch",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Estimability and rank-deficient linear models."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact anchors include the Moore–Penrose inverse of diag(1,0), full-rank formulas, projection identities and null-space estimability. Not production-approved.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Foundation: rank, transpose and inverse",
+   "objective": "Recall the matrix facts needed for generalized inverses.",
+   "ask": {
+    "q": "When does an ordinary inverse A⁻¹ exist?",
+    "nudge": "A must be square and nonsingular."
+   },
+   "body": [
+    "The ordinary inverse is defined only for a square full-rank matrix. Statistical design matrices are often rectangular or rank deficient, so an ordinary inverse may not exist.",
+    "A generalized inverse extends useful inverse identities to arbitrary matrices. It supports least-squares solutions, projection matrices and estimability in linear models."
+   ],
+   "items": [
+    {
+     "ask": "What does rank measure?",
+     "recall": "The dimension of the column space, equal to the dimension of the row space.",
+     "refresh": [
+      "Rank counts the independent directions carried by a matrix. A matrix of order m×n has rank at most min(m,n).",
+      "Full column rank means all columns are independent; full row rank means all rows are independent. These two cases have different simple Moore–Penrose formulas."
+     ]
+    },
+    {
+     "ask": "What is the null space?",
+     "recall": "The set of x satisfying Ax=0.",
+     "refresh": [
+      "The null space contains coefficient directions that the matrix sends to zero. Its dimension is n−rank(A) for an m×n matrix.",
+      "In a linear model, a non-zero null-space direction represents a change in coefficients that leaves fitted values unchanged. This is why rank deficiency creates non-unique coefficient representations."
+     ]
+    },
+    {
+     "ask": "What is a symmetric idempotent matrix?",
+     "recall": "A matrix P with Pᵀ=P and P²=P.",
+     "refresh": [
+      "Symmetry and idempotence are the defining properties of an orthogonal projection matrix. It projects vectors onto its column space.",
+      "The Moore–Penrose inverse creates projection matrices AA⁺ and A⁺A, which are symmetric and idempotent. These matrices are central to least squares and estimability."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "Why a generalized inverse is useful",
+   "objective": "Understand what the extension makes possible.",
+   "ask": {
+    "q": "If X is rectangular or rank deficient, can (XᵀX)⁻¹ always be used?",
+    "nudge": "Only if X has full column rank."
+   },
+   "body": [
+    "Many statistical matrices are rectangular. Even when X is square, exact linear dependence can make it singular. The ordinary inverse then fails.",
+    "A generalized inverse supplies a matrix G satisfying AGA=A. The Moore–Penrose inverse adds symmetry conditions that select one unique generalized inverse for every real matrix."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Generalized and reflexive inverses",
+   "objective": "State the basic generalized-inverse identities.",
+   "ask": {
+    "q": "What identity defines a generalized inverse G of A?",
+    "nudge": "A, G, A in that order."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Generalized inverse",
+     "body": "G is a generalized inverse of A if AGA=A. Such a G exists for every real matrix A."
+    },
+    {
+     "t": "formula",
+     "h": "Reflexive generalized inverse",
+     "body": "A reflexive generalized inverse additionally satisfies GAG=G. The two identities are AGA=A and GAG=G."
+    },
+    {
+     "t": "step",
+     "h": "Non-uniqueness",
+     "body": "A generalized inverse need not be unique. The Moore–Penrose inverse adds two symmetry conditions and is unique."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Worked: a simple singular matrix",
+   "objective": "Find and verify the Moore–Penrose inverse.",
+   "ask": {
+    "q": "For A=diag(1,0), what is A⁺?",
+    "nudge": "This matrix is already its own Moore–Penrose inverse."
+   },
+   "problem": "Find the Moore–Penrose inverse of A=[[1,0],[0,0]].",
+   "steps": [
+    {
+     "say": "Propose G=A.",
+     "math": "G=[[1,0],[0,0]]",
+     "why": "A is symmetric and idempotent."
+    },
+    {
+     "say": "Check the first two Penrose identities.",
+     "math": "AGA=A³=A; GAG=G³=G",
+     "why": "Idempotence gives both identities immediately."
+    },
+    {
+     "say": "Check symmetry of AG and GA.",
+     "math": "AG=A and GA=A, both symmetric",
+     "why": "All four Moore–Penrose conditions hold, so G=A⁺."
+    }
+   ],
+   "scenario": {
+    "teaser": "A redundant predictor makes a design matrix rank deficient.",
+    "title": "A generalized inverse in an over-specified regression",
+    "body": [
+     "Suppose two columns of a design matrix are identical. The coefficient vector is not uniquely determined: adding a value to one coefficient and subtracting it from the other leaves fitted values unchanged.",
+     "The ordinary inverse (XᵀX)⁻¹ does not exist. The Moore–Penrose inverse X⁺ still gives a least-squares solution, selecting the minimum-Euclidean-norm coefficient vector among all least-squares solutions.",
+     "The fitted vector XX⁺y is unique even when the coefficient representation is not. This separates prediction from parameter identifiability."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 8,
+   "title": "The four Moore–Penrose conditions",
+   "objective": "Recognise the unique pseudoinverse.",
+   "ask": {
+    "q": "Which two products must be symmetric for the Moore–Penrose inverse?",
+    "nudge": "The products are AA⁺ and A⁺A."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Penrose equations",
+     "body": "For G=A⁺: (1) AGA=A; (2) GAG=G; (3) (AG)ᵀ=AG; (4) (GA)ᵀ=GA."
+    },
+    {
+     "t": "def",
+     "h": "Uniqueness",
+     "body": "Every real matrix has exactly one Moore–Penrose inverse satisfying all four equations. It is denoted A⁺."
+    },
+    {
+     "t": "step",
+     "h": "Projection meaning",
+     "body": "AA⁺ is the orthogonal projection onto Col(A). A⁺A is the orthogonal projection onto Row(A), viewed as a subspace of the domain."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s5",
+   "mins": 8,
+   "title": "Guided: full column rank formula",
+   "objective": "Use the simplified formula when columns are independent.",
+   "problem": "Let A be m×n with full column rank. State A⁺.",
+   "hints": [
+    "AᵀA is an n×n matrix.",
+    "Full column rank makes AᵀA invertible.",
+    "Use the left-inverse formula."
+   ],
+   "answer": "A⁺=(AᵀA)⁻¹Aᵀ.",
+   "solution": "When A has full column rank, AᵀA is nonsingular. The Moore–Penrose inverse is (AᵀA)⁻¹Aᵀ, and A⁺A=Iₙ.",
+   "ask": {
+    "q": "What is A⁺A in this full-column-rank case?",
+    "nudge": "Substitute the formula and simplify."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Full row rank and projection matrices",
+   "objective": "Distinguish the full-row-rank formula.",
+   "ask": {
+    "q": "If A has full row rank, what is A⁺?",
+    "nudge": "Use the right-inverse formula."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Full row rank",
+     "body": "For A of order m×n with rank m, A⁺=Aᵀ(AAᵀ)⁻¹ and AA⁺=Iₘ."
+    },
+    {
+     "t": "formula",
+     "h": "Orthogonal projections",
+     "body": "AA⁺ is symmetric and idempotent, projecting onto Col(A). A⁺A is symmetric and idempotent, projecting onto Row(A)."
+    },
+    {
+     "t": "step",
+     "h": "Rank-deficient case",
+     "body": "Use the four Penrose equations or an SVD to obtain A⁺. Do not use (AᵀA)⁻¹Aᵀ unless A has full column rank."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided: estimability",
+   "objective": "Use row-space membership to test a linear function.",
+   "problem": "In y=Xβ+ε, when is cᵀβ estimable?",
+   "hints": [
+    "A linear function is estimable if it can be written as a linear combination of the expected observations.",
+    "The condition is c=Xᵀa for some vector a.",
+    "Equivalently, c belongs to Row(X) and is orthogonal to Null(X)."
+   ],
+   "answer": "cᵀβ is estimable iff c∈Row(X), equivalently c=Xᵀa for some a.",
+   "solution": "E(y)=Xβ. A linear combination aᵀE(y)=aᵀXβ=(Xᵀa)ᵀβ. Thus cᵀβ is estimable exactly when c=Xᵀa, which is row-space membership.",
+   "ask": {
+    "q": "If X has full column rank, are all linear functions cᵀβ estimable?",
+    "nudge": "Its row space is the entire parameter space."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s8",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the identities and rank conditions.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "Define a generalized inverse.",
+     "a": "AGA=A."
+    },
+    {
+     "q": "What extra identity makes it reflexive?",
+     "a": "GAG=G."
+    },
+    {
+     "q": "How many Penrose equations define A⁺?",
+     "a": "Four."
+    },
+    {
+     "q": "When is cᵀβ estimable?",
+     "a": "When c lies in Row(X)."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s9",
+   "mins": 8,
+   "title": "Four generalized-inverse decisions",
+   "objective": "Apply the correct rank formula.",
+   "problem": "Complete each statement.",
+   "steps": [
+    {
+     "say": "A has full column rank.",
+     "blank": {
+      "prompt": "Write A⁺.",
+      "answer": "(AᵀA)⁻¹Aᵀ",
+      "accept": [
+       "(A^T A)^-1 A^T",
+       "(AᵀA)⁻¹Aᵀ"
+      ],
+      "hint": "Use the left-inverse formula."
+     },
+     "why": "AᵀA is invertible."
+    },
+    {
+     "say": "A has full row rank.",
+     "blank": {
+      "prompt": "Write A⁺.",
+      "answer": "Aᵀ(AAᵀ)⁻¹",
+      "accept": [
+       "A^T(AA^T)^-1",
+       "Aᵀ(AAᵀ)⁻¹"
+      ],
+      "hint": "Use the right-inverse formula."
+     },
+     "why": "AAᵀ is invertible."
+    },
+    {
+     "say": "A is square and nonsingular.",
+     "blank": {
+      "prompt": "What is A⁺?",
+      "answer": "A⁻¹",
+      "accept": [
+       "A^-1",
+       "A⁻¹"
+      ],
+      "hint": "The generalized inverse agrees with the ordinary inverse."
+     },
+     "why": "All four Penrose conditions reduce to the ordinary inverse."
+    },
+    {
+     "say": "X is rank deficient.",
+     "blank": {
+      "prompt": "Are all coefficient functions estimable?",
+      "answer": "No",
+      "accept": [
+       "no"
+      ],
+      "hint": "Only contrasts in Row(X) are estimable."
+     },
+     "why": "The row space is a proper subspace of the parameter space."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s10",
+   "mins": 6,
+   "title": "Least squares and the projection",
+   "objective": "Interpret fitted values and residuals.",
+   "ask": {
+    "q": "Why is XX⁺y a projection?",
+    "nudge": "It lies in Col(X) and the residual is orthogonal to Col(X)."
+   },
+   "body": [
+    "The Moore–Penrose solution β̂=X⁺y gives fitted values Xβ̂=XX⁺y. The matrix XX⁺ is symmetric and idempotent, so it is the orthogonal projector onto the column space of X.",
+    "The residual y−XX⁺y is orthogonal to every column of X. This is the normal-equation condition Xᵀ(y−Xβ̂)=0, and it holds even when the coefficient vector is not unique."
+   ],
+   "scenario": {
+    "teaser": "The fitted values remain unique despite non-unique coefficients.",
+    "title": "Least squares with redundant predictors",
+    "body": [
+     "When columns of X are linearly dependent, several coefficient vectors can produce the same fitted vector. The ordinary normal-equation inverse fails, but least-squares fitted values remain well-defined.",
+     "The Moore–Penrose inverse chooses the minimum-norm coefficient solution β̂=X⁺y. The fitted vector XX⁺y is the orthogonal projection of y onto Col(X).",
+     "Thus prediction can be unique even when individual regression coefficients are not identifiable. Estimability asks which linear combinations of those coefficients are determined by the model."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s11",
+   "mins": 7,
+   "title": "Worked: test estimability",
+   "objective": "Use a null-space direction to reject a non-estimable contrast.",
+   "ask": {
+    "q": "If Null(X) contains (1,−1), is β₁+β₂ estimable?",
+    "nudge": "The contrast vector (1,1) is not orthogonal to (1,−1)? Check the dot product."
+   },
+   "problem": "Suppose Null(X)=span{(1,−1)}. Is cᵀβ estimable for c=(1,1)ᵀ and for d=(1,0)ᵀ?",
+   "steps": [
+    {
+     "say": "Use orthogonality to the null space.",
+     "math": "cᵀ(1,−1)=1−1=0",
+     "why": "c is orthogonal to the null space, so c lies in Row(X) and is estimable."
+    },
+    {
+     "say": "Check d.",
+     "math": "dᵀ(1,−1)=1",
+     "why": "d is not orthogonal to the null space, so d is not in Row(X)."
+    },
+    {
+     "say": "State the conclusions.",
+     "math": "β₁+β₂ is estimable; β₁ alone is not.",
+     "why": "Estimability is determined by row-space membership, not by whether a particular generalized inverse returns a coefficient."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s12",
+   "mins": 5,
+   "title": "Trap check: six statements",
+   "objective": "Avoid common generalized-inverse confusions.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "Every real matrix has a Moore–Penrose inverse.",
+     "tf": true,
+     "why": "The four Penrose equations have a unique solution for every real matrix."
+    },
+    {
+     "claim": "A generalized inverse is always unique.",
+     "tf": false,
+     "why": "The condition AGA=A alone does not ensure uniqueness."
+    },
+    {
+     "claim": "The Moore–Penrose inverse is unique.",
+     "tf": true,
+     "why": "The four Penrose equations select exactly one matrix."
+    },
+    {
+     "claim": "For full column rank A, A⁺=(AᵀA)⁻¹Aᵀ.",
+     "tf": true,
+     "why": "AᵀA is invertible in this case."
+    },
+    {
+     "claim": "Every coefficient in a rank-deficient model is estimable.",
+     "tf": false,
+     "why": "Only contrasts in Row(X) are estimable."
+    },
+    {
+     "claim": "AA⁺ is the orthogonal projector onto Col(A).",
+     "tf": true,
+     "why": "It is symmetric, idempotent and has column space Col(A)."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "Final generalized-inverse checklist",
+   "objective": "Select the right identity for each statistical task.",
+   "body": [
+    "1. Generalized inverse: AGA=A; reflexive also requires GAG=G.",
+    "2. Moore–Penrose inverse: all four Penrose equations; unique for every real matrix.",
+    "3. Full column rank: A⁺=(AᵀA)⁻¹Aᵀ.",
+    "4. Full row rank: A⁺=Aᵀ(AAᵀ)⁻¹.",
+    "5. AA⁺ projects onto Col(A); A⁺A projects onto Row(A).",
+    "6. Least-squares fitted vector is XX⁺y; residual is orthogonal to Col(X).",
+    "7. cᵀβ is estimable iff c∈Row(X), equivalently c is orthogonal to Null(X)."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate generalized-inverse and estimability reasoning.",
+   "setId": "maths_t8_mastery"
+  }
+ ]
+}
