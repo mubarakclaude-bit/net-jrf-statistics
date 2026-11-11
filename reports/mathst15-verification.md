@@ -2,8 +2,9 @@
 
 Date: 12 November 2026
 
-- Lesson package authored: 15 scenes, required scene types, two applied scenarios, orthogonality flow, revision sheet and three references.
-- Mastery pool: 20 questions with target 6/10/4 difficulty distribution.
-- Exact examples: projection, Gram–Schmidt in R² and orthogonal-matrix verification.
-- App validator, formula renderer, index/harness and browser checks: pending.
-- Production status: NOT APPROVED; not indexed or wired yet.
+- Lesson package: 15 scenes, including two guided practice scenes, two applied scenarios, an orthogonalisation flow and revision sheet.
+- Mastery pool: 20 items; 6 easy, 10 moderate, 4 hard; answer keys balanced A=5, B=5, C=5, D=5; 8 numeric, 10 single-choice, 2 multi-statement.
+- Exact anchors: projection and residual, Gram–Schmidt in R², orthonormal basis and orthogonal-matrix determinant.
+- Evidence map: evidence/mathst15.md.
+- App schema, formula rendering, index/harness and browser validation: included in the expanded Mathematics package workflow; final run pending.
+- Release status: DRAFT / NOT IN PRODUCTION.
