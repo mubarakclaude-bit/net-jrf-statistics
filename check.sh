@@ -1,27 +1,39 @@
 #!/usr/bin/env bash
-# Validate the seed set and the contracts. Read-only; safe to run any time, and it is what CI runs first.
-#
-#   npm ci && ./check.sh          (or: npm run check)
-#
-# 1. tools/gen-index.js --check      every lesson seed is valid JSON with the required fields, no duplicate topicId or
-#                                    store document id; warns about a quiz pointing at a missing pool. The lesson index
-#                                    and the test harness are GENERATED from seed/, so there is nothing to drift.
-# 2. tools/validate-contracts.js     the contracts in contracts/ agree with the app source they mirror, accept every valid
-#                                    fixture and reject every invalid one, every literal storage path in src/ is allowed,
-#                                    and every lesson and question-set seed conforms (known legacy deviations are listed in
-#                                    contracts/legacy-exceptions.json and reported on every run).
-# 3. tests/content.test.js           the content tool (tools/content.js) against a made-up content set with known answers
-#    tools/content.js check          the real seed files agree with each other (catalog, lessons, June 2026 paper, variant banks)
-set -e
+# Read-only repository gate. The generated index is the source of lesson discovery;
+# the metadata manifest remains the versioned store-facing release inventory.
+set -euo pipefail
 cd "$(dirname "$0")"
+
 node tools/gen-index.js --check
 node tools/validate-contracts.js
-out=$(node tests/content.test.js) || { echo "$out"; exit 1; }   # not a pipe: a pipe would hide a failure
-echo "$out" | tail -1
+node tests/content.test.js
 node tools/content.js check
-out=$(node tests/changed-topics.test.js) || { echo "$out"; exit 1; }   # which lessons a pull request must click-test
-echo "$out" | tail -1
-out=$(node tests/check-ids.test.js) || { echo "$out"; exit 1; }   # the id-stability tool, in a throwaway git repo
-echo "$out" | tail -1
-out=$(node tests/papers.test.js) || { echo "$out"; exit 1; }   # finding past papers by file name, and scrubbing the candidate's answers
-echo "$out" | tail -1
+node tests/changed-topics.test.js
+node tests/check-ids.test.js
+node tests/papers.test.js
+
+# Keep the store-facing manifest consistent with every checked-in lesson seed.
+node - <<'NODE'
+const fs = require("fs");
+const path = require("path");
+const manifest = JSON.parse(fs.readFileSync("seed/meta_lessons.json", "utf8"));
+const files = fs.readdirSync("seed").filter(f => /^lesson_.*\.json$/.test(f)).sort();
+const seen = new Set();
+const problems = [];
+for (const file of files) {
+  const lesson = JSON.parse(fs.readFileSync(path.join("seed", file), "utf8"));
+  const id = lesson.topicId;
+  if (!id || seen.has(id)) { problems.push(`duplicate or missing topicId in ${file}: ${id}`); continue; }
+  seen.add(id);
+  const entry = manifest.topics[id];
+  if (!entry) { problems.push(`not registered in meta_lessons.json: ${id}`); continue; }
+  for (const key of ["id", "title", "moduleId", "estMin", "status", "version"]) {
+    if (entry[key] !== lesson[key]) problems.push(`${id}: manifest ${key}=${entry[key]} but lesson has ${lesson[key]}`);
+  }
+  if (entry.scenes !== lesson.scenes.length) problems.push(`${id}: manifest scene count differs from lesson`);
+}
+for (const id of Object.keys(manifest.topics)) if (!seen.has(id)) problems.push(`manifest entry has no lesson seed: ${id}`);
+if (manifest.count !== Object.keys(manifest.topics).length) problems.push("manifest count does not match topic entries");
+if (problems.length) { console.error(problems.join("\n")); process.exit(1); }
+console.log(`manifest clean: ${seen.size} lesson seeds, ${manifest.count} registered topics`);
+NODE
