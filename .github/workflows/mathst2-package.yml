@@ -1,0 +1,21 @@
+name: Mathematics T2 package checks
+on:
+  push:
+    branches: [gpt/mathematics-unit2-production]
+    paths:
+      - 'seed/lesson_ma2.json'
+      - 'seed/maths_t2_mastery.json'
+      - 'verify_mathst2.py'
+  workflow_dispatch:
+jobs:
+  exact-math-and-pool:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify exact anchors and pool structure
+        run: python verify_mathst2.py
+      - name: Validate JSON syntax
+        run: python -c "import json; [json.load(open(p, encoding='utf-8')) for p in ['seed/lesson_ma2.json','seed/maths_t2_mastery.json']]"
