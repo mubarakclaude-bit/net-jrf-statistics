@@ -147,7 +147,7 @@ q(14, "single", "moderate",
    "The Indian Council of Medical Research",
    "The Registrar General of India",
    "The International Institute for Population Sciences, Mumbai"], "D",
-  "IIPS Mumbai is the nodal agency. NFHS-6, fielded in 2023-24 and released in May 2026, covered about 6.79 lakh "
+  "IIPS Mumbai is the nodal agency. NFHS-6 results are not quoted here without the corresponding official report; the survey is conducted by MoHFW with IIPS Mumbai as "
   "households across 715 districts and reported a total fertility rate of 2.0. The Registrar General handles the census "
   "and the Sample Registration System, which is a neighbouring topic and the reason that option is attractive.")
 
@@ -164,7 +164,7 @@ q(16, "multi", "moderate",
   ["A and B only", "A, B and C only", "B, C and D only", "A, B, C and D"], "B",
   "A, B and C hold: the base was revised from 2011-12 to 2022-23, the basket expanded from 697 to 957 items, and the "
   "Output PPI was launched alongside it with a quarterly Services PPI covering seven sectors. D is false — the WPI is "
-  "to be discontinued after a five-year transition, not immediately, which is the detail the option sets turn on.",
+  "continues to be published alongside Output PPI, trial Input PPI and phased Services PPIs.",
   statements=["The WPI base year was revised from 2011-12 to 2022-23.",
               "The WPI basket expanded from 697 to 957 items.",
               "An Output Producer Price Index was launched alongside the revised WPI.",
@@ -199,7 +199,7 @@ q(18, "single", "hard",
 q(19, "single", "hard",
   "A statement reads: 'All three of India's main indices — CPI, WPI and IIP — were rebased in 2026, and all three "
   "continue to be published on their new bases.' What is wrong with it?",
-  ["The WPI is being replaced by the Producer Price Index after a five-year transition",
+  ["WPI base 2022-23 continues to be published alongside Output PPI, trial Input PPI and phased Services PPIs",
    "The IIP was not rebased in this period",
    "The CPI was replaced rather than rebased",
    "Nothing is wrong; the statement is accurate"], "A",
