@@ -12,6 +12,8 @@ on:
       - 'seed/lesson_ma8.json'
       - 'seed/lesson_ma9.json'
       - 'seed/lesson_ma10.json'
+      - 'seed/lesson_ma11.json'
+      - 'seed/maths_t11_mastery.json'
       - 'seed/maths_t10_mastery.json'
       - 'seed/maths_t9_mastery.json'
       - 'seed/maths_t8_mastery.json'
@@ -29,6 +31,7 @@ on:
       - 'verify_mathst8.py'
       - 'verify_mathst9.py'
       - 'verify_mathst10.py'
+      - 'verify_mathst11.py'
       - '.github/workflows/mathst2-package.yml'
       - 'vcheck.js'
       - 'src/62-gen.js'
@@ -58,6 +61,7 @@ jobs:
           python verify_mathst8.py
           python verify_mathst9.py
           python verify_mathst10.py
+          python verify_mathst11.py
       - name: App scene schema validation
         run: |
           node vcheck.js seed/lesson_ma2.json
@@ -68,6 +72,7 @@ jobs:
           node vcheck.js seed/lesson_ma8.json
           node vcheck.js seed/lesson_ma9.json
           node vcheck.js seed/lesson_ma10.json
+          node vcheck.js seed/lesson_ma11.json
       - name: Render every authored formula
         run: |
           mkdir -p .cache
@@ -82,7 +87,7 @@ jobs:
                       else: walk(v)
               elif isinstance(o,list):
                   for x in o: walk(x)
-          for p in ['seed/lesson_ma2.json','seed/lesson_ma3.json','seed/lesson_ma5.json','seed/lesson_ma6.json','seed/lesson_ma7.json','seed/lesson_ma8.json','seed/lesson_ma9.json','seed/lesson_ma10.json']:
+          for p in ['seed/lesson_ma2.json','seed/lesson_ma3.json','seed/lesson_ma5.json','seed/lesson_ma6.json','seed/lesson_ma7.json','seed/lesson_ma8.json','seed/lesson_ma9.json','seed/lesson_ma10.json','seed/lesson_ma11.json']:
               walk(json.load(open(p,encoding='utf-8')))
           json.dump(out,open('.cache/math-formulas.json','w',encoding='utf-8'),ensure_ascii=False)
           PY
@@ -95,7 +100,7 @@ jobs:
           if bad: raise SystemExit('formula renderer refused: '+repr(bad[:5]))
           PY
       - name: Validate JSON syntax
-        run: python -c "import json; [json.load(open(p, encoding='utf-8')) for p in ['seed/lesson_ma2.json','seed/maths_t2_mastery.json','seed/lesson_ma3.json','seed/maths_t3_mastery.json','seed/lesson_ma5.json','seed/maths_t5_mastery.json','seed/lesson_ma6.json','seed/maths_t6_mastery.json','seed/lesson_ma7.json','seed/maths_t7_mastery.json','seed/lesson_ma8.json','seed/maths_t8_mastery.json','seed/lesson_ma9.json','seed/maths_t9_mastery.json','seed/lesson_ma10.json','seed/maths_t10_mastery.json','seed/meta_lessons.json']]"
+        run: python -c "import json; [json.load(open(p, encoding='utf-8')) for p in ['seed/lesson_ma2.json','seed/maths_t2_mastery.json','seed/lesson_ma3.json','seed/maths_t3_mastery.json','seed/lesson_ma5.json','seed/maths_t5_mastery.json','seed/lesson_ma6.json','seed/maths_t6_mastery.json','seed/lesson_ma7.json','seed/maths_t7_mastery.json','seed/lesson_ma8.json','seed/maths_t8_mastery.json','seed/lesson_ma9.json','seed/maths_t9_mastery.json','seed/lesson_ma10.json','seed/maths_t10_mastery.json','seed/lesson_ma11.json','seed/maths_t11_mastery.json','seed/meta_lessons.json']]"
       - name: Verify lesson index and harness wiring
         run: bash check.sh
       - name: Build application
