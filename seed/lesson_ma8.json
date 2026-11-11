@@ -308,7 +308,93 @@
      "h": "Projection meaning",
      "body": "AA⁺ is the orthogonal projection onto Col(A). A⁺A is the orthogonal projection onto Row(A), viewed as a subspace of the domain."
     }
-   ]
+   ],
+   "flow": {
+    "title": "Choose the generalized-inverse route",
+    "alt": "Flow for selecting the appropriate inverse formula",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Matrix A",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Square and nonsingular?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Use ordinary inverse",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Full column or row rank?",
+      "kind": "dec"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 0,
+      "label": "Full column: (AᵀA)⁻¹Aᵀ",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 3,
+      "c": 2,
+      "label": "Full row: Aᵀ(AAᵀ)⁻¹",
+      "kind": "step"
+     },
+     {
+      "id": "g",
+      "r": 4,
+      "c": 1,
+      "label": "Otherwise use four Penrose equations / SVD",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "yes"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "no"
+     },
+     {
+      "from": "d",
+      "to": "e",
+      "label": "column"
+     },
+     {
+      "from": "d",
+      "to": "f",
+      "label": "row"
+     },
+     {
+      "from": "d",
+      "to": "g",
+      "label": "rank deficient"
+     }
+    ]
+   }
   },
   {
    "kind": "guided",
