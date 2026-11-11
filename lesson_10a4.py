@@ -577,7 +577,7 @@ LES = dict(
       ["Survey that sets the CPI weights", "HCES — the 2023-24 round for base 2024=100"],
       ["CPI base year and first release", "2024=100, first released 12 February 2026"],
       ["IIP and WPI base year", "Both 2022-23 — a financial year, unlike CPI's calendar 2024"],
-      ["Index being discontinued, and its replacement", "WPI base 2022-23 remains published alongside Output PPI and other PPI series"],
+      ["WPI and PPI: current publication status", "WPI base 2022-23 remains published alongside Output PPI and other PPI series"],
       ["WPI's producer", "Office of the Economic Adviser, DPIIT — not MoSPI"],
       ["PLFS reference periods", "Usual Status 365 days; Current Weekly Status 7 days"],
       ["The headline PLFS change of 2025", "Monthly all-India LFPR, WPR and UR on CWS"],
