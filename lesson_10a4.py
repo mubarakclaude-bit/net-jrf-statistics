@@ -133,7 +133,7 @@ SC.append(dict(
    dict(t="step", h="Surveys outside MoSPI",
      body="Two major surveys belong to other ministries and are examined all the same. The National Family Health Survey "
           "is run by the Ministry of Health and Family Welfare with the International Institute for Population Sciences, "
-          "Mumbai, as nodal agency; NFHS-6, fielded in 2023-24 and released in May 2026, covered about 6.79 lakh "
+          "Mumbai, as nodal agency; NFHS-6 results are not quoted here without the corresponding official report; the survey is conducted by MoHFW with IIPS Mumbai as "
           "households across 715 districts and reported a total fertility rate of 2.0. The Annual Health Survey and the "
           "Sample Registration System belong to the civil registration side and are the next topic's business."),
    dict(t="trap", h="The 2017-18 round that was never published",
@@ -486,7 +486,7 @@ SC.append(dict(
    "Indices. CPI base 2024=100, first release February 2026, weights from HCES 2023-24, COICOP 2018, 358 items, food and "
    "beverages 40.10%, housing 11.88%, produced by the NSO, used for the inflation target. WPI base revised to 2022-23, "
    "957 items, goods only, produced by the Office of the Economic Adviser in DPIIT, and being replaced by the Producer "
-   "Price Index from June 2026 over a five-year transition. IIP base 2022-23=100, first release June 2026, 1,042 "
+   "Price Index (PPI) introduced alongside continuing WPI publication from June 2026. IIP base 2022-23=100, first release June 2026, 1,042 "
    "products in 463 item groups on NIC 2025, manufacturing 76.062, mining 11.053, electricity and gas 10.865, water "
    "supply and sewerage 2.020 as a new sector.",
    "Linking. The CPI factor is new-over-old, so multiply: 0.5267 combined. The IIP factor is old-over-new, so divide: "
@@ -563,7 +563,7 @@ LES = dict(
       "PLFS from Jan 2025: monthly all-India CWS; quarterly rural + urban + combined; calendar annual year.",
       "PLFS sample: 22,692 FSUs × 12 households ≈ 2.72 lakh, from 12,800 × 8 ≈ 1.02 lakh; four visits per household.",
       "ASI = registered factories (Factories Act 1948); ASUSE = unincorporated enterprises. ASI 2023-24: 2,60,061 factories.",
-      "NFHS: MoHFW with IIPS Mumbai. Rounds 1992-93, 1998-99, 2005-06, 2015-16, 2019-21, 2023-24 (NFHS-6, released May 2026).",
+      "NFHS: MoHFW with IIPS Mumbai. Published rounds listed here through NFHS-5 (2019-21); do not quote NFHS-6 indicators without its official report.",
       "CPI base 2024=100 from 12 Feb 2026; weights from HCES 2023-24; COICOP 2018; 358 items; food 40.10%, housing 11.88%.",
       "CPI is a modified Laspeyres index: Jevons at the elementary level, Young/modified Laspeyres above it.",
       "WPI base revised 2011-12 → 2022-23; 957 items; goods only; Office of the Economic Adviser, DPIIT.",
