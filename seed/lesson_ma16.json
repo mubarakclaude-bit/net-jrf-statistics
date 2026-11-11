@@ -8,7 +8,7 @@
  "engineName": "Mathematics — matrix invariants and invertibility",
  "version": "1.0",
  "status": "draft",
- "estMin": 112,
+ "estMin": 106,
  "objectives": [
   "Compute trace and use its linear, cyclic and similarity properties.",
   "Apply determinant rules for products, transposes, scalar multiples and inverses.",
@@ -176,24 +176,24 @@
      "ask": "What is the trace of a square matrix?",
      "recall": "The sum of its diagonal entries.",
      "refresh": [
-      "Trace is defined only for square matrices and adds the entries on the main diagonal. It is linear: tr(A+B)=tr(A)+tr(B), and tr(cA)=c tr(A).",
-      "For compatible products, tr(AB)=tr(BA). For longer products only cyclic rotations are guaranteed; arbitrary reordering is not valid."
+      "Trace is defined only for square matrices.",
+      "It is linear: tr(A+B)=tr(A)+tr(B), and tr(cA)=c tr(A)."
      ]
     },
     {
-     "ask": "When is a square matrix invertible?",
-     "recall": "Exactly when its determinant is non-zero, equivalently when it has full rank.",
+     "ask": "When does a square matrix have an inverse?",
+     "recall": "Exactly when its determinant is non-zero.",
      "refresh": [
-      "A square matrix is nonsingular iff det(A)≠0 iff rank(A)=n. If its determinant is zero, its columns are linearly dependent and no two-sided inverse exists.",
-      "The inverse is unique and satisfies AA⁻¹=A⁻¹A=I. Product order matters: the inverse of AB is B⁻¹A⁻¹, not A⁻¹B⁻¹."
+      "Equivalent conditions are full rank, linearly independent columns and nonsingularity.",
+      "A singular matrix has determinant zero and no inverse."
      ]
     },
     {
-     "ask": "What is the determinant product rule?",
+     "ask": "What is the determinant of a product?",
      "recall": "det(AB)=det(A)det(B).",
      "refresh": [
-      "The determinant is multiplicative. It also satisfies det(Aᵀ)=det(A) and det(A⁻¹)=1/det(A) for an invertible matrix.",
-      "For an n×n matrix, det(cA)=cⁿdet(A), because each of the n rows is scaled by c. For triangular matrices, the determinant is the product of diagonal entries."
+      "This multiplicative property is the fastest way to handle determinants of matrix products.",
+      "It also gives det(A inverse)=1/det(A) whenever A is invertible."
      ]
     }
    ]
@@ -372,19 +372,19 @@
    "kind": "guided",
    "id": "s4",
    "mins": 8,
-   "title": "Determinants and powers",
-   "objective": "Apply product identities to powers and inverses.",
-   "problem": "Suppose A is 3×3 and det(A)=2.",
+   "title": "Guided: determinant scaling and powers",
+   "objective": "Apply determinant identities to a 3×3 matrix.",
+   "problem": "A is 3×3 and det(A)=2. Find det(3A), det(A²) and det(A inverse).",
    "hints": [
-    "Use determinant multiplicativity: det(A²)=det(A)det(A).",
-    "For an n×n matrix, det(cA)=cⁿdet(A); here n=3 and c=3.",
-    "Use det(A)det(A⁻¹)=det(I)=1."
+    "For an n×n matrix, det(cA)=cⁿdet(A).",
+    "Use det(A²)=det(A)det(A).",
+    "For an invertible matrix, det(A inverse)=1/det(A)."
    ],
-   "answer": "det(A²)=4, det(3A)=54 and det(A⁻¹)=1/2.",
-   "solution": "Since det(A)=2, det(A²)=2²=4. For a 3×3 matrix, det(3A)=3³·2=54. Finally det(A⁻¹)=1/2.",
+   "answer": "det(3A)=54, det(A²)=4 and det(A inverse)=1/2.",
+   "solution": "Since A is 3×3, det(3A)=3³×2=54. Multiplicativity gives det(A²)=2²=4. Since det(A)≠0, det(A inverse)=1/2.",
    "ask": {
-    "q": "If det(A)=2 for a 3×3 matrix, what is det(2A)?",
-    "nudge": "Use 2³det(A)."
+    "q": "Why is the exponent 3 used in det(3A)?",
+    "nudge": "A has three rows, each scaled by 3."
    }
   },
   {
@@ -579,6 +579,25 @@
      "why": "(AB)(B⁻¹A⁻¹)=I."
     }
    ]
+  },
+  {
+   "kind": "guided",
+   "id": "s12",
+   "mins": 8,
+   "title": "Guided: inverse of a product",
+   "objective": "Reverse the order correctly when inverting a product.",
+   "problem": "Let A and B be nonsingular. Verify the formula for (AB) inverse.",
+   "hints": [
+    "Start with the candidate B inverse A inverse.",
+    "Multiply AB by B inverse A inverse.",
+    "Use associativity and BB inverse=I."
+   ],
+   "answer": "(AB) inverse = B inverse A inverse.",
+   "solution": "(AB)(B⁻¹A⁻¹)=A(BB⁻¹)A⁻¹=AIA⁻¹=I. The order must reverse; A⁻¹B⁻¹ is not generally correct.",
+   "ask": {
+    "q": "Why must the order reverse?",
+    "nudge": "The middle factors must cancel as BB⁻¹."
+   }
   },
   {
    "kind": "intuition",
