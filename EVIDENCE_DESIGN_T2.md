@@ -12,7 +12,7 @@
 - Latin square SS components use squared row, column and treatment totals divided by p, less CF=G²/p².
 
 ## Exact worked-example checks
-- RBD: G=123; CF=5043/4; total SS=133/4; treatment SS=25/2; block SS=251/12; error SS=5/6; treatment F=45 with df (2,6).
+- RBD: G=123; CF=5043/4; total SS=137/4; treatment SS=25/2; block SS=251/12; error SS=5/6; treatment F=45 with df (2,6).
 - Latin square: G=96; CF=1024; total SS=20; row SS=8/3; column SS=8; treatment SS=14/3; error SS=14/3; treatment F=1 with df (2,2).
 
 ## Assumptions and limits

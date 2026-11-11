@@ -19,7 +19,7 @@ vals=[v for row in x for v in row]; G=sum(vals); N=12; CF=F(G*G,N)
 ss_total=F(sum(v*v for v in vals))-CF
 t=[sum(row[j] for row in x) for j in range(3)]; b=[sum(row) for row in x]
 ss_t=sum(F(v*v,4) for v in t)-CF; ss_b=sum(F(v*v,3) for v in b)-CF; ss_e=ss_total-ss_t-ss_b
-assert (G,CF,ss_total,t,b,ss_t,ss_b,ss_e)==(123,F(5043,4),F(133,4),[36,46,41],[28,33,26,36],F(25,2),F(251,12),F(5,6))
+assert (G,CF,ss_total,t,b,ss_t,ss_b,ss_e)==(123,F(5043,4),F(137,4),[36,46,41],[28,33,26,36],F(25,2),F(251,12),F(5,6))
 assert (ss_t/2)/(ss_e/6)==45
 x=[[8,12,10],[11,10,13],[9,12,11]]
 vals=[v for row in x for v in row]; G=sum(vals); p=3; CF=F(G*G,p*p)
