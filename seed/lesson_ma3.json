@@ -271,7 +271,83 @@
      "h": "Do not use the wrong minors",
      "body": "The criterion uses leading principal minors in the fixed top-left sequence. Checking only det(A), or checking every principal minor without understanding the theorem, is not the intended shortcut."
     }
-   ]
+   ],
+   "flow": {
+    "title": "Classify a real symmetric quadratic form",
+    "alt": "Flow for choosing eigenvalue or minor tests",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Write Q=xᵀAx with A symmetric",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Eigenvalues available?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Count positive, negative and zero",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Use leading minors for strict tests",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 2,
+      "label": "Semidefinite? check all principal minors",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "State class and inertia",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "yes"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "no"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     },
+     {
+      "from": "c",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ]
+   }
   },
   {
    "kind": "worked",
@@ -503,7 +579,16 @@
    "body": [
     "For Q(x)=1, a positive definite form produces an ellipsoid in higher dimensions. A negative definite form has no real points at positive level 1, while an indefinite form produces hyperboloid-type geometry.",
     "Zero eigenvalues create flat directions. In statistics these may correspond to non-identifiable directions or redundant variables. The inertia is the coordinate-free summary of these directions."
-   ]
+   ],
+   "scenario": {
+    "teaser": "A flat direction appears in a quadratic penalty.",
+    "title": "A zero eigenvalue as an unpenalised direction",
+    "body": [
+     "Suppose a model uses Q(β)=βᵀAβ as a penalty. If A is positive definite, every non-zero coefficient displacement incurs a positive penalty.",
+     "If A is positive semidefinite with a zero eigenvalue, there is a non-zero direction v with Av=0 and vᵀAv=0. Moving along that direction does not change the penalty, so the quadratic form has a flat direction.",
+     "This can be intentional, as in a penalty that leaves an intercept unpenalised, or it can reveal redundancy. The inertia (p,n,z) reports how many positive, negative and flat directions exist, independent of the nonsingular coordinate change used to describe the parameters."
+    ]
+   }
   },
   {
    "kind": "worked",
