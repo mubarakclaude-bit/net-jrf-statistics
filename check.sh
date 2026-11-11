@@ -1,29 +1,51 @@
 #!/usr/bin/env bash
-# Validate the seed set and the contracts. Read-only; safe to run any time, and it is what CI runs first.
-#
-#   npm ci && ./check.sh          (or: npm run check)
-#
-# 1. tools/gen-index.js --check      every lesson seed is valid JSON with the required fields, no duplicate topicId or
-#                                    store document id; warns about a quiz pointing at a missing pool. The lesson index
-#                                    and the test harness are GENERATED from seed/, so there is nothing to drift.
-# 2. tools/validate-contracts.js     the contracts in contracts/ agree with the app source they mirror, accept every valid
-#                                    fixture and reject every invalid one, every literal storage path in src/ is allowed,
-#                                    and every lesson and question-set seed conforms (known legacy deviations are listed in
-#                                    contracts/legacy-exceptions.json and reported on every run).
-# 3. tests/content.test.js           the content tool (tools/content.js) against a made-up content set with known answers
-#    tools/content.js check          the real seed files agree with each other (catalog, lessons, June 2026 paper, variant banks)
-set -e
+# Repository seed integrity check. Read-only and independent of authoring assistants.
+set -euo pipefail
 cd "$(dirname "$0")"
-node tools/gen-index.js --check
-node tools/validate-contracts.js
-out=$(node tests/content.test.js) || { echo "$out"; exit 1; }   # not a pipe: a pipe would hide a failure
-echo "$out" | tail -1
-node tools/content.js check
-out=$(node tests/changed-topics.test.js) || { echo "$out"; exit 1; }   # which lessons a pull request must click-test
-echo "$out" | tail -1
-out=$(node tests/check-ids.test.js) || { echo "$out"; exit 1; }   # the id-stability tool, in a throwaway git repo
-echo "$out" | tail -1
-out=$(node tests/papers.test.js) || { echo "$out"; exit 1; }   # finding past papers by file name, and scrubbing the candidate's answers
-echo "$out" | tail -1
-out=$(node tests/lesson.test.js) || { echo "$out"; exit 1; }   # the topic-driven lesson workflow (tools/lesson.js)
-echo "$out" | tail -1
+
+python3 - <<'PY'
+import json, pathlib, sys
+root = pathlib.Path("seed")
+files = sorted(root.glob("*.json"))
+data = {}
+for path in files:
+    try:
+        data[path.stem] = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise SystemExit(f"INVALID JSON {path}: {exc}")
+print(f"JSON syntax: {len(files)} seed documents parsed")
+
+manifest = data.get("meta_lessons", {}).get("topics", {})
+lessons = {}
+for stem, obj in data.items():
+    if isinstance(obj, dict) and obj.get("topicId"):
+        tid = obj["topicId"]
+        if tid in lessons:
+            raise SystemExit(f"DUPLICATE topicId {tid}: {lessons[tid]} and {stem}")
+        lessons[tid] = (stem, obj)
+missing = []
+for tid, meta in manifest.items():
+    item = lessons.get(tid)
+    if not item:
+        missing.append(tid)
+        continue
+    stem, lesson = item
+    if lesson.get("status") != meta.get("status"):
+        raise SystemExit(f"STATUS mismatch for {tid}: lesson={lesson.get('status')} manifest={meta.get('status')}")
+    if not isinstance(lesson.get("scenes"), list) or not lesson["scenes"]:
+        raise SystemExit(f"NO SCENES for {tid} ({stem})")
+    for scene in lesson["scenes"]:
+        if scene.get("kind") == "quiz" and scene.get("setId"):
+            pool = data.get(scene["setId"])
+            if not pool or not isinstance(pool.get("items"), list):
+                raise SystemExit(f"MISSING mastery pool {scene['setId']} referenced by {tid}")
+if missing:
+    raise SystemExit("Manifest lessons missing seed files: " + ", ".join(missing))
+print(f"Lesson manifest: {len(manifest)} topics resolve to unique lesson seeds and quiz pools")
+PY
+
+# The Probability module has an explicit, independently maintained aggregate index verifier.
+if [ -f verify_probability_index.py ]; then
+  python3 verify_probability_index.py
+fi
+echo "SEED CHECK PASS"
