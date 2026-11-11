@@ -6,9 +6,9 @@
  "breadcrumb": "Stochastic processes → Random walks → Gambler’s ruin",
  "engine": "B",
  "engineName": "Model movement as a random walk, then use boundary conditions and first-step equations to find ruin probabilities and expected duration.",
- "version": "1.0",
+ "version": "4.1",
  "status": "approved",
- "estMin": 105,
+ "estMin": 115,
  "objectives": [
   "Define a simple random walk and identify its drift from step probabilities.",
   "Calculate the position distribution after n steps using the number of upward steps.",
@@ -63,6 +63,16 @@
    "free": true,
    "checked": "2026-11-11",
    "why": "Mathematical background for random walks."
+  },
+  {
+   "title": "Probability and Random Processes",
+   "where": "Random walks and gambler’s ruin",
+   "site": "Geoffrey Grimmett and David Stirzaker",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "A standard reference for random walks, recurrence and hitting probabilities."
   }
  ],
  "provenance": "Original teaching material aligned to the Simple random walk and Gambler’s ruin items in UGC NET Statistics Unit IX. Practice questions are original and are not represented as official UGC NET PYQs.",
@@ -146,27 +156,27 @@
      "ask": "If there are n steps and X upward moves, how many downward moves occur?",
      "recall": "n−X.",
      "refresh": [
-      "Every step is either upward or downward.",
-      "The total number of steps is the sum of the two counts.",
-      "Therefore downward moves = n−X."
+      "A simple random walk has exactly two possible moves at each step: +1 or −1. If there are n steps in total and X of them are upward, every remaining step must be downward.",
+      "The number of downward moves is therefore n−X. This is a counting identity, not a probability formula: it holds for every realised path, regardless of the value of p.",
+      "For example, if a 10-step path contains 6 upward moves, it contains 4 downward moves. The net displacement is then 6−4=2 units."
      ]
     },
     {
      "ask": "What is the net displacement after n steps?",
      "recall": "2X−n.",
      "refresh": [
-      "Upward moves contribute +X.",
-      "Downward moves contribute −(n−X).",
-      "Net displacement is X−(n−X)=2X−n."
+      "Each upward move contributes +1, so X upward moves contribute +X. Each downward move contributes −1, and there are n−X of those moves, contributing −(n−X).",
+      "Add the two contributions: X−(n−X)=X−n+X=2X−n. If the walk starts at S₀, add S₀ to obtain Sₙ=S₀+2X−n.",
+      "This representation is useful because X has a Binomial(n,p) distribution when the steps are independent with a constant upward probability p. A position probability can then be calculated as a binomial probability."
      ]
     },
     {
      "ask": "What is the expected change in one step?",
      "recall": "p−q=2p−1.",
      "refresh": [
-      "The step is +1 with probability p and −1 with probability q.",
-      "Its expectation is 1·p+(−1)·q=p−q.",
-      "Since q=1−p, the drift is 2p−1."
+      "The increment ΔS is +1 with probability p and −1 with probability q=1−p. Its expectation is the probability-weighted average of these two possible values.",
+      "Compute E[ΔS]=(+1)p+(−1)q=p−q. Substituting q=1−p gives p−(1−p)=2p−1, which is the drift per step.",
+      "A positive drift means upward movement is favoured on average, a negative drift means downward movement is favoured, and zero drift occurs for a fair walk with p=q=1/2. Drift is an average, not a guarantee about an individual step."
      ]
     }
    ],
@@ -575,6 +585,56 @@
    "ask": {
     "q": "What must you define before writing any gambler’s ruin recurrence?",
     "nudge": "State variable and exact event whose probability is being calculated."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s12",
+   "mins": 8,
+   "title": "Guided problem: expected duration in a biased game",
+   "objective": "Use the biased hitting probability to calculate expected absorption time.",
+   "problem": "A walk has p=2/3, q=1/3, barriers 0 and 3, and starts at i=1. Find the expected number of steps until absorption.",
+   "hints": [
+    "First calculate the upper-barrier probability u₁ using q/p=1/2.",
+    "Use m_i=[i−Nu_i]/(q−p), with i=1 and N=3.",
+    "Keep the sign of q−p: here it is −1/3."
+   ],
+   "answer": "u₁=4/7 and m₁=[1−3(4/7)]/(1/3−2/3)=15/7 steps.",
+   "solution": [
+    "For p=2/3 and q=1/3, the biased gambler’s ruin formula gives u₁=[1−(1/2)]/[1−(1/2)³]=4/7.",
+    "The expected absorption time is m_i=[i−Nu_i]/(q−p). Substitute i=1, N=3 and u₁=4/7.",
+    "The numerator is 1−12/7=−5/7 and the denominator is −1/3.",
+    "Thus m₁=(−5/7)/(−1/3)=15/7≈2.143 steps. The result is an expectation and need not be an integer."
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 5,
+   "title": "Summary: random walks and gambler’s ruin",
+   "objective": "Recall the distribution, boundary equations and hitting-time formulas.",
+   "body": [
+    "A simple random walk has independent increments +1 with probability p and −1 with probability q=1−p. After n steps, Sₙ=S₀+2X−n with X~Binomial(n,p).",
+    "For the upper-barrier probability uᵢ=Pᵢ(T_N<T_0), use u₀=0, u_N=1 and uᵢ=puᵢ₊₁+quᵢ₋₁.",
+    "For a fair walk, uᵢ=i/N and the ruin probability is 1−i/N. For p≠q, uᵢ=[1−(q/p)^i]/[1−(q/p)^N].",
+    "Expected absorption time satisfies mᵢ=1+pmᵢ₊₁+qmᵢ₋₁ with zero boundary values. In the fair case mᵢ=i(N−i).",
+    "Define the success event before assigning boundary values. Check probabilities lie in [0,1] and distinguish a hitting probability from an expected duration."
+   ],
+   "ask": {
+    "q": "For a fair walk starting at i, what is the probability of ruin before reaching N?",
+    "nudge": "It is the complement of the upper-barrier probability i/N."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Solve unseen random-walk and gambler’s ruin problems independently.",
+   "setId": "stochastic_t6_mastery",
+   "ask": {
+    "q": "Ready for the unseen mastery set?",
+    "nudge": "Define the boundary event first and show the recurrence or formula you use."
    }
   }
  ],
