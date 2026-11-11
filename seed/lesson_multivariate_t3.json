@@ -1,613 +1,697 @@
 {
- "id": "multivariatet3",
- "topicId": "multivariate-t3",
- "moduleId": "multivariate",
- "title": "Principal Component Analysis: directions, eigenvalues and explained variance",
- "breadcrumb": "Unit VIII · Multivariate Analysis · PCA",
- "engine": "B",
- "engineName": "NET JRF Statistics lesson engine",
- "version": "1.0",
- "status": "approved",
- "estMin": 96,
- "objectives": [
-  "Explain PCA as successive orthogonal linear combinations that maximise variance.",
-  "Find principal-component directions from eigenvectors of a covariance or correlation matrix.",
-  "Calculate eigenvalues, explained variance and cumulative explained variance.",
-  "Interpret scores, loadings, scaling choices and repeated eigenvalues.",
-  "Solve the June 2026 Paper 2 Q2 equicorrelation problem."
- ],
- "prereq": [
-  {
-   "id": "p1",
-   "name": "Variance and covariance of linear combinations",
-   "why": "PCA maximises the variance of a linear combination, aᵀΣa."
+  "id": "multivariatet3",
+  "topicId": "multivariate-t3",
+  "moduleId": "multivariate",
+  "title": "Principal Component Analysis: directions, eigenvalues and explained variance",
+  "breadcrumb": "Unit VIII · Multivariate Analysis · PCA",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 96,
+  "objectives": [
+    "Explain PCA as successive orthogonal linear combinations that maximise variance.",
+    "Find principal-component directions from eigenvectors of a covariance or correlation matrix.",
+    "Calculate eigenvalues, explained variance and cumulative explained variance.",
+    "Interpret scores, loadings, scaling choices and repeated eigenvalues.",
+    "Solve the June 2026 Paper 2 Q2 equicorrelation problem."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Variance and covariance of linear combinations",
+      "why": "PCA maximises the variance of a linear combination, aᵀΣa."
+    },
+    {
+      "id": "p2",
+      "name": "Symmetric matrices and orthogonal eigenvectors",
+      "why": "Covariance and correlation matrices are symmetric; their eigenvectors provide orthogonal component directions."
+    },
+    {
+      "id": "p3",
+      "name": "Trace, determinant and characteristic equations",
+      "why": "The trace checks eigenvalue sums and the characteristic equation yields eigenvalues."
+    }
+  ],
+  "traps": [
+    "Eigenvectors give directions; eigenvalues give component variances.",
+    "PC1 is a direction, not necessarily one original variable.",
+    "PCA scores are uncorrelated, not generally independent.",
+    "Covariance PCA is scale-sensitive; correlation PCA standardises variables.",
+    "Explained variance divides by the sum of all eigenvalues."
+  ],
+  "revision": {
+    "cards": [
+      [
+        "PC direction",
+        "Unit eigenvector of Σ or R"
+      ],
+      [
+        "PC variance",
+        "Corresponding eigenvalue λⱼ"
+      ],
+      [
+        "Total variance",
+        "tr(Σ)=Σλᵢ"
+      ],
+      [
+        "Explained proportion",
+        "λⱼ/Σλᵢ"
+      ],
+      [
+        "Cumulative proportion",
+        "(λ₁+…+λₖ)/Σλᵢ"
+      ],
+      [
+        "Correlation PCA",
+        "PCA after standardising variables"
+      ]
+    ],
+    "tricks": [
+      "Try the all-ones vector for an equicorrelation matrix.",
+      "Check the eigenvalue sum against the trace.",
+      "For a p×p correlation matrix, eigenvalues sum to p.",
+      "Repeated eigenvalues identify an eigenspace, not a unique basis."
+    ],
+    "remember": [
+      "Largest eigenvalue gives maximum variance.",
+      "Eigenvectors are directions; eigenvalues are variances.",
+      "Uncorrelated does not automatically mean independent."
+    ],
+    "sheet": [
+      "PC direction: aⱼ is a unit eigenvector of Σ (or R when standardising).",
+      "PC score: zⱼ=aⱼᵀx for a centred observation x; its variance is λⱼ.",
+      "Eigenvalue check: Σλⱼ=tr(Σ), total variance. For a p×p correlation matrix, the sum is p.",
+      "Explained proportion: λⱼ/Σλᵢ. Cumulative first k: (λ₁+…+λₖ)/Σλᵢ.",
+      "June 2026 Q2 equicorrelation ρ=1/2: eigenvalues 2, 1/2, 1/2; first direction (1,1,1)/√3; PC1 explains 2/3.",
+      "Covariance PCA retains original scale; correlation PCA standardises variables before extraction.",
+      "Repeated eigenvalue: eigenspace is fixed, but an orthonormal basis within it is not unique.",
+      "PC scores are uncorrelated. Do not claim independence without additional assumptions."
+    ],
+    "shortcuts": [
+      "Equicorrelation matrix: test the all-ones vector first; the eigenvalue is the common row sum.",
+      "Use trace as a fast check before accepting a list of eigenvalues.",
+      "For a correlation matrix, the eigenvalue sum equals the number of variables.",
+      "Explained variance is a ratio: selected eigenvalue sum divided by total eigenvalue sum.",
+      "Signs of eigenvectors are arbitrary; flipping all signs does not change variance.",
+      "Repeated eigenvalues identify a subspace rather than one unique direction."
+    ]
   },
-  {
-   "id": "p2",
-   "name": "Symmetric matrices and orthogonal eigenvectors",
-   "why": "Covariance and correlation matrices are symmetric; their eigenvectors provide orthogonal component directions."
+  "howto": "Centre the data and decide whether raw scales are meaningful. Form the covariance matrix or, after standardisation, the correlation matrix. Find eigenvalues and orthonormal eigenvectors, order them from largest to smallest, and interpret the eigenvectors as component directions. Each eigenvalue is the variance of its score. Divide by the trace to obtain explained-variance proportions. For June 2026 Q2, use the all-ones vector to obtain the largest eigenvalue, then use the trace to check the remaining eigenvalues.",
+  "refs": [
+    {
+      "title": "Applied Multivariate Statistical Analysis",
+      "where": "Principal component analysis chapter",
+      "site": "Johnson and Wichern",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Classical reference for covariance and correlation PCA."
+    },
+    {
+      "title": "An Introduction to Statistical Learning",
+      "where": "Chapter 12: Unsupervised Learning",
+      "site": "ISLR",
+      "url": "https://www.statlearning.com/",
+      "type": "Free textbook",
+      "free": true,
+      "checked": "2026-11-11",
+      "why": "Accessible treatment of principal components and explained variance."
+    },
+    {
+      "title": "Penn State STAT 505",
+      "where": "Applied multivariate analysis notes",
+      "site": "Penn State",
+      "url": "https://online.stat.psu.edu/stat505/",
+      "type": "Free course notes",
+      "free": true,
+      "checked": "2026-11-11",
+      "why": "Applied multivariate-statistics reference."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings; not an NTA rule."
   },
-  {
-   "id": "p3",
-   "name": "Trace, determinant and characteristic equations",
-   "why": "The trace checks eigenvalue sums and the characteristic equation yields eigenvalues."
-  }
- ],
- "traps": [
-  "Eigenvectors give directions; eigenvalues give component variances.",
-  "PC1 is a direction, not necessarily one original variable.",
-  "PCA scores are uncorrelated, not generally independent.",
-  "Covariance PCA is scale-sensitive; correlation PCA standardises variables.",
-  "Explained variance divides by the sum of all eigenvalues."
- ],
- "revision": {
-  "cards": [
-   [
-    "PC direction",
-    "Unit eigenvector of Σ or R"
-   ],
-   [
-    "PC variance",
-    "Corresponding eigenvalue λⱼ"
-   ],
-   [
-    "Total variance",
-    "tr(Σ)=Σλᵢ"
-   ],
-   [
-    "Explained proportion",
-    "λⱼ/Σλᵢ"
-   ],
-   [
-    "Cumulative proportion",
-    "(λ₁+…+λₖ)/Σλᵢ"
-   ],
-   [
-    "Correlation PCA",
-    "PCA after standardising variables"
-   ]
+  "anchors": [
+    {
+      "paper": "j26",
+      "q": 2
+    }
   ],
-  "tricks": [
-   "Try the all-ones vector for an equicorrelation matrix.",
-   "Check the eigenvalue sum against the trace.",
-   "For a p×p correlation matrix, eigenvalues sum to p.",
-   "Repeated eigenvalues identify an eigenspace, not a unique basis."
-  ],
-  "remember": [
-   "Largest eigenvalue gives maximum variance.",
-   "Eigenvectors are directions; eigenvalues are variances.",
-   "Uncorrelated does not automatically mean independent."
-  ],
-  "sheet": [
-   "PC direction: aⱼ is a unit eigenvector of Σ (or R when standardising).",
-   "PC score: zⱼ=aⱼᵀx for a centred observation x; its variance is λⱼ.",
-   "Eigenvalue check: Σλⱼ=tr(Σ), total variance. For a p×p correlation matrix, the sum is p.",
-   "Explained proportion: λⱼ/Σλᵢ. Cumulative first k: (λ₁+…+λₖ)/Σλᵢ.",
-   "June 2026 Q2 equicorrelation ρ=1/2: eigenvalues 2, 1/2, 1/2; first direction (1,1,1)/√3; PC1 explains 2/3.",
-   "Covariance PCA retains original scale; correlation PCA standardises variables before extraction.",
-   "Repeated eigenvalue: eigenspace is fixed, but an orthonormal basis within it is not unique.",
-   "PC scores are uncorrelated. Do not claim independence without additional assumptions."
-  ],
-  "shortcuts": [
-   "Equicorrelation matrix: test the all-ones vector first; the eigenvalue is the common row sum.",
-   "Use trace as a fast check before accepting a list of eigenvalues.",
-   "For a correlation matrix, the eigenvalue sum equals the number of variables.",
-   "Explained variance is a ratio: selected eigenvalue sum divided by total eigenvalue sum.",
-   "Signs of eigenvectors are arbitrary; flipping all signs does not change variance.",
-   "Repeated eigenvalues identify a subspace rather than one unique direction."
+  "provenance": "Authored 11 November 2026. June 2026 Paper 2 Q2: the 3×3 equicorrelation matrix has eigenvalues 2, 1/2, 1/2; PC1 direction (1,1,1)/√3; total variance 3; PC1 explains 2/3=66.67%. Statements A,C,D are true and B false; correct option D. Five PCA variants misfiled in the time-series variant bank (srcQ=2) are transferred to the multivariate bank and explanations repaired. Exact checks are in verify_multivariate_t3.py.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Three tools before PCA",
+      "objective": "Recover variance, covariance and eigenvalue language.",
+      "body": [
+        "PCA summarises several related measurements with a smaller number of new measurements. It searches for directions in which the data vary most.",
+        "Variance measures spread. Covariance measures how two variables move together. An eigenvector is a direction preserved by matrix multiplication.",
+        "A covariance matrix is symmetric, so its eigenvectors can be chosen orthonormal. This is why standard PCA produces uncorrelated component scores."
+      ],
+      "items": [
+        {
+          "ask": "Write Var(X+Y).",
+          "recall": "Var(X)+Var(Y)+2Cov(X,Y).",
+          "refresh": [
+            "Start from the identity Var(X+Y)=E[(X+Y−E(X+Y))²]. Expand the square into the two squared deviations and twice their product. Taking expectations gives Var(X)+Var(Y)+2Cov(X,Y), because covariance is the expected product of centred deviations. Positive covariance increases the variance of the sum; negative covariance reduces it.",
+            "Check the coefficient rule with aX+bY: Var(aX+bY)=a²Var(X)+b²Var(Y)+2abCov(X,Y). The coefficients are squared on the variance terms but multiplied once in the cross-term. For more than two variables, this becomes aᵀΣa, the expression PCA maximises under a unit-length constraint."
+          ]
+        },
+        {
+          "ask": "What does Σv=λv mean?",
+          "recall": "v is an eigenvector and λ its eigenvalue.",
+          "refresh": [
+            "An eigenvector is a non-zero vector v for which multiplying by a matrix changes only its scale, not its direction: Σv=λv. The scalar λ is the eigenvalue. For PCA, Σ is the covariance matrix and v is a component direction; normalising v to length one makes the eigenvalue equal to the variance of the corresponding component score.",
+            "To see the role of the unit vector, let Z=vᵀX for centred X and unit v. Then Var(Z)=vᵀΣv. If Σv=λv, this equals vᵀ(λv)=λ(vᵀv)=λ. Without unit length, the variance would also depend on the arbitrary length chosen for v, so component directions are conventionally normalised."
+          ]
+        },
+        {
+          "ask": "What does tr(Σ) represent?",
+          "recall": "The sum of the original variances and the sum of the eigenvalues.",
+          "refresh": [
+            "The trace of a square matrix is the sum of its diagonal entries. For a covariance matrix, those diagonal entries are the individual variable variances, so tr(Σ) is the total variance across the original variables. A fundamental eigenvalue identity says that the trace also equals the sum of all eigenvalues, counting multiplicity.",
+            "Use this as an arithmetic audit after solving the characteristic equation. For example, if a 3-variable covariance matrix has diagonal entries 4, 3 and 2, its trace is 9, so the three eigenvalues must add to 9. For a correlation matrix, every diagonal entry is 1; with p variables, the eigenvalues therefore sum to p."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "If two variables are positively correlated, what extra term appears in Var(X+Y)?",
+        "nudge": "Write the full variance-of-a-sum identity."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Why rotate the variables?",
+      "objective": "Explain PCA as a rotation that captures shared variation.",
+      "body": [
+        "Imagine measuring height, arm span and leg length. These measurements tend to move together, so much of their variation overlaps.",
+        "PCA finds a first score in the direction of greatest spread. A second score is perpendicular to the first and captures the greatest remaining spread. Later scores continue this process.",
+        "The first few scores may preserve most variation with fewer numbers. PCA is dimension reduction, not arbitrary variable deletion."
+      ],
+      "scenario": {
+        "teaser": "Six correlated body measurements; one compact summary.",
+        "title": "Compressing a health survey",
+        "body": [
+          "A team records height, weight, waist, hip, arm span and chest circumference for 600 adults. The measurements are correlated. The team wants a smaller set of scores for clustering. Choosing two variables by intuition may discard information. PCA uses the full covariance structure. However, the measurements use different units and scales: kilograms and centimetres. Raw covariance PCA may let larger numerical variances dominate, so the team should consider correlation-matrix PCA after standardisation."
+        ],
+        "q": "Why might correlation PCA be preferred?",
+        "answer": "The variables have different units and scales; standardisation gives each unit variance before extracting components."
+      },
+      "ask": {
+        "q": "Does PCA simply select the original variable with the largest variance?",
+        "nudge": "A component can be a linear combination of several variables."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 10,
+      "title": "The optimisation problem",
+      "objective": "Connect maximum variance to eigenvectors.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "A principal component",
+          "body": "For centred p-dimensional X, a score in direction a is Z=aᵀX. Its variance is aᵀΣa."
+        },
+        {
+          "t": "formula",
+          "h": "First component",
+          "body": "Maximise aᵀΣa subject to aᵀa=1. The solution is a unit eigenvector for the largest eigenvalue λ₁."
+        },
+        {
+          "t": "formula",
+          "h": "Later components",
+          "body": "The second component maximises variance subject to unit length and perpendicularity to the first. It is an eigenvector for λ₂. Continue in descending order."
+        },
+        {
+          "t": "step",
+          "h": "Why λ is the score variance",
+          "body": "If Σaⱼ=λⱼaⱼ and aⱼᵀaⱼ=1, then Var(aⱼᵀX)=aⱼᵀΣaⱼ=λⱼ."
+        }
+      ],
+      "ask": {
+        "q": "Why constrain a to have unit length?",
+        "nudge": "Without it, scaling a by 10 would multiply the variance by 100."
+      },
+      "flow": {
+        "caption": "PCA calculation route: from raw variables to interpretable component scores",
+        "nodes": [
+          {
+            "id": "start",
+            "r": 0,
+            "c": 1,
+            "label": "Centre data; inspect units",
+            "kind": "start"
+          },
+          {
+            "id": "matrix",
+            "r": 1,
+            "c": 1,
+            "label": "Choose covariance Σ or correlation R",
+            "kind": "step"
+          },
+          {
+            "id": "eigen",
+            "r": 2,
+            "c": 1,
+            "label": "Find eigenvalues and eigenvectors",
+            "kind": "step"
+          },
+          {
+            "id": "order",
+            "r": 3,
+            "c": 1,
+            "label": "Order eigenvalues λ₁ ≥ … ≥ λₚ",
+            "kind": "step"
+          },
+          {
+            "id": "score",
+            "r": 4,
+            "c": 0,
+            "label": "Form component scores aⱼᵀx",
+            "kind": "step"
+          },
+          {
+            "id": "variance",
+            "r": 4,
+            "c": 2,
+            "label": "Compute λⱼ / Σλᵢ",
+            "kind": "step"
+          },
+          {
+            "id": "interpret",
+            "r": 5,
+            "c": 1,
+            "label": "Inspect loadings; choose retained PCs",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "start",
+            "to": "matrix"
+          },
+          {
+            "from": "matrix",
+            "to": "eigen"
+          },
+          {
+            "from": "eigen",
+            "to": "order"
+          },
+          {
+            "from": "order",
+            "to": "score"
+          },
+          {
+            "from": "order",
+            "to": "variance"
+          },
+          {
+            "from": "score",
+            "to": "interpret"
+          },
+          {
+            "from": "variance",
+            "to": "interpret"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 12,
+      "title": "June 2026 Paper 2 — Q2, fully worked",
+      "objective": "Derive the eigenstructure and judge all four statements.",
+      "problem": "Let Σ have 1 on the diagonal and 1/2 in every off-diagonal position. Determine the first PC, largest eigenvalue, explained variance and smallest eigenvalue.",
+      "steps": [
+        {
+          "say": "Write the matrix and test the all-ones direction.",
+          "math": "Σ=[[1,1/2,1/2],[1/2,1,1/2],[1/2,1/2,1]]; v=(1,1,1)ᵀ",
+          "why": "Each row has the same sum, so the all-ones vector is an eigenvector."
+        },
+        {
+          "say": "Multiply to obtain the first eigenvalue.",
+          "math": "Σv=(2,2,2)ᵀ=2v; λ₁=2",
+          "why": "The unit first direction is (1,1,1)ᵀ/√3."
+        },
+        {
+          "say": "Find the orthogonal eigenvalues.",
+          "math": "For x₁+x₂+x₃=0, Σx=(1−1/2)x=x/2. Thus λ₂=λ₃=1/2.",
+          "why": "The two-dimensional orthogonal complement has repeated eigenvalue 1/2."
+        },
+        {
+          "say": "Check total variance.",
+          "math": "tr(Σ)=3; 2+1/2+1/2=3; PC1 proportion=2/3=66.67%.",
+          "why": "The eigenvalues add to the trace."
+        },
+        {
+          "say": "Evaluate the statements.",
+          "math": "A true: first PC is (X₁+X₂+X₃)/√3. B false: largest eigenvalue is 2, not 3. C true: 66.7%. D true: smallest eigenvalue is 1/2. Correct option: D (A,C,D only).",
+          "why": "The candidate marked A; the official key is D."
+        }
+      ],
+      "ask": {
+        "q": "Why is the largest eigenvalue 2 rather than 3?",
+        "nudge": "Multiply the matrix by (1,1,1)ᵀ."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 3,
+      "title": "Retrieve the core facts",
+      "objective": "Recall definitions before the next example.",
+      "intro": "Try each before revealing.",
+      "items": [
+        {
+          "q": "What determines the first PC direction?",
+          "a": "A unit eigenvector for the largest eigenvalue."
+        },
+        {
+          "q": "What is the variance of PC j?",
+          "a": "Its eigenvalue λⱼ."
+        },
+        {
+          "q": "What does the sum of eigenvalues equal?",
+          "a": "The trace."
+        },
+        {
+          "q": "Are PCs always independent?",
+          "a": "No. They are uncorrelated; independence needs additional assumptions such as joint normality."
+        },
+        {
+          "q": "When is correlation PCA useful?",
+          "a": "When variables have different units or scales."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 8,
+      "title": "Your turn — a two-variable covariance matrix",
+      "objective": "Complete an eigenanalysis.",
+      "problem": "For Σ=[[4,2],[2,4]], find the eigenvalues, first direction and proportion explained by PC1.",
+      "steps": [
+        {
+          "say": "Find the characteristic equation.",
+          "blank": {
+            "prompt": "Expand |Σ−λI|=0.",
+            "answer": "(4−λ)²−4=0, so λ²−8λ+12=0.",
+            "hint": "For a 2×2 determinant, multiply diagonal entries and subtract the off-diagonal product.",
+            "accept": [
+              "(4-lambda)^2-4=0; lambda^2-8lambda+12=0",
+              "(4−λ)²−4=0, λ²−8λ+12=0"
+            ]
+          },
+          "why": "The roots are 6 and 2; their sum is the trace 8."
+        },
+        {
+          "say": "Find the first direction.",
+          "blank": {
+            "prompt": "Give a unit eigenvector for λ=6.",
+            "answer": "(1,1)ᵀ/√2.",
+            "hint": "Try equal coordinates because the rows are symmetric.",
+            "accept": [
+              "(1,1)/sqrt(2)",
+              "(1,1)ᵀ/√2",
+              "(1/sqrt(2),1/sqrt(2))"
+            ]
+          },
+          "why": "The common direction is stretched by 6."
+        },
+        {
+          "say": "Calculate explained variance.",
+          "blank": {
+            "prompt": "What proportion does PC1 explain?",
+            "answer": "6/8=3/4=75%.",
+            "hint": "Divide the largest eigenvalue by the trace.",
+            "accept": [
+              "6/(6+2)=0.75=75%",
+              "75%",
+              "3/4 or 0.75"
+            ]
+          },
+          "why": "The component variances sum to total variance."
+        }
+      ],
+      "after": "The trace is the total variance. Once the eigenvalues are ordered, the first component's explained proportion is simply the largest eigenvalue divided by the trace. This same ratio extends to cumulative variance when retaining several components."
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Covariance PCA, correlation PCA, scores and loadings",
+      "objective": "Choose the input matrix and interpret coefficients.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Covariance matrix",
+          "body": "Use Σ when original scales are meaningful and their variance magnitudes should influence the analysis."
+        },
+        {
+          "t": "def",
+          "h": "Correlation matrix",
+          "body": "Use R when variables have different units or should begin with equal standardised variance. Since tr(R)=p, its eigenvalues sum to p."
+        },
+        {
+          "t": "formula",
+          "h": "Scores",
+          "body": "For centred observation x, component score zⱼ=aⱼᵀx. The entries of aⱼ define the component direction."
+        },
+        {
+          "t": "step",
+          "h": "Explained variance",
+          "body": "PC j proportion = λⱼ/Σλᵢ. The first k cumulative proportion is (λ₁+…+λₖ)/Σλᵢ. Retention is a modelling decision; no universal cutoff applies."
+        }
+      ],
+      "ask": {
+        "q": "A variable is in rupees and another in proportions. What should you decide before PCA?",
+        "nudge": "Is the scale difference substantive or merely a unit choice?"
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s7",
+      "mins": 9,
+      "title": "Guided case — how many components?",
+      "objective": "Calculate cumulative explained variance and justify a decision.",
+      "problem": "Five standardised welfare indicators have eigenvalues 2.5, 1.2, 0.7, 0.4 and 0.2. Find each proportion, the first-two cumulative proportion and interpret retaining two components.",
+      "hints": [
+        "Check the trace: eigenvalues must sum to five.",
+        "Divide each eigenvalue by five and add the first two.",
+        "Separate the numerical result from the retention decision."
+      ],
+      "answer": "The proportions are 50%, 24%, 14%, 8% and 4%. The first two explain 74%. Two components reduce five dimensions while retaining 74%; inspect loadings and the importance of omitted variation before deciding.",
+      "check": "The eigenvalues sum to five and the proportions sum to 100%.",
+      "scenario": {
+        "teaser": "A policy team needs a small dashboard.",
+        "title": "A transparent retention decision",
+        "body": [
+          "A state planning team measures school completion, primary-care access, electricity, sanitation and drinking water across districts. The standardised PCA eigenvalues are 2.5, 1.2, 0.7, 0.4 and 0.2. Two components explain 74%. The team should inspect loadings and ensure the remaining 26% does not contain a critical policy signal. A percentage threshold is evidence, not a substitute for interpretation."
+        ],
+        "q": "What should the team inspect beyond 74%?",
+        "answer": "Component loadings, substantive meaning and whether omitted components contain important policy information."
+      },
+      "solution": [
+        {
+          "say": "Check the trace.",
+          "math": "2.5+1.2+0.7+0.4+0.2=5",
+          "why": "This agrees with tr(R)=5."
+        },
+        {
+          "say": "Convert to proportions.",
+          "math": "(0.50,0.24,0.14,0.08,0.04)",
+          "why": "Divide each eigenvalue by five."
+        },
+        {
+          "say": "Add the first two.",
+          "math": "0.50+0.24=0.74=74%",
+          "why": "Two components retain 74% of total standardised variation."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s8",
+      "mins": 6,
+      "title": "Six common traps",
+      "objective": "Distinguish valid PCA facts from overstatements.",
+      "intro": "Judge each statement.",
+      "items": [
+        {
+          "claim": "The first PC is always an original variable.",
+          "tf": false,
+          "why": "It is generally a linear combination."
+        },
+        {
+          "claim": "Covariance-matrix eigenvalues are non-negative.",
+          "tf": true,
+          "why": "A covariance matrix is positive semidefinite."
+        },
+        {
+          "claim": "Standard PCA components are uncorrelated.",
+          "tf": true,
+          "why": "The covariance matrix is diagonal in the PC basis."
+        },
+        {
+          "claim": "Uncorrelated components must be independent.",
+          "tf": false,
+          "why": "Not in general; joint normality is a sufficient additional condition."
+        },
+        {
+          "claim": "Eigenvalues of a p×p correlation matrix sum to one.",
+          "tf": false,
+          "why": "They sum to p."
+        },
+        {
+          "claim": "A repeated eigenvalue need not have a unique eigenvector basis.",
+          "tf": true,
+          "why": "Any orthonormal basis of that eigenspace is valid."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Transfer — scale-sensitive PCA",
+      "objective": "Compare covariance and correlation PCA.",
+      "problem": "Income in thousands has variance 400; satisfaction on a 0–10 scale has variance 4; their correlation is 0.6. Explain why covariance and correlation PCA may differ. Find the correlation-matrix eigenvalues.",
+      "hints": [
+        "Covariance is r sₓsᵧ.",
+        "Write the correlation matrix with unit diagonal.",
+        "Test sum and difference directions."
+      ],
+      "answer": "The covariance is 0.6×20×2=24, giving Σ=[[400,24],[24,4]], where income's scale dominates. Correlation PCA uses R=[[1,0.6],[0.6,1]], with eigenvalues 1.6 and 0.4 and directions (1,1)/√2 and (1,−1)/√2.",
+      "check": "The eigenvalues sum to trace 2 and are non-negative.",
+      "solution": [
+        {
+          "say": "Compute covariance.",
+          "math": "Cov(X,Y)=0.6×20×2=24",
+          "why": "The standard deviations are 20 and 2."
+        },
+        {
+          "say": "Write R.",
+          "math": "R=[[1,0.6],[0.6,1]]",
+          "why": "Standardisation gives unit diagonal."
+        },
+        {
+          "say": "Find eigenvalues.",
+          "math": "λ₁=1.6; λ₂=0.4",
+          "why": "Sum is 2, the trace."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s10",
+      "mins": 8,
+      "title": "Interpretation and limitations",
+      "objective": "Explain what PCA does and does not establish.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "Loadings are not causal effects",
+          "body": "Eigenvector coefficients describe a component direction; they are not regression coefficients or causal effects."
+        },
+        {
+          "t": "step",
+          "h": "Signs are arbitrary",
+          "body": "If a is an eigenvector, −a is also one. Reversing all signs reverses the score but not its variance."
+        },
+        {
+          "t": "def",
+          "h": "Repeated eigenvalues",
+          "body": "The eigenspace is identified, but its orthonormal basis is not unique."
+        },
+        {
+          "t": "step",
+          "h": "What PCA does not guarantee",
+          "body": "PCA is a linear variance summary. It does not guarantee prediction, causal interpretation, cluster separation or preservation of low-variance scientific signals."
+        }
+      ],
+      "ask": {
+        "q": "If all loadings change sign, does explained variance change?",
+        "nudge": "The score changes sign but its variance does not."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s11",
+      "mins": 3,
+      "title": "Second recall — exam checks",
+      "objective": "Retrieve formulas and caveats.",
+      "intro": "Answer, then reveal.",
+      "items": [
+        {
+          "q": "Eigenvalue sum for p×p correlation matrix?",
+          "a": "p."
+        },
+        {
+          "q": "Explained proportion of PC j?",
+          "a": "λⱼ divided by the sum of all eigenvalues."
+        },
+        {
+          "q": "Why is the all-ones vector an eigenvector of an equicorrelation matrix?",
+          "a": "Each row has the same sum."
+        },
+        {
+          "q": "What does a repeated eigenvalue imply?",
+          "a": "The eigenspace is identified but its basis is not unique."
+        },
+        {
+          "q": "Does PCA establish causality?",
+          "a": "No."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s12",
+      "mins": 3,
+      "title": "What you should now do unaided",
+      "objective": "Consolidate the lesson.",
+      "body": [
+        "Explain PCA as successive variance-maximising orthogonal linear combinations.",
+        "Find a component direction from an eigenvector and its variance from the eigenvalue.",
+        "Use trace to check eigenvalue sums.",
+        "Calculate individual and cumulative explained-variance proportions.",
+        "Choose covariance or correlation PCA based on units and scale.",
+        "Solve June 2026 Q2: eigenvalues 2, 1/2, 1/2; PC1 explains 66.7%; option D is correct.",
+        "Distinguish uncorrelated from independent and interpret repeated eigenvalues."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s13",
+      "mins": 12,
+      "title": "Mastery test",
+      "objective": "Demonstrate independent PCA reasoning.",
+      "setId": "multivariate_t3_mastery"
+    }
   ]
- },
- "howto": "Centre the data and decide whether raw scales are meaningful. Form the covariance matrix or, after standardisation, the correlation matrix. Find eigenvalues and orthonormal eigenvectors, order them from largest to smallest, and interpret the eigenvectors as component directions. Each eigenvalue is the variance of its score. Divide by the trace to obtain explained-variance proportions. For June 2026 Q2, use the all-ones vector to obtain the largest eigenvalue, then use the trace to check the remaining eigenvalues.",
- "refs": [
-  {
-   "title": "Applied Multivariate Statistical Analysis",
-   "where": "Principal component analysis chapter",
-   "site": "Johnson and Wichern",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-11-11",
-   "why": "Classical reference for covariance and correlation PCA."
-  },
-  {
-   "title": "An Introduction to Statistical Learning",
-   "where": "Chapter 12: Unsupervised Learning",
-   "site": "ISLR",
-   "url": "https://www.statlearning.com/",
-   "type": "Free textbook",
-   "free": true,
-   "checked": "2026-11-11",
-   "why": "Accessible treatment of principal components and explained variance."
-  },
-  {
-   "title": "Penn State STAT 505",
-   "where": "Applied multivariate analysis notes",
-   "site": "Penn State",
-   "url": "https://online.stat.psu.edu/stat505/",
-   "type": "Free course notes",
-   "free": true,
-   "checked": "2026-11-11",
-   "why": "Applied multivariate-statistics reference."
-  }
- ],
- "mastery": {
-  "minQ": 10,
-  "pass": 80,
-  "draw": 10,
-  "fmtMin": {
-   "numeric": 70,
-   "multi": 70
-  },
-  "diffMix": {
-   "easy": 3,
-   "moderate": 5,
-   "hard": 2
-  },
-  "noHints": true,
-  "retestDays": 7,
-  "note": "Platform mastery settings; not an NTA rule."
- },
- "anchors": [
-  {
-   "paper": "j26",
-   "q": 2
-  }
- ],
- "provenance": "Authored 11 November 2026. June 2026 Paper 2 Q2: the 3×3 equicorrelation matrix has eigenvalues 2, 1/2, 1/2; PC1 direction (1,1,1)/√3; total variance 3; PC1 explains 2/3=66.67%. Statements A,C,D are true and B false; correct option D. Five PCA variants misfiled in the time-series variant bank (srcQ=2) are transferred to the multivariate bank and explanations repaired. Exact checks are in verify_multivariate_t3.py.",
- "scenes": [
-  {
-   "kind": "foundation",
-   "id": "s0",
-   "mins": 7,
-   "title": "Three tools before PCA",
-   "objective": "Recover variance, covariance and eigenvalue language.",
-   "body": [
-    "PCA summarises several related measurements with a smaller number of new measurements. It searches for directions in which the data vary most.",
-    "Variance measures spread. Covariance measures how two variables move together. An eigenvector is a direction preserved by matrix multiplication.",
-    "A covariance matrix is symmetric, so its eigenvectors can be chosen orthonormal. This is why standard PCA produces uncorrelated component scores."
-   ],
-   "items": [
-    {
-     "ask": "Write Var(X+Y).",
-     "recall": "Var(X)+Var(Y)+2Cov(X,Y).",
-     "refresh": [
-      "The covariance term records joint movement.",
-      "For aX+bY, multiply each variance by the squared coefficient."
-     ]
-    },
-    {
-     "ask": "What does Σv=λv mean?",
-     "recall": "v is an eigenvector and λ its eigenvalue.",
-     "refresh": [
-      "The vector direction is unchanged by multiplication.",
-      "In PCA, λ is the variance along a unit eigenvector."
-     ]
-    },
-    {
-     "ask": "What does tr(Σ) represent?",
-     "recall": "The sum of the original variances and the sum of the eigenvalues.",
-     "refresh": [
-      "Trace is the sum of diagonal entries.",
-      "It is a fast check on an eigenvalue calculation."
-     ]
-    }
-   ],
-   "ask": {
-    "q": "If two variables are positively correlated, what extra term appears in Var(X+Y)?",
-    "nudge": "Write the full variance-of-a-sum identity."
-   }
-  },
-  {
-   "kind": "intuition",
-   "id": "s1",
-   "mins": 7,
-   "title": "Why rotate the variables?",
-   "objective": "Explain PCA as a rotation that captures shared variation.",
-   "body": [
-    "Imagine measuring height, arm span and leg length. These measurements tend to move together, so much of their variation overlaps.",
-    "PCA finds a first score in the direction of greatest spread. A second score is perpendicular to the first and captures the greatest remaining spread. Later scores continue this process.",
-    "The first few scores may preserve most variation with fewer numbers. PCA is dimension reduction, not arbitrary variable deletion."
-   ],
-   "scenario": {
-    "teaser": "Six correlated body measurements; one compact summary.",
-    "title": "Compressing a health survey",
-    "body": [
-     "A team records height, weight, waist, hip, arm span and chest circumference for 600 adults. The measurements are correlated. The team wants a smaller set of scores for clustering. Choosing two variables by intuition may discard information. PCA uses the full covariance structure. However, the measurements use different units and scales: kilograms and centimetres. Raw covariance PCA may let larger numerical variances dominate, so the team should consider correlation-matrix PCA after standardisation."
-    ],
-    "q": "Why might correlation PCA be preferred?",
-    "answer": "The variables have different units and scales; standardisation gives each unit variance before extracting components."
-   },
-   "ask": {
-    "q": "Does PCA simply select the original variable with the largest variance?",
-    "nudge": "A component can be a linear combination of several variables."
-   }
-  },
-  {
-   "kind": "theory",
-   "id": "s2",
-   "mins": 10,
-   "title": "The optimisation problem",
-   "objective": "Connect maximum variance to eigenvectors.",
-   "blocks": [
-    {
-     "t": "def",
-     "h": "A principal component",
-     "body": "For centred p-dimensional X, a score in direction a is Z=aᵀX. Its variance is aᵀΣa."
-    },
-    {
-     "t": "formula",
-     "h": "First component",
-     "body": "Maximise aᵀΣa subject to aᵀa=1. The solution is a unit eigenvector for the largest eigenvalue λ₁."
-    },
-    {
-     "t": "formula",
-     "h": "Later components",
-     "body": "The second component maximises variance subject to unit length and perpendicularity to the first. It is an eigenvector for λ₂. Continue in descending order."
-    },
-    {
-     "t": "step",
-     "h": "Why λ is the score variance",
-     "body": "If Σaⱼ=λⱼaⱼ and aⱼᵀaⱼ=1, then Var(aⱼᵀX)=aⱼᵀΣaⱼ=λⱼ."
-    }
-   ],
-   "ask": {
-    "q": "Why constrain a to have unit length?",
-    "nudge": "Without it, scaling a by 10 would multiply the variance by 100."
-   }
-  },
-  {
-   "kind": "worked",
-   "id": "s3",
-   "mins": 12,
-   "title": "June 2026 Paper 2 — Q2, fully worked",
-   "objective": "Derive the eigenstructure and judge all four statements.",
-   "problem": "Let Σ have 1 on the diagonal and 1/2 in every off-diagonal position. Determine the first PC, largest eigenvalue, explained variance and smallest eigenvalue.",
-   "steps": [
-    {
-     "say": "Write the matrix and test the all-ones direction.",
-     "math": "Σ=[[1,1/2,1/2],[1/2,1,1/2],[1/2,1/2,1]]; v=(1,1,1)ᵀ",
-     "why": "Each row has the same sum, so the all-ones vector is an eigenvector."
-    },
-    {
-     "say": "Multiply to obtain the first eigenvalue.",
-     "math": "Σv=(2,2,2)ᵀ=2v; λ₁=2",
-     "why": "The unit first direction is (1,1,1)ᵀ/√3."
-    },
-    {
-     "say": "Find the orthogonal eigenvalues.",
-     "math": "For x₁+x₂+x₃=0, Σx=(1−1/2)x=x/2. Thus λ₂=λ₃=1/2.",
-     "why": "The two-dimensional orthogonal complement has repeated eigenvalue 1/2."
-    },
-    {
-     "say": "Check total variance.",
-     "math": "tr(Σ)=3; 2+1/2+1/2=3; PC1 proportion=2/3=66.67%.",
-     "why": "The eigenvalues add to the trace."
-    },
-    {
-     "say": "Evaluate the statements.",
-     "math": "A true: first PC is (X₁+X₂+X₃)/√3. B false: largest eigenvalue is 2, not 3. C true: 66.7%. D true: smallest eigenvalue is 1/2. Correct option: D (A,C,D only).",
-     "why": "The candidate marked A; the official key is D."
-    }
-   ],
-   "ask": {
-    "q": "Why is the largest eigenvalue 2 rather than 3?",
-    "nudge": "Multiply the matrix by (1,1,1)ᵀ."
-   }
-  },
-  {
-   "kind": "recall",
-   "id": "s4",
-   "mins": 3,
-   "title": "Retrieve the core facts",
-   "objective": "Recall definitions before the next example.",
-   "intro": "Try each before revealing.",
-   "items": [
-    {
-     "q": "What determines the first PC direction?",
-     "a": "A unit eigenvector for the largest eigenvalue."
-    },
-    {
-     "q": "What is the variance of PC j?",
-     "a": "Its eigenvalue λⱼ."
-    },
-    {
-     "q": "What does the sum of eigenvalues equal?",
-     "a": "The trace."
-    },
-    {
-     "q": "Are PCs always independent?",
-     "a": "No. They are uncorrelated; independence needs additional assumptions such as joint normality."
-    },
-    {
-     "q": "When is correlation PCA useful?",
-     "a": "When variables have different units or scales."
-    }
-   ]
-  },
-  {
-   "kind": "completion",
-   "id": "s5",
-   "mins": 8,
-   "title": "Your turn — a two-variable covariance matrix",
-   "objective": "Complete an eigenanalysis.",
-   "problem": "For Σ=[[4,2],[2,4]], find the eigenvalues, first direction and proportion explained by PC1.",
-   "steps": [
-    {
-     "say": "Find the characteristic equation.",
-     "blank": {
-      "prompt": "Expand |Σ−λI|=0.",
-      "answer": "(4−λ)²−4=0, so λ²−8λ+12=0.",
-      "hint": "For a 2×2 determinant, multiply diagonal entries and subtract the off-diagonal product.",
-      "accept": [
-       "(4-lambda)^2-4=0; lambda^2-8lambda+12=0",
-       "(4−λ)²−4=0, λ²−8λ+12=0"
-      ]
-     },
-     "why": "The roots are 6 and 2; their sum is the trace 8."
-    },
-    {
-     "say": "Find the first direction.",
-     "blank": {
-      "prompt": "Give a unit eigenvector for λ=6.",
-      "answer": "(1,1)ᵀ/√2.",
-      "hint": "Try equal coordinates because the rows are symmetric.",
-      "accept": [
-       "(1,1)/sqrt(2)",
-       "(1,1)ᵀ/√2",
-       "(1/sqrt(2),1/sqrt(2))"
-      ]
-     },
-     "why": "The common direction is stretched by 6."
-    },
-    {
-     "say": "Calculate explained variance.",
-     "blank": {
-      "prompt": "What proportion does PC1 explain?",
-      "answer": "6/8=3/4=75%.",
-      "hint": "Divide the largest eigenvalue by the trace.",
-      "accept": [
-       "6/(6+2)=0.75=75%",
-       "75%",
-       "3/4 or 0.75"
-      ]
-     },
-     "why": "The component variances sum to total variance."
-    }
-   ],
-   "after": "The trace is the total variance. Once the eigenvalues are ordered, the first component's explained proportion is simply the largest eigenvalue divided by the trace. This same ratio extends to cumulative variance when retaining several components."
-  },
-  {
-   "kind": "theory",
-   "id": "s6",
-   "mins": 8,
-   "title": "Covariance PCA, correlation PCA, scores and loadings",
-   "objective": "Choose the input matrix and interpret coefficients.",
-   "blocks": [
-    {
-     "t": "def",
-     "h": "Covariance matrix",
-     "body": "Use Σ when original scales are meaningful and their variance magnitudes should influence the analysis."
-    },
-    {
-     "t": "def",
-     "h": "Correlation matrix",
-     "body": "Use R when variables have different units or should begin with equal standardised variance. Since tr(R)=p, its eigenvalues sum to p."
-    },
-    {
-     "t": "formula",
-     "h": "Scores",
-     "body": "For centred observation x, component score zⱼ=aⱼᵀx. The entries of aⱼ define the component direction."
-    },
-    {
-     "t": "step",
-     "h": "Explained variance",
-     "body": "PC j proportion = λⱼ/Σλᵢ. The first k cumulative proportion is (λ₁+…+λₖ)/Σλᵢ. Retention is a modelling decision; no universal cutoff applies."
-    }
-   ],
-   "ask": {
-    "q": "A variable is in rupees and another in proportions. What should you decide before PCA?",
-    "nudge": "Is the scale difference substantive or merely a unit choice?"
-   }
-  },
-  {
-   "kind": "guided",
-   "id": "s7",
-   "mins": 9,
-   "title": "Guided case — how many components?",
-   "objective": "Calculate cumulative explained variance and justify a decision.",
-   "problem": "Five standardised welfare indicators have eigenvalues 2.5, 1.2, 0.7, 0.4 and 0.2. Find each proportion, the first-two cumulative proportion and interpret retaining two components.",
-   "hints": [
-    "Check the trace: eigenvalues must sum to five.",
-    "Divide each eigenvalue by five and add the first two.",
-    "Separate the numerical result from the retention decision."
-   ],
-   "answer": "The proportions are 50%, 24%, 14%, 8% and 4%. The first two explain 74%. Two components reduce five dimensions while retaining 74%; inspect loadings and the importance of omitted variation before deciding.",
-   "check": "The eigenvalues sum to five and the proportions sum to 100%.",
-   "scenario": {
-    "teaser": "A policy team needs a small dashboard.",
-    "title": "A transparent retention decision",
-    "body": [
-     "A state planning team measures school completion, primary-care access, electricity, sanitation and drinking water across districts. The standardised PCA eigenvalues are 2.5, 1.2, 0.7, 0.4 and 0.2. Two components explain 74%. The team should inspect loadings and ensure the remaining 26% does not contain a critical policy signal. A percentage threshold is evidence, not a substitute for interpretation."
-    ],
-    "q": "What should the team inspect beyond 74%?",
-    "answer": "Component loadings, substantive meaning and whether omitted components contain important policy information."
-   },
-   "solution": [
-    {
-     "say": "Check the trace.",
-     "math": "2.5+1.2+0.7+0.4+0.2=5",
-     "why": "This agrees with tr(R)=5."
-    },
-    {
-     "say": "Convert to proportions.",
-     "math": "(0.50,0.24,0.14,0.08,0.04)",
-     "why": "Divide each eigenvalue by five."
-    },
-    {
-     "say": "Add the first two.",
-     "math": "0.50+0.24=0.74=74%",
-     "why": "Two components retain 74% of total standardised variation."
-    }
-   ]
-  },
-  {
-   "kind": "trapcheck",
-   "id": "s8",
-   "mins": 6,
-   "title": "Six common traps",
-   "objective": "Distinguish valid PCA facts from overstatements.",
-   "intro": "Judge each statement.",
-   "items": [
-    {
-     "claim": "The first PC is always an original variable.",
-     "tf": false,
-     "why": "It is generally a linear combination."
-    },
-    {
-     "claim": "Covariance-matrix eigenvalues are non-negative.",
-     "tf": true,
-     "why": "A covariance matrix is positive semidefinite."
-    },
-    {
-     "claim": "Standard PCA components are uncorrelated.",
-     "tf": true,
-     "why": "The covariance matrix is diagonal in the PC basis."
-    },
-    {
-     "claim": "Uncorrelated components must be independent.",
-     "tf": false,
-     "why": "Not in general; joint normality is a sufficient additional condition."
-    },
-    {
-     "claim": "Eigenvalues of a p×p correlation matrix sum to one.",
-     "tf": false,
-     "why": "They sum to p."
-    },
-    {
-     "claim": "A repeated eigenvalue need not have a unique eigenvector basis.",
-     "tf": true,
-     "why": "Any orthonormal basis of that eigenspace is valid."
-    }
-   ]
-  },
-  {
-   "kind": "guided",
-   "id": "s9",
-   "mins": 8,
-   "title": "Transfer — scale-sensitive PCA",
-   "objective": "Compare covariance and correlation PCA.",
-   "problem": "Income in thousands has variance 400; satisfaction on a 0–10 scale has variance 4; their correlation is 0.6. Explain why covariance and correlation PCA may differ. Find the correlation-matrix eigenvalues.",
-   "hints": [
-    "Covariance is r sₓsᵧ.",
-    "Write the correlation matrix with unit diagonal.",
-    "Test sum and difference directions."
-   ],
-   "answer": "The covariance is 0.6×20×2=24, giving Σ=[[400,24],[24,4]], where income's scale dominates. Correlation PCA uses R=[[1,0.6],[0.6,1]], with eigenvalues 1.6 and 0.4 and directions (1,1)/√2 and (1,−1)/√2.",
-   "check": "The eigenvalues sum to trace 2 and are non-negative.",
-   "solution": [
-    {
-     "say": "Compute covariance.",
-     "math": "Cov(X,Y)=0.6×20×2=24",
-     "why": "The standard deviations are 20 and 2."
-    },
-    {
-     "say": "Write R.",
-     "math": "R=[[1,0.6],[0.6,1]]",
-     "why": "Standardisation gives unit diagonal."
-    },
-    {
-     "say": "Find eigenvalues.",
-     "math": "λ₁=1.6; λ₂=0.4",
-     "why": "Sum is 2, the trace."
-    }
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s10",
-   "mins": 8,
-   "title": "Interpretation and limitations",
-   "objective": "Explain what PCA does and does not establish.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "Loadings are not causal effects",
-     "body": "Eigenvector coefficients describe a component direction; they are not regression coefficients or causal effects."
-    },
-    {
-     "t": "step",
-     "h": "Signs are arbitrary",
-     "body": "If a is an eigenvector, −a is also one. Reversing all signs reverses the score but not its variance."
-    },
-    {
-     "t": "def",
-     "h": "Repeated eigenvalues",
-     "body": "The eigenspace is identified, but its orthonormal basis is not unique."
-    },
-    {
-     "t": "step",
-     "h": "What PCA does not guarantee",
-     "body": "PCA is a linear variance summary. It does not guarantee prediction, causal interpretation, cluster separation or preservation of low-variance scientific signals."
-    }
-   ],
-   "ask": {
-    "q": "If all loadings change sign, does explained variance change?",
-    "nudge": "The score changes sign but its variance does not."
-   }
-  },
-  {
-   "kind": "recall",
-   "id": "s11",
-   "mins": 3,
-   "title": "Second recall — exam checks",
-   "objective": "Retrieve formulas and caveats.",
-   "intro": "Answer, then reveal.",
-   "items": [
-    {
-     "q": "Eigenvalue sum for p×p correlation matrix?",
-     "a": "p."
-    },
-    {
-     "q": "Explained proportion of PC j?",
-     "a": "λⱼ divided by the sum of all eigenvalues."
-    },
-    {
-     "q": "Why is the all-ones vector an eigenvector of an equicorrelation matrix?",
-     "a": "Each row has the same sum."
-    },
-    {
-     "q": "What does a repeated eigenvalue imply?",
-     "a": "The eigenspace is identified but its basis is not unique."
-    },
-    {
-     "q": "Does PCA establish causality?",
-     "a": "No."
-    }
-   ]
-  },
-  {
-   "kind": "summary",
-   "id": "s12",
-   "mins": 3,
-   "title": "What you should now do unaided",
-   "objective": "Consolidate the lesson.",
-   "body": [
-    "Explain PCA as successive variance-maximising orthogonal linear combinations.",
-    "Find a component direction from an eigenvector and its variance from the eigenvalue.",
-    "Use trace to check eigenvalue sums.",
-    "Calculate individual and cumulative explained-variance proportions.",
-    "Choose covariance or correlation PCA based on units and scale.",
-    "Solve June 2026 Q2: eigenvalues 2, 1/2, 1/2; PC1 explains 66.7%; option D is correct.",
-    "Distinguish uncorrelated from independent and interpret repeated eigenvalues."
-   ]
-  },
-  {
-   "kind": "quiz",
-   "id": "s13",
-   "mins": 12,
-   "title": "Mastery test",
-   "objective": "Demonstrate independent PCA reasoning.",
-   "setId": "multivariate_t3_mastery"
-  }
- ]
 }
