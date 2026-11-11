@@ -205,10 +205,10 @@
         "teaser": "A risk analyst needs the skewness of a total count from independent portfolios.",
         "title": "Cumulants turn convolution into addition",
         "body": [
-          "Two independent claim-count portfolios are Poisson with rates 2 and 3 per month.",
-          "Their MGFs multiply to exp{2(eᵗ−1)}exp{3(eᵗ−1)}=exp{5(eᵗ−1)}, the MGF of Poisson(5).",
-          "The cumulant functions add; every cumulant of the total is 5.",
-          "This avoids a convolution and works at every cumulant order."
+          "An insurance portfolio records independent claim counts from two regions. Region A has a Poisson claim count with mean 2 per month, and region B has a Poisson count with mean 3 per month. Let N_A and N_B denote the monthly counts. The total N=N_A+N_B is the quantity the analyst needs for staffing and reserve planning.",
+          "Independence allows the moment-generating functions to multiply. For a Poisson(λ) variable, M(t)=exp{λ(eᵗ−1)}. Thus M_N(t)=exp{2(eᵗ−1)} exp{3(eᵗ−1)}=exp{5(eᵗ−1)}, which is exactly the MGF of a Poisson(5) variable. The total count therefore has mean 5 and variance 5.",
+          "The cumulant-generating function is the logarithm of the MGF. Since K_N(t)=K_A(t)+K_B(t), cumulants add order by order: the first cumulants add to 5, the second cumulants add to 5, and every higher cumulant also adds to 5. This gives more than the mean and variance without performing a convolution sum.",
+          "The shortcut depends on independence and on both counts having Poisson laws. If the regional counts are dependent, multiplying their MGFs is not justified. The practical lesson is to establish independence first, then use factorisation to identify the distribution of the total."
         ],
         "q": "Why are cumulants easier for independent sums?",
         "answer": "The log-MGF turns products into sums, so cumulants add."
@@ -513,10 +513,10 @@
         "teaser": "A student mistakes the second raw moment for the variance.",
         "title": "Raw, central and cumulant quantities differ",
         "body": [
-          "For N(2,3), M(t)=exp(2t+3t²/2).",
-          "M''(0)=E(X²)=7, while Var(X)=7−2²=3.",
-          "At fourth order μ₄ and κ₄ also differ: μ₄=κ₄+3σ⁴.",
-          "Label every result: raw moment, central moment or cumulant."
+          "Suppose X is normal with mean 2 and variance 3. Its MGF is M(t)=exp(2t+3t²/2). Differentiate before substituting t=0: M'(0)=2 and M''(0)=7. These are the first and second raw moments, E(X)=2 and E(X²)=7.",
+          "The variance is not the second raw moment. It is E(X²)−[E(X)]²=7−4=3. This distinction is a common exam trap because the MGF derivatives return raw moments, whereas central moments are defined around the mean.",
+          "For the fourth order, the fourth central moment and fourth cumulant are different. A normal distribution has μ₄=3σ⁴=27, while its fourth cumulant κ₄ is zero. The relation μ₄=κ₄+3κ₂² makes the difference explicit: 0+3(3²)=27.",
+          "A reliable solution labels each result before using it: M''(0) is a raw moment; central moments centre the variable at μ; cumulants come from derivatives of log M(t). Keeping these three labels separate prevents a correct derivative from being reported as the wrong requested quantity."
         ],
         "q": "For N(2,3), what is M''(0) and the variance?",
         "answer": "M''(0)=7 and variance=3."
