@@ -1,0 +1,531 @@
+{
+  "id": "designt7",
+  "topicId": "design-t7",
+  "moduleId": "design",
+  "title": "Missing Plot Technique in Block Designs",
+  "breadcrumb": "Unit III · Design of Experiments · Missing observations",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 96,
+  "objectives": [
+    "Explain why missing plot values complicate block-design analysis.",
+    "Apply the one-missing-value estimator in a randomised block design.",
+    "Apply the one-missing-value estimator in a Latin square design.",
+    "Recalculate sums of squares and adjust error degrees of freedom after estimation.",
+    "Recognise limitations of simple missing-value formulas and the need for iterative methods with multiple omissions."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "RBD and Latin square layouts",
+      "why": "The missing-value formulas depend on block structure."
+    },
+    {
+      "id": "p2",
+      "name": "Treatment, block and grand totals",
+      "why": "The estimators use totals excluding the missing observation."
+    },
+    {
+      "id": "p3",
+      "name": "ANOVA sums of squares and degrees of freedom",
+      "why": "The completed analysis must adjust error degrees of freedom."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule. Ten items are drawn with a 3/5/2 difficulty mix; retakes draw again."
+  },
+  "refs": [
+    {
+      "title": "Cochran and Cox, Experimental Designs",
+      "where": "Missing observations in block designs",
+      "site": "Wiley",
+      "url": "https://www.wiley.com/",
+      "type": "book",
+      "free": false,
+      "why": "Classical reference for missing plot estimation."
+    },
+    {
+      "title": "Montgomery, Design and Analysis of Experiments",
+      "where": "Missing data in designed experiments",
+      "site": "Wiley",
+      "url": "https://www.wiley.com/",
+      "type": "book",
+      "free": false,
+      "why": "Standard experimental-design analysis reference."
+    },
+    {
+      "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+      "where": "Design of experiments",
+      "site": "NIST",
+      "url": "https://www.itl.nist.gov/div898/handbook/",
+      "type": "reference",
+      "free": true,
+      "why": "Open reference for experimental design principles."
+    }
+  ],
+  "traps": [
+    "In the RBD formula, t is number of treatments and r is number of blocks/replications; do not swap them.",
+    "Use treatment, block and grand totals calculated without the missing observation.",
+    "In a Latin square, the row, column and treatment totals all exclude the missing value.",
+    "After estimating one missing value, the error degrees of freedom are reduced by one.",
+    "The estimated value is a model-based completion for ANOVA, not a recovered observation.",
+    "With multiple missing values, estimates are generally simultaneous or iterative; do not apply a one-missing formula independently without checking dependencies.",
+    "Missingness related to the unobserved response can bias the analysis; the classical formula assumes the design model remains appropriate."
+  ],
+  "howto": "Locate the missing cell and identify the design. For one RBD omission use x=(tB+rT−G)/((t−1)(r−1)); for one Latin-square omission use x=[p(R+C+T)−2G]/[(p−1)(p−2)]. All totals exclude the missing cell. Substitute x, recompute the ANOVA components and reduce error df by one.",
+  "revision": {
+    "sheet": [
+      "RBD one missing: x=(tB+rT−G)/[(t−1)(r−1)].",
+      "RBD t=treatments; r=blocks; B=affected block total; T=affected treatment total; G=grand total, all excluding x.",
+      "Latin square one missing: x=[p(R+C+T)−2G]/[(p−1)(p−2)].",
+      "Latin p=order; R,C,T are affected row, column and treatment totals; G is grand total, all excluding x.",
+      "Insert the estimate and recompute corrected totals and sums of squares.",
+      "Reduce error df by one for one estimated missing observation.",
+      "Do not count the estimated value as an independently observed replicate.",
+      "Multiple missing values generally require simultaneous/iterative estimation.",
+      "Check the design model and missingness mechanism before relying on the classical estimate."
+    ],
+    "cards": [
+      [
+        "RBD",
+        "One omission; t treatments, r blocks"
+      ],
+      [
+        "RBD estimate",
+        "(tB+rT−G)/((t−1)(r−1))"
+      ],
+      [
+        "Latin square",
+        "One omission in a p×p layout"
+      ],
+      [
+        "Latin estimate",
+        "[p(R+C+T)−2G]/[(p−1)(p−2))"
+      ],
+      [
+        "Totals",
+        "All exclude the missing cell"
+      ],
+      [
+        "Error df",
+        "Reduce by one for one estimated value"
+      ],
+      [
+        "Multiple omissions",
+        "Use simultaneous or iterative methods"
+      ],
+      [
+        "Caution",
+        "Estimate is not a recovered observation"
+      ]
+    ],
+    "tricks": [
+      {
+        "hook": "RBD: t with B, r with T",
+        "why": "Treatment count multiplies block total; block count multiplies treatment total."
+      },
+      {
+        "hook": "Latin: R+C+T",
+        "why": "Use affected row, column and treatment totals."
+      },
+      {
+        "hook": "One estimate, one df",
+        "why": "One estimated value costs one error degree of freedom in the classical adjustment."
+      }
+    ],
+    "shortcuts": [
+      "Write the design and define every symbol before substituting.",
+      "Circle totals that exclude the missing observation.",
+      "After estimating, recompute SS and reduce error df; do not leave the original df unchanged."
+    ],
+    "remember": [
+      "The RBD and Latin-square formulas are different because their layouts differ.",
+      "The estimate is used to complete the ANOVA under the design model."
+    ],
+    "traps": [
+      "Using totals that already include a guessed x.",
+      "Swapping t and r in the RBD formula.",
+      "Forgetting the one-df error adjustment."
+    ]
+  },
+  "provenance": "Original GPT-authored lesson for design-t7. No official PYQ is claimed. Covers one missing observation in RBD and Latin square designs, ANOVA recalculation and error-df adjustment. Multiple missing values are treated as requiring simultaneous or iterative methods; the simple formulas are not presented as universal imputation procedures.",
+  "anchors": [],
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Why a plot value may be missing",
+      "objective": "Understand missing observations in designed experiments.",
+      "body": [
+        "An experimental unit may be lost because of crop failure, equipment damage, sample destruction or recording error. The resulting missing cell disrupts the balance of the original design.",
+        "Classical missing plot techniques estimate a value under the design model so that the ANOVA can be completed with an adjustment. The estimate is not a recovered measurement."
+      ],
+      "items": [
+        {
+          "ask": "Why does a missing plot matter in a balanced block design?",
+          "recall": "It breaks the complete treatment-by-block layout and affects sums of squares.",
+          "refresh": [
+            "The original design expects a value in every planned cell.",
+            "The missing cell changes treatment and block totals.",
+            "A classical estimate allows a model-based ANOVA completion."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Locate the missing cell and identify the design",
+      "objective": "Distinguish RBD and Latin square omissions.",
+      "body": [
+        "First identify the layout. In a randomised block design, each block contains every treatment. In a Latin square, each treatment occurs once in every row and column.",
+        "The formula depends on the layout and the totals surrounding the missing cell. Never choose a formula before identifying the design."
+      ],
+      "scenario": {
+        "teaser": "One crop plot is lost in a complete RBD.",
+        "title": "Identify the required totals",
+        "body": [
+          "The missing observation lies in treatment i and block j. Let t be the number of treatments and r the number of blocks. Let B be the affected block total, T the affected treatment total and G the grand total, each excluding the missing value.",
+          "The RBD estimator combines these totals with the design dimensions."
+        ],
+        "q": "Which two totals correspond to the missing cell's row and column in an RBD?",
+        "answer": "Its treatment total T and its block total B."
+      },
+      "ask": {
+        "q": "What should you identify before selecting a missing-value formula?",
+        "nudge": "The experimental layout."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "RBD estimator for one missing value",
+      "objective": "State and interpret the RBD formula.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "One missing observation",
+          "body": "x̂=(tB+rT−G)/[(t−1)(r−1)]. Here t is the number of treatments and r the number of blocks."
+        },
+        {
+          "t": "def",
+          "h": "Totals excluding x",
+          "body": "B is the affected block total, T is the affected treatment total and G is the grand total, all calculated without the missing observation."
+        },
+        {
+          "t": "assume",
+          "h": "Scope",
+          "body": "This is the classical single-missing-value estimator for a balanced RBD under its usual additive model assumptions."
+        }
+      ],
+      "ask": {
+        "q": "In the RBD formula, what does t represent?",
+        "nudge": "Count the treatments, not the blocks."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 9,
+      "title": "Worked RBD missing plot estimate",
+      "objective": "Substitute the correct totals in the RBD formula.",
+      "problem": "An RBD has t=3 treatments and r=3 blocks. For one missing value, the affected block total is B=20, affected treatment total T=18 and grand total G=48, all excluding the missing value. Estimate x.",
+      "hints": [
+        "Write the formula first.",
+        "Substitute the dimensions and totals."
+      ],
+      "solution": [
+        {
+          "say": "Write the RBD estimator.",
+          "math": "x̂=(tB+rT−G)/[(t−1)(r−1)]."
+        },
+        {
+          "say": "Substitute.",
+          "math": "x̂=(3×20+3×18−48)/[(2)(2)]=(60+54−48)/4=66/4=16.5."
+        }
+      ],
+      "answer": "The estimated missing value is 16.5.",
+      "check": "Numerator 66; denominator 4; x̂=16.5.",
+      "ask": {
+        "q": "If t=4,r=3,B=22,T=18,G=60, calculate the numerator.",
+        "nudge": "4×22+3×18−60."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s4",
+      "mins": 8,
+      "title": "Latin square estimator",
+      "objective": "State and interpret the Latin-square formula.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "One missing observation",
+          "body": "x̂=[p(R+C+T)−2G]/[(p−1)(p−2)], where p is the order of the square."
+        },
+        {
+          "t": "def",
+          "h": "Required totals",
+          "body": "R, C and T are the affected row, column and treatment totals; G is the grand total. Every total excludes the missing observation."
+        },
+        {
+          "t": "assume",
+          "h": "Why the formula differs",
+          "body": "The Latin square has three balancing classifications—rows, columns and treatments—so its estimator differs from the RBD formula."
+        }
+      ],
+      "ask": {
+        "q": "Which three affected totals enter the Latin-square estimator?",
+        "nudge": "Row, column and treatment."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s5",
+      "mins": 9,
+      "title": "Worked Latin-square missing value",
+      "objective": "Calculate an estimate from row, column and treatment totals.",
+      "problem": "A Latin square of order p=3 has one missing observation. The affected row, column and treatment totals are R=14,C=12,T=13 and the grand total is G=30, all excluding the missing value. Estimate x.",
+      "hints": [
+        "Use the Latin-square formula.",
+        "Keep the factor 2G in the numerator."
+      ],
+      "solution": [
+        {
+          "say": "Write the formula.",
+          "math": "x̂=[p(R+C+T)−2G]/[(p−1)(p−2)]."
+        },
+        {
+          "say": "Substitute.",
+          "math": "x̂=[3(14+12+13)−2(30)]/[(2)(1)]=(117−60)/2=28.5."
+        }
+      ],
+      "answer": "The estimated missing value is 28.5.",
+      "check": "Numerator 57; denominator 2.",
+      "ask": {
+        "q": "For p=4,R=25,C=23,T=24,G=80, what is the numerator?",
+        "nudge": "4(25+23+24)−2×80."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s6",
+      "mins": 7,
+      "title": "Why all totals exclude the missing value",
+      "objective": "Avoid double counting the unknown cell.",
+      "body": [
+        "The missing value is the unknown being estimated. If B, T, R, C or G already included a guessed value, the formula would count that value again and become circular.",
+        "Construct each required total from observed values only. Substitute the estimate only after solving the formula."
+      ],
+      "scenario": {
+        "teaser": "A student adds a provisional x=10 to the grand total before applying the formula.",
+        "title": "Spot the double count",
+        "body": [
+          "The classical formula is derived with the missing cell removed from each relevant total. Adding a guessed x to G before substitution violates that definition.",
+          "The correct procedure is to compute totals from observed entries, solve for x, then insert the estimate for the ANOVA completion."
+        ],
+        "q": "Should the missing value be included in G when calculating the estimate?",
+        "answer": "No. G must exclude the missing observation."
+      },
+      "ask": {
+        "q": "At what stage should the estimated value be inserted into the completed table?",
+        "nudge": "After solving the estimator."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 7,
+      "title": "Complete the ANOVA after estimation",
+      "objective": "Explain sums-of-squares and degrees-of-freedom adjustments.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Insert and recompute",
+          "body": "After estimating x, place it in the missing cell and recompute the relevant treatment, block, row or column totals and sums of squares according to the design."
+        },
+        {
+          "t": "formula",
+          "h": "Error degrees of freedom",
+          "body": "For one estimated missing observation, reduce the error degrees of freedom by one in the classical ANOVA adjustment."
+        },
+        {
+          "t": "assume",
+          "h": "Do not count it as observed",
+          "body": "The estimate completes the calculation but is not an independently observed replicate. Report that a missing value was estimated."
+        }
+      ],
+      "ask": {
+        "q": "If the original error df is 12 and one value is estimated, what is the adjusted error df?",
+        "nudge": "Subtract one."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 7,
+      "title": "Degrees-of-freedom adjustment",
+      "objective": "Adjust error df for one missing plot.",
+      "problem": "An RBD analysis has error df=12 before accounting for one missing plot estimate. Find the adjusted error df.",
+      "hints": [
+        "One estimated missing value costs one error df."
+      ],
+      "solution": [
+        {
+          "say": "Apply the adjustment.",
+          "math": "Adjusted error df=12−1=11."
+        },
+        {
+          "say": "Interpret.",
+          "math": "The estimated value is not an extra independent observation."
+        }
+      ],
+      "answer": "Adjusted error df is 11.",
+      "check": "One estimated value; reduce error df by one.",
+      "ask": {
+        "q": "If the original error df is 17, what is the adjusted df after one estimate?",
+        "nudge": "17−1."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s9",
+      "mins": 7,
+      "title": "Multiple missing observations",
+      "objective": "Recognise when simple formulas are inadequate.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "More than one omission",
+          "body": "With multiple missing values, the estimating equations may depend on one another because several row, column, treatment or block totals are incomplete."
+        },
+        {
+          "t": "formula",
+          "h": "Simultaneous or iterative estimation",
+          "body": "Use the appropriate simultaneous equations or iterative procedure, updating estimates until stable under the chosen model."
+        },
+        {
+          "t": "assume",
+          "h": "Avoid blind repetition",
+          "body": "Do not apply a one-missing formula separately to each omission without checking the dependency structure and design assumptions."
+        }
+      ],
+      "ask": {
+        "q": "Why may multiple missing values require an iterative method?",
+        "nudge": "The estimates can depend on each other through shared totals."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 7,
+      "title": "Choose the correct estimator",
+      "objective": "Select formula by design and identify totals.",
+      "problem": "A missing observation occurs in a p×p Latin square. A student proposes the RBD formula because both designs are blocked. Is that correct?",
+      "hints": [
+        "Identify all balancing classifications.",
+        "Count the totals required by each formula."
+      ],
+      "solution": [
+        {
+          "say": "Identify the design.",
+          "math": "A Latin square has rows, columns and treatments as three classifications."
+        },
+        {
+          "say": "Choose the formula.",
+          "math": "Use x̂=[p(R+C+T)−2G]/[(p−1)(p−2)], not the RBD estimator."
+        }
+      ],
+      "answer": "Use the Latin-square missing-value estimator.",
+      "check": "The layout, not merely the presence of blocks, determines the formula.",
+      "ask": {
+        "q": "Which formula uses the affected row, column and treatment totals?",
+        "nudge": "Latin-square estimator."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s11",
+      "mins": 6,
+      "title": "Missing plot examination traps",
+      "objective": "Avoid formula and inference errors.",
+      "traps": [
+        {
+          "q": "In the RBD formula, what does t denote?",
+          "a": "Number of treatments; r is number of blocks."
+        },
+        {
+          "q": "Should totals include the missing value?",
+          "a": "No; all relevant totals exclude it."
+        },
+        {
+          "q": "What happens to error df after one estimate?",
+          "a": "Reduce it by one."
+        },
+        {
+          "q": "Is the estimate a recovered observation?",
+          "a": "No; it is a model-based estimate used for ANOVA completion."
+        }
+      ]
+    },
+    {
+      "kind": "worked",
+      "id": "s12",
+      "mins": 7,
+      "title": "Compare RBD and Latin-square formulas",
+      "objective": "Match formula symbols to design structure.",
+      "problem": "An RBD has t treatments and r blocks; a Latin square has order p. Which formula uses two dimensions t,r and which uses p plus three marginal totals?",
+      "hints": [
+        "RBD has treatment and block totals.",
+        "Latin square has row, column and treatment totals."
+      ],
+      "solution": [
+        {
+          "say": "RBD.",
+          "math": "x̂=(tB+rT−G)/[(t−1)(r−1)]."
+        },
+        {
+          "say": "Latin square.",
+          "math": "x̂=[p(R+C+T)−2G]/[(p−1)(p−2)]."
+        }
+      ],
+      "answer": "RBD uses t,r,B,T,G; Latin square uses p,R,C,T,G.",
+      "check": "Use the estimator that matches the layout.",
+      "ask": {
+        "q": "Which design estimator contains the factor 2G?",
+        "nudge": "Latin square."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 5,
+      "title": "Missing plot mastery checkpoint",
+      "objective": "Consolidate estimators and ANOVA adjustments.",
+      "body": [
+        "For one RBD omission use x̂=(tB+rT−G)/[(t−1)(r−1)]. For one Latin-square omission use x̂=[p(R+C+T)−2G]/[(p−1)(p−2)]. All totals exclude the missing cell.",
+        "Insert the estimate, recompute the ANOVA components and reduce error df by one. Multiple omissions generally need simultaneous or iterative estimation; the estimate is not a recovered observation."
+      ],
+      "setId": "design_t7_mastery"
+    }
+  ]
+}
