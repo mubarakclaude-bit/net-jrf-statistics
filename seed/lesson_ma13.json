@@ -1,0 +1,581 @@
+{
+ "id": "mathst13",
+ "topicId": "maths-t13",
+ "moduleId": "maths",
+ "title": "Vector Spaces, Subspaces, Span, Basis and Dimension",
+ "breadcrumb": "Mathematics → Linear algebra → Vector spaces and dimension",
+ "engine": "B",
+ "engineName": "Mathematics — independent directions and coordinate systems",
+ "version": "1.0",
+ "status": "draft",
+ "estMin": 105,
+ "objectives": [
+  "Apply the subspace test to subsets of vector spaces.",
+  "Compute and interpret the span of a set of vectors.",
+  "Test linear independence using linear combinations or rank.",
+  "Identify bases and compute dimensions.",
+  "Use the dimension formula for sums and intersections of subspaces."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Vectors and linear combinations",
+   "why": "Span and independence are defined through linear combinations."
+  },
+  {
+   "id": "p2",
+   "name": "Linear systems and row reduction",
+   "why": "Rank and pivots provide computational tests for independence."
+  },
+  {
+   "id": "p3",
+   "name": "Matrix rank and nullity",
+   "why": "Dimensions of column and null spaces use rank-nullity."
+  }
+ ],
+ "traps": [
+  "A subspace must contain zero.",
+  "A non-homogeneous linear equation usually defines an affine set, not a subspace.",
+  "Span is always a subspace.",
+  "A basis must both span and be independent.",
+  "All bases of a finite-dimensional space have equal size.",
+  "The union of subspaces is not generally a subspace."
+ ],
+ "revision": {
+  "sheet": [
+   "Subspace: non-empty, closed under addition and scalar multiplication.",
+   "Every subspace contains zero.",
+   "One-step test: αu+βv∈W for all u,v∈W and scalars α,β.",
+   "Span{vᵢ}: all linear combinations; always a subspace.",
+   "Independent: only the trivial linear combination equals zero.",
+   "Basis: linearly independent and spanning.",
+   "Dimension: number of vectors in any basis.",
+   "dim(Rⁿ)=n.",
+   "dim(Pₙ)=n+1 with basis {1,x,…,xⁿ}.",
+   "dim(U+W)=dim(U)+dim(W)−dim(U∩W).",
+   "A line through origin is a subspace; a translated line is not.",
+   "Rank of a matrix equals dimension of its column space."
+  ],
+  "cards": [
+   [
+    "Subspace",
+    "Closed under addition and scaling"
+   ],
+   [
+    "Span",
+    "All linear combinations"
+   ],
+   [
+    "Independence",
+    "Only trivial zero combination"
+   ],
+   [
+    "Basis",
+    "Independent and spanning"
+   ],
+   [
+    "Dimension",
+    "Size of a basis"
+   ],
+   [
+    "Rⁿ",
+    "Dimension n"
+   ],
+   [
+    "Pₙ",
+    "Dimension n+1"
+   ],
+   [
+    "Dimension formula",
+    "dim U+dim W−dim intersection"
+   ]
+  ],
+  "tricks": [
+   "Check zero first when rejecting a proposed subspace.",
+   "Put spanning vectors as columns and find pivot columns.",
+   "Remove redundant vectors to obtain a basis.",
+   "Count basis elements, not the number of displayed generators.",
+   "Use the dimension formula to avoid constructing U+W explicitly."
+  ],
+  "shortcuts": [
+   "dim(P₂)=3; basis {1,x,x²}.",
+   "Two independent vectors in R² form a basis.",
+   "Proportional non-zero vectors span a one-dimensional line."
+  ],
+  "remember": [
+   "Subspace contains zero.",
+   "Basis = independent + spanning.",
+   "Dimension counts independent directions."
+  ]
+ },
+ "howto": "For a proposed subspace, check zero and closure. For a span or basis problem, put vectors into a matrix and use pivots to identify independent generators. Count the basis elements to obtain dimension.",
+ "refs": [
+  {
+   "title": "Linear Algebra",
+   "where": "Vector spaces and subspaces",
+   "site": "MIT OpenCourseWare 18.06",
+   "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Vector spaces, bases and dimension."
+  },
+  {
+   "title": "Linear Algebra and Its Applications",
+   "where": "Vector spaces and dimension",
+   "site": "Gilbert Strang",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Subspaces, span and independence."
+  },
+  {
+   "title": "Linear Algebra",
+   "where": "Vector spaces",
+   "site": "NPTEL",
+   "url": "https://nptel.ac.in/courses/111106051",
+   "type": "Video course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "University-level vector-space foundations."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact anchors include subspace tests, polynomial-space dimension, basis extraction and the dimension formula. Not production-approved.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Foundation: vectors and linear combinations",
+   "objective": "Recall the algebra behind vector spaces.",
+   "ask": {
+    "q": "What is a linear combination of vectors v₁,…,vₖ?",
+    "nudge": "Multiply each vector by a scalar and add."
+   },
+   "body": [
+    "A vector space is a set with vector addition and scalar multiplication satisfying the usual axioms. Familiar examples include Rⁿ and polynomial spaces.",
+    "Span, linear independence, basis and dimension describe how vectors generate a space and how many independent directions it contains."
+   ],
+   "items": [
+    {
+     "ask": "What is the span of a set of vectors?",
+     "recall": "All linear combinations of those vectors.",
+     "refresh": [
+      "The span is the smallest subspace containing the given vectors. It always contains the zero vector and is closed under addition and scalar multiplication.",
+      "If two vectors in R² are independent, their span is all of R². If they are proportional, their span is only a line through the origin."
+     ]
+    },
+    {
+     "ask": "What does linear independence mean?",
+     "recall": "The only linear combination equal to zero has all coefficients zero.",
+     "refresh": [
+      "A set is linearly independent if no vector in the set can be expressed as a linear combination of the others.",
+      "For a matrix with the vectors as columns, independence is equivalent to full column rank. This connects the abstract definition to row reduction."
+     ]
+    },
+    {
+     "ask": "What is a basis?",
+     "recall": "A linearly independent set that spans the whole space.",
+     "refresh": [
+      "A basis gives every vector a unique coordinate representation. It has no redundant vectors, but it generates the entire space.",
+      "Every basis of a finite-dimensional vector space has the same number of vectors. That number is the dimension, so dimension is well-defined."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "A basis is a minimal coordinate system",
+   "objective": "Interpret spanning and independence together.",
+   "ask": {
+    "q": "Can a set span R² and still fail to be a basis?",
+    "nudge": "Yes, if it contains redundant vectors."
+   },
+   "body": [
+    "Spanning means there are enough vectors to reach every point in the space. Independence means none of the vectors is redundant.",
+    "A basis satisfies both. In R², two non-parallel vectors form a basis; three vectors may span R² but cannot be independent."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Subspaces and the subspace test",
+   "objective": "Check whether a subset is a vector subspace.",
+   "ask": {
+    "q": "Is the set {(x,y):x+y=1} a subspace of R²?",
+    "nudge": "Does it contain the zero vector?"
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Subspace",
+     "body": "A non-empty subset W of a vector space V is a subspace if it is closed under vector addition and scalar multiplication."
+    },
+    {
+     "t": "formula",
+     "h": "One-step test",
+     "body": "W is a subspace iff it is non-empty and αu+βv∈W for every u,v∈W and scalars α,β."
+    },
+    {
+     "t": "step",
+     "h": "Fast rejection",
+     "body": "Every subspace contains the zero vector. A line or plane not passing through the origin cannot be a subspace."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Worked: test a line through the origin",
+   "objective": "Prove a subset of R² is a subspace.",
+   "ask": {
+    "q": "Is W={(x,y):y=2x} a subspace?",
+    "nudge": "Take two points on the line and a linear combination."
+   },
+   "problem": "Show that W={(x,2x):x∈R} is a subspace of R².",
+   "steps": [
+    {
+     "say": "Check the zero vector.",
+     "math": "(0,0)=(0,2·0)∈W",
+     "why": "The set is non-empty and contains zero."
+    },
+    {
+     "say": "Check a linear combination.",
+     "math": "α(x,2x)+β(y,2y)=(αx+βy,2(αx+βy))",
+     "why": "The resulting vector has second coordinate twice the first."
+    },
+    {
+     "say": "Conclude.",
+     "math": "αu+βv∈W; hence W is a subspace.",
+     "why": "The one-step subspace test is satisfied."
+    }
+   ],
+   "scenario": {
+    "teaser": "A set of feasible parameter changes is closed under linear combinations.",
+    "title": "Subspaces of allowable model perturbations",
+    "body": [
+     "In a linear model, some parameter perturbations preserve a linear restriction. The set of all perturbations satisfying a homogeneous linear equation forms a subspace.",
+     "For example, y=2x describes a line through the origin. Adding two vectors on the line or scaling one vector keeps the result on the same line.",
+     "A non-homogeneous equation such as x+y=1 does not define a subspace because it excludes the zero vector. The homogeneous structure is essential."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 8,
+   "title": "Span and linear independence",
+   "objective": "Determine whether vectors generate a space without redundancy.",
+   "ask": {
+    "q": "Do (1,0) and (2,0) span R²?",
+    "nudge": "They are proportional and lie on the x-axis."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Span",
+     "body": "span{v₁,…,vₖ}={c₁v₁+…+cₖvₖ:cᵢ∈R}. It is always a subspace."
+    },
+    {
+     "t": "formula",
+     "h": "Independence test",
+     "body": "The vectors are independent iff c₁v₁+…+cₖvₖ=0 implies c₁=…=cₖ=0."
+    },
+    {
+     "t": "step",
+     "h": "Matrix test",
+     "body": "Place the vectors as columns of a matrix. They are independent iff the matrix has full column rank; row reduction identifies pivot columns."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s5",
+   "mins": 8,
+   "title": "Guided: find a basis for a span",
+   "objective": "Remove redundant vectors from a generating set.",
+   "problem": "Find a basis for span{(1,0),(0,1),(1,1)} in R².",
+   "hints": [
+    "The first two vectors already generate every (x,y).",
+    "The third vector is the sum of the first two.",
+    "Keep only the independent generating vectors."
+   ],
+   "answer": "{(1,0),(0,1)} is a basis.",
+   "solution": "The first two vectors are independent and span R². The third vector is redundant because (1,1)=(1,0)+(0,1).",
+   "ask": {
+    "q": "What is the dimension of this span?",
+    "nudge": "Count the basis vectors."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Basis and dimension",
+   "objective": "Connect basis size with the dimension of a space.",
+   "ask": {
+    "q": "What is the dimension of P₂, the polynomials of degree at most two?",
+    "nudge": "Use the basis 1,x,x²."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Dimension",
+     "body": "The dimension of a finite-dimensional vector space is the number of vectors in any basis."
+    },
+    {
+     "t": "formula",
+     "h": "Standard examples",
+     "body": "dim(Rⁿ)=n. The polynomial space Pₙ of degree at most n has basis {1,x,…,xⁿ} and dimension n+1."
+    },
+    {
+     "t": "step",
+     "h": "Coordinates",
+     "body": "Relative to an ordered basis, every vector has a unique coordinate vector. Changing the basis changes coordinates, not the vector or the dimension."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided: polynomial coordinates",
+   "objective": "Express a polynomial in a basis.",
+   "problem": "Write p(x)=2−3x+4x² in the standard basis of P₂.",
+   "hints": [
+    "The ordered basis is (1,x,x²).",
+    "Read the coefficient of each basis element.",
+    "Keep the coordinate order aligned with the basis order."
+   ],
+   "answer": "The coordinate vector is (2,−3,4).",
+   "solution": "p(x)=2·1+(−3)·x+4·x², so its coordinates in the ordered basis (1,x,x²) are (2,−3,4).",
+   "ask": {
+    "q": "What is dim(P₂)?",
+    "nudge": "There are three basis polynomials."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s8",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the core vector-space definitions.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "What is a subspace?",
+     "a": "A non-empty subset closed under addition and scalar multiplication."
+    },
+    {
+     "q": "What is span?",
+     "a": "The set of all linear combinations."
+    },
+    {
+     "q": "What is a basis?",
+     "a": "A linearly independent spanning set."
+    },
+    {
+     "q": "What is dimension?",
+     "a": "The number of vectors in any basis."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s9",
+   "mins": 8,
+   "title": "Four vector-space decisions",
+   "objective": "Apply subspace, basis and dimension tests.",
+   "problem": "Complete each statement.",
+   "steps": [
+    {
+     "say": "W={(x,y):x+y=1}.",
+     "blank": {
+      "prompt": "Is W a subspace?",
+      "answer": "No",
+      "accept": [
+       "no"
+      ],
+      "hint": "Check whether zero belongs."
+     },
+     "why": "The zero vector does not satisfy x+y=1."
+    },
+    {
+     "say": "The standard basis of R³.",
+     "blank": {
+      "prompt": "How many vectors does it contain?",
+      "answer": "3",
+      "accept": [
+       "3"
+      ],
+      "hint": "It has e₁,e₂,e₃."
+     },
+     "why": "dim(R³)=3."
+    },
+    {
+     "say": "P₂ has basis {1,x,x²}.",
+     "blank": {
+      "prompt": "What is its dimension?",
+      "answer": "3",
+      "accept": [
+       "3"
+      ],
+      "hint": "Count the basis elements."
+     },
+     "why": "There are three independent basis polynomials."
+    },
+    {
+     "say": "Vectors (1,0) and (2,0).",
+     "blank": {
+      "prompt": "What is the dimension of their span?",
+      "answer": "1",
+      "accept": [
+       "1"
+      ],
+      "hint": "They are proportional."
+     },
+     "why": "Both vectors lie on the same line through the origin."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s10",
+   "mins": 6,
+   "title": "Dimension counts independent directions",
+   "objective": "Interpret dimension in familiar spaces.",
+   "ask": {
+    "q": "Why does P₂ have dimension three rather than two?",
+    "nudge": "The constant, linear and quadratic terms are three independent directions."
+   },
+   "body": [
+    "Dimension counts independent directions, not the number of coordinates visible in a particular expression. P₂ contains polynomials with three independent coefficient choices.",
+    "The same idea applies to matrix spaces, solution spaces of linear systems and subspaces generated by data vectors. A basis gives the minimal number of coordinates needed."
+   ],
+   "scenario": {
+    "teaser": "A data set may contain many variables but fewer independent directions.",
+    "title": "Dimension and redundant features",
+    "body": [
+     "A data matrix may have many columns, but some columns can be linear combinations of others. The column space dimension is the rank, not the raw number of variables.",
+     "A basis selects independent columns that still span the same column space. The number of selected columns is the dimension of that space.",
+     "This is the geometric meaning of redundancy in a design matrix: the ambient number of variables can exceed the number of independent directions represented by the data."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s11",
+   "mins": 7,
+   "title": "Worked: intersection and dimension",
+   "objective": "Use the dimension formula for subspaces.",
+   "ask": {
+    "q": "If dim(U)=3, dim(W)=2 and dim(U∩W)=1, what is dim(U+W)?",
+    "nudge": "Use dim(U+W)=dim U+dim W−dim(U∩W)."
+   },
+   "problem": "Find dim(U+W) when dim(U)=3, dim(W)=2 and dim(U∩W)=1.",
+   "steps": [
+    {
+     "say": "State the dimension formula.",
+     "math": "dim(U+W)=dim(U)+dim(W)−dim(U∩W)",
+     "why": "The intersection is counted in both dimensions and must be subtracted once."
+    },
+    {
+     "say": "Substitute the values.",
+     "math": "dim(U+W)=3+2−1=4",
+     "why": "The combined subspace has dimension four."
+    },
+    {
+     "say": "Interpret.",
+     "math": "The sum contains the directions in U and W without double-counting their common line.",
+     "why": "This is the finite-dimensional subspace dimension formula."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s12",
+   "mins": 5,
+   "title": "Trap check: six statements",
+   "objective": "Avoid common vector-space errors.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "Every subspace contains the zero vector.",
+     "tf": true,
+     "why": "It must be closed under scalar multiplication and non-empty."
+    },
+    {
+     "claim": "The set x+y=1 is a subspace of R².",
+     "tf": false,
+     "why": "It does not contain zero."
+    },
+    {
+     "claim": "The span of any set of vectors is a subspace.",
+     "tf": true,
+     "why": "Linear combinations are closed under addition and scaling."
+    },
+    {
+     "claim": "A basis must span and be linearly independent.",
+     "tf": true,
+     "why": "Both conditions define a basis."
+    },
+    {
+     "claim": "All bases of a finite-dimensional space have the same size.",
+     "tf": true,
+     "why": "This common size is the dimension."
+    },
+    {
+     "claim": "The union of two subspaces is always a subspace.",
+     "tf": false,
+     "why": "The union need not be closed under addition."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "Final vector-space checklist",
+   "objective": "Identify subspaces, bases and dimensions.",
+   "body": [
+    "1. Subspace: non-empty and closed under addition and scalar multiplication.",
+    "2. Every subspace contains zero; non-homogeneous affine sets usually fail this test.",
+    "3. Span is the set of all linear combinations and is always a subspace.",
+    "4. Independent means only the trivial combination gives zero.",
+    "5. Basis = independent + spanning.",
+    "6. Dimension = number of vectors in any basis.",
+    "7. dim(U+W)=dim(U)+dim(W)−dim(U∩W)."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate subspace, basis, span and dimension reasoning.",
+   "setId": "maths_t13_mastery"
+  }
+ ]
+}
