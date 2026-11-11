@@ -96,3 +96,8 @@ elif not bad:
     print('clean: %d lessons, index and harness agree with the seeds on disk'%len(seeds))
 sys.exit(0)
 PYEOF
+
+# Keep Probability question-bank totals and all 13 mastery pools independently verified.
+if [ -f verify_probability_index.py ]; then
+  python3 verify_probability_index.py
+fi
