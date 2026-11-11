@@ -49,6 +49,10 @@ def validate(topic: int, lesson: dict, pool: dict) -> None:
     assert lesson["topicId"] == topic_id, f"t{topic}: wrong topicId"
     assert lesson["id"] == f"regressiont{topic}", f"t{topic}: unstable lesson id"
     assert lesson["moduleId"] == "regression", f"t{topic}: wrong module"
+    assert all(s.get("objective") for s in lesson["scenes"]), f"t{topic}: scene objective missing"
+    for scene in lesson["scenes"]:
+        for block in scene.get("blocks", []):
+            assert block.get("t") and block.get("h") and block.get("body"), f"t{topic}: malformed theory block in {scene.get('id')}"
     assert len({s.get("id") for s in lesson["scenes"]}) == len(lesson["scenes"]), f"t{topic}: duplicate scene id"
     assert lesson["scenes"][-1]["kind"] == "quiz", f"t{topic}: quiz is not the final scene"
     assert lesson["scenes"][-1]["setId"] == set_id, f"t{topic}: quiz setId mismatch"
