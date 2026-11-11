@@ -8,7 +8,7 @@
  "engineName": "Mathematics — matrix invariants and invertibility",
  "version": "1.0",
  "status": "draft",
- "estMin": 98,
+ "estMin": 112,
  "objectives": [
   "Compute trace and use its linear, cyclic and similarity properties.",
   "Apply determinant rules for products, transposes, scalar multiples and inverses.",
@@ -125,6 +125,16 @@
    "free": true,
    "checked": "2026-11-12",
    "why": "Undergraduate linear algebra and matrix identities."
+  },
+  {
+   "title": "Matrix Algebra Useful for Statistics",
+   "where": "Trace, determinant and inverse identities",
+   "site": "Searle",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Statistical matrix identities and trace manipulations."
   }
  ],
  "mastery": {
@@ -212,7 +222,16 @@
      "math": "BA=[[3,4],[2,4]], so tr(BA)=7.",
      "why": "The matrices differ, but their traces agree."
     }
-   ]
+   ],
+   "scenario": {
+    "teaser": "A trace identity shortens a matrix calculation.",
+    "title": "Trace shortcuts in statistical derivations",
+    "body": [
+     "Statistical expressions often contain traces of matrix products such as tr(XᵀX) or tr(AB). Direct multiplication can be lengthy and hide the structure.",
+     "The cyclic property allows factors to rotate inside a trace, such as tr(ABC)=tr(BCA). It does not permit arbitrary swapping of factors.",
+     "This is useful in simplifying quadratic forms, projection matrices and covariance expressions. Keep dimensions compatible and preserve cyclic order."
+    ]
+   }
   },
   {
    "kind": "theory",
@@ -240,6 +259,87 @@
    "ask": {
     "q": "If det(A)=−2 and det(B)=3, what is det(AB)?",
     "nudge": "Use multiplicativity."
+   },
+   "flow": {
+    "title": "Choose a matrix identity",
+    "alt": "Decision flow for trace, determinant and inverse calculations",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Identify the requested quantity",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Trace, determinant or inverse?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Use linearity and cyclic trace",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 1,
+      "label": "Use determinant properties",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 2,
+      "c": 2,
+      "label": "Check det(A)≠0, then adjugate",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 3,
+      "c": 1,
+      "label": "Preserve dimensions and product order",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "trace"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "determinant"
+     },
+     {
+      "from": "b",
+      "to": "e",
+      "label": "inverse"
+     },
+     {
+      "from": "c",
+      "to": "f"
+     },
+     {
+      "from": "d",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ]
    }
   },
   {
@@ -344,7 +444,16 @@
      "math": "A⁻¹=(1/det A)adj(A)=[[1,−1],[−1,2]].",
      "why": "Here det(A)=1."
     }
-   ]
+   ],
+   "scenario": {
+    "teaser": "A determinant decides whether a model matrix can be inverted.",
+    "title": "Invertibility in a small linear model",
+    "body": [
+     "A square model matrix is invertible exactly when its determinant is non-zero. A zero determinant means the columns are dependent and the inverse does not exist.",
+     "The determinant product rule and row-operation rules can simplify this check without a full cofactor expansion. For larger matrices, row reduction or triangular structure is often more efficient.",
+     "In statistical models, singularity signals exact linear dependence or a non-identifiable parameterisation. Check rank and determinant before writing an inverse formula."
+    ]
+   }
   },
   {
    "kind": "theory",
@@ -470,6 +579,61 @@
       "hint": "Reverse order."
      },
      "why": "(AB)(B⁻¹A⁻¹)=I."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s13",
+   "mins": 6,
+   "title": "Trace is cyclic, not commutative",
+   "objective": "Distinguish cyclic invariance from arbitrary factor reordering.",
+   "ask": {
+    "q": "Does tr(ABC)=tr(ACB) hold for all matrices?",
+    "nudge": "Only cyclic rotations are guaranteed."
+   },
+   "body": [
+    "Trace has a special cyclic property: tr(ABC)=tr(BCA)=tr(CAB), provided the products are defined. This is not the same as saying matrix multiplication is commutative.",
+    "The matrices AB and BA can be different even though their traces agree. When simplifying longer products, rotate the entire product without changing the order of the factors."
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s14",
+   "mins": 5,
+   "title": "Trap check: six matrix identities",
+   "objective": "Avoid common trace, determinant and inverse errors.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "tr(AB)=tr(BA) for compatible square products.",
+     "tf": true,
+     "why": "This is the cyclic trace identity."
+    },
+    {
+     "claim": "Trace allows arbitrary reordering of factors.",
+     "tf": false,
+     "why": "Only cyclic rotations are guaranteed."
+    },
+    {
+     "claim": "det(AB)=det(A)det(B).",
+     "tf": true,
+     "why": "Determinant is multiplicative."
+    },
+    {
+     "claim": "det(cA)=cⁿdet(A) for n×n A.",
+     "tf": true,
+     "why": "The scalar multiplies each of n rows."
+    },
+    {
+     "claim": "(AB)⁻¹=A⁻¹B⁻¹.",
+     "tf": false,
+     "why": "The correct order is B⁻¹A⁻¹."
+    },
+    {
+     "claim": "A square matrix is invertible iff det(A)≠0.",
+     "tf": true,
+     "why": "This is the standard nonsingularity criterion."
     }
    ]
   },
