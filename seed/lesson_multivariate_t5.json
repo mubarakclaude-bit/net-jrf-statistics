@@ -1,0 +1,598 @@
+{
+ "id": "multivariatet5",
+ "topicId": "multivariate-t5",
+ "moduleId": "multivariate",
+ "title": "Wishart Distribution: the sampling distribution of a covariance matrix",
+ "breadcrumb": "Module 8 · Multivariate Analysis · Wishart distribution",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 88,
+ "objectives": [
+  "Define the Wishart distribution as a distribution of a random sum of outer products.",
+  "Recognise the degrees of freedom and scale matrix in a Wishart representation.",
+  "Use independence and the addition property to combine independent Wishart matrices.",
+  "Apply whitening and linear transformations to identify Wishart distributions.",
+  "Connect the sample covariance matrix of a multivariate normal sample to a Wishart distribution."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Multivariate normal distribution",
+   "why": "Wishart results arise from independent multivariate normal vectors."
+  },
+  {
+   "id": "p2",
+   "name": "Matrix transpose and quadratic forms",
+   "why": "The defining random matrix is a sum of vector outer products."
+  },
+  {
+   "id": "p3",
+   "name": "Covariance matrix and matrix transformations",
+   "why": "The scale matrix and whitening transformations determine the Wishart parameters."
+  }
+ ],
+ "traps": [
+  "For n independent Np(0,Σ) vectors, the sum of outer products has Wishart degrees of freedom n.",
+  "The Wishart dimension p is the order of the random matrix, not the number of observations.",
+  "Independent Wishart matrices add degrees of freedom only when they share the same scale matrix.",
+  "Whitening by Σ⁻¹/² changes the scale matrix to I, not the matrix dimension.",
+  "For a normal sample, (n−1)S follows Wp(n−1,Σ), not Wp(n,Σ).",
+  "A Wishart matrix is symmetric positive semidefinite; it is positive definite with probability one when the degrees of freedom are sufficient under a nonsingular scale."
+ ],
+ "revision": {
+  "sheet": [
+   "If Z₁,…,Zₙ are independent Np(0,Σ), then W=ΣZᵢZᵢ′ follows Wp(n,Σ).",
+   "The dimension p is the order of W and Σ; n is the degrees of freedom.",
+   "If W₁~Wp(n₁,Σ) and W₂~Wp(n₂,Σ) independently, then W₁+W₂~Wp(n₁+n₂,Σ).",
+   "The addition rule requires independent Wishart matrices with the same scale matrix.",
+   "For a full-rank transformation A, AWA′~Wp(n,AΣA′).",
+   "Whitening: Σ⁻¹/²WΣ⁻¹/²~Wp(n,Iₚ).",
+   "For a normal sample, (n−1)S~Wp(n−1,Σ); sample mean and sample covariance are independent.",
+   "June 2026 Q17: two whitened X columns and three whitened Y columns give W₄(2,I₄)+W₄(3,I₄)=W₄(5,I₄)."
+  ],
+  "cards": [
+   [
+    "Definition",
+    "Σ ZᵢZᵢ′ ~ Wp(n,Σ)"
+   ],
+   [
+    "Dimension",
+    "p = matrix order"
+   ],
+   [
+    "Degrees of freedom",
+    "n = number of independent normal vectors"
+   ],
+   [
+    "Addition",
+    "Independent Wp(n₁,Σ)+Wp(n₂,Σ)"
+   ],
+   [
+    "Whitening",
+    "Σ⁻¹/² W Σ⁻¹/² has scale Iₚ"
+   ],
+   [
+    "Sample covariance",
+    "(n−1)S ~ Wp(n−1,Σ)"
+   ]
+  ],
+  "tricks": [
+   "Count independent vector columns to get degrees of freedom.",
+   "Read the matrix order from each vector dimension, not the number of columns.",
+   "Before adding Wishart matrices, compare their scale matrices exactly."
+  ],
+  "shortcuts": [
+   "Write Wp(df, scale) and label p, df and scale separately.",
+   "Whitened vectors have identity covariance, so their outer-product sum has scale I.",
+   "For a sample covariance question, remember the lost degree of freedom from estimating the sample mean."
+  ],
+  "remember": [
+   "Wishart is the multivariate analogue of a sum of squared normal variables.",
+   "Independent Wishart matrices add degrees of freedom when their scale matrices match."
+  ]
+ },
+ "howto": "Start by identifying the dimension of each random vector and counting independent vectors. Then inspect the covariance matrix of each vector. If a transformation whitens the vectors, the resulting scale is the identity matrix. Finally, combine independent Wishart terms only when their scale matrices are the same. The June 2026 question is a direct test of these steps.",
+ "refs": [
+  {
+   "title": "Applied Multivariate Statistical Analysis",
+   "where": "Wishart distribution and sample covariance chapters",
+   "site": "Johnson and Wichern",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Classical definitions, sampling distributions and covariance matrix results."
+  },
+  {
+   "title": "Applied Multivariate Statistical Analysis",
+   "where": "Multivariate normal sampling and Wishart matrices",
+   "site": "Penn State STAT 505",
+   "url": "https://online.stat.psu.edu/stat505/",
+   "type": "Free course notes",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Course notes for multivariate normal samples and covariance inference."
+  },
+  {
+   "title": "Methods of Multivariate Analysis",
+   "where": "Wishart distribution",
+   "site": "Rencher and Christensen",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Theoretical treatment of matrix variate distributions."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [
+  {
+   "paper": "j26",
+   "q": 17
+  }
+ ],
+ "provenance": "Authored 11 November 2026. Anchored to June 2026 Paper 2 Q17 (j26-q17). The question’s two whitened X columns are independent N4(0,I4), giving W4(2,I4); its three whitened Y columns give W4(3,I4). Independence and common identity scale yield W4(5,I4), official option B. A separate verifier checks degrees of freedom, dimensions and transformation arithmetic.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "From normal vectors to random matrices",
+   "objective": "Recall the ingredients used to define a Wishart matrix.",
+   "body": [
+    "In univariate statistics, adding squares of independent standard normal variables produces a chi-square random variable. In multivariate statistics, the analogous operation uses vector outer products and produces a random matrix.",
+    "For a column vector z, the outer product zz′ is a p×p matrix. It is symmetric and positive semidefinite. Summing several such matrices preserves those properties.",
+    "The Wishart distribution describes the random matrix obtained when the vectors are independent multivariate normal observations with a common covariance matrix."
+   ],
+   "items": [
+    {
+     "ask": "What is the order of zz′ when z is p×1?",
+     "recall": "p×p.",
+     "refresh": [
+      "A p×1 column vector has p entries and its transpose is a 1×p row vector. Their product zz′ therefore has p rows and p columns; its order is determined by the vector length, not by the number of observations.",
+      "The (j,k) entry is zⱼzₖ. Since zⱼzₖ=zₖzⱼ, the matrix is symmetric. Also, for every vector a, a′zz′a=(z′a)²≥0, so it is positive semidefinite."
+     ]
+    },
+    {
+     "ask": "What is the covariance matrix of a Np(0,Σ) vector?",
+     "recall": "Σ.",
+     "refresh": [
+      "For Z~Nₚ(0,Σ), Σ is a p×p covariance matrix. Its diagonal entries are coordinate variances and its off-diagonal entries describe covariances between pairs of coordinates.",
+      "The Wishart scale parameter is this covariance matrix Σ, not its inverse. Applying a whitening transformation changes the covariance to Iₚ."
+     ]
+    },
+    {
+     "ask": "What does independence allow when combining random contributions?",
+     "recall": "Use distributional addition results when the required parameters match.",
+     "refresh": [
+      "Independent random vectors can be grouped without changing their joint independence structure.",
+      "For Wishart matrices, independent terms with the same scale matrix add their degrees of freedom. Independence and a common scale are both essential."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "Why does a sum of outer products have matrix rather than scalar values?",
+    "nudge": "Each vector contributes all pairwise coordinate products."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "Wishart as the matrix version of chi-square",
+   "objective": "Interpret the Wishart distribution through outer products.",
+   "body": [
+    "If Z is a standard normal scalar, Z² has a chi-square distribution with one degree of freedom. Adding n independent squared standard normals gives χ²ₙ.",
+    "For p-dimensional normal vectors, each vector contributes a whole matrix ZZ′ rather than one square. Summing n independent contributions produces Wp(n,Σ).",
+    "When p=1, the Wishart distribution reduces to the familiar chi-square structure after accounting for the scale."
+   ],
+   "scenario": {
+    "teaser": "A laboratory stores multiple correlated measurements.",
+    "title": "Repeated multivariate measurements",
+    "body": [
+     "A laboratory records p correlated measurements from each independent specimen. Each specimen produces a vector, not a single scalar. To describe the variation accumulated across specimens, the analyst adds the outer product of each centred vector. The resulting matrix stores sums of squares on its diagonal and cross-products off the diagonal. Under multivariate normal sampling, this random matrix has a Wishart distribution. The number of independent vector contributions determines its degrees of freedom."
+    ],
+    "q": "What replaces the scalar square in the multivariate construction?",
+    "answer": "The vector outer product ZZ′."
+   },
+   "ask": {
+    "q": "What determines the Wishart degrees of freedom in the defining construction?",
+    "nudge": "Count the independent normal vectors being summed."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 9,
+   "title": "Definition, dimension and degrees of freedom",
+   "objective": "Identify the parameters in Wp(n,Σ).",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Wishart definition",
+     "body": "If Z₁,…,Zₙ are independent p-variate normal vectors with mean zero and covariance Σ, then W=Σᵢ ZᵢZᵢ′ has a p-dimensional Wishart distribution with n degrees of freedom and scale Σ: W~Wp(n,Σ)."
+    },
+    {
+     "t": "formula",
+     "h": "Parameter roles",
+     "body": "p is the order of the p×p random matrix; n is the degrees of freedom; Σ is the p×p scale matrix."
+    },
+    {
+     "t": "def",
+     "h": "Matrix properties",
+     "body": "W is symmetric and positive semidefinite. For nonsingular Σ, it is positive definite with probability one when n≥p."
+    },
+    {
+     "t": "formula",
+     "h": "Mean",
+     "body": "E(W)=nΣ. The expected sum of n independent outer products is n times the common covariance matrix."
+    }
+   ],
+   "flow": {
+    "title": "Identify a Wishart distribution",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Identify vector size p",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Count independent vectors n",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Find their covariance Σ",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Write Wp(n,Σ)",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
+   },
+   "ask": {
+    "q": "If four independent 3-variate normal vectors are summed through outer products, what are p and n?",
+    "nudge": "Dimension comes from vector length; degrees of freedom come from the count."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 10,
+   "title": "June 2026 Paper 2 Q17 — decode the matrix",
+   "objective": "Apply whitening and the addition property.",
+   "problem": "Independent X₁,X₂~N₄(0,Σ₁) and Y₁,Y₂,Y₃~N₄(0,Σ₂). Let X=(X₁,X₂), Y=(Y₁,Y₂,Y₃) and Z=Σ₁⁻¹/²XX′Σ₁⁻¹/²+Σ₂⁻¹/²YY′Σ₂⁻¹/². Identify the distribution of Z.",
+   "steps": [
+    {
+     "say": "Inspect the first transformed term.",
+     "math": "Σ₁⁻¹/²XX′Σ₁⁻¹/² = Σⱼ₌₁² (Σ₁⁻¹/²Xⱼ)(Σ₁⁻¹/²Xⱼ)′.",
+     "why": "The matrix product XX′ is the sum of the two column outer products."
+    },
+    {
+     "say": "Find the distribution of each whitened X vector.",
+     "math": "Σ₁⁻¹/²Xⱼ ~ N₄(0,I₄), independently.",
+     "why": "The covariance transforms to Σ₁⁻¹/²Σ₁Σ₁⁻¹/²=I₄."
+    },
+    {
+     "say": "Identify the first Wishart term.",
+     "math": "Σ₁⁻¹/²XX′Σ₁⁻¹/² ~ W₄(2,I₄).",
+     "why": "There are two independent four-dimensional standard normal vectors."
+    },
+    {
+     "say": "Repeat for the Y term.",
+     "math": "Σ₂⁻¹/²YY′Σ₂⁻¹/² ~ W₄(3,I₄).",
+     "why": "There are three independent four-dimensional standard normal vectors after whitening."
+    },
+    {
+     "say": "Add the independent Wishart matrices.",
+     "math": "Z ~ W₄(2+3,I₄)=W₄(5,I₄).",
+     "why": "The two terms are independent and share the same scale matrix I₄."
+    }
+   ],
+   "ask": {
+    "q": "Which option is correct, and why is the dimension four rather than five?",
+    "nudge": "Count vector coordinates for p and columns for degrees of freedom."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 5,
+   "title": "Retrieve the key Wishart rules",
+   "objective": "Recall the definition and addition property.",
+   "intro": "Try these from memory before continuing.",
+   "items": [
+    {
+     "q": "What is the order of W~Wp(n,Σ)?",
+     "a": "p×p."
+    },
+    {
+     "q": "What determines n in the defining construction?",
+     "a": "The number of independent normal vectors."
+    },
+    {
+     "q": "What is E(W)?",
+     "a": "nΣ."
+    },
+    {
+     "q": "When can independent Wishart matrices be added directly?",
+     "a": "When they have the same scale matrix."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s5",
+   "mins": 7,
+   "title": "Complete the degrees-of-freedom count",
+   "objective": "Identify Wishart parameters from vector dimensions and counts.",
+   "problem": "Seven independent N₃(0,I₃) vectors are used to form W=ΣZᵢZᵢ′. Complete the distribution.",
+   "steps": [
+    {
+     "say": "Read the vector dimension.",
+     "math": "Each vector has ",
+     "why": "The vector length determines the matrix order.",
+     "blank": {
+      "prompt": "Enter p.",
+      "answer": "3",
+      "accept": [
+       "3"
+      ],
+      "hint": "The vectors are three-dimensional."
+     }
+    },
+    {
+     "say": "Count independent vectors.",
+     "math": "There are ",
+     "why": "Each independent vector contributes one outer product.",
+     "blank": {
+      "prompt": "Enter n.",
+      "answer": "7",
+      "accept": [
+       "7"
+      ],
+      "hint": "Count the vectors in the sum."
+     }
+    },
+    {
+     "say": "Write the distribution.",
+     "math": "W ~ W₃(",
+     "why": "The scale matrix is the covariance of each vector.",
+     "blank": {
+      "prompt": "Complete the degrees of freedom and scale.",
+      "answer": "7,I₃",
+      "accept": [
+       "7,I3",
+       "7, I3",
+       "7, I₃"
+      ],
+      "hint": "Use the count and the common covariance matrix."
+     }
+    }
+   ],
+   "after": "The expected matrix is E(W)=7I₃. Its order is 3×3.",
+   "ask": {
+    "q": "Would the degrees of freedom change if the same three coordinates were recorded in a different unit?",
+    "nudge": "Units affect scale, not the number of independent vectors."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Addition, transformation and sample covariance",
+   "objective": "Use the main Wishart distribution properties.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Addition property",
+     "body": "If W₁~Wp(n₁,Σ) and W₂~Wp(n₂,Σ) are independent, then W₁+W₂~Wp(n₁+n₂,Σ)."
+    },
+    {
+     "t": "formula",
+     "h": "Linear transformation",
+     "body": "For a suitable full-rank matrix A, if W~Wp(n,Σ), then AWA′~Wp(n,AΣA′). For a square nonsingular A, the transformed matrix remains p-dimensional."
+    },
+    {
+     "t": "formula",
+     "h": "Whitening",
+     "body": "Taking A=Σ⁻¹/² gives Σ⁻¹/²WΣ⁻¹/²~Wp(n,Iₚ)."
+    },
+    {
+     "t": "def",
+     "h": "Sample covariance",
+     "body": "For X₁,…,Xₙ iid Np(μ,Σ), (n−1)S~Wp(n−1,Σ), where S is the unbiased sample covariance matrix. The sample mean vector and S are independent."
+    }
+   ],
+   "ask": {
+    "q": "Why does the sample covariance result have n−1 degrees of freedom?",
+    "nudge": "One degree of freedom is used when the sample mean is estimated."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided transfer: combine two common-scale matrices",
+   "objective": "Apply the addition property without confusing scale and degrees of freedom.",
+   "problem": "Let W₁~W₃(4,2I₃) and W₂~W₃(6,2I₃) independently. Identify the distribution of W₁+W₂ and its expected value.",
+   "hints": [
+    "Check whether both matrices have the same dimension and scale.",
+    "The matrices are independent and share scale 2I₃, so add their degrees of freedom.",
+    "Use E(W)=nΣ for the expected value."
+   ],
+   "answer": "W₁+W₂~W₃(10,2I₃), and E(W₁+W₂)=10(2I₃)=20I₃.",
+   "check": "The dimension remains 3; the degrees of freedom become 10.",
+   "solution": [
+    {
+     "say": "Confirm the common scale.",
+     "math": "Σ₁=Σ₂=2I₃.",
+     "why": "The addition property requires matching scale matrices."
+    },
+    {
+     "say": "Add degrees of freedom.",
+     "math": "4+6=10; W₁+W₂~W₃(10,2I₃).",
+     "why": "Independence permits the sum rule."
+    },
+    {
+     "say": "Compute the expectation.",
+     "math": "E(W₁+W₂)=10×2I₃=20I₃.",
+     "why": "The Wishart mean is degrees of freedom times scale."
+    }
+   ],
+   "scenario": {
+    "teaser": "Pooling independent batches",
+    "title": "Two laboratory batches",
+    "body": [
+     "Two independent laboratories each calculate a matrix sum of centred multivariate outer products. Both populations have the same covariance matrix, and the two laboratories’ datasets are independent. The first batch contributes four degrees of freedom and the second contributes six. Because the scale matrices match, the pooled matrix sum is Wishart with ten degrees of freedom and the same common scale. If the covariance matrices differed, this simple addition rule could not be applied in this form."
+    ],
+    "q": "Which two conditions make the addition rule valid?",
+    "answer": "Independence and a common scale matrix."
+   },
+   "ask": {
+    "q": "What changes when adding these Wishart matrices: p, n or Σ?",
+    "nudge": "Only the degrees of freedom add; the common scale and dimension remain."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s8",
+   "mins": 6,
+   "title": "Avoid the common Wishart traps",
+   "objective": "Distinguish dimension, degrees of freedom and scale.",
+   "intro": "Decide whether each statement is true or false.",
+   "items": [
+    {
+     "claim": "The degrees of freedom equal the dimension p of each random vector.",
+     "tf": false,
+     "why": "Degrees of freedom count independent vectors; p is the vector dimension."
+    },
+    {
+     "claim": "The Wishart matrix is symmetric.",
+     "tf": true,
+     "why": "Each outer product ZZ′ is symmetric, and sums of symmetric matrices remain symmetric."
+    },
+    {
+     "claim": "Independent Wishart matrices with different scale matrices can always be combined by adding degrees of freedom.",
+     "tf": false,
+     "why": "The standard addition property requires a common scale matrix."
+    },
+    {
+     "claim": "For a normal sample, (n−1)S follows Wp(n−1,Σ).",
+     "tf": true,
+     "why": "Estimating the sample mean uses one degree of freedom in the sample covariance."
+    }
+   ],
+   "ask": {
+    "q": "Which parameter is read from the size of each observation vector?",
+    "nudge": "It is the matrix order p."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s9",
+   "mins": 7,
+   "title": "Transfer: identify a transformed Wishart matrix",
+   "objective": "Apply a linear transformation to a Wishart scale matrix.",
+   "problem": "If W~W₂(8,Σ) and A is a nonsingular 2×2 matrix, identify the distribution of AWA′.",
+   "hints": [
+    "The matrix A is square and nonsingular, so the dimension remains two.",
+    "Transform the scale matrix on the left by A and on the right by A transpose.",
+    "The degrees of freedom do not change under this transformation."
+   ],
+   "answer": "AWA′~W₂(8,AΣA′).",
+   "check": "The dimension and degrees of freedom remain 2 and 8 respectively.",
+   "solution": [
+    {
+     "say": "Keep the dimension and degrees of freedom.",
+     "math": "p=2, n=8.",
+     "why": "A nonsingular square transformation does not change the matrix order or number of vector contributions."
+    },
+    {
+     "say": "Transform the scale.",
+     "math": "Σ* = AΣA′.",
+     "why": "Covariance transforms by multiplication with A and A transpose."
+    },
+    {
+     "say": "State the distribution.",
+     "math": "AWA′~W₂(8,AΣA′).",
+     "why": "This is the Wishart transformation property."
+    }
+   ],
+   "ask": {
+    "q": "Does A change the number of degrees of freedom?",
+    "nudge": "A transforms the vectors, not the count of vectors."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s10",
+   "mins": 5,
+   "title": "Exam routine: dimension, count, scale",
+   "objective": "Summarise the identification steps.",
+   "body": [
+    "For every Wishart question, identify p from vector length, n from the number of independent vectors, and Σ from their covariance.",
+    "An outer-product sum of independent Np(0,Σ) vectors follows Wp(n,Σ).",
+    "Independent Wishart matrices with the same scale add their degrees of freedom. Do not apply this shortcut when the scales differ.",
+    "Whitening changes Σ to Iₚ. The dimension p and degrees of freedom n are unchanged.",
+    "For a normal sample, (n−1)S~Wp(n−1,Σ), and the sample mean and sample covariance are independent.",
+    "June 2026 Q17: two whitened X vectors plus three whitened Y vectors yield W₄(5,I₄), option B."
+   ],
+   "ask": {
+    "q": "State the three parameters or identifiers you read before writing a Wishart distribution.",
+    "nudge": "Think vector size, vector count and covariance."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s11",
+   "mins": 10,
+   "title": "Unseen mastery test",
+   "objective": "Demonstrate independent command of the Wishart distribution.",
+   "setId": "multivariate_t5_mastery"
+  }
+ ]
+}
