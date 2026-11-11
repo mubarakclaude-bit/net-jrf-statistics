@@ -1,0 +1,618 @@
+{
+ "id": "multivariatet4",
+ "topicId": "multivariate-t4",
+ "moduleId": "multivariate",
+ "title": "Hotelling’s T²: multivariate mean testing and the F transformation",
+ "breadcrumb": "Module 8 · Multivariate Analysis · Hotelling’s T²",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 94,
+ "objectives": [
+  "Explain why Hotelling’s T² extends the one-sample t test to a vector mean.",
+  "Compute the sample mean vector, unbiased covariance matrix and its inverse.",
+  "Evaluate T²=n(x̄−μ₀)′S⁻¹(x̄−μ₀) without losing cross-product terms.",
+  "Convert one-sample T² to an exact F statistic and identify both degrees of freedom.",
+  "Distinguish one-sample, paired and two-sample Hotelling procedures."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Sample mean vector and covariance matrix",
+   "why": "The statistic compares the observed mean vector with a hypothesised vector and scales the difference by sample covariance."
+  },
+  {
+   "id": "p2",
+   "name": "Matrix inverse and quadratic forms",
+   "why": "The Mahalanobis quadratic form d′S⁻¹d accounts for variances and covariances jointly."
+  },
+  {
+   "id": "p3",
+   "name": "Student t and F distributions",
+   "why": "The exact finite-sample test is conducted through an F transformation with specified degrees of freedom."
+  }
+ ],
+ "traps": [
+  "For the one-sample statistic, use T²=n d′S⁻¹d; do not omit n.",
+  "Use the sample covariance with divisor n−1, not the maximum-likelihood divisor n, in the standard test.",
+  "The inverse covariance matrix is essential; separate univariate t statistics do not reproduce the joint test.",
+  "For one sample, F=(n−p)T²/[p(n−1)] with df (p,n−p).",
+  "For paired data, form difference vectors and apply the one-sample procedure.",
+  "Do not confuse the one-sample and pooled two-sample F transformations."
+ ],
+ "revision": {
+  "sheet": [
+   "One-sample: T² = n(x̄−μ₀)′S⁻¹(x̄−μ₀), where S uses divisor n−1.",
+   "Let d=x̄−μ₀. Compute S, invert S, then calculate the full quadratic form d′S⁻¹d.",
+   "Under H₀ and multivariate normality: [(n−p)/(p(n−1))]T² ~ F(p,n−p).",
+   "Decision: reject H₀ when F exceeds the upper α critical value Fα;p,n−p.",
+   "Paired test: calculate each difference vector, then use the one-sample T² test on those differences.",
+   "Two independent samples with common covariance use pooled Sp and a different scaling and degrees-of-freedom formula.",
+   "S must be nonsingular; in particular, the sample size and data rank must support inversion.",
+   "June 2026 Q4: x̄=(3,3)′, d=(−0.5,0.5)′, S=[[3,1.5],[1.5,1]], T²=7.0."
+  ],
+  "cards": [
+   [
+    "One-sample T²",
+    "n d′S⁻¹d"
+   ],
+   [
+    "Sample covariance",
+    "S=Σ(xᵢ−x̄)(xᵢ−x̄)′/(n−1)"
+   ],
+   [
+    "F conversion",
+    "(n−p)T²/[p(n−1)]"
+   ],
+   [
+    "F degrees of freedom",
+    "(p,n−p)"
+   ],
+   [
+    "Paired design",
+    "One-sample test on difference vectors"
+   ],
+   [
+    "Covariance role",
+    "Accounts for scale and correlation"
+   ]
+  ],
+  "tricks": [
+   "Write p and n beside the formula before substituting; this prevents swapping degrees of freedom.",
+   "For a 2×2 symmetric matrix [[a,b],[b,c]], inverse is 1/(ac−b²)[[c,−b],[−b,a]].",
+   "Compute d′S⁻¹d as a matrix product in two stages and retain the off-diagonal terms."
+  ],
+  "shortcuts": [
+   "Check S is symmetric and positive definite before inversion.",
+   "Check determinant ac−b² is positive for a positive-definite 2×2 covariance matrix.",
+   "If the question asks for T², stop at T²; apply the F conversion only when testing."
+  ],
+  "remember": [
+   "T² is a squared multivariate distance, not itself an F statistic.",
+   "One-sample F degrees of freedom are (p,n−p)."
+  ]
+ },
+ "howto": "Work through the June 2026 question first, then derive the statistic from the geometry of a vector mean. The central calculation is the covariance-adjusted squared distance between x̄ and μ₀. The lesson separates computing T² from converting it to F, because examination questions may ask for either quantity. The paired and two-sample sections prevent formula transfer across designs.",
+ "refs": [
+  {
+   "title": "Applied Multivariate Statistical Analysis",
+   "where": "Hotelling’s T² and multivariate inference chapters",
+   "site": "Johnson and Wichern",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Classical treatment of one- and two-sample Hotelling tests."
+  },
+  {
+   "title": "Applied Multivariate Statistical Analysis",
+   "where": "One-sample and two-sample inference",
+   "site": "Penn State STAT 505",
+   "url": "https://online.stat.psu.edu/stat505/",
+   "type": "Free course notes",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Worked multivariate inference material and distributional transformations."
+  },
+  {
+   "title": "Multivariate Statistical Methods",
+   "where": "Hotelling’s T-squared",
+   "site": "Rencher and Christensen",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Detailed theoretical assumptions and multivariate test derivations."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [
+  {
+   "paper": "j26",
+   "q": 4
+  }
+ ],
+ "provenance": "Authored 11 November 2026. Anchored to June 2026 Paper 2 Q4 (j26-q04). The observation vectors and null mean were transcribed from seed/pyq_j26_full.json. Exact rational arithmetic independently verifies x̄=(3,3)′, S=[[3,3/2],[3/2,1]], det(S)=3/4, S⁻¹=[[4/3,−2],[−2,4]], d=(−1/2,1/2)′, d′S⁻¹d=7/3 and T²=3×7/3=7. The one-sample F conversion is 7/4=1.75 with df (2,1). A separate verifier checks these values and all mastery keys.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "The vector problem behind the test",
+   "objective": "Recover the matrix ingredients needed for multivariate inference.",
+   "body": [
+    "A univariate test asks whether one population mean equals a stated value. A multivariate test asks whether several population means, considered together, equal a stated vector.",
+    "The variables may be correlated. Testing each coordinate separately ignores that relationship and creates a different testing problem.",
+    "Hotelling’s T² measures how far the sample mean vector lies from the null vector after adjusting for the covariance structure."
+   ],
+   "items": [
+    {
+     "ask": "What does the diagonal of a sample covariance matrix contain?",
+     "recall": "The sample variances.",
+     "refresh": [
+      "The diagonal entry Sⱼⱼ is the sample variance of variable j. The off-diagonal entry Sⱼₖ is the sample covariance between variables j and k.",
+      "The off-diagonal terms matter because a displacement in one coordinate may be less unusual when it follows a direction of strong positive covariance. The inverse covariance matrix adjusts for that joint geometry."
+     ]
+    },
+    {
+     "ask": "What is a quadratic form d′Ad?",
+     "recall": "A scalar formed by multiplying a vector, a matrix and the vector transpose.",
+     "refresh": [
+      "For a column vector d, d′Ad is a single number. If A is positive definite, it is non-negative and is positive for every non-zero d.",
+      "In Hotelling’s statistic, A=S⁻¹. The quadratic form measures squared distance after scaling and rotating according to the sample covariance."
+     ]
+    },
+    {
+     "ask": "Which divisor defines the usual unbiased sample covariance?",
+     "recall": "n−1.",
+     "refresh": [
+      "The usual sample covariance matrix is the sum of outer products (xᵢ−x̄)(xᵢ−x̄)′ divided by n−1.",
+      "Using n instead changes S and therefore changes T². Keep the convention fixed throughout the calculation."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "Why is the covariance matrix needed rather than only the sample variances?",
+    "nudge": "Think about how correlated coordinates change the direction and scale of a displacement."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "Distance that respects correlation",
+   "objective": "Interpret T² as a covariance-adjusted distance.",
+   "body": [
+    "Suppose a sample mean is two units above the target on variable 1 and one unit below on variable 2. Whether that displacement is unusual depends on the variables’ scales and their correlation.",
+    "Euclidean distance treats every direction equally. Mahalanobis distance rescales and rotates the displacement using the inverse covariance matrix.",
+    "Hotelling’s T² is n times the squared Mahalanobis distance between the sample mean and the hypothesised mean."
+   ],
+   "scenario": {
+    "teaser": "Two quality measures move together.",
+    "title": "A manufacturing process",
+    "body": [
+     "A plant monitors tensile strength and elongation. Historical measurements show positive covariance: batches with higher tensile strength often have higher elongation. A new sample mean is displaced from the target in both coordinates. The quality team wants one joint test rather than two isolated tests. The covariance-adjusted distance recognises that a displacement along the usual joint movement direction is less surprising than an equally long displacement against that pattern."
+    ],
+    "q": "What feature makes the joint distance different from ordinary Euclidean distance?",
+    "answer": "It uses S inverse, so it adjusts for both the variances and the covariance."
+   },
+   "ask": {
+    "q": "What is the one-sample statistic proportional to?",
+    "nudge": "It is a sample-size multiple of a squared Mahalanobis distance."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 9,
+   "title": "Definition and exact F conversion",
+   "objective": "State the one-sample statistic and its null distribution.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Set-up",
+     "body": "Let X₁,…,Xₙ be independent observations from a p-variate normal population with mean μ and nonsingular covariance Σ. Test H₀: μ=μ₀."
+    },
+    {
+     "t": "formula",
+     "h": "One-sample Hotelling statistic",
+     "body": "T² = n(x̄−μ₀)′S⁻¹(x̄−μ₀), where S = Σᵢ(Xᵢ−x̄)(Xᵢ−x̄)′/(n−1)."
+    },
+    {
+     "t": "formula",
+     "h": "Exact finite-sample transformation",
+     "body": "Under H₀: [(n−p)/(p(n−1))]T² follows F with p and n−p degrees of freedom."
+    },
+    {
+     "t": "note",
+     "h": "Assumptions",
+     "body": "The standard exact result assumes independent multivariate-normal observations and a nonsingular sample covariance matrix. The test is not distribution-free."
+    }
+   ],
+   "flow": {
+    "title": "One-sample Hotelling test workflow",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Sample vectors",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Compute x̄ and S",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Find d and S⁻¹",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Calculate T²",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 4,
+      "c": 0,
+      "label": "Convert to F",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 5,
+      "c": 0,
+      "label": "Compare with F critical",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ]
+   },
+   "ask": {
+    "q": "For p=2 and n=10, what are the F degrees of freedom?",
+    "nudge": "The first is p; the second is n−p."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 12,
+   "title": "June 2026 Paper 2 Q4 — full calculation",
+   "objective": "Reproduce the official T² value without skipping matrix arithmetic.",
+   "problem": "Test H₀: μ=(3.5,2.5)′ from X₁=(1,2)′, X₂=(4,4)′ and X₃=(4,3)′. Find T².",
+   "steps": [
+    {
+     "say": "Compute the sample mean coordinate by coordinate.",
+     "math": "x̄=((1+4+4)/3,(2+4+3)/3)′=(3,3)′.",
+     "why": "The three vectors contribute to each coordinate separately."
+    },
+    {
+     "say": "Subtract the null mean.",
+     "math": "d=x̄−μ₀=(3−3.5,3−2.5)′=(−1/2,1/2)′.",
+     "why": "Keep the signs; the cross-product term depends on them."
+    },
+    {
+     "say": "Compute the unbiased sample covariance matrix.",
+     "math": "S=1/2 Σ(Xᵢ−x̄)(Xᵢ−x̄)′=[[3,3/2],[3/2,1]].",
+     "why": "The divisor is n−1=2. The off-diagonal sample covariance is 1.5."
+    },
+    {
+     "say": "Invert the 2×2 matrix.",
+     "math": "det(S)=3×1−(3/2)²=3/4; S⁻¹=(4/3)[[1,−3/2],[−3/2,3]]=[[4/3,−2],[−2,4]].",
+     "why": "For [[a,b],[b,c]], the inverse is 1/(ac−b²)[[c,−b],[−b,a]]."
+    },
+    {
+     "say": "Evaluate the quadratic form.",
+     "math": "S⁻¹d=(−5/3,3)′; d′S⁻¹d=(−1/2)(−5/3)+(1/2)(3)=7/3.",
+     "why": "Both diagonal and off-diagonal contributions are included."
+    },
+    {
+     "say": "Multiply by n.",
+     "math": "T²=3×(7/3)=7.0.",
+     "why": "The question asks for T² itself, not its F transform."
+    }
+   ],
+   "ask": {
+    "q": "What is the exact T² answer and the corresponding option?",
+    "nudge": "Multiply the quadratic form by n only after evaluating it."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 5,
+   "title": "Retrieve the formula before using it",
+   "objective": "Recall the definitions and degrees of freedom.",
+   "intro": "Answer these without looking back. The distinction between the statistic and its F transform is a frequent source of lost marks.",
+   "items": [
+    {
+     "q": "What is d?",
+     "a": "x̄−μ₀."
+    },
+    {
+     "q": "What divisor is used in S?",
+     "a": "n−1."
+    },
+    {
+     "q": "What multiplies the quadratic form in T²?",
+     "a": "n."
+    },
+    {
+     "q": "What are the one-sample F degrees of freedom?",
+     "a": "p and n−p."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s5",
+   "mins": 8,
+   "title": "Complete the F conversion",
+   "objective": "Move from a computed T² to the correct F statistic.",
+   "problem": "A one-sample test has p=2, n=8 and observed T²=12. Complete the conversion.",
+   "steps": [
+    {
+     "say": "Identify the scale factor.",
+     "math": "(n−p)/[p(n−1)] = ",
+     "why": "Substitute p and n before simplifying.",
+     "blank": {
+      "prompt": "Enter the scale factor.",
+      "answer": "6/14 = 3/7",
+      "accept": [
+       "3/7",
+       "0.428571",
+       "6/14"
+      ],
+      "hint": "Use (8−2)/(2×7)."
+     }
+    },
+    {
+     "say": "Multiply by T².",
+     "math": "F = (3/7)×12 = ",
+     "why": "This is the transformed test statistic.",
+     "blank": {
+      "prompt": "Enter F.",
+      "answer": "36/7 ≈ 5.143",
+      "accept": [
+       "36/7",
+       "5.143",
+       "5.14"
+      ],
+      "hint": "Multiply 12 by 3, then divide by 7."
+     }
+    },
+    {
+     "say": "Record the degrees of freedom.",
+     "math": "df₁=2, df₂=6.",
+     "why": "The numerator df is p and denominator df is n−p."
+    }
+   ],
+   "after": "Compare F=5.143 with the upper-tail critical value Fα;2,6. Do not compare T² directly with an F critical value.",
+   "ask": {
+    "q": "Why is it not enough to compare T²=12 directly with an F critical value?",
+    "nudge": "The two statistics have different null distributions and scales."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Design determines the formula",
+   "objective": "Choose the correct Hotelling procedure for the sampling design.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Paired observations",
+     "body": "For paired multivariate measurements, form Dᵢ=Xᵢ−Yᵢ for each pair. Test the mean difference vector with the one-sample Hotelling statistic."
+    },
+    {
+     "t": "formula",
+     "h": "Two independent samples",
+     "body": "With common covariance, pooled Sp and N=n₁+n₂: T²=[n₁n₂/N](x̄₁−x̄₂)′Sp⁻¹(x̄₁−x̄₂). The exact F conversion is [(N−p−1)/(p(N−2))]T² ~ F(p,N−p−1)."
+    },
+    {
+     "t": "trap",
+     "h": "Do not mix the transformations",
+     "body": "The two-sample formula has a pooled covariance and different scaling and degrees of freedom. It is not the one-sample formula with n replaced by N."
+    },
+    {
+     "t": "assume",
+     "h": "Design and assumptions",
+     "body": "Independent groups, multivariate normality within groups and a common population covariance matrix underpin the classical pooled two-sample test."
+    }
+   ],
+   "ask": {
+    "q": "How do you handle a paired multivariate design?",
+    "nudge": "Reduce each pair to one difference vector."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 9,
+   "title": "Guided transfer: a paired process study",
+   "objective": "Recognise and set up a paired Hotelling test.",
+   "problem": "Five machines are measured before and after calibration on two performance variables. The research question is whether the mean change vector is zero. State the correct test statistic and F degrees of freedom; do not calculate a numeric result.",
+   "hints": [
+    "The measurements are paired, so preserve each machine’s before-after link.",
+    "Create one two-dimensional difference vector per machine and use the one-sample procedure.",
+    "Here n=5 and p=2. Substitute these into the one-sample F conversion."
+   ],
+   "answer": "Use Dᵢ=Afterᵢ−Beforeᵢ, then T²=5 D̄′S_D⁻¹D̄. The F transformation is (3/8)T² with df (2,3).",
+   "check": "The denominator degrees of freedom are n−p=3.",
+   "solution": [
+    {
+     "say": "Construct the paired difference vectors.",
+     "math": "Dᵢ=Afterᵢ−Beforeᵢ.",
+     "why": "Pairing removes between-machine baseline variation from the target comparison."
+    },
+    {
+     "say": "Treat the five difference vectors as one sample.",
+     "math": "T²=5 D̄′S_D⁻¹D̄.",
+     "why": "There are n=5 vectors and p=2 response variables."
+    },
+    {
+     "say": "Transform to F.",
+     "math": "F=[(5−2)/(2(5−1))]T²=(3/8)T²; df=(2,3).",
+     "why": "This is the one-sample transformation applied to the differences."
+    }
+   ],
+   "scenario": {
+    "teaser": "Repeated measurements on the same units.",
+    "title": "Calibration before and after",
+    "body": [
+     "Each of five machines contributes a pair of two-variable measurements. Treating the ten measurements as independent would discard the pairing and misrepresent the sampling design. The analysis should first create five difference vectors. The null mean difference is the zero vector. The resulting one-sample Hotelling statistic tests the joint mean change."
+    ],
+    "q": "Why should the paired observations not be analysed as two unrelated samples?",
+    "answer": "Because the two measurements from each machine are dependent and the pairing is part of the design."
+   },
+   "ask": {
+    "q": "What is the denominator degree of freedom in the F conversion?",
+    "nudge": "Use n−p with n=5 and p=2."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s8",
+   "mins": 6,
+   "title": "Check the mistakes that change the answer",
+   "objective": "Detect formula and design errors before submission.",
+   "intro": "Mark each claim true or false and read the reason.",
+   "items": [
+    {
+     "claim": "The one-sample statistic is d′S⁻¹d without a sample-size multiplier.",
+     "tf": false,
+     "why": "The standard one-sample definition includes n: T²=n d′S⁻¹d."
+    },
+    {
+     "claim": "The sample covariance matrix in the standard test uses divisor n−1.",
+     "tf": true,
+     "why": "This is the unbiased sample covariance convention used in the exact formula."
+    },
+    {
+     "claim": "For a paired test, calculate differences and use the one-sample procedure.",
+     "tf": true,
+     "why": "The paired differences form one sample of p-dimensional vectors."
+    },
+    {
+     "claim": "For a one-sample test, the F degrees of freedom are (n−p,p).",
+     "tf": false,
+     "why": "The correct order is numerator p and denominator n−p."
+    }
+   ],
+   "ask": {
+    "q": "Which single omission most directly changes the June 2026 answer?",
+    "nudge": "Check the definition of T² after evaluating the quadratic form."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s9",
+   "mins": 8,
+   "title": "Transfer: calculate a simple two-dimensional T²",
+   "objective": "Evaluate a covariance-adjusted distance with a diagonal covariance matrix.",
+   "problem": "Let n=6, d=(1,−1)′ and S=diag(4,1). Find T².",
+   "hints": [
+    "A diagonal matrix is inverted by taking reciprocals of its diagonal entries.",
+    "Multiply S⁻¹ by d before taking the dot product with d.",
+    "Then multiply the quadratic form by n."
+   ],
+   "answer": "S⁻¹=diag(1/4,1); d′S⁻¹d=1/4+1=5/4; T²=6×5/4=7.5.",
+   "check": "The quadratic form is positive and equals 1.25.",
+   "solution": [
+    {
+     "say": "Invert the covariance matrix.",
+     "math": "S⁻¹=diag(1/4,1).",
+     "why": "The inverse of a nonsingular diagonal matrix has reciprocal diagonal entries."
+    },
+    {
+     "say": "Evaluate the quadratic form.",
+     "math": "d′S⁻¹d=(1)(1/4)(1)+(−1)(1)(−1)=5/4.",
+     "why": "The second coordinate contributes 1."
+    },
+    {
+     "say": "Multiply by sample size.",
+     "math": "T²=6×5/4=7.5.",
+     "why": "The sample-size multiplier belongs to the one-sample definition."
+    }
+   ],
+   "ask": {
+    "q": "What would T² be if the first variance were 1 instead of 4?",
+    "nudge": "The first coordinate would then contribute 1 rather than 1/4."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s10",
+   "mins": 5,
+   "title": "The complete exam routine",
+   "objective": "Consolidate the calculation and design checks.",
+   "body": [
+    "First identify the design: one sample, paired sample, or two independent samples. Choose the matching statistic before calculating.",
+    "For one sample, compute x̄, S with divisor n−1, d=x̄−μ₀, and S⁻¹. Then evaluate T²=n d′S⁻¹d.",
+    "If a hypothesis test is requested, convert to F using [(n−p)/(p(n−1))]T² and degrees of freedom (p,n−p).",
+    "For June 2026 Q4, T²=7.0 is option C. Its F equivalent is 1.75 with df (2,1). The requested answer was T², so option C is the response.",
+    "Before submitting, check matrix symmetry, determinant, signs in d, the n multiplier, and the order of the F degrees of freedom."
+   ],
+   "ask": {
+    "q": "State the one-sample formula and the F degrees of freedom from memory.",
+    "nudge": "Write T² first, then the conversion on a separate line."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s11",
+   "mins": 10,
+   "title": "Unseen mastery test",
+   "objective": "Demonstrate independent command of Hotelling’s T².",
+   "setId": "multivariate_t4_mastery"
+  }
+ ]
+}
