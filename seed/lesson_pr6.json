@@ -1,0 +1,670 @@
+{
+  "id": "probabilityt6",
+  "topicId": "probability-t6",
+  "moduleId": "probability",
+  "title": "Standard Continuous Distributions",
+  "breadcrumb": "Probability → Standard continuous distributions",
+  "engine": "B",
+  "engineName": "Probability — continuous laws and parameterisations",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 100,
+  "objectives": [
+    "Identify support and parameterisation of the main continuous distribution families.",
+    "Compute probabilities from PDFs, CDFs and survival functions.",
+    "Distinguish exponential and gamma rate from scale conventions.",
+    "Calculate means and variances for uniform, exponential, gamma, beta and normal laws.",
+    "Recognise chi-square, t and F distributions and their parameter roles."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "PDFs, CDFs and integration",
+      "why": "Read and integrate density functions."
+    },
+    {
+      "id": "p2",
+      "name": "Expectation and variance",
+      "why": "Compute distributional moments."
+    },
+    {
+      "id": "p3",
+      "name": "Gamma and beta functions",
+      "why": "Evaluate Gamma and Beta normalising constants."
+    }
+  ],
+  "traps": [
+    "Identify support before choosing a family.",
+    "For exponential rate λ, mean=1/λ; for scale θ, mean=θ.",
+    "Gamma rate and scale are reciprocals.",
+    "Beta is supported on (0,1); Gamma and chi-square on (0,∞).",
+    "For continuous X, P(X=x)=0 even if f(x)>0.",
+    "F degrees of freedom are ordered: numerator first, denominator second."
+  ],
+  "revision": {
+    "sheet": [
+      "Uniform(a,b): mean (a+b)/2, variance (b−a)²/12.",
+      "Exp(rate λ): mean 1/λ, variance 1/λ², survival e^(−λx).",
+      "Gamma(shape α, rate λ): mean α/λ, variance α/λ².",
+      "Beta(α,β): mean α/(α+β), variance αβ/[(α+β)²(α+β+1)].",
+      "Normal(μ,σ²): Z=(X−μ)/σ.",
+      "χ²_ν=Gamma(ν/2, rate 1/2).",
+      "t_ν=Z/√(U/ν).",
+      "F=(U₁/ν₁)/(U₂/ν₂)."
+    ],
+    "cards": [
+      [
+        "Uniform",
+        "Finite interval; constant density"
+      ],
+      [
+        "Exponential",
+        "Memoryless; mean reciprocal rate"
+      ],
+      [
+        "Gamma",
+        "Positive; shape and rate"
+      ],
+      [
+        "Beta",
+        "Unit interval; two shape parameters"
+      ],
+      [
+        "Normal",
+        "All real values; standardise"
+      ],
+      [
+        "Chi-square",
+        "Gamma with rate 1/2"
+      ]
+    ],
+    "tricks": [
+      "Read rate or scale before using a formula.",
+      "Support usually identifies the family quickly.",
+      "For integer Gamma shape use Erlang survival sums."
+    ],
+    "shortcuts": [
+      "Exp(rate λ) is Gamma(1,λ).",
+      "χ²_ν is Gamma(ν/2,1/2).",
+      "Beta normalising constant is B(α,β)."
+    ],
+    "remember": [
+      "Rate and scale are reciprocals.",
+      "A density value is not a point probability."
+    ]
+  },
+  "howto": "Identify support first, then match the density kernel and parameter convention. Work the Gamma survival example and Beta tail integral, then practise rate-versus-scale conversions. A density value is not a point probability.",
+  "refs": [
+    {
+      "title": "Introduction to Mathematical Statistics",
+      "where": "Continuous distributions",
+      "site": "Hogg, McKean and Craig",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Density families and moments."
+    },
+    {
+      "title": "A First Course in Probability",
+      "where": "Continuous random variables",
+      "site": "Sheldon Ross",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "CDF, PDF and standard continuous laws."
+    },
+    {
+      "title": "Statistical Inference",
+      "where": "Common distribution families",
+      "site": "Casella and Berger",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Gamma, beta, normal and sampling distributions."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Proposed platform settings, not an NTA rule."
+  },
+  "provenance": "Original syllabus-aligned lesson authored 12 November 2026. Gamma(3, rate 2), Beta(2,3), exponential rate/scale and chi-square moments were checked algebraically. No PYQ attribution is claimed.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Before the lesson — four foundations",
+      "objective": "Retrieve density, CDF and expectation.",
+      "body": [
+        "A continuous law is identified by support, density and parameters.",
+        "The main exam traps are rate versus scale, support limits and confusing a density value with a point probability."
+      ],
+      "ask": {
+        "q": "What is P(X=x) for an absolutely continuous variable?",
+        "nudge": "A density is not a point mass."
+      },
+      "items": [
+        {
+          "ask": "What must a PDF satisfy?",
+          "recall": "Non-negative and integrates to one.",
+          "refresh": [
+            "Its value may exceed one."
+          ]
+        },
+        {
+          "ask": "How is P(a<X<b) computed?",
+          "recall": "F(b)−F(a), or integrate f from a to b.",
+          "refresh": [
+            "Use the support."
+          ]
+        },
+        {
+          "ask": "What is the variance?",
+          "recall": "E(X²)−[E(X)]².",
+          "refresh": [
+            "It is not the second raw moment."
+          ]
+        },
+        {
+          "ask": "What is the Gamma function at an integer n?",
+          "recall": "Γ(n)=(n−1)!.",
+          "refresh": [
+            "It extends the factorial."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Support and parameterisation come first",
+      "objective": "Use support and rate/scale to identify the family.",
+      "body": [
+        "The support often narrows the possible family before any calculation. A proportion lives on (0,1); a waiting time lives on (0,∞); a normal variable can take any real value.",
+        "For exponential and Gamma laws, rate and scale are reciprocals. Writing the density before using a parameter prevents the most common factor error."
+      ],
+      "scenario": {
+        "teaser": "A call-centre manager mistakes an exponential rate for its mean.",
+        "title": "Rate and scale reverse the answer",
+        "body": [
+          "A waiting time is exponential with rate λ=4 per hour. A report states that the average wait is four hours.",
+          "Under the rate convention, the mean is 1/λ=0.25 hours, or fifteen minutes. The survival probability beyond half an hour is e^(−4×.5)=e^(−2)=0.1353.",
+          "If written with scale θ, then θ=1/λ=.25 hours and the density is θ⁻¹e^(−x/θ). Rate and scale are reciprocals.",
+          "Write the density before substituting a parameter. It reveals whether the given parameter is a rate or scale."
+        ],
+        "q": "For Exp(rate 4), what are the mean and P(X>.5)?",
+        "answer": "Mean=.25 hours; P(X>.5)=e^(−2)≈.1353."
+      },
+      "ask": {
+        "q": "Why should you write the density before substituting λ?",
+        "nudge": "It tells you whether λ multiplies x in the exponent or divides it."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 10,
+      "title": "The standard continuous families",
+      "objective": "Compare support, density and moments.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Uniform(a,b)",
+          "body": "f(x)=1/(b−a), a<x<b; E(X)=(a+b)/2; Var(X)=(b−a)²/12. Probabilities are interval lengths divided by b−a."
+        },
+        {
+          "t": "def",
+          "h": "Exponential(rate λ)",
+          "body": "f(x)=λe^(−λx), x≥0; P(X>x)=e^(−λx); mean=1/λ and variance=1/λ². Scale θ=1/λ."
+        },
+        {
+          "t": "step",
+          "h": "Gamma(shape α, rate λ)",
+          "body": "f(x)=λ^αx^(α−1)e^(−λx)/Γ(α); mean=α/λ, variance=α/λ². With scale θ, mean=αθ."
+        },
+        {
+          "t": "step",
+          "h": "Beta(α,β)",
+          "body": "f(x)=x^(α−1)(1−x)^(β−1)/B(α,β), 0<x<1; mean=α/(α+β); variance=αβ/[(α+β)²(α+β+1)]."
+        },
+        {
+          "t": "step",
+          "h": "Normal(μ,σ²)",
+          "body": "Standardise Z=(X−μ)/σ. Linear combinations of jointly normal variables remain normal."
+        },
+        {
+          "t": "step",
+          "h": "Chi-square, t and F",
+          "body": "χ²_ν is Gamma(ν/2, rate 1/2); t_ν=Z/√(U/ν); F_{ν1,ν2}=(U₁/ν₁)/(U₂/ν₂), independent chi-squares."
+        }
+      ],
+      "table": {
+        "caption": "The continuous families most often confused",
+        "head": [
+          "Family",
+          "Support",
+          "Mean",
+          "Variance"
+        ],
+        "rows": [
+          [
+            "Uniform(a,b)",
+            "(a,b)",
+            "(a+b)/2",
+            "(b−a)²/12"
+          ],
+          [
+            "Exponential(rate λ)",
+            "x>0",
+            "1/λ",
+            "1/λ²"
+          ],
+          [
+            "Gamma(α, rate λ)",
+            "x>0",
+            "α/λ",
+            "α/λ²"
+          ],
+          [
+            "Beta(α,β)",
+            "(0,1)",
+            "α/(α+β)",
+            "αβ/[(α+β)²(α+β+1)]"
+          ],
+          [
+            "Normal(μ,σ²)",
+            "R",
+            "μ",
+            "σ²"
+          ],
+          [
+            "χ²_ν",
+            "x>0",
+            "ν",
+            "2ν"
+          ]
+        ]
+      },
+      "flow": {
+        "title": "Identify a continuous law",
+        "alt": "Decision flow by support and density kernel",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Check the support",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 0,
+            "label": "Finite interval?",
+            "kind": "dec"
+          },
+          {
+            "id": "c",
+            "r": 1,
+            "c": 2,
+            "label": "Positive half-line or all real?",
+            "kind": "dec"
+          },
+          {
+            "id": "d",
+            "r": 2,
+            "c": 0,
+            "label": "Uniform or Beta",
+            "kind": "end"
+          },
+          {
+            "id": "e",
+            "r": 2,
+            "c": 2,
+            "label": "Gamma / exponential / normal / t",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "a",
+            "to": "c"
+          },
+          {
+            "from": "b",
+            "to": "d"
+          },
+          {
+            "from": "c",
+            "to": "e"
+          }
+        ],
+        "note": "Support first, kernel second, parameter convention third."
+      },
+      "ask": {
+        "q": "What is the quickest first discriminator between Beta and Gamma?",
+        "nudge": "Compare their supports."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example — Gamma waiting time",
+      "objective": "Compute moments and a survival probability.",
+      "problem": "Let X~Gamma(shape 3, rate 2). Find its mean, variance and P(X>2).",
+      "steps": [
+        {
+          "say": "Identify parameters",
+          "math": "α=3, rate λ=2; f(x)=2³x²e^(−2x)/Γ(3).",
+          "why": "The word rate is decisive."
+        },
+        {
+          "say": "Compute moments",
+          "math": "E(X)=α/λ=1.5; Var(X)=α/λ²=.75.",
+          "why": "Do not multiply by the rate."
+        },
+        {
+          "say": "Use the Erlang survival formula",
+          "math": "P(X>2)=e^(−4)[1+4+4²/2]=13e^(−4)≈.2381.",
+          "why": "For integer shape 3 this is the waiting time to the third event of a rate-2 Poisson process."
+        }
+      ],
+      "after": "For integer shape, Gamma is an Erlang waiting-time distribution.",
+      "ask": {
+        "q": "What changes if the Gamma parameter is scale θ instead of rate λ?",
+        "nudge": "The mean becomes αθ."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 3,
+      "title": "Pause and retrieve",
+      "objective": "Recall the family formulas.",
+      "intro": "Answer before revealing.",
+      "items": [
+        {
+          "q": "Mean of Exp(rate λ)?",
+          "a": "1/λ."
+        },
+        {
+          "q": "Mean of Gamma(shape α, rate λ)?",
+          "a": "α/λ."
+        },
+        {
+          "q": "Support of Beta?",
+          "a": "(0,1)."
+        },
+        {
+          "q": "Variance of Uniform(a,b)?",
+          "a": "(b−a)²/12."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 7,
+      "title": "Complete the Beta moments",
+      "objective": "Fill the mean and variance.",
+      "problem": "For Beta(2,3), find its first two moments.",
+      "steps": [
+        {
+          "say": "Mean.",
+          "blank": {
+            "prompt": "E(X)=?",
+            "answer": "0.4",
+            "accept": [
+              ".4",
+              "2/5"
+            ],
+            "hint": "α/(α+β)."
+          },
+          "why": "2/5=.4."
+        },
+        {
+          "say": "Variance.",
+          "blank": {
+            "prompt": "Var(X)=?",
+            "answer": "0.04",
+            "accept": [
+              ".04",
+              "1/25"
+            ],
+            "hint": "αβ/[(α+β)²(α+β+1)]."
+          },
+          "why": "6/(25×6)=.04."
+        },
+        {
+          "say": "Upper tail.",
+          "blank": {
+            "prompt": "P(X>1/2)=?",
+            "answer": "5/16",
+            "accept": [
+              "5/16",
+              ".3125"
+            ],
+            "hint": "Integrate 12x(1−x)² from .5 to 1."
+          },
+          "why": "The tail probability is 5/16."
+        }
+      ],
+      "after": "Beta parameters control shape; the support remains the unit interval."
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Related laws — chi-square, t and F",
+      "objective": "Recognise the construction and degrees of freedom.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Chi-square as Gamma",
+          "body": "χ²_ν is Gamma(shape ν/2, rate 1/2); mean ν and variance 2ν."
+        },
+        {
+          "t": "formula",
+          "h": "Student t",
+          "body": "t_ν=Z/√(U/ν), where Z~N(0,1), U~χ²_ν and they are independent."
+        },
+        {
+          "t": "formula",
+          "h": "F distribution",
+          "body": "F_{ν₁,ν₂}=(U₁/ν₁)/(U₂/ν₂), with independent chi-squares. The numerator df is written first."
+        }
+      ],
+      "ask": {
+        "q": "What is the mean of χ²_6 and its variance?",
+        "nudge": "They are ν and 2ν."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s7",
+      "mins": 9,
+      "title": "On your own — Beta probability",
+      "objective": "Compute moments and a tail area.",
+      "problem": "For X~Beta(2,3), find E(X), Var(X), and P(X>1/2).",
+      "hints": [
+        "Mean=α/(α+β).",
+        "Variance=αβ/[(α+β)²(α+β+1)].",
+        "f(x)=12x(1−x)²; integrate from 1/2 to 1."
+      ],
+      "answer": "E(X)=.4; Var(X)=.04; P(X>.5)=5/16=.3125.",
+      "check": "The Beta density is supported on (0,1); use the normalising constant 12.",
+      "scenario": {
+        "teaser": "A reliability analyst must distinguish Gamma from Beta by support and kernel.",
+        "title": "Support is the first clue",
+        "body": [
+          "A lifetime is positive and has density proportional to x²e^(−2x). The power identifies Gamma shape 3; the exponential term identifies rate 2.",
+          "A proportion is bounded between zero and one and has density proportional to x(1−x)². That is Beta(2,3).",
+          "Both can be skewed, but their supports differ: Gamma lives on (0,∞), Beta on (0,1).",
+          "For exam questions identify support first, match the kernel second, and check the normalising constant and parameter convention last."
+        ],
+        "q": "Which family has support (0,1) and density proportional to x(1−x)²?",
+        "answer": "Beta(2,3)."
+      },
+      "solution": [
+        {
+          "say": "Mean",
+          "math": "2/(2+3)=.4",
+          "why": "Use the Beta mean."
+        },
+        {
+          "say": "Variance",
+          "math": "6/(25×6)=.04",
+          "why": "Substitute α=2, β=3."
+        },
+        {
+          "say": "Tail probability",
+          "math": "∫₁/₂¹12x(1−x)²dx=5/16=.3125",
+          "why": "Integrate the stated density over the upper half."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s8",
+      "mins": 6,
+      "title": "Six claims — decide before revealing",
+      "objective": "Avoid parameter and support errors.",
+      "intro": "Decide true or false.",
+      "items": [
+        {
+          "claim": "Identify support before choosing a family.",
+          "tf": true,
+          "why": "True: support is a primary clue."
+        },
+        {
+          "claim": "For exponential rate λ, mean=1/λ; for scale θ, mean=θ.",
+          "tf": true,
+          "why": "True: rate and scale are reciprocal parameterisations."
+        },
+        {
+          "claim": "Gamma rate and scale are reciprocals.",
+          "tf": true,
+          "why": "True: Gamma scale is 1/λ."
+        },
+        {
+          "claim": "Beta is supported on (0,1); Gamma and chi-square on (0,∞).",
+          "tf": true,
+          "why": "True: their supports differ."
+        },
+        {
+          "claim": "For continuous X, P(X=x)=0 even if f(x)>0.",
+          "tf": true,
+          "why": "True: continuous laws have no point masses."
+        },
+        {
+          "claim": "F degrees of freedom are ordered: numerator first, denominator second.",
+          "tf": true,
+          "why": "True: F degrees of freedom are ordered."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Transfer problem — exponential waiting time",
+      "objective": "Convert rate to scale and compute a survival probability.",
+      "problem": "For X~Exponential(rate 4), find E(X), Var(X), P(X>.5), and its equivalent scale.",
+      "hints": [
+        "Mean is reciprocal rate.",
+        "Variance is reciprocal rate squared.",
+        "Survival is e^(−λx); scale θ=1/λ."
+      ],
+      "answer": "Mean=.25; variance=.0625; P(X>.5)=e^(−2)=.1353; scale=.25.",
+      "check": "Rate 4 is not a mean of 4 hours.",
+      "solution": [
+        {
+          "say": "Mean and variance",
+          "math": "E(X)=1/4=.25; Var(X)=1/16=.0625",
+          "why": "Use the rate parameterisation."
+        },
+        {
+          "say": "Survival probability",
+          "math": "P(X>.5)=e^(−4×.5)=e^(−2)=.1353",
+          "why": "Use the survival function."
+        },
+        {
+          "say": "Scale parameter",
+          "math": "θ=1/λ=.25",
+          "why": "Rate and scale are reciprocals."
+        }
+      ]
+    },
+    {
+      "kind": "recall",
+      "id": "s10",
+      "mins": 3,
+      "title": "Second recall — quick identification",
+      "objective": "Retrieve key distribution cues.",
+      "intro": "State each in one line.",
+      "items": [
+        {
+          "q": "Exp(rate λ) survival?",
+          "a": "e^(−λx)."
+        },
+        {
+          "q": "Gamma rate mean?",
+          "a": "α/λ."
+        },
+        {
+          "q": "Beta mean?",
+          "a": "α/(α+β)."
+        },
+        {
+          "q": "χ²_ν variance?",
+          "a": "2ν."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 3,
+      "title": "What you should now do unaided",
+      "objective": "Summarise the family-recognition sequence.",
+      "body": [
+        "Identify support and parameterisation of the main continuous distribution families.",
+        "Compute probabilities from PDFs, CDFs and survival functions.",
+        "Distinguish exponential and gamma rate from scale conventions.",
+        "Calculate means and variances for uniform, exponential, gamma, beta and normal laws.",
+        "Recognise chi-square, t and F distributions and their parameter roles.",
+        "Identify support, density kernel and parameterisation in that order."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 12,
+      "title": "Mastery test",
+      "objective": "Demonstrate independent understanding.",
+      "setId": "probability_t6_mastery"
+    }
+  ]
+}
