@@ -4,7 +4,7 @@ The single set of instructions for any assistant or person working here: ChatGPT
 tool-neutral. `CLAUDE.md` adds only what is specific to Claude's own tools and defers to this file everywhere else.
 
 This repository builds and fills a personalised UGC NET Statistics (JRF) preparation app. **The repository is the
-source of truth.** The Vercel site is built from it. The Claude artifact is an optional generated copy, never an
+source of truth.** The Vercel site is built from it. The Claude artifact is retired as a publishing target.
 authoring surface.
 
 **The goal this file serves:** the owner can ask any one assistant, directly in GitHub, to create or modify a lesson or an
