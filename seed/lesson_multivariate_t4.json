@@ -512,7 +512,9 @@
     "teaser": "Repeated measurements on the same units.",
     "title": "Calibration before and after",
     "body": [
-     "Each of five machines contributes a pair of two-variable measurements. Treating the ten measurements as independent would discard the pairing and misrepresent the sampling design. The analysis should first create five difference vectors. The null mean difference is the zero vector. The resulting one-sample Hotelling statistic tests the joint mean change."
+     "Each of five machines contributes a pair of two-variable measurements: one vector before calibration and one vector after calibration. The two observations from the same machine are related, so the analysis must preserve that pairing. Treating the ten vectors as if they came from ten unrelated machines would discard the within-machine comparison and answer a different question.",
+     "The research question is whether calibration produces a non-zero average change in the two performance variables considered jointly. For each machine, subtract its before vector from its after vector. This creates five difference vectors in two dimensions. The null hypothesis is that the population mean of these difference vectors is the zero vector.",
+     "Now the dataset has the exact structure of a one-sample multivariate mean problem. Compute the mean difference vector and its sample covariance matrix, then apply the one-sample Hotelling statistic with n=5 and p=2. The F transformation therefore uses numerator degrees of freedom 2 and denominator degrees of freedom 3. This is a joint test; it does not say that each individual variable must change significantly on its own."
     ],
     "q": "Why should the paired observations not be analysed as two unrelated samples?",
     "answer": "Because the two measurements from each machine are dependent and the pairing is part of the design."
