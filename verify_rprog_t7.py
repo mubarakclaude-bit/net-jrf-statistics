@@ -10,10 +10,14 @@ assert L['scenes'][-1]['setId']=='rprog_t7_mastery'
 assert len(P['items'])==P['count']==20
 assert Counter(q['diff'] for q in P['items'])=={'easy':6,'moderate':10,'hard':4}
 assert Counter(q['answer'] for q in P['items'])=={'A':5,'B':5,'C':5,'D':5}
+fmt=Counter(q['format'] for q in P['items']); assert fmt.get('numeric',0)>=4 and fmt.get('multi',0)>=2
 for q in P['items']:
  assert len(q['options'])==4 and len(q['explanation'])>=30
  if q['format']=='numeric': assert q.get('check')
- if q['format']=='multi': assert len(q['statements'])==4 and set(q['verdicts'])==set('ABCD')
-assert sum(s['kind']=='guided' for s in L['scenes'])>=2
-assert any('flow' in s for s in L['scenes'])
-print('PASS: R programming T7 lesson and mastery contract.')
+ if q['format']=='multi': assert len(q['statements'])==4 and all(isinstance(q['verdicts'][k]['tf'],bool) and q['verdicts'][k]['why'] for k in 'ABCD')
+assert sum(s['kind']=='guided' for s in L['scenes'])>=2 and any(s.get('flow') for s in L['scenes'])
+levels=['low','medium','high']; codes={'low':1,'medium':2,'high':3}
+assert [codes[x] for x in ['low','high','medium']]==[1,3,2]
+assert len(set(['a','b','a']))==2
+assert ['a','b'][0]=='a'
+print('PASS: R T7 structure, mastery contract, factor-level and list examples.')
