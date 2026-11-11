@@ -400,19 +400,19 @@
    "check": "The first matching binding in the lexical environment chain is the one used or updated.",
    "solution": [
     {
-     "say": "Identify the local binding.",
-     "math": "A local or enclosing binding is present.",
-     "why": "Lookup starts in the current evaluation environment."
+     "say": "Locate the assignment.",
+     "math": "score = 25 creates a binding in f's current evaluation environment.",
+     "why": "The function has no score argument, so this assignment creates a local score for this call."
     },
     {
-     "say": "Apply the assignment rule.",
-     "math": "<- is local; <<- searches enclosing environments.",
-     "why": "The operators have different targets."
+     "say": "Keep the global binding separate.",
+     "math": "Local score = 25; global score = 80.",
+     "why": "Ordinary assignment does not search outward and overwrite the global score; the local binding masks it during this call."
     },
     {
      "say": "Evaluate the final expression.",
-     "math": "Return the value after the binding update.",
-     "why": "Trace the exact environment changed."
+     "math": "score + 5 = 25 + 5 = 30; therefore f() returns 30.",
+     "why": "R returns the last evaluated expression when no explicit return() is used."
     }
    ],
    "ask": {
@@ -459,19 +459,19 @@
    "check": "The first matching binding in the lexical environment chain is the one used or updated.",
    "solution": [
     {
-     "say": "Identify the local binding.",
-     "math": "A local or enclosing binding is present.",
-     "why": "Lookup starts in the current evaluation environment."
+     "say": "Draw the environments.",
+     "math": "outer's evaluation environment contains level = 2; its parent, .GlobalEnv, contains level = 1.",
+     "why": "The local and global bindings are distinct; the nearer outer binding is the first match."
     },
     {
-     "say": "Apply the assignment rule.",
-     "math": "<- is local; <<- searches enclosing environments.",
-     "why": "The operators have different targets."
+     "say": "Resolve the superassignment inside inner().",
+     "math": "inner's enclosing environment is outer's evaluation environment. level <<- 9 updates that binding from 2 to 9.",
+     "why": "<<- starts searching in the parent of inner's evaluation environment and updates the first existing binding."
     },
     {
-     "say": "Evaluate the final expression.",
-     "math": "Return the value after the binding update.",
-     "why": "Trace the exact environment changed."
+     "say": "Finish outer().",
+     "math": "The final expression reads outer's level = 9. Thus outer() returns 9, while global level remains 1.",
+     "why": "The update changed the enclosing local binding, not the global binding."
     }
    ],
    "scenario": {
