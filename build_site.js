@@ -3,7 +3,6 @@
  *   ./build.sh && node build_site.js
  * site/index.html = app.html with web/shim.js inlined ahead of the app script.
  * site/data.json  = every store document the app reads, built from seed/.
- * site/manifest.json = which lessons and pools this deployment holds (version, hash, pool size, commit).
  * Personal data never enters the bundle: the answers/marks in the June paper are scrubbed,
  * and the test-profile list (meta/users) is left out. */
 const fs = require("fs"), path = require("path");
@@ -54,26 +53,6 @@ if (prose.length) console.warn("WARNING: " + prose.length + " lesson(s) mention 
 
 fs.mkdirSync(OUT, { recursive: true });
 fs.writeFileSync(path.join(OUT, "data.json"), JSON.stringify(docs));
-
-// site/manifest.json: what this deployment contains, so "is the lesson live?" is answered by one file instead of by opening the
-// app. The hash covers the content only (never a date), so the same repository state always yields the same manifest.
-const crypto = require("crypto");
-const sha = s => crypto.createHash("sha256").update(s).digest("hex");
-const lessonsOut = Object.keys(docs).filter(k => k.startsWith("lessons/")).sort().map(k => {
-  const l = docs[k], quiz = (l.scenes || []).find(s => s.kind === "quiz");
-  const pool = quiz && docs["qsets/" + quiz.setId];
-  return { id: l.id, topicId: l.topicId, moduleId: l.moduleId, version: l.version, status: l.status, scenes: l.scenes.length,
-           pool: quiz ? quiz.setId : null, poolItems: pool ? pool.items.length : 0, hash: sha(JSON.stringify(l)).slice(0, 12) };
-});
-const manifest = {
-  commit: process.env.VERCEL_GIT_COMMIT_SHA || process.env.GITHUB_SHA || null,
-  contentHash: sha(JSON.stringify(docs)).slice(0, 16),
-  counts: { lessons: lessonsOut.length, qsets: Object.keys(docs).filter(k => k.startsWith("qsets/")).length },
-  lessons: lessonsOut
-};
-const unwired = lessonsOut.filter(l => !l.pool || l.poolItems === 0);
-if (unwired.length) console.warn("WARNING: lesson(s) with no mastery pool in the bundle: " + unwired.map(l => l.id).join(", "));
-fs.writeFileSync(path.join(OUT, "manifest.json"), JSON.stringify(manifest, null, 1));
 
 const app = path.join(W, "app.html");
 if (!fs.existsSync(app)) { console.error("FAILED: app.html missing, run ./build.sh first"); process.exit(1); }
