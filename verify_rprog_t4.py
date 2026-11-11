@@ -19,5 +19,8 @@ for q in P['items']:
 assert sum(s['kind']=='guided' for s in L['scenes'])>=2 and any(s.get('flow') for s in L['scenes'])
 assert 2*2-1*3==1
 A=(3,2); B=(2,4); assert A[1]==B[0] and (A[0],B[1])==(3,4)
-assert (1*2,3*4)==(2,12) # elementwise product entries for the corresponding example positions
+A=[[1,2],[3,4]]; B=[[2,0],[1,2]]
+elem=[[A[i][j]*B[i][j] for j in range(2)] for i in range(2)]
+prod=[[sum(A[i][k]*B[k][j] for k in range(2)) for j in range(2)] for i in range(2)]
+assert elem==[[2,0],[3,8]] and prod==[[4,4],[10,8]]
 print('PASS: R T4 structure and mastery contract; determinant and product-dimension arithmetic.')
