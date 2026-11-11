@@ -6,16 +6,24 @@ on:
       - 'seed/lesson_ma2.json'
       - 'seed/maths_t2_mastery.json'
       - 'verify_mathst2.py'
+      - '.github/workflows/mathst2-package.yml'
+      - 'vcheck.js'
+      - 'src/62-gen.js'
   workflow_dispatch:
 jobs:
-  exact-math-and-pool:
+  lesson-and-mastery:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify exact anchors and pool structure
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Exact mathematical anchors and pool structure
         run: python verify_mathst2.py
+      - name: App scene schema validation
+        run: node vcheck.js seed/lesson_ma2.json
       - name: Validate JSON syntax
         run: python -c "import json; [json.load(open(p, encoding='utf-8')) for p in ['seed/lesson_ma2.json','seed/maths_t2_mastery.json']]"
