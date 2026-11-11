@@ -291,13 +291,12 @@ SC.append(dict(
           "Rural house rent entered the index for the first time. Prices are collected from 1,465 rural markets and 1,395 urban "
           "markets across 434 towns, collected electronically on handheld devices, with e-commerce prices used in twelve "
           "large towns and administrative data for rail fares, postal charges and fuel."),
-   dict(t="def", h="WPI, and the index replacing it",
+   dict(t="def", h="WPI and the emerging PPI framework",
      body="The wholesale price index measures prices of goods only — no services — at the wholesale or first point of "
           "bulk sale, and is produced by the Office of the Economic Adviser in the Department for Promotion of Industry "
           "and Internal Trade, not by MoSPI. Its base was revised from 2011-12 to 2022-23 and the basket expanded from "
           "697 to 957 items. Launched alongside it, on 15 June 2026, was the Output Producer Price Index, with a trial "
-          "Input PPI for manufacturing and a quarterly Services PPI covering seven sectors. WPI continues to be published alongside Output PPI, trial Input PPI and phased Services PPIs; "
-          "alongside Output PPI, trial Input PPI and phased Services PPIs; WPI continues to be published."),
+          "Input PPI for manufacturing and a quarterly Services PPI covering seven sectors. WPI continues to be published alongside Output PPI, trial Input PPI and phased Services PPIs."),
    dict(t="def", h="IIP — Index of Industrial Production, base 2022-23=100",
      body="Produced by the NSO. The base-year report came on 25 May 2026 and the first release on the new base on 1 June "
           "2026, replacing base 2011-12. The basket holds 1,042 products mapped to 463 item groups, against 839 and 407 "
@@ -313,8 +312,8 @@ SC.append(dict(
           "Economic Adviser: WPI and now the PPI. Ministry of Health and Family Welfare through IIPS: NFHS. RBI uses "
           "CPI-Combined as the target for monetary policy, but does not produce it."),
    dict(t="trap", h="Three indices, three different revisions",
-     body="CPI moved to a calendar base year, 2024. IIP and WPI both moved to a financial year, 2022-23. Only WPI is "
-          "being replaced rather than merely rebased. Mixing these three up is the single most productive confusion the "
+     body="CPI moved to a calendar base year, 2024. IIP and WPI both moved to a financial year, 2022-23. WPI and PPI are "
+          "published concurrently; distinguish publication from the use of a price index as a GDP deflator. Mixing these three up is the single most productive confusion the "
           "examiner has available in this topic.")],
   flow=dict(caption="Who produces which index, on which base, from which source",
     nodes=[
@@ -485,8 +484,7 @@ SC.append(dict(
    "Ministry of Health and Family Welfare through IIPS Mumbai; six rounds, NFHS institutional role; do not quote unverified NFHS-6 result statistics.",
    "Indices. CPI base 2024=100, first release February 2026, weights from HCES 2023-24, COICOP 2018, 358 items, food and "
    "beverages 40.10%, housing 11.88%, produced by the NSO, used for the inflation target. WPI base revised to 2022-23, "
-   "957 items, goods only, produced by the Office of the Economic Adviser in DPIIT, and being replaced by the Producer "
-   "Price Index (PPI) introduced alongside continuing WPI publication from June 2026. IIP base 2022-23=100, first release June 2026, 1,042 "
+   "957 items, goods only, produced by the Office of the Economic Adviser in DPIIT, with Output PPI, trial Input PPI and phased Services PPIs published alongside it from June 2026. IIP base 2022-23=100, first release June 2026, 1,042 "
    "products in 463 item groups on NIC 2025, manufacturing 76.062, mining 11.053, electricity and gas 10.865, water "
    "supply and sewerage 2.020 as a new sector.",
    "Linking. The CPI factor is new-over-old, so multiply: 0.5267 combined. The IIP factor is old-over-new, so divide: "
