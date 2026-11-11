@@ -1,0 +1,533 @@
+{
+  "id": "designt8",
+  "topicId": "design-t8",
+  "moduleId": "design",
+  "title": "Connectedness and Orthogonality of Block Designs",
+  "breadcrumb": "Unit III · Design of Experiments · Block-design structure",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 100,
+  "objectives": [
+    "Define connectedness of a block design in terms of estimable treatment contrasts.",
+    "Use the treatment concurrence graph to reason about connectedness.",
+    "Interpret the information matrix C=R−NK⁻¹N′ and the rank condition rank(C)=v−1.",
+    "Explain orthogonality of treatment and block contrasts in complete block and Latin-square layouts.",
+    "Distinguish connectedness, balance and orthogonality."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Incidence matrices and BIBD",
+      "why": "Connectedness is studied through treatment-block incidence."
+    },
+    {
+      "id": "p2",
+      "name": "Matrix rank and estimability",
+      "why": "The rank of the adjusted information matrix determines estimable contrasts."
+    },
+    {
+      "id": "p3",
+      "name": "CRD, RBD and Latin square",
+      "why": "These layouts illustrate orthogonality of treatment and block contrasts."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule. Ten items are drawn with a 3/5/2 difficulty mix; retakes draw again."
+  },
+  "refs": [
+    {
+      "title": "Cochran and Cox, Experimental Designs",
+      "where": "Connectedness and block designs",
+      "site": "Wiley",
+      "url": "https://www.wiley.com/",
+      "type": "book",
+      "free": false,
+      "why": "Classical reference for block-design analysis."
+    },
+    {
+      "title": "Raghavarao and Padgett, Block Designs",
+      "where": "Connectedness and information matrices",
+      "site": "World Scientific",
+      "url": "https://www.worldscientific.com/",
+      "type": "book",
+      "free": false,
+      "why": "Reference for combinatorial and matrix properties."
+    },
+    {
+      "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+      "where": "Design of experiments",
+      "site": "NIST",
+      "url": "https://www.itl.nist.gov/div898/handbook/",
+      "type": "reference",
+      "free": true,
+      "why": "Open experimental design reference."
+    }
+  ],
+  "traps": [
+    "Connectedness means every treatment contrast is estimable after eliminating block effects; it is not the same as equal pair concurrence.",
+    "For a design with v treatments, rank(C)=v−1 is the connectedness condition when C=R−NK⁻¹N′.",
+    "A disconnected design can still estimate contrasts within each connected component, but not all contrasts across components.",
+    "A connected design need not be a BIBD; connectedness is about estimability, balance is about equal replication/concurrence.",
+    "Orthogonality means the relevant centred contrast cross-products are zero; it is not synonymous with connectedness.",
+    "In a complete RBD, every treatment occurs once in each block, making treatment and block contrasts orthogonal.",
+    "In a Latin square, treatment contrasts are orthogonal to both row and column contrasts under the standard balanced layout."
+  ],
+  "howto": "For connectedness, construct a treatment graph: join two treatments if they occur together in a block. If the graph is connected, treatment contrasts are estimable; equivalently check rank(C)=v−1 for C=R−NK⁻¹N′. For orthogonality, identify the centred treatment and block contrast columns and check their cross-products are zero in the balanced layout.",
+  "revision": {
+    "sheet": [
+      "Connectedness: all v−1 independent treatment contrasts are estimable after adjusting for blocks.",
+      "Treatment concurrence graph: treatments are vertices; join a pair if they occur together in a block.",
+      "A connected graph gives a connected block design.",
+      "Information matrix C=R−NK⁻¹N′; connected iff rank(C)=v−1.",
+      "For equal block sizes k, K=kI, so C=R−(1/k)NN′.",
+      "Disconnected components prevent estimation of contrasts comparing treatments across components.",
+      "Connectedness does not require BIBD pair balance.",
+      "Orthogonality: centred contrast cross-products are zero.",
+      "Complete RBD: treatment and block contrasts are orthogonal.",
+      "Latin square: treatment contrasts are orthogonal to row and column contrasts."
+    ],
+    "cards": [
+      [
+        "Connected",
+        "All treatment contrasts estimable"
+      ],
+      [
+        "Graph",
+        "Treatments are vertices; shared-block pairs are edges"
+      ],
+      [
+        "C matrix",
+        "R−NK⁻¹N′"
+      ],
+      [
+        "Rank condition",
+        "rank(C)=v−1"
+      ],
+      [
+        "Disconnected",
+        "Cross-component contrasts not estimable"
+      ],
+      [
+        "Orthogonality",
+        "Centred contrast cross-products are zero"
+      ],
+      [
+        "RBD",
+        "Treatment orthogonal to block contrasts"
+      ],
+      [
+        "Latin square",
+        "Treatment orthogonal to row and column contrasts"
+      ]
+    ],
+    "tricks": [
+      {
+        "hook": "Connected = one component",
+        "why": "Every treatment can be linked to every other through shared blocks."
+      },
+      {
+        "hook": "Rank v−1",
+        "why": "There are v−1 independent treatment contrasts after removing the overall mean."
+      },
+      {
+        "hook": "Orthogonal = zero cross-product",
+        "why": "Check centred contrast spaces, not merely whether the design is connected."
+      }
+    ],
+    "shortcuts": [
+      "Draw the treatment concurrence graph before attempting a rank argument.",
+      "For v treatments, the connectedness target rank is v−1.",
+      "Keep the intercept/grand-mean direction separate from treatment contrasts."
+    ],
+    "remember": [
+      "A BIBD with λ>0 is connected, but a connected design need not be balanced.",
+      "Orthogonality concerns independent information between effects; connectedness concerns estimability."
+    ],
+    "traps": [
+      "Using rank v instead of v−1.",
+      "Calling a design disconnected because some pairs never occur together, even when a path connects them.",
+      "Equating connectedness with orthogonality."
+    ]
+  },
+  "provenance": "Original GPT-authored lesson for design-t8. No official PYQ is claimed. Covers treatment concurrence graphs, the adjusted information matrix C=R−NK⁻¹N′, rank-based connectedness, and orthogonality in complete RBD and Latin-square layouts. Matrix orientation and estimability statements are explicit.",
+  "anchors": [],
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Why connectedness matters",
+      "objective": "Motivate estimability in incomplete block designs.",
+      "body": [
+        "In an incomplete block design, not every treatment appears in every block. The block effects may absorb some treatment comparisons, so the key question is whether treatment contrasts can still be estimated after adjusting for blocks.",
+        "A design is connected when every treatment contrast is estimable. Connectedness is about information and estimability, not necessarily equal pair concurrence."
+      ],
+      "items": [
+        {
+          "ask": "What does connectedness guarantee in a block design?",
+          "recall": "All independent treatment contrasts are estimable after adjusting for block effects.",
+          "refresh": [
+            "There are v−1 independent treatment contrasts.",
+            "Some pairs may never share a block, yet paths through other treatments can connect them.",
+            "Connectedness is distinct from BIBD balance."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "The treatment concurrence graph",
+      "objective": "Translate block incidence into a graph.",
+      "body": [
+        "Construct a graph with one vertex for each treatment. Join two vertices when the corresponding treatments occur together in at least one block.",
+        "If the graph has one connected component, any treatment can be linked to every other through a chain of shared-block comparisons. This is the graph interpretation of connectedness."
+      ],
+      "scenario": {
+        "teaser": "Blocks are {1,2}, {2,3} and {3,4}.",
+        "title": "A chain connects four treatments",
+        "body": [
+          "The concurrence graph has edges 1–2, 2–3 and 3–4. Treatments 1 and 4 never occur in the same block, but a path connects them.",
+          "Thus the graph is connected even though not every pair is directly adjacent."
+        ],
+        "q": "Is the design connected?",
+        "answer": "Yes. The path 1–2–3–4 connects all four treatments."
+      },
+      "ask": {
+        "q": "Must every pair of treatments share a block for the design to be connected?",
+        "nudge": "A path through intermediate treatments is enough."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 7,
+      "title": "Connected versus disconnected graphs",
+      "objective": "Identify components and estimable comparisons.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Connected graph",
+          "body": "A graph is connected if a path exists between every pair of vertices. A design with a connected concurrence graph is connected."
+        },
+        {
+          "t": "formula",
+          "h": "Disconnected graph",
+          "body": "If the graph splits into components, comparisons between treatments in different components are not estimable after eliminating block effects."
+        },
+        {
+          "t": "assume",
+          "h": "Within-component information",
+          "body": "Contrasts within a connected component may still be estimable. The failure concerns comparisons across disconnected components."
+        }
+      ],
+      "ask": {
+        "q": "If treatments form two separate concurrence-graph components, can a contrast comparing one treatment from each component be estimated?",
+        "nudge": "There is no chain of shared-block comparisons across the components."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Check a concurrence graph",
+      "objective": "Classify a small block design.",
+      "problem": "A design has blocks {1,2}, {2,3}, {4,5}. Determine whether all five treatments form one connected design.",
+      "hints": [
+        "Draw one edge for each pair in a block.",
+        "Count graph components."
+      ],
+      "solution": [
+        {
+          "say": "Construct the edges.",
+          "math": "Edges are 1–2, 2–3 and 4–5."
+        },
+        {
+          "say": "Find components.",
+          "math": "The components are {1,2,3} and {4,5}."
+        }
+      ],
+      "answer": "The design is disconnected; cross-component treatment contrasts are not estimable.",
+      "check": "There are two graph components.",
+      "ask": {
+        "q": "How many connected components are present?",
+        "nudge": "One component contains 1,2,3; the other contains 4,5."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s4",
+      "mins": 8,
+      "title": "The adjusted information matrix",
+      "objective": "Interpret C=R−NK⁻¹N′.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Incidence matrices",
+          "body": "Let N be the v×b treatment-by-block incidence matrix. R is the diagonal matrix of treatment replications and K is the diagonal matrix of block sizes."
+        },
+        {
+          "t": "formula",
+          "h": "Eliminate block effects",
+          "body": "The adjusted treatment information matrix is C=R−NK⁻¹N′. It measures treatment information after accounting for block effects."
+        },
+        {
+          "t": "assume",
+          "h": "Equal block size",
+          "body": "If every block has size k, then K=kI and C=R−(1/k)NN′. The matrix is singular in the overall-mean direction."
+        }
+      ],
+      "ask": {
+        "q": "What is the dimension of C when there are v treatments?",
+        "nudge": "It is a treatment-by-treatment matrix."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s5",
+      "mins": 7,
+      "title": "Rank condition for connectedness",
+      "objective": "State the rank criterion.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Connectedness criterion",
+          "body": "For a design with v treatments, rank(C)=v−1 if and only if all v−1 independent treatment contrasts are estimable."
+        },
+        {
+          "t": "def",
+          "h": "Why not rank v?",
+          "body": "Adding a common constant to all treatment effects does not change treatment contrasts. The grand-mean direction is therefore not part of the contrast information."
+        },
+        {
+          "t": "assume",
+          "h": "Disconnected designs",
+          "body": "If there are c connected components, the rank is v−c under the standard incidence model; each component contributes one unidentifiable level shift."
+        }
+      ],
+      "ask": {
+        "q": "For v=6 treatments, what rank must C have for connectedness?",
+        "nudge": "v−1."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s6",
+      "mins": 8,
+      "title": "Rank and connectedness",
+      "objective": "Apply rank(C)=v−1.",
+      "problem": "A block design has v=5 treatments and adjusted information matrix rank(C)=4. Is it connected?",
+      "hints": [
+        "Compute v−1.",
+        "Compare with rank(C)."
+      ],
+      "solution": [
+        {
+          "say": "Find the target rank.",
+          "math": "v−1=5−1=4."
+        },
+        {
+          "say": "Compare.",
+          "math": "rank(C)=4, so the design is connected."
+        }
+      ],
+      "answer": "Yes. The rank equals v−1.",
+      "check": "All four independent treatment contrasts are estimable.",
+      "ask": {
+        "q": "For v=8 and rank(C)=6, is the design connected?",
+        "nudge": "The required rank is seven."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s7",
+      "mins": 7,
+      "title": "A BIBD is connected when λ is positive",
+      "objective": "Relate BIBD balance to connectedness.",
+      "body": [
+        "In a BIBD, every distinct treatment pair occurs together λ times. If λ>0, every pair is directly joined in the concurrence graph, so the graph is complete and connected.",
+        "This is a sufficient property of a BIBD, not a definition of connectedness. A connected design can have many pairs that never occur together directly."
+      ],
+      "scenario": {
+        "teaser": "A BIBD has v=4 and λ=1.",
+        "title": "Every pair is adjacent",
+        "body": [
+          "Every pair of treatments occurs together once. The concurrence graph is complete on four vertices.",
+          "It is therefore connected. A chain-connected design does not need this stronger all-pairs property."
+        ],
+        "q": "Is a BIBD with λ=1 connected?",
+        "answer": "Yes. Every treatment pair shares a block."
+      },
+      "ask": {
+        "q": "Does connectedness require λ to be constant across all pairs?",
+        "nudge": "No; it requires paths, not equal concurrence."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s8",
+      "mins": 7,
+      "title": "Orthogonality: zero cross-products",
+      "objective": "Define orthogonality of contrast spaces.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Contrast orthogonality",
+          "body": "Two sets of effects are orthogonal when their centred design-contrast columns have zero cross-products. Their information can be separated without one effect's estimate depending on the other."
+        },
+        {
+          "t": "formula",
+          "h": "Balanced layouts",
+          "body": "In a complete RBD, each treatment appears once in every block, so treatment contrasts are orthogonal to block contrasts."
+        },
+        {
+          "t": "assume",
+          "h": "Do not conflate terms",
+          "body": "Orthogonality concerns cross-products between effect spaces. Connectedness concerns whether treatment contrasts are estimable at all."
+        }
+      ],
+      "ask": {
+        "q": "What algebraic feature indicates orthogonality of two centred contrast spaces?",
+        "nudge": "Their cross-product matrix is zero."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s9",
+      "mins": 7,
+      "title": "Orthogonality in Latin squares",
+      "objective": "Explain treatment orthogonality to row and column effects.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Latin-square structure",
+          "body": "Each treatment occurs exactly once in every row and exactly once in every column."
+        },
+        {
+          "t": "formula",
+          "h": "Orthogonal treatment contrasts",
+          "body": "This balanced incidence makes treatment contrasts orthogonal to row contrasts and to column contrasts under the standard Latin-square model."
+        },
+        {
+          "t": "assume",
+          "h": "Interpretation",
+          "body": "The row and column effects can be adjusted without confounding the treatment contrasts in the standard balanced layout."
+        }
+      ],
+      "ask": {
+        "q": "In a Latin square, treatment contrasts are orthogonal to which two effects?",
+        "nudge": "The two blocking directions."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s10",
+      "mins": 7,
+      "title": "Connectedness is not balance",
+      "objective": "Distinguish the two properties.",
+      "problem": "A design has a connected treatment concurrence graph, but some pairs occur together twice and others never occur together directly. Is it connected? Is it a BIBD?",
+      "hints": [
+        "Connectedness asks about paths.",
+        "BIBD asks for equal pair concurrence."
+      ],
+      "solution": [
+        {
+          "say": "Connectedness.",
+          "math": "Yes. Paths connect all treatments, so all treatment contrasts are estimable."
+        },
+        {
+          "say": "BIBD balance.",
+          "math": "No. Pair concurrence is not the same for every pair."
+        }
+      ],
+      "answer": "The design is connected but not a BIBD.",
+      "check": "Connectedness and pair balance are different properties.",
+      "ask": {
+        "q": "Can a connected design fail to be a BIBD?",
+        "nudge": "Yes; paths need not give equal pair concurrence."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s11",
+      "mins": 6,
+      "title": "Connectedness and orthogonality traps",
+      "objective": "Avoid rank and terminology errors.",
+      "traps": [
+        {
+          "q": "What is the connectedness rank for v treatments?",
+          "a": "v−1, not v."
+        },
+        {
+          "q": "Must every pair directly share a block in a connected design?",
+          "a": "No; a path through other treatments is enough."
+        },
+        {
+          "q": "Does connectedness imply BIBD balance?",
+          "a": "No; equal pair concurrence is a stronger condition."
+        },
+        {
+          "q": "What does orthogonality mean?",
+          "a": "Zero cross-products between the relevant centred contrast spaces."
+        }
+      ]
+    },
+    {
+      "kind": "worked",
+      "id": "s12",
+      "mins": 7,
+      "title": "Choose the correct property",
+      "objective": "Classify connectedness and orthogonality statements.",
+      "problem": "A complete RBD contains every treatment once in each block. Which property does this balanced layout provide between treatment and block contrasts?",
+      "hints": [
+        "Every treatment occurs equally in each block.",
+        "Consider centred cross-products."
+      ],
+      "solution": [
+        {
+          "say": "Check treatment-block balance.",
+          "math": "Each treatment appears once in every block."
+        },
+        {
+          "say": "Conclude.",
+          "math": "Treatment contrasts are orthogonal to block contrasts in the complete RBD."
+        }
+      ],
+      "answer": "Orthogonality of treatment and block contrasts.",
+      "check": "Equal treatment incidence across every block yields zero centred cross-products.",
+      "ask": {
+        "q": "What property does the rank condition rank(C)=v−1 establish?",
+        "nudge": "Connectedness."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 5,
+      "title": "Connectedness and orthogonality mastery",
+      "objective": "Consolidate graph, rank and contrast ideas.",
+      "body": [
+        "Connectedness means all treatment contrasts are estimable. Use the treatment concurrence graph or the rank condition rank(C)=v−1 for C=R−NK⁻¹N′. A path is enough; every pair need not share a block.",
+        "Orthogonality means centred contrast cross-products are zero. Complete RBD treatment contrasts are orthogonal to block contrasts; Latin-square treatment contrasts are orthogonal to row and column contrasts. Connectedness, balance and orthogonality are distinct."
+      ],
+      "setId": "design_t8_mastery"
+    }
+  ]
+}
