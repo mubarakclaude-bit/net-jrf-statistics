@@ -1,0 +1,548 @@
+{
+  "id": "designt3",
+  "topicId": "design-t3",
+  "moduleId": "design",
+  "title": "Factorial Experiments: Main Effects and Interactions",
+  "breadcrumb": "Unit III · Design of Experiments · Factorial layouts",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "4.1",
+  "status": "approved",
+  "estMin": 96,
+  "objectives": [
+    "Explain why factorial experiments study two or more factors simultaneously.",
+    "Construct and interpret treatment combinations in a 2² and 2³ factorial experiment.",
+    "Calculate main effects and interaction effects using marginal means and contrasts.",
+    "Partition the treatment sum of squares into orthogonal factorial components in a balanced replicated 2² experiment.",
+    "Distinguish replication, randomisation and interaction, and interpret interaction before marginal main effects."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "ANOVA sums of squares and degrees of freedom",
+      "why": "Factorial ANOVA partitions treatment variation into main-effect and interaction components."
+    },
+    {
+      "id": "p2",
+      "name": "Treatment means and contrasts",
+      "why": "Factorial effects are comparisons of averages across the levels of other factors."
+    },
+    {
+      "id": "p3",
+      "name": "Randomisation and replication",
+      "why": "Replication provides an estimate of experimental error and randomisation protects inference."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule. Ten items are drawn with a 3/5/2 difficulty mix; retakes draw again."
+  },
+  "refs": [
+    {
+      "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+      "where": "Factorial designs and design of experiments",
+      "site": "NIST",
+      "url": "https://www.itl.nist.gov/div898/handbook/",
+      "type": "reference",
+      "free": true,
+      "why": "Open reference for factorial design principles and analysis."
+    },
+    {
+      "title": "Penn State STAT 503",
+      "where": "Factorial designs",
+      "site": "Penn State Eberly College of Science",
+      "url": "https://online.stat.psu.edu/stat503/",
+      "type": "course",
+      "free": true,
+      "why": "Open course material on factorial experiments and interactions."
+    },
+    {
+      "title": "Montgomery, Design and Analysis of Experiments",
+      "where": "Two-level factorial designs and analysis",
+      "site": "Wiley",
+      "url": "https://www.wiley.com/",
+      "type": "book",
+      "free": false,
+      "why": "Standard reference for factorial effects, contrasts and ANOVA."
+    }
+  ],
+  "traps": [
+    "A factorial experiment studies all combinations of the selected factor levels; it is not merely several separate one-factor experiments.",
+    "A main effect is an average effect over the levels of the other factor(s).",
+    "An interaction means the effect of one factor changes across levels of another factor.",
+    "When interaction is substantial, report simple effects or cell means; a marginal main effect can hide different or reversed responses.",
+    "For a full 2^k factorial there are 2^k treatment combinations and 2^k−1 non-empty factorial effects.",
+    "Replication means independently applying the same treatment combination to multiple experimental units; repeated readings on one unit are not automatically independent replications.",
+    "Orthogonality of factorial contrasts in a balanced design does not remove the need for randomisation."
+  ],
+  "howto": "Begin with the treatment-combination table. Mark low and high levels, compute cell means, then calculate marginal main effects and difference-in-differences interactions. For ANOVA, write the effect degrees of freedom before calculating mean squares. Complete the mastery test without hints.",
+  "revision": {
+    "sheet": [
+      "A factorial experiment studies all combinations of levels of two or more factors.",
+      "A 2² design has 4 combinations; a 2³ design has 8 combinations.",
+      "For 2²: A−B−, A+B−, A−B+, A+B+; each factor has low (−) and high (+) levels.",
+      "Main effect A = mean response at A+ − mean response at A−, averaged over B.",
+      "Main effect B = mean response at B+ − mean response at B−, averaged over A.",
+      "AB interaction = [A effect at B+] − [A effect at B−], equivalently a difference-in-differences.",
+      "In a replicated balanced 2²: df for A, B and AB are each 1; pure error df=4(r−1); total df=4r−1.",
+      "For a full 2^k design, each of the 2^k−1 factorial effects has 1 df; treatment df=2^k−1.",
+      "In a balanced design, orthogonal factorial contrasts partition treatment SS into non-overlapping components.",
+      "Inspect interaction/cell means before interpreting averaged main effects."
+    ],
+    "cards": [
+      [
+        "2² factorial",
+        "2 factors × 2 levels = 4 combinations"
+      ],
+      [
+        "2³ factorial",
+        "3 factors × 2 levels = 8 combinations"
+      ],
+      [
+        "Main effect A",
+        "Average response at A+ minus A−"
+      ],
+      [
+        "AB interaction",
+        "Difference between the two simple A effects"
+      ],
+      [
+        "Full 2^k",
+        "2^k runs; 2^k−1 non-empty effects"
+      ],
+      [
+        "Replicate",
+        "Independent experimental unit at same treatment combination"
+      ],
+      [
+        "Balanced factorial",
+        "Equal replication at each combination"
+      ],
+      [
+        "Interpretation",
+        "Interaction first; then simple and marginal effects"
+      ]
+    ],
+    "tricks": [
+      {
+        "hook": "All combinations",
+        "why": "Factorial means every selected factor-level combination is included in a full factorial."
+      },
+      {
+        "hook": "Main = average",
+        "why": "Average over the other factor(s); do not confuse a main effect with a simple effect."
+      },
+      {
+        "hook": "Interaction = change of effect",
+        "why": "If the A effect differs between B− and B+, A and B interact."
+      }
+    ],
+    "shortcuts": [
+      "For a 2² table, calculate the four cell means first; marginal means then give main effects directly.",
+      "Use a difference-in-differences for AB: (A+−A− at B+)−(A+−A− at B−).",
+      "For a full 2^k design, treatment df is 2^k−1; each named factorial effect has one df."
+    ],
+    "remember": [
+      "A significant interaction changes the interpretation: explain how treatment effects vary across the other factor's levels.",
+      "Balanced replication makes the standard factorial contrasts orthogonal and gives a clean treatment/error decomposition."
+    ],
+    "traps": [
+      "Calling a repeated measurement on the same experimental unit an independent replicate.",
+      "Interpreting a zero average main effect as proof that the factor has no effect at any level of the other factor.",
+      "Confusing the AB interaction contrast with the average main effect of A or B."
+    ]
+  },
+  "provenance": "Original GPT-authored lesson for repository catalog topic design-t3. No official PYQ is claimed. Numerical examples are independently checked with exact arithmetic in verify_design_t3.py. Scope: full fixed-effects factorial designs, two-level 2² and 2³ layouts, main effects, interactions and balanced replicated 2² ANOVA; fractional factorial aliasing and confounding are reserved for design-t6.",
+  "anchors": [],
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Why study factors together?",
+      "objective": "Define factors, levels, treatment combinations and factorial structure.",
+      "body": [
+        "A factor is a controllable explanatory variable, such as temperature, pressure, fertiliser type or machine speed. A level is a selected setting of that factor. A treatment combination specifies one level of every factor in the experiment.",
+        "A factorial experiment studies the combinations together. This reveals not only how each factor changes the response on average, but also whether the effect of one factor depends on the level of another. That dependence is an interaction."
+      ],
+      "items": [
+        {
+          "ask": "What is a treatment combination in a two-factor experiment?",
+          "recall": "One selected level of factor A paired with one selected level of factor B.",
+          "refresh": [
+            "For a 2×3 design there are six combinations.",
+            "The combination, not an isolated factor level, is the treatment applied to an experimental unit.",
+            "A full factorial includes every combination of the chosen levels."
+          ]
+        },
+        {
+          "ask": "Why is factorial experimentation often more informative than changing one factor at a time?",
+          "recall": "It can estimate interactions while studying several factors efficiently.",
+          "refresh": [
+            "Separate one-factor studies can miss dependence between factors.",
+            "A factorial layout allows main effects and interactions to be estimated from one coordinated experiment.",
+            "Efficiency depends on the design, resources and scientific question."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "A 2² design has four treatment combinations",
+      "objective": "Construct the complete two-factor, two-level layout.",
+      "body": [
+        "Let factor A be temperature (low/high) and factor B be pressure (low/high). A full 2² factorial contains all four combinations: A−B−, A+B−, A−B+ and A+B+. The signs are coded levels, not positive or negative responses.",
+        "The four combinations should be randomly allocated to experimental units. If each combination is independently applied r times, there are 4r experimental units in a balanced replicated design."
+      ],
+      "scenario": {
+        "teaser": "A process engineer varies temperature and pressure, each at two settings.",
+        "title": "Count the runs before collecting data",
+        "body": [
+          "The engineer wants to assess both temperature and pressure and whether the temperature effect changes with pressure. Both factors have two settings.",
+          "The full factorial requires 2×2=4 distinct treatment combinations. With three independent replicates per combination, the experiment uses 12 experimental units.",
+          "The three observations at each combination are genuine replicates only if treatment is independently assigned to three experimental units, rather than three readings from one unit."
+        ],
+        "q": "How many combinations and experimental units are required with three replicates?",
+        "answer": "Four combinations; 4×3=12 independently treated experimental units."
+      },
+      "ask": {
+        "q": "Why does a 2² factorial have four combinations rather than two?",
+        "nudge": "List the two A levels against both B levels."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s2",
+      "mins": 6,
+      "title": "Main effects are marginal average effects",
+      "objective": "Calculate the main effects from the four cell means.",
+      "body": [
+        "The main effect of A compares the average response at A+ with the average response at A−, averaging over both B levels. The main effect of B is defined similarly, averaging over A.",
+        "With cell means y₁₁, y₂₁, y₁₂ and y₂₂, the A effect is [(y₂₁+y₂₂)−(y₁₁+y₁₂)]/2. The B effect is [(y₁₂+y₂₂)−(y₁₁+y₂₁)]/2. These are differences of marginal means."
+      ],
+      "ask": {
+        "q": "If A+ has average 16 and A− has average 10, what is the main effect of A?",
+        "nudge": "High-level marginal mean minus low-level marginal mean."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 8,
+      "title": "Interaction: the effect changes across another factor",
+      "objective": "Interpret the AB interaction using simple effects.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Simple effect of A",
+          "body": "At B−, compare A+ with A−. At B+, make the same comparison. These are the two simple effects of A."
+        },
+        {
+          "t": "formula",
+          "h": "Difference-in-differences",
+          "body": "AB interaction contrast = (A effect at B+)−(A effect at B−). If this is non-zero, the A effect changes with B."
+        },
+        {
+          "t": "assume",
+          "h": "Interpretation",
+          "body": "A strong interaction can make a marginal main effect misleading. Inspect cell means or simple effects; the same factor may help at one level and hurt at another."
+        }
+      ],
+      "ask": {
+        "q": "At B−, A increases the response by 4; at B+, A increases it by 10. What is the interaction contrast?",
+        "nudge": "10−4."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s4",
+      "mins": 7,
+      "title": "The 2³ factorial and the hierarchy of effects",
+      "objective": "Count effects and treatment degrees of freedom in a three-factor design.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Eight combinations",
+          "body": "Three two-level factors A, B and C create 2³=8 combinations. A full factorial includes all eight."
+        },
+        {
+          "t": "formula",
+          "h": "Seven factorial effects",
+          "body": "There are three main effects A, B, C; three two-factor interactions AB, AC, BC; and one three-factor interaction ABC. Total treatment df=8−1=7."
+        },
+        {
+          "t": "assume",
+          "h": "Higher-order interactions",
+          "body": "A three-factor interaction means a two-factor interaction itself changes across the level of the third factor. Interpretation should be guided by the scientific question and adequate replication."
+        }
+      ],
+      "ask": {
+        "q": "How many non-empty factorial effects occur in a full 2³ design?",
+        "nudge": "Eight treatment combinations minus one grand-mean degree of freedom."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s5",
+      "mins": 9,
+      "title": "Worked 2² example: calculate the effects",
+      "objective": "Compute two main effects and one interaction from replicated cell means.",
+      "problem": "A process is tested at low/high temperature (A) and low/high pressure (B). The four cell means are A−B−=9, A+B−=13, A−B+=11 and A+B+=19.",
+      "hints": [
+        "Compute A marginal means from the two cells at each A level.",
+        "Compute B marginal means similarly.",
+        "Compare the simple A effects at B− and B+."
+      ],
+      "solution": [
+        {
+          "say": "Main effect A.",
+          "math": "A effect = (13+19)/2 − (9+11)/2 = 16−10 = 6."
+        },
+        {
+          "say": "Main effect B.",
+          "math": "B effect = (11+19)/2 − (9+13)/2 = 15−11 = 4."
+        },
+        {
+          "say": "Interaction AB.",
+          "math": "A effect at B− = 13−9=4; at B+ = 19−11=8. AB = 8−4=4."
+        }
+      ],
+      "answer": "The marginal main effects are A=6 and B=4; the AB difference-in-differences is 4.",
+      "check": "The A effect changes from 4 at B− to 8 at B+; hence the interaction is non-zero."
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Factorial ANOVA partitions treatment variation",
+      "objective": "Relate factorial effects to treatment, error and total degrees of freedom.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Balanced replicated 2²",
+          "body": "There are four combinations and r replicates per combination. Total N=4r; total df=4r−1; treatment df=3; pure error df=4(r−1)."
+        },
+        {
+          "t": "formula",
+          "h": "Effect-specific df",
+          "body": "A, B and AB each have one df. In a balanced design, the three orthogonal factorial contrasts partition treatment SS: SS_Treat=SS_A+SS_B+SS_AB."
+        },
+        {
+          "t": "assume",
+          "h": "F tests",
+          "body": "For each effect, F=MS_effect/MS_error. Under the standard fixed-effects normal model, the denominator is the pooled within-combination error mean square."
+        }
+      ],
+      "ask": {
+        "q": "For r=3 replicates per combination, what are the total and error df?",
+        "nudge": "N=12; error df=4(3−1)."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s7",
+      "mins": 10,
+      "title": "Complete replicated 2² ANOVA",
+      "objective": "Verify sums of squares, degrees of freedom and F ratios exactly.",
+      "problem": "Two observations are recorded at each combination: A−B− (8,10), A+B− (12,14), A−B+ (10,12), A+B+ (18,20).",
+      "hints": [
+        "Cell means are 9, 13, 11 and 19.",
+        "Grand mean is 13; each cell has two observations.",
+        "Within-cell deviations are −1 and +1."
+      ],
+      "solution": [
+        {
+          "say": "Find the grand total and total SS.",
+          "math": "G=104; N=8; CF=104²/8=1352. Σy²=1424; SS_Total=1424−1352=72."
+        },
+        {
+          "say": "Use the orthogonal factorial contrasts.",
+          "math": "SS_A=36; SS_B=16; SS_AB=16; therefore SS_Treat=68."
+        },
+        {
+          "say": "Find pure error.",
+          "math": "Each of four cells contributes 1 to within-cell SS, so SS_E=4. Check: 36+16+16+4=72."
+        },
+        {
+          "say": "Complete the F tests.",
+          "math": "df A=B=AB=1; error df=4; total df=7. MS_E=4/4=1, so F_A=36, F_B=16, F_AB=16."
+        }
+      ],
+      "answer": "The ANOVA decomposition is 72=36+16+16+4; with df (1,1,1,4,7), the F ratios are 36, 16 and 16.",
+      "check": "All sums of squares add to 72; all degrees of freedom add to 7."
+    },
+    {
+      "kind": "theory",
+      "id": "s8",
+      "mins": 7,
+      "title": "Replication, randomisation and balance",
+      "objective": "Explain what replication and balanced factorial allocation contribute.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Replication",
+          "body": "Independent experimental units at each treatment combination provide within-combination information to estimate experimental error."
+        },
+        {
+          "t": "assume",
+          "h": "Randomisation",
+          "body": "Randomly allocate treatment combinations to units, subject to any planned blocks or restrictions. Factorial structure does not replace randomisation."
+        },
+        {
+          "t": "formula",
+          "h": "Balance",
+          "body": "Equal replication at every combination gives orthogonal factorial contrasts in the standard complete factorial layout. Unequal replication requires more careful analysis and may destroy simple orthogonality."
+        }
+      ],
+      "ask": {
+        "q": "Why are multiple readings from the same unit not automatically replication?",
+        "nudge": "Replication concerns independent experimental units, not merely repeated measurements."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 7,
+      "title": "Interpret an interaction before the main effects",
+      "objective": "Choose a scientifically meaningful interpretation when simple effects differ.",
+      "problem": "A chemical additive increases yield by 2 units at low temperature but decreases yield by 3 units at high temperature.",
+      "hints": [
+        "The simple effects have opposite signs.",
+        "Averaging them can conceal the reversal.",
+        "Describe the interaction and conditional effects."
+      ],
+      "solution": [
+        {
+          "say": "Compare simple effects.",
+          "math": "At low temperature: +2. At high temperature: −3."
+        },
+        {
+          "say": "Calculate the difference.",
+          "math": "Interaction contrast = −3−(+2)=−5."
+        },
+        {
+          "say": "State the interpretation.",
+          "math": "The additive's effect depends on temperature and reverses direction."
+        }
+      ],
+      "answer": "There is an interaction: the additive increases yield at low temperature but decreases it at high temperature. Report the conditional effects rather than relying only on the marginal main effect.",
+      "check": "A marginal average of −0.5 would conceal the opposite simple effects."
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 6,
+      "title": "Exam drill: degrees of freedom in 2³",
+      "objective": "Calculate factorial and residual degrees of freedom.",
+      "problem": "A full 2³ factorial has four independent replicates at each of its eight combinations.",
+      "hints": [
+        "There are 8×4 observations.",
+        "Treatment df=2³−1.",
+        "Error df is number of combinations times (r−1)."
+      ],
+      "solution": [
+        {
+          "say": "Count observations.",
+          "math": "N=8×4=32; total df=31."
+        },
+        {
+          "say": "Count factorial treatment df.",
+          "math": "2³−1=7."
+        },
+        {
+          "say": "Find error df.",
+          "math": "8(4−1)=24; 7+24=31."
+        }
+      ],
+      "answer": "Treatment df=7, error df=24 and total df=31.",
+      "check": "The three df components (7+24) reconcile to total 31."
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s11",
+      "mins": 6,
+      "title": "Common factorial-design traps",
+      "objective": "Avoid misreading interactions, combinations and replication.",
+      "items": [
+        {
+          "claim": "A 2² full factorial has four treatment combinations.",
+          "tf": true,
+          "why": "Two levels for each of two factors give 2×2=4 combinations."
+        },
+        {
+          "claim": "A main effect is the effect of A at only the low level of B.",
+          "tf": false,
+          "why": "That is a simple effect; the main effect averages over B levels."
+        },
+        {
+          "claim": "A non-zero AB interaction means the A effect differs across B levels.",
+          "tf": true,
+          "why": "This is the difference-in-differences interpretation."
+        },
+        {
+          "claim": "A full 2³ design has seven non-empty factorial effects.",
+          "tf": true,
+          "why": "Three main effects, three two-factor interactions and one three-factor interaction."
+        },
+        {
+          "claim": "Three readings from one experimental unit always count as three independent replicates.",
+          "tf": false,
+          "why": "Independent treatment assignment to experimental units, not repeated readings, defines replication."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s12",
+      "mins": 6,
+      "title": "Transfer: choose the right factorial interpretation",
+      "objective": "Apply factorial logic to a new applied experiment.",
+      "scenario": {
+        "teaser": "A hospital compares two training methods and two reminder systems.",
+        "title": "Two factors, one response",
+        "body": [
+          "A hospital evaluates training method (standard/intensive) and reminder system (text/no text). Every combination is assigned to independent teams, with equal replication.",
+          "The intensive method improves performance substantially when text reminders are absent, but adds little when reminders are present. The reminder effect also differs by training method.",
+          "The design should estimate both main effects and their interaction. If the interaction is important, the team-specific cell means and simple effects explain the result more clearly than a single average effect."
+        ],
+        "q": "Which design and which effect should receive special attention?",
+        "answer": "A replicated 2² factorial design; examine the training-by-reminder interaction and then interpret simple effects."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 4,
+      "title": "Factorial experiments: final revision",
+      "objective": "Consolidate the design, effect and ANOVA rules.",
+      "body": [
+        "A full factorial studies every combination of the chosen factor levels. For 2² there are four combinations; for 2³ there are eight. Main effects are marginal average differences, while interactions describe changes in one factor's effect across levels of another.",
+        "For a balanced replicated 2² design, A, B and AB each have one df; with r replicates per combination, error df=4(r−1), total df=4r−1. Orthogonal contrasts partition treatment SS into A, B and AB components.",
+        "When interaction is substantial, interpret cell means and simple effects. Replicate independently, randomise treatment allocation, and distinguish repeated measurements from independent experimental units."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 2,
+      "title": "Unseen mastery test",
+      "objective": "Demonstrate factorial design and interaction analysis without hints.",
+      "setId": "design_t3_mastery"
+    }
+  ]
+}
