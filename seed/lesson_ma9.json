@@ -355,7 +355,100 @@
      "h": "Forms needing rewriting",
      "body": "0·∞, ∞−∞, 0⁰, 1^∞ and ∞⁰ are not direct quotient forms. Algebraic rewriting or logarithms may convert them into 0/0 or ∞/∞."
     }
-   ]
+   ],
+   "flow": {
+    "title": "Choose the analysis tool",
+    "alt": "Flow for Taylor approximation, L'Hopital and uniform continuity",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "What is the task?",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Approximate near a point",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 1,
+      "c": 2,
+      "label": "Evaluate an indeterminate quotient",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 0,
+      "label": "Taylor polynomial and remainder",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 2,
+      "c": 2,
+      "label": "Check 0/0 or infinity/infinity",
+      "kind": "dec"
+     },
+     {
+      "id": "f",
+      "r": 3,
+      "c": 2,
+      "label": "Rewrite other forms first",
+      "kind": "step"
+     },
+     {
+      "id": "g",
+      "r": 4,
+      "c": 1,
+      "label": "For global delta control, test uniform continuity",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b",
+      "label": "approximation"
+     },
+     {
+      "from": "a",
+      "to": "c",
+      "label": "limit"
+     },
+     {
+      "from": "b",
+      "to": "d"
+     },
+     {
+      "from": "c",
+      "to": "e"
+     },
+     {
+      "from": "e",
+      "to": "f",
+      "label": "no"
+     },
+     {
+      "from": "d",
+      "to": "g"
+     },
+     {
+      "from": "e",
+      "to": "g",
+      "label": "yes"
+     },
+     {
+      "from": "f",
+      "to": "g"
+     }
+    ]
+   }
   },
   {
    "kind": "guided",
