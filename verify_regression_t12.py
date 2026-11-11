@@ -17,7 +17,6 @@ assert len(P['items'])==20
 sig=lambda x:1/(1+math.exp(-x))
 assert abs(sig(0)-0.5)<1e-12 and abs(sig(1)-0.7310586)<1e-6
 assert abs(sig(-1)-0.2689414)<1e-6
-assert abs(1/(1+1/9*0+0)-1)>0 # odds-to-probability calculation is checked explicitly below
 odds=0.1/0.9*2
 assert abs(odds/(1+odds)-2/11)<1e-12
 assert abs(2*0.5*(1-0.5)-0.5)<1e-12
