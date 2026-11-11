@@ -1,17 +1,14 @@
 # T5 verification report — Poisson Process
 
-**Status: authoring package created; automated repository execution pending.**
+**Lesson:** v4.1, 15 scenes, 93 minutes. Includes count laws, independent and stationary increments, exponential inter-arrival times, kth-arrival waiting times, a second guided transfer problem, summary and mastery test.
 
-- Lesson: `seed/lesson_stochastic_t5.json`; 12 scenes covering foundations, count law, increments, inter-arrival times, exponential waiting, kth arrival and memorylessness.
-- Mastery pool: `seed/stochastic_t5_mastery.json`; 20 unseen questions: 6 easy / 10 moderate / 4 hard; 12 single-choice / 5 numeric / 3 multi-statement. Answer positions are balanced 5 each across A–D.
-- Evidence map: `evidence/stochastic_t5_evidence_map.md`.
-- Independent verifier: `verify_stochastic_t5.py`.
+**Mastery pool:** 20 unseen questions; 6 easy / 10 moderate / 4 hard; 12 single-choice / 5 numeric / 3 multi-statement. Answer positions are balanced A=5, B=5, C=5, D=5.
 
-## Mathematical checks specified
-- Poisson count probabilities and complement probabilities.
-- Exponential survival and memoryless identity.
-- Gamma/Erlang kth-arrival moments and Poisson-tail identity.
-- Unit conversions and key numerical examples.
+## Mathematical checks
+- Poisson count probabilities, means and variances.
+- Exponential survival, mean, variance and memoryless identity.
+- Gamma/Erlang kth-arrival moments and the Poisson-tail identity.
+- Unit conversions and exact numerical examples, including \(P(T_3>1)=5e^{-2}\) for rate 2 per minute.
 
-## Release gate
-The Python verifier, lesson structure validator, formula renderer, app build and Playwright browser suites must pass in GitHub Actions before this lesson is considered validated. No merge or production deployment is implied by this report.
+## Validation evidence
+The lesson data, pool audit, exact verifier, contract, house-standard, ID, formula-render and self-answer checks, app build, browser suite and six-scenario acceptance passed in [production workflow run 42983244351](https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/42983244351). Reproducible serialization entry point: `lesson_stochastic_t5.py`; mathematical verifier: `verify_stochastic_t5.py`.

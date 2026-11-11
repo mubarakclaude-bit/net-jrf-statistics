@@ -31,3 +31,8 @@ UGC NET Statistics, Unit IX: Poisson process; inter-arrival and waiting-time dis
 - Guided practice includes explicit unit conversion.
 - Mastery pool has 20 items with 6 easy, 10 moderate and 4 hard items, mixing conceptual and numerical formats.
 - This is original practice material, not an official PYQ set.
+
+## v4.1 lesson extension
+- s12: guided transfer — convert a third-arrival waiting-time event into a Poisson count event and evaluate the exact tail.
+- s13: summary — connect count probabilities, exponential gaps and Gamma/Erlang arrival epochs.
+- s14: unseen mastery test linked to `stochastic_t5_mastery`.

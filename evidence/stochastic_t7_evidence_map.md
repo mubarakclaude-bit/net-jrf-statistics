@@ -27,3 +27,8 @@ UGC NET Statistics Unit IX explicitly names birth and death processes and M/M/1 
 - Guided problems progress from state balance to queue performance.
 - Numerical work requires consistent units and an explicit stability check.
 - Mastery items are original practice, not official PYQs.
+
+## v4.1 lesson extension
+- s0: third foundation check — interpret traffic intensity and the stability condition.
+- s12: guided transfer — calculate utilisation, L, Lq, W and Wq for a new M/M/1 clinic queue and check Little’s law.
+- s13: summary; s14: unseen mastery test linked to `stochastic_t7_mastery`.

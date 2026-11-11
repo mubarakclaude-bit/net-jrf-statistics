@@ -1,11 +1,14 @@
 # T3 verification report — First Passage and First Return
 
-**Status: authoring checks specified; execution pending.**
+**Lesson:** 11 scenes, approximately 82 minutes. Covers hitting events, first-step conditioning, hitting probabilities and expected hitting times.
 
-- Lesson JSON: 11 scenes, with a mastery scene referencing `stochastic_t3_mastery`.
-- Mastery pool: 20 items; target composition 6 easy / 10 moderate / 4 hard; 13 single / 5 numeric / 2 multi.
-- Answer positions: 5 each of A, B, C and D.
-- Exact worked examples are encoded in `verify_stochastic_t3.py`.
-- The script checks exact first-step equations and pool structure.
+**Mastery pool:** 20 questions; 6 easy / 10 moderate / 4 hard; 13 single-choice / 5 numeric / 2 multi-statement. Answer positions are balanced A=5, B=5, C=5, D=5.
 
-**Not yet claimed:** repository `vcheck.js`, formula renderer, Playwright `test.js`, `clicktest.js`, or the Python verifier have not been run in this environment. Run `python3 verify_stochastic_t3.py` and `node vcheck.js seed/lesson_stochastic_t3.json` from the repository root before approval.
+## Mathematical checks
+- First-step equations for hitting probabilities and expected hitting times.
+- Boundary conditions distinguish a target-hit probability from remaining expected time.
+- Self-loops are included in the first-step expectation and can increase the mean hitting time.
+- Exact rational examples are recomputed in `verify_stochastic_t3.py`.
+
+## Validation evidence
+The lesson data, pool audit, exact verifier, contract, house-standard, ID, formula-render and self-answer checks, app build, browser suite and six-scenario acceptance passed in [production workflow run 42983244351](https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/42983244351). Reproducible serialization entry point: `lesson_stochastic_t3.py`; mathematical verifier: `verify_stochastic_t3.py`.

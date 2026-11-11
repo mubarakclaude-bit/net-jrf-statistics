@@ -1,18 +1,14 @@
 # T7 verification report — Birth–Death Processes and M/M/1 Queues
 
-**Status: authoring package created; repository execution pending.**
+**Lesson:** v4.1, 15 scenes, 94 minutes. Includes birth–death rates, local balance, M/M/1 stability and stationary law, queue performance, two guided problems, summary and mastery test.
 
-- Lesson: `seed/lesson_stochastic_t7.json`; 12 scenes.
-- Mastery pool: `seed/stochastic_t7_mastery.json`; 20 questions, 6 easy / 10 moderate / 4 hard.
-- Evidence map: `evidence/stochastic_t7_evidence_map.md`.
-- Independent verifier: `verify_stochastic_t7.py`.
+**Mastery pool:** 20 questions; 6 easy / 10 moderate / 4 hard; 12 single-choice / 5 numeric / 3 multi-statement. Answer positions are balanced A=5, B=5, C=5, D=5.
 
-## Mathematical checks specified
+## Mathematical checks
 - Finite birth–death stationary probabilities by exact local balance.
-- M/M/1 geometric stationary law and stability.
-- Exact utilisation, P₀, P₂, L, Lq, W and Wq.
-- Little’s law and cross-check identities.
-- Mastery pool counts, formats, answer balance and multi-statement structure.
+- M/M/1 geometric stationary law and stability condition.
+- Exact utilisation, empty-system probability, queue lengths and waiting times.
+- Little’s law and independent cross-check identities.
 
-## Release gate
-GitHub Actions must execute the verifier, vcheck, build/formula checks and browser integration suites. This report does not claim those executions have passed. No merge or production deployment is implied.
+## Validation evidence
+The lesson data, pool audit, exact verifier, contract, house-standard, ID, formula-render and self-answer checks, app build, browser suite and six-scenario acceptance passed in [production workflow run 42983244351](https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/42983244351). Reproducible serialization entry point: `lesson_stochastic_t7.py`; mathematical verifier: `verify_stochastic_t7.py`.

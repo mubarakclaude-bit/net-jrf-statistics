@@ -32,3 +32,8 @@ UGC NET Statistics Unit IX explicitly names Gambler’s ruin problem and Simple 
 - Guided practice includes a biased game with exact rational answer.
 - Mastery pool contains 20 questions across easy / moderate / hard levels and includes numerical and multi-statement formats.
 - Questions are original practice, not official PYQs.
+
+## v4.1 lesson extension
+- s12: guided transfer — calculate biased expected absorption time from the exact upper-hit probability.
+- s13: summary — distinguish position probabilities, hitting probabilities and expected duration.
+- s14: unseen mastery test linked to `stochastic_t6_mastery`.
