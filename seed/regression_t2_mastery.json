@@ -1,363 +1,389 @@
 {
- "moduleId": "regression",
- "topicId": "regression-t2",
- "source": "mastery",
- "label": "Gauss–Markov, BLUE and estimability — mastery test (unseen)",
- "count": 20,
- "items": [
-  {
-   "id": "regression-t2-m-01",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "easy",
-   "stem": "In y = Xβ + u, the OLS estimator is BLUE when E(u) = 0 and V(u) = σ²I. Beyond these two moment conditions, the theorem needs:",
-   "options": [
-    "normality of u",
-    "no distributional assumption",
-    "a large sample size",
-    "a random design matrix"
-   ],
-   "answer": "B",
-   "explanation": "Gauss–Markov uses only the mean and variance of u, with X fixed. Normality is needed for exact t and F tests, not for BLUE. A large sample is not required, and a random X changes the setting."
-  },
-  {
-   "id": "regression-t2-m-02",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "easy",
-   "stem": "The variance–covariance matrix of the OLS estimator β̂ is:",
-   "options": [
-    "σ²X′X",
-    "σ²(X′X)⁻¹",
-    "(X′X)⁻¹",
-    "σ²I"
-   ],
-   "answer": "B",
-   "explanation": "Var(β̂) = (X′X)⁻¹X′(σ²I)X(X′X)⁻¹ = σ²(X′X)⁻¹. Dropping σ² gives (X′X)⁻¹, and σ²X′X has the wrong inverse structure."
-  },
-  {
-   "id": "regression-t2-m-03",
-   "format": "numeric",
-   "topic": "regression-t2",
-   "diff": "easy",
-   "stem": "For y₁ = β + u₁ and y₂ = 2β + u₂ with V(uᵢ) = σ² = 10, the variance of the BLUE of β is:",
-   "options": [
-    "2",
-    "2.5",
-    "5",
-    "10"
-   ],
-   "answer": "A",
-   "explanation": "The BLUE is (y₁ + 2y₂)/5 with variance σ²/5 = 10/5 = 2. The value 2.5 is the variance of y₂/2 and 10 is the variance of y₁ alone.",
-   "check": "The BLUE variance must be below both single-reading variances: below 10 for y₁ and below 2.5 for y₂/2."
-  },
-  {
-   "id": "regression-t2-m-04",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "easy",
-   "stem": "If X′X is a diagonal matrix, the least squares estimators of the parameters are:",
-   "options": [
-    "not unique",
-    "biased",
-    "uncorrelated",
-    "identical"
-   ],
-   "answer": "C",
-   "explanation": "Cov(β̂) = σ²(X′X)⁻¹, and the inverse of a diagonal matrix is diagonal, so the off-diagonal covariances are zero. Diagonal X′X implies full rank, hence uniqueness, and says nothing about bias."
-  },
-  {
-   "id": "regression-t2-m-05",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "easy",
-   "stem": "A linear parametric function ℓ′β is estimable if and only if:",
-   "options": [
-    "X is a square matrix",
-    "ℓ′ lies in the row space of X",
-    "ℓ′ℓ = 1",
-    "ℓ is any vector"
-   ],
-   "answer": "B",
-   "explanation": "Estimable means some c′y is unbiased, c′X = ℓ′, so ℓ′ is a combination of the rows of X. In a full-rank X every ℓ qualifies, but the condition itself is membership of the row space."
-  },
-  {
-   "id": "regression-t2-m-06",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "easy",
-   "stem": "Which of the following is NOT a consequence of near (not perfect) multicollinearity for OLS?",
-   "options": [
-    "The estimates can be large in magnitude",
-    "Small changes in the data cause large changes in the estimates",
-    "Standard errors are large while R² is high",
-    "The estimates are biased"
-   ],
-   "answer": "D",
-   "explanation": "Near multicollinearity breaks no Gauss–Markov assumption, so OLS stays unbiased and BLUE. What suffers is the variance, which is inflated by 1/(1 − r²). The other three are all symptoms of that inflation."
-  },
-  {
-   "id": "regression-t2-m-07",
-   "format": "numeric",
-   "topic": "regression-t2",
-   "diff": "moderate",
-   "stem": "In the model y₁ = β₁ + β₂ + u₁, y₂ = 2β₁ + u₂, y₃ = β₁ − β₂ + u₃, the observations are y = (7, 4, 3). The BLUE of β₁ is:",
-   "options": [
-    "2",
-    "9",
-    "84",
-    "3"
-   ],
-   "answer": "D",
-   "explanation": "β̂₁ = (y₁ + 2y₂ + y₃)/6 = (7 + 8 + 3)/6 = 3. With the divisor 2 the value would be 9, 84 is 6(y₁ + y₂ + y₃), and 2 is β̂₂ = (7 − 3)/2.",
-   "check": "Multiply the weights (1, 2, 1)/6 into the first column of X: (1 + 4 + 1)/6 = 1, and into the second: (1 + 0 − 1)/6 = 0."
-  },
-  {
-   "id": "regression-t2-m-08",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "moderate",
-   "stem": "Under heteroscedastic errors, the OLS estimator of β is:",
-   "options": [
-    "BLUE",
-    "biased",
-    "unbiased but not BLUE",
-    "inconsistent"
-   ],
-   "answer": "C",
-   "explanation": "Unbiasedness uses E(u) = 0 only, so it survives. The variance formula σ²(X′X)⁻¹ no longer holds and generalised least squares has smaller variance."
-  },
-  {
-   "id": "regression-t2-m-09",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "moderate",
-   "stem": "Which of the following DOES cause bias in the OLS estimator of a coefficient?",
-   "options": [
-    "Heteroscedastic errors",
-    "A large sample",
-    "Multicollinearity among the regressors",
-    "Omission of a relevant variable correlated with the regressor"
-   ],
-   "answer": "D",
-   "explanation": "Omitting a relevant correlated variable puts part of its effect into the error and breaks E(u) = 0 for the fitted model. The bias is β₂δ. Large samples, multicollinearity and heteroscedasticity leave OLS unbiased."
-  },
-  {
-   "id": "regression-t2-m-10",
-   "format": "numeric",
-   "topic": "regression-t2",
-   "diff": "moderate",
-   "stem": "The true model has β₂ = 2 on x₂, and the regression of x₂ on x₁ has slope δ = 0.6. Leaving x₂ out, the bias in the slope on x₁ is:",
-   "options": [
-    "1.2",
-    "2.0",
-    "0.6",
-    "2.6"
-   ],
-   "answer": "A",
-   "explanation": "Bias = β₂δ = 2 × 0.6 = 1.2. The value 2.6 is β₂ + δ and 2.0 and 0.6 are the two factors taken alone.",
-   "check": "The bias is a product of a coefficient and a slope less than 1 in size, so it cannot exceed β₂ = 2."
-  },
-  {
-   "id": "regression-t2-m-11",
-   "format": "multi",
-   "topic": "regression-t2",
-   "diff": "moderate",
-   "stem": "Near (but not perfect) multicollinearity among the regressors of a linear model.",
-   "options": [
-    "A, B, C and D",
-    "A and B only",
-    "B, C and D only",
-    "A, B and C only"
-   ],
-   "answer": "D",
-   "explanation": "Unbiasedness and BLUE survive, standard errors grow, and a high R² with insignificant t values is the classic symptom. The estimates are not biased.",
-   "statements": [
-    "OLS estimators remain unbiased",
-    "The variances of the estimators are inflated",
-    "R² can be high while individual t statistics are insignificant",
-    "The OLS estimators become biased"
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "E(u) = 0 and fixed X are unaffected."
+  "moduleId": "regression",
+  "topicId": "regression-t2",
+  "source": "mastery",
+  "label": "Gauss–Markov, BLUE and estimability — mastery test",
+  "count": 20,
+  "items": [
+    {
+      "id": "regression-t2-m-01",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "BLUE stands for:",
+      "options": [
+        "Best linear unbiased estimator",
+        "Best likelihood unbiased estimator",
+        "Biased linear unbiased estimator",
+        "Best least-squares estimator"
+      ],
+      "answer": "A",
+      "explanation": "BLUE means best linear unbiased estimator; the word best refers to the minimum-variance comparison among linear unbiased estimators."
     },
-    "B": {
-     "tf": true,
-     "why": "The variance is multiplied by 1/(1 − r²)."
+    {
+      "id": "regression-t2-m-02",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "Which assumption is NOT required by the Gauss–Markov theorem?",
+      "options": [
+        "Normality of errors",
+        "Zero conditional mean",
+        "Spherical error covariance",
+        "Full column rank for the standard inverse form"
+      ],
+      "answer": "A",
+      "explanation": "Normality is not part of the Gauss–Markov assumptions; it is used for exact finite-sample distributional results."
     },
-    "C": {
-     "tf": true,
-     "why": "The F test pools the coefficients, while each t statistic suffers from its own inflated standard error."
+    {
+      "id": "regression-t2-m-03",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "The ordinary OLS estimator when X has full column rank is:",
+      "options": [
+        "(X′X)⁻¹X′y",
+        "X′y",
+        "(XX′)⁻¹Xy",
+        "X(X′X)⁻¹y"
+      ],
+      "answer": "A",
+      "explanation": "The normal equations are X′Xβ̂=X′y, and full column rank permits inversion of X′X."
     },
-    "D": {
-     "tf": false,
-     "why": "No assumption needed for unbiasedness is violated."
+    {
+      "id": "regression-t2-m-04",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "Under V(u|X)=σ²I, the variance of OLS is:",
+      "options": [
+        "σ²(X′X)⁻¹",
+        "σ²X′X",
+        "(X′X)⁻¹",
+        "σ²I"
+      ],
+      "answer": "A",
+      "explanation": "Applying the matrix variance rule to (X′X)⁻¹X′u gives σ²(X′X)⁻¹."
+    },
+    {
+      "id": "regression-t2-m-05",
+      "diff": "easy",
+      "format": "numeric",
+      "topic": "regression-t2",
+      "stem": "For X=[[1],[2]], calculate X′X.",
+      "options": [
+        "5",
+        "2",
+        "3",
+        "6"
+      ],
+      "answer": "A",
+      "explanation": "X′X=1²+2²=5. Check by summing the squared entries of the column.",
+      "check": "5"
+    },
+    {
+      "id": "regression-t2-m-06",
+      "diff": "easy",
+      "format": "numeric",
+      "topic": "regression-t2",
+      "stem": "If X′X=diag(4,9), what is the (1,1) element of Var(β̂)/σ²?",
+      "options": [
+        "1/9",
+        "1/4",
+        "4",
+        "9"
+      ],
+      "answer": "B",
+      "explanation": "The inverse is diag(1/4,1/9), so the first variance factor is 1/4.",
+      "check": "0.25"
+    },
+    {
+      "id": "regression-t2-m-07",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "A′β is estimable if and only if a belongs to:",
+      "options": [
+        "Null(X)",
+        "Row space of X",
+        "Column space of X",
+        "Null(X′)"
+      ],
+      "answer": "B",
+      "explanation": "Estimability requires a to be a linear combination of rows of X, equivalently a∈C(X′)."
+    },
+    {
+      "id": "regression-t2-m-08",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "If X has full column rank k, then:",
+      "options": [
+        "No coefficient is estimable",
+        "Every linear function of β is estimable",
+        "Only the intercept is estimable",
+        "X′X is singular"
+      ],
+      "answer": "B",
+      "explanation": "Full column rank makes row(X)=Rᵏ, so every coefficient vector a belongs to the row space."
+    },
+    {
+      "id": "regression-t2-m-09",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "The zero conditional mean assumption is primarily used to establish:",
+      "options": [
+        "Normality",
+        "Unbiasedness of OLS",
+        "Homoscedasticity",
+        "Full rank"
+      ],
+      "answer": "B",
+      "explanation": "E(u|X)=0 makes E(β̂|X)=β after substituting the linear model."
+    },
+    {
+      "id": "regression-t2-m-10",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "In the BLUE comparison, OLS is compared with:",
+      "options": [
+        "All measurable estimators",
+        "All linear unbiased estimators",
+        "All biased estimators",
+        "Only maximum likelihood estimators"
+      ],
+      "answer": "B",
+      "explanation": "The theorem's comparison class is specifically linear unbiased estimators."
+    },
+    {
+      "id": "regression-t2-m-11",
+      "diff": "moderate",
+      "format": "multi",
+      "topic": "regression-t2",
+      "stem": "Which statements are correct? A. Normality is unnecessary for Gauss–Markov. B. OLS is linear in y. C. BLUE compares linear unbiased estimators. D. Spherical covariance includes zero off-diagonal covariances.",
+      "options": [
+        "A and B only",
+        "A, B and C only",
+        "A, B, C and D",
+        "A, C and D only"
+      ],
+      "answer": "C",
+      "explanation": "All four are correct: normality is not needed, OLS is linear in y, and σ²I specifies equal variances and zero covariances.",
+      "statements": [
+        "Normality is unnecessary for Gauss–Markov.",
+        "OLS is linear in y.",
+        "BLUE compares linear unbiased estimators.",
+        "Spherical covariance includes zero off-diagonal covariances."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The theorem does not require normality."
+        },
+        "B": {
+          "tf": true,
+          "why": "OLS is a matrix linear transformation of y."
+        },
+        "C": {
+          "tf": true,
+          "why": "The comparison class is linear and unbiased."
+        },
+        "D": {
+          "tf": true,
+          "why": "σ²I has zero off-diagonal entries."
+        }
+      },
+      "check": "A:true;B:true;C:true;D:true"
+    },
+    {
+      "id": "regression-t2-m-12",
+      "diff": "moderate",
+      "format": "numeric",
+      "topic": "regression-t2",
+      "stem": "For X=[[1,1],[2,0],[1,−1]], calculate the (1,1) element of X′X.",
+      "options": [
+        "2",
+        "4",
+        "6",
+        "8"
+      ],
+      "answer": "C",
+      "explanation": "The first column has squared entries 1, 4 and 1; their sum is 6.",
+      "check": "6"
+    },
+    {
+      "id": "regression-t2-m-13",
+      "diff": "moderate",
+      "format": "numeric",
+      "topic": "regression-t2",
+      "stem": "For the same X, calculate the (2,2) element of X′X.",
+      "options": [
+        "1",
+        "3",
+        "2",
+        "6"
+      ],
+      "answer": "C",
+      "explanation": "The second column has squared entries 1, 0 and 1; their sum is 2.",
+      "check": "2"
+    },
+    {
+      "id": "regression-t2-m-14",
+      "diff": "moderate",
+      "format": "multi",
+      "topic": "regression-t2",
+      "stem": "For X=[[1,1],[2,0],[1,−1]], which statements are true? A. X′X is diagonal. B. rank(X)=2. C. Both β₁ and β₂ are estimable. D. X′X has determinant zero.",
+      "options": [
+        "A and B only",
+        "B, C and D only",
+        "A, B and C only",
+        "All four"
+      ],
+      "answer": "C",
+      "explanation": "A, B and C are true. The determinant is 6×2=12, not zero.",
+      "statements": [
+        "Normality is unnecessary for Gauss–Markov.",
+        "OLS is linear in y.",
+        "BLUE compares linear unbiased estimators.",
+        "Spherical covariance includes zero off-diagonal covariances."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The theorem does not require normality."
+        },
+        "B": {
+          "tf": true,
+          "why": "OLS is a matrix linear transformation of y."
+        },
+        "C": {
+          "tf": true,
+          "why": "The comparison class is linear and unbiased."
+        },
+        "D": {
+          "tf": true,
+          "why": "σ²I has zero off-diagonal entries."
+        }
+      },
+      "check": "A:true;B:true;C:true;D:false"
+    },
+    {
+      "id": "regression-t2-m-15",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "For the June 2026 design, the coefficient of y₂ in β̂₁ is:",
+      "options": [
+        "1/2",
+        "1/6",
+        "1/3",
+        "2/3"
+      ],
+      "answer": "C",
+      "explanation": "β̂₁=(y₁+2y₂+y₃)/6, so the coefficient of y₂ is 2/6=1/3."
+    },
+    {
+      "id": "regression-t2-m-16",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "If two columns of X are identical, which function is generally estimable?",
+      "options": [
+        "β₁ alone",
+        "β₂ alone",
+        "β₁−β₂",
+        "β₁+β₂"
+      ],
+      "answer": "D",
+      "explanation": "The fitted mean depends on the sum along the shared column direction, while the difference is not identified."
+    },
+    {
+      "id": "regression-t2-m-18",
+      "diff": "hard",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "For any competing linear unbiased estimator Cy with CX=I, write C=(X′X)⁻¹X′+D. The restriction on D is:",
+      "options": [
+        "D′D=0",
+        "DX=I",
+        "D=X",
+        "DX=0"
+      ],
+      "answer": "D",
+      "explanation": "Subtracting the OLS unbiasedness identity from CX=I gives DX=0."
+    },
+    {
+      "id": "regression-t2-m-19",
+      "diff": "hard",
+      "format": "multi",
+      "topic": "regression-t2",
+      "stem": "Which statements about the BLUE variance comparison are true? A. Var(Cy)−Var(β̂)=σ²DD′. B. DD′ is positive semidefinite. C. The difference can be negative in some direction. D. OLS is minimum variance in the linear unbiased class.",
+      "options": [
+        "A and B only",
+        "A, C and D only",
+        "All four",
+        "A, B and D only"
+      ],
+      "answer": "D",
+      "explanation": "A, B and D are true; a′DD′a=||D′a||²≥0, so the difference cannot be negative in any direction.",
+      "statements": [
+        "Normality is unnecessary for Gauss–Markov.",
+        "OLS is linear in y.",
+        "BLUE compares linear unbiased estimators.",
+        "Spherical covariance includes zero off-diagonal covariances."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The theorem does not require normality."
+        },
+        "B": {
+          "tf": true,
+          "why": "OLS is a matrix linear transformation of y."
+        },
+        "C": {
+          "tf": true,
+          "why": "The comparison class is linear and unbiased."
+        },
+        "D": {
+          "tf": true,
+          "why": "σ²I has zero off-diagonal entries."
+        }
+      },
+      "check": "A:true;B:true;C:false;D:true"
+    },
+    {
+      "id": "regression-t2-m-20",
+      "diff": "hard",
+      "format": "single",
+      "topic": "regression-t2",
+      "stem": "For the June 2026 design, calculate det(X′X).",
+      "options": [
+        "6",
+        "8",
+        "18",
+        "12"
+      ],
+      "answer": "D",
+      "explanation": "X′X=diag(6,2), so its determinant is 12. This confirms full column rank."
+    },
+    {
+      "id": "regression-t2-m-21",
+      "diff": "hard",
+      "format": "numeric",
+      "topic": "regression-t2",
+      "stem": "For β̂₂=(y₁−y₃)/2 and independent errors each with variance σ², find Var(β̂₂)/σ².",
+      "options": [
+        "1/4",
+        "1",
+        "2",
+        "1/2"
+      ],
+      "answer": "D",
+      "explanation": "The variance is (1/4)(σ²+σ²)=σ²/2; the coefficient squares must be summed.",
+      "check": "0.5"
     }
-   }
-  },
-  {
-   "id": "regression-t2-m-12",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "moderate",
-   "stem": "In a design with an intercept and two group effects (parameters α, τ₁, τ₂) and observations in both groups, which function is estimable?",
-   "options": [
-    "τ₁ − τ₂",
-    "τ₁",
-    "α",
-    "τ₁ + τ₂"
-   ],
-   "answer": "A",
-   "explanation": "(0, 1, −1) is the difference of the two row types (1,1,0) and (1,0,1), so it is in the row space. The other three are not combinations of those two rows."
-  },
-  {
-   "id": "regression-t2-m-13",
-   "format": "numeric",
-   "topic": "regression-t2",
-   "diff": "moderate",
-   "stem": "In Q11's model with σ² = 12, the variance of the BLUE of β₁ is:",
-   "options": [
-    "6",
-    "2",
-    "4",
-    "1"
-   ],
-   "answer": "B",
-   "explanation": "Var(β̂₁) = σ²/6 = 12/6 = 2, using the squared weights (1 + 4 + 1)/36 = 1/6. The value 6 is the divisor, not the variance.",
-   "check": "The sum of the squared weights is 6/36 = 1/6, so the variance is σ² times a number below 1: it must be below 12."
-  },
-  {
-   "id": "regression-t2-m-14",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "moderate",
-   "stem": "In y₁ = β + u₁, y₂ = 2β + u₂ with equal variances, the estimator (y₁ + y₂)/3 is:",
-   "options": [
-    "the BLUE",
-    "biased",
-    "unbiased but has larger variance than the BLUE",
-    "unbiased with smaller variance than the BLUE"
-   ],
-   "answer": "C",
-   "explanation": "E = (β + 2β)/3 = β, so it is unbiased. Its variance is 2σ²/9 ≈ 0.222σ², above the BLUE's σ²/5 = 0.2σ². No unbiased linear estimator can beat the BLUE."
-  },
-  {
-   "id": "regression-t2-m-15",
-   "format": "multi",
-   "topic": "regression-t2",
-   "diff": "moderate",
-   "stem": "In the two-group design with parameters (α, τ₁, τ₂), each group having observations, the following functions.",
-   "options": [
-    "C and D only",
-    "A, B and C only",
-    "A and B only",
-    "A, B, C and D"
-   ],
-   "answer": "C",
-   "explanation": "The estimable ones are the contrast τ₁ − τ₂ and the group mean α + τ₁. The parameters α and τ₁ taken alone are not.",
-   "statements": [
-    "τ₁ − τ₂ is estimable",
-    "α + τ₁ is estimable",
-    "τ₁ alone is estimable",
-    "α alone is estimable"
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "It is a difference of two row types."
-    },
-    "B": {
-     "tf": true,
-     "why": "It is the row (1,1,0) itself."
-    },
-    "C": {
-     "tf": false,
-     "why": "(0,1,0) is not a combination of (1,1,0) and (1,0,1)."
-    },
-    "D": {
-     "tf": false,
-     "why": "(1,0,0) is not a combination of those two rows."
-    }
-   }
-  },
-  {
-   "id": "regression-t2-m-16",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "moderate",
-   "stem": "In the three-equation model of Q11, the covariance between the BLUEs of β₁ and β₂ is:",
-   "options": [
-    "σ²/3",
-    "σ²/6",
-    "−σ²/2",
-    "zero, because X′X is diagonal"
-   ],
-   "answer": "D",
-   "explanation": "X′X = diag(6, 2), so (X′X)⁻¹ = diag(1/6, 1/2) and the off-diagonal entry is zero. The values σ²/6 and σ²/2 are the two variances."
-  },
-  {
-   "id": "regression-t2-m-17",
-   "format": "numeric",
-   "topic": "regression-t2",
-   "diff": "hard",
-   "stem": "Two regressors are correlated with r = 0.99. The variance inflation factor 1/(1 − r²) is:",
-   "options": [
-    "50.25",
-    "7.09",
-    "100",
-    "0.0199"
-   ],
-   "answer": "A",
-   "explanation": "1 − 0.9801 = 0.0199, and 1/0.0199 = 50.25. The value 7.09 is the square root, which inflates the standard deviation. The value 100 is 1/(1 − r) and 0.0199 is the denominator.",
-   "check": "For r near 1, 1/(1 − r²) ≈ 1/(2(1 − r)) = 1/0.02 = 50, so the answer is close to 50."
-  },
-  {
-   "id": "regression-t2-m-18",
-   "format": "numeric",
-   "topic": "regression-t2",
-   "diff": "hard",
-   "stem": "In the two-group design with group 1 responses 3, 5 and group 2 responses 8, 10, the estimate of the estimable contrast τ₁ − τ₂ is:",
-   "options": [
-    "13",
-    "5",
-    "−5",
-    "4"
-   ],
-   "answer": "C",
-   "explanation": "The estimable contrast equals the difference of group means: 4 − 9 = −5. It is the same for every solution of the normal equations, unlike τ̂₁ alone.",
-   "check": "A contrast of two group effects equals the difference of group means, and group 1 has the smaller mean, so the sign is negative."
-  },
-  {
-   "id": "regression-t2-m-19",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "hard",
-   "stem": "In the proof of Gauss–Markov, a competing linear unbiased estimator is written c = a + d, where a are the OLS weights. Its variance exceeds that of OLS by σ²d′d because:",
-   "options": [
-    "d′X = 0 makes a′d = 0, so the cross term vanishes",
-    "d is a constant vector",
-    "d′d is always zero",
-    "a and d have equal length"
-   ],
-   "answer": "A",
-   "explanation": "Unbiasedness of both c and a gives d′X = 0. Then a′d = ℓ′(X′X)⁻¹X′d = 0, so Var(c′y) = σ²(a′a + d′d). The term d′d is positive unless d = 0."
-  },
-  {
-   "id": "regression-t2-m-20",
-   "format": "single",
-   "topic": "regression-t2",
-   "diff": "hard",
-   "stem": "If the errors are in addition normally distributed, OLS is best among:",
-   "options": [
-    "linear unbiased estimators only",
-    "all unbiased estimators, linear or not",
-    "all estimators, biased or not",
-    "only estimators with equal weights"
-   ],
-   "answer": "B",
-   "explanation": "Under normality β̂ is a function of a complete sufficient statistic and unbiased, hence the minimum-variance unbiased estimator in the whole class. It still does not beat biased estimators on mean squared error everywhere."
-  }
- ]
+  ]
 }

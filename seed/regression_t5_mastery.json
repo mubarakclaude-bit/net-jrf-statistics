@@ -1,365 +1,389 @@
 {
- "moduleId": "regression",
- "topicId": "regression-t5",
- "source": "mastery",
- "label": "Multicollinearity — mastery test (unseen)",
- "count": 20,
- "items": [
-  {
-   "id": "regression-t5-m-01",
-   "format": "single",
-   "topic": "regression-t5",
-   "diff": "easy",
-   "stem": "Which of the following is NOT a consequence of near (but not perfect) multicollinearity for the OLS estimator?",
-   "options": [
-    "The estimates are large in magnitude",
-    "Small changes in the data produce large changes in the estimates",
-    "The estimates have high standard errors and low t values although R² is very high",
-    "The estimates are biased"
-   ],
-   "answer": "D",
-   "explanation": "Near multicollinearity breaks no Gauss–Markov assumption, so the estimator stays unbiased and BLUE. The other three are all effects of the inflated variance, including large estimates, since E|b|² = |β|² + σ²tr[(X′X)⁻¹]."
-  },
-  {
-   "id": "regression-t5-m-02",
-   "format": "single",
-   "topic": "regression-t5",
-   "diff": "easy",
-   "stem": "Multicollinearity primarily damages:",
-   "options": [
-    "the interpretation of individual coefficients",
-    "the R² of the model",
-    "the overall F test",
-    "prediction within the range of the data"
-   ],
-   "answer": "A",
-   "explanation": "The data fix the combined effect of the collinear regressors well but not the split between them, so each coefficient is imprecise. R², F and in-pattern prediction are not harmed."
-  },
-  {
-   "id": "regression-t5-m-03",
-   "format": "single",
-   "topic": "regression-t5",
-   "diff": "easy",
-   "stem": "Principal components regression addresses multicollinearity by:",
-   "options": [
-    "transforming the dependent variable",
-    "using orthogonal linear combinations of the regressors",
-    "weighting the observations",
-    "dropping observations"
-   ],
-   "answer": "B",
-   "explanation": "Rotating to the eigenvector directions gives uncorrelated components. The components with tiny eigenvalues are the unstable ones and are dropped or shrunk. Transforming y, weighting observations or deleting rows does not remove the dependence among regressors."
-  },
-  {
-   "id": "regression-t5-m-04",
-   "format": "numeric",
-   "topic": "regression-t5",
-   "diff": "easy",
-   "stem": "If regressing x_j on the other regressors gives R_j² = 0.75, the variance inflation factor of x_j is:",
-   "options": [
-    "1.33",
-    "0.25",
-    "4",
-    "3"
-   ],
-   "answer": "C",
-   "explanation": "VIF_j = 1/(1 − R_j²) = 1/0.25 = 4. The value 0.25 is 1 − R_j² and 1.33 is 1/R_j².",
-   "check": "A VIF is never below 1, which excludes 0.25."
-  },
-  {
-   "id": "regression-t5-m-05",
-   "format": "single",
-   "topic": "regression-t5",
-   "diff": "easy",
-   "stem": "The variance inflation factor of the j-th regressor is defined as:",
-   "options": [
-    "R_j²/(1 − R_j²)",
-    "1/R_j²",
-    "1 − R_j²",
-    "1/(1 − R_j²), where R_j² is from regressing x_j on the other regressors"
-   ],
-   "answer": "D",
-   "explanation": "VIF_j = 1/(1 − R_j²) is the factor by which Var(b_j) exceeds its value when x_j is uncorrelated with the others. The other three are not the inflation factor."
-  },
-  {
-   "id": "regression-t5-m-06",
-   "format": "single",
-   "topic": "regression-t5",
-   "diff": "easy",
-   "stem": "When one regressor is an exact linear combination of the others, the matrix X′X is:",
-   "options": [
-    "singular, so the OLS solution is not unique",
-    "diagonal",
-    "the identity matrix",
-    "negative definite"
-   ],
-   "answer": "A",
-   "explanation": "An exact dependence among the columns gives a rank-deficient X, hence a singular X′X and infinitely many solutions of the normal equations. Only estimable functions are determined."
-  },
-  {
-   "id": "regression-t5-m-07",
-   "format": "numeric",
-   "topic": "regression-t5",
-   "diff": "moderate",
-   "stem": "Two regressors have correlation r = 0.9. The variance inflation factor of each is:",
-   "options": [
-    "0.19",
-    "10.0",
-    "1.9",
-    "5.26"
-   ],
-   "answer": "D",
-   "explanation": "VIF = 1/(1 − r²) = 1/0.19 = 5.26. The value 0.19 is 1 − r², the value 1.9 is 1 + r, and 10.0 is the result of treating r = 0.9 as R_j² of 0.9 in 1/(1 − R_j²).",
-   "check": "At r = 0.9 the factor must lie above 1 and well below the 50 seen at r = 0.99."
-  },
-  {
-   "id": "regression-t5-m-08",
-   "format": "numeric",
-   "topic": "regression-t5",
-   "diff": "moderate",
-   "stem": "A regressor has VIF = 20. By what factor is its standard error inflated, compared with an uncorrelated regressor?",
-   "options": [
-    "20",
-    "4.47",
-    "10",
-    "2.5"
-   ],
-   "answer": "B",
-   "explanation": "Variance is inflated by the VIF and the standard error by its square root: √20 = 4.47. The value 20 is the variance factor.",
-   "check": "The standard-error factor is smaller than the variance factor 20, which rules out 20."
-  },
-  {
-   "id": "regression-t5-m-09",
-   "format": "single",
-   "topic": "regression-t5",
-   "diff": "moderate",
-   "stem": "A regression reports R² = 0.81 and a significant overall F, yet every slope has an insignificant t statistic. The most likely reason is:",
-   "options": [
-    "a wrongly specified dependent variable",
-    "autocorrelated errors",
-    "omitted-variable bias",
-    "near multicollinearity among the regressors"
-   ],
-   "answer": "D",
-   "explanation": "Collinear regressors jointly explain y, so R² and F are high, while each coefficient's standard error is inflated and its t is small. The other three do not produce this particular pattern."
-  },
-  {
-   "id": "regression-t5-m-10",
-   "format": "multi",
-   "topic": "regression-t5",
-   "diff": "moderate",
-   "stem": "In a regression with two highly but not perfectly correlated regressors.",
-   "options": [
-    "A, B, C and D",
-    "A and B only",
-    "B, C and D only",
-    "A, B and C only"
-   ],
-   "answer": "D",
-   "explanation": "The estimator is unbiased, its variance is inflated by the VIF, and predictions at points that follow the collinear pattern are precise. The estimates are not biased.",
-   "statements": [
-    "The OLS estimators remain unbiased",
-    "The variances of the coefficient estimates are inflated",
-    "Predictions at points following the collinear pattern remain precise",
-    "The OLS estimators become biased"
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "E(u) = 0 and fixed X are untouched."
+  "moduleId": "regression",
+  "topicId": "regression-t5",
+  "source": "mastery",
+  "label": "6.5 Multicollinearity — mastery test",
+  "count": 20,
+  "items": [
+    {
+      "id": "regression-t5-m-01",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "The main consequence of near multicollinearity is:",
+      "options": [
+        "Inflated standard errors",
+        "Biased OLS estimates",
+        "A necessarily low R²",
+        "A necessarily large coefficient magnitude"
+      ],
+      "answer": "A",
+      "explanation": "Near dependence can inflate coefficient variances and standard errors; it does not by itself create bias."
     },
-    "B": {
-     "tf": true,
-     "why": "Var(b_j) is multiplied by 1/(1 − R_j²)."
+    {
+      "id": "regression-t5-m-02",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "Perfect multicollinearity means:",
+      "options": [
+        "Exact linear dependence among columns of X",
+        "High but imperfect correlation",
+        "Heteroscedastic errors",
+        "A nonlinear response relation"
+      ],
+      "answer": "A",
+      "explanation": "Perfect collinearity is exact linear dependence, so X loses column rank."
     },
-    "C": {
-     "tf": true,
-     "why": "Var(ŷ₀) = 0.0201σ² at (1, 1) for r = 0.99, n = 50."
+    {
+      "id": "regression-t5-m-03",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "If X has perfect multicollinearity, then X′X is:",
+      "options": [
+        "Singular",
+        "Identity",
+        "Diagonal with positive entries",
+        "Always positive definite"
+      ],
+      "answer": "A",
+      "explanation": "Exact column dependence makes X′X singular."
     },
-    "D": {
-     "tf": false,
-     "why": "Unbiasedness does not need uncorrelated regressors."
+    {
+      "id": "regression-t5-m-04",
+      "diff": "easy",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "Does multicollinearity alone bias OLS when E(u|X)=0 holds?",
+      "options": [
+        "No",
+        "Yes, always",
+        "Only for large samples",
+        "Only when R² is high"
+      ],
+      "answer": "A",
+      "explanation": "Exogeneity gives OLS unbiasedness; collinearity affects precision."
+    },
+    {
+      "id": "regression-t5-m-05",
+      "diff": "easy",
+      "format": "numeric",
+      "topic": "regression-t5",
+      "stem": "If an auxiliary regression has R²ⱼ=0.80, calculate VIFⱼ.",
+      "options": [
+        "5",
+        "2",
+        "4",
+        "10"
+      ],
+      "answer": "A",
+      "explanation": "VIF=1/(1−0.80)=5.",
+      "check": "5"
+    },
+    {
+      "id": "regression-t5-m-06",
+      "diff": "easy",
+      "format": "numeric",
+      "topic": "regression-t5",
+      "stem": "An estimate is 3 and its standard error is 1.5. What is the t statistic for H₀:β=0?",
+      "options": [
+        "1",
+        "2",
+        "1.5",
+        "4"
+      ],
+      "answer": "B",
+      "explanation": "t=3/1.5=2.",
+      "check": "2"
+    },
+    {
+      "id": "regression-t5-m-07",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "Which pattern is a common warning sign of multicollinearity?",
+      "options": [
+        "Low R² and all coefficients highly significant",
+        "High R² with weak individual t statistics",
+        "No correlation among regressors",
+        "A zero residual sum of squares"
+      ],
+      "answer": "B",
+      "explanation": "Strong joint fit can coexist with imprecise individual coefficients."
+    },
+    {
+      "id": "regression-t5-m-08",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "The VIF for predictor j is:",
+      "options": [
+        "1−R²ⱼ",
+        "1/(1−R²ⱼ)",
+        "1/R²ⱼ",
+        "R²ⱼ/(1−R²ⱼ)²"
+      ],
+      "answer": "B",
+      "explanation": "VIF is the reciprocal of one minus the auxiliary-regression R²."
+    },
+    {
+      "id": "regression-t5-m-09",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "Which statement about coefficient magnitude is correct?",
+      "options": [
+        "Multicollinearity always makes estimates large",
+        "Magnitude is not a necessary consequence; imprecision is the general concern",
+        "Multicollinearity always makes estimates close to zero",
+        "Magnitude must equal the VIF"
+      ],
+      "answer": "B",
+      "explanation": "The robust general consequence is inflated variance, not a guaranteed direction or size of the point estimate."
+    },
+    {
+      "id": "regression-t5-m-10",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "Pairwise correlations may fail to detect multicollinearity because:",
+      "options": [
+        "They only detect nonlinear dependence",
+        "A predictor can be explained by a combination of several other predictors",
+        "They depend on the response variable",
+        "They are always zero in multiple regression"
+      ],
+      "answer": "B",
+      "explanation": "An auxiliary regression can reveal joint dependence not visible in any single pairwise correlation."
+    },
+    {
+      "id": "regression-t5-m-11",
+      "diff": "moderate",
+      "format": "multi",
+      "topic": "regression-t5",
+      "stem": "Which statements are correct? A. Near multicollinearity can inflate standard errors. B. It automatically biases OLS. C. R² can remain high. D. Individual t statistics can be weak.",
+      "options": [
+        "A and C only",
+        "B and D only",
+        "A, C and D only",
+        "All four"
+      ],
+      "answer": "C",
+      "explanation": "A, C and D are true. Collinearity alone does not create bias under exogeneity.",
+      "statements": [
+        "Near multicollinearity can inflate standard errors.",
+        "It automatically biases OLS.",
+        "R² can remain high.",
+        "Individual t statistics can be weak."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The variance of affected coefficient estimators can rise."
+        },
+        "B": {
+          "tf": false,
+          "why": "Collinearity alone does not violate exogeneity."
+        },
+        "C": {
+          "tf": true,
+          "why": "Joint fit can remain high."
+        },
+        "D": {
+          "tf": true,
+          "why": "Large standard errors can weaken t statistics."
+        }
+      },
+      "check": "A:true;B:false;C:true;D:true"
+    },
+    {
+      "id": "regression-t5-m-12",
+      "diff": "moderate",
+      "format": "numeric",
+      "topic": "regression-t5",
+      "stem": "If R²ⱼ=0.90, calculate VIFⱼ.",
+      "options": [
+        "5",
+        "9",
+        "10",
+        "20"
+      ],
+      "answer": "C",
+      "explanation": "VIF=1/(1−0.90)=10.",
+      "check": "10"
+    },
+    {
+      "id": "regression-t5-m-13",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "If a standard error increases from 0.5 to 2 while the estimate stays fixed, by what factor does its variance increase?",
+      "options": [
+        "2",
+        "4",
+        "16",
+        "8"
+      ],
+      "answer": "C",
+      "explanation": "Variance is SE². The ratio is 2²/0.5²=4/0.25=16."
+    },
+    {
+      "id": "regression-t5-m-14",
+      "diff": "moderate",
+      "format": "multi",
+      "topic": "regression-t5",
+      "stem": "Which statements distinguish perfect from near multicollinearity? A. Perfect collinearity is exact dependence. B. Near collinearity can retain full rank. C. Perfect collinearity makes X′X singular. D. Near collinearity always makes OLS biased.",
+      "options": [
+        "A and B only",
+        "B, C and D only",
+        "A, B and C only",
+        "All four"
+      ],
+      "answer": "C",
+      "explanation": "A, B and C are true; D is false because collinearity alone does not cause bias under exogeneity.",
+      "statements": [
+        "Near multicollinearity can inflate standard errors.",
+        "It automatically biases OLS.",
+        "R² can remain high.",
+        "Individual t statistics can be weak."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The variance of affected coefficient estimators can rise."
+        },
+        "B": {
+          "tf": false,
+          "why": "Collinearity alone does not violate exogeneity."
+        },
+        "C": {
+          "tf": true,
+          "why": "Joint fit can remain high."
+        },
+        "D": {
+          "tf": true,
+          "why": "Large standard errors can weaken t statistics."
+        }
+      },
+      "check": "A:true;B:true;C:true;D:false"
+    },
+    {
+      "id": "regression-t5-m-15",
+      "diff": "moderate",
+      "format": "numeric",
+      "topic": "regression-t5",
+      "stem": "If β̂=2.4 and SE=1.2, calculate |t| for testing β=0.",
+      "options": [
+        "0.5",
+        "1",
+        "2",
+        "2.4"
+      ],
+      "answer": "C",
+      "explanation": "|t|=2.4/1.2=2.",
+      "check": "2"
+    },
+    {
+      "id": "regression-t5-m-16",
+      "diff": "moderate",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "Which is a possible consequence of deleting a relevant predictor correlated with included regressors?",
+      "options": [
+        "Guaranteed lower variance without trade-off",
+        "Automatic restoration of exogeneity",
+        "A proof that R² rises",
+        "Omitted-variable bias"
+      ],
+      "answer": "D",
+      "explanation": "Omitting a relevant correlated variable can make the composite error correlated with included regressors."
+    },
+    {
+      "id": "regression-t5-m-17",
+      "diff": "hard",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "Which is NOT generally a consequence of near multicollinearity under exogeneity?",
+      "options": [
+        "Large standard errors",
+        "Unstable estimates under small data changes",
+        "Weak individual significance despite high R²",
+        "Biased OLS estimates"
+      ],
+      "answer": "D",
+      "explanation": "The expected value of OLS remains correct under exogeneity; multicollinearity affects precision."
+    },
+    {
+      "id": "regression-t5-m-18",
+      "diff": "hard",
+      "format": "single",
+      "topic": "regression-t5",
+      "stem": "If R²ⱼ=0.96 in the auxiliary regression for xⱼ, VIFⱼ equals:",
+      "options": [
+        "12.5",
+        "20",
+        "40",
+        "25"
+      ],
+      "answer": "D",
+      "explanation": "VIF=1/(1−0.96)=25."
+    },
+    {
+      "id": "regression-t5-m-19",
+      "diff": "hard",
+      "format": "multi",
+      "topic": "regression-t5",
+      "stem": "Which statements about remedies are defensible? A. Collecting more informative data may help. B. Dropping any correlated predictor is always harmless. C. Ridge regression can stabilise prediction while introducing shrinkage bias. D. Principal components can replace correlated variables with orthogonal combinations.",
+      "options": [
+        "A and C only",
+        "B, C and D only",
+        "All four",
+        "A, C and D only"
+      ],
+      "answer": "D",
+      "explanation": "A, C and D are defensible. Dropping a relevant correlated variable may create omitted-variable bias.",
+      "statements": [
+        "Near multicollinearity can inflate standard errors.",
+        "It automatically biases OLS.",
+        "R² can remain high.",
+        "Individual t statistics can be weak."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The variance of affected coefficient estimators can rise."
+        },
+        "B": {
+          "tf": false,
+          "why": "Collinearity alone does not violate exogeneity."
+        },
+        "C": {
+          "tf": true,
+          "why": "Joint fit can remain high."
+        },
+        "D": {
+          "tf": true,
+          "why": "Large standard errors can weaken t statistics."
+        }
+      },
+      "check": "A:true;B:false;C:true;D:true"
+    },
+    {
+      "id": "regression-t5-m-20",
+      "diff": "hard",
+      "format": "numeric",
+      "topic": "regression-t5",
+      "stem": "If VIF=25, what is the corresponding auxiliary R²ⱼ?",
+      "options": [
+        "0.80",
+        "0.90",
+        "0.99",
+        "0.96"
+      ],
+      "answer": "D",
+      "explanation": "R²=1−1/VIF=1−1/25=0.96.",
+      "check": "0.96"
     }
-   }
-  },
-  {
-   "id": "regression-t5-m-11",
-   "format": "single",
-   "topic": "regression-t5",
-   "diff": "moderate",
-   "stem": "Why can a check of the pairwise correlations miss multicollinearity?",
-   "options": [
-    "Pairwise correlations are always biased",
-    "A regressor can be almost a combination of several others without a high correlation with any one",
-    "Pairwise correlations ignore the sign",
-    "The VIF is the same as the largest pairwise correlation"
-   ],
-   "answer": "B",
-   "explanation": "In the example x₃ = x₁ + x₂ + 0.1ε the largest pairwise correlation is 0.705 but the VIF of x₃ is 201. The VIF uses the regression on all the other regressors together."
-  },
-  {
-   "id": "regression-t5-m-12",
-   "format": "numeric",
-   "topic": "regression-t5",
-   "diff": "moderate",
-   "stem": "For two standardised regressors with r = 0.9, the variance of a prediction at a point that breaks the pattern, (1, −1), compared with a point that follows it, (1, 1), is larger by the factor:",
-   "options": [
-    "1.9",
-    "9.5",
-    "19",
-    "81"
-   ],
-   "answer": "C",
-   "explanation": "The ratio is (1 + r)/(1 − r) = 1.9/0.1 = 19. The value 1.9 is 1 + r and 81 is 1/(1 − r)².",
-   "check": "The ratio must be much larger than 1, and at r = 0.99 it would be 199, so a smaller r gives a smaller ratio, 19."
-  },
-  {
-   "id": "regression-t5-m-13",
-   "format": "single",
-   "topic": "regression-t5",
-   "diff": "moderate",
-   "stem": "Which of the following DOES cause bias in the OLS estimator of a coefficient?",
-   "options": [
-    "Heteroscedastic errors",
-    "Near multicollinearity among the regressors",
-    "Omission of a relevant variable correlated with the regressor",
-    "A large sample"
-   ],
-   "answer": "C",
-   "explanation": "Omitting a relevant correlated variable violates E(u) = 0 for the fitted model and gives bias β₂δ. Near multicollinearity, heteroscedasticity and sample size leave OLS unbiased."
-  },
-  {
-   "id": "regression-t5-m-14",
-   "format": "numeric",
-   "topic": "regression-t5",
-   "diff": "moderate",
-   "stem": "The eigenvalues of the correlation matrix of the regressors are 100 and 0.04. The condition index √(λ_max/λ_min) is:",
-   "options": [
-    "50",
-    "2500",
-    "5",
-    "25"
-   ],
-   "answer": "A",
-   "explanation": "√(100/0.04) = √2500 = 50, well above the common warning level of 30. The value 2500 is the ratio before taking the square root.",
-   "check": "A condition index of 50 exceeds 30, and the ratio 2500 exceeds the index, so 2500 is the unrooted figure."
-  },
-  {
-   "id": "regression-t5-m-15",
-   "format": "single",
-   "topic": "regression-t5",
-   "diff": "moderate",
-   "stem": "Ridge regression reduces the effect of multicollinearity by:",
-   "options": [
-    "accepting some bias in exchange for a smaller variance",
-    "removing all bias from OLS",
-    "increasing the sample size",
-    "making the regressors uncorrelated"
-   ],
-   "answer": "A",
-   "explanation": "Ridge adds λ to the diagonal of X′X, which shrinks the coefficients and cuts the variance. It is biased by design. At λ = 0.5 in the worked example the MSE falls from 2.0101 to 0.5100."
-  },
-  {
-   "id": "regression-t5-m-16",
-   "format": "multi",
-   "topic": "regression-t5",
-   "diff": "moderate",
-   "stem": "Regarding remedies for multicollinearity.",
-   "options": [
-    "B, C and D only",
-    "A and B only",
-    "A, B and C only",
-    "A, B, C and D"
-   ],
-   "answer": "C",
-   "explanation": "Principal components regression uses orthogonal combinations, ridge is biased, and keeping all components reproduces OLS. PCR is not unbiased in general: it is unbiased only if the true coefficients lie in the kept directions.",
-   "statements": [
-    "Principal components regression uses orthogonal linear combinations of the regressors",
-    "Ridge regression is biased",
-    "Principal components regression keeping all components is the same as OLS",
-    "Principal components regression is always unbiased"
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "The components are the eigenvector directions of X′X."
-    },
-    "B": {
-     "tf": true,
-     "why": "It shrinks every coefficient toward zero."
-    },
-    "C": {
-     "tf": true,
-     "why": "Dropping nothing leaves the full least-squares fit."
-    },
-    "D": {
-     "tf": false,
-     "why": "With β along the dropped direction the bias² was 2 in the worked case."
-    }
-   }
-  },
-  {
-   "id": "regression-t5-m-17",
-   "format": "numeric",
-   "topic": "regression-t5",
-   "diff": "hard",
-   "stem": "Two standardised regressors have r = 0.99, n = 50, σ = 1 and true β = (1, 1), so tr[(X′X)⁻¹] = 2.0101. The expected squared length E|b|² of the OLS estimate is:",
-   "options": [
-    "4.01",
-    "2.00",
-    "2.01",
-    "6.02"
-   ],
-   "answer": "A",
-   "explanation": "E|b|² = |β|² + σ²tr[(X′X)⁻¹] = 2 + 2.0101 = 4.0101. The value 2.00 is the squared length of the truth alone and 2.01 is the variance part alone.",
-   "check": "Since E(b) = β the estimates are on average longer than β by the total variance, so the answer exceeds |β|² = 2."
-  },
-  {
-   "id": "regression-t5-m-18",
-   "format": "numeric",
-   "topic": "regression-t5",
-   "diff": "hard",
-   "stem": "Three predictors satisfy x₃ = x₁ + x₂ + 0.1ε with x₁, x₂ independent standard normals. The VIF of x₃ is:",
-   "options": [
-    "1.99",
-    "201",
-    "101",
-    "0.995"
-   ],
-   "answer": "B",
-   "explanation": "The auxiliary R² of x₃ on x₁ and x₂ is 2/2.01 = 0.995, so VIF = 1/(1 − 0.995) = 201. The value 1.99 is the VIF a pairwise correlation of 0.705 would suggest, and 101 is the VIF of x₁ or x₂.",
-   "check": "R² of 0.995 gives 1/0.005 = 200, so the answer must be about 200."
-  },
-  {
-   "id": "regression-t5-m-19",
-   "format": "numeric",
-   "topic": "regression-t5",
-   "diff": "hard",
-   "stem": "In the r = 0.99, n = 50 design with β = (1, 1), OLS has MSE 2.0101. Ridge with λ = 0.5 has bias (−0.005, −0.005) and total variance 0.5100. Its total MSE is approximately:",
-   "options": [
-    "2.01",
-    "0.51",
-    "0.01",
-    "0.005"
-   ],
-   "answer": "B",
-   "explanation": "MSE = bias² + variance = 2 × 0.005² + 0.5099 ≈ 0.51. The squared bias is only 0.00005, negligible beside the variance. Ridge cuts the MSE from 2.01 to 0.51.",
-   "check": "Ridge reduces MSE below OLS's 2.0101 here, and bias² is tiny, so the answer is the variance, about 0.51."
-  },
-  {
-   "id": "regression-t5-m-20",
-   "format": "single",
-   "topic": "regression-t5",
-   "diff": "hard",
-   "stem": "In a model with an intercept, x₁ = x and x₂ = 2x. Which function of the coefficients is estimable?",
-   "options": [
-    "β₂ alone",
-    "β₁ alone",
-    "β₁ + 2β₂",
-    "β₁ − 2β₂"
-   ],
-   "answer": "C",
-   "explanation": "Every row of X has the form (1, x, 2x), so the model sees only (β₁ + 2β₂)x. The combination β₁ + 2β₂ is in the row space. Neither coefficient alone, nor β₁ − 2β₂, is."
-  }
- ]
+  ]
 }
