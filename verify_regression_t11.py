@@ -28,11 +28,25 @@ assert 50-(1+3+4) == 42
 assert (3-1) == 2
 assert 80-(1+2+5) == 72
 # Model coding/rank audit: intercept + all K indicators is dependent; K-1 is full rank.
-import numpy as np
+def rank(A):
+    A=[list(map(float,row)) for row in A]
+    m,n=len(A),len(A[0]); r=0
+    for c in range(n):
+        pivot=next((i for i in range(r,m) if abs(A[i][c])>1e-10),None)
+        if pivot is None: continue
+        A[r],A[pivot]=A[pivot],A[r]
+        z=A[r][c]; A[r]=[x/z for x in A[r]]
+        for i in range(m):
+            if i!=r:
+                z=A[i][c]
+                A[i]=[A[i][j]-z*A[r][j] for j in range(n)]
+        r+=1
+        if r==m: break
+    return r
 for K in range(2,8):
-    full=np.column_stack([np.ones(K),np.eye(K)])
-    reduced=np.column_stack([np.ones(K),np.eye(K)[:,:K-1]])
-    assert np.linalg.matrix_rank(full)==K
-    assert np.linalg.matrix_rank(reduced)==K
+    full=[[1.0]+[1.0 if i==j else 0.0 for j in range(K)] for i in range(K)]
+    reduced=[[1.0]+[1.0 if i==j else 0.0 for j in range(K-1)] for i in range(K)]
+    assert rank(full)==K
+    assert rank(reduced)==K
 print("PASS: lesson structure, scenario/guided floors, 20-item pool, keys, explanations, numeric checks and design-matrix rank audit")
 print("Answer distribution:", keys)
