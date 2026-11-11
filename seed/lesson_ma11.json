@@ -1,0 +1,582 @@
+{
+ "id": "mathst11",
+ "topicId": "maths-t11",
+ "moduleId": "maths",
+ "title": "Saddle Points and Lagrange Multipliers",
+ "breadcrumb": "Mathematics → Calculus → Multivariable optimisation",
+ "engine": "B",
+ "engineName": "Mathematics — Hessian classification and constraints",
+ "version": "1.0",
+ "status": "draft",
+ "estMin": 105,
+ "objectives": [
+  "Find unconstrained stationary points using the gradient.",
+  "Classify non-degenerate stationary points using the Hessian determinant.",
+  "Recognise saddle points and inconclusive Hessian cases.",
+  "Set up equality-constrained optimisation using Lagrange multipliers.",
+  "Evaluate feasible candidates to identify constrained extrema."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Partial derivatives and gradients",
+   "why": "Stationary and constrained conditions are expressed with gradients."
+  },
+  {
+   "id": "p2",
+   "name": "Second partial derivatives",
+   "why": "The Hessian determinant classifies local extrema."
+  },
+  {
+   "id": "p3",
+   "name": "Algebraic systems",
+   "why": "The multiplier equations must be solved with the constraint."
+  }
+ ],
+ "traps": [
+  "Solve both first partial equations before using the Hessian test.",
+  "D<0 means saddle, not a minimum.",
+  "D=0 is inconclusive.",
+  "For D>0, the sign of fₓₓ distinguishes minimum from maximum.",
+  "Lagrange equations produce candidates, not automatic global extrema.",
+  "Check regularity and exceptional constraint points."
+ ],
+ "revision": {
+  "sheet": [
+   "Stationary point: fₓ=0 and fᵧ=0.",
+   "Hessian determinant D=fₓₓfᵧᵧ−fₓᵧ².",
+   "D>0 and fₓₓ>0 ⇒ local minimum.",
+   "D>0 and fₓₓ<0 ⇒ local maximum.",
+   "D<0 ⇒ saddle point.",
+   "D=0 ⇒ second derivative test inconclusive.",
+   "Lagrange equality constraint: ∇f=λ∇g and g=0.",
+   "At a regular constrained extremum, gradients are parallel.",
+   "Check all feasible candidates and compare objective values.",
+   "The multiplier may represent marginal value of relaxing the constraint."
+  ],
+  "cards": [
+   [
+    "Stationary point",
+    "fₓ=fᵧ=0"
+   ],
+   [
+    "Hessian D",
+    "fₓₓfᵧᵧ−fₓᵧ²"
+   ],
+   [
+    "D>0, fₓₓ>0",
+    "Local minimum"
+   ],
+   [
+    "D>0, fₓₓ<0",
+    "Local maximum"
+   ],
+   [
+    "D<0",
+    "Saddle"
+   ],
+   [
+    "D=0",
+    "Inconclusive"
+   ],
+   [
+    "Lagrange",
+    "∇f=λ∇g, g=0"
+   ],
+   [
+    "Global constrained",
+    "Compare all feasible candidates"
+   ]
+  ],
+  "tricks": [
+   "Solve first-order equations before computing the Hessian.",
+   "Use D<0 as the quickest saddle test.",
+   "When D>0, check fₓₓ to distinguish max and min.",
+   "For constraints, write g=0 explicitly in the system.",
+   "Do not stop at solving multipliers; evaluate f."
+  ],
+  "shortcuts": [
+   "x²−y² at zero is a saddle: D=−4.",
+   "x²+2y² at zero is a minimum: D=8 and fₓₓ=2.",
+   "Minimise x²+y² subject to x+y=1 at (1/2,1/2), value 1/2."
+  ],
+  "remember": [
+   "D<0 means saddle.",
+   "D=0 means inconclusive.",
+   "Lagrange candidates must be compared."
+  ]
+ },
+ "howto": "First solve the unconstrained gradient equations and classify with the Hessian. For an equality constraint, add a multiplier and solve the full system. Always check regularity and compare the objective at every feasible candidate.",
+ "refs": [
+  {
+   "title": "Calculus Volume 3",
+   "where": "Maxima and minima of functions of several variables",
+   "site": "OpenStax",
+   "url": "https://openstax.org/details/books/calculus-volume-3",
+   "type": "Open textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Hessian tests and constrained extrema."
+  },
+  {
+   "title": "Multivariable Calculus",
+   "where": "Lagrange multipliers",
+   "site": "MIT OpenCourseWare 18.02SC",
+   "url": "https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Constrained optimisation and gradient geometry."
+  },
+  {
+   "title": "Mathematical Analysis",
+   "where": "Extrema of functions of several variables",
+   "site": "Tom M. Apostol",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Rigorous multivariable optimisation."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact examples include saddle and minimum Hessians, a line-constrained minimum and circle-constrained extrema. Not production-approved.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Foundation: gradients and second derivatives",
+   "objective": "Recall the ingredients of multivariable optimisation.",
+   "ask": {
+    "q": "What condition defines an unconstrained stationary point of f(x,y)?",
+    "nudge": "Both first partial derivatives must vanish."
+   },
+   "body": [
+    "For a differentiable function of two variables, an interior stationary point satisfies ∇f=(fₓ,fᵧ)=(0,0). It is only a candidate; it may be a maximum, minimum or saddle point.",
+    "The Hessian matrix collects the second partial derivatives. Its determinant and curvature help classify a stationary point."
+   ],
+   "items": [
+    {
+     "ask": "What is the gradient?",
+     "recall": "∇f=(fₓ,fᵧ).",
+     "refresh": [
+      "The gradient is the vector of first partial derivatives. A stationary point requires both components to be zero, not merely one partial derivative.",
+      "The gradient points in the direction of steepest increase. At an unconstrained interior extremum of a differentiable function, no first-order direction of increase remains, so the gradient vanishes."
+     ]
+    },
+    {
+     "ask": "Define the Hessian determinant for two variables.",
+     "recall": "D=fₓₓfᵧᵧ−(fₓᵧ)².",
+     "refresh": [
+      "The Hessian is the 2×2 matrix of second partial derivatives. If mixed partials are continuous, the off-diagonal entries agree.",
+      "The determinant D and the sign of fₓₓ classify a non-degenerate stationary point: D>0 with fₓₓ>0 is a minimum; D>0 with fₓₓ<0 is a maximum; D<0 is a saddle."
+     ]
+    },
+    {
+     "ask": "What is the Lagrange multiplier condition?",
+     "recall": "At a regular constrained extremum, ∇f=λ∇g together with g=0.",
+     "refresh": [
+      "For an equality constraint g(x,y)=0, the gradient of the objective is parallel to the gradient of the constraint at a regular constrained extremum.",
+      "Solve the two multiplier equations and the constraint simultaneously. Then evaluate the objective at every feasible candidate; the multiplier equations generate candidates, not an automatic global classification."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "A saddle is neither a peak nor a valley",
+   "objective": "Interpret curvature in different directions.",
+   "ask": {
+    "q": "For f(x,y)=x²−y² at the origin, is the point a maximum or minimum?",
+    "nudge": "Along the x-axis values are positive; along the y-axis they are negative."
+   },
+   "body": [
+    "A two-variable surface can rise in one direction and fall in another. Such a point is a saddle, not a local maximum or minimum.",
+    "The Hessian determinant test detects this mixed curvature: D<0 at a stationary point indicates a saddle."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Critical points and the Hessian test",
+   "objective": "Classify non-degenerate stationary points.",
+   "ask": {
+    "q": "At a stationary point, if D>0 and fₓₓ<0, what is the classification?",
+    "nudge": "The curvature is negative in both principal directions."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Hessian determinant",
+     "body": "D=fₓₓfᵧᵧ−fₓᵧ², evaluated at the stationary point."
+    },
+    {
+     "t": "formula",
+     "h": "Second derivative test",
+     "body": "D>0 and fₓₓ>0: local minimum. D>0 and fₓₓ<0: local maximum. D<0: saddle point. D=0: inconclusive."
+    },
+    {
+     "t": "step",
+     "h": "The test is conditional",
+     "body": "First solve fₓ=0 and fᵧ=0. The Hessian test applies at those stationary candidates. When D=0, use another method; do not invent a classification."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Worked: classify a saddle point",
+   "objective": "Use the Hessian determinant.",
+   "ask": {
+    "q": "For f=x²−y², what is D at the origin?",
+    "nudge": "fₓₓ=2, fᵧᵧ=−2 and fₓᵧ=0."
+   },
+   "problem": "Classify the stationary point of f(x,y)=x²−y².",
+   "steps": [
+    {
+     "say": "Find the stationary point.",
+     "math": "fₓ=2x=0; fᵧ=−2y=0 ⇒ (0,0)",
+     "why": "Both first partial derivatives vanish at the origin."
+    },
+    {
+     "say": "Compute second partials and D.",
+     "math": "fₓₓ=2; fᵧᵧ=−2; fₓᵧ=0; D=−4",
+     "why": "The Hessian determinant is negative."
+    },
+    {
+     "say": "Classify.",
+     "math": "D<0 ⇒ saddle point",
+     "why": "The surface curves upward in one direction and downward in another."
+    }
+   ],
+   "scenario": {
+    "teaser": "A fitted response surface may have a stationary but unstable point.",
+    "title": "Saddle points in response-surface analysis",
+    "body": [
+     "A response surface may have zero first partial derivatives at a point without having a local optimum. The surface can rise along one axis and fall along another.",
+     "The Hessian determinant test identifies this saddle geometry when D<0. Treating every solution of fₓ=fᵧ=0 as a maximum or minimum would misclassify such a point.",
+     "In experimental design and optimisation, the Hessian classification is therefore a necessary second step after solving the first-order equations."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 8,
+   "title": "Local maxima and minima in two variables",
+   "objective": "Apply the complete second derivative classification.",
+   "ask": {
+    "q": "For f=x²+y² at the origin, what is the Hessian classification?",
+    "nudge": "D=4>0 and fₓₓ=2>0."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Positive definite Hessian",
+     "body": "At a stationary point, D>0 and fₓₓ>0 gives a strict local minimum."
+    },
+    {
+     "t": "formula",
+     "h": "Negative definite Hessian",
+     "body": "At a stationary point, D>0 and fₓₓ<0 gives a strict local maximum."
+    },
+    {
+     "t": "step",
+     "h": "Inconclusive case",
+     "body": "If D=0, the test does not decide. Compare function values or examine higher-order terms along different directions."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s5",
+   "mins": 8,
+   "title": "Guided: classify a local minimum",
+   "objective": "Use first and second partial derivatives.",
+   "problem": "Classify the stationary point of f=x²+2y².",
+   "hints": [
+    "Find fₓ and fᵧ and solve both equal to zero.",
+    "The stationary point is (0,0). Compute fₓₓ=2, fᵧᵧ=4 and fₓᵧ=0.",
+    "D=2·4−0=8>0 and fₓₓ>0."
+   ],
+   "answer": "A strict local minimum at (0,0).",
+   "solution": "The only stationary point is the origin. The Hessian determinant is 8>0 and fₓₓ=2>0, so the second derivative test gives a strict local minimum.",
+   "ask": {
+    "q": "What would D<0 imply instead?",
+    "nudge": "A saddle point."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Lagrange multipliers for equality constraints",
+   "objective": "Set up the constrained first-order equations.",
+   "ask": {
+    "q": "For maximising f subject to g(x,y)=0, what equations are solved?",
+    "nudge": "Set ∇f=λ∇g and include the constraint."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Lagrange equations",
+     "body": "∇f(x,y)=λ∇g(x,y), together with g(x,y)=0."
+    },
+    {
+     "t": "step",
+     "h": "Why gradients are parallel",
+     "body": "At a regular constrained extremum, movement along the constraint has zero first-order change in f. Thus ∇f is normal to the constraint curve and parallel to ∇g."
+    },
+    {
+     "t": "def",
+     "h": "Regularity and candidates",
+     "body": "The standard method assumes ∇g≠0 at the candidate. Solve all multiplier systems, inspect exceptional points if needed, and compare objective values for global constrained extrema."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided: minimise on a straight-line constraint",
+   "objective": "Solve a simple Lagrange multiplier problem.",
+   "problem": "Minimise f=x²+y² subject to x+y=1.",
+   "hints": [
+    "Let g=x+y−1=0, so ∇g=(1,1).",
+    "Set (2x,2y)=λ(1,1), giving x=y.",
+    "Use x+y=1 to obtain x=y=1/2."
+   ],
+   "answer": "The constrained minimum is 1/2 at (1/2,1/2).",
+   "solution": "The multiplier equations give 2x=λ and 2y=λ, so x=y. The constraint gives x=y=1/2, and f=1/4+1/4=1/2.",
+   "ask": {
+    "q": "What is the value of the objective at the candidate?",
+    "nudge": "Add (1/2)²+(1/2)²."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s8",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the Hessian and multiplier equations.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "What equations define a stationary point?",
+     "a": "fₓ=0 and fᵧ=0."
+    },
+    {
+     "q": "What is the Hessian determinant?",
+     "a": "D=fₓₓfᵧᵧ−fₓᵧ²."
+    },
+    {
+     "q": "What does D<0 mean?",
+     "a": "Saddle point."
+    },
+    {
+     "q": "State the Lagrange condition.",
+     "a": "∇f=λ∇g and g=0."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s9",
+   "mins": 8,
+   "title": "Four optimisation decisions",
+   "objective": "Apply the Hessian and Lagrange methods.",
+   "problem": "Complete each conclusion.",
+   "steps": [
+    {
+     "say": "At a stationary point D>0 and fₓₓ>0.",
+     "blank": {
+      "prompt": "Classify it.",
+      "answer": "Local minimum",
+      "accept": [
+       "local minimum",
+       "minimum"
+      ],
+      "hint": "Positive curvature in both principal directions."
+     },
+     "why": "The Hessian is positive definite."
+    },
+    {
+     "say": "At a stationary point D<0.",
+     "blank": {
+      "prompt": "Classify it.",
+      "answer": "Saddle point",
+      "accept": [
+       "saddle",
+       "saddle point"
+      ],
+      "hint": "Curvature has mixed signs."
+     },
+     "why": "The Hessian is indefinite."
+    },
+    {
+     "say": "At a stationary point D>0 and fₓₓ<0.",
+     "blank": {
+      "prompt": "Classify it.",
+      "answer": "Local maximum",
+      "accept": [
+       "local maximum",
+       "maximum"
+      ],
+      "hint": "The Hessian is negative definite."
+     },
+     "why": "The surface is locally concave downward."
+    },
+    {
+     "say": "Constraint g(x,y)=0.",
+     "blank": {
+      "prompt": "Write the Lagrange equations.",
+      "answer": "∇f=λ∇g and g=0",
+      "accept": [
+       "grad f=lambda grad g and g=0",
+       "∇f=λ∇g"
+      ],
+      "hint": "Set the objective gradient parallel to the constraint gradient."
+     },
+     "why": "These are the constrained first-order equations."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s10",
+   "mins": 6,
+   "title": "The constraint reduces the search",
+   "objective": "Understand why Lagrange multipliers work.",
+   "ask": {
+    "q": "Why is ∇f parallel to ∇g at a regular constrained extremum?",
+    "nudge": "The gradient of g is normal to the constraint, and the objective has zero tangent derivative."
+   },
+   "body": [
+    "The constraint curve restricts movement to tangent directions. At a constrained optimum, the objective cannot increase or decrease to first order along the tangent.",
+    "Therefore ∇f is perpendicular to the tangent, just like ∇g. The two gradients are parallel, giving ∇f=λ∇g."
+   ],
+   "scenario": {
+    "teaser": "A budget constraint limits the feasible choices.",
+    "title": "Optimising a response under a resource constraint",
+    "body": [
+     "Suppose an objective f(x,y) represents output or utility, while g(x,y)=0 represents a fixed resource budget. The feasible choices lie on a curve rather than across the whole plane.",
+     "At a regular constrained optimum, the objective gradient is parallel to the constraint gradient. The multiplier equations identify candidate points where the objective has no first-order change along the feasible curve.",
+     "The multiplier λ measures the marginal change in the optimal objective when the constraint level is relaxed, under suitable regularity and differentiability assumptions."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s11",
+   "mins": 7,
+   "title": "Worked: constrained maximum on a circle",
+   "objective": "Solve a symmetric multiplier problem.",
+   "ask": {
+    "q": "Maximise f=x+y subject to x²+y²=1. What is the maximum?",
+    "nudge": "The maximum occurs at x=y=1/√2."
+   },
+   "problem": "Find the maximum and minimum of f=x+y subject to x²+y²=1.",
+   "steps": [
+    {
+     "say": "Write the constraint and gradients.",
+     "math": "g=x²+y²−1; ∇f=(1,1); ∇g=(2x,2y)",
+     "why": "The constraint is the unit circle."
+    },
+    {
+     "say": "Apply the multiplier equations.",
+     "math": "1=2λx; 1=2λy ⇒ x=y",
+     "why": "The two equations force equal coordinates."
+    },
+    {
+     "say": "Use the constraint and evaluate.",
+     "math": "2x²=1 ⇒ x=y=±1/√2; f=±√2",
+     "why": "The maximum is √2 and the minimum is −√2."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s12",
+   "mins": 5,
+   "title": "Trap check: six statements",
+   "objective": "Avoid common multivariable optimisation errors.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "An unconstrained stationary point satisfies fₓ=fᵧ=0.",
+     "tf": true,
+     "why": "Both components of the gradient must vanish."
+    },
+    {
+     "claim": "D<0 at a stationary point indicates a saddle.",
+     "tf": true,
+     "why": "The Hessian has mixed curvature."
+    },
+    {
+     "claim": "D=0 proves a local minimum.",
+     "tf": false,
+     "why": "The second derivative test is inconclusive."
+    },
+    {
+     "claim": "D>0 and fₓₓ>0 gives a local minimum.",
+     "tf": true,
+     "why": "The Hessian is positive definite."
+    },
+    {
+     "claim": "Lagrange multipliers solve ∇f=λ∇g with g=0.",
+     "tf": true,
+     "why": "These are the equality-constrained first-order equations."
+    },
+    {
+     "claim": "Every Lagrange candidate is automatically a global maximum.",
+     "tf": false,
+     "why": "Candidates must be evaluated and compared."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "Final multivariable optimisation checklist",
+   "objective": "Classify stationary points and constrained candidates.",
+   "body": [
+    "1. Unconstrained stationary point: solve fₓ=0 and fᵧ=0.",
+    "2. Compute D=fₓₓfᵧᵧ−fₓᵧ².",
+    "3. D>0, fₓₓ>0: local minimum; D>0, fₓₓ<0: local maximum; D<0: saddle; D=0: inconclusive.",
+    "4. For g=0, solve ∇f=λ∇g together with g=0.",
+    "5. Check regularity and any exceptional points where ∇g=0.",
+    "6. Evaluate the objective at all feasible candidates before claiming a global optimum."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate Hessian and constrained-extrema reasoning.",
+   "setId": "maths_t11_mastery"
+  }
+ ]
+}
