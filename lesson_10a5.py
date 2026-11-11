@@ -372,7 +372,7 @@ SC.append(dict(
           "indicator does not fit the pattern of improvement is usually pointing at it."),
    dict(t="trap", h="Period labels are part of the answer",
      body="CBR, CDR, IMR and TFR are annual, currently 2024. Sex ratio at birth is a three-year average, currently "
-          "2021-23. MMR is a three-year figure, currently 2022-24. Giving a correct number against the wrong period is "
+          "2022-24. MMR is a three-year figure, currently 2022-24. Giving a correct number against the wrong period is "
           "a wrong answer, and the three different period lengths are deliberate.")],
   scenario=dict(
     teaser="One of India's vital statistics has a known biological value. Measure it, and the gap is the finding.",
@@ -543,11 +543,10 @@ LES = dict(
              "history page for 1872, 1881, the Census Act 1948 and the May 1949 decision to create a permanent "
              "organisation; the Registration of Births and Deaths (Amendment) Act, 2023 for the national database and "
              "the 1 October 2023 commencement; a CRS/SRS explainer for the dual record system, the 1964-65 pilot and "
-             "1969-70 full scale, the 8,839 sampling units and the 2023 completeness figures; the SRS Statistical "
-             "Report 2023 for CBR, CDR, IMR, TFR and the sex ratio at birth; and the PIB release on maternal and child "
-             "mortality for MMR 87 in 2022-24. Where sources differ on a single-year IMR — 25 for 2023 against 27 for "
-             "2021 in an earlier release — the lesson gives the figure with its period attached and no question tests "
-             "the bare number.",
+             "1969-70 full scale, the 8,839 sampling units and the 2024 CRS completeness figures; the SRS Statistical Report "
+             "2024 for current annual CBR, CDR, IMR and TFR and the 2022-24 sex ratio at birth; and the SRS Special "
+             "Bulletin on Maternal Mortality 2022-24 for MMR 87. The lesson distinguishes annual rates from three-year "
+             "pooled indicators and attaches the reference period to every current figure.",
   objectives=[
     "Distinguish the census, the Civil Registration System and the Sample Registration System by what each measures "
     "and what each is used for.",
