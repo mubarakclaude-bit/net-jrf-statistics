@@ -9,7 +9,7 @@ assert len((1,"x","x^2"))==3 and len((1,"x","x^2","x^3"))==4
 # Dimension formula.
 assert 3+2-1==4
 # (1,1) is redundant in span of e1,e2.
-assert (1,1)==(1,0)+(0,1)
+assert (1+0,0+1)==(1,1)
 with open("seed/maths_t13_mastery.json",encoding="utf-8") as f: pool=json.load(f)
 items=pool["items"]
 assert len(items)==20
