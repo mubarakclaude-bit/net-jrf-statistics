@@ -1,0 +1,646 @@
+{
+  "id": "multivariatet2",
+  "topicId": "multivariate-t2",
+  "moduleId": "multivariate",
+  "title": "Partial and Multiple Correlation: isolate and combine relationships",
+  "breadcrumb": "Unit VIII · Multivariate Analysis · Partial and Multiple Correlation",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "1.0",
+  "status": "review",
+  "estMin": 90,
+  "objectives": [
+    "Distinguish simple, partial and multiple correlation.",
+    "Calculate a first-order partial correlation by controlling one variable.",
+    "Interpret partial correlation as correlation between residualised variables.",
+    "Calculate the multiple correlation coefficient using the inverse predictor-correlation matrix.",
+    "Relate partial correlations to the precision matrix and identify common exam traps."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Pearson correlation",
+      "why": "Partial and multiple correlation extend the ordinary correlation coefficient."
+    },
+    {
+      "id": "p2",
+      "name": "Regression residuals",
+      "why": "A partial correlation is the correlation between residuals after removing controlled variables."
+    },
+    {
+      "id": "p3",
+      "name": "Matrix inverse and quadratic forms",
+      "why": "The general multiple-correlation formula uses the inverse predictor correlation matrix."
+    }
+  ],
+  "traps": [
+    "A partial correlation controls specified variables; a simple correlation does not.",
+    "The first-order partial correlation is not r12−r13r23; it includes a denominator.",
+    "Multiple correlation is non-negative and measures association of one variable with a set of predictors.",
+    "R² is the squared multiple correlation; do not confuse R with R².",
+    "A zero partial correlation means no linear association after linear control, not necessarily full probabilistic independence."
+  ],
+  "revision": {
+    "sheet": [
+      "Simple correlation: r12 measures the linear association between X1 and X2 without controlling other variables.",
+      "First-order partial correlation: r12·3=(r12−r13r23)/√[(1−r13²)(1−r23²)].",
+      "Interpretation: remove the linear effect of X3 from X1 and X2 separately, then correlate the two residuals.",
+      "Multiple correlation of Y with X1,…,Xp: R²Y·X = r′RXX⁻¹r, where r is the vector of correlations between Y and the predictors.",
+      "For one predictor, R²=r² and R=|r|. For several predictors, 0≤R≤1.",
+      "For a non-singular multivariate normal vector, partial correlations are related to the precision matrix K=Σ⁻¹: ρij·rest=−Kij/√(KiiKjj)."
+    ],
+    "cards": [
+      [
+        "Simple correlation",
+        "No variable is controlled"
+      ],
+      [
+        "Partial correlation",
+        "Control one or more variables"
+      ],
+      [
+        "Multiple correlation",
+        "One response against a set of predictors"
+      ],
+      [
+        "Partial r",
+        "Correlation between residuals"
+      ],
+      [
+        "Multiple R²",
+        "r′RXX⁻¹r"
+      ],
+      [
+        "Precision matrix",
+        "Partial correlation from inverse covariance"
+      ]
+    ],
+    "tricks": [
+      "For first-order partial correlation, calculate the numerator and both denominator factors separately.",
+      "A negative partial correlation is allowed; the multiple correlation R is defined as non-negative.",
+      "If predictors are uncorrelated, R² is the sum of squared response–predictor correlations, provided the model is valid."
+    ],
+    "remember": [
+      "Partial means control; multiple means combine.",
+      "The denominator in partial correlation is essential.",
+      "R² is explained linear variation; R is its non-negative square root."
+    ],
+    "shortcuts": [
+      "For r12·3, subtract r13r23 from r12, then divide by the square-root product.",
+      "For multiple R², arrange predictor correlations in RXX, response correlations in r, then compute r′RXX⁻¹r."
+    ]
+  },
+  "howto": "First identify the response and the variables to be controlled or combined. For a first-order partial correlation, use the three simple correlations in the standard formula. For a multiple correlation, build the predictor correlation matrix RXX and the response-correlation vector r, then calculate r′RXX⁻¹r. Finally take the non-negative square root if the question asks for R rather than R².",
+  "refs": [
+    {
+      "title": "Applied Multivariate Statistical Analysis",
+      "where": "Partial and multiple correlation",
+      "site": "Johnson and Wichern",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Standard derivations and interpretation of partial and multiple correlation."
+    },
+    {
+      "title": "STAT 505 — Applied Multivariate Statistical Analysis",
+      "where": "Correlation and regression topics",
+      "site": "Penn State",
+      "url": "https://online.stat.psu.edu/stat505/",
+      "type": "Free course notes",
+      "free": true,
+      "checked": "2026-11-11",
+      "why": "Open multivariate statistics notes for correlation and regression foundations."
+    },
+    {
+      "title": "Methods of Multivariate Analysis",
+      "where": "Partial and multiple correlation",
+      "site": "Rencher and Christensen",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Reference treatment of multivariate correlation methods."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings; not an NTA rule."
+  },
+  "anchors": [],
+  "provenance": "Authored 11 November 2026. No direct official June 2026 PYQ is claimed as an anchor for this topic. The lesson teaches the standard first-order partial-correlation formula, residual interpretation and general multiple-correlation matrix formula; practice questions are original exam-style items.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Three correlation ideas",
+      "objective": "Recall the difference between pairwise association and controlled association.",
+      "body": [
+        "Pearson correlation measures the direction and strength of a linear relationship between two variables. It does not adjust for other variables.",
+        "In many applications, two variables are correlated because both are related to a third variable. Partial correlation asks what remains after controlling that third variable.",
+        "Multiple correlation asks a different question: how strongly is one response linearly related to a whole set of predictors taken together?"
+      ],
+      "items": [
+        {
+          "ask": "What does ordinary Pearson correlation measure?",
+          "recall": "The linear association between two variables.",
+          "refresh": [
+            "It is a standardised covariance, lying between −1 and 1.",
+            "It does not automatically control for other variables."
+          ]
+        },
+        {
+          "ask": "What does the word partial signal?",
+          "recall": "Some other variable or variables are held constant statistically.",
+          "refresh": [
+            "Partial correlation removes linear effects of the controlled variables from both variables of interest.",
+            "The remaining residuals are then correlated."
+          ]
+        },
+        {
+          "ask": "Can a multiple correlation coefficient be negative?",
+          "recall": "No. Multiple R is non-negative.",
+          "refresh": [
+            "R² is a proportion of variation explained by the best linear prediction from the predictor set.",
+            "By convention R is the non-negative square root of R²."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 5,
+      "title": "A third variable changes the story",
+      "objective": "Understand why a raw correlation may be misleading.",
+      "body": [
+        "Suppose study time and examination score are positively correlated. Prior preparation may influence both: students with stronger foundations may study more effectively and score higher.",
+        "The raw correlation mixes the direct linear association with the shared association due to prior preparation. Partial correlation asks how study time and score are related after statistically controlling prior preparation.",
+        "This is an adjusted linear association, not proof of causation. Control variables can reduce confounding in an analysis, but correlation alone does not establish a causal effect."
+      ],
+      "scenario": {
+        "teaser": "Study time, prior preparation and exam score.",
+        "title": "Separate a shared influence",
+        "body": [
+          "A college analyst observes a strong positive correlation between weekly study hours and examination score. Students who entered with stronger prior preparation also tend to study more and score higher. The analyst therefore calculates the partial correlation between study hours and score while controlling prior preparation.",
+          "If the partial correlation is smaller than the simple correlation, part of the original association was shared with prior preparation. The remaining coefficient describes the linear relationship between the residual parts of study hours and score. It should not be interpreted as a causal effect."
+        ]
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "First-order partial correlation",
+      "objective": "Learn and interpret the formula controlling one variable.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Notation",
+          "body": "r₁₂·₃ is the correlation between X₁ and X₂ after controlling X₃."
+        },
+        {
+          "t": "formula",
+          "h": "Formula",
+          "body": "r₁₂·₃=(r₁₂−r₁₃r₂₃)/√[(1−r₁₃²)(1−r₂₃²)]."
+        },
+        {
+          "t": "step",
+          "h": "Numerator",
+          "body": "Subtract r₁₃r₂₃ from r₁₂. This removes the component of the pairwise association explained by their linear relationships with X₃."
+        },
+        {
+          "t": "step",
+          "h": "Denominator",
+          "body": "Divide by the product of the residual standard deviations. This standardises the residual covariance to a correlation."
+        },
+        {
+          "t": "note",
+          "h": "Range",
+          "body": "When the denominator is positive, the partial correlation lies between −1 and 1."
+        }
+      ],
+      "ask": {
+        "q": "Which term is subtracted from r₁₂ in the numerator?",
+        "nudge": "Multiply the two correlations involving the controlled variable."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 7,
+      "title": "Partial correlation as residual correlation",
+      "objective": "Connect the formula to regression residuals.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "Regress X₁ on X₃",
+          "body": "Fit the linear regression of X₁ on X₃ and retain residuals e₁."
+        },
+        {
+          "t": "step",
+          "h": "Regress X₂ on X₃",
+          "body": "Fit the linear regression of X₂ on X₃ and retain residuals e₂."
+        },
+        {
+          "t": "formula",
+          "h": "Residual interpretation",
+          "body": "r₁₂·₃=Corr(e₁,e₂)."
+        },
+        {
+          "t": "note",
+          "h": "Why this is useful",
+          "body": "The residuals contain the parts of X₁ and X₂ not linearly explained by X₃. Their correlation measures the remaining linear association."
+        },
+        {
+          "t": "caution",
+          "h": "Scope",
+          "body": "The control is linear. A zero partial correlation does not in general imply conditional independence."
+        }
+      ],
+      "ask": {
+        "q": "Which two quantities are correlated in the residual interpretation?",
+        "nudge": "Each is left after regressing one target variable on the control variable."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked example: calculate a partial correlation",
+      "objective": "Calculate r12·3 without skipping the denominator.",
+      "problem": "Given r₁₂=0.70, r₁₃=0.50 and r₂₃=0.40, find r₁₂·₃.",
+      "steps": [
+        {
+          "say": "Write the numerator.",
+          "math": "0.70−(0.50)(0.40)=0.50.",
+          "why": "The product of the two correlations with X₃ is 0.20."
+        },
+        {
+          "say": "Calculate the denominator.",
+          "math": "√[(1−0.50²)(1−0.40²)]=√[(0.75)(0.84)]=√0.63≈0.7937.",
+          "why": "Both residual variance factors must be included."
+        },
+        {
+          "say": "Divide to obtain the partial correlation.",
+          "math": "r₁₂·₃=0.50/0.7937≈0.630.",
+          "why": "The controlled association is positive and smaller than the raw correlation 0.70."
+        },
+        {
+          "say": "Interpret the result.",
+          "math": "After controlling X₃, the remaining linear correlation is approximately 0.63.",
+          "why": "This is an association measure, not a causal effect."
+        }
+      ],
+      "ask": {
+        "q": "Why is the answer not simply 0.50?",
+        "nudge": "The numerator is not yet standardised."
+      },
+      "after": "A partial correlation is a standardised residual association; never stop after the numerator."
+    },
+    {
+      "kind": "theory",
+      "id": "s5",
+      "mins": 8,
+      "title": "Multiple correlation: one response, many predictors",
+      "objective": "Define multiple correlation and its squared form.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Definition",
+          "body": "The multiple correlation Rᵧ·₁₂…ₚ measures the linear association between response Y and the set of predictors X₁,…,Xₚ."
+        },
+        {
+          "t": "formula",
+          "h": "General matrix formula",
+          "body": "R²ᵧ·X = r′RXX⁻¹r, where r=(rᵧ₁,…,rᵧₚ)′ and RXX is the predictor correlation matrix."
+        },
+        {
+          "t": "step",
+          "h": "Interpretation",
+          "body": "R² is the coefficient of determination from the regression of Y on the predictor set, with an intercept under the usual standardised formulation."
+        },
+        {
+          "t": "note",
+          "h": "Range",
+          "body": "0≤R²≤1 and 0≤R≤1. Multiple R is not signed because the fitted value can use positive or negative regression coefficients."
+        }
+      ],
+      "ask": {
+        "q": "What is the relationship between multiple R and R²?",
+        "nudge": "Take the non-negative square root."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 7,
+      "title": "The two-predictor formula",
+      "objective": "Reduce the matrix expression to an exam-ready scalar formula.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Predictor matrix",
+          "body": "RXX=[[1,r₁₂],[r₁₂,1]], with inverse (1/(1−r₁₂²))[[1,−r₁₂],[−r₁₂,1]]."
+        },
+        {
+          "t": "formula",
+          "h": "Response correlations",
+          "body": "Let r=(rᵧ₁,rᵧ₂)′."
+        },
+        {
+          "t": "formula",
+          "h": "Multiple R squared",
+          "body": "R²ᵧ·₁₂=(rᵧ₁²+rᵧ₂²−2rᵧ₁rᵧ₂r₁₂)/(1−r₁₂²)."
+        },
+        {
+          "t": "caution",
+          "h": "Invertibility",
+          "body": "The formula requires |r₁₂|<1. If the predictors are perfectly correlated, the predictor correlation matrix is singular and the ordinary inverse does not exist."
+        }
+      ],
+      "ask": {
+        "q": "What is the denominator in the two-predictor R² formula?",
+        "nudge": "It is one minus the squared correlation between the predictors."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s7",
+      "mins": 9,
+      "title": "Worked example: multiple correlation with two predictors",
+      "objective": "Calculate R² and R from a small correlation matrix.",
+      "problem": "Suppose rᵧ₁=0.60, rᵧ₂=0.50 and r₁₂=0.20. Find the multiple correlation of Y with X₁ and X₂.",
+      "steps": [
+        {
+          "say": "Substitute into the numerator.",
+          "math": "0.60²+0.50²−2(0.60)(0.50)(0.20)=0.36+0.25−0.12=0.49.",
+          "why": "The cross-term adjusts for correlation between the predictors."
+        },
+        {
+          "say": "Calculate the denominator.",
+          "math": "1−0.20²=0.96.",
+          "why": "The predictors are not perfectly correlated, so the inverse exists."
+        },
+        {
+          "say": "Find R².",
+          "math": "R²=0.49/0.96≈0.5104.",
+          "why": "About 51.04% of the standardised response variation is explained by the two-predictor linear model."
+        },
+        {
+          "say": "Take the non-negative square root.",
+          "math": "R=√0.5104≈0.714.",
+          "why": "Multiple R is reported between zero and one."
+        }
+      ],
+      "ask": {
+        "q": "If the question asks for R² rather than R, which value should you report?",
+        "nudge": "Do not take the square root."
+      },
+      "after": "Check whether the question asks for the coefficient of determination R² or the multiple correlation R."
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 7,
+      "title": "Worked example: uncorrelated predictors",
+      "objective": "Use the simplification when predictors are mutually uncorrelated.",
+      "problem": "Let rᵧ₁=0.30, rᵧ₂=0.40 and r₁₂=0. Find R² and R.",
+      "steps": [
+        {
+          "say": "Use the zero predictor correlation.",
+          "math": "R²=0.30²+0.40²=0.09+0.16=0.25.",
+          "why": "The cross-term vanishes and the denominator is one."
+        },
+        {
+          "say": "Take the square root.",
+          "math": "R=√0.25=0.50.",
+          "why": "Multiple R is non-negative."
+        },
+        {
+          "say": "Check the range.",
+          "math": "0≤0.25≤1 and 0≤0.50≤1.",
+          "why": "A value outside the unit interval signals an arithmetic or input error."
+        }
+      ],
+      "ask": {
+        "q": "Why does the formula simplify to a sum of squared correlations?",
+        "nudge": "The predictor correlation r12 is zero."
+      },
+      "after": "When predictors are uncorrelated, their individual squared correlations add in R²."
+    },
+    {
+      "kind": "theory",
+      "id": "s9",
+      "mins": 7,
+      "title": "Partial correlations from the precision matrix",
+      "objective": "Recognise the inverse-covariance relationship for multivariate normal data.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Precision matrix",
+          "body": "For a non-singular covariance matrix Σ, the precision matrix is K=Σ⁻¹."
+        },
+        {
+          "t": "formula",
+          "h": "Partial correlation",
+          "body": "For a jointly multivariate normal vector, ρᵢⱼ·rest=−Kᵢⱼ/√(KᵢᵢKⱼⱼ)."
+        },
+        {
+          "t": "step",
+          "h": "Interpretation",
+          "body": "The off-diagonal precision entry describes the remaining conditional association after controlling all other coordinates."
+        },
+        {
+          "t": "caution",
+          "h": "Do not confuse matrices",
+          "body": "Σ describes marginal covariance; Σ⁻¹ encodes conditional dependence. A zero covariance entry and a zero precision entry answer different questions."
+        }
+      ],
+      "ask": {
+        "q": "Which entry is used for the partial correlation between Xi and Xj controlling all remaining variables?",
+        "nudge": "Use the off-diagonal entry of the inverse covariance matrix."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 7,
+      "title": "Guided practice: first-order partial correlation",
+      "objective": "Work through a new partial-correlation calculation.",
+      "problem": "Given r₁₂=0.60, r₁₃=0.30 and r₂₃=0.20, calculate r₁₂·₃.",
+      "hints": [
+        "Direction: use (r12−r13r23) divided by the square root of two residual variance factors.",
+        "Method: numerator = 0.60−0.30×0.20 = 0.54.",
+        "Next step: denominator = √[(1−0.09)(1−0.04)] = √0.8736."
+      ],
+      "answer": "r₁₂·₃=0.54/√0.8736≈0.578.",
+      "check": "The result is positive and slightly below the raw correlation 0.60.",
+      "solution": [
+        {
+          "say": "Calculate the numerator.",
+          "math": "0.60−0.30(0.20)=0.54.",
+          "why": "Remove the shared linear contribution through X₃."
+        },
+        {
+          "say": "Calculate the denominator.",
+          "math": "√[(0.91)(0.96)]=√0.8736≈0.9347.",
+          "why": "Standardise by both residual standard deviations."
+        },
+        {
+          "say": "Divide.",
+          "math": "0.54/0.9347≈0.578.",
+          "why": "This is the partial correlation after controlling X₃."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "mins": 8,
+      "title": "Guided practice: multiple correlation",
+      "objective": "Calculate R² from two response correlations and one predictor correlation.",
+      "problem": "Given rᵧ₁=0.50, rᵧ₂=0.40 and r₁₂=0.30, find R²ᵧ·₁₂.",
+      "hints": [
+        "Use the two-predictor formula.",
+        "Numerator = 0.25+0.16−2(0.50)(0.40)(0.30).",
+        "Denominator = 1−0.30²."
+      ],
+      "answer": "R²=(0.25+0.16−0.12)/0.91=0.29/0.91≈0.3187.",
+      "check": "The value is between zero and one.",
+      "solution": [
+        {
+          "say": "Calculate the numerator.",
+          "math": "0.25+0.16−0.12=0.29.",
+          "why": "The cross-term accounts for predictor overlap."
+        },
+        {
+          "say": "Calculate the denominator.",
+          "math": "1−0.09=0.91.",
+          "why": "The predictor correlation matrix is invertible."
+        },
+        {
+          "say": "Divide.",
+          "math": "R²≈0.3187.",
+          "why": "The requested quantity is R², so no square root is required."
+        }
+      ]
+    },
+    {
+      "kind": "scenario",
+      "id": "s12",
+      "mins": 6,
+      "title": "Interpret the output, not just the number",
+      "objective": "Distinguish a partial coefficient from multiple R in an applied setting.",
+      "body": [
+        "A public-health analyst studies the relationship between exercise and blood pressure while controlling age. The partial correlation describes the remaining linear association between exercise and blood pressure after removing the linear effects of age from both variables.",
+        "The analyst separately predicts blood pressure using exercise, age and diet together. The multiple correlation measures the association between observed blood pressure and its fitted values from the whole predictor set. The two coefficients answer different questions and need not be equal."
+      ],
+      "question": "Which statistic answers the question about the combined predictor set?",
+      "answer": "The multiple correlation R (or R² if the question asks for explained variation)."
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s13",
+      "mins": 7,
+      "title": "Six traps to eliminate",
+      "objective": "Test the distinctions that most often cause formula errors.",
+      "items": [
+        {
+          "claim": "The first-order partial correlation r12·3 has numerator r12−r13r23.",
+          "truth": true,
+          "why": "That is the numerator, but the full coefficient also divides by √[(1−r13²)(1−r23²)]."
+        },
+        {
+          "claim": "Partial correlation can be interpreted as the correlation between two regression residuals.",
+          "truth": true,
+          "why": "Regress each target variable on the controlled variable and correlate the residuals."
+        },
+        {
+          "claim": "Multiple correlation R can be negative.",
+          "truth": false,
+          "why": "Multiple R is the non-negative square root of R²."
+        },
+        {
+          "claim": "For one predictor, the multiple R² equals the squared simple correlation.",
+          "truth": true,
+          "why": "With one predictor, the model coefficient of determination is r²."
+        },
+        {
+          "claim": "A zero partial correlation always proves conditional independence.",
+          "truth": false,
+          "why": "It indicates no remaining linear association; stronger distributional assumptions are needed for independence conclusions."
+        },
+        {
+          "claim": "If two predictors are perfectly correlated, their 2×2 correlation matrix is singular.",
+          "truth": true,
+          "why": "Its determinant 1−r12² equals zero when |r12|=1."
+        }
+      ]
+    },
+    {
+      "kind": "recall",
+      "id": "s14",
+      "mins": 5,
+      "title": "Recall the decision rules",
+      "objective": "Retrieve the two central formulas from memory.",
+      "items": [
+        {
+          "q": "First-order partial correlation formula?",
+          "a": "(r12−r13r23)/√[(1−r13²)(1−r23²)]."
+        },
+        {
+          "q": "Residual interpretation?",
+          "a": "Correlation between residuals after regressing each target variable on the control variable(s)."
+        },
+        {
+          "q": "General multiple R² formula?",
+          "a": "r′RXX⁻¹r."
+        },
+        {
+          "q": "One-predictor multiple R²?",
+          "a": "r²."
+        },
+        {
+          "q": "Precision-matrix formula?",
+          "a": "ρij·rest=−Kij/√(KiiKjj), where K=Σ⁻¹."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s15",
+      "mins": 3,
+      "title": "Your one-minute revision",
+      "objective": "Leave with a reliable distinction between the two methods.",
+      "body": [
+        "Partial correlation controls specified variables and measures the remaining linear association.",
+        "For one control variable, r₁₂·₃=(r₁₂−r₁₃r₂₃)/√[(1−r₁₃²)(1−r₂₃²)].",
+        "Multiple correlation measures one response against a set of predictors; R²=r′RXX⁻¹r and R=√R².",
+        "Always distinguish R from R², and do not equate zero partial correlation with independence without assumptions."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s16",
+      "mins": 9,
+      "title": "Unseen mastery test",
+      "objective": "Apply partial and multiple correlation formulas to fresh data.",
+      "setId": "multivariate_t2_mastery"
+    }
+  ]
+}
