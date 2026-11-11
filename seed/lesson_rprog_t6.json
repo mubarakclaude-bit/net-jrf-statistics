@@ -1,0 +1,519 @@
+{
+  "id": "rprogt6",
+  "topicId": "rprog-t6",
+  "moduleId": "rprog",
+  "title": "Summary functions and missing values (NA) in R",
+  "breadcrumb": "Module 9 · R Programming · Summary functions and NA handling",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "1.0",
+  "status": "review",
+  "estMin": 60,
+  "objectives": [
+    "Use common summary functions such as sum, mean, median, min, max and range.",
+    "Recognise how NA affects summaries and how na.rm=TRUE changes results.",
+    "Distinguish length, sum(!is.na(x)) and complete-case counts.",
+    "Interpret logical summaries and missing-value tests.",
+    "Avoid common NA, NaN and Inf output traps."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Numeric and logical vectors",
+      "why": "Summary functions operate on vectors."
+    },
+    {
+      "id": "p2",
+      "name": "Missing observations",
+      "why": "NA handling changes summary results."
+    }
+  ],
+  "traps": [
+    "Most arithmetic summaries return NA when an input contains NA unless na.rm=TRUE is used.",
+    "na.rm=TRUE removes missing values for that calculation; it does not modify the original vector.",
+    "is.na(x) returns a logical vector; sum(is.na(x)) counts missing entries.",
+    "length(x) includes NA values.",
+    "sum(!is.na(x)) counts observed entries.",
+    "NaN is also treated as missing by is.na().",
+    "na.rm=TRUE does not remove Inf.",
+    "mean(x) and median(x) are different summaries.",
+    "range(x) returns two endpoints; diff(range(x)) gives the spread."
+  ],
+  "revision": {
+    "sheet": [
+      "sum(x), mean(x), median(x), min(x), max(x) summarise numeric vectors.",
+      "range(x) returns c(min,max); diff(range(x)) gives max−min.",
+      "NA denotes a missing value; arithmetic involving NA generally propagates NA.",
+      "Use na.rm=TRUE to omit missing values for a summary.",
+      "na.rm=TRUE does not change the original vector.",
+      "is.na(x) identifies NA and NaN entries.",
+      "sum(is.na(x)) counts missing values.",
+      "sum(!is.na(x)) counts non-missing values.",
+      "length(x) counts all positions, including NA.",
+      "na.rm=TRUE does not remove Inf or -Inf.",
+      "mean(c(2,NA,6),na.rm=TRUE)=4.",
+      "median(c(1,3,100),na.rm=TRUE)=3."
+    ],
+    "cards": [
+      [
+        "mean()",
+        "Arithmetic average"
+      ],
+      [
+        "median()",
+        "Middle ordered value"
+      ],
+      [
+        "range()",
+        "Minimum and maximum"
+      ],
+      [
+        "na.rm=TRUE",
+        "Omit missing values for this calculation"
+      ],
+      [
+        "is.na()",
+        "Identify missing values"
+      ],
+      [
+        "length()",
+        "Count all vector positions"
+      ],
+      [
+        "sum(!is.na(x))",
+        "Count observed values"
+      ]
+    ],
+    "tricks": [
+      "Check for NA before computing a summary.",
+      "Count missing values with sum(is.na(x)).",
+      "Count observed values with sum(!is.na(x)).",
+      "Do not assume na.rm removes Inf."
+    ],
+    "shortcuts": [
+      "Write the non-missing values separately.",
+      "Compute the requested summary on that reduced set.",
+      "Keep length and observed count distinct.",
+      "Check whether the question asks count or value."
+    ],
+    "remember": [
+      "NA propagates in many summaries.",
+      "na.rm=TRUE omits NA for one calculation.",
+      "length includes missing entries.",
+      "is.na detects NA and NaN.",
+      "Inf is not NA."
+    ]
+  },
+  "howto": "Inspect the vector for missing entries. Identify whether the question asks for a summary, missing count or observed count. Apply na.rm=TRUE only when required, and remember it does not mutate the original vector or remove infinite values.",
+  "refs": [
+    {
+      "title": "R Documentation: NA",
+      "where": "Missing values",
+      "site": "R Core Team",
+      "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/NA.html",
+      "type": "Official documentation",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Missing values, NA and NaN semantics."
+    },
+    {
+      "title": "R Documentation: mean",
+      "where": "Arithmetic mean",
+      "site": "R Core Team",
+      "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/mean.html",
+      "type": "Official documentation",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Mean and na.rm argument."
+    },
+    {
+      "title": "R Documentation: Summary",
+      "where": "sum, min, max, range and related functions",
+      "site": "R Core Team",
+      "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/summary.html",
+      "type": "Official documentation",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Summary generic and related functions."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings; not an NTA rule."
+  },
+  "anchors": [],
+  "provenance": "Catalog rprog-t6: Summary functions and NA handling. Content aligned to base R summary and missing-value semantics; no unsupported PYQ anchor is claimed.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "What is a summary function?",
+      "objective": "Identify common descriptive summaries.",
+      "body": [
+        "Summary functions reduce a vector to one or a few descriptive values.",
+        "mean() calculates the arithmetic average; median() is the middle ordered value; min() and max() give endpoints.",
+        "range() returns both endpoints, not their difference. The statistical range is diff(range(x))."
+      ],
+      "items": [
+        {
+          "ask": "What does mean() calculate?",
+          "recall": "The arithmetic average.",
+          "refresh": [
+            "Add the observations and divide by their count.",
+            "Missing values affect the result unless they are removed for that calculation."
+          ]
+        },
+        {
+          "ask": "What does range(x) return?",
+          "recall": "The minimum and maximum.",
+          "refresh": [
+            "range() returns two endpoints.",
+            "Subtract the first from the second to obtain the statistical range."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Which function gives the middle ordered value?",
+        "nudge": "It is robust to extreme values."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 5,
+      "title": "Missing values affect calculations",
+      "objective": "Understand NA propagation.",
+      "body": [
+        "NA represents a missing value. A calculation that depends on an unknown observation commonly returns NA.",
+        "For x=c(2,NA,6), mean(x) is NA, while mean(x,na.rm=TRUE) is 4.",
+        "na.rm=TRUE omits missing values for that call only; it does not edit x."
+      ],
+      "scenario": {
+        "teaser": "A survey contains unanswered items",
+        "title": "A researcher summarises a partial response vector",
+        "body": [
+          "A researcher has responses 2, NA and 6. The mean is unavailable under the default missing-value rule, but can be computed from observed responses with na.rm=TRUE.",
+          "The number of observed responses is two, while length(x) remains three."
+        ],
+        "q": "What is the mean of observed values?",
+        "answer": "4."
+      },
+      "ask": {
+        "q": "Does na.rm=TRUE permanently remove NA from x?",
+        "nudge": "It is an argument to the summary call."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 7,
+      "title": "na.rm and is.na",
+      "objective": "Use missing-value handling correctly.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Remove for calculation",
+          "body": "mean(x,na.rm=TRUE), sum(x,na.rm=TRUE), min(x,na.rm=TRUE) omit NA values for that calculation."
+        },
+        {
+          "t": "formula",
+          "h": "Detect missing values",
+          "body": "is.na(x) returns TRUE for NA and NaN entries."
+        },
+        {
+          "t": "step",
+          "h": "Count missing values",
+          "body": "sum(is.na(x)) counts missing entries; sum(!is.na(x)) counts observed entries."
+        }
+      ],
+      "flow": {
+        "title": "NA handling decision",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 0,
+            "label": "Inspect vector",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 0,
+            "label": "Need summary?",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 0,
+            "label": "Use na.rm if appropriate",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 0,
+            "label": "Count with is.na",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          }
+        ]
+      },
+      "ask": {
+        "q": "How do you count NA values?",
+        "nudge": "Apply is.na() and sum the TRUE values."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 7,
+      "title": "Compute summaries with missing values",
+      "objective": "Calculate mean and counts.",
+      "problem": "For x=c(2,NA,6,NA,10), find length(x), sum(is.na(x)), sum(!is.na(x)) and mean(x,na.rm=TRUE).",
+      "steps": [
+        {
+          "say": "Count all positions.",
+          "math": "length(x)=5.",
+          "why": "NA still occupies a vector position."
+        },
+        {
+          "say": "Count missing values.",
+          "math": "sum(is.na(x))=2.",
+          "why": "There are two NA entries."
+        },
+        {
+          "say": "Count observed values.",
+          "math": "sum(!is.na(x))=3.",
+          "why": "Three entries are not missing."
+        },
+        {
+          "say": "Compute observed mean.",
+          "math": "(2+6+10)/3=6.",
+          "why": "na.rm=TRUE omits NA for this calculation."
+        }
+      ],
+      "ask": {
+        "q": "What is mean(x) without na.rm=TRUE?",
+        "nudge": "The default propagates NA."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 4,
+      "title": "Summary and missingness function cards",
+      "objective": "Recall function roles.",
+      "intro": "Recall each function.",
+      "items": [
+        {
+          "q": "mean(x)",
+          "a": "Arithmetic average."
+        },
+        {
+          "q": "median(x)",
+          "a": "Middle ordered value."
+        },
+        {
+          "q": "is.na(x)",
+          "a": "Logical vector identifying NA and NaN."
+        },
+        {
+          "q": "length(x)",
+          "a": "Number of positions, including missing values."
+        },
+        {
+          "q": "sum(!is.na(x))",
+          "a": "Number of observed values."
+        }
+      ],
+      "ask": {
+        "q": "Which expression counts missing values?",
+        "nudge": "sum(is.na(x))."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s5",
+      "mins": 7,
+      "title": "NA, NaN and Inf are not interchangeable",
+      "objective": "Distinguish missing and infinite values.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "NA and NaN",
+          "body": "is.na() is TRUE for both NA and NaN."
+        },
+        {
+          "t": "def",
+          "h": "Inf",
+          "body": "Inf and -Inf are infinite values, not missing values; na.rm=TRUE does not remove them."
+        },
+        {
+          "t": "step",
+          "h": "Check carefully",
+          "body": "Use is.na() for missingness. Use is.finite() when finite values are required."
+        }
+      ],
+      "ask": {
+        "q": "Does na.rm=TRUE remove Inf?",
+        "nudge": "Infinite values are not NA."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s6",
+      "mins": 6,
+      "title": "Count observed values",
+      "objective": "Separate vector length from complete observations.",
+      "problem": "For x=c(NA,4,NA,8,10), find length(x) and the number of observed values.",
+      "hints": [
+        "Count every position for length.",
+        "Mark each NA using is.na().",
+        "Count the FALSE entries in is.na(x)."
+      ],
+      "answer": "length(x)=5; observed count=3.",
+      "check": "There are five positions, two missing and three observed.",
+      "ask": {
+        "q": "What is sum(is.na(x))?",
+        "nudge": "There are two missing entries."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 6,
+      "title": "Mean, median and robust summaries",
+      "objective": "Choose the right summary.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Mean",
+          "body": "The mean uses every observed value and is sensitive to extreme observations."
+        },
+        {
+          "t": "formula",
+          "h": "Median",
+          "body": "The median is the middle ordered value (or average of two middle values for an even count). It is less sensitive to extremes."
+        },
+        {
+          "t": "step",
+          "h": "Example",
+          "body": "For 1, 3, 100, the mean is 104/3, while the median is 3."
+        }
+      ],
+      "ask": {
+        "q": "Which summary is less affected by one extreme observation?",
+        "nudge": "It is based on the middle order statistic."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 6,
+      "title": "A summary drill with NA",
+      "objective": "Apply na.rm to different functions.",
+      "problem": "For x=c(1,NA,3,9), find sum(x,na.rm=TRUE), mean(x,na.rm=TRUE) and median(x,na.rm=TRUE).",
+      "hints": [
+        "The observed values are 1, 3 and 9.",
+        "Add them for the sum.",
+        "Divide by 3 for the mean; the middle ordered value is the median."
+      ],
+      "answer": "Sum=13; mean=13/3; median=3.",
+      "check": "All summaries use the three observed values.",
+      "ask": {
+        "q": "What is range(x,na.rm=TRUE)?",
+        "nudge": "Write minimum then maximum."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 5,
+      "title": "Exam traps",
+      "objective": "Avoid NA and summary errors.",
+      "intro": "Judge each statement.",
+      "items": [
+        {
+          "claim": "length(c(1,NA,3)) is 2.",
+          "tf": false,
+          "why": "length counts all three positions."
+        },
+        {
+          "claim": "sum(is.na(c(1,NA,3))) is 1.",
+          "tf": true,
+          "why": "There is one missing entry."
+        },
+        {
+          "claim": "na.rm=TRUE modifies the original vector.",
+          "tf": false,
+          "why": "It affects only the calculation."
+        },
+        {
+          "claim": "is.na(NaN) is TRUE.",
+          "tf": true,
+          "why": "NaN is treated as missing by is.na()."
+        }
+      ],
+      "ask": {
+        "q": "What is the difference between length(x) and sum(!is.na(x))?",
+        "nudge": "One counts positions; the other counts observed values."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s10",
+      "mins": 4,
+      "title": "The summary-function checklist",
+      "objective": "Consolidate summary and NA rules.",
+      "body": [
+        "Use mean, median, min, max, sum and range for descriptive summaries.",
+        "NA propagates through many summaries unless na.rm=TRUE is used.",
+        "na.rm=TRUE omits missing values for that call only; it does not mutate x or remove Inf.",
+        "is.na(x) detects NA and NaN; sum(is.na(x)) counts missing entries.",
+        "length(x) includes NA; sum(!is.na(x)) counts observed values.",
+        "range returns endpoints; diff(range(x)) gives the statistical range."
+      ],
+      "ask": {
+        "q": "Give two expressions to count missing and observed values.",
+        "nudge": "Use sum with is.na and its negation."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s11",
+      "mins": 2,
+      "title": "Mastery test",
+      "objective": "Demonstrate independent summary and NA reasoning.",
+      "setId": "rprog_t6_mastery"
+    }
+  ]
+}
