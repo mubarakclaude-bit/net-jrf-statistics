@@ -13,7 +13,7 @@ assert Counter(q["diff"] for q in P["items"])=={"easy":6,"moderate":10,"hard":4}
 assert Counter(q["format"] for q in P["items"])=={"single":12,"numeric":5,"multi":3}
 assert Counter(q["answer"] for q in P["items"])=={"A":5,"B":5,"C":5,"D":5}
 for q in P["items"]:
- assert len(q["options"])==4 and q["answer"] in "ABCD" and len(q["explanation"])>=30
+ assert len(q["options"])==4 and q["answer"] in "ABCD" and len(q["explanation"])>=40
  if q["format"]=="numeric": assert q.get("check")
  if q["format"]=="multi": assert len(q["statements"])==4 and set(q["verdicts"])==set("ABCD")
 # June 2026 Q2: equicorrelation rho=1/2.
