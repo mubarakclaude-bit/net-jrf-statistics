@@ -58,27 +58,27 @@
           "ask": "What is a stratum?",
           "recall": "A non-overlapping population subgroup.",
           "refresh": [
-            "Define the group before selecting the sample.",
-            "A region, age band or institution type can define a stratum.",
-            "A stratum is a population subgroup, not a selected cluster."
+            "A stratum is a subgroup defined on the population frame before sample selection begins.",
+            "Every eligible population unit is assigned to exactly one stratum under a valid partition.",
+            "Examples include districts, age groups or farm-size categories, provided the groups do not overlap."
           ]
         },
         {
           "ask": "Must strata overlap?",
           "recall": "No.",
           "refresh": [
-            "No unit should belong to two strata.",
-            "Overlapping groups do not form a partition.",
-            "Check the frame for duplicate membership."
+            "Mutual exclusivity means that no eligible unit belongs to two different strata.",
+            "If a household appears in two strata, its membership must be resolved before selection.",
+            "Overlapping groups cannot be treated as a partition for the standard stratified estimator."
           ]
         },
         {
           "ask": "Must all target units be covered?",
           "recall": "Yes.",
           "refresh": [
-            "Every eligible unit must be covered.",
-            "An omitted unit has zero chance of selection.",
-            "Check the frame for omissions and duplicates."
+            "Collective exhaustiveness means that every eligible unit appears in one of the strata.",
+            "A unit omitted from the frame has zero chance of selection and creates a coverage problem.",
+            "Check the frame for missing units and duplicate membership before drawing samples."
           ]
         }
       ],
@@ -226,27 +226,33 @@
       "steps": [
         {
           "say": "The total population is 300, so the population shares are one-third and two-thirds.",
-          "math": "W₁=100/300=1/3; W₂=200/300=2/3"
+          "math": "W₁=100/300=1/3; W₂=200/300=2/3",
+          "why": "Population shares determine the contribution of each stratum to the overall population mean."
         },
         {
           "say": "Proportional allocation follows these shares.",
-          "math": "n₁=30/3=10; n₂=60/3=20"
+          "math": "n₁=30/3=10; n₂=60/3=20",
+          "why": "Proportional allocation assigns the total sample in the same proportions as the population."
         },
         {
           "say": "The sampling fractions are both one-tenth.",
-          "math": "f₁=10/100=0.1; f₂=20/200=0.1"
+          "math": "f₁=10/100=0.1; f₂=20/200=0.1",
+          "why": "The FPC is computed separately because each stratum has its own sampling fraction."
         },
         {
           "say": "Substitute the values into the stratified variance formula.",
-          "math": "V=(1/9)(0.9)(16/10)+(4/9)(0.9)(36/20)"
+          "math": "V=(1/9)(0.9)(16/10)+(4/9)(0.9)(36/20)",
+          "why": "Each term is the variance contribution from one independently sampled stratum."
         },
         {
           "say": "Evaluate the two contributions.",
-          "math": "0.16+0.72=0.88"
+          "math": "0.16+0.72=0.88",
+          "why": "The two independent contributions are added to obtain the total design variance."
         },
         {
           "say": "The standard error is the square root.",
-          "math": "SE=√0.88≈0.9381"
+          "math": "SE=√0.88≈0.9381",
+          "why": "The standard error is the square root of the variance, in the original measurement units."
         }
       ],
       "after": "The population weights determine the combined mean; allocation determines the precision.",
@@ -556,6 +562,10 @@
       [
         "Neyman",
         "n_h∝N_hS_h"
+      ],
+      [
+        "Allocation choice",
+        "Population size, variability and unit cost determine the rule."
       ]
     ],
     "tricks": [
