@@ -386,7 +386,7 @@ SC.append(dict(
       "India's convention of females per 1,000 males, that is about 952. The excess of boys is then reversed by higher "
       "male mortality at every later age, which is why women outnumber men in the older age groups.",
       "The SRS reports India's sex ratio at birth as 918 for 2022-24. The gap between 918 and roughly 952 is not "
-      "sampling error: the SRS sample covers over 8.8 million people, and the figure is averaged over three years "
+      "sampling error: the SRS sample covers about 8.981 million people, and the figure is averaged over three years "
       "precisely to damp the year-to-year noise. A systematic shortfall of that size, sustained over years, is "
       "evidence of something acting on the ratio before birth or at registration.",
       "The state spread makes the point sharper. Chhattisgarh reports 978 and Kerala 974; Uttarakhand "
@@ -409,7 +409,7 @@ SC.append(dict(
   hints=["Sum the ASFRs first, then deal with the width of the age groups and the per-1,000 scale.",
          "GRR narrows TFR to daughters only, so you need the proportion of births that are female — not the ratio as "
          "given.",
-         "The sex ratio is females per 1,000 males, so the proportion female is 917 divided by the total of females and "
+         "The sex ratio is females per 1,000 males, so the proportion female is 918 divided by the total of females and "
          "males, not by 1,000."],
   solution=[
    dict(say="Sum the age-specific rates. The groups are five years wide, so TFR is five times the sum, with the "
