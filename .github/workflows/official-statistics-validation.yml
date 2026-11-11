@@ -1,0 +1,60 @@
+name: Official Statistics lesson validation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'lesson_10a4.py'
+      - 'lesson_10a5.py'
+      - 'qset_10a4.py'
+      - 'qset_10a5.py'
+      - 'seed/lesson_10a4.json'
+      - 'seed/lesson_10a5.json'
+      - 'seed/official_t4_mastery.json'
+      - 'seed/official_t5_mastery.json'
+      - 'seed/meta_lessons.json'
+      - 'test.js'
+      - 'src/62-gen.js'
+      - 'vcheck.js'
+      - 'check.sh'
+      - '.github/workflows/official-statistics-validation.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Rebuild Official Statistics lessons and mastery pools
+        run: |
+          python lesson_10a4.py
+          python qset_10a4.py
+          python lesson_10a5.py
+          python qset_10a5.py
+
+      - name: Ensure generated JSON is committed and in sync
+        run: |
+          git diff --exit-code -- seed/lesson_10a4.json seed/official_t4_mastery.json seed/lesson_10a5.json seed/official_t5_mastery.json
+
+      - name: Check manifest and harness consistency
+        run: bash check.sh
+
+      - name: Validate T4 lesson against app renderer
+        run: node vcheck.js seed/lesson_10a4.json
+
+      - name: Validate T5 lesson against app renderer
+        run: node vcheck.js seed/lesson_10a5.json

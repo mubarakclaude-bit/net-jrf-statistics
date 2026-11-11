@@ -12,9 +12,9 @@
 #            Official CRS 2024 registration levels: 99.1% births and 99.4% deaths
 #            (national report released July 2026).
 #   SRS      pilot 1964-65, full scale 1969-70; dual record system; 8,839 sampling units
-#            and over 8.8 million people by 2023; designed so IMR has RSE under 15%.
-#   Figures  SRS 2023: CBR 18.4, CDR 6.4, IMR 25, TFR 1.9, SRB 917 (2021-23).
-#            MMR 93 per lakh live births for 2019-21, from 130 for 2014-16; SDG target 70.
+#            and 8.981 million people in 2024; designed so IMR has RSE under 15%.
+#   Figures  SRS 2024: CBR 18.3, CDR 6.4, IMR 24, TFR 1.9, SRB 918 (2022-24).
+#            MMR 87 per lakh live births for 2022-24, down from 88 for 2021-23; SDG target 70.
 import json, io
 
 def P(*x): return list(x)
@@ -40,7 +40,7 @@ SC.append(dict(
       "they are called crude: they take no account of the age structure. IMR and MMR are per live births, because "
       "infant and maternal deaths are events of childbearing, not of the population at large.",
       "MMR additionally uses a different multiplier, 1,00,000 rather than 1,000, because maternal deaths are rare. "
-      "India's MMR of 93 and IMR of 25 are therefore not on the same scale at all, and a question that asks you to "
+      "India's MMR of 87 and IMR of 24 are therefore not on the same scale at all, and a question that asks you to "
       "compare them is testing exactly that.",
       "Keep the word ratio for MMR. It is a ratio because the denominator — live births — does not contain the "
       "population at risk of a maternal death, which is pregnancies, not births.")),
@@ -271,17 +271,17 @@ SC.append(dict(
                "pilot in 1964-65; full scale from 1969-70", "1964 65 pilot 1969 70 full"],
        hint="Both are financial-year pairs, five years apart."),
      why="Two dates, and the exam picks whichever one you did not memorise."),
-   dict(say="The SRS gives India's vital rates. State the 2023 birth and death rates.",
-     blank=dict(prompt="CBR and CDR for 2023?", answer="CBR 18.4, CDR 6.4",
-       accept=["18.4 and 6.4", "CBR 18.4 CDR 6.4", "birth rate 18.4, death rate 6.4",
-               "18.4 per 1000 and 6.4 per 1000"],
+   dict(say="The SRS gives India's vital rates. State the 2024 birth and death rates.",
+     blank=dict(prompt="CBR and CDR for 2024?", answer="CBR 18.3, CDR 6.4",
+       accept=["18.3 and 6.4", "CBR 18.3 CDR 6.4", "birth rate 18.3, death rate 6.4",
+               "18.3 per 1000 and 6.4 per 1000"],
        hint="Their difference is the natural growth rate, a round number."),
      why="These two numbers generate the natural growth rate and anchor every other figure in the topic."),
    dict(say="Maternal mortality is reported for a three-year period, on its own scale.",
      blank=dict(prompt="Which MMR, for which period, per what?",
-       answer="93 per 1,00,000 live births for 2019-21",
-       accept=["93 for 2019-21", "MMR 93, 2019-21, per lakh live births",
-               "93 per lakh live births (2019-21)", "93 per 100000 live births for 2019 21"],
+       answer="87 per 1,00,000 live births for 2022-24",
+       accept=["87 for 2022-24", "MMR 87, 2022-24, per lakh live births",
+               "87 per lakh live births (2022-24)", "87 per 100000 live births for 2022 24"],
        hint="The SDG target for 2030 is 70 on the same scale."),
      why="The multiplier is the examinable part: MMR is per lakh, not per thousand.")],
   after="Two census dates, two Acts, two SRS dates, two rates and one ratio. That is most of the recall this topic "
@@ -316,7 +316,7 @@ SC.append(dict(
           "measure of how incomplete a single pass would have been. That is the whole logic of the method, and it is "
           "the standard answer to 'why not simply use the register'."),
    dict(t="formula", h="Size and precision",
-     body="By 2023 the SRS covered 8,839 sampling units and over 8.8 million people. The sample is designed so that the "
+     body="In 2024 the SRS covered 8,839 sampling units and 8.981 million people. The sample is designed so that the "
           "infant mortality rate can be estimated with a relative standard error below 15% — a design criterion worth "
           "quoting, because it shows the sample size was chosen for a stated precision on a specific indicator rather "
           "than picked for convenience."),
@@ -346,23 +346,23 @@ SC.append(dict(
   kind="theory", id="s7", title="The current figures, and what each one says", mins=6,
   objective="Carry India's vital rates with their periods, and read what each implies.",
   blocks=[
-   dict(t="formula", h="SRS 2023",
-     body="Crude birth rate 18.4 per 1,000, down from 19.1 in 2022. Crude death rate 6.4 per 1,000. Natural growth "
-          "rate therefore 12.0 per 1,000, which is CBR minus CDR and nothing more. Infant mortality rate 25 per 1,000 "
+   dict(t="formula", h="SRS 2024",
+     body="Crude birth rate 18.3 per 1,000, down from 18.4 in 2023. Crude death rate 6.4 per 1,000. Natural growth "
+          "rate therefore 11.9 per 1,000, which is CBR minus CDR and nothing more. Infant mortality rate 24 per 1,000 "
           "live births. Total fertility rate 1.9."),
    dict(t="def", h="What a TFR of 1.9 means",
      body="It is below the replacement level of 2.1, which is the TFR at which a population reproduces itself once "
           "mortality before the end of childbearing is allowed for — a little above 2 for that reason, not exactly 2. "
           "A below-replacement TFR does not mean the population is falling now: India's population continues to grow "
           "because of its young age structure, which is called population momentum. The state spread is wide: Bihar "
-          "highest at 2.8, Delhi lowest at 1.2."),
+          "highest at 2.9, Delhi lowest at 1.2."),
    dict(t="formula", h="Sex ratio at birth, and the convention",
-     body="917 for 2021-23 — females per 1,000 males, averaged over three years because the annual figure is noisy. "
-          "Chhattisgarh highest at 974, Uttarakhand lowest at 868. Note the convention: India reports the sex ratio as "
+     body="918 for 2022-24 — females per 1,000 males, averaged over three years because the annual figure is noisy. "
+          "Chhattisgarh and Kerala highest at 978 and 974 respectively; Uttarakhand lowest at 872. Note the convention: India reports the sex ratio as "
           "females per 1,000 males, while much international work reports males per 100 females. A question that gives "
           "a figure near 1,050 is using the other convention."),
    dict(t="def", h="Maternal mortality",
-     body="93 per 1,00,000 live births for 2019-21, down from 130 for 2014-16. The SDG target is 70 or below by 2030. "
+     body="87 per 1,00,000 live births for 2022-24, down from 88 for 2021-23 and 130 for 2014-16. The SDG target is 70 or below by 2030. "
           "MMR is published for three-year periods, not single years, because maternal deaths are too rare for an "
           "annual sample estimate to be stable — the same reason the multiplier is a lakh rather than a thousand."),
    dict(t="step", h="Reading the figures together",
@@ -371,8 +371,8 @@ SC.append(dict(
           "last is the one figure in the set that is not simply a development story, and an exam question asking which "
           "indicator does not fit the pattern of improvement is usually pointing at it."),
    dict(t="trap", h="Period labels are part of the answer",
-     body="CBR, CDR, IMR and TFR are annual, currently 2023. Sex ratio at birth is a three-year average, currently "
-          "2021-23. MMR is a three-year figure, currently 2019-21. Giving a correct number against the wrong period is "
+     body="CBR, CDR, IMR and TFR are annual, currently 2024. Sex ratio at birth is a three-year average, currently "
+          "2022-24. MMR is a three-year figure, currently 2022-24. Giving a correct number against the wrong period is "
           "a wrong answer, and the three different period lengths are deliberate.")],
   scenario=dict(
     teaser="One of India's vital statistics has a known biological value. Measure it, and the gap is the finding.",
@@ -385,12 +385,12 @@ SC.append(dict(
       "demographers treat it as a biological constant, though there is no accepted explanation for why it holds. On "
       "India's convention of females per 1,000 males, that is about 952. The excess of boys is then reversed by higher "
       "male mortality at every later age, which is why women outnumber men in the older age groups.",
-      "The SRS reports India's sex ratio at birth as 917 for 2021-23. The gap between 917 and roughly 952 is not "
-      "sampling error: the SRS sample covers over 8.8 million people, and the figure is averaged over three years "
+      "The SRS reports India's sex ratio at birth as 918 for 2022-24. The gap between 918 and roughly 952 is not "
+      "sampling error: the SRS sample covers about 8.981 million people, and the figure is averaged over three years "
       "precisely to damp the year-to-year noise. A systematic shortfall of that size, sustained over years, is "
       "evidence of something acting on the ratio before birth or at registration.",
-      "The state spread makes the point sharper. Chhattisgarh reports 974, above the biological value; Uttarakhand "
-      "reports 868, far below it. A single biological constant cannot vary by state, so the variation is in the "
+      "The state spread makes the point sharper. Chhattisgarh reports 978 and Kerala 974; Uttarakhand "
+      "reports 872, far below the biological value. A single biological constant cannot vary by state, so the variation is in the "
       "behaviour, not in the biology.",
       "For the exam, three things follow. The convention — females per 1,000 males in India, males per 100 females in "
       "much international work, so a figure near 1,050 is the other convention. The period — a three-year average, not "
@@ -403,25 +403,25 @@ SC.append(dict(
   kind="guided", id="s8", title="Compute TFR, GRR and NRR from age-specific rates", mins=8,
   objective="Do the arithmetic the measurement half of this topic actually asks for.",
   problem="For a population, the age-specific fertility rates per 1,000 women are: 15-19: 30, 20-24: 120, 25-29: 130, "
-          "30-34: 60, 35-39: 20, 40-44: 8, 45-49: 2. The sex ratio at birth is 917 females per 1,000 males, and the "
+          "30-34: 60, 35-39: 20, 40-44: 8, 45-49: 2. The sex ratio at birth is 918 females per 1,000 males, and the "
           "probability that a newborn girl survives to the mean age of childbearing is 0.95. Find the TFR, the GRR and "
           "the NRR, and say whether the population is replacing itself.",
   hints=["Sum the ASFRs first, then deal with the width of the age groups and the per-1,000 scale.",
          "GRR narrows TFR to daughters only, so you need the proportion of births that are female — not the ratio as "
          "given.",
-         "The sex ratio is females per 1,000 males, so the proportion female is 917 divided by the total of females and "
+         "The sex ratio is females per 1,000 males, so the proportion female is 918 divided by the total of females and "
          "males, not by 1,000."],
   solution=[
    dict(say="Sum the age-specific rates. The groups are five years wide, so TFR is five times the sum, with the "
             "per-1,000 scale divided out.",
      math="Σ ASFR = 30+120+130+60+20+8+2 = 370 per 1,000;  TFR = 5 × 370/1000 = 1.85"),
-   dict(say="Convert the sex ratio into a proportion. With 917 females per 1,000 males, every 1,917 births contain 917 "
+   dict(say="Convert the sex ratio into a proportion. With 918 females per 1,000 males, every 1,918 births contain 918 "
             "females.",
-     math="proportion female = 917 / (917 + 1000) = 917/1917 = 0.4783"),
+     math="proportion female = 918 / (918 + 1000) = 918/1918 = 0.4786"),
    dict(say="GRR is the TFR counting daughters only.",
-     math="GRR = 1.85 × 0.4783 = 0.8850"),
+     math="GRR = 1.85 × 0.4786 = 0.8855"),
    dict(say="NRR allows for mortality among those daughters before they reach childbearing.",
-     math="NRR = 0.8850 × 0.95 = 0.8407"),
+     math="NRR = 0.8855 × 0.95 = 0.8412"),
    dict(say="NRR is below 1, so each generation of women is being replaced by about 0.84 of a generation; under these "
             "rates the population would eventually decline, even though a young age structure can keep it growing for "
             "decades. Note also that TFR = 1.85 is below the replacement level of 2.1, which says the same thing in "
@@ -453,11 +453,11 @@ SC.append(dict(
      why="Continuous enumeration by a part-time local enumerator, an independent half-yearly retrospective survey by a "
          "supervisor, then matching and field verification of the mismatches."),
    dict(claim="India's maternal mortality ratio of 93 is reported per 1,000 live births.", tf=False,
-     why="Per 1,00,000 live births, for the period 2019-21, down from 130 in 2014-16. The multiplier and the "
+     why="Per 1,00,000 live births, for the period 2022-24, down from 130 in 2014-16. The multiplier and the "
          "three-year period are both part of the correct statement."),
    dict(claim="A total fertility rate below 2.1 means India's population is already falling.", tf=False,
      why="It means fertility is below replacement, not that the population is declining. A young age structure keeps "
-         "the population growing for decades afterwards — population momentum. India's TFR was 1.9 in 2023 and its "
+         "the population growing for decades afterwards — population momentum. India's TFR was 1.9 in 2024 and its "
          "population is still rising.")]))
 
 SC.append(dict(
@@ -513,11 +513,11 @@ SC.append(dict(
    "CRS 2024 completeness: 99.1% birth registration and 99.4% death registration.",
    "The SRS. Pilot 1964-65, full scale 1969-70. Continuous recording by a part-time local enumerator, an independent "
    "half-yearly retrospective survey by a supervisor, matching by the Directorate of Census Operations, field "
-   "verification of mismatches. 8,839 sampling units and over 8.8 million people by 2023, sized so that IMR has a "
+   "verification of mismatches. 8,839 sampling units and 8.981 million people in 2024, sized so that IMR has a "
    "relative standard error below 15%. Publishes the annual bulletin, the Statistical Report, special bulletins on "
    "maternal mortality and causes of death, and abridged life tables.",
-   "The figures, with their periods. SRS 2023: CBR 18.4, CDR 6.4, natural growth rate 12.0, IMR 25, TFR 1.9. Sex ratio "
-   "at birth 917 for 2021-23, females per 1,000 males. MMR 93 per 1,00,000 live births for 2019-21, from 130 for "
+   "The figures, with their periods. SRS 2024: CBR 18.3, CDR 6.4, natural growth rate 11.9, IMR 24, TFR 1.9. Sex ratio "
+   "at birth 918 for 2022-24, females per 1,000 males. MMR 87 per 1,00,000 live births for 2022-24, from 130 for "
    "2014-16, against an SDG target of 70 by 2030.",
    "The formulae. CBR and CDR per 1,000 mid-year population; IMR per 1,000 live births; MMR per 1,00,000 live births. "
    "TFR = 5 × Σ ASFR with five-year groups and rates per woman. GRR = TFR × proportion of births female. NRR = GRR × "
@@ -535,7 +535,7 @@ LES = dict(
   title="Census and Vital Statistics",
   breadcrumb="Official Statistics → Indian Statistical System → Census and vital statistics",
   engine="A", engineName="Institutions and official statistics — who counts what, how often, and on what denominator",
-  estMin=sum(s["mins"] for s in SC), version="1.0", status="approved",
+  estMin=sum(s["mins"] for s in SC), version="1.2", status="approved",
   provenance="Revised and checked on 12 November 2026. Every institutional and numerical fact was checked against a "
              "primary or official source rather than recalled, because the census schedule and the registration law "
              "both changed after most textbook material was written: the PIB release on Census 2027 for the two "
@@ -543,11 +543,10 @@ LES = dict(
              "history page for 1872, 1881, the Census Act 1948 and the May 1949 decision to create a permanent "
              "organisation; the Registration of Births and Deaths (Amendment) Act, 2023 for the national database and "
              "the 1 October 2023 commencement; a CRS/SRS explainer for the dual record system, the 1964-65 pilot and "
-             "1969-70 full scale, the 8,839 sampling units and the 2023 completeness figures; the SRS Statistical "
-             "Report 2023 for CBR, CDR, IMR, TFR and the sex ratio at birth; and the PIB release on maternal and child "
-             "mortality for MMR 93 in 2019-21. Where sources differ on a single-year IMR — 25 for 2023 against 27 for "
-             "2021 in an earlier release — the lesson gives the figure with its period attached and no question tests "
-             "the bare number.",
+             "1969-70 full scale, the 8,839 sampling units and the 2024 CRS completeness figures; the SRS Statistical Report "
+             "2024 for current annual CBR, CDR, IMR and TFR and the 2022-24 sex ratio at birth; and the SRS Special "
+             "Bulletin on Maternal Mortality 2022-24 for MMR 87. The lesson distinguishes annual rates from three-year "
+             "pooled indicators and attaches the reference period to every current figure.",
   objectives=[
     "Distinguish the census, the Civil Registration System and the Sample Registration System by what each measures "
     "and what each is used for.",
@@ -584,12 +583,18 @@ LES = dict(
          url="https://www.censusindia.gov.in/census.website/en/node/180",
          type="Official government page", free=True, checked="2026-11-12",
          why="Current official source for the RBD Act amendment history, 2024 CRS completeness and SRS dual-record method."),
-    dict(title="Sample Registration System Statistical Report 2023",
-         where="CBR, CDR, IMR, TFR and the sex ratio at birth, with state extremes",
-         site="Drishti IAS", url="https://www.drishtiias.com/daily-updates/daily-news-analysis/sample-registration-system-srs-statistical-report-2023",
-         type="Current-affairs summary of an official report", free=True, checked="2026-10-13",
-         why="For the figures in scene 8. Note that the sex ratio at birth is a 2021-23 average, not a 2023 figure, "
-             "which this source states and many do not.")],
+    dict(title="Sample Registration System Statistical Report 2024",
+         where="CBR, CDR, IMR, TFR, sex ratio at birth and 2024 sample coverage",
+         site="Office of the Registrar General and Census Commissioner, India",
+         url="https://censusindia.gov.in/nada/index.php/catalog/47152",
+         type="Official statistical report", free=True, checked="2026-11-12",
+         why="Latest annual SRS report available at the time of this revision; includes 2024 vital rates, the 2022-24 sex ratio at birth and the 8,839-unit sample coverage."),
+    dict(title="SRS Special Bulletin on Maternal Mortality in India 2022-24",
+         where="Latest maternal mortality ratio and three-year reference period",
+         site="Office of the Registrar General and Census Commissioner, India",
+         url="https://censusindia.gov.in/nada/index.php/catalog/47151",
+         type="Official statistical bulletin", free=True, checked="2026-11-12",
+         why="Primary source for the national MMR of 87 per 1,00,000 live births for 2022-24, compared with 88 for 2021-23.")],
   revision=dict(
     sheet=[
       "Census = stock, decennial, complete. CRS = flow, continuous, legal. SRS = flow, continuous, on a sample.",
@@ -607,10 +612,10 @@ LES = dict(
       "CRS 2024 registration completeness: 99.1% births and 99.4% deaths (national report released July 2026).",
       "SRS: pilot 1964-65, full scale 1969-70; run by the RGI; no statute behind it.",
       "SRS dual record: continuous enumeration + independent half-yearly survey, then matching and field verification.",
-      "SRS 2023: 8,839 sampling units, over 8.8 million people; sized for IMR with RSE under 15%.",
-      "SRS 2023 rates: CBR 18.4, CDR 6.4, natural growth 12.0, IMR 25, TFR 1.9.",
-      "Sex ratio at birth 917 (2021-23), females per 1,000 males; Chhattisgarh 974 highest, Uttarakhand 868 lowest.",
-      "MMR 93 per 1,00,000 live births (2019-21), from 130 (2014-16); SDG target 70 by 2030.",
+      "SRS 2024: 8,839 sampling units and 8.981 million people; sized for IMR with RSE under 15%.",
+      "SRS 2024 rates: CBR 18.3, CDR 6.4, natural growth 11.9, IMR 24, TFR 1.9.",
+      "Sex ratio at birth 918 (2022-24), females per 1,000 males; Chhattisgarh 978 and Kerala 974 highest, Uttarakhand 872 lowest.",
+      "MMR 87 per 1,00,000 live births (2022-24), down from 88 (2021-23) and 130 (2014-16); SDG target 70 by 2030.",
       "TFR = 5 × Σ ASFR (five-year groups, rates per woman); GRR = TFR × proportion female; NRR = GRR × survival.",
       "Life table: dₓ = lₓ − lₓ₊₁; qₓ = dₓ / lₓ; e₀ = life expectancy at birth; abridged = five-year intervals."],
     cards=[
@@ -621,8 +626,8 @@ LES = dict(
       ["The 2023 RBD amendment", "National database and birth-certificate provisions; commenced 1 Oct 2023"],
       ["SRS pilot and full scale", "1964-65 and 1969-70"],
       ["The SRS method", "Dual record: continuous enumeration + half-yearly survey, then matching"],
-      ["SRS 2023 CBR, CDR, IMR, TFR", "18.4, 6.4, 25, 1.9"],
-      ["MMR and its period and scale", "93 per 1,00,000 live births, 2019-21"],
+      ["SRS 2024 CBR, CDR, IMR, TFR", "18.3, 6.4, 24, 1.9"],
+      ["MMR and its period and scale", "87 per 1,00,000 live births, 2022-24"],
       ["TFR from five-year ASFRs", "TFR = 5 × Σ ASFR, rates per woman"],
       ["NRR = 1 means", "Exact replacement — each generation reproduces itself"]],
     tricks=[
@@ -657,10 +662,10 @@ LES = dict(
       "Saying the first census of India was 1881; that is the first synchronous one.",
       "Dating the permanent census organisation to 1948 or 1951 instead of the May 1949 decision.",
       "Putting the census or the SRS under MoSPI rather than the RGI in the Ministry of Home Affairs.",
-      "Quoting MMR per 1,000 live births, or against a single year rather than 2019-21.",
-      "Quoting the sex ratio at birth as a 2023 figure; it is a 2021-23 average.",
+      "Quoting MMR per 1,000 live births, or against a single year rather than 2022-24.",
+      "Quoting the sex ratio at birth as a 2023 figure; it is a 2022-24 average.",
       "Forgetting the factor of 5 or the per-1,000 scale when computing TFR from five-year ASFRs.",
-      "Taking the proportion of female births as 917/1000 rather than 917/1917.",
+      "Taking the proportion of female births as 918/1000 rather than 918/1918.",
       "Treating a TFR below 2.1 as proof that the population is already declining.",
       "Citing CRS completeness as independent evidence that the SRS is unnecessary; it is computed from SRS rates."]),
   traps=[
@@ -669,7 +674,7 @@ LES = dict(
     "IMR is per 1,000 live births, not per 1,000 population; MMR is per 1,00,000 live births.",
     "Census 2027 has area-specific fieldwork windows. Separate reference moments from fieldwork dates and use the Gazette notice for the State/UT.",
     "The SRS rests on no statute; the census has the Census Act 1948 and registration the RBD Act 1969.",
-    "The proportion of births that are female is 917/1917, not 917/1000.",
+    "The proportion of births that are female is 918/1918, not 918/1000.",
     "A TFR below replacement does not mean the population is falling — population momentum.",
     "CRS completeness is measured against SRS-based estimates, so it cannot justify retiring the SRS."],
   scenes=SC)
