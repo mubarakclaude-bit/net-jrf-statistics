@@ -1,0 +1,583 @@
+{
+ "id": "mathst12",
+ "topicId": "maths-t12",
+ "moduleId": "maths",
+ "title": "Double and Triple Integrals, Change of Variables and Jacobians",
+ "breadcrumb": "Mathematics → Calculus → Multiple integration and coordinate changes",
+ "engine": "B",
+ "engineName": "Mathematics — accumulation over regions and volumes",
+ "version": "1.0",
+ "status": "draft",
+ "estMin": 105,
+ "objectives": [
+  "Evaluate double integrals using Fubini's theorem.",
+  "Set correct limits for rectangular and non-rectangular regions.",
+  "Apply change of variables using the absolute Jacobian determinant.",
+  "Use polar coordinates to evaluate integrals over circular regions.",
+  "Evaluate triple integrals and interpret them as volume or mass."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Single-variable definite integrals",
+   "why": "Iterated integrals are nested one-dimensional integrals."
+  },
+  {
+   "id": "p2",
+   "name": "Partial derivatives and determinants",
+   "why": "The Jacobian is a determinant of partial derivatives."
+  },
+  {
+   "id": "p3",
+   "name": "Coordinate geometry",
+   "why": "Region bounds and polar coordinates describe integration domains."
+  }
+ ],
+ "traps": [
+  "Draw the region before writing limits.",
+  "The polar area element is r dr dθ, not dr dθ.",
+  "Use the absolute value of the Jacobian determinant.",
+  "Transform the region and integrand as well as the area element.",
+  "An interior order reversal changes limits, not the region.",
+  "A triple integral of one gives volume, not surface area."
+ ],
+ "revision": {
+  "sheet": [
+   "Fubini: evaluate double integrals as iterated integrals under suitable conditions.",
+   "Rectangle: integrate one variable, then the other.",
+   "Type I region: a≤x≤b, g₁(x)≤y≤g₂(x).",
+   "Type II region: c≤y≤d, h₁(y)≤x≤h₂(y).",
+   "Change of variables: dA=|∂(x,y)/∂(u,v)|dudv.",
+   "Polar: x=r cosθ, y=r sinθ; Jacobian r.",
+   "Polar area element: r dr dθ.",
+   "Unit disk area: π.",
+   "Triple integral of 1 gives volume.",
+   "Density integrated over a region gives mass.",
+   "Cylindrical volume element: r dr dθ dz.",
+   "Always transform integrand, bounds and differential together."
+  ],
+  "cards": [
+   [
+    "Fubini",
+    "Iterated integration"
+   ],
+   [
+    "Type I",
+    "y-bounds depend on x"
+   ],
+   [
+    "Type II",
+    "x-bounds depend on y"
+   ],
+   [
+    "Jacobian",
+    "Absolute determinant"
+   ],
+   [
+    "Polar",
+    "dA=r dr dθ"
+   ],
+   [
+    "Unit disk",
+    "Area π"
+   ],
+   [
+    "Triple integral",
+    "Volume or mass"
+   ],
+   [
+    "Cylindrical",
+    "dV=r dr dθ dz"
+   ]
+  ],
+  "tricks": [
+   "Sketch non-rectangular regions to avoid wrong bounds.",
+   "Choose the order with simpler limits.",
+   "Never drop the polar r factor.",
+   "Use |J|, not signed J, for area scaling.",
+   "Check units: density × volume/area gives mass."
+  ],
+  "shortcuts": [
+   "∬_[0,1]²(x+y)dA=1.",
+   "∬_unit disk 1 dA=π.",
+   "∭_[0,1]³(x+y+z)dV=3/2."
+  ],
+  "remember": [
+   "Polar Jacobian is r.",
+   "Change the bounds with the variables.",
+   "Triple integral of 1 is volume."
+  ]
+ },
+ "howto": "Sketch the region first, then choose an integration order that gives simple bounds. For a coordinate transformation, write the Jacobian separately and update the region. Evaluate the integral only after all three parts are correct.",
+ "refs": [
+  {
+   "title": "Calculus Volume 3",
+   "where": "Double and triple integrals",
+   "site": "OpenStax",
+   "url": "https://openstax.org/details/books/calculus-volume-3",
+   "type": "Open textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Fubini, regions and multiple integration."
+  },
+  {
+   "title": "Multivariable Calculus",
+   "where": "Multiple integrals and change of variables",
+   "site": "MIT OpenCourseWare 18.02SC",
+   "url": "https://ocw.mit.edu/courses/18-02sc-multivariable-calculus-fall-2010/",
+   "type": "Open course",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Jacobian and polar/cylindrical integration."
+  },
+  {
+   "title": "Mathematical Analysis",
+   "where": "Multiple integration",
+   "site": "Tom M. Apostol",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Rigorous integration over regions."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA-prescribed difficulty distribution."
+ },
+ "provenance": "GPT-authored draft, 12 November 2026. Exact anchors include rectangular, triangular, polar and triple integrals. Not production-approved.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Foundation: iterated integration and regions",
+   "objective": "Recall single integrals and area elements.",
+   "ask": {
+    "q": "What does a double integral ∬ᴿf(x,y)dA accumulate?",
+    "nudge": "It accumulates a scalar quantity over a two-dimensional region."
+   },
+   "body": [
+    "A double integral extends definite integration to a region in the plane. It can represent area, volume under a surface, mass from a density or total probability.",
+    "An iterated integral evaluates the same accumulation one variable at a time. The limits must describe the region correctly, and a change of variables introduces a Jacobian factor."
+   ],
+   "items": [
+    {
+     "ask": "What is Fubini's theorem used for?",
+     "recall": "It allows a double integral to be evaluated as an iterated integral under suitable integrability conditions.",
+     "refresh": [
+      "For a continuous function on a rectangle, integrate with respect to one variable and then the other. The order may be reversed, with limits adjusted to describe the same region.",
+      "For more general regions, describe the bounds carefully. If the region is not rectangular, the inner limits often depend on the outer variable."
+     ]
+    },
+    {
+     "ask": "What is the Jacobian determinant?",
+     "recall": "The determinant of the matrix of first partial derivatives of the transformation.",
+     "refresh": [
+      "For x=x(u,v), y=y(u,v), the Jacobian is ∂(x,y)/∂(u,v)=xᵤyᵥ−xᵥyᵤ. It measures local area scaling under the transformation.",
+      "In a change of variables, dA=|J|dudv. The absolute value is essential because area is non-negative even if the transformation reverses orientation."
+     ]
+    },
+    {
+     "ask": "What is the area element in polar coordinates?",
+     "recall": "dA=r dr dθ.",
+     "refresh": [
+      "The transformation x=r cosθ, y=r sinθ has Jacobian r. Therefore dxdy becomes r dr dθ, not simply dr dθ.",
+      "The extra factor r accounts for the fact that a small angular sector has arc length r dθ. Forgetting r is one of the most common errors in polar integration."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "A double integral is accumulated area or volume",
+   "objective": "Interpret the geometry of multiple integration.",
+   "ask": {
+    "q": "Why does the polar area element contain r?",
+    "nudge": "The angular width corresponds to an arc of length r dθ."
+   },
+   "body": [
+    "A double integral over a region sums contributions from tiny area pieces. If f=1, the result is the area of the region. If f is a height, it gives volume under the surface.",
+    "In polar coordinates, tiny sectors widen as r increases. The Jacobian r corrects the area of each transformed rectangle in (r,θ)-space."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Fubini's theorem on rectangles",
+   "objective": "Evaluate double integrals as iterated integrals.",
+   "ask": {
+    "q": "For continuous f on [a,b]×[c,d], can the order of integration be reversed?",
+    "nudge": "Yes, under the rectangle and continuity conditions."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Fubini on a rectangle",
+     "body": "∬ᴿf(x,y)dA=∫ₐᵇ[∫꜀ᵈf(x,y)dy]dx=∫꜀ᵈ[∫ₐᵇf(x,y)dx]dy."
+    },
+    {
+     "t": "step",
+     "h": "Choose an order",
+     "body": "Integrate the inner variable first, treating the outer variable as a constant. Then integrate the resulting expression over the outer interval."
+    },
+    {
+     "t": "def",
+     "h": "Order can simplify work",
+     "body": "Both orders give the same value when the hypotheses hold, but one may produce simpler inner limits or algebra. Choose the order that best matches the region and integrand."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Worked: a rectangular double integral",
+   "objective": "Evaluate an iterated integral step by step.",
+   "ask": {
+    "q": "Evaluate ∬_[0,1]²(x+y)dA.",
+    "nudge": "Integrate with respect to y first."
+   },
+   "problem": "Evaluate ∫₀¹∫₀¹(x+y)dy dx.",
+   "steps": [
+    {
+     "say": "Integrate the inner variable y.",
+     "math": "∫₀¹(x+y)dy=x+1/2",
+     "why": "Treat x as constant during the inner integration."
+    },
+    {
+     "say": "Integrate the result in x.",
+     "math": "∫₀¹(x+1/2)dx=1/2+1/2=1",
+     "why": "Now integrate the expression over x from zero to one."
+    },
+    {
+     "say": "Interpret the result.",
+     "math": "The double integral equals 1.",
+     "why": "The region is the unit square and the integrand is non-negative."
+    }
+   ],
+   "scenario": {
+    "teaser": "A density is accumulated over a rectangular plate.",
+    "title": "Mass from a two-dimensional density",
+    "body": [
+     "Suppose a thin plate occupies a rectangle R and has density ρ(x,y). Its total mass is ∬ᴿρ(x,y)dA.",
+     "For a rectangular region, Fubini's theorem evaluates the mass as an iterated integral. The inner integral accumulates along one coordinate and the outer integral accumulates across the other.",
+     "The units provide a check: density per unit area multiplied by area gives mass. If the density is constant, the result reduces to density times the rectangle's area."
+    ]
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 8,
+   "title": "Non-rectangular regions and changing order",
+   "objective": "Set limits from the geometry of a region.",
+   "ask": {
+    "q": "For 0≤x≤1 and 0≤y≤x, what is the outer x-range?",
+    "nudge": "x runs from zero to one."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Type I region",
+     "body": "A region may be written a≤x≤b and g₁(x)≤y≤g₂(x). Then integrate y first with x-dependent limits."
+    },
+    {
+     "t": "def",
+     "h": "Type II region",
+     "body": "Alternatively c≤y≤d and h₁(y)≤x≤h₂(y). Then integrate x first with y-dependent limits."
+    },
+    {
+     "t": "step",
+     "h": "Draw before integrating",
+     "body": "Sketch the region, identify its left/right and lower/upper boundaries, then choose an order. Reversing order changes the bounds, not the region or integral value."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s5",
+   "mins": 8,
+   "title": "Guided: triangular region",
+   "objective": "Set up and evaluate an integral on a triangle.",
+   "problem": "Evaluate ∬ᴿx dA over 0≤x≤1, 0≤y≤x.",
+   "hints": [
+    "Use x as the outer variable from 0 to 1.",
+    "For each x, y runs from 0 to x.",
+    "Integrate x with respect to y, then integrate the result in x."
+   ],
+   "answer": "1/3.",
+   "solution": "∫₀¹∫₀ˣx dy dx=∫₀¹x·x dx=∫₀¹x²dx=1/3.",
+   "ask": {
+    "q": "What is the area of the same triangular region?",
+    "nudge": "Set the integrand equal to one."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Change of variables and the Jacobian",
+   "objective": "Transform an integral into simpler coordinates.",
+   "ask": {
+    "q": "For polar coordinates, what is |∂(x,y)/∂(r,θ)|?",
+    "nudge": "It equals r."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "General transformation",
+     "body": "If x=x(u,v), y=y(u,v), then dxdy=|∂(x,y)/∂(u,v)|dudv."
+    },
+    {
+     "t": "formula",
+     "h": "Polar coordinates",
+     "body": "x=r cosθ, y=r sinθ; the Jacobian is r, so dA=r dr dθ."
+    },
+    {
+     "t": "step",
+     "h": "Transform the region too",
+     "body": "A change of variables requires transforming the integrand, the region and the area element. All three must be updated consistently."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided: area of the unit disk",
+   "objective": "Use polar coordinates and the Jacobian.",
+   "problem": "Evaluate ∬ᴰ1 dA over the unit disk x²+y²≤1.",
+   "hints": [
+    "In polar coordinates, 0≤r≤1 and 0≤θ≤2π.",
+    "Replace dA by r dr dθ.",
+    "Integrate r first, then θ."
+   ],
+   "answer": "π.",
+   "solution": "∫₀²π∫₀¹r dr dθ=∫₀²π(1/2)dθ=π.",
+   "ask": {
+    "q": "What would the upper radial limit be for a disk of radius 3?",
+    "nudge": "It would be r=3."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s8",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall Fubini and Jacobian rules.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "What does Fubini allow?",
+     "a": "Evaluation as an iterated integral under suitable conditions."
+    },
+    {
+     "q": "What is the polar Jacobian?",
+     "a": "r."
+    },
+    {
+     "q": "What is the area element in polar coordinates?",
+     "a": "r dr dθ."
+    },
+    {
+     "q": "What must change under a variable transformation?",
+     "a": "The integrand, region and area element."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s9",
+   "mins": 8,
+   "title": "Four integration decisions",
+   "objective": "Evaluate rectangular, triangular and polar integrals.",
+   "problem": "Complete each calculation.",
+   "steps": [
+    {
+     "say": "Evaluate ∫₀¹∫₀¹1 dy dx.",
+     "blank": {
+      "prompt": "Give the value.",
+      "answer": "1",
+      "accept": [
+       "1"
+      ],
+      "hint": "It is the area of the unit square."
+     },
+     "why": "The area of the unit square is one."
+    },
+    {
+     "say": "Evaluate ∬ over 0≤y≤x≤1 of x dA.",
+     "blank": {
+      "prompt": "Give the value.",
+      "answer": "1/3",
+      "accept": [
+       "1/3",
+       "0.3333"
+      ],
+      "hint": "The inner integral is x²."
+     },
+     "why": "Integrating x over y from zero to x gives x², then integrate x² from zero to one."
+    },
+    {
+     "say": "Find the polar Jacobian.",
+     "blank": {
+      "prompt": "What factor multiplies dr dθ?",
+      "answer": "r",
+      "accept": [
+       "r"
+      ],
+      "hint": "The polar area element is r dr dθ."
+     },
+     "why": "The determinant magnitude is r."
+    },
+    {
+     "say": "Find the area of a disk of radius 2.",
+     "blank": {
+      "prompt": "Give the area.",
+      "answer": "4π",
+      "accept": [
+       "4pi",
+       "4π"
+      ],
+      "hint": "Use ∫₀²π∫₀²r dr dθ."
+     },
+     "why": "The integral is 2π·(2²/2)=4π."
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s10",
+   "mins": 6,
+   "title": "Triple integrals accumulate volume and mass",
+   "objective": "Extend the same idea to three dimensions.",
+   "ask": {
+    "q": "What does ∭_V1 dV represent?",
+    "nudge": "It is the volume of the region V."
+   },
+   "body": [
+    "A triple integral accumulates a scalar field over a three-dimensional region. With integrand one, it gives volume; with a density, it gives mass.",
+    "For a rectangular box, use three nested integrals. For cylindrical or spherical symmetry, coordinate changes can simplify the region, but their Jacobians must be included."
+   ],
+   "scenario": {
+    "teaser": "A density varies throughout a three-dimensional solid.",
+    "title": "Mass of a solid from a volume density",
+    "body": [
+     "If a solid V has density ρ(x,y,z), its total mass is ∭_Vρ(x,y,z)dV. A constant density gives mass equal to density times volume.",
+     "For a rectangular box, Fubini evaluates the triple integral as three nested one-dimensional integrals. For cylindrical symmetry, cylindrical coordinates may simplify the limits and the volume element.",
+     "The same rule applies: transform the region and include the Jacobian. In cylindrical coordinates dV=r dr dθ dz; omitting r gives an incorrect volume and mass."
+    ]
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s11",
+   "mins": 7,
+   "title": "Worked: a triple integral on a box",
+   "objective": "Evaluate a simple volume integral.",
+   "ask": {
+    "q": "Evaluate ∭_[0,1]³1 dV.",
+    "nudge": "It is the volume of the unit cube."
+   },
+   "problem": "Evaluate ∫₀¹∫₀¹∫₀¹(x+y+z) dz dy dx.",
+   "steps": [
+    {
+     "say": "Integrate in z.",
+     "math": "∫₀¹(x+y+z)dz=x+y+1/2",
+     "why": "Treat x and y as constants."
+    },
+    {
+     "say": "Integrate in y.",
+     "math": "∫₀¹(x+y+1/2)dy=x+1",
+     "why": "The y integral contributes 1/2 and the existing 1/2."
+    },
+    {
+     "say": "Integrate in x.",
+     "math": "∫₀¹(x+1)dx=3/2",
+     "why": "The final result is 1/2+1=3/2."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s12",
+   "mins": 5,
+   "title": "Trap check: six statements",
+   "objective": "Avoid common multiple-integration errors.",
+   "intro": "Judge each statement true or false.",
+   "items": [
+    {
+     "claim": "Fubini permits order reversal under suitable integrability conditions.",
+     "tf": true,
+     "why": "The iterated integrals agree under the theorem's hypotheses."
+    },
+    {
+     "claim": "The polar area element is dr dθ.",
+     "tf": false,
+     "why": "The Jacobian factor r is required."
+    },
+    {
+     "claim": "The Jacobian enters as an absolute value.",
+     "tf": true,
+     "why": "Area scaling is non-negative."
+    },
+    {
+     "claim": "Changing variables requires transforming the region.",
+     "tf": true,
+     "why": "The new bounds must describe the same region."
+    },
+    {
+     "claim": "A double integral of one gives the area of the region.",
+     "tf": true,
+     "why": "It accumulates unit density over the region."
+    },
+    {
+     "claim": "A triple integral of one gives surface area.",
+     "tf": false,
+     "why": "It gives volume; surface area is a two-dimensional measure."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "Final multiple-integration checklist",
+   "objective": "Set bounds and Jacobians correctly.",
+   "body": [
+    "1. Draw or describe the region before choosing integration limits.",
+    "2. Use Fubini to evaluate as nested one-dimensional integrals when conditions hold.",
+    "3. For non-rectangular regions, make inner limits depend on the outer variable.",
+    "4. Change of variables: transform integrand, region and area element.",
+    "5. Polar coordinates: x=r cosθ, y=r sinθ and dA=r dr dθ.",
+    "6. Triple integral of one gives volume; density gives mass.",
+    "7. Cylindrical coordinates use dV=r dr dθ dz."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Demonstrate double, triple and transformed integration.",
+   "setId": "maths_t12_mastery"
+  }
+ ]
+}
