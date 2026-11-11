@@ -16,5 +16,5 @@ for q in P["items"]:
     assert len(q["options"])==4 and len(q["explanation"])>=40
     if q["format"]=="numeric": assert q.get("check")
     if q["format"]=="multi": assert len(q["statements"])==4 and set(q["verdicts"])==set("ABCD")
-for path,obj in ((LP,L),(PP,P)): path.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+for path,obj in ((LP,L),(PP,P)): path.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 print("PASS: serialized lesson and pool; identity, quiz link, item count, difficulty, format and key contracts.")
