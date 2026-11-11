@@ -53,7 +53,7 @@ def check(name, condition, detail):
 A = [[2, 1], [1, 2]]
 check("T2 characteristic polynomial", det([[2,1],[1,2]]) == 3 and tr(A) == 4,
       "det(A)=3, trace(A)=4; characteristic polynomial λ²−4λ+3=(λ−1)(λ−3)")
-check("T2 Cayley–Hamilton", mm(A,A) == [[5,4],[4,5]],
+check("T2 Cayley–Hamilton", [[x-4*A[i][j]+(3 if i==j else 0) for j,x in enumerate(row)] for i,row in enumerate(mm(A,A))] == [[0,0],[0,0]],
       "A²−4A+3I=0 for A=[[2,1],[1,2]]")
 
 # T3 — positive definite quadratic form and Sylvester criterion.
