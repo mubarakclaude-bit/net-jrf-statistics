@@ -2,8 +2,22 @@
 
 Date: 12 November 2026
 
-- Lesson package authored: 16 scenes, required scene types, two applied scenarios, revision sheet and three references.
-- Mastery pool: 20 questions with target 6/10/4 difficulty distribution.
-- Exact examples: FTC evaluation, p-integrals at zero and infinity, logarithmic divergence and an interior singularity.
-- App validator, formula renderer, index/harness and browser checks: pending.
-- Production status: NOT APPROVED; not indexed or wired yet.
+## Package
+- 16 core scenes, required app scene types, two applied scenarios, proper/improper decision flow, revision sheet and three references.
+- 20 mastery questions: 6 easy, 10 moderate, 4 hard; 8 numeric and 2 multi-statement.
+- Answer key spread: A=5, B=5, C=5, D=5.
+- Evidence map: evidence/mathst7.md.
+
+## Automated verification — PASS
+- Exact anchors: FTC evaluation, p-integrals at zero and infinity, logarithmic divergence and interior singularity.
+- App vScene validator: PASS.
+- Mastery pool validator: PASS.
+- Formula renderer: 88 formula lines across T2/T3/T5/T6/T7, zero parser refusals.
+- JSON syntax: PASS.
+- Lesson index and test harness consistency: PASS; 49 lesson seeds indexed and wired.
+- Application build: PASS.
+- Full Playwright browser regression suite: PASS; no harness errors.
+
+GitHub Actions run: https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43090227048
+
+Status: VALIDATED ON DEVELOPMENT BRANCH. Kept as draft pending consolidated Mathematics release and final human approval. Not yet in production.
