@@ -118,7 +118,7 @@ Source order: 10-const 11-state 12-utils 05-auth 13-db 20-metrics 21-attempts 22
 
 Per topic, one command does the mechanical work:
 
-    ./addlesson.sh <authoring.py> <seed-stem> <topicId> <storeDocId> <masterySetStem>
+    ./addlesson.sh <authoring.py> <seed-stem>
 
 It generates the seed, runs both validators, checks every formula through `mathrender.js`,
 wires `test.js` idempotently, and updates both copies of the lesson index. It prints only what

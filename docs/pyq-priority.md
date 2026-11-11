@@ -204,7 +204,7 @@ Fourteen lessons in, eleven of which passed every validator on the first run.
 
 One command does the mechanical work:
 
-    ./addlesson.sh <authoring.py> <seed-stem> <topicId> <storeDocId> <masterySetStem>
+    ./addlesson.sh <authoring.py> <seed-stem>
 
 It generates the seed, runs both validators, checks every formula through `mathrender.js`,
 audits the pool for any item citing its own answer, wires `test.js` and asserts the wiring, and
