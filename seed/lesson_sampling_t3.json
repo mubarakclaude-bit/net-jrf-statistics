@@ -1,0 +1,638 @@
+{
+  "id": "samplingt3",
+  "topicId": "sampling-t3",
+  "moduleId": "sampling",
+  "title": "Ratio and Regression Estimators",
+  "breadcrumb": "Sampling theory → Auxiliary information → Ratio and regression estimation",
+  "engine": "B",
+  "engineName": "Use known population auxiliary information to adjust the sample mean of a study variable.",
+  "version": "1.0",
+  "status": "review",
+  "estMin": 95,
+  "objectives": [
+    "State and calculate ratio and regression estimators of a population mean.",
+    "Explain when proportional versus linear auxiliary relationships support each estimator.",
+    "Compute adjusted estimates using known population auxiliary means.",
+    "Interpret residual-based approximate variances under SRSWOR.",
+    "Explain why the ratio estimator is generally not exactly design-unbiased."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Population and sample means",
+      "why": "Both estimators adjust the sample mean using a population benchmark."
+    },
+    {
+      "id": "p2",
+      "name": "Covariance and regression slope",
+      "why": "The regression estimator uses the fitted sample slope."
+    },
+    {
+      "id": "p3",
+      "name": "Simple random sampling without replacement",
+      "why": "The variance approximations use an SRSWOR design and its FPC."
+    }
+  ],
+  "traps": [
+    "Ratio estimation scales ȳ by X̄/x̄; regression adds b(X̄−x̄).",
+    "Do not reverse the sign in the regression adjustment.",
+    "A ratio estimator is generally not exactly design-unbiased in finite samples.",
+    "The ratio estimator is most plausible for a proportional near-origin relationship.",
+    "State the sampling design before quoting a variance approximation."
+  ],
+  "howto": "Identify the known population auxiliary mean X̄. Compare the relationship of y to x: use ratio estimation for an approximately proportional relationship and regression estimation for a linear relationship that may have an intercept. Write the formula before substitution. For variance, define residuals and state SRSWOR and first-order approximation assumptions.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Auxiliary information and sample means",
+      "objective": "Refresh population means, sample means and known auxiliary totals.",
+      "body": [
+        "A survey often measures an outcome y together with an auxiliary variable x. The auxiliary variable may be cheaper to collect, available from a register, or strongly related to y.",
+        "Write X̄ and Ȳ for the population means, and x̄ and ȳ for the corresponding sample means. Ratio and regression estimators use the known population information about x to improve estimation of y.",
+        "The sample is still selected under a probability design. Auxiliary information changes the estimator, not the sampling design itself."
+      ],
+      "items": [
+        {
+          "ask": "What is an auxiliary variable?",
+          "recall": "A variable related to the study variable and used to improve estimation.",
+          "refresh": [
+            "The study variable is the quantity the survey wants to estimate, such as household expenditure.",
+            "An auxiliary variable is related to that quantity, such as household size or a register count.",
+            "Useful auxiliary information is known for the population or is measured at low cost."
+          ]
+        },
+        {
+          "ask": "What does X̄ represent?",
+          "recall": "The known population mean of the auxiliary variable.",
+          "refresh": [
+            "Sum x-values for all N population units to obtain X.",
+            "Divide X by N to obtain X̄.",
+            "Ratio and regression estimators use this known benchmark to adjust the sample estimate."
+          ]
+        },
+        {
+          "ask": "What is the sample mean of y?",
+          "recall": "ȳ=Σᵢ∈s yᵢ/n.",
+          "refresh": [
+            "Add the observed study-variable values in the sample.",
+            "Divide by the number of sampled units under equal-probability SRS.",
+            "The sample mean is an estimator; its realised value varies across samples."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Why can a known population mean of x help estimate the population mean of y?",
+        "nudge": "If x and y are related, the sample's x̄ signals whether the sample is high or low relative to the population benchmark."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 8,
+      "title": "Correct the sample using a benchmark",
+      "objective": "Explain the ratio adjustment and its assumptions.",
+      "body": [
+        "Suppose the sample average household size is 3, but the known population average is 4. If expenditure tends to increase in proportion to household size, the sample expenditure mean may be scaled upward by 4/3.",
+        "The ratio estimator multiplies ȳ by X̄/x̄. It is intuitive when the relationship between y and x is approximately proportional and passes near the origin.",
+        "A regression estimator instead adjusts by a slope and the difference X̄−x̄. It is more flexible when the relationship has a nonzero intercept."
+      ],
+      "scenario": {
+        "teaser": "A household expenditure survey",
+        "title": "Using a population benchmark",
+        "body": [
+          "A survey team measures monthly expenditure and household size for a probability sample. The sample has an average household size of 3 persons and average monthly expenditure of ₹12,000. The latest population register gives a reliable average household size of 4 persons. If expenditure is roughly proportional to household size over the relevant range, the sample mean can be adjusted upward by the ratio 4/3. This adjustment does not invent extra observations; it uses a known population benchmark to correct the sample's auxiliary-variable imbalance. If the relationship is not proportional, a regression adjustment may be more appropriate.",
+          "The analyst must still consider the sampling design and the approximate nature of the ratio estimator's bias and variance formula."
+        ],
+        "q": "What ratio estimate follows from these sample and population means?",
+        "answer": "12,000×(4/3)=₹16,000."
+      },
+      "ask": {
+        "q": "When is a ratio estimator especially plausible?",
+        "nudge": "When y and x are positively related and the relationship is approximately proportional through the origin."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "See the ratio adjustment",
+      "objective": "Compute a ratio estimate from a simple sample.",
+      "viz": {
+        "type": "disc-pmf",
+        "caption": "The adjustment factor X̄/x̄ is 4/3 when X̄=4 and x̄=3."
+      },
+      "body": [
+        "If X̄=x̄, the ratio estimator equals the ordinary sample mean ȳ; no auxiliary adjustment is needed.",
+        "If X̄ is larger than x̄, the ratio estimator scales ȳ upward. If X̄ is smaller, it scales ȳ downward.",
+        "For ȳ=12,000, x̄=3 and X̄=4, the adjustment factor is 1.333…, giving 16,000."
+      ],
+      "ask": {
+        "q": "If X̄/x̄=0.8 and ȳ=50, what is the ratio estimate?",
+        "nudge": "Multiply 50 by 0.8."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 10,
+      "title": "Ratio and regression estimators",
+      "objective": "State estimators and distinguish their adjustment mechanisms.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Notation",
+          "body": "For a sample of size n, ȳ and x̄ are sample means. The known population auxiliary mean is X̄. The sample regression slope is b= s_xy/s_x²."
+        },
+        {
+          "t": "formula",
+          "h": "Ratio estimator",
+          "body": "Ȳ_R=ȳ(X̄/x̄). Equivalently, estimate the ratio R by r=ȳ/x̄ and use Ȳ_R=rX̄."
+        },
+        {
+          "t": "formula",
+          "h": "Regression estimator",
+          "body": "Ȳ_reg=ȳ+b(X̄−x̄). The sample mean is adjusted by the fitted slope times the auxiliary-mean discrepancy."
+        },
+        {
+          "t": "step",
+          "h": "Approximate variances under SRSWOR",
+          "body": "V(ȳ_R)≈(1−f)S_e²/n, where eᵢ=yᵢ−Rxᵢ. V(ȳ_reg)≈(1−f)S_{y·x}²/n, where residuals are yᵢ−α−βxᵢ. These are first-order approximations; the exact design variance depends on the design and estimator."
+        },
+        {
+          "t": "def",
+          "h": "Bias and choice",
+          "body": "The ratio estimator is generally not exactly design-unbiased in finite samples. Its bias is often small for a strong near-origin relationship. The regression estimator also uses estimated coefficients and is generally treated through approximation. Choose using the relationship, auxiliary quality and design."
+        }
+      ],
+      "flow": {
+        "title": "Choose the auxiliary adjustment",
+        "alt": "Start with the sample mean, compare the sample auxiliary mean with its known population mean, then choose ratio scaling for a proportional relationship or regression adjustment for a linear relationship with an intercept.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Start with ȳ",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Known X̄ available?",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 0,
+            "label": "Proportional relation: ratio",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 2,
+            "c": 2,
+            "label": "Linear relation: regression",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 3,
+            "c": 1,
+            "label": "Check design and approximation",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "b",
+            "to": "d"
+          },
+          {
+            "from": "c",
+            "to": "e"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ],
+        "note": "A strong auxiliary relationship can improve precision; it does not remove the need to state assumptions."
+      },
+      "ask": {
+        "q": "What distinguishes the ratio adjustment from the regression adjustment?",
+        "nudge": "Ratio scales ȳ by X̄/x̄; regression adds b(X̄−x̄)."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked ratio and regression estimates",
+      "objective": "Calculate and compare both adjusted estimates.",
+      "problem": "A sample has x̄=10 and ȳ=12. The known population auxiliary mean is X̄=15. Calculate the ratio estimate and the regression estimate when b=1.2.",
+      "steps": [
+        {
+          "say": "Calculate the ratio adjustment factor.",
+          "math": "X̄/x̄=15/10=1.5",
+          "why": "The sample auxiliary mean is two-thirds of the known population mean."
+        },
+        {
+          "say": "Multiply the sample study mean by this factor.",
+          "math": "Ȳ_R=12×1.5=18",
+          "why": "The ratio estimator scales the observed y mean by the auxiliary benchmark."
+        },
+        {
+          "say": "For regression, calculate the auxiliary mean difference.",
+          "math": "X̄−x̄=15−10=5",
+          "why": "This is the amount by which the sample auxiliary mean differs from the population benchmark."
+        },
+        {
+          "say": "Multiply the difference by the slope and add it to ȳ.",
+          "math": "Ȳ_reg=12+1.2(5)=18",
+          "why": "The regression estimator adjusts additively using the fitted slope."
+        },
+        {
+          "say": "Compare the results.",
+          "math": "Ȳ_R=Ȳ_reg=18",
+          "why": "They coincide for these chosen values, but the estimators are not generally identical."
+        }
+      ],
+      "ask": {
+        "q": "If the regression slope were 0.8 instead, what would the regression estimate be?",
+        "nudge": "Use 12+0.8×5."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 3,
+      "title": "Retrieve the two formulas",
+      "objective": "Recall the estimator forms and key assumptions.",
+      "intro": "Answer before revealing each response.",
+      "items": [
+        {
+          "q": "Ratio estimator of Ȳ?",
+          "a": "Ȳ_R=ȳ(X̄/x̄)."
+        },
+        {
+          "q": "Regression estimator of Ȳ?",
+          "a": "Ȳ_reg=ȳ+b(X̄−x̄)."
+        },
+        {
+          "q": "Sample ratio r?",
+          "a": "r=ȳ/x̄."
+        },
+        {
+          "q": "What is the ratio estimator's main relationship assumption?",
+          "a": "A strong approximately proportional relationship through the origin."
+        },
+        {
+          "q": "What does the regression adjustment multiply?",
+          "a": "The difference X̄−x̄ by the fitted slope b."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 8,
+      "title": "Complete the estimator comparison",
+      "objective": "Build both estimates from their components.",
+      "problem": "Given ȳ=20, x̄=5, X̄=6 and b=2, complete the ratio and regression estimates.",
+      "steps": [
+        {
+          "say": "The ratio adjustment factor is X̄/x̄.",
+          "blank": {
+            "prompt": "Find X̄/x̄.",
+            "answer": "1.2",
+            "accept": [
+              "1.2",
+              "6/5"
+            ],
+            "hint": "Divide 6 by 5."
+          },
+          "why": "The population auxiliary mean is 20% above the sample auxiliary mean."
+        },
+        {
+          "say": "Multiply the sample y mean by the ratio factor.",
+          "blank": {
+            "prompt": "Find the ratio estimate.",
+            "answer": "24",
+            "accept": [
+              "24",
+              "24.0"
+            ],
+            "hint": "Compute 20×1.2."
+          },
+          "why": "The ratio estimator scales the sample mean."
+        },
+        {
+          "say": "The auxiliary discrepancy is X̄−x̄.",
+          "blank": {
+            "prompt": "Find X̄−x̄.",
+            "answer": "1",
+            "accept": [
+              "1",
+              "1.0"
+            ],
+            "hint": "Subtract 5 from 6."
+          },
+          "why": "The regression adjustment uses this difference."
+        },
+        {
+          "say": "Add b times the discrepancy to ȳ.",
+          "blank": {
+            "prompt": "Find the regression estimate.",
+            "answer": "22",
+            "accept": [
+              "22",
+              "22.0"
+            ],
+            "hint": "Compute 20+2×1."
+          },
+          "why": "The regression estimate is an additive adjustment."
+        }
+      ],
+      "ask": {
+        "q": "Why can the ratio and regression estimates differ?",
+        "nudge": "They use different functional relationships and different adjustments."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 8,
+      "title": "Approximate variance and bias",
+      "objective": "Interpret residual-based variance and ratio bias.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Ratio residual",
+          "body": "For R=Ȳ/X̄, define eᵢ=yᵢ−Rxᵢ. Under SRSWOR, a first-order approximation is V(Ȳ_R)≈(1−f)S_e²/n."
+        },
+        {
+          "t": "formula",
+          "h": "Regression residual",
+          "body": "For population regression coefficients α and β, define eᵢ=yᵢ−α−βxᵢ. The regression estimator's approximate variance is driven by residual variation after explaining y with x."
+        },
+        {
+          "t": "def",
+          "h": "Bias caution",
+          "body": "The ratio estimator is a nonlinear function of sample means, so it is generally biased in finite samples. Its first-order bias is approximately (1−f)/(nX̄) [R S_x²−S_xy], under SRSWOR conventions."
+        },
+        {
+          "t": "step",
+          "h": "Exam method",
+          "body": "First identify whether X̄ or X is known. Then write the correct estimator, substitute the sample and population quantities, and state the design/approximation assumptions before using a variance formula."
+        }
+      ],
+      "ask": {
+        "q": "Why is the ratio estimator not generally exactly unbiased?",
+        "nudge": "It is a ratio of random sample quantities, and expectation of a ratio is not generally the ratio of expectations."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 9,
+      "title": "Guided practice: select the estimator",
+      "objective": "Choose and calculate an estimator from the relationship.",
+      "problem": "A sample has ȳ=30, x̄=6, and the known population mean X̄=8. The relationship is approximately proportional. Find the ratio estimate and explain the choice.",
+      "hints": [
+        "Identify the proportional relationship cue.",
+        "Calculate X̄/x̄.",
+        "Multiply by ȳ."
+      ],
+      "answer": "Ȳ_R=30×(8/6)=40. Ratio estimation is suitable because the relationship is approximately proportional.",
+      "check": "The adjustment factor is 4/3 and 30×4/3=40.",
+      "scenario": {
+        "teaser": "A crop-yield survey",
+        "title": "Register acreage as auxiliary information",
+        "body": [
+          "A crop survey estimates average yield per holding. A sample of farms provides observed yields and acreage, while an agricultural register supplies the population mean acreage. The sample mean acreage is lower than the known population mean, and yield is approximately proportional to acreage for the crop and region under study. A ratio adjustment can therefore correct the sample mean yield using the acreage benchmark. The analyst must not assume the same adjustment is appropriate if yield has a substantial fixed component unrelated to acreage; in that case a regression estimator with an intercept may be more suitable.",
+          "The choice should be justified by the empirical relationship and the quality of the population auxiliary information, rather than by the availability of a convenient formula alone."
+        ],
+        "q": "Which estimator is suggested by an approximately proportional relationship?",
+        "answer": "The ratio estimator."
+      },
+      "solution": [
+        {
+          "say": "The proportional relationship supports ratio estimation."
+        },
+        {
+          "say": "The auxiliary adjustment factor is 8/6=4/3."
+        },
+        {
+          "say": "The adjusted mean is 30×4/3=40."
+        }
+      ],
+      "ask": {
+        "q": "What should be checked before using the ratio estimator?",
+        "nudge": "That x̄ is nonzero and the y–x relationship is plausibly proportional."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 7,
+      "title": "Avoid common estimator traps",
+      "objective": "Distinguish estimator forms and inference claims.",
+      "intro": "Judge each statement.",
+      "items": [
+        {
+          "claim": "The ratio estimator is ȳ(X̄/x̄).",
+          "tf": true,
+          "why": "It scales the sample mean by the known-to-sample auxiliary mean ratio."
+        },
+        {
+          "claim": "The regression estimator is ȳ+b(x̄−X̄).",
+          "tf": false,
+          "why": "The sign is reversed; the adjustment is b(X̄−x̄)."
+        },
+        {
+          "claim": "The ratio estimator is exactly design-unbiased for every finite population.",
+          "tf": false,
+          "why": "It is generally biased because it is a nonlinear ratio of random sample quantities."
+        },
+        {
+          "claim": "If X̄=x̄, both displayed adjusted estimators reduce to ȳ.",
+          "tf": true,
+          "why": "The ratio factor is one and the regression adjustment is zero."
+        },
+        {
+          "claim": "Ratio estimation is most natural for a proportional relationship through the origin.",
+          "tf": true,
+          "why": "A near-origin proportional relationship supports scaling by X̄/x̄."
+        },
+        {
+          "claim": "Regression adjustment requires the slope b to be multiplied by X̄−x̄.",
+          "tf": true,
+          "why": "This is the additive correction in the regression estimator."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 9,
+      "title": "Transfer: regression with an intercept",
+      "objective": "Apply regression adjustment when proportionality is unsuitable.",
+      "problem": "A sample gives ȳ=50 and x̄=10; the known population mean is X̄=12. A fitted regression slope is b=1.5. Calculate the regression estimate and explain why it can be preferred to a ratio estimate.",
+      "hints": [
+        "Calculate X̄−x̄.",
+        "Multiply by b.",
+        "Add the result to ȳ; explain the role of an intercept."
+      ],
+      "answer": "Ȳ_reg=50+1.5(12−10)=53. Regression can be preferred when the relationship is approximately linear but does not pass through the origin.",
+      "check": "The auxiliary difference is 2 and the adjustment is 3.",
+      "solution": [
+        {
+          "say": "The population auxiliary mean exceeds the sample mean by 2."
+        },
+        {
+          "say": "The fitted slope converts that difference into an estimated y adjustment of 3."
+        },
+        {
+          "say": "Add the adjustment to 50 to obtain 53."
+        },
+        {
+          "say": "A regression line can accommodate a nonzero intercept, unlike a strict proportional model."
+        }
+      ],
+      "ask": {
+        "q": "What feature of the relationship makes regression more flexible?",
+        "nudge": "It allows a nonzero intercept."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 6,
+      "title": "Formula and decision checklist",
+      "objective": "Summarise estimator choice and caveats.",
+      "body": [
+        "Ratio estimator: Ȳ_R=ȳ(X̄/x̄). Use when y is approximately proportional to x and x̄ is nonzero.",
+        "Regression estimator: Ȳ_reg=ȳ+b(X̄−x̄). Use when a linear relationship with a possible nonzero intercept is plausible.",
+        "Under SRSWOR, first-order approximate variances are residual-based and include the FPC (1−f). State the design and approximation before using them.",
+        "The ratio estimator is generally not exactly design-unbiased in finite samples. Auxiliary information can improve precision when it is reliable and strongly related to y.",
+        "Exam sequence: identify known population auxiliary information, choose the relationship form, write the estimator, substitute carefully, and state bias/variance qualifications."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 4,
+      "title": "Mastery check",
+      "objective": "Demonstrate independent command of ratio and regression estimators.",
+      "setId": "sampling_t3_mastery"
+    }
+  ],
+  "revision": {
+    "sheet": [
+      "Ratio: Ȳ_R=ȳ(X̄/x̄).",
+      "Regression: Ȳ_reg=ȳ+b(X̄−x̄).",
+      "Sample ratio r=ȳ/x̄.",
+      "Ratio residual eᵢ=yᵢ−Rxᵢ.",
+      "Approx. ratio variance: (1−f)S_e²/n.",
+      "Regression residuals determine residual variance.",
+      "Ratio estimator generally has finite-sample bias."
+    ],
+    "cards": [
+      [
+        "Ratio",
+        "ȳ(X̄/x̄)"
+      ],
+      [
+        "Regression",
+        "ȳ+b(X̄−x̄)"
+      ],
+      [
+        "Ratio cue",
+        "Proportional through origin"
+      ],
+      [
+        "Regression cue",
+        "Linear; intercept allowed"
+      ],
+      [
+        "Caveat",
+        "Ratio is generally biased"
+      ]
+    ],
+    "tricks": [
+      "Check whether x̄ is nonzero before ratio estimation.",
+      "For regression, calculate X̄−x̄ before multiplying by b.",
+      "Use the known population mean, not the sample mean, in the adjustment."
+    ],
+    "shortcuts": [
+      "If X̄=x̄, both adjustments reduce to ȳ.",
+      "A proportional relationship points to ratio; a nonzero intercept points to regression."
+    ],
+    "remember": [
+      "Auxiliary information improves precision only when informative and reliable.",
+      "Approximate variance formulas need stated design assumptions."
+    ]
+  },
+  "refs": [
+    {
+      "title": "Sampling Techniques",
+      "where": "Ratio and regression methods of estimation",
+      "site": "William G. Cochran",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Classical derivation and design-based properties of ratio and regression estimators."
+    },
+    {
+      "title": "Sampling: Design and Analysis",
+      "where": "Auxiliary information and regression estimation",
+      "site": "Sharon L. Lohr",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Modern survey-sampling treatment of auxiliary-variable estimators."
+    },
+    {
+      "title": "Sampling Theory lecture notes",
+      "where": "Ratio and regression estimation",
+      "site": "IIT Kanpur, Shalabh",
+      "url": "https://home.iitk.ac.in/~shalab/sampling/",
+      "type": "Open lecture notes",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Open supporting material for sampling estimators."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule."
+  },
+  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t3. Practice items are original and are not represented as official PYQs. Worked ratio and regression estimates are independently recomputed in verify_sampling_t3.py. Variance statements are first-order approximations under SRSWOR."
+}
