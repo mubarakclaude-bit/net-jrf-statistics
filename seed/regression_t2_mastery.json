@@ -1,0 +1,363 @@
+{
+ "moduleId": "regression",
+ "topicId": "regression-t2",
+ "source": "mastery",
+ "label": "Gauss–Markov, BLUE and estimability — mastery test (unseen)",
+ "count": 20,
+ "items": [
+  {
+   "id": "regression-t2-m-01",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "easy",
+   "stem": "In y = Xβ + u, the OLS estimator is BLUE when E(u) = 0 and V(u) = σ²I. Beyond these two moment conditions, the theorem needs:",
+   "options": [
+    "normality of u",
+    "no distributional assumption",
+    "a large sample size",
+    "a random design matrix"
+   ],
+   "answer": "B",
+   "explanation": "Gauss–Markov uses only the mean and variance of u, with X fixed. Normality is needed for exact t and F tests, not for BLUE. A large sample is not required, and a random X changes the setting."
+  },
+  {
+   "id": "regression-t2-m-02",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "easy",
+   "stem": "The variance–covariance matrix of the OLS estimator β̂ is:",
+   "options": [
+    "σ²X′X",
+    "σ²(X′X)⁻¹",
+    "(X′X)⁻¹",
+    "σ²I"
+   ],
+   "answer": "B",
+   "explanation": "Var(β̂) = (X′X)⁻¹X′(σ²I)X(X′X)⁻¹ = σ²(X′X)⁻¹. Dropping σ² gives (X′X)⁻¹, and σ²X′X has the wrong inverse structure."
+  },
+  {
+   "id": "regression-t2-m-03",
+   "format": "numeric",
+   "topic": "regression-t2",
+   "diff": "easy",
+   "stem": "For y₁ = β + u₁ and y₂ = 2β + u₂ with V(uᵢ) = σ² = 10, the variance of the BLUE of β is:",
+   "options": [
+    "2",
+    "2.5",
+    "5",
+    "10"
+   ],
+   "answer": "A",
+   "explanation": "The BLUE is (y₁ + 2y₂)/5 with variance σ²/5 = 10/5 = 2. The value 2.5 is the variance of y₂/2 and 10 is the variance of y₁ alone.",
+   "check": "The BLUE variance must be below both single-reading variances: below 10 for y₁ and below 2.5 for y₂/2."
+  },
+  {
+   "id": "regression-t2-m-04",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "easy",
+   "stem": "If X′X is a diagonal matrix, the least squares estimators of the parameters are:",
+   "options": [
+    "not unique",
+    "biased",
+    "uncorrelated",
+    "identical"
+   ],
+   "answer": "C",
+   "explanation": "Cov(β̂) = σ²(X′X)⁻¹, and the inverse of a diagonal matrix is diagonal, so the off-diagonal covariances are zero. Diagonal X′X implies full rank, hence uniqueness, and says nothing about bias."
+  },
+  {
+   "id": "regression-t2-m-05",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "easy",
+   "stem": "A linear parametric function ℓ′β is estimable if and only if:",
+   "options": [
+    "X is a square matrix",
+    "ℓ′ lies in the row space of X",
+    "ℓ′ℓ = 1",
+    "ℓ is any vector"
+   ],
+   "answer": "B",
+   "explanation": "Estimable means some c′y is unbiased, c′X = ℓ′, so ℓ′ is a combination of the rows of X. In a full-rank X every ℓ qualifies, but the condition itself is membership of the row space."
+  },
+  {
+   "id": "regression-t2-m-06",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "easy",
+   "stem": "Which of the following is NOT a consequence of near (not perfect) multicollinearity for OLS?",
+   "options": [
+    "The estimates can be large in magnitude",
+    "Small changes in the data cause large changes in the estimates",
+    "Standard errors are large while R² is high",
+    "The estimates are biased"
+   ],
+   "answer": "D",
+   "explanation": "Near multicollinearity breaks no Gauss–Markov assumption, so OLS stays unbiased and BLUE. What suffers is the variance, which is inflated by 1/(1 − r²). The other three are all symptoms of that inflation."
+  },
+  {
+   "id": "regression-t2-m-07",
+   "format": "numeric",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "In the model y₁ = β₁ + β₂ + u₁, y₂ = 2β₁ + u₂, y₃ = β₁ − β₂ + u₃, the observations are y = (7, 4, 3). The BLUE of β₁ is:",
+   "options": [
+    "2",
+    "9",
+    "84",
+    "3"
+   ],
+   "answer": "D",
+   "explanation": "β̂₁ = (y₁ + 2y₂ + y₃)/6 = (7 + 8 + 3)/6 = 3. With the divisor 2 the value would be 9, 84 is 6(y₁ + y₂ + y₃), and 2 is β̂₂ = (7 − 3)/2.",
+   "check": "Multiply the weights (1, 2, 1)/6 into the first column of X: (1 + 4 + 1)/6 = 1, and into the second: (1 + 0 − 1)/6 = 0."
+  },
+  {
+   "id": "regression-t2-m-08",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "Under heteroscedastic errors, the OLS estimator of β is:",
+   "options": [
+    "BLUE",
+    "biased",
+    "unbiased but not BLUE",
+    "inconsistent"
+   ],
+   "answer": "C",
+   "explanation": "Unbiasedness uses E(u) = 0 only, so it survives. The variance formula σ²(X′X)⁻¹ no longer holds and generalised least squares has smaller variance."
+  },
+  {
+   "id": "regression-t2-m-09",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "Which of the following DOES cause bias in the OLS estimator of a coefficient?",
+   "options": [
+    "Heteroscedastic errors",
+    "A large sample",
+    "Multicollinearity among the regressors",
+    "Omission of a relevant variable correlated with the regressor"
+   ],
+   "answer": "D",
+   "explanation": "Omitting a relevant correlated variable puts part of its effect into the error and breaks E(u) = 0 for the fitted model. The bias is β₂δ. Large samples, multicollinearity and heteroscedasticity leave OLS unbiased."
+  },
+  {
+   "id": "regression-t2-m-10",
+   "format": "numeric",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "The true model has β₂ = 2 on x₂, and the regression of x₂ on x₁ has slope δ = 0.6. Leaving x₂ out, the bias in the slope on x₁ is:",
+   "options": [
+    "1.2",
+    "2.0",
+    "0.6",
+    "2.6"
+   ],
+   "answer": "A",
+   "explanation": "Bias = β₂δ = 2 × 0.6 = 1.2. The value 2.6 is β₂ + δ and 2.0 and 0.6 are the two factors taken alone.",
+   "check": "The bias is a product of a coefficient and a slope less than 1 in size, so it cannot exceed β₂ = 2."
+  },
+  {
+   "id": "regression-t2-m-11",
+   "format": "multi",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "Near (but not perfect) multicollinearity among the regressors of a linear model.",
+   "options": [
+    "A, B, C and D",
+    "A and B only",
+    "B, C and D only",
+    "A, B and C only"
+   ],
+   "answer": "D",
+   "explanation": "Unbiasedness and BLUE survive, standard errors grow, and a high R² with insignificant t values is the classic symptom. The estimates are not biased.",
+   "statements": [
+    "OLS estimators remain unbiased",
+    "The variances of the estimators are inflated",
+    "R² can be high while individual t statistics are insignificant",
+    "The OLS estimators become biased"
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "E(u) = 0 and fixed X are unaffected."
+    },
+    "B": {
+     "tf": true,
+     "why": "The variance is multiplied by 1/(1 − r²)."
+    },
+    "C": {
+     "tf": true,
+     "why": "The F test pools the coefficients, while each t statistic suffers from its own inflated standard error."
+    },
+    "D": {
+     "tf": false,
+     "why": "No assumption needed for unbiasedness is violated."
+    }
+   }
+  },
+  {
+   "id": "regression-t2-m-12",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "In a design with an intercept and two group effects (parameters α, τ₁, τ₂) and observations in both groups, which function is estimable?",
+   "options": [
+    "τ₁ − τ₂",
+    "τ₁",
+    "α",
+    "τ₁ + τ₂"
+   ],
+   "answer": "A",
+   "explanation": "(0, 1, −1) is the difference of the two row types (1,1,0) and (1,0,1), so it is in the row space. The other three are not combinations of those two rows."
+  },
+  {
+   "id": "regression-t2-m-13",
+   "format": "numeric",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "In Q11's model with σ² = 12, the variance of the BLUE of β₁ is:",
+   "options": [
+    "6",
+    "2",
+    "4",
+    "1"
+   ],
+   "answer": "B",
+   "explanation": "Var(β̂₁) = σ²/6 = 12/6 = 2, using the squared weights (1 + 4 + 1)/36 = 1/6. The value 6 is the divisor, not the variance.",
+   "check": "The sum of the squared weights is 6/36 = 1/6, so the variance is σ² times a number below 1: it must be below 12."
+  },
+  {
+   "id": "regression-t2-m-14",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "In y₁ = β + u₁, y₂ = 2β + u₂ with equal variances, the estimator (y₁ + y₂)/3 is:",
+   "options": [
+    "the BLUE",
+    "biased",
+    "unbiased but has larger variance than the BLUE",
+    "unbiased with smaller variance than the BLUE"
+   ],
+   "answer": "C",
+   "explanation": "E = (β + 2β)/3 = β, so it is unbiased. Its variance is 2σ²/9 ≈ 0.222σ², above the BLUE's σ²/5 = 0.2σ². No unbiased linear estimator can beat the BLUE."
+  },
+  {
+   "id": "regression-t2-m-15",
+   "format": "multi",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "In the two-group design with parameters (α, τ₁, τ₂), each group having observations, the following functions.",
+   "options": [
+    "C and D only",
+    "A, B and C only",
+    "A and B only",
+    "A, B, C and D"
+   ],
+   "answer": "C",
+   "explanation": "The estimable ones are the contrast τ₁ − τ₂ and the group mean α + τ₁. The parameters α and τ₁ taken alone are not.",
+   "statements": [
+    "τ₁ − τ₂ is estimable",
+    "α + τ₁ is estimable",
+    "τ₁ alone is estimable",
+    "α alone is estimable"
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "It is a difference of two row types."
+    },
+    "B": {
+     "tf": true,
+     "why": "It is the row (1,1,0) itself."
+    },
+    "C": {
+     "tf": false,
+     "why": "(0,1,0) is not a combination of (1,1,0) and (1,0,1)."
+    },
+    "D": {
+     "tf": false,
+     "why": "(1,0,0) is not a combination of those two rows."
+    }
+   }
+  },
+  {
+   "id": "regression-t2-m-16",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "In the three-equation model of Q11, the covariance between the BLUEs of β₁ and β₂ is:",
+   "options": [
+    "σ²/3",
+    "σ²/6",
+    "−σ²/2",
+    "zero, because X′X is diagonal"
+   ],
+   "answer": "D",
+   "explanation": "X′X = diag(6, 2), so (X′X)⁻¹ = diag(1/6, 1/2) and the off-diagonal entry is zero. The values σ²/6 and σ²/2 are the two variances."
+  },
+  {
+   "id": "regression-t2-m-17",
+   "format": "numeric",
+   "topic": "regression-t2",
+   "diff": "hard",
+   "stem": "Two regressors are correlated with r = 0.99. The variance inflation factor 1/(1 − r²) is:",
+   "options": [
+    "50.25",
+    "7.09",
+    "100",
+    "0.0199"
+   ],
+   "answer": "A",
+   "explanation": "1 − 0.9801 = 0.0199, and 1/0.0199 = 50.25. The value 7.09 is the square root, which inflates the standard deviation. The value 100 is 1/(1 − r) and 0.0199 is the denominator.",
+   "check": "For r near 1, 1/(1 − r²) ≈ 1/(2(1 − r)) = 1/0.02 = 50, so the answer is close to 50."
+  },
+  {
+   "id": "regression-t2-m-18",
+   "format": "numeric",
+   "topic": "regression-t2",
+   "diff": "hard",
+   "stem": "In the two-group design with group 1 responses 3, 5 and group 2 responses 8, 10, the estimate of the estimable contrast τ₁ − τ₂ is:",
+   "options": [
+    "13",
+    "5",
+    "−5",
+    "4"
+   ],
+   "answer": "C",
+   "explanation": "The estimable contrast equals the difference of group means: 4 − 9 = −5. It is the same for every solution of the normal equations, unlike τ̂₁ alone.",
+   "check": "A contrast of two group effects equals the difference of group means, and group 1 has the smaller mean, so the sign is negative."
+  },
+  {
+   "id": "regression-t2-m-19",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "hard",
+   "stem": "In the proof of Gauss–Markov, a competing linear unbiased estimator is written c = a + d, where a are the OLS weights. Its variance exceeds that of OLS by σ²d′d because:",
+   "options": [
+    "d′X = 0 makes a′d = 0, so the cross term vanishes",
+    "d is a constant vector",
+    "d′d is always zero",
+    "a and d have equal length"
+   ],
+   "answer": "A",
+   "explanation": "Unbiasedness of both c and a gives d′X = 0. Then a′d = ℓ′(X′X)⁻¹X′d = 0, so Var(c′y) = σ²(a′a + d′d). The term d′d is positive unless d = 0."
+  },
+  {
+   "id": "regression-t2-m-20",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "hard",
+   "stem": "If the errors are in addition normally distributed, OLS is best among:",
+   "options": [
+    "linear unbiased estimators only",
+    "all unbiased estimators, linear or not",
+    "all estimators, biased or not",
+    "only estimators with equal weights"
+   ],
+   "answer": "B",
+   "explanation": "Under normality β̂ is a function of a complete sufficient statistic and unbiased, hence the minimum-variance unbiased estimator in the whole class. It still does not beat biased estimators on mean squared error everywhere."
+  }
+ ]
+}
