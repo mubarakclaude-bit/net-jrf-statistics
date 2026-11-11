@@ -56,8 +56,10 @@ All numerical anchors are included in deterministic verification scripts. No new
 
 ## Release status
 
-Consolidated pull request: [#66 — Complete Probability module](https://github.com/mubarakclaude-bit/net-jrf-statistics/pull/66).
-
-Pre-merge automated validation is running in GitHub Actions. Do not mark this release merged or production-ready until the final PR-head checks pass and the PR is merged into `main`.
+- Consolidated pull request [#66](https://github.com/mubarakclaude-bit/net-jrf-statistics/pull/66) was merged into `main` on 11 November 2026.
+- Merge commit: `4e64639c5aca89157171df63f23d7710951cf129`.
+- Post-merge repository audit confirms 13/13 Probability topics in the catalogue and manifest, all 13 approved, with all six new lesson/mastery/evidence/verifier/report packages present.
+- GitHub Actions validation runs are queued; no green post-merge CI conclusion is available yet. The PR's Vercel status reported a deployment rate limit; deployment is outside this task and was not attempted.
+- Do not claim live deployment or full CI acceptance until the relevant queued workflows complete successfully.
 
 Vercel deployment, live `data.json` verification and learner-facing deployment checks are out of scope and intentionally not performed here.
