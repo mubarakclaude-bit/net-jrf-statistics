@@ -132,18 +132,18 @@ q(12, "match", "moderate",
          ["D. Net reproduction rate", "IV. Continuous sample survey producing India's vital rates"]])
 
 q(13, "single", "moderate",
-  "India reports its sex ratio at birth as 917 for 2021-23. The figure is expressed as:",
+  "India reports its sex ratio at birth as 918 for 2022-24. The figure is expressed as:",
   ["Males per 100 females", "Males per 1,000 females",
    "Female births as a percentage of all births", "Females per 1,000 males"], "D",
-  "India's convention is females per 1,000 males, so 917 means 917 girls for every 1,000 boys — below the biological "
+  "India's convention is females per 1,000 males, so 918 means 918 girls for every 1,000 boys — below the biological "
   "value of roughly 952. Much international work reports the ratio the other way round, as males per 100 females, "
   "where the natural value is about 105; a figure near 1,050 in a question is using that other convention.")
 
 q(14, "numeric", "moderate",
-  "If the crude birth rate is 18.4 and the crude death rate is 6.4 per 1,000 population, the natural growth rate is:",
-  ["12.0 per 1,000", "24.8 per 1,000", "2.88 per 1,000", "1.2 per 1,000"], "A",
-  "The natural growth rate is simply CBR minus CDR: 18.4 − 6.4 = 12.0 per 1,000. It is called natural because it "
-  "excludes migration. The option 24.8 adds the two rates and 2.88 divides them, both of which are meaningless here.",
+  "If the crude birth rate is 18.3 and the crude death rate is 6.4 per 1,000 population, the natural growth rate is:",
+  ["11.9 per 1,000", "24.7 per 1,000", "2.86 per 1,000", "1.2 per 1,000"], "A",
+  "The natural growth rate is simply CBR minus CDR: 18.3 − 6.4 = 11.9 per 1,000. It is called natural because it "
+  "excludes migration. The option 24.7 adds the two rates and 2.86 divides them, both of which are meaningless here.",
   check="Natural growth is a difference, not a sum or a ratio, and it excludes migration entirely.")
 
 q(15, "numeric", "moderate",
@@ -158,13 +158,13 @@ q(15, "numeric", "moderate",
 q(16, "multi", "moderate",
   "Consider the following statements about the Sample Registration System.",
   ["A and C only", "A, B and C only", "A, C and D only", "B, C and D only"], "C",
-  "A, C and D hold: it is run by the Registrar General of India, it covered 8,839 sampling units and over 8.8 million "
-  "people by 2023, and it is sized so that the infant mortality rate can be estimated with a relative standard error "
+  "A, C and D hold: it is run by the Registrar General of India, it covered 8,839 sampling units and 8.981 million "
+  "people in 2024, and it is sized so that the infant mortality rate can be estimated with a relative standard error "
   "below 15%. B is false — the SRS is an administrative survey resting on no statute, unlike the census and civil "
   "registration, each of which has its own Act.",
   statements=["It is conducted by the Office of the Registrar General of India.",
               "It operates under a statute of its own.",
-              "By 2023 it covered 8,839 sampling units and over 8.8 million people.",
+              "By 2023 it covered 8,839 sampling units and 8.981 million people.",
               "Its sample is designed so that IMR has a relative standard error below 15%."],
   verdicts={"A": dict(tf=True,  why="The same body that takes the census and oversees civil registration."),
             "B": dict(tf=False, why="No statute. The Census Act 1948 covers the census and the RBD Act 1969 registration; the SRS is administrative."),
@@ -207,14 +207,14 @@ q(19, "single", "hard",
   "including unmeasured migration, and that dominates the uncertainty in the rate.")
 
 q(20, "single", "hard",
-  "India's sex ratio at birth for 2021-23 is 917, against a biological value of roughly 952 on the same convention. The "
-  "state figures range from 974 to 868. The statistically correct reading is that:",
+  "India's sex ratio at birth for 2022-24 is 918, against a biological value of roughly 952 on the same convention. The "
+  "state figures range from 978 to 872. The statistically correct reading is that:",
   ["The gap is within the sampling error of the SRS",
    "The biological value differs across Indian states",
    "The three-year averaging has biased the national figure downwards",
    "The shortfall is systematic, and the state variation must reflect behaviour rather than biology"], "D",
   "A biological constant cannot vary by state, so a range from 974 to 868 locates the variation in behaviour. Nor is "
-  "the gap sampling noise: the SRS covers over 8.8 million people and the figure is averaged over three years "
+  "the gap sampling noise: the SRS covers 8.981 million people and the figure is averaged over three years "
   "precisely to damp year-to-year variation, which reduces noise rather than introducing bias. This is the one "
   "indicator in the set that does not fit a pattern of steady improvement.")
 
