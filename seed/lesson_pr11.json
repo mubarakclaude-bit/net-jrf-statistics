@@ -1,0 +1,649 @@
+{
+  "id": "probabilityt11",
+  "topicId": "probability-t11",
+  "moduleId": "probability",
+  "title": "Characteristic Functions",
+  "breadcrumb": "Probability → Characteristic functions",
+  "engine": "B",
+  "engineName": "Probability — Fourier transforms of probability laws",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 100,
+  "objectives": [
+    "Define the characteristic function and explain why it always exists.",
+    "Compute CFs for Bernoulli, Poisson, normal and uniform laws.",
+    "Use independence, scaling and translation identities.",
+    "Recover moments from derivatives when the moments exist.",
+    "Apply uniqueness and Lévy continuity to identify distributions and limits."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Expectation of complex-valued functions",
+      "why": "Interpret the complex exponential expectation."
+    },
+    {
+      "id": "p2",
+      "name": "Independence and sums of random variables",
+      "why": "Apply product identities for independent sums."
+    },
+    {
+      "id": "p3",
+      "name": "Taylor expansion and moments",
+      "why": "Recover moments by differentiating near zero."
+    }
+  ],
+  "traps": [
+    "A CF always exists; an MGF may fail to exist near zero.",
+    "φ(0)=1 and |φ(t)|≤1 are necessary properties.",
+    "Independent sums multiply CFs; dependence prevents automatic factorisation.",
+    "For aX+b, φ(t)=e^{itb}φ_X(at).",
+    "φ'(0)=iE(X), not E(X) directly.",
+    "Equal CFs imply equal distributions; equal moments alone need not."
+  ],
+  "revision": {
+    "sheet": [
+      "φ_X(t)=E(e^{itX}); it always exists.",
+      "φ(0)=1; |φ(t)|≤1.",
+      "φ(−t)=conjugate φ(t).",
+      "φ_{aX+b}(t)=e^{itb}φ_X(at).",
+      "Independent sums: φ_{X+Y}=φ_Xφ_Y.",
+      "Bernoulli(p): 1−p+pe^{it}.",
+      "Poisson(λ): exp{λ(e^{it}−1)}.",
+      "Normal: exp(iμt−σ²t²/2).",
+      "If moments exist, φ^(r)(0)=i^rE(X^r)."
+    ],
+    "cards": [
+      [
+        "Definition",
+        "E(e^{itX})"
+      ],
+      [
+        "Existence",
+        "Always exists"
+      ],
+      [
+        "Independence",
+        "CFs multiply"
+      ],
+      [
+        "Scaling",
+        "φ_{aX+b}=e^{itb}φ_X(at)"
+      ],
+      [
+        "Mean",
+        "φ'(0)/i"
+      ],
+      [
+        "Uniqueness",
+        "One CF, one distribution"
+      ]
+    ],
+    "tricks": [
+      "Check φ(0)=1 and modulus ≤1.",
+      "Use products only under independence.",
+      "Set the CF at zero by continuity when needed."
+    ],
+    "shortcuts": [
+      "Poisson rates add by CF multiplication.",
+      "A constant c has CF e^{itc}.",
+      "Normal CF is exponential quadratic."
+    ],
+    "remember": [
+      "CF always exists; MGF need not.",
+      "Uniqueness is for CFs, not arbitrary moment sequences."
+    ]
+  },
+  "howto": "Start with existence and the three basic properties. Practise Bernoulli, Poisson and uniform examples, then use independence and scaling. Finish with uniqueness and Lévy continuity; these are the main reasons CFs matter beyond computing moments.",
+  "refs": [
+    {
+      "title": "Probability: Theory and Examples",
+      "where": "Characteristic functions and convergence",
+      "site": "Rick Durrett",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "CF uniqueness and continuity theorem."
+    },
+    {
+      "title": "A First Course in Probability",
+      "where": "Characteristic functions",
+      "site": "Sheldon Ross",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Standard CF calculations."
+    },
+    {
+      "title": "Statistical Inference",
+      "where": "Convergence in distribution",
+      "site": "Casella and Berger",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Characteristic-function methods and limit laws."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Proposed platform settings, not an NTA rule."
+  },
+  "provenance": "Original syllabus-aligned lesson authored 12 November 2026. Bernoulli, Poisson and uniform CFs and their derivative identities were checked directly from expectations. Independent Poisson sum uses uniqueness of characteristic functions. No PYQ attribution is claimed.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Before the lesson — four foundations",
+      "objective": "Retrieve expectation, independence and complex exponentials.",
+      "body": [
+        "The characteristic function is the Fourier transform of a probability law.",
+        "Unlike an MGF, it exists for every probability distribution because the complex exponential is bounded."
+      ],
+      "ask": {
+        "q": "What is the modulus of e^{itX} for real t and X?",
+        "nudge": "The exponent is purely imaginary."
+      },
+      "items": [
+        {
+          "ask": "What is E(e^{tX})?",
+          "recall": "The MGF, when it exists.",
+          "refresh": [
+            "It may diverge for some laws."
+          ]
+        },
+        {
+          "ask": "What is independence useful for in a sum?",
+          "recall": "It factors joint expectations.",
+          "refresh": [
+            "The CFs multiply."
+          ]
+        },
+        {
+          "ask": "What is e^{itX} in real and imaginary parts?",
+          "recall": "cos(tX)+i sin(tX).",
+          "refresh": [
+            "Both parts are bounded."
+          ]
+        },
+        {
+          "ask": "What does a transform encode?",
+          "recall": "Information about the probability distribution.",
+          "refresh": [
+            "The CF uniquely determines the law."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Why this transform always exists",
+      "objective": "Understand the bounded complex exponential.",
+      "body": [
+        "An MGF can fail because E(e^{tX}) diverges. The CF uses e^{itX}, whose modulus is exactly one.",
+        "Therefore φ_X(t)=E(e^{itX}) is finite for every real t and every probability law.",
+        "For independent sums, CFs multiply. This turns convolution into algebra and supports limit theorems."
+      ],
+      "scenario": {
+        "teaser": "A heavy-tailed model has no useful MGF, but its characteristic function still exists.",
+        "title": "The transform that always exists",
+        "body": [
+          "An MGF can fail because E(e^{tX}) diverges for t>0. The characteristic function uses e^{itX}, whose modulus is exactly one.",
+          "Thus φ_X(t)=E(e^{itX}) is finite for every real t, for every probability law. This makes it the universal transform for distributional arguments.",
+          "For independent sums, CFs multiply. This turns convolution into algebra and often identifies the sum by matching a known CF.",
+          "The normal CF exp(−t²/2) is the target in the classical CLT proof. Lévy's continuity theorem converts pointwise CF convergence into convergence in distribution."
+        ],
+        "q": "Why does the CF exist even when the MGF fails?",
+        "answer": "Because |e^{itX}|=1 for real t, so the integrand is bounded."
+      },
+      "ask": {
+        "q": "Why is the CF more universal than the MGF?",
+        "nudge": "Compare the magnitudes of e^{tX} and e^{itX}."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 10,
+      "title": "Definition, properties and examples",
+      "objective": "Compute and manipulate characteristic functions.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Definition and existence",
+          "body": "φ_X(t)=E(e^{itX})=E(cos tX)+iE(sin tX). Since |e^{itX}|=1, the expectation exists for every real t, even when an MGF does not."
+        },
+        {
+          "t": "def",
+          "h": "Basic properties",
+          "body": "φ(0)=1; |φ(t)|≤1; φ(−t)=conjugate φ(t); φ is uniformly continuous and positive definite."
+        },
+        {
+          "t": "step",
+          "h": "Transformations and sums",
+          "body": "φ_{aX+b}(t)=e^{itb}φ_X(at). If X,Y are independent, φ_{X+Y}(t)=φ_X(t)φ_Y(t)."
+        },
+        {
+          "t": "step",
+          "h": "Standard examples",
+          "body": "Bernoulli(p): 1−p+pe^{it}. Poisson(λ): exp{λ(e^{it}−1)}. Normal(μ,σ²): exp(iμt−σ²t²/2). Uniform(−a,a): sin(at)/(at)."
+        },
+        {
+          "t": "step",
+          "h": "Moments from derivatives",
+          "body": "If the rth absolute moment exists, φ^(r)(0)=i^rE(X^r). Thus E(X)=φ'(0)/i and E(X²)=−φ''(0)."
+        },
+        {
+          "t": "step",
+          "h": "Uniqueness and convergence",
+          "body": "A distribution is uniquely determined by its CF. Lévy continuity theorem: pointwise convergence to a function continuous at zero that is a CF gives convergence in distribution to its law."
+        }
+      ],
+      "table": {
+        "caption": "Characteristic functions of standard laws",
+        "head": [
+          "Distribution",
+          "Characteristic function",
+          "Consequence"
+        ],
+        "rows": [
+          [
+            "Bernoulli(p)",
+            "1−p+pe^{it}",
+            "Two-point law"
+          ],
+          [
+            "Poisson(λ)",
+            "exp{λ(e^{it}−1)}",
+            "Independent rates add"
+          ],
+          [
+            "Normal(μ,σ²)",
+            "exp(iμt−σ²t²/2)",
+            "Normal sums remain normal"
+          ],
+          [
+            "Uniform(−a,a)",
+            "sin(at)/(at)",
+            "Value at zero is 1"
+          ],
+          [
+            "Constant c",
+            "e^{itc}",
+            "Deterministic law"
+          ]
+        ]
+      },
+      "flow": {
+        "title": "Use a characteristic function",
+        "alt": "CF application workflow",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Write φ_X(t)",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Apply shift / scale / product",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Simplify to known CF",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Use uniqueness or continuity",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          }
+        ],
+        "note": "The CF always exists; use it when the MGF may fail."
+      },
+      "ask": {
+        "q": "What condition allows CFs of a sum to factor?",
+        "nudge": "The two random variables must satisfy a relationship stronger than zero correlation."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example — add independent Poisson counts",
+      "objective": "Use the product rule and uniqueness.",
+      "problem": "Let X~Poisson(2), Y~Poisson(3), independent. Find the CF of X+Y and identify its law.",
+      "steps": [
+        {
+          "say": "Write each CF",
+          "math": "φ_X(t)=exp{2(e^{it}−1)}; φ_Y(t)=exp{3(e^{it}−1)}.",
+          "why": "Use the standard Poisson CF."
+        },
+        {
+          "say": "Multiply",
+          "math": "φ_{X+Y}(t)=exp{5(e^{it}−1)}.",
+          "why": "Independence permits factorisation."
+        },
+        {
+          "say": "Identify",
+          "math": "X+Y~Poisson(5).",
+          "why": "Uniqueness identifies the distribution."
+        }
+      ],
+      "after": "The product rule requires independence. Equal CFs identify the entire distribution.",
+      "ask": {
+        "q": "Would the product rule hold automatically if X and Y were dependent?",
+        "nudge": "The joint expectation would not necessarily factor."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 3,
+      "title": "Pause and retrieve",
+      "objective": "Recall basic properties.",
+      "intro": "Answer before revealing.",
+      "items": [
+        {
+          "q": "What is φ(0)?",
+          "a": "1."
+        },
+        {
+          "q": "What is |φ(t)| bounded by?",
+          "a": "1."
+        },
+        {
+          "q": "What is φ'(0)?",
+          "a": "iE(X), when the mean exists."
+        },
+        {
+          "q": "What does uniqueness say?",
+          "a": "A characteristic function determines one probability distribution."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 7,
+      "title": "Complete the Bernoulli CF",
+      "objective": "Recover mean and variance from the CF.",
+      "problem": "For Bernoulli(p), complete the characteristic-function calculation.",
+      "steps": [
+        {
+          "say": "Write the two-point expectation.",
+          "blank": {
+            "prompt": "φ(t)=?",
+            "answer": "1−p+pe^{it}",
+            "accept": [
+              "1-p+pe^(it)",
+              "1−p+pe^{it}"
+            ],
+            "hint": "P(X=0)=1−p; P(X=1)=p."
+          },
+          "why": "The two support points contribute separately."
+        },
+        {
+          "say": "Differentiate at zero.",
+          "blank": {
+            "prompt": "φ'(0)=?",
+            "answer": "ip",
+            "accept": [
+              "ip",
+              "i p"
+            ],
+            "hint": "Derivative of e^{it} is ie^{it}."
+          },
+          "why": "At t=0 the derivative is ip."
+        },
+        {
+          "say": "Recover the variance.",
+          "blank": {
+            "prompt": "Var(X)=?",
+            "answer": "p(1−p)",
+            "accept": [
+              "p(1-p)",
+              "pq"
+            ],
+            "hint": "E(X²)=p for Bernoulli."
+          },
+          "why": "p−p²=p(1−p)."
+        }
+      ],
+      "after": "The CF derivatives recover raw moments when the moments exist."
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Moments, uniqueness and continuity",
+      "objective": "Use CFs for moments and limit laws.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Moment derivatives",
+          "body": "φ^(r)(0)=i^rE(X^r), when the rth absolute moment exists. Thus E(X)=φ'(0)/i and E(X²)=−φ''(0)."
+        },
+        {
+          "t": "def",
+          "h": "Uniqueness",
+          "body": "If two probability distributions have the same characteristic function for every real t, they are the same distribution."
+        },
+        {
+          "t": "formula",
+          "h": "Lévy continuity theorem",
+          "body": "If φ_n(t) converges pointwise to φ(t), and φ is continuous at zero, then φ is a characteristic function and the corresponding distributions converge weakly to its law."
+        }
+      ],
+      "ask": {
+        "q": "Why is equality of the first two moments weaker than equality of CFs?",
+        "nudge": "Many distinct distributions can share a mean and variance."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s7",
+      "mins": 9,
+      "title": "On your own — Bernoulli moments",
+      "objective": "Differentiate a simple CF.",
+      "problem": "For X~Bernoulli(p=.3), write φ_X(t), then obtain E(X) and Var(X).",
+      "hints": [
+        "φ_X(t)=P(X=0)+P(X=1)e^{it}.",
+        "φ'(0)=iE(X).",
+        "E(X²)=E(X) for Bernoulli."
+      ],
+      "answer": "φ_X(t)=.7+.3e^{it}; E(X)=.3; E(X²)=.3; Var(X)=.3−.09=.21.",
+      "check": "Divide φ'(0) by i to obtain the mean; subtract the squared mean for variance.",
+      "scenario": {
+        "teaser": "Two independent Poisson sources feed a combined event counter.",
+        "title": "Add independent counts without convolution",
+        "body": [
+          "One server generates Poisson(2) events per minute and another independent server generates Poisson(3).",
+          "Their CFs multiply: exp{2(e^{it}−1)}exp{3(e^{it}−1)}=exp{5(e^{it}−1)}.",
+          "This is the characteristic function of Poisson(5). Uniqueness establishes the distribution, not merely matching moments.",
+          "The product rule works for any independent random variables, even if the sum's density or pmf is difficult to calculate directly."
+        ],
+        "q": "What assumption allows the CFs to multiply?",
+        "answer": "Independence."
+      },
+      "solution": [
+        {
+          "say": "Write the CF",
+          "math": "φ(t)=.7+.3e^{it}",
+          "why": "The variable takes values 0 and 1."
+        },
+        {
+          "say": "Differentiate",
+          "math": "φ'(0)=.3i, so E(X)=.3",
+          "why": "φ'(0)=iE(X)."
+        },
+        {
+          "say": "Compute variance",
+          "math": "E(X²)=.3; Var=.3−.3²=.21",
+          "why": "For Bernoulli, X²=X."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s8",
+      "mins": 6,
+      "title": "Six claims — decide before revealing",
+      "objective": "Avoid CF property errors.",
+      "intro": "Decide true or false.",
+      "items": [
+        {
+          "claim": "A CF always exists; an MGF may fail to exist near zero.",
+          "tf": true,
+          "why": "True: bounded modulus guarantees existence."
+        },
+        {
+          "claim": "φ(0)=1 and |φ(t)|≤1 are necessary properties.",
+          "tf": true,
+          "why": "True: these are necessary properties."
+        },
+        {
+          "claim": "Independent sums multiply CFs; dependence prevents automatic factorisation.",
+          "tf": true,
+          "why": "True only under independence; without it factorisation can fail."
+        },
+        {
+          "claim": "For aX+b, φ(t)=e^{itb}φ_X(at).",
+          "tf": true,
+          "why": "True: substitute aX+b into the exponent."
+        },
+        {
+          "claim": "φ'(0)=iE(X), not E(X) directly.",
+          "tf": true,
+          "why": "True: φ'(0)=iE(X)."
+        },
+        {
+          "claim": "Equal CFs imply equal distributions; equal moments alone need not.",
+          "tf": true,
+          "why": "True: uniqueness is specific to the CF transform."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Transfer problem — uniform CF",
+      "objective": "Integrate the uniform density against the complex exponential.",
+      "problem": "For X~Uniform(−π,π), derive φ_X(t) and state its value at t=0.",
+      "hints": [
+        "Integrate (1/2π)e^{itx} from −π to π.",
+        "Use e^{itx}/(it).",
+        "At zero, E(1)=1."
+      ],
+      "answer": "φ(t)=sin(πt)/(πt) for t≠0; φ(0)=1.",
+      "check": "Define the value at zero by continuity; it is 1, not an undefined ratio.",
+      "solution": [
+        {
+          "say": "Set up integral",
+          "math": "φ(t)=(1/2π)∫_{−π}^{π}e^{itx}dx",
+          "why": "Use the uniform density."
+        },
+        {
+          "say": "Integrate",
+          "math": "[e^{itx}/(2πit)]_{−π}^{π}=sin(πt)/(πt)",
+          "why": "Simplify the exponentials."
+        },
+        {
+          "say": "Handle zero",
+          "math": "φ(0)=1",
+          "why": "By definition or continuity."
+        }
+      ]
+    },
+    {
+      "kind": "recall",
+      "id": "s10",
+      "mins": 3,
+      "title": "Second recall — exam-critical distinctions",
+      "objective": "Retrieve the transform identities.",
+      "intro": "State each in one line.",
+      "items": [
+        {
+          "q": "CF of Poisson(λ)?",
+          "a": "exp{λ(e^{it}−1)}."
+        },
+        {
+          "q": "CF of N(μ,σ²)?",
+          "a": "exp(iμt−σ²t²/2)."
+        },
+        {
+          "q": "CF of aX+b?",
+          "a": "e^{itb}φ_X(at)."
+        },
+        {
+          "q": "When do CFs multiply for a sum?",
+          "a": "When the summands are independent."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 3,
+      "title": "What you should now do unaided",
+      "objective": "Summarise CF use.",
+      "body": [
+        "Define the characteristic function and explain why it always exists.",
+        "Compute CFs for Bernoulli, Poisson, normal and uniform laws.",
+        "Use independence, scaling and translation identities.",
+        "Recover moments from derivatives when the moments exist.",
+        "Apply uniqueness and Lévy continuity to identify distributions and limits.",
+        "Use CFs when MGFs do not exist and for distributional limit proofs."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 12,
+      "title": "Mastery test",
+      "objective": "Demonstrate independent understanding.",
+      "setId": "probability_t11_mastery"
+    }
+  ]
+}
