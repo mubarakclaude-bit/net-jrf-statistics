@@ -1,6 +1,6 @@
 # Verification report — Unit VI, 6.5 Multicollinearity
 
-**Status: consolidated batch; final repository CI pending.**
+**Status: PASS — release validation completed in GitHub Actions run 43101176172 (Validate #534) on release commit `51242bedb30f378f06d08ae3b28b40a8805ce03d`.**
 
 - 16 scenes (including the retained optional extension; existing scene IDs preserved), including foundation recovery, conceptual intuition, formula derivation, worked VIF example, two guided problems, scenarios, flow diagram, summary and mastery quiz.
 - 20 mastery items: 6 easy / 10 moderate / 4 hard; 10 single / 8 numeric / 2 multi; answer positions balanced A–D.
