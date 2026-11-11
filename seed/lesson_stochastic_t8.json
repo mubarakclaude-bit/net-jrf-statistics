@@ -1,0 +1,674 @@
+{
+ "id": "stochastict8",
+ "topicId": "stochastic-t8",
+ "moduleId": "stochastic",
+ "title": "Branching Processes and Extinction Probability",
+ "breadcrumb": "Stochastic processes → Branching processes → Galton–Watson model",
+ "engine": "B",
+ "engineName": "Model each generation from offspring counts, use a probability-generating function, and identify the extinction probability.",
+ "version": "4.1",
+ "status": "approved",
+ "estMin": 96,
+ "objectives": [
+  "Define a Galton–Watson branching process and state its independence assumptions.",
+  "Construct the offspring probability-generating function and obtain its mean.",
+  "Derive the recursion for extinction by generation n.",
+  "Find the eventual extinction probability as the smallest solution of f(s)=s in [0,1].",
+  "Classify extinction behaviour using the offspring mean and check boundary cases."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Discrete probability distributions",
+   "why": "Offspring number is a nonnegative integer-valued random variable."
+  },
+  {
+   "id": "p2",
+   "name": "Power series and expectation",
+   "why": "The probability-generating function is a power series whose derivative at one gives the mean."
+  },
+  {
+   "id": "p3",
+   "name": "Fixed-point equations",
+   "why": "The extinction probability is a fixed point of the offspring generating function."
+  }
+ ],
+ "traps": [
+  "The offspring count is per individual in one generation, not the total population.",
+  "Offspring counts of different individuals and generations are independent and identically distributed in the classical Galton–Watson model.",
+  "The extinction probability is the smallest root of f(s)=s in [0,1], not any root selected arbitrarily.",
+  "If m>1, extinction is not automatically impossible; it can still have positive probability.",
+  "The statement m≤1 implies certain extinction needs the non-degenerate qualification; if every individual has exactly one child, extinction never occurs.",
+  "Extinction by generation n and eventual extinction are different events.",
+  "The mean population E[Z_n]=m^n does not determine the probability of extinction by itself."
+ ],
+ "howto": "Write the offspring probabilities, form f(s), calculate m=f′(1), and solve f(s)=s on [0,1]. Select the smallest admissible root and check degenerate cases before interpreting it.",
+ "refs": [
+  {
+   "title": "Introduction to Probability Models",
+   "where": "Branching processes",
+   "site": "Sheldon M. Ross",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Galton–Watson generating functions and extinction probabilities."
+  },
+  {
+   "title": "An Introduction to Stochastic Processes",
+   "where": "Branching processes",
+   "site": "Gregory F. Lawler",
+   "url": "https://www.math.uchicago.edu/~lawler/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Stochastic-process foundations and branching-process examples."
+  },
+  {
+   "title": "Stochastic Processes",
+   "where": "Galton–Watson processes",
+   "site": "Sheldon M. Ross",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Probability-generating functions and extinction criteria."
+  }
+ ],
+ "provenance": "Original teaching material for the stochastic-t8 branching-process topic in the repository backlog. The Galton–Watson model is used as the standard introductory branching-process model. Practice questions are original and are not represented as official UGC NET PYQs.",
+ "revision": {
+  "sheet": [
+   "Z_n is the population size in generation n; Z_0 is the initial population.",
+   "Each individual independently produces K offspring with P(K=k)=p_k.",
+   "The offspring PGF is f(s)=E[s^K]=Σ p_k s^k.",
+   "f(1)=1 and f′(1)=E[K]=m.",
+   "E[Z_n|Z_0=1]=m^n; with Z_0=z, E[Z_n]=z m^n.",
+   "q_0=0 and q_{n+1}=f(q_n), where q_n is extinction by generation n.",
+   "The eventual extinction probability q is lim q_n and is the smallest root of f(s)=s in [0,1].",
+   "If m<1, extinction is certain in the non-degenerate model; if m>1 and p_0>0, q<1.",
+   "If m=1, extinction is certain except the degenerate K=1 almost surely case.",
+   "For K~Binomial(2,p), f(s)=(1−p+ps)^2 and m=2p."
+  ],
+  "cards": [
+   [
+    "Offspring PGF",
+    "f(s)=Σ p_k s^k."
+   ],
+   [
+    "Mean offspring",
+    "m=f′(1)."
+   ],
+   [
+    "Generation mean",
+    "E[Z_n]=Z₀mⁿ."
+   ],
+   [
+    "Extinction recursion",
+    "q₀=0; qₙ₊₁=f(qₙ)."
+   ],
+   [
+    "Fixed point",
+    "q=f(q), choose the smallest root in [0,1]."
+   ],
+   [
+    "Subcritical",
+    "m<1: eventual extinction is certain."
+   ],
+   [
+    "Supercritical",
+    "m>1: survival may have positive probability."
+   ],
+   [
+    "Critical boundary",
+    "m=1: extinction certain unless K=1 a.s."
+   ],
+   [
+    "Binomial offspring",
+    "K~Bin(2,p): f(s)=(1−p+ps)²."
+   ]
+  ],
+  "tricks": [
+   "Always include p₀ in the PGF; it represents zero offspring.",
+   "Check f(1)=1 before solving the fixed-point equation.",
+   "If f(s)−s factors, compare all roots in [0,1] and choose the smallest.",
+   "A supercritical mean permits survival but does not guarantee survival of a particular family."
+  ],
+  "shortcuts": [
+   "For Binomial(2,p), the mean is 2p; the threshold is p=1/2.",
+   "When p>1/2, the non-unit root is ((1−p)/p)².",
+   "The survival probability is 1−q, not q."
+  ],
+  "remember": [
+   "Extinction probability is a fixed point; it is not the expected population size.",
+   "The classical theorem assumes independent, identically distributed offspring counts."
+  ]
+ },
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Refresh discrete distributions and generating functions",
+   "objective": "Recover the probability tools used in a branching model.",
+   "body": [
+    "Let K be the number of children produced by one individual. K can be 0, 1, 2, and so on. Its distribution is described by probabilities p₀,p₁,… that add to one.",
+    "The probability-generating function (PGF) is f(s)=E[sᴷ]=p₀+p₁s+p₂s²+…. It packages the offspring probabilities into one function. At s=1, f(1)=1. Its derivative at one gives the mean number of offspring: f′(1)=E[K]."
+   ],
+   "items": [
+    {
+     "ask": "If P(K=0)=0.2, P(K=1)=0.5 and P(K=2)=0.3, what is f(s)?",
+     "recall": "f(s)=0.2+0.5s+0.3s².",
+     "refresh": [
+      "The probability-generating function is defined by f(s)=E[s^K]=Σₖ pₖsᵏ, where pₖ=P(K=k). Each possible offspring count contributes its probability multiplied by s raised to that count.",
+      "For this example, K can be 0, 1 or 2, so write one term for each value: p₀s⁰+p₁s¹+p₂s². Substituting the probabilities gives 0.2+0.5s+0.3s²; the zero-offspring term is 0.2, not zero.",
+      "A useful check is f(1)=0.2+0.5+0.3=1. This confirms that the probabilities form a complete distribution. The powers of s record the offspring counts, while the coefficients record their probabilities."
+     ]
+    },
+    {
+     "ask": "Find E[K] for the same distribution.",
+     "recall": "0(0.2)+1(0.5)+2(0.3)=1.1.",
+     "refresh": [
+      "Expected value is the probability-weighted sum of all possible offspring counts: E[K]=Σₖ k pₖ. The value zero contributes nothing to the mean, but its probability remains part of the distribution and affects extinction.",
+      "Here E[K]=0(0.2)+1(0.5)+2(0.3)=0+0.5+0.6=1.1. The mean is 1.1 offspring per individual per generation; it need not be an integer because it averages many individuals.",
+      "Do not confuse the mean with the most likely offspring count. The mean summarises the long-run average number of children, and it is the key quantity used to classify a Galton–Watson process as subcritical, critical or supercritical."
+     ]
+    },
+    {
+     "ask": "What does f′(1) represent?",
+     "recall": "The expected number of offspring per individual.",
+     "refresh": [
+      "Differentiate the PGF term by term. For f(s)=0.2+0.5s+0.3s², the derivative is f′(s)=0.5+0.6s; the constant term disappears and the quadratic term contributes 0.6s.",
+      "Evaluate at s=1: f′(1)=0.5+0.6=1.1. This equals E[K], as follows from differentiating Σₖpₖsᵏ and setting s=1 to obtain Σₖ k pₖ.",
+      "The result is the expected number of offspring per individual. In branching-process questions, compare this derivative with one: below one is subcritical, equal to one is critical, and above one is supercritical, subject to the usual non-degenerate assumptions."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "Why must the offspring probabilities include the possibility K=0?",
+    "nudge": "An individual may leave no descendants; this is essential to extinction."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "A population grows generation by generation",
+   "objective": "Interpret the population count and reproduction rule.",
+   "body": [
+    "A branching process tracks a population in generations. Z₀ is the initial number of individuals. Z₁ is the number of their children. Z₂ is the number of grandchildren, and the process continues.",
+    "In the classical Galton–Watson model, every individual has an independent copy of the same offspring count K. One person's offspring count does not affect another person's count. The rule is repeated independently in each generation.",
+    "Extinction occurs when a generation has no individuals. Once Zₙ=0, every later generation is also zero."
+   ],
+   "scenario": {
+    "teaser": "A conservation breeding programme",
+    "title": "Track one generation at a time",
+    "body": [
+     "A conservation team releases one breeding pair? For a clean mathematical model, take one founder individual as generation zero. Each individual independently produces 0, 1 or 2 surviving offspring, with probabilities 0.2, 0.5 and 0.3. The offspring become the next generation; the parent is not counted in that next-generation population.",
+     "The team records Z₀=1, then Z₁, Z₂ and so on. A generation with Zₙ=0 means no descendants remain in the model. It is an absorbing condition: the next generation must also be empty.",
+     "The expected number of offspring is 1.1 per individual. This mean alone does not say that every realised family grows. Some lineages become extinct even when the average reproduction exceeds one."
+    ],
+    "q": "What event defines extinction in this model?",
+    "answer": "A generation contains zero individuals; all later generations then remain zero."
+   },
+   "ask": {
+    "q": "Why can the realised population decrease even when the mean offspring number exceeds one?",
+    "nudge": "An average over many possible families does not force each family to reproduce above average."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "The Galton–Watson assumptions",
+   "objective": "State the model assumptions precisely.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Generation size",
+     "body": "Zₙ is the number of individuals in generation n, with Z₀ specified at the start."
+    },
+    {
+     "t": "def",
+     "h": "Offspring rule",
+     "body": "Each individual independently produces K offspring, where P(K=k)=pₖ and the distribution is the same for all individuals and generations."
+    },
+    {
+     "t": "formula",
+     "h": "Offspring PGF",
+     "body": "f(s)=Σₖ₌₀∞pₖsᵏ. It satisfies f(1)=1 and f′(1)=m=E[K]."
+    },
+    {
+     "t": "step",
+     "h": "Extinction event",
+     "body": "Extinction by generation n means Zₙ=0. Eventual extinction means Zₙ=0 for some finite n."
+    }
+   ],
+   "ask": {
+    "q": "Which assumption makes the classical model a Galton–Watson process rather than a varying-offspring model?",
+    "nudge": "The offspring distribution is repeated unchanged across individuals and generations."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Worked example: construct the PGF",
+   "objective": "Build the PGF and calculate the mean.",
+   "problem": "An individual has 0, 1 or 2 offspring with probabilities 1/4, 1/2 and 1/4. Find the PGF and mean offspring number.",
+   "steps": [
+    {
+     "say": "Write one term for each possible offspring count.",
+     "math": "f(s)=1/4+(1/2)s+(1/4)s²",
+     "why": "The coefficient of sᵏ is P(K=k)."
+    },
+    {
+     "say": "Check that the probabilities sum to one.",
+     "math": "f(1)=1/4+1/2+1/4=1",
+     "why": "A valid probability-generating function equals one at s=1."
+    },
+    {
+     "say": "Differentiate.",
+     "math": "f′(s)=1/2+(1/2)s",
+     "why": "The derivative of s² is 2s."
+    },
+    {
+     "say": "Evaluate at one.",
+     "math": "m=f′(1)=1/2+1/2=1",
+     "why": "The mean offspring number is one, so the process is critical."
+    }
+   ],
+   "ask": {
+    "q": "What is the expected number of offspring per individual?",
+    "nudge": "Differentiate the PGF and put s=1."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 8,
+   "title": "Expected population size by generation",
+   "objective": "Use the offspring mean to calculate generation means.",
+   "blocks": [
+    {
+     "t": "step",
+     "h": "Condition on the current generation",
+     "body": "If there are Zₙ individuals, the next generation is the sum of Zₙ independent offspring counts."
+    },
+    {
+     "t": "formula",
+     "h": "Conditional expectation",
+     "body": "E[Zₙ₊₁|Zₙ]=mZₙ, where m=E[K]."
+    },
+    {
+     "t": "formula",
+     "h": "Generation mean",
+     "body": "With Z₀=z, E[Zₙ]=z mⁿ. For one founder, E[Zₙ]=mⁿ."
+    },
+    {
+     "t": "def",
+     "h": "Interpretation",
+     "body": "m<1 is subcritical, m=1 is critical, and m>1 is supercritical. These labels describe the mean reproduction rate, not the fate of every realised family."
+    }
+   ],
+   "ask": {
+    "q": "If one founder has mean offspring m=1.2, what is the expected population after three generations?",
+    "nudge": "Raise 1.2 to the third power."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 7,
+   "title": "Read the offspring PGF",
+   "objective": "Interpret the PGF coefficients and its value at zero.",
+   "body": [
+    "A PGF is not just a formula. Each coefficient gives the probability of one offspring count. The constant term is especially important: p₀ is the chance that an individual leaves no offspring.",
+    "For a finite offspring distribution, the PGF is a polynomial. Its shape on [0,1] helps us study the fixed-point equation f(s)=s."
+   ],
+   "ask": {
+    "q": "What does the intercept f(0) equal?",
+    "nudge": "Set s=0 in the PGF; all positive powers vanish."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Offspring probabilities",
+     "body": "The coefficient pₖ is the probability that one individual produces k offspring. The constant term p₀ is the probability of producing none."
+    },
+    {
+     "t": "formula",
+     "h": "PGF at zero",
+     "body": "f(0)=p₀. Every positive power of zero vanishes, leaving only the probability of zero offspring."
+    },
+    {
+     "t": "formula",
+     "h": "PGF at one",
+     "body": "f(1)=Σpₖ=1. This is the first normalisation check for an offspring distribution."
+    },
+    {
+     "t": "step",
+     "h": "Read the polynomial",
+     "body": "For f(s)=0.2+0.5s+0.3s², the probabilities of 0, 1 and 2 offspring are 0.2, 0.5 and 0.3."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s6",
+   "mins": 9,
+   "title": "Worked example: extinction probability",
+   "objective": "Solve the fixed-point equation and choose the smallest root.",
+   "problem": "Each individual has a Binomial(2,0.6) number of offspring. Find the eventual extinction probability.",
+   "steps": [
+    {
+     "say": "Write the offspring PGF.",
+     "math": "f(s)=(0.4+0.6s)²",
+     "why": "The PGF of a Binomial(2,p) variable is (1−p+ps)²."
+    },
+    {
+     "say": "Set the fixed-point equation.",
+     "math": "q=(0.4+0.6q)²",
+     "why": "The eventual extinction probability is a fixed point of f."
+    },
+    {
+     "say": "Expand and factor.",
+     "math": "0.36q²−0.52q+0.16=0 = 0.36(q−1)(q−4/9)",
+     "why": "The two algebraic roots are 1 and 4/9."
+    },
+    {
+     "say": "Select the smallest root in [0,1].",
+     "math": "q=4/9≈0.4444",
+     "why": "The extinction probability is the smallest fixed point; survival probability is 1−q=5/9."
+    }
+   ],
+   "scenario": {
+    "teaser": "Two offspring at most",
+    "title": "A supercritical lineage can still die out",
+    "body": [
+     "Suppose every individual independently has a Binomial(2,0.6) number of offspring. The possible counts are zero, one and two. The mean is 2×0.6=1.2, so the process is supercritical.",
+     "The offspring PGF is f(s)=(0.4+0.6s)². The fixed-point equation q=f(q) has roots 1 and 4/9. The smallest root is q=4/9, so the lineage becomes extinct with probability about 0.4444, despite having mean reproduction above one.",
+     "The survival probability is 1−q=5/9. This is a probability for the long-run fate of the branching family, not a guarantee that the population grows in every generation."
+    ],
+    "q": "What is the probability of eventual survival?",
+    "answer": "1−4/9=5/9."
+   },
+   "ask": {
+    "q": "Why is q=1 not the answer in this supercritical example?",
+    "nudge": "There is another fixed point below one; extinction probability is the smallest root."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Extinction by generation n",
+   "objective": "Build the finite-generation recursion.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Finite-generation extinction",
+     "body": "qₙ=P(Zₙ=0 | Z₀=1) is the probability that the family is extinct by generation n."
+    },
+    {
+     "t": "formula",
+     "h": "Recursion",
+     "body": "q₀=0 and qₙ₊₁=f(qₙ). The initial value is zero because the founder is alive at generation zero."
+    },
+    {
+     "t": "step",
+     "h": "Why composition appears",
+     "body": "Condition on the founder's number of children. Every child must have an extinct descendant family by generation n for the founder's family to be extinct by generation n+1. Independence multiplies the probabilities, producing f(qₙ)."
+    },
+    {
+     "t": "formula",
+     "h": "Eventual extinction",
+     "body": "q=limₙ→∞qₙ. This limit is the smallest solution of q=f(q) in [0,1]."
+    }
+   ],
+   "ask": {
+    "q": "What is q₀ when there is one founder at generation zero?",
+    "nudge": "The founder is present, so extinction has not yet occurred."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Guided problem: finite-generation extinction",
+   "objective": "Calculate extinction probabilities recursively.",
+   "problem": "An individual has 0 or 2 offspring with equal probability. Starting from one founder, find the probability of extinction by generation 2.",
+   "hints": [
+    "Write f(s)=0.5+0.5s².",
+    "Start with q₀=0 and use qₙ₊₁=f(qₙ).",
+    "Calculate q₁ first, then substitute q₁ into f to obtain q₂."
+   ],
+   "answer": "q₁=1/2; q₂=1/2+(1/2)(1/2)²=5/8.",
+   "solution": [
+    "The offspring PGF is f(s)=1/2+s²/2.",
+    "q₀=0, so q₁=f(0)=1/2.",
+    "q₂=f(1/2)=1/2+(1/2)(1/4)=5/8."
+   ],
+   "ask": {
+    "q": "Why is q₂ larger than q₁?",
+    "nudge": "Extinction by generation 2 includes every way extinction happened by generation 1, plus additional paths."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s9",
+   "mins": 8,
+   "title": "Subcritical, critical and supercritical cases",
+   "objective": "Interpret the mean and fixed-point results together.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Subcritical case",
+     "body": "If m<1, the non-degenerate Galton–Watson process becomes extinct with probability one."
+    },
+    {
+     "t": "def",
+     "h": "Critical case",
+     "body": "If m=1, extinction is also certain under the usual non-degenerate condition. The exceptional case K=1 with probability one never becomes extinct."
+    },
+    {
+     "t": "def",
+     "h": "Supercritical case",
+     "body": "If m>1, extinction probability is less than one when p₀>0; survival has positive probability. If p₀=0, extinction is impossible and q=0."
+    },
+    {
+     "t": "step",
+     "h": "Do not confuse mean with certainty",
+     "body": "A supercritical process may still become extinct. The mean classifies the model; the fixed-point equation gives the actual extinction probability."
+    }
+   ],
+   "ask": {
+    "q": "Can a supercritical process become extinct?",
+    "nudge": "Check whether the extinction fixed point can be below one."
+   },
+   "flow": {
+    "title": "Classify a Galton–Watson process",
+    "alt": "Calculate the offspring mean, then interpret the extinction fixed point and check degenerate cases.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Find m=f′(1)",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "m<1",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Extinction certain (non-degenerate)",
+      "kind": "end"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 1,
+      "label": "m=1",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 1,
+      "label": "Check K=1 a.s.; otherwise extinction certain",
+      "kind": "end"
+     },
+     {
+      "id": "f",
+      "r": 2,
+      "c": 2,
+      "label": "m>1",
+      "kind": "step"
+     },
+     {
+      "id": "g",
+      "r": 3,
+      "c": 2,
+      "label": "Solve f(q)=q; smallest root",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "a",
+      "to": "d"
+     },
+     {
+      "from": "a",
+      "to": "f"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     },
+     {
+      "from": "f",
+      "to": "g"
+     }
+    ]
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 8,
+   "title": "Transfer problem: identify the correct extinction result",
+   "objective": "Apply the fixed-point method to a new offspring law.",
+   "problem": "An individual has 0, 1 or 2 offspring with probabilities 0.1, 0.2 and 0.7. Find the mean and classify the process; state what must be solved to obtain the extinction probability.",
+   "hints": [
+    "Construct f(s)=0.1+0.2s+0.7s².",
+    "Differentiate and evaluate at s=1.",
+    "For the extinction probability, solve f(q)=q and choose the smallest root in [0,1]."
+   ],
+   "answer": "m=0.2+1.4=1.6, so the process is supercritical. Solve 0.1+0.2q+0.7q²=q; the admissible roots are 1 and 1/7, so q=1/7.",
+   "solution": [
+    "f(s)=0.1+0.2s+0.7s².",
+    "f′(s)=0.2+1.4s, hence m=f′(1)=1.6.",
+    "Solve 0.7q²−0.8q+0.1=0=(0.7q−0.1)(q−1).",
+    "The smallest root is q=1/7. The eventual survival probability is 6/7."
+   ],
+   "ask": {
+    "q": "What additional check should you make after solving the quadratic?",
+    "nudge": "Both roots must be checked against the interval [0,1], and the smallest one is selected."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s11",
+   "mins": 6,
+   "title": "Exam traps and interpretation checks",
+   "objective": "Distinguish mean growth, finite extinction and eventual extinction.",
+   "intro": "Mark each statement true or false, then read the reason.",
+   "items": [
+    {
+     "claim": "The PGF satisfies f(1)=1.",
+     "tf": true,
+     "why": "The offspring probabilities sum to one."
+    },
+    {
+     "claim": "The extinction probability is the largest root of f(s)=s.",
+     "tf": false,
+     "why": "It is the smallest root in [0,1]."
+    },
+    {
+     "claim": "A supercritical process can still become extinct.",
+     "tf": true,
+     "why": "When p₀>0, extinction may have positive probability below one."
+    },
+    {
+     "claim": "qₙ is the probability of extinction by generation n.",
+     "tf": true,
+     "why": "It is a finite-generation probability."
+    },
+    {
+     "claim": "If every individual has exactly one child, extinction is certain.",
+     "tf": false,
+     "why": "The population remains exactly one forever."
+    }
+   ],
+   "ask": {
+    "q": "What is the most important root-selection rule?",
+    "nudge": "Choose the smallest solution in the unit interval."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s12",
+   "mins": 4,
+   "title": "Summary and exam checklist",
+   "objective": "Recall the complete PGF-to-extinction workflow.",
+   "body": [
+    "Start with the offspring distribution. Build f(s)=Σpₖsᵏ and check f(1)=1. Differentiate to find m=f′(1).",
+    "For finite-generation extinction, use q₀=0 and qₙ₊₁=f(qₙ). For eventual extinction, solve q=f(q) and select the smallest root in [0,1].",
+    "Interpret m carefully. Subcritical and non-degenerate critical processes become extinct almost surely. A supercritical process can survive with positive probability, but extinction may still occur. Check degenerate boundary cases."
+   ],
+   "ask": {
+    "q": "What are the three steps to find eventual extinction probability?",
+    "nudge": "Construct the PGF, solve the fixed point, select the smallest admissible root."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s13",
+   "mins": 1,
+   "title": "Mastery test",
+   "setId": "stochastic_t8_mastery"
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA rule."
+ }
+}
