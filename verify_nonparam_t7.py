@@ -8,6 +8,6 @@ assert Fraction(2,8)==Fraction(1,4)
 F=Fraction(2,5); n=10
 assert F*(1-F)/n==Fraction(6,250) # 0.024
 assert (3,10)*(1-Fraction(3,10))/20==Fraction(21,2000) # 0.0105
-assert (3,10)*(1-Fraction(6,10))/10==Fraction(12,1000) # covariance 0.012
-assert (3,4)*12==9
+assert Fraction(3,10)*(1-Fraction(6,10))/10==Fraction(12,1000) # covariance 0.012
+from math import ceil\nassert ceil(Fraction(3,4)*12)==9
 print("PASS EDF values, tie jumps, pointwise variance, covariance and inverse-CDF index")
