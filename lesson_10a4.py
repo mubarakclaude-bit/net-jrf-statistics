@@ -12,7 +12,7 @@
 #   PLFS  revamped Jan 2025: monthly all-India CWS bulletins, quarterly rural+urban,
 #         annual on a calendar year, 22,692 FSUs and 12 households per FSU.
 #   HCES  2022-23 and 2023-24 rounds; MPCE 4,122 rural / 6,996 urban in 2023-24.
-#   NFHS-6 fieldwork 2023-24, released 29 May 2026, 6.79 lakh households, 715 districts.
+#   NFHS institutional responsibility: MoHFW, with IIPS Mumbai as nodal agency; verify round-specific releases before quoting results.
 #   ASI   2023-24 results released 27 Aug 2025; 2,60,061 factories.
 import json, io
 
@@ -288,7 +288,7 @@ SC.append(dict(
      body="Classification moved to COICOP 2018 — twelve divisions in place of six groups, resolving to 43 groups, 92 "
           "classes, 162 subclasses and 358 items, up from 299. Goods rose from 259 to 308 and services from 40 to 50. "
           "Food and beverages carry 40.10% in the group table against 45.86% before, and housing 11.88% against 10.07%. "
-          "Rural house rent entered the index for the first time. Prices now come from 1,465 villages and 1,395 urban "
+          "Rural house rent entered the index for the first time. Prices are collected from 1,465 rural markets and 1,395 urban "
           "markets across 434 towns, collected electronically on handheld devices, with e-commerce prices used in twelve "
           "large towns and administrative data for rail fares, postal charges and fuel."),
    dict(t="def", h="WPI, and the index replacing it",
@@ -297,7 +297,7 @@ SC.append(dict(
           "and Internal Trade, not by MoSPI. Its base was revised from 2011-12 to 2022-23 and the basket expanded from "
           "697 to 957 items. Launched alongside it, on 15 June 2026, was the Output Producer Price Index, with a trial "
           "Input PPI for manufacturing and a quarterly Services PPI covering seven sectors. WPI is to be discontinued "
-          "after a five-year transition."),
+          "alongside Output PPI, trial Input PPI and phased Services PPIs; WPI continues to be published."),
    dict(t="def", h="IIP — Index of Industrial Production, base 2022-23=100",
      body="Produced by the NSO. The base-year report came on 25 May 2026 and the first release on the new base on 1 June "
           "2026, replacing base 2011-12. The basket holds 1,042 products mapped to 463 item groups, against 839 and 407 "
@@ -482,7 +482,7 @@ SC.append(dict(
    "against about 1.02 lakh.",
    "ASI covers registered factories under the Factories Act, 1948, collected under the Collection of Statistics Act, "
    "2008; its 2023-24 results covered 2,60,061 factories. ASUSE covers unincorporated enterprises. NFHS belongs to the "
-   "Ministry of Health and Family Welfare through IIPS Mumbai; six rounds, NFHS-6 fielded 2023-24 and released May 2026.",
+   "Ministry of Health and Family Welfare through IIPS Mumbai; six rounds, NFHS institutional role; do not quote unverified NFHS-6 result statistics.",
    "Indices. CPI base 2024=100, first release February 2026, weights from HCES 2023-24, COICOP 2018, 358 items, food and "
    "beverages 40.10%, housing 11.88%, produced by the NSO, used for the inflation target. WPI base revised to 2022-23, "
    "957 items, goods only, produced by the Office of the Economic Adviser in DPIIT, and being replaced by the Producer "
@@ -577,7 +577,7 @@ LES = dict(
       ["Survey that sets the CPI weights", "HCES — the 2023-24 round for base 2024=100"],
       ["CPI base year and first release", "2024=100, first released 12 February 2026"],
       ["IIP and WPI base year", "Both 2022-23 — a financial year, unlike CPI's calendar 2024"],
-      ["Index being discontinued, and its replacement", "WPI, replaced by the Producer Price Index over five years"],
+      ["Index being discontinued, and its replacement", "WPI base 2022-23 remains published alongside Output PPI and other PPI series"],
       ["WPI's producer", "Office of the Economic Adviser, DPIIT — not MoSPI"],
       ["PLFS reference periods", "Usual Status 365 days; Current Weekly Status 7 days"],
       ["The headline PLFS change of 2025", "Monthly all-India LFPR, WPR and UR on CWS"],
@@ -588,7 +588,7 @@ LES = dict(
       dict(hook="Calendar for consumers, financial for the rest",
            why="CPI moved to calendar 2024; IIP and WPI both moved to financial 2022-23. One word separates the three."),
       dict(hook="Only one index is being killed",
-           why="CPI and IIP were rebased. WPI was rebased AND is being replaced by the PPI. Rebasing is not abolition."),
+           why="CPI and IIP were rebased. WPI and PPI series are published concurrently; distinguish publication from GDP deflator use."),
       dict(hook="MoSPI does CPI and IIP; DPIIT does WPI and PPI",
            why="The producer is asked as often as the base year, and the two price indices sit in different ministries."),
       dict(hook="Surveys measure quantities, indices reprice them",
@@ -606,7 +606,7 @@ LES = dict(
       "Locate any unfamiliar fact on the chain: survey → weights → index → deflator → national accounts.",
       "Before applying a linking factor, read whether it is defined as new over old or old over new."],
     traps=[
-      "Treating WPI as rebased only, or as abolished outright, instead of rebased and then being replaced.",
+      "Assuming WPI publication ended when PPI was introduced; OEA currently publishes both.",
       "Giving the CPI a 2022-23 base because the other two indices have it.",
       "Naming 2017-18 as the consumption round preceding 2022-23.",
       "Calling gas supply a new IIP sector; it is inside electricity, and water supply is the new sector.",
