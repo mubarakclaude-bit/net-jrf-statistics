@@ -566,34 +566,34 @@
       "intro": "Decide true or false.",
       "items": [
         {
-          "claim": "Use the marginal of the variable being conditioned on.",
+          "claim": "The denominator of f(X|Y=y) is f_X(x).",
           "tf": false,
-          "why": "False if the denominator is not the marginal of the conditioning variable."
+          "why": "False: it is f_Y(y), the marginal of the conditioning variable."
         },
         {
-          "claim": "Write the conditional support before dividing.",
+          "claim": "Conditional support is the joint support sliced at the observed value.",
+          "tf": true,
+          "why": "True: fixing Y=y leaves only compatible x-values."
+        },
+        {
+          "claim": "A conditional density integrates to one over its conditional support.",
+          "tf": true,
+          "why": "True: this is its normalisation."
+        },
+        {
+          "claim": "f(X|Y) and f(Y|X) are interchangeable.",
           "tf": false,
-          "why": "False: support is the joint region sliced at the observed coordinate."
+          "why": "False: the conditioning variables and supports differ."
         },
         {
-          "claim": "A conditional density must integrate to one on its support.",
-          "tf": true,
-          "why": "True: this is the defining normalisation condition."
-        },
-        {
-          "claim": "f(X|Y) and f(Y|X) are directional and generally differ.",
+          "claim": "For a bivariate normal pair, Var(X|Y=y) depends on y.",
           "tf": false,
-          "why": "False: the two conditional laws generally differ."
+          "why": "False: it is σ_X²(1−ρ²), independent of y."
         },
         {
-          "claim": "For a bivariate normal pair, conditional variance is independent of y.",
+          "claim": "Independence is equivalent to conditional law equalling marginal law almost everywhere.",
           "tf": true,
-          "why": "True: conditional variance is σ_X²(1−ρ²), independent of y."
-        },
-        {
-          "claim": "Independence requires conditional law to equal marginal law almost everywhere.",
-          "tf": true,
-          "why": "True: equality of conditional and marginal laws characterises independence."
+          "why": "True: this characterises independence."
         }
       ]
     },
