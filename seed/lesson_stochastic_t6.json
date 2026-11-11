@@ -1,586 +1,658 @@
 {
-  "id": "stochastict6",
-  "topicId": "stochastic-t6",
-  "moduleId": "stochastic",
-  "title": "Simple Random Walk and Gambler’s Ruin",
-  "breadcrumb": "Stochastic processes → Random walks → Gambler’s ruin",
-  "engine": "B",
-  "engineName": "Model movement as a random walk, then use boundary conditions and first-step equations to find ruin probabilities and expected duration.",
-  "version": "1.0",
-  "status": "approved",
-  "estMin": 105,
-  "objectives": [
-    "Define a simple random walk and identify its drift from step probabilities.",
-    "Calculate the position distribution after n steps using the number of upward steps.",
-    "Set up and solve gambler’s ruin probabilities using first-step recurrence and boundary conditions.",
-    "Find expected duration until absorption in the fair and biased cases.",
-    "Interpret the fair-game and biased-game results and recognise common boundary and indexing errors."
-  ],
-  "prereq": [
-    {
-      "id": "p1",
-      "name": "Binomial distribution",
-      "why": "After n independent steps, the number of upward moves is binomial."
-    },
-    {
-      "id": "p2",
-      "name": "Difference equations",
-      "why": "Ruin probabilities satisfy a second-order recurrence."
-    },
-    {
-      "id": "p3",
-      "name": "Boundary conditions",
-      "why": "Absorbing barriers determine the constants in the recurrence."
-    }
-  ],
-  "traps": [
-    "Define the state as the current fortune before writing the recurrence.",
-    "At an interior state i, p_i = p p_{i+1}+q p_{i−1}; do not reverse p and q.",
-    "Use boundary values u_0=0 and u_N=1 when asking for the probability of reaching N before 0.",
-    "For a fair walk, the ruin probability from i is 1−i/N; the probability of reaching N first is i/N.",
-    "For a biased walk, the ratio q/p determines the powers in the solution.",
-    "The expected absorption time for a fair walk is i(N−i), in step units.",
-    "Do not confuse eventual ruin probability with expected time to ruin or absorption."
-  ],
-  "howto": "Draw the integer states and absorbing barriers. Define the event being asked, write the first-step recurrence at an interior state, apply both boundary values, and check the answer at the endpoints and at p=q=1/2.",
-  "refs": [
-    {
-      "title": "Introduction to Probability Models",
-      "where": "Random walks and gambler’s ruin",
-      "site": "Sheldon M. Ross",
-      "url": "",
-      "type": "Textbook",
-      "free": false,
-      "checked": "2026-11-11",
-      "why": "Standard gambler’s ruin probability and expected duration results."
-    },
-    {
-      "title": "Introduction to Stochastic Processes",
-      "where": "Simple random walk and absorbing boundaries",
-      "site": "Gregory F. Lawler",
-      "url": "https://www.math.uchicago.edu/~lawler/",
-      "type": "Free online textbook",
-      "free": true,
-      "checked": "2026-11-11",
-      "why": "Mathematical background for random walks."
-    }
-  ],
-  "provenance": "Original teaching material aligned to the Simple random walk and Gambler’s ruin items in UGC NET Statistics Unit IX. Practice questions are original and are not represented as official UGC NET PYQs.",
-  "revision": {
-    "sheet": [
-      "A simple random walk moves +1 with probability p and −1 with probability q=1−p.",
-      "After n steps, S_n=S_0+2X−n where X~Binomial(n,p).",
-      "The drift per step is E[ΔS]=p−q=2p−1.",
-      "In gambler’s ruin, fortune i moves to i+1 with probability p and i−1 with probability q.",
-      "With barriers 0 and N, both endpoints are absorbing.",
-      "Let u_i=P_i(reach N before 0): u_0=0, u_N=1 and u_i=pu_{i+1}+qu_{i−1}.",
-      "If p=q=1/2, u_i=i/N and ruin probability is 1−i/N.",
-      "If p≠q, u_i=[1−(q/p)^i]/[1−(q/p)^N].",
-      "For a fair walk, expected absorption time is i(N−i).",
-      "For p≠q, expected absorption time is [i−Nu_i]/(q−p)."
-    ],
-    "cards": [
-      [
-        "Step probabilities",
-        "Up with p; down with q=1−p."
-      ],
-      [
-        "Drift",
-        "2p−1 per step."
-      ],
-      [
-        "Position after n steps",
-        "S_n=S_0+2X−n, X~Binomial(n,p)."
-      ],
-      [
-        "Ruin probability",
-        "1−u_i when u_i is probability of hitting N before 0."
-      ],
-      [
-        "Fair game",
-        "u_i=i/N."
-      ],
-      [
-        "Biased game",
-        "u_i=[1−(q/p)^i]/[1−(q/p)^N]."
-      ],
-      [
-        "Boundary conditions",
-        "u_0=0 and u_N=1 for reaching N before 0."
-      ],
-      [
-        "Fair expected duration",
-        "i(N−i) steps."
-      ]
-    ],
-    "tricks": [
-      "Check which boundary is the success event before writing u_0 and u_N.",
-      "If p=q, use the linear solution; do not substitute q/p=1 into a 0/0 expression.",
-      "For p≠q, verify u_0=0 and u_N=1 after substitution.",
-      "At p=1/2, expected duration is largest near the midpoint and zero at either boundary."
-    ],
-    "shortcuts": [
-      "Fair walk: success probability i/N; ruin probability (N−i)/N.",
-      "One-step drift is positive, zero or negative according as p is greater than, equal to or less than 1/2.",
-      "At i=N/2 in a fair walk, expected absorption time is N²/4."
-    ],
-    "remember": [
-      "Probability of reaching the upper barrier and probability of ruin are complementary when absorption occurs at one of the two barriers.",
-      "First-step equations condition on the first move, not on the final path."
-    ]
+ "id": "stochastict6",
+ "topicId": "stochastic-t6",
+ "moduleId": "stochastic",
+ "title": "Simple Random Walk and Gambler’s Ruin",
+ "breadcrumb": "Stochastic processes → Random walks → Gambler’s ruin",
+ "engine": "B",
+ "engineName": "Model movement as a random walk, then use boundary conditions and first-step equations to find ruin probabilities and expected duration.",
+ "version": "4.1",
+ "status": "approved",
+ "estMin": 115,
+ "objectives": [
+  "Define a simple random walk and identify its drift from step probabilities.",
+  "Calculate the position distribution after n steps using the number of upward steps.",
+  "Set up and solve gambler’s ruin probabilities using first-step recurrence and boundary conditions.",
+  "Find expected duration until absorption in the fair and biased cases.",
+  "Interpret the fair-game and biased-game results and recognise common boundary and indexing errors."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Binomial distribution",
+   "why": "After n independent steps, the number of upward moves is binomial."
   },
-  "scenes": [
-    {
-      "kind": "foundation",
-      "id": "s0",
-      "mins": 8,
-      "title": "Refresh steps, binomial counts and recurrences",
-      "objective": "Rebuild the tools used in random-walk calculations.",
-      "body": [
-        "A simple random walk changes its position by one unit at each step. An upward step is +1 and a downward step is −1.",
-        "If each step is upward with probability p and downward with probability q=1−p, then the number X of upward steps in n independent moves has a Binomial(n,p) distribution.",
-        "After n steps, the net change is X−(n−X)=2X−n. This converts a path question into a binomial probability calculation."
-      ],
-      "items": [
-        {
-          "ask": "If there are n steps and X upward moves, how many downward moves occur?",
-          "recall": "n−X.",
-          "refresh": [
-            "Every step is either upward or downward.",
-            "The total number of steps is the sum of the two counts.",
-            "Therefore downward moves = n−X."
-          ]
-        },
-        {
-          "ask": "What is the net displacement after n steps?",
-          "recall": "2X−n.",
-          "refresh": [
-            "Upward moves contribute +X.",
-            "Downward moves contribute −(n−X).",
-            "Net displacement is X−(n−X)=2X−n."
-          ]
-        },
-        {
-          "ask": "What is the expected change in one step?",
-          "recall": "p−q=2p−1.",
-          "refresh": [
-            "The step is +1 with probability p and −1 with probability q.",
-            "Its expectation is 1·p+(−1)·q=p−q.",
-            "Since q=1−p, the drift is 2p−1."
-          ]
-        }
-      ],
-      "ask": {
-        "q": "Which distribution counts upward steps in n independent moves?",
-        "nudge": "Each step is a Bernoulli trial."
-      }
-    },
-    {
-      "kind": "intuition",
-      "id": "s1",
-      "mins": 7,
-      "title": "A fortune that moves one unit at a time",
-      "objective": "Interpret a random walk and absorbing barriers.",
-      "body": [
-        "Imagine a player whose fortune changes by one unit after every game. A win adds one unit; a loss removes one unit.",
-        "The player stops when the fortune reaches zero or a fixed target N. These two endpoints are absorbing: after reaching either endpoint, the game ends.",
-        "The central question is often whether the player reaches the target before going broke. This is gambler’s ruin, a random walk with two absorbing barriers."
-      ],
-      "scenario": {
-        "teaser": "A player starts with a limited stake",
-        "title": "A game between two fortunes",
-        "body": [
-          "A player begins with 3 units. A win increases the fortune by one, and a loss decreases it by one. The game ends if the player reaches 0 or 7 units.",
-          "The state is the current fortune, so the possible transient states are 1,2,3,4,5,6. State 0 is ruin and state 7 is the target. At each interior state, the next state is one step higher with probability p and one step lower with probability q=1−p.",
-          "We want the probability of reaching 7 before 0. The first move determines whether the next problem is the same problem starting from 4 or from 2. This observation produces a recurrence."
-        ],
-        "q": "What are the two absorbing states in this game?",
-        "answer": "0 (ruin) and 7 (the target fortune)."
-      },
-      "ask": {
-        "q": "Why are states 0 and N called absorbing barriers?",
-        "nudge": "The game stops when either is reached."
-      }
-    },
-    {
-      "kind": "theory",
-      "id": "s2",
-      "mins": 9,
-      "title": "Simple random walk and its distribution",
-      "objective": "Calculate the position after n independent steps.",
-      "blocks": [
-        {
-          "t": "def",
-          "h": "Simple random walk",
-          "body": "S_n=S_0+X_1+⋯+X_n, where each increment is +1 with probability p and −1 with probability q=1−p, independently."
-        },
-        {
-          "t": "formula",
-          "h": "Position after n steps",
-          "body": "If X is the number of upward steps, X~Binomial(n,p) and S_n=S_0+2X−n."
-        },
-        {
-          "t": "formula",
-          "h": "Drift",
-          "body": "E[S_n−S_0]=n(p−q)=n(2p−1)."
-        }
-      ],
-      "ask": {
-        "q": "Starting at 0, what is the probability of being at position 2 after 4 steps?",
-        "nudge": "Solve 2X−4=2 for the required number of upward steps."
-      }
-    },
-    {
-      "kind": "worked",
-      "id": "s3",
-      "mins": 9,
-      "title": "Worked example: a position after four steps",
-      "objective": "Use a binomial count to find a random-walk probability.",
-      "problem": "A walk starts at 0. Each step is +1 with probability 1/2 and −1 with probability 1/2. Find P(S₄=2).",
-      "steps": [
-        {
-          "say": "Translate the final position into upward steps.",
-          "math": "S₄=2X−4=2 ⇒ X=3",
-          "why": "Three upward moves and one downward move produce net position 2."
-        },
-        {
-          "say": "Use the binomial distribution.",
-          "math": "X~Binomial(4,1/2)",
-          "why": "The four steps are independent and have the same upward probability."
-        },
-        {
-          "say": "Calculate the probability.",
-          "math": "P(X=3)=C(4,3)(1/2)^3(1/2)^1",
-          "why": "Exactly three of the four moves must be upward."
-        },
-        {
-          "say": "Simplify.",
-          "math": "P(S₄=2)=4/16=1/4",
-          "why": "There are four equally likely sequences with three upward moves."
-        }
-      ],
-      "ask": {
-        "q": "Can the walk be at position 2 after three steps if it starts at zero?",
-        "nudge": "The parity of position changes with each step."
-      }
-    },
-    {
-      "kind": "theory",
-      "id": "s4",
-      "mins": 9,
-      "title": "Gambler’s ruin: define the success probability",
-      "objective": "Set up the first-step recurrence and boundary conditions.",
-      "blocks": [
-        {
-          "t": "def",
-          "h": "Success probability",
-          "body": "Let u_i=P_i(the walk reaches N before 0), starting at fortune i."
-        },
-        {
-          "t": "formula",
-          "h": "First-step recurrence",
-          "body": "u_i=p u_{i+1}+q u_{i−1}, for i=1,…,N−1."
-        },
-        {
-          "t": "formula",
-          "h": "Boundary conditions",
-          "body": "u_0=0 and u_N=1."
-        }
-      ],
-      "flow": {
-        "title": "Gambler’s ruin solution plan",
-        "alt": "Define the event, write first-step recurrence, apply boundaries and solve.",
-        "nodes": [
-          {
-            "id": "a",
-            "r": 0,
-            "c": 1,
-            "label": "Define uᵢ = P(reach N first)",
-            "kind": "start"
-          },
-          {
-            "id": "b",
-            "r": 1,
-            "c": 1,
-            "label": "Condition on first step",
-            "kind": "step"
-          },
-          {
-            "id": "c",
-            "r": 2,
-            "c": 1,
-            "label": "Use u₀=0 and uN=1",
-            "kind": "step"
-          },
-          {
-            "id": "d",
-            "r": 3,
-            "c": 1,
-            "label": "Solve recurrence",
-            "kind": "end"
-          }
-        ],
-        "edges": [
-          {
-            "from": "a",
-            "to": "b"
-          },
-          {
-            "from": "b",
-            "to": "c"
-          },
-          {
-            "from": "c",
-            "to": "d"
-          }
-        ]
-      },
-      "ask": {
-        "q": "If the player starts at N, what is u_N?",
-        "nudge": "The target has already been reached."
-      }
-    },
-    {
-      "kind": "worked",
-      "id": "s5",
-      "mins": 10,
-      "title": "Worked example: fair gambler’s ruin",
-      "objective": "Solve the fair-game ruin probability.",
-      "problem": "A fair player starts with 2 units and stops at 0 or 5. Find the probability of reaching 5 before 0.",
-      "steps": [
-        {
-          "say": "Define the upper-barrier probability.",
-          "math": "u_i=P_i(T_5<T_0)",
-          "why": "The event is reaching 5 before ruin at 0."
-        },
-        {
-          "say": "Use the fair recurrence.",
-          "math": "u_i=(u_{i+1}+u_{i−1})/2",
-          "why": "Here p=q=1/2."
-        },
-        {
-          "say": "The solution is linear in i.",
-          "math": "u_i=A+Bi",
-          "why": "The second difference is zero."
-        },
-        {
-          "say": "Apply the boundaries.",
-          "math": "u_0=0 ⇒ A=0; u_5=1 ⇒ B=1/5",
-          "why": "The boundary conditions determine the constants."
-        },
-        {
-          "say": "Evaluate at i=2.",
-          "math": "u_2=2/5",
-          "why": "The chance of reaching 5 first is 2/5; ruin probability is 3/5."
-        }
-      ],
-      "ask": {
-        "q": "What is the probability of ruin before reaching 5?",
-        "nudge": "Use the complement of 2/5."
-      }
-    },
-    {
-      "kind": "theory",
-      "id": "s6",
-      "mins": 9,
-      "title": "Biased gambler’s ruin",
-      "objective": "Use the geometric solution when p and q differ.",
-      "blocks": [
-        {
-          "t": "formula",
-          "h": "Biased solution",
-          "body": "For p≠q, u_i=[1−(q/p)^i]/[1−(q/p)^N]."
-        },
-        {
-          "t": "step",
-          "h": "Fair limit",
-          "body": "When p=q=1/2, the recurrence has the linear solution u_i=i/N; do not substitute q/p=1 into the biased formula without taking a limit."
-        },
-        {
-          "t": "def",
-          "h": "Interpretation",
-          "body": "If p>q, upward movement is favoured; if p<q, downward movement is favoured. The same boundary event and formula still apply."
-        }
-      ],
-      "ask": {
-        "q": "In the biased formula, what is q/p when the game is fair?",
-        "nudge": "Both probabilities are one-half."
-      }
-    },
-    {
-      "kind": "guided",
-      "id": "s7",
-      "mins": 10,
-      "title": "Guided problem: a biased game",
-      "objective": "Calculate an upper-barrier probability using the biased formula.",
-      "problem": "A player starts at 1 unit, with barriers 0 and 3. The chance of a win is p=2/3 and q=1/3. Find the probability of reaching 3 before 0.",
-      "hints": [
-        "First identify that the desired event is reaching the upper barrier, so u₀=0 and u₃=1.",
-        "Use q/p=(1/3)/(2/3)=1/2.",
-        "Substitute i=1 and N=3 into the biased formula."
-      ],
-      "answer": "u₁=[1−(1/2)]/[1−(1/2)³]=(1/2)/(7/8)=4/7.",
-      "solution": [
-        "Since p≠q, use u_i=[1−(q/p)^i]/[1−(q/p)^N].",
-        "Here q/p=1/2, i=1 and N=3.",
-        "u₁=(1−1/2)/(1−1/8)=(1/2)/(7/8)=4/7.",
-        "The ruin probability is 1−4/7=3/7."
-      ],
-      "scenario": {
-        "teaser": "A player has a favourable game",
-        "title": "A three-unit target",
-        "body": [
-          "A player begins with one unit and must reach three units before losing everything. Each play is a win with probability 2/3 and a loss with probability 1/3.",
-          "The upper-barrier probability is found from the biased gambler’s ruin formula. The ratio q/p is 1/2, and the boundaries are 0 and 3.",
-          "The calculation gives 4/7 for reaching the target first. The complementary probability 3/7 is the probability of ruin first."
-        ],
-        "q": "Is the probability of reaching the target greater than one-half?",
-        "answer": "Yes. It is 4/7, reflecting the favourable upward step probability."
-      },
-      "ask": {
-        "q": "Why is q/p rather than p/q used in this expression?",
-        "nudge": "Check that the formula satisfies u₀=0 and u_N=1."
-      }
-    },
-    {
-      "kind": "theory",
-      "id": "s8",
-      "mins": 9,
-      "title": "Expected time until absorption",
-      "objective": "Distinguish expected duration from ruin probability.",
-      "blocks": [
-        {
-          "t": "def",
-          "h": "Expected duration",
-          "body": "Let m_i be the expected number of steps to hit either 0 or N, starting from i."
-        },
-        {
-          "t": "formula",
-          "h": "First-step equation",
-          "body": "m_i=1+p m_{i+1}+q m_{i−1}, with m_0=m_N=0."
-        },
-        {
-          "t": "formula",
-          "h": "Fair walk result",
-          "body": "For p=q=1/2, m_i=i(N−i)."
-        },
-        {
-          "t": "formula",
-          "h": "Biased walk result",
-          "body": "For p≠q, m_i=[i−N u_i]/(q−p), where u_i is the probability of reaching N before 0."
-        }
-      ],
-      "ask": {
-        "q": "What is the expected absorption time for a fair walk starting at i=2 with N=5?",
-        "nudge": "Use i(N−i)."
-      }
-    },
-    {
-      "kind": "worked",
-      "id": "s9",
-      "mins": 9,
-      "title": "Worked example: expected duration in a fair game",
-      "objective": "Calculate the expected number of steps to absorption.",
-      "problem": "A fair walk starts at fortune 2 and is absorbed at 0 or 5. Find the expected number of steps until absorption.",
-      "steps": [
-        {
-          "say": "Identify the fair-walk formula.",
-          "math": "m_i=i(N−i)",
-          "why": "For p=q=1/2, this solves the expected-time recurrence with zero boundary values."
-        },
-        {
-          "say": "Substitute the starting fortune and upper barrier.",
-          "math": "m_2=2(5−2)",
-          "why": "The walk begins at i=2 and N=5."
-        },
-        {
-          "say": "Evaluate.",
-          "math": "m_2=6 steps",
-          "why": "The expected duration is six steps."
-        }
-      ],
-      "ask": {
-        "q": "At which starting fortune is the fair expected duration largest when N=6?",
-        "nudge": "The product i(6−i) is largest nearest the midpoint."
-      }
-    },
-    {
-      "kind": "trapcheck",
-      "id": "s10",
-      "mins": 7,
-      "title": "Trap check: boundaries, bias and duration",
-      "objective": "Detect common gambler’s ruin errors.",
-      "intro": "Mark each statement true or false, then read the reason.",
-      "items": [
-        {
-          "claim": "For u_i=P_i(reach N before 0), the boundary values are u₀=0 and u_N=1.",
-          "tf": true,
-          "why": "At zero the success event is impossible; at N it has already occurred."
-        },
-        {
-          "claim": "For a fair walk, the probability of reaching N before 0 is (N−i)/N.",
-          "tf": false,
-          "why": "That is the ruin probability. The upper-barrier probability is i/N."
-        },
-        {
-          "claim": "The first-step equation at an interior state is u_i=p u_{i+1}+q u_{i−1}.",
-          "tf": true,
-          "why": "Condition on the first upward or downward step."
-        },
-        {
-          "claim": "The expected absorption time of a fair walk is i(N−i).",
-          "tf": true,
-          "why": "This is the solution of the fair expected-time recurrence with zero boundary values."
-        },
-        {
-          "claim": "The probability of ruin and the probability of reaching N first add to one.",
-          "tf": true,
-          "why": "The walk is absorbed at one of the two barriers."
-        }
-      ],
-      "ask": {
-        "q": "Which boundary condition changes if the event of interest is ruin before reaching N?",
-        "nudge": "Redefine the success event before assigning boundary values."
-      }
-    },
-    {
-      "kind": "recall",
-      "id": "s11",
-      "mins": 5,
-      "title": "Rapid recall and exam checklist",
-      "objective": "Retrieve formulas and set up a new problem independently.",
-      "intro": "Try each prompt before revealing its answer.",
-      "items": [
-        {
-          "q": "What is the one-step drift?",
-          "a": "p−q=2p−1."
-        },
-        {
-          "q": "What is the fair probability of reaching N before 0 from i?",
-          "a": "i/N."
-        },
-        {
-          "q": "What is the fair probability of ruin first?",
-          "a": "1−i/N=(N−i)/N."
-        },
-        {
-          "q": "What is the biased upper-barrier probability?",
-          "a": "[1−(q/p)^i]/[1−(q/p)^N], p≠q."
-        },
-        {
-          "q": "What is the fair expected absorption time?",
-          "a": "i(N−i) steps."
-        }
-      ],
-      "ask": {
-        "q": "What must you define before writing any gambler’s ruin recurrence?",
-        "nudge": "State variable and exact event whose probability is being calculated."
-      }
-    }
-  ],
-  "mastery": {
-    "ref": "stochastic_t6_mastery",
-    "count": 20,
-    "label": "Simple random walk and gambler’s ruin — mastery test (unseen)"
+  {
+   "id": "p2",
+   "name": "Difference equations",
+   "why": "Ruin probabilities satisfy a second-order recurrence."
+  },
+  {
+   "id": "p3",
+   "name": "Boundary conditions",
+   "why": "Absorbing barriers determine the constants in the recurrence."
   }
+ ],
+ "traps": [
+  "Define the state as the current fortune before writing the recurrence.",
+  "At an interior state i, p_i = p p_{i+1}+q p_{i−1}; do not reverse p and q.",
+  "Use boundary values u_0=0 and u_N=1 when asking for the probability of reaching N before 0.",
+  "For a fair walk, the ruin probability from i is 1−i/N; the probability of reaching N first is i/N.",
+  "For a biased walk, the ratio q/p determines the powers in the solution.",
+  "The expected absorption time for a fair walk is i(N−i), in step units.",
+  "Do not confuse eventual ruin probability with expected time to ruin or absorption."
+ ],
+ "howto": "Draw the integer states and absorbing barriers. Define the event being asked, write the first-step recurrence at an interior state, apply both boundary values, and check the answer at the endpoints and at p=q=1/2.",
+ "refs": [
+  {
+   "title": "Introduction to Probability Models",
+   "where": "Random walks and gambler’s ruin",
+   "site": "Sheldon M. Ross",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Standard gambler’s ruin probability and expected duration results."
+  },
+  {
+   "title": "Introduction to Stochastic Processes",
+   "where": "Simple random walk and absorbing boundaries",
+   "site": "Gregory F. Lawler",
+   "url": "https://www.math.uchicago.edu/~lawler/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Mathematical background for random walks."
+  },
+  {
+   "title": "Probability and Random Processes",
+   "where": "Random walks and gambler’s ruin",
+   "site": "Geoffrey Grimmett and David Stirzaker",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "A standard reference for random walks, recurrence and hitting probabilities."
+  }
+ ],
+ "provenance": "Original teaching material aligned to the Simple random walk and Gambler’s ruin items in UGC NET Statistics Unit IX. Practice questions are original and are not represented as official UGC NET PYQs.",
+ "revision": {
+  "sheet": [
+   "A simple random walk moves +1 with probability p and −1 with probability q=1−p.",
+   "After n steps, S_n=S_0+2X−n where X~Binomial(n,p).",
+   "The drift per step is E[ΔS]=p−q=2p−1.",
+   "In gambler’s ruin, fortune i moves to i+1 with probability p and i−1 with probability q.",
+   "With barriers 0 and N, both endpoints are absorbing.",
+   "Let u_i=P_i(reach N before 0): u_0=0, u_N=1 and u_i=pu_{i+1}+qu_{i−1}.",
+   "If p=q=1/2, u_i=i/N and ruin probability is 1−i/N.",
+   "If p≠q, u_i=[1−(q/p)^i]/[1−(q/p)^N].",
+   "For a fair walk, expected absorption time is i(N−i).",
+   "For p≠q, expected absorption time is [i−Nu_i]/(q−p)."
+  ],
+  "cards": [
+   [
+    "Step probabilities",
+    "Up with p; down with q=1−p."
+   ],
+   [
+    "Drift",
+    "2p−1 per step."
+   ],
+   [
+    "Position after n steps",
+    "S_n=S_0+2X−n, X~Binomial(n,p)."
+   ],
+   [
+    "Ruin probability",
+    "1−u_i when u_i is probability of hitting N before 0."
+   ],
+   [
+    "Fair game",
+    "u_i=i/N."
+   ],
+   [
+    "Biased game",
+    "u_i=[1−(q/p)^i]/[1−(q/p)^N]."
+   ],
+   [
+    "Boundary conditions",
+    "u_0=0 and u_N=1 for reaching N before 0."
+   ],
+   [
+    "Fair expected duration",
+    "i(N−i) steps."
+   ]
+  ],
+  "tricks": [
+   "Check which boundary is the success event before writing u_0 and u_N.",
+   "If p=q, use the linear solution; do not substitute q/p=1 into a 0/0 expression.",
+   "For p≠q, verify u_0=0 and u_N=1 after substitution.",
+   "At p=1/2, expected duration is largest near the midpoint and zero at either boundary."
+  ],
+  "shortcuts": [
+   "Fair walk: success probability i/N; ruin probability (N−i)/N.",
+   "One-step drift is positive, zero or negative according as p is greater than, equal to or less than 1/2.",
+   "At i=N/2 in a fair walk, expected absorption time is N²/4."
+  ],
+  "remember": [
+   "Probability of reaching the upper barrier and probability of ruin are complementary when absorption occurs at one of the two barriers.",
+   "First-step equations condition on the first move, not on the final path."
+  ]
+ },
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 8,
+   "title": "Refresh steps, binomial counts and recurrences",
+   "objective": "Rebuild the tools used in random-walk calculations.",
+   "body": [
+    "A simple random walk changes its position by one unit at each step. An upward step is +1 and a downward step is −1.",
+    "If each step is upward with probability p and downward with probability q=1−p, then the number X of upward steps in n independent moves has a Binomial(n,p) distribution.",
+    "After n steps, the net change is X−(n−X)=2X−n. This converts a path question into a binomial probability calculation."
+   ],
+   "items": [
+    {
+     "ask": "If there are n steps and X upward moves, how many downward moves occur?",
+     "recall": "n−X.",
+     "refresh": [
+      "A simple random walk has exactly two possible moves at each step: +1 or −1. If there are n steps in total and X of them are upward, every remaining step must be downward.",
+      "The number of downward moves is therefore n−X. This is a counting identity, not a probability formula: it holds for every realised path, regardless of the value of p.",
+      "For example, if a 10-step path contains 6 upward moves, it contains 4 downward moves. The net displacement is then 6−4=2 units."
+     ]
+    },
+    {
+     "ask": "What is the net displacement after n steps?",
+     "recall": "2X−n.",
+     "refresh": [
+      "Each upward move contributes +1, so X upward moves contribute +X. Each downward move contributes −1, and there are n−X of those moves, contributing −(n−X).",
+      "Add the two contributions: X−(n−X)=X−n+X=2X−n. If the walk starts at S₀, add S₀ to obtain Sₙ=S₀+2X−n.",
+      "This representation is useful because X has a Binomial(n,p) distribution when the steps are independent with a constant upward probability p. A position probability can then be calculated as a binomial probability."
+     ]
+    },
+    {
+     "ask": "What is the expected change in one step?",
+     "recall": "p−q=2p−1.",
+     "refresh": [
+      "The increment ΔS is +1 with probability p and −1 with probability q=1−p. Its expectation is the probability-weighted average of these two possible values.",
+      "Compute E[ΔS]=(+1)p+(−1)q=p−q. Substituting q=1−p gives p−(1−p)=2p−1, which is the drift per step.",
+      "A positive drift means upward movement is favoured on average, a negative drift means downward movement is favoured, and zero drift occurs for a fair walk with p=q=1/2. Drift is an average, not a guarantee about an individual step."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "Which distribution counts upward steps in n independent moves?",
+    "nudge": "Each step is a Bernoulli trial."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "A fortune that moves one unit at a time",
+   "objective": "Interpret a random walk and absorbing barriers.",
+   "body": [
+    "Imagine a player whose fortune changes by one unit after every game. A win adds one unit; a loss removes one unit.",
+    "The player stops when the fortune reaches zero or a fixed target N. These two endpoints are absorbing: after reaching either endpoint, the game ends.",
+    "The central question is often whether the player reaches the target before going broke. This is gambler’s ruin, a random walk with two absorbing barriers."
+   ],
+   "scenario": {
+    "teaser": "A player starts with a limited stake",
+    "title": "A game between two fortunes",
+    "body": [
+     "A player begins with 3 units. A win increases the fortune by one, and a loss decreases it by one. The game ends if the player reaches 0 or 7 units.",
+     "The state is the current fortune, so the possible transient states are 1,2,3,4,5,6. State 0 is ruin and state 7 is the target. At each interior state, the next state is one step higher with probability p and one step lower with probability q=1−p.",
+     "We want the probability of reaching 7 before 0. The first move determines whether the next problem is the same problem starting from 4 or from 2. This observation produces a recurrence."
+    ],
+    "q": "What are the two absorbing states in this game?",
+    "answer": "0 (ruin) and 7 (the target fortune)."
+   },
+   "ask": {
+    "q": "Why are states 0 and N called absorbing barriers?",
+    "nudge": "The game stops when either is reached."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 9,
+   "title": "Simple random walk and its distribution",
+   "objective": "Calculate the position after n independent steps.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Simple random walk",
+     "body": "S_n=S_0+X_1+⋯+X_n, where each increment is +1 with probability p and −1 with probability q=1−p, independently."
+    },
+    {
+     "t": "formula",
+     "h": "Position after n steps",
+     "body": "If X is the number of upward steps, X~Binomial(n,p) and S_n=S_0+2X−n."
+    },
+    {
+     "t": "formula",
+     "h": "Drift",
+     "body": "E[S_n−S_0]=n(p−q)=n(2p−1)."
+    }
+   ],
+   "ask": {
+    "q": "Starting at 0, what is the probability of being at position 2 after 4 steps?",
+    "nudge": "Solve 2X−4=2 for the required number of upward steps."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 9,
+   "title": "Worked example: a position after four steps",
+   "objective": "Use a binomial count to find a random-walk probability.",
+   "problem": "A walk starts at 0. Each step is +1 with probability 1/2 and −1 with probability 1/2. Find P(S₄=2).",
+   "steps": [
+    {
+     "say": "Translate the final position into upward steps.",
+     "math": "S₄=2X−4=2 ⇒ X=3",
+     "why": "Three upward moves and one downward move produce net position 2."
+    },
+    {
+     "say": "Use the binomial distribution.",
+     "math": "X~Binomial(4,1/2)",
+     "why": "The four steps are independent and have the same upward probability."
+    },
+    {
+     "say": "Calculate the probability.",
+     "math": "P(X=3)=C(4,3)(1/2)^3(1/2)^1",
+     "why": "Exactly three of the four moves must be upward."
+    },
+    {
+     "say": "Simplify.",
+     "math": "P(S₄=2)=4/16=1/4",
+     "why": "There are four equally likely sequences with three upward moves."
+    }
+   ],
+   "ask": {
+    "q": "Can the walk be at position 2 after three steps if it starts at zero?",
+    "nudge": "The parity of position changes with each step."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s4",
+   "mins": 9,
+   "title": "Gambler’s ruin: define the success probability",
+   "objective": "Set up the first-step recurrence and boundary conditions.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Success probability",
+     "body": "Let u_i=P_i(the walk reaches N before 0), starting at fortune i."
+    },
+    {
+     "t": "formula",
+     "h": "First-step recurrence",
+     "body": "u_i=p u_{i+1}+q u_{i−1}, for i=1,…,N−1."
+    },
+    {
+     "t": "formula",
+     "h": "Boundary conditions",
+     "body": "u_0=0 and u_N=1."
+    }
+   ],
+   "flow": {
+    "title": "Gambler’s ruin solution plan",
+    "alt": "Define the event, write first-step recurrence, apply boundaries and solve.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Define uᵢ = P(reach N first)",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Condition on first step",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 1,
+      "label": "Use u₀=0 and uN=1",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 1,
+      "label": "Solve recurrence",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
+   },
+   "ask": {
+    "q": "If the player starts at N, what is u_N?",
+    "nudge": "The target has already been reached."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s5",
+   "mins": 10,
+   "title": "Worked example: fair gambler’s ruin",
+   "objective": "Solve the fair-game ruin probability.",
+   "problem": "A fair player starts with 2 units and stops at 0 or 5. Find the probability of reaching 5 before 0.",
+   "steps": [
+    {
+     "say": "Define the upper-barrier probability.",
+     "math": "u_i=P_i(T_5<T_0)",
+     "why": "The event is reaching 5 before ruin at 0."
+    },
+    {
+     "say": "Use the fair recurrence.",
+     "math": "u_i=(u_{i+1}+u_{i−1})/2",
+     "why": "Here p=q=1/2."
+    },
+    {
+     "say": "The solution is linear in i.",
+     "math": "u_i=A+Bi",
+     "why": "The second difference is zero."
+    },
+    {
+     "say": "Apply the boundaries.",
+     "math": "u_0=0 ⇒ A=0; u_5=1 ⇒ B=1/5",
+     "why": "The boundary conditions determine the constants."
+    },
+    {
+     "say": "Evaluate at i=2.",
+     "math": "u_2=2/5",
+     "why": "The chance of reaching 5 first is 2/5; ruin probability is 3/5."
+    }
+   ],
+   "ask": {
+    "q": "What is the probability of ruin before reaching 5?",
+    "nudge": "Use the complement of 2/5."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 9,
+   "title": "Biased gambler’s ruin",
+   "objective": "Use the geometric solution when p and q differ.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Biased solution",
+     "body": "For p≠q, u_i=[1−(q/p)^i]/[1−(q/p)^N]."
+    },
+    {
+     "t": "step",
+     "h": "Fair limit",
+     "body": "When p=q=1/2, the recurrence has the linear solution u_i=i/N; do not substitute q/p=1 into the biased formula without taking a limit."
+    },
+    {
+     "t": "def",
+     "h": "Interpretation",
+     "body": "If p>q, upward movement is favoured; if p<q, downward movement is favoured. The same boundary event and formula still apply."
+    }
+   ],
+   "ask": {
+    "q": "In the biased formula, what is q/p when the game is fair?",
+    "nudge": "Both probabilities are one-half."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 10,
+   "title": "Guided problem: a biased game",
+   "objective": "Calculate an upper-barrier probability using the biased formula.",
+   "problem": "A player starts at 1 unit, with barriers 0 and 3. The chance of a win is p=2/3 and q=1/3. Find the probability of reaching 3 before 0.",
+   "hints": [
+    "First identify that the desired event is reaching the upper barrier, so u₀=0 and u₃=1.",
+    "Use q/p=(1/3)/(2/3)=1/2.",
+    "Substitute i=1 and N=3 into the biased formula."
+   ],
+   "answer": "u₁=[1−(1/2)]/[1−(1/2)³]=(1/2)/(7/8)=4/7.",
+   "solution": [
+    "Since p≠q, use u_i=[1−(q/p)^i]/[1−(q/p)^N].",
+    "Here q/p=1/2, i=1 and N=3.",
+    "u₁=(1−1/2)/(1−1/8)=(1/2)/(7/8)=4/7.",
+    "The ruin probability is 1−4/7=3/7."
+   ],
+   "scenario": {
+    "teaser": "A player has a favourable game",
+    "title": "A three-unit target",
+    "body": [
+     "A player begins with one unit and must reach three units before losing everything. Each play is a win with probability 2/3 and a loss with probability 1/3.",
+     "The upper-barrier probability is found from the biased gambler’s ruin formula. The ratio q/p is 1/2, and the boundaries are 0 and 3.",
+     "The calculation gives 4/7 for reaching the target first. The complementary probability 3/7 is the probability of ruin first."
+    ],
+    "q": "Is the probability of reaching the target greater than one-half?",
+    "answer": "Yes. It is 4/7, reflecting the favourable upward step probability."
+   },
+   "ask": {
+    "q": "Why is q/p rather than p/q used in this expression?",
+    "nudge": "Check that the formula satisfies u₀=0 and u_N=1."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s8",
+   "mins": 9,
+   "title": "Expected time until absorption",
+   "objective": "Distinguish expected duration from ruin probability.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Expected duration",
+     "body": "Let m_i be the expected number of steps to hit either 0 or N, starting from i."
+    },
+    {
+     "t": "formula",
+     "h": "First-step equation",
+     "body": "m_i=1+p m_{i+1}+q m_{i−1}, with m_0=m_N=0."
+    },
+    {
+     "t": "formula",
+     "h": "Fair walk result",
+     "body": "For p=q=1/2, m_i=i(N−i)."
+    },
+    {
+     "t": "formula",
+     "h": "Biased walk result",
+     "body": "For p≠q, m_i=[i−N u_i]/(q−p), where u_i is the probability of reaching N before 0."
+    }
+   ],
+   "ask": {
+    "q": "What is the expected absorption time for a fair walk starting at i=2 with N=5?",
+    "nudge": "Use i(N−i)."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s9",
+   "mins": 9,
+   "title": "Worked example: expected duration in a fair game",
+   "objective": "Calculate the expected number of steps to absorption.",
+   "problem": "A fair walk starts at fortune 2 and is absorbed at 0 or 5. Find the expected number of steps until absorption.",
+   "steps": [
+    {
+     "say": "Identify the fair-walk formula.",
+     "math": "m_i=i(N−i)",
+     "why": "For p=q=1/2, this solves the expected-time recurrence with zero boundary values."
+    },
+    {
+     "say": "Substitute the starting fortune and upper barrier.",
+     "math": "m_2=2(5−2)",
+     "why": "The walk begins at i=2 and N=5."
+    },
+    {
+     "say": "Evaluate.",
+     "math": "m_2=6 steps",
+     "why": "The expected duration is six steps."
+    }
+   ],
+   "ask": {
+    "q": "At which starting fortune is the fair expected duration largest when N=6?",
+    "nudge": "The product i(6−i) is largest nearest the midpoint."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s10",
+   "mins": 7,
+   "title": "Trap check: boundaries, bias and duration",
+   "objective": "Detect common gambler’s ruin errors.",
+   "intro": "Mark each statement true or false, then read the reason.",
+   "items": [
+    {
+     "claim": "For u_i=P_i(reach N before 0), the boundary values are u₀=0 and u_N=1.",
+     "tf": true,
+     "why": "At zero the success event is impossible; at N it has already occurred."
+    },
+    {
+     "claim": "For a fair walk, the probability of reaching N before 0 is (N−i)/N.",
+     "tf": false,
+     "why": "That is the ruin probability. The upper-barrier probability is i/N."
+    },
+    {
+     "claim": "The first-step equation at an interior state is u_i=p u_{i+1}+q u_{i−1}.",
+     "tf": true,
+     "why": "Condition on the first upward or downward step."
+    },
+    {
+     "claim": "The expected absorption time of a fair walk is i(N−i).",
+     "tf": true,
+     "why": "This is the solution of the fair expected-time recurrence with zero boundary values."
+    },
+    {
+     "claim": "The probability of ruin and the probability of reaching N first add to one.",
+     "tf": true,
+     "why": "The walk is absorbed at one of the two barriers."
+    }
+   ],
+   "ask": {
+    "q": "Which boundary condition changes if the event of interest is ruin before reaching N?",
+    "nudge": "Redefine the success event before assigning boundary values."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s11",
+   "mins": 5,
+   "title": "Rapid recall and exam checklist",
+   "objective": "Retrieve formulas and set up a new problem independently.",
+   "intro": "Try each prompt before revealing its answer.",
+   "items": [
+    {
+     "q": "What is the one-step drift?",
+     "a": "p−q=2p−1."
+    },
+    {
+     "q": "What is the fair probability of reaching N before 0 from i?",
+     "a": "i/N."
+    },
+    {
+     "q": "What is the fair probability of ruin first?",
+     "a": "1−i/N=(N−i)/N."
+    },
+    {
+     "q": "What is the biased upper-barrier probability?",
+     "a": "[1−(q/p)^i]/[1−(q/p)^N], p≠q."
+    },
+    {
+     "q": "What is the fair expected absorption time?",
+     "a": "i(N−i) steps."
+    }
+   ],
+   "ask": {
+    "q": "What must you define before writing any gambler’s ruin recurrence?",
+    "nudge": "State variable and exact event whose probability is being calculated."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s12",
+   "mins": 8,
+   "title": "Guided problem: expected duration in a biased game",
+   "objective": "Use the biased hitting probability to calculate expected absorption time.",
+   "problem": "A walk has p=2/3, q=1/3, barriers 0 and 3, and starts at i=1. Find the expected number of steps until absorption.",
+   "hints": [
+    "First calculate the upper-barrier probability u₁ using q/p=1/2.",
+    "Use m_i=[i−Nu_i]/(q−p), with i=1 and N=3.",
+    "Keep the sign of q−p: here it is −1/3."
+   ],
+   "answer": "u₁=4/7 and m₁=[1−3(4/7)]/(1/3−2/3)=15/7 steps.",
+   "solution": [
+    "For p=2/3 and q=1/3, the biased gambler’s ruin formula gives u₁=[1−(1/2)]/[1−(1/2)³]=4/7.",
+    "The expected absorption time is m_i=[i−Nu_i]/(q−p). Substitute i=1, N=3 and u₁=4/7.",
+    "The numerator is 1−12/7=−5/7 and the denominator is −1/3.",
+    "Thus m₁=(−5/7)/(−1/3)=15/7≈2.143 steps. The result is an expectation and need not be an integer."
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 5,
+   "title": "Summary: random walks and gambler’s ruin",
+   "objective": "Recall the distribution, boundary equations and hitting-time formulas.",
+   "body": [
+    "A simple random walk has independent increments +1 with probability p and −1 with probability q=1−p. After n steps, Sₙ=S₀+2X−n with X~Binomial(n,p).",
+    "For the upper-barrier probability uᵢ=Pᵢ(T_N<T_0), use u₀=0, u_N=1 and uᵢ=puᵢ₊₁+quᵢ₋₁.",
+    "For a fair walk, uᵢ=i/N and the ruin probability is 1−i/N. For p≠q, uᵢ=[1−(q/p)^i]/[1−(q/p)^N].",
+    "Expected absorption time satisfies mᵢ=1+pmᵢ₊₁+qmᵢ₋₁ with zero boundary values. In the fair case mᵢ=i(N−i).",
+    "Define the success event before assigning boundary values. Check probabilities lie in [0,1] and distinguish a hitting probability from an expected duration."
+   ],
+   "ask": {
+    "q": "For a fair walk starting at i, what is the probability of ruin before reaching N?",
+    "nudge": "It is the complement of the upper-barrier probability i/N."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 12,
+   "title": "Mastery test",
+   "objective": "Solve unseen random-walk and gambler’s ruin problems independently.",
+   "setId": "stochastic_t6_mastery",
+   "ask": {
+    "q": "Ready for the unseen mastery set?",
+    "nudge": "Define the boundary event first and show the recurrence or formula you use."
+   }
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform settings, not an NTA rule."
+ }
 }

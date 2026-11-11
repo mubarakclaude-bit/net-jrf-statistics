@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parent
 lesson=json.loads((ROOT/"seed/lesson_stochastic_t6.json").read_text())
 pool=json.loads((ROOT/"seed/stochastic_t6_mastery.json").read_text())
 assert lesson["topicId"]=="stochastic-t6"
-assert len(lesson["scenes"])==12
+assert len(lesson["scenes"])==15
 assert sum(bool(s.get("scenario")) for s in lesson["scenes"])==2
 assert len(pool["items"])==20
 
