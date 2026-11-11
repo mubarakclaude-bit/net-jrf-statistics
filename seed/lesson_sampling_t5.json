@@ -1,0 +1,623 @@
+{
+  "id": "samplingt5",
+  "topicId": "sampling-t5",
+  "moduleId": "sampling",
+  "title": "Systematic Sampling",
+  "breadcrumb": "Sampling theory → Systematic sampling → Random start, inclusion probabilities and variance",
+  "engine": "B",
+  "engineName": "Choose a random start and select every kth unit from an ordered frame.",
+  "version": "1.0",
+  "status": "review",
+  "estMin": 95,
+  "objectives": [
+    "Construct a linear systematic sample from an ordered frame.",
+    "Calculate first- and second-order inclusion probabilities.",
+    "Explain the restricted sample space compared with SRSWOR.",
+    "Calculate exact design variance by enumerating possible starts.",
+    "Diagnose periodicity and variance-estimation limitations."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Sampling frame and population size",
+      "why": "The interval is calculated from the ordered frame size."
+    },
+    {
+      "id": "p2",
+      "name": "Simple random sampling",
+      "why": "Sample-space comparison clarifies the design."
+    },
+    {
+      "id": "p3",
+      "name": "Inclusion probabilities and variance",
+      "why": "Joint inclusion probabilities determine design properties."
+    }
+  ],
+  "traps": [
+    "The random start is selected from 1,…,k in the standard linear design.",
+    "Equal first-order inclusion probabilities do not imply the same variance as SRS.",
+    "Only k systematic samples are possible when N=nk.",
+    "Many second-order inclusion probabilities are zero.",
+    "A periodic frame pattern aligned with k can be harmful.",
+    "A single sample generally cannot provide an unbiased design-based variance estimate."
+  ],
+  "howto": "Compute k=N/n, choose the random start from the first k positions and add k repeatedly. Each unit is included under one of k starts. Two distinct units occur together only if they occupy the same residue class modulo k. For exact variance, enumerate all k possible sample means.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "The frame, interval and random start",
+      "objective": "Refresh ordered frames and equal-probability selection.",
+      "body": [
+        "Systematic sampling selects units from an ordered list using a fixed interval. The frame contains N units and the design selects n units, often with N=nk.",
+        "A random start r is selected from 1,…,k. The sample is r,r+k,r+2k,…,r+(n−1)k. Every unit has the same first-order inclusion probability in this design.",
+        "The ordering matters. If the frame contains a periodic pattern related to the study variable, systematic sampling can produce an unusually high or low sample."
+      ],
+      "items": [
+        {
+          "ask": "What is a sampling frame?",
+          "recall": "The list or operational representation from which units are selected.",
+          "refresh": [
+            "The frame identifies eligible units.",
+            "Systematic sampling moves through this ordered list at a fixed interval.",
+            "Coverage errors arise if the frame omits eligible units or includes ineligible ones."
+          ]
+        },
+        {
+          "ask": "What is the interval k when N is divisible by n?",
+          "recall": "k=N/n.",
+          "refresh": [
+            "N is the frame size and n is the required sample size.",
+            "Divide N by n to obtain the spacing between successive selections.",
+            "The standard equal-interval design uses an integer k."
+          ]
+        },
+        {
+          "ask": "Why is the start random?",
+          "recall": "Randomising the first position gives each eligible unit a known selection chance.",
+          "refresh": [
+            "The first position is chosen randomly from 1,…,k.",
+            "All later selections follow the fixed interval.",
+            "Without a random start, this is not the stated probability design."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Once the random start is chosen, how are the remaining units selected?",
+        "nudge": "Add the fixed interval k repeatedly."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 8,
+      "title": "A simple route through an ordered list",
+      "objective": "Explain systematic selection and periodicity risk.",
+      "body": [
+        "Imagine a register of 20 households and a required sample of four. The interval is five. A random start from positions 1 to 5 determines one of five possible samples.",
+        "If the start is 3, select positions 3, 8, 13 and 18. Every possible start gives four observations and every household appears in exactly one of the five possible samples.",
+        "This design is operationally simple and spreads the sample across the list. However, a repeating pattern with period five can align with the interval and make the selected units unrepresentative."
+      ],
+      "scenario": {
+        "teaser": "A register ordered by street blocks",
+        "title": "When the order helps or harms",
+        "body": [
+          "A municipal register contains 2,000 households and the survey selects 200, so the systematic interval is ten. The list is ordered geographically, which can spread interviews across the municipality with little fieldwork complexity. If household characteristics vary smoothly along the ordering, the spread may be useful. But suppose every tenth entry is a corner shop and the survey is intended to estimate household electricity use. Depending on the random start, the sample could repeatedly select corner shops or avoid them. This periodic alignment is a risk created by the relationship between the frame order and the fixed interval, not by unequal first-order inclusion probabilities.",
+          "Before using systematic sampling, inspect the frame order and consider whether periodicity or hidden grouping can coincide with the interval."
+        ],
+        "q": "What is the main risk in the corner-shop example?",
+        "answer": "Periodicity: the frame pattern may align with the sampling interval."
+      },
+      "ask": {
+        "q": "Does equal first-order inclusion probability guarantee that every possible sample is equally likely?",
+        "nudge": "No. The design only permits the k samples generated by the k possible starts."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Explore the possible starts",
+      "objective": "Enumerate systematic samples for a small frame.",
+      "viz": {
+        "type": "disc-pmf",
+        "caption": "For N=20 and k=5, the random start has five equally likely values."
+      },
+      "body": [
+        "For N=20 and n=4, k=5. Start 1 selects 1,6,11,16; start 2 selects 2,7,12,17; and so on.",
+        "There are five possible samples, each with probability 1/5. Each population unit occurs in exactly one of these samples, so π_i=1/5.",
+        "Only five of the many possible size-four subsets can be selected. This is why pairwise inclusion probabilities are zero for most pairs."
+      ],
+      "ask": {
+        "q": "What is the probability that unit 14 is selected?",
+        "nudge": "It is selected only when the random start is 4, so the probability is 1/5."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 10,
+      "title": "Inclusion probabilities and variance",
+      "objective": "Derive first- and second-order probabilities.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Linear systematic design",
+          "body": "Assume N=nk and choose r uniformly from {1,…,k}. The selected positions are r,r+k,…,r+(n−1)k."
+        },
+        {
+          "t": "formula",
+          "h": "First-order inclusion probability",
+          "body": "π_i=1/k=n/N for every unit i. Each unit is selected for exactly one of the k possible random starts."
+        },
+        {
+          "t": "formula",
+          "h": "Second-order inclusion probability",
+          "body": "For distinct units i and j, π_ij=1/k if i and j are congruent modulo k; otherwise π_ij=0 in this linear design."
+        },
+        {
+          "t": "formula",
+          "h": "Variance from the random starts",
+          "body": "For a population-mean estimator, each possible start gives a systematic sample mean ȳ_r. V(ȳ_sys)=(1/k)Σ_{r=1}^k(ȳ_r−Ȳ)^2. The total estimator variance is N² times this quantity."
+        },
+        {
+          "t": "def",
+          "h": "Variance estimation limitation",
+          "body": "A single realised systematic sample reveals only one of the k possible start-specific means. Since many pairs have π_ij=0, the usual pairwise-probability unbiased variance estimator is unavailable for those pairs. A single systematic sample therefore does not generally permit an unbiased design-based variance estimate without additional assumptions or design features."
+        }
+      ],
+      "flow": {
+        "title": "Systematic selection",
+        "alt": "Calculate interval, choose a random start between one and k, select every kth unit, then inspect the frame order for periodicity.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Compute k=N/n",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Choose r in 1,…,k",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Select r,r+k,…",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Check periodicity",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Estimate and assess variance",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ],
+        "note": "The random start determines the random component in the basic linear design."
+      },
+      "ask": {
+        "q": "Why are many π_ij equal to zero?",
+        "nudge": "Only units at the same residue position modulo k can appear together."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked sample and inclusion probabilities",
+      "objective": "Construct a sample and calculate its probabilities.",
+      "problem": "A frame has N=20 units and n=4. The random start is r=3. List selected positions and calculate π_i.",
+      "steps": [
+        {
+          "say": "Calculate the interval.",
+          "math": "k=N/n=20/4=5",
+          "why": "The interval determines spacing between selected positions."
+        },
+        {
+          "say": "Start at three and add five repeatedly.",
+          "math": "s={3,8,13,18}",
+          "why": "The sample contains four positions separated by the fixed interval."
+        },
+        {
+          "say": "Count possible starts.",
+          "math": "r∈{1,2,3,4,5}",
+          "why": "There are five equally likely starts."
+        },
+        {
+          "say": "Calculate first-order probability.",
+          "math": "π_i=1/5=0.20=n/N",
+          "why": "Every unit belongs to exactly one of the five possible samples."
+        }
+      ],
+      "ask": {
+        "q": "What is π_8,13 for this design?",
+        "nudge": "The positions differ by five and occur together for start three, so π_8,13=1/5."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 3,
+      "title": "Retrieve the systematic rules",
+      "objective": "Recall interval, start and inclusion probabilities.",
+      "intro": "Try each prompt before revealing the answer.",
+      "items": [
+        {
+          "q": "Systematic interval?",
+          "a": "k=N/n, when N is divisible by n."
+        },
+        {
+          "q": "Possible random starts?",
+          "a": "1,2,…,k."
+        },
+        {
+          "q": "First-order inclusion probability?",
+          "a": "π_i=1/k=n/N."
+        },
+        {
+          "q": "When is π_ij=1/k for distinct units?",
+          "a": "When the two positions are congruent modulo k in the stated linear design."
+        },
+        {
+          "q": "Why can variance estimation be difficult?",
+          "a": "Many pairwise inclusion probabilities are zero and only one start is observed."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 8,
+      "title": "Complete a systematic sample",
+      "objective": "Apply interval and random-start rule.",
+      "problem": "A frame contains N=36 units and n=6 are required. The random start is r=4. Complete the selection.",
+      "steps": [
+        {
+          "say": "Calculate the interval.",
+          "blank": {
+            "prompt": "Find k.",
+            "answer": "6",
+            "accept": [
+              "6"
+            ],
+            "hint": "Divide 36 by 6."
+          },
+          "why": "The interval is the frame size divided by the sample size."
+        },
+        {
+          "say": "Begin at r=4 and add six repeatedly.",
+          "blank": {
+            "prompt": "List the six selected positions.",
+            "answer": "4,10,16,22,28,34",
+            "accept": [
+              "4,10,16,22,28,34",
+              "4 10 16 22 28 34"
+            ],
+            "hint": "Start at four and keep adding six."
+          },
+          "why": "There are six selected units."
+        },
+        {
+          "say": "Calculate the first-order probability.",
+          "blank": {
+            "prompt": "Find π_i.",
+            "answer": "1/6",
+            "accept": [
+              "1/6",
+              "0.1667",
+              "0.167"
+            ],
+            "hint": "Use 1/k or n/N."
+          },
+          "why": "Every frame unit is selected by one of six equally likely starts."
+        }
+      ],
+      "ask": {
+        "q": "What is the probability that unit 35 is selected?",
+        "nudge": "It is 1/6, as for every unit in this design."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 8,
+      "title": "Systematic sampling versus SRS",
+      "objective": "Compare sample spaces and variance implications.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Sample space",
+          "body": "SRSWOR permits every subset of size n with equal probability. Linear systematic sampling with N=nk permits only k possible samples, one for each random start."
+        },
+        {
+          "t": "formula",
+          "h": "Same first-order probability",
+          "body": "Both designs can have π_i=n/N. Equal first-order probabilities do not imply equal second-order probabilities or equal variance."
+        },
+        {
+          "t": "formula",
+          "h": "Systematic variance",
+          "body": "The exact design variance is the variation among the k possible start-specific estimates. Its value depends on how y-values are arranged in the ordered frame."
+        },
+        {
+          "t": "def",
+          "h": "When systematic sampling can work well",
+          "body": "A well-ordered frame can spread the sample across the population. A periodic pattern aligned with k can be harmful. Randomising or carefully ordering the frame can reduce this risk."
+        }
+      ],
+      "ask": {
+        "q": "Why can two designs with the same π_i have different variances?",
+        "nudge": "Their joint inclusion probabilities and sets of possible samples differ."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 9,
+      "title": "Guided practice: diagnose periodicity",
+      "objective": "Identify alignment between a frame pattern and interval.",
+      "problem": "A factory register is ordered by production line, with every sixth entry belonging to the night shift. A systematic sample uses k=6. Explain the risk and suggest a safeguard.",
+      "hints": [
+        "Compare frame period with k.",
+        "Consider what each possible start selects.",
+        "Consider changing ordering or design."
+      ],
+      "answer": "The period six pattern is aligned with k=6. Each start repeatedly selects the same position within the six-entry cycle, so the sample can overrepresent or miss a shift category. Randomise the frame order or stratify by shift.",
+      "check": "The periodicity period equals the systematic interval.",
+      "scenario": {
+        "teaser": "Factory production register",
+        "title": "The interval matches a repeating shift pattern",
+        "body": [
+          "A factory register lists machines in a repeating order: five day-shift machines followed by one night-shift machine. The survey selects every sixth machine using an interval of six. Depending on the random start, the sample can select only night-shift machines or only day-shift machines. The first-order inclusion probability of each machine remains 1/6, but the sample space is restricted to six possible samples and each sample is highly homogeneous with respect to shift. This illustrates why equal inclusion probabilities alone do not protect against periodicity.",
+          "A better approach may randomise the list or stratify by shift and sample within each shift, depending on the survey objective and frame quality."
+        ],
+        "q": "What frame feature creates the risk?",
+        "answer": "A repeating period equal to the systematic interval."
+      },
+      "solution": [
+        {
+          "say": "Identify the repeating period: six positions."
+        },
+        {
+          "say": "Compare it with the interval k=6."
+        },
+        {
+          "say": "A random start selects the same position in each repeated block."
+        },
+        {
+          "say": "Randomise the frame or stratify by shift."
+        }
+      ],
+      "ask": {
+        "q": "Would changing the random start alone remove the structural risk?",
+        "nudge": "No. It changes which repeated position is selected, but each sample remains aligned with the cycle."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 7,
+      "title": "Avoid systematic-sampling traps",
+      "objective": "Distinguish probabilities, sample space and variance.",
+      "intro": "Judge each statement.",
+      "items": [
+        {
+          "claim": "For N=nk and a uniform random start, every unit has π_i=1/k.",
+          "tf": true,
+          "why": "Each unit is selected for exactly one of the k possible starts."
+        },
+        {
+          "claim": "Systematic sampling permits every size-n subset with equal probability.",
+          "tf": false,
+          "why": "Only the k interval-spaced samples generated by possible starts can occur."
+        },
+        {
+          "claim": "Equal first-order inclusion probabilities imply equal variance under systematic sampling and SRS.",
+          "tf": false,
+          "why": "Second-order probabilities and sample spaces differ."
+        },
+        {
+          "claim": "In the linear design, distinct units in different residue classes modulo k have π_ij=0.",
+          "tf": true,
+          "why": "They cannot be included together under one random start."
+        },
+        {
+          "claim": "A periodic frame pattern aligned with k can be harmful.",
+          "tf": true,
+          "why": "The sample may repeatedly select the same phase of the pattern."
+        },
+        {
+          "claim": "One realised sample generally reveals all possible start-specific means.",
+          "tf": false,
+          "why": "It reveals only the mean corresponding to the realised start."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 9,
+      "title": "Transfer: variance across possible starts",
+      "objective": "Calculate exact design variance by enumerating starts.",
+      "problem": "A frame of N=8 units has n=2 and k=4. The four possible systematic sample means are 3, 5, 7 and 9. Calculate the population mean and design variance of the sample mean.",
+      "hints": [
+        "Average the four possible sample means.",
+        "Calculate squared deviations from that mean.",
+        "Average the four squared deviations."
+      ],
+      "answer": "Ȳ=(3+5+7+9)/4=6. V(ȳ_sys)=[9+1+1+9]/4=5.",
+      "check": "The mean of the four start-specific means is six and the mean squared deviation is five.",
+      "solution": [
+        {
+          "say": "Average the four possible estimates.",
+          "math": "Ȳ=(3+5+7+9)/4=6",
+          "why": "The design expectation averages equally over four starts."
+        },
+        {
+          "say": "Calculate deviations from six.",
+          "math": "−3,−1,1,3",
+          "why": "These are deviations of the possible systematic sample means."
+        },
+        {
+          "say": "Square and average.",
+          "math": "V(ȳ_sys)=(9+1+1+9)/4=5",
+          "why": "The variance averages squared deviations over the random-start sample space."
+        }
+      ],
+      "ask": {
+        "q": "Why can this exact variance not usually be calculated from one realised sample?",
+        "nudge": "The other three start-specific means are not observed."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 6,
+      "title": "Systematic sampling checklist",
+      "objective": "Summarise design and limitations.",
+      "body": [
+        "For N=nk, calculate k=N/n, choose r∈{1,…,k}, and select r,r+k,…,r+(n−1)k.",
+        "Every unit has π_i=1/k=n/N. In the linear design, distinct units in different residue classes modulo k have π_ij=0.",
+        "The exact design variance is the variation among the k possible start-specific estimates. It depends on the arrangement of values in the ordered frame.",
+        "Only one start is observed in a single sample. The usual pairwise-probability unbiased variance estimator is generally unavailable when many π_ij are zero.",
+        "Inspect the frame for periodicity aligned with k. Equal first-order probabilities do not guarantee low variance."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 4,
+      "title": "Mastery check",
+      "objective": "Demonstrate independent command of systematic sampling.",
+      "setId": "sampling_t5_mastery"
+    }
+  ],
+  "revision": {
+    "sheet": [
+      "k=N/n.",
+      "Random start r∈{1,…,k}.",
+      "Selected positions r,r+k,…,r+(n−1)k.",
+      "π_i=1/k=n/N.",
+      "π_ij=1/k for same residue class; zero otherwise.",
+      "V(ȳ_sys)=(1/k)Σ_r(ȳ_r−Ȳ)².",
+      "Periodicity aligned with k can be harmful."
+    ],
+    "cards": [
+      [
+        "Interval",
+        "N/n"
+      ],
+      [
+        "Start",
+        "1,…,k"
+      ],
+      [
+        "First order",
+        "1/k"
+      ],
+      [
+        "Pair probability",
+        "1/k or 0"
+      ],
+      [
+        "Variance",
+        "Across k starts"
+      ]
+    ],
+    "tricks": [
+      "List k possible starts before computing pair probabilities.",
+      "Check whether i−j is a multiple of k.",
+      "Inspect frame order for periodicity."
+    ],
+    "shortcuts": [
+      "A pair in different residue classes cannot appear together.",
+      "Exact design variance is variance across possible starts."
+    ],
+    "remember": [
+      "Systematic sample space is smaller than SRS sample space.",
+      "One start does not reveal other start-specific estimates."
+    ]
+  },
+  "refs": [
+    {
+      "title": "Sampling Techniques",
+      "where": "Systematic sampling",
+      "site": "William G. Cochran",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Classical treatment of systematic sampling and variance."
+    },
+    {
+      "title": "Sampling: Design and Analysis",
+      "where": "Systematic sampling",
+      "site": "Sharon L. Lohr",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Design-based treatment of systematic sampling and frame ordering."
+    },
+    {
+      "title": "Sampling Theory lecture notes",
+      "where": "Systematic sampling",
+      "site": "IIT Kanpur, Shalabh",
+      "url": "https://home.iitk.ac.in/~shalab/sampling/",
+      "type": "Open lecture notes",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Open supporting material for probability sampling designs."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule."
+  },
+  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t5. Practice questions are original, not official PYQs. Worked samples, probabilities and design-variance calculations are independently recomputed in verify_sampling_t5.py. Assumptions: linear systematic design, N=nk and a uniform random start from 1,…,k."
+}
