@@ -53,6 +53,8 @@ def validate(topic: int, lesson: dict, pool: dict) -> None:
     for scene in lesson["scenes"]:
         for block in scene.get("blocks", []):
             assert block.get("t") and block.get("h") and block.get("body"), f"t{topic}: malformed theory block in {scene.get('id')}"
+        if scene.get("kind") == "guided":
+            assert all(isinstance(step, dict) and step.get("say") for step in scene.get("solution", [])), f"t{topic}: malformed guided solution in {scene.get('id')}"
     assert len({s.get("id") for s in lesson["scenes"]}) == len(lesson["scenes"]), f"t{topic}: duplicate scene id"
     assert lesson["scenes"][-1]["kind"] == "quiz", f"t{topic}: quiz is not the final scene"
     assert lesson["scenes"][-1]["setId"] == set_id, f"t{topic}: quiz setId mismatch"
