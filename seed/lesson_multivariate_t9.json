@@ -1,0 +1,557 @@
+{
+ "id": "multivariatet9",
+ "topicId": "multivariate-t9",
+ "moduleId": "multivariate",
+ "title": "Factor and Cluster Analysis",
+ "breadcrumb": "Module 8 · Multivariate Analysis · Factor and cluster analysis",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 65,
+ "objectives": [
+  "Explain the common-factor model and distinguish common variance from uniqueness.",
+  "Interpret loadings, communalities and uniquenesses.",
+  "Explain factor rotation and recognise varimax.",
+  "Distinguish factor analysis from principal component analysis.",
+  "Describe hierarchical and k-means clustering and common linkage rules."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Correlation and covariance matrices",
+   "why": "Factor analysis studies shared covariance among observed variables."
+  },
+  {
+   "id": "p2",
+   "name": "Eigenvalues and eigenvectors",
+   "why": "Extraction and scree plots are used in exploratory factor analysis."
+  },
+  {
+   "id": "p3",
+   "name": "Euclidean distance",
+   "why": "Distance and scale determine how observations are grouped."
+  }
+ ],
+ "traps": [
+  "Factor analysis models shared covariance among variables; PCA explains total variance.",
+  "Communality is explained common variance; uniqueness is specific plus error variance.",
+  "For standardised variables in the usual orthogonal model, communality plus uniqueness equals one.",
+  "Varimax is orthogonal; oblique rotations permit correlated factors.",
+  "Single linkage uses minimum cross-cluster distance and can create chaining.",
+  "Complete linkage uses maximum; average linkage uses mean cross-cluster distance.",
+  "Ward's method minimises the increase in within-cluster sum of squares.",
+  "Standard k-means requires k in advance and is sensitive to initial centres, scale and outliers."
+ ],
+ "revision": {
+  "sheet": [
+   "Common-factor model: X=μ+ΛF+ε; observed variables are explained by latent common factors plus unique components.",
+   "For orthogonal factors, Σ=ΛΛ′+Ψ, where Ψ is diagonal uniqueness covariance.",
+   "Communality hᵢ²=Σⱼ λᵢⱼ²; uniqueness ψᵢ=1−hᵢ² for standardised variables in the usual orthogonal model.",
+   "Large absolute loading indicates a stronger variable–factor relationship; sign gives direction.",
+   "Rotation aids interpretation; varimax is orthogonal, while oblique rotations allow correlated factors.",
+   "PCA explains total variance; common factor analysis models shared/common variance.",
+   "Hierarchical clustering builds nested groups; a dendrogram displays the sequence of merges.",
+   "Single linkage uses minimum distance; complete uses maximum; average uses the mean.",
+   "Ward's method merges the pair causing the smallest increase in within-cluster sum of squares.",
+   "k-means minimises within-cluster squared Euclidean distances for a chosen k.",
+   "Standardise variables when scales differ; otherwise large-scale variables can dominate distance.",
+   "Factor analysis groups variables through latent dimensions; cluster analysis groups observations."
+  ],
+  "cards": [
+   [
+    "Common-factor model",
+    "X=μ+ΛF+ε"
+   ],
+   [
+    "Covariance decomposition",
+    "Σ=ΛΛ′+Ψ"
+   ],
+   [
+    "Communality",
+    "hᵢ²=Σⱼ λᵢⱼ²"
+   ],
+   [
+    "Uniqueness",
+    "Specific + error variance"
+   ],
+   [
+    "Varimax",
+    "Orthogonal rotation"
+   ],
+   [
+    "Single linkage",
+    "Minimum inter-cluster distance"
+   ],
+   [
+    "Complete linkage",
+    "Maximum inter-cluster distance"
+   ],
+   [
+    "Ward linkage",
+    "Minimum increase in within-cluster SS"
+   ],
+   [
+    "k-means",
+    "Minimise within-cluster squared distances"
+   ]
+  ],
+  "tricks": [
+   "Factor analysis explains covariance among variables; clustering groups cases.",
+   "Communality plus uniqueness equals one for standardised variables in the usual decomposition.",
+   "Varimax keeps factors orthogonal; oblique rotations allow correlation.",
+   "Single = nearest pair; complete = farthest pair; average = mean pair.",
+   "k-means alternates assignments and centroid updates."
+  ],
+  "shortcuts": [
+   "Latent dimensions → factor analysis; groups of cases → cluster analysis.",
+   "Calculate communalities by summing squared loadings across retained orthogonal factors.",
+   "Identify linkage from the distance aggregation rule.",
+   "Check standardisation before using Euclidean distance or k-means on mixed scales."
+  ],
+  "remember": [
+   "Factor analysis explains shared covariance with latent variables.",
+   "Communality is explained common variance; uniqueness is what remains.",
+   "Rotation improves interpretability; varimax is orthogonal.",
+   "Hierarchical methods create a dendrogram; k-means uses a chosen k."
+  ]
+ },
+ "howto": "For factor analysis, specify the common-factor model, inspect loadings, calculate communalities and uniquenesses, then interpret a rotated solution. For clustering, define the cases and variables, standardise when appropriate, choose a distance and linkage or k, and interpret groups with substantive caution.",
+ "refs": [
+  {
+   "title": "An Introduction to Multivariate Statistical Analysis",
+   "where": "Factor analysis and multivariate methods",
+   "site": "T. W. Anderson",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Mathematical foundations of multivariate covariance models."
+  },
+  {
+   "title": "Applied Multivariate Statistical Analysis",
+   "where": "Factor analysis and cluster analysis",
+   "site": "Johnson and Wichern",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Standard applied treatment of factor methods and clustering."
+  },
+  {
+   "title": "STAT 505: Applied Multivariate Statistical Analysis",
+   "where": "Factor and cluster analysis course notes",
+   "site": "Penn State",
+   "url": "https://online.stat.psu.edu/stat505/",
+   "type": "Free course notes",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Accessible supplementary material for multivariate analysis."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [],
+ "provenance": "Authored 11 November 2026 from catalog topic multivariate-t9 (Recall, importance 2). June 2026 Paper 2 source bank searched for factor analysis, cluster analysis, common factors, rotation and linkage terminology; no directly matching question was identified, so no PYQ anchor is claimed. Scope is introductory definitions, interpretation and method recognition.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 5,
+   "title": "Two different multivariate questions",
+   "objective": "Distinguish variables from observations.",
+   "body": [
+    "Multivariate analysis asks whether observed variables share a smaller number of underlying dimensions, or whether cases can be divided into groups with similar profiles.",
+    "Factor analysis explains correlations among variables through latent common factors.",
+    "Cluster analysis groups observations or objects using similarity or distance."
+   ],
+   "items": [
+    {
+     "ask": "Factor analysis primarily seeks to group what?",
+     "recall": "Variables through latent factors.",
+     "refresh": [
+      "A factor is an unobserved dimension used to explain shared variation among observed variables.",
+      "The aim is to account for covariance among measured variables, not to assign each person to a cluster."
+     ]
+    },
+    {
+     "ask": "Cluster analysis primarily groups what?",
+     "recall": "Observations or cases.",
+     "refresh": [
+      "Each case is represented by measured features and grouped using a distance or similarity rule.",
+      "Clusters are data-driven and are not necessarily pre-labelled classes."
+     ]
+    },
+    {
+     "ask": "Does basic cluster analysis require known response labels?",
+     "recall": "No.",
+     "refresh": [
+      "Clustering is generally an unsupervised exploratory method.",
+      "There is no pre-labelled target group in the basic clustering task."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "To discover hidden dimensions behind ten questionnaire items, which method is relevant?",
+    "nudge": "The goal is to explain correlations among variables."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 5,
+   "title": "Latent traits behind observed variables",
+   "objective": "Understand the motivation for factor analysis.",
+   "body": [
+    "Vocabulary, reading comprehension, grammar and verbal reasoning scores may correlate because they share a broader latent ability.",
+    "Factor analysis represents this shared pattern using fewer common factors. The factors are not directly observed; they are inferred from a covariance or correlation matrix.",
+    "A useful solution must be statistically defensible and substantively interpretable. The algorithm does not name the latent construct."
+   ],
+   "scenario": {
+    "teaser": "Ten survey items, fewer dimensions",
+    "title": "A student skills survey",
+    "body": [
+     "A university measures ten indicators of academic engagement: reading frequency, library use, assignment planning, class participation and peer discussion. Many indicators are positively correlated. The researcher suspects that a few broader dimensions may explain the shared pattern.",
+     "Exploratory factor analysis investigates whether correlations are organised around fewer latent factors. The researcher examines loadings and names factors only after considering what the variables measure."
+    ],
+    "q": "What is the main reason to use factor analysis?",
+    "answer": "To explain shared correlations among observed indicators using fewer latent factors."
+   },
+   "ask": {
+    "q": "Are latent factors directly measured in the original questionnaire?",
+    "nudge": "They are inferred from observed variables."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "The common-factor model",
+   "objective": "Interpret loadings and uniqueness.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Common-factor model",
+     "body": "X=μ+ΛF+ε. X is the p-vector of observed variables, F the q-vector of common factors, Λ the loading matrix, and ε the variable-specific components."
+    },
+    {
+     "t": "def",
+     "h": "Orthogonal factor covariance",
+     "body": "If Cov(F)=I, Cov(ε)=Ψ and common factors are uncorrelated with unique components, then Σ=ΛΛ′+Ψ, with Ψ diagonal."
+    },
+    {
+     "t": "formula",
+     "h": "Communality and uniqueness",
+     "body": "For variable i, hᵢ²=Σⱼ λᵢⱼ² in the usual orthogonal solution. For a standardised variable, ψᵢ=1−hᵢ²."
+    },
+    {
+     "t": "step",
+     "h": "Interpret a loading",
+     "body": "A larger absolute loading indicates a stronger association between the observed variable and that factor. The sign indicates direction."
+    }
+   ],
+   "ask": {
+    "q": "In the orthogonal common-factor model, what does Ψ represent?",
+    "nudge": "It is the diagonal covariance matrix of variable-specific components."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Calculate communalities",
+   "objective": "Calculate explained common variance.",
+   "problem": "A standardised variable has loadings 0.6 and 0.5 on two retained orthogonal factors. Find its communality and uniqueness.",
+   "steps": [
+    {
+     "say": "Square the first loading.",
+     "math": "0.6²=0.36.",
+     "why": "The contribution of a factor to communality is its squared loading."
+    },
+    {
+     "say": "Square the second loading.",
+     "math": "0.5²=0.25.",
+     "why": "Add squared loadings across retained orthogonal factors."
+    },
+    {
+     "say": "Add the contributions.",
+     "math": "h²=0.36+0.25=0.61.",
+     "why": "The two factors explain 61% of the variable's variance in this standardised model."
+    },
+    {
+     "say": "Find uniqueness.",
+     "math": "ψ=1−0.61=0.39.",
+     "why": "The remaining 39% is specific plus error variance."
+    }
+   ],
+   "ask": {
+    "q": "If a third orthogonal factor with loading 0.3 is retained, what is the new communality?",
+    "nudge": "Add 0.3 squared to the current communality."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 4,
+   "title": "Retrieve factor-analysis vocabulary",
+   "objective": "Recall the main quantities.",
+   "intro": "Try to answer before revealing each definition.",
+   "items": [
+    {
+     "q": "What is Λ?",
+     "a": "The factor loading matrix."
+    },
+    {
+     "q": "What is communality?",
+     "a": "The variance of an observed variable explained by retained common factors."
+    },
+    {
+     "q": "What is uniqueness?",
+     "a": "The variable-specific plus error variance not explained by common factors."
+    },
+    {
+     "q": "What is a latent factor?",
+     "a": "An unobserved common dimension inferred from observed variables."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 7,
+   "title": "Extraction, rotation and PCA distinction",
+   "objective": "Recognise rotation and separate PCA from factor analysis.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Factor extraction",
+     "body": "An extraction method estimates a lower-dimensional common-factor representation from the covariance or correlation structure. The number of factors is informed by theory and diagnostics."
+    },
+    {
+     "t": "formula",
+     "h": "Rotation",
+     "body": "Rotation changes factor-axis orientation to produce a more interpretable loading pattern. Varimax is orthogonal; oblique rotations permit correlated factors."
+    },
+    {
+     "t": "step",
+     "h": "PCA versus common factor analysis",
+     "body": "PCA constructs linear combinations to explain total observed variance. Common factor analysis models shared covariance and separates common variance from uniqueness."
+    },
+    {
+     "t": "step",
+     "h": "Choosing the number of factors",
+     "body": "Scree plots, eigenvalue rules, parallel analysis and substantive interpretability can inform the choice. No single mechanical rule replaces judgement."
+    }
+   ],
+   "ask": {
+    "q": "Which rotation keeps the rotated factors orthogonal?",
+    "nudge": "It is the widely used variance-maximising orthogonal rotation."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s6",
+   "mins": 6,
+   "title": "Interpret a rotated loading pattern",
+   "objective": "Read a simple factor loading matrix.",
+   "problem": "A rotated solution has two factors. A loads (0.82, 0.10), B loads (0.76, 0.18), and C loads (0.08, 0.79). Give a simple interpretation.",
+   "hints": [
+    "Compare absolute loadings within each row.",
+    "A and B load mainly on the first factor; C loads mainly on the second.",
+    "Name factors only after considering what the variables measure."
+   ],
+   "answer": "A and B define the first factor; C defines the second. Substantive labels require variable descriptions.",
+   "check": "A and B → Factor 1; C → Factor 2.",
+   "solution": [
+    {
+     "say": "Inspect A and B.",
+     "math": "0.82 and 0.76 are dominant on Factor 1.",
+     "why": "Both variables are strongly associated with the first factor."
+    },
+    {
+     "say": "Inspect C.",
+     "math": "0.79 is dominant on Factor 2.",
+     "why": "Variable C is primarily associated with the second factor."
+    },
+    {
+     "say": "Avoid inventing labels.",
+     "math": "Use item meanings to name factors.",
+     "why": "Loadings show statistical association; interpretation needs subject-matter context."
+    }
+   ],
+   "ask": {
+    "q": "Why is it risky to name Factor 1 without knowing what A and B measure?",
+    "nudge": "A numerical pattern alone does not reveal the substantive construct."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Hierarchical cluster analysis",
+   "objective": "Distinguish linkage rules and dendrograms.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Agglomerative procedure",
+     "body": "Start with each observation as its own cluster. Repeatedly merge the two closest clusters until one cluster remains or the desired number is reached."
+    },
+    {
+     "t": "formula",
+     "h": "Single linkage",
+     "body": "Cluster distance is the minimum distance between any cross-cluster pair. It can produce chaining."
+    },
+    {
+     "t": "formula",
+     "h": "Complete and average linkage",
+     "body": "Complete linkage uses the maximum cross-cluster pairwise distance. Average linkage uses the average of those distances."
+    },
+    {
+     "t": "step",
+     "h": "Ward's method and dendrogram",
+     "body": "Ward's method merges the pair causing the smallest increase in within-cluster sum of squares. A dendrogram displays the sequence and height of merges."
+    }
+   ],
+   "ask": {
+    "q": "Which linkage is most associated with chaining?",
+    "nudge": "It merges clusters whenever at least one cross-cluster pair is close."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s8",
+   "mins": 6,
+   "title": "Read the linkage rule",
+   "objective": "Select a hierarchical linkage method.",
+   "problem": "Cluster A contains points 1 and 8; cluster B contains points 4 and 10 on a one-dimensional scale. Find single-linkage and complete-linkage distances.",
+   "steps": [
+    {
+     "say": "List cross-cluster distances.",
+     "math": "|1−4|=3, |1−10|=9, |8−4|=4, |8−10|=2.",
+     "why": "Only pairs with one point from each cluster are considered."
+    },
+    {
+     "say": "Take the minimum for single linkage.",
+     "math": "d_single(A,B)=min(3,9,4,2)=2.",
+     "why": "Single linkage uses the nearest cross-cluster pair."
+    },
+    {
+     "say": "Take the maximum for complete linkage.",
+     "math": "d_complete(A,B)=max(3,9,4,2)=9.",
+     "why": "Complete linkage uses the farthest cross-cluster pair."
+    }
+   ],
+   "ask": {
+    "q": "What would average linkage use?",
+    "nudge": "It aggregates all four cross-cluster distances."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s9",
+   "mins": 7,
+   "title": "k-means clustering",
+   "objective": "Describe the k-means algorithm and limitations.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Objective",
+     "body": "For chosen k, k-means minimises ΣⱼΣᵢ∈Cⱼ ||xᵢ−cⱼ||², where cⱼ is the centroid of cluster j."
+    },
+    {
+     "t": "step",
+     "h": "Algorithm",
+     "body": "Choose k initial centres; assign each observation to its nearest centre; recompute each centre as the mean of its assigned observations; repeat until stable."
+    },
+    {
+     "t": "def",
+     "h": "Practical limitations",
+     "body": "Results depend on initial centres. The method is sensitive to outliers and variable scale, and favours roughly compact, centroid-based groups."
+    },
+    {
+     "t": "step",
+     "h": "Choosing k",
+     "body": "An elbow plot compares within-cluster sum of squares across k. Silhouette width assesses cohesion and separation. These diagnostics support, but do not mechanically settle, the choice."
+    }
+   ],
+   "ask": {
+    "q": "Why standardise variables measured in rupees and years before k-means?",
+    "nudge": "Euclidean distance is affected by the scale of each coordinate."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s10",
+   "mins": 5,
+   "title": "Factor or cluster? Avoid the traps",
+   "objective": "Distinguish the two method families.",
+   "intro": "Decide whether each statement is correct.",
+   "items": [
+    {
+     "claim": "Factor analysis explains covariance among variables using latent factors.",
+     "tf": true,
+     "why": "Its target is the shared structure among observed variables."
+    },
+    {
+     "claim": "Cluster analysis primarily groups variables into latent dimensions.",
+     "tf": false,
+     "why": "Basic cluster analysis groups observations or objects, not latent dimensions among variables."
+    },
+    {
+     "claim": "Varimax is an orthogonal rotation.",
+     "tf": true,
+     "why": "Varimax maintains orthogonal factor axes."
+    },
+    {
+     "claim": "k-means automatically determines the number of clusters k.",
+     "tf": false,
+     "why": "The user specifies k before running standard k-means."
+    }
+   ],
+   "ask": {
+    "q": "Which method segments customers into groups based on their profiles?",
+    "nudge": "The objects to be grouped are the customers."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s11",
+   "mins": 4,
+   "title": "Exam-ready method selector",
+   "objective": "Consolidate factor and cluster analysis.",
+   "body": [
+    "Factor analysis explains shared covariance among observed variables through latent common factors. Loadings describe variable–factor relationships; communalities and uniquenesses partition variance.",
+    "Rotation improves interpretability. Varimax is orthogonal, while oblique rotations allow correlated factors. PCA explains total variance; common factor analysis models shared variance.",
+    "Hierarchical clustering builds nested groups using linkage rules and displays them in a dendrogram. Single uses minimum distance, complete maximum, average the mean, and Ward minimises the increase in within-cluster sum of squares.",
+    "k-means partitions observations into a chosen k clusters by minimising within-cluster squared distances. Standardisation, initialisation, outliers and interpretation matter."
+   ],
+   "ask": {
+    "q": "What is the quickest distinction between factor analysis and cluster analysis?",
+    "nudge": "One groups variables through latent dimensions; the other groups cases."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s12",
+   "mins": 2,
+   "title": "Check your understanding",
+   "objective": "Test the essential ideas.",
+   "setId": "multivariate_t9_mastery"
+  }
+ ]
+}
