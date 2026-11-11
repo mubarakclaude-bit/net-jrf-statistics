@@ -44,6 +44,14 @@ jobs:
             python "lesson_design_${topic}.py"
             python "verify_design_${topic}.py"
           done
+      - name: Validate Regression lessons and mastery pools
+        run: |
+          python tools/serialize_regression_batch.py --check
+          for topic in $(seq 1 15); do
+            echo "=== Regression T${topic} ==="
+            node vcheck.js "seed/lesson_rg${topic}.json"
+            python "verify_regression_t${topic}.py"
+          done
       - name: Build app and check JavaScript syntax
         run: ./build.sh
       - name: Install browser test dependency

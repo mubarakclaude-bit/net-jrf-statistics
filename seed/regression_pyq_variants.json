@@ -16,14 +16,14 @@
     "0.49"
    ],
    "answer": "A",
-   "explanation": "1 − (0.45)(49/45) = 1 − 0.49 = 0.51. (This is Q84 of your paper.)",
+   "explanation": "Adjusted R² = 1 − (1−0.55)(50−1)/(50−5) = 1 − 0.45×49/45 = 0.51.",
    "srcQ": 9
   },
   {
    "id": "j26v-q09-02",
    "format": "single",
    "topic": "June 2026 paper · Q9",
-   "stem": "The degrees of freedom of the overall Fstatistic in a model with n observations and k parameters are:",
+   "stem": "The degrees of freedom of the overall F statistic in a model with n observations and k parameters are:",
    "options": [
     "(n − k, k − 1)",
     "(k − 1, n − k)",
@@ -31,7 +31,7 @@
     "(k − 1, n − 1)"
    ],
    "answer": "B",
-   "explanation": "3. In simple linear regression, the relation between the overall F and the t-statistic for the slope is:",
+   "explanation": "The regression mean square has k−1 degrees of freedom and the residual mean square has n−k degrees of freedom. Under the null and the classical normal-error assumptions, the overall statistic has an F(k−1,n−k) distribution.",
    "srcQ": 9
   },
   {
@@ -46,7 +46,7 @@
     "unrelated"
    ],
    "answer": "C",
-   "explanation": "4. As R² approaches 1, the F-statistic:",
+   "explanation": "In simple linear regression there is one slope restriction, so the overall F test is equivalent to the two-sided t test for the slope: F=t².",
    "srcQ": 9
   },
   {
@@ -61,7 +61,7 @@
     "tends to infinity"
    ],
    "answer": "D",
-   "explanation": "5. Adding an irrelevant regressor to a model will:",
+   "explanation": "For fixed n and k, F=[R²/(k−1)]/[(1−R²)/(n−k)]. As R² approaches 1 from below, the denominator approaches zero while the numerator stays positive, so F tends to infinity.",
    "srcQ": 9
   },
   {
@@ -76,7 +76,7 @@
     "always increase adjusted R²"
    ],
    "answer": "A",
-   "explanation": "6. Adjusted R² can be:",
+   "explanation": "Adding a regressor cannot increase RSS because the larger model can reproduce the smaller fit by setting its new coefficient to zero. With TSS fixed, R² therefore cannot fall.",
    "srcQ": 9
   },
   {
@@ -91,7 +91,7 @@
     "greater than 1"
    ],
    "answer": "B",
-   "explanation": "When the fit is very poor relative to the number of parameters",
+   "explanation": "Adjusted R² = 1 − (1−R²)(n−1)/(n−k). It becomes negative when the fit is weak relative to the number of estimated parameters.",
    "srcQ": 9
   },
   {
@@ -106,7 +106,7 @@
     "0.015"
    ],
    "answer": "C",
-   "explanation": "(66870/3)/(5344/16) = 22290/334 = 66.74. (This is Q79 of your paper.)",
+   "explanation": "MSR=66870/3=22290 and MSE=5344/16=334. Hence F=22290/334≈66.74.",
    "srcQ": 9
   },
   {
@@ -121,7 +121,7 @@
     "RegSS/TSS"
    ],
    "answer": "D",
-   "explanation": "9. A high R² together with individually insignificant t-statistics suggests:",
+   "explanation": "With an intercept, R²=1−RSS/TSS=RegSS/TSS. It is the proportion of total variation explained by the fitted regression.",
    "srcQ": 9
   },
   {
@@ -136,7 +136,7 @@
     "heteroscedasticity"
    ],
    "answer": "A",
-   "explanation": "10. The unbiased estimator of σ² in a model with k parameters is:",
+   "explanation": "This is a classic multicollinearity pattern: correlated regressors can inflate individual coefficient standard errors even when the model has a high R² and a significant joint F test.",
    "srcQ": 9
   },
   {
@@ -151,7 +151,7 @@
     "RSS/(n − 1)"
    ],
    "answer": "B",
-   "explanation": "Q10. One-sided (upper) confidence bound for a normal mean X₁, …, Xₙ is a random sample from N(μ, σ²). The (1 − α) upper confidence bound for μ is:",
+   "explanation": "With k fitted parameters, E(RSS)=σ²(n−k). Dividing RSS by its residual degrees of freedom gives the unbiased estimator RSS/(n−k).",
    "srcQ": 9
   },
   {
@@ -166,7 +166,7 @@
     "large n"
    ],
    "answer": "C",
-   "explanation": "Gauss–Markov needs only mean zero and constant variance with no correlation",
+   "explanation": "The Gauss–Markov result uses the zero conditional mean and spherical error covariance assumptions (plus full column rank). Normality and large-sample assumptions are not required for BLUE.",
    "srcQ": 11
   },
   {
@@ -181,7 +181,7 @@
     "σ²(X′X)⁻¹"
    ],
    "answer": "D",
-   "explanation": "3. If y₁ = β + u₁, y₂ = 2β + u₂ with equal variances, the BLUE of β is:",
+   "explanation": "Conditional on X, Var(β̂_OLS)=Var((X′X)⁻¹X′u)=σ²(X′X)⁻¹ when Var(u|X)=σ²I.",
    "srcQ": 11
   },
   {
@@ -196,7 +196,7 @@
     "(y₁ + y₂)/ 3"
    ],
    "answer": "A",
-   "explanation": "X = (1, 2)′, X′X = 5, X′y = y₁ + 2y₂",
+   "explanation": "For X=(1,2)′, β̂=(X′X)⁻¹X′y=(1/5)(y₁+2y₂), which is the minimum-variance linear unbiased estimator under equal error variances.",
    "srcQ": 11
   },
   {
@@ -211,7 +211,7 @@
     "2σ²"
    ],
    "answer": "B",
-   "explanation": "σ²(X′X)⁻¹ = σ²/5",
+   "explanation": "Var(β̂)=σ²(X′X)⁻¹ and X′X=1²+2²=5, so the variance is σ²/5.",
    "srcQ": 11
   },
   {
@@ -226,7 +226,7 @@
     "identical"
    ],
    "answer": "C",
-   "explanation": "Off-diagonal zeros in (X′X)⁻¹ give zero covariances",
+   "explanation": "If X′X is diagonal, σ²(X′X)⁻¹ is also diagonal. The OLS coefficient estimators therefore have zero pairwise covariances (and are uncorrelated).",
    "srcQ": 11
   },
   {
@@ -241,7 +241,7 @@
     "ℓ′ lies in the row space of X"
    ],
    "answer": "D",
-   "explanation": "Q12. Partial and multiple correlations from an equicorrelation matrix X ~ N₃(0, Σ) with Σ the equicorrelation matrix (1 on the diagonal, 1/2 off it). A. R₃.₁₂ = R₂.₁₃ B. r₁₃.₂ = 1/3 C. R₁.₂₃ = 2/3 D. r₂₃.₁ = r₁₃.₂ Correct:",
+   "explanation": "A linear function ℓ′β is estimable exactly when ℓ belongs to the row space of X; equivalently, ℓ′=a′X for some vector a.",
    "srcQ": 11
   },
   {
@@ -250,20 +250,20 @@
    "topic": "June 2026 paper · Q38",
    "stem": "Which of the following DOES cause bias in the OLS estimator?",
    "options": [
-    "omission of a relevant correlated variable",
+    "omission of a relevant variable correlated with an included regressor",
     "a large sample",
     "multicollinearity",
     "heteroscedasticity"
    ],
    "answer": "A",
-   "explanation": "8. Under heteroscedasticity, OLS is:",
+   "explanation": "Omitting a relevant variable that is correlated with an included regressor creates omitted-variable bias. Large samples, multicollinearity and heteroscedasticity do not by themselves imply coefficient bias under exogeneity.",
    "srcQ": 38
   },
   {
    "id": "j26v-q38-02",
    "format": "single",
    "topic": "June 2026 paper · Q38",
-   "stem": "Under heteroscedasticity, OLS is:",
+   "stem": "With E(u|X)=0, under heteroscedasticity OLS is:",
    "options": [
     "biased",
     "unbiased but not BLUE",
@@ -271,7 +271,7 @@
     "inconsistent"
    ],
    "answer": "B",
-   "explanation": "9. Principal component regression addresses multicollinearity by:",
+   "explanation": "With E(u|X)=0, heteroscedasticity alone does not bias OLS. It does violate the spherical covariance condition, so OLS is generally not BLUE and conventional homoscedastic standard errors are invalid.",
    "srcQ": 38
   },
   {
@@ -286,7 +286,7 @@
     "dropping observations"
    ],
    "answer": "C",
-   "explanation": "10. Multicollinearity primarily damages:",
+   "explanation": "Principal component regression replaces correlated regressors with orthogonal principal-component directions, often retaining a subset to reduce multicollinearity.",
    "srcQ": 38
   },
   {
@@ -301,7 +301,7 @@
     "interpretation of individual coefficients"
    ],
    "answer": "D",
-   "explanation": "Q39. Power of a test for a uniform distribution",
+   "explanation": "Multicollinearity inflates coefficient variances and makes individual effects difficult to distinguish. Overall fit and in-range prediction can remain strong.",
    "srcQ": 38
   }
  ]

@@ -1,0 +1,685 @@
+{
+  "id": "regressiont9",
+  "topicId": "regression-t9",
+  "moduleId": "regression",
+  "title": "6.9 — Identification in Simultaneous Equation Models",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.9 Identification in simultaneous equation models",
+  "engine": "B",
+  "engineName": "Distinguish structural and reduced forms and apply the order and rank conditions for identification.",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 92,
+  "objectives": [
+    "Distinguish structural equations from reduced-form equations in a simultaneous system.",
+    "Identify endogenous and predetermined or exogenous variables in a structural model.",
+    "Explain why OLS applied directly to a structural equation is generally inconsistent when endogenous regressors appear on its right-hand side.",
+    "Apply the order condition to classify an equation as underidentified, exactly identified or overidentified.",
+    "Apply the rank condition and explain why it is necessary and sufficient while the order condition is only necessary.",
+    "Interpret excluded exogenous variables as sources of identifying variation."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Endogeneity and IV assumptions",
+      "why": "Simultaneous equations create correlation between endogenous right-hand-side variables and structural disturbances."
+    },
+    {
+      "id": "p2",
+      "name": "Linear systems and matrix rank",
+      "why": "The rank condition is a matrix-rank statement about excluded exogenous variables across the other structural equations."
+    },
+    {
+      "id": "p3",
+      "name": "Reduced-form algebra",
+      "why": "Identification is understood by solving the structural system for endogenous variables as functions of exogenous variables and disturbances."
+    }
+  ],
+  "traps": [
+    "Structural coefficients describe behavioural equations; reduced-form coefficients describe equilibrium responses to exogenous variables.",
+    "An endogenous variable is jointly determined inside the system; an exogenous variable is determined outside the system.",
+    "The order condition counts excluded exogenous variables and endogenous right-hand-side variables, not all regressors.",
+    "The order condition is necessary but not sufficient; a zero cross-equation coefficient can still make the rank condition fail.",
+    "Exactly identified means the number of excluded exogenous variables equals the number of endogenous RHS variables and the rank condition holds.",
+    "Overidentified means there are more excluded exogenous variables than endogenous RHS variables; the rank condition must still hold.",
+    "A variable's exclusion from one equation is a modelling restriction, not proof that it is irrelevant in the full system.",
+    "The reduced form does not generally identify every structural coefficient without additional restrictions."
+  ],
+  "howto": "For each structural equation, mark endogenous variables on the right-hand side and count exogenous variables excluded from that equation. Apply the order condition as a quick necessary screen. Then inspect the coefficients on those excluded exogenous variables in the other equations and apply the rank condition. Never call an equation identified from the order count alone.",
+  "refs": [
+    {
+      "title": "Econometric Analysis",
+      "where": "Simultaneous-equation models and identification",
+      "site": "William H. Greene",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Formal structural and reduced-form systems and identification conditions."
+    },
+    {
+      "title": "Introductory Econometrics: A Modern Approach",
+      "where": "Simultaneous equations and IV estimation",
+      "site": "Jeffrey M. Wooldridge",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Applied explanation of simultaneous determination and instruments."
+    },
+    {
+      "title": "Econometric Methods",
+      "where": "Identification in simultaneous equation systems",
+      "site": "Jack Johnston and John DiNardo",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Classical order and rank conditions."
+    }
+  ],
+  "provenance": "Authored for UGC NET Statistics Paper 2 Unit VI. The demand-supply system and numerical coefficients are original teaching examples; the rank and reduced-form calculations are checked exactly in verify_regression_t9.py. No June 2026 question is claimed as a direct simultaneous-equation identification PYQ.",
+  "revision": {
+    "sheet": [
+      "Structural form describes behavioural equations; reduced form expresses endogenous variables in terms of exogenous variables.",
+      "Endogenous variables are jointly determined within the system; exogenous variables are determined outside it.",
+      "The order condition counts exogenous variables excluded from an equation and endogenous variables on its right-hand side.",
+      "For m endogenous RHS variables, the order condition requires k≥m excluded exogenous variables.",
+      "If k<m, the equation is underidentified.",
+      "If k=m and rank holds, it is exactly identified.",
+      "If k>m and rank holds, it is overidentified.",
+      "The order condition is necessary but not sufficient; rank must be checked.",
+      "Rank checks whether the excluded variables provide enough independent cross-equation variation.",
+      "Reduced-form coefficients are equilibrium combinations of structural parameters."
+    ],
+    "cards": [
+      [
+        "Structural form",
+        "Behavioural equations"
+      ],
+      [
+        "Reduced form",
+        "Endogenous variables on exogenous variables"
+      ],
+      [
+        "Endogenous",
+        "Jointly determined inside the system"
+      ],
+      [
+        "Exogenous",
+        "Determined outside the system"
+      ],
+      [
+        "Order condition",
+        "k≥m"
+      ],
+      [
+        "Exact identification",
+        "k=m and full rank"
+      ],
+      [
+        "Overidentification",
+        "k>m and full rank"
+      ],
+      [
+        "Rank condition",
+        "Independent excluded-variable coefficients"
+      ]
+    ],
+    "tricks": [
+      "Count excluded exogenous variables, not included ones.",
+      "If k<m, classify underidentified immediately.",
+      "If order passes, do not stop: calculate rank.",
+      "Two proportional columns count as one independent direction."
+    ],
+    "shortcuts": [
+      "Order = count; rank = independence.",
+      "Equality gives exact identification only if rank holds.",
+      "Reduced-form slopes are not structural behavioural slopes."
+    ],
+    "remember": [
+      "The order condition is necessary but not sufficient.",
+      "For m endogenous RHS variables, the relevant rank must be m."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh structural equations and matrix rank",
+      "objective": "Recover the system concepts needed for identification.",
+      "body": [
+        "A simultaneous-equation model contains several structural relationships that determine endogenous variables jointly. Identification asks whether the data and the model restrictions can recover a particular structural equation's coefficients.",
+        "The key tools are variable classification, solving linear systems and matrix rank. Recall these before applying the order and rank conditions."
+      ],
+      "items": [
+        {
+          "ask": "What is an endogenous variable?",
+          "recall": "A variable determined jointly within the system.",
+          "refresh": [
+            "An endogenous variable is explained by the structural equations and may appear on the right-hand side of another structural equation.",
+            "Because it is jointly determined, it can be correlated with structural disturbances in the system.",
+            "Price and quantity are common endogenous variables in a demand-supply system."
+          ]
+        },
+        {
+          "ask": "What is an exogenous variable?",
+          "recall": "A variable determined outside the system and taken as given.",
+          "refresh": [
+            "An exogenous variable shifts one or more structural equations but is not determined by the system itself.",
+            "Examples include income in a demand equation or input prices in a supply equation, under the model's assumptions.",
+            "An exogenous variable excluded from one equation may help identify that equation through its presence elsewhere."
+          ]
+        },
+        {
+          "ask": "What does matrix rank measure?",
+          "recall": "The number of linearly independent rows or columns.",
+          "refresh": [
+            "Rank counts independent information in a matrix; proportional or zero columns do not add rank.",
+            "The rank condition checks whether excluded exogenous variables create enough independent cross-equation variation.",
+            "A simple count of excluded variables can pass even when those variables contribute no independent identifying variation."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What distinguishes the order condition from the rank condition?",
+        "nudge": "One counts variables; the other checks linear independence."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Why equilibrium price is endogenous",
+      "objective": "Explain simultaneous determination using a demand-supply example.",
+      "body": [
+        "In a market, demand depends on price and income, while supply depends on price and input costs. The market price is not set independently of either equation: it adjusts until quantity demanded equals quantity supplied.",
+        "A shock to demand changes price and quantity; a supply shock also changes both. Price therefore responds to disturbances in both structural equations.",
+        "Regressing quantity demanded on observed price by OLS is problematic because price contains the equilibrium response to unobserved demand and supply shocks."
+      ],
+      "scenario": {
+        "teaser": "Demand and supply determine one market price",
+        "title": "The equilibrium price problem",
+        "body": [
+          "A market analyst observes monthly price and quantity, household income and the cost of a key input. Price and quantity are jointly determined where demand meets supply.",
+          "Income shifts demand; input cost shifts supply. The observed price responds to both shocks, including unobserved demand and supply disturbances.",
+          "The analyst wants the structural demand slope, but observed price is endogenous in the demand equation. Identification requires an excluded supply shifter that moves price through supply without entering demand directly.",
+          "The question is not simply whether income and input cost correlate with price; it is whether the model restrictions allow the demand response to be separated from the supply response."
+        ],
+        "q": "Why is market price endogenous in the demand equation?",
+        "answer": "It is jointly determined by demand and supply and responds to both structural disturbances."
+      },
+      "ask": {
+        "q": "What is the key identification issue in this system?",
+        "nudge": "Focus on which exogenous shifters are excluded from the equation."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "Structural form versus reduced form",
+      "objective": "Distinguish behavioural coefficients from equilibrium response coefficients.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Structural form",
+          "body": "A structural equation describes a behavioural relationship, such as Q_d=α₀+α₁P+α₂Y+u_d. Its coefficients are the parameters of the demand relationship."
+        },
+        {
+          "t": "def",
+          "h": "Reduced form",
+          "body": "The reduced form solves the full simultaneous system so that each endogenous variable is written as a function of all exogenous variables and reduced-form disturbances."
+        },
+        {
+          "t": "step",
+          "h": "Why the distinction matters",
+          "body": "Reduced-form coefficients combine several structural parameters. A reduced-form regression may be estimable by OLS under exogeneity of the included exogenous variables, but it does not automatically reveal the structural slope α₁."
+        },
+        {
+          "t": "note",
+          "h": "Variable labels are model-relative",
+          "body": "A variable may be endogenous in one system and exogenous in another. Classification depends on the specified system and the timing or behavioural assumptions."
+        }
+      ],
+      "flow": {
+        "caption": "From behavioural equations to equilibrium reduced form",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Structural demand and supply",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Set Qd = Qs",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Solve for P and Q",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Reduced form in exogenous variables",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          }
+        ]
+      },
+      "ask": {
+        "q": "Why is a reduced-form price coefficient not automatically the structural demand slope?",
+        "nudge": "It is an equilibrium combination of demand and supply parameters."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example: apply the order condition",
+      "objective": "Count excluded exogenous variables and endogenous RHS variables.",
+      "problem": "The demand equation includes price and income. The full system has exogenous variables income, input cost and weather. Which exogenous variables are excluded from demand, and what does the order condition imply?",
+      "steps": [
+        {
+          "say": "Identify the endogenous variable on the right-hand side of demand.",
+          "math": "P: one endogenous RHS variable",
+          "why": "Price is jointly determined in the demand-supply system."
+        },
+        {
+          "say": "List exogenous variables in the system.",
+          "math": "Y, W, R",
+          "why": "Income, input cost and weather are treated as exogenous shifters."
+        },
+        {
+          "say": "Count the variables excluded from demand.",
+          "math": "W and R: two excluded exogenous variables",
+          "why": "Income is included in demand, so it is not counted as excluded."
+        },
+        {
+          "say": "Compare the counts.",
+          "math": "2 ≥ 1 → order condition passes; overidentified by order",
+          "why": "There is one more excluded exogenous variable than endogenous RHS variable; rank must still be checked."
+        }
+      ],
+      "ask": {
+        "q": "Does passing the order condition prove identification?",
+        "nudge": "A separate matrix-rank condition is still required."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 5,
+      "title": "Recall the two identification conditions",
+      "objective": "Retrieve the order and rank logic.",
+      "intro": "Answer from memory before reading the explanation.",
+      "items": [
+        {
+          "q": "What does the order condition compare?",
+          "a": "The number of exogenous variables excluded from an equation with the number of endogenous variables on its right-hand side."
+        },
+        {
+          "q": "Is the order condition sufficient?",
+          "a": "No. It is necessary but not sufficient."
+        },
+        {
+          "q": "What does the rank condition check?",
+          "a": "That the relevant cross-equation coefficients on excluded exogenous variables provide enough linearly independent identifying variation."
+        },
+        {
+          "q": "What is exact identification?",
+          "a": "The order count is equal and the rank condition holds."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 6,
+      "title": "Complete the order-condition classification",
+      "objective": "Reconstruct under-, exact- and overidentification from the counts.",
+      "problem": "Suppose an equation contains m endogenous RHS variables and excludes k exogenous variables.",
+      "steps": [
+        {
+          "say": "If too few exogenous variables are excluded.",
+          "blank": {
+            "prompt": "When k is less than m, the equation is _____.",
+            "answer": "underidentified",
+            "accept": [
+              "under identified"
+            ],
+            "hint": "There are not enough excluded variables even by count."
+          }
+        },
+        {
+          "say": "If the counts are equal and rank holds.",
+          "blank": {
+            "prompt": "When k equals m and rank holds, the equation is _____.",
+            "answer": "exactly identified",
+            "accept": [
+              "exact identified",
+              "just identified"
+            ],
+            "hint": "The count exactly matches the number of endogenous RHS variables."
+          }
+        },
+        {
+          "say": "If more exogenous variables are excluded than needed and rank holds.",
+          "blank": {
+            "prompt": "When k is greater than m, the equation is _____.",
+            "answer": "overidentified",
+            "accept": [
+              "over identified"
+            ],
+            "hint": "There are more excluded variables than endogenous RHS variables."
+          }
+        },
+        {
+          "say": "State the limitation of the count.",
+          "blank": {
+            "prompt": "The order condition is necessary but not _____.",
+            "answer": "sufficient",
+            "accept": [
+              "sufficient"
+            ],
+            "hint": "A rank check is still required."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "The order condition in general form",
+      "objective": "Use the order count correctly for each structural equation.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Order condition",
+          "body": "For an equation with m endogenous variables on its right-hand side, the number k of exogenous variables excluded from that equation must satisfy k ≥ m for the equation to be identified."
+        },
+        {
+          "t": "step",
+          "h": "Underidentified",
+          "body": "If k<m, there are too few excluded exogenous variables. The equation is underidentified, and no rank calculation can rescue the failed order condition."
+        },
+        {
+          "t": "step",
+          "h": "Exactly or overidentified",
+          "body": "If k=m, the equation is exactly identified by order. If k>m, it is overidentified by order. In both cases the rank condition must still hold."
+        },
+        {
+          "t": "note",
+          "h": "Count only exclusions",
+          "body": "An exogenous variable included in the equation is not an excluded instrument for that equation. Count variables in the full system that are deliberately absent from the equation."
+        }
+      ],
+      "ask": {
+        "q": "If an equation has two endogenous RHS variables and excludes three exogenous variables, what is its order classification?",
+        "nudge": "Compare three excluded variables with two endogenous RHS variables."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s7",
+      "mins": 7,
+      "title": "Why the rank condition is stronger",
+      "objective": "Explain why the order count alone can fail.",
+      "body": [
+        "Suppose an equation excludes two exogenous variables, so its order count is large enough. But if both excluded variables enter the other structural equations with coefficients that are proportional, they may provide only one independent direction of variation.",
+        "The rank condition asks whether the relevant coefficient matrix has enough independent columns or rows to identify all endogenous RHS coefficients.",
+        "A zero coefficient or exact linear dependence can therefore make an equation underidentified even though the order condition passes."
+      ],
+      "scenario": {
+        "teaser": "Two excluded variables but only one independent direction",
+        "title": "A rank-deficient instrument set",
+        "body": [
+          "A structural equation has two endogenous variables on its right-hand side and excludes two exogenous variables. The order condition is satisfied with equality.",
+          "In the other equations, the two excluded variables enter with proportional coefficients. Their cross-equation coefficient matrix has rank one, not two.",
+          "The excluded-variable count is two, but the identifying variation is only one-dimensional. The equation therefore fails the rank condition and remains underidentified.",
+          "This is the key reason the order condition is a necessary counting screen rather than a complete identification test."
+        ],
+        "q": "Why can two excluded variables fail to identify two endogenous RHS variables?",
+        "answer": "Their cross-equation coefficients may be linearly dependent, giving rank below two."
+      },
+      "ask": {
+        "q": "What is the key identification issue in this system?",
+        "nudge": "Focus on which exogenous shifters are excluded from the equation."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 8,
+      "title": "Worked example: solve a demand-supply reduced form",
+      "objective": "Derive equilibrium price coefficients from structural parameters.",
+      "problem": "Demand: Q=10−2P+3Y+u_d. Supply: Q=2+P+4W+u_s. Solve for the reduced-form equation for P.",
+      "steps": [
+        {
+          "say": "Set demand equal to supply.",
+          "math": "10−2P+3Y+u_d = 2+P+4W+u_s",
+          "why": "At equilibrium, quantity demanded equals quantity supplied."
+        },
+        {
+          "say": "Collect the price terms and exogenous shifters.",
+          "math": "8+3Y−4W+u_d−u_s = 3P",
+          "why": "Move the intercept and W terms to the left and collect P on the right."
+        },
+        {
+          "say": "Divide through by three.",
+          "math": "P = 8/3 + Y − (4/3)W + (u_d−u_s)/3",
+          "why": "This is the reduced-form price equation."
+        },
+        {
+          "say": "Interpret the coefficients.",
+          "math": "π_Y=1; π_W=−4/3",
+          "why": "They are equilibrium effects, not the structural demand coefficient −2."
+        }
+      ],
+      "ask": {
+        "q": "Why is the coefficient of Y in the reduced form not the demand slope on P?",
+        "nudge": "The reduced form describes how equilibrium price responds to an exogenous shifter."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Guided problem: classify demand and supply",
+      "objective": "Apply the order condition equation by equation.",
+      "problem": "A two-equation market has endogenous P and Q, exogenous Y and W. Demand includes P and Y but excludes W; supply includes P and W but excludes Y. Classify each equation by order.",
+      "hints": [
+        "Count endogenous variables on the right-hand side of each equation.",
+        "Count exogenous variables excluded from that same equation.",
+        "Apply the order count, then state that rank must also hold."
+      ],
+      "answer": "Each equation has one endogenous RHS variable and one excluded exogenous variable, so both are exactly identified by order; each still needs rank one.",
+      "solution": [
+        {
+          "say": "Demand contains endogenous P on the right-hand side.",
+          "math": "m_d=1"
+        },
+        {
+          "say": "W is excluded from demand.",
+          "math": "k_d=1; k_d=m_d"
+        },
+        {
+          "say": "Supply contains endogenous P and excludes Y.",
+          "math": "m_s=1; k_s=1"
+        },
+        {
+          "say": "Both are exactly identified by order, conditional on a nonzero rank coefficient.",
+          "math": "k=m=1; rank must equal 1"
+        }
+      ],
+      "ask": {
+        "q": "What extra fact is needed beyond the count for demand?",
+        "nudge": "The excluded supply shifter must enter the other equation with a nonzero coefficient."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s10",
+      "mins": 6,
+      "title": "Exam traps: order and rank",
+      "objective": "Avoid common identification misclassifications.",
+      "intro": "Classify each statement as true or false.",
+      "items": [
+        {
+          "claim": "The order condition counts exogenous variables excluded from the equation.",
+          "tf": true,
+          "why": "Only excluded exogenous variables can provide the identifying variation for that equation."
+        },
+        {
+          "claim": "Passing the order condition is sufficient for identification.",
+          "tf": false,
+          "why": "The rank condition may still fail because the cross-equation coefficients are dependent."
+        },
+        {
+          "claim": "If k<m, the equation is underidentified.",
+          "tf": true,
+          "why": "There are too few excluded exogenous variables even by the necessary count."
+        },
+        {
+          "claim": "An equation with k>m is overidentified if the rank condition holds.",
+          "tf": true,
+          "why": "More excluded exogenous variables than endogenous RHS variables create overidentifying restrictions."
+        },
+        {
+          "claim": "A reduced-form coefficient is always equal to a structural coefficient.",
+          "tf": false,
+          "why": "Reduced-form coefficients are equilibrium combinations of structural parameters."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "mins": 8,
+      "title": "Transfer problem: order passes, rank fails",
+      "objective": "Use rank to overturn a misleading order classification.",
+      "problem": "An equation has two endogenous RHS variables and excludes two exogenous variables. The relevant cross-equation coefficient matrix is [[2,4],[1,2]]. Is the equation identified?",
+      "hints": [
+        "The order condition compares 2 excluded variables with 2 endogenous RHS variables.",
+        "Compute whether the two columns of the matrix are independent.",
+        "If one column is a multiple of the other, determine the rank."
+      ],
+      "answer": "No. The order condition passes with equality, but the matrix has rank one, below two; the equation is underidentified.",
+      "solution": [
+        {
+          "say": "The order count is equal.",
+          "math": "k=m=2"
+        },
+        {
+          "say": "The second column is twice the first.",
+          "math": "(4,2)′=2(2,1)′"
+        },
+        {
+          "say": "Only one independent column exists.",
+          "math": "rank([[2,4],[1,2]])=1"
+        },
+        {
+          "say": "The required rank is two, so identification fails.",
+          "math": "rank < m → underidentified"
+        }
+      ],
+      "ask": {
+        "q": "Which condition defeats identification here?",
+        "nudge": "The two excluded variables do not supply two independent directions."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s12",
+      "mins": 5,
+      "title": "Summary: count first, rank second",
+      "objective": "Compress the identification test into an exam-ready sequence.",
+      "body": [
+        "Structural equations describe behavioural relationships; reduced forms express endogenous variables in terms of exogenous variables and reduced-form disturbances. Their coefficients are generally different objects.",
+        "For each structural equation, count endogenous right-hand-side variables m and exogenous variables excluded from the equation k. If k<m, the equation is underidentified. If k=m it is exactly identified by order; if k>m it is overidentified by order.",
+        "The order condition is necessary, not sufficient. The rank condition checks whether the excluded exogenous variables generate enough linearly independent cross-equation variation. A matrix can have the right number of columns but still have deficient rank."
+      ],
+      "ask": {
+        "q": "What is the correct order for an identification question?",
+        "nudge": "First count exclusions, then test the independence condition."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s13",
+      "mins": 8,
+      "ext": true,
+      "title": "Extension — rank condition in matrix notation",
+      "objective": "Relate the rank requirement to excluded-variable coefficient matrices.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Rank requirement",
+          "body": "For m endogenous variables on the right-hand side, the relevant matrix of coefficients on exogenous variables excluded from the equation must have rank at least m (and, in the standard equation-identification condition, rank m)."
+        },
+        {
+          "t": "step",
+          "h": "One endogenous RHS variable",
+          "body": "When m=1, at least one excluded exogenous variable must have a nonzero coefficient in the other structural equations. A zero coefficient makes the rank zero even if the exclusion count is one."
+        },
+        {
+          "t": "step",
+          "h": "Two endogenous RHS variables",
+          "body": "When m=2, two excluded variables must generate two independent directions. Two proportional columns have rank one and fail the condition."
+        }
+      ],
+      "ask": {
+        "q": "Why does a proportional pair of columns have rank one?",
+        "nudge": "The second column adds no independent direction."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 0,
+      "title": "6.9 mastery test",
+      "setId": "regression_t9_mastery",
+      "objective": "Demonstrate identification analysis independently on unseen questions."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings, not an NTA rule. Ten unseen questions are drawn as 3 easy, 5 moderate and 2 hard; the pass threshold is 80% overall with 70% floors for numerical and multi-statement items."
+  }
+}
