@@ -1,0 +1,573 @@
+{
+ "id": "rprogt3",
+ "topicId": "rprog-t3",
+ "moduleId": "rprog",
+ "title": "Scoping Rules in R",
+ "breadcrumb": "Module 9 · R Programming · Scoping Rules",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 60,
+ "objectives": [
+  "Explain lexical scoping and environment parent chains.",
+  "Trace name lookup through local and enclosing environments.",
+  "Distinguish <- from <<-.",
+  "Explain function enclosing versus calling environments.",
+  "Explain closures and retained state in nested functions."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "R functions",
+   "why": "Scoping tracks names during function evaluation."
+  },
+  {
+   "id": "p2",
+   "name": "Assignment and variables",
+   "why": "Distinguish local from outward assignment."
+  },
+  {
+   "id": "p3",
+   "name": "Vectors and lists",
+   "why": "Examples use objects stored as environment bindings."
+  }
+ ],
+ "traps": [
+  "R uses lexical scoping: lookup follows the function's creation environment, not simply its caller.",
+  "A local binding masks a same-named binding in a parent environment.",
+  "Ordinary <- inside a function creates or updates a binding in its current evaluation environment.",
+  "<<- searches enclosing environments for an existing binding and updates the first match.",
+  "If <<- finds no enclosing binding, it assigns in .GlobalEnv.",
+  "A closure combines a function with its enclosing environment.",
+  "The calling and enclosing environments are not interchangeable.",
+  "A nested function can retain access to an outer local binding after the outer call returns.",
+  "Lookup stops at the first environment containing the name.",
+  "A global binding may be masked by a nearer binding."
+ ],
+ "revision": {
+  "sheet": [
+   "An environment stores name–value bindings and has a parent.",
+   "Lookup starts in the current evaluation environment and follows parent links.",
+   "A function's enclosing environment is where it was created.",
+   "The calling environment is where the function was invoked.",
+   "Lexical scoping follows the enclosing environment chain.",
+   "Arguments and local assignments create bindings in the function evaluation environment.",
+   "A nearer binding masks a same-named parent binding.",
+   "<- normally assigns in the current evaluation environment.",
+   "<<- searches parent environments and updates the first existing binding.",
+   "If <<- finds no existing enclosing binding, it assigns in .GlobalEnv.",
+   "A closure is a function plus its enclosing environment.",
+   "Draw the environment chain and stop at the first binding."
+  ],
+  "cards": [
+   [
+    "Lexical scoping",
+    "Lookup follows the creation environment chain"
+   ],
+   [
+    "Environment",
+    "Name–value bindings plus a parent"
+   ],
+   [
+    "Enclosing environment",
+    "Where a function was created"
+   ],
+   [
+    "Calling environment",
+    "Where a function was invoked"
+   ],
+   [
+    "<-",
+    "Current evaluation environment assignment"
+   ],
+   [
+    "<<-",
+    "Search outward and update first match"
+   ],
+   [
+    "Closure",
+    "Function plus enclosing environment"
+   ],
+   [
+    "Masking",
+    "Nearer binding hides parent binding"
+   ]
+  ],
+  "tricks": [
+   "Draw the environment chain before resolving a free variable.",
+   "Stop at the first environment containing the name.",
+   "For <<-, begin at the parent of the current evaluation environment.",
+   "Do not insert the caller's local environment into lexical lookup.",
+   "Check for a nearer binding before selecting a global value."
+  ],
+  "shortcuts": [
+   "Lookup: current evaluation environment → parent → parent → ...",
+   "Function enclosing environment is fixed at creation.",
+   "<- can create a local binding that masks a parent binding.",
+   "<<- updates an existing enclosing binding; otherwise it uses .GlobalEnv."
+  ],
+  "remember": [
+   "R uses lexical scoping.",
+   "Lookup follows the function's enclosing environment chain.",
+   "<- is current/local; <<- searches outward.",
+   "First matching binding wins.",
+   "A closure retains its enclosing environment."
+  ]
+ },
+ "howto": "Check arguments and local bindings first. If absent, follow the function's enclosing environment chain and use the first match. For <<-, start at the parent of the current evaluation environment and update the first existing binding; if none is found, assignment goes to .GlobalEnv. Keep the calling environment separate from the enclosing environment.",
+ "refs": [
+  {
+   "title": "R Language Definition — Scope of variables",
+   "where": "Lexical scoping and name lookup",
+   "site": "R Core Team",
+   "url": "https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Scope-of-variables",
+   "type": "Official language documentation",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Primary explanation of R lexical scoping."
+  },
+  {
+   "title": "R Documentation: environment",
+   "where": "Environment objects and parent environments",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/environment.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Defines environments and parent relationships."
+  },
+  {
+   "title": "R Documentation: assign",
+   "where": "Assignment and environment lookup",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/assign.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Documents assignment into environments."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [],
+ "provenance": "Catalog rprog-t3: Scoping rules; State; importance 2; estimated question share 0.67 and marks 1.3. No direct R-scoping PYQ was identified in the available June 2026 Paper 2 repository bank; no PYQ anchor is claimed.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 6,
+   "title": "An environment stores named bindings",
+   "objective": "Understand environment bindings.",
+   "body": [
+    "An environment maps names to objects and has a parent. Lookup starts in the current evaluation environment and follows parent links until the first matching binding is found. A nearer binding masks a same-named binding farther up the chain."
+   ],
+   "items": [
+    {
+     "ask": "Where does name lookup begin?",
+     "recall": "The current evaluation environment.",
+     "refresh": [
+      "R first checks the current evaluation environment, then follows its parent if the name is absent."
+     ]
+    },
+    {
+     "ask": "What is masking?",
+     "recall": "A nearer binding hides a same-named parent binding.",
+     "refresh": [
+      "The first matching binding is used; farther bindings remain but are masked."
+     ]
+    },
+    {
+     "ask": "What does an environment contain?",
+     "recall": "Name–value bindings and a parent relationship.",
+     "refresh": [
+      "Bindings connect names to objects; the parent link defines the next lookup location."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "If x is in both local and parent environments, which is used?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 5,
+   "title": "The caller does not control lexical lookup",
+   "objective": "Distinguish caller from enclosing environment.",
+   "body": [
+    "A function remembers the environment in which it was created. That is its enclosing environment. Its calling environment is where it was invoked. R follows the enclosing chain for free variables; the caller's local bindings are not automatically searched."
+   ],
+   "scenario": {
+    "teaser": "A reusable pricing function",
+    "title": "A function called from a temporary workspace",
+    "body": [
+     "A pricing function is created where tax_rate=0.05. Later it is called from another function where tax_rate=0.10. The pricing function does not receive tax_rate as an argument or define it locally.",
+     "Lexical scoping means it finds the binding in its own enclosing environment, not the caller's local workspace."
+    ],
+    "q": "Which tax_rate is found if no nearer binding exists?",
+    "answer": "0.05."
+   },
+   "ask": {
+    "q": "What determines a function's enclosing environment?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 7,
+   "title": "Lexical lookup follows the parent chain",
+   "objective": "Resolve a free variable.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Lexical lookup follows the parent chain",
+     "body": "Check arguments and local bindings first. For a free variable, follow the function's enclosing environment chain. The first matching binding supplies the value. A local binding can mask a global or other parent binding."
+    },
+    {
+     "t": "step",
+     "h": "Exam tracing rule",
+     "body": "Write the environment chain explicitly. Mark local arguments and assignments, then follow parent links and stop at the first matching binding."
+    }
+   ],
+   "flow": {
+    "title": "Resolve a name",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Check local / arguments",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Check enclosing environment",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Follow parent link",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Stop at first binding",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
+   },
+   "ask": {
+    "q": "What is the difference between caller and enclosing environment?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 7,
+   "title": "Trace lexical scoping in nested calls",
+   "objective": "Predict a nested function result.",
+   "problem": "Global x=10. Define g=function() x. Define f=function(){x=20; g()}. Calling f() returns 10: g was created globally, so its lexical lookup finds global x. f's local x is only in g's calling environment.",
+   "steps": [
+    {
+     "say": "Find where g was created.",
+     "math": "g's enclosing environment is .GlobalEnv.",
+     "why": "The function retains its creation environment."
+    },
+    {
+     "say": "Call g from inside f.",
+     "math": "f's local x=20 is in the caller, not g's lexical parent.",
+     "why": "Lexical lookup does not use the caller's local variables."
+    },
+    {
+     "say": "Resolve x.",
+     "math": "g finds global x=10; f() returns 10.",
+     "why": "The first matching binding in g's enclosing chain is global x."
+    }
+   ],
+   "ask": {
+    "q": "How do you resolve a free variable?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 4,
+   "title": "Remember the scoping vocabulary",
+   "objective": "Define core scoping terms.",
+   "intro": "Try to define each term before revealing its meaning.",
+   "items": [
+    {
+     "q": "Enclosing environment",
+     "a": "The environment in which a function was created."
+    },
+    {
+     "q": "Calling environment",
+     "a": "The environment from which the function was invoked."
+    },
+    {
+     "q": "Free variable",
+     "a": "A name used but not bound as an argument or locally."
+    },
+    {
+     "q": "Closure",
+     "a": "A function together with its enclosing environment."
+    }
+   ],
+   "ask": {
+    "q": "What is a closure?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 7,
+   "title": "Local assignment with <-",
+   "objective": "Explain local assignment.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Local assignment with <-",
+     "body": "Inside a function, x <- value normally creates or updates x in the current evaluation environment. If a global x exists, the local x masks it inside the function; the global binding remains unchanged."
+    },
+    {
+     "t": "step",
+     "h": "Exam tracing rule",
+     "body": "Write the environment chain explicitly. Mark local arguments and assignments, then follow parent links and stop at the first matching binding."
+    }
+   ],
+   "ask": {
+    "q": "What does <- do inside a function?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s6",
+   "mins": 6,
+   "title": "Trace local masking",
+   "objective": "Trace local masking.",
+   "problem": "Global score=80. Evaluate f=function(){score=25; score+5}. The local score becomes 25, so f() returns 30. The global score remains 80 because ordinary assignment acted in the function evaluation environment.",
+   "hints": [
+    "Identify the function's local environment and its enclosing environment.",
+    "Find the first matching binding along the relevant chain.",
+    "Evaluate the final expression after applying the assignment rule."
+   ],
+   "answer": "30; global score remains 80.",
+   "check": "The first matching binding in the lexical environment chain is the one used or updated.",
+   "solution": [
+    {
+     "say": "Identify the local binding.",
+     "math": "A local or enclosing binding is present.",
+     "why": "Lookup starts in the current evaluation environment."
+    },
+    {
+     "say": "Apply the assignment rule.",
+     "math": "<- is local; <<- searches enclosing environments.",
+     "why": "The operators have different targets."
+    },
+    {
+     "say": "Evaluate the final expression.",
+     "math": "Return the value after the binding update.",
+     "why": "Trace the exact environment changed."
+    }
+   ],
+   "ask": {
+    "q": "Which operator searches outward?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 7,
+   "title": "Superassignment with <<-",
+   "objective": "Explain superassignment.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Superassignment with <<-",
+     "body": "Within a function, <<- searches enclosing environments for an existing binding and updates the first match. If no existing binding is found in the enclosing chain, it assigns in .GlobalEnv. This can create hidden side effects."
+    },
+    {
+     "t": "step",
+     "h": "Exam tracing rule",
+     "body": "Write the environment chain explicitly. Mark local arguments and assignments, then follow parent links and stop at the first matching binding."
+    }
+   ],
+   "ask": {
+    "q": "What is the fallback for <<-?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 7,
+   "title": "Trace <<- through nested environments",
+   "objective": "Trace nested superassignment.",
+   "problem": "Global level=1. outer=function(){level=2; inner=function(){level <<- 9}; inner(); level}. inner was created inside outer, so <<- finds outer's local level first. outer() returns 9; global level remains 1.",
+   "hints": [
+    "Identify the function's local environment and its enclosing environment.",
+    "Find the first matching binding along the relevant chain.",
+    "Evaluate the final expression after applying the assignment rule."
+   ],
+   "answer": "outer() returns 9; global level remains 1.",
+   "check": "The first matching binding in the lexical environment chain is the one used or updated.",
+   "solution": [
+    {
+     "say": "Identify the local binding.",
+     "math": "A local or enclosing binding is present.",
+     "why": "Lookup starts in the current evaluation environment."
+    },
+    {
+     "say": "Apply the assignment rule.",
+     "math": "<- is local; <<- searches enclosing environments.",
+     "why": "The operators have different targets."
+    },
+    {
+     "say": "Evaluate the final expression.",
+     "math": "Return the value after the binding update.",
+     "why": "Trace the exact environment changed."
+    }
+   ],
+   "scenario": {
+    "teaser": "A nested counter",
+    "title": "A counter retained by a closure",
+    "body": [
+     "A factory creates a local counter and returns an inner function. The inner function uses <<- to update counter. Each call changes the binding in the retained factory environment.",
+     "The inner function remains able to access that environment after the factory call has returned."
+    ],
+    "q": "Why can the returned function still access counter?",
+    "answer": "It retains the factory environment as its enclosing environment."
+   },
+   "ask": {
+    "q": "Which binding is updated by nested superassignment?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s9",
+   "mins": 6,
+   "title": "Closures retain their environment",
+   "objective": "Explain retained state.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Closures retain their environment",
+     "body": "A closure is a function plus its enclosing environment. make_counter=function(){n=0; function(){n <<- n+1; n}} returns an inner function that retains the environment containing n. Calls return 1, then 2, then 3."
+    },
+    {
+     "t": "step",
+     "h": "Exam tracing rule",
+     "body": "Write the environment chain explicitly. Mark local arguments and assignments, then follow parent links and stop at the first matching binding."
+    }
+   ],
+   "ask": {
+    "q": "Why can a closure retain state?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s10",
+   "mins": 5,
+   "title": "Check common scoping claims",
+   "objective": "Detect scoping misconceptions.",
+   "intro": "Decide whether each statement is correct.",
+   "items": [
+    {
+     "claim": "A function's enclosing environment is where it was created.",
+     "tf": true,
+     "why": "The function retains its creation environment."
+    },
+    {
+     "claim": "A function always searches its caller's local variables for free names.",
+     "tf": false,
+     "why": "R uses lexical scoping."
+    },
+    {
+     "claim": "<- normally creates a binding in the current function evaluation environment.",
+     "tf": true,
+     "why": "Ordinary assignment acts locally in the current evaluation environment."
+    },
+    {
+     "claim": "If <<- finds no enclosing binding, it assigns in .GlobalEnv.",
+     "tf": true,
+     "why": "That is the superassignment fallback."
+    }
+   ],
+   "ask": {
+    "q": "Which claim about dynamic lookup is false?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s11",
+   "mins": 4,
+   "title": "The scoping exam checklist",
+   "objective": "Consolidate name lookup.",
+   "body": [
+    "R uses lexical scoping. Lookup starts locally and follows parent environments. The function's enclosing environment is where it was created, not where it was called. <- normally creates a local binding. <<- searches outward and updates the first match, or falls back to .GlobalEnv. Closures retain their enclosing environments."
+   ],
+   "ask": {
+    "q": "How should you trace a scoping question?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s12",
+   "mins": 2,
+   "title": "Mastery test",
+   "objective": "Demonstrate mastery.",
+   "setId": "rprog_t3_mastery",
+   "ask": {
+    "q": "What does the mastery test assess?",
+    "nudge": "Use the environment chain and the first matching binding."
+   }
+  }
+ ]
+}
