@@ -567,7 +567,7 @@
       "mins": 9,
       "title": "Worked RBD: treatments, blocks and residual error",
       "objective": "Build a complete randomised block ANOVA and verify each decomposition.",
-      "problem": "Four treatments are tested in three blocks. The response table is: Block 1: 8, 10, 9, 13; Block 2: 9, 11, 10, 14; Block 3: 7, 9, 8, 12. Rows are blocks and columns are treatments. Construct the ANOVA table.",
+      "problem": "Four treatments are tested in three blocks. The response table is: Block 1: 9, 9, 9, 13; Block 2: 9, 11, 10, 14; Block 3: 7, 9, 8, 12. Rows are blocks and columns are treatments. Construct the ANOVA table.",
       "table": {
         "caption": "Observed responses: blocks by treatments",
         "head": [
@@ -621,27 +621,27 @@
         },
         {
           "say": "Calculate total SS from the twelve squared responses.",
-          "math": "Σy²=8²+10²+9²+13²+9²+11²+10²+14²+7²+9²+8²+12²=1244.\\nSS_Total=1244−1200=44.",
+          "math": "Σy²=9²+9²+9²+13²+9²+11²+10²+14²+7²+9²+8²+12²=1248.\\nSS_Total=1248−1200=48.",
           "why": "This measures every response's squared deviation from the grand mean."
         },
         {
           "say": "Calculate treatment and block SS separately.",
-          "math": "T=(24,30,27,39); SS_T=(24²+30²+27²+39²)/3−1200=34.\\nB=(40,44,36); SS_B=(40²+44²+36²)/4−1200=6.6667.",
+          "math": "T=(25,29,27,39); SS_T=(25²+29²+27²+39²)/3−1200=116/3.\\nB=(40,44,36); SS_B=(40²+44²+36²)/4−1200=8.",
           "why": "Treatment totals are divided by the number of blocks, three; block totals are divided by the number of treatments, four."
         },
         {
           "say": "Find error SS and check the decomposition.",
-          "math": "SS_E=44−34−6.6667=3.3333.\\nCheck: 34+6.6667+3.3333=44.",
+          "math": "SS_E=48−116/3−8=4/3.\\nCheck: 116/3+8+4/3=48.",
           "why": "Once treatment and block effects are removed, the remaining sum of squares is the residual error."
         },
         {
           "say": "Calculate degrees of freedom and mean squares.",
-          "math": "df_T=3; df_B=2; df_E=6; df_Total=11.\\nMS_T=34/3=11.3333; MS_E=3.3333/6=0.5556.",
+          "math": "df_T=3; df_B=2; df_E=6; df_Total=11.\\nMS_T=(116/3)/3=116/9; MS_E=(4/3)/6=2/9.",
           "why": "The df add 3+2+6=11. That verifies the allocation."
         },
         {
           "say": "Form the treatment F statistic.",
-          "math": "F_T=11.3333/0.5556=20.4, with df (3,6).",
+          "math": "F_T=(116/9)/(2/9)=58, with df (3,6).",
           "why": "The denominator is the residual mean square after block variation has been removed."
         }
       ],
@@ -649,7 +649,8 @@
       "ask": {
         "q": "In this RBD, why is the block sum of squares divided by four while treatment SS is divided by three?",
         "nudge": "Each block total contains four observations; each treatment total contains three."
-      }
+      },
+      "check": "SS decomposition: 116/3+8+4/3=48; df 3+2+6=11; treatment F=58."
     },
     {
       "kind": "guided",

@@ -16,7 +16,7 @@
 
 ## Independent arithmetic
 - CRD example: treatment totals (30,42,26), G=98, N=12, Σy²=850. CF=800⅓; total SS=149/3; treatment SS=104/3; error SS=15. Treatment/error df=2/9; F=52/5=10.4.
-- RBD example: 4 treatments × 3 blocks; G=120, Σy²=1244, CF=1200. Total SS=44; treatment SS=34; block SS=20/3; error SS=10/3. df=(3,2,6,11); treatment F=20.4.
+- RBD example: 4 treatments × 3 blocks; G=120, Σy²=1248, CF=1200. Total SS=48; treatment SS=116/3; block SS=8; error SS=4/3. df=(3,2,6,11); treatment F=58.
 - Transfer example: 3 treatments × 5 shifts; treatment SS=48, error SS=12; df treatment/error=2/8; F=16.
 
 ## Assumptions and limits

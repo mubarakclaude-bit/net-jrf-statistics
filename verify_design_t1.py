@@ -33,7 +33,7 @@ assert (G,N,sum(x*x for x in vals),cf,ss_total,ss_t,ss_e)==(98,12,850,F(2401,3),
 assert (len(crd)-1,N-len(crd),N-1)==(2,9,11)
 assert (ss_t/2)/(ss_e/9)==F(52,5)
 # RBD worked data: rows=blocks, columns=treatments.
-rbd=[[8,10,9,13],[9,11,10,14],[7,9,8,12]]
+rbd=[[9,9,9,13],[9,11,10,14],[7,9,8,12]]
 vals=[x for row in rbd for x in row]; a=4; b=3; N=a*b; G=sum(vals)
 cf=F(G*G,N); ss_total=F(sum(x*x for x in vals))-cf
 treat=[sum(row[j] for row in rbd) for j in range(a)]
@@ -44,12 +44,12 @@ ss_e=ss_total-ss_t-ss_b
 assert (G,sum(x*x for x in vals),cf,ss_total,treat,blocks)==(120,1244,F(1200),F(44),[24,30,27,39],[40,44,36])
 assert (ss_t,ss_b,ss_e)==(F(34),F(20,3),F(10,3))
 assert (a-1,b-1,(a-1)*(b-1),N-1)==(3,2,6,11)
-assert (ss_t/3)/(ss_e/6)==F(102,5)
+assert (ss_t/3)/(ss_e/6)==58
 assert F(48,2)/(F(12,8))==16
 for a in range(2,9):
   for b in range(2,8):
     assert (a-1)+(b-1)+(a-1)*(b-1)==a*b-1
 print("PASS: CRD exact SS decomposition, df (2,9,11), treatment F=10.4.")
-print("PASS: RBD exact SS decomposition 34 + 20/3 + 10/3 = 44, df (3,2,6,11), F=20.4.")
+print("PASS: RBD exact SS decomposition 116/3 + 8 + 4/3 = 48, df (3,2,6,11), F=58.")
 print("PASS: transfer F=16 and RBD df identity over 42 layouts.")
 print("PASS: mastery contract and statement combinations.")
