@@ -15,4 +15,4 @@
 
 ## Verification status
 - Arithmetic and structural assertions are encoded in `verify_multivariate_t1.py` and `lesson_multivariate_t1.py`.
-- This report records authored checks only. GitHub Actions validation and browser acceptance remain pending after commit.
+- GitHub Actions run 43075286908 passed on commit `4857c9deb063d95818fe535f13d6e0cbe3e8ba16`: `validate`, `browser` (including click-through of every lesson and hosted storage/features tests), and `acceptance` all completed successfully.
