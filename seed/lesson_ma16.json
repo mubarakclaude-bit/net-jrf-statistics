@@ -176,24 +176,27 @@
      "ask": "What is the trace of a square matrix?",
      "recall": "The sum of its diagonal entries.",
      "refresh": [
-      "Trace is defined only for square matrices.",
-      "It is linear: tr(A+B)=tr(A)+tr(B), and tr(cA)=c tr(A)."
+      "Trace is defined only for square matrices because it adds the diagonal entries from a single square array. For example, if A=[[1,2],[3,4]], then tr(A)=1+4=5; off-diagonal entries do not contribute.",
+      "Trace is linear: tr(A+B)=tr(A)+tr(B), and tr(cA)=c tr(A). These rules allow sums and scalar multiples to be simplified before calculating the diagonal.",
+      "Trace is also invariant under similarity. If B=P⁻¹AP, then tr(B)=tr(A); this is why diagonalisation preserves the trace and why trace equals the sum of eigenvalues with algebraic multiplicity."
      ]
     },
     {
      "ask": "When does a square matrix have an inverse?",
      "recall": "Exactly when its determinant is non-zero.",
      "refresh": [
-      "Equivalent conditions are full rank, linearly independent columns and nonsingularity.",
-      "A singular matrix has determinant zero and no inverse."
+      "A square matrix is nonsingular exactly when its determinant is non-zero. This is equivalent to full rank and to having linearly independent columns.",
+      "If det(A)=0, the homogeneous system Ax=0 has a non-zero solution, so A cannot have a two-sided inverse. Never apply an inverse formula when the determinant vanishes.",
+      "For a 2×2 matrix [[a,b],[c,d]], the determinant is ad−bc. A non-zero value guarantees the inverse exists; a zero value means the rows or columns are dependent."
      ]
     },
     {
      "ask": "What is the determinant of a product?",
      "recall": "det(AB)=det(A)det(B).",
      "refresh": [
-      "This multiplicative property is the fastest way to handle determinants of matrix products.",
-      "It also gives det(A inverse)=1/det(A) whenever A is invertible."
+      "The determinant is multiplicative: det(AB)=det(A)det(B). This makes a product determinant easy even when multiplying the matrices first would be tedious.",
+      "Setting B=A gives det(A²)=det(A)². If A is invertible, det(A)det(A⁻¹)=det(I)=1, so det(A⁻¹)=1/det(A).",
+      "Do not confuse multiplicativity with additivity: det(A+B) is not generally det(A)+det(B). A quick numerical counterexample is enough to rule out that false rule."
      ]
     }
    ]
@@ -582,7 +585,7 @@
   },
   {
    "kind": "guided",
-   "id": "s12",
+   "id": "s15",
    "mins": 8,
    "title": "Guided: inverse of a product",
    "objective": "Reverse the order correctly when inverting a product.",
