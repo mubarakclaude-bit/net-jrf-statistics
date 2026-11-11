@@ -259,12 +259,11 @@ SC.append(dict(
        accept=["2022-23", "2022-23 = 100", "base 2022-23", "2022 23"],
        hint="A financial year, not a calendar year — and the same one the wholesale index moved to."),
      why="The CPI base is a calendar year and the IIP base a financial year; the pairing is examinable."),
-   dict(say="The wholesale price index is being replaced by a new index.",
-     blank=dict(prompt="By what, and over how long a transition?", answer="the Producer Price Index, over five years",
-       accept=["Producer Price Index, five years", "PPI, 5 years", "Output PPI alongside current WPI publication",
-               "PPI over a five year transition"],
-       hint="The output version of it launched alongside the revised wholesale index."),
-     why="A question will ask whether WPI was rebased or abolished; the answer is both, in that order."),
+   dict(say="The WPI and PPI are now published in parallel.",
+     blank=dict(prompt="Which office publishes both series?", answer="Office of the Economic Adviser, DPIIT",
+       accept=["OEA, DPIIT", "Office of the Economic Adviser", "Office of Economic Adviser, DPIIT"],
+       hint="The same office that publishes the revised WPI also introduced Output PPI."),
+     why="PPI is used for selected GDP deflation purposes, but that does not mean WPI publication has ended."),
    dict(say="PLFS now publishes an estimate at a frequency it did not before 2025.",
      blank=dict(prompt="Which frequency, on which reference period?", answer="monthly, on Current Weekly Status",
        accept=["monthly, CWS", "monthly on CWS", "monthly - current weekly status",
@@ -502,7 +501,7 @@ LES = dict(
   title="Major Surveys and Indices",
   breadcrumb="Official Statistics → Indian Statistical System → Major surveys and indices",
   engine="A", engineName="Institutions and official statistics — what India measures, how often, and on what base",
-  estMin=sum(s["mins"] for s in SC), version="1.0", status="approved",
+  estMin=sum(s["mins"] for s in SC), version="1.1", status="approved",
   provenance="Authored for this platform in October 2026. Every institutional figure was checked against a primary "
              "source rather than recalled, because this topic moved substantially in 2025 and 2026: the CPI series on "
              "base 2024=100 (MoSPI first release 12 February 2026, and the CPI 2024 FAQ for the linking factors and "
