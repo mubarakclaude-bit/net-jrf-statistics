@@ -145,7 +145,7 @@ draft pull request first. Run `npm test` before and after. The owner reviews eve
 
 - **One concern per pull request**, on its own branch named for the task (`lesson/<topic-id>`, `feature/<id>`).
   Open it as a draft early; that is how the other assistant sees the work is claimed.
-- **Base every branch on `multi-author-hosting`, and target your PR at it.** That is the production branch: Vercel deploys
+- **Base every branch on `main`, and target your PR at it.** That is the production branch: Vercel deploys
   it. `main` is not deployed. Branch from its latest commit (`git fetch` first, or create the branch from it in GitHub).
 - **Dependent work is stacked and says so:** if your change needs another open PR, base your branch on that PR's branch
   and write "Depends on #N" at the top of the description. Do not copy its commits into yours.
@@ -217,7 +217,7 @@ CI cannot judge whether a verification script checks the right thing. Nothing ne
 
 ## Where things go live
 
-- **Vercel site (primary):** merging to the production branch, `multi-author-hosting`, rebuilds and redeploys it from the repository.
+- **Vercel site (primary):** merging to the production branch, `main`, rebuilds and redeploys it from the repository.
 - **What is live:** `/manifest.json` on the deployed site lists every lesson, its version, pool size and content hash, plus
   the commit. Compare it with `seed/` to confirm a merge is published.
 - **Claude artifact: retired** as a publishing target (decision 2026-11-12). Do not write to it. The `ArtifactData` push
