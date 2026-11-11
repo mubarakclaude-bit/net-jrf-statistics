@@ -2,8 +2,11 @@
 
 Date: 12 November 2026
 
-- Lesson package authored: 15 scenes, required scene types, two applied scenarios, row-reduction flow, revision sheet and three references.
-- Mastery pool: 20 questions with target 6/10/4 difficulty distribution.
-- Exact examples: unique system, contradictory augmented row, rank-nullity and full-rank 2×2 matrix.
-- App validator, formula renderer, index/harness and browser checks: pending.
-- Production status: NOT APPROVED; not indexed or wired yet.
+- Lesson: 15 scenes, row-reduction and consistency decision flow, two applied scenarios, revision sheet and three references.
+- Mastery pool: 20 questions; 6 easy, 10 moderate, 4 hard; six numeric and two multi-statement.
+- Exact checks: unique 2×2 system, contradictory augmented row, rank-nullity and full-rank determinant example.
+- App scene validator: PASS; mastery pool validator: PASS; formula renderer: PASS; JSON and index/harness checks: PASS; application build: PASS; Playwright browser regression: PASS.
+
+GitHub Actions: https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43092839189
+
+Status: VALIDATED ON DEVELOPMENT BRANCH; draft pending consolidated release and human approval. Not in production.
