@@ -18,4 +18,4 @@ for x in P["items"]:
  if x["format"]=="multi":
   truth="".join(k for k in "ABCD" if x["verdicts"][k]["tf"])
   assert x["options"]["ABCD".index(x["answer"])]=={"ABC":"A, B and C only","ABD":"A, B and D only"}[truth]
-print("PASS: 14 scenes; mastery contract; balanced keys, formats and difficulty.")
+print("PASS: 15 scenes; mastery contract; balanced keys, formats and difficulty.")
