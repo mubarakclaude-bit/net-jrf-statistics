@@ -21,8 +21,6 @@ assert kc(F(0))==F(2)
 assert kc(F(1,2))==F(35,16)   # 2.1875
 assert kc(F(1))==F(5,2)
 assert (F(18)-F(4))/(F(8)-F(2))==F(7,3)
-# Endpoint identities.
-assert 1-(1-1)==1
 for q in P['items']:
     assert len(q['options'])==4 and len(q['explanation'])>=40
     if q['format']=='numeric': assert q.get('check')
