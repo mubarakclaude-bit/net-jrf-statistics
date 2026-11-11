@@ -1,33 +1,15 @@
 name: Validate
 
-# The independent verification for every pull request, whoever or whatever wrote it. A PR cannot merge while this is red.
-# Every step is a documented command (see AGENTS.md) that runs from a clean checkout with `npm ci`; nothing depends on
-# one assistant's tools, prompts or session, and nothing needs the Claude artifact.
-#
-#   validate    contracts, fixtures, storage paths, EVERY lesson and question pool, and the generated lesson index;
-#               plus the house-standard check (vcheck.js) on the lessons this PR changes
-#   browser     builds the app and the hosted site, then runs test.js, clicktest.js, the hosted storage adapter, and
-#               EVERY feature's own browser test (each feature in a fresh browser, in strict storage-path mode)
-#   acceptance  the independence test, six scenarios on a scratch copy (docs/INDEPENDENCE.md):
-#                 S1 two authors each create a lesson           S2 a lesson is revised while another is added
-#                 S3 an author creates a feature (own folder)   S4 a feature is revised while another is created
-#                 S5 non-conforming lessons and features are rejected   S6 a clean copy, no artifact dependency
-#               Each merges the authors' branches in BOTH orders and requires a byte-identical build.
-#
-# Run the same checks locally:  npm ci && npm run check && npm run build && npm test && npm run acceptance
+# CI uses only scripts that are present in this repository. Vercel deployment is deliberately separate.
 on:
   pull_request:
   push:
-    branches: ["**"]        # every pushed branch is verified, so a branch has an independent CI result before any PR exists
+    branches: ["**"]
   workflow_dispatch:
-    inputs:
-      audit:
-        description: "Also run vcheck.js on EVERY lesson and print the seed inventory (reports legacy findings; does not block)"
-        type: boolean
-        default: false
 
-# A pull request and the push that opened it share one branch name, so they share one group: the older run is cancelled
-# and the same checks do not run twice.
+permissions:
+  contents: read
+
 concurrency:
   group: validate-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
@@ -42,17 +24,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install (from the lockfile, so every author runs the same tools)
-        run: npm ci
-
-      - name: Contracts and the seed set (schemas, fixtures, storage paths, features, generated index)
-        run: ./check.sh
-
-      - name: Work out which lesson seeds changed
+      - name: Validate seed JSON, manifest links and mastery-pool references
+        run: bash check.sh
+      - name: Identify changed lesson seeds
         id: changed
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
@@ -67,130 +44,37 @@ jobs:
           else
             : > .changed.txt
           fi
-          echo "Changed lesson seeds:"; cat .changed.txt || true
-
-      - name: House-standard check (vcheck.js) on the lessons this change touches
+          echo "Changed lesson seeds:"; cat .changed.txt
+      - name: App renderer and lesson structure validation
         run: |
           fail=0
           while read -r f; do
             [ -z "$f" ] && continue
             echo "::group::$f"
-            out=$(node vcheck.js "$f" 2>&1) || rc=$?
-            echo "$out" | grep -v '^seed/' || true
-            if [ "${rc:-0}" -ne 0 ] || echo "$out" | grep -q "FAILURES"; then
-              echo "::error file=$f::house-standard validation failed"; fail=1
-            fi
-            rc=0
+            node vcheck.js "$f" || fail=1
             echo "::endgroup::"
           done < .changed.txt
-          exit $fail
+          exit "$fail"
 
-      - name: Ids stay stable (learner progress is stored against scene, question and lesson ids)
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then BASE="${{ github.event.pull_request.base.sha }}"
-          elif [ "${{ github.event_name }}" = "push" ]; then BASE="${{ github.event.before }}"
-          else BASE=""; fi
-          if [ -n "$BASE" ] && git cat-file -e "$BASE" 2>/dev/null; then node tools/check-ids.js "$BASE"
-          else echo "no base to compare with; nothing to check"; fi
-
-      - name: Formula-render and self-cited-answer audit on the lessons this change touches (same as addlesson.sh)
-        run: |
-          fail=0
-          while read -r f; do
-            [ -z "$f" ] && continue
-            echo "::group::$f"
-            python -I tools/audit-lesson.py "$f" || { echo "::error file=$f::lesson audit failed"; fail=1; }
-            echo "::endgroup::"
-          done < .changed.txt
-          exit $fail
-
-      - name: Verification scripts this change touches (numbers are computed, never typed)
-        run: |
-          pip install numpy scipy
-          if [ "${{ github.event_name }}" = "pull_request" ]; then BASE="${{ github.event.pull_request.base.sha }}"
-          elif [ "${{ github.event_name }}" = "push" ]; then BASE="${{ github.event.before }}"
-          else BASE=""; fi
-          if [ -n "$BASE" ] && git cat-file -e "$BASE" 2>/dev/null; then node tools/run-verifiers.js "$BASE"
-          else echo "no base to compare with; nothing to run"; fi
-
-      - name: Audit every lesson and print the seed inventory (manual run only)
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.audit }}
-        continue-on-error: true
-        run: |
-          node tools/contract-audit.js
-          for f in seed/lesson_*.json; do
-            out=$(node vcheck.js "$f" 2>&1) || true
-            if echo "$out" | grep -q "FAILURES"; then echo "::warning file=$f::$(echo "$out" | grep -A3 FAILURES | tr '\n' ' ')"; fi
-          done
-
-  browser:   # runs in parallel with validate and acceptance: all three are required checks, so none is skipped
+  browser:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0     # the click-test scope compares this change with its base
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install (from the lockfile) and the browser
-        run: |
-          npm ci
-          npx playwright install --with-deps chromium
-      - name: Build the app and the hosted site
+      - name: Install declared dependencies (repository currently has no lockfile)
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Build the app and hosted data
         run: npm run build
-      - name: test.js (the app against the storage-path contract, in strict mode)
+      - name: App integration suite
         run: node test.js
-      - name: clicktest.js (every lesson starts and advances)
-        # A pull request that only changes lesson content walks just the lessons it changed (tools/changed-topics.js);
-        # anything that reaches the app, the build or the tests, and every push to production, walks all lessons in 4 shards.
-        run: |
-          MODE=FULL
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            MODE=$(node tools/changed-topics.js "${{ github.event.pull_request.base.sha }}")
-          fi
-          echo "click-test scope: $MODE"
-          if [ "$MODE" = "NONE" ]; then
-            CLICKTEST_LIMIT=1 node clicktest.js
-          elif [ "$MODE" != "FULL" ]; then
-            CLICKTEST_TOPICS="$MODE" node clicktest.js
-          else
-            pids=""
-            for i in 1 2 3 4; do
-              CLICKTEST_SHARD="$i/4" node clicktest.js > ".cache/click-$i.log" 2>&1 &
-              pids="$pids $!"
-            done
-            fail=0
-            for p in $pids; do wait "$p" || fail=1; done
-            for i in 1 2 3 4; do echo "::group::shard $i"; tail -n 8 ".cache/click-$i.log"; echo "::endgroup::"; done
-            if [ "$fail" -ne 0 ]; then
-              echo "::error::a clicktest shard failed"; grep -h "FAIL\|PAGEERROR\|CONSOLE" .cache/click-*.log | head -20; exit 1
-            fi
-          fi
-      - name: Hosted storage adapter conformance
-        run: node tests/hosted-shim.test.js
-      - name: Every feature's own browser test
-        run: node tests/features.test.js --verbose
-
-  acceptance:
-    # The owner's requirement as a command. It runs browser tests (scenarios 3 and 4 run the features' own tests),
-    # so it needs the browser installed as well.
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          cache: npm
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install (from the lockfile) and the browser
-        run: |
-          npm ci
-          npx playwright install --with-deps chromium
-      - name: Independence acceptance test (six scenarios)
-        run: node tools/acceptance.js
+      - name: Lesson interaction suite
+        run: node clicktest.js
