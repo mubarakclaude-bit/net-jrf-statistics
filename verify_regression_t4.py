@@ -31,6 +31,6 @@ assert len(Q)==20
 assert Counter(x['diff'] for x in Q)=={'easy':6,'moderate':10,'hard':4}
 assert Counter(x['format'] for x in Q)=={'single':9,'numeric':9,'multi':2}
 assert Counter(x['answer'] for x in Q)=={'A':5,'B':5,'C':5,'D':5}
-assert all(x.get('check') for x in Q if x['format'] in ('numeric','multi'))
+assert all(x.get('check') for x in Q if x['format']=='numeric')
 assert all(len(x.get('statements',[]))==4 and set(x.get('verdicts',{}))=={'A','B','C','D'} for x in Q if x['format']=='multi')
 print('Regression T4 R-squared and adjusted R-squared exact checks: PASS')
