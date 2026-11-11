@@ -38,4 +38,7 @@ assert Counter(x["format"] for x in items)=={"single":12,"numeric":5,"multi":3}
 assert Counter(x["answer"] for x in items)=={"A":5,"B":5,"C":5,"D":5}
 assert all(x["topic"]=="stochastic-t7" for x in items)
 assert all(len(x.get("statements",[]))==4 and set(x.get("verdicts",{}))=={"A","B","C","D"} for x in items if x["format"]=="multi")
+# Ensure multi-statement assessment metadata is specific to its displayed stem.
+assert all("stated incorrect" not in s.lower() for q in P["items"] for s in q.get("statements", []))
+assert all(len(v.get("why", "")) >= 20 for q in P["items"] if q["format"] == "multi" for v in q["verdicts"].values())
 print("T7 birth–death, M/M/1 and mastery checks: PASS")
