@@ -1,0 +1,695 @@
+{
+  "id": "regressiont13",
+  "topicId": "regression-t13",
+  "moduleId": "regression",
+  "title": "6.13 — Restricted Regression and Linear Hypothesis Testing",
+  "breadcrumb": "Unit VI → Regression and linear models → 6.13 Restricted regression",
+  "engine": "B",
+  "engineName": "Impose linear restrictions on regression coefficients and test them using nested-model F statistics.",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 92,
+  "objectives": [
+    "Express restrictions on regression coefficients in the matrix form Rβ=r.",
+    "Distinguish unrestricted OLS from restricted least squares.",
+    "Calculate a restricted least-squares estimate for a simple linear restriction.",
+    "Use the extra sum-of-squares F statistic to test q linear restrictions.",
+    "Recognise the equivalence F=t² for a single linear restriction.",
+    "Distinguish exact restrictions from stochastic restrictions and explain mixed estimation."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "OLS estimation and residual sums of squares",
+      "why": "Restricted regression compares the fit of nested unrestricted and restricted models."
+    },
+    {
+      "id": "p2",
+      "name": "Matrix algebra and linear restrictions",
+      "why": "The restrictions are represented by Rβ=r and the restricted estimator uses matrix projections."
+    },
+    {
+      "id": "p3",
+      "name": "F tests and degrees of freedom",
+      "why": "The joint test uses the number of restrictions and the unrestricted residual degrees of freedom."
+    }
+  ],
+  "traps": [
+    "A linear restriction has the form Rβ=r, where R has q independent rows.",
+    "Restricted least squares minimises RSS subject to the restrictions; its RSS cannot be smaller than unrestricted OLS RSS.",
+    "The extra sum-of-squares F statistic is [(RSS_R−RSS_U)/q]/[RSS_U/(n−k)] for q restrictions.",
+    "The unrestricted model is nested within the restricted model in the sense that the restriction defines a subset of the parameter space.",
+    "For one restriction, the classical F statistic equals the square of the corresponding t statistic.",
+    "Exact restrictions impose a fixed equality; stochastic restrictions allow deviations with a specified variance.",
+    "Mixed estimation combines sample information with external or prior linear information.",
+    "A restriction matrix with redundant rows does not represent q independent restrictions; use its rank."
+  ],
+  "howto": "Write the null restriction as Rβ=r and count independent restrictions q=rank(R). Estimate the unrestricted model, then estimate or calculate the restricted fit. Compare RSS values with the extra sum-of-squares F statistic. For one restriction, check that F=t². If the restriction is stochastic rather than exact, describe the variance of the restriction error and use mixed estimation rather than imposing it as a hard equality.",
+  "refs": [
+    {
+      "title": "Introductory Econometrics: A Modern Approach",
+      "where": "Linear restrictions and F tests",
+      "site": "Jeffrey M. Wooldridge",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Applied treatment of joint linear restrictions and nested regression tests."
+    },
+    {
+      "title": "Econometric Analysis",
+      "where": "Restricted least squares and mixed estimation",
+      "site": "William H. Greene",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Matrix derivations for exact and stochastic restrictions."
+    },
+    {
+      "title": "Econometric Methods",
+      "where": "Linear restrictions in regression",
+      "site": "Jack Johnston and John DiNardo",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Classical restricted regression and hypothesis testing."
+    }
+  ],
+  "provenance": "Authored for UGC NET Statistics Paper 2 Unit VI. The constrained least-squares and nested-F numerical anchors are original examples verified exactly in verify_regression_t13.py. No June 2026 question is claimed as a direct restricted-regression PYQ.",
+  "revision": {
+    "sheet": [
+      "A set of q linear restrictions is written Rβ=r, with rank(R)=q.",
+      "Unrestricted OLS minimises RSS over all coefficient vectors.",
+      "Restricted least squares minimises RSS subject to Rβ=r.",
+      "The restricted RSS cannot be smaller than the unrestricted RSS.",
+      "Extra sum-of-squares F=[(RSS_R−RSS_U)/q]/[RSS_U/(n−k)].",
+      "The numerator degrees of freedom equal the number of independent restrictions q.",
+      "The denominator degrees of freedom equal n−k for k unrestricted parameters.",
+      "For one restriction, F=t² under the corresponding classical assumptions.",
+      "Exact restrictions are hard equalities; stochastic restrictions allow deviations with known or specified covariance.",
+      "Mixed estimation combines sample information with external linear information."
+    ],
+    "cards": [
+      [
+        "Linear restriction",
+        "Rβ=r"
+      ],
+      [
+        "Independent restrictions",
+        "q=rank(R)"
+      ],
+      [
+        "Restricted LS",
+        "Minimise RSS subject to Rβ=r"
+      ],
+      [
+        "RSS ordering",
+        "RSS_R≥RSS_U"
+      ],
+      [
+        "Extra-sum F",
+        "[(RSS_R−RSS_U)/q]/[RSS_U/(n−k)]"
+      ],
+      [
+        "Single restriction",
+        "F=t²"
+      ],
+      [
+        "Exact restriction",
+        "Fixed equality"
+      ],
+      [
+        "Stochastic restriction",
+        "Restriction with random deviation"
+      ]
+    ],
+    "tricks": [
+      "Count independent restrictions using rank(R), not simply the number of written equations.",
+      "The restricted model cannot fit better in-sample than unrestricted OLS.",
+      "Use q in the numerator degrees of freedom and n−k in the denominator.",
+      "For one restriction, compare the F statistic with t² as an arithmetic check."
+    ],
+    "shortcuts": [
+      "Rβ=r defines the null restriction.",
+      "RSS_R−RSS_U is the cost of imposing the restrictions.",
+      "F=t² when q=1."
+    ],
+    "remember": [
+      "A restriction is a hypothesis about coefficients, not a change to the observed data.",
+      "Stochastic restrictions are not imposed as exact equalities; they are weighted according to their uncertainty."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 8,
+      "title": "Refresh OLS fit, hypotheses and degrees of freedom",
+      "objective": "Recover the regression tools needed for restricted estimation.",
+      "body": [
+        "Restricted regression asks what happens when the coefficient vector is required to satisfy one or more linear equalities. It compares the constrained fit with unrestricted OLS.",
+        "The core quantities are the residual sum of squares, the number of independent restrictions and the residual degrees of freedom."
+      ],
+      "items": [
+        {
+          "ask": "What does unrestricted OLS minimise?",
+          "recall": "The residual sum of squares over all coefficient vectors.",
+          "refresh": [
+            "OLS chooses coefficients that minimise the sum of squared residuals.",
+            "Without restrictions, the parameter vector can take any value allowed by the model design.",
+            "A restricted model searches over a smaller set of coefficient vectors, so its minimum RSS cannot be lower."
+          ]
+        },
+        {
+          "ask": "What is a linear hypothesis on β?",
+          "recall": "A linear equation or set of equations involving regression coefficients.",
+          "refresh": [
+            "A single restriction can be β₁=β₂ or β₁+2β₂=3.",
+            "Several restrictions can be collected in matrix form Rβ=r.",
+            "The number of independent restrictions is the rank of R, not necessarily the number of displayed rows."
+          ]
+        },
+        {
+          "ask": "What are the residual degrees of freedom in a model with n observations and k parameters?",
+          "recall": "n−k.",
+          "refresh": [
+            "The unrestricted model estimates k coefficients, including the intercept if present.",
+            "The residual degrees of freedom are n−k under the usual full-rank setup.",
+            "This quantity appears in the denominator of the classical regression F statistic."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Why must restricted RSS be at least as large as unrestricted RSS?",
+        "nudge": "The restricted coefficient set is a subset of the unrestricted parameter space."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "What does a restriction cost?",
+      "objective": "Build an intuitive picture of constrained regression.",
+      "body": [
+        "Suppose an unrestricted model estimates two slopes as 2 and 3, but theory suggests their sum should equal 4. The restriction removes coefficient combinations that do not satisfy that equality.",
+        "The constrained estimator adjusts the coefficients to satisfy the restriction while minimising the increase in residual error. It is not simply a matter of changing one coefficient and leaving the other fixed.",
+        "The F test asks whether the loss of fit from imposing the restriction is large relative to the unexplained variation remaining in the unrestricted model."
+      ],
+      "scenario": {
+        "teaser": "Theory says two slopes should sum to four",
+        "title": "Constrain the coefficient vector",
+        "body": [
+          "A researcher estimates two coefficients with unrestricted OLS and obtains β̂₁=2 and β̂₂=3. A theory proposes that β₁+β₂=4.",
+          "The unrestricted estimate does not satisfy the restriction because its sum is five. Restricted least squares chooses the closest coefficient vector in the OLS metric that satisfies the equality.",
+          "If the regressors are orthonormal so that X′X=I, the adjustment is shared equally: the restricted estimate becomes (1.5,2.5), which sums to four.",
+          "The restriction may improve scientific interpretability, but the F test evaluates whether the increase in RSS is statistically large."
+        ],
+        "q": "What is the restricted coefficient vector in the orthonormal example?",
+        "answer": "(1.5, 2.5), which satisfies the sum restriction."
+      },
+      "ask": {
+        "q": "Does imposing a restriction guarantee a smaller RSS?",
+        "nudge": "Compare the feasible coefficient sets for restricted and unrestricted OLS."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "Write restrictions in matrix form",
+      "objective": "Represent multiple coefficient restrictions as Rβ=r.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "General restriction",
+          "body": "Rβ=r, where β is the k×1 coefficient vector, R is a q×k restriction matrix and r is a q×1 vector. The independent restriction count is q=rank(R)."
+        },
+        {
+          "t": "step",
+          "h": "Example: equality of two slopes",
+          "body": "For β₁+β₂=4 with β=(β₁,β₂)′, R=[1,1] and r=[4]. For β₁=β₂, R=[1,−1] and r=[0]."
+        },
+        {
+          "t": "note",
+          "h": "Redundant restrictions",
+          "body": "If one row of R is a linear combination of other rows, it adds no independent restriction. Use rank(R) to determine the numerator degrees of freedom."
+        },
+        {
+          "t": "def",
+          "h": "Restricted least squares",
+          "body": "The estimator minimises (Y−Xβ)′(Y−Xβ) subject to Rβ=r. It adjusts the unrestricted OLS vector to the nearest feasible vector under the X′X metric."
+        }
+      ],
+      "flow": {
+        "caption": "From a theory statement to a restricted regression test",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "State coefficient hypothesis",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Write Rβ = r",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Find q = rank(R)",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Fit restricted and unrestricted models",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Compare RSS with F test",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ]
+      },
+      "ask": {
+        "q": "How many independent restrictions are in Rβ=r?",
+        "nudge": "Use the rank of R."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s3",
+      "mins": 8,
+      "title": "Worked example: restricted least-squares estimate",
+      "objective": "Calculate a constrained coefficient vector in an orthonormal design.",
+      "problem": "The unrestricted estimate is β̂=(2,3)′, X′X=I and the restriction is β₁+β₂=4. Find the restricted least-squares estimate.",
+      "steps": [
+        {
+          "say": "Write the restricted estimator adjustment for identity X′X.",
+          "math": "β̂_R=β̂−R′(RR′)⁻¹(Rβ̂−r)",
+          "why": "The restriction is projected back onto the feasible coefficient set."
+        },
+        {
+          "say": "Use R=[1,1] and r=4.",
+          "math": "Rβ̂−r=2+3−4=1",
+          "why": "The unrestricted estimate exceeds the required sum by one."
+        },
+        {
+          "say": "Compute the adjustment.",
+          "math": "R′(RR′)⁻¹(1)=(1,1)′/2=(0.5,0.5)′",
+          "why": "The identity metric shares the adjustment equally across the two coefficients."
+        },
+        {
+          "say": "Subtract the adjustment.",
+          "math": "β̂_R=(2,3)′−(0.5,0.5)′=(1.5,2.5)′",
+          "why": "The restricted vector satisfies 1.5+2.5=4."
+        }
+      ],
+      "ask": {
+        "q": "What must be true of the restricted estimates?",
+        "nudge": "Substitute them into the restriction equation."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s4",
+      "mins": 5,
+      "title": "Recall the extra sum-of-squares F test",
+      "objective": "Retrieve the test statistic and degrees of freedom.",
+      "intro": "Answer before reading the explanation.",
+      "items": [
+        {
+          "q": "What is the numerator of the extra sum-of-squares statistic?",
+          "a": "The increase in RSS, RSS_R−RSS_U, divided by the number q of independent restrictions."
+        },
+        {
+          "q": "What are the F degrees of freedom?",
+          "a": "q and n−k."
+        },
+        {
+          "q": "Can restricted RSS be smaller than unrestricted RSS?",
+          "a": "No; the restricted parameter set is smaller."
+        },
+        {
+          "q": "What is the single-restriction relationship?",
+          "a": "F=t² under the corresponding classical regression assumptions."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s5",
+      "mins": 6,
+      "title": "Complete the nested-model F statistic",
+      "objective": "Reconstruct the test for q linear restrictions.",
+      "problem": "Complete the extra sum-of-squares formula.",
+      "steps": [
+        {
+          "say": "The restriction increases residual sum of squares.",
+          "blank": {
+            "prompt": "The numerator uses RSS_R minus RSS_ _____.",
+            "answer": "U",
+            "accept": [
+              "unrestricted"
+            ],
+            "hint": "It is the unrestricted model's residual sum of squares."
+          }
+        },
+        {
+          "say": "Divide the RSS increase by the independent restriction count.",
+          "blank": {
+            "prompt": "The numerator degrees of freedom are _____.",
+            "answer": "q",
+            "accept": [
+              "number of restrictions"
+            ],
+            "hint": "Use rank(R)."
+          }
+        },
+        {
+          "say": "The unrestricted residual variance estimate uses residual degrees of freedom.",
+          "blank": {
+            "prompt": "The denominator degrees of freedom are n−_____.",
+            "answer": "k",
+            "accept": [
+              "number of unrestricted parameters"
+            ],
+            "hint": "k is the number of unrestricted coefficients."
+          }
+        },
+        {
+          "say": "For one restriction, the classical t and F statistics are related.",
+          "blank": {
+            "prompt": "F equals t squared when q=_____.",
+            "answer": "1",
+            "accept": [
+              "one"
+            ],
+            "hint": "The F test has one numerator degree of freedom."
+          }
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s6",
+      "mins": 8,
+      "title": "Test restrictions using the RSS increase",
+      "objective": "Apply the extra sum-of-squares F statistic.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Extra sum-of-squares F",
+          "body": "F=[(RSS_R−RSS_U)/q]/[RSS_U/(n−k)], where q is the number of independent restrictions and k is the number of unrestricted parameters."
+        },
+        {
+          "t": "step",
+          "h": "Interpret the numerator",
+          "body": "RSS_R−RSS_U measures the additional unexplained variation caused by imposing the restrictions. Divide by q to obtain the average cost per restriction."
+        },
+        {
+          "t": "step",
+          "h": "Interpret the denominator",
+          "body": "RSS_U/(n−k) is the unrestricted residual mean square, the estimated error variance under the unrestricted model."
+        },
+        {
+          "t": "note",
+          "h": "Decision",
+          "body": "A large F statistic means the fit deteriorates substantially when the restrictions are imposed. Compare with the F(q,n−k) reference distribution under the classical assumptions."
+        }
+      ],
+      "ask": {
+        "q": "What does a large F statistic say about the restrictions?",
+        "nudge": "The restricted model loses too much fit relative to the unrestricted residual variation."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s7",
+      "mins": 7,
+      "title": "Exact restrictions versus uncertain prior information",
+      "objective": "Distinguish hard constraints from stochastic restrictions.",
+      "body": [
+        "An exact restriction says the coefficient combination must equal a fixed value, such as β₁+β₂=4. Restricted least squares imposes that equality exactly.",
+        "Sometimes the restriction comes from an external study or prior information that is informative but uncertain. Then it is more realistic to model the restriction error as random with a known or specified covariance.",
+        "Mixed estimation weights the sample regression and the external information according to their relative precision. A highly precise restriction receives more weight; a noisy restriction receives less."
+      ],
+      "scenario": {
+        "teaser": "External evidence with uncertainty",
+        "title": "Do not force uncertain information to be exact",
+        "body": [
+          "A transport study estimates an elasticity near 0.8 but reports a standard error. A new sample regression estimates the same elasticity from a different population.",
+          "Treating the external estimate as an exact equality would ignore its uncertainty. A stochastic restriction instead represents the external information as Rβ=r+v, where v has a specified covariance.",
+          "Mixed estimation combines the new sample information and the external restriction, weighting each according to its precision. If the external variance is very small, it has more influence; if it is large, the sample data dominate.",
+          "The distinction is substantive: exact restrictions are hard constraints, while stochastic restrictions are noisy pieces of information."
+        ],
+        "q": "Why is a stochastic restriction not imposed as an exact equality?",
+        "answer": "Because the external information has uncertainty represented by a random restriction error."
+      },
+      "ask": {
+        "q": "What determines the weight given to a stochastic restriction?",
+        "nudge": "Think about the variance or precision of the external information."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s8",
+      "mins": 8,
+      "title": "Worked example: compute the restricted-model F statistic",
+      "objective": "Calculate an F statistic from restricted and unrestricted RSS.",
+      "problem": "The unrestricted model has RSS_U=20 with n−k=10. Imposing one restriction gives RSS_R=24. Compute the extra sum-of-squares F statistic.",
+      "steps": [
+        {
+          "say": "Find the increase in RSS.",
+          "math": "RSS_R−RSS_U=24−20=4",
+          "why": "The restriction adds four units of residual variation."
+        },
+        {
+          "say": "Divide by q=1.",
+          "math": "Numerator mean square=4/1=4",
+          "why": "There is one independent restriction."
+        },
+        {
+          "say": "Compute the unrestricted residual mean square.",
+          "math": "20/10=2",
+          "why": "The denominator estimates the unrestricted error variance."
+        },
+        {
+          "say": "Form the F ratio.",
+          "math": "F=4/2=2",
+          "why": "The observed fit loss is twice the unrestricted residual mean square."
+        }
+      ],
+      "ask": {
+        "q": "If q were two and the same RSS increase occurred, what would the numerator mean square be?",
+        "nudge": "Divide the increase by the number of independent restrictions."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "mins": 8,
+      "title": "Guided problem: count independent restrictions",
+      "objective": "Use rank(R) rather than the number of displayed equations.",
+      "problem": "The restrictions are β₁+β₂=2 and 2β₁+2β₂=4. How many independent restrictions are imposed?",
+      "hints": [
+        "Write the two rows of R.",
+        "Check whether one row is a multiple of the other.",
+        "Use rank(R), not the number of written lines."
+      ],
+      "answer": "There is only one independent restriction because the second equation is twice the first; rank(R)=1.",
+      "solution": [
+        {
+          "say": "Write the restriction matrix.",
+          "math": "R=[[1,1],[2,2]]"
+        },
+        {
+          "say": "The second row is twice the first.",
+          "math": "(2,2)=2(1,1)"
+        },
+        {
+          "say": "The rows are linearly dependent.",
+          "math": "rank(R)=1"
+        },
+        {
+          "say": "Use one restriction in the F numerator degrees of freedom.",
+          "math": "q=1"
+        }
+      ],
+      "ask": {
+        "q": "What is q for this pair of equations?",
+        "nudge": "Count independent rows, not displayed restrictions."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s10",
+      "mins": 6,
+      "title": "Exam traps: restricted regression",
+      "objective": "Avoid common errors in restrictions and F testing.",
+      "intro": "Mark each statement true or false.",
+      "items": [
+        {
+          "claim": "Restricted RSS cannot be smaller than unrestricted RSS.",
+          "tf": true,
+          "why": "Unrestricted OLS minimises RSS over a larger parameter space."
+        },
+        {
+          "claim": "The number of restrictions is always the number of displayed equations.",
+          "tf": false,
+          "why": "Redundant restrictions do not add independent information; use rank(R)."
+        },
+        {
+          "claim": "For one restriction, the classical F statistic equals t squared.",
+          "tf": true,
+          "why": "Both test the same one-dimensional linear hypothesis."
+        },
+        {
+          "claim": "The numerator degrees of freedom equal n−k.",
+          "tf": false,
+          "why": "The numerator degrees of freedom equal q; n−k is the denominator degrees of freedom."
+        },
+        {
+          "claim": "Stochastic restrictions are imposed as exact equalities.",
+          "tf": false,
+          "why": "They allow a random deviation with specified uncertainty."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "mins": 8,
+      "title": "Transfer problem: interpret a restriction test",
+      "objective": "Explain a joint F test in context.",
+      "problem": "A model tests H₀:β₂=β₃=0. The unrestricted model has RSS=100; the restricted model has RSS=112; q=2 and n−k=20. Compute F and state what it measures.",
+      "hints": [
+        "There are two independent zero restrictions.",
+        "Use the increase in RSS divided by q.",
+        "Divide by the unrestricted residual mean square."
+      ],
+      "answer": "F=[(112−100)/2]/(100/20)=6/5=1.2. It measures the average fit loss per restriction relative to the unrestricted residual mean square.",
+      "solution": [
+        {
+          "say": "Compute the restricted RSS increase.",
+          "math": "112−100=12"
+        },
+        {
+          "say": "Divide by q=2.",
+          "math": "12/2=6"
+        },
+        {
+          "say": "Compute the unrestricted residual mean square.",
+          "math": "100/20=5"
+        },
+        {
+          "say": "Divide numerator mean square by denominator mean square.",
+          "math": "F=6/5=1.2"
+        }
+      ],
+      "ask": {
+        "q": "What does the numerator degree of freedom equal?",
+        "nudge": "It is the number of independent coefficient restrictions."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s12",
+      "mins": 5,
+      "title": "Summary: restrict, compare and test",
+      "objective": "Compress restricted regression into an exam-ready checklist.",
+      "body": [
+        "Write the hypothesis as Rβ=r and use q=rank(R) independent restrictions. Restricted least squares minimises RSS subject to the equality; its RSS cannot be lower than unrestricted OLS RSS.",
+        "The extra sum-of-squares statistic is F=[(RSS_R−RSS_U)/q]/[RSS_U/(n−k)]. The numerator degrees of freedom are q and the denominator degrees of freedom are n−k. For one restriction, F=t² under the classical assumptions.",
+        "Exact restrictions are hard equalities. Stochastic restrictions allow deviations with specified uncertainty, and mixed estimation combines the external information with the sample regression according to precision."
+      ],
+      "ask": {
+        "q": "What are the three steps in a restricted-regression test?",
+        "nudge": "Write Rβ=r, count q, then compare restricted and unrestricted RSS."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s13",
+      "mins": 8,
+      "ext": true,
+      "title": "Extension — stochastic restrictions and mixed estimation",
+      "objective": "Connect external linear information to a weighted regression problem.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Stochastic restriction",
+          "body": "External information can be written Rβ=r+v, where v has mean zero and covariance Ω. Unlike an exact restriction, it allows the coefficient combination to deviate from r."
+        },
+        {
+          "t": "formula",
+          "h": "Mixed-estimation objective",
+          "body": "A common formulation minimises the sample residual sum of squares together with a weighted penalty (Rβ−r)′Ω⁻¹(Rβ−r). The weight is larger when the restriction variance is smaller."
+        },
+        {
+          "t": "note",
+          "h": "Limiting cases",
+          "body": "As Ω becomes very small, the stochastic restriction approaches an exact restriction. As Ω becomes very large, the external information receives little weight and the sample regression dominates."
+        }
+      ],
+      "ask": {
+        "q": "What happens when the restriction variance is very small?",
+        "nudge": "The external information is treated as highly precise."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s14",
+      "mins": 0,
+      "title": "6.13 mastery test",
+      "setId": "regression_t13_mastery",
+      "objective": "Demonstrate restricted-regression reasoning independently."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings, not an NTA rule. Ten unseen questions are drawn as 3 easy, 5 moderate and 2 hard; the pass threshold is 80% overall with 70% floors for numerical and multi-statement items."
+  }
+}
