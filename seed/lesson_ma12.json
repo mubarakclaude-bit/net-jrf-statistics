@@ -355,7 +355,83 @@
      "h": "Transform the region too",
      "body": "A change of variables requires transforming the integrand, the region and the area element. All three must be updated consistently."
     }
-   ]
+   ],
+   "flow": {
+    "title": "Choose coordinates and integration order",
+    "alt": "Flow for setting up multiple integrals",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Describe the region",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Rectangular or simple slices?",
+      "kind": "dec"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Use Cartesian iterated bounds",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 2,
+      "label": "Use polar/cylindrical if symmetry helps",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 1,
+      "label": "Transform integrand and region",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "Multiply by absolute Jacobian",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c",
+      "label": "yes"
+     },
+     {
+      "from": "b",
+      "to": "d",
+      "label": "symmetry"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     },
+     {
+      "from": "c",
+      "to": "e"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ]
+   }
   },
   {
    "kind": "guided",
