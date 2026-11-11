@@ -1,0 +1,618 @@
+{
+ "id": "nonparamt2",
+ "topicId": "nonparam-t2",
+ "moduleId": "nonparam",
+ "title": "Wilcoxon signed-rank and sign tests",
+ "breadcrumb": "Non-parametric methods → Paired samples → Sign and signed-rank tests",
+ "engine": "B",
+ "engineName": "Pair, subtract, then use signs or signed ranks.",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 96,
+ "objectives": [
+  "Identify paired observations and construct differences in a stated direction.",
+  "Apply the sign test after omitting zero differences.",
+  "Apply Wilcoxon signed-rank by ranking absolute nonzero differences and restoring signs.",
+  "Calculate rank sums and the no-tie null moments.",
+  "Choose between the two tests using the symmetry assumption."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Paired observations",
+   "why": "Each difference must connect two measurements from the same or matched unit."
+  },
+  {
+   "id": "p2",
+   "name": "Median and signs",
+   "why": "The sign test uses the direction of each nonzero difference."
+  },
+  {
+   "id": "p3",
+   "name": "Ranking and average ranks",
+   "why": "The signed-rank test orders absolute differences and averages tied positions."
+  }
+ ],
+ "traps": [
+  "Paired methods analyse within-pair differences; they are not for two unrelated groups.",
+  "Fix the subtraction order before interpreting positive and negative signs.",
+  "Zero differences are omitted from the effective sample size.",
+  "Sign test uses directions only; signed-rank also uses magnitude ranks.",
+  "Tied absolute differences receive average ranks.",
+  "Signed-rank's usual location interpretation needs symmetric differences; sign test does not."
+ ],
+ "howto": "Work the paired-difference example before memorising formulas. First identify the pairing and subtraction direction. Use the sign test if symmetry is doubtful; use Wilcoxon signed-rank when the difference distribution is reasonably symmetric. For signed ranks, remove zeros, rank absolute differences, restore signs and verify the rank total.",
+ "revision": {
+  "sheet": [
+   "Paired observations → form dᵢ=afterᵢ−beforeᵢ (or state another consistent direction).",
+   "Sign test: omit dᵢ=0; let m be nonzero count and X positive signs.",
+   "Under H₀: X∼Binomial(m,1/2); E(X)=m/2; Var(X)=m/4.",
+   "Exact two-sided sign-test p-value: double the smaller binomial tail, capped at 1.",
+   "Wilcoxon: omit zero differences under the common convention; rank |dᵢ|; average tied ranks; restore signs.",
+   "W⁺=sum positive ranks; W⁻=sum negative ranks; total ranks=m(m+1)/2 (also with midranks).",
+   "No-tie E(W⁺)=m(m+1)/4; Var(W⁺)=m(m+1)(2m+1)/24.",
+   "Signed-rank assumes symmetric paired differences for its usual location interpretation.",
+   "Sign test does not require symmetry; it is less sensitive because it discards magnitude ordering.",
+   "Independent groups → do not use either paired procedure; consider Mann–Whitney for two groups."
+  ],
+  "cards": [
+   [
+    "Design",
+    "Paired samples"
+   ],
+   [
+    "Sign test",
+    "Count positive vs negative nonzero differences"
+   ],
+   [
+    "Sign null",
+    "Binomial(m, 1/2)"
+   ],
+   [
+    "Sign variance",
+    "m/4"
+   ],
+   [
+    "Signed-rank",
+    "Rank |d|, then restore signs"
+   ],
+   [
+    "Rank total",
+    "m(m+1)/2"
+   ],
+   [
+    "E(W⁺)",
+    "m(m+1)/4"
+   ],
+   [
+    "Var(W⁺), no ties",
+    "m(m+1)(2m+1)/24"
+   ],
+   [
+    "Extra assumption",
+    "Symmetric paired differences for signed-rank"
+   ]
+  ],
+  "tricks": [
+   "Remove zeros before defining m.",
+   "Use absolute differences for ranking, not signed differences.",
+   "Check W⁺+W⁻ against m(m+1)/2."
+  ],
+  "shortcuts": [
+   "Sign test: X~Binomial(m, 1/2).",
+   "Signed-rank no-tie variance: m(m+1)(2m+1)/24."
+  ],
+  "remember": [
+   "Same units twice → paired test.",
+   "Skewed differences → sign test is safer than signed-rank."
+  ]
+ },
+ "refs": [
+  {
+   "title": "Nonparametric Statistical Methods",
+   "where": "Paired-sample procedures",
+   "site": "Hollander, Wolfe and Chicken",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Standard treatment of sign and Wilcoxon signed-rank procedures."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+   "where": "Nonparametric methods",
+   "site": "NIST",
+   "url": "https://www.itl.nist.gov/div898/handbook/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Applied reference for nonparametric inference."
+  },
+  {
+   "title": "Penn State STAT 415",
+   "where": "Nonparametric tests",
+   "site": "Penn State",
+   "url": "https://online.stat.psu.edu/stat415/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Accessible supporting material for paired tests."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints."
+ },
+ "provenance": "June 2026 Paper 2 Q42 practice variant j26v-q42-08 identifies Wilcoxon signed-rank as the nonparametric analogue of the paired t test; Q33 variant j26v-q33-09 distinguishes paired t from independent-sample procedures. The full Q42 stem is a Mann–Whitney independent-groups question, so it is not presented as a signed-rank data example. Worked calculations use constructed paired differences. The verifier checks sign counts, zero exclusion, rank sums, tied average ranks, null moments and the binomial model.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Start with the paired design",
+   "objective": "Recognise paired observations and construct a difference.",
+   "ask": {
+    "q": "The same 10 people are measured before and after. Independent or paired?",
+    "nudge": "Does each after-value belong to a particular before-value?"
+   },
+   "body": [
+    "A paired study follows the same unit twice, or deliberately matches units into pairs. The analysis must preserve the link within each pair.",
+    "Choose a consistent subtraction, such as after minus before. Positive values then mean an increase and negative values mean a decrease. The subtraction convention changes the direction label, not the two-sided evidence."
+   ],
+   "items": [
+    {
+     "ask": "The same patient is measured twice. What is the design?",
+     "recall": "Paired; each patient supplies a linked pair.",
+     "refresh": [
+      "Pairing means two observations belong to the same unit or a matched unit. Keep the link when analysing the data.",
+      "Do not treat the two columns as independent samples. Form one within-pair difference for each unit."
+     ]
+    },
+    {
+     "ask": "What does after minus before equal to −2 mean?",
+     "recall": "The after measurement fell by 2 units.",
+     "refresh": [
+      "Write the subtraction order first. Here the second measurement is subtracted from the first? No: d=after−before.",
+      "A negative after-minus-before difference means the after value is lower. The sign convention must remain consistent for every pair."
+     ]
+    },
+    {
+     "ask": "What is the median of −3, −1, 2, 4?",
+     "recall": "(−1+2)/2=0.5.",
+     "refresh": [
+      "Sort the values before finding the median. With an even number of observations, use the two central values.",
+      "Average the two middle values: (−1+2)/2=0.5."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "Use direction before magnitude",
+   "objective": "Understand the distinction between the sign and signed-rank procedures.",
+   "ask": {
+    "q": "Which test uses only whether a difference is positive or negative?",
+    "nudge": "Ignore how large the changes are."
+   },
+   "body": [
+    "Suppose six people improve and two worsen. The sign test records six plus signs and two minus signs. It does not distinguish a one-point improvement from a ten-point improvement.",
+    "Wilcoxon signed-rank keeps the same signs but also ranks the absolute nonzero differences. A large change receives a larger rank. This can add information when the difference distribution is symmetric."
+   ],
+   "scenario": {
+    "teaser": "A paired before-and-after health outcome.",
+    "title": "A hospital treatment study",
+    "body": [
+     "A hospital records pain scores for the same patients immediately before and after treatment. Each patient supplies a pair of observations, so the two columns are linked. The scale is ordered, but adjacent categories need not be equally spaced. A sign test uses whether each patient's score rose or fell. A signed-rank test also ranks the absolute size of each nonzero change, and its usual location interpretation assumes symmetric paired differences. Patients with no change contribute no direction to either calculation."
+    ],
+    "q": "Why is an independent two-sample test inappropriate here?",
+    "answer": "Each patient's before and after values are linked; the analysis must preserve the pairing."
+   }
+  },
+  {
+   "kind": "explore",
+   "id": "s2",
+   "mins": 6,
+   "title": "Make paired differences visible",
+   "objective": "Build signed differences before ranking.",
+   "ask": {
+    "q": "If d=after−before, what does d=+3 mean?",
+    "nudge": "The after measurement is three units higher."
+   },
+   "viz": {
+    "type": "paired-differences",
+    "caption": "Pair first, subtract consistently, then separate zero, positive and negative differences."
+   },
+   "body": [
+    "Consider paired differences 4, −1, 3, −2, 5, −6, using after minus before. There are three positive and three negative differences, so the sign test has a balanced count.",
+    "For signed ranks, order the absolute differences: 1, 2, 3, 4, 5, 6. Their ranks are 1, 2, 3, 4, 5, 6. Positive ranks sum to 4+3+5=12; negative ranks sum to 1+2+6=9."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 9,
+   "title": "The sign test",
+   "objective": "Set up the binomial test after removing zero differences.",
+   "ask": {
+    "q": "What is the null probability of a positive sign?",
+    "nudge": "Under no directional tendency, positive and negative are equally likely."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Remove zero differences",
+     "body": "A zero difference has neither a positive nor a negative sign. Omit it. Let m be the number of nonzero pairs, with X positive signs."
+    },
+    {
+     "t": "formula",
+     "h": "Null model",
+     "body": "Under H₀ of no median directional shift, X follows Binomial(m, 1/2). Thus E(X)=m/2 and Var(X)=m/4."
+    },
+    {
+     "t": "step",
+     "h": "Exact two-sided probability",
+     "body": "Add binomial probabilities at least as extreme in both tails. For an observed x, use 2×P(X≤min(x,m−x)), capped at 1, under the symmetric null."
+    },
+    {
+     "t": "def",
+     "h": "Assumption and scope",
+     "body": "The sign test does not require a symmetric distribution of differences. It tests the median of the paired-difference distribution against zero, under the usual independent-pair sampling model."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 10,
+   "title": "Worked example: sign and signed ranks",
+   "objective": "Calculate both procedures from the same six nonzero paired differences.",
+   "ask": {
+    "q": "Why do both methods use six observations here?",
+    "nudge": "All six differences are nonzero; no pair is discarded."
+   },
+   "problem": "Paired differences (after−before) are 4, −1, 3, −2, 5, −6. Calculate the sign count and Wilcoxon signed-rank sums.",
+   "steps": [
+    {
+     "say": "Count the signs.",
+     "math": "Positive=3; negative=3; m=6",
+     "why": "The sign test ignores the size of each change."
+    },
+    {
+     "say": "Rank the absolute differences.",
+     "math": "|d|: 1, 2, 3, 4, 5, 6 → ranks 1, 2, 3, 4, 5, 6",
+     "why": "There are no ties in the absolute differences, so the ranks are consecutive."
+    },
+    {
+     "say": "Add the positive ranks.",
+     "math": "W⁺=4+3+5=12",
+     "why": "The positive differences are 4, 3 and 5."
+    },
+    {
+     "say": "Add the negative ranks.",
+     "math": "W⁻=1+2+6=9",
+     "why": "The negative differences are −1, −2 and −6."
+    },
+    {
+     "say": "Check the total.",
+     "math": "W⁺+W⁻=12+9=21=6×7/2",
+     "why": "The sum of ranks 1 through 6 is 21. The smaller signed-rank sum is 9."
+    }
+   ],
+   "after": "The sign test sees three positive and three negative signs. Signed-rank also uses the ordering of the magnitudes."
+  },
+  {
+   "kind": "recall",
+   "id": "s5",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the design and null model.",
+   "intro": "Try each answer before revealing it.",
+   "items": [
+    {
+     "q": "Which test uses only plus and minus signs?",
+     "a": "The sign test."
+    },
+    {
+     "q": "What happens to zero differences?",
+     "a": "Omit them from the sign count."
+    },
+    {
+     "q": "Under the sign-test null, what is P(positive)?",
+     "a": "One half."
+    },
+    {
+     "q": "What does signed-rank add?",
+     "a": "Ranks of absolute nonzero differences."
+    },
+    {
+     "q": "Which test needs symmetric paired differences for its usual location interpretation?",
+     "a": "Wilcoxon signed-rank."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s6",
+   "mins": 8,
+   "title": "Complete a signed-rank calculation",
+   "objective": "Fill the missing rank and total.",
+   "problem": "Six nonzero absolute differences have distinct ranks 1 to 6. The positive differences have ranks 2, 4 and 6. Find W⁺ and W⁻.",
+   "steps": [
+    {
+     "say": "Add positive ranks.",
+     "blank": {
+      "prompt": "W⁺=2+4+6=…",
+      "answer": "12",
+      "accept": [
+       "12.0"
+      ],
+      "hint": "Add the three positive ranks."
+     },
+     "why": "W⁺ is the sum of ranks carrying a positive sign."
+    },
+    {
+     "say": "Find the total rank sum.",
+     "blank": {
+      "prompt": "1+2+3+4+5+6=…",
+      "answer": "21",
+      "accept": [
+       "21.0"
+      ],
+      "hint": "Use m(m+1)/2 with m=6."
+     },
+     "why": "All ranks must be allocated to either positive or negative differences."
+    },
+    {
+     "say": "Subtract to find the negative sum.",
+     "blank": {
+      "prompt": "W⁻=21−12=…",
+      "answer": "9",
+      "accept": [
+       "9.0"
+      ],
+      "hint": "The positive and negative rank sums must add to 21."
+     },
+     "why": "This checks the two signed-rank sums."
+    }
+   ],
+   "after": "For m distinct nonzero absolute differences, W⁺+W⁻=m(m+1)/2."
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Wilcoxon signed-rank test",
+   "objective": "Rank magnitudes and state the symmetry condition.",
+   "ask": {
+    "q": "Why rank |d| rather than d itself?",
+    "nudge": "The sign is kept separately; rank the size of each nonzero change."
+   },
+   "blocks": [
+    {
+     "t": "step",
+     "h": "Procedure",
+     "body": "Compute paired differences dᵢ. Under the common Wilcoxon convention, omit zero differences. Rank |dᵢ| from smallest to largest, assigning average ranks to ties. Restore each original sign and sum positive and negative ranks."
+    },
+    {
+     "t": "formula",
+     "h": "Rank totals",
+     "body": "W⁺ is the sum of positive ranks and W⁻ is the sum of negative ranks. With m nonzero differences, W⁺+W⁻=m(m+1)/2; average ranks preserve the same total when ties occur."
+    },
+    {
+     "t": "formula",
+     "h": "Null moments without ties",
+     "body": "For W⁺ under H₀: E(W⁺)=m(m+1)/4 and Var(W⁺)=m(m+1)(2m+1)/24."
+    },
+    {
+     "t": "def",
+     "h": "Assumption",
+     "body": "The paired differences should be independent across pairs and approximately symmetric about the null location for the signed-rank test's usual location interpretation. The sign test does not require symmetry."
+    },
+    {
+     "t": "step",
+     "h": "Zeros and ties",
+     "body": "The common Wilcoxon convention omits zero differences and ranks the remaining absolute differences. Tied absolute differences receive average ranks; use a tie-adjusted variance or an appropriate exact method."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Guided transfer: choose between the tests",
+   "objective": "Select the procedure from the shape and information available.",
+   "problem": "A researcher has 14 independent pairs of ordered before-and-after scores. The paired differences are strongly skewed. The question asks whether the median change is zero. Which test is safer, and why?",
+   "hints": [
+    "Identify the paired structure and target.",
+    "Check whether the signed-rank symmetry condition is plausible.",
+    "Choose the method whose assumptions match the information."
+   ],
+   "answer": "The sign test is safer because it uses only the direction of nonzero differences and does not require symmetric paired differences. Remove zero differences before the binomial calculation.",
+   "check": "Do not choose signed-rank solely because the data are paired; inspect the difference distribution.",
+   "solution": [
+    {
+     "say": "Preserve the paired design.",
+     "math": "dᵢ=afterᵢ−beforeᵢ",
+     "why": "The target is a one-sample location question on paired differences."
+    },
+    {
+     "say": "Check the stronger assumption.",
+     "math": "Strong skewness → symmetry is doubtful",
+     "why": "The signed-rank test's usual location interpretation relies on symmetric differences."
+    },
+    {
+     "say": "Select the sign procedure.",
+     "math": "X∼Binomial(m, 1/2) under H₀",
+     "why": "The sign test uses directions and does not require symmetry."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 6,
+   "title": "Six statements to challenge",
+   "objective": "Separate the two paired rank procedures.",
+   "intro": "Mark each claim true or false before reading the reason.",
+   "items": [
+    {
+     "claim": "Both sign and signed-rank tests are for paired observations.",
+     "tf": true,
+     "why": "True. Both operate on within-pair differences."
+    },
+    {
+     "claim": "The sign test ranks absolute differences.",
+     "tf": false,
+     "why": "False. That is the additional step in Wilcoxon signed-rank."
+    },
+    {
+     "claim": "Zero differences count as positive signs.",
+     "tf": false,
+     "why": "False. They are omitted from the sign test's effective sample size."
+    },
+    {
+     "claim": "Wilcoxon signed-rank usually assumes symmetric paired differences.",
+     "tf": true,
+     "why": "True. Symmetry supports its usual location interpretation."
+    },
+    {
+     "claim": "Tied absolute differences receive average ranks.",
+     "tf": true,
+     "why": "True. Average ranks preserve the total rank sum."
+    },
+    {
+     "claim": "The sign test requires normally distributed differences.",
+     "tf": false,
+     "why": "False. It requires independent pairs and the sign-probability null, not normality."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 8,
+   "title": "Guided calculation: zeros and signs",
+   "objective": "Recalculate the sign-test sample size after zero differences.",
+   "problem": "Paired differences are 2, 0, −1, 3, 0, 4, −2, 1. Find m and the positive and negative counts.",
+   "hints": [
+    "Identify and set aside zero differences.",
+    "Count only the nonzero signs.",
+    "Check positive plus negative equals m."
+   ],
+   "answer": "There are two zero differences, so m=6. Positive=4 and negative=2.",
+   "check": "The nonzero count is 8−2=6, and 4+2=6.",
+   "solution": [
+    {
+     "say": "Remove zero differences.",
+     "math": "8 total pairs−2 zero differences=6 nonzero pairs",
+     "why": "Zero has neither a positive nor a negative direction."
+    },
+    {
+     "say": "Count the remaining signs.",
+     "math": "Positive: 2, 3, 4, 1 → 4; negative: −1, −2 → 2",
+     "why": "Count each nonzero difference once."
+    },
+    {
+     "say": "Check the count.",
+     "math": "4+2=6=m",
+     "why": "The sign counts must equal the effective sample size."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s11",
+   "mins": 6,
+   "title": "Inference and test selection",
+   "objective": "Connect exact and approximate inference with assumptions.",
+   "ask": {
+    "q": "What is the sign-test variance under H₀?",
+    "nudge": "For a binomial variable, variance is mpq."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Sign test",
+     "body": "X∼Binomial(m, 1/2), E(X)=m/2 and Var(X)=m/4. Use the exact binomial tail for small m; a normal approximation may be used for sufficiently large m with an appropriate continuity correction."
+    },
+    {
+     "t": "formula",
+     "h": "Signed-rank normal approximation",
+     "body": "Without ties or zeros, E(W⁺)=m(m+1)/4 and Var(W⁺)=m(m+1)(2m+1)/24. Standardise W⁺ using these moments when a normal approximation is justified."
+    },
+    {
+     "t": "def",
+     "h": "Decision guide",
+     "body": "Paired data with symmetric differences and useful magnitude ordering: Wilcoxon signed-rank. Paired data with doubtful symmetry, or only directional information trusted: sign test. Independent groups: neither; consider Mann–Whitney for two groups."
+    }
+   ]
+  },
+  {
+   "kind": "recall",
+   "id": "s12",
+   "mins": 3,
+   "title": "Second recall",
+   "objective": "Retrieve formulas under exam conditions.",
+   "intro": "Answer, then reveal.",
+   "items": [
+    {
+     "q": "Sign-test null distribution?",
+     "a": "Binomial(m, 1/2), where m excludes zeros."
+    },
+    {
+     "q": "Sign-test variance?",
+     "a": "m/4."
+    },
+    {
+     "q": "No-tie signed-rank null mean for W⁺?",
+     "a": "m(m+1)/4."
+    },
+    {
+     "q": "No-tie signed-rank variance?",
+     "a": "m(m+1)(2m+1)/24."
+    },
+    {
+     "q": "What is the extra signed-rank assumption?",
+     "a": "Symmetry of paired differences for its usual location interpretation."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "What you should now be able to do",
+   "objective": "Choose and calculate the two paired-sample nonparametric tests.",
+   "body": [
+    "Identify paired data and define differences in a stated direction.",
+    "For the sign test, omit zero differences, count positive signs and use Binomial(m, 1/2).",
+    "For signed-rank, rank absolute nonzero differences with average ranks for ties, then sum ranks by sign.",
+    "Use no-tie null moments only when their conditions apply; account for ties in inference.",
+    "Choose signed-rank when symmetry is plausible; choose sign test when it is not."
+   ]
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 4,
+   "title": "Mastery test",
+   "objective": "Demonstrate the paired-test skills independently.",
+   "setId": "nonparam_t2_mastery"
+  }
+ ]
+}
