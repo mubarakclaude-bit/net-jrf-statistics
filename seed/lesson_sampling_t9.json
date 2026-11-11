@@ -1,0 +1,651 @@
+{
+  "id": "samplingt9",
+  "topicId": "sampling-t9",
+  "moduleId": "sampling",
+  "title": "Nonnegative Variance Estimation and Ordered/Unordered Estimators",
+  "breadcrumb": "Sampling theory → PPSWOR → Variance estimation and ordered estimators",
+  "engine": "B",
+  "engineName": "Check pairwise variance coefficients and distinguish ordered from unordered estimators.",
+  "version": "1.0",
+  "status": "review",
+  "estMin": 95,
+  "objectives": [
+    "Explain why an unbiased variance estimate may be negative.",
+    "State the SYG variance estimator and its nonnegativity condition.",
+    "Explain limitations caused by zero joint inclusion probabilities.",
+    "Calculate Des Raj's ordered estimator and its variance for n=2.",
+    "Calculate Murthy's unordered estimator and explain its efficiency rationale."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "First- and second-order inclusion probabilities",
+      "why": "Variance estimators depend on π_i and π_ij."
+    },
+    {
+      "id": "p2",
+      "name": "Horvitz–Thompson estimator",
+      "why": "The variance formula estimates uncertainty in the HT total."
+    },
+    {
+      "id": "p3",
+      "name": "PPS without replacement",
+      "why": "Des Raj and Murthy estimators are sequential PPSWOR estimators."
+    }
+  ],
+  "traps": [
+    "An unbiased variance estimator can be negative in a realised sample.",
+    "SYG nonnegativity requires the pairwise coefficient condition; it is not automatic for every design.",
+    "The usual pairwise variance estimator requires positive π_ij for relevant pairs.",
+    "Des Raj is order-dependent; Murthy is order-independent for n=2.",
+    "Use initial selection probabilities p_i in the Des Raj and Murthy formulas as defined for the observed units."
+  ],
+  "howto": "For SYG, compute Δ_ij=π_iπ_j−π_ij and check its sign for every pair with positive π_ij. For Des Raj with two draws, retain draw order and apply the compact formula. For Murthy, use the unordered pair and the symmetric formula. Do not claim that all unbiased variance estimators are nonnegative.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Why variance estimates can be negative",
+      "objective": "Distinguish true variance from an estimated variance.",
+      "body": [
+        "A true variance is nonnegative by definition. A variance estimator is a random statistic calculated from the realised sample; an unbiased estimator can nevertheless take a negative value in some samples.",
+        "For the Horvitz–Thompson total estimator, the usual unbiased variance estimator uses first- and second-order inclusion probabilities. Its algebraic terms need not all be nonnegative.",
+        "The Sen–Yates–Grundy (SYG) form rewrites the variance estimator as a weighted sum of squared differences. Its nonnegativity depends on the sign of the pairwise coefficients and on positive joint inclusion probabilities."
+      ],
+      "items": [
+        {
+          "ask": "Can an unbiased variance estimator be negative?",
+          "recall": "Yes. Unbiasedness is an expectation property, not a pointwise constraint.",
+          "refresh": [
+            "The estimator may vary across realised samples.",
+            "Its expectation can equal the true nonnegative variance.",
+            "Some realised values can still be below zero."
+          ]
+        },
+        {
+          "ask": "Is the true variance ever negative?",
+          "recall": "No. A variance is an expected squared deviation.",
+          "refresh": [
+            "A squared deviation cannot be negative.",
+            "Only an estimated variance can produce a negative numerical value.",
+            "A negative estimate signals a limitation of the estimator/design combination."
+          ]
+        },
+        {
+          "ask": "What does the SYG form use?",
+          "recall": "Weighted squared differences of inverse-inclusion-probability values.",
+          "refresh": [
+            "The difference is y_i/π_i−y_j/π_j.",
+            "The pair coefficient depends on π_iπ_j−π_ij.",
+            "Coefficient signs determine nonnegativity."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What is the difference between unbiasedness and nonnegativity?",
+        "nudge": "Unbiasedness concerns the estimator's expectation; nonnegativity concerns every realised value."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 8,
+      "title": "A weighted squared-difference view",
+      "objective": "Interpret the SYG estimator and its sign condition.",
+      "body": [
+        "For a fixed-size design, define Δ_ij=π_iπ_j−π_ij. The SYG variance estimator for the total is one half the sum over sampled unordered pairs of (Δ_ij/π_ij)(y_i/π_i−y_j/π_j)².",
+        "Every squared difference is nonnegative. If π_ij is positive and Δ_ij is nonnegative for every pair, every term is nonnegative and the estimator cannot be negative.",
+        "If some Δ_ij is negative, a negative contribution is possible. This condition is sufficient for nonnegativity term by term; it is not a universal statement that every design has nonnegative SYG estimates."
+      ],
+      "scenario": {
+        "teaser": "Two units with unequal inclusion chances",
+        "title": "The sign comes from the pair coefficient",
+        "body": [
+          "Suppose a fixed-size sampling design has positive pairwise inclusion probability π_ij for every relevant pair. The SYG estimate uses the coefficient (π_iπ_j−π_ij)/π_ij multiplying a squared difference between y_i/π_i and y_j/π_j. If π_ij is no larger than π_iπ_j for every pair, all coefficients are nonnegative and the estimate is nonnegative for every sample. If the design violates this inequality for some pair, that pair contributes a negative term; the total estimate may or may not be negative depending on the observed values and the other pair contributions. Therefore the design condition is important, and it should not be replaced by the blanket claim that SYG is always nonnegative.",
+          "The design's joint inclusion probabilities, not merely its first-order probabilities, control this property."
+        ],
+        "q": "What inequality gives nonnegative pair coefficients?",
+        "answer": "π_ij≤π_iπ_j for every relevant pair."
+      },
+      "ask": {
+        "q": "Does one negative pair coefficient guarantee the entire estimate is negative?",
+        "nudge": "No. Other pair contributions may offset it."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Check a pair coefficient",
+      "objective": "Calculate the SYG pair coefficient.",
+      "viz": {
+        "type": "disc-pmf",
+        "caption": "The coefficient (π_iπ_j−π_ij)/π_ij is nonnegative when π_ij≤π_iπ_j."
+      },
+      "body": [
+        "Suppose π_i=0.4, π_j=0.5 and π_ij=0.15. Then π_iπ_j=0.20 and the SYG coefficient is (0.20−0.15)/0.15=1/3.",
+        "The coefficient is positive, and the squared difference cannot be negative. This pair's contribution is therefore nonnegative.",
+        "If π_ij=0.25 instead, the coefficient becomes (0.20−0.25)/0.25=−0.20. A negative pair contribution is possible."
+      ],
+      "ask": {
+        "q": "For π_i=0.4, π_j=0.5 and π_ij=0.25, what is the coefficient?",
+        "nudge": "(0.20−0.25)/0.25=−0.20."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 10,
+      "title": "HT and Sen–Yates–Grundy variance estimators",
+      "objective": "State unbiasedness and nonnegativity conditions.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "HT total estimator",
+          "body": "Ŷ_HT=Σ_{i∈s} y_i/π_i, where π_i>0 is the first-order inclusion probability."
+        },
+        {
+          "t": "formula",
+          "h": "HT variance estimator",
+          "body": "v_HT(Ŷ)=Σ_{i∈s}Σ_{j∈s}[(π_ij−π_iπ_j)/π_ij](y_i/π_i)(y_j/π_j), when the required π_ij are positive. This unbiased estimator can be negative."
+        },
+        {
+          "t": "formula",
+          "h": "Sen–Yates–Grundy form",
+          "body": "For a fixed-size design, v_SYG(Ŷ)=Σ_{i<j, i,j∈s}[(π_iπ_j−π_ij)/π_ij](y_i/π_i−y_j/π_j)². This is an unbiased alternative under the stated pairwise-probability conditions."
+        },
+        {
+          "t": "def",
+          "h": "Nonnegativity condition",
+          "body": "If π_ij>0 and π_ij≤π_iπ_j for every distinct pair, each SYG coefficient is nonnegative, so v_SYG≥0 for every realised sample. If the condition fails, the estimator may be negative; it is not universally nonnegative."
+        },
+        {
+          "t": "def",
+          "h": "Zero joint inclusion probabilities",
+          "body": "If π_ij=0 for a pair, the standard pairwise variance estimator cannot use that pair's observed joint-inclusion term. An unbiased design-based variance estimate may be unavailable without a different design or additional assumptions."
+        }
+      ],
+      "flow": {
+        "title": "Check a variance estimator",
+        "alt": "Confirm fixed sample size, check positive pair inclusion probabilities, compute pair coefficients, then assess whether every coefficient is nonnegative.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Fixed-size design?",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Check πᵢⱼ > 0",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Compute Δᵢⱼ=πᵢπⱼ−πᵢⱼ",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "All Δᵢⱼ ≥ 0?",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "SYG estimate nonnegative",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ],
+        "note": "If any pair probability is zero or a coefficient is negative, the usual guarantee does not apply."
+      },
+      "ask": {
+        "q": "Does the HT variance estimator share the same simple nonnegativity guarantee?",
+        "nudge": "No. Its unbiased estimate can be negative."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked pair-coefficient calculation",
+      "objective": "Evaluate SYG pair coefficients.",
+      "problem": "For a sampled pair, π_i=0.4, π_j=0.5, π_ij=0.15 and inverse-weighted values are 20 and 14. Calculate the SYG pair coefficient and pair contribution.",
+      "steps": [
+        {
+          "say": "Calculate the product of first-order probabilities.",
+          "math": "π_iπ_j=0.4×0.5=0.20",
+          "why": "This is compared with the joint inclusion probability."
+        },
+        {
+          "say": "Calculate the coefficient.",
+          "math": "(0.20−0.15)/0.15=1/3",
+          "why": "The coefficient is positive."
+        },
+        {
+          "say": "Calculate the squared difference.",
+          "math": "(20−14)²=36",
+          "why": "The squared difference is nonnegative."
+        },
+        {
+          "say": "Multiply coefficient and squared difference.",
+          "math": "(1/3)×36=12",
+          "why": "This pair contributes a nonnegative value to the SYG sum."
+        }
+      ],
+      "ask": {
+        "q": "If π_ij were 0.25, what would the coefficient be?",
+        "nudge": "(0.20−0.25)/0.25=−0.20."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 3,
+      "title": "Recall the variance rules",
+      "objective": "Retrieve key variance conditions.",
+      "intro": "Try each prompt before revealing the answer.",
+      "items": [
+        {
+          "q": "Can an unbiased variance estimate be negative?",
+          "a": "Yes. Unbiasedness is an expectation property."
+        },
+        {
+          "q": "What is Δ_ij?",
+          "a": "π_iπ_j−π_ij."
+        },
+        {
+          "q": "When is the SYG estimate guaranteed nonnegative?",
+          "a": "For positive π_ij and Δ_ij≥0 for every distinct pair."
+        },
+        {
+          "q": "Is the HT variance estimate always nonnegative?",
+          "a": "No. It can be negative."
+        },
+        {
+          "q": "Why are zero π_ij problematic?",
+          "a": "The standard pairwise variance estimator divides by π_ij and cannot estimate that pair contribution."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 8,
+      "title": "Complete the variance condition",
+      "objective": "Apply the SYG nonnegativity test.",
+      "problem": "For a fixed-size design, π_i=0.3, π_j=0.4 and π_ij=0.10. Complete the coefficient and sign assessment.",
+      "steps": [
+        {
+          "say": "Calculate π_iπ_j.",
+          "blank": {
+            "prompt": "Find the product.",
+            "answer": "0.12",
+            "accept": [
+              "0.12"
+            ],
+            "hint": "Multiply 0.3 by 0.4."
+          },
+          "why": "This is the independence benchmark for the pair."
+        },
+        {
+          "say": "Calculate Δ_ij.",
+          "blank": {
+            "prompt": "Find π_iπ_j−π_ij.",
+            "answer": "0.02",
+            "accept": [
+              "0.02"
+            ],
+            "hint": "Subtract 0.10 from 0.12."
+          },
+          "why": "A nonnegative Δ gives a nonnegative pair coefficient."
+        },
+        {
+          "say": "Calculate the SYG coefficient.",
+          "blank": {
+            "prompt": "Find Δ_ij/π_ij.",
+            "answer": "0.2",
+            "accept": [
+              "0.2",
+              "0.20"
+            ],
+            "hint": "Divide 0.02 by 0.10."
+          },
+          "why": "The coefficient is positive."
+        },
+        {
+          "say": "State the pair's sign.",
+          "blank": {
+            "prompt": "Is its contribution nonnegative?",
+            "answer": "Yes",
+            "accept": [
+              "yes",
+              "nonnegative"
+            ],
+            "hint": "A positive coefficient multiplies a square."
+          },
+          "why": "The squared difference cannot be negative."
+        }
+      ],
+      "ask": {
+        "q": "If π_ij=0.14, does this pair satisfy the condition?",
+        "nudge": "No. π_iπ_j−π_ij=0.12−0.14<0."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 8,
+      "title": "Ordered estimators: Des Raj",
+      "objective": "Construct the ordered estimator under sequential PPSWOR.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Why ordered?",
+          "body": "Under sequential PPS without replacement, selection probabilities change after each draw. The order of selection contains information used to construct an unbiased estimator."
+        },
+        {
+          "t": "formula",
+          "h": "Des Raj general-n estimator",
+          "body": "Ŷ_d=(1/n)Σ_{r=1}^n t_r, where t_1=y_1/p_1 and t_r=Σ_{q<r}y_q + [y_r/p_r](1−Σ_{q<r}p_q), r≥2. Here p_r are the initial selection probabilities of the units in draw order."
+        },
+        {
+          "t": "formula",
+          "h": "Des Raj variance estimate",
+          "body": "v(Ŷ_d)=1/[n(n−1)] Σ_r (t_r−Ŷ_d)² = [Σ_r t_r²−nŶ_d²]/[n(n−1)]. This sample-variance form is nonnegative."
+        },
+        {
+          "t": "formula",
+          "h": "Two-draw form",
+          "body": "For n=2, Ŷ_d=1/2[y_1(1+p_1)/p_1 + y_2(1−p_1)/p_2] and v(Ŷ_d)=1/4(1−p_1)²(y_1/p_1−y_2/p_2)²."
+        },
+        {
+          "t": "def",
+          "h": "Interpretation",
+          "body": "The estimator uses the ordered sequence. Reversing the order can change the estimate. Do not replace p_2 by a fixed unconditional draw probability: it is the initial probability of the second selected unit, while the conditional probability at draw two is adjusted after the first selection."
+        }
+      ],
+      "ask": {
+        "q": "Why can reversing two selected units change the Des Raj estimate?",
+        "nudge": "The first-draw probability enters the adjustment for the second draw."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 9,
+      "title": "Guided practice: calculate Des Raj estimate",
+      "objective": "Apply the two-draw ordered estimator and variance.",
+      "problem": "Two units are selected in order under PPSWOR. The first has y₁=10 and p₁=0.2; the second has y₂=12 and p₂=0.3. Calculate the Des Raj total estimate and its variance estimate.",
+      "hints": [
+        "Use the two-draw formula.",
+        "Calculate y₁/p₁ and y₂/p₂.",
+        "Use the variance formula based on their difference."
+      ],
+      "answer": "Ŷ_d=1/2[10(1+0.2)/0.2 + 12(1−0.2)/0.3]=1/2[60+32]=46. v=1/4(0.8)²(50−40)²=16.",
+      "check": "The ordered estimate is 46 and its nonnegative variance estimate is 16.",
+      "scenario": {
+        "teaser": "PPS without replacement sample of two villages",
+        "title": "Order changes the estimate",
+        "body": [
+          "A survey selects two villages sequentially with probability proportional to a size measure and without replacement. The first selected village has initial probability p₁=0.2 and study value y₁=10; the second has initial probability p₂=0.3 and value y₂=12. Des Raj's estimator uses the first draw's probability in the correction for the second draw. The estimate is 46. If the draw order is reversed, the correction uses p₂ in the corresponding position and the result changes. The order is therefore part of the observed data required by this estimator.",
+          "The variance estimate is a nonnegative squared-difference expression for this two-draw case."
+        ],
+        "q": "What feature of the observed sample must be retained?",
+        "answer": "The order in which the two units were selected."
+      },
+      "solution": [
+        {
+          "say": "Compute inverse-weighted values.",
+          "math": "y₁/p₁=50; y₂/p₂=40",
+          "why": "These enter the estimator and variance."
+        },
+        {
+          "say": "Calculate Des Raj estimate.",
+          "math": "Ŷ_d=½[50(1.2)+40(0.8)]=46",
+          "why": "The first draw receives its order-specific adjustment."
+        },
+        {
+          "say": "Calculate variance estimate.",
+          "math": "v=¼(0.8)²(10)²=16",
+          "why": "The squared difference makes this estimate nonnegative."
+        }
+      ],
+      "ask": {
+        "q": "Would reversing the two draws necessarily leave the estimate unchanged?",
+        "nudge": "No. The order-specific adjustment changes."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 7,
+      "title": "Avoid variance and order traps",
+      "objective": "Distinguish estimator properties.",
+      "intro": "Judge each statement.",
+      "items": [
+        {
+          "claim": "The true variance is nonnegative.",
+          "tf": true,
+          "why": "It is an expectation of a squared deviation."
+        },
+        {
+          "claim": "Every unbiased variance estimator must be nonnegative in every sample.",
+          "tf": false,
+          "why": "Unbiasedness concerns expectation, not each realised value."
+        },
+        {
+          "claim": "The SYG estimate is nonnegative if every relevant π_ij is positive and π_ij≤π_iπ_j.",
+          "tf": true,
+          "why": "Every pair coefficient and squared difference is then nonnegative."
+        },
+        {
+          "claim": "The HT variance estimator is always nonnegative.",
+          "tf": false,
+          "why": "The unbiased HT variance estimator can be negative."
+        },
+        {
+          "claim": "Des Raj's ordered estimator uses the order of selection.",
+          "tf": true,
+          "why": "The previous draws affect each adjusted term."
+        },
+        {
+          "claim": "Murthy's unordered estimator for n=2 depends on which unit was drawn first.",
+          "tf": false,
+          "why": "It symmetrises over both possible orders and depends on the unordered pair."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 9,
+      "title": "Transfer: Murthy unordered estimator",
+      "objective": "Calculate the n=2 unordered estimate and variance.",
+      "problem": "For the same two units, y₁=10, p₁=0.2, y₂=12, p₂=0.3. Calculate Murthy's unordered estimator and its variance estimate.",
+      "hints": [
+        "Use the symmetric n=2 formula.",
+        "Weight y₁/p₁ by 1−p₂ and y₂/p₂ by 1−p₁.",
+        "Use the corresponding nonnegative variance formula."
+      ],
+      "answer": "Ŷ_M=[(1−0.3)50+(1−0.2)40]/(2−0.2−0.3)=(35+32)/1.5=44.6667. v_M=[0.8×0.7×0.5/(1.5²)](10)²=12.4444.",
+      "check": "The estimate does not depend on the order of the two sampled units.",
+      "solution": [
+        {
+          "say": "Calculate inverse-weighted values.",
+          "math": "y₁/p₁=50; y₂/p₂=40",
+          "why": "These are the weighted study values."
+        },
+        {
+          "say": "Apply Murthy's symmetric estimator.",
+          "math": "Ŷ_M=[0.7(50)+0.8(40)]/1.5=44.6667",
+          "why": "The formula weights both possible orders into one unordered estimate."
+        },
+        {
+          "say": "Calculate variance estimate.",
+          "math": "v_M=[0.8×0.7×0.5/2.25]×100=12.4444",
+          "why": "All factors are nonnegative for these probabilities."
+        }
+      ],
+      "ask": {
+        "q": "What is the main advantage of unordered estimation?",
+        "nudge": "It does not depend on the recorded draw order and can be more efficient by averaging over orders."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 6,
+      "title": "Variance and ordered/unordered checklist",
+      "objective": "Summarise SYG, Des Raj and Murthy.",
+      "body": [
+        "True variance is nonnegative, but unbiased variance estimators may be negative.",
+        "For fixed-size designs, the SYG form is a weighted sum of squared differences. It is guaranteed nonnegative when π_ij>0 and π_ij≤π_iπ_j for every distinct pair.",
+        "The HT variance estimator can be negative. Zero joint inclusion probabilities prevent the usual pairwise unbiased variance formula from using that pair.",
+        "Des Raj's ordered PPSWOR estimator uses draw order and has a nonnegative sample-variance estimate. For n=2, use the compact formulas in the lesson.",
+        "Murthy's unordered n=2 estimator averages the two ordered Des Raj estimates using their ordered-sample probabilities. It is symmetric in the two sampled units and is obtained by Rao–Blackwellisation/conditioning on the unordered sample; it is at least as efficient as the corresponding ordered estimator under the stated setup."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 4,
+      "title": "Mastery check",
+      "objective": "Demonstrate independent command of nonnegative variance and ordered/unordered estimators.",
+      "setId": "sampling_t9_mastery"
+    }
+  ],
+  "revision": {
+    "sheet": [
+      "Δ_ij=π_iπ_j−π_ij.",
+      "SYG total variance estimate = Σ_{i<j in s}[(π_iπ_j−π_ij)/π_ij](y_i/π_i−y_j/π_j)².",
+      "SYG nonnegative if π_ij>0 and Δ_ij≥0 for all pairs.",
+      "HT variance estimate can be negative.",
+      "Des Raj: Ŷ_d=(1/n)Σt_r; t_r uses previous draws and initial p_r.",
+      "For n=2: Ŷ_d=½[y₁(1+p₁)/p₁+y₂(1−p₁)/p₂].",
+      "Murthy n=2: Ŷ_M=[(1−p₂)y₁/p₁+(1−p₁)y₂/p₂]/(2−p₁−p₂)."
+    ],
+    "cards": [
+      [
+        "SYG sign",
+        "Check π_iπ_j−π_ij"
+      ],
+      [
+        "HT variance",
+        "May be negative"
+      ],
+      [
+        "Des Raj",
+        "Order-dependent"
+      ],
+      [
+        "Murthy",
+        "Unordered, n=2"
+      ],
+      [
+        "Zero π_ij",
+        "Pairwise variance formula unavailable"
+      ]
+    ],
+    "tricks": [
+      "Calculate Δ_ij before expanding the SYG sum.",
+      "For Des Raj, do not reorder observations.",
+      "For Murthy, swap unit labels and verify the estimate is unchanged."
+    ],
+    "shortcuts": [
+      "A sum of nonnegative pair terms is nonnegative.",
+      "Murthy averages ordered estimates using their sample-order probabilities."
+    ],
+    "remember": [
+      "Unbiasedness is not the same as pointwise nonnegativity.",
+      "Rao–Blackwellisation explains the unordered estimator's efficiency advantage."
+    ]
+  },
+  "refs": [
+    {
+      "title": "Elements of Survey Sampling",
+      "where": "Sections 4.7–4.9: Des Raj, Murthy and Horvitz–Thompson estimators",
+      "site": "Ravindra Singh and Naurang Singh Mangat",
+      "url": "https://faculty.ksu.edu.sa/sites/default/files/singh_elements-of-survey-samplingf-1996.pdf",
+      "type": "Textbook",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Contains general-n Des Raj estimator, its nonnegative variance estimate and n=2 Murthy formula."
+    },
+    {
+      "title": "Sampling Theory, Chapter 7: Varying Probability Sampling",
+      "where": "Ordered and unordered estimators",
+      "site": "Shalabh, IIT Kanpur",
+      "url": "https://home.iitk.ac.in/~shalab/sampling/chapter7-sampling-varying-probability-sampling.pdf",
+      "type": "Open lecture notes",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Derives Des Raj ordered estimators and Murthy unordered estimation."
+    },
+    {
+      "title": "On the Estimate of the Variance in Unequal Probability Sampling",
+      "where": "HT and Yates–Grundy variance estimators",
+      "site": "J. N. K. Rao",
+      "url": "https://www.ism.ac.jp/editsec/aism/pdf/013_1_0057.pdf",
+      "type": "Research paper",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Classic treatment of HT and Yates–Grundy variance estimators."
+    },
+    {
+      "title": "A New Proof of Murthy's Estimator",
+      "where": "Rao–Blackwell argument",
+      "site": "M. M. Salehi and G. A. F. Seber",
+      "url": "https://onlinelibrary.wiley.com/doi/10.1111/1467-842X.00174",
+      "type": "Research paper",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Explains Murthy's estimator through Rao–Blackwellisation."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule."
+  },
+  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t9. Practice items are original and are not represented as official PYQs. Formulas are checked against Singh and Mangat, Elements of Survey Sampling, sections 4.7–4.8, and IIT Kanpur Sampling Theory Chapter 7. The SYG nonnegativity statement is conditional on positive pairwise inclusion probabilities and π_ij≤π_iπ_j for all relevant pairs; no blanket claim is made for arbitrary designs."
+}
