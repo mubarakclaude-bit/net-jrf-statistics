@@ -16,7 +16,7 @@ UGC NET Statistics Unit VIII, Multivariate Analysis. Catalog topic: multivariate
 | Correlation PCA eigenvalues sum to p | s6 | Trace identity |
 
 ## PYQ bank repair
-Five items with srcQ=2 were misfiled in the time-series variant bank. They cover equicorrelation positive definiteness, explained variance, uncorrelated components, diagonal covariance PCA and trace. They are transferred to the multivariate variant bank; AR/Yule–Walker material remains in the time-series bank.
+Five PCA items with srcQ=2 were misfiled in the time-series variant bank. They now live in the multivariate variant bank under their original IDs (j26v-q03-01…05), preserving historical attempt linkage. The time-series bank retains only AR/Yule–Walker material.
 
 ## Verification
 Run `python verify_multivariate_t3.py`. Exact fractions check the June 2026 matrix and worked examples. Structural checks cover lesson-to-pool wiring, 20-item mastery composition, difficulty distribution, numerical checks and multi-statement verdicts.
