@@ -100,7 +100,8 @@
   ],
   "shortcuts": [
    "Sign test: X~Binomial(m, 1/2).",
-   "Signed-rank no-tie variance: m(m+1)(2m+1)/24."
+   "Signed-rank no-tie variance: m(m+1)(2m+1)/24.",
+   "Sign test: count positive signs among m nonzero pairs; zeros do not enter m."
   ],
   "remember": [
    "Same units twice → paired test.",
@@ -273,7 +274,82 @@
      "h": "Assumption and scope",
      "body": "The sign test does not require a symmetric distribution of differences. It tests the median of the paired-difference distribution against zero, under the usual independent-pair sampling model."
     }
-   ]
+   ],
+   "flow": {
+    "title": "Choose the paired rank procedure",
+    "alt": "Paired differences with plausible symmetry lead to Wilcoxon signed-rank; doubtful symmetry leads to the sign test.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Paired observations",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Form differences",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 1,
+      "label": "Check symmetry",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Symmetric: signed-rank",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 3,
+      "c": 2,
+      "label": "Skewed: sign test",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 4,
+      "c": 1,
+      "label": "Interpret paired change",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     },
+     {
+      "from": "c",
+      "to": "e"
+     },
+     {
+      "from": "d",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ],
+    "note": "Both tests preserve pairing; signed-rank additionally uses magnitude ranks and needs symmetry for its usual location interpretation."
+   }
   },
   {
    "kind": "worked",
@@ -460,7 +536,16 @@
      "math": "X∼Binomial(m, 1/2) under H₀",
      "why": "The sign test uses directions and does not require symmetry."
     }
-   ]
+   ],
+   "scenario": {
+    "teaser": "A paired confidence rating before and after a course.",
+    "title": "Student confidence study",
+    "body": [
+     "A university measures the same students' confidence before and after a short course. Each student has a linked pair, and the analyst defines the difference as after minus before. Positive values then mean confidence increased. The sign test uses only the direction of nonzero differences. Wilcoxon signed-rank also uses the ordering of their magnitudes and therefore needs a reasonably symmetric distribution of paired differences for its usual location interpretation. The researcher checks the difference distribution before choosing the procedure."
+    ],
+    "q": "Why is the symmetry check relevant before using signed-rank?",
+    "answer": "Its usual location interpretation assumes a symmetric distribution of paired differences."
+   }
   },
   {
    "kind": "trapcheck",
