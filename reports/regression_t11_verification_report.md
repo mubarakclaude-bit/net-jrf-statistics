@@ -2,7 +2,7 @@
 
 **Status: authored; awaiting repository CI.**
 
-- Lesson: 15 core scenes; 94 estimated minutes; 5 objectives; 3 prerequisites.
+- Lesson: 16 core scenes; 94 estimated minutes; 5 objectives; 3 prerequisites.
 - Pedagogy: foundation drill, two scenario blocks, worked examples, completion exercise, two guided problems, trap check, summary and mastery quiz.
 - Mastery pool: 20 items with 6 easy / 10 moderate / 4 hard; 4 numeric items; 2 multi-statement items; four options per item.
 - Evidence: catalogue syllabus audit; no direct June 2026 PYQ match found in the local archive.

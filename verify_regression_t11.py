@@ -3,7 +3,7 @@ from pathlib import Path
 
 L=json.loads(Path("seed/lesson_regression_t11.json").read_text(encoding="utf-8"))
 P=json.loads(Path("seed/regression_t11_mastery.json").read_text(encoding="utf-8"))
-assert len(L["scenes"]) == 15
+assert len(L["scenes"]) == 16
 assert sum(not s.get("ext",False) for s in L["scenes"]) == 15
 assert len([s for s in L["scenes"] if s.get("scenario")]) >= 2
 assert len([s for s in L["scenes"] if s.get("kind")=="guided"]) >= 2
