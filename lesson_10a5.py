@@ -273,7 +273,7 @@ SC.append(dict(
      why="Two dates, and the exam picks whichever one you did not memorise."),
    dict(say="The SRS gives India's vital rates. State the 2024 birth and death rates.",
      blank=dict(prompt="CBR and CDR for 2024?", answer="CBR 18.3, CDR 6.4",
-       accept=["18.3 and 6.4", "CBR 18.4 CDR 6.4", "birth rate 18.3, death rate 6.4",
+       accept=["18.3 and 6.4", "CBR 18.3 CDR 6.4", "birth rate 18.3, death rate 6.4",
                "18.3 per 1000 and 6.4 per 1000"],
        hint="Their difference is the natural growth rate, a round number."),
      why="These two numbers generate the natural growth rate and anchor every other figure in the topic."),
@@ -415,7 +415,7 @@ SC.append(dict(
    dict(say="Sum the age-specific rates. The groups are five years wide, so TFR is five times the sum, with the "
             "per-1,000 scale divided out.",
      math="Σ ASFR = 30+120+130+60+20+8+2 = 370 per 1,000;  TFR = 5 × 370/1000 = 1.85"),
-   dict(say="Convert the sex ratio into a proportion. With 918 females per 1,000 males, every 1,917 births contain 917 "
+   dict(say="Convert the sex ratio into a proportion. With 918 females per 1,000 males, every 1,918 births contain 918 "
             "females.",
      math="proportion female = 918 / (918 + 1000) = 918/1918 = 0.4786"),
    dict(say="GRR is the TFR counting daughters only.",
@@ -584,12 +584,18 @@ LES = dict(
          url="https://www.censusindia.gov.in/census.website/en/node/180",
          type="Official government page", free=True, checked="2026-11-12",
          why="Current official source for the RBD Act amendment history, 2024 CRS completeness and SRS dual-record method."),
-    dict(title="Sample Registration System Statistical Report 2023",
-         where="CBR, CDR, IMR, TFR and the sex ratio at birth, with state extremes",
-         site="Drishti IAS", url="https://www.drishtiias.com/daily-updates/daily-news-analysis/sample-registration-system-srs-statistical-report-2023",
-         type="Current-affairs summary of an official report", free=True, checked="2026-10-13",
-         why="For the figures in scene 8. Note that the sex ratio at birth is a 2021-23 average, not a 2023 figure, "
-             "which this source states and many do not.")],
+    dict(title="Sample Registration System Statistical Report 2024",
+         where="CBR, CDR, IMR, TFR, sex ratio at birth and 2024 sample coverage",
+         site="Office of the Registrar General and Census Commissioner, India",
+         url="https://censusindia.gov.in/nada/index.php/catalog/47152",
+         type="Official statistical report", free=True, checked="2026-11-12",
+         why="Latest annual SRS report available at the time of this revision; includes 2024 vital rates, the 2022-24 sex ratio at birth and the 8,839-unit sample coverage."),
+    dict(title="SRS Special Bulletin on Maternal Mortality in India 2022-24",
+         where="Latest maternal mortality ratio and three-year reference period",
+         site="Office of the Registrar General and Census Commissioner, India",
+         url="https://censusindia.gov.in/nada/index.php/catalog/47151",
+         type="Official statistical bulletin", free=True, checked="2026-11-12",
+         why="Primary source for the national MMR of 87 per 1,00,000 live births for 2022-24, compared with 88 for 2021-23.")],
   revision=dict(
     sheet=[
       "Census = stock, decennial, complete. CRS = flow, continuous, legal. SRS = flow, continuous, on a sample.",
