@@ -1,6 +1,6 @@
 # Verification report — Regression T2
 
-**Status: consolidated batch; final repository CI pending.**
+**Status: PASS — release validation completed in GitHub Actions run 43101176172 (Validate #534) on release commit `51242bedb30f378f06d08ae3b28b40a8805ce03d`.**
 
 - 16 scenes (including the retained optional extension; existing scene IDs preserved) with foundation recovery, geometry intuition, theorem assumptions, full derivation, completion, two guided problems, transfer case, scenarios, flow diagram and summary.
 - 20 mastery items: 6 easy / 10 moderate / 4 hard; 12 single / 6 numeric / 2 multi; balanced A–D keys.
@@ -12,4 +12,4 @@
 - Existing lesson/scene IDs and the t1–t5 mastery-question IDs are preserved, so learner progress and previous attempts are not orphaned. The existing pools retain their original, balanced format mixes.
 - Canonical package serialization/check: `python tools/serialize_regression_batch.py --check`.
 
-The consolidated batch must pass the exact verifier, vcheck, app build and shared browser suite before it is called validated. No merge or deployment is implied.
+Release validation passed on the merged release commit: regression lesson/pool checks, app build and JavaScript syntax, app integration suite, and full lesson interaction suite. Vercel deployment remains excluded.
