@@ -1,0 +1,713 @@
+{
+ "id": "nonparamt5",
+ "topicId": "nonparam-t5",
+ "moduleId": "nonparam",
+ "title": "Matching nonparametric tests to design",
+ "breadcrumb": "Non-parametric methods → Test selection → Match test to design",
+ "engine": "B",
+ "engineName": "Design first, target second, test last.",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 96,
+ "objectives": [
+  "Classify a study as independent, paired, blocked or association-based.",
+  "Select Mann–Whitney, signed-rank or sign test for two-sample designs.",
+  "Select Kruskal–Wallis or Friedman for several groups or treatments.",
+  "Distinguish rank association, distributional fit and sequence randomness procedures.",
+  "Justify a test choice using its design and key assumptions."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Independent and paired samples",
+   "why": "The design determines whether a two-sample or repeated-measures procedure is appropriate."
+  },
+  {
+   "id": "p2",
+   "name": "Ordinal scales and ranks",
+   "why": "Most procedures in this decision map require a meaningful ordering."
+  },
+  {
+   "id": "p3",
+   "name": "Research targets",
+   "why": "Group differences, association, distributional fit and randomness are different inferential questions."
+  }
+ ],
+ "traps": [
+  "Mann–Whitney is independent; signed-rank and sign are paired.",
+  "Kruskal–Wallis is several independent groups; Friedman is several related treatments.",
+  "KS tests distributional fit or equality of distributions; runs tests sequence randomness.",
+  "Spearman and Kendall assess association, not group differences.",
+  "A significant omnibus result does not identify which pair differs.",
+  "Check symmetry before interpreting signed-rank as a median/location test."
+ ],
+ "howto": "Read the question in this order: observational unit, relationship among observations, number of groups or treatments, then research target. Only then select the test. Use the decision flow and comparison cards for revision; practise by stating one reason why each distractor does not fit.",
+ "revision": {
+  "sheet": [
+   "Two independent groups, ordinal+: Mann–Whitney U.",
+   "Two paired conditions: Wilcoxon signed-rank if differences are symmetric; sign test if symmetry is doubtful.",
+   "Several independent groups: Kruskal–Wallis.",
+   "Several related treatments in blocks: Friedman.",
+   "Monotonic rank association: Spearman ρ or Kendall τ.",
+   "One sample vs specified continuous CDF or two samples vs each other: KS.",
+   "Randomness in a two-label sequence: runs test.",
+   "Kruskal–Wallis and Friedman are omnibus; post-hoc comparisons locate differences.",
+   "Signed-rank uses absolute nonzero differences and average ranks for ties.",
+   "Sign test omits zeros and uses only the signs."
+  ],
+  "cards": [
+   [
+    "Two independent groups",
+    "Mann–Whitney U"
+   ],
+   [
+    "Two paired conditions",
+    "Signed-rank / sign"
+   ],
+   [
+    "Several independent groups",
+    "Kruskal–Wallis"
+   ],
+   [
+    "Several related treatments",
+    "Friedman"
+   ],
+   [
+    "Rank association",
+    "Spearman / Kendall"
+   ],
+   [
+    "Distributional fit or comparison",
+    "Kolmogorov–Smirnov"
+   ],
+   [
+    "Sequence randomness",
+    "Runs test"
+   ],
+   [
+    "K-W / Friedman result",
+    "Omnibus; follow up for pairs"
+   ]
+  ],
+  "tricks": [
+   "Independent vs paired is the first fork.",
+   "Group count is the second fork: two vs several.",
+   "Ask whether the target is difference, association, CDF fit or sequence order."
+  ],
+  "shortcuts": [
+   "Two independent → Mann–Whitney; paired → signed-rank/sign.",
+   "Several independent → Kruskal–Wallis; several related → Friedman.",
+   "CDF → KS; sequence randomness → runs; rank association → Spearman/Kendall."
+  ],
+  "remember": [
+   "Design first, target second, test last.",
+   "Do not use a paired test on independent groups or vice versa."
+  ]
+ },
+ "refs": [
+  {
+   "title": "Nonparametric Statistical Methods",
+   "where": "Choosing rank-based procedures",
+   "site": "Hollander, Wolfe and Chicken",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Standard reference for nonparametric test assumptions and selection."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+   "where": "Nonparametric methods",
+   "site": "NIST",
+   "url": "https://www.itl.nist.gov/div898/handbook/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Reference for distributional and rank-based tests."
+  },
+  {
+   "title": "Penn State STAT 415",
+   "where": "Nonparametric tests",
+   "site": "Penn State",
+   "url": "https://online.stat.psu.edu/stat415/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Accessible test-selection explanations."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints."
+ },
+ "provenance": "June 2026 Paper 2 Q33 variants identify Mann–Whitney as the independent two-sample t alternative, Kruskal–Wallis as the one-way ANOVA alternative and paired t as the paired parametric method. June 2026 Q42 variants identify signed-rank as the paired t analogue and Kruskal–Wallis for several independent samples. The full June Q42 is an independent-sample Mann–Whitney example. The lesson synthesises these PYQ distinctions with KS, runs, Spearman and Kendall test-selection cues.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Start with the research design",
+   "objective": "Identify independent, paired, blocked and association designs.",
+   "ask": {
+    "q": "What changes when the same people are measured twice?",
+    "nudge": "Their observations are linked within person."
+   },
+   "body": [
+    "A test should match the way the data were collected and the question being asked. Start by identifying the observational unit and whether measurements are independent or linked.",
+    "Then identify the target: compare groups, test a median or distribution, assess association, or test the order of a sequence."
+   ],
+   "items": [
+    {
+     "ask": "The same people are measured before and after. What is the design?",
+     "recall": "Paired or repeated measurements.",
+     "refresh": [
+      "Each person contributes two linked values. Analyse the within-person difference rather than pretending the two columns are unrelated samples.",
+      "For two paired conditions, use a paired method such as Wilcoxon signed-rank or the sign test when a nonparametric approach is needed."
+     ]
+    },
+    {
+     "ask": "Three unrelated groups are compared. What is the design?",
+     "recall": "Several independent groups.",
+     "refresh": [
+      "Each observational unit appears in one group only. There is no matching or repeated measurement across groups.",
+      "For three or more independent groups with ordinal outcomes, Kruskal–Wallis is a rank-based omnibus option."
+     ]
+    },
+    {
+     "ask": "What does an ordinal scale provide?",
+     "recall": "A meaningful ordering, even if category gaps are not equal.",
+     "refresh": [
+      "Ordinal categories can be arranged from lower to higher, such as mild, moderate and severe. This ordering is meaningful even when the distance between adjacent categories is not known to be equal.",
+      "Rank-based procedures use the order of observations and do not require equal spacing between category labels. Nominal labels without a natural order, such as blood group, cannot be ranked meaningfully; assigning numbers to them would not create a valid order."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "A decision is more than a test name",
+   "objective": "Separate the design, target and measurement scale.",
+   "ask": {
+    "q": "Why is Mann–Whitney not suitable for the same people measured twice?",
+    "nudge": "It assumes independent groups and would ignore the pairing."
+   },
+   "body": [
+    "A quick exam shortcut is to read the design words before the test names: independent, paired, repeated, matched, monotonic, distribution, or sequence.",
+    "Next check the target. A group comparison, an association, a goodness-of-fit question and a randomness question need different procedures, even when all observations are numeric."
+   ],
+   "scenario": {
+    "teaser": "One research project, three distinct comparisons.",
+    "title": "Choosing the procedure",
+    "body": [
+     "A researcher has several questions from one study: compare two unrelated groups of ordinal scores, compare before-and-after scores from the same people, and compare three independent treatment groups. These are not the same design. Mann–Whitney handles two independent groups; sign or Wilcoxon signed-rank handles paired differences; Kruskal–Wallis handles several independent groups. Selecting a test from the research question alone is not enough. The relationship among observations must be identified first."
+    ],
+    "q": "Which information should be checked before choosing among these tests?",
+    "answer": "Whether the groups are independent or paired, how many groups there are, and the target of inference."
+   }
+  },
+  {
+   "kind": "explore",
+   "id": "s2",
+   "mins": 6,
+   "title": "Follow the design map",
+   "objective": "Visualise the first decision before memorising a test list.",
+   "ask": {
+    "q": "Where do three related treatments lead?",
+    "nudge": "To Friedman, with ranks assigned within blocks."
+   },
+   "viz": {
+    "type": "rank-null",
+    "caption": "The design map links sample relationships to the appropriate rank-based procedure."
+   },
+   "body": [
+    "If groups are independent, use Mann–Whitney for two groups or Kruskal–Wallis for several groups. If conditions are related, use sign or signed-rank for two conditions, or Friedman for several treatments.",
+    "For monotonic association use Spearman or Kendall. For a distributional comparison use Kolmogorov–Smirnov. For randomness in a binary sequence use the runs test."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 9,
+   "title": "The test-selection framework",
+   "objective": "Match the design and research target to a procedure.",
+   "ask": {
+    "q": "Which procedure tests randomness in the order of two labels?",
+    "nudge": "The runs test."
+   },
+   "blocks": [
+    {
+     "t": "step",
+     "h": "Two independent groups",
+     "body": "For two independent samples with an ordinal-or-higher response, Mann–Whitney U is a common rank-based alternative to the independent-samples t test."
+    },
+    {
+     "t": "step",
+     "h": "Two paired conditions",
+     "body": "For paired differences, use Wilcoxon signed-rank when symmetry is plausible; use the sign test when only direction is trusted or symmetry is doubtful."
+    },
+    {
+     "t": "step",
+     "h": "Several groups or treatments",
+     "body": "Kruskal–Wallis compares several independent groups. Friedman compares several related treatments ranked within blocks."
+    },
+    {
+     "t": "step",
+     "h": "Other targets",
+     "body": "Spearman or Kendall assesses rank association; Kolmogorov–Smirnov compares a sample distribution with a reference CDF or compares two sample distributions; the runs test assesses sequence randomness."
+    }
+   ],
+   "flow": {
+    "title": "Nonparametric test selector",
+    "alt": "Start from the target and design: independent groups, paired or blocked conditions, association, distributional fit, or sequence randomness.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "State the target",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Group comparison",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 1,
+      "c": 2,
+      "label": "Other target",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 0,
+      "label": "Independent or related?",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 2,
+      "c": 2,
+      "label": "Association / CDF / sequence",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 3,
+      "c": 0,
+      "label": "MWU / KW / sign / WSR / Friedman",
+      "kind": "step"
+     },
+     {
+      "id": "g",
+      "r": 3,
+      "c": 2,
+      "label": "Spearman / Kendall / KS / runs",
+      "kind": "step"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "a",
+      "to": "c"
+     },
+     {
+      "from": "b",
+      "to": "d"
+     },
+     {
+      "from": "c",
+      "to": "e"
+     },
+     {
+      "from": "d",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "g"
+     }
+    ],
+    "note": "The number of groups and whether observations are linked determine the group-comparison branch."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 10,
+   "title": "Worked selection across four questions",
+   "objective": "Choose a test and justify it from the design.",
+   "ask": {
+    "q": "Which case uses within-block ranks?",
+    "nudge": "The repeated or matched treatment case."
+   },
+   "problem": "Select the nonparametric procedure for each case: (1) two independent ordinal groups; (2) the same people before and after, with symmetric differences; (3) four independent groups; (4) the same subjects under four treatments.",
+   "steps": [
+    {
+     "say": "Case 1: two independent groups.",
+     "math": "Mann–Whitney U",
+     "why": "There are two unrelated samples; pooled ranks compare their distributions."
+    },
+    {
+     "say": "Case 2: paired before-and-after scores.",
+     "math": "Wilcoxon signed-rank",
+     "why": "The data are paired, and the stated symmetry condition supports the signed-rank location interpretation."
+    },
+    {
+     "say": "Case 3: four independent groups.",
+     "math": "Kruskal–Wallis",
+     "why": "There are more than two independent samples; the omnibus rank test compares them."
+    },
+    {
+     "say": "Case 4: four related treatments.",
+     "math": "Friedman",
+     "why": "The same subjects contribute all four outcomes, so rank within each subject or block."
+    }
+   ],
+   "after": "Changing only the pairing can change the correct test. Never select from the number of columns alone."
+  },
+  {
+   "kind": "recall",
+   "id": "s5",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the central matching rules.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "Two independent groups?",
+     "a": "Mann–Whitney U."
+    },
+    {
+     "q": "Two paired conditions?",
+     "a": "Wilcoxon signed-rank or sign test."
+    },
+    {
+     "q": "Several independent groups?",
+     "a": "Kruskal–Wallis."
+    },
+    {
+     "q": "Several related treatments?",
+     "a": "Friedman."
+    },
+    {
+     "q": "Randomness of a two-label sequence?",
+     "a": "Runs test."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s6",
+   "mins": 8,
+   "title": "Complete the test-selection grid",
+   "objective": "Fill the missing procedure from the design.",
+   "problem": "Complete the matching: (a) three independent ordinal groups; (b) four repeated treatments; (c) monotonic association between two ordinal variables.",
+   "steps": [
+    {
+     "say": "Match three independent groups.",
+     "blank": {
+      "prompt": "Three independent groups → …",
+      "answer": "Kruskal–Wallis",
+      "accept": [
+       "Kruskal Wallis"
+      ],
+      "hint": "This is the multi-group independent rank test."
+     },
+     "why": "Kruskal–Wallis is the rank-based omnibus test for independent groups."
+    },
+    {
+     "say": "Match four repeated treatments.",
+     "blank": {
+      "prompt": "Four related treatments → …",
+      "answer": "Friedman",
+      "accept": [
+       "Friedman test"
+      ],
+      "hint": "Rank treatments within each block."
+     },
+     "why": "Friedman preserves the repeated or blocked design."
+    },
+    {
+     "say": "Match monotonic association.",
+     "blank": {
+      "prompt": "Monotonic association → …",
+      "answer": "Spearman or Kendall",
+      "accept": [
+       "Spearman",
+       "Kendall"
+      ],
+      "hint": "These are rank association measures."
+     },
+     "why": "Spearman and Kendall quantify association using ranks or concordance."
+    }
+   ],
+   "after": "The research target matters too: association is not a group-comparison problem.",
+   "ask": {
+    "q": "Which design feature determines the first branch of the test-selection map?",
+    "nudge": "Whether observations are independent or linked."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Distribution and sequence questions",
+   "objective": "Distinguish Kolmogorov–Smirnov from the runs test.",
+   "ask": {
+    "q": "Does the runs test compare a sample CDF with a reference CDF?",
+    "nudge": "No. It studies the order of labels in a sequence."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Kolmogorov–Smirnov",
+     "body": "The one-sample KS test compares an empirical distribution function with a specified continuous reference CDF. The two-sample KS test compares two empirical distributions using the largest vertical gap between their CDFs."
+    },
+    {
+     "t": "formula",
+     "h": "KS statistic",
+     "body": "D=supₓ|Fₙ(x)−F₀(x)| for the one-sample form. For two samples, D=supₓ|Fₙ(x)−Gₘ(x)|."
+    },
+    {
+     "t": "def",
+     "h": "Runs test",
+     "body": "A run is a maximal consecutive sequence of the same label, such as PPP, FF, P, FF. The runs test asks whether the observed ordering is consistent with randomness, conditional on the counts of the two labels."
+    },
+    {
+     "t": "step",
+     "h": "Do not interchange the targets",
+     "body": "KS concerns distributional shape or fit. Runs concerns order and randomness. Neither is a substitute for Mann–Whitney or Friedman when the target is a group or treatment comparison."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Guided application: choose KS or runs",
+   "objective": "Choose the procedure from the stated target.",
+   "problem": "A quality analyst records a chronological sequence of pass/fail outcomes and asks whether the order is random. Which test is appropriate? What if the question instead asks whether measurement times follow an exponential CDF?",
+   "hints": [
+    "Identify whether order or distributional fit is the target.",
+    "A binary sequence is not a CDF comparison.",
+    "A specified continuous CDF points to a goodness-of-fit procedure."
+   ],
+   "answer": "Use the runs test for randomness of the pass/fail order. Use the one-sample Kolmogorov–Smirnov test to compare measurement times with the specified exponential CDF.",
+   "check": "The runs test uses sequence order; KS uses the maximum empirical-CDF gap.",
+   "solution": [
+    {
+     "say": "For pass/fail order, identify the target.",
+     "math": "Randomness of a two-label sequence",
+     "why": "The sequence arrangement, not the magnitude of a measurement, is under study."
+    },
+    {
+     "say": "Select the runs test.",
+     "math": "Observed number of runs vs its null distribution",
+     "why": "A run is a consecutive block of identical labels."
+    },
+    {
+     "say": "For measurement-time fit, change the target.",
+     "math": "Empirical CDF vs specified continuous CDF → one-sample KS",
+     "why": "The KS statistic is the maximum vertical distance between the empirical and reference CDFs."
+    }
+   ],
+   "scenario": {
+    "teaser": "A production line's pass/fail sequence.",
+    "title": "Testing sequence randomness",
+    "body": [
+     "A quality analyst records a sequence of pass and fail outcomes from a production line and wants to know whether the order looks random. The number of passes and fails is not the only information: the order of the labels matters. A runs test examines the sequence of consecutive identical labels. It is not a test of equality of means or medians. If the question instead asks whether a sample distribution follows a specified continuous distribution, a Kolmogorov–Smirnov test is a different tool."
+    ],
+    "q": "Why is the runs test not interchangeable with Kolmogorov–Smirnov?",
+    "answer": "Runs tests the order of labels; KS compares empirical distribution functions."
+   },
+   "ask": {
+    "q": "Does the question concern sequence order or distributional fit?",
+    "nudge": "Order points to runs; CDF fit points to KS."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 6,
+   "title": "Six statements to challenge",
+   "objective": "Detect common test-selection errors.",
+   "intro": "Mark each claim true or false before revealing the reason.",
+   "items": [
+    {
+     "claim": "Mann–Whitney is for two independent samples.",
+     "tf": true,
+     "why": "True. It is not the paired alternative."
+    },
+    {
+     "claim": "Wilcoxon signed-rank is for paired differences.",
+     "tf": true,
+     "why": "True. It operates on within-pair differences."
+    },
+    {
+     "claim": "Kruskal–Wallis is for several independent groups.",
+     "tf": true,
+     "why": "True. It is the rank-based omnibus independent-groups procedure."
+    },
+    {
+     "claim": "Friedman ranks all raw observations in one global pool.",
+     "tf": false,
+     "why": "False. It ranks treatments within each block."
+    },
+    {
+     "claim": "KS can compare an empirical CDF with a specified continuous CDF.",
+     "tf": true,
+     "why": "True. That is the one-sample KS goodness-of-fit form."
+    },
+    {
+     "claim": "The runs test assesses randomness in sequence order.",
+     "tf": true,
+     "why": "True. It uses the arrangement of two labels, not a group mean."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 8,
+   "title": "Guided calculation: a quick numeric check",
+   "objective": "Calculate a statistic only after identifying its test.",
+   "problem": "A binary sequence contains six successes and four failures. Under the runs-test null, find the expected number of runs E(R)=1+2n₁n₂/(n₁+n₂).",
+   "hints": [
+    "Identify n₁ and n₂ from the two labels.",
+    "Substitute into the expectation formula.",
+    "Check that the result lies between 1 and the maximum possible runs."
+   ],
+   "answer": "E(R)=1+2(6)(4)/10=1+4.8=5.8 runs.",
+   "check": "The expected number of runs is not the observed run count; it is a null expectation.",
+   "solution": [
+    {
+     "say": "Identify the two label counts.",
+     "math": "n₁=6; n₂=4; n=10",
+     "why": "The formula uses the counts of the two categories."
+    },
+    {
+     "say": "Substitute.",
+     "math": "E(R)=1+2×6×4/(6+4)",
+     "why": "Keep the denominator as the total number of labels."
+    },
+    {
+     "say": "Evaluate.",
+     "math": "E(R)=1+48/10=5.8",
+     "why": "This is the expected number of runs under randomness."
+    }
+   ],
+   "ask": {
+    "q": "Which test compares two independent empirical CDFs?",
+    "nudge": "Two-sample Kolmogorov–Smirnov."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s11",
+   "mins": 6,
+   "title": "A final decision checklist",
+   "objective": "Use a repeatable sequence under exam pressure.",
+   "ask": {
+    "q": "What should you identify before looking at answer options?",
+    "nudge": "The design and the research target."
+   },
+   "blocks": [
+    {
+     "t": "step",
+     "h": "Four checks",
+     "body": "(1) Identify the observational unit. (2) Decide independent, paired or blocked. (3) Count groups or treatments. (4) State whether the target is a group difference, association, distributional fit or sequence randomness."
+    },
+    {
+     "t": "step",
+     "h": "Scale and assumptions",
+     "body": "Check that an ordinal outcome has a meaningful order. For signed-rank, inspect symmetry of paired differences. For a median interpretation of Kruskal–Wallis, consider similar distribution shapes."
+    },
+    {
+     "t": "def",
+     "h": "Omnibus caution",
+     "body": "Kruskal–Wallis and Friedman are omnibus tests. A significant result says a difference exists somewhere; follow-up comparisons are needed to locate it."
+    }
+   ]
+  },
+  {
+   "kind": "recall",
+   "id": "s12",
+   "mins": 3,
+   "title": "Second recall",
+   "objective": "Retrieve the full test map.",
+   "intro": "Answer, then reveal.",
+   "items": [
+    {
+     "q": "Two independent groups?",
+     "a": "Mann–Whitney U."
+    },
+    {
+     "q": "Two paired groups?",
+     "a": "Wilcoxon signed-rank or sign test."
+    },
+    {
+     "q": "Several independent groups?",
+     "a": "Kruskal–Wallis."
+    },
+    {
+     "q": "Several related treatments?",
+     "a": "Friedman."
+    },
+    {
+     "q": "CDF fit vs sequence randomness?",
+     "a": "KS vs runs test."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "What you should now be able to do",
+   "objective": "Select the test from design and target.",
+   "body": [
+    "Identify independent, paired and blocked designs before selecting a procedure.",
+    "Match two independent groups to Mann–Whitney and paired differences to sign or signed-rank.",
+    "Match several independent groups to Kruskal–Wallis and several related treatments to Friedman.",
+    "Use Spearman/Kendall for rank association, KS for distributional fit or comparison, and runs for sequence randomness.",
+    "Read assumptions and omnibus interpretations before selecting an answer."
+   ],
+   "ask": {
+    "q": "What is the safest order for selecting a test?",
+    "nudge": "Design first, target second, test last."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 4,
+   "title": "Mastery test",
+   "objective": "Demonstrate accurate test selection on mixed designs.",
+   "setId": "nonparam_t5_mastery"
+  }
+ ]
+}
