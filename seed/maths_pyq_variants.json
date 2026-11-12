@@ -16,7 +16,7 @@
         "3"
       ],
       "answer": "A",
-      "explanation": "υ = n − rank = 5 − 3 =",
+      "explanation": "By the rank–nullity theorem, nullity(A)=n−rank(A)=10−8=2.",
       "srcQ": 1
     },
     {
@@ -31,7 +31,7 @@
         "3"
       ],
       "answer": "B",
-      "explanation": "Sylvester: rank(AB) ≥ 2 + 3 − 4 =",
+      "explanation": "Sylvester's inequality gives rank(AB)≥rank(A)+rank(B)−n=3+3−5=1. This lower bound is attainable, so the minimum is 1.",
       "srcQ": 1
     },
     {
@@ -46,7 +46,7 @@
         "3"
       ],
       "answer": "B",
-      "explanation": "Sylvester on A·A: 0 = rank(A²) ≥ 2·rank(A) − 3, so rank(A) ≤ 1.5, hence",
+      "explanation": "Since A²=0, the image of A is contained in the null space of A. Hence rank(A)≤nullity(A)=3−rank(A), so 2rank(A)≤3 and the integer rank is at most 1.",
       "srcQ": 1
     },
     {
@@ -61,7 +61,7 @@
         "trace(A)"
       ],
       "answer": "D",
-      "explanation": "For an idempotent matrix every eigenvalue is 0 or 1, so rank = number of unit eigenvalues = trace",
+      "explanation": "An idempotent matrix has eigenvalues only 0 or 1. Its trace equals the number of eigenvalues equal to 1, counted with multiplicity, which is also its rank.",
       "srcQ": 1
     },
     {
@@ -76,7 +76,7 @@
         "min(m, n) always"
       ],
       "answer": "A",
-      "explanation": "A′Ax = 0 ⇒ x′A′Ax = ‖Ax‖² = 0 ⇒ Ax = 0, so the null spaces coincide",
+      "explanation": "For every x, x′A′Ax=||Ax||². Thus A′Ax=0 exactly when Ax=0, so A′A and A have the same nullity and therefore the same rank.",
       "srcQ": 1
     },
     {
@@ -91,7 +91,7 @@
         "n − k"
       ],
       "answer": "B",
-      "explanation": "P is idempotent with rank n − k, so υ(P) = n − (n − k) = k. (This is Q5 of your paper viewed from the nullity side.)",
+      "explanation": "H=X(X′X)⁻¹X′ is a rank-k projection, so P=I−H is a projection of rank n−k. Its nullity is n−(n−k)=k.",
       "srcQ": 1
     },
     {
@@ -106,7 +106,7 @@
         "symmetric"
       ],
       "answer": "C",
-      "explanation": "Zero nullity means Ax = 0 only for x = 0, i.e. full rank",
+      "explanation": "A square matrix has nullity zero exactly when its kernel contains only the zero vector. It then has full rank and is nonsingular.",
       "srcQ": 1
     },
     {
@@ -121,7 +121,7 @@
         "[3, 5]"
       ],
       "answer": "D",
-      "explanation": "Lower bound max{2, 3} = 3; upper bound 2 + 3 =",
+      "explanation": "For n×n matrices, max{ν(A),ν(B)}≤ν(AB)≤ν(A)+ν(B). The bounds are max(3,2)=3 and 3+2=5.",
       "srcQ": 1
     },
     {
@@ -136,7 +136,7 @@
         "2"
       ],
       "answer": "C",
-      "explanation": "The second row is twice the first",
+      "explanation": "The second row is exactly twice the first, so there is only one linearly independent row. The rank is 1.",
       "srcQ": 26
     },
     {
@@ -151,7 +151,7 @@
         "1"
       ],
       "answer": "D",
-      "explanation": "It is 11′, a rank-one matrix",
+      "explanation": "Every row and every column is the same vector of ones. The matrix is 11′, an outer product of two non-zero vectors, and has rank 1.",
       "srcQ": 26
     },
     {
@@ -166,7 +166,7 @@
         "5"
       ],
       "answer": "A",
-      "explanation": "4. The rank of a matrix whose rows form an arithmetic progression (each row = previous + fixed vector) is at most:",
+      "explanation": "A square matrix has full rank if and only if it is nonsingular. A nonsingular square matrix has non-zero determinant.",
       "srcQ": 26
     },
     {
@@ -181,7 +181,7 @@
         "3"
       ],
       "answer": "B",
-      "explanation": "5. Elementary row operations change the rank:",
+      "explanation": "Each row is the first row plus an integer multiple of the fixed increment vector. All rows therefore lie in the span of two vectors, so the rank is at most 2.",
       "srcQ": 26
     },
     {
@@ -196,7 +196,7 @@
         "only for singular matrices"
       ],
       "answer": "C",
-      "explanation": "6. The rank of a non-zero skew-symmetric matrix is:",
+      "explanation": "Elementary row operations are multiplication by nonsingular elementary matrices. Such multiplication preserves linear dependence relations and hence preserves rank.",
       "srcQ": 26
     },
     {
@@ -211,7 +211,7 @@
         "always even"
       ],
       "answer": "D",
-      "explanation": "A classical result — the eigenvalues occur in ± imaginary pairs",
+      "explanation": "A real skew-symmetric matrix has non-zero eigenvalues in conjugate imaginary pairs. Its rank is therefore even; a non-zero such matrix cannot have odd rank.",
       "srcQ": 26
     },
     {
@@ -226,7 +226,7 @@
         "8"
       ],
       "answer": "A",
-      "explanation": "min(m, n)",
+      "explanation": "The rank of an m×n matrix cannot exceed either dimension. Thus rank(A)≤min(3,5)=3.",
       "srcQ": 26
     },
     {
@@ -241,7 +241,7 @@
         "n"
       ],
       "answer": "B",
-      "explanation": "9. The rank of the centring matrix I − (1/ n)11′ is:",
+      "explanation": "By rank–nullity, rank(A)+nullity(A)=n. If rank(A)=n−1, the nullity is 1.",
       "srcQ": 26
     },
     {
@@ -256,14 +256,14 @@
         "1"
       ],
       "answer": "C",
-      "explanation": "It is idempotent with trace n −",
+      "explanation": "The centring matrix I−(1/n)11′ projects onto the subspace orthogonal to the all-ones vector. That subspace has dimension n−1, so its rank is n−1.",
       "srcQ": 26
     },
     {
       "id": "j26v-q26-11",
       "format": "single",
       "topic": "June 2026 paper · Q26",
-      "stem": "In the matrix of this question, the nullity is:",
+      "stem": "For the matrix [[2,6,4,2],[3,7,4,2],[4,8,4,2],[5,9,4,2]], the nullity is:",
       "options": [
         "1",
         "4",
@@ -271,7 +271,7 @@
         "2"
       ],
       "answer": "D",
-      "explanation": "4 − rank = 4 −",
+      "explanation": "For the displayed 4×4 matrix, each row after the first is obtained by adding (1,1,0,0). The rows lie in the span of the first row and this increment, so rank=2 and nullity=4−2=2.",
       "srcQ": 26
     },
     {
@@ -286,7 +286,7 @@
         "e"
       ],
       "answer": "B",
-      "explanation": "Factorial decay dominates any x",
+      "explanation": "The ratio test gives |aₙ₊₁xⁿ⁺¹/(aₙxⁿ)|=|x|/(n+1)→0 for every fixed x. The series converges for all real x, so its radius is infinite.",
       "srcQ": 28
     },
     {
@@ -301,7 +301,7 @@
         "1"
       ],
       "answer": "C",
-      "explanation": "The terms blow up for every x ≠",
+      "explanation": "For x≠0, the ratio of successive term magnitudes is (n+1)|x|, which tends to infinity. The terms do not tend to zero; only x=0 gives convergence, so the radius is zero.",
       "srcQ": 28
     },
     {
@@ -316,7 +316,7 @@
         "p > 1"
       ],
       "answer": "D",
-      "explanation": "4. The interval of convergence of Σ(x − 2)ⁿ/n is:",
+      "explanation": "The p-series test states that Σ1/nᵖ converges exactly when p>1 and diverges when p≤1.",
       "srcQ": 28
     },
     {
@@ -331,7 +331,7 @@
         "(1, 3]"
       ],
       "answer": "A",
-      "explanation": "R = 1 about 2; at x = 1 the alternating harmonic converges, at x = 3 the harmonic diverges",
+      "explanation": "The radius is 1 about centre 2. At x=1 the series becomes the alternating harmonic series and converges; at x=3 it becomes the harmonic series and diverges. Hence [1,3).",
       "srcQ": 28
     },
     {
@@ -346,7 +346,7 @@
         "(−3, 2)"
       ],
       "answer": "B",
-      "explanation": "The series is Σ((x+3)/2)ⁿ, a geometric series in (x+3)/2. It converges exactly when |(x+3)/2| < 1, that is |x + 3| < 2, giving −5 < x < −1. At both endpoints the ratio has modulus 1 and the terms are ±1, so the series diverges there and the interval is open.",
+      "explanation": "This is a geometric series with ratio (x+3)/2. It converges when |(x+3)/2|<1, or −5<x<−1; at either endpoint the terms fail to approach zero.",
       "srcQ": 28
     },
     {
@@ -361,7 +361,7 @@
         "converges to log 2"
       ],
       "answer": "C",
-      "explanation": "Check: expected frequencies sum to 160 ✓ and observed sum to 160 ✓. Always run this check — it catches arithmetic slips before they propagate",
+      "explanation": "The harmonic series diverges. For example, grouping terms between successive powers of two shows that each block contributes at least 1/2, so the partial sums are unbounded.",
       "srcQ": 28
     },
     {
@@ -376,7 +376,7 @@
         "1"
       ],
       "answer": "D",
-      "explanation": "It telescopes. Step 2 — compute (O − E)²/E term by term",
+      "explanation": "Use 1/[n(n+1)]=1/n−1/(n+1). The partial sums telescope to 1−1/(N+1), which tends to 1.",
       "srcQ": 28
     },
     {
@@ -391,7 +391,7 @@
         "1"
       ],
       "answer": "A",
-      "explanation": "R = 1/limsup|aₙ|^(1/n) = 1/3",
+      "explanation": "By the Cauchy–Hadamard formula, R=1/limsup|aₙ|^(1/n)=1/3 because aₙ=3ⁿ.",
       "srcQ": 28
     },
     {
@@ -406,7 +406,7 @@
         "conditional convergence"
       ],
       "answer": "B",
-      "explanation": "The converse is false",
+      "explanation": "Absolute convergence means Σ|aₙ| is finite. Since |aₙ|≥0 and |aₙ|≥aₙ in magnitude, this guarantees convergence of Σaₙ.",
       "srcQ": 28
     },
     {
@@ -421,7 +421,7 @@
         "divergent"
       ],
       "answer": "C",
-      "explanation": "It converges to log 2 but Σ1/n diverges",
+      "explanation": "The alternating harmonic series converges by the alternating-series test, but the series of absolute values Σ1/n diverges. It is conditionally convergent.",
       "srcQ": 28
     },
     {
@@ -436,7 +436,7 @@
         "2"
       ],
       "answer": "C",
-      "explanation": "Every column is a multiple of u. Check the idempotency, which explains the whole structure: P² = I − 2uv′/(u′v) + u(v′u)v′/(u′v)² = I − 2uv′/(u′v) + uv′/(u′v) = I − uv′/(u′v) = P ✓ So P is idempotent, and Q = uv′ has all its columns proportional to u — the very direction P kills. Hence PQ =",
+      "explanation": "The outer product uv′ has every column equal to a scalar multiple of u. Since u and v are non-zero, at least one column is non-zero, so the rank is exactly 1.",
       "srcQ": 21,
       "moduleId": "maths"
     },
@@ -452,7 +452,7 @@
         "u′v"
       ],
       "answer": "D",
-      "explanation": "3. The non-zero eigenvalue of uv′ is:",
+      "explanation": "Using the trace identity tr(uv′)=tr(v′u), and v′u is a 1×1 scalar, the trace is u′v.",
       "srcQ": 21,
       "moduleId": "maths"
     },
@@ -468,7 +468,7 @@
         "1"
       ],
       "answer": "A",
-      "explanation": "with the remaining n − 1 eigenvalues zero",
+      "explanation": "The matrix uv′ is rank one. It maps u to u(v′u), so its only possible non-zero eigenvalue is v′u=u′v.",
       "srcQ": 21,
       "moduleId": "maths"
     },
@@ -484,7 +484,7 @@
         "(uv′)′"
       ],
       "answer": "B",
-      "explanation": "5. The centring matrix C = I − (1/n)11′ is:",
+      "explanation": "(uv′)(uv′)=u(v′u)v′=(u′v)uv′, since v′u is a scalar.",
       "srcQ": 21,
       "moduleId": "maths"
     },
@@ -500,7 +500,7 @@
         "idempotent of rank n"
       ],
       "answer": "C",
-      "explanation": "6. C1 where C is the centring matrix equals:",
+      "explanation": "C=I−(1/n)11′ satisfies C²=C and C1=0. Its null space is span{1}, so its rank is n−1.",
       "srcQ": 21,
       "moduleId": "maths"
     },
@@ -516,7 +516,7 @@
         "0"
       ],
       "answer": "D",
-      "explanation": "Deviations of a constant vector from its own mean are zero",
+      "explanation": "C1=1−(1/n)1(1′1)=1−(1/n)n1=0. The centring matrix removes the constant component.",
       "srcQ": 21,
       "moduleId": "maths"
     },
@@ -532,7 +532,7 @@
         "all 1"
       ],
       "answer": "A",
-      "explanation": "8. In the expression a′Ab, where a and b are n × 1 and A is n × n, the result is:",
+      "explanation": "J=11′ maps the all-ones vector to n times itself and maps every vector orthogonal to it to zero. Thus its eigenvalues are n once and 0 with multiplicity n−1.",
       "srcQ": 21,
       "moduleId": "maths"
     },
@@ -548,7 +548,7 @@
         "n × n"
       ],
       "answer": "B",
-      "explanation": "and being a scalar it equals its own transpose b′A′a",
+      "explanation": "The dimensions multiply as (1×n)(n×n)(n×1), leaving a 1×1 result. Therefore a′Ab is a scalar.",
       "srcQ": 21,
       "moduleId": "maths"
     },
@@ -564,7 +564,7 @@
         "P² = I"
       ],
       "answer": "C",
-      "explanation": "Idempotent",
+      "explanation": "Let R=uv′/(u′v). Since R²=R, (I−R)²=I−2R+R²=I−R. Hence P is idempotent.",
       "srcQ": 21,
       "moduleId": "maths"
     },
@@ -580,7 +580,7 @@
         "A + uv′"
       ],
       "answer": "D",
-      "explanation": "Q22. R: a factorial written as a for-loop trapolating, f(5) = 5! = 120. Testing a loop with n = 1 or 2 takes five seconds and settles almost every R loop question",
+      "explanation": "The Sherman–Morrison identity gives the inverse of a nonsingular matrix plus a rank-one update, A+uv′, provided the required denominator is non-zero.",
       "srcQ": 21,
       "moduleId": "maths"
     },
@@ -596,7 +596,7 @@
         "5 ≤ nullity(AB) ≤ 8"
       ],
       "answer": "B",
-      "explanation": "For square matrices, max{ν(A),ν(B)} ≤ ν(AB) ≤ ν(A)+ν(B). Substituting 2 and 3 gives 3 ≤ ν(AB) ≤ 5.",
+      "explanation": "The general nullity bounds are max{2,3}≤ν(AB)≤2+3, so 3≤ν(AB)≤5.",
       "format": "single"
     },
     {
@@ -611,7 +611,7 @@
         "the rank of B"
       ],
       "answer": "B",
-      "explanation": "Left multiplication by a nonsingular matrix does not change rank: rank(AB)=rank(B). By rank–nullity, ν(AB)=n−rank(AB)=n−rank(B)=ν(B).",
+      "explanation": "Multiplication on the left by a nonsingular matrix preserves rank. Thus rank(AB)=rank(B), and rank–nullity gives ν(AB)=ν(B).",
       "format": "single"
     }
   ]
