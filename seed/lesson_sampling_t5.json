@@ -6,7 +6,7 @@
   "breadcrumb": "Sampling theory → Systematic sampling → Random start, inclusion probabilities and variance",
   "engine": "B",
   "engineName": "Choose a random start and select every kth unit from an ordered frame.",
-  "version": "1.0",
+  "version": "1.1",
   "status": "review",
   "estMin": 95,
   "objectives": [
@@ -59,27 +59,21 @@
           "ask": "What is a sampling frame?",
           "recall": "The list or operational representation from which units are selected.",
           "refresh": [
-            "The frame identifies eligible units.",
-            "Systematic sampling moves through this ordered list at a fixed interval.",
-            "Coverage errors arise if the frame omits eligible units or includes ineligible ones."
+            "A sampling frame is the operational list or device that identifies the population units from which the sample is selected. It should cover every eligible unit once. Missing units create undercoverage, duplicate entries create overcoverage, and outdated entries can cause contact or eligibility errors."
           ]
         },
         {
           "ask": "What is the interval k when N is divisible by n?",
           "recall": "k=N/n.",
           "refresh": [
-            "N is the frame size and n is the required sample size.",
-            "Divide N by n to obtain the spacing between successive selections.",
-            "The standard equal-interval design uses an integer k."
+            "When N is divisible by n, the systematic interval is k=N/n. Choose one integer start r uniformly from 1,…,k, then select r, r+k, r+2k and continue until n units are selected. The interval is fixed; the random start is what makes the procedure a probability design."
           ]
         },
         {
           "ask": "Why is the start random?",
           "recall": "Randomising the first position gives each eligible unit a known selection chance.",
           "refresh": [
-            "The first position is chosen randomly from 1,…,k.",
-            "All later selections follow the fixed interval.",
-            "Without a random start, this is not the stated probability design."
+            "The random start prevents the investigator from choosing a convenient first unit and gives each frame position its required first-order inclusion probability. If the start were fixed, the sample would be deterministic and units outside that sequence would have zero chance of selection."
           ]
         }
       ],
@@ -536,7 +530,9 @@
       "π_i=1/k=n/N.",
       "π_ij=1/k for same residue class; zero otherwise.",
       "V(ȳ_sys)=(1/k)Σ_r(ȳ_r−Ȳ)².",
-      "Periodicity aligned with k can be harmful."
+      "Periodicity aligned with k can be harmful.",
+      "When N/n is not an integer, use a stated fractional-interval or circular convention; do not silently round k.",
+      "A single systematic sample generally cannot provide an unbiased design-based variance estimate because many pairwise inclusion probabilities are zero."
     ],
     "cards": [
       [
@@ -558,6 +554,10 @@
       [
         "Variance",
         "Across k starts"
+      ],
+      [
+        "Periodicity",
+        "A repeating frame pattern aligned with k can make a systematic sample unrepresentative."
       ]
     ],
     "tricks": [
@@ -567,7 +567,8 @@
     ],
     "shortcuts": [
       "A pair in different residue classes cannot appear together.",
-      "Exact design variance is variance across possible starts."
+      "Exact design variance is variance across possible starts.",
+      "Check the ordering of the frame before using systematic sampling; random start does not remove periodicity."
     ],
     "remember": [
       "Systematic sample space is smaller than SRS sample space.",
