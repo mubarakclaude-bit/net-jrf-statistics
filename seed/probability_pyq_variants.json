@@ -2,7 +2,7 @@
   "moduleId": "probability",
   "source": "variant",
   "label": "June 2026 PYQ variants — Probability and distributions",
-  "count": 79,
+  "count": 90,
   "items": [
     {
       "id": "j26v-q06-01",
@@ -1176,34 +1176,199 @@
     {
       "id": "j26v-q42-01",
       "format": "single",
-      "topic": "June 2026 paper · Q42",
-      "stem": "For n iid exponential(θ), E(X₍₁₎) equals:",
+      "topic": "Exponential order statistics",
+      "stem": "For an iid sample of size n from an exponential distribution with mean θ, the expected value of the minimum order statistic X₍₁₎ is:",
       "options": [
-        "nθ",
-        "θ/(n + 1)",
+        "θ",
         "θ/n",
-        "θ"
+        "nθ",
+        "θ/(n−1)"
       ],
-      "answer": "C",
-      "explanation": "8.5 62 ES 8.5 62 LC 10 65 ES",
+      "answer": "B",
+      "explanation": "The minimum of n independent exponential variables with mean θ is exponential with rate n/θ, so its mean is θ/n.",
       "srcQ": 41,
       "moduleId": "probability"
     },
     {
       "id": "j26v-q42-02",
       "format": "single",
-      "topic": "June 2026 paper · Q42",
-      "stem": "The variance of the unbiased estimator θ̂ = T/r is:",
+      "topic": "Exponential order statistics",
+      "stem": "For an iid exponential sample with mean θ, which estimator is unbiased for θ?",
       "options": [
-        "θ²",
-        "θ²/n",
-        "θ²/(n − r)",
-        "θ²/r"
+        "X₍₁₎",
+        "X₍ₙ₎/n",
+        "nX₍₁₎",
+        "X₍₁₎/n"
       ],
-      "answer": "D",
-      "explanation": "Precision depends on failures observed, not items tested. Rank Value Group Option 13.5 72 ES 13.5 72 LC",
+      "answer": "C",
+      "explanation": "Since E[X₍₁₎]=θ/n, multiplying the minimum by n gives E[nX₍₁₎]=θ.",
       "srcQ": 41,
       "moduleId": "probability"
+    },
+    {
+      "id": "j26v-q25-10",
+      "srcQ": 25,
+      "topic": "Conditional distributions",
+      "stem": "Let X and Y be independent exponential random variables with the same rate. Conditional on X+Y=s, the density of X is:",
+      "options": [
+        "Exponential with the original rate",
+        "Uniform on (0,s)",
+        "Gamma with shape 2",
+        "A point mass at s/2"
+      ],
+      "answer": "B",
+      "explanation": "The joint density is proportional to exp(−λx)exp(−λ(s−x))=exp(−λs), constant for 0<x<s. Normalising gives the Uniform(0,s) conditional distribution.",
+      "format": "single"
+    },
+    {
+      "id": "j26v-q34-10",
+      "srcQ": 34,
+      "topic": "Independent events and complements",
+      "stem": "Independent events A₁,A₂,A₃ satisfy P(Aᵢ)=1−2⁻ⁱ. The probability that at least one occurs is:",
+      "options": [
+        "1/64",
+        "1/8",
+        "63/64",
+        "7/8"
+      ],
+      "answer": "C",
+      "explanation": "By independence, P(no event occurs)=∏₂⁻ⁱ=2⁻⁽¹⁺²⁺³⁾=1/64. The required probability is the complement, 63/64.",
+      "format": "single"
+    },
+    {
+      "id": "j26v-q45-10",
+      "srcQ": 45,
+      "topic": "Mixed Poisson distributions",
+      "stem": "Suppose X is exponential with mean 2 and Y|X=x is Poisson(x). What is Var(Y)?",
+      "options": [
+        "2",
+        "4",
+        "6",
+        "8"
+      ],
+      "answer": "B",
+      "explanation": "By total variance, Var(Y)=E[Var(Y|X)]+Var(E[Y|X])=E(X)+Var(X). For an exponential variable with mean 2, E(X)=2 and Var(X)=4, so Var(Y)=6.",
+      "format": "single"
+    },
+    {
+      "id": "j26v-q41-03",
+      "srcQ": 41,
+      "topic": "Exponential order statistics",
+      "format": "single",
+      "stem": "For an iid exponential sample with mean θ and size n, E[X₍ₙ₎] is:",
+      "options": [
+        "θ",
+        "θHₙ",
+        "θ/n",
+        "nθ"
+      ],
+      "answer": "B",
+      "explanation": "The expected maximum of n iid exponential variables with mean θ is θHₙ, where Hₙ=1+1/2+⋯+1/n."
+    },
+    {
+      "id": "j26v-q41-04",
+      "srcQ": 41,
+      "topic": "Exponential order statistics",
+      "format": "single",
+      "stem": "For exponential observations with mean θ, the spacing X₍ᵣ₎−X₍ᵣ₋₁₎ has expectation:",
+      "options": [
+        "θ/(n−r+1)",
+        "θ/r",
+        "rθ",
+        "θ/n"
+      ],
+      "answer": "A",
+      "explanation": "The r-th spacing has exponential rate (n−r+1)/θ. Its expectation is therefore θ/(n−r+1)."
+    },
+    {
+      "id": "j26v-q41-05",
+      "srcQ": 41,
+      "topic": "Exponential order statistics",
+      "format": "single",
+      "stem": "For 1≤r≤n, which transformation of the r-th exponential order-statistic spacing is unbiased for the mean θ?",
+      "options": [
+        "(n−r+1)(X₍ᵣ₎−X₍ᵣ₋₁₎)",
+        "rX₍ᵣ₎",
+        "X₍ᵣ₎/(n−r+1)",
+        "nX₍ᵣ₎"
+      ],
+      "answer": "A",
+      "explanation": "The spacing has expectation θ/(n−r+1). Multiplication by n−r+1 therefore produces an estimator with expectation θ."
+    },
+    {
+      "id": "j26v-q41-06",
+      "srcQ": 41,
+      "topic": "Exponential order statistics",
+      "format": "single",
+      "stem": "For a random sample, the arithmetic mean of all n order statistics equals:",
+      "options": [
+        "The sample median",
+        "The sample maximum",
+        "The ordinary sample mean",
+        "The sample minimum"
+      ],
+      "answer": "C",
+      "explanation": "Ordering only rearranges the observations. Thus ΣX₍ᵢ₎=ΣXᵢ and their averages are identical; the sample mean is unbiased for θ."
+    },
+    {
+      "id": "j26v-q41-07",
+      "srcQ": 41,
+      "topic": "Exponential order statistics",
+      "format": "single",
+      "stem": "The spacings of iid exponential order statistics are:",
+      "options": [
+        "Mutually independent",
+        "All equal",
+        "Mutually perfectly correlated",
+        "Normally distributed"
+      ],
+      "answer": "A",
+      "explanation": "The successive spacings of exponential order statistics are independent exponential variables, with rates that decrease as the order increases."
+    },
+    {
+      "id": "j26v-q41-08",
+      "srcQ": 41,
+      "topic": "Exponential order statistics",
+      "format": "single",
+      "stem": "If X₁,…,X₄ are iid exponential with mean θ, then E[X₍₁₎] is:",
+      "options": [
+        "θ/2",
+        "θ/3",
+        "θ/4",
+        "4θ"
+      ],
+      "answer": "C",
+      "explanation": "The minimum of four iid exponential variables has rate 4/θ and therefore mean θ/4."
+    },
+    {
+      "id": "j26v-q41-09",
+      "srcQ": 41,
+      "topic": "Exponential order statistics",
+      "format": "single",
+      "stem": "If the exponential distribution is parameterised by rate λ, the minimum of n iid observations has rate:",
+      "options": [
+        "λ",
+        "λ/n",
+        "nλ",
+        "λ²"
+      ],
+      "answer": "C",
+      "explanation": "The survival probability of the minimum is the product of the n individual survival probabilities: e^(−nλx). Hence its rate is nλ."
+    },
+    {
+      "id": "j26v-q41-10",
+      "srcQ": 41,
+      "topic": "Exponential order statistics",
+      "format": "single",
+      "stem": "For iid exponential observations with mean θ, the sample mean X̄ is unbiased because:",
+      "options": [
+        "E(X̄)=θ",
+        "E(X̄)=θ/n",
+        "E(X̄)=nθ",
+        "E(X̄)=1/θ"
+      ],
+      "answer": "A",
+      "explanation": "Linearity of expectation gives E(X̄)=n⁻¹ΣE(Xᵢ)=θ, regardless of the dependence among order statistics after sorting."
     }
   ]
 }
