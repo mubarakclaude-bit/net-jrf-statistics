@@ -169,7 +169,22 @@ for (const l of seeds.lessons) {
   if (!want(l.file)) continue;
   if (l.error) { fail("seed/" + l.file + ": " + l.error); continue; }
   nl++; const v = V("lesson");
-  if (!v(l.data)) fail("seed/" + l.file + " violates lesson contract: " + brief(v.errors));
+  if (!v(l.data)) {
+    const mine = exceptions.filter(x => x.file === "seed/" + l.file && x.contract === "lesson");
+    const real = [];
+    for (const e of v.errors) {
+      const ex = mine.find(x => {
+        if (x.pointer && e.instancePath !== x.pointer) return false;
+        if (x.kind === "missing-property") return e.keyword === "required" && (e.params || {}).missingProperty === x.field;
+        if (x.kind === "wrong-type") return e.keyword === "type" && (e.params || {}).type === x.expected;
+        if (x.kind === "enum") return e.keyword === "enum" || e.keyword === "const";
+        if (x.kind === "empty-field") return e.keyword === "minLength";
+        return false;
+      });
+      if (ex) usedEx.add(ex); else real.push(e);
+    }
+    if (real.length) fail("seed/" + l.file + " violates lesson contract: " + brief(real));
+  }
   if (!moduleIds.has(l.data.moduleId)) fail("seed/" + l.file + ": moduleId '" + l.data.moduleId + "' is not in seed/catalog.json");
   else if (!String(l.data.topicId).startsWith(l.data.moduleId + "-")) fail("seed/" + l.file + ": topicId '" + l.data.topicId + "' must start with its moduleId '" + l.data.moduleId + "-'");
   for (const s of l.data.scenes || []) if (s.kind === "quiz" && !qstems.has(s.setId)) fail("seed/" + l.file + ": quiz scene points at set '" + s.setId + "' which is not a question set");
@@ -183,6 +198,14 @@ for (const q of seeds.qsets) {
     const excused = new Set(), real = [];
     const itemAt = e => { const m = /^\/items\/(\d+)/.exec(e.instancePath || ""); return m ? +m[1] : -1; };
     const matches = (e, ex) => {
+      if (ex.pointer) {
+        if (e.instancePath !== ex.pointer) return false;
+        if (ex.kind === "wrong-type") return e.keyword === "type" && (e.params || {}).type === ex.expected;
+        if (ex.kind === "enum") return e.keyword === "enum" || e.keyword === "const";
+        if (ex.kind === "missing-property") return e.keyword === "required" && (e.params || {}).missingProperty === ex.field;
+        if (ex.kind === "empty-field") return e.keyword === "minLength";
+        return false;
+      }
       const i = itemAt(e); if (i < 0) return false;
       if (ex.itemId && (q.data.items[i] || {}).id !== ex.itemId) return false;
       if (ex.kind === "missing-property") return e.keyword === "required" && (e.params || {}).missingProperty === ex.field;
