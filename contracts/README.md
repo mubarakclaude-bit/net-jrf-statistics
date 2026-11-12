@@ -23,14 +23,14 @@ node tools/validate-contracts.js --file backup.json --as progress-backup        
 | `feedback.schema.json` | A learner's asks and requests, per profile |
 | `feature.schema.json` | A feature manifest: id, title, version, tab, and every storage key it may use |
 | `storage-paths.json` | Every valid store document path, and the known-bad ones |
-| `legacy-exceptions.json` | Seeds that deviate today, each with a reason; reported on every run |
+| `legacy-exceptions.json` | Exact legacy deviations by file and JSON pointer, each with a reason; reported on every run |
 | `fixtures/` | The contracts' own tests: every valid case must pass, every invalid case must fail for the stated reason |
 
 ## Structure, not standard
 
 The schemas describe **shape**: types, required fields, enums. The house **quality** rules (at least three references,
 `howto`, scene counts, answer-key spread, explanation quality) stay in `vcheck.js` and `addlesson.sh`, and are not
-duplicated here. A field is required by a schema only if all 48 lessons and 63 pools already have it and a reader
+duplicated here. A field is required by a schema only if all 104 lessons and 119 question sets already have it and a reader
 needs it. Content objects allow extra fields so teaching extensions need no contract change; the typed fields are what
 every reader may rely on. Envelopes (`progress-backup`, `progress-snapshot`) are strict.
 
@@ -58,8 +58,7 @@ throws when `window.__NJ_STRICT_PATHS` is set). A feature that invents a path mu
 - A change that old conforming data would fail is a **breaking change**: add a new versioned schema alongside the old
   one (`*.v2.schema.json`, new `$id`), keep both until every seed and stored record has migrated, and ship the migration
   with it. Adding an optional field, widening an enum, or fixing a fixture is not breaking.
-- A legacy deviation is never fixed as a side effect of tightening a contract: list it in `legacy-exceptions.json` with
-  its reason. A stale entry (the seed now conforms) fails CI, so the list only ever shrinks. New content gets no entry.
+- A legacy deviation is never fixed as a side effect of tightening a contract: list only the exact pre-existing file and JSON pointer in `legacy-exceptions.json`, with its violation kind and reason. Supported kinds are `missing-property`, `empty-field`, `wrong-type` and `enum`. The validator reports every used exception and fails if it becomes stale (the seed now conforms), so the list only ever shrinks. New content gets no entry. The current list contains 59 entries: 56 exact pre-existing deviations across Design of Experiments, Mathematics and Probability, plus the three earlier pool exceptions.
 
 ## Changing a contract
 
