@@ -126,6 +126,16 @@ function seedDocs() {
   docs['meta/users'] = J('meta_users');
   docs['meta/syllabus'] = J('meta_syllabus');
   docs['meta/app'] = { url: 'https://claude.ai/artifact/TEST', title: 'NET JRF Statistics', v: 4 };
+  // Original PYQs must be split into module-scoped qsets so module filters cannot
+  // accidentally show all 50 under the legacy parent module.
+  const originalSets = Object.entries(docs).filter(([p]) => /^qsets\\/pyq_j26_/.test(p));
+  const originalCount = originalSets.reduce((n, [,b]) => n + (b.items || []).length, 0);
+  if (originalCount !== 50) throw new Error('Expected 50 module-scoped original PYQs; found ' + originalCount);
+  for (const [p,b] of originalSets) {
+    if ((b.items || []).some(q => q.moduleId !== b.moduleId))
+      throw new Error(p + ': original question moduleId does not match its qset');
+  }
+  if (docs['qsets/pyq_j26_full']) throw new Error('Legacy unsplit original PYQ qset must not be published');
   return docs;
 }
 
