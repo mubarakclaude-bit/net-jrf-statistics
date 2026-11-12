@@ -150,7 +150,7 @@ async function loadBank(mid){
       if(b.source==="mastery")return;           // kept unseen for mastery tests
       (b.items||[]).forEach(it=>{
         if(!it||!it.id||seen[it.id])return;seen[it.id]=1;
-        items.push(Object.assign({},it,{moduleId:mid,source:b.source||"variant",setId:d.id,setLabel:b.label||d.id}));
+        items.push(Object.assign({},it,{moduleId:it.moduleId||mid,source:b.source||"variant",setId:d.id,setLabel:b.label||d.id}));
       })});
     S.bank[mid]=items;
   }catch(e){S.bank[mid]=[];toast("Could not load "+mid+" ("+(e&&e.code||"error")+")")}
