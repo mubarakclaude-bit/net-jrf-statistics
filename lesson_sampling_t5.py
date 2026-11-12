@@ -26,6 +26,14 @@ assert [sum(q["diff"] == d for q in pool["items"]) for d in ("easy", "moderate",
 assert len({s["id"] for s in lesson["scenes"]}) == len(lesson["scenes"])
 assert len({q["id"] for q in pool["items"]}) == len(pool["items"])
 
+
+foundation = next(scene for scene in lesson["scenes"] if scene.get("kind") == "foundation")
+assert len(foundation.get("items", [])) >= 3
+assert all(len(" ".join(item.get("refresh", [])) if isinstance(item.get("refresh"), list) else str(item.get("refresh", ""))) >= 200 for item in foundation["items"])
+assert len(lesson.get("revision", {}).get("sheet", [])) >= 8
+assert len(lesson.get("revision", {}).get("cards", [])) >= 6
+assert len(lesson.get("revision", {}).get("shortcuts", [])) >= 3
+
 for path, data in ((LESSON, lesson), (POOL, pool)):
     path.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
