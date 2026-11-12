@@ -32,6 +32,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Install pinned validation and browser dependencies
+        run: npm ci
       - name: Check seed index and harness wiring
         run: |
           chmod +x ./check.sh ./build.sh
@@ -61,6 +63,14 @@ jobs:
             echo "=== Multivariate ${topic} ==="
             node vcheck.js "seed/lesson_multivariate_${topic}.json"
             python "verify_multivariate_${topic}.py"
+          done
+      - name: Validate Non-parametric lessons, mastery pools and numerical verifiers
+        run: |
+          for topic in nonparam-t1 nonparam-t2 nonparam-t3 nonparam-t4 nonparam-t5 nonparam-t6 nonparam-t7 nonparam-t8; do
+            echo "=== Non-parametric ${topic} ==="
+            npm run lesson -- check "${topic}"
+            number="${topic##*-t}"
+            python -I "verify_nonparam_t${number}.py"
           done
       - name: Build app and check JavaScript syntax
         run: ./build.sh
