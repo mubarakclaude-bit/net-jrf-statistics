@@ -70,9 +70,8 @@ jobs:
             for topic in nonparam-t1 nonparam-t2 nonparam-t3 nonparam-t4 nonparam-t5 nonparam-t6 nonparam-t7 nonparam-t8; do
               echo "=== Non-parametric ${topic} ==="
               npm run lesson -- check "${topic}"
-              number="${topic##*-t}"
-              python -I "verify_nonparam_t${number}.py"
             done
+            python -I verify_nonparametric.py
           else
             echo "SKIP: Non-parametric release checks run when the module content PR is included."
           fi
