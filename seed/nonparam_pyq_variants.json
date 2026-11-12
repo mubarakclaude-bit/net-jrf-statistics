@@ -16,7 +16,7 @@
     "1 − 6Σd²/[n(n² − 1)]"
    ],
    "answer": "D",
-   "explanation": "2. For n = 5 with Σd² = 4, ρ equals:",
+   "explanation": "With no tied ranks, Spearman’s coefficient is ρ = 1 − 6Σd²/[n(n² − 1)], where d is the difference between the two ranks for each observation. The squared differences measure disagreement between the rankings; the formula gives ρ = 1 for identical rankings and −1 for a complete reversal.",
    "srcQ": 35
   },
   {
@@ -31,7 +31,7 @@
     "0.4"
    ],
    "answer": "A",
-   "explanation": "1 − 24/120 = 0.8",
+   "explanation": "Substitute n = 5 and Σd² = 4: ρ = 1 − 6(4)/[5(25 − 1)] = 1 − 24/120 = 0.8. Keep n outside the bracket; the denominator is 5×24.",
    "srcQ": 35
   },
   {
@@ -46,7 +46,7 @@
     "0"
    ],
    "answer": "B",
-   "explanation": "4. Σd in a Spearman calculation always equals:",
+   "explanation": "A complete reversal pairs rank 1 with n, rank 2 with n−1, and so on. It produces the maximum possible Σd² = n(n² − 1)/3, so the Spearman formula reduces to ρ = 1 − 2 = −1.",
    "srcQ": 35
   },
   {
@@ -61,7 +61,7 @@
     "1"
    ],
    "answer": "C",
-   "explanation": "5. When ties are present, the correct procedure is to:",
+   "explanation": "Each rank column is a permutation of 1, 2, …, n. Both rank sums therefore equal n(n+1)/2, and subtracting them gives Σd = 0 for every pair of complete rankings.",
    "srcQ": 35
   },
   {
@@ -76,7 +76,7 @@
     "assign average ranks"
    ],
    "answer": "D",
-   "explanation": "6. Spearman’s ρ is equivalent to:",
+   "explanation": "Tied observations should receive the average of the rank positions they occupy (midranks). Then calculate Pearson’s correlation between the two rank columns; the simple no-tie Σd² shortcut is not generally valid with ties.",
    "srcQ": 35
   },
   {
@@ -91,7 +91,7 @@
     "the covariance"
    ],
    "answer": "A",
-   "explanation": "7. Kendall’s τ is defined using:",
+   "explanation": "Spearman’s ρ is Pearson’s product-moment correlation after replacing each variable by its ranks. This makes it a measure of monotone association rather than linear association on the original measurement scale.",
    "srcQ": 35
   },
   {
@@ -106,7 +106,7 @@
     "squared rank differences"
    ],
    "answer": "B",
-   "explanation": "8. For n = 10, the maximum possible value of Σd² is:",
+   "explanation": "Kendall’s τ compares every unordered pair of observations. A pair is concordant when the two variables order it the same way and discordant when they order it oppositely; without ties, τ = (C − D)/[n(n − 1)/2].",
    "srcQ": 35
   },
   {
@@ -121,7 +121,7 @@
     "990"
    ],
    "answer": "C",
-   "explanation": "n(n² − 1)/3, attained when the ranks are reversed",
+   "explanation": "The maximum squared rank-difference sum occurs for reversed rankings and equals n(n² − 1)/3. At n = 10 this is 10(100 − 1)/3 = 330.",
    "srcQ": 35
   },
   {
@@ -136,7 +136,7 @@
     "the relationship is monotone but non-linear"
    ],
    "answer": "D",
-   "explanation": "10. For n = 6 with Σd² = 35, ρ equals:",
+   "explanation": "Rank correlation is useful when the relationship is monotone but not linear, when measurements are ordinal, or when extreme values make raw-value correlation misleading. It measures ordering, not the size of numerical gaps.",
    "srcQ": 35
   },
   {
@@ -151,7 +151,7 @@
     "1"
    ],
    "answer": "A",
-   "explanation": "1 − 210/210 =",
+   "explanation": "For n = 6, ρ = 1 − 6(35)/[6(36 − 1)] = 1 − 210/210 = 0. The observed Σd² is half its maximum value of 70.",
    "srcQ": 35
   },
   {
@@ -166,7 +166,7 @@
     "210"
    ],
    "answer": "A",
-   "explanation": "n₁n₂",
+   "explanation": "For two independent samples, every cross-sample pair contributes to exactly one of U₁ or U₂. Therefore U₁ + U₂ = n₁n₂ = 10×10 = 100.",
    "srcQ": 42
   },
   {
@@ -181,7 +181,7 @@
     "n₁(n₁+1)/2"
    ],
    "answer": "B",
-   "explanation": "3. The variance of U under H₀ is:",
+   "explanation": "Under the null hypothesis that the two continuous populations have the same distribution, either group is equally likely to contain the larger value in a cross-sample pair. Thus E(U) = n₁n₂/2.",
    "srcQ": 42
   },
   {
@@ -196,7 +196,7 @@
     "n₁n₂/12"
    ],
    "answer": "C",
-   "explanation": "4. In the Mann–Whitney test, ties are handled by:",
+   "explanation": "For independent samples with no tied pooled observations, Var(U) = n₁n₂(N + 1)/12, where N = n₁ + n₂. When ties occur, a tie-correction factor must be applied to the variance.",
    "srcQ": 42
   },
   {
@@ -211,7 +211,7 @@
     "assigning average ranks"
    ],
    "answer": "D",
-   "explanation": "5. The sum of all ranks in a pooled sample of size N is:",
+   "explanation": "Pool the observations and rank them together. Every tied block receives the average of the positions it occupies; this preserves the total rank sum and avoids arbitrarily favouring one group.",
    "srcQ": 42
   },
   {
@@ -226,7 +226,7 @@
     "N(N − 1)/2"
    ],
    "answer": "A",
-   "explanation": "6. The nonparametric analogue of the paired t test is:",
+   "explanation": "The pooled ranks are 1 through N, so their total is 1 + 2 + … + N = N(N + 1)/2. This identity is a useful check before converting a rank sum into U.",
    "srcQ": 42
   },
   {
@@ -241,7 +241,7 @@
     "run test"
    ],
    "answer": "B",
-   "explanation": "7. The Kruskal–Wallis test is used for:",
+   "explanation": "The Wilcoxon signed-rank test is the usual rank-based alternative to the paired t-test. It ranks the absolute non-zero within-pair differences and restores their signs; Mann–Whitney is for independent groups.",
    "srcQ": 42
   },
   {
@@ -256,7 +256,7 @@
     "two independent samples"
    ],
    "answer": "C",
-   "explanation": "8. The asymptotic relative efficiency of the Mann–Whitney U to the t test under normality is about:",
+   "explanation": "Kruskal–Wallis compares three or more independent groups using pooled ranks. It is the rank-based counterpart of one-way ANOVA; for repeated or blocked measurements, use Friedman instead.",
    "srcQ": 42
   },
   {
@@ -271,7 +271,7 @@
     "22"
    ],
    "answer": "D",
-   "explanation": "100 −",
+   "explanation": "Convert the rank sum using U₁ = R₁ − n₁(n₁ + 1)/2. Here U₁ = 100 − 12×13/2 = 100 − 78 = 22.",
    "srcQ": 42
   },
   {
@@ -286,7 +286,7 @@
     "ratio"
    ],
    "answer": "A",
-   "explanation": "Q43. Sequence of steps in hypothesis testing A. Checking the assumptions of the test. B. Calculation of test statistic. C. Formation of hypothesis. D. Comparing with the tabulated values. E. Drawing the inference",
+   "explanation": "The Mann–Whitney procedure is based on ordering observations and therefore requires at least ordinal measurement. Interval or ratio data are also suitable because they can be ranked.",
    "srcQ": 42
   },
   {
@@ -301,7 +301,7 @@
     "58"
    ],
    "answer": "A",
-   "explanation": "The two Mann–Whitney statistics add to n₁n₂. Hence U₂ = 8×12 − 34 = 96 − 34 = 62.",
+   "explanation": "The two U statistics add to n₁n₂. Here U₂ = 8×12 − 34 = 96 − 34 = 62; the complementary statistic is not found by subtracting from n₁+n₂.",
    "srcQ": 42
   }
  ]
