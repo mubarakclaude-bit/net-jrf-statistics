@@ -136,7 +136,7 @@ function seedDocs() {
       throw new Error(p + ': original question moduleId does not match its qset');
   }
   if (docs['qsets/pyq_j26_full']) throw new Error('Legacy unsplit original PYQ qset must not be published');
-  const variantSets = Object.entries(docs).filter(([p]) => /^qsets\\/.*_pyq_variants$/.test(p));
+  const variantSets = Object.entries(docs).filter(([p]) => /^qsets\/.*_pyq_variants$/.test(p));
   const variantCount = variantSets.reduce((n, [,b]) => n + (b.items || []).length, 0);
   if (variantCount !== 500) throw new Error('Expected 500 June 2026 PYQ variants; found ' + variantCount);
   const bySource = {}, variantIds = new Set();
