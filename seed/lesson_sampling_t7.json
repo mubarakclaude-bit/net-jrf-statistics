@@ -6,7 +6,7 @@
   "breadcrumb": "Sampling theory → Multistage selection and two-phase sampling",
   "engine": "B",
   "engineName": "Follow the unit-selection path and distinguish it from phases of measurement.",
-  "version": "1.0",
+  "version": "1.1",
   "status": "review",
   "estMin": 95,
   "objectives": [
@@ -58,27 +58,21 @@
           "ask": "What is a PSU?",
           "recall": "The unit selected at the first stage.",
           "refresh": [
-            "A district, village or school may be a PSU.",
-            "Later-stage units are selected within it.",
-            "A PSU need not be the final observation unit."
+            "A primary sampling unit (PSU) is selected at the first stage of a multistage design. It may be a district, village or other group. The PSU is a selection unit, not necessarily the final element about which the study wants information."
           ]
         },
         {
           "ask": "What is an SSU?",
           "recall": "A unit selected within a sampled PSU.",
           "refresh": [
-            "Households may be SSUs within villages.",
-            "Persons may be selected within households.",
-            "Conditional probabilities apply within sampled PSUs."
+            "A secondary sampling unit (SSU) is selected within a sampled PSU at the next stage. The final element can be a household or person selected at a later stage. The overall inclusion probability is the first-stage probability multiplied by the relevant conditional probabilities at each later stage."
           ]
         },
         {
           "ask": "What is double sampling?",
           "recall": "A two-phase design with successive measurement rounds.",
           "refresh": [
-            "Phase one may measure an inexpensive auxiliary variable.",
-            "Phase two measures the costly study variable on a subsample.",
-            "It is not synonymous with two geographical selection levels."
+            "Double sampling, also called two-phase sampling, first collects inexpensive auxiliary information on a large sample and then collects detailed study information on a subsample. It is a sequence of measurement phases; two-stage sampling is a hierarchy of selection units. These are different design dimensions."
           ]
         }
       ],
@@ -544,7 +538,9 @@
       "π_unit=π_stage1×π_stage2|stage1×…",
       "HT contribution=y_unit/π_unit.",
       "Two-phase: phase one auxiliary x; phase two subsample measures y.",
-      "Stages = selection hierarchy; phases = measurement rounds."
+      "Stages = selection hierarchy; phases = measurement rounds.",
+      "Two-stage variance has a between-PSU component and a within-PSU component.",
+      "For a multistage path, multiply the first-stage probability by each conditional later-stage probability to obtain the unit's overall inclusion probability."
     ],
     "cards": [
       [
@@ -566,6 +562,10 @@
       [
         "HT weight",
         "1/overall π"
+      ],
+      [
+        "Two-stage vs two-phase",
+        "Stages describe selection levels; phases describe successive rounds of measurement."
       ]
     ],
     "tricks": [
@@ -575,7 +575,8 @@
     ],
     "shortcuts": [
       "Multiply conditional probabilities along the path.",
-      "In two-phase SRS, (n′/N)(n/n′)=n/N."
+      "In two-phase SRS, (n′/N)(n/n′)=n/N.",
+      "Write the selection path PSU → SSU → final unit, then multiply the conditional probabilities along that path."
     ],
     "remember": [
       "Two-stage and two-phase are not synonyms.",
