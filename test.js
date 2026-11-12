@@ -128,7 +128,7 @@ function seedDocs() {
   docs['meta/app'] = { url: 'https://claude.ai/artifact/TEST', title: 'NET JRF Statistics', v: 4 };
   // Original PYQs must be split into module-scoped qsets so module filters cannot
   // accidentally show all 50 under the legacy parent module.
-  const originalSets = Object.entries(docs).filter(([p]) => /^qsets\\/pyq_j26_/.test(p));
+  const originalSets = Object.entries(docs).filter(([p]) => /^qsets\/pyq_j26_/.test(p));
   const originalCount = originalSets.reduce((n, [,b]) => n + (b.items || []).length, 0);
   if (originalCount !== 50) throw new Error('Expected 50 module-scoped original PYQs; found ' + originalCount);
   for (const [p,b] of originalSets) {
