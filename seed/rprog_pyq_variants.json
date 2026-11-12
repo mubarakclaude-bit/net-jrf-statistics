@@ -53,105 +53,105 @@
    "id": "j26v-q16-04",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "range(c(1, 6, -14, -154, 0)) returns:",
+   "stem": "sort(c(7, 2, 5), decreasing = TRUE) returns:",
    "options": [
-    "6",
-    "-154",
-    "160",
-    "-154 6"
+    "2 5 7",
+    "7 2 5",
+    "5 7 2",
+    "7 5 2"
    ],
    "answer": "D",
-   "explanation": "range() returns the minimum and maximum, not their difference.",
+   "explanation": "The decreasing argument reverses the default ascending order, so the values appear as 7, 5 and 2.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-05",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "which(c(1, 6, -14, -154, 0) < 0) returns:",
+   "stem": "order(c(7, 2, 5)) returns:",
    "options": [
-    "3 4",
-    "-14 -154",
-    "TRUE TRUE",
-    "2"
+    "3 2 1",
+    "1 2 3",
+    "2 3 1",
+    "2 1 3"
    ],
-   "answer": "A",
-   "explanation": "which() returns the positions satisfying the logical condition.",
+   "answer": "C",
+   "explanation": "The smallest value is at position 2, the next at position 3 and the largest at position 1.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-06",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "A function multiplies x by each i in 1:5, starting with x = 1. Its final x is:",
+   "stem": "rank(c(4, 4, 1)) returns under the default average-tie rule:",
    "options": [
-    "1",
-    "120",
-    "20",
-    "5"
+    "2, 2, 1",
+    "2.5, 2.5, 1",
+    "3, 3, 1",
+    "1, 1, 3"
    ],
    "answer": "B",
-   "explanation": "The loop computes 1×2×3×4×5 = 120, which is the factorial 5!.",
+   "explanation": "The two tied values occupy ranks 2 and 3, so each receives their average rank 2.5; the value 1 receives rank 1.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-07",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "matrix(1:6, nrow = 2, ncol = 3) fills the matrix:",
+   "stem": "sort(c(3, 1, 3)) returns:",
    "options": [
-    "diagonally",
-    "by row",
-    "by column",
-    "randomly"
+    "3, 3, 1",
+    "3, 1, 3",
+    "1, 3, 3",
+    "1, 1, 3"
    ],
    "answer": "C",
-   "explanation": "R fills a matrix column-wise unless byrow = TRUE is supplied.",
+   "explanation": "Sorting changes the order but preserves repeated values, producing 1 followed by the two 3s.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-08",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "For two same-sized matrices A and B, A * B performs:",
+   "stem": "order(c(5, 2, 8)) returns:",
    "options": [
-    "an error",
-    "a cross product",
-    "matrix multiplication",
-    "element-wise multiplication"
+    "1, 2, 3",
+    "3, 1, 2",
+    "2, 3, 1",
+    "2, 1, 3"
    ],
    "answer": "D",
-   "explanation": "The * operator multiplies corresponding entries; %*% performs matrix multiplication.",
+   "explanation": "The values in ascending order are 2, 5 and 8, originally at positions 2, 1 and 3.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-09",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "With x <- 3, f <- function(y) { x <- 5; x + y }, f(4) returns:",
+   "stem": "rank(c(9, 2, 5)) returns:",
    "options": [
-    "9",
-    "3",
-    "4",
-    "7"
+    "3, 1, 2",
+    "1, 2, 3",
+    "2, 3, 1",
+    "3, 2, 1"
    ],
    "answer": "A",
-   "explanation": "The local x is 5, so the function returns 5 + 4 = 9.",
+   "explanation": "The smallest value 2 has rank 1, 5 has rank 2 and 9 has rank 3 in their original positions.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-10",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "rev(c(4, 2, 9)) returns:",
+   "stem": "For x <- c(3, 1, 2), x[order(x)] returns:",
    "options": [
-    "9 4 2",
-    "9 2 4",
-    "4 2 9",
-    "2 4 9"
+    "2, 3, 1",
+    "1, 2, 3",
+    "3, 1, 2",
+    "3, 2, 1"
    ],
    "answer": "B",
-   "explanation": "rev() reverses the existing order; it does not sort the values.",
+   "explanation": "order(x) supplies the sorting permutation; indexing x by it returns the values in ascending order.",
    "srcQ": 16
   },
   {
@@ -383,36 +383,6 @@
    "id": "j26v-q48-06",
    "format": "single",
    "topic": "June 2026 paper · Q48",
-   "stem": "The default denominator used by var(x) in R is:",
-   "options": [
-    "n",
-    "n + 1",
-    "n - 2",
-    "n - 1"
-   ],
-   "answer": "D",
-   "explanation": "var() computes the sample variance using n−1 degrees of freedom.",
-   "srcQ": 48
-  },
-  {
-   "id": "j26v-q48-07",
-   "format": "single",
-   "topic": "June 2026 paper · Q48",
-   "stem": "For a numeric vector without missing values, summary(x) reports:",
-   "options": [
-    "min, Q1, median, mean, Q3, max",
-    "a plot",
-    "only the mean",
-    "the variance"
-   ],
-   "answer": "A",
-   "explanation": "The default numeric summary includes the five-number summary plus the mean.",
-   "srcQ": 48
-  },
-  {
-   "id": "j26v-q48-08",
-   "format": "single",
-   "topic": "June 2026 paper · Q48",
    "stem": "min(c(7, -2, 4)) returns:",
    "options": [
     "7",
@@ -425,7 +395,7 @@
    "srcQ": 48
   },
   {
-   "id": "j26v-q48-09",
+   "id": "j26v-q48-07",
    "format": "single",
    "topic": "June 2026 paper · Q48",
    "stem": "max(c(7, -2, 4)) returns:",
@@ -440,7 +410,7 @@
    "srcQ": 48
   },
   {
-   "id": "j26v-q48-10",
+   "id": "j26v-q48-08",
    "format": "single",
    "topic": "June 2026 paper · Q48",
    "stem": "which.min(c(9, 2, 5)) returns:",
@@ -451,7 +421,37 @@
     "2"
    ],
    "answer": "D",
-   "explanation": "The minimum value is at position 2; which.min() returns that position.",
+   "explanation": "The minimum value is at position 2; which.min() returns that position, not the value.",
+   "srcQ": 48
+  },
+  {
+   "id": "j26v-q48-09",
+   "format": "single",
+   "topic": "June 2026 paper · Q48",
+   "stem": "which(c(2, 5, 1, 5) == 5) returns:",
+   "options": [
+    "2 4",
+    "5",
+    "1 3",
+    "TRUE FALSE"
+   ],
+   "answer": "A",
+   "explanation": "The condition is true at the second and fourth positions, so which() returns 2 and 4.",
+   "srcQ": 48
+  },
+  {
+   "id": "j26v-q48-10",
+   "format": "single",
+   "topic": "June 2026 paper · Q48",
+   "stem": "range(c(-3, 2, 7)) returns:",
+   "options": [
+    "-3",
+    "-3 7",
+    "7",
+    "10"
+   ],
+   "answer": "B",
+   "explanation": "range() returns the minimum and maximum as two endpoints: −3 and 7.",
    "srcQ": 48
   },
   {
