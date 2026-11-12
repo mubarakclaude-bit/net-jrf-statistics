@@ -3,6 +3,10 @@
 ## Scope
 Statement ordering, sequential evaluation, assignments, conditional branches, loops, break/next, printed output and returned values.
 
+## June 2026 Paper 2 anchor
+
+Anchor: Q50, the R program statement-ordering item. Ten practice variants (`j26v-q50-01`…`-10`) are stored in `seed/rprog_pyq_variants.json`; these are not verbatim official questions.
+
 ## Primary references
 - R Language Definition: https://cran.r-project.org/doc/manuals/r-release/R-lang.html
 - R Core Team, Control Flow: https://stat.ethz.ch/R-manual/R-devel/library/base/html/Control.html
