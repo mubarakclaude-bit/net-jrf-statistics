@@ -92,9 +92,10 @@ if fix and drift+missing:
     json.dump(idx,io.open('seed/meta_lessons.json','w',encoding='utf-8'),ensure_ascii=False,indent=1)
     print('\nFIXED %d index entries. The store still serves the old values until you push'%len(drift+missing))
     print('seed/meta_lessons.json AND every lesson whose version changed.')
+    bad=0
 elif not bad:
     print('clean: %d lessons, index and harness agree with the seeds on disk'%len(seeds))
-sys.exit(0)
+sys.exit(1 if bad else 0)
 PYEOF
 
 # Keep Probability question-bank totals and all 13 mastery pools independently verified.

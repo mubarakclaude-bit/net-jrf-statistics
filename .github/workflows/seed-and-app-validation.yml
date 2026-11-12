@@ -52,6 +52,16 @@ jobs:
             node vcheck.js "seed/lesson_rg${topic}.json"
             python "verify_regression_t${topic}.py"
           done
+      - name: Validate Stochastic Processes and Multivariate Analysis lessons and mastery pools
+        run: |
+          for topic in t1 t2 t3 t4 t5 t6 t7 t8 t9; do
+            echo "=== Stochastic ${topic} ==="
+            node vcheck.js "seed/lesson_stochastic_${topic}.json"
+            python "verify_stochastic_${topic}.py"
+            echo "=== Multivariate ${topic} ==="
+            node vcheck.js "seed/lesson_multivariate_${topic}.json"
+            python "verify_multivariate_${topic}.py"
+          done
       - name: Build app and check JavaScript syntax
         run: ./build.sh
       - name: Install browser test dependency

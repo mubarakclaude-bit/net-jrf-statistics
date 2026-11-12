@@ -1,0 +1,603 @@
+{
+ "id": "multivariatet6",
+ "topicId": "multivariate-t6",
+ "moduleId": "multivariate",
+ "title": "Canonical Correlation: relationships between two variable sets",
+ "breadcrumb": "Module 8 · Multivariate Analysis · Canonical correlation",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 94,
+ "objectives": [
+  "Explain canonical correlation as the maximum correlation between linear combinations of two variable sets.",
+  "Partition a joint covariance matrix into within-set and cross-covariance blocks.",
+  "Compute canonical correlations using singular values of a standardized cross-covariance matrix.",
+  "Use eigenvalues to obtain squared canonical correlations and interpret the largest root.",
+  "Solve the June 2026 Paper 2 Q20 matrix problem."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Covariance and correlation matrices",
+   "why": "The method uses within-set covariance blocks and cross-covariances."
+  },
+  {
+   "id": "p2",
+   "name": "Matrix inverse and eigenvalues",
+   "why": "Squared canonical correlations are eigenvalues of a matrix built from covariance blocks."
+  },
+  {
+   "id": "p3",
+   "name": "Linear combinations",
+   "why": "Canonical variates are weighted linear combinations of the original variables."
+  }
+ ],
+ "traps": [
+  "Canonical correlation is between two optimally weighted linear combinations, not necessarily one raw variable from each set.",
+  "Eigenvalues of C′C are squared canonical correlations; take square roots to report correlations.",
+  "Standardise the cross block using both within-set covariance matrices.",
+  "The number of nonzero roots cannot exceed min(p,q).",
+  "If both within-set blocks are identity matrices, canonical correlations are singular values of the cross block.",
+  "The first canonical pair maximises correlation; later pairs obey within-set uncorrelatedness constraints."
+ ],
+ "revision": {
+  "sheet": [
+   "Partition Σ=[[Σ₁₁,Σ₁₂],[Σ₂₁,Σ₂₂]] for X (p variables) and Y (q variables).",
+   "Canonical variates are U=a′X and V=b′Y; choose weights to maximise Corr(U,V).",
+   "C=Σ₁₁⁻¹/²Σ₁₂Σ₂₂⁻¹/²; canonical correlations are singular values of C.",
+   "Squared canonical correlations are eigenvalues of C′C or CC′.",
+   "There are at most min(p,q) roots, ordered from largest to smallest.",
+   "June 2026 Q20: C=[[.5,0],[.3,.4]], roots .40 and .10; maximum correlation √.40≈.632, option B.",
+   "Canonical variates are standardised to variance one before the correlation is maximised.",
+   "If C is p×q, use C′C (q×q) or CC′ (p×p); their nonzero eigenvalues agree."
+  ],
+  "cards": [
+   [
+    "Canonical variates",
+    "U=a′X; V=b′Y"
+   ],
+   [
+    "Covariance partition",
+    "Σ₁₁, Σ₁₂, Σ₂₁, Σ₂₂"
+   ],
+   [
+    "Standardized cross block",
+    "C=Σ₁₁⁻¹/²Σ₁₂Σ₂₂⁻¹/²"
+   ],
+   [
+    "Canonical roots",
+    "Eigenvalues of C′C"
+   ],
+   [
+    "Canonical correlations",
+    "Singular values of C"
+   ],
+   [
+    "Maximum number",
+    "min(p,q)"
+   ]
+  ],
+  "tricks": [
+   "If Σ₁₁=I and Σ₂₂=I, use singular values of Σ₁₂ directly.",
+   "For a 2×2 C′C, use trace and determinant to check eigenvalues.",
+   "Take square roots only when the question asks for canonical correlations."
+  ],
+  "shortcuts": [
+   "Check dimensions: C is p×q and C′C is q×q.",
+   "Canonical correlations lie between zero and one for a valid nonsingular covariance matrix.",
+   "Report the largest correlation, not its square, when asked for maximum canonical correlation."
+  ],
+  "remember": [
+   "Canonical correlation links two sets through optimally chosen linear combinations.",
+   "Singular values of the standardized cross-covariance matrix are canonical correlations."
+  ]
+ },
+ "howto": "Partition the joint covariance matrix into within-X, cross and within-Y blocks. Standardise the cross block on both sides, then find its singular values. Equivalently, find eigenvalues of C′C and take nonnegative square roots. In June 2026 Q20 both within-set blocks are identity, so the calculation reduces to a 2×2 singular-value problem.",
+ "refs": [
+  {
+   "title": "Applied Multivariate Statistical Analysis",
+   "where": "Canonical correlation analysis",
+   "site": "Johnson and Wichern",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Classical derivation of canonical variates, canonical roots and inference."
+  },
+  {
+   "title": "Applied Multivariate Statistical Analysis",
+   "where": "Canonical correlation",
+   "site": "Penn State STAT 505",
+   "url": "https://online.stat.psu.edu/stat505/",
+   "type": "Free course notes",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Accessible multivariate course material."
+  },
+  {
+   "title": "Methods of Multivariate Analysis",
+   "where": "Canonical correlation analysis",
+   "site": "Rencher and Christensen",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Detailed treatment of canonical coefficients and roots."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [
+  {
+   "paper": "j26",
+   "q": 20
+  }
+ ],
+ "provenance": "Authored 11 November 2026. Anchored to June 2026 Paper 2 Q20 (j26-q20) in seed/pyq_j26_full.json. Both within-set covariance blocks are I₂, so the canonical correlations are singular values of B=[[0.5,0],[0.3,0.4]]. B′B has eigenvalues 0.40 and 0.10; the maximum is √0.40≈0.632 (official option B).",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Two sets, one relationship question",
+   "objective": "Recall covariance and correlation ingredients.",
+   "body": [
+    "Research often measures two groups of variables on the same individuals. For example, students may have aptitude scores and achievement scores. The question is how strongly the two sets can be related when each side is allowed to form a weighted composite.",
+    "A covariance matrix has variances on its diagonal and covariances off the diagonal. Correlation is scale-free and lies between −1 and 1.",
+    "Canonical correlation chooses one linear combination from each set to maximise their correlation."
+   ],
+   "items": [
+    {
+     "ask": "What do diagonal entries of a covariance matrix represent?",
+     "recall": "Variances.",
+     "refresh": [
+      "For X=(X₁,…,Xₚ)′, the diagonal entry Sⱼⱼ is the variance of variable j. These values describe the variability of each coordinate separately.",
+      "The off-diagonal entry Sⱼₖ is the covariance between variables j and k. These terms matter because optimal composites depend on how variables vary together."
+     ]
+    },
+    {
+     "ask": "What is a linear combination of a two-variable vector X?",
+     "recall": "a′X=a₁X₁+a₂X₂.",
+     "refresh": [
+      "A coefficient vector a=(a₁,a₂)′ assigns a weight to each variable. Multiplication a′X creates one scalar composite from the original measurements.",
+      "Different weights produce different composites. Canonical correlation searches for weights on both sets that maximise the correlation between the two composites."
+     ]
+    },
+    {
+     "ask": "What is the range of an ordinary correlation?",
+     "recall": "−1 to 1.",
+     "refresh": [
+      "Correlation is covariance divided by the product of the two standard deviations, when both variances are positive.",
+      "The Cauchy–Schwarz inequality bounds correlation between −1 and 1. Canonical correlations are nonnegative magnitudes between zero and one."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "Why might two variable sets be related even if no single raw pair has the strongest relationship?",
+    "nudge": "Think about weighted combinations that collect information across several variables."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "The best pair of composite scores",
+   "objective": "Interpret the first canonical correlation.",
+   "body": [
+    "Let X contain p variables and Y contain q variables. Choose weights a and b and form U=a′X and V=b′Y. The first canonical correlation is the maximum possible Corr(U,V).",
+    "The weights are selected to make the composites strongly correlated while each composite is scaled to have variance one.",
+    "The first pair captures the strongest linear link between the sets. Later pairs describe remaining relationships subject to within-set uncorrelatedness constraints."
+   ],
+   "scenario": {
+    "teaser": "Aptitude and achievement data",
+    "title": "Two measurement batteries",
+    "body": [
+     "A university records three aptitude measures and two achievement measures for each student. Comparing each aptitude score with each achievement score may miss a relationship spread across several measures. Canonical correlation allows each set to form a weighted composite and selects the pair with the largest possible correlation. A second pair can then describe remaining association without duplicating the first pair’s within-set information."
+    ],
+    "q": "What is maximised?",
+    "answer": "The correlation between one linear combination from X and one from Y."
+   },
+   "ask": {
+    "q": "How is this different from calculating all pairwise correlations?",
+    "nudge": "The weights for both composites are optimised simultaneously."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 10,
+   "title": "Covariance partition and canonical roots",
+   "objective": "Set up the matrix formulation.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Partition the joint covariance",
+     "body": "Σ=[[Σ₁₁,Σ₁₂],[Σ₂₁,Σ₂₂]], where Σ₁₁=Cov(X), Σ₂₂=Cov(Y), Σ₁₂=Cov(X,Y), and Σ₂₁=Σ₁₂′."
+    },
+    {
+     "t": "formula",
+     "h": "Standardized cross-covariance",
+     "body": "C=Σ₁₁⁻¹/²Σ₁₂Σ₂₂⁻¹/². The singular values of C are the canonical correlations ρ₁≥ρ₂≥…≥0."
+    },
+    {
+     "t": "formula",
+     "h": "Squared canonical correlations",
+     "body": "ρᵢ² are the nonzero eigenvalues of C′C or CC′, equivalently of the covariance-block eigenvalue formulation."
+    },
+    {
+     "t": "def",
+     "h": "Number of roots",
+     "body": "There can be at most min(p,q) canonical correlations. Order them from largest to smallest; take nonnegative square roots of squared roots."
+    }
+   ],
+   "flow": {
+    "title": "Canonical correlation calculation",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Partition Σ into four blocks",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Standardise the cross block",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Find singular values of C",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Order canonical correlations",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
+   },
+   "ask": {
+    "q": "If X has three variables and Y has two, what is the maximum number of roots?",
+    "nudge": "Use the smaller of p and q."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 11,
+   "title": "June 2026 Paper 2 Q20 — maximum canonical correlation",
+   "objective": "Solve the official matrix question.",
+   "problem": "Both within-set covariance blocks are I₂ and the cross block is B=[[0.5,0],[0.3,0.4]]. Find the maximum canonical correlation.",
+   "steps": [
+    {
+     "say": "Use the identity within-set blocks.",
+     "math": "C=B.",
+     "why": "Whitening by identity matrices leaves the cross block unchanged."
+    },
+    {
+     "say": "Form B′B.",
+     "math": "B′B=[[0.34,0.12],[0.12,0.16]].",
+     "why": "The diagonal entries are .25+.09=.34 and .16; the off-diagonal is .3×.4=.12."
+    },
+    {
+     "say": "Find its eigenvalues.",
+     "math": "tr=.50; det=.04; λ²−.50λ+.04=0 ⇒ λ=.40,.10.",
+     "why": "The roots sum to the trace and multiply to the determinant."
+    },
+    {
+     "say": "Take square roots.",
+     "math": "ρ₁=√.40≈.632; ρ₂=√.10≈.316.",
+     "why": "Eigenvalues of B′B are squared canonical correlations."
+    },
+    {
+     "say": "Report the maximum.",
+     "math": "Maximum ≈0.63, option B.",
+     "why": "The question asks for correlation, not squared correlation."
+    }
+   ],
+   "ask": {
+    "q": "Why is 0.40 not the final answer?",
+    "nudge": "It is a squared canonical correlation."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 5,
+   "title": "Retrieve the core definitions",
+   "objective": "Recall the matrix recipe.",
+   "intro": "Answer from memory.",
+   "items": [
+    {
+     "q": "What are the two canonical variates?",
+     "a": "U=a′X and V=b′Y."
+    },
+    {
+     "q": "What does Σ₁₂ contain?",
+     "a": "Covariances between variables in X and variables in Y."
+    },
+    {
+     "q": "What are singular values of C?",
+     "a": "Canonical correlations."
+    },
+    {
+     "q": "What do eigenvalues of C′C represent?",
+     "a": "Squared canonical correlations."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s5",
+   "mins": 7,
+   "title": "Complete a canonical-root calculation",
+   "objective": "Connect eigenvalues to reported correlations.",
+   "problem": "Suppose C′C has eigenvalues 0.64 and 0.09. Complete the canonical correlations.",
+   "steps": [
+    {
+     "say": "Take the square root of the larger eigenvalue.",
+     "math": "ρ₁=√",
+     "why": "Eigenvalues are squared correlations.",
+     "blank": {
+      "prompt": "Enter the first correlation.",
+      "answer": "0.8",
+      "accept": [
+       "0.8",
+       ".8"
+      ],
+      "hint": "Find √0.64."
+     }
+    },
+    {
+     "say": "Take the square root of the second eigenvalue.",
+     "math": "ρ₂=√",
+     "why": "Canonical correlations are nonnegative.",
+     "blank": {
+      "prompt": "Enter the second correlation.",
+      "answer": "0.3",
+      "accept": [
+       "0.3",
+       ".3"
+      ],
+      "hint": "Find √0.09."
+     }
+    },
+    {
+     "say": "State which pair is stronger.",
+     "math": "The first correlation is",
+     "why": "Roots are ordered from largest to smallest.",
+     "blank": {
+      "prompt": "Enter the larger value.",
+      "answer": "0.8",
+      "accept": [
+       "0.8",
+       ".8"
+      ],
+      "hint": "Compare the two square roots."
+     }
+    }
+   ],
+   "after": "The canonical correlations are 0.80 and 0.30.",
+   "ask": {
+    "q": "If the question asks for the largest squared canonical correlation, what do you report?",
+    "nudge": "Do not take a square root in that case."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Canonical variates and interpretation",
+   "objective": "Interpret first and later canonical pairs.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Variance normalisation",
+     "body": "Choose a and b so Var(a′X)=1 and Var(b′Y)=1. Maximising covariance then maximises correlation."
+    },
+    {
+     "t": "def",
+     "h": "First pair",
+     "body": "The first canonical pair maximises Corr(a′X,b′Y) over admissible weights and captures the strongest linear association between the sets."
+    },
+    {
+     "t": "def",
+     "h": "Later pairs",
+     "body": "Subsequent pairs are constrained to be uncorrelated with earlier canonical variates within their own sets. Their correlations cannot exceed the first."
+    },
+    {
+     "t": "formula",
+     "h": "Identity-block case",
+     "body": "If Σ₁₁=Iₚ and Σ₂₂=I_q, then C=Σ₁₂ and the canonical correlations are singular values of the cross block."
+    }
+   ],
+   "ask": {
+    "q": "Why can a later canonical correlation not exceed the first?",
+    "nudge": "The first pair is the global maximum."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided practice: unequal within-set scales",
+   "objective": "Standardise covariance blocks before finding roots.",
+   "problem": "Let Σ₁₁=diag(4,1), Σ₂₂=diag(1,9), and Σ₁₂=diag(1,1). Find the canonical correlations.",
+   "hints": [
+    "Find the diagonal inverse square roots of Σ₁₁ and Σ₂₂.",
+    "Form C=Σ₁₁⁻¹/²Σ₁₂Σ₂₂⁻¹/²; it is diagonal.",
+    "The singular values of a diagonal matrix are absolute diagonal entries."
+   ],
+   "answer": "C=diag(1/2,1/3), so the canonical correlations are 0.50 and 0.333.",
+   "check": "Both values lie between zero and one and are ordered descending.",
+   "solution": [
+    {
+     "say": "Whiten the X block.",
+     "math": "Σ₁₁⁻¹/²=diag(1/2,1).",
+     "why": "Take reciprocal square roots of the variances."
+    },
+    {
+     "say": "Whiten the Y block.",
+     "math": "Σ₂₂⁻¹/²=diag(1,1/3).",
+     "why": "The reciprocal square root of 9 is 1/3."
+    },
+    {
+     "say": "Multiply the diagonal matrices.",
+     "math": "C=diag(1/2,1/3).",
+     "why": "The cross block is identity."
+    },
+    {
+     "say": "Read singular values.",
+     "math": "ρ₁=0.5; ρ₂=1/3.",
+     "why": "For a diagonal matrix the singular values are absolute diagonal entries."
+    }
+   ],
+   "scenario": {
+    "teaser": "Different measurement units",
+    "title": "Standardise before comparing",
+    "body": [
+     "A health study combines two physiological measures with variances four and one, and two lifestyle measures with variances one and nine. The cross-covariance block is diagonal with unit entries. Raw cross-covariances ignore the different within-set scales. Canonical correlation standardises on both sides, producing correlations one-half and one-third so the two links can be compared directly. This scaling step is essential whenever the variables have different measurement units or markedly different variances. The singular values after standardisation describe the strength of association independently of the original units, while the coefficients indicate which variables contribute to each composite. Always retain the full matrix product rather than comparing the cross-covariances informally."
+    ],
+    "q": "Why does the second cross-covariance become one-third?",
+    "answer": "It is divided by standard deviations 1 and 3."
+   },
+   "ask": {
+    "q": "What mistake occurs if you use Σ₁₂ alone here?",
+    "nudge": "You would ignore unequal variances."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s8",
+   "mins": 6,
+   "title": "Exam traps: correlation or squared root?",
+   "objective": "Identify common errors.",
+   "intro": "Mark each statement true or false.",
+   "items": [
+    {
+     "claim": "The largest eigenvalue of C′C is the largest canonical correlation.",
+     "tf": false,
+     "why": "It is the largest squared canonical correlation; take its square root."
+    },
+    {
+     "claim": "The number of nonzero canonical correlations cannot exceed min(p,q).",
+     "tf": true,
+     "why": "The rank of a p×q matrix cannot exceed the smaller dimension."
+    },
+    {
+     "claim": "With identity within-set covariance blocks, canonical correlations are singular values of Σ₁₂.",
+     "tf": true,
+     "why": "The standardising factors are identity matrices."
+    },
+    {
+     "claim": "Canonical correlation is the correlation between two optimally chosen linear combinations.",
+     "tf": true,
+     "why": "The weights on both sets are selected to maximise composite correlation."
+    }
+   ],
+   "ask": {
+    "q": "What do you square to obtain eigenvalues of C′C?",
+    "nudge": "Singular values are correlations; their squares are eigenvalues."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s9",
+   "mins": 8,
+   "title": "Transfer problem: compute the maximum root",
+   "objective": "Find a largest canonical correlation from a 2×2 matrix.",
+   "problem": "Suppose C′C=[[0.5,0.1],[0.1,0.2]]. Find the largest canonical correlation.",
+   "hints": [
+    "Find trace and determinant.",
+    "Solve λ²−(trace)λ+determinant=0.",
+    "Take the square root of the larger eigenvalue."
+   ],
+   "answer": "Trace=.7, determinant=.09; roots are (0.7±√.13)/2, so the larger root is about .5303 and the maximum correlation is about .728.",
+   "check": "The largest squared root is about .5303; its square root is about .728.",
+   "solution": [
+    {
+     "say": "Compute trace and determinant.",
+     "math": "tr=.7; det=.5(.2)−.1²=.09.",
+     "why": "These determine the characteristic polynomial."
+    },
+    {
+     "say": "Solve the quadratic.",
+     "math": "λ=(.7±√.13)/2.",
+     "why": "The discriminant is .49−.36=.13."
+    },
+    {
+     "say": "Take the square root of the larger root.",
+     "math": "λ₁≈.5303; ρ₁≈.728.",
+     "why": "The eigenvalue is the squared canonical correlation."
+    }
+   ],
+   "ask": {
+    "q": "What is the final step if the question asks for correlation?",
+    "nudge": "Take the square root of the largest eigenvalue."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s10",
+   "mins": 5,
+   "title": "Exam routine: partition, standardise, take singular values",
+   "objective": "Summarise the workflow.",
+   "body": [
+    "Canonical correlation studies the strongest linear relationship between two variable sets through U=a′X and V=b′Y.",
+    "Partition the joint covariance into Σ₁₁, Σ₁₂, Σ₂₁ and Σ₂₂. Standardise the cross block as C=Σ₁₁⁻¹/²Σ₁₂Σ₂₂⁻¹/².",
+    "The singular values of C are canonical correlations; eigenvalues of C′C are their squares.",
+    "There are at most min(p,q) roots, ordered descending.",
+    "June 2026 Q20: roots .40 and .10; maximum correlation √.40≈.63, option B."
+   ],
+   "ask": {
+    "q": "State the three steps in a numerical problem.",
+    "nudge": "Partition, standardise, then solve for roots."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s11",
+   "mins": 10,
+   "title": "Unseen mastery test",
+   "objective": "Apply canonical correlation independently.",
+   "setId": "multivariate_t6_mastery"
+  }
+ ]
+}
