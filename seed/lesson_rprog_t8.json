@@ -1,0 +1,577 @@
+{
+ "id": "rprogt8",
+ "topicId": "rprog-t8",
+ "moduleId": "rprog",
+ "title": "Data frames, data input/output, graphics and plots in R",
+ "breadcrumb": "Module 9 · R Programming · Data frames, I/O and graphics",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 90,
+ "objectives": [
+  "Create and inspect data frames and select rows and columns.",
+  "Understand recycling and equal-length column requirements.",
+  "Read common data import and export functions.",
+  "Interpret plot(), hist(), boxplot(), barplot() and graphical arguments.",
+  "Distinguish plot types, axes, labels and graphical device output."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Vectors and lists",
+   "why": "Data frames are list-like objects with equal-length columns."
+  },
+  {
+   "id": "p2",
+   "name": "Indexing and logical conditions",
+   "why": "Rows and columns are selected with indices and conditions."
+  },
+  {
+   "id": "p3",
+   "name": "Basic descriptive statistics",
+   "why": "Plots and summaries describe observed data."
+  }
+ ],
+ "traps": [
+  "A data frame is a list of variables with equal-length columns.",
+  "data.frame() may recycle shorter columns only when lengths are compatible, such as a divisor; otherwise it errors.",
+  "df[row,column] uses row first and column second.",
+  "df$var selects a column; df[ , 'var', drop=FALSE] can preserve a data-frame result.",
+  "read.csv() imports comma-separated data; write.csv() exports it.",
+  "read.table() is a general delimited text reader.",
+  "plot() is generic; output depends on object classes and method.",
+  "hist() displays a frequency distribution; boxplot() summarises median, quartiles and potential outliers.",
+  "barplot() displays bar heights; plot(type='l') draws lines.",
+  "Graphical labels use main, xlab and ylab; axes and limits can be controlled."
+ ],
+ "revision": {
+  "sheet": [
+   "data.frame(x,y) combines equal-length columns into a rectangular object.",
+   "nrow(df), ncol(df), dim(df), names(df) inspect structure.",
+   "df[i,j] selects rows then columns; df$var selects a column.",
+   "df[df$score>50,] selects rows using a logical condition.",
+   "Use drop=FALSE to preserve a one-column data-frame result.",
+   "read.csv(file) imports comma-separated data.",
+   "read.table(file,header=TRUE) imports general delimited text data.",
+   "write.csv(df,file,row.names=FALSE) exports a CSV without row names.",
+   "plot(x,y) creates a scatter plot by default for numeric vectors.",
+   "hist(x) shows a frequency distribution; boxplot(x) shows a five-number summary and potential outliers.",
+   "barplot(height) displays bar heights; plot(x,type='l') draws a line plot.",
+   "main, xlab and ylab set title and axis labels."
+  ],
+  "cards": [
+   [
+    "data.frame()",
+    "Rectangular tabular object"
+   ],
+   [
+    "df[i,j]",
+    "Rows then columns"
+   ],
+   [
+    "read.csv()",
+    "Import CSV"
+   ],
+   [
+    "write.csv()",
+    "Export CSV"
+   ],
+   [
+    "plot()",
+    "Generic plot"
+   ],
+   [
+    "hist()",
+    "Histogram"
+   ],
+   [
+    "boxplot()",
+    "Box-and-whisker plot"
+   ],
+   [
+    "barplot()",
+    "Bar heights"
+   ]
+  ],
+  "tricks": [
+   "Check equal column lengths before data.frame().",
+   "Remember row index first, column index second.",
+   "Use row.names=FALSE for clean CSV export.",
+   "Match plot type to variable structure."
+  ],
+  "shortcuts": [
+   "Inspect dim() and names() first.",
+   "Write row and column subscripts explicitly.",
+   "Choose histogram for one numeric variable.",
+   "Choose scatter plot for two numeric variables."
+  ],
+  "remember": [
+   "Data frames have equal-length columns.",
+   "Index rows before columns.",
+   "read imports; write exports.",
+   "hist is distribution; boxplot is spread; scatter plot is relationship.",
+   "main, xlab and ylab label a plot."
+  ]
+ },
+ "howto": "Inspect a data frame with dim(), names() and str(). Select rows and columns deliberately. Choose an import/export function based on the file format. For plots, identify variable types and the question before selecting a graph, then label axes and title.",
+ "refs": [
+  {
+   "title": "R Documentation: data.frame",
+   "where": "Data frames",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/data.frame.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Data frame construction and structure."
+  },
+  {
+   "title": "R Documentation: read.table",
+   "where": "Data import",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/utils/html/read.table.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Delimited text and CSV import."
+  },
+  {
+   "title": "R Documentation: plot",
+   "where": "Graphics",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/plot.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Generic plotting and graphical arguments."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [],
+ "provenance": "Catalog rprog-t8: Data frames, data input/output, graphics and plots. Content aligned to base R documentation; no unsupported PYQ anchor is claimed.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 8,
+   "title": "A data frame is a rectangular object",
+   "objective": "Understand data-frame structure.",
+   "body": [
+    "A data frame stores variables as columns. Each column has the same number of rows, while different columns may have different types.",
+    "Use data.frame() to combine vectors into columns. Inspect dimensions with dim(), nrow() and ncol().",
+    "Use names() and str() to inspect variable names and structure."
+   ],
+   "items": [
+    {
+     "ask": "What is a data frame?",
+     "recall": "A rectangular object whose columns have compatible equal lengths.",
+     "refresh": [
+      "A data frame is a list-like rectangular structure in which each variable is stored as a column. Each column has one entry per row, although different columns can have different data types.",
+      "Use dim(), nrow(), ncol(), names() and str() to inspect the object before selecting observations. This confirms the dimensions, variables and storage types used in subsequent expressions."
+     ]
+    },
+    {
+     "ask": "In df[i,j], what is indexed first?",
+     "recall": "Rows are indexed first, then columns.",
+     "refresh": [
+      "The first subscript in df[i,j] selects rows and the second selects columns. A blank row or column position means that all entries in that dimension are retained.",
+      "For a logical filter, construct the condition from a column and place it in the row position, such as df[df$score>50,]. This returns the observations satisfying the condition."
+     ]
+    },
+    {
+     "ask": "Which function imports a comma-separated file?",
+     "recall": "read.csv().",
+     "refresh": [
+      "read.csv() reads a comma-separated values file and returns a data frame by default. It is a convenient choice when the first line contains variable names.",
+      "The corresponding export function is write.csv(). When exporting a data frame for reuse, consider row.names=FALSE so that row numbers are not written as an additional data column."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "Which function displays a data frame's structure?",
+    "nudge": "Use str()."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "Rows and columns answer different questions",
+   "objective": "Select data-frame elements.",
+   "body": [
+    "df[i,j] selects rows first and columns second. df$score extracts the score column.",
+    "A logical row condition such as df[df$score>50,] selects observations satisfying the condition."
+   ],
+   "scenario": {
+    "teaser": "Filter student records",
+    "title": "A tutor selects qualifying students",
+    "body": [
+     "A tutor has a data frame with name and score columns. To select students scoring above 50, the row condition is applied to the score column.",
+     "The result contains complete rows for qualifying students, not just the score values.",
+     " Before sharing the result, the analyst should inspect the dimensions and variable names, check that the filter selects the intended records, and label the graph so its variables and units are clear. The chosen plot should answer the analytical question rather than simply display whatever data structure is easiest to pass to a plotting function."
+    ],
+    "q": "Which expression selects rows with score above 50?",
+    "answer": "df[df$score>50,]."
+   },
+   "ask": {
+    "q": "In df[i,j], what does i represent?",
+    "nudge": "It is the row subscript."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 10,
+   "title": "Construction and indexing",
+   "objective": "Create and select data-frame columns.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Construction",
+     "body": "data.frame(id=c(1,2),score=c(70,85)) creates two columns and two rows."
+    },
+    {
+     "t": "formula",
+     "h": "Indexing",
+     "body": "df[i,j] selects rows i and columns j. df$score selects the named column."
+    },
+    {
+     "t": "step",
+     "h": "Preserve class",
+     "body": "Use drop=FALSE when a subset should remain a data frame, especially when one column is selected."
+    }
+   ],
+   "flow": {
+    "title": "Select a data-frame subset",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Identify rows",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Write row condition",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Select columns",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Preserve class if needed",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
+   },
+   "ask": {
+    "q": "How do you select the score column by name?",
+    "nudge": "Use the dollar operator."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 10,
+   "title": "Inspect and subset a data frame",
+   "objective": "Compute dimensions and filter rows.",
+   "problem": "df=data.frame(id=1:3,score=c(40,60,80)). How many rows and columns? Which ids have score>50?",
+   "steps": [
+    {
+     "say": "Count columns and rows.",
+     "math": "3 rows, 2 columns.",
+     "why": "Each vector has length 3 and there are two variables."
+    },
+    {
+     "say": "Evaluate the condition.",
+     "math": "score>50 gives FALSE, TRUE, TRUE.",
+     "why": "Only the second and third observations qualify."
+    },
+    {
+     "say": "Extract ids.",
+     "math": "c(2,3).",
+     "why": "Rows 2 and 3 meet the condition."
+    }
+   ],
+   "ask": {
+    "q": "What is dim(df)?",
+    "nudge": "Rows first, then columns."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 6,
+   "title": "Data import and export cards",
+   "objective": "Recall common I/O functions.",
+   "intro": "Recall each function.",
+   "items": [
+    {
+     "q": "read.csv()",
+     "a": "Import comma-separated values."
+    },
+    {
+     "q": "write.csv()",
+     "a": "Export a data frame to CSV."
+    },
+    {
+     "q": "read.table()",
+     "a": "Import general delimited text."
+    },
+    {
+     "q": "names(df)",
+     "a": "Return column names."
+    },
+    {
+     "q": "str(df)",
+     "a": "Display object structure."
+    }
+   ],
+   "ask": {
+    "q": "Which function imports a CSV file?",
+    "nudge": "read.csv()."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 10,
+   "title": "Read and write data",
+   "objective": "Choose import and export functions.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Import CSV",
+     "body": "read.csv('data.csv') reads comma-separated values and treats the first row as column names by default."
+    },
+    {
+     "t": "formula",
+     "h": "General text import",
+     "body": "read.table() reads tabular text and provides arguments such as header and sep."
+    },
+    {
+     "t": "step",
+     "h": "Export",
+     "body": "write.csv(df,'out.csv',row.names=FALSE) writes data without an extra row-name column."
+    }
+   ],
+   "ask": {
+    "q": "How do you prevent row names from being written to CSV?",
+    "nudge": "Set row.names=FALSE."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s6",
+   "mins": 8,
+   "title": "Choose an import/export function",
+   "objective": "Interpret file I/O calls.",
+   "problem": "A comma-separated file named sample.csv must be imported, then a cleaned data frame exported without row names. Write the calls.",
+   "hints": [
+    "Use read.csv() for comma-separated input.",
+    "Use write.csv() for export.",
+    "Set row.names=FALSE in the export call."
+   ],
+   "answer": "df <- read.csv('sample.csv'); write.csv(df,'clean.csv',row.names=FALSE).",
+   "check": "The input and output functions match the CSV format.",
+   "ask": {
+    "q": "What does read.table(...,header=TRUE) indicate?",
+    "nudge": "The first row contains column names."
+   },
+   "solution": [
+    {
+     "say": "Inspect the dimensions.",
+     "math": "There are 3 rows and 2 columns.",
+     "why": "The id and score vectors each contain three entries."
+    },
+    {
+     "say": "Evaluate the row condition.",
+     "math": "score > 50 gives FALSE, TRUE, TRUE.",
+     "why": "Only the second and third scores exceed 50."
+    },
+    {
+     "say": "Read the qualifying ids.",
+     "math": "The selected ids are 2 and 3.",
+     "why": "The logical condition selects complete rows two and three."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Choose the appropriate plot",
+   "objective": "Match graph type to data.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Histogram",
+     "body": "hist(x) displays the frequency distribution of one quantitative variable."
+    },
+    {
+     "t": "def",
+     "h": "Boxplot",
+     "body": "boxplot(x) displays median, quartiles, spread and potential outliers."
+    },
+    {
+     "t": "formula",
+     "h": "Scatter and line plots",
+     "body": "plot(x,y) displays paired numeric values; plot(x,type='l') draws a line plot."
+    }
+   ],
+   "ask": {
+    "q": "Which plot is suitable for the relationship between two numeric variables?",
+    "nudge": "Plot paired x and y values."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Select a plot and label it",
+   "objective": "Interpret plot arguments.",
+   "problem": "You have numeric vectors age and income and want to examine their relationship with a title and axis labels. Give a suitable call.",
+   "hints": [
+    "Use plot(age,income) for paired numeric values.",
+    "Set main for the title.",
+    "Set xlab and ylab for axis labels."
+   ],
+   "answer": "plot(age,income,main='Income by age',xlab='Age',ylab='Income').",
+   "check": "A scatter plot is suitable for two numeric variables.",
+   "scenario": {
+    "teaser": "Visualise a relationship",
+    "title": "An analyst studies age and income",
+    "body": [
+     "An analyst wants to examine whether income changes with age. Both variables are numeric, so paired observations should be displayed in a scatter plot.",
+     "A meaningful title and axis labels make the graph interpretable.",
+     " Before sharing the result, the analyst should inspect the dimensions and variable names, check that the filter selects the intended records, and label the graph so its variables and units are clear. The chosen plot should answer the analytical question rather than simply display whatever data structure is easiest to pass to a plotting function."
+    ],
+    "q": "Which plot function is suitable?",
+    "answer": "plot(age,income)."
+   },
+   "ask": {
+    "q": "Which argument sets the y-axis label?",
+    "nudge": "ylab."
+   },
+   "solution": [
+    {
+     "say": "Identify the variable types.",
+     "math": "age and income are both numeric vectors.",
+     "why": "The question asks about paired observations on two quantitative variables."
+    },
+    {
+     "say": "Choose the plot.",
+     "math": "Use plot(age, income).",
+     "why": "The default plot for two numeric vectors is a scatter plot."
+    },
+    {
+     "say": "Add labels for interpretation.",
+     "math": "Set main, xlab and ylab.",
+     "why": "A title and axis labels make the variables and relationship clear."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 7,
+   "title": "Exam traps",
+   "objective": "Avoid data-frame and plotting errors.",
+   "intro": "Judge each statement.",
+   "items": [
+    {
+     "claim": "df[i,j] selects rows before columns.",
+     "tf": true,
+     "why": "The first index is rows and the second is columns."
+    },
+    {
+     "claim": "read.csv() exports a data frame.",
+     "tf": false,
+     "why": "read.csv imports; write.csv exports."
+    },
+    {
+     "claim": "hist(x) is used for a univariate frequency distribution.",
+     "tf": true,
+     "why": "A histogram displays the distribution of one quantitative variable."
+    },
+    {
+     "claim": "row.names=FALSE prevents row names being written by write.csv().",
+     "tf": true,
+     "why": "This omits the row-name column."
+    }
+   ],
+   "ask": {
+    "q": "What should be checked before using data.frame()?",
+    "nudge": "Column lengths must be compatible."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s10",
+   "mins": 6,
+   "title": "Data frames, I/O and graphics quick sheet",
+   "objective": "Consolidate data-frame and plot rules.",
+   "body": [
+    "A data frame is a rectangular list of equal-length columns. Inspect with dim(), names() and str().",
+    "df[i,j] selects rows then columns; df$var selects a column. Use drop=FALSE to preserve a data-frame subset.",
+    "read.csv() and read.table() import data; write.csv() exports it. Set row.names=FALSE when needed.",
+    "hist() shows a univariate distribution; boxplot() summarises spread and potential outliers.",
+    "plot(x,y) displays paired numeric values; plot(x,type='l') draws lines; barplot() displays bar heights.",
+    "Use main, xlab and ylab for title and axis labels."
+   ],
+   "ask": {
+    "q": "Match histogram and scatter plot to their data structures.",
+    "nudge": "One numeric variable versus paired numeric variables."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s11",
+   "mins": 2,
+   "title": "Mastery test",
+   "objective": "Demonstrate independent data-frame, I/O and graphics reasoning.",
+   "setId": "rprog_t8_mastery"
+  }
+ ]
+}

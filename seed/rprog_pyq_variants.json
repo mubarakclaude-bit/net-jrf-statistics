@@ -2,13 +2,13 @@
  "moduleId": "rprog",
  "source": "variant",
  "label": "June 2026 paper — practice variants",
- "count": 47,
+ "count": 40,
  "items": [
   {
    "id": "j26v-q16-01",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "sort(c(3, 1, 2)) returns:",
+   "stem": "In R, sort(c(3, 1, 2)) returns:",
    "options": [
     "1 2 3",
     "2 3 1",
@@ -16,14 +16,14 @@
     "3 2 1"
    ],
    "answer": "A",
-   "explanation": "2. order(c(3, 1, 2)) returns:",
+   "explanation": "sort() returns the values in ascending order by default.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-02",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "order(c(3, 1, 2)) returns:",
+   "stem": "In R, order(c(3, 1, 2)) returns:",
    "options": [
     "1 2 3",
     "2 3 1",
@@ -31,14 +31,14 @@
     "3 1 2"
    ],
    "answer": "B",
-   "explanation": "Smallest (1) is at position 2, then 2 at position 3, then 3 at position",
+   "explanation": "The values in ascending order occur at positions 2, 3 and 1.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-03",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "rank(c(3, 1, 2)) returns:",
+   "stem": "In R, rank(c(3, 1, 2)) returns:",
    "options": [
     "2 3 1",
     "3 2 1",
@@ -46,7 +46,7 @@
     "1 2 3"
    ],
    "answer": "C",
-   "explanation": "3 is the largest (rank 3), 1 the smallest (rank 1), 2 the middle",
+   "explanation": "Ranks are placed in the original positions: 3, 1 and 2.",
    "srcQ": 16
   },
   {
@@ -61,7 +61,7 @@
     "-154 6"
    ],
    "answer": "D",
-   "explanation": "range returns both endpoints, not the difference. (This is Q48 of your paper.)",
+   "explanation": "range() returns the minimum and maximum, not their difference.",
    "srcQ": 16
   },
   {
@@ -76,14 +76,14 @@
     "2"
    ],
    "answer": "A",
-   "explanation": "which returns positions, not values",
+   "explanation": "which() returns the positions satisfying the logical condition.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-06",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "For the R function f = function(n) { x = 1; for (i in 1:n) x = x * i; x } , the value of f(5) is:",
+   "stem": "A function multiplies x by each i in 1:5, starting with x = 1. Its final x is:",
    "options": [
     "1",
     "120",
@@ -91,14 +91,14 @@
     "5"
    ],
    "answer": "B",
-   "explanation": "It computes 5! (Q22 of your paper.)",
+   "explanation": "The loop computes 1×2×3×4×5 = 120, which is the factorial 5!.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-07",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "matrix(c(1:6), 2, 3) fills the matrix:",
+   "stem": "matrix(1:6, nrow = 2, ncol = 3) fills the matrix:",
    "options": [
     "diagonally",
     "by row",
@@ -106,14 +106,14 @@
     "randomly"
    ],
    "answer": "C",
-   "explanation": "Use byrow = TRUE to change it",
+   "explanation": "R fills a matrix column-wise unless byrow = TRUE is supplied.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-08",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "In R, A * B for two matrices of the same size performs:",
+   "stem": "For two same-sized matrices A and B, A * B performs:",
    "options": [
     "an error",
     "a cross product",
@@ -121,14 +121,14 @@
     "element-wise multiplication"
    ],
    "answer": "D",
-   "explanation": "Matrix multiplication is %*%",
+   "explanation": "The * operator multiplies corresponding entries; %*% performs matrix multiplication.",
    "srcQ": 16
   },
   {
    "id": "j26v-q16-09",
    "format": "single",
    "topic": "June 2026 paper · Q16",
-   "stem": "x <- 3; f = function(y) { x <- 5; x + y }; f(4) gives:",
+   "stem": "With x <- 3, f <- function(y) { x <- 5; x + y }, f(4) returns:",
    "options": [
     "9",
     "3",
@@ -136,7 +136,7 @@
     "7"
    ],
    "answer": "A",
-   "explanation": "The local x <- 5 applies inside the function. (Q82 of your paper.)",
+   "explanation": "The local x is 5, so the function returns 5 + 4 = 9.",
    "srcQ": 16
   },
   {
@@ -151,308 +151,158 @@
     "2 4 9"
    ],
    "answer": "B",
-   "explanation": "rev reverses the order as given; it does not sort",
+   "explanation": "rev() reverses the existing order; it does not sort the values.",
    "srcQ": 16
   },
   {
-   "id": "j26v-q21-01",
+   "id": "j26v-q22-01",
    "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "For non-zero n × 1 vectors u and v, the rank of uv′ is:",
+   "topic": "June 2026 paper · Q22",
+   "stem": "For f <- function(n) { x <- 1; for(i in 1:n) x <- x*i; x }, f(4) returns:",
    "options": [
-    "n",
-    "0",
-    "1",
-    "2"
-   ],
-   "answer": "C",
-   "explanation": "Every column is a multiple of u. Check the idempotency, which explains the whole structure: P² = I − 2uv′/(u′v) + u(v′u)v′/(u′v)² = I − 2uv′/(u′v) + uv′/(u′v) = I − uv′/(u′v) = P ✓ So P is idempotent, and Q = uv′ has all its columns proportional to u — the very direction P kills. Hence PQ =",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-02",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "trace(uv′) equals:",
-   "options": [
-    "0",
-    "uv′",
-    "n",
-    "u′v"
-   ],
-   "answer": "D",
-   "explanation": "3. The non-zero eigenvalue of uv′ is:",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-03",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "The non-zero eigenvalue of uv′ is:",
-   "options": [
-    "u′v",
-    "‖u‖",
-    "n",
-    "1"
-   ],
-   "answer": "A",
-   "explanation": "with the remaining n − 1 eigenvalues zero",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-04",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "(uv′)² equals:",
-   "options": [
-    "0",
-    "(u′v)uv′",
-    "uv′",
-    "(uv′)′"
-   ],
-   "answer": "B",
-   "explanation": "5. The centring matrix C = I − (1/n)11′ is:",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-05",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "The centring matrix C = I − (1/n)11′ is:",
-   "options": [
-    "not idempotent",
-    "singular of rank 1",
-    "idempotent of rank n − 1",
-    "idempotent of rank n"
-   ],
-   "answer": "C",
-   "explanation": "6. C1 where C is the centring matrix equals:",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-06",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "C1 where C is the centring matrix equals:",
-   "options": [
-    "n1",
-    "I",
-    "1",
-    "0"
-   ],
-   "answer": "D",
-   "explanation": "Deviations of a constant vector from its own mean are zero",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-07",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "For J = 11′ of order n, the eigenvalues are:",
-   "options": [
-    "n once and 0 (n − 1) times",
-    "0 and 1 alternately",
-    "all n",
-    "all 1"
-   ],
-   "answer": "A",
-   "explanation": "8. In the expression a′Ab, where a and b are n × 1 and A is n × n, the result is:",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-08",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "In the expression a′Ab, where a and b are n × 1 and A is n × n, the result is:",
-   "options": [
-    "undefined",
-    "a scalar",
-    "n × 1",
-    "n × n"
-   ],
-   "answer": "B",
-   "explanation": "and being a scalar it equals its own transpose b′A′a",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-09",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "P = I − uv′/(u′v) satisfies:",
-   "options": [
-    "P = P⁻¹",
-    "P² = 0",
-    "P² = P",
-    "P² = I"
-   ],
-   "answer": "C",
-   "explanation": "Idempotent",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-10",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "The Sherman–Morrison formula gives the inverse of:",
-   "options": [
-    "A′A",
-    "A²",
-    "AB",
-    "A + uv′"
-   ],
-   "answer": "D",
-   "explanation": "Q22. R: a factorial written as a for-loop trapolating, f(5) = 5! = 120. Testing a loop with n = 1 or 2 takes five seconds and settles almost every R loop question",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-11",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "prod(1:6) returns:",
-   "options": [
-    "720",
-    "120",
-    "21",
-    "6"
-   ],
-   "answer": "A",
-   "explanation": "6! = 720",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-12",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "For g = function(n) { s = 0; for (i in 1:n) s = s + i; s } , g(10) gives:",
-   "options": [
-    "3628800",
-    "55",
-    "10",
-    "100"
-   ],
-   "answer": "B",
-   "explanation": "10 × 11/2 =",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-13",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "In R, a function returns:",
-   "options": [
-    "the first argument",
-    "nothing unless return() is used",
-    "the value of the last evaluated expression",
-    "always a list"
-   ],
-   "answer": "C",
-   "explanation": "and in general",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-14",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "cumsum(1:4) returns:",
-   "options": [
-    "4 3 2 1",
-    "1 2 3 4",
-    "10",
-    "1 3 6 10"
-   ],
-   "answer": "D",
-   "explanation": "Step 3 — variance. The εᵢ are uncorrelated, so variances add:",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-15",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "For h = function(n) { x = 1; for (i in 1:n) x = x * 2; x } , h(4) gives:",
-   "options": [
-    "8",
+    "12",
+    "24",
     "16",
-    "4",
-    "2"
-   ],
-   "answer": "B",
-   "explanation": "2⁴. Both grow without bound as t increases → option (D)",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-16",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "x <- 3; f = function(y) { x <- 5; x + y }; f(4) returns:",
-   "options": [
-    "7",
-    "9",
-    "3",
     "4"
    ],
    "answer": "B",
-   "explanation": "The local x is 5, so 5 +",
-   "srcQ": 21
+   "explanation": "The loop multiplies 1×2×3×4, giving 4! = 24.",
+   "srcQ": 22
   },
   {
-   "id": "j26v-q21-17",
+   "id": "j26v-q22-02",
    "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "After running the function in question 6, the global value of x is:",
+   "topic": "June 2026 paper · Q22",
+   "stem": "For f <- function(n) { s <- 0; for(i in 1:n) s <- s+i; s }, f(5) returns:",
    "options": [
-    "5",
-    "undefined",
+    "10",
+    "15",
+    "20",
+    "5"
+   ],
+   "answer": "B",
+   "explanation": "The accumulator is 1+2+3+4+5 = 15 after the fifth iteration.",
+   "srcQ": 22
+  },
+  {
+   "id": "j26v-q22-03",
+   "format": "single",
+   "topic": "June 2026 paper · Q22",
+   "stem": "Starting with x <- 1, a loop multiplies x by 2 for i in 1:3. What is x afterwards?",
+   "options": [
+    "6",
+    "8",
+    "9",
+    "4"
+   ],
+   "answer": "B",
+   "explanation": "There are three multiplications: 1×2×2×2 = 8.",
+   "srcQ": 22
+  },
+  {
+   "id": "j26v-q22-04",
+   "format": "single",
+   "topic": "June 2026 paper · Q22",
+   "stem": "For s <- 0; for(i in 2:4) s <- s+i, the final value of s is:",
+   "options": [
+    "6",
+    "7",
+    "9",
+    "12"
+   ],
+   "answer": "C",
+   "explanation": "The loop adds 2+3+4, so the final accumulator is s = 9.",
+   "srcQ": 22
+  },
+  {
+   "id": "j26v-q22-05",
+   "format": "single",
+   "topic": "June 2026 paper · Q22",
+   "stem": "A loop adds only odd i from 1 to 5 to s, using next to skip even i. The final s is:",
+   "options": [
+    "6",
+    "9",
+    "15",
+    "25"
+   ],
+   "answer": "B",
+   "explanation": "The retained values are 1, 3 and 5; their sum is 9.",
+   "srcQ": 22
+  },
+  {
+   "id": "j26v-q22-06",
+   "format": "single",
+   "topic": "June 2026 paper · Q22",
+   "stem": "With x <- 0; while(x < 4) x <- x+1, the value after the loop is:",
+   "options": [
     "3",
+    "4",
+    "5",
+    "0"
+   ],
+   "answer": "B",
+   "explanation": "The condition is tested before each iteration; the loop stops when x reaches 4.",
+   "srcQ": 22
+  },
+  {
+   "id": "j26v-q22-07",
+   "format": "single",
+   "topic": "June 2026 paper · Q22",
+   "stem": "For f <- function(x) { y <- x+1; y*2 }, f(3) returns:",
+   "options": [
+    "4",
+    "6",
+    "8",
     "9"
    ],
    "answer": "C",
-   "explanation": "Local assignment does not leak out",
-   "srcQ": 21
+   "explanation": "The final expression is y*2; y is 4, so the returned value is 8.",
+   "srcQ": 22
   },
   {
-   "id": "j26v-q21-18",
+   "id": "j26v-q22-08",
    "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "seq(2, 10, by = 2) returns:",
+   "topic": "June 2026 paper · Q22",
+   "stem": "For s <- 0; for(i in 1:4) s <- s+i^2, the final s is:",
    "options": [
-    "2 4 6 8",
-    "2 10",
-    "1 2 ... 10",
-    "2 4 6 8 10"
+    "20",
+    "24",
+    "30",
+    "16"
    ],
-   "answer": "D",
-   "explanation": "9. rep(c(1, 2), times = 3) returns:",
-   "srcQ": 21
+   "answer": "C",
+   "explanation": "The accumulator is 1²+2²+3²+4² = 30 after four iterations.",
+   "srcQ": 22
   },
   {
-   "id": "j26v-q21-19",
+   "id": "j26v-q22-09",
    "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "rep(c(1, 2), times = 3) returns:",
+   "topic": "June 2026 paper · Q22",
+   "stem": "For f <- function(n) { p <- 1; for(i in 1:n) p <- p*i; p }, f(3) returns:",
    "options": [
-    "1 2 1 2 1 2",
-    "1 1 1 2 2 2",
-    "3 6",
-    "1 2 3"
-   ],
-   "answer": "A",
-   "explanation": "Use each = 3 for the first pattern",
-   "srcQ": 21
-  },
-  {
-   "id": "j26v-q21-20",
-   "format": "single",
-   "topic": "June 2026 paper · Q21",
-   "stem": "factorial(0) returns:",
-   "options": [
-    "NA",
-    "1",
-    "0",
-    "an error"
+    "3",
+    "6",
+    "9",
+    "27"
    ],
    "answer": "B",
-   "explanation": "By convention 0! =",
-   "srcQ": 21
+   "explanation": "The loop computes 1×2×3 = 6, the factorial of three.",
+   "srcQ": 22
+  },
+  {
+   "id": "j26v-q22-10",
+   "format": "single",
+   "topic": "June 2026 paper · Q22",
+   "stem": "Starting with p <- 1, a loop multiplies p by each value in seq(2, 6, by=2). The result is:",
+   "options": [
+    "24",
+    "36",
+    "48",
+    "64"
+   ],
+   "answer": "C",
+   "explanation": "The loop multiplies 2×4×6 = 48; the starting value is one.",
+   "srcQ": 22
   },
   {
    "id": "j26v-q48-01",
@@ -466,14 +316,14 @@
     "8"
    ],
    "answer": "C",
-   "explanation": "Two values, min first",
+   "explanation": "range() returns the minimum followed by the maximum.",
    "srcQ": 48
   },
   {
    "id": "j26v-q48-02",
    "format": "single",
    "topic": "June 2026 paper · Q48",
-   "stem": "To obtain the statistical range in R you write:",
+   "stem": "To obtain the numerical range (maximum minus minimum) in R, use:",
    "options": [
     "range(x)",
     "span(x)",
@@ -481,7 +331,7 @@
     "diff(range(x))"
    ],
    "answer": "D",
-   "explanation": "3. which.max(c(3, 8, 5)) returns:",
+   "explanation": "diff() subtracts the first endpoint from the second endpoint returned by range().",
    "srcQ": 48
   },
   {
@@ -496,7 +346,7 @@
     "8"
    ],
    "answer": "A",
-   "explanation": "The position, not the value",
+   "explanation": "which.max() returns the position of the maximum value, not the value itself.",
    "srcQ": 48
   },
   {
@@ -511,14 +361,14 @@
     "TRUE FALSE TRUE FALSE"
    ],
    "answer": "B",
-   "explanation": "Positions 1 and",
+   "explanation": "The positive entries occur at positions 1 and 3.",
    "srcQ": 48
   },
   {
    "id": "j26v-q48-05",
    "format": "single",
    "topic": "June 2026 paper · Q48",
-   "stem": "x[x > 0] for x = c(2, −1, 4, −6) returns:",
+   "stem": "For x <- c(2, -1, 4, -6), x[x > 0] returns:",
    "options": [
     "6",
     "1 3",
@@ -526,29 +376,29 @@
     "TRUE FALSE"
    ],
    "answer": "C",
-   "explanation": "The values",
+   "explanation": "Logical subsetting returns the values at positions where the condition is TRUE.",
    "srcQ": 48
   },
   {
    "id": "j26v-q48-06",
    "format": "single",
    "topic": "June 2026 paper · Q48",
-   "stem": "var() in R uses the divisor:",
+   "stem": "The default denominator used by var(x) in R is:",
    "options": [
     "n",
     "n + 1",
-    "n − 2",
-    "n − 1"
+    "n - 2",
+    "n - 1"
    ],
    "answer": "D",
-   "explanation": "7. summary(x) returns:",
+   "explanation": "var() computes the sample variance using n−1 degrees of freedom.",
    "srcQ": 48
   },
   {
    "id": "j26v-q48-07",
    "format": "single",
    "topic": "June 2026 paper · Q48",
-   "stem": "summary(x) returns:",
+   "stem": "For a numeric vector without missing values, summary(x) reports:",
    "options": [
     "min, Q1, median, mean, Q3, max",
     "a plot",
@@ -556,157 +406,202 @@
     "the variance"
    ],
    "answer": "A",
-   "explanation": "Q49. Size and power of a binomial test H₀: p = 1/2 against H₁: p = 3/4. A coin is tossed 5 times and H₀ is rejected if more than 3 heads are obtained. The size and power are respectively:",
+   "explanation": "The default numeric summary includes the five-number summary plus the mean.",
+   "srcQ": 48
+  },
+  {
+   "id": "j26v-q48-08",
+   "format": "single",
+   "topic": "June 2026 paper · Q48",
+   "stem": "min(c(7, -2, 4)) returns:",
+   "options": [
+    "7",
+    "-2",
+    "4",
+    "-14"
+   ],
+   "answer": "B",
+   "explanation": "The smallest value in the vector is −2, so min() returns −2.",
+   "srcQ": 48
+  },
+  {
+   "id": "j26v-q48-09",
+   "format": "single",
+   "topic": "June 2026 paper · Q48",
+   "stem": "max(c(7, -2, 4)) returns:",
+   "options": [
+    "-2",
+    "4",
+    "7",
+    "9"
+   ],
+   "answer": "C",
+   "explanation": "The largest value in the vector is 7, so max() returns 7.",
+   "srcQ": 48
+  },
+  {
+   "id": "j26v-q48-10",
+   "format": "single",
+   "topic": "June 2026 paper · Q48",
+   "stem": "which.min(c(9, 2, 5)) returns:",
+   "options": [
+    "9",
+    "5",
+    "1",
+    "2"
+   ],
+   "answer": "D",
+   "explanation": "The minimum value is at position 2; which.min() returns that position.",
    "srcQ": 48
   },
   {
    "id": "j26v-q50-01",
    "format": "single",
    "topic": "June 2026 paper · Q50",
-   "stem": "For the same x, sum(x^2) returns:",
+   "stem": "Arrange the statements to assign a vector to x, copy it to y, square y and display the result. A: y <- x; B: x <- c(1, -1, 3.5, 2); C: [1] 1.00 1.00 12.25 4.00; D: y^2",
    "options": [
-    "9",
-    "29",
-    "3",
-    "4 9 16"
+    "A, B, C, D",
+    "A, D, B, C",
+    "C, B, A, D",
+    "B, A, D, C"
    ],
-   "answer": "B",
-   "explanation": "Mann– Whitney U U = R₁ − n₁(n₁+1)/2; check U₁ + U₂ = n₁n₂ 43 Testing steps A D",
+   "answer": "D",
+   "explanation": "Create x first, copy it to y, evaluate y^2, then the console displays the four squared values.",
    "srcQ": 50
   },
   {
    "id": "j26v-q50-02",
    "format": "single",
    "topic": "June 2026 paper · Q50",
-   "stem": "x %*% x for a numeric vector x returns:",
+   "stem": "Arrange the statements to create x, add 2 element-wise, square the result and display it. A: z <- x+2; B: x <- c(1, 2, 3); C: [1] 9 16 25; D: z^2",
    "options": [
-    "a vector of squares",
-    "the outer product",
-    "a 1 × 1 matrix holding the inner product",
-    "an error"
+    "B, A, D, C",
+    "A, B, C, D",
+    "B, D, A, C",
+    "C, B, A, D"
    ],
-   "answer": "C",
-   "explanation": "Hypothesis first — assumptions depend on which test 44 MVN conditional B B✓ μ₂ + Σ₂₁Σ₁₁⁻¹(x₁ − μ₁); variance shrinks 45 Compound distribution A D Var = E[X] + Var[X] = 1/λ + 1/λ² = (λ+1)/λ² 46 Distribution of r B C Density ∝ (1 − r²)^((n−4)/ 2): n=3 arcsine, n=4 uniform 47 NSC origin B C Rangarajan",
+   "answer": "A",
+   "explanation": "x must exist before z is assigned; z^2 is then evaluated and its output follows.",
    "srcQ": 50
   },
   {
    "id": "j26v-q50-03",
    "format": "single",
    "topic": "June 2026 paper · Q50",
-   "stem": "For x <- c(2, -3, 4) , x^2 returns:",
+   "stem": "Arrange the statements to double a vector and print the doubled values. A: y <- 2*x; B: x <- c(1, 3, 5); C: [1] 2 6 10; D: y",
    "options": [
-    "4 -9 16",
-    "29",
-    "2 -3 4",
-    "4 9 16"
+    "A, B, D, C",
+    "B, A, D, C",
+    "B, D, A, C",
+    "C, B, A, D"
    ],
-   "answer": "D",
-   "explanation": "Element-wise, and the negative squares to positive",
+   "answer": "B",
+   "explanation": "Define x, assign the doubled vector to y, evaluate y, and then read the printed output.",
    "srcQ": 50
   },
   {
    "id": "j26v-q50-04",
    "format": "single",
    "topic": "June 2026 paper · Q50",
-   "stem": "In an ordering question about a program, the printed output belongs:",
+   "stem": "Arrange the statements to calculate and display the sum of 1, 2, 3 and 4. A: s <- sum(x); B: x <- 1:4; C: [1] 10; D: s",
    "options": [
-    "last",
-    "immediately after object creation",
-    "anywhere",
-    "first"
+    "B, A, D, C",
+    "A, B, C, D",
+    "B, D, A, C",
+    "C, B, A, D"
    ],
    "answer": "A",
-   "explanation": "5. y <- x followed by modifying x will:",
+   "explanation": "The vector is created before its sum is assigned; evaluating s prints 10.",
    "srcQ": 50
   },
   {
    "id": "j26v-q50-05",
    "format": "single",
    "topic": "June 2026 paper · Q50",
-   "stem": "y <- x followed by modifying x will:",
+   "stem": "Arrange the statements to take square roots and display the result. A: z <- sqrt(x); B: x <- c(1, 4, 9); C: [1] 1 2 3; D: z",
    "options": [
-    "raise an error",
-    "leave y unchanged",
-    "delete y",
-    "also change y"
+    "A, B, C, D",
+    "B, A, D, C",
+    "B, D, A, C",
+    "C, B, A, D"
    ],
    "answer": "B",
-   "explanation": "R copies on assignment",
+   "explanation": "Create x, compute its element-wise square roots, evaluate z, then the output appears.",
    "srcQ": 50
   },
   {
    "id": "j26v-q50-06",
    "format": "single",
    "topic": "June 2026 paper · Q50",
-   "stem": "c(1, -1, 3.5, 2)^2 gives how many elements?",
+   "stem": "Arrange the statements to square each entry of x and display y. A: y <- x^2; B: x <- c(2, 3, 4); C: [1] 4 9 16; D: y",
    "options": [
-    "16",
-    "2",
-    "4",
-    "1"
+    "B, A, D, C",
+    "A, B, D, C",
+    "B, D, A, C",
+    "C, B, A, D"
    ],
-   "answer": "C",
-   "explanation": "7. For z <- c(1, 4, 9) , sqrt(z) returns:",
+   "answer": "A",
+   "explanation": "Assignment to x precedes y <- x^2; evaluating y produces the displayed vector.",
    "srcQ": 50
   },
   {
    "id": "j26v-q50-07",
    "format": "single",
    "topic": "June 2026 paper · Q50",
-   "stem": "For z <- c(1, 4, 9) , sqrt(z) returns:",
+   "stem": "Arrange the statements to define a function, set an argument, call the function and display the answer. A: f <- function(x) x+1; B: x <- 4; C: [1] 5; D: f(x)",
    "options": [
-    "1 4 9",
-    "3.74",
-    "14",
-    "1 2 3"
+    "B, D, A, C",
+    "A, B, D, C",
+    "A, D, B, C",
+    "C, A, B, D"
    ],
-   "answer": "D",
-   "explanation": "8. x %o% x for a length-3 vector returns:",
+   "answer": "B",
+   "explanation": "Define f and x before calling f(x); the returned value 5 is printed after the call.",
    "srcQ": 50
   },
   {
    "id": "j26v-q50-08",
    "format": "single",
    "topic": "June 2026 paper · Q50",
-   "stem": "x %o% x for a length-3 vector returns:",
+   "stem": "Arrange the statements to sort a vector and display the sorted copy. A: x <- c(3, 1, 2); B: y <- sort(x); C: y; D: [1] 1 2 3",
    "options": [
-    "a 3 × 3 matrix",
-    "an error",
-    "a length-3 vector",
-    "a scalar"
+    "B, A, C, D",
+    "A, C, B, D",
+    "A, B, C, D",
+    "D, A, B, C"
    ],
-   "answer": "A",
-   "explanation": "9. In R, <- and = for assignment are:",
+   "answer": "C",
+   "explanation": "Create x, assign sort(x) to y, evaluate y, and then read the printed sorted vector.",
    "srcQ": 50
   },
   {
    "id": "j26v-q50-09",
    "format": "single",
    "topic": "June 2026 paper · Q50",
-   "stem": "In R, <- and = for assignment are:",
+   "stem": "Arrange the statements to square a vector, sum the squares and display the scalar. A: x <- c(2, 4, 6); B: y <- x^2; C: [1] 56; D: sum(y)",
    "options": [
-    "= is invalid",
-    "largely interchangeable at the top level",
-    "<- is invalid",
-    "completely different"
+    "A, D, B, C",
+    "B, A, D, C",
+    "C, A, B, D",
+    "A, B, D, C"
    ],
-   "answer": "B",
-   "explanation": "10. For x <- 1:4 , x^2 returns:",
+   "answer": "D",
+   "explanation": "Create x, compute y, evaluate sum(y), then the console prints 4+16+36 = 56.",
    "srcQ": 50
   },
   {
    "id": "j26v-q50-10",
    "format": "single",
    "topic": "June 2026 paper · Q50",
-   "stem": "For x <- 1:4 , x^2 returns:",
+   "stem": "Arrange the statements to compute the mean of a vector and display it. A: m <- mean(x); B: x <- c(2, 4, 6); C: [1] 4; D: m",
    "options": [
-    "30",
-    "1 2 3 4",
-    "1 4 9 16",
-    "2 4 6 8"
+    "B, D, A, C",
+    "A, B, D, C",
+    "C, B, A, D",
+    "B, A, D, C"
    ],
-   "answer": "C",
-   "explanation": "range gives two numbers; which gives positions 49 Size and power A B You reported β = 47/128 instead of power = 81/128 50 R ordering D D✓ Define, use, output Halfway assessment — Paper 2, questions 1 to 50 Running score: 16 / 50 (32%). Block by block: 2, 4, 4, 3",
+   "answer": "D",
+   "explanation": "Create the vector before computing its mean; evaluating m prints 4.",
    "srcQ": 50
   }
  ]

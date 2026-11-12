@@ -1,0 +1,570 @@
+{
+ "id": "rprogt7",
+ "topicId": "rprog-t7",
+ "moduleId": "rprog",
+ "title": "Lists, factors, display and formatting in R",
+ "breadcrumb": "Module 9 · R Programming · Lists, factors and formatting",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 90,
+ "objectives": [
+  "Create and index lists, including nested elements.",
+  "Distinguish [ ], [[ ]] and $ extraction.",
+  "Understand factors, levels and ordered factors.",
+  "Interpret print, str, class, summary and formatting functions.",
+  "Recognise factor-code versus label and display-versus-data traps."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Vectors and indexing",
+   "why": "Lists and factors use indexing."
+  },
+  {
+   "id": "p2",
+   "name": "Character and categorical data",
+   "why": "Factors represent categorical variables."
+  },
+  {
+   "id": "p3",
+   "name": "R objects and classes",
+   "why": "Display functions reveal object structure and class."
+  }
+ ],
+ "traps": [
+  "A list can contain objects of different types and lengths.",
+  "x[i] returns a sublist; x[[i]] returns the element itself.",
+  "x$name is shorthand for extracting a named list element.",
+  "A factor stores integer codes plus levels; codes are not necessarily the printed labels.",
+  "factor() levels are ordered alphabetically by default unless levels are supplied.",
+  "ordered=TRUE creates an ordered factor with level order.",
+  "as.numeric(factor) returns internal codes, not the original numeric labels.",
+  "str() displays structure; class() reports class; levels() reports factor labels.",
+  "format() returns character strings for display; it does not change the underlying numeric object."
+ ],
+ "revision": {
+  "sheet": [
+   "list() creates a list that can contain heterogeneous objects.",
+   "x[i] returns a sublist; x[[i]] extracts one element.",
+   "x$name extracts a named element; names(x) returns element names.",
+   "Nested lists use repeated [[ ]] extraction.",
+   "factor(x) encodes categories as integer codes with character levels.",
+   "levels(f) gives labels; nlevels(f) counts levels.",
+   "Specify levels= to control order and include unused categories.",
+   "ordered=TRUE creates an ordered factor.",
+   "as.numeric(f) returns internal integer codes, not numeric labels.",
+   "str() inspects structure; class() returns class; summary() summarises object.",
+   "format() and sprintf() create character representations for display.",
+   "Display formatting does not modify the underlying numeric value."
+  ],
+  "cards": [
+   [
+    "list()",
+    "Heterogeneous container"
+   ],
+   [
+    "[ ]",
+    "Sublist"
+   ],
+   [
+    "[[ ]]",
+    "Single element"
+   ],
+   [
+    "$",
+    "Named element"
+   ],
+   [
+    "factor()",
+    "Categorical encoding"
+   ],
+   [
+    "levels()",
+    "Factor labels"
+   ],
+   [
+    "str()",
+    "Object structure"
+   ],
+   [
+    "sprintf()",
+    "Formatted character output"
+   ]
+  ],
+  "tricks": [
+   "Use [[ ]] when a single element is required.",
+   "Inspect levels before interpreting factor codes.",
+   "Specify levels for a meaningful category order.",
+   "Do not confuse formatted strings with numeric values."
+  ],
+  "shortcuts": [
+   "Write down list names and element types.",
+   "Separate factor codes from displayed labels.",
+   "Check whether a factor is ordered.",
+   "Read formatting output as character text."
+  ],
+  "remember": [
+   "Lists can be heterogeneous.",
+   "[ ] keeps a list; [[ ]] extracts an element.",
+   "Factors encode categories with levels.",
+   "Numeric factor conversion returns codes.",
+   "formatting changes display, not stored values."
+  ]
+ },
+ "howto": "Inspect the object with str() and class(). For lists, decide whether the question wants a sublist or a single element. For factors, read levels before interpreting codes. For display functions, distinguish a character representation from the original data.",
+ "refs": [
+  {
+   "title": "R Documentation: list",
+   "where": "Lists and extraction",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/list.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "List construction and extraction."
+  },
+  {
+   "title": "R Documentation: factor",
+   "where": "Factors and levels",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/factor.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Factor coding, levels and ordering."
+  },
+  {
+   "title": "R Documentation: format",
+   "where": "Formatting objects",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/format.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Display formatting."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [],
+ "provenance": "Catalog rprog-t7: Lists, factors, display and formatting. Content aligned to official base R documentation; no unsupported PYQ anchor is claimed.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 8,
+   "title": "Lists hold heterogeneous objects",
+   "objective": "Understand list structure.",
+   "body": [
+    "A list is a recursive object that can contain elements of different types and lengths.",
+    "Use list() to create a list. Elements can be accessed by position or name.",
+    "str() is useful for inspecting the structure before extracting values."
+   ],
+   "items": [
+    {
+     "ask": "What is a list?",
+     "recall": "A container that can hold objects of different types and lengths.",
+     "refresh": [
+      "A list is a recursive R object whose elements may be numeric vectors, character strings, matrices, other lists or many other object types. It is therefore useful for storing mixed records.",
+      "Inspect a list with str() and names() before extracting an element. This reveals the nesting and element names, reducing mistakes when a question uses several levels of indexing."
+     ]
+    },
+    {
+     "ask": "What is a factor?",
+     "recall": "A categorical variable represented by integer codes and levels.",
+     "refresh": [
+      "A factor stores categorical observations using integer codes associated with a levels attribute. The printed values are the labels, while the underlying codes identify positions in the level order.",
+      "The default level order is often alphabetical. If the category order has meaning, supply levels explicitly and use ordered=TRUE when the categories are ordinal."
+     ]
+    },
+    {
+     "ask": "What does x[[1]] return for a list?",
+     "recall": "The first element itself.",
+     "refresh": [
+      "Double brackets extract the selected element from a list. If the first element is a numeric vector, x[[1]] returns that vector rather than a list wrapper containing it.",
+      "Single brackets have a different purpose: x[1] returns a one-element sublist. The distinction matters when a later function expects a vector, a scalar or another list."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "Which function displays compact object structure?",
+    "nudge": "It begins with str."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "A list is a container",
+   "objective": "Read list extraction.",
+   "body": [
+    "For x=list(score=c(72,81),name='Asha'), x[1] returns a one-element list while x[[1]] returns the score vector.",
+    "x$name extracts the named character element."
+   ],
+   "scenario": {
+    "teaser": "A student record",
+    "title": "A tutor stores mixed information",
+    "body": [
+     "A tutor stores a numeric score vector and a character name in one list. The tutor needs the score vector itself rather than a one-element list wrapper.",
+     "Single-bracket extraction preserves list structure; double brackets extract the element.",
+     " The tutor should inspect the element names and factor levels before using the stored values in a calculation or report. A numeric conversion of a factor can expose its internal codes rather than the original category labels, so it must not be interpreted as the measurement values without checking how the factor was constructed."
+    ],
+    "q": "Which expression extracts the score vector itself?",
+    "answer": "x[[1]] or x$score."
+   },
+   "ask": {
+    "q": "What is the difference between x[1] and x[[1]]?",
+    "nudge": "One returns a sublist; the other returns its element."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 10,
+   "title": "List extraction operators",
+   "objective": "Distinguish list indexing.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Single brackets",
+     "body": "x[i] returns a list containing selected elements."
+    },
+    {
+     "t": "formula",
+     "h": "Double brackets",
+     "body": "x[[i]] extracts one element from the list."
+    },
+    {
+     "t": "step",
+     "h": "Dollar extraction",
+     "body": "x$name extracts the named element called name; it is convenient for valid syntactic names."
+    }
+   ],
+   "flow": {
+    "title": "Choose extraction",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Need a sublist?",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Use [ ]",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Need one element?",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Use [[ ]] or $",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
+   },
+   "ask": {
+    "q": "Which operator extracts a single element?",
+    "nudge": "Use double square brackets."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 10,
+   "title": "Extract from a nested list",
+   "objective": "Trace nested extraction.",
+   "problem": "x=list(a=list(b=12),c=5). Find x[[1]][[1]].",
+   "steps": [
+    {
+     "say": "Extract the first outer element.",
+     "math": "x[[1]] is list(b=12).",
+     "why": "Double brackets return the inner list itself."
+    },
+    {
+     "say": "Extract its first element.",
+     "math": "x[[1]][[1]]=12.",
+     "why": "The nested extraction reaches the numeric value."
+    }
+   ],
+   "ask": {
+    "q": "What does x[1] return?",
+    "nudge": "It is a one-element list, not the number 12."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 6,
+   "title": "List function cards",
+   "objective": "Recall list operations.",
+   "intro": "Recall each operation.",
+   "items": [
+    {
+     "q": "list()",
+     "a": "Construct a list."
+    },
+    {
+     "q": "x[i]",
+     "a": "Extract a sublist."
+    },
+    {
+     "q": "x[[i]]",
+     "a": "Extract one element."
+    },
+    {
+     "q": "x$name",
+     "a": "Extract a named element."
+    },
+    {
+     "q": "str(x)",
+     "a": "Display object structure."
+    }
+   ],
+   "ask": {
+    "q": "Which function inspects object structure?",
+    "nudge": "str(x)."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 10,
+   "title": "Factors store categories and levels",
+   "objective": "Understand factor encoding.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Factor",
+     "body": "factor(x) stores categorical values using integer codes and a levels attribute."
+    },
+    {
+     "t": "formula",
+     "h": "Levels",
+     "body": "levels(f) returns the category labels; levels can be specified to control order and include unused categories."
+    },
+    {
+     "t": "step",
+     "h": "Ordered factor",
+     "body": "factor(x,ordered=TRUE) creates an ordered factor; the order of levels determines the category order."
+    }
+   ],
+   "ask": {
+    "q": "What does levels(f) return?",
+    "nudge": "It returns the category labels."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s6",
+   "mins": 8,
+   "title": "Read factor codes correctly",
+   "objective": "Distinguish labels and internal codes.",
+   "problem": "f=factor(c('low','high','medium'),levels=c('low','medium','high')). What is as.numeric(f)?",
+   "hints": [
+    "Levels are low, medium, high.",
+    "The first observation is low, the second high, the third medium.",
+    "Convert each level position to its integer code."
+   ],
+   "answer": "c(1,3,2).",
+   "check": "Codes follow the supplied level order.",
+   "ask": {
+    "q": "What does as.character(f) return?",
+    "nudge": "It returns the labels, not the integer codes."
+   },
+   "solution": [
+    {
+     "say": "Read the supplied level order.",
+     "math": "low = 1, medium = 2, high = 3.",
+     "why": "The integer codes follow the explicit levels argument."
+    },
+    {
+     "say": "Match each observation to its level.",
+     "math": "low, high, medium maps to 1, 3, 2.",
+     "why": "Each label is replaced by its position in the level sequence."
+    },
+    {
+     "say": "Report the internal codes.",
+     "math": "as.numeric(f) gives c(1, 3, 2).",
+     "why": "This is the factor code vector, not a numeric measurement scale."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Display, structure and formatting",
+   "objective": "Interpret common inspection functions.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "class() and str()",
+     "body": "class(x) reports an object's class; str(x) displays its internal structure."
+    },
+    {
+     "t": "def",
+     "h": "summary()",
+     "body": "summary(x) gives a compact summary appropriate to the object's class."
+    },
+    {
+     "t": "formula",
+     "h": "format() and sprintf()",
+     "body": "These functions create character representations for display; they do not change the original numeric data."
+    }
+   ],
+   "ask": {
+    "q": "Does format(12.345) change the original numeric value?",
+    "nudge": "It returns a formatted representation."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Formatting is not numeric rounding",
+   "objective": "Separate display text from stored values.",
+   "problem": "x=12.3456; y=format(x,nsmall=2). Is y numeric or character?",
+   "hints": [
+    "format() creates a display representation.",
+    "Check the type of its result.",
+    "The original x remains numeric."
+   ],
+   "answer": "y is character; x remains numeric.",
+   "check": "Formatting returns character output and does not overwrite x.",
+   "scenario": {
+    "teaser": "Prepare a report table",
+    "title": "A statistician formats a reported estimate",
+    "body": [
+     "A statistician needs to display a value with a fixed number of decimal places. The formatting function produces text for a report, while the original numeric variable remains available for calculations.",
+     "Formatting is not the same as replacing the underlying value with a rounded number.",
+     " The tutor should inspect the element names and factor levels before using the stored values in a calculation or report. A numeric conversion of a factor can expose its internal codes rather than the original category labels, so it must not be interpreted as the measurement values without checking how the factor was constructed."
+    ],
+    "q": "Should the formatted string be used for further arithmetic?",
+    "answer": "No; retain the numeric variable for calculations."
+   },
+   "ask": {
+    "q": "Which function can create formatted output using a template?",
+    "nudge": "It uses C-style format specifications."
+   },
+   "solution": [
+    {
+     "say": "Extract the outer list element.",
+     "math": "x[[1]] is list(b = 12).",
+     "why": "Double brackets return the selected inner list."
+    },
+    {
+     "say": "Extract the nested value.",
+     "math": "x[[1]][[1]] is 12.",
+     "why": "The second extraction reaches the numeric element stored under b."
+    },
+    {
+     "say": "Distinguish the bracket forms.",
+     "math": "x[1] is a one-element sublist.",
+     "why": "Single brackets preserve the list container."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 7,
+   "title": "Exam traps",
+   "objective": "Avoid list, factor and formatting errors.",
+   "intro": "Judge each statement.",
+   "items": [
+    {
+     "claim": "x[1] and x[[1]] always return the same type.",
+     "tf": false,
+     "why": "One returns a sublist; the other extracts the element."
+    },
+    {
+     "claim": "as.numeric(factor(c('a','b'))) returns the labels as numbers.",
+     "tf": false,
+     "why": "It returns internal integer codes."
+    },
+    {
+     "claim": "levels(f) returns factor labels.",
+     "tf": true,
+     "why": "levels reports the category labels."
+    },
+    {
+     "claim": "format() returns a character representation.",
+     "tf": true,
+     "why": "Formatting is intended for display."
+    }
+   ],
+   "ask": {
+    "q": "What must be checked before interpreting a numeric factor conversion?",
+    "nudge": "Inspect the level order and internal codes."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s10",
+   "mins": 6,
+   "title": "Lists and factors quick sheet",
+   "objective": "Consolidate list and factor rules.",
+   "body": [
+    "Lists can hold heterogeneous objects. x[i] returns a sublist; x[[i]] extracts one element; x$name extracts a named element.",
+    "Factors encode categories using integer codes and levels. levels(f) returns labels; specify levels to control order.",
+    "as.numeric(f) returns internal codes, not the original labels. Use as.character(f) for labels.",
+    "str() inspects structure; class() reports class; summary() provides a compact summary.",
+    "format() and sprintf() create character output for display; they do not modify the original numeric object."
+   ],
+   "ask": {
+    "q": "State the distinction between [ ] and [[ ]].",
+    "nudge": "Sublist versus one element."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s11",
+   "mins": 2,
+   "title": "Mastery test",
+   "objective": "Demonstrate independent list and factor reasoning.",
+   "setId": "rprog_t7_mastery"
+  }
+ ]
+}
