@@ -13,8 +13,8 @@ POOL_JSON = "{\n \"moduleId\": \"nonparam\",\n \"topicId\": \"nonparam-t8\",\n \
 os.makedirs("seed", exist_ok=True)
 with open(OUT, "w", encoding="utf-8") as f:
     json.dump(json.loads(LESSON_JSON), f, ensure_ascii=False, indent=1)
-    f.write("\\n")
+    f.write(chr(10))
 with open(POOL, "w", encoding="utf-8") as f:
     json.dump(json.loads(POOL_JSON), f, ensure_ascii=False, indent=1)
-    f.write("\\n")
+    f.write(chr(10))
 print(f"Wrote {OUT} and {POOL}")
