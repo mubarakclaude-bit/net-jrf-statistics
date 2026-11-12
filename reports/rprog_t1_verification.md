@@ -2,7 +2,7 @@
 
 - Catalog: `rprog-t1`, Apply; importance 2; estimated question share 0.67; estimated marks 1.3.
 - Lesson: 13 scenes, 90-minute estimate; two guided tasks; two contextual scenarios; workflow diagram.
-- PYQ: June 2026 Paper 2 Q16 anchor; five repository study variants traced in the evidence map.
+- PYQ: June 2026 Paper 2 Q16 anchor; ten repository study variants are available for this anchor.
 - Mastery: 20 items; 6 easy / 10 moderate / 4 hard; 12 single / 5 numeric / 3 multi; keys A–D balanced at five each.
 - Checks cover sort/order/rank, one-based indices, ties, logical indexing and statistical range.
 
