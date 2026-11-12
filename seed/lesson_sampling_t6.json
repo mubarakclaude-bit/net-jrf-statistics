@@ -6,7 +6,7 @@
   "breadcrumb": "Sampling theory → Unequal probability sampling → PPS methods and estimators",
   "engine": "B",
   "engineName": "Use size-related selection chances with the estimator matched to replacement status.",
-  "version": "1.0",
+  "version": "1.1",
   "status": "review",
   "estMin": 95,
   "objectives": [
@@ -58,27 +58,21 @@
           "ask": "What is a measure of size?",
           "recall": "An auxiliary measure used to assign selection probabilities.",
           "refresh": [
-            "A measure of size may be population, acreage, sales or number of employees.",
-            "The PPS design uses this measure to give larger units higher selection chances.",
-            "The measure of size need not be the study variable being estimated."
+            "A measure of size M_i is an auxiliary quantity attached to unit i and used to make larger units more likely to be selected. It must be positive for the ordinary PPS formulas used here. The probabilities are proportional to size, not proportional to the study value y_i."
           ]
         },
         {
           "ask": "What does p_i represent in PPS with replacement?",
           "recall": "The probability that unit i is selected on one draw.",
           "refresh": [
-            "Each draw is made according to the draw probabilities.",
-            "The same unit may be selected again on another draw.",
-            "For independent draws, the draw probability remains p_i on each draw."
+            "For PPS with replacement, p_i is the probability of selecting unit i on any one draw. The n draws are independent, and a unit may appear more than once. Hansen–Hurwitz uses the draw probabilities p_i and counts repeated selections with their multiplicities."
           ]
         },
         {
           "ask": "What does π_i represent in PPS without replacement?",
           "recall": "The probability that unit i appears in the final sample.",
           "refresh": [
-            "The final sample contains distinct units.",
-            "The inclusion probability concerns membership in the final sample, not a particular draw.",
-            "In general, π_i is not the same as a first-draw probability."
+            "For PPS without replacement, π_i is the probability that unit i appears at least once in the final sample. It is an inclusion probability, not a per-draw probability. Horvitz–Thompson weights each selected unit by 1/π_i, so do not substitute p_i from a with-replacement scheme."
           ]
         }
       ],
@@ -552,7 +546,9 @@
       "HT: Σ_{i∈s}y_i/π_i.",
       "V(HT)=Σ_iΣ_j(π_ij−π_iπ_j)(y_i/π_i)(y_j/π_j).",
       "PPSWR permits repeats; PPSWOR does not.",
-      "Cumulative-total and Lahiri methods generate PPS draws."
+      "Cumulative-total and Lahiri methods generate PPS draws.",
+      "With replacement, repeated selections are separate draws; without replacement, each unit appears at most once.",
+      "A PPSWOR Horvitz–Thompson estimator requires the final inclusion probabilities π_i, not the size measure M_i itself."
     ],
     "cards": [
       [
@@ -587,7 +583,8 @@
     ],
     "shortcuts": [
       "Independent PPSWR draws imply variance of mean = single-draw variance/n.",
-      "HT weights selected units by inverse final inclusion probability."
+      "HT weights selected units by inverse final inclusion probability.",
+      "Label every PPS question WR or WOR before choosing HH with p_i or HT with π_i."
     ],
     "remember": [
       "Size measure is auxiliary information.",
