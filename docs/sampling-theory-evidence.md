@@ -24,7 +24,9 @@ All nine official syllabus topics are included. Each topic has a lesson seed, 20
 - 180 mastery questions total; each pool is intended to follow the 6 easy / 10 moderate / 4 hard contract.
 - 117 unique scene IDs; each lesson has 13 scenes, five objectives, three prerequisites, two guided scenes, a quiz scene wired to its corresponding pool, a flow diagram, and two substantial scenarios.
 - Topic and module identifiers are paired consistently (`sampling-t1` … `sampling-t9`, module `sampling`).
-- No hand-maintained `seed/meta_lessons.json` edit is made; generated seed tooling remains the index owner.
+- All nine topics are now indexed in `seed/meta_lessons.json`; each entry is checked against its lesson seed by `check.sh`.
+- All nine lesson documents and all nine mastery pools are wired into `test.js` for app integration and interaction tests.
+- Foundation rebuild explanations meet the 200-character teaching-depth threshold; each lesson has at least 8 revision-sheet lines, 6 flashcards and 3 shortcuts. The serializer checks enforce these minima.
 - Authored practice prompts and mastery questions are not labelled as official PYQs.
 
 ## Official PYQ trace
@@ -57,4 +59,4 @@ The two exact official-paper anchors are retained from `seed/pyq_j26_full.json` 
 
 ## Validation and release gate
 
-The topic verifier scripts use exact rational arithmetic for their numerical examples. Their execution against the final release branch is **not yet confirmed**. The current-head `Validate` workflow must complete its `validate`, `browser`, and `acceptance` jobs successfully before this PR is marked ready for review. Do not count these topics as production until merged into `main`. Vercel deployment is deliberately out of scope.
+The topic verifier scripts use exact rational arithmetic for their numerical examples. The repository `Validate` workflow now runs the Sampling verifiers automatically when a Sampling lesson seed changes; the separate seed/app workflow checks index wiring and browser integration. Execution against the latest release head is **pending GitHub Actions**. Both validation and browser jobs must pass before this PR is marked ready for review. Do not count these topics as production until merged into `main`. Vercel deployment is deliberately out of scope.
