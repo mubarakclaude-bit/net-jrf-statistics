@@ -16,7 +16,7 @@
         "Binomial"
       ],
       "answer": "A",
-      "explanation": "2. For a Poisson distribution, mean and variance are:",
+      "explanation": "The geometric distribution is the discrete memoryless distribution: the probability of waiting at least s+t trials, conditional on already waiting s, equals the probability of waiting t more trials.",
       "srcQ": 6
     },
     {
@@ -31,7 +31,7 @@
         "unrelated"
       ],
       "answer": "B",
-      "explanation": "Both equal λ",
+      "explanation": "For X~Poisson(λ), E(X)=λ and Var(X)=λ. The equality of mean and variance is a defining property of the Poisson distribution.",
       "srcQ": 6
     },
     {
@@ -46,7 +46,7 @@
         "greater than the mean"
       ],
       "answer": "C",
-      "explanation": "npq < np since q <",
+      "explanation": "For X~Binomial(n,p), Var(X)=np(1−p)=npq. Since 0<p<1 gives q<1, the variance is smaller than the mean np.",
       "srcQ": 6
     },
     {
@@ -61,7 +61,7 @@
         "Geometric"
       ],
       "answer": "D",
-      "explanation": "5. If X ~ B(n, p) with n → ∞, p → 0 and np = λ, the limiting distribution is:",
+      "explanation": "A negative-binomial variable counts trials or failures until r successes. When r=1, it describes the number of trials until the first success, which is geometric.",
       "srcQ": 6
     },
     {
@@ -76,7 +76,7 @@
         "Exponential"
       ],
       "answer": "A",
-      "explanation": "6. The mean of a geometric distribution with parameter p (counting trials) is:",
+      "explanation": "The binomial-to-Poisson limit applies when n→∞, p→0 and np→λ. Under these conditions Binomial(n,p) converges in distribution to Poisson(λ).",
       "srcQ": 6
     },
     {
@@ -91,7 +91,7 @@
         "q/p²"
       ],
       "answer": "B",
-      "explanation": "7. X₁ ~ Poisson(2), X₂ ~ Poisson(3), independent. Then X₁ + X₂ follows:",
+      "explanation": "For a geometric variable counting the trial on which the first success occurs, P(X=k)=(1−p)^(k−1)p and E(X)=1/p.",
       "srcQ": 6
     },
     {
@@ -121,7 +121,7 @@
         "Hypergeometric"
       ],
       "answer": "D",
-      "explanation": "9. The mgf of a binomial B(n, p) is:",
+      "explanation": "Sampling without replacement from a finite population with a fixed number of successes gives a hypergeometric count. The draws are dependent, unlike binomial sampling.",
       "srcQ": 6
     },
     {
@@ -136,7 +136,7 @@
         "e(λ(et − 1))"
       ],
       "answer": "A",
-      "explanation": "10. For the negative binomial, the variance relative to the mean is:",
+      "explanation": "For X~Binomial(n,p), independence of the Bernoulli trials gives M_X(t)=[(1−p)+pe^t]^n=(q+pe^t)^n.",
       "srcQ": 6
     },
     {
@@ -166,7 +166,7 @@
         "1/5"
       ],
       "answer": "C",
-      "explanation": "r/(n + 1) = 2/5",
+      "explanation": "For a sample of size n from U(0,1), E[X₍ᵣ₎]=r/(n+1). With r=2 and n=4, the expectation is 2/5.",
       "srcQ": 13
     },
     {
@@ -181,7 +181,7 @@
         "Beta(r, n − r + 1)"
       ],
       "answer": "D",
-      "explanation": "3. For a sample of size 5 from U(0, 1), E(X₍₅₎) is:",
+      "explanation": "For n iid Uniform(0,1) observations, the r-th order statistic has a Beta distribution with shape parameters r and n−r+1.",
       "srcQ": 13
     },
     {
@@ -196,7 +196,7 @@
         "1/6"
       ],
       "answer": "A",
-      "explanation": "4. The cdf of the largest order statistic X₍ₙ₎ is:",
+      "explanation": "For U(0,1), the expected r-th order statistic is r/(n+1). The maximum is r=n, so E[X₍₅₎]=5/6.",
       "srcQ": 13
     },
     {
@@ -211,7 +211,7 @@
         "nF(x)"
       ],
       "answer": "B",
-      "explanation": "5. For an exponential population with pdf e^(−x), the cdf of X₍₇₎ in a sample of size 7 is:",
+      "explanation": "The maximum is at most x exactly when every observation is at most x. By independence, P(X₍ₙ₎≤x)=F(x)^n.",
       "srcQ": 13
     },
     {
@@ -226,7 +226,7 @@
         "7e^(−7x)"
       ],
       "answer": "C",
-      "explanation": "It is [F(x)]ⁿ. (This is Q32 of your paper.)",
+      "explanation": "For the unit-rate exponential, F(x)=1−e^(−x) for x≥0. The maximum of seven iid observations therefore has cdf [1−e^(−x)]⁷.",
       "srcQ": 13
     },
     {
@@ -241,7 +241,7 @@
         "θ/n"
       ],
       "answer": "D",
-      "explanation": "7. For a sample from any distribution symmetric about μ, the sample median has expectation:",
+      "explanation": "The minimum of n iid exponential variables with mean θ has rate n/θ. Its mean is the reciprocal rate, θ/n.",
       "srcQ": 13
     },
     {
@@ -256,7 +256,7 @@
         "μ/2"
       ],
       "answer": "A",
-      "explanation": "8. The expected value of the sample range from U(0, 1) with n observations is:",
+      "explanation": "For an odd sample size from a distribution symmetric about μ, the sample median has a distribution symmetric about μ. Provided its expectation exists, its expected value is μ.",
       "srcQ": 13
     },
     {
@@ -331,7 +331,7 @@
         "χ²ₙ"
       ],
       "answer": "B",
-      "explanation": "3. The minimum of n iid exponential(λ) variables follows:",
+      "explanation": "The sum of n independent exponential(rate λ) variables is Gamma with shape n and rate λ. Its mean is n/λ.",
       "srcQ": 25
     },
     {
@@ -346,7 +346,7 @@
         "Uniform"
       ],
       "answer": "C",
-      "explanation": "lows:",
+      "explanation": "The survival probability of the minimum is P(X₍₁₎>t)=P(X₁>t,…,Xₙ>t)=e^(−nλt), so the minimum is exponential with rate nλ.",
       "srcQ": 25
     },
     {
@@ -361,7 +361,7 @@
         "32/81"
       ],
       "answer": "D",
-      "explanation": "Conditionally N₁ ~ Binomial(4, λ/(λ + 2λ)) = Binomial(4, 1/3), so P = ⁴C₁(1/3) (2/3)³ = 4 × 8/81 = 32/81. (This is Q60 of your paper, where the same value is printed as 2⁵/3⁴ — recognise that 32/81 and 2⁵/3⁴ are the same number.)",
+      "explanation": "Conditional on the total count N₁+N₂=4, the four arrivals are allocated between the independent processes with probabilities proportional to their rates. Thus N₁|total=4~Binomial(4,1/3), and P(N₁=1)=4(1/3)(2/3)³=32/81.",
       "srcQ": 25
     },
     {
@@ -376,7 +376,7 @@
         "gamma"
       ],
       "answer": "A",
-      "explanation": "8. If X ~ exponential(λ), then 2λX follows:",
+      "explanation": "The exponential distribution is the only continuous distribution on the non-negative half-line with the memoryless property P(X>s+t|X>s)=P(X>t).",
       "srcQ": 25
     },
     {
@@ -391,7 +391,7 @@
         "χ²₁"
       ],
       "answer": "B",
-      "explanation": "9. Given X + Y = s for iid exponentials, E(X | X + Y = s) equals:",
+      "explanation": "If X has rate λ, then 2λX has the same distribution as the square of a standard normal variable, namely χ² with 2 degrees of freedom.",
       "srcQ": 25
     },
     {
@@ -421,7 +421,7 @@
         "Hypergeometric"
       ],
       "answer": "D",
-      "explanation": "Q26. Rank of a 4 × 4 matrix The rank of [[2, 6, 4, 2], [3, 7, 4, 2], [4, 8, 4, 2], [5, 9, 4, 2]] is:",
+      "explanation": "Condition on X+Y=k. The k successes are distributed among m trials from X and n trials from Y; the conditional count X is Hypergeometric(N=m+n, K=m, draws=k).",
       "srcQ": 25
     },
     {
@@ -436,7 +436,7 @@
         "nF(x)"
       ],
       "answer": "A",
-      "explanation": "2. The cdf of the minimum of n iid observations is:",
+      "explanation": "The maximum is no greater than x only if all n observations are no greater than x. Independence gives P(X₍ₙ₎≤x)=F(x)^n.",
       "srcQ": 32
     },
     {
@@ -451,7 +451,7 @@
         "[1 − F(x)]ⁿ"
       ],
       "answer": "B",
-      "explanation": "3. For n iid exponential(λ) variables, the minimum follows:",
+      "explanation": "The minimum exceeds x only if all observations exceed x, with probability [1−F(x)]^n. Taking the complement gives F₍₁₎(x)=1−[1−F(x)]^n.",
       "srcQ": 32
     },
     {
@@ -466,7 +466,7 @@
         "exponential(λ)"
       ],
       "answer": "C",
-      "explanation": "4. The pdf of the maximum is:",
+      "explanation": "For independent exponential(rate λ) observations, P(X₍₁₎>t)=e^(−nλt). Therefore the minimum has exponential rate nλ.",
       "srcQ": 32
     },
     {
@@ -481,7 +481,7 @@
         "n[F(x)]^(n−1)f(x)"
       ],
       "answer": "D",
-      "explanation": "Differentiate [F(x)]ⁿ",
+      "explanation": "Differentiate the maximum cdf F(x)^n with respect to x. The pdf is nF(x)^(n−1)f(x).",
       "srcQ": 32
     },
     {
@@ -496,7 +496,7 @@
         "2X̄"
       ],
       "answer": "A",
-      "explanation": "6. In question 5, the UMVUE of θ is:",
+      "explanation": "For a Uniform(0,θ) sample, the likelihood is θ^(−n) for θ≥X₍ₙ₎ and zero otherwise. It is maximised at the smallest admissible θ, namely X₍ₙ₎.",
       "srcQ": 32
     },
     {
@@ -526,7 +526,7 @@
         "θ"
       ],
       "answer": "C",
-      "explanation": "8. A function proposed as a cdf must satisfy, at the lower end of the support:",
+      "explanation": "For an exponential distribution with mean θ, E[X₍ₙ₎]=θ(1+1/2+⋯+1/n)=θHₙ, the harmonic-number multiple of θ.",
       "srcQ": 32
     },
     {
@@ -556,7 +556,7 @@
         "0.25"
       ],
       "answer": "A",
-      "explanation": "(0.5)⁵",
+      "explanation": "P(X₍₅₎≤0.5)=P(all five observations are at most 0.5)=(0.5)^5=1/32.",
       "srcQ": 32
     },
     {
@@ -601,7 +601,7 @@
         "1 − (1 − p)ⁿ"
       ],
       "answer": "D",
-      "explanation": "3. 1 + 2 + … + n equals:",
+      "explanation": "The complement of 'at least one occurs' is 'none occurs'. Independence gives P(none)=(1−p)^n, so the required probability is 1−(1−p)^n.",
       "srcQ": 34
     },
     {
@@ -616,7 +616,7 @@
         "2ⁿ"
       ],
       "answer": "B",
-      "explanation": "(A) ΣP(Aᵢ)",
+      "explanation": "Pair the first and last terms, or use the arithmetic-series formula: 1+2+⋯+n=n(n+1)/2.",
       "srcQ": 34
     },
     {
@@ -631,7 +631,7 @@
         "dependent"
       ],
       "answer": "B",
-      "explanation": "9. For 3 independent events with probabilities 1/2, 3/4, 7/8, P(at least one) equals:",
+      "explanation": "P(A∩Bᶜ)=P(A)−P(A∩B)=P(A)−P(A)P(B)=P(A)[1−P(B)]=P(A)P(Bᶜ). Hence A and Bᶜ are independent.",
       "srcQ": 34
     },
     {
@@ -661,7 +661,7 @@
         "ΣP(Aᵢ)"
       ],
       "answer": "D",
-      "explanation": "Q35. Spearman’s rank correlation Crude oil and gasoline prices over 10 years are tabulated. Spearman’s rank correlation coefficient is:",
+      "explanation": "By the union bound (first Bonferroni inequality), P(∪ᵢAᵢ)≤ΣᵢP(Aᵢ).",
       "srcQ": 34
     },
     {
@@ -676,7 +676,7 @@
         "E[Var(Y|X)]"
       ],
       "answer": "B",
-      "explanation": "2. If Y | X ~ Poisson(X), then E(Y) equals:",
+      "explanation": "The law of total variance is Var(Y)=E[Var(Y|X)]+Var(E[Y|X]). It separates average conditional variation from variation in the conditional mean.",
       "srcQ": 45
     },
     {
@@ -691,7 +691,7 @@
         "E(X²)"
       ],
       "answer": "C",
-      "explanation": "3. A Poisson distribution mixed over a Gamma-distributed mean gives:",
+      "explanation": "For Y|X~Poisson(X), E(Y|X)=X. Taking expectations again gives E(Y)=E[X].",
       "srcQ": 45
     },
     {
@@ -706,7 +706,7 @@
         "negative binomial"
       ],
       "answer": "D",
-      "explanation": "r is the sample correlation coefficient based on n pairs of observations. A. The distribution of r is skewed for values closer to 1 B. The distribution of r is non-degenerate for −1 ≤ r ≤ 1 C. r has a U-shaped arcsine distribution when n = 3 D. r follows U(−1, 1) when n = 4 Correct:",
+      "explanation": "A Poisson distribution with a Gamma-distributed random mean produces a negative-binomial marginal distribution. This is the Poisson–Gamma mixture.",
       "srcQ": 45
     },
     {
@@ -721,7 +721,7 @@
         "1/λ"
       ],
       "answer": "A",
-      "explanation": "Solution",
+      "explanation": "An exponential distribution with rate λ has mean 1/λ and variance 1/λ².",
       "srcQ": 45
     },
     {
@@ -751,7 +751,7 @@
         "a constant"
       ],
       "answer": "C",
-      "explanation": "7. If X and Y are independent, E(Y | X) equals:",
+      "explanation": "The conditional expectation E(Y|X) is measurable with respect to X; it is a function of the information contained in X and is therefore a random variable.",
       "srcQ": 45
     },
     {
@@ -766,7 +766,7 @@
         "E(Y)"
       ],
       "answer": "D",
-      "explanation": "8. If Y | X ~ Binomial(n, X) with X ~ Beta(a, b), then Y follows:",
+      "explanation": "If X and Y are independent, conditioning on X does not change the distribution or expectation of Y. Thus E(Y|X)=E(Y).",
       "srcQ": 45
     },
     {
@@ -781,7 +781,7 @@
         "Poisson"
       ],
       "answer": "A",
-      "explanation": "9. If Y | X ~ N(X, 1) and X ~ N(0, σ²), then Var(Y) equals:",
+      "explanation": "Mixing a Binomial(n,p) distribution over p~Beta(a,b) gives a Beta-binomial distribution.",
       "srcQ": 45
     },
     {
@@ -811,7 +811,7 @@
         "a chi-square"
       ],
       "answer": "C",
-      "explanation": "2. For n = 4 and ρ = 0, the distribution of r is:",
+      "explanation": "Under bivariate normal sampling and H₀:ρ=0, the statistic t=r√(n−2)/√(1−r²) follows Student's t distribution with n−2 degrees of freedom.",
       "srcQ": 46
     },
     {
@@ -826,7 +826,7 @@
         "uniform on (−1, 1)"
       ],
       "answer": "D",
-      "explanation": "3. For n = 3 and ρ = 0, the distribution of r is:",
+      "explanation": "When n=4 and ρ=0, the exact density of the sample correlation coefficient is constant on (−1,1), so r is Uniform(−1,1).",
       "srcQ": 46
     },
     {
@@ -841,7 +841,7 @@
         "normal"
       ],
       "answer": "A",
-      "explanation": "4. Fisher’s z transformation of r is:",
+      "explanation": "For n=3 and ρ=0, the sample correlation density is proportional to (1−r²)^(−1/2), which is the U-shaped arcsine distribution on (−1,1).",
       "srcQ": 46
     },
     {
@@ -856,7 +856,7 @@
         "√r"
       ],
       "answer": "B",
-      "explanation": "5. The approximate variance of Fisher’s z is:",
+      "explanation": "Fisher's transformation is z=atanh(r)=½ log[(1+r)/(1−r)]. It maps correlations in (−1,1) to the real line.",
       "srcQ": 46
     },
     {
@@ -886,7 +886,7 @@
         "more skewed"
       ],
       "answer": "D",
-      "explanation": "7. If ρ = 1 exactly, the distribution of r is:",
+      "explanation": "As the population correlation approaches 1, the sample correlation distribution becomes increasingly concentrated near the upper boundary and increasingly asymmetric.",
       "srcQ": 46
     },
     {
@@ -901,7 +901,7 @@
         "uniform"
       ],
       "answer": "A",
-      "explanation": "8. r = 0 implies:",
+      "explanation": "If the population correlation is exactly 1 in a non-degenerate bivariate normal model, the sample correlation is 1 with probability one. Its distribution is a point mass at 1.",
       "srcQ": 46
     },
     {
@@ -916,7 +916,7 @@
         "Y is constant"
       ],
       "answer": "B",
-      "explanation": "9. The sample correlation r relates to the two regression slopes by:",
+      "explanation": "A sample correlation of zero means there is no linear sample association. It does not in general imply independence; that implication needs additional assumptions such as joint normality.",
       "srcQ": 46
     },
     {
@@ -931,7 +931,7 @@
         "r = b_yx"
       ],
       "answer": "C",
-      "explanation": "10. Fisher’s z is preferred over the t test when testing:",
+      "explanation": "The product of the two simple-regression slopes equals r². Since b_yx=r(s_y/s_x) and b_xy=r(s_x/s_y), their product is r².",
       "srcQ": 46
     },
     {
@@ -961,7 +961,7 @@
         "1 − e^(−1)"
       ],
       "answer": "B",
-      "explanation": "Memorylessness: P(T > 2) = e^(−2·2). (Q51 of your paper.)",
+      "explanation": "The exponential interarrival time is memoryless. P(T>6|T>4)=P(T>2)=e^(−2×2)=e^(−4).",
       "srcQ": 25,
       "moduleId": "probability"
     },
@@ -1009,7 +1009,7 @@
         "exhaustive"
       ],
       "answer": "B",
-      "explanation": "7. P(A ∪ B ∪ C) by inclusion–exclusion equals: Step 2 — sum the squared differences. Σd² = 4 + 25 + 16 + 9 + 16 + 4 + 25 + 9 + 0 + 0 = 108 Step 3 — apply the formula. ρ = 1 − 6Σd²/[n(n² − 1)] = 1 − 6(108)/ [10(100 − 1)] = 1 − 648/990 648/990 = 0.6545, so ρ = 1 − 0.6545 = 0.345 → option",
+      "explanation": "If A and B are mutually exclusive, P(A∩B)=0. If both have positive probabilities, P(A)P(B)>0, so the independence condition fails; they are dependent.",
       "srcQ": 34,
       "moduleId": "probability"
     },
@@ -1025,7 +1025,7 @@
         "E[g(X)] ≥ g(E X)"
       ],
       "answer": "D",
-      "explanation": "2. For a positive random variable X, E(1/X) compared with 1/E(X) is:",
+      "explanation": "Jensen's inequality for a convex function g states E[g(X)]≥g(E[X]), whenever the expectations exist.",
       "srcQ": 31,
       "moduleId": "probability"
     },
@@ -1041,7 +1041,7 @@
         "smaller"
       ],
       "answer": "A",
-      "explanation": "Correct:",
+      "explanation": "The function g(x)=1/x is convex for x>0 because g″(x)=2/x³>0. Jensen's inequality therefore gives E(1/X)≥1/E(X).",
       "srcQ": 31,
       "moduleId": "probability"
     },
@@ -1057,7 +1057,7 @@
         "∫F(x)dx"
       ],
       "answer": "B",
-      "explanation": "Solution",
+      "explanation": "For a non-negative random variable, the tail-integral identity is E(X)=∫₀∞P(X>x)dx=∫₀∞[1−F(x)]dx.",
       "srcQ": 31,
       "moduleId": "probability"
     },
@@ -1105,7 +1105,7 @@
         "1"
       ],
       "answer": "A",
-      "explanation": "1/k² with k =",
+      "explanation": "Chebyshev's inequality gives P(|X−μ|≥kσ)≤1/k². Setting k=2 yields the upper bound 1/4.",
       "srcQ": 31,
       "moduleId": "probability"
     },
@@ -1121,7 +1121,7 @@
         "convex"
       ],
       "answer": "B",
-      "explanation": "8. Var(X) ≥ 0 is a special case of Jensen’s inequality applied to:",
+      "explanation": "The logarithm is concave on (0,∞), so Jensen's inequality reverses the convex-function direction: E[log X]≤log E[X].",
       "srcQ": 31,
       "moduleId": "probability"
     },
@@ -1137,7 +1137,7 @@
         "1/x"
       ],
       "answer": "C",
-      "explanation": "9. For a discrete non-negative integer-valued X, E(X) equals:",
+      "explanation": "The function g(x)=x² is convex. Jensen gives E(X²)≥[E(X)]², which is equivalent to Var(X)≥0.",
       "srcQ": 31,
       "moduleId": "probability"
     },
@@ -1153,7 +1153,7 @@
         "Σ_{k≥0} P(X > k)"
       ],
       "answer": "D",
-      "explanation": "10. The Cauchy–Schwarz inequality applied to random variables yields:",
+      "explanation": "For a non-negative integer-valued variable, the tail-sum formula is E(X)=Σₖ₌₀∞P(X>k).",
       "srcQ": 31,
       "moduleId": "probability"
     },
@@ -1169,7 +1169,7 @@
         "Var ≥ 0"
       ],
       "answer": "A",
-      "explanation": "Q32. Distribution function of the largest order statistic For the exponential distribution f(x) = e^(−x), x ≥ 0, the cumulative distribution function of X₍₇₎ in a random sample of size 7 is:",
+      "explanation": "Cauchy–Schwarz gives |E(XY)|²≤E(X²)E(Y²). Applied to centred, standardised variables, this yields |Corr(X,Y)|≤1.",
       "srcQ": 31,
       "moduleId": "probability"
     },
