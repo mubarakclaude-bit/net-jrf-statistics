@@ -168,29 +168,32 @@
           "ask": "How is f_Y(y) obtained?",
           "recall": "Integrate the joint density over x on the joint support.",
           "refresh": [
-            "Limits depend on the joint support.",
-            "The marginal density must integrate to one."
+            "To obtain the marginal density of Y, start from the joint density f(x,y) and integrate out X. For each fixed y, integrate across every x-value allowed by the joint support: f_Y(y)=∫ f(x,y) dx. The limits come from the support, not automatically from 0 to 1 or from the full real line.",
+            "After finding f_Y(y), check that it is a valid density: it must be non-negative and its integral over the full support of Y must equal 1. The support of Y is obtained by projecting the joint support onto the y-axis. A missing or incorrect limit changes the marginal and every conditional law built from it."
           ]
         },
         {
           "ask": "Define P(A|B).",
           "recall": "P(A∩B)/P(B), when P(B)>0.",
           "refresh": [
-            "The denominator is the probability of the known event."
+            "Conditional probability measures the chance of A after B is known to have occurred. Restrict the sample space to B, then count the part of B that also lies in A: P(A|B)=P(A∩B)/P(B), provided P(B)>0. The denominator is the probability of the information you have been given.",
+            "For example, if 30 of 100 students take Statistics and 12 of those 30 also take Economics, then P(Economics|Statistics)=12/30, not 12/100. The latter is the joint probability. Conditioning changes the reference group, so always identify the event after the vertical bar before choosing the denominator."
           ]
         },
         {
           "ask": "How is E[g(X)|Y=y] computed?",
           "recall": "Integrate g(x) against f_{X|Y}(x|y).",
           "refresh": [
-            "Use the conditional support."
+            "A conditional expectation is an ordinary expectation under the conditional distribution. First obtain f_{X|Y}(x|y), including its support; then multiply the value g(x) by that conditional density and integrate: E[g(X)|Y=y]=∫g(x)f_{X|Y}(x|y)dx. For a discrete variable, replace the integral by a sum.",
+            "If g(x)=x, the result is the conditional mean. If g(x)=x², it gives the conditional second moment, from which Var(X|Y=y)=E(X²|Y=y)−{E(X|Y=y)}². The integration limits must be the conditional support at the observed y, not the unconditional support of X."
           ]
         },
         {
           "ask": "What characterises independence?",
           "recall": "The conditional law equals the marginal law almost everywhere.",
           "refresh": [
-            "The conditional law must not change with the observed value."
+            "Independence means that learning Y does not change the probability law of X. In distributional terms, for almost every y with positive marginal density, f_{X|Y}(x|y)=f_X(x) on the relevant support; in the discrete case, use the corresponding conditional and marginal pmfs. The equality is about the whole distribution, not just equal means.",
+            "A useful test is to derive the conditional law and see whether y remains in it. If the conditional density or pmf changes with y, the variables are not independent. If it simplifies to the marginal law for almost every admissible y, that is the independence condition. Do not confuse zero covariance with independence unless an additional result, such as joint normality, applies."
           ]
         }
       ]
