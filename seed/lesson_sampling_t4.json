@@ -6,7 +6,7 @@
   "breadcrumb": "Sampling theory → Cluster sampling → One-stage estimators and design effect",
   "engine": "B",
   "engineName": "Select groups as primary sampling units and estimate using cluster totals.",
-  "version": "1.0",
+  "version": "1.1",
   "status": "review",
   "estMin": 95,
   "objectives": [
@@ -58,27 +58,21 @@
           "ask": "What is a cluster?",
           "recall": "A group of population elements treated as a sampling unit.",
           "refresh": [
-            "Clusters are existing groups such as villages or schools.",
-            "The cluster is selected as the primary sampling unit.",
-            "Elements are individual people, farms or records inside it."
+            "A cluster is a group of population elements treated as one first-stage selection unit. Examples include villages, schools or city blocks. The elements inside a selected cluster are the ultimate study units; the clusters themselves are not the same thing as strata."
           ]
         },
         {
           "ask": "What is one-stage cluster sampling?",
           "recall": "Select clusters and observe every element in each selected cluster.",
           "refresh": [
-            "Select a sample of clusters from the frame.",
-            "Measure every element in each selected cluster.",
-            "Sampling only some elements within selected clusters is two-stage sampling."
+            "In one-stage cluster sampling, draw a probability sample of clusters and measure every element in each selected cluster. There is no second within-cluster subsampling stage. If only some elements are sampled inside selected clusters, the design is two-stage cluster sampling instead."
           ]
         },
         {
           "ask": "What is a cluster total?",
           "recall": "The sum of element values within a cluster.",
           "refresh": [
-            "Add all element values in cluster j to obtain t_j.",
-            "Cluster totals are the observed values for one-stage cluster estimation.",
-            "A cluster total is not an individual value or cluster mean."
+            "The cluster total t_j is the sum of the study values for every element in cluster j. Under equal-probability SRS of n clusters from M clusters, estimate the population total by M times the sample mean of the observed cluster totals. Do not multiply by the average cluster size again."
           ]
         }
       ],
@@ -529,7 +523,9 @@
       "V(Ŷ_cl)=M²(1−f_c)S_t²/n.",
       "For equal cluster size N=Mm, Ȳ_cl=Ŷ_cl/N.",
       "DEFF≈1+(m−1)ρ.",
-      "n_eff≈n/DEFF."
+      "n_eff≈n/DEFF.",
+      "In one-stage sampling, all elements in every selected cluster are enumerated.",
+      "Cluster sampling selects groups; stratified sampling draws units from every stratum."
     ],
     "cards": [
       [
@@ -551,6 +547,10 @@
       [
         "Effective n",
         "n/DEFF"
+      ],
+      [
+        "Cluster versus stratum",
+        "Clusters are sampled as groups; every stratum contributes a sample."
       ]
     ],
     "tricks": [
@@ -560,7 +560,8 @@
     ],
     "shortcuts": [
       "One-stage means all elements in selected clusters are measured.",
-      "Positive ICC usually makes DEFF exceed one."
+      "Positive ICC usually makes DEFF exceed one.",
+      "With positive intracluster correlation, larger clusters usually increase the design effect and reduce effective sample size."
     ],
     "remember": [
       "Cluster sampling units are groups.",
