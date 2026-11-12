@@ -16,7 +16,7 @@
         "n"
       ],
       "answer": "A",
-      "explanation": "trace[X(X′X)⁻¹X′] = trace[(X′X)⁻¹X′X] = trace(I_k) = k",
+      "explanation": "The hat matrix H is a rank-k projection. The trace of a projection equals its rank, so tr(H)=k.",
       "srcQ": 5,
       "moduleId": "regression"
     },
@@ -32,7 +32,7 @@
         "0"
       ],
       "answer": "B",
-      "explanation": "4. E(e′e) in the model y = Xβ + u with E(uu′) = σ²I is:",
+      "explanation": "With e=(I−H)u and Var(u)=σ²I, Var(e)=σ²(I−H)(I−H)′. Since I−H is symmetric and idempotent, this reduces to σ²(I−H).",
       "srcQ": 5,
       "moduleId": "regression"
     },
@@ -48,7 +48,7 @@
         "σ²"
       ],
       "answer": "C",
-      "explanation": "Hence σ̂ ² = e′e/(n − k)",
+      "explanation": "E(e′e)=tr{E(ee′)}=σ²tr(I−H). Since tr(H)=k, tr(I−H)=n−k, giving E(e′e)=σ²(n−k).",
       "srcQ": 5,
       "moduleId": "regression"
     },
@@ -64,7 +64,7 @@
         "χ²(n − k)"
       ],
       "answer": "D",
-      "explanation": "6. The product H(I − H) equals:",
+      "explanation": "Under normal errors, (I−H)u/σ is a normal projection onto a subspace of dimension n−k. Its squared length therefore follows χ² with n−k degrees of freedom.",
       "srcQ": 5,
       "moduleId": "regression"
     },
@@ -80,7 +80,7 @@
         "H"
       ],
       "answer": "A",
-      "explanation": "H − H² = H − H =",
+      "explanation": "H is idempotent, so H²=H. Hence H(I−H)=H−H²=0.",
       "srcQ": 5,
       "moduleId": "regression"
     },
@@ -96,7 +96,7 @@
         "X"
       ],
       "answer": "B",
-      "explanation": "MX = X − X(X′X)⁻¹X′X = X − X =",
+      "explanation": "M=I−X(X′X)⁻¹X′ annihilates every column of X. Therefore MX=0.",
       "srcQ": 5,
       "moduleId": "regression"
     },
@@ -112,7 +112,7 @@
         "n − k"
       ],
       "answer": "C",
-      "explanation": "It is trace(H)",
+      "explanation": "The sum of the diagonal leverages is tr(H). Since H is a rank-k projection, tr(H)=k.",
       "srcQ": 5,
       "moduleId": "regression"
     },
@@ -128,7 +128,7 @@
         "0"
       ],
       "answer": "D",
-      "explanation": "It has k zero eigenvalues, so the product of eigenvalues is",
+      "explanation": "An idempotent projection I−H has k zero eigenvalues and n−k unit eigenvalues. Its determinant, the product of its eigenvalues, is zero.",
       "srcQ": 5,
       "moduleId": "regression"
     },
@@ -144,7 +144,7 @@
         "n − k"
       ],
       "answer": "A",
-      "explanation": "Q6. Matching discrete distributions to their defining property A. Probability of number of successes in a finite number of trials — I. Negative Binomial B. Probability of first success — II. Poisson C. Probability of number of failures preceding the rᵗʰ success — III. Binomial D",
+      "explanation": "The matrix X(X′X)⁻¹X′ projects onto the column space of X. Its rank equals the dimension of that space, namely k.",
       "srcQ": 5,
       "moduleId": "regression"
     },
@@ -160,7 +160,7 @@
         "biased and inefficient"
       ],
       "answer": "C",
-      "explanation": "GLS is BLUE in that case. Step 2 — the symmetry argument. In an equicorrelation matrix all three variables are exchangeable — relabelling them leaves Σ unchanged. Therefore every firstorder partial correlation equals 1/3 and every multiple correlation is the same number",
+      "explanation": "When E(u|X)=0, OLS remains unbiased. With non-spherical error covariance it is generally not BLUE; GLS is the efficient linear unbiased estimator under the specified covariance structure.",
       "srcQ": 11,
       "moduleId": "regression"
     },
@@ -176,7 +176,7 @@
         "e′e/(n − k)"
       ],
       "answer": "D",
-      "explanation": "Statement D (r₂₃.₁ = r₁₃.₂) is TRUE — both equal 1/3. Statement A (R₃.₁₂ = R₂.₁₃) is TRUE — both multiple correlations are equal by the same symmetry",
+      "explanation": "Under the classical linear model, E(e′e)=σ²(n−k). Dividing the residual sum of squares by its residual degrees of freedom gives the unbiased estimator σ̂²=e′e/(n−k).",
       "srcQ": 11,
       "moduleId": "regression"
     },
@@ -192,7 +192,7 @@
         "(y₁ − y₂)/4"
       ],
       "answer": "A",
-      "explanation": "X′X = 2I, X′y = (y₁ + y₂, y₁ − y₂)′. Step 3 — multiple correlation",
+      "explanation": "The design matrix has rows (1,1) and (1,−1), so X′X=2I. Thus β̂₂ is the second component of (X′X)⁻¹X′y, equal to (y₁−y₂)/2.",
       "srcQ": 11,
       "moduleId": "regression"
     },
@@ -208,7 +208,7 @@
         "maximum likelihood"
       ],
       "answer": "C",
-      "explanation": "R₁.₂₃² = (r₁₂² + r₁₃² − 2r₁₂r₁₃r₂₃)/(1 − r₂₃²) = (0.25 + 0.25 − 2(0.5)(0.5)(0.5))/(1 − 0.25) = (0.5 − 0.25)/0.75 = 0.25/0.75 = 1/3 So R₁.₂₃ = √(1/3) = 0.577, not 2/3 = 0.667. Statement C is FALSE. True: A, B, D → option (D)",
+      "explanation": "In the Gauss–Markov theorem, 'best' means having the smallest variance among all linear unbiased estimators of the same estimable function.",
       "srcQ": 11,
       "moduleId": "regression"
     },
@@ -224,7 +224,7 @@
         "0.49"
       ],
       "answer": "A",
-      "explanation": "Adjusted R² = 1 − (1−0.55)(50−1)/(50−5) = 1 − 0.45×49/45 = 0.51.",
+      "explanation": "Adjusted R²=1−(1−R²)(n−1)/(n−k). Substitution gives 1−0.45×49/45=0.51.",
       "srcQ": 9
     },
     {
@@ -239,7 +239,7 @@
         "(k − 1, n − 1)"
       ],
       "answer": "B",
-      "explanation": "The regression mean square has k−1 degrees of freedom and the residual mean square has n−k degrees of freedom. Under the null and the classical normal-error assumptions, the overall statistic has an F(k−1,n−k) distribution.",
+      "explanation": "The overall regression F statistic compares regression mean square with residual mean square. Their degrees of freedom are k−1 and n−k, respectively.",
       "srcQ": 9
     },
     {
@@ -254,7 +254,7 @@
         "unrelated"
       ],
       "answer": "C",
-      "explanation": "In simple linear regression there is one slope restriction, so the overall F test is equivalent to the two-sided t test for the slope: F=t².",
+      "explanation": "With one slope restriction, the overall F test and the two-sided t test for the slope are equivalent. The relationship is F=t².",
       "srcQ": 9
     },
     {
@@ -269,7 +269,7 @@
         "tends to infinity"
       ],
       "answer": "D",
-      "explanation": "For fixed n and k, F=[R²/(k−1)]/[(1−R²)/(n−k)]. As R² approaches 1 from below, the denominator approaches zero while the numerator stays positive, so F tends to infinity.",
+      "explanation": "F=[R²/(k−1)]/[(1−R²)/(n−k)]. As R²→1, the denominator tends to zero while the numerator remains positive, so F→∞.",
       "srcQ": 9
     },
     {
@@ -284,7 +284,7 @@
         "always increase adjusted R²"
       ],
       "answer": "A",
-      "explanation": "Adding a regressor cannot increase RSS because the larger model can reproduce the smaller fit by setting its new coefficient to zero. With TSS fixed, R² therefore cannot fall.",
+      "explanation": "Adding a regressor enlarges the set of possible fitted values; the old fit remains available by setting the new coefficient to zero. RSS cannot increase, so R² cannot decrease.",
       "srcQ": 9
     },
     {
@@ -299,7 +299,7 @@
         "greater than 1"
       ],
       "answer": "B",
-      "explanation": "Adjusted R² = 1 − (1−R²)(n−1)/(n−k). It becomes negative when the fit is weak relative to the number of estimated parameters.",
+      "explanation": "Adjusted R² subtracts a degrees-of-freedom penalty from the ordinary fit measure. If the fit is weak relative to the number of parameters, the adjusted value can be negative.",
       "srcQ": 9
     },
     {
@@ -314,7 +314,7 @@
         "0.015"
       ],
       "answer": "C",
-      "explanation": "MSR=66870/3=22290 and MSE=5344/16=334. Hence F=22290/334≈66.74.",
+      "explanation": "MSR=66870/3=22290 and MSE=5344/16=334. The F ratio is 22290/334≈66.74.",
       "srcQ": 9
     },
     {
@@ -329,7 +329,7 @@
         "RegSS/TSS"
       ],
       "answer": "D",
-      "explanation": "With an intercept, R²=1−RSS/TSS=RegSS/TSS. It is the proportion of total variation explained by the fitted regression.",
+      "explanation": "With an intercept, TSS=RegSS+RSS. Therefore R²=RegSS/TSS=1−RSS/TSS.",
       "srcQ": 9
     },
     {
@@ -344,7 +344,7 @@
         "heteroscedasticity"
       ],
       "answer": "A",
-      "explanation": "This is a classic multicollinearity pattern: correlated regressors can inflate individual coefficient standard errors even when the model has a high R² and a significant joint F test.",
+      "explanation": "Multicollinearity makes coefficient estimates imprecise by inflating their standard errors. The model can still have high overall explanatory power and a significant joint F test.",
       "srcQ": 9
     },
     {
@@ -359,7 +359,7 @@
         "RSS/(n − 1)"
       ],
       "answer": "B",
-      "explanation": "With k fitted parameters, E(RSS)=σ²(n−k). Dividing RSS by its residual degrees of freedom gives the unbiased estimator RSS/(n−k).",
+      "explanation": "For k estimated parameters, E(RSS)=σ²(n−k). Hence RSS/(n−k) is unbiased for σ².",
       "srcQ": 9
     },
     {
@@ -374,7 +374,7 @@
         "large n"
       ],
       "answer": "C",
-      "explanation": "The Gauss–Markov result uses the zero conditional mean and spherical error covariance assumptions (plus full column rank). Normality and large-sample assumptions are not required for BLUE.",
+      "explanation": "The Gauss–Markov theorem requires a correctly specified linear conditional mean, zero conditional error mean, spherical error covariance and full column rank. Normality is not required for BLUE.",
       "srcQ": 11
     },
     {
@@ -389,7 +389,7 @@
         "σ²(X′X)⁻¹"
       ],
       "answer": "D",
-      "explanation": "Conditional on X, Var(β̂_OLS)=Var((X′X)⁻¹X′u)=σ²(X′X)⁻¹ when Var(u|X)=σ²I.",
+      "explanation": "Using β̂=(X′X)⁻¹X′y and Var(u|X)=σ²I gives Var(β̂|X)=σ²(X′X)⁻¹.",
       "srcQ": 11
     },
     {
@@ -404,7 +404,7 @@
         "(y₁ + y₂)/ 3"
       ],
       "answer": "A",
-      "explanation": "For X=(1,2)′, β̂=(X′X)⁻¹X′y=(1/5)(y₁+2y₂), which is the minimum-variance linear unbiased estimator under equal error variances.",
+      "explanation": "For X=(1,2)′, X′X=1²+2²=5 and X′y=y₁+2y₂. Thus β̂=(y₁+2y₂)/5.",
       "srcQ": 11
     },
     {
@@ -419,7 +419,7 @@
         "2σ²"
       ],
       "answer": "B",
-      "explanation": "Var(β̂)=σ²(X′X)⁻¹ and X′X=1²+2²=5, so the variance is σ²/5.",
+      "explanation": "The variance of the estimator in the preceding design is σ²(X′X)⁻¹=σ²/5.",
       "srcQ": 11
     },
     {
@@ -434,7 +434,7 @@
         "identical"
       ],
       "answer": "C",
-      "explanation": "If X′X is diagonal, σ²(X′X)⁻¹ is also diagonal. The OLS coefficient estimators therefore have zero pairwise covariances (and are uncorrelated).",
+      "explanation": "If X′X is diagonal, its inverse is diagonal. Since Var(β̂|X)=σ²(X′X)⁻¹, the coefficient estimators have zero pairwise covariances.",
       "srcQ": 11
     },
     {
@@ -449,7 +449,7 @@
         "ℓ′ lies in the row space of X"
       ],
       "answer": "D",
-      "explanation": "A linear function ℓ′β is estimable exactly when ℓ belongs to the row space of X; equivalently, ℓ′=a′X for some vector a.",
+      "explanation": "A linear function ℓ′β is estimable exactly when ℓ lies in the row space of X, equivalently when ℓ′=a′X for some vector a.",
       "srcQ": 11
     },
     {
@@ -464,7 +464,7 @@
         "heteroscedasticity"
       ],
       "answer": "A",
-      "explanation": "Omitting a relevant variable that is correlated with an included regressor creates omitted-variable bias. Large samples, multicollinearity and heteroscedasticity do not by themselves imply coefficient bias under exogeneity.",
+      "explanation": "Omitting a relevant variable correlated with an included regressor makes the included regressor correlated with the composite error, creating omitted-variable bias.",
       "srcQ": 38
     },
     {
@@ -479,7 +479,7 @@
         "inconsistent"
       ],
       "answer": "B",
-      "explanation": "With E(u|X)=0, heteroscedasticity alone does not bias OLS. It does violate the spherical covariance condition, so OLS is generally not BLUE and conventional homoscedastic standard errors are invalid.",
+      "explanation": "Under E(u|X)=0, heteroscedasticity alone does not bias OLS. It generally makes OLS inefficient relative to GLS and invalidates conventional homoscedastic standard errors.",
       "srcQ": 38
     },
     {
@@ -494,7 +494,7 @@
         "dropping observations"
       ],
       "answer": "C",
-      "explanation": "Principal component regression replaces correlated regressors with orthogonal principal-component directions, often retaining a subset to reduce multicollinearity.",
+      "explanation": "Principal component regression replaces correlated predictors with orthogonal principal-component scores and can retain selected components to reduce multicollinearity.",
       "srcQ": 38
     },
     {
@@ -509,7 +509,7 @@
         "interpretation of individual coefficients"
       ],
       "answer": "D",
-      "explanation": "Multicollinearity inflates coefficient variances and makes individual effects difficult to distinguish. Overall fit and in-range prediction can remain strong.",
+      "explanation": "Multicollinearity inflates standard errors and makes separate coefficient effects hard to interpret. It need not damage overall fit or prediction within the observed data range.",
       "srcQ": 38
     },
     {
@@ -524,7 +524,7 @@
         "increase or stay the same"
       ],
       "answer": "D",
-      "explanation": "2. Adjusted R² differs from R² in that it:",
+      "explanation": "Adding a regressor cannot increase the residual sum of squares in a nested least-squares model. With total sum of squares fixed, R² can only increase or stay the same.",
       "srcQ": 15
     },
     {
@@ -539,7 +539,7 @@
         "is always larger"
       ],
       "answer": "A",
-      "explanation": "3. The residual sum of squares of a model with more parameters, compared with a nested submodel, is:",
+      "explanation": "Adjusted R² modifies ordinary R² by penalising the number of estimated parameters, so an added regressor must improve fit enough to offset the degrees-of-freedom penalty.",
       "srcQ": 15
     },
     {
@@ -554,7 +554,7 @@
         "equal"
       ],
       "answer": "B",
-      "explanation": "4. Adjusted R² can decrease when a regressor is added because:",
+      "explanation": "The larger nested model contains all fits available to the smaller model. Minimising over a larger parameter set cannot produce a larger residual sum of squares.",
       "srcQ": 15
     },
     {
@@ -569,7 +569,7 @@
         "RSS rises"
       ],
       "answer": "C",
-      "explanation": "This is exactly why R² is useless for choosing between models with different numbers of regressors, and why adjusted R², AIC, BIC or Mallows’ Cₚ are used instead",
+      "explanation": "Adjusted R² can fall when the improvement in RSS is too small to compensate for the loss of residual degrees of freedom caused by adding a parameter.",
       "srcQ": 15
     },
     {
@@ -584,7 +584,7 @@
         "t²"
       ],
       "answer": "D",
-      "explanation": "where q is the number of restrictions being tested, compared with F(q, n − k). For this question, testing H₀: γ = 0 uses q = 1, and F = (A − B)/[B/(n − 3)], which is equivalent to the t-test on γ̂",
+      "explanation": "For one restriction, the partial F statistic has one numerator degree of freedom and equals the square of the corresponding t statistic.",
       "srcQ": 15
     },
     {
@@ -599,7 +599,7 @@
         "1"
       ],
       "answer": "A",
-      "explanation": "and the model is worthless for prediction — the classic overfitting illustration",
+      "explanation": "A polynomial of degree n−1 can interpolate n observations at distinct x values exactly. Every fitted residual is zero, so RSS=0.",
       "srcQ": 15
     },
     {
@@ -614,7 +614,7 @@
         "AIC"
       ],
       "answer": "B",
-      "explanation": "The penalty k log n exceeds 2k once n >",
+      "explanation": "AIC uses a penalty of 2k, whereas BIC uses k log(n). For n>e², log(n)>2, so BIC penalises additional parameters more heavily.",
       "srcQ": 15
     },
     {
@@ -629,7 +629,7 @@
         "A < B"
       ],
       "answer": "C",
-      "explanation": "10. Mallows’ Cₚ is used for:",
+      "explanation": "If the added coefficient is estimated as zero, the larger model gives the same fitted values as the restricted model. Their residual sums of squares are equal.",
       "srcQ": 15
     },
     {
@@ -644,7 +644,7 @@
         "variable selection"
       ],
       "answer": "D",
-      "explanation": "Q16. R output: x, sort, rank, order A. > x <- c(12, 4, -8, 54, 23, -51); x B. > sort(c(12, 4, -8, 54, 23, -51)) C. > rank(c(...)) D. > order(c(...)) I. [1] 4 3 2 6 5 1 II. [1] 6 3 2 1 5 4 III. [1] 12 4 -8 54 23 -51 IV. [1] -51 -8 4 12 23 54 Correct:",
+      "explanation": "Mallows' Cₚ is a model-selection criterion used to compare subsets of predictors, balancing residual fit against model complexity.",
       "srcQ": 15
     },
     {
@@ -659,7 +659,7 @@
         "1/(1 − R_j²)"
       ],
       "answer": "D",
-      "explanation": "f(x, θ) = 1/θ for 0 ≤ x ≤ θ. Testing H₀: θ = 1 against H₁: θ = 2 with critical region w = {x : x ≥ 0.5}, based on a single observation. The power of the test is:",
+      "explanation": "For regressor j, VIFⱼ=1/(1−Rⱼ²), where Rⱼ² comes from regressing that predictor on all the other predictors.",
       "srcQ": 38
     },
     {
@@ -674,7 +674,7 @@
         "1"
       ],
       "answer": "A",
-      "explanation": "Correct:",
+      "explanation": "A VIF above 10 is a commonly used warning threshold for potentially serious multicollinearity. It is a heuristic, not a universal cutoff.",
       "srcQ": 38
     },
     {
@@ -689,7 +689,7 @@
         "zero residuals"
       ],
       "answer": "B",
-      "explanation": "Power = P(reject H₀ | H₁ is true) = P(X ≥ 0.5 | θ = 2)",
+      "explanation": "When regressors are highly correlated, the model may explain y well overall while individual coefficient standard errors are large. This produces high R² but insignificant individual t tests.",
       "srcQ": 38
     },
     {
@@ -704,7 +704,7 @@
         "unbiased with smaller variance"
       ],
       "answer": "C",
-      "explanation": "6. With perfect multicollinearity, X′X is:",
+      "explanation": "Ridge regression adds a penalty to the least-squares objective. This introduces some bias but can substantially reduce coefficient variance and improve stability.",
       "srcQ": 38
     },
     {
