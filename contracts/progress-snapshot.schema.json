@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://net-jrf-statistics/contracts/progress-snapshot.schema.json",
+  "title": "Pre-import snapshot (contract v1)",
+  "$comment": "Written (and read back) BEFORE an import replaces anything, so a failed or regretted import can be undone. Stored at data/users/{uid}/snapshots/{snapshot}/record, or data/users/{uid}/p/{profile}/snapshots/{snapshot}/record for a non-default profile: both are valid DOCUMENT paths (even segment count). Retention: keep the most recent 5 per learner and profile; older ones are deleted after a successful import.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "createdAt", "learnerId", "profileId", "records"],
+  "properties": {
+    "format": { "const": "net-jrf-statistics-preimport" },
+    "version": { "const": 1 },
+    "createdAt": { "$ref": "progress-backup.schema.json#/$defs/isoTime" },
+    "learnerId": { "type": "string", "minLength": 1 },
+    "profileId": { "$ref": "progress-backup.schema.json#/$defs/profileId" },
+    "records": { "$ref": "progress-backup.schema.json#/$defs/records" }
+  }
+}
