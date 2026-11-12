@@ -1,0 +1,636 @@
+{
+  "id": "samplingt7",
+  "topicId": "sampling-t7",
+  "moduleId": "sampling",
+  "title": "Two-Stage, Multistage and Double Sampling",
+  "breadcrumb": "Sampling theory → Multistage selection and two-phase sampling",
+  "engine": "B",
+  "engineName": "Follow the unit-selection path and distinguish it from phases of measurement.",
+  "version": "1.1",
+  "status": "review",
+  "estMin": 95,
+  "objectives": [
+    "Distinguish multistage selection from two-phase measurement.",
+    "Identify PSUs, SSUs and later-stage units.",
+    "Calculate overall inclusion probabilities from conditional probabilities.",
+    "Construct inverse-probability HT contributions.",
+    "Explain auxiliary information in double sampling."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Conditional probability",
+      "why": "Overall probabilities are products along a selection path."
+    },
+    {
+      "id": "p2",
+      "name": "Inclusion probabilities and HT estimation",
+      "why": "Element weights depend on overall inclusion probabilities."
+    },
+    {
+      "id": "p3",
+      "name": "Auxiliary variables",
+      "why": "Two-phase designs collect inexpensive auxiliary measurements first."
+    }
+  ],
+  "traps": [
+    "Stage describes a level of unit selection; phase describes a round of measurement.",
+    "Multiply successive conditional probabilities; do not add them.",
+    "A PSU is not necessarily the final observation unit.",
+    "Phase two is normally subsampled from phase one.",
+    "A survey can combine multistage selection and two-phase measurement."
+  ],
+  "howto": "Trace one element from the first stage to final measurement. Write each conditional inclusion probability, multiply them for the overall probability, then use its reciprocal as the HT weight when appropriate. Separately identify whether phases refer to inexpensive auxiliary measurement followed by detailed outcome measurement.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Stages and phases",
+      "objective": "Distinguish selection levels from measurement phases.",
+      "body": [
+        "Multistage sampling selects units through successive levels: districts, villages, households and persons. Two-stage sampling selects PSUs first and SSUs within sampled PSUs.",
+        "Double sampling, or two-phase sampling, usually describes measurement. A large phase-one sample provides inexpensive auxiliary information; a subsample receives detailed measurement in phase two.",
+        "Stages describe the selection hierarchy; phases describe rounds of measurement. A survey can combine both."
+      ],
+      "items": [
+        {
+          "ask": "What is a PSU?",
+          "recall": "The unit selected at the first stage.",
+          "refresh": [
+            "A primary sampling unit (PSU) is selected at the first stage of a multistage design. It may be a district, village or other group. The PSU is a selection unit, not necessarily the final element about which the study wants information."
+          ]
+        },
+        {
+          "ask": "What is an SSU?",
+          "recall": "A unit selected within a sampled PSU.",
+          "refresh": [
+            "A secondary sampling unit (SSU) is selected within a sampled PSU at the next stage. The final element can be a household or person selected at a later stage. The overall inclusion probability is the first-stage probability multiplied by the relevant conditional probabilities at each later stage."
+          ]
+        },
+        {
+          "ask": "What is double sampling?",
+          "recall": "A two-phase design with successive measurement rounds.",
+          "refresh": [
+            "Double sampling, also called two-phase sampling, first collects inexpensive auxiliary information on a large sample and then collects detailed study information on a subsample. It is a sequence of measurement phases; two-stage sampling is a hierarchy of selection units. These are different design dimensions."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What is the key difference between two-stage and two-phase sampling?",
+        "nudge": "One describes selection levels; the other describes measurement rounds."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 8,
+      "title": "Why use multistage sampling?",
+      "objective": "Explain hierarchical selection.",
+      "body": [
+        "A national education survey may select districts, schools within districts and students within schools. Listing every student nationally may be costly or impractical.",
+        "Each stage has its own selection probability. The overall probability for a student is the product of conditional probabilities along that student's selection path.",
+        "A two-phase design addresses a different problem: a large first-phase sample collects inexpensive screening data, then a subsample receives detailed interviews."
+      ],
+      "scenario": {
+        "teaser": "National household survey",
+        "title": "Selection hierarchy versus measurement phases",
+        "body": [
+          "A national survey selects districts, villages within districts and households within villages. This is three-stage sampling. A household's overall inclusion probability is the district inclusion probability multiplied by the conditional village and household probabilities. Separately, a large first-phase sample might provide age and household size, while a smaller subsample receives a detailed health-expenditure interview. This is two-phase measurement, not another geographical selection stage. The terms stage and phase answer different questions: what level is selected, and when or how intensively is information collected.",
+          "A precise description should name both components when a survey combines nested selection and phased measurement."
+        ],
+        "q": "Districts, villages and households selected in sequence form what design?",
+        "answer": "Three-stage sampling."
+      },
+      "ask": {
+        "q": "If household selection probability varies by village, can a single common conditional probability be used?",
+        "nudge": "Use the conditional probability applying within the sampled village."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Follow a unit's selection path",
+      "objective": "Calculate an overall inclusion probability.",
+      "viz": {
+        "type": "disc-pmf",
+        "caption": "Overall probability is the product of conditional probabilities along the path."
+      },
+      "body": [
+        "Suppose a district is selected with probability 1/2, a village within it with probability 1/3 and a household within that village with probability 1/4.",
+        "The household's overall probability is (1/2)(1/3)(1/4)=1/24, provided these are the appropriate conditional probabilities.",
+        "Unequal-probability stages require the actual probability for each unit. Do not assume equal probabilities merely because the design is multistage."
+      ],
+      "ask": {
+        "q": "What is the overall probability for the example path?",
+        "nudge": "Multiply 1/2, 1/3 and 1/4."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 10,
+      "title": "Overall probabilities and HT estimation",
+      "objective": "State probability products and the HT estimator.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Two-stage design",
+          "body": "Select PSUs i at stage one, then SSUs j within selected PSUs. Let π_i be first-stage inclusion probability and π_{j|i} the conditional second-stage probability."
+        },
+        {
+          "t": "formula",
+          "h": "Overall inclusion probability",
+          "body": "For element (i,j), π_ij=π_iπ_{j|i}. In a multistage design multiply the successive conditional inclusion probabilities along its path."
+        },
+        {
+          "t": "formula",
+          "h": "Horvitz–Thompson total",
+          "body": "Ŷ_HT=Σ_{(i,j)∈s} y_ij/(π_iπ_{j|i}), when overall element inclusion probabilities are known and positive."
+        },
+        {
+          "t": "formula",
+          "h": "Equal-probability illustration",
+          "body": "If M PSUs exist and n are selected by SRSWOR, π_i=n/M. If m_i of N_i elements are selected within PSU i, π_{j|i}=m_i/N_i. Thus π_ij=(n/M)(m_i/N_i)."
+        },
+        {
+          "t": "def",
+          "h": "Two-phase measurement",
+          "body": "Phase one selects a sample for auxiliary x; phase two selects a subsample for y. Phases describe data collection rather than additional unit levels."
+        }
+      ],
+      "flow": {
+        "title": "Multistage selection path",
+        "alt": "Select PSU, select SSU conditionally, continue through further stages, multiply conditional probabilities, then weight by inverse overall probability.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Select PSU",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Select SSU within PSU",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Continue later stages",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Multiply conditional probabilities",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Use inverse overall π",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ],
+        "note": "The overall probability follows the selected unit's conditional path."
+      },
+      "ask": {
+        "q": "What is the overall probability if stage probabilities are 0.5, 0.2 and 0.1?",
+        "nudge": "Multiply the three values."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked two-stage probability",
+      "objective": "Calculate element probabilities and an HT contribution.",
+      "problem": "There are M=10 villages; n=2 are selected by SRSWOR. Each has N_i=20 households and m_i=5 are sampled. A sampled household reports y=12. Find its overall probability and HT contribution.",
+      "steps": [
+        {
+          "say": "Calculate first-stage probability.",
+          "math": "π_i=2/10=1/5",
+          "why": "Two of ten villages are selected."
+        },
+        {
+          "say": "Calculate conditional household probability.",
+          "math": "π_{j|i}=5/20=1/4",
+          "why": "Five of twenty households are sampled within the village."
+        },
+        {
+          "say": "Multiply the probabilities.",
+          "math": "π_ij=(1/5)(1/4)=1/20",
+          "why": "The household must be selected at both stages."
+        },
+        {
+          "say": "Calculate the HT contribution.",
+          "math": "12/(1/20)=240",
+          "why": "Inverse-probability weighting expands the observed value."
+        }
+      ],
+      "ask": {
+        "q": "If ten of twenty households were sampled, what would the conditional probability be?",
+        "nudge": "Calculate 10/20."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 3,
+      "title": "Recall the multistage rules",
+      "objective": "Retrieve probability products and phase distinctions.",
+      "intro": "Try each prompt before revealing the answer.",
+      "items": [
+        {
+          "q": "Two-stage unit probability?",
+          "a": "π_ij=π_iπ_{j|i}."
+        },
+        {
+          "q": "Three-stage unit probability?",
+          "a": "Multiply all three successive conditional inclusion probabilities."
+        },
+        {
+          "q": "What is a PSU?",
+          "a": "The primary sampling unit selected at stage one."
+        },
+        {
+          "q": "What is two-phase sampling?",
+          "a": "A first-phase auxiliary sample followed by a detailed-measurement subsample."
+        },
+        {
+          "q": "Are double sampling and two-stage sampling synonyms?",
+          "a": "No. One concerns phases of measurement; the other concerns selection levels."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 8,
+      "title": "Complete a three-stage probability",
+      "objective": "Apply conditional probability multiplication.",
+      "problem": "A region is selected with probability 1/2, a school within it with probability 1/5, and a student within the school with probability 1/10. Complete the overall probability.",
+      "steps": [
+        {
+          "say": "Write the factors.",
+          "blank": {
+            "prompt": "List the three conditional probabilities.",
+            "answer": "1/2, 1/5, 1/10",
+            "accept": [
+              "1/2,1/5,1/10",
+              "1/2 1/5 1/10"
+            ],
+            "hint": "Use each stage probability."
+          },
+          "why": "The student must be selected at all three stages."
+        },
+        {
+          "say": "Multiply the factors.",
+          "blank": {
+            "prompt": "Find the overall probability.",
+            "answer": "1/100",
+            "accept": [
+              "1/100",
+              "0.01"
+            ],
+            "hint": "Multiply numerators and denominators."
+          },
+          "why": "The product is the student's overall probability."
+        },
+        {
+          "say": "Take the reciprocal.",
+          "blank": {
+            "prompt": "Find the inverse-probability weight.",
+            "answer": "100",
+            "accept": [
+              "100",
+              "100.0"
+            ],
+            "hint": "Take the reciprocal of 1/100."
+          },
+          "why": "The inverse probability is the expansion weight."
+        }
+      ],
+      "ask": {
+        "q": "If school selection probability changes to 1/4, what is the overall probability?",
+        "nudge": "Calculate (1/2)(1/4)(1/10)."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 8,
+      "title": "Double sampling and two-phase designs",
+      "objective": "Explain phase-one auxiliary data and phase-two detailed measurement.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Phase one",
+          "body": "Select a relatively large sample and measure an inexpensive auxiliary variable x, such as age, land area or a short screening score."
+        },
+        {
+          "t": "def",
+          "h": "Phase two",
+          "body": "Select a subsample from phase one and measure the costly study variable y. The phase-two sample is nested within phase one."
+        },
+        {
+          "t": "formula",
+          "h": "Two-phase SRS probability",
+          "body": "If phase one selects n′ of N by SRSWOR and phase two selects n of the n′ phase-one units, overall probability of phase-two measurement is (n′/N)(n/n′)=n/N."
+        },
+        {
+          "t": "def",
+          "h": "Why use two phases?",
+          "body": "A larger first-phase sample provides auxiliary information at lower cost. A smaller second-phase sample provides expensive y measurements. Auxiliary information can support ratio or regression estimators when assumptions are appropriate."
+        },
+        {
+          "t": "def",
+          "h": "Terminology",
+          "body": "Two-stage sampling selects two levels of units. Two-phase sampling measures a sample and then a subsample. A survey may combine both."
+        }
+      ],
+      "ask": {
+        "q": "Is phase two normally selected from phase one?",
+        "nudge": "Think of the detailed-measurement sample as a nested subsample."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 9,
+      "title": "Guided practice: identify the design",
+      "objective": "Classify multistage, two-stage and double sampling.",
+      "problem": "A survey selects 30 villages, then 10 households per village, and collects a short roster from all selected households. A detailed expenditure interview is conducted on a subsample. Identify selection stages and measurement phases.",
+      "hints": [
+        "Count levels of units selected.",
+        "Distinguish household selection from the later detailed interview.",
+        "A survey can combine stages and phases."
+      ],
+      "answer": "Village and household selection form a two-stage design. The short roster followed by detailed expenditure interviews on a subsample is a two-phase measurement component. The survey combines two-stage selection with two-phase measurement.",
+      "check": "Stages describe unit levels; phases describe measurement rounds.",
+      "scenario": {
+        "teaser": "Household expenditure survey",
+        "title": "A combined design",
+        "body": [
+          "The survey first selects villages, then households within selected villages. This is two-stage sampling because two levels of sampling units are selected. All selected households complete a short roster, but only a subsample receives a lengthy expenditure interview. That second interview is a second measurement phase: inexpensive auxiliary information is collected first and detailed outcome information later. Calling the entire design simply two-stage misses the measurement subsampling; calling it only double sampling misses the nested village-household selection.",
+          "A precise description names both components: two-stage selection and two-phase measurement."
+        ],
+        "q": "What is the most precise classification?",
+        "answer": "Two-stage selection combined with two-phase measurement."
+      },
+      "solution": [
+        {
+          "say": "Count selection levels: villages, then households."
+        },
+        {
+          "say": "Classify this as two-stage sampling."
+        },
+        {
+          "say": "Identify roster data as phase one and detailed expenditure as phase two."
+        },
+        {
+          "say": "State that the survey combines selection stages and measurement phases."
+        }
+      ],
+      "ask": {
+        "q": "If the detailed interview subsample is drawn only from roster respondents, is it nested?",
+        "nudge": "Phase two is drawn from phase-one units."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 7,
+      "title": "Avoid multistage sampling traps",
+      "objective": "Check conditional probabilities and terminology.",
+      "intro": "Judge each statement.",
+      "items": [
+        {
+          "claim": "In a two-stage design, overall element probability is the product of first-stage and conditional second-stage probabilities.",
+          "tf": true,
+          "why": "The unit must be selected at both stages."
+        },
+        {
+          "claim": "A PSU is necessarily the final observation unit.",
+          "tf": false,
+          "why": "PSUs contain later-stage sampling units."
+        },
+        {
+          "claim": "Two-phase sampling usually refers to successive measurement rounds.",
+          "tf": true,
+          "why": "Phase one may collect auxiliary data and phase two detailed study data."
+        },
+        {
+          "claim": "A three-stage unit probability is obtained by adding stage probabilities.",
+          "tf": false,
+          "why": "Successive conditional probabilities are multiplied."
+        },
+        {
+          "claim": "A survey can combine multistage selection and two-phase measurement.",
+          "tf": true,
+          "why": "Selection hierarchy and measurement phases describe different aspects."
+        },
+        {
+          "claim": "The HH estimator is automatically required for every multistage design.",
+          "tf": false,
+          "why": "Estimator choice depends on the design and its inclusion probabilities."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 9,
+      "title": "Transfer: two-phase sample probability",
+      "objective": "Calculate phase-two probability and expansion weight.",
+      "problem": "A population of 1,000 farms is sampled in phase one: 200 provide land area. Phase two selects 50 of those 200 for crop-yield measurement. Under SRSWOR at both phases, calculate the probability a farm receives phase-two measurement and its inverse-probability weight.",
+      "hints": [
+        "Calculate phase-one probability.",
+        "Calculate conditional phase-two probability.",
+        "Multiply and take the reciprocal."
+      ],
+      "answer": "Phase-one probability=200/1000=0.2. Conditional phase-two probability=50/200=0.25. Overall probability=0.05=1/20. Weight=20.",
+      "check": "The product simplifies to 50/1000.",
+      "solution": [
+        {
+          "say": "Phase-one probability.",
+          "math": "200/1000=1/5",
+          "why": "One fifth enters phase one."
+        },
+        {
+          "say": "Conditional phase-two probability.",
+          "math": "50/200=1/4",
+          "why": "One quarter of phase-one units receive detailed measurement."
+        },
+        {
+          "say": "Multiply.",
+          "math": "(1/5)(1/4)=1/20",
+          "why": "A farm must enter both phases."
+        },
+        {
+          "say": "Take the reciprocal.",
+          "math": "w=20",
+          "why": "The inverse overall probability is the expansion weight."
+        }
+      ],
+      "ask": {
+        "q": "Would the probability be 1/4 relative to the full population?",
+        "nudge": "1/4 is conditional on already entering phase one."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 6,
+      "title": "Multistage and double sampling checklist",
+      "objective": "Summarise probability products and terminology.",
+      "body": [
+        "Two-stage sampling selects PSUs first, then SSUs within sampled PSUs. Multistage sampling extends the hierarchy to three or more levels.",
+        "Overall element inclusion probability is the product of successive conditional inclusion probabilities along its selection path.",
+        "For two-stage SRSWOR, π_ij=(n/M)(m_i/N_i). The HT element contribution is y_ij/π_ij when overall inclusion probability is known and positive.",
+        "Two-phase or double sampling first collects inexpensive auxiliary information on a larger sample, then detailed study information on a subsample.",
+        "A survey can combine multistage selection with two-phase measurement. State both components precisely."
+      ],
+      "ask": {
+        "q": "Which estimator and key design condition should you remember for Two-Stage, Multistage and Double Sampling?",
+        "nudge": "State the estimator, its weighting or expansion rule, and the assumptions behind its variance."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 4,
+      "title": "Mastery check",
+      "objective": "Demonstrate independent command of multistage and double sampling.",
+      "setId": "sampling_t7_mastery"
+    }
+  ],
+  "revision": {
+    "sheet": [
+      "Two-stage: select PSU, then SSU within PSU.",
+      "Multistage: three or more selection levels.",
+      "π_unit=π_stage1×π_stage2|stage1×…",
+      "HT contribution=y_unit/π_unit.",
+      "Two-phase: phase one auxiliary x; phase two subsample measures y.",
+      "Stages = selection hierarchy; phases = measurement rounds.",
+      "Two-stage variance has a between-PSU component and a within-PSU component.",
+      "For a multistage path, multiply the first-stage probability by each conditional later-stage probability to obtain the unit's overall inclusion probability."
+    ],
+    "cards": [
+      [
+        "PSU",
+        "First-stage unit"
+      ],
+      [
+        "SSU",
+        "Later-stage unit"
+      ],
+      [
+        "Overall π",
+        "Product of conditional probabilities"
+      ],
+      [
+        "Two-phase",
+        "Auxiliary sample then detailed subsample"
+      ],
+      [
+        "HT weight",
+        "1/overall π"
+      ],
+      [
+        "Two-stage vs two-phase",
+        "Stages describe selection levels; phases describe successive rounds of measurement."
+      ]
+    ],
+    "tricks": [
+      "Draw the selection tree before multiplying probabilities.",
+      "Label conditional probabilities explicitly.",
+      "Ask whether the term refers to unit levels or measurement rounds."
+    ],
+    "shortcuts": [
+      "Multiply conditional probabilities along the path.",
+      "In two-phase SRS, (n′/N)(n/n′)=n/N.",
+      "Write the selection path PSU → SSU → final unit, then multiply the conditional probabilities along that path."
+    ],
+    "remember": [
+      "Two-stage and two-phase are not synonyms.",
+      "A design may combine both."
+    ]
+  },
+  "refs": [
+    {
+      "title": "Sampling Techniques",
+      "where": "Multistage sampling and double sampling",
+      "site": "William G. Cochran",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Classical treatment of multistage and two-phase sampling."
+    },
+    {
+      "title": "Sampling: Design and Analysis",
+      "where": "Multistage sampling",
+      "site": "Sharon L. Lohr",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Design-based treatment of nested selection."
+    },
+    {
+      "title": "Sampling Theory lecture notes",
+      "where": "Multistage sampling",
+      "site": "IIT Kanpur, Shalabh",
+      "url": "https://home.iitk.ac.in/~shalab/sampling/",
+      "type": "Open lecture notes",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Open supporting material on sampling designs."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule."
+  },
+  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t7. Practice questions are original, not official PYQs. Worked inclusion probabilities and weights are independently recomputed in verify_sampling_t7.py. Illustrative designs state their SRSWOR assumptions."
+}

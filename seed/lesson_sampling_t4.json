@@ -1,0 +1,621 @@
+{
+  "id": "samplingt4",
+  "topicId": "sampling-t4",
+  "moduleId": "sampling",
+  "title": "Cluster Sampling",
+  "breadcrumb": "Sampling theory → Cluster sampling → One-stage estimators and design effect",
+  "engine": "B",
+  "engineName": "Select groups as primary sampling units and estimate using cluster totals.",
+  "version": "1.1",
+  "status": "review",
+  "estMin": 95,
+  "objectives": [
+    "Distinguish elements, clusters and primary sampling units.",
+    "Calculate one-stage cluster estimators of totals and means.",
+    "State design variance under SRSWOR of clusters.",
+    "Interpret ICC, design effect and effective sample size.",
+    "Explain operational benefits and precision limitations."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Finite population totals",
+      "why": "The estimator expands the mean of sampled cluster totals."
+    },
+    {
+      "id": "p2",
+      "name": "SRSWOR",
+      "why": "The variance assumes SRSWOR of clusters."
+    },
+    {
+      "id": "p3",
+      "name": "Variance and correlation",
+      "why": "Design-effect interpretation depends on within-cluster similarity."
+    }
+  ],
+  "traps": [
+    "The primary sampling unit is the cluster, not the individual.",
+    "One-stage sampling observes every element in selected clusters.",
+    "Use cluster totals in the total estimator.",
+    "DEFF≈1+(m−1)ρ is an approximation.",
+    "Cluster sampling can reduce field costs while reducing precision per interview."
+  ],
+  "howto": "Identify the primary sampling unit and whether all elements are observed. For one-stage SRSWOR of clusters, calculate each sampled cluster total, average those totals and multiply by M. For equal cluster size, divide by N=Mm for the element mean. Use the design-effect approximation only after stating its assumptions.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Elements and clusters",
+      "objective": "Distinguish clusters and elements.",
+      "body": [
+        "A cluster is a naturally occurring group of population elements, such as a village, school or household. In cluster sampling, groups are selected first.",
+        "In one-stage cluster sampling, every element in a selected cluster is measured. The cluster is the primary sampling unit.",
+        "Let M be the number of clusters and t_j the total value in cluster j. Cluster totals are distinct from element values and cluster means."
+      ],
+      "items": [
+        {
+          "ask": "What is a cluster?",
+          "recall": "A group of population elements treated as a sampling unit.",
+          "refresh": [
+            "A cluster is a group of population elements treated as one first-stage selection unit. Examples include villages, schools or city blocks. The elements inside a selected cluster are the ultimate study units; the clusters themselves are not the same thing as strata."
+          ]
+        },
+        {
+          "ask": "What is one-stage cluster sampling?",
+          "recall": "Select clusters and observe every element in each selected cluster.",
+          "refresh": [
+            "In one-stage cluster sampling, draw a probability sample of clusters and measure every element in each selected cluster. There is no second within-cluster subsampling stage. If only some elements are sampled inside selected clusters, the design is two-stage cluster sampling instead."
+          ]
+        },
+        {
+          "ask": "What is a cluster total?",
+          "recall": "The sum of element values within a cluster.",
+          "refresh": [
+            "The cluster total t_j is the sum of the study values for every element in cluster j. Under equal-probability SRS of n clusters from M clusters, estimate the population total by M times the sample mean of the observed cluster totals. Do not multiply by the average cluster size again."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What is selected randomly in one-stage cluster sampling?",
+        "nudge": "Clusters are the primary sampling units."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 8,
+      "title": "Why sample clusters?",
+      "objective": "Explain operational efficiency and precision trade-offs.",
+      "body": [
+        "Listing every individual in a dispersed population can be expensive. A survey can list villages, select some villages and enumerate households in them.",
+        "Cluster sampling can reduce travel and setup costs. But people within a cluster may resemble one another, so observations can contain less independent information than an SRS of individuals.",
+        "The gain is often logistical rather than statistical. The design effect describes the precision cost of within-cluster similarity."
+      ],
+      "scenario": {
+        "teaser": "Household survey across remote villages",
+        "title": "Fieldwork costs versus information",
+        "body": [
+          "A district contains 80 villages, each with approximately 40 households. Selecting households scattered across all villages may require long travel times and repeated setup costs. Instead, the team selects a smaller number of villages and interviews every household in each selected village. This one-stage cluster design makes fieldwork more concentrated and the village is the primary sampling unit.",
+          "Households in one village may share water access, local prices and infrastructure, making their outcomes correlated. The design may be cheaper to operate but less statistically efficient per interview than a well-spread individual sample. Both cost and within-village similarity matter when choosing the design."
+        ],
+        "q": "What is the main operational advantage?",
+        "answer": "It concentrates fieldwork and can reduce listing and travel costs."
+      },
+      "ask": {
+        "q": "Why can many interviews in a few villages reduce precision?",
+        "nudge": "Outcomes within a village may be correlated and partly redundant."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Expand cluster totals",
+      "objective": "Calculate an estimated total from sampled clusters.",
+      "viz": {
+        "type": "disc-pmf",
+        "caption": "M=20 and n=4 gives expansion factor M/n=5."
+      },
+      "body": [
+        "With M=20 clusters and four selected clusters having totals 20, 25, 30 and 25, the sample mean cluster total is 25.",
+        "Expanding this mean by M gives an estimated population total of 500. The estimator uses cluster totals because whole clusters are observed.",
+        "For equal cluster sizes, divide the estimated total by the known number of population elements to estimate the element mean."
+      ],
+      "ask": {
+        "q": "What is the expansion factor for M=20 and n=4?",
+        "nudge": "Divide population clusters by sampled clusters."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 10,
+      "title": "One-stage cluster estimators",
+      "objective": "State total, mean and variance estimators.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Notation",
+          "body": "There are M clusters with totals t₁,…,t_M. SRSWOR selects n clusters. Let f_c=n/M and S_t² be the finite-population variance among cluster totals."
+        },
+        {
+          "t": "formula",
+          "h": "Total estimator",
+          "body": "Ŷ_cl=M t̄_s=M(1/n)Σ_{j∈s}t_j. It is design-unbiased for Y=Σ_jt_j."
+        },
+        {
+          "t": "formula",
+          "h": "Variance",
+          "body": "V(Ŷ_cl)=M²(1−f_c)S_t²/n under SRSWOR of clusters."
+        },
+        {
+          "t": "formula",
+          "h": "Element mean for equal cluster size",
+          "body": "If each cluster contains m elements and N=Mm, then Ȳ_cl=Ŷ_cl/N and V(Ȳ_cl)=V(Ŷ_cl)/N²."
+        },
+        {
+          "t": "def",
+          "h": "Unequal cluster sizes",
+          "body": "If cluster sizes differ, an element mean needs a suitable total-over-known-N or ratio construction. The unweighted mean of cluster means is not automatically the element mean."
+        }
+      ],
+      "flow": {
+        "title": "One-stage cluster sampling",
+        "alt": "List clusters, select a sample, measure every element in selected clusters, calculate cluster totals and expand their mean by M.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "List clusters",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Select n clusters",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Measure all elements",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Calculate totals",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Expand by M",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ],
+        "note": "Variance is based on variation among cluster totals."
+      },
+      "ask": {
+        "q": "Which finite-population variance is used?",
+        "nudge": "The variance among cluster totals."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked expansion estimate",
+      "objective": "Estimate a total and element mean.",
+      "problem": "M=20 equal-size clusters, m=5. Four sampled cluster totals are 20, 25, 30 and 25. Estimate the population total and element mean.",
+      "steps": [
+        {
+          "say": "Calculate the sample mean cluster total.",
+          "math": "t̄_s=(20+25+30+25)/4=25",
+          "why": "Sampled cluster totals are the observed values."
+        },
+        {
+          "say": "Expand by the population cluster count.",
+          "math": "Ŷ_cl=20×25=500",
+          "why": "The sample mean estimates the population mean cluster total."
+        },
+        {
+          "say": "Calculate the number of elements.",
+          "math": "N=Mm=20×5=100",
+          "why": "There are 20 clusters with five elements each."
+        },
+        {
+          "say": "Divide estimated total by N.",
+          "math": "Ȳ_cl=500/100=5",
+          "why": "The element mean is total divided by population size."
+        }
+      ],
+      "ask": {
+        "q": "Why multiply by 20?",
+        "nudge": "There are 20 population clusters."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 3,
+      "title": "Recall cluster formulas",
+      "objective": "Retrieve estimator and variance.",
+      "intro": "Try each prompt before revealing its answer.",
+      "items": [
+        {
+          "q": "One-stage total estimator?",
+          "a": "Ŷ_cl=M t̄_s."
+        },
+        {
+          "q": "Cluster sampling fraction?",
+          "a": "f_c=n/M."
+        },
+        {
+          "q": "Variance of total estimator?",
+          "a": "M²(1−f_c)S_t²/n."
+        },
+        {
+          "q": "What is observed in selected clusters?",
+          "a": "Every element in one-stage sampling."
+        },
+        {
+          "q": "Equal-size design effect?",
+          "a": "Approximately 1+(m−1)ρ."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 8,
+      "title": "Complete the design-effect calculation",
+      "objective": "Calculate design effect and effective sample size.",
+      "problem": "Average cluster size m=8, ICC ρ=0.25 and 160 interviewed elements. Complete the approximation.",
+      "steps": [
+        {
+          "say": "Use the equal-size design-effect approximation.",
+          "blank": {
+            "prompt": "Write the formula.",
+            "answer": "1+(m−1)ρ",
+            "accept": [
+              "1+(m-1)rho",
+              "1+(m−1)ρ"
+            ],
+            "hint": "One plus cluster size minus one, times ICC."
+          },
+          "why": "It accounts for correlation among elements within a cluster."
+        },
+        {
+          "say": "Substitute m=8 and ρ=0.25.",
+          "blank": {
+            "prompt": "Calculate DEFF.",
+            "answer": "2.75",
+            "accept": [
+              "2.75",
+              "2.750"
+            ],
+            "hint": "1+7×0.25."
+          },
+          "why": "Seven within-cluster correlations add 1.75 to one."
+        },
+        {
+          "say": "Divide nominal sample size by DEFF.",
+          "blank": {
+            "prompt": "Find effective sample size.",
+            "answer": "58.18",
+            "accept": [
+              "58.18",
+              "58.2",
+              "58"
+            ],
+            "hint": "Compute 160/2.75."
+          },
+          "why": "This is the approximate SRS-equivalent sample size."
+        }
+      ],
+      "ask": {
+        "q": "What happens to DEFF as positive ICC increases?",
+        "nudge": "It increases, reducing effective sample size."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 8,
+      "title": "Intraclass correlation and design effect",
+      "objective": "Interpret similarity and precision effect.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Intraclass correlation",
+          "body": "The intraclass correlation coefficient ρ describes similarity between outcomes for two elements in the same cluster."
+        },
+        {
+          "t": "formula",
+          "h": "Approximate design effect",
+          "body": "For approximately equal cluster size m, DEFF≈1+(m−1)ρ. This compares variance with an SRS of the same number of elements."
+        },
+        {
+          "t": "formula",
+          "h": "Effective sample size",
+          "body": "n_eff≈n/DEFF. A design effect above one means less precision than an SRS with the same nominal element sample size."
+        },
+        {
+          "t": "def",
+          "h": "Limits",
+          "body": "This is an approximation. Unequal cluster sizes, unequal weights and complex designs can change the design effect."
+        }
+      ],
+      "ask": {
+        "q": "If ρ=0, what does the approximation give?",
+        "nudge": "DEFF=1."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 9,
+      "title": "Guided practice: estimate a total",
+      "objective": "Apply cluster expansion estimator.",
+      "problem": "There are M=12 clusters. A sample of n=3 has cluster totals 15, 18 and 21. Estimate the population total.",
+      "hints": [
+        "Calculate sample mean cluster total.",
+        "Multiply by M.",
+        "Keep cluster count separate from element count."
+      ],
+      "answer": "t̄_s=18; Ŷ_cl=12×18=216.",
+      "check": "Sample mean is 18 and expansion factor is 12.",
+      "scenario": {
+        "teaser": "School-level education survey",
+        "title": "Schools as primary sampling units",
+        "body": [
+          "A state education survey lists 300 schools and selects 30 by simple random sampling. In each selected school, the survey measures every enrolled student's attendance days for the reference month. The school total is the sum of attendance days for all students in that school. The design is one-stage cluster sampling because all students in a selected school are included.",
+          "The estimated state total is the number of schools multiplied by the sample mean of school totals. If the objective changes to average attendance per student, the analyst must also use the total number of students in the population or an appropriate ratio estimator; simply averaging school means gives each school equal weight, not each student."
+        ],
+        "q": "What is the primary sampling unit?",
+        "answer": "The school."
+      },
+      "solution": [
+        {
+          "say": "The sample mean of cluster totals is (15+18+21)/3=18."
+        },
+        {
+          "say": "Expand by M=12 clusters."
+        },
+        {
+          "say": "The estimated total is 12×18=216."
+        }
+      ],
+      "ask": {
+        "q": "Why expand school totals rather than student values?",
+        "nudge": "Schools are the sampled primary units."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 7,
+      "title": "Avoid cluster-sampling traps",
+      "objective": "Distinguish cluster sampling from other designs.",
+      "intro": "Judge each statement.",
+      "items": [
+        {
+          "claim": "In one-stage sampling, all elements in a selected cluster are observed.",
+          "tf": true,
+          "why": "That is the defining one-stage rule."
+        },
+        {
+          "claim": "The primary sampling unit is an individual element.",
+          "tf": false,
+          "why": "The primary sampling unit is the cluster."
+        },
+        {
+          "claim": "The total estimator is M times the sample mean cluster total.",
+          "tf": true,
+          "why": "The sample mean cluster total estimates the population mean cluster total."
+        },
+        {
+          "claim": "Positive ICC usually increases DEFF.",
+          "tf": true,
+          "why": "Within-cluster similarity makes observations partly redundant."
+        },
+        {
+          "claim": "The equal-size DEFF approximation is 1+(m−1)ρ.",
+          "tf": true,
+          "why": "This is the common equal-size approximation."
+        },
+        {
+          "claim": "Cluster sampling always gives more precision than SRS of individuals.",
+          "tf": false,
+          "why": "It often trades precision for operational savings."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 9,
+      "title": "Transfer: compare effective sample sizes",
+      "objective": "Compare design effects for two cluster sizes.",
+      "problem": "Two surveys each interview 200 people. A has m=10 and ρ=0.10; B has m=5 and ρ=0.10. Compare design effects and effective sample sizes.",
+      "hints": [
+        "Apply 1+(m−1)ρ.",
+        "Calculate 200/DEFF.",
+        "Smaller clusters reduce the penalty when ICC is positive."
+      ],
+      "answer": "A: DEFF=1.9 and n_eff≈105.26. B: DEFF=1.4 and n_eff≈142.86. B has larger effective sample size.",
+      "check": "Both surveys interview 200 people; average cluster size differs.",
+      "solution": [
+        {
+          "say": "For A, DEFF=1+9(0.10)=1.9."
+        },
+        {
+          "say": "For B, DEFF=1+4(0.10)=1.4."
+        },
+        {
+          "say": "Divide 200 by each design effect."
+        },
+        {
+          "say": "Smaller clusters in B reduce the approximate penalty."
+        }
+      ],
+      "ask": {
+        "q": "At fixed interviews and positive ICC, what is the usual effect of smaller clusters?",
+        "nudge": "They reduce DEFF and increase effective sample size."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 6,
+      "title": "Cluster sampling checklist",
+      "objective": "Summarise estimation, variance and design effect.",
+      "body": [
+        "One-stage cluster sampling selects clusters and observes every element in each selected cluster. Cluster totals are the sampled values.",
+        "Under SRSWOR of M clusters, estimate the total by Ŷ_cl=M t̄_s, with variance M²(1−n/M)S_t²/n.",
+        "For equal cluster size m and known N=Mm, estimate the element mean by Ŷ_cl/N.",
+        "For approximately equal cluster size, DEFF≈1+(m−1)ρ and n_eff≈n/DEFF. Positive ICC reduces effective information.",
+        "Cluster sampling can lower fieldwork costs but does not guarantee higher precision. Distinguish one-stage cluster sampling from two-stage and stratified sampling."
+      ],
+      "ask": {
+        "q": "Which estimator and key design condition should you remember for Cluster Sampling?",
+        "nudge": "State the estimator, its weighting or expansion rule, and the assumptions behind its variance."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 4,
+      "title": "Mastery check",
+      "objective": "Demonstrate command of one-stage cluster sampling.",
+      "setId": "sampling_t4_mastery"
+    }
+  ],
+  "revision": {
+    "sheet": [
+      "Ŷ_cl=M t̄_s.",
+      "f_c=n/M.",
+      "V(Ŷ_cl)=M²(1−f_c)S_t²/n.",
+      "For equal cluster size N=Mm, Ȳ_cl=Ŷ_cl/N.",
+      "DEFF≈1+(m−1)ρ.",
+      "n_eff≈n/DEFF.",
+      "In one-stage sampling, all elements in every selected cluster are enumerated.",
+      "Cluster sampling selects groups; stratified sampling draws units from every stratum."
+    ],
+    "cards": [
+      [
+        "Total",
+        "M t̄_s"
+      ],
+      [
+        "Cluster FPC",
+        "1−n/M"
+      ],
+      [
+        "Variance",
+        "M²(1−f_c)S_t²/n"
+      ],
+      [
+        "Design effect",
+        "1+(m−1)ρ"
+      ],
+      [
+        "Effective n",
+        "n/DEFF"
+      ],
+      [
+        "Cluster versus stratum",
+        "Clusters are sampled as groups; every stratum contributes a sample."
+      ]
+    ],
+    "tricks": [
+      "Average cluster totals first, then expand by M.",
+      "Keep M distinct from element count N.",
+      "Calculate DEFF before effective sample size."
+    ],
+    "shortcuts": [
+      "One-stage means all elements in selected clusters are measured.",
+      "Positive ICC usually makes DEFF exceed one.",
+      "With positive intracluster correlation, larger clusters usually increase the design effect and reduce effective sample size."
+    ],
+    "remember": [
+      "Cluster sampling units are groups.",
+      "Variance is driven by variation among cluster totals."
+    ]
+  },
+  "refs": [
+    {
+      "title": "Sampling Techniques",
+      "where": "Cluster sampling and intracluster correlation",
+      "site": "William G. Cochran",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Classical cluster sampling estimators and variance formulas."
+    },
+    {
+      "title": "Sampling: Design and Analysis",
+      "where": "Cluster sampling and design effects",
+      "site": "Sharon L. Lohr",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Modern treatment of cluster designs and precision."
+    },
+    {
+      "title": "Sampling Theory lecture notes",
+      "where": "Cluster sampling",
+      "site": "IIT Kanpur, Shalabh",
+      "url": "https://home.iitk.ac.in/~shalab/sampling/",
+      "type": "Open lecture notes",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Open supporting material for sampling designs."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule."
+  },
+  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t4. Practice items are original and are not represented as official PYQs. Worked cluster expansion and design-effect examples are independently recomputed in verify_sampling_t4.py. The total variance assumes SRSWOR of clusters; the design-effect expression is an equal-cluster-size approximation."
+}
