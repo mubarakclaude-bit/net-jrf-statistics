@@ -1,5 +1,7 @@
 # Sampling Theory T7 — verification report
 
+- PYQ anchor: June 2026 Paper 2 Q36 (NSSO stratified multi-stage sampling); ten linked practice variants are available.
+
 **Topic:** Two-stage, multi-stage and double sampling  
 **Verifier:** `verify_sampling_t7.py`  
 **Authoring/serialization:** `lesson_sampling_t7.py`
