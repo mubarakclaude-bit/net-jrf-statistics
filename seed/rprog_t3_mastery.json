@@ -1,0 +1,386 @@
+{
+ "moduleId": "rprog",
+ "topicId": "rprog-t3",
+ "source": "mastery",
+ "label": "Scoping Rules in R — unseen mastery test",
+ "count": 20,
+ "items": [
+  {
+   "id": "rprog-t3-m-01",
+   "diff": "easy",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "R name lookup begins in which environment?",
+   "options": [
+    "The current evaluation environment",
+    "The global environment always",
+    "The empty environment",
+    "The package environment"
+   ],
+   "answer": "A",
+   "explanation": "Lookup begins in the current evaluation environment and follows parent links when needed."
+  },
+  {
+   "id": "rprog-t3-m-02",
+   "diff": "easy",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "A function's enclosing environment is generally:",
+   "options": [
+    "Where it was called",
+    "Where it was created",
+    "The global environment in every case",
+    "The environment of its last call"
+   ],
+   "answer": "B",
+   "explanation": "A function retains the environment in which it was created."
+  },
+  {
+   "id": "rprog-t3-m-03",
+   "diff": "easy",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "What does masking mean?",
+   "options": [
+    "Deleting a parent binding",
+    "Changing every binding with a name",
+    "A nearer binding hiding a same-named parent binding",
+    "Moving an object to the global environment"
+   ],
+   "answer": "C",
+   "explanation": "Lookup stops at the first matching binding, so a nearer binding masks the parent one."
+  },
+  {
+   "id": "rprog-t3-m-04",
+   "diff": "easy",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "Which operator normally creates or updates a local binding inside a function?",
+   "options": [
+    "<<-",
+    "==",
+    "->>",
+    "<-"
+   ],
+   "answer": "D",
+   "explanation": "Ordinary assignment inside a function normally acts in its current evaluation environment."
+  },
+  {
+   "id": "rprog-t3-m-05",
+   "diff": "easy",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "Which operator searches enclosing environments for an existing binding?",
+   "options": [
+    "<<-",
+    "<-",
+    "%in%",
+    "$"
+   ],
+   "answer": "A",
+   "explanation": "Superassignment searches outward and updates the first existing binding."
+  },
+  {
+   "id": "rprog-t3-m-06",
+   "diff": "easy",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "A closure consists of:",
+   "options": [
+    "A loop and a vector",
+    "A function and its enclosing environment",
+    "A function and its calling environment only",
+    "A global variable and a package"
+   ],
+   "answer": "B",
+   "explanation": "The function retains its enclosing environment, forming a closure."
+  },
+  {
+   "id": "rprog-t3-m-07",
+   "diff": "moderate",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "Global x=10. g=function() x. f=function(){x=20; g()}. What does f() return?",
+   "options": [
+    "20",
+    "30",
+    "10",
+    "Error"
+   ],
+   "answer": "C",
+   "explanation": "g was created globally, so lexical lookup finds global x=10; f's local x is only in the calling environment."
+  },
+  {
+   "id": "rprog-t3-m-08",
+   "diff": "moderate",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "Global rate=0.05. What does f=function(){rate=0.12; rate} return?",
+   "options": [
+    "0.05",
+    "0.17",
+    "NULL",
+    "0.12"
+   ],
+   "answer": "D",
+   "explanation": "The local rate binding masks the global binding inside the function."
+  },
+  {
+   "id": "rprog-t3-m-09",
+   "diff": "moderate",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "If <<- finds no existing binding in enclosing environments, where does it assign?",
+   "options": [
+    ".GlobalEnv",
+    "The empty environment",
+    "The calling environment",
+    "Every parent environment"
+   ],
+   "answer": "A",
+   "explanation": "The documented fallback for superassignment is assignment in the global environment."
+  },
+  {
+   "id": "rprog-t3-m-10",
+   "diff": "moderate",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "A function created inside outer() accesses n after outer() returns. Why?",
+   "options": [
+    "The call stack remains forever",
+    "The closure retains the enclosing environment",
+    "R copies n into .GlobalEnv",
+    "The calling environment is reused"
+   ],
+   "answer": "B",
+   "explanation": "A reachable closure retains access to the environment in which it was created."
+  },
+  {
+   "id": "rprog-t3-m-11",
+   "diff": "moderate",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "In inner=function(){x <<- 9}, which environment is searched first for an existing x?",
+   "options": [
+    "The global environment only",
+    "The calling environment",
+    "The parent of inner's evaluation environment",
+    "The empty environment"
+   ],
+   "answer": "C",
+   "explanation": "Superassignment searches outward, beginning with the enclosing environment."
+  },
+  {
+   "id": "rprog-t3-m-12",
+   "diff": "moderate",
+   "format": "single",
+   "topic": "rprog-t3",
+   "stem": "If x exists locally and globally, which value is used inside that local evaluation?",
+   "options": [
+    "The global value",
+    "Their sum",
+    "An error",
+    "The local value"
+   ],
+   "answer": "D",
+   "explanation": "The first matching binding is local, so it masks the global binding."
+  },
+  {
+   "id": "rprog-t3-m-13",
+   "diff": "moderate",
+   "format": "numeric",
+   "topic": "rprog-t3",
+   "stem": "Global score=80. f=function(){score=25; score+5}. What does f() return?",
+   "options": [
+    "30",
+    "25",
+    "85",
+    "80"
+   ],
+   "answer": "A",
+   "explanation": "The local score is 25, so the final expression returns 25+5=30.",
+   "check": "30"
+  },
+  {
+   "id": "rprog-t3-m-14",
+   "diff": "moderate",
+   "format": "numeric",
+   "topic": "rprog-t3",
+   "stem": "Global level=1. outer=function(){level=2; inner=function(){level <<- 9}; inner(); level}. What does outer() return?",
+   "options": [
+    "2",
+    "9",
+    "1",
+    "10"
+   ],
+   "answer": "B",
+   "explanation": "inner's enclosing environment is outer's evaluation environment, where level=2; <<- updates it to 9.",
+   "check": "9"
+  },
+  {
+   "id": "rprog-t3-m-15",
+   "diff": "moderate",
+   "format": "numeric",
+   "topic": "rprog-t3",
+   "stem": "A fresh counter closure starts n=0 and each call executes n <<- n+1; n. What is its fourth result?",
+   "options": [
+    "3",
+    "5",
+    "4",
+    "1"
+   ],
+   "answer": "C",
+   "explanation": "The retained counter increments once per call, giving 1, 2, 3 and then 4.",
+   "check": "4"
+  },
+  {
+   "id": "rprog-t3-m-16",
+   "diff": "moderate",
+   "format": "numeric",
+   "topic": "rprog-t3",
+   "stem": "Global x=10. f=function(){x <<- 4; x}. What is global x after f()?",
+   "options": [
+    "10",
+    "14",
+    "0",
+    "4"
+   ],
+   "answer": "D",
+   "explanation": "The enclosing chain contains global x=10, so <<- updates that binding to 4.",
+   "check": "4"
+  },
+  {
+   "id": "rprog-t3-m-17",
+   "diff": "hard",
+   "format": "multi",
+   "topic": "rprog-t3",
+   "stem": "Which statements about lexical scoping are correct?",
+   "options": [
+    "A, B and C only",
+    "A and D only",
+    "B and C only",
+    "All four"
+   ],
+   "answer": "A",
+   "explanation": "A, B and C are correct; the caller's local environment is not automatically searched by lexical lookup.",
+   "statements": [
+    "A function retains its creation environment.",
+    "A nearer binding can mask a parent binding.",
+    "The calling environment is not automatically the lexical parent.",
+    "Free variables are always resolved in .GlobalEnv first."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The creation environment is the function's enclosing environment."
+    },
+    "B": {
+     "tf": true,
+     "why": "The first matching binding is used."
+    },
+    "C": {
+     "tf": true,
+     "why": "R follows lexical rather than dynamic scoping."
+    },
+    "D": {
+     "tf": false,
+     "why": "Lookup begins in the current evaluation environment, then follows its parent chain."
+    }
+   }
+  },
+  {
+   "id": "rprog-t3-m-18",
+   "diff": "hard",
+   "format": "multi",
+   "topic": "rprog-t3",
+   "stem": "Which statements about <<- are correct?",
+   "options": [
+    "A and C only",
+    "A, B and D only",
+    "B and C only",
+    "All four"
+   ],
+   "answer": "B",
+   "explanation": "A, B and D are correct; <<- does not create a new binding in every parent environment.",
+   "statements": [
+    "It searches enclosing environments for an existing binding.",
+    "It updates the first matching binding found.",
+    "It always changes only the current local binding.",
+    "If no enclosing binding is found, it assigns in .GlobalEnv."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The operator searches outward through parent environments."
+    },
+    "B": {
+     "tf": true,
+     "why": "The first existing binding is the one updated."
+    },
+    "C": {
+     "tf": false,
+     "why": "That is not the behaviour of superassignment."
+    },
+    "D": {
+     "tf": true,
+     "why": "The global environment is the documented fallback."
+    }
+   }
+  },
+  {
+   "id": "rprog-t3-m-19",
+   "diff": "hard",
+   "format": "multi",
+   "topic": "rprog-t3",
+   "stem": "Which statements about closures are correct?",
+   "options": [
+    "A and D only",
+    "All four",
+    "A, B and C only",
+    "B and C only"
+   ],
+   "answer": "C",
+   "explanation": "Statements A, B and C are true; D is false. A closure retains its enclosing environment, so the outer function does not need to remain on the call stack.",
+   "statements": [
+    "A closure combines a function with its enclosing environment.",
+    "A returned inner function can retain access to an outer local variable.",
+    "A retained environment can hold changing state between calls.",
+    "The outer function must still be on the call stack for the closure to work."
+   ],
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The enclosing environment is part of the closure."
+    },
+    "B": {
+     "tf": true,
+     "why": "The inner function can resolve the outer binding lexically."
+    },
+    "C": {
+     "tf": true,
+     "why": "The environment remains reachable through the closure."
+    },
+    "D": {
+     "tf": false,
+     "why": "The outer call may have returned; the closure retains the environment."
+    }
+   }
+  },
+  {
+   "id": "rprog-t3-m-20",
+   "diff": "hard",
+   "format": "numeric",
+   "topic": "rprog-t3",
+   "stem": "Global x=10. Define f=function(){x=3; g=function() x; g()}. What does f() return?",
+   "options": [
+    "10",
+    "13",
+    "Error",
+    "3"
+   ],
+   "answer": "D",
+   "explanation": "g is created after the local x binding exists, so g's enclosing environment is f's evaluation environment and it finds x=3.",
+   "check": "3"
+  }
+ ]
+}

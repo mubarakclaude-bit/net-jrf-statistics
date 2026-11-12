@@ -1,0 +1,667 @@
+{
+ "id": "rprogt4",
+ "topicId": "rprog-t4",
+ "moduleId": "rprog",
+ "title": "Matrices and matrix operators in R",
+ "breadcrumb": "Module 9 · R Programming · Matrices and matrix operators",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 90,
+ "objectives": [
+  "Create matrices and predict column-wise filling.",
+  "Read dimensions and indexing.",
+  "Distinguish element-wise and matrix multiplication.",
+  "Use transpose, determinant, solve, diagonal and margin summaries."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Vectors and indexing",
+   "why": "Matrices are vectors with dimension attributes."
+  },
+  {
+   "id": "p2",
+   "name": "Matrix dimensions and multiplication",
+   "why": "Conformability determines whether a product is defined."
+  },
+  {
+   "id": "p3",
+   "name": "Linear equations",
+   "why": "The solve() function is used to solve matrix systems."
+  }
+ ],
+ "traps": [
+  "matrix() fills by column unless byrow=TRUE.",
+  "* is element-wise; %*% is matrix multiplication.",
+  "A[i,j] means row i, column j.",
+  "Matrix products require matching inner dimensions.",
+  "det() requires a square matrix.",
+  "solve(A,b) solves Ax=b.",
+  "Use drop=FALSE to preserve matrix dimensions."
+ ],
+ "revision": {
+  "sheet": [
+   "matrix() fills columns by default.",
+   "dim(A) returns rows then columns.",
+   "A[i,j] selects row i and column j.",
+   "* is element-wise; %*% is matrix multiplication.",
+   "A(m×n)%*%B(n×q) has size m×q.",
+   "t(A) swaps dimensions.",
+   "det([[a,b],[c,d]])=ad−bc.",
+   "solve(A,b) solves Ax=b.",
+   "diag(A) extracts diagonal; diag(n) creates identity.",
+   "rowSums() and colSums() summarise margins."
+  ],
+  "cards": [
+   [
+    "matrix()",
+    "Column-wise fill"
+   ],
+   [
+    "*",
+    "Element-wise"
+   ],
+   [
+    "%*%",
+    "Matrix product"
+   ],
+   [
+    "t()",
+    "Transpose"
+   ],
+   [
+    "det()",
+    "Determinant"
+   ],
+   [
+    "solve()",
+    "Linear system"
+   ],
+   [
+    "diag()",
+    "Diagonal / identity"
+   ]
+  ],
+  "tricks": [
+   "Check dimensions before %*%.",
+   "Never confuse * and %*%.",
+   "Use row-column order for indexing.",
+   "Use drop=FALSE to preserve dimensions."
+  ],
+  "shortcuts": [
+   "Write dimensions beside each matrix.",
+   "Check inner dimensions before multiplying.",
+   "For 2×2 determinant use ad−bc.",
+   "Compute matrix products row by column."
+  ],
+  "remember": [
+   "Default fill is by column.",
+   "* is not matrix multiplication.",
+   "Inner dimensions must match.",
+   "Transpose swaps dimensions.",
+   "A zero determinant means singular."
+  ]
+ },
+ "howto": "Write matrix dimensions first. For construction, follow the fill direction. For multiplication, verify inner dimensions and compute row-by-column dot products. For elementwise operations, apply the operation entrywise.",
+ "refs": [
+  {
+   "title": "R Documentation: matrix",
+   "where": "Matrix construction",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/matrix.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Construction, dimensions, byrow and indexing."
+  },
+  {
+   "title": "R Documentation: matmult",
+   "where": "Matrix multiplication",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/matmult.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Matrix product operator semantics."
+  },
+  {
+   "title": "R Documentation: solve",
+   "where": "Linear systems",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/solve.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Solving systems and matrix inversion."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [],
+ "provenance": "Catalog rprog-t4 (Matrices and matrix operators; Apply). Practice content aligned to base R matrix semantics.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "A matrix is a vector with dimensions",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "R matrices are atomic vectors with a two-dimensional dim attribute.",
+    "The first subscript is the row and the second is the column. R uses one-based indexing.",
+    "matrix() fills down columns by default; byrow=TRUE changes the fill direction."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "items": [
+    {
+     "ask": "What does dim(A) report?",
+     "recall": "The number of rows followed by the number of columns.",
+     "refresh": [
+      "dim(A) returns a length-two integer vector: first the row count, then the column count. For a matrix with three rows and two columns, dim(A) is c(3,2).",
+      "Always keep the order straight when reading dimensions. nrow(A) and ncol(A) report the two values separately, while dim(A) reports both together in row-column order."
+     ]
+    },
+    {
+     "ask": "Which operator performs matrix multiplication?",
+     "recall": "%*%.",
+     "refresh": [
+      "In R, the operator %*% performs matrix multiplication. The ordinary * operator multiplies corresponding entries and is not a substitute for a matrix product.",
+      "Before using %*%, check that the number of columns in the left matrix equals the number of rows in the right matrix. If those inner dimensions differ, the product is not conformable."
+     ]
+    },
+    {
+     "ask": "What does t(A) do?",
+     "recall": "It returns the transpose of A.",
+     "refresh": [
+      "The transpose exchanges rows and columns. A matrix with r rows and c columns becomes a matrix with c rows and r columns.",
+      "When tracing matrix expressions, write the dimensions before and after transposition. This makes it easier to check whether a later matrix product is defined and what dimensions its result will have."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "Construction and column-major filling",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "matrix(1:6,nrow=2,ncol=3) produces rows (1,3,5) and (2,4,6).",
+    "The input vector is consumed down the first column, then down the next column.",
+    "Use byrow=TRUE only when the requested layout is row-wise."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "scenario": {
+    "teaser": "Arrange six observations",
+    "title": "A researcher's data layout",
+    "body": [
+     "A researcher creates a matrix from six measurements. Default matrix construction fills down columns, so the first two observations occupy the first column of a two-row matrix.",
+     "If the intended layout is row-wise, the researcher must set byrow=TRUE.",
+     " The analyst should also record the dimensions of each intermediate object, not merely the final answer. This makes it possible to identify a non-conformable product before attempting arithmetic and to distinguish a matrix product from elementwise multiplication. In an examination setting, writing the inner dimensions first is a quick way to avoid a common operator error."
+    ],
+    "q": "What is the first row of matrix(1:6,nrow=2)?",
+    "answer": "c(1,3,5)."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 8,
+   "title": "Dimensions and indexing",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "dim(A) returns c(nrow(A),ncol(A)).",
+    "A[i,j] selects one element; A[i,] selects row i; A[,j] selects column j.",
+    "Use drop=FALSE to keep a one-row or one-column subset as a matrix."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Dimensions",
+     "body": "dim(A) returns c(nrow(A), ncol(A))."
+    },
+    {
+     "t": "def",
+     "h": "Indexing",
+     "body": "A[i,j] selects one element; A[i,] selects row i; A[,j] selects column j."
+    },
+    {
+     "t": "def",
+     "h": "Preserve dimensions",
+     "body": "Use drop=FALSE to keep a one-row or one-column subset as a matrix."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 8,
+   "title": "Construct a matrix by hand",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "For matrix(c(2,4,6,8,10,12),2,3), fill columns as (2,4), (6,8), (10,12).",
+    "Read across the completed matrix: row 1 is (2,6,10), row 2 is (4,8,12).",
+    "With byrow=TRUE, the first row instead receives 2,4,6."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "problem": "Construct matrix(c(2,4,6,8,10,12), nrow=2, ncol=3) using R's default filling order. State the resulting rows.",
+   "steps": [
+    {
+     "say": "Fill the first column",
+     "math": "The first two values fill rows one and two: 2, 4.",
+     "why": "R fills matrices down columns by default."
+    },
+    {
+     "say": "Fill the remaining columns",
+     "math": "The second column is 6, 8; the third is 10, 12.",
+     "why": "Continue down each column before moving to the next."
+    },
+    {
+     "say": "Read the completed rows",
+     "math": "Row 1 is (2,6,10); row 2 is (4,8,12).",
+     "why": "Read across the completed matrix after filling by columns."
+    }
+   ]
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 5,
+   "title": "Operator meanings",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "A*B multiplies corresponding entries element by element.",
+    "A%*%B performs matrix multiplication using row-by-column dot products.",
+    "t(A) transposes; det(A) calculates a determinant; solve(A,b) solves Ax=b."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "intro": "Recall the main matrix operators and their purposes.",
+   "items": [
+    {
+     "q": "A*B",
+     "a": "Multiplies corresponding entries element by element."
+    },
+    {
+     "q": "A%*%B",
+     "a": "Performs matrix multiplication using row-by-column dot products."
+    },
+    {
+     "q": "t(A)",
+     "a": "Returns the transpose of A."
+    },
+    {
+     "q": "det(A)",
+     "a": "Calculates the determinant of a square matrix."
+    },
+    {
+     "q": "solve(A,b)",
+     "a": "Solves the linear system Ax=b."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 8,
+   "title": "Element-wise arithmetic versus matrix product",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "The * operator is element-wise; it does not perform a linear-algebra product.",
+    "For A of size m×n and B of size p×q, A%*%B exists only when n=p.",
+    "The resulting product has size m×q."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "flow": {
+    "title": "Matrix multiplication check",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Write dimensions",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Compare inner dimensions",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "If equal, multiply",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Result: outer dimensions",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Elementwise multiplication",
+     "body": "The * operator multiplies corresponding entries; it is not a matrix product."
+    },
+    {
+     "t": "def",
+     "h": "Conformability",
+     "body": "For A of size m×n and B of size p×q, A%*%B exists only when n=p."
+    },
+    {
+     "t": "def",
+     "h": "Result dimensions",
+     "body": "A conformable product A%*%B has size m×q."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s6",
+   "mins": 7,
+   "title": "Check conformability",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "For A(3×2) and B(2×4), the inner dimensions match at 2.",
+    "The product AB has 3 rows and 4 columns, hence dimension 3×4.",
+    "The number of entries in the result is 3×4=12."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "problem": "A is 3×2 and B is 2×4. Give the dimension of AB.",
+   "answer": "3×4",
+   "hints": [
+    "Write (3×2)(2×4).",
+    "The inner dimensions match at 2.",
+    "The result uses the outer dimensions."
+   ],
+   "solution": [
+    {
+     "say": "Write the dimensions in the order shown.",
+     "math": "A is 3×2 and B is 2×4.",
+     "why": "The first matrix contributes the row count and the second contributes the column count."
+    },
+    {
+     "say": "Check the inner dimensions.",
+     "math": "2 = 2, so the product is conformable.",
+     "why": "The number of columns in A equals the number of rows in B."
+    },
+    {
+     "say": "Read the outer dimensions for the result.",
+     "math": "AB is 3×4.",
+     "why": "The product keeps the rows of A and the columns of B."
+    }
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Transpose, determinant and inverse",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "t(A) exchanges rows and columns: an m×n matrix becomes n×m.",
+    "For [[a,b],[c,d]], det(A)=ad−bc. The determinant requires a square matrix.",
+    "solve(A,b) solves Ax=b; solve(A) gives the inverse when A is nonsingular."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Transpose",
+     "body": "t(A) exchanges rows and columns: an m×n matrix becomes n×m."
+    },
+    {
+     "t": "def",
+     "h": "Determinant",
+     "body": "For a 2×2 matrix, det(A)=ad−bc. The determinant requires a square matrix."
+    },
+    {
+     "t": "def",
+     "h": "Solving systems",
+     "body": "solve(A,b) solves Ax=b; solve(A) gives the inverse when A is nonsingular."
+    }
+   ]
+  },
+  {
+   "kind": "worked",
+   "id": "s8",
+   "mins": 8,
+   "title": "Calculate a determinant",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "For A=[[2,1],[3,2]], identify a=2,b=1,c=3,d=2.",
+    "det(A)=ad−bc=2×2−1×3=1.",
+    "Because the determinant is nonzero, A is nonsingular and has an inverse."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "problem": "For A = [[2,1],[3,2]], calculate det(A) and state whether A is nonsingular.",
+   "answer": "1",
+   "steps": [
+    {
+     "say": "Identify the entries",
+     "math": "a=2, b=1, c=3, d=2.",
+     "why": "Match the matrix entries to the determinant formula."
+    },
+    {
+     "say": "Apply the 2×2 formula",
+     "math": "det(A)=ad−bc = 2×2−1×3 = 1.",
+     "why": "Substitute each entry in the correct position."
+    },
+    {
+     "say": "Interpret the result",
+     "math": "The determinant is 1, which is nonzero; A is nonsingular.",
+     "why": "A square matrix with nonzero determinant has an inverse."
+    }
+   ],
+   "scenario": {
+    "teaser": "Check a covariance matrix",
+    "title": "A statistician checks invertibility",
+    "body": [
+     "A statistician is given a 2×2 matrix and needs to decide whether it has an inverse before solving a system.",
+     "The determinant is computed first. A nonzero determinant indicates that the square matrix is nonsingular.",
+     " The analyst should also record the dimensions of each intermediate object, not merely the final answer. This makes it possible to identify a non-conformable product before attempting arithmetic and to distinguish a matrix product from elementwise multiplication. In an examination setting, writing the inner dimensions first is a quick way to avoid a common operator error."
+    ],
+    "q": "What does a nonzero determinant establish?",
+    "answer": "The matrix is nonsingular and invertible."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s9",
+   "mins": 7,
+   "title": "Diagonal and margin summaries",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "diag(A) extracts diagonal entries; diag(n) creates an n×n identity matrix.",
+    "rowSums(A) and colSums(A) calculate row and column totals.",
+    "For [[1,2],[3,4]], rowSums is (3,7), colSums is (4,6), and diag is (1,4)."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Diagonal",
+     "body": "diag(A) extracts diagonal entries; diag(n) creates an n×n identity matrix."
+    },
+    {
+     "t": "def",
+     "h": "Row and column totals",
+     "body": "rowSums(A) and colSums(A) calculate row and column totals."
+    },
+    {
+     "t": "def",
+     "h": "Example",
+     "body": "For [[1,2],[3,4]], rowSums is (3,7), colSums is (4,6), and diag is (1,4)."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 7,
+   "title": "Read a matrix expression",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "If A is 2×3, then t(A) is 3×2.",
+    "The product t(A)%*%A has dimensions (3×2)(2×3), so it is 3×3.",
+    "A%*%t(A) instead has dimensions (2×3)(3×2), so it is 2×2."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "problem": "A is 2×3. Determine the dimensions of t(A)%*%A and A%*%t(A).",
+   "hints": [
+    "Identify the object and the requested result.",
+    "Apply the relevant R rule in the correct order.",
+    "Check the result against the stated dimensions or values."
+   ],
+   "answer": "t(A)%*%A is 3×3; A%*%t(A) is 2×2.",
+   "solution": [
+    {
+     "say": "Transpose A before multiplying.",
+     "math": "A is 2×3, so t(A) is 3×2.",
+     "why": "Transposition exchanges the row and column dimensions."
+    },
+    {
+     "say": "Check the product dimensions.",
+     "math": "(3×2)(2×3) is conformable and gives 3×3.",
+     "why": "The inner dimensions match and the outer dimensions determine the result."
+    },
+    {
+     "say": "Compare with the reversed product.",
+     "math": "(2×3)(3×2) gives 2×2.",
+     "why": "Matrix multiplication is order-sensitive; reversing the factors changes the result dimensions."
+    }
+   ]
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s11",
+   "mins": 6,
+   "title": "Exam traps",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   },
+   "intro": "Judge each statement about matrix construction and operators.",
+   "items": [
+    {
+     "claim": "matrix() fills values down columns by default.",
+     "tf": true,
+     "why": "R uses column-major filling unless byrow=TRUE is specified."
+    },
+    {
+     "claim": "The * operator performs matrix multiplication.",
+     "tf": false,
+     "why": "The * operator multiplies corresponding entries; %*% is matrix multiplication."
+    },
+    {
+     "claim": "Matrix multiplication requires matching inner dimensions.",
+     "tf": true,
+     "why": "The column count of the left matrix must equal the row count of the right matrix."
+    },
+    {
+     "claim": "det() is defined for every rectangular matrix.",
+     "tf": false,
+     "why": "A determinant is defined only for square matrices."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s12",
+   "mins": 5,
+   "title": "Matrix operator quick sheet",
+   "objective": "Interpret R matrix construction, dimensions and operators.",
+   "body": [
+    "matrix() fills columns unless byrow=TRUE. Index as row, column.",
+    "A*B is element-wise; A%*%B is matrix multiplication with matching inner dimensions.",
+    "t() swaps dimensions; det() requires square matrices; solve(A,b) solves Ax=b.",
+    "diag(), rowSums() and colSums() extract or summarise matrix structure."
+   ],
+   "ask": {
+    "q": "What is the key output rule to check in this section?",
+    "nudge": "Identify dimensions, fill direction or operator semantics before calculating."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s13",
+   "mins": 0,
+   "title": "Mastery test",
+   "objective": "Demonstrate independent matrix reasoning.",
+   "setId": "rprog_t4_mastery"
+  }
+ ]
+}

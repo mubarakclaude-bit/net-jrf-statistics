@@ -1,0 +1,628 @@
+{
+ "id": "rprogt2",
+ "topicId": "rprog-t2",
+ "moduleId": "rprog",
+ "title": "Loops, functions and return values",
+ "breadcrumb": "Module 9 · R Programming · Loops, functions and return values",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 90,
+ "objectives": [
+  "Trace for, while and repeat loops in R.",
+  "Distinguish break from next and identify loop termination.",
+  "Read function definitions, arguments and returned values.",
+  "Recognise implicit return of the last evaluated expression.",
+  "Solve output-tracing questions involving loops inside functions."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "R assignment and arithmetic",
+   "why": "Loop traces update variables using assignments and expressions."
+  },
+  {
+   "id": "p2",
+   "name": "Vectors and sequences",
+   "why": "for loops commonly iterate over sequences."
+  },
+  {
+   "id": "p3",
+   "name": "Conditional statements",
+   "why": "if conditions commonly control break, next and return."
+  }
+ ],
+ "traps": [
+  "A for loop iterates over values in its sequence.",
+  "1:n is unsafe for n=0; seq_len(n) or seq_along(x) is safer.",
+  "break exits the nearest loop; next skips the current iteration.",
+  "while tests its condition before each pass; repeat needs an explicit exit.",
+  "A loop does not automatically return the last loop-variable value.",
+  "A function implicitly returns its last evaluated expression if return() is not called.",
+  "return(value) exits the current function immediately.",
+  "Trace assignments sequentially; do not confuse printed output with a returned value.",
+  "A while loop must update state so its condition can eventually become FALSE."
+ ],
+ "revision": {
+  "sheet": [
+   "for (i in seq) executes once for each value in seq.",
+   "while (condition) tests before each iteration; it may execute zero times.",
+   "repeat runs until explicitly exited, commonly with break.",
+   "break exits the nearest loop; next skips the current iteration.",
+   "Use seq_len(n) or seq_along(x), not 1:n, when n may be zero.",
+   "function(arg){...} defines a function; calling f(value) supplies the argument.",
+   "return(value) exits the current function immediately.",
+   "Without explicit return(), R returns the last evaluated expression.",
+   "Trace accumulator updates in order; factorial n! multiplies 1×2×...×n.",
+   "June 2026 Q22: the loop computes 5! = 120.",
+   "A loop's internal assignments and the function's returned value are distinct.",
+   "Check loop start, end, update, exit condition and final expression."
+  ],
+  "cards": [
+   [
+    "for",
+    "Iterate over sequence values"
+   ],
+   [
+    "while",
+    "Test condition before iteration"
+   ],
+   [
+    "repeat",
+    "Run until explicit exit"
+   ],
+   [
+    "break",
+    "Exit nearest loop"
+   ],
+   [
+    "next",
+    "Skip current iteration"
+   ],
+   [
+    "function",
+    "Define reusable computation"
+   ],
+   [
+    "return(v)",
+    "Exit function with v"
+   ],
+   [
+    "Last expression",
+    "Implicit return value"
+   ]
+  ],
+  "tricks": [
+   "Trace one iteration at a time.",
+   "break exits; next skips.",
+   "Inspect the function's final expression after the loop.",
+   "For n=0, prefer seq_len(n) over 1:n.",
+   "Do not assume a function prints its return value."
+  ],
+  "shortcuts": [
+   "Write a trace table for the loop variable and accumulator.",
+   "Mark break as loop exit and next as iteration skip.",
+   "Circle the last expression if return() is absent.",
+   "For factorial, multiply the accumulator by each integer once."
+  ],
+  "remember": [
+   "for = iterate over values.",
+   "while = condition checked before each pass.",
+   "repeat = explicit exit required.",
+   "break = leave loop; next = skip iteration.",
+   "Last expression is returned unless return() exits earlier."
+  ]
+ },
+ "howto": "Trace the program line by line. Record the loop variable and every changing accumulator after each iteration. Apply next or break at the exact point encountered. When the loop finishes, inspect the function body: explicit return() exits immediately; otherwise the last evaluated expression supplies the returned value.",
+ "refs": [
+  {
+   "title": "R Documentation: Control Flow",
+   "where": "for, while, repeat, break and next",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/Control.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Authoritative syntax and semantics for R loop control."
+  },
+  {
+   "title": "R Documentation: function",
+   "where": "Function definition and return values",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/function.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Function definitions, arguments and return behaviour."
+  },
+  {
+   "title": "R Documentation: Sequence Generation",
+   "where": "seq, seq_len and seq_along",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/seq.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Authoritative behaviour of safe sequence-generation helpers."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [
+  {
+   "paper": "j26",
+   "q": 22
+  }
+ ],
+ "provenance": "Catalog rprog-t2 (Loops, functions, return values; Apply; importance 2; estimated question share 0.67 and marks 1.3). Anchored to the exact repository transcription of June 2026 Paper 2 Q22 (`j26-q22`): a function multiplies an accumulator through a for loop and returns 5! = 120. Official answer D.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "A loop repeats a controlled update",
+   "objective": "Identify the loop variable, body and changing state.",
+   "body": [
+    "A loop repeats a block of instructions. To trace it, identify what changes on each pass: a counter, accumulator, vector element or condition.",
+    "In R, a for loop takes each value from a sequence in turn. In for (i in 1:4), i takes 1, 2, 3 and 4. The body runs once for each value.",
+    "An accumulator stores a running result. In a factorial program, start x at 1 and multiply x by the next integer on every iteration."
+   ],
+   "items": [
+    {
+     "ask": "In for (i in 1:3), what values does i take?",
+     "recall": "1, then 2, then 3.",
+     "refresh": [
+      "A for loop iterates over the values supplied after in. The expression 1:3 creates the sequence 1, 2, 3, so the body executes three times, once for each value.",
+      "The loop variable is updated before each pass. When the loop completes, the body is not executed for an extra value; it has run exactly once for each sequence element."
+     ]
+    },
+    {
+     "ask": "What is an accumulator?",
+     "recall": "A variable that stores a running result.",
+     "refresh": [
+      "An accumulator is updated repeatedly as a calculation progresses. For example, x <- 1 followed by x <- x*i multiplies the current stored result by each new i.",
+      "To trace it, write its value before and after every iteration. This prevents the mistake of replacing the old value mentally instead of multiplying the current accumulator by the new loop value."
+     ]
+    },
+    {
+     "ask": "What should you inspect after a loop ends inside a function?",
+     "recall": "The final expression or explicit return().",
+     "refresh": [
+      "Finishing a loop does not by itself tell you what the enclosing function returns. The next statement may use an accumulator, or the function may end with an expression that evaluates to a value.",
+      "In R, if return() is not called, the last evaluated expression in the function body is returned. If return(value) is executed, the function exits immediately with that value."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "For x=1 and i=1,2,3 in x <- x*i, what is final x?",
+    "nudge": "Update sequentially: 1×1, then ×2, then ×3."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "A loop inside a function",
+   "objective": "Connect repetition to a returned result.",
+   "body": [
+    "A function packages a computation so it can be called with different inputs. Its body may contain a loop that updates an accumulator.",
+    "Consider f <- function(n) { x <- 1; for (i in 1:n) x <- x*i; x }. The loop builds a product, and the final expression x is the returned value.",
+    "For n=5, the accumulator becomes 1, 2, 6, 24 and 120. The result is 5 factorial."
+   ],
+   "scenario": {
+    "teaser": "Compute a batch product",
+    "title": "A quality analyst's repeated calculation",
+    "body": [
+     "A quality analyst receives a positive integer n and needs the product of all integers from 1 through n. The analyst writes a function with an accumulator initially equal to 1 and a for loop that multiplies it by each successive integer. The final expression in the function body is the accumulator itself.",
+     "When called, the loop performs the repeated multiplication. The caller receives the final accumulator value, even though the function contains no explicit return() statement. This illustrates both loop tracing and R's implicit return rule."
+    ],
+    "q": "If n=4, what value is returned?",
+    "answer": "24."
+   },
+   "ask": {
+    "q": "What is f(5) for the factorial function?",
+    "nudge": "Multiply 1×2×3×4×5."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 9,
+   "title": "for loops: iterate over sequence values",
+   "objective": "Trace a for loop and recognise safe sequence construction.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Basic syntax",
+     "body": "for (i in sequence) { statements }. The body runs once for each value in sequence; i takes those values in order."
+    },
+    {
+     "t": "formula",
+     "h": "Safe sequence helpers",
+     "body": "seq_len(n) generates 1,...,n for positive n and integer(0) when n=0. seq_along(x) generates positions for elements of x. By contrast, 1:0 is c(1,0), not an empty sequence."
+    },
+    {
+     "t": "step",
+     "h": "Trace an accumulator",
+     "body": "x <- 1; for (i in 1:4) x <- x*i gives x values 1, 2, 6, 24. The final x is 24."
+    }
+   ],
+   "flow": {
+    "title": "A reliable loop trace",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Read the sequence",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Set loop variable",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Execute body and update",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Next value or finish",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 4,
+      "c": 0,
+      "label": "Read final expression",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     },
+     {
+      "from": "d",
+      "to": "c"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     }
+    ]
+   },
+   "ask": {
+    "q": "What does seq_len(0) return?",
+    "nudge": "It is an empty integer sequence."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 9,
+   "title": "Trace the factorial loop",
+   "objective": "Calculate a loop accumulator exactly.",
+   "problem": "Evaluate f(5) for f=function(n){x=1; for(i in 1:n){x=x*i}; x}.",
+   "steps": [
+    {
+     "say": "Initialise the accumulator.",
+     "math": "x=1.",
+     "why": "The product starts at 1, the multiplicative identity."
+    },
+    {
+     "say": "Update for i=1 and i=2.",
+     "math": "i=1: x=1×1=1; i=2: x=1×2=2.",
+     "why": "Each update uses the current value of x."
+    },
+    {
+     "say": "Continue for i=3 and i=4.",
+     "math": "i=3: x=2×3=6; i=4: x=6×4=24.",
+     "why": "The accumulator stores the running product."
+    },
+    {
+     "say": "Complete i=5 and evaluate the final expression.",
+     "math": "x=24×5=120; final expression x returns 120.",
+     "why": "No explicit return() is needed because x is the last expression."
+    }
+   ],
+   "ask": {
+    "q": "What is the returned value for n=4?",
+    "nudge": "The final accumulator is 4!."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 5,
+   "title": "Recall the control words",
+   "objective": "Distinguish loop-control instructions.",
+   "intro": "State the effect before revealing the answer.",
+   "items": [
+    {
+     "q": "for",
+     "a": "Iterates over each value in a sequence."
+    },
+    {
+     "q": "while",
+     "a": "Checks a condition before each iteration."
+    },
+    {
+     "q": "repeat",
+     "a": "Repeats until an explicit exit."
+    },
+    {
+     "q": "break",
+     "a": "Exits the nearest loop."
+    },
+    {
+     "q": "next",
+     "a": "Skips the rest of the current iteration."
+    }
+   ],
+   "ask": {
+    "q": "Which keyword skips the current iteration?",
+    "nudge": "It does not terminate the entire loop."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 9,
+   "title": "while and repeat loops",
+   "objective": "Identify loop conditions and termination.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "while",
+     "body": "while (condition) { body } checks the condition before each pass. If it is FALSE initially, the body runs zero times. Update state inside the body so the condition can eventually become FALSE."
+    },
+    {
+     "t": "formula",
+     "h": "repeat",
+     "body": "repeat { body } has no condition in its header. It continues until code exits, commonly using if (condition) break."
+    },
+    {
+     "t": "step",
+     "h": "Termination check",
+     "body": "For a loop that increments i, ask whether the condition eventually becomes FALSE. If the body never changes a relevant variable, a while loop can run forever."
+    }
+   ],
+   "ask": {
+    "q": "If a while condition is FALSE before the first pass, how many times does its body run?",
+    "nudge": "The condition is tested before entering the body."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s6",
+   "mins": 7,
+   "title": "Use break and next correctly",
+   "objective": "Trace skipped iterations and loop exit.",
+   "problem": "What is total after this code? total=0; for(i in 1:5){if(i==2) next; if(i==4) break; total=total+i}.",
+   "hints": [
+    "Start total at 0 and process i=1 to 5 in order.",
+    "At i=2, next skips the addition. At i=4, break exits before the addition.",
+    "Only i=1 and i=3 are added."
+   ],
+   "answer": "4",
+   "check": "total=1+3=4; i=2 is skipped and the loop stops at i=4.",
+   "solution": [
+    {
+     "say": "Process i=1.",
+     "math": "total=0+1=1.",
+     "why": "Neither control statement is triggered."
+    },
+    {
+     "say": "Process i=2.",
+     "math": "next skips total=total+i.",
+     "why": "The current iteration ends immediately."
+    },
+    {
+     "say": "Process i=3, then i=4.",
+     "math": "total=1+3=4; break exits at i=4.",
+     "why": "The addition is not executed for i=4."
+    }
+   ],
+   "ask": {
+    "q": "What if break were replaced by next at i=4?",
+    "nudge": "The loop would continue to i=5."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 9,
+   "title": "Functions and returned values",
+   "objective": "Read function syntax and distinguish explicit from implicit return.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Define and call",
+     "body": "f <- function(x) { expression1; expression2 }. Calling f(5) binds the supplied argument to x and evaluates the function body."
+    },
+    {
+     "t": "formula",
+     "h": "Implicit return",
+     "body": "If no return() is executed, R returns the value of the last evaluated expression in the function body. A final x returns the current value stored in x."
+    },
+    {
+     "t": "formula",
+     "h": "Explicit return",
+     "body": "return(value) immediately exits the current function and returns value. Expressions after that return() are not evaluated in that call."
+    }
+   ],
+   "ask": {
+    "q": "What does function(x){x+1; x*2} return when called with 3?",
+    "nudge": "The last expression is x*2."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 9,
+   "title": "Trace a function with an early return",
+   "objective": "Determine which return statement is reached.",
+   "problem": "Evaluate f(3) for f=function(n){s=0; for(i in seq_len(n)){s=s+i; if(s>3) return(s)}; s}.",
+   "hints": [
+    "Trace s after i=1 and i=2.",
+    "After i=2, s=3, so s>3 is still FALSE.",
+    "At i=3, s becomes 6 and return(s) exits the function."
+   ],
+   "answer": "6",
+   "check": "The function returns immediately when s first exceeds 3, at s=6.",
+   "solution": [
+    {
+     "say": "Start and first pass.",
+     "math": "s=0; i=1 gives s=1.",
+     "why": "The condition s>3 is FALSE."
+    },
+    {
+     "say": "Second pass.",
+     "math": "i=2 gives s=3; 3>3 is FALSE.",
+     "why": "The inequality is strict, so the function continues."
+    },
+    {
+     "say": "Third pass.",
+     "math": "i=3 gives s=6; 6>3 is TRUE, so return(6).",
+     "why": "return exits the function immediately."
+    }
+   ],
+   "scenario": {
+    "teaser": "Stop after a threshold",
+    "title": "A monitoring function",
+    "body": [
+     "A monitoring function adds incoming measurements one by one. It should return as soon as the running total exceeds a specified threshold. The function uses a loop to update the running total and an if condition to test the threshold after each update.",
+     "The return() statement is inside the loop. Once the threshold condition becomes TRUE, the function exits immediately; later iterations do not occur. This differs from break, which exits the loop but continues executing the function after the loop."
+    ],
+    "q": "Which instruction exits the function immediately rather than only leaving the loop?",
+    "answer": "return(value)."
+   },
+   "ask": {
+    "q": "How does return(s) differ from break?",
+    "nudge": "One exits the function; the other exits only the loop."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s9",
+   "mins": 7,
+   "title": "Common output-tracing traps",
+   "objective": "Avoid errors with sequence boundaries and termination.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "1:n when n=0",
+     "body": "In R, 1:0 produces c(1,0), so a loop over 1:n does not become empty when n=0. Use seq_len(n) when n may be zero."
+    },
+    {
+     "t": "def",
+     "h": "break versus return",
+     "body": "break exits the nearest loop and continues after the loop. return(value) exits the current function immediately."
+    },
+    {
+     "t": "def",
+     "h": "Printed versus returned",
+     "body": "print(x) displays a value; it is not a substitute for identifying the function's returned expression. A function call can return a value without printing it."
+    }
+   ],
+   "ask": {
+    "q": "For n=0, why is for(i in 1:n) unsafe?",
+    "nudge": "The sequence 1:0 contains two values."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s10",
+   "mins": 6,
+   "title": "Check the control-flow statements",
+   "objective": "Evaluate common true/false claims.",
+   "intro": "Decide whether each statement is correct.",
+   "items": [
+    {
+     "claim": "A for loop iterates over the values in its sequence.",
+     "tf": true,
+     "why": "The loop variable takes each sequence value in turn."
+    },
+    {
+     "claim": "next exits the entire loop.",
+     "tf": false,
+     "why": "next skips only the remainder of the current iteration; break exits the nearest loop."
+    },
+    {
+     "claim": "A while loop tests its condition before the body.",
+     "tf": true,
+     "why": "A false initial condition means zero iterations."
+    },
+    {
+     "claim": "If return(5) executes inside a function, later statements in that call are skipped.",
+     "tf": true,
+     "why": "return exits the current function immediately."
+    }
+   ],
+   "ask": {
+    "q": "Which statement distinguishes break from return()?",
+    "nudge": "Consider whether execution continues after the loop."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s11",
+   "mins": 5,
+   "title": "The loop-and-function exam checklist",
+   "objective": "Consolidate program tracing.",
+   "body": [
+    "for iterates over sequence values; while checks its condition before each pass; repeat needs an explicit exit.",
+    "break leaves the nearest loop. next skips the remainder of the current iteration. Neither is the same as return(), which exits the current function.",
+    "A function returns the last evaluated expression if no return() is executed. An explicit return(value) exits immediately.",
+    "Trace accumulators sequentially and check loop boundaries. Use seq_len(n) or seq_along(x) when a sequence may be empty; 1:0 is c(1,0).",
+    "June 2026 Paper 2 Q22 uses a for loop to compute 5! = 120. The final expression x returns the accumulator."
+   ],
+   "ask": {
+    "q": "What is the most reliable way to solve an R loop-output question?",
+    "nudge": "Trace every iteration and then inspect the final function expression."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s12",
+   "mins": 2,
+   "title": "Mastery test",
+   "objective": "Demonstrate independent loop and function tracing.",
+   "setId": "rprog_t2_mastery"
+  }
+ ]
+}
