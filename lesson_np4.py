@@ -448,6 +448,7 @@ LES = {
  "id": "nonparamt4",
  "topicId": "nonparam-t4",
  "moduleId": "nonparam",
+ "anchors": [{"paper": "j26", "q": 35}],
  "title": "Spearman's ρ and Kendall's τ",
  "breadcrumb": "Non-parametric methods → Association → Rank correlation",
  "engine": "B",
