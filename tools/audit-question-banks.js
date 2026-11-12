@@ -43,6 +43,7 @@ for (const file of files) {
   catch (e) { problems.push(file + ": invalid JSON: " + e.message); continue; }
   if (!Array.isArray(bank.items)) { problems.push(file + ": items must be an array"); continue; }
   const parentModule = bank.moduleId || file.replace("_pyq_variants.json","");
+  if (bank.count !== bank.items.length) problems.push(file + ": declared count does not match items.length");
   for (const q of bank.items) {
     total++;
     const src = Number(q.srcQ);
@@ -81,7 +82,10 @@ for(let n=1;n<=50;n++){
   else if(c<10) under.push({q:n,count:c,missing:10-c});
   else if(c===10) exact.push(n);
   else over.push({q:n,count:c,excess:c-10});
+  if(c!==10) problems.push("Q"+n+": expected exactly 10 variants; found "+c);
 }
+if (total !== 500) problems.push("Expected 500 variants; found "+total);
+if (moduleMismatches.length) problems.push(moduleMismatches.length+" variant records have incorrect module attribution");
 console.log(JSON.stringify({
   originals: originals.length, variantFiles: files.length, variants: total,
   coveredOriginals: 50-none.length, exactlyTen: exact.length,
