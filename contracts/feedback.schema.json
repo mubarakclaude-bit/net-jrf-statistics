@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://net-jrf-statistics/contracts/feedback.schema.json",
+  "title": "Learner feedback (contract v1)",
+  "$comment": "DECISION: feedback is PROFILE-SPECIFIC. The default profile keeps feedback/{uid} (unchanged, so existing documents need no migration); every other profile writes feedback/{uid}~{profile}. Before this contract all profiles of one learner id shared feedback/{uid}, so one profile's asks silently replaced another's (found testing PR #4: the label flipped me -> demo). A legacy document whose label is not 'me' at feedback/{uid} is left alone and never auto-moved: a one-time read-only note is shown instead, because its true owner cannot be proven.",
+  "type": "object",
+  "required": ["uid", "label", "asks", "reqs", "updated"],
+  "properties": {
+    "uid": { "type": "string", "minLength": 1 },
+    "name": { "type": "string" },
+    "label": { "type": "string", "minLength": 1, "$comment": "the profile id that wrote it; 'me' for the default profile" },
+    "profileId": { "$ref": "progress-backup.schema.json#/$defs/profileId" },
+    "asks": { "type": "array", "maxItems": 200, "items": { "type": "object" } },
+    "reqs": { "type": "array", "maxItems": 200, "items": { "type": "object" } },
+    "updated": { "type": "number" }
+  }
+}

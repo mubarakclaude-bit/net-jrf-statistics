@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://net-jrf-statistics/contracts/mastery-pool.schema.json",
+  "title": "Mastery pool (contract v1)",
+  "$comment": "Applies to every seed whose file stem ends in _mastery, and to any pool a lesson's quiz scene points at. It is a pool (pool.schema.json) plus the structural facts of the 20-item mastery test. Answer-key spread, difficulty mix and explanation quality are authoring-quality rules enforced by vcheck.js and addlesson.sh, not by this schema.",
+  "allOf": [
+    { "$ref": "pool.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "source": { "const": "mastery" },
+        "count": { "const": 20 },
+        "items": {
+          "minItems": 20, "maxItems": 20,
+          "items": { "type": "object", "required": ["diff"], "properties": { "options": { "minItems": 4, "maxItems": 4 } } }
+        }
+      }
+    }
+  ]
+}

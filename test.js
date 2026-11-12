@@ -10,121 +10,13 @@ fs.mkdirSync(CACHE, { recursive: true });
 const SEED = path.join(W, 'seed');
 
 function seedDocs() {
-  const J = f => JSON.parse(fs.readFileSync(path.join(SEED, f + '.json'), 'utf8'));
-  const docs = {};
-  docs['meta/catalog'] = J('catalog');
-  for (const f of ['inference_multi_1', 'inference_numeric_1', 'inference_concept_1', 'pyq_j26_full',
-                   'inference_t4_practice', 'inference_t4_mastery', 'inference_t1_mastery', 'inference_t2_mastery', 'inference_t3_mastery', 'inference_t6_mastery', 'inference_t5_mastery', 'inference_t9_mastery', 'inference_t7_mastery', 'inference_t8_mastery', 'inference_t12_mastery', 'inference_t10_mastery', 'inference_t13_mastery', 'inference_t17_mastery', 'inference_t15_mastery', 'inference_t14_mastery', 'inference_t16_mastery', 'inference_t11_mastery', 'timeseries_t3_mastery', 'timeseries_t5_mastery', 'official_t1_mastery', 'official_t2_mastery', 'official_t3_mastery', 'official_t4_mastery', 'official_t5_mastery', 'probability_t7_mastery', 'nonparam_t4_mastery', 'timeseries_t11_mastery', 'timeseries_t10_mastery', 'timeseries_t9_mastery', 'timeseries_t8_mastery', 'timeseries_t4_mastery', 'timeseries_t2_mastery', 'timeseries_t1_mastery', 'timeseries_t7_mastery', 'timeseries_t6_mastery', 'probability_t10_mastery', 'probability_t8_mastery', 'maths_t4_mastery', 'maths_t2_mastery', 'maths_t3_mastery', 'maths_t5_mastery', 'maths_t6_mastery', 'maths_t7_mastery', 'maths_t8_mastery', 'maths_t9_mastery', 'maths_t10_mastery', 'maths_t11_mastery', 'maths_t12_mastery', 'maths_t13_mastery', 'maths_t14_mastery', 'maths_t15_mastery', 'maths_t16_mastery', 'probability_t5_mastery', 'maths_t1_mastery', 'probability_t1_mastery', 'probability_t13_mastery', 'probability_t3_mastery', 'probability_t2_mastery', 'probability_t4_mastery', 'probability_t6_mastery', 'probability_t9_mastery', 'probability_t11_mastery', 'probability_t12_mastery',
-                   'inference_pyq_variants','maths_pyq_variants','probability_pyq_variants',
-                   'timeseries_pyq_variants','rprog_pyq_variants','regression_pyq_variants',
-                   'multivariate_pyq_variants','nonparam_pyq_variants','official_pyq_variants', 'stochastic_t1_mastery', 'stochastic_t2_mastery', 'stochastic_t3_mastery', 'stochastic_t4_mastery', 'stochastic_t5_mastery', 'stochastic_t6_mastery', 'stochastic_t7_mastery', 'stochastic_t8_mastery', 'stochastic_t9_mastery', 'multivariate_t1_mastery', 'multivariate_t2_mastery', 'multivariate_t3_mastery', 'multivariate_t4_mastery', 'multivariate_t5_mastery', 'multivariate_t6_mastery', 'multivariate_t7_mastery', 'multivariate_t8_mastery', 'multivariate_t9_mastery', 'design_t1_mastery', 'design_t2_mastery', 'design_t3_mastery', 'design_t4_mastery', 'design_t5_mastery', 'design_t6_mastery', 'design_t7_mastery', 'design_t8_mastery', 'regression_t1_mastery', 'regression_t2_mastery', 'regression_t3_mastery', 'regression_t4_mastery', 'regression_t5_mastery', 'regression_t6_mastery', 'regression_t7_mastery', 'regression_t8_mastery', 'regression_t9_mastery', 'regression_t10_mastery', 'regression_t11_mastery', 'regression_t12_mastery', 'regression_t13_mastery', 'regression_t14_mastery', 'regression_t15_mastery']) docs['qsets/' + f] = J(f);
-  docs['lessons/mle'] = J('lesson_mle');
-  docs['lessons/inferencet1'] = J('lesson_t1');
-  docs['lessons/inferencet2'] = J('lesson_t2');
-  docs['lessons/inferencet3'] = J('lesson_t3');
-  docs['lessons/inferencet6'] = J('lesson_t6');
-  docs['lessons/inferencet5'] = J('lesson_t5');
-  docs['lessons/inferencet9'] = J('lesson_t9');
-  docs['lessons/inferencet7'] = J('lesson_t7');
-  docs['lessons/inferencet8'] = J('lesson_t8');
-  docs['lessons/inferencet12'] = J('lesson_t12');
-  docs['lessons/inferencet10'] = J('lesson_t10');
-  docs['lessons/inferencet13'] = J('lesson_t13');
-  docs['lessons/inferencet17'] = J('lesson_t17');
-  docs['lessons/inferencet15'] = J('lesson_t15');
-  docs['lessons/inferencet14'] = J('lesson_t14');
-  docs['lessons/inferencet16'] = J('lesson_t16');
-  docs['lessons/inferencet11'] = J('lesson_t11');
-  docs['lessons/timeseriest3'] = J('lesson_ts3');
-  docs['lessons/timeseriest5'] = J('lesson_ts5');
-  docs['lessons/officialt1'] = J('lesson_10a1');
-  docs['lessons/officialt2'] = J('lesson_10a2');
-  docs['lessons/officialt3'] = J('lesson_10a3');
-  docs['lessons/officialt4'] = J('lesson_10a4');
-  docs['lessons/officialt5'] = J('lesson_10a5');
-  docs['lessons/probabilityt3'] = J('lesson_pr3');
-  docs['lessons/probabilityt13'] = J('lesson_pr13');
-  docs['lessons/probabilityt2'] = J('lesson_pr2');
-  docs['lessons/probabilityt4'] = J('lesson_pr4');
-  docs['lessons/probabilityt6'] = J('lesson_pr6');
-  docs['lessons/probabilityt9'] = J('lesson_pr9');
-  docs['lessons/probabilityt11'] = J('lesson_pr11');
-  docs['lessons/probabilityt12'] = J('lesson_pr12');
-  docs['lessons/probabilityt1'] = J('lesson_pr1');
-  docs['lessons/mathst1'] = J('lesson_ma1');
-  docs['lessons/mathst2'] = J('lesson_ma2');
-  docs['lessons/mathst3'] = J('lesson_ma3');
-  docs['lessons/mathst5'] = J('lesson_ma5');
-  docs['lessons/mathst6'] = J('lesson_ma6');
-  docs['lessons/mathst7'] = J('lesson_ma7');
-  docs['lessons/mathst8'] = J('lesson_ma8');
-  docs['lessons/mathst9'] = J('lesson_ma9');
-  docs['lessons/mathst10'] = J('lesson_ma10');
-  docs['lessons/mathst11'] = J('lesson_ma11');
-  docs['lessons/mathst12'] = J('lesson_ma12');
-  docs['lessons/mathst13'] = J('lesson_ma13');
-  docs['lessons/mathst14'] = J('lesson_ma14');
-  docs['lessons/mathst15'] = J('lesson_ma15');
-  docs['lessons/mathst16'] = J('lesson_ma16');
-  docs['lessons/probabilityt5'] = J('lesson_pr5');
-  docs['lessons/mathst4'] = J('lesson_ma4');
-  docs['lessons/probabilityt8'] = J('lesson_pr8');
-  docs['lessons/probabilityt10'] = J('lesson_pr10');
-  docs['lessons/timeseriest6'] = J('lesson_ts6');
-  docs['lessons/timeseriest7'] = J('lesson_ts7');
-  docs['lessons/timeseriest1'] = J('lesson_ts1');
-  docs['lessons/timeseriest2'] = J('lesson_ts2');
-  docs['lessons/timeseriest4'] = J('lesson_ts4');
-  docs['lessons/timeseriest8'] = J('lesson_ts8');
-  docs['lessons/timeseriest9'] = J('lesson_ts9');
-  docs['lessons/timeseriest10'] = J('lesson_ts10');
-  docs['lessons/timeseriest11'] = J('lesson_ts11');
-  docs['lessons/nonparamt4'] = J('lesson_np4');
-  docs['lessons/probabilityt7'] = J('lesson_pr7');
-  docs['lessons/stochastict1'] = J('lesson_stochastic_t1');
-  docs['lessons/designt1'] = J('lesson_design_t1');
-  docs['lessons/designt2'] = J('lesson_design_t2');
-  docs['lessons/designt3'] = J('lesson_design_t3');
-  docs['lessons/designt4'] = J('lesson_design_t4');
-  docs['lessons/designt5'] = J('lesson_design_t5');
-  docs['lessons/designt6'] = J('lesson_design_t6');
-  docs['lessons/designt7'] = J('lesson_design_t7');
-  docs['lessons/designt8'] = J('lesson_design_t8');
-  docs['lessons/regressiont1'] = J('lesson_rg1');
-  docs['lessons/regressiont2'] = J('lesson_rg2');
-  docs['lessons/regressiont3'] = J('lesson_rg3');
-  docs['lessons/regressiont4'] = J('lesson_rg4');
-  docs['lessons/regressiont5'] = J('lesson_rg5');
-  docs['lessons/regressiont6'] = J('lesson_rg6');
-  docs['lessons/regressiont7'] = J('lesson_rg7');
-  docs['lessons/regressiont8'] = J('lesson_rg8');
-  docs['lessons/regressiont9'] = J('lesson_rg9');
-  docs['lessons/regressiont10'] = J('lesson_rg10');
-  docs['lessons/regressiont11'] = J('lesson_rg11');
-  docs['lessons/regressiont12'] = J('lesson_rg12');
-  docs['lessons/regressiont13'] = J('lesson_rg13');
-  docs['lessons/regressiont14'] = J('lesson_rg14');
-  docs['lessons/regressiont15'] = J('lesson_rg15');
-  docs['lessons/stochastict2'] = J('lesson_stochastic_t2');
-  docs['lessons/stochastict3'] = J('lesson_stochastic_t3');
-  docs['lessons/stochastict4'] = J('lesson_stochastic_t4');
-  docs['lessons/stochastict5'] = J('lesson_stochastic_t5');
-  docs['lessons/stochastict6'] = J('lesson_stochastic_t6');
-  docs['lessons/stochastict7'] = J('lesson_stochastic_t7');
-  docs['lessons/stochastict8'] = J('lesson_stochastic_t8');
-  docs['lessons/stochastict9'] = J('lesson_stochastic_t9');
-  docs['lessons/multivariatet1'] = J('lesson_multivariate_t1');
-  docs['lessons/multivariatet2'] = J('lesson_multivariate_t2');
-  docs['lessons/multivariatet3'] = J('lesson_multivariate_t3');
-  docs['lessons/multivariatet4'] = J('lesson_multivariate_t4');
-  docs['lessons/multivariatet5'] = J('lesson_multivariate_t5');
-  docs['lessons/multivariatet6'] = J('lesson_multivariate_t6');
-  docs['lessons/multivariatet7'] = J('lesson_multivariate_t7');
-  docs['lessons/multivariatet8'] = J('lesson_multivariate_t8');
-  docs['lessons/multivariatet9'] = J('lesson_multivariate_t9');
-  docs['meta/lessons'] = J('meta_lessons');
-  docs['meta/users'] = J('meta_users');
-  docs['meta/syllabus'] = J('meta_syllabus');
+  // Nothing here lists lessons or question sets by hand. tools/seed-docs.js builds every store
+  // document from seed/, so adding a lesson never edits this file.
+  const { buildDocs } = require('./tools/seed-docs');
+  const built = buildDocs();
+  if (built.problems.length) throw new Error('seed problems: ' + built.problems.join(' | '));
+  const docs = built.docs;
+  docs['meta/users'] = JSON.parse(fs.readFileSync(path.join(SEED, 'meta_users.json'), 'utf8'));   // test profiles
   docs['meta/app'] = { url: 'https://claude.ai/artifact/TEST', title: 'NET JRF Statistics', v: 4 };
   return docs;
 }
@@ -133,7 +25,21 @@ function seedDocs() {
 const STUB = `
 window.__writes = [];
 window.__docs = __SEED__;
+__PATHS__
+// Storage-path contract (contracts/storage-paths.json), enforced exactly as the artifact store would:
+// an invalid DOCUMENT path throws invalid_argument. Violations are also recorded, because the app
+// swallows many database errors and a thrown error alone could hide one; test.js fails the run on any.
+window.__pathViolations = [];
+function guardDoc(p){
+  const r = window.__NJ_PATHS.checkDocPath(p);
+  if (!r.ok) { window.__pathViolations.push(p + ' -> ' + r.reason); const e = new Error('invalid_argument: ' + r.reason); e.code = 'invalid_argument'; throw e; }
+}
+function guardColl(p){
+  const r = window.__NJ_PATHS.checkCollectionPath(p);
+  if (!r.ok) { window.__pathViolations.push(p + ' -> ' + r.reason); const e = new Error('invalid_argument: ' + r.reason); e.code = 'invalid_argument'; throw e; }
+}
 function mkDoc(p){
+  guardDoc(p);
   return {
     id: p.split('/').pop(), path: p,
     get: async () => { await new Promise(r=>setTimeout(r,(window.__SLOW_LESSON&&p.indexOf('lessons/')===0)?window.__SLOW_LESSON:180)); const d = window.__docs[p];
@@ -148,6 +54,7 @@ function mkDoc(p){
   };
 }
 function mkColl(cp, filters){
+  guardColl(cp);
   filters = filters || [];
   const q = {
     path: cp,
@@ -189,7 +96,7 @@ window.claude = { use: async (n) => {
   page.on('console', m => { if (m.type() === 'error') errs.push('CONSOLE: ' + m.text()); });
 
   const body = fs.readFileSync(path.join(W, 'app.html'), 'utf8');
-  const stub = STUB.replace('__SEED__', JSON.stringify(seedDocs()));
+  const stub = STUB.replace('__SEED__', () => JSON.stringify(seedDocs())).replace('__PATHS__', () => require('./tools/storage-paths').browserSource());
   // mirror the real artifact wrapper, viewport meta and safe-area padding included
   const html = '<!doctype html><html><head><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">' +
@@ -378,7 +285,10 @@ window.claude = { use: async (n) => {
       await page.click('[data-exit="1"]'); await page.waitForTimeout(200); }
   }
 
+  const pathViolations = await page.evaluate(() => window.__pathViolations || []);
+  pathViolations.forEach(v => errs.push('STORAGE PATH VIOLATION: ' + v));
   say('--- errors: ' + (errs.length ? '\n' + errs.join('\n') : 'none'));
   await browser.close();
+  if (errs.length) process.exitCode = 1;   // it used to print the list and still exit 0, so CI could never fail on an error
   fs.writeFileSync(path.join(CACHE, 'test-out.txt'), out.join('\n'));
 })().catch(e => { console.error('HARNESS FAILED', e); process.exit(1); });
