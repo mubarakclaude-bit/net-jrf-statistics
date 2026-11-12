@@ -1,3 +1,7 @@
+import json
+from pathlib import Path
+L=json.loads((Path(__file__).resolve().parent/"seed/lesson_sampling_t4.json").read_text(encoding="utf-8"))
+assert L["anchors"]==[{"paper":"j26","q":36}]
 #!/usr/bin/env python3
 from fractions import Fraction as F
 M,n=20,4

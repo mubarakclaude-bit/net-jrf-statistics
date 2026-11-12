@@ -14,6 +14,7 @@ pool = json.loads(POOL.read_text(encoding="utf-8"))
 assert lesson["id"] == EXPECTED_ID
 assert lesson["topicId"] == pool["topicId"] == EXPECTED_TOPIC
 assert lesson["moduleId"] == pool["moduleId"] == "sampling"
+assert lesson["anchors"] == [{"paper": "j26", "q": 36}]
 assert len(lesson["scenes"]) == 13
 assert len(lesson["objectives"]) >= 4 and len(lesson["prereq"]) >= 3
 assert sum(s.get("kind") == "guided" for s in lesson["scenes"]) >= 2
