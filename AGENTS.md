@@ -159,7 +159,7 @@ draft pull request first. Run `npm test` before and after. The owner reviews eve
   it cannot prove the content is right. The author never reviews its own lesson. The reviewer works from the PR alone and
   posts the checklist below as a PR comment, saying plainly what it did and did not check.
 - **Keep deployments few: Vercel allows 100 a day.** `vercel.json` sets `git.deploymentEnabled` so that **only the production
-  branch (`multi-author-hosting`) deploys automatically**; pushes to feature branches and PRs create no Vercel deployment, and CI
+  branch (`main`) deploys automatically**; pushes to feature branches and PRs create no Vercel deployment, and CI
   (`validate`, `browser`, `acceptance`) is the verification, since `browser` builds the full site. What costs a deployment is a
   merge to the production branch, and when the limit is hit the live site cannot redeploy either. So:
   1. **One PR per group of related lessons, one merge.** The whole Nonparametric module is one branch, one PR, one deploy.
