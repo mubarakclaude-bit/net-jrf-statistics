@@ -42,3 +42,35 @@ Initial spot checks found malformed content, so count completion alone is not ac
 ## Reporting rule
 
 Report separate numbers for authored, structurally valid, mathematically verified, correctly mapped, integrated in repository, and deployed. Repository readiness must never be conflated with Vercel deployment.
+
+## Execution status — 2026-11-12
+
+### Phase 1 — audit controls: complete
+- Dedicated branch: `question-bank/completion-audit`.
+- Original PYQ source has question-level module IDs.
+- Original questions are split into ten module-scoped qsets for correct filtering.
+- Loader preserves item-level module assignment.
+- Structural validator and test-fixture assertions added.
+
+### Phase 2 — coverage and attribution: complete on this branch
+- 50 original questions.
+- 500 variants total.
+- Exactly 10 variants for every original question.
+- 10 module-scoped variant files, including Sampling.
+- Zero duplicate variant IDs and zero source/module mismatches in the latest cross-check.
+
+### Phase 3 — explanation integrity: first pass complete
+- Repaired or rewrote 388 explanations/stems with contamination, truncation, missing context or incomplete calculations.
+- All 500 records now pass the conservative explanation-fragment heuristic scan.
+- This is not equivalent to independent verification of all 500 answer keys. A separate answer-calculation and distractor audit remains mandatory.
+
+### Phase 4 — integration: code changes made; runtime verification pending
+- Original question sets are split by module.
+- Loader uses the correct module-scoped sets and preserves item-level metadata.
+- Test fixture asserts exact counts, unique IDs and module attribution.
+- Browser and learner-flow tests have not yet been executed in a local checkout.
+
+### Phase 5 — release readiness: pending
+- Draft PR: https://github.com/mubarakclaude-bit/net-jrf-statistics/pull/82
+- Do not merge until independent answer verification and automated/browser tests pass.
+- Vercel deployment is explicitly excluded.
