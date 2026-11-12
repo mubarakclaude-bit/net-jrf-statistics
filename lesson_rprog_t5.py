@@ -6,6 +6,7 @@ root=Path(__file__).resolve().parent
 lesson=json.loads((root/"seed/lesson_rprog_t5.json").read_text(encoding="utf-8"))
 pool=json.loads((root/"seed/rprog_t5_mastery.json").read_text(encoding="utf-8"))
 assert lesson["id"]=="rprogt5" and lesson["topicId"]=="rprog-t5" and lesson["moduleId"]=="rprog"
+assert lesson["anchors"]==[{"paper":"j26","q":50}]
 assert len(lesson["scenes"]) in range(11,17)
 assert lesson["estMin"]==sum(s["mins"] for s in lesson["scenes"] if not s.get("ext"))
 assert lesson["scenes"][-1]["setId"]=="rprog_t5_mastery"

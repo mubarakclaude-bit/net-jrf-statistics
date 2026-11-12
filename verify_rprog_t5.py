@@ -6,6 +6,7 @@ R=Path(__file__).resolve().parent
 L=json.loads((R/'seed/lesson_rprog_t5.json').read_text())
 P=json.loads((R/'seed/rprog_t5_mastery.json').read_text())
 assert L['id']=='rprogt5' and L['topicId']=='rprog-t5' and L['moduleId']=='rprog'
+assert L['anchors']==[{'paper':'j26','q':50}]
 assert L['scenes'][-1]['setId']=='rprog_t5_mastery'
 assert len(P['items'])==P['count']==20
 assert Counter(q['diff'] for q in P['items'])=={'easy':6,'moderate':10,'hard':4}

@@ -7,7 +7,7 @@ L=json.loads((R/"seed/lesson_rprog_t1.json").read_text())
 P=json.loads((R/"seed/rprog_t1_mastery.json").read_text())
 assert L["id"]=="rprogt1" and L["topicId"]=="rprog-t1" and L["moduleId"]=="rprog"
 assert len(L["scenes"])==13 and L["scenes"][-1]["setId"]=="rprog_t1_mastery"
-assert L["anchors"]==[{"paper":"j26","q":16}]
+assert L["anchors"]==[{"paper":"j26","q":16},{"paper":"j26","q":48}]
 assert L["estMin"]==sum(s["mins"] for s in L["scenes"] if not s.get("ext"))==90
 assert len(P["items"])==P["count"]==20
 assert Counter(x["diff"] for x in P["items"])=={"easy":6,"moderate":10,"hard":4}
