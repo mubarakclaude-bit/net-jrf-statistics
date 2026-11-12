@@ -4,7 +4,7 @@ from fractions import Fraction
 from math import ceil
 
 sample = [2, 3, 3, 4, 6]
-assert sum(x <= 3 for x in sample) / len(sample) == Fraction(3, 5)
+assert Fraction(sum(x <= 3 for x in sample), len(sample)) == Fraction(3, 5)
 assert Fraction(2, 10) == Fraction(1, 5)
 assert Fraction(2, 8) == Fraction(1, 4)
 F, n = Fraction(2, 5), 10
