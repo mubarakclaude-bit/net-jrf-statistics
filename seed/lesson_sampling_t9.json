@@ -6,7 +6,7 @@
   "breadcrumb": "Sampling theory → PPSWOR → Variance estimation and ordered estimators",
   "engine": "B",
   "engineName": "Check pairwise variance coefficients and distinguish ordered from unordered estimators.",
-  "version": "1.0",
+  "version": "1.1",
   "status": "review",
   "estMin": 95,
   "objectives": [
@@ -58,27 +58,21 @@
           "ask": "Can an unbiased variance estimator be negative?",
           "recall": "Yes. Unbiasedness is an expectation property, not a pointwise constraint.",
           "refresh": [
-            "The estimator may vary across realised samples.",
-            "Its expectation can equal the true nonnegative variance.",
-            "Some realised values can still be below zero."
+            "An unbiased estimator is judged by its expectation over repeated samples from the design. A particular realised value can be below zero even when the parameter being estimated is nonnegative. This is possible for an unbiased variance estimator and does not mean the true variance is negative."
           ]
         },
         {
           "ask": "Is the true variance ever negative?",
           "recall": "No. A variance is an expected squared deviation.",
           "refresh": [
-            "A squared deviation cannot be negative.",
-            "Only an estimated variance can produce a negative numerical value.",
-            "A negative estimate signals a limitation of the estimator/design combination."
+            "A variance is an expectation of a squared deviation, so the true design variance cannot be negative. Keep the parameter and its estimator separate: the parameter is nonnegative, while an unbiased estimator can have a negative realised value because it is a random variable."
           ]
         },
         {
           "ask": "What does the SYG form use?",
           "recall": "Weighted squared differences of inverse-inclusion-probability values.",
           "refresh": [
-            "The difference is y_i/π_i−y_j/π_j.",
-            "The pair coefficient depends on π_iπ_j−π_ij.",
-            "Coefficient signs determine nonnegativity."
+            "The Sen–Yates–Grundy form rewrites the variance using pairwise inclusion probabilities and squared differences between inverse-probability weighted values. It uses unordered pairs i<j. Its nonnegativity requires the relevant π_ij to be positive and π_iπ_j−π_ij to be nonnegative for every pair."
           ]
         }
       ],
@@ -554,7 +548,9 @@
       "HT variance estimate can be negative.",
       "Des Raj: Ŷ_d=(1/n)Σt_r; t_r uses previous draws and initial p_r.",
       "For n=2: Ŷ_d=½[y₁(1+p₁)/p₁+y₂(1−p₁)/p₂].",
-      "Murthy n=2: Ŷ_M=[(1−p₂)y₁/p₁+(1−p₁)y₂/p₂]/(2−p₁−p₂)."
+      "Murthy n=2: Ŷ_M=[(1−p₂)y₁/p₁+(1−p₁)y₂/p₂]/(2−p₁−p₂).",
+      "The SYG sum is over unordered sample pairs i<j, so each pair is counted once.",
+      "If any required π_ij=0, the usual pairwise HT/SYG variance expression is unavailable for that pair."
     ],
     "cards": [
       [
@@ -576,6 +572,10 @@
       [
         "Zero π_ij",
         "Pairwise variance formula unavailable"
+      ],
+      [
+        "Unordered pair",
+        "In SYG, sum once over i<j; do not double-count (i,j) and (j,i)."
       ]
     ],
     "tricks": [
@@ -585,7 +585,8 @@
     ],
     "shortcuts": [
       "A sum of nonnegative pair terms is nonnegative.",
-      "Murthy averages ordered estimates using their sample-order probabilities."
+      "Murthy averages ordered estimates using their sample-order probabilities.",
+      "Check Δ_ij=π_iπ_j−π_ij pair by pair before claiming the SYG estimate is nonnegative."
     ],
     "remember": [
       "Unbiasedness is not the same as pointwise nonnegativity.",
