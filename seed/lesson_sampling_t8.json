@@ -1,0 +1,640 @@
+{
+  "id": "samplingt8",
+  "topicId": "sampling-t8",
+  "moduleId": "sampling",
+  "title": "Non-Sampling Errors",
+  "breadcrumb": "Sampling theory → Survey quality → Non-sampling errors",
+  "engine": "B",
+  "engineName": "Trace error sources from frame construction through processing and reporting.",
+  "version": "1.1",
+  "status": "review",
+  "estMin": 95,
+  "objectives": [
+    "Distinguish sampling error from non-sampling error.",
+    "Classify coverage, nonresponse, measurement, processing and specification errors.",
+    "Distinguish unit nonresponse from item nonresponse.",
+    "Explain why census operations remain vulnerable to non-sampling errors.",
+    "Match quality interventions to error mechanisms."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Target population and sampling frame",
+      "why": "Coverage errors arise from a mismatch between them."
+    },
+    {
+      "id": "p2",
+      "name": "Sampling error and variance",
+      "why": "The distinction separates design variance from other quality failures."
+    },
+    {
+      "id": "p3",
+      "name": "Basic survey operations",
+      "why": "Non-sampling errors arise during contact, measurement and processing."
+    }
+  ],
+  "traps": [
+    "A census can have non-sampling errors.",
+    "Increasing sample size does not automatically remove nonresponse or measurement bias.",
+    "Unit and item nonresponse are different.",
+    "Response rate alone does not determine nonresponse bias.",
+    "A wrong code introduced after interview is a processing error."
+  ],
+  "howto": "Locate where the problem enters the survey lifecycle. Frame mismatch means coverage; a missing case means unit nonresponse; a skipped question means item nonresponse; inaccurate answers mean measurement; errors introduced after collection mean processing. Choose a remedy aimed at that mechanism.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Sampling and non-sampling error",
+      "objective": "Distinguish design variance from other survey failures.",
+      "body": [
+        "Sampling error arises because a sample rather than the entire population is observed. Probability designs permit design-based variance assessment.",
+        "Non-sampling errors arise elsewhere in the survey lifecycle: frame construction, contact, response, measurement, coding and processing. They affect sample surveys and censuses.",
+        "Increasing sample size may reduce sampling variability, but it does not automatically fix a faulty frame, inaccurate answers or data-processing mistakes."
+      ],
+      "items": [
+        {
+          "ask": "What is sampling error?",
+          "recall": "Variation from observing a sample rather than the full population.",
+          "refresh": [
+            "Sampling error is the variation caused by observing a probability sample rather than the entire finite population. Under a probability design it can be described through repeated samples from the same fixed population. It is not the same as a mistake in recording, coverage or measurement."
+          ]
+        },
+        {
+          "ask": "Can a census contain non-sampling errors?",
+          "recall": "Yes: coverage, response, measurement and processing errors remain possible.",
+          "refresh": [
+            "A census removes sampling error in the sense that every population unit is intended to be enumerated, but it can still suffer from undercoverage, nonresponse, measurement mistakes, processing errors and incorrect definitions. A complete count is not automatically an error-free count."
+          ]
+        },
+        {
+          "ask": "Does a larger sample remove nonresponse bias?",
+          "recall": "No. Sample size alone does not correct systematic nonresponse.",
+          "refresh": [
+            "A larger sample can reduce sampling variance, but it does not automatically remove nonresponse bias. If respondents differ systematically from nonrespondents on the survey variable, a high response count can still give a biased estimate. Follow-up, adjustment and good field procedures address different parts of this problem."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "Which errors can remain even when every listed unit is enumerated?",
+        "nudge": "Coverage, measurement, response and processing errors."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 8,
+      "title": "Where survey errors enter",
+      "objective": "Map error sources across survey operations.",
+      "body": [
+        "An outdated frame may omit new households, creating undercoverage. A selected household may refuse, creating unit nonresponse. A respondent may misreport income, creating measurement error.",
+        "An interviewer may influence an answer, or a data-entry operator may assign the wrong code. These are distinct from sample-to-sample variation.",
+        "A question may also measure the wrong concept. Accurate recording of an irrelevant construct is still a specification or validity problem."
+      ],
+      "scenario": {
+        "teaser": "Household income survey",
+        "title": "One survey, several error sources",
+        "body": [
+          "A household income survey uses a frame prepared three years earlier. New housing areas are absent, creating undercoverage. Some selected households refuse, creating unit nonresponse. Other respondents report approximate monthly income because the reference period is unclear, creating measurement error. An interviewer records one response in the wrong category, and a later data import shifts a column, creating processing error. These problems arise at different points and require different remedies. Increasing sample size would not repair the omitted areas, clarify the question or correct the import.",
+          "A quality review should trace the survey from target-population definition through frame construction, contact, measurement, coding and analysis."
+        ],
+        "q": "Which error results from omitting new housing areas?",
+        "answer": "Coverage error, specifically undercoverage."
+      },
+      "ask": {
+        "q": "Why classify the error before choosing a remedy?",
+        "nudge": "Different mechanisms require different corrective actions."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Classify the mechanism",
+      "objective": "Recognise common non-sampling error types.",
+      "viz": {
+        "type": "disc-pmf",
+        "caption": "Coverage, nonresponse, measurement, interviewer and processing errors arise at different stages."
+      },
+      "body": [
+        "Undercoverage omits eligible units; overcoverage includes ineligible or duplicate units. Unit nonresponse means a selected eligible unit provides no interview; item nonresponse means a respondent skips a question.",
+        "Measurement error occurs when recorded values differ from true or intended values because of recall, wording, instrument, respondent or interviewer effects.",
+        "Processing errors can arise during editing, coding, data entry, record linkage, imputation, weighting, tabulation or transfer."
+      ],
+      "ask": {
+        "q": "A respondent completes the interview but skips the income question. What is this?",
+        "nudge": "Item nonresponse."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 10,
+      "title": "Taxonomy of non-sampling errors",
+      "objective": "Define coverage, nonresponse, measurement and processing errors.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Coverage error",
+          "body": "A mismatch between target population and frame. Undercoverage omits eligible units; overcoverage includes ineligible or duplicate units."
+        },
+        {
+          "t": "def",
+          "h": "Nonresponse error",
+          "body": "Selected units or requested items fail to provide data. Unit nonresponse affects the whole case; item nonresponse affects particular variables. Bias depends on response propensities and outcome differences, not merely the response rate."
+        },
+        {
+          "t": "def",
+          "h": "Measurement error",
+          "body": "The observed response differs from the intended true value. Causes include ambiguous wording, recall failure, social desirability, faulty instruments, interviewer influence and misunderstanding."
+        },
+        {
+          "t": "def",
+          "h": "Processing error",
+          "body": "Errors introduced after collection through coding, data entry, editing, record linkage, imputation, weighting, tabulation or transfer."
+        },
+        {
+          "t": "def",
+          "h": "Specification error",
+          "body": "The operational measure or question does not match the concept required by the study. Accurate measurement of the wrong construct remains a validity problem."
+        }
+      ],
+      "flow": {
+        "title": "Survey error pathway",
+        "alt": "Errors can enter at target definition, frame, contact, measurement, processing and analysis.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Target and frame",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Selection and contact",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Questionnaire and measurement",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Coding and processing",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Analysis and reporting",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ],
+        "note": "Non-sampling errors can arise throughout the survey lifecycle."
+      },
+      "ask": {
+        "q": "Does a high response rate guarantee absence of nonresponse bias?",
+        "nudge": "No. Bias depends on how response relates to the outcome."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 9,
+      "title": "Worked error classification",
+      "objective": "Diagnose survey incidents.",
+      "problem": "Classify: (i) eligible homes missing from frame; (ii) selected household refuses; (iii) respondent misremembers income; (iv) correct response entered under wrong code.",
+      "steps": [
+        {
+          "say": "Identify the frame omission.",
+          "math": "(i) Undercoverage",
+          "why": "Eligible target units are absent from the frame."
+        },
+        {
+          "say": "Identify the refusal.",
+          "math": "(ii) Unit nonresponse",
+          "why": "An eligible selected unit provides no interview."
+        },
+        {
+          "say": "Identify the inaccurate recalled value.",
+          "math": "(iii) Measurement error",
+          "why": "The recorded response differs from the true value."
+        },
+        {
+          "say": "Identify the wrong code.",
+          "math": "(iv) Processing error",
+          "why": "The error is introduced during coding or data handling."
+        }
+      ],
+      "ask": {
+        "q": "If the household responds but leaves one question blank, what changes?",
+        "nudge": "It is item nonresponse rather than unit nonresponse."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 3,
+      "title": "Recall the error taxonomy",
+      "objective": "Retrieve definitions.",
+      "intro": "Try each prompt before revealing the answer.",
+      "items": [
+        {
+          "q": "Undercoverage?",
+          "a": "Eligible target units are missing from the frame."
+        },
+        {
+          "q": "Unit nonresponse?",
+          "a": "A selected eligible unit provides no interview."
+        },
+        {
+          "q": "Item nonresponse?",
+          "a": "A respondent participates but leaves an item unanswered."
+        },
+        {
+          "q": "Measurement error?",
+          "a": "Recorded response differs from the intended true value."
+        },
+        {
+          "q": "Processing error?",
+          "a": "Error introduced in coding, entry, editing, imputation or tabulation."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 8,
+      "title": "Complete the error diagnosis",
+      "objective": "Classify census quality failures.",
+      "problem": "A census omits remote settlements, some residents refuse, an ambiguous question produces inaccurate ages, and a data import duplicates records.",
+      "steps": [
+        {
+          "say": "Omitted settlements.",
+          "blank": {
+            "prompt": "Name the error.",
+            "answer": "Undercoverage",
+            "accept": [
+              "undercoverage",
+              "coverage error"
+            ],
+            "hint": "Eligible units are missing from the frame."
+          },
+          "why": "The frame fails to cover part of the target population."
+        },
+        {
+          "say": "Residents refuse.",
+          "blank": {
+            "prompt": "Name the error.",
+            "answer": "Unit nonresponse",
+            "accept": [
+              "unit nonresponse",
+              "nonresponse"
+            ],
+            "hint": "The whole selected case does not respond."
+          },
+          "why": "The selected unit supplies no interview."
+        },
+        {
+          "say": "Ambiguous question produces inaccurate ages.",
+          "blank": {
+            "prompt": "Name the error.",
+            "answer": "Measurement error",
+            "accept": [
+              "measurement error"
+            ],
+            "hint": "The recorded value differs from the true value."
+          },
+          "why": "Question wording affects the response."
+        },
+        {
+          "say": "Data import duplicates records.",
+          "blank": {
+            "prompt": "Name the error.",
+            "answer": "Processing error",
+            "accept": [
+              "processing error"
+            ],
+            "hint": "The problem is introduced during data handling."
+          },
+          "why": "Processing has introduced duplicate records."
+        }
+      ],
+      "ask": {
+        "q": "Can all four problems occur in a census?",
+        "nudge": "Yes. Census operations remain vulnerable to non-sampling errors."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 8,
+      "title": "Bias, variance and total survey error",
+      "objective": "Explain why sample size is not a universal remedy.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Bias versus variance",
+          "body": "Sampling variance describes random variation across samples under a design. Non-sampling errors may introduce systematic bias, additional random error or both."
+        },
+        {
+          "t": "def",
+          "h": "Total survey error",
+          "body": "A quality framework considers the combined consequences of sampling and non-sampling errors. Optimising only sampling variance can worsen total quality if fieldwork, measurement or processing quality deteriorates."
+        },
+        {
+          "t": "def",
+          "h": "Response-rate caution",
+          "body": "A low response rate can signal risk, but response rate alone does not determine nonresponse bias. Bias depends on how response propensities relate to the survey variable and on follow-up or adjustment."
+        },
+        {
+          "t": "def",
+          "h": "Census caution",
+          "body": "A census removes sampling error for complete enumeration of the defined population, but coverage, nonresponse, measurement, processing and specification errors remain possible."
+        }
+      ],
+      "ask": {
+        "q": "Does increasing n necessarily reduce measurement bias?",
+        "nudge": "No. A larger sample does not fix a badly worded question."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 9,
+      "title": "Guided practice: choose the remedy",
+      "objective": "Match prevention to error source.",
+      "problem": "A survey has undercoverage in new urban areas, high refusal among working adults and confusion about the income reference period. Recommend a distinct action for each.",
+      "hints": [
+        "Update the frame for coverage.",
+        "Improve contact and follow-up for refusals.",
+        "Improve question design for measurement."
+      ],
+      "answer": "Update and supplement the frame; use suitable contact times and repeated callbacks for refusals; clarify and pretest the income reference period and train interviewers.",
+      "check": "Each remedy targets the mechanism creating the error.",
+      "scenario": {
+        "teaser": "Improving a recurring labour survey",
+        "title": "Different errors need different interventions",
+        "body": [
+          "The survey team finds new residential developments missing from its frame, a high refusal rate among employed adults and inconsistent interpretation of the earnings reference period. The frame should be updated and coverage checked against independent sources. Refusals may be reduced through evening or weekend contact, repeated callbacks and clear respondent communication. The earnings question should be cognitively tested, define its reference period and include interviewer guidance. Applying one generic remedy, such as increasing sample size, would not address these different causes.",
+          "Quality improvement begins by diagnosing the mechanism and selecting a targeted intervention."
+        ],
+        "q": "Which action directly addresses the unclear earnings reference period?",
+        "answer": "Revise and test the question wording and train interviewers."
+      },
+      "solution": [
+        {
+          "say": "Undercoverage: update and supplement the frame."
+        },
+        {
+          "say": "Unit nonresponse: improve contact timing and callbacks."
+        },
+        {
+          "say": "Measurement error: clarify and test the income question."
+        }
+      ],
+      "ask": {
+        "q": "Would nonresponse weighting automatically correct undercoverage?",
+        "nudge": "No. Frame coverage and nonresponse are different mechanisms."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 7,
+      "title": "Avoid non-sampling error traps",
+      "objective": "Check conceptual distinctions.",
+      "intro": "Judge each statement.",
+      "items": [
+        {
+          "claim": "A census can contain non-sampling errors.",
+          "tf": true,
+          "why": "Census operations still involve coverage, response, measurement and processing."
+        },
+        {
+          "claim": "A larger sample automatically removes nonresponse bias.",
+          "tf": false,
+          "why": "Bias depends on response mechanisms and differences between respondents and nonrespondents."
+        },
+        {
+          "claim": "Item nonresponse occurs when a respondent skips a particular question.",
+          "tf": true,
+          "why": "The unit participates but an item is missing."
+        },
+        {
+          "claim": "A wrong data-entry code is measurement error by definition.",
+          "tf": false,
+          "why": "It is a processing error introduced after response collection."
+        },
+        {
+          "claim": "A high response rate guarantees no nonresponse bias.",
+          "tf": false,
+          "why": "Response rate alone does not determine the outcome differences."
+        },
+        {
+          "claim": "A question that measures the wrong construct creates specification problems.",
+          "tf": true,
+          "why": "The operational measure does not match the intended concept."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 9,
+      "title": "Transfer: census quality audit",
+      "objective": "Separate sampling error from non-sampling errors.",
+      "problem": "A census enumerates all listed households. It misses informal settlements absent from the list, some people are absent during visits, respondents misreport ages, and the office deletes records during processing. Identify the errors and state whether a larger sample would solve them.",
+      "hints": [
+        "A census can still have an incomplete frame.",
+        "Separate non-enumeration from measurement and processing.",
+        "Consider whether sample size addresses the mechanisms."
+      ],
+      "answer": "Missing settlements are undercoverage; absent eligible people who are not enumerated are non-enumeration/nonresponse; misreported ages are measurement error; deleted records are processing error. Increasing sample size is not a remedy.",
+      "check": "A census removes sampling error only for complete enumeration of the defined population.",
+      "solution": [
+        {
+          "say": "Identify missing settlements.",
+          "math": "Undercoverage",
+          "why": "The frame omits eligible units."
+        },
+        {
+          "say": "Identify unenumerated people.",
+          "math": "Nonresponse / non-enumeration",
+          "why": "Eligible people are not successfully enumerated."
+        },
+        {
+          "say": "Identify inaccurate ages.",
+          "math": "Measurement error",
+          "why": "Reported values differ from true values."
+        },
+        {
+          "say": "Identify deleted records.",
+          "math": "Processing error",
+          "why": "The loss occurs during data handling."
+        }
+      ],
+      "ask": {
+        "q": "Does a census have zero total survey error?",
+        "nudge": "No. It can still have non-sampling errors."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 6,
+      "title": "Non-sampling error checklist",
+      "objective": "Summarise error sources and remedies.",
+      "body": [
+        "Coverage: frame differs from target population. Undercoverage omits eligible units; overcoverage includes ineligible or duplicate units.",
+        "Nonresponse: selected units or requested items fail to provide data. Unit and item nonresponse are distinct.",
+        "Measurement: recorded answers differ from intended values due to wording, recall, respondent, interviewer or instrument effects.",
+        "Processing: coding, entry, editing, linkage, imputation, tabulation or transfer introduces errors. Specification error occurs when the operational measure does not match the intended concept.",
+        "Non-sampling errors affect censuses as well as sample surveys. Larger n is not a universal remedy; diagnose the mechanism and use targeted prevention or adjustment."
+      ],
+      "ask": {
+        "q": "Which estimator and key design condition should you remember for Non-Sampling Errors?",
+        "nudge": "State the estimator, its weighting or expansion rule, and the assumptions behind its variance."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 4,
+      "title": "Mastery check",
+      "objective": "Demonstrate independent command of non-sampling errors.",
+      "setId": "sampling_t8_mastery"
+    }
+  ],
+  "revision": {
+    "sheet": [
+      "Sampling error: sample rather than full population observed.",
+      "Coverage: undercoverage or overcoverage.",
+      "Nonresponse: unit or item.",
+      "Measurement: observed response differs from intended true value.",
+      "Processing: coding, entry, editing, linkage, imputation or tabulation.",
+      "Specification: measure does not match target concept.",
+      "Census can still have non-sampling errors.",
+      "Total survey error includes both sampling and non-sampling sources; reducing one does not guarantee the other is small.",
+      "Nonresponse bias depends on how respondents differ from nonrespondents, not only on the response rate."
+    ],
+    "cards": [
+      [
+        "Coverage",
+        "Frame mismatch"
+      ],
+      [
+        "Unit nonresponse",
+        "Whole case missing"
+      ],
+      [
+        "Item nonresponse",
+        "Question unanswered"
+      ],
+      [
+        "Measurement",
+        "Inaccurate response"
+      ],
+      [
+        "Processing",
+        "Data handling error"
+      ],
+      [
+        "Specification",
+        "Wrong construct"
+      ]
+    ],
+    "tricks": [
+      "Ask where in the survey lifecycle the error occurs.",
+      "Do not infer bias from response rate alone.",
+      "A census is not automatically error-free."
+    ],
+    "shortcuts": [
+      "Missing eligible units → undercoverage.",
+      "Skipped question → item nonresponse.",
+      "Wrong code after interview → processing."
+    ],
+    "remember": [
+      "Large n reduces sampling variability, not every survey error.",
+      "Target remedies to the mechanism."
+    ]
+  },
+  "refs": [
+    {
+      "title": "Survey Errors and Survey Costs",
+      "where": "Total survey error framework",
+      "site": "Robert M. Groves",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Foundational framework for survey error sources and quality."
+    },
+    {
+      "title": "Survey Methodology",
+      "where": "Coverage, nonresponse and measurement errors",
+      "site": "Robert M. Groves et al.",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Comprehensive survey error and fieldwork treatment."
+    },
+    {
+      "title": "AAPOR Standard Definitions",
+      "where": "Response rates and disposition codes",
+      "site": "American Association for Public Opinion Research",
+      "url": "https://aapor.org/standards-and-ethics/standard-definitions/",
+      "type": "Professional standards",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Definitions for survey response and disposition reporting."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule."
+  },
+  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t8. Practice questions are original, not official PYQs. Classification examples are authored for learning; numeric items use explicit finite examples."
+}
