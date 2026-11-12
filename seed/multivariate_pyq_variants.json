@@ -32,7 +32,7 @@
         "W_p(n, Σ)"
       ],
       "answer": "B",
-      "explanation": "3. The Wishart distribution with p = 1 reduces to:",
+      "explanation": "For a multivariate normal sample, the unbiased sample covariance matrix S satisfies (n−1)S~Wₚ(n−1,Σ), a Wishart distribution with n−1 degrees of freedom and scale matrix Σ.",
       "srcQ": 17,
       "moduleId": "multivariate"
     },
@@ -48,7 +48,7 @@
         "beta"
       ],
       "answer": "C",
-      "explanation": "σ²χ²_m",
+      "explanation": "When p=1, the Wishart distribution becomes a scaled chi-square distribution: W₁(m,σ²) is distributed as σ²χ²ₘ.",
       "srcQ": 17,
       "moduleId": "multivariate"
     },
@@ -64,7 +64,7 @@
         "W₃(10, Σ)"
       ],
       "answer": "D",
-      "explanation": "5. E(W) for W ~ W_p(m, Σ) is:",
+      "explanation": "Independent Wishart matrices with the same scale matrix add their degrees of freedom. Thus W₁+W₂~W₃(4+6,Σ)=W₃(10,Σ).",
       "srcQ": 17,
       "moduleId": "multivariate"
     },
@@ -80,7 +80,7 @@
         "mΣ²"
       ],
       "answer": "A",
-      "explanation": "6. If W ~ W_p(m, Σ) and C is q × p of rank q, then CWC′ follows:",
+      "explanation": "For W~Wₚ(m,Σ), the expectation is E(W)=mΣ. Each of the m independent outer-product contributions has expectation Σ.",
       "srcQ": 17,
       "moduleId": "multivariate"
     },
@@ -96,7 +96,7 @@
         "W_p(m, Σ)"
       ],
       "answer": "B",
-      "explanation": "7. W ~ W_p(m, Σ) is non-singular with probability 1 provided:",
+      "explanation": "If W~Wₚ(m,Σ) and C has q rows and rank q, the linear transformation CWC′ is Wishart with degrees of freedom m and scale CΣC′.",
       "srcQ": 17,
       "moduleId": "multivariate"
     },
@@ -112,7 +112,7 @@
         "always"
       ],
       "answer": "C",
-      "explanation": "8. For W ~ W_p(m, Σ), the distribution of Σ(−1/2)WΣ(−1/2) is:",
+      "explanation": "A Wishart matrix with positive-definite scale is nonsingular with probability one when its degrees of freedom satisfy m≥p.",
       "srcQ": 17,
       "moduleId": "multivariate"
     },
@@ -128,7 +128,7 @@
         "W_p(m, I_p)"
       ],
       "answer": "D",
-      "explanation": "9. In a random sample from N_p(μ, Σ), x̄ and S are:",
+      "explanation": "Congruence standardisation by Σ^(−1/2) changes the scale matrix to identity. Therefore Σ^(−1/2)WΣ^(−1/2)~Wₚ(m,Iₚ).",
       "srcQ": 17,
       "moduleId": "multivariate"
     },
@@ -152,7 +152,7 @@
       "id": "j26v-q17-10",
       "format": "single",
       "topic": "June 2026 paper · Q17",
-      "stem": "Wilks’ Λ, used in MANOVA, is formed from:",
+      "stem": "In MANOVA, Wilks' Λ is formed from:",
       "options": [
         "a normal vector",
         "a ratio of de26 / 83 terminants of two independent Wisharts",
@@ -160,7 +160,7 @@
         "a chi-square"
       ],
       "answer": "B",
-      "explanation": "Q18. ACF of the differenced series yₜ = 0.6yₜ₋₁ + 0.4yₜ₋₂ + εₜ, with E(εₜ) = 0 and E(εₜ²) = σ²ε. The ACF of {Δyₜ}, say r_k, is:",
+      "explanation": "In MANOVA, Wilks' Λ is the ratio |E|/|E+H|, where E is the within-groups error SSCP matrix and H is the hypothesis SSCP matrix. Under the null, these have independent Wishart structures under the usual normal model.",
       "srcQ": 17,
       "moduleId": "multivariate"
     },
@@ -192,7 +192,7 @@
         "N_q(Aμ, AΣA′)"
       ],
       "answer": "D",
-      "explanation": "3. a′X and b′X are independent if and only if:",
+      "explanation": "A linear transformation of a multivariate normal vector is multivariate normal. Its mean is Aμ and its covariance matrix is AΣA′, so AX~N_q(Aμ,AΣA′).",
       "srcQ": 19,
       "moduleId": "multivariate"
     },
@@ -208,7 +208,7 @@
         "a = b"
       ],
       "answer": "A",
-      "explanation": "4. With Σ = [[2, 1], [1, 3]], X₁ and X₁ + cX₂ are independent when c equals:",
+      "explanation": "The linear forms a′X and b′X are jointly normal. Jointly normal variables are independent exactly when their covariance is zero, which is a′Σb=0.",
       "srcQ": 19,
       "moduleId": "multivariate"
     },
@@ -256,7 +256,7 @@
         "χ²_p"
       ],
       "answer": "D",
-      "explanation": "7. Every marginal of a multivariate normal is:",
+      "explanation": "The squared Mahalanobis distance (X−μ)′Σ⁻¹(X−μ) for a p-dimensional normal vector is the sum of p independent squared standard normals, hence χ²ₚ.",
       "srcQ": 19,
       "moduleId": "multivariate"
     },
@@ -272,7 +272,7 @@
         "chi-square"
       ],
       "answer": "A",
-      "explanation": "8. If two variables are each marginally normal and uncorrelated, they are:",
+      "explanation": "Every subvector of a multivariate normal vector has a multivariate normal distribution. In particular, each marginal component is normally distributed.",
       "srcQ": 19,
       "moduleId": "multivariate"
     },
@@ -288,7 +288,7 @@
         "never independent"
       ],
       "answer": "B",
-      "explanation": "9. For X ~ N₃(μ, Σ) with Σ diagonal, the components are:",
+      "explanation": "Zero covariance implies independence for jointly normal variables. Marginal normality alone is not sufficient; joint normality is the required condition.",
       "srcQ": 19,
       "moduleId": "multivariate"
     },
@@ -304,7 +304,7 @@
         "uncorrelated but dependent"
       ],
       "answer": "C",
-      "explanation": "10. The conditional mean of X⁽²⁾ given X⁽¹⁾ = x₁ is:",
+      "explanation": "A multivariate normal vector with diagonal covariance has mutually uncorrelated components. Joint normality then makes the components mutually independent.",
       "srcQ": 19,
       "moduleId": "multivariate"
     },
@@ -336,7 +336,7 @@
         "σ_Y/ σ_X"
       ],
       "answer": "A",
-      "explanation": "1. The conditional distribution is again normal",
+      "explanation": "In a bivariate normal distribution, E(Y|X)=μY+ρ(σY/σX)(X−μX). The coefficient of X is therefore ρσY/σX.",
       "srcQ": 44,
       "moduleId": "multivariate"
     },
@@ -352,7 +352,7 @@
         "chi-square"
       ],
       "answer": "B",
-      "explanation": "2. The conditional covariance matrix Σ₂₂ − Σ₂₁Σ₁₁⁻¹Σ₁₂:",
+      "explanation": "A conditional distribution of one block of a jointly multivariate normal vector, given another block, is again multivariate normal.",
       "srcQ": 44,
       "moduleId": "multivariate"
     },
@@ -368,7 +368,7 @@
         "is always diagonal"
       ],
       "answer": "C",
-      "explanation": "3. In a bivariate normal, Var(Y | X = x) equals:",
+      "explanation": "The conditional covariance is the Schur complement Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂. It depends on the covariance blocks, not on the realised conditioning value x₁.",
       "srcQ": 44,
       "moduleId": "multivariate"
     },
@@ -384,7 +384,7 @@
         "linear in x₁"
       ],
       "answer": "D",
-      "explanation": "6. If Σ₂₁ = 0, the conditional distribution of X⁽²⁾ given X⁽¹⁾ equals:",
+      "explanation": "The conditional mean is μ₂+Σ₂₁Σ₁₁⁻¹(x₁−μ₁), an affine (linear plus constant) function of the conditioning vector x₁.",
       "srcQ": 44,
       "moduleId": "multivariate"
     },
@@ -416,7 +416,7 @@
         "increasing it"
       ],
       "answer": "B",
-      "explanation": "8. For a bivariate normal with ρ = 0.6, σ_Y = 5, Var(Y | X) equals:",
+      "explanation": "The conditional covariance equals the marginal covariance minus a positive-semidefinite matrix. Conditioning therefore cannot increase variance; it can reduce it or leave it unchanged.",
       "srcQ": 44,
       "moduleId": "multivariate"
     },
@@ -432,7 +432,7 @@
         "25"
       ],
       "answer": "C",
-      "explanation": "25(1 − 0.36)",
+      "explanation": "For a bivariate normal, Var(Y|X)=σY²(1−ρ²). Here 25(1−0.6²)=25×0.64=16.",
       "srcQ": 44,
       "moduleId": "multivariate"
     },
@@ -448,7 +448,7 @@
         "the partial covariance matrix (Schur complement)"
       ],
       "answer": "D",
-      "explanation": "10. For X ~ N₂(μ, Σ) with μ = (1, 2)′ and Σ = [[4, 2], [2, 4]], E(X₂ | X₁ = 3) equals:",
+      "explanation": "The Schur complement Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂ is the conditional covariance matrix of X⁽²⁾ given X⁽¹⁾.",
       "srcQ": 44,
       "moduleId": "multivariate"
     },
@@ -464,7 +464,7 @@
         "4"
       ],
       "answer": "A",
-      "explanation": "2 + (2/4)(3 − 1) = 2 +",
+      "explanation": "The conditional mean is μ₂+Σ₂₁Σ₁₁⁻¹(x₁−μ₁)=2+(2/4)(3−1)=3.",
       "srcQ": 44,
       "moduleId": "multivariate"
     },
@@ -488,7 +488,7 @@
       "id": "j26v-q02-02",
       "format": "single",
       "topic": "June 2026 paper · Q2",
-      "stem": "In question 1, the proportion of total variation explained by the first PC is:",
+      "stem": "A PCA has total variance 4 and the largest eigenvalue is 2.8. What proportion of total variation is explained by the first principal component?",
       "options": [
         "60%",
         "70%",
@@ -496,7 +496,7 @@
         "40%"
       ],
       "answer": "B",
-      "explanation": "2.8/4 = 0.70",
+      "explanation": "For a PCA with total variance 4 and largest eigenvalue 2.8, the proportion explained by the first principal component is 2.8/4=0.70, or 70%.",
       "srcQ": 2,
       "moduleId": "multivariate"
     },
@@ -576,7 +576,7 @@
         "(4, 20)"
       ],
       "answer": "C",
-      "explanation": "F(p, n − p) = F(4, 16). Correct:",
+      "explanation": "The one-sample Hotelling statistic converts to F with degrees of freedom (p,n−p). Here p=4 and n−p=16, giving F(4,16).",
       "srcQ": 4,
       "moduleId": "multivariate"
     },
@@ -624,7 +624,7 @@
         "no transformation"
       ],
       "answer": "B",
-      "explanation": "7. In a two-sample T² with n₁ = 10, n₂ = 12, p = 3, the F degrees of freedom are:",
+      "explanation": "Hotelling's T² is invariant under any nonsingular linear transformation of the variables. The transformed mean difference and covariance change together so that the quadratic form is unchanged.",
       "srcQ": 4,
       "moduleId": "multivariate"
     },
@@ -640,7 +640,7 @@
         "(3, 20)"
       ],
       "answer": "C",
-      "explanation": "n₁ + n₂ − p − 1 = 10 + 12 − 3 − 1 =",
+      "explanation": "For the two-sample Hotelling test, the converted F distribution has degrees of freedom (p,n₁+n₂−p−1). Here these are (3,10+12−3−1)=(3,18).",
       "srcQ": 4,
       "moduleId": "multivariate"
     },
@@ -656,7 +656,7 @@
         "10"
       ],
       "answer": "D",
-      "explanation": "d = (1, 0)′; d′S⁻¹d = 2; T² = 5 × 2 =",
+      "explanation": "Let d=x̄−μ₀=(1,0)′. Then d′S⁻¹d=2, so T²=nd′S⁻¹d=5×2=10.",
       "srcQ": 4,
       "moduleId": "multivariate"
     },
@@ -672,7 +672,7 @@
         "a nonparametric test"
       ],
       "answer": "A",
-      "explanation": "10. Large values of T² lead to:",
+      "explanation": "Under multivariate normal sampling, the one-sample Hotelling T² test is the likelihood-ratio test for the null hypothesis about the population mean vector.",
       "srcQ": 4,
       "moduleId": "multivariate"
     },
@@ -752,7 +752,7 @@
         "R₁.₂₃ ≤ |r₁₂|"
       ],
       "answer": "B",
-      "explanation": "5. Given r₁₂ = 0.8, r₁₃ = 0.6, r₂₃ = 0.5, R₁.₂₃² equals:",
+      "explanation": "A multiple correlation uses both predictors and cannot be smaller in magnitude than the simple correlation with either included predictor. Thus R₁.₂₃≥|r₁₂|.",
       "srcQ": 12,
       "moduleId": "multivariate"
     },
@@ -784,7 +784,7 @@
         "negative even when the simple correlation is positive"
       ],
       "answer": "D",
-      "explanation": "7. The identity 1 − R₁.₂₃² = (1 − r₁₂²)(1 − r₁₃.₂²) is used to:",
+      "explanation": "A partial correlation measures association after controlling for other variables. Its sign can differ from a simple correlation because conditioning can reverse the association.",
       "srcQ": 12,
       "moduleId": "multivariate"
     },
@@ -800,7 +800,7 @@
         "invert Σ"
       ],
       "answer": "A",
-      "explanation": "8. For a 4-variate equicorrelation matrix with ρ = 0.5, the first-order partial correlation between any two variables is:",
+      "explanation": "The identity decomposes the unexplained proportion after using two predictors into the product of the unexplained proportions after the first predictor and after adding the second conditionally. It allows R₁.₂₃ to be recovered from simple and partial correlations.",
       "srcQ": 12,
       "moduleId": "multivariate"
     },
@@ -848,7 +848,7 @@
         "3"
       ],
       "answer": "D",
-      "explanation": "r₁₂.₃, r₁₃.₂, r₂₃.₁",
+      "explanation": "With three variables, the first-order partial correlations are r₁₂.₃, r₁₃.₂ and r₂₃.₁: one for each of the three variable pairs, controlling for the remaining variable.",
       "srcQ": 12,
       "moduleId": "multivariate"
     },
@@ -864,7 +864,7 @@
         "n − 1"
       ],
       "answer": "B",
-      "explanation": "2. The MLE of Σ is:",
+      "explanation": "The multivariate normal log-likelihood is maximised at the sample mean and at the covariance estimate equal to the sample SSCP matrix divided by n.",
       "srcQ": 37,
       "moduleId": "multivariate"
     },
@@ -880,7 +880,7 @@
         "not sufficient"
       ],
       "answer": "C",
-      "explanation": "3. For N(μ, σ²), the MLE of σ² is:",
+      "explanation": "The MLE covariance estimator uses divisor n. Since E(SSCP)=(n−1)Σ, its expectation is ((n−1)/n)Σ, so it is biased downward.",
       "srcQ": 37,
       "moduleId": "multivariate"
     },
@@ -896,7 +896,7 @@
         "Σ(xᵢ − x̄ )²/n"
       ],
       "answer": "D",
-      "explanation": "4. In a sample from N_p(μ, Σ), x̄ follows:",
+      "explanation": "For a univariate normal sample with unknown mean, maximising the likelihood gives σ̂²=n⁻¹Σ(xᵢ−x̄)². The unbiased estimator instead uses n−1.",
       "srcQ": 37,
       "moduleId": "multivariate"
     },
@@ -912,7 +912,7 @@
         "N_p(μ, Σ)"
       ],
       "answer": "A",
-      "explanation": "5. x̄ and S in a multivariate normal sample are:",
+      "explanation": "The sample mean of n independent Nₚ(μ,Σ) observations is Nₚ(μ,Σ/n). Averaging divides the covariance matrix by n.",
       "srcQ": 37,
       "moduleId": "multivariate"
     },
@@ -928,7 +928,7 @@
         "both biased"
       ],
       "answer": "B",
-      "explanation": "6. If θ̂ is the MLE of θ, then the MLE of g(θ) is:",
+      "explanation": "For a multivariate normal sample, the sample mean vector and unbiased sample covariance matrix are independent. This is a special property of the normal distribution.",
       "srcQ": 37,
       "moduleId": "multivariate"
     },
@@ -944,7 +944,7 @@
         "undefined"
       ],
       "answer": "C",
-      "explanation": "Invariance property",
+      "explanation": "The invariance property of maximum likelihood states that if θ̂ maximises the likelihood for θ, then g(θ̂) maximises the likelihood for the transformed parameter g(θ), under the usual conditions.",
       "srcQ": 37,
       "moduleId": "multivariate"
     },
@@ -960,7 +960,7 @@
         "functions of sufficient statistics"
       ],
       "answer": "D",
-      "explanation": "8. For a random sample of size 3 with deviations giving Σd₁² = 12, the MLE of the variance of the first component is:",
+      "explanation": "The likelihood depends on the data through sufficient statistics whenever the factorisation theorem applies. In the stated regular setting, the MLE can be expressed as a function of the sufficient statistics.",
       "srcQ": 37,
       "moduleId": "multivariate"
     },
@@ -976,7 +976,7 @@
         "6"
       ],
       "answer": "A",
-      "explanation": "12/3",
+      "explanation": "The MLE covariance uses divisor n. With n=3 and sum of squared deviations 12, the estimate is 12/3=4.",
       "srcQ": 37,
       "moduleId": "multivariate"
     },
@@ -992,7 +992,7 @@
         "more biased"
       ],
       "answer": "B",
-      "explanation": "10. The UMVUE of Σ is:",
+      "explanation": "The MLE covariance estimator is biased by the factor (n−1)/n, which tends to one. Its bias vanishes as n grows, so it is asymptotically unbiased.",
       "srcQ": 37,
       "moduleId": "multivariate"
     },
@@ -1008,7 +1008,7 @@
         "the SSCP matrix"
       ],
       "answer": "C",
-      "explanation": "Q38. Which is NOT a consequence of near multicollinearity Which of the following is not a consequence of near multicollinearity for the OLS estimator?",
+      "explanation": "For a multivariate normal sample, the unbiased sample covariance S divides the SSCP matrix by n−1. It is the UMVUE of Σ under the normal model.",
       "srcQ": 37,
       "moduleId": "multivariate"
     },
