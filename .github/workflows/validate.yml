@@ -56,6 +56,16 @@ jobs:
           done < .changed.txt
           exit "$fail"
 
+      - name: Exact Sampling Theory numerical verifiers when Sampling lessons change
+        run: |
+          if grep -q '^seed/lesson_sampling_' .changed.txt; then
+            python verify_sampling.py
+            python verify_sampling_t2.py
+            for f in verify_sampling_t{3..9}.py; do python "$f"; done
+          else
+            echo "No Sampling Theory lesson changed; skipping Sampling-specific numerical verifiers."
+          fi
+
   browser:
     runs-on: ubuntu-latest
     steps:
