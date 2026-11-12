@@ -6,7 +6,7 @@
   "breadcrumb": "Sampling theory → Auxiliary information → Ratio and regression estimation",
   "engine": "B",
   "engineName": "Use known population auxiliary information to adjust the sample mean of a study variable.",
-  "version": "1.0",
+  "version": "1.1",
   "status": "review",
   "estMin": 95,
   "objectives": [
@@ -58,27 +58,21 @@
           "ask": "What is an auxiliary variable?",
           "recall": "A variable related to the study variable and used to improve estimation.",
           "refresh": [
-            "The study variable is the quantity the survey wants to estimate, such as household expenditure.",
-            "An auxiliary variable is related to that quantity, such as household size or a register count.",
-            "Useful auxiliary information is known for the population or is measured at low cost."
+            "An auxiliary variable x is measured on the same population units as y and is useful because it is related to the study variable. It may come from a register, an earlier census or a cheaper measurement operation. Its purpose is to improve precision, not to replace the variable y that defines the target."
           ]
         },
         {
           "ask": "What does X̄ represent?",
           "recall": "The known population mean of the auxiliary variable.",
           "refresh": [
-            "Sum x-values for all N population units to obtain X.",
-            "Divide X by N to obtain X̄.",
-            "Ratio and regression estimators use this known benchmark to adjust the sample estimate."
+            "The population mean X̄ is the fixed mean of x over all N population units. In this lesson it is assumed known from an external source. It is not the sample mean and it does not change when a different sample is drawn; the sample mean x̄ is calculated only from the selected units."
           ]
         },
         {
           "ask": "What is the sample mean of y?",
           "recall": "ȳ=Σᵢ∈s yᵢ/n.",
           "refresh": [
-            "Add the observed study-variable values in the sample.",
-            "Divide by the number of sampled units under equal-probability SRS.",
-            "The sample mean is an estimator; its realised value varies across samples."
+            "The sample mean ȳ is the arithmetic average of the observed study values: add the y-values for the n sampled units and divide by n. Under SRSWOR it is design-unbiased for the finite-population mean Ȳ. Ratio and regression estimators adjust this starting value using the difference between known X̄ and observed x̄."
           ]
         }
       ],
@@ -551,7 +545,8 @@
       "Ratio residual eᵢ=yᵢ−Rxᵢ.",
       "Approx. ratio variance: (1−f)S_e²/n.",
       "Regression residuals determine residual variance.",
-      "Ratio estimator generally has finite-sample bias."
+      "Ratio estimator generally has finite-sample bias.",
+      "Under SRSWOR, f=n/N and V(ȳ)=(1−f)S_y²/n."
     ],
     "cards": [
       [
@@ -573,6 +568,10 @@
       [
         "Caveat",
         "Ratio is generally biased"
+      ],
+      [
+        "Auxiliary mean",
+        "X̄ is the known population mean of x; x̄ is calculated from the sample."
       ]
     ],
     "tricks": [
@@ -582,7 +581,8 @@
     ],
     "shortcuts": [
       "If X̄=x̄, both adjustments reduce to ȳ.",
-      "A proportional relationship points to ratio; a nonzero intercept points to regression."
+      "A proportional relationship points to ratio; a nonzero intercept points to regression.",
+      "Calculate r=ȳ/x̄ once; the ratio estimate is rX̄."
     ],
     "remember": [
       "Auxiliary information improves precision only when informative and reliable.",
