@@ -1,0 +1,600 @@
+{
+ "id": "multivariatet7",
+ "topicId": "multivariate-t7",
+ "moduleId": "multivariate",
+ "title": "MLE of the Mean Vector and Covariance Matrix",
+ "breadcrumb": "Module 8 · Multivariate Analysis · MLE of mean vector and covariance",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 90,
+ "objectives": [
+  "Derive the multivariate normal likelihood.",
+  "Obtain the mean vector MLE as the sample mean vector.",
+  "Obtain the covariance MLE using divisor n.",
+  "Distinguish the MLE from unbiased sample covariance using n−1.",
+  "Compute both estimators and recognise rank constraints."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Multivariate normal distribution",
+   "why": "The likelihood is built from the multivariate normal density."
+  },
+  {
+   "id": "p2",
+   "name": "Matrix transpose and determinant",
+   "why": "The log-likelihood contains a determinant and quadratic form."
+  },
+  {
+   "id": "p3",
+   "name": "Sample mean and covariance",
+   "why": "The estimators use centred outer products."
+  }
+ ],
+ "traps": [
+  "The covariance MLE divides by n, not n−1.",
+  "The unbiased sample covariance divides by n−1; it is not the MLE.",
+  "When μ is unknown, centre observations at x̄, not zero.",
+  "Use outer products to retain cross-products.",
+  "The estimate is symmetric positive semidefinite.",
+  "The centred covariance rank is at most min(p,n−1); if n≤p it is singular."
+ ],
+ "revision": {
+  "sheet": [
+   "For iid Nₚ(μ,Σ), log L=−np/2 log(2π)−n/2 log|Σ|−(1/2)Σᵢ(xᵢ−μ)′Σ⁻¹(xᵢ−μ).",
+   "Mean MLE: μ̂=x̄=(1/n)ΣXᵢ.",
+   "Covariance MLE: Σ̂=(1/n)Σ(Xᵢ−x̄)(Xᵢ−x̄)′.",
+   "Unbiased covariance: S=(1/(n−1))Σ(Xᵢ−x̄)(Xᵢ−x̄)′.",
+   "Relation: Σ̂=((n−1)/n)S.",
+   "Each outer product is p×p; the estimate is symmetric positive semidefinite.",
+   "June 2026 Q37: centred sum [[6,3],[3,2]], MLE [[2,1],[1,2/3]], option D.",
+   "rank(Σ̂)≤min(p,n−1); if n≤p, it is singular."
+  ],
+  "cards": [
+   [
+    "Mean vector MLE",
+    "μ̂=x̄"
+   ],
+   [
+    "Covariance MLE",
+    "Σ̂=(1/n)Σ(xᵢ−x̄)(xᵢ−x̄)′"
+   ],
+   [
+    "Unbiased covariance",
+    "S=(1/(n−1))Σ(xᵢ−x̄)(xᵢ−x̄)′"
+   ],
+   [
+    "Relationship",
+    "Σ̂=((n−1)/n)S"
+   ],
+   [
+    "Outer product",
+    "(p×1)(1×p) gives p×p"
+   ],
+   [
+    "Rank bound",
+    "rank(S)≤min(p,n−1)"
+   ]
+  ],
+  "tricks": [
+   "MLE uses n.",
+   "Unbiased covariance uses n−1.",
+   "Compute the centred outer-product sum once and divide at the end."
+  ],
+  "shortcuts": [
+   "Check x̄ has p coordinates and Σ̂ is p×p.",
+   "Check symmetry and nonnegative diagonal entries.",
+   "For n=3, the MLE is two-thirds of the unbiased covariance."
+  ],
+  "remember": [
+   "Mean vector MLE is the sample mean vector.",
+   "Covariance MLE uses n; unbiased covariance uses n−1."
+  ]
+ },
+ "howto": "Find x̄ first. Subtract it from every observation. Form each deviation outer product, add the matrices, and divide by n for the Gaussian covariance MLE. Divide by n−1 only when asked for unbiased sample covariance.",
+ "refs": [
+  {
+   "title": "Applied Multivariate Statistical Analysis",
+   "where": "Canonical correlation analysis",
+   "site": "Johnson and Wichern",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Classical derivation of canonical variates, canonical roots and inference."
+  },
+  {
+   "title": "Applied Multivariate Statistical Analysis",
+   "where": "Canonical correlation",
+   "site": "Penn State STAT 505",
+   "url": "https://online.stat.psu.edu/stat505/",
+   "type": "Free course notes",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Accessible multivariate course material."
+  },
+  {
+   "title": "Methods of Multivariate Analysis",
+   "where": "Canonical correlation analysis",
+   "site": "Rencher and Christensen",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-11",
+   "why": "Detailed treatment of canonical coefficients and roots."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [
+  {
+   "paper": "j26",
+   "q": 37
+  }
+ ],
+ "provenance": "Authored 11 November 2026. June 2026 Paper 2 Q37: observations (1,2)', (4,4)', (4,3)'; x̄=(3,3)' and centred outer-product sum [[6,3],[3,2]]. Divide by n=3 to obtain [[2,1],[1,2/3]], official option D. The unbiased covariance divides by n−1=2.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Vectors, covariance and outer products",
+   "objective": "Recall the matrix ingredients.",
+   "body": [
+    "A multivariate observation is a p×1 column vector. A sample of n subjects gives n such vectors.",
+    "The mean vector contains one sample mean per variable. A covariance matrix has variances on its diagonal and covariances off the diagonal; it is symmetric.",
+    "For d=xᵢ−x̄, the outer product dd′ is p×p. Adding these matrices gives the centred sum-of-products matrix."
+   ],
+   "items": [
+    {
+     "ask": "If x is p×1, what are dimensions of xx′?",
+     "recall": "p×p.",
+     "refresh": [
+      "A p×1 column vector has p rows and one column. Its transpose has one row and p columns, so xx′ is a p×p matrix. This is the outer product, not the scalar inner product x′x. The dimensions matter because a covariance matrix must have one row and one column for every measured variable.",
+      "The (j,k) entry of xx′ is xⱼxₖ. Swapping j and k leaves the product unchanged, so the outer-product matrix is symmetric. For any vector a, a′xx′a=(x′a)², which cannot be negative; therefore each outer product is positive semidefinite."
+     ]
+    },
+    {
+     "ask": "What does the covariance matrix diagonal contain?",
+     "recall": "Variances.",
+     "refresh": [
+      "The jth diagonal entry of a covariance matrix is Var(Xⱼ), the variance of variable j. It describes how widely that variable varies around its population mean. Diagonal entries are nonnegative, and they are positive when the corresponding variable is non-degenerate.",
+      "The off-diagonal entry in position (j,k) is Cov(Xⱼ,Xₖ), which describes how the two variables vary together. Covariance matrices are symmetric because Cov(Xⱼ,Xₖ)=Cov(Xₖ,Xⱼ); hence entry (j,k) equals entry (k,j)."
+     ]
+    },
+    {
+     "ask": "What is the sample mean vector?",
+     "recall": "x̄=(1/n)Σxᵢ.",
+     "refresh": [
+      "The sample mean vector is formed by averaging each coordinate across the n observations. If every observation is p×1, the resulting mean vector is also p×1. Its jth entry is the ordinary sample mean of the jth variable.",
+      "For a multivariate normal sample, maximising the likelihood with respect to the unknown mean vector gives μ̂=x̄. This estimate is then used to centre every observation before the covariance matrix MLE is calculated."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "Why use an outer product instead of squaring each coordinate separately?",
+    "nudge": "The off-diagonal cross-products estimate covariance."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 6,
+   "title": "What does the likelihood fit?",
+   "objective": "Interpret the two estimators.",
+   "body": [
+    "For independent observations from Nₚ(μ,Σ), the likelihood rewards parameter values that make the observed vectors plausible.",
+    "The mean estimate locates the centre of the cloud. The covariance estimate describes spread, orientation and linear dependence.",
+    "The normal covariance MLE averages centred outer products over n observations. The unbiased covariance uses n−1 because estimating the mean consumes one degree of freedom."
+   ],
+   "scenario": {
+    "teaser": "A two-measurement sample",
+    "title": "Estimating a bivariate cloud",
+    "body": [
+     "A researcher records two measurements for each of three subjects. The sample mean gives the centre. Each subject's deviation is a two-coordinate vector; its outer product records squared deviations and their cross-product. Summing these matrices estimates scatter around the fitted centre. For maximum likelihood under the normal model, average over all three observations, so divide by three. The unbiased sample covariance instead divides by two."
+    ],
+    "q": "What distinguishes the two covariance estimates?",
+    "answer": "The MLE divides by n; the unbiased estimator divides by n−1."
+   },
+   "ask": {
+    "q": "Why does maximum likelihood use n rather than n−1?",
+    "nudge": "Unbiasedness is a different criterion from likelihood maximisation."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 10,
+   "title": "Likelihood and log-likelihood",
+   "objective": "Write the multivariate normal likelihood.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Sampling model",
+     "body": "X₁,…,Xₙ are independent Nₚ(μ,Σ), where μ is p×1 and Σ is symmetric positive definite."
+    },
+    {
+     "t": "formula",
+     "h": "Joint likelihood",
+     "body": "L=(2π)^(−np/2)|Σ|^(−n/2) exp{−(1/2)Σᵢ(xᵢ−μ)′Σ⁻¹(xᵢ−μ)}."
+    },
+    {
+     "t": "formula",
+     "h": "Log-likelihood",
+     "body": "ℓ=−np/2 log(2π)−n/2 log|Σ|−(1/2)Σᵢ(xᵢ−μ)′Σ⁻¹(xᵢ−μ)."
+    },
+    {
+     "t": "step",
+     "h": "Two maximisations",
+     "body": "Maximise first over μ to obtain x̄. Substitute it and maximise over Σ; the result is the centred outer-product sum divided by n."
+    }
+   ],
+   "flow": {
+    "title": "Normal MLE workflow",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Write joint likelihood",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Maximise over μ: obtain x̄",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "Centre each observation",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Sum outer products; divide by n",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
+   },
+   "ask": {
+    "q": "Which term contains the determinant of Σ?",
+    "nudge": "It is the log-determinant penalty in the log-likelihood."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 11,
+   "title": "June 2026 Paper 2 Q37",
+   "objective": "Compute mean vector and covariance MLE.",
+   "problem": "For X₁=(1,2)′, X₂=(4,4)′, X₃=(4,3)′ from N₂(μ,Σ), find μ̂ and Σ̂.",
+   "steps": [
+    {
+     "say": "Calculate the mean vector.",
+     "math": "x̄=(3,3)′.",
+     "why": "The mean MLE is the coordinate-wise sample mean."
+    },
+    {
+     "say": "Find deviations.",
+     "math": "d₁=(−2,−1)′; d₂=(1,1)′; d₃=(1,0)′.",
+     "why": "Subtract x̄ from each observation."
+    },
+    {
+     "say": "Add outer products.",
+     "math": "Σdᵢdᵢ′=[[6,3],[3,2]].",
+     "why": "Outer products preserve squares and cross-products."
+    },
+    {
+     "say": "Divide by n=3.",
+     "math": "Σ̂=[[2,1],[1,2/3]].",
+     "why": "The covariance MLE uses divisor n, not n−1."
+    },
+    {
+     "say": "Identify the answer.",
+     "math": "μ̂=(3,3)′; Σ̂=[[2,1],[1,2/3]], option D.",
+     "why": "This matches the official June 2026 answer."
+    }
+   ],
+   "ask": {
+    "q": "What would the unbiased sample covariance be?",
+    "nudge": "Use the same centred sum but divide by two."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 5,
+   "title": "Recall the two estimators",
+   "objective": "Retrieve key formulas.",
+   "intro": "Try to write the formulas from memory.",
+   "items": [
+    {
+     "q": "MLE of μ?",
+     "a": "μ̂=x̄=(1/n)ΣXᵢ."
+    },
+    {
+     "q": "MLE of Σ?",
+     "a": "Σ̂=(1/n)Σ(Xᵢ−x̄)(Xᵢ−x̄)′."
+    },
+    {
+     "q": "Unbiased covariance?",
+     "a": "S=(1/(n−1))Σ(Xᵢ−x̄)(Xᵢ−x̄)′."
+    },
+    {
+     "q": "Relation between S and Σ̂?",
+     "a": "Σ̂=((n−1)/n)S."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s5",
+   "mins": 7,
+   "title": "Complete the divisor decision",
+   "objective": "Choose correct denominators.",
+   "problem": "The centred outer-product sum is M=[[12,6],[6,8]] from n=4 observations.",
+   "steps": [
+    {
+     "say": "For the MLE, divide by n.",
+     "math": "Σ̂=M/",
+     "why": "The normal likelihood averages over all observations.",
+     "blank": {
+      "prompt": "Enter denominator.",
+      "answer": "4",
+      "accept": [
+       "4"
+      ],
+      "hint": "Use sample size."
+     }
+    },
+    {
+     "say": "For unbiased covariance, divide by n−1.",
+     "math": "S=M/",
+     "why": "Estimating the mean uses one degree of freedom.",
+     "blank": {
+      "prompt": "Enter denominator.",
+      "answer": "3",
+      "accept": [
+       "3"
+      ],
+      "hint": "Subtract one."
+     }
+    },
+    {
+     "say": "Compute the MLE top-left entry.",
+     "math": "Σ̂₁₁=12/",
+     "why": "Divide the centred sum entry by n.",
+     "blank": {
+      "prompt": "Enter value.",
+      "answer": "3",
+      "accept": [
+       "3"
+      ],
+      "hint": "12 divided by 4."
+     }
+    }
+   ],
+   "after": "The MLE is M/4; the unbiased covariance is M/3. The top-left MLE entry is 3.",
+   "ask": {
+    "q": "Which estimate is larger entry by entry here?",
+    "nudge": "The same positive matrix is divided by three versus four."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s6",
+   "mins": 8,
+   "title": "Bias, rank and matrix structure",
+   "objective": "Understand estimator properties.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Relationship",
+     "body": "Σ̂_MLE=((n−1)/n)S. The MLE is biased downward for Σ; S is unbiased under iid sampling."
+    },
+    {
+     "t": "def",
+     "h": "Degrees of freedom",
+     "body": "The centred deviations sum to zero, leaving n−1 degrees of freedom after estimating the mean."
+    },
+    {
+     "t": "formula",
+     "h": "Rank constraint",
+     "body": "rank(Σ̂)≤min(p,n−1). When n≤p, the centred sample covariance is singular."
+    },
+    {
+     "t": "def",
+     "h": "Matrix checks",
+     "body": "The estimate is symmetric and positive semidefinite. It is positive definite only if centred observations span the full p-dimensional space."
+    }
+   ],
+   "ask": {
+    "q": "If n=5, what is the ratio Σ̂_MLE/S?",
+    "nudge": "Compare denominators while keeping the same centred sum."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s7",
+   "mins": 8,
+   "title": "Guided practice: a new bivariate sample",
+   "objective": "Calculate covariance MLE.",
+   "problem": "Take X₁=(0,1)′, X₂=(2,1)′, X₃=(1,4)′. Find μ̂ and Σ̂.",
+   "hints": [
+    "Compute both coordinate means.",
+    "Subtract x̄ and form the three outer products.",
+    "Add and divide by n=3, not n−1."
+   ],
+   "answer": "x̄=(1,2)′. The outer-product sum is [[2,0],[0,6]], so Σ̂=[[2/3,0],[0,2]].",
+   "check": "The matrix is symmetric with nonnegative diagonal entries.",
+   "solution": [
+    {
+     "say": "Find mean.",
+     "math": "x̄=(1,2)′.",
+     "why": "Average each coordinate."
+    },
+    {
+     "say": "Centre observations.",
+     "math": "d₁=(−1,−1)′; d₂=(1,−1)′; d₃=(0,2)′.",
+     "why": "Subtract the mean."
+    },
+    {
+     "say": "Sum outer products.",
+     "math": "Σdᵢdᵢ′=[[2,0],[0,6]].",
+     "why": "The cross-products cancel."
+    },
+    {
+     "say": "Divide by three.",
+     "math": "Σ̂=[[2/3,0],[0,2]].",
+     "why": "There are three observations."
+    }
+   ],
+   "scenario": {
+    "teaser": "A small pilot sample",
+    "title": "Two measurements from three units",
+    "body": [
+     "A pilot study records response and time scores (0,1), (2,1) and (1,4). Their centre is (1,2). After centring, cross-products from the first two participants cancel, so estimated covariance is zero although both variables vary. The covariance MLE divides the centred outer-product sum by three. The result is diagonal with entries two-thirds and two. This illustrates why the off-diagonal estimate depends on signs and magnitudes of paired deviations, not just separate variances."
+    ],
+    "q": "Why is the estimated covariance off-diagonal zero?",
+    "answer": "Positive and negative cross-products cancel in the sum."
+   },
+   "ask": {
+    "q": "What quick checks can you make on your final matrix?",
+    "nudge": "Check symmetry and nonnegative diagonal entries."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s8",
+   "mins": 6,
+   "title": "Exam traps: denominator and centring",
+   "objective": "Detect common mistakes.",
+   "intro": "Mark each statement true or false.",
+   "items": [
+    {
+     "claim": "The normal covariance MLE with unknown mean divides by n−1.",
+     "tf": false,
+     "why": "The MLE divides by n; n−1 gives unbiased sample covariance."
+    },
+    {
+     "claim": "The MLE of μ is the sample mean vector.",
+     "tf": true,
+     "why": "Differentiating the log-likelihood with respect to μ gives x̄."
+    },
+    {
+     "claim": "The covariance MLE uses centred outer products.",
+     "tf": true,
+     "why": "Each term is (xᵢ−x̄)(xᵢ−x̄)′ and retains cross-products."
+    },
+    {
+     "claim": "If n≤p, the centred sample covariance must be full rank.",
+     "tf": false,
+     "why": "Its rank is at most n−1, below p when n≤p."
+    }
+   ],
+   "ask": {
+    "q": "Which word in a question signals use of n−1?",
+    "nudge": "Look for 'unbiased' rather than 'maximum likelihood'."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s9",
+   "mins": 8,
+   "title": "Transfer: convert unbiased covariance to MLE",
+   "objective": "Use the estimator relationship.",
+   "problem": "A sample of n=6 has unbiased covariance S=[[3,1],[1,2]]. Find Σ̂_MLE.",
+   "hints": [
+    "Use Σ̂=((n−1)/n)S.",
+    "Substitute 5/6.",
+    "Multiply every entry by 5/6."
+   ],
+   "answer": "Σ̂=(5/6)S=[[2.5,5/6],[5/6,5/3]].",
+   "check": "The MLE is 5/6 of S, so its diagonal entries are smaller.",
+   "solution": [
+    {
+     "say": "Write relationship.",
+     "math": "Σ̂=((n−1)/n)S.",
+     "why": "Both estimators use the same centred sum."
+    },
+    {
+     "say": "Substitute n=6.",
+     "math": "Σ̂=(5/6)S.",
+     "why": "The ratio is five-sixths."
+    },
+    {
+     "say": "Multiply each entry.",
+     "math": "[[2.5,5/6],[5/6,5/3]].",
+     "why": "Scalar multiplication applies to every entry."
+    }
+   ],
+   "ask": {
+    "q": "Can the MLE be larger than the unbiased covariance from the same data?",
+    "nudge": "Compare (n−1)/n with one."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s10",
+   "mins": 5,
+   "title": "Exam routine: centre, outer-product, divide",
+   "objective": "Summarise the method.",
+   "body": [
+    "For iid Nₚ(μ,Σ), the mean MLE is μ̂=x̄.",
+    "The covariance MLE is the centred outer-product sum divided by n.",
+    "The unbiased sample covariance uses the same sum divided by n−1.",
+    "Σ̂_MLE=((n−1)/n)S. Centre at x̄ when μ is unknown.",
+    "June 2026 Q37: x̄=(3,3)′; centred sum [[6,3],[3,2]]; MLE [[2,1],[1,2/3]], option D."
+   ],
+   "ask": {
+    "q": "State the three steps in a covariance MLE numerical problem.",
+    "nudge": "Find x̄, sum centred outer products, divide by n."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s11",
+   "mins": 10,
+   "title": "Unseen mastery test",
+   "objective": "Apply canonical correlation independently.",
+   "setId": "multivariate_t7_mastery"
+  }
+ ]
+}

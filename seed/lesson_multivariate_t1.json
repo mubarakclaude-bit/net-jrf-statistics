@@ -1,0 +1,762 @@
+{
+  "id": "multivariatet1",
+  "topicId": "multivariate-t1",
+  "moduleId": "multivariate",
+  "title": "Multivariate Normal Distribution: marginals, conditionals and block matrices",
+  "breadcrumb": "Unit VIII · Multivariate Analysis · Multivariate Normal",
+  "engine": "B",
+  "engineName": "NET JRF Statistics lesson engine",
+  "version": "1.0",
+  "status": "review",
+  "estMin": 100,
+  "objectives": [
+    "Recognise the multivariate normal distribution from its mean vector and covariance matrix.",
+    "Obtain marginal distributions by selecting the corresponding mean entries and covariance submatrix.",
+    "Derive conditional means and covariance matrices using block-matrix partitioning.",
+    "Apply the Schur complement to calculate conditional covariance.",
+    "Distinguish zero correlation from conditional independence, using the joint-normal assumption correctly."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Univariate normal distribution",
+      "why": "Every coordinate and every linear combination of a multivariate normal vector is normally distributed."
+    },
+    {
+      "id": "p2",
+      "name": "Variance and covariance",
+      "why": "The covariance matrix records variances on the diagonal and pairwise covariances off the diagonal."
+    },
+    {
+      "id": "p3",
+      "name": "Matrix inverse and partitioned matrices",
+      "why": "The conditional mean and covariance use the inverse of the covariance block for the variables being conditioned on."
+    }
+  ],
+  "traps": [
+    "A marginal distribution uses a covariance submatrix; do not invert it.",
+    "A conditional distribution uses Σ₂₁Σ₁₁⁻¹ and the Schur complement Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂.",
+    "The conditional covariance does not depend on the observed conditioning value.",
+    "Zero covariance implies independence for jointly multivariate normal subvectors, not for arbitrary distributions.",
+    "The order of the blocks matters: dimensions must conform throughout."
+  ],
+  "revision": {
+    "sheet": [
+      "If X~Nₚ(μ,Σ), any subvector is multivariate normal with the matching subvector of μ and principal covariance submatrix.",
+      "Partition X=(X₁′,X₂′)′, μ=(μ₁′,μ₂′)′ and Σ=[[Σ₁₁,Σ₁₂],[Σ₂₁,Σ₂₂]].",
+      "Marginal: X₁~N(μ₁,Σ₁₁); X₂~N(μ₂,Σ₂₂).",
+      "Conditional: X₂|X₁=x₁ ~ N(μ₂+Σ₂₁Σ₁₁⁻¹(x₁−μ₁), Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂).",
+      "Conditional covariance is the Schur complement of Σ₁₁ in Σ; it is constant in x₁.",
+      "For bivariate normal variables, E(Y|X=x)=μY+ρ(σY/σX)(x−μX), Var(Y|X)=σY²(1−ρ²).",
+      "For jointly normal blocks, zero cross-covariance is equivalent to independence.",
+      "Do not confuse marginal covariance Σ₂₂ with conditional covariance Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂."
+    ],
+    "cards": [
+      [
+        "Marginal",
+        "Keep the matching mean and covariance block"
+      ],
+      [
+        "Conditional mean",
+        "μ₂+Σ₂₁Σ₁₁⁻¹(x₁−μ₁)"
+      ],
+      [
+        "Conditional covariance",
+        "Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂"
+      ],
+      [
+        "Schur complement",
+        "The covariance remaining after conditioning"
+      ],
+      [
+        "Bivariate slope",
+        "ρσY/σX"
+      ],
+      [
+        "Joint normality",
+        "Zero cross-covariance ⇔ independence"
+      ]
+    ],
+    "tricks": [
+      "Write the block dimensions before multiplying: Σ₂₁ is q×p and Σ₁₁⁻¹ is p×p.",
+      "For a scalar conditioning variable, the conditional mean coefficient is Cov(Y,X)/Var(X).",
+      "Conditional variance must be non-negative and no larger than the marginal variance in the scalar normal case."
+    ],
+    "remember": [
+      "Marginalisation selects; conditioning adjusts.",
+      "The conditional mean changes with the observed value; the conditional covariance does not.",
+      "Independence from zero covariance requires joint normality."
+    ],
+    "shortcuts": [
+      "For a marginal, select the matching covariance block; do not invert or subtract.",
+      "For a conditional, calculate the mean adjustment first, then the Schur-complement covariance.",
+      "For a scalar conditioning variable, divide the cross-covariance by the conditioning variance."
+    ]
+  },
+  "howto": "Start by partitioning the vector into the variables retained and the variables conditioned on. For a marginal, select the matching entries of the mean and covariance. For a conditional, use the block formula: the cross-covariance block shifts the mean, while the Schur complement reduces the covariance. Check dimensions and verify that the resulting covariance is symmetric and positive semidefinite.",
+  "refs": [
+    {
+      "title": "Applied Multivariate Statistical Analysis",
+      "where": "Multivariate normal distribution; marginal and conditional distributions",
+      "site": "Johnson and Wichern",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Standard derivation of the partitioned multivariate normal formulas."
+    },
+    {
+      "title": "STAT 505 — Applied Multivariate Statistical Analysis",
+      "where": "Multivariate normal distribution",
+      "site": "Penn State",
+      "url": "https://online.stat.psu.edu/stat505/",
+      "type": "Free course notes",
+      "free": true,
+      "checked": "2026-11-11",
+      "why": "Open course notes for multivariate normal theory and covariance matrices."
+    },
+    {
+      "title": "Methods of Multivariate Analysis",
+      "where": "Multivariate normal theory and conditional distributions",
+      "site": "Rencher and Christensen",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-11",
+      "why": "Reference treatment of partitioned covariance matrices and conditional distributions."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform mastery settings; not an NTA rule."
+  },
+  "anchors": [],
+  "provenance": "Authored 11 November 2026. No direct June 2026 official question is claimed as an anchor for this topic. The lesson focuses on the multivariate-normal marginal and conditional formulas; the June 2026 Q24 practice variants concern conditional covariance/partial association and are not represented as a direct official PYQ for this lesson. Formula and example checks are independently encoded in verify_multivariate_t1.py.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Three building blocks",
+      "objective": "Refresh the vector, covariance and normal-distribution language.",
+      "body": [
+        "A random vector collects several random variables into one object. For example, X=(X₁,X₂)′ records two measurements on the same individual.",
+        "Its mean vector contains the coordinate means. Its covariance matrix contains each variance on the diagonal and each covariance off the diagonal.",
+        "The multivariate normal distribution is determined by its mean vector and covariance matrix. Its defining strength is that every linear combination a′X is univariate normal."
+      ],
+      "items": [
+        {
+          "ask": "What does the diagonal of a covariance matrix contain?",
+          "recall": "The variances of the individual coordinates.",
+          "refresh": [
+            "The (i,i) entry is Cov(Xᵢ,Xᵢ)=Var(Xᵢ). Off-diagonal entries are Cov(Xᵢ,Xⱼ).",
+            "For two variables, Σ=[[σ₁²,σ₁₂],[σ₁₂,σ₂²]]. Symmetry is essential: Cov(X₁,X₂)=Cov(X₂,X₁).",
+            "The diagonal variances describe the spread of each variable on its own. The off-diagonal covariances describe how pairs move together, and their signs tell whether the variables tend to move in the same or opposite directions."
+          ]
+        },
+        {
+          "ask": "What is the distribution of a′X when X is multivariate normal?",
+          "recall": "A univariate normal distribution.",
+          "refresh": [
+            "For X~Nₚ(μ,Σ), a′X~N(a′μ,a′Σa). This linear-combination property is central to the definition and to deriving marginal and conditional results.",
+            "The variance a′Σa is non-negative because Σ is positive semidefinite."
+          ]
+        },
+        {
+          "ask": "How do you invert a non-zero scalar or a nonsingular 2×2 matrix?",
+          "recall": "A scalar a has inverse 1/a. For [[a,b],[c,d]], the inverse is 1/(ad−bc)[[d,−b],[−c,a]], when ad−bc is non-zero.",
+          "refresh": [
+            "The inverse reverses matrix multiplication: AA⁻¹=I. For a scalar, divide 1 by the non-zero value. For a 2×2 matrix, divide the adjugate matrix by the determinant.",
+            "The determinant is the gatekeeper. If ad−bc=0, the inverse does not exist, so the standard conditional formula using that block cannot be applied in this form."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "If X is p-dimensional, what is the size of its covariance matrix?",
+        "nudge": "There is one row and one column for each coordinate."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 5,
+      "title": "Marginal versus conditional",
+      "objective": "Separate keeping a subset from learning after observing another subset.",
+      "body": [
+        "Suppose a study records blood pressure, cholesterol and age. A marginal distribution for blood pressure and cholesterol ignores age; it simply describes those two coordinates jointly.",
+        "A conditional distribution asks a different question: among individuals whose age is observed to be a particular value, how are blood pressure and cholesterol distributed?",
+        "The marginal keeps the original mean and covariance block. Conditioning adjusts the mean using cross-covariances and reduces uncertainty through a Schur complement."
+      ],
+      "scenario": {
+        "teaser": "Two measurements are correlated; a third is observed.",
+        "title": "A clinical measurement example",
+        "body": [
+          "A health study records age, blood pressure and cholesterol for each participant. The marginal distribution of the two health measurements describes their joint variation across the whole study population, without fixing age at any particular value.",
+          "Now suppose a clinician knows a participant's age is 50. The conditional distribution asks how blood pressure and cholesterol vary among people with that observed age. The conditional mean can shift because age is associated with the measurements, and the conditional covariance is reduced because some uncertainty has been explained by age. The distinction matters whenever a question says given, conditional on, or after observing."
+        ],
+        "q": "Which distribution answers the question for a fixed observed age?",
+        "answer": "The conditional distribution of X₂ given X₁=x."
+      },
+      "ask": {
+        "q": "Does taking a marginal distribution require the inverse of a covariance block?",
+        "nudge": "Think of selecting coordinates rather than conditioning."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2",
+      "mins": 8,
+      "title": "The multivariate normal model",
+      "objective": "Read the parameters and the key linear-combination property.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Model",
+          "body": "X~Nₚ(μ,Σ), where μ is p×1 and Σ is a symmetric positive-semidefinite p×p covariance matrix."
+        },
+        {
+          "t": "formula",
+          "h": "Linear combination",
+          "body": "For any fixed vector a, a′X~N(a′μ,a′Σa)."
+        },
+        {
+          "t": "step",
+          "h": "Non-singular case",
+          "body": "When Σ is positive definite, the density exists in the usual full-dimensional form. Singular covariance matrices describe degenerate normal distributions supported on a lower-dimensional subspace."
+        },
+        {
+          "t": "note",
+          "h": "Why partitioning works",
+          "body": "A subvector and the remaining coordinates are jointly normal. Their covariance blocks determine the marginal and conditional distributions."
+        }
+      ],
+      "ask": {
+        "q": "What two parameters determine a non-degenerate multivariate normal distribution?",
+        "nudge": "One describes location; the other describes spread and dependence."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 7,
+      "title": "Partition the vector and covariance matrix",
+      "objective": "Set up block notation without losing dimensions.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Vector partition",
+          "body": "Write X=(X₁′,X₂′)′ and μ=(μ₁′,μ₂′)′, where X₁ has p coordinates and X₂ has q coordinates."
+        },
+        {
+          "t": "formula",
+          "h": "Covariance partition",
+          "body": "Σ=[[Σ₁₁,Σ₁₂],[Σ₂₁,Σ₂₂]], with Σ₁₁ p×p, Σ₂₂ q×q, Σ₁₂ p×q and Σ₂₁=Σ₁₂′."
+        },
+        {
+          "t": "step",
+          "h": "Dimension check",
+          "body": "Σ₂₁Σ₁₁⁻¹(x₁−μ₁) has size q×p times p×p times p×1, so the conditional-mean adjustment is q×1."
+        },
+        {
+          "t": "note",
+          "h": "Assumption",
+          "body": "The standard formula below requires Σ₁₁ to be invertible. A positive-definite full covariance matrix guarantees this for a principal block."
+        }
+      ],
+      "ask": {
+        "q": "If X₁ has p entries and X₂ has q entries, what is the dimension of Σ₂₁?",
+        "nudge": "It maps a p-dimensional change into q dimensions."
+      },
+      "flow": {
+        "title": "Choose the right distribution",
+        "alt": "Partition the vector, then choose either the marginal block or the conditional formula.",
+        "note": "A marginal selects a block. A conditional adjusts both the mean and covariance.",
+        "nodes": [
+          {
+            "id": "start",
+            "r": 0,
+            "c": 1,
+            "label": "Partition X, μ and Σ",
+            "kind": "start"
+          },
+          {
+            "id": "choice",
+            "r": 1,
+            "c": 1,
+            "label": "What is being asked?",
+            "kind": "decision"
+          },
+          {
+            "id": "marginal",
+            "r": 2,
+            "c": 0,
+            "label": "Marginal: select μ₂ and Σ₂₂",
+            "kind": "step"
+          },
+          {
+            "id": "conditional",
+            "r": 2,
+            "c": 2,
+            "label": "Conditional: use block formula",
+            "kind": "step"
+          },
+          {
+            "id": "mean",
+            "r": 3,
+            "c": 2,
+            "label": "Adjust mean using Σ₂₁Σ₁₁⁻¹",
+            "kind": "step"
+          },
+          {
+            "id": "cov",
+            "r": 4,
+            "c": 2,
+            "label": "Subtract Schur complement term",
+            "kind": "step"
+          },
+          {
+            "id": "end",
+            "r": 5,
+            "c": 1,
+            "label": "State the normal distribution",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "start",
+            "to": "choice"
+          },
+          {
+            "from": "choice",
+            "to": "marginal",
+            "label": "Keep a subset"
+          },
+          {
+            "from": "choice",
+            "to": "conditional",
+            "label": "Given an observed block"
+          },
+          {
+            "from": "conditional",
+            "to": "mean"
+          },
+          {
+            "from": "mean",
+            "to": "cov"
+          },
+          {
+            "from": "marginal",
+            "to": "end"
+          },
+          {
+            "from": "cov",
+            "to": "end"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s4",
+      "mins": 6,
+      "title": "Marginal distributions",
+      "objective": "Extract a marginal law directly from the matching blocks.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "First block",
+          "body": "X₁~Nₚ(μ₁,Σ₁₁)."
+        },
+        {
+          "t": "formula",
+          "h": "Second block",
+          "body": "X₂~Nq(μ₂,Σ₂₂)."
+        },
+        {
+          "t": "step",
+          "h": "Selection rule",
+          "body": "Keep the entries of μ belonging to the retained coordinates and the corresponding principal submatrix of Σ. Do not subtract a correction term and do not invert a block."
+        },
+        {
+          "t": "note",
+          "h": "Important distinction",
+          "body": "The marginal covariance of X₂ is Σ₂₂. It is generally larger (in the positive-semidefinite ordering) than its conditional covariance given X₁."
+        }
+      ],
+      "ask": {
+        "q": "What covariance matrix belongs to the marginal distribution of X₂?",
+        "nudge": "Select the lower-right block."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s5",
+      "mins": 7,
+      "title": "Conditional distributions: the central formula",
+      "objective": "Use cross-covariance to adjust the mean and the Schur complement for covariance.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Conditional mean",
+          "body": "E(X₂|X₁=x₁)=μ₂+Σ₂₁Σ₁₁⁻¹(x₁−μ₁)."
+        },
+        {
+          "t": "formula",
+          "h": "Conditional covariance",
+          "body": "Cov(X₂|X₁=x₁)=Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂."
+        },
+        {
+          "t": "formula",
+          "h": "Full conditional law",
+          "body": "X₂|X₁=x₁ ~ Nq(μ₂+Σ₂₁Σ₁₁⁻¹(x₁−μ₁), Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂)."
+        },
+        {
+          "t": "step",
+          "h": "Interpretation",
+          "body": "The observed deviation x₁−μ₁ shifts the conditional mean. The covariance reduction is fixed by the model and does not depend on the particular observed value x₁."
+        }
+      ],
+      "ask": {
+        "q": "Which part of the conditional distribution changes when x₁ changes?",
+        "nudge": "Compare the two parameter formulas."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s6",
+      "mins": 8,
+      "title": "Worked example: a bivariate normal",
+      "objective": "Calculate a conditional mean and variance with scalar blocks.",
+      "problem": "Let (X,Y)′ be bivariate normal with mean (10,20)′ and covariance Σ=[[4,2],[2,9]]. Find the distribution of Y given X=12.",
+      "steps": [
+        {
+          "say": "Identify the parameters belonging to X and Y.",
+          "math": "μX=10, μY=20, Var(X)=4, Cov(Y,X)=2 and Var(Y)=9.",
+          "why": "The conditional formula needs the variance of the conditioning variable and the cross-covariance."
+        },
+        {
+          "say": "Calculate the conditional mean.",
+          "math": "20+(2/4)(12−10)=20+1=21.",
+          "why": "The observed X is two units above its mean, so the conditional mean of Y shifts upward by one."
+        },
+        {
+          "say": "Calculate the conditional variance.",
+          "math": "9−2(1/4)2=9−1=8.",
+          "why": "The conditional variance is the marginal variance minus the explained covariance contribution."
+        },
+        {
+          "say": "State the conditional distribution.",
+          "math": "Y|X=12 ~ N(21,8).",
+          "why": "The first parameter is the conditional mean and the second is the conditional variance."
+        }
+      ],
+      "ask": {
+        "q": "If the observed value were X=8 instead, what would change?",
+        "nudge": "The conditional mean shifts; the conditional variance stays 8."
+      },
+      "after": "The conditional mean follows the observed value; the conditional variance is fixed by the covariance structure."
+    },
+    {
+      "kind": "worked",
+      "id": "s7",
+      "mins": 8,
+      "title": "Worked example: a matrix Schur complement",
+      "objective": "Apply the block formula to a two-coordinate conditional covariance.",
+      "problem": "Suppose X₁ is scalar and X₂ has two coordinates, with Σ₁₁=[4], Σ₁₂=[2  0], Σ₂₁=[2;0] and Σ₂₂=[[9,1],[1,5]]. Find Cov(X₂|X₁).",
+      "steps": [
+        {
+          "say": "Invert the conditioning covariance block.",
+          "math": "Σ₁₁=[4], so Σ₁₁⁻¹=[1/4].",
+          "why": "The scalar block is invertible and its inverse is one quarter."
+        },
+        {
+          "say": "Form the covariance adjustment.",
+          "math": "Σ₂₁Σ₁₁⁻¹Σ₁₂=[[2],[0]](1/4)[2 0]=[[1,0],[0,0]].",
+          "why": "The product is 2×1 times 1×1 times 1×2, giving a 2×2 matrix."
+        },
+        {
+          "say": "Subtract the adjustment from the marginal block.",
+          "math": "[[9,1],[1,5]]−[[1,0],[0,0]]=[[8,1],[1,5]].",
+          "why": "This is the Schur complement and therefore the conditional covariance matrix."
+        },
+        {
+          "say": "Check the result.",
+          "math": "The matrix is symmetric; its diagonal entries are 8 and 5.",
+          "why": "Symmetry is necessary for a covariance matrix. The example also shows how conditioning reduces uncertainty."
+        }
+      ],
+      "ask": {
+        "q": "Why is the adjustment matrix 2×2?",
+        "nudge": "It must have the same dimensions as Σ₂₂."
+      },
+      "after": "Keep the block dimensions visible. The Schur complement always has the same dimensions as Σ₂₂."
+    },
+    {
+      "kind": "completion",
+      "id": "s15",
+      "mins": 6,
+      "title": "Complete the Schur-complement calculation",
+      "objective": "Fill the missing operations in a new conditional-covariance calculation.",
+      "problem": "Let Σ₁₁=[3], Σ₂₁=[[3],[3]] and Σ₂₂=[[10,2],[2,8]]. Complete Cov(X₂|X₁).",
+      "steps": [
+        {
+          "say": "First invert the scalar conditioning block.",
+          "blank": {
+            "prompt": "What is Σ₁₁⁻¹?",
+            "answer": "1/3",
+            "accept": [
+              "[1/3]",
+              "one third"
+            ],
+            "hint": "Take the reciprocal of 3."
+          },
+          "why": "The scalar block is non-zero, so its inverse exists."
+        },
+        {
+          "say": "Now calculate the covariance adjustment.",
+          "blank": {
+            "prompt": "What is Σ₂₁Σ₁₁⁻¹Σ₁₂?",
+            "answer": "[[3,3],[3,3]]",
+            "accept": [
+              "3 3; 3 3"
+            ],
+            "hint": "Multiply the column by one third and then by its transpose."
+          },
+          "why": "The result must be a 2×2 matrix because Σ₂₂ is 2×2."
+        },
+        {
+          "say": "Subtract the adjustment from the marginal covariance block.",
+          "blank": {
+            "prompt": "What is the conditional covariance matrix?",
+            "answer": "[[7,−1],[−1,5]]",
+            "accept": [
+              "[[7,-1],[-1,5]]"
+            ],
+            "hint": "Subtract each corresponding entry."
+          },
+          "why": "The final matrix is symmetric, as a covariance matrix must be."
+        }
+      ],
+      "after": "The marginal block is not the answer to a conditional question. Conditioning subtracts the covariance explained by the observed block."
+    },
+    {
+      "kind": "theory",
+      "id": "s8",
+      "mins": 7,
+      "title": "Independence and conditional independence",
+      "objective": "Use zero covariance carefully under multivariate normality.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Independence of blocks",
+          "body": "For jointly multivariate normal X₁ and X₂, Σ₁₂=0 is equivalent to independence of the two blocks."
+        },
+        {
+          "t": "note",
+          "h": "Do not overgeneralise",
+          "body": "Outside the joint-normal family, zero covariance alone does not imply independence."
+        },
+        {
+          "t": "formula",
+          "h": "Conditional independence",
+          "body": "For a non-singular multivariate normal vector, coordinates Xᵢ and Xⱼ are conditionally independent given all remaining coordinates exactly when the (i,j) entry of the precision matrix Σ⁻¹ is zero."
+        },
+        {
+          "t": "step",
+          "h": "Exam distinction",
+          "body": "A zero entry in Σ concerns marginal covariance. A zero off-diagonal entry in Σ⁻¹ concerns conditional independence given the remaining coordinates."
+        }
+      ],
+      "ask": {
+        "q": "Which matrix is inspected for conditional independence given all remaining coordinates?",
+        "nudge": "It is the inverse covariance, also called the precision matrix."
+      },
+      "scenario": {
+        "teaser": "Three process sensors; one conditional-independence question.",
+        "title": "Reading a Gaussian dependence network",
+        "body": [
+          "An industrial process records vibration X₁, temperature X₂ and pressure X₃. Engineers model the three measurements jointly as a non-singular multivariate normal vector. They want to know whether vibration and temperature become conditionally independent once pressure is held fixed. This is not answered by simply looking at the raw covariance between vibration and temperature.",
+          "For a multivariate normal model, the inverse covariance matrix — called the precision matrix — encodes conditional dependencies. A zero off-diagonal entry Kᵢⱼ means Xᵢ and Xⱼ are conditionally independent given all the other coordinates. In the example below, K₁₂ is zero while K₂₃ is nonzero. This lets the team distinguish a missing direct conditional link from ordinary marginal correlation."
+        ]
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s13",
+      "mins": 6,
+      "title": "Build a conditional covariance",
+      "objective": "Apply the Schur complement to a fresh two-dimensional block.",
+      "problem": "Let Σ₁₁=[2], Σ₂₁=[[2],[4]] and Σ₂₂=[[5,1],[1,12]]. Find Cov(X₂|X₁).",
+      "hints": [
+        "Direction: identify the scalar conditioning block and the 2×2 marginal covariance block.",
+        "Method: use Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂, remembering Σ₁₂=Σ₂₁′.",
+        "Next step: multiply the column by one half and then by its transpose."
+      ],
+      "answer": "Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂=[[5,1],[1,12]]−[[2,4],[4,8]]=[[3,−3],[−3,4]].",
+      "check": "The result is symmetric. Its determinant is 3×4−(−3)²=3, which is positive.",
+      "solution": [
+        {
+          "say": "Use symmetry to form Σ₁₂ and invert Σ₁₁.",
+          "math": "Σ₁₂=[2 4] and Σ₁₁⁻¹=[1/2].",
+          "why": "The cross block is the transpose of Σ₂₁ because the full covariance matrix is symmetric."
+        },
+        {
+          "say": "Calculate the adjustment.",
+          "math": "[[2],[4]](1/2)[2 4]=[[2,4],[4,8]].",
+          "why": "The product is 2×1 times 1×1 times 1×2, so it is 2×2."
+        },
+        {
+          "say": "Subtract from Σ₂₂.",
+          "math": "[[5,1],[1,12]]−[[2,4],[4,8]]=[[3,−3],[−3,4]].",
+          "why": "This is the required conditional covariance."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s14",
+      "mins": 7,
+      "title": "Transfer: conditional independence from precision",
+      "objective": "Use the inverse covariance to identify a conditional-independence relation.",
+      "problem": "For a non-singular N₃(0,Σ) vector, suppose the precision matrix K=Σ⁻¹ is [[2,0,0],[0,2,1],[0,1,2]]. Which pair is conditionally independent given the remaining coordinate?",
+      "hints": [
+        "Direction: the question says given the remaining coordinate, so use the precision matrix rather than Σ.",
+        "Method: for a multivariate normal vector, inspect the off-diagonal entry for the pair.",
+        "Next step: locate the zero off-diagonal entry and name the remaining variable."
+      ],
+      "answer": "X₁ and X₂ are conditionally independent given X₃ because K₁₂=0.",
+      "check": "K₂₃=1 is nonzero, so this matrix does not give the same conditional-independence conclusion for X₂ and X₃ given X₁.",
+      "scenario": {
+        "teaser": "A process-monitoring team needs to separate direct and indirect links.",
+        "title": "Three sensors in a manufacturing line",
+        "body": [
+          "A manufacturing line monitors vibration X₁, temperature X₂ and pressure X₃. The measurements are modelled jointly as a non-singular trivariate normal vector. A reliability engineer wants to know whether vibration and temperature have any remaining direct statistical association after pressure is accounted for. A raw correlation alone cannot answer that question, because an observed association may be transmitted through the third measurement.",
+          "The fitted precision matrix is K=[[2,0,0],[0,2,1],[0,1,2]]. For a multivariate normal distribution, the zero in position (1,2) says that X₁ and X₂ are conditionally independent given X₃. The nonzero entry in position (2,3) says the corresponding conditional-independence claim for X₂ and X₃ does not follow. The exercise tests whether you select the precision matrix for a conditional question."
+        ],
+        "q": "Which matrix entry determines whether X₁ and X₂ are conditionally independent given X₃?",
+        "answer": "K₁₂, the (1,2) entry of the precision matrix."
+      },
+      "solution": [
+        {
+          "say": "Identify the relevant matrix.",
+          "math": "K=Σ⁻¹=[[2,0,0],[0,2,1],[0,1,2]].",
+          "why": "Conditional independence in a non-singular Gaussian model is encoded by the precision matrix."
+        },
+        {
+          "say": "Inspect the entry for X₁ and X₂.",
+          "math": "K₁₂=0.",
+          "why": "A zero off-diagonal precision entry is the Gaussian conditional-independence criterion."
+        },
+        {
+          "say": "State the conditioning set.",
+          "math": "X₁ ⟂ X₂ | X₃.",
+          "why": "In three dimensions, the remaining coordinate after selecting X₁ and X₂ is X₃."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 5,
+      "title": "Four common traps",
+      "objective": "Catch formula swaps before solving exam questions.",
+      "intro": "Check each statement before moving on.",
+      "items": [
+        {
+          "claim": "The marginal covariance of X₂ is Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂.",
+          "tf": false,
+          "why": "That is the conditional covariance. The marginal covariance is Σ₂₂."
+        },
+        {
+          "claim": "The conditional covariance depends on the observed value x₁.",
+          "tf": false,
+          "why": "The conditional mean changes with x₁; the covariance formula contains only the population covariance blocks."
+        },
+        {
+          "claim": "For jointly multivariate normal blocks, zero cross-covariance implies independence.",
+          "tf": true,
+          "why": "Joint normality makes zero cross-covariance equivalent to independence."
+        },
+        {
+          "claim": "The conditional mean adjustment must have the same dimension as X₂.",
+          "tf": true,
+          "why": "The product Σ₂₁Σ₁₁⁻¹(x₁−μ₁) is q×1."
+        },
+        {
+          "claim": "A marginal distribution requires inverting Σ₁₁.",
+          "tf": false,
+          "why": "A marginal selects the matching mean entries and principal covariance block; no inverse is needed."
+        },
+        {
+          "claim": "For a non-singular multivariate normal vector, a zero off-diagonal precision entry indicates conditional independence given the remaining coordinates.",
+          "tf": true,
+          "why": "The precision matrix Σ⁻¹ encodes conditional independence in a Gaussian model."
+        }
+      ]
+    },
+    {
+      "kind": "recall",
+      "id": "s10",
+      "mins": 3,
+      "title": "Recall the complete route",
+      "objective": "Retrieve the marginal and conditional formulas from memory.",
+      "intro": "Before the unseen test, reconstruct these steps without looking back.",
+      "items": [
+        {
+          "q": "Marginal X₂?",
+          "a": "Nq(μ₂,Σ₂₂)."
+        },
+        {
+          "q": "Conditional mean of X₂ given X₁=x₁?",
+          "a": "μ₂+Σ₂₁Σ₁₁⁻¹(x₁−μ₁)."
+        },
+        {
+          "q": "Conditional covariance?",
+          "a": "Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂."
+        },
+        {
+          "q": "Does conditional covariance depend on x₁?",
+          "a": "No."
+        },
+        {
+          "q": "When does zero covariance imply independence?",
+          "a": "For jointly multivariate normal blocks."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s11",
+      "mins": 2,
+      "title": "Your one-minute revision",
+      "objective": "Leave with a reliable decision rule.",
+      "body": [
+        "Marginal question: select the mean entries and principal covariance block.",
+        "Conditional question: adjust the mean by Σ₂₁Σ₁₁⁻¹(x₁−μ₁) and subtract the Schur complement term from Σ₂₂.",
+        "Check dimensions, symmetry and non-negative conditional variances. Never claim independence from zero covariance without joint normality."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s12",
+      "mins": 9,
+      "title": "Unseen mastery test",
+      "objective": "Apply the formulas to new scalar and matrix settings.",
+      "setId": "multivariate_t1_mastery"
+    }
+  ]
+}
