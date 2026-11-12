@@ -171,7 +171,7 @@ for (const l of seeds.lessons) {
   nl++; const v = V("lesson");
   if (!v(l.data)) {
     const mine = exceptions.filter(x => x.file === "seed/" + l.file && x.contract === "lesson");
-    const real = [];
+    const real = [], excusedParents = new Set();
     for (const e of v.errors) {
       const ex = mine.find(x => {
         if (x.pointer && e.instancePath !== x.pointer) return false;
@@ -181,9 +181,15 @@ for (const l of seeds.lessons) {
         if (x.kind === "empty-field") return e.keyword === "minLength";
         return false;
       });
-      if (ex) usedEx.add(ex); else real.push(e);
+      if (ex) {
+        usedEx.add(ex);
+        if (ex.kind === "wrong-type") excusedParents.add(ex.pointer.split("/").slice(0, -1).join("/"));
+        else excusedParents.add(ex.pointer);
+      } else real.push(e);
     }
-    if (real.length) fail("seed/" + l.file + " violates lesson contract: " + brief(real));
+    const remaining = real.filter(e => !(e.keyword === "if" && excusedParents.has(e.instancePath) &&
+      !real.some(r => r !== e && r.instancePath.startsWith(e.instancePath + "/"))));
+    if (remaining.length) fail("seed/" + l.file + " violates lesson contract: " + brief(remaining));
   }
   if (!moduleIds.has(l.data.moduleId)) fail("seed/" + l.file + ": moduleId '" + l.data.moduleId + "' is not in seed/catalog.json");
   else if (!String(l.data.topicId).startsWith(l.data.moduleId + "-")) fail("seed/" + l.file + ": topicId '" + l.data.topicId + "' must start with its moduleId '" + l.data.moduleId + "-'");
