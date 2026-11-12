@@ -1,0 +1,640 @@
+{
+  "id": "samplingt2",
+  "topicId": "sampling-t2",
+  "moduleId": "sampling",
+  "title": "Stratified Sampling and Allocation",
+  "breadcrumb": "Sampling theory → Stratified sampling → Estimation and allocation",
+  "engine": "B",
+  "engineName": "Stratification divides the population into non-overlapping groups and samples each group separately.",
+  "version": "1.0",
+  "status": "review",
+  "estMin": 95,
+  "objectives": [
+    "Construct stratified estimators of a population mean and total.",
+    "Calculate variance under independent SRSWOR within strata.",
+    "Distinguish proportional, equal and Neyman allocation.",
+    "Allocate a fixed sample under unequal stratum sizes and variability.",
+    "Explain how finite-population corrections and costs affect allocation."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Finite population",
+      "why": "The target is a fixed population partitioned into strata."
+    },
+    {
+      "id": "p2",
+      "name": "Sample mean and variance",
+      "why": "Each stratum has its own sample mean and variance."
+    },
+    {
+      "id": "p3",
+      "name": "Expectation and variance",
+      "why": "The combined design variance adds independent stratum contributions."
+    }
+  ],
+  "traps": [
+    "Use population shares W_h, not sample shares, in the combined mean.",
+    "Use the stratum-specific FPC 1−n_h/N_h.",
+    "Neyman allocation uses N_hS_h when unit costs are equal.",
+    "A stratum census has zero sampling variance.",
+    "Stratification does not guarantee a variance reduction for every partition."
+  ],
+  "howto": "List strata and their population sizes. Compute W_h=N_h/N. Estimate the mean with population-weighted stratum means. For variance, retain each stratum's own sampling fraction and variance. Choose allocation only after stating whether the objective is equal, proportional or variance-oriented and whether unit costs differ.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s2s1",
+      "mins": 7,
+      "title": "Partition the population",
+      "objective": "Identify a valid stratification.",
+      "body": [
+        "A stratified design divides the target population into non-overlapping groups before sampling.",
+        "Every eligible unit belongs to exactly one stratum. The strata together cover the target population.",
+        "A sample is selected separately within each stratum. This guarantees representation of each group and allows allocation to reflect population size or variability."
+      ],
+      "items": [
+        {
+          "ask": "What is a stratum?",
+          "recall": "A non-overlapping population subgroup.",
+          "refresh": [
+            "A stratum is a subgroup defined on the population frame before sample selection begins.",
+            "Every eligible population unit is assigned to exactly one stratum under a valid partition.",
+            "Examples include districts, age groups or farm-size categories, provided the groups do not overlap."
+          ]
+        },
+        {
+          "ask": "Must strata overlap?",
+          "recall": "No.",
+          "refresh": [
+            "Mutual exclusivity means that no eligible unit belongs to two different strata.",
+            "If a household appears in two strata, its membership must be resolved before selection.",
+            "Overlapping groups cannot be treated as a partition for the standard stratified estimator."
+          ]
+        },
+        {
+          "ask": "Must all target units be covered?",
+          "recall": "Yes.",
+          "refresh": [
+            "Collective exhaustiveness means that every eligible unit appears in one of the strata.",
+            "A unit omitted from the frame has zero chance of selection and creates a coverage problem.",
+            "Check the frame for missing units and duplicate membership before drawing samples."
+          ]
+        }
+      ],
+      "ask": {
+        "q": "What two properties define a valid partition?",
+        "nudge": "Mutually exclusive and collectively exhaustive."
+      }
+    },
+    {
+      "kind": "intuition",
+      "id": "s2s2",
+      "mins": 8,
+      "title": "Why stratify?",
+      "objective": "Explain representation and precision gains.",
+      "body": [
+        "A population may contain distinct groups with different average values.",
+        "A simple random sample can, by chance, include too few units from a small but important group. Stratification ensures each group is represented.",
+        "Precision can improve when units within each stratum are relatively similar, while stratum means differ. This is a potential gain, not a guarantee: the result depends on the variable, the partition and the allocation."
+      ],
+      "scenario": {
+        "teaser": "A two-district survey",
+        "title": "Representation before estimation",
+        "body": [
+          "A survey covers two districts. District A has 100 households and District B has 200. Water use varies substantially between districts, but households within each district have similar use.",
+          "A stratified sample selects households separately in both districts. The final population mean must weight each district's sample mean by its share of the 300 households.",
+          "Equal sample sizes would not make the districts equally important in the population estimate. This example separates estimator weights from sample allocation."
+        ],
+        "q": "Why can stratification improve precision?",
+        "answer": "It can reduce within-stratum variation while ensuring that each group is represented."
+      },
+      "ask": {
+        "q": "What determines the estimator weights?",
+        "nudge": "The population sizes of the strata."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2s3",
+      "mins": 7,
+      "title": "Population weights",
+      "objective": "Calculate stratum population shares.",
+      "viz": {
+        "type": "disc-pmf",
+        "caption": "N₁=100 and N₂=200: population shares are 1/3 and 2/3."
+      },
+      "body": [
+        "Let N be the total population size and N_h the size of stratum h. The population share is W_h=N_h/N.",
+        "These weights sum to one. They remain the correct weights for the overall mean even when the sample allocation is disproportionate.",
+        "Allocation changes precision; it does not change the target population weights."
+      ],
+      "ask": {
+        "q": "If stratum means are 10 and 20, what is the combined mean for these shares?",
+        "nudge": "Calculate (1/3)10+(2/3)20."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2s4",
+      "mins": 10,
+      "title": "Estimator and variance",
+      "objective": "Derive the mean, total and variance estimators.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Notation",
+          "body": "There are L strata. N_h and n_h are the population and sample sizes. W_h=N_h/N, f_h=n_h/N_h, and ȳ_h and S_h² are the sample mean and finite-population variance in stratum h."
+        },
+        {
+          "t": "formula",
+          "h": "Combined mean and total",
+          "body": "ȳ_st=Σ_h W_hȳ_h. The total estimator is Ŷ_st=Σ_h N_hȳ_h=Nȳ_st."
+        },
+        {
+          "t": "formula",
+          "h": "Design variance",
+          "body": "Under independent SRSWOR within strata, V(ȳ_st)=Σ_h W_h²(1−f_h)S_h²/n_h. Therefore V(Ŷ_st)=N²V(ȳ_st)."
+        },
+        {
+          "t": "step",
+          "h": "Estimated variance",
+          "body": "Replace S_h² by the within-stratum sample variance s_h²: v(ȳ_st)=Σ_h W_h²(1−f_h)s_h²/n_h."
+        }
+      ],
+      "flow": {
+        "title": "Build the stratified estimate",
+        "alt": "Partition the population, sample within each stratum, calculate stratum means and combine with population weights.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Define strata",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Select sample in each stratum",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Calculate each stratum mean",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Weight by W_h and combine",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          }
+        ],
+        "note": "Use population weights W_h=N_h/N for the overall mean."
+      },
+      "ask": {
+        "q": "Why are the weights W_h and not n_h/n?",
+        "nudge": "The target is the population mean, so weights represent population shares."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s2s5",
+      "mins": 9,
+      "title": "Worked example: proportional allocation",
+      "objective": "Compute allocation and variance.",
+      "problem": "N₁=100, N₂=200, S₁=4, S₂=6 and total sample n=30. Use proportional allocation and calculate V(ȳ_st).",
+      "steps": [
+        {
+          "say": "The total population is 300, so the population shares are one-third and two-thirds.",
+          "math": "W₁=100/300=1/3; W₂=200/300=2/3",
+          "why": "Population shares determine the contribution of each stratum to the overall population mean."
+        },
+        {
+          "say": "Proportional allocation follows these shares.",
+          "math": "n₁=30/3=10; n₂=60/3=20",
+          "why": "Proportional allocation assigns the total sample in the same proportions as the population."
+        },
+        {
+          "say": "The sampling fractions are both one-tenth.",
+          "math": "f₁=10/100=0.1; f₂=20/200=0.1",
+          "why": "The FPC is computed separately because each stratum has its own sampling fraction."
+        },
+        {
+          "say": "Substitute the values into the stratified variance formula.",
+          "math": "V=(1/9)(0.9)(16/10)+(4/9)(0.9)(36/20)",
+          "why": "Each term is the variance contribution from one independently sampled stratum."
+        },
+        {
+          "say": "Evaluate the two contributions.",
+          "math": "0.16+0.72=0.88",
+          "why": "The two independent contributions are added to obtain the total design variance."
+        },
+        {
+          "say": "The standard error is the square root.",
+          "math": "SE=√0.88≈0.9381",
+          "why": "The standard error is the square root of the variance, in the original measurement units."
+        }
+      ],
+      "after": "The population weights determine the combined mean; allocation determines the precision.",
+      "ask": {
+        "q": "Which factor corrects for sampling without replacement?",
+        "nudge": "The stratum-specific factor 1−f_h."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s2s6",
+      "mins": 3,
+      "title": "Recall the formulas",
+      "objective": "Retrieve the core formulas.",
+      "intro": "Try each prompt before revealing its answer.",
+      "items": [
+        {
+          "q": "Stratified mean?",
+          "a": "Σ_h W_hȳ_h."
+        },
+        {
+          "q": "Stratified total?",
+          "a": "Σ_h N_hȳ_h."
+        },
+        {
+          "q": "Sampling fraction?",
+          "a": "f_h=n_h/N_h."
+        },
+        {
+          "q": "Variance contribution?",
+          "a": "W_h²(1−f_h)S_h²/n_h."
+        },
+        {
+          "q": "What is proportional allocation?",
+          "a": "n_h=nW_h."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s2s7",
+      "mins": 9,
+      "title": "Complete Neyman allocation",
+      "objective": "Allocate a sample using stratum sizes and standard deviations.",
+      "problem": "N₁=100, S₁=4; N₂=200, S₂=6; n=30; equal unit costs. Complete the Neyman allocation.",
+      "steps": [
+        {
+          "say": "The Neyman weight for stratum h is N_hS_h.",
+          "blank": {
+            "prompt": "Allocation weight = ?",
+            "answer": "N_hS_h",
+            "accept": [
+              "N_hS_h",
+              "N_h S_h"
+            ],
+            "hint": "Multiply population size by standard deviation."
+          },
+          "why": "The weight reflects both the size of the stratum and its within-stratum variability."
+        },
+        {
+          "say": "The two weights are 100×4=400 and 200×6=1200.",
+          "blank": {
+            "prompt": "Write the two weights.",
+            "answer": "400 and 1200",
+            "accept": [
+              "400 and 1200",
+              "400,1200"
+            ],
+            "hint": "Compute N₁S₁ and N₂S₂."
+          },
+          "why": "The second stratum has three times the first stratum's weight."
+        },
+        {
+          "say": "Allocate 30 in the ratio 400:1200, which is 1:3.",
+          "blank": {
+            "prompt": "Find the continuous allocations.",
+            "answer": "7.5 and 22.5",
+            "accept": [
+              "7.5 and 22.5",
+              "7.5,22.5"
+            ],
+            "hint": "Divide the total sample in the ratio 1:3."
+          },
+          "why": "The continuous allocations add to 30."
+        },
+        {
+          "say": "Round to feasible integers while preserving the total.",
+          "blank": {
+            "prompt": "Give one feasible integer allocation.",
+            "answer": "8 and 22",
+            "accept": [
+              "8 and 22",
+              "8,22"
+            ],
+            "hint": "Round the first allocation up and the second down."
+          },
+          "why": "The rounded allocations still sum to 30 and remain below the stratum population sizes."
+        }
+      ],
+      "after": "Check that rounded allocations sum to n and do not exceed stratum sizes.",
+      "ask": {
+        "q": "Why does stratum 2 receive three times the continuous allocation?",
+        "nudge": "Its N_hS_h weight is three times as large."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s2s8",
+      "mins": 8,
+      "title": "Compare allocation rules",
+      "objective": "Distinguish equal, proportional and Neyman allocation.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Equal allocation",
+          "body": "n_h≈n/L. Each stratum receives approximately the same sample size."
+        },
+        {
+          "t": "formula",
+          "h": "Proportional allocation",
+          "body": "n_h=nN_h/N=nW_h. Every stratum has the same sampling fraction."
+        },
+        {
+          "t": "formula",
+          "h": "Neyman allocation",
+          "body": "For equal unit costs, n_h=nN_hS_h/(Σ_g N_gS_g). It accounts for both population size and variability."
+        },
+        {
+          "t": "trap",
+          "h": "Unequal costs",
+          "body": "With per-unit cost c_h and a fixed variable-cost budget, the continuous variance-oriented allocation is proportional to N_hS_h/√c_h, subject to feasibility and minimum-sample constraints."
+        }
+      ],
+      "ask": {
+        "q": "Which allocation uses within-stratum standard deviations?",
+        "nudge": "Neyman allocation."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s2s9",
+      "mins": 9,
+      "title": "Guided comparison",
+      "objective": "Compare proportional and Neyman allocation.",
+      "problem": "For N₁=100, N₂=200, S₁=4, S₂=6 and n=30, find both allocations.",
+      "hints": [
+        "Proportional allocation uses N_h/N.",
+        "Neyman allocation uses N_hS_h.",
+        "Round only after finding the continuous allocation."
+      ],
+      "answer": "Proportional: (10,20). Neyman: (7.5,22.5), with feasible rounding such as (8,22).",
+      "check": "Both allocations sum to 30; the Neyman weights are 400 and 1200.",
+      "scenario": {
+        "teaser": "A fieldwork decision",
+        "title": "Two districts, one field team",
+        "body": [
+          "A team can complete 30 interviews. District A contains 100 households and has a target-variable standard deviation of 4. District B contains 200 households and standard deviation 6.",
+          "Interview costs are equal. The manager asks for a population-proportional allocation and a variance-oriented allocation. The first uses population sizes only; the second uses both population size and variability.",
+          "The final integer allocation must preserve the total workload and respect each district's available population."
+        ],
+        "q": "Which rule uses the standard deviations?",
+        "answer": "Neyman allocation."
+      },
+      "solution": [
+        {
+          "say": "Proportional shares are one-third and two-thirds, giving 10 and 20."
+        },
+        {
+          "say": "Neyman weights are 400 and 1200."
+        },
+        {
+          "say": "The continuous Neyman allocation is 7.5 and 22.5."
+        },
+        {
+          "say": "A feasible rounded allocation is 8 and 22."
+        }
+      ],
+      "ask": {
+        "q": "What assumption supports ordinary Neyman allocation?",
+        "nudge": "Equal per-unit costs and a fixed total sample size."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s2s10",
+      "mins": 7,
+      "title": "Check common traps",
+      "objective": "Identify incorrect weighting and allocation claims.",
+      "intro": "Judge each statement.",
+      "items": [
+        {
+          "claim": "The stratified mean uses sample shares n_h/n.",
+          "tf": false,
+          "why": "It uses population shares W_h=N_h/N."
+        },
+        {
+          "claim": "The within-stratum FPC is 1−n_h/N_h.",
+          "tf": true,
+          "why": "The sampling fraction is calculated within stratum h."
+        },
+        {
+          "claim": "Proportional allocation gives equal sampling fractions.",
+          "tf": true,
+          "why": "n_h/N_h=n/N for each stratum."
+        },
+        {
+          "claim": "Neyman allocation is proportional to N_hS_h for equal costs.",
+          "tf": true,
+          "why": "It accounts for population size and standard deviation."
+        },
+        {
+          "claim": "A stratum sampled by census contributes zero sampling variance.",
+          "tf": true,
+          "why": "Its sampling fraction is one, so the FPC is zero."
+        },
+        {
+          "claim": "Stratification always lowers variance.",
+          "tf": false,
+          "why": "The gain depends on the strata, variable and allocation."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s2s11",
+      "mins": 9,
+      "title": "Transfer: unequal costs",
+      "objective": "Apply cost-adjusted Neyman allocation.",
+      "problem": "Two strata have N₁S₁=600 and N₂S₂=1200. Costs are c₁=1 and c₂=4. Find n₁:n₂ under a fixed variable-cost budget.",
+      "hints": [
+        "Use N_hS_h/√c_h.",
+        "Calculate each adjusted weight.",
+        "Reduce the ratio."
+      ],
+      "answer": "600/√1 : 1200/√4 = 600:600 = 1:1.",
+      "check": "Both adjusted weights equal 600.",
+      "solution": [
+        {
+          "say": "Divide each N_hS_h by the square root of its cost."
+        },
+        {
+          "say": "The first adjusted weight is 600."
+        },
+        {
+          "say": "The second adjusted weight is 1200/2=600."
+        },
+        {
+          "say": "The allocation ratio is therefore 1:1."
+        }
+      ],
+      "ask": {
+        "q": "Why does the more expensive stratum not receive more sample?",
+        "nudge": "Its higher cost offsets its larger size-variability weight."
+      }
+    },
+    {
+      "kind": "summary",
+      "id": "s2s12",
+      "mins": 6,
+      "title": "Final checklist",
+      "objective": "Summarise estimation and allocation.",
+      "body": [
+        "A valid stratification partitions the population into non-overlapping groups.",
+        "Under independent SRSWOR within strata, estimate the mean by Σ_hW_hȳ_h and the total by Σ_hN_hȳ_h.",
+        "The variance of the mean is Σ_hW_h²(1−f_h)S_h²/n_h.",
+        "Proportional allocation follows N_h. Neyman allocation follows N_hS_h when costs are equal. With unequal costs, use N_hS_h/√c_h.",
+        "Check population weights, finite-population corrections, sample-size totals and feasibility."
+      ],
+      "ask": {
+        "q": "Which estimator and key design condition should you remember for Stratified Sampling and Allocation?",
+        "nudge": "State the estimator, its weighting or expansion rule, and the assumptions behind its variance."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s2s13",
+      "mins": 3,
+      "title": "Mastery check",
+      "objective": "Demonstrate independent command of stratified sampling.",
+      "setId": "sampling_t2_mastery"
+    }
+  ],
+  "revision": {
+    "sheet": [
+      "W_h=N_h/N; ΣW_h=1.",
+      "ȳ_st=ΣW_hȳ_h.",
+      "Ŷ_st=ΣN_hȳ_h.",
+      "V(ȳ_st)=ΣW_h²(1−f_h)S_h²/n_h.",
+      "f_h=n_h/N_h.",
+      "Proportional: n_h=nW_h.",
+      "Neyman: n_h∝N_hS_h.",
+      "Unequal costs: n_h∝N_hS_h/√c_h."
+    ],
+    "cards": [
+      [
+        "Mean",
+        "ΣW_hȳ_h"
+      ],
+      [
+        "Total",
+        "ΣN_hȳ_h"
+      ],
+      [
+        "FPC",
+        "1−n_h/N_h"
+      ],
+      [
+        "Proportional",
+        "n_h=nW_h"
+      ],
+      [
+        "Neyman",
+        "n_h∝N_hS_h"
+      ],
+      [
+        "Allocation choice",
+        "Population size, variability and unit cost determine the rule."
+      ]
+    ],
+    "tricks": [
+      "Write population weights before combining means.",
+      "Calculate each stratum FPC separately.",
+      "Round only after the continuous allocation."
+    ],
+    "shortcuts": [
+      "Proportional allocation gives equal sampling fractions.",
+      "Check that population weights sum to one.",
+      "For two strata, calculate W₁ and W₂ first and confirm that they sum to one."
+    ],
+    "remember": [
+      "Estimator weights are population shares.",
+      "Ordinary Neyman allocation assumes equal costs."
+    ]
+  },
+  "refs": [
+    {
+      "title": "Sampling Techniques",
+      "where": "Stratified random sampling, variance and allocation",
+      "site": "William G. Cochran",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Classical treatment of stratified estimators and allocation."
+    },
+    {
+      "title": "Sampling: Design and Analysis",
+      "where": "Stratified sampling and optimal allocation",
+      "site": "Sharon L. Lohr",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-12",
+      "why": "Modern treatment of design-based stratified estimation."
+    },
+    {
+      "title": "Sampling Theory lecture notes",
+      "where": "Stratified sampling and allocation",
+      "site": "IIT Kanpur, Shalabh",
+      "url": "https://home.iitk.ac.in/~shalab/sampling/",
+      "type": "Open lecture notes",
+      "free": true,
+      "checked": "2026-11-12",
+      "why": "Open supporting material for classical sampling designs."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule."
+  },
+  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t2. Practice items are original and are not represented as official PYQs. The worked proportional allocation and variance are independently recomputed in verify_sampling_t2.py. Formula assumptions are independent SRSWOR within strata; Neyman allocation assumes equal unit costs."
+}
