@@ -25,7 +25,7 @@ function listSeeds() {
   const lessons = [], qsets = [];
   for (const f of fs.readdirSync(SEED).filter(x => x.endsWith(".json")).sort()) {
     const stem = f.slice(0, -5);
-    if (stem === "catalog" || stem.startsWith("meta_")) continue;
+    if (stem === "catalog" || stem === "pyq_j26_full" || stem.startsWith("meta_")) continue;
     let d;
     try { d = readSeed(f); } catch (e) { lessons.push({ file: f, stem, error: "not valid JSON: " + e.message }); continue; }
     if (stem.startsWith("lesson_")) lessons.push({ file: f, stem, data: d });

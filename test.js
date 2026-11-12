@@ -13,11 +13,11 @@ function seedDocs() {
   const J = f => JSON.parse(fs.readFileSync(path.join(SEED, f + '.json'), 'utf8'));
   const docs = {};
   docs['meta/catalog'] = J('catalog');
-  for (const f of ['inference_multi_1', 'inference_numeric_1', 'inference_concept_1', 'pyq_j26_full',
+  for (const f of ['inference_multi_1', 'inference_numeric_1', 'inference_concept_1', 'pyq_j26_probability','pyq_j26_maths','pyq_j26_sampling','pyq_j26_regression','pyq_j26_inference','pyq_j26_nonparam','pyq_j26_timeseries','pyq_j26_multivariate','pyq_j26_official','pyq_j26_rprog',
                    'inference_t4_practice', 'inference_t4_mastery', 'inference_t1_mastery', 'inference_t2_mastery', 'inference_t3_mastery', 'inference_t6_mastery', 'inference_t5_mastery', 'inference_t9_mastery', 'inference_t7_mastery', 'inference_t8_mastery', 'inference_t12_mastery', 'inference_t10_mastery', 'inference_t13_mastery', 'inference_t17_mastery', 'inference_t15_mastery', 'inference_t14_mastery', 'inference_t16_mastery', 'inference_t11_mastery', 'timeseries_t3_mastery', 'timeseries_t5_mastery', 'official_t1_mastery', 'official_t2_mastery', 'official_t3_mastery', 'official_t4_mastery', 'official_t5_mastery', 'probability_t7_mastery', 'nonparam_t4_mastery', 'timeseries_t11_mastery', 'timeseries_t10_mastery', 'timeseries_t9_mastery', 'timeseries_t8_mastery', 'timeseries_t4_mastery', 'timeseries_t2_mastery', 'timeseries_t1_mastery', 'timeseries_t7_mastery', 'timeseries_t6_mastery', 'probability_t10_mastery', 'probability_t8_mastery', 'maths_t4_mastery', 'maths_t2_mastery', 'maths_t3_mastery', 'maths_t5_mastery', 'maths_t6_mastery', 'maths_t7_mastery', 'maths_t8_mastery', 'maths_t9_mastery', 'maths_t10_mastery', 'maths_t11_mastery', 'maths_t12_mastery', 'maths_t13_mastery', 'maths_t14_mastery', 'maths_t15_mastery', 'maths_t16_mastery', 'probability_t5_mastery', 'maths_t1_mastery', 'probability_t1_mastery', 'probability_t13_mastery', 'probability_t3_mastery', 'probability_t2_mastery', 'probability_t4_mastery', 'probability_t6_mastery', 'probability_t9_mastery', 'probability_t11_mastery', 'probability_t12_mastery',
                    'inference_pyq_variants','maths_pyq_variants','probability_pyq_variants',
                    'timeseries_pyq_variants','rprog_pyq_variants','regression_pyq_variants',
-                   'multivariate_pyq_variants','nonparam_pyq_variants','official_pyq_variants', 'stochastic_t1_mastery', 'stochastic_t2_mastery', 'stochastic_t3_mastery', 'stochastic_t4_mastery', 'stochastic_t5_mastery', 'stochastic_t6_mastery', 'stochastic_t7_mastery', 'stochastic_t8_mastery', 'stochastic_t9_mastery', 'multivariate_t1_mastery', 'multivariate_t2_mastery', 'multivariate_t3_mastery', 'multivariate_t4_mastery', 'multivariate_t5_mastery', 'multivariate_t6_mastery', 'multivariate_t7_mastery', 'multivariate_t8_mastery', 'multivariate_t9_mastery', 'design_t1_mastery', 'design_t2_mastery', 'design_t3_mastery', 'design_t4_mastery', 'design_t5_mastery', 'design_t6_mastery', 'design_t7_mastery', 'design_t8_mastery', 'regression_t1_mastery', 'regression_t2_mastery', 'regression_t3_mastery', 'regression_t4_mastery', 'regression_t5_mastery', 'regression_t6_mastery', 'regression_t7_mastery', 'regression_t8_mastery', 'regression_t9_mastery', 'regression_t10_mastery', 'regression_t11_mastery', 'regression_t12_mastery', 'regression_t13_mastery', 'regression_t14_mastery', 'regression_t15_mastery']) docs['qsets/' + f] = J(f);
+                   'multivariate_pyq_variants','nonparam_pyq_variants','official_pyq_variants','sampling_pyq_variants', 'stochastic_t1_mastery', 'stochastic_t2_mastery', 'stochastic_t3_mastery', 'stochastic_t4_mastery', 'stochastic_t5_mastery', 'stochastic_t6_mastery', 'stochastic_t7_mastery', 'stochastic_t8_mastery', 'stochastic_t9_mastery', 'multivariate_t1_mastery', 'multivariate_t2_mastery', 'multivariate_t3_mastery', 'multivariate_t4_mastery', 'multivariate_t5_mastery', 'multivariate_t6_mastery', 'multivariate_t7_mastery', 'multivariate_t8_mastery', 'multivariate_t9_mastery', 'design_t1_mastery', 'design_t2_mastery', 'design_t3_mastery', 'design_t4_mastery', 'design_t5_mastery', 'design_t6_mastery', 'design_t7_mastery', 'design_t8_mastery', 'regression_t1_mastery', 'regression_t2_mastery', 'regression_t3_mastery', 'regression_t4_mastery', 'regression_t5_mastery', 'regression_t6_mastery', 'regression_t7_mastery', 'regression_t8_mastery', 'regression_t9_mastery', 'regression_t10_mastery', 'regression_t11_mastery', 'regression_t12_mastery', 'regression_t13_mastery', 'regression_t14_mastery', 'regression_t15_mastery']) docs['qsets/' + f] = J(f);
   docs['lessons/mle'] = J('lesson_mle');
   docs['lessons/inferencet1'] = J('lesson_t1');
   docs['lessons/inferencet2'] = J('lesson_t2');
@@ -126,6 +126,29 @@ function seedDocs() {
   docs['meta/users'] = J('meta_users');
   docs['meta/syllabus'] = J('meta_syllabus');
   docs['meta/app'] = { url: 'https://claude.ai/artifact/TEST', title: 'NET JRF Statistics', v: 4 };
+  // Original PYQs must be split into module-scoped qsets so module filters cannot
+  // accidentally show all 50 under the legacy parent module.
+  const originalSets = Object.entries(docs).filter(([p]) => /^qsets\/pyq_j26_/.test(p));
+  const originalCount = originalSets.reduce((n, [,b]) => n + (b.items || []).length, 0);
+  if (originalCount !== 50) throw new Error('Expected 50 module-scoped original PYQs; found ' + originalCount);
+  for (const [p,b] of originalSets) {
+    if ((b.items || []).some(q => q.moduleId !== b.moduleId))
+      throw new Error(p + ': original question moduleId does not match its qset');
+  }
+  if (docs['qsets/pyq_j26_full']) throw new Error('Legacy unsplit original PYQ qset must not be published');
+  const variantSets = Object.entries(docs).filter(([p]) => /^qsets\/.*_pyq_variants$/.test(p));
+  const variantCount = variantSets.reduce((n, [,b]) => n + (b.items || []).length, 0);
+  if (variantCount !== 500) throw new Error('Expected 500 June 2026 PYQ variants; found ' + variantCount);
+  const bySource = {}, variantIds = new Set();
+  const sourceModule = {1:'maths',2:'multivariate',3:'timeseries',4:'multivariate',5:'regression',6:'probability',7:'timeseries',8:'sampling',9:'regression',10:'inference',11:'regression',12:'multivariate',13:'probability',14:'inference',15:'regression',16:'rprog',17:'multivariate',18:'timeseries',19:'multivariate',20:'multivariate',21:'maths',22:'rprog',23:'timeseries',24:'multivariate',25:'probability',26:'maths',27:'rprog',28:'maths',29:'nonparam',30:'inference',31:'probability',32:'probability',33:'nonparam',34:'probability',35:'nonparam',36:'official',37:'multivariate',38:'regression',39:'inference',40:'inference',41:'probability',42:'nonparam',43:'inference',44:'multivariate',45:'probability',46:'probability',47:'official',48:'rprog',49:'inference',50:'rprog'};
+  for (const [p,b] of variantSets) for (const q of (b.items || [])) {
+    if (variantIds.has(q.id)) throw new Error('Duplicate variant id: ' + q.id);
+    variantIds.add(q.id);
+    bySource[q.srcQ] = (bySource[q.srcQ] || 0) + 1;
+    if (sourceModule[q.srcQ] !== b.moduleId) throw new Error(p + '/' + q.id + ': wrong module for source Q' + q.srcQ);
+  }
+  for (let q=1;q<=50;q++) if (bySource[q] !== 10)
+    throw new Error('Original Q' + q + ' must have exactly 10 variants; found ' + (bySource[q] || 0));
   return docs;
 }
 

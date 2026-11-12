@@ -1,8 +1,8 @@
 {
   "moduleId": "timeseries",
   "source": "variant",
-  "label": "June 2026 paper — practice variants",
-  "count": 39,
+  "label": "June 2026 PYQ variants — Time series",
+  "count": 40,
   "items": [
     {
       "id": "j26v-q03-06",
@@ -16,7 +16,7 @@
         "r₁²"
       ],
       "answer": "B",
-      "explanation": "The single YW equation is ρ₁ = Φ",
+      "explanation": "For an AR(1), the Yule–Walker equation is ρ₁=Φρ₀=Φ because ρ₀=1. The method-of-moments estimate is therefore Φ̂=r₁.",
       "srcQ": 3
     },
     {
@@ -31,7 +31,7 @@
         "0.467"
       ],
       "answer": "C",
-      "explanation": "(0.3 − 0.25)/(1 − 0.25) = 0.05/0.75 = 1/15",
+      "explanation": "For an AR(2), Φ̂₂=(r₂−r₁²)/(1−r₁²). Substitution gives (0.30−0.25)/(1−0.25)=0.05/0.75≈0.0667.",
       "srcQ": 3
     },
     {
@@ -46,7 +46,7 @@
         "0.467"
       ],
       "answer": "D",
-      "explanation": "r₁(1 − r₂)/(1 − r₁²) = 0.5(0.7)/0.75",
+      "explanation": "The AR(2) Yule–Walker estimate is Φ̂₁=r₁(1−r₂)/(1−r₁²). Here 0.5×0.7/0.75≈0.4667.",
       "srcQ": 3
     },
     {
@@ -61,7 +61,7 @@
         "4"
       ],
       "answer": "A",
-      "explanation": "σ²/(1 − Φ²) = 4/0.64 = 6.25",
+      "explanation": "A stationary AR(1) has variance σ²ε/(1−Φ²). Thus 4/(1−0.6²)=4/0.64=6.25.",
       "srcQ": 3
     },
     {
@@ -76,7 +76,7 @@
         "α(h) ≠ 0 for all h"
       ],
       "answer": "B",
-      "explanation": "PACF of AR(p) cuts off after lag p, so it vanishes from lag 3 onwards",
+      "explanation": "For an AR(p), the theoretical PACF cuts off after lag p. With p=2, it is zero at lags 3 and higher.",
       "srcQ": 3
     },
     {
@@ -91,7 +91,7 @@
         "Φ₁ = 1.2, Φ₂ = 0.1"
       ],
       "answer": "C",
-      "explanation": "Only 0.4 + 0.3 = 0.7 < 1 with the other two conditions also satisfied",
+      "explanation": "AR(2) stationarity requires −1<Φ₂<1, Φ₁+Φ₂<1 and Φ₂−Φ₁<1. Only (0.4,0.3) satisfies all three conditions.",
       "srcQ": 3
     },
     {
@@ -106,7 +106,7 @@
         "0.25"
       ],
       "answer": "D",
-      "explanation": "ρ_k = Φ^k = (−0.5)² = 0.25",
+      "explanation": "For an AR(1), ρₖ=Φᵏ. At lag 2, (−0.5)²=0.25.",
       "srcQ": 3
     },
     {
@@ -121,7 +121,7 @@
         "nowhere"
       ],
       "answer": "A",
-      "explanation": "MA(q) ACF cuts off after lag q",
+      "explanation": "An MA(q) autocorrelation function cuts off after lag q. For MA(1), only lag 1 can have a non-zero autocorrelation beyond lag zero.",
       "srcQ": 3
     },
     {
@@ -136,7 +136,7 @@
         "taking the spectral density"
       ],
       "answer": "B",
-      "explanation": "Multiplying by yₜ₋ₖ and using E(εₜ yₜ₋ₖ) = 0 for k ≥",
+      "explanation": "Multiply the AR(2) equation by yₜ₋₂ and take expectations. The innovation is uncorrelated with past values, yielding ρ₂=Φ₁ρ₁+Φ₂.",
       "srcQ": 3
     },
     {
@@ -151,7 +151,7 @@
         "−0.36"
       ],
       "answer": "C",
-      "explanation": "r₂ = r₁² exactly, so the numerator vanishes — the series behaves like an AR(1)",
+      "explanation": "The AR(2) estimate Φ̂₂ has numerator r₂−r₁². Since 0.36−0.6²=0, the estimate is zero.",
       "srcQ": 3
     },
     {
@@ -166,7 +166,7 @@
         "autocovariance function"
       ],
       "answer": "D",
-      "explanation": "2. The periodogram as an estimator of the spectral density is:",
+      "explanation": "The spectral density and autocovariance function form a Fourier-transform pair. The spectral density is the Fourier transform of the autocovariance sequence.",
       "srcQ": 7
     },
     {
@@ -181,7 +181,7 @@
         "unbiased and consistent"
       ],
       "answer": "A",
-      "explanation": "Its variance does not vanish as n grows",
+      "explanation": "The raw periodogram is asymptotically unbiased under standard conditions, but it is inconsistent because its variance does not tend to zero as sample size increases.",
       "srcQ": 7
     },
     {
@@ -196,7 +196,7 @@
         "uses the PACF"
       ],
       "answer": "B",
-      "explanation": "4. The spectral density of a white noise process is:",
+      "explanation": "Smoothing the periodogram with a suitable spectral window averages neighbouring frequencies and reduces variance, producing a consistent spectral-density estimator under standard bandwidth conditions.",
       "srcQ": 7
     },
     {
@@ -211,7 +211,7 @@
         "zero everywhere"
       ],
       "answer": "C",
-      "explanation": "All frequencies contribute equally — this is why it is called “white”",
+      "explanation": "White noise has zero autocovariance at all non-zero lags. Its spectral density is therefore constant across frequency.",
       "srcQ": 7
     },
     {
@@ -226,7 +226,7 @@
         "γ₀"
       ],
       "answer": "D",
-      "explanation": "The total area is the variance of the process",
+      "explanation": "Under the usual convention f(ω)=(1/2π)Σγₖe^(−iωk), integrating f from −π to π gives γ₀, the variance of the process.",
       "srcQ": 7
     },
     {
@@ -241,7 +241,7 @@
         "it is flat"
       ],
       "answer": "A",
-      "explanation": "Positive autocorrelation means power concentrated at long periods",
+      "explanation": "For a stationary AR(1), f(ω) is proportional to 1/(1+Φ²−2Φcosω). With positive Φ, the denominator is smallest at ω=0, so the spectrum peaks at low frequency.",
       "srcQ": 7
     },
     {
@@ -256,14 +256,14 @@
         "estimate the mean"
       ],
       "answer": "B",
-      "explanation": "8. For an MA(1) with θ = 0.7 and σ² = 1, the spectral density is proportional to:",
+      "explanation": "The PACF measures the correlation at lag k after controlling for intermediate lags. For an AR(p), its cutoff helps identify p.",
       "srcQ": 7
     },
     {
       "id": "j26v-q07-08",
       "format": "single",
       "topic": "June 2026 paper · Q7",
-      "stem": "For an MA(1) with θ = 0.7 and σ² = 1, the spectral density is proportional to:",
+      "stem": "For yₜ=εₜ−0.7εₜ₋₁ with innovation variance 1, the spectral density is proportional to:",
       "options": [
         "1/(1.49 − 1.4cos ω)",
         "1.49 + 1.4cos ω",
@@ -271,7 +271,7 @@
         "0.49cos ω"
       ],
       "answer": "C",
-      "explanation": "1 + θ² − 2θcos ω = 1 + 0.49 − 1.4cos ω. (Q100 of your paper is this exact computation.)",
+      "explanation": "For MA(1), f(ω) is proportional to |1+θe^(−iω)|²=1+θ²+2θcosω under the plus-sign MA convention; for yₜ=εₜ−θεₜ₋₁ it is 1+θ²−2θcosω. With θ=0.7 the latter is 1.49−1.4cosω.",
       "srcQ": 7
     },
     {
@@ -286,7 +286,7 @@
         "spectral windows"
       ],
       "answer": "D",
-      "explanation": "10. The cumulative periodogram is used to test whether a series is:",
+      "explanation": "Bartlett, Tukey–Hanning and Parzen are examples of spectral windows (also called lag windows) used to smooth spectral estimates.",
       "srcQ": 7
     },
     {
@@ -301,7 +301,7 @@
         "invertible"
       ],
       "answer": "A",
-      "explanation": "Q8. Properties of the Horvitz– Thompson estimator A. Horvitz–Thompson estimate is an ordered estimate B. The unbiased estimate of the variance of the HT estimator does not reduce to zero when all Zᵢ are equal C",
+      "explanation": "The cumulative periodogram compares cumulative spectral power with the linear pattern expected under white noise. It is used as a diagnostic test for whiteness.",
       "srcQ": 7
     },
     {
@@ -316,14 +316,14 @@
         "stationary"
       ],
       "answer": "B",
-      "explanation": "2. For the random walk yₜ = μ + yₜ₋₁ + εₜ, the mean and variance of yₜ are:",
+      "explanation": "The process contains a unit root: shocks accumulate and the variance grows with time. It is a random walk and is not covariance-stationary.",
       "srcQ": 18
     },
     {
       "id": "j26v-q18-02",
       "format": "single",
       "topic": "June 2026 paper · Q18",
-      "stem": "For the random walk yₜ = μ + yₜ₋₁ + εₜ, the mean and variance of yₜ are:",
+      "stem": "For the random walk yₜ=μ+yₜ₋₁+εₜ with y₀=0, E(yₜ) and Var(yₜ) are:",
       "options": [
         "μ, σ²",
         "μ, tσ²",
@@ -331,7 +331,7 @@
         "tμ, σ²"
       ],
       "answer": "C",
-      "explanation": "Both accumulate with t. (Q23 of your paper.)",
+      "explanation": "Assuming y₀=0 and zero-mean innovations with variance σ², iteration gives E(yₜ)=tμ and Var(yₜ)=tσ².",
       "srcQ": 18
     },
     {
@@ -346,7 +346,7 @@
         "has a unit root"
       ],
       "answer": "D",
-      "explanation": "4. For yₜ = 1.2yₜ₋₁ − 0.2yₜ₋₂ + εₜ, the differenced series Δyₜ is:",
+      "explanation": "The AR polynomial is 1−Φ₁B−Φ₂B². If Φ₁+Φ₂=1, it has a root at B=1, so the process contains a unit root.",
       "srcQ": 18
     },
     {
@@ -361,7 +361,7 @@
         "MA(1)"
       ],
       "answer": "A",
-      "explanation": "1 − 1.2B + 0.2B² = (1 − B)(1 − 0.2B)",
+      "explanation": "The AR polynomial factors as 1−1.2B+0.2B²=(1−B)(1−0.2B). After first differencing, (1−0.2B)Δyₜ=εₜ, an AR(1) with coefficient 0.2.",
       "srcQ": 18
     },
     {
@@ -376,7 +376,7 @@
         "no differencing"
       ],
       "answer": "B",
-      "explanation": "The middle index d =",
+      "explanation": "In ARIMA(p,d,q), d is the number of differences applied to the original series. An ARIMA(2,1,0) is differenced once to obtain a stationary AR(2) model.",
       "srcQ": 18
     },
     {
@@ -391,7 +391,7 @@
         "zero after lag 1"
       ],
       "answer": "C",
-      "explanation": "ρ_k = (−0.5)^k",
+      "explanation": "For an AR(1), ρₖ=Φᵏ. A negative coefficient makes the sign alternate with the lag.",
       "srcQ": 18
     },
     {
@@ -406,7 +406,7 @@
         "|θ| < 1"
       ],
       "answer": "D",
-      "explanation": "8. The Dickey–Fuller test is used to test for:",
+      "explanation": "For yₜ=εₜ−θεₜ₋₁, invertibility requires the root of 1−θB=0 to lie outside the unit circle, equivalent to |θ|<1.",
       "srcQ": 18
     },
     {
@@ -421,7 +421,7 @@
         "normality"
       ],
       "answer": "A",
-      "explanation": "9. A sample ACF that decays very slowly and almost linearly suggests:",
+      "explanation": "The Dickey–Fuller family of tests examines the null hypothesis that an autoregressive process has a unit root.",
       "srcQ": 18
     },
     {
@@ -436,7 +436,7 @@
         "white noise"
       ],
       "answer": "B",
-      "explanation": "10. For a process with Φ₁ = 0.4, Φ₂ = 0.3, θ₁ = 0.6, θ₂ = 0.4, the process is:",
+      "explanation": "A very slowly decaying sample ACF is a common symptom of a unit root or near-unit-root behaviour. First differencing is then examined to remove the stochastic trend.",
       "srcQ": 18
     },
     {
@@ -450,8 +450,8 @@
         "stationary but not invertible",
         "invertible but not stationary"
       ],
-      "answer": "C",
-      "explanation": "Φ₁ + Φ₂ = 0.7 < 1 gives stationarity; θ₁ + θ₂ = 1.0 sits exactly on the boundary, so invertibility fails. (Q98 of your paper.)",
+      "answer": "A",
+      "explanation": "The AR(2) part is stationary because its coefficients satisfy the AR(2) stationarity inequalities. The MA(2) polynomial 1+0.6B+0.4B² has complex roots with modulus √(1/0.4)≈1.58, outside the unit circle, so it is invertible too.",
       "srcQ": 18
     },
     {
@@ -466,14 +466,14 @@
         "strict stationarity"
       ],
       "answer": "D",
-      "explanation": "Process Stationary? White noise Yes AR(1) with |Φ| < 1 Yes AR(1) with Φ = 1 (random walk) No — unit root Random walk with drift No — mean and variance both grow Any MA(q) with finite coefficients Yes, always Deterministic trend yₜ = a + bt + εₜ No, but trend-stationary — remove by regression, not di",
+      "explanation": "For a Gaussian process, all finite-dimensional distributions are determined by the mean vector and covariance matrix. If the mean is constant and covariance depends only on lag, these distributions are invariant to time shifts, giving strict stationarity.",
       "srcQ": 23
     },
     {
       "id": "j26v-q23-02",
       "format": "single",
       "topic": "June 2026 paper · Q23",
-      "stem": "For the random walk yₜ = yₜ₋₁ + εₜ (no drift), E(yₜ) and Var(yₜ) are:",
+      "stem": "For the random walk yₜ=yₜ₋₁+εₜ with y₀=0 and zero-mean innovations of variance σ², E(yₜ) and Var(yₜ) are:",
       "options": [
         "0, tσ²",
         "tμ, tσ²",
@@ -481,7 +481,7 @@
         "0, σ²"
       ],
       "answer": "A",
-      "explanation": "2. Weak stationarity requires the autocovariance to depend on:",
+      "explanation": "With y₀=0 and no drift, yₜ is the sum of t independent zero-mean innovations. Its mean is 0 and its variance is tσ².",
       "srcQ": 23
     },
     {
@@ -496,7 +496,7 @@
         "neither"
       ],
       "answer": "B",
-      "explanation": "3. A random walk becomes stationary after:",
+      "explanation": "Weak stationarity requires a constant mean and an autocovariance function that depends on the lag, not on calendar time t.",
       "srcQ": 23
     },
     {
@@ -511,7 +511,7 @@
         "differencing twice"
       ],
       "answer": "C",
-      "explanation": "4. In a random walk, the effect of a single shock on future values is:",
+      "explanation": "First differencing a random walk gives Δyₜ=εₜ. The differenced series is white noise under the stated innovation assumptions.",
       "srcQ": 23
     },
     {
@@ -526,7 +526,7 @@
         "permanent"
       ],
       "answer": "D",
-      "explanation": "5. An MA(q) process with finite coefficients is:",
+      "explanation": "A shock enters every subsequent level of a random walk with coefficient one. Its effect does not decay, so it is permanent.",
       "srcQ": 23
     },
     {
@@ -541,7 +541,7 @@
         "a random walk"
       ],
       "answer": "A",
-      "explanation": "Remove the deterministic trend by regression",
+      "explanation": "The deterministic component 5+0.2t is a linear trend. Subtracting the fitted deterministic trend leaves εₜ, so the series is trend-stationary rather than stationary in levels.",
       "srcQ": 23
     },
     {
@@ -556,7 +556,7 @@
         "white noise"
       ],
       "answer": "B",
-      "explanation": "9. For a random walk, Corr(yₜ, yₜ₊ₖ) equals:",
+      "explanation": "Differencing a stationary series unnecessarily can introduce a non-invertible moving-average component with a unit root, making the model harder to estimate.",
       "srcQ": 23
     },
     {
@@ -571,7 +571,7 @@
         "1"
       ],
       "answer": "C",
-      "explanation": "which is close to 1 for large t — hence the slowly decaying sample ACF",
+      "explanation": "For a zero-drift random walk starting at zero, Cov(yₜ,yₜ₊ₖ)=tσ², Var(yₜ)=tσ² and Var(yₜ₊ₖ)=(t+k)σ². Hence the correlation is √[t/(t+k)].",
       "srcQ": 23
     },
     {
@@ -586,8 +586,23 @@
         "a random walk"
       ],
       "answer": "D",
-      "explanation": "Q24. Solving for a parameter from a partial correlation X ~ N₃(0, Σ) with Σ = [[4, 1, 1], [1, 2, α], [1, α, 2]]. The value of α for which r₂₃.₁ = 5/7 is:",
+      "explanation": "ARIMA(0,1,0) has no AR or MA terms after one difference. Thus Δyₜ is white noise and yₜ is a random walk.",
       "srcQ": 23
+    },
+    {
+      "id": "j26v-q23-10",
+      "srcQ": 23,
+      "topic": "Random walk with drift",
+      "stem": "A random walk with drift is yₜ=0.2+yₜ₋₁+εₜ, with fixed y₀=5 and E(εₜ)=0. What is E(y₁₀)?",
+      "options": [
+        "5",
+        "5.2",
+        "7",
+        "10"
+      ],
+      "answer": "C",
+      "explanation": "Iterating gives yₜ=y₀+0.2t+Σᵢ₌₁ᵗεᵢ. Taking expectations at t=10 gives 5+2=7.",
+      "format": "single"
     }
   ]
 }
