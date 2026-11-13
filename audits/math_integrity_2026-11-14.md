@@ -59,8 +59,9 @@ Expected verifier output:
 - PASS: design_t1 s4 CRD arithmetic and learner-facing conclusion
 - PASS: design_t1 s8 RBD arithmetic, table totals and learner-facing conclusion
 - PASS: exact rational checks; F(s4)=52/5=10.4; F(s8)=58
+- PASS: exponential population median = 4.852030; expected sample median for n=9 = 5.219444 (exactly 1879/360)
 
-Execution status: not yet run in a local checkout in this environment. The verifier is committed to the task branch for execution in CI or a checkout; do not interpret its assertions as an executed test result.
+Execution status: neither verifier has yet been run from a full local repository checkout in this environment. The numerical calculations were independently recomputed in Python. The PR currently has no associated GitHub Actions workflow runs, so repository CI/validators remain unverified; do not interpret the expected PASS lines above as executed test results.
 
 ## Scope and limitations
 
