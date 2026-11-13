@@ -1,0 +1,715 @@
+{
+ "id": "nonparamt3",
+ "topicId": "nonparam-t3",
+ "moduleId": "nonparam",
+ "title": "Kruskal–Wallis and Friedman tests",
+ "breadcrumb": "Non-parametric methods → Several samples → Kruskal–Wallis and Friedman",
+ "engine": "B",
+ "engineName": "Independent groups: pool ranks. Related treatments: rank within blocks.",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 96,
+ "objectives": [
+  "Choose Kruskal–Wallis or Friedman from the sample design.",
+  "Calculate Kruskal–Wallis H from pooled group rank sums.",
+  "Apply the Kruskal–Wallis tie correction and degrees of freedom.",
+  "Rank treatments within blocks and calculate the Friedman statistic.",
+  "Interpret omnibus results and identify when post-hoc comparisons are required."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Independent and paired designs",
+   "why": "The choice between the two tests depends on whether groups are independent or related."
+  },
+  {
+   "id": "p2",
+   "name": "Pooled ranks and rank sums",
+   "why": "Kruskal–Wallis compares independent groups through pooled rank sums."
+  },
+  {
+   "id": "p3",
+   "name": "Chi-square reference distribution",
+   "why": "Both omnibus statistics use an approximate chi-square reference with k−1 degrees of freedom."
+  }
+ ],
+ "traps": [
+  "Kruskal–Wallis: pool observations across independent groups before ranking.",
+  "Friedman: rank treatments within each block, not across all raw values.",
+  "Both tests use k−1 degrees of freedom in the common chi-square approximation.",
+  "A significant omnibus statistic does not identify which pair differs.",
+  "Kruskal–Wallis median interpretation needs similarly shaped distributions.",
+  "Apply tie corrections when ties occur; do not silently use no-tie formulas."
+ ],
+ "howto": "Start by identifying independent groups versus repeated or matched blocks. For Kruskal–Wallis, pool all observations, rank, calculate group rank sums and then H. For Friedman, rank within each block and sum treatment ranks. Verify rank totals before interpreting either statistic.",
+ "revision": {
+  "sheet": [
+   "Kruskal–Wallis: k independent groups, pooled ranks, group rank sums Rⱼ.",
+   "H=12/[N(N+1)] Σ(Rⱼ²/nⱼ)−3(N+1); df=k−1.",
+   "Kruskal–Wallis tie factor C=1−Σ(t³−t)/(N³−N); corrected H=H/C.",
+   "Friedman: k related treatments in b independent blocks; rank within each block.",
+   "Friedman Q=12/[b k(k+1)] ΣRⱼ²−3b(k+1); df=k−1.",
+   "Friedman tie factor C=1−Σ(t³−t)/[b k(k²−1)]; corrected Q=Q/C.",
+   "Kruskal–Wallis: significant result means at least one independent-group distribution differs.",
+   "Friedman: significant result means at least one treatment condition differs in rank distribution.",
+   "Neither omnibus test identifies the differing pairs; use multiplicity-adjusted post-hoc comparisons.",
+   "Median/location interpretation of Kruskal–Wallis needs similarly shaped group distributions."
+  ],
+  "cards": [
+   [
+    "Independent groups",
+    "Kruskal–Wallis"
+   ],
+   [
+    "Related blocks",
+    "Friedman"
+   ],
+   [
+    "K-W statistic",
+    "12/[N(N+1)] Σ(Rⱼ²/nⱼ)−3(N+1)"
+   ],
+   [
+    "Friedman statistic",
+    "12/[bk(k+1)]ΣRⱼ²−3b(k+1)"
+   ],
+   [
+    "Degrees of freedom",
+    "k−1"
+   ],
+   [
+    "Tie correction",
+    "Divide H or Q by C"
+   ],
+   [
+    "K-W ranking",
+    "Pool all groups"
+   ],
+   [
+    "Friedman ranking",
+    "Within each block"
+   ],
+   [
+    "After omnibus significance",
+    "Post-hoc comparisons"
+   ]
+  ],
+  "tricks": [
+   "Check ΣRⱼ=N(N+1)/2 for Kruskal–Wallis.",
+   "Check Σ treatment rank sums=bk(k+1)/2 for Friedman.",
+   "Do not report pairwise conclusions from an omnibus p-value."
+  ],
+  "shortcuts": [
+   "Both tests: df=k−1.",
+   "Friedman each block contributes k(k+1)/2 rank points.",
+   "Both omnibus tests use k−1 degrees of freedom in the usual chi-square approximation."
+  ],
+  "remember": [
+   "Independent → Kruskal–Wallis; related blocks → Friedman.",
+   "Omnibus significant ≠ every pair significant."
+  ]
+ },
+ "refs": [
+  {
+   "title": "Nonparametric Statistical Methods",
+   "where": "Several-sample rank tests",
+   "site": "Hollander, Wolfe and Chicken",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Standard treatment of Kruskal–Wallis and Friedman tests."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+   "where": "Nonparametric methods",
+   "site": "NIST",
+   "url": "https://www.itl.nist.gov/div898/handbook/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Applied reference for rank-based inference."
+  },
+  {
+   "title": "Penn State STAT 415",
+   "where": "Nonparametric tests",
+   "site": "Penn State",
+   "url": "https://online.stat.psu.edu/stat415/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Accessible support for rank tests."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints."
+ },
+ "provenance": "No direct June 2026 anchor for the Kruskal–Wallis or Friedman calculations. This lesson is syllabus-driven: it distinguishes independent multi-group comparisons (Kruskal–Wallis) from blocked/repeated comparisons (Friedman). Worked examples use constructed rank sums and block ranks; the verifier recomputes both statistics, degrees of freedom, rank totals and tie factors.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Identify groups and blocks",
+   "objective": "Distinguish independent groups from repeated measurements.",
+   "ask": {
+    "q": "Three separate schools each use one teaching method. Which design?",
+    "nudge": "Does a student appear in more than one group?"
+   },
+   "body": [
+    "The number of groups is not enough to choose a test. Ask whether different observational units form each group or whether the same units contribute measurements under several conditions.",
+    "Kruskal–Wallis compares independent groups. Friedman compares related conditions arranged in blocks, such as the same participant measured under each treatment."
+   ],
+   "items": [
+    {
+     "ask": "Three separate schools each provide students for one method. What is the design?",
+     "recall": "Several independent groups.",
+     "refresh": [
+      "Each student belongs to one school group, and no student contributes to another group's sample. That is an independent-groups design.",
+      "For three or more independent groups with ordinal outcomes, Kruskal–Wallis is a candidate rank procedure."
+     ]
+    },
+    {
+     "ask": "The same patient is measured under three treatments. What is the design?",
+     "recall": "Repeated measures or blocked; observations are related within patient.",
+     "refresh": [
+      "Each patient supplies a set of linked treatment measurements. The patient is a block, not three independent people.",
+      "Friedman ranks treatments within each block, preserving the repeated-measures structure and the link among observations."
+     ]
+    },
+    {
+     "ask": "What does a pooled rank preserve?",
+     "recall": "The ordering of observations, not the size of numerical gaps.",
+     "refresh": [
+      "Sort the values and assign ranks. A larger observation receives a larger rank, regardless of the numerical gap.",
+      "Ranks let a method compare ordinal outcomes without requiring normally distributed populations."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "Two designs, two rank tests",
+   "objective": "Explain why independent and blocked data need different procedures.",
+   "ask": {
+    "q": "What does Friedman do within each patient?",
+    "nudge": "It ranks the treatment outcomes within that patient."
+   },
+   "body": [
+    "Kruskal–Wallis pools observations from all independent groups into one ranking. Group membership is then used to add ranks.",
+    "Friedman ranks the treatments separately inside each block, then adds each treatment's ranks across blocks. This protects the pairing or blocking."
+   ],
+   "scenario": {
+    "teaser": "Three independent district samples.",
+    "title": "Comparing service satisfaction",
+    "body": [
+     "Three different districts provide satisfaction ratings. Each resident belongs to one district only, so the samples are independent. Ratings are ordered categories, but the distances between categories are not known to be equal. Kruskal–Wallis pools all observations and ranks them together before comparing the group rank sums. It is the rank-based omnibus alternative to one-way ANOVA. A significant result indicates that at least one group distribution differs, but it does not reveal which pair differs."
+    ],
+    "q": "Which feature makes Kruskal–Wallis suitable?",
+    "answer": "The three district samples are independent, and the response can be ordered."
+   }
+  },
+  {
+   "kind": "explore",
+   "id": "s2",
+   "mins": 6,
+   "title": "See the rank totals",
+   "objective": "Understand pooled ranks versus within-block ranks.",
+   "ask": {
+    "q": "For three treatments in one patient, what ranks apply if A is highest, B lowest and C middle?",
+    "nudge": "Use ranks 1, 2 and 3 within that block."
+   },
+   "body": [
+    "For three treatments in one patient, suppose A scores highest, C is in the middle and B is lowest. The within-patient ranks are A=3, B=1, C=2.",
+    "With four patients, each treatment receives four ranks. Add those ranks by treatment. The sum of all treatment rank totals must equal 4×(1+2+3)=24."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 9,
+   "title": "Kruskal–Wallis H statistic",
+   "objective": "Calculate H from pooled group rank sums.",
+   "ask": {
+    "q": "What degrees of freedom are used for k independent groups?",
+    "nudge": "There are k−1 degrees of freedom."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Notation",
+     "body": "There are k independent groups, group j has size nⱼ, total N=Σnⱼ, and Rⱼ is its pooled rank sum."
+    },
+    {
+     "t": "formula",
+     "h": "Test statistic",
+     "body": "H=[12/{N(N+1)}]Σ(Rⱼ²/nⱼ)−3(N+1). Under H₀ and suitable sample sizes, H is approximated by χ² with k−1 degrees of freedom."
+    },
+    {
+     "t": "formula",
+     "h": "Tie correction",
+     "body": "C=1−Σ(t³−t)/(N³−N), where t is each tied-value group size in the pooled data. Use H_corrected=H/C when ties occur."
+    },
+    {
+     "t": "step",
+     "h": "Interpretation",
+     "body": "A significant result indicates that at least one group distribution differs. It does not identify the differing groups; use a suitable multiple-comparison procedure after the omnibus test."
+    }
+   ],
+   "flow": {
+    "title": "Choose the rank test",
+    "alt": "Independent groups lead to pooled ranks and Kruskal–Wallis; related treatments within blocks lead to within-block ranks and Friedman.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Identify design",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Independent groups",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 1,
+      "c": 2,
+      "label": "Related blocks",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 0,
+      "label": "Kruskal–Wallis",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 2,
+      "c": 2,
+      "label": "Friedman",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 3,
+      "c": 1,
+      "label": "Omnibus inference",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "a",
+      "to": "c"
+     },
+     {
+      "from": "b",
+      "to": "d"
+     },
+     {
+      "from": "c",
+      "to": "e"
+     },
+     {
+      "from": "d",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ],
+    "note": "Design determines whether ranks are pooled across groups or assigned within blocks."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 10,
+   "title": "Worked example: Kruskal–Wallis",
+   "objective": "Compute H for three independent groups.",
+   "ask": {
+    "q": "What is the total of all pooled ranks for N=12?",
+    "nudge": "Use N(N+1)/2."
+   },
+   "problem": "Three independent groups each contain four observations. Their pooled rank sums are R₁=10, R₂=26 and R₃=42. Calculate H.",
+   "steps": [
+    {
+     "say": "Find N and check the rank sum.",
+     "math": "N=4+4+4=12; total ranks=12×13/2=78",
+     "why": "The three group rank sums add to 10+26+42=78."
+    },
+    {
+     "say": "Calculate the group contributions.",
+     "math": "Σ(Rⱼ²/nⱼ)=10²/4+26²/4+42²/4=25+169+441=635",
+     "why": "Square each group rank sum and divide by that group's sample size."
+    },
+    {
+     "say": "Calculate the first term.",
+     "math": "12/[12×13]×635=635/13=48.8461538",
+     "why": "The multiplier is 12 divided by N(N+1)=156."
+    },
+    {
+     "say": "Subtract the correction term.",
+     "math": "H=48.8461538−3×13=9.8461538",
+     "why": "The correction term is 3(N+1)=39."
+    },
+    {
+     "say": "State the reference degrees of freedom.",
+     "math": "df=k−1=3−1=2",
+     "why": "The large-sample reference distribution is χ²₂, subject to the usual conditions."
+    }
+   ],
+   "after": "No ties were specified, so no tie correction is needed. H≈9.8462 with 2 degrees of freedom."
+  },
+  {
+   "kind": "recall",
+   "id": "s5",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the Kruskal–Wallis structure.",
+   "intro": "Try each answer before revealing it.",
+   "items": [
+    {
+     "q": "Design for Kruskal–Wallis?",
+     "a": "Three or more independent groups."
+    },
+    {
+     "q": "What is ranked?",
+     "a": "All observations pooled together."
+    },
+    {
+     "q": "What is df?",
+     "a": "k−1."
+    },
+    {
+     "q": "Tie correction factor?",
+     "a": "1−Σ(t³−t)/(N³−N)."
+    },
+    {
+     "q": "Does significant H identify the differing pair?",
+     "a": "No. It is an omnibus test; follow-up comparisons are needed."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s6",
+   "mins": 8,
+   "title": "Complete the H calculation",
+   "objective": "Fill the missing group contribution and degrees of freedom.",
+   "problem": "For three independent groups, n₁=n₂=n₃=4 and rank sums 10, 26, 42. Complete the calculation.",
+   "steps": [
+    {
+     "say": "Find the second group's contribution.",
+     "blank": {
+      "prompt": "R₂²/n₂=26²/4=…",
+      "answer": "169",
+      "accept": [
+       "169.0"
+      ],
+      "hint": "Square 26, then divide by 4."
+     },
+     "why": "The contribution is 676/4=169."
+    },
+    {
+     "say": "Add the three contributions.",
+     "blank": {
+      "prompt": "25+169+441=…",
+      "answer": "635",
+      "accept": [
+       "635.0"
+      ],
+      "hint": "Add the group contributions."
+     },
+     "why": "This is the sum inside the H formula."
+    },
+    {
+     "say": "Find degrees of freedom.",
+     "blank": {
+      "prompt": "df=k−1=3−1=…",
+      "answer": "2",
+      "accept": [
+       "2.0"
+      ],
+      "hint": "Subtract one from the number of groups."
+     },
+     "why": "The chi-square approximation uses two degrees of freedom."
+    }
+   ],
+   "after": "The full H calculation gives approximately 9.8462.",
+   "ask": {
+    "q": "Which group contribution is inserted into the Kruskal–Wallis sum?",
+    "nudge": "Square its pooled rank sum and divide by its group size."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Friedman test",
+   "objective": "Rank treatments within each block and compare treatment rank sums.",
+   "ask": {
+    "q": "If b=4 patients each receive k=3 treatments, how many ranks are assigned in each patient?",
+    "nudge": "Each patient gets ranks 1, 2 and 3."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Design",
+     "body": "Friedman is for k related treatments or conditions observed in each of b blocks. A block may be a participant, matched set or experimental unit."
+    },
+    {
+     "t": "step",
+     "h": "Ranking",
+     "body": "Within each block, rank the k treatment outcomes from 1 to k. Use average ranks for ties within that block. Then add ranks down each treatment column to obtain Rⱼ."
+    },
+    {
+     "t": "formula",
+     "h": "Friedman statistic",
+     "body": "Q=[12/{b k(k+1)}]ΣRⱼ²−3b(k+1). Under H₀, Q is commonly compared with χ² having k−1 degrees of freedom for adequate b and k."
+    },
+    {
+     "t": "formula",
+     "h": "Tie correction",
+     "body": "C=1−Σ(t³−t)/[b k(k²−1)], where the sum covers tied groups within blocks. Use Q_corrected=Q/C when ties occur."
+    },
+    {
+     "t": "def",
+     "h": "Interpretation",
+     "body": "A significant result indicates that at least one treatment condition differs in rank distribution. It does not identify which treatment pairs differ."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Guided calculation: Friedman rank totals",
+   "objective": "Calculate treatment rank sums and verify their total.",
+   "problem": "Four blocks have treatment ranks: A=(3,3,3,2), B=(1,1,2,3), C=(2,2,1,1). Find R_A, R_B and R_C.",
+   "hints": [
+    "Add each treatment's ranks down its column.",
+    "Check that each block contributes 1+2+3=6 ranks.",
+    "The three treatment totals must sum to 4×6."
+   ],
+   "answer": "R_A=11, R_B=7 and R_C=6. Their total is 24.",
+   "check": "For b=4 and k=3, total treatment ranks must be b×k(k+1)/2=4×6=24.",
+   "solution": [
+    {
+     "say": "Add A's ranks.",
+     "math": "R_A=3+3+3+2=11",
+     "why": "Sum treatment A across all four blocks."
+    },
+    {
+     "say": "Add B's and C's ranks.",
+     "math": "R_B=1+1+2+3=7; R_C=2+2+1+1=6",
+     "why": "Keep each treatment's rank column separate."
+    },
+    {
+     "say": "Check the total.",
+     "math": "11+7+6=24=4×(1+2+3)",
+     "why": "Every block contributes the same rank total of six."
+    }
+   ],
+   "scenario": {
+    "teaser": "Three rehabilitation conditions measured on the same patients.",
+    "title": "A repeated-treatment study",
+    "body": [
+     "The same patients complete three rehabilitation programmes, and each patient gives one rating under each programme. Measurements from one patient are linked. Friedman treats each patient as a block, ranks the three treatment outcomes within that patient, and adds ranks by treatment. This preserves the repeated-measures structure. Pooling all raw ratings globally would ignore the matching and would not be the Friedman procedure."
+    ],
+    "q": "Why should the analysis not pool all raw treatment observations into one global rank list?",
+    "answer": "The measurements are related within patient. Friedman ranks treatments within each patient, preserving the blocks."
+   },
+   "ask": {
+    "q": "How do you check the total of Friedman treatment ranks?",
+    "nudge": "Use b×k(k+1)/2."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 6,
+   "title": "Six statements to challenge",
+   "objective": "Check whether the design and ranking method match.",
+   "intro": "Mark each claim true or false before reading the reason.",
+   "items": [
+    {
+     "claim": "Kruskal–Wallis is for independent groups.",
+     "tf": true,
+     "why": "True. It compares k independent samples using pooled ranks."
+    },
+    {
+     "claim": "Friedman is for repeated or blocked treatments.",
+     "tf": true,
+     "why": "True. Each block contributes a rank to each treatment."
+    },
+    {
+     "claim": "Kruskal–Wallis ranks each group separately.",
+     "tf": false,
+     "why": "False. All observations are pooled before ranking."
+    },
+    {
+     "claim": "Friedman ranks treatments within each block.",
+     "tf": true,
+     "why": "True. This preserves the block structure."
+    },
+    {
+     "claim": "A significant omnibus test identifies every differing pair.",
+     "tf": false,
+     "why": "False. Post-hoc comparisons are needed to locate differences."
+    },
+    {
+     "claim": "Both tests can use ordinal outcomes.",
+     "tf": true,
+     "why": "True. Both use ranks rather than requiring normal population measurements."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 8,
+   "title": "Guided transfer: select the right omnibus test",
+   "objective": "Choose the procedure for a matched-block experiment.",
+   "problem": "Five judges rate each of four products. Every judge rates every product. The outcome is ordinal. Which omnibus nonparametric test should compare the four products?",
+   "hints": [
+    "Identify whether product ratings are independent within judge.",
+    "Treat each judge as a block.",
+    "Select the test that ranks treatments inside blocks."
+   ],
+   "answer": "Friedman test. Each judge is a block and the four product ratings are ranked within that judge.",
+   "check": "The design has b=5 blocks and k=4 related treatments.",
+   "solution": [
+    {
+     "say": "Identify the observational structure.",
+     "math": "Each judge rates all four products",
+     "why": "Ratings from one judge are linked."
+    },
+    {
+     "say": "Name the block and treatments.",
+     "math": "b=5 judges; k=4 products",
+     "why": "Each judge contributes one rank to every product."
+    },
+    {
+     "say": "Choose the blocked rank test.",
+     "math": "Friedman",
+     "why": "Friedman compares related treatments by ranking within each block."
+    }
+   ],
+   "ask": {
+    "q": "What identifies the block in this product-rating design?",
+    "nudge": "Each judge who rates every product is one block."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s11",
+   "mins": 6,
+   "title": "Assumptions and follow-up",
+   "objective": "Interpret each omnibus test and its limitations.",
+   "ask": {
+    "q": "What should follow a significant omnibus result if the aim is to locate differences?",
+    "nudge": "Use an appropriate multiplicity-adjusted post-hoc comparison."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Kruskal–Wallis conditions",
+     "body": "Independent observations; independent groups; an outcome that can be ranked. A median/location interpretation requires similarly shaped group distributions."
+    },
+    {
+     "t": "def",
+     "h": "Friedman conditions",
+     "body": "Matched or repeated observations arranged in blocks; blocks are independent of one another; treatments are observed under comparable conditions; an outcome that can be ranked."
+    },
+    {
+     "t": "step",
+     "h": "Omnibus does not mean pairwise",
+     "body": "A significant H or Q says that not all groups or treatments behave alike. It does not show which pair differs. Use suitable post-hoc comparisons with multiplicity control."
+    }
+   ]
+  },
+  {
+   "kind": "recall",
+   "id": "s12",
+   "mins": 3,
+   "title": "Second recall",
+   "objective": "Retrieve both formulas and their designs.",
+   "intro": "Answer, then reveal.",
+   "items": [
+    {
+     "q": "Kruskal–Wallis design?",
+     "a": "Independent groups; pooled ranks."
+    },
+    {
+     "q": "Friedman design?",
+     "a": "Related treatments; ranks within blocks."
+    },
+    {
+     "q": "Kruskal–Wallis df?",
+     "a": "k−1."
+    },
+    {
+     "q": "Friedman df?",
+     "a": "k−1."
+    },
+    {
+     "q": "What follows a significant omnibus result?",
+     "a": "Post-hoc comparisons if pairwise identification is needed."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "What you should now be able to do",
+   "objective": "Select and calculate the two multi-sample rank tests.",
+   "body": [
+    "Use Kruskal–Wallis for k independent groups; pool all observations and calculate H from group rank sums.",
+    "Use Friedman for k related treatments; rank within each block and calculate Q from treatment rank sums.",
+    "Apply tie corrections when ties occur and use k−1 reference degrees of freedom.",
+    "Interpret a significant omnibus result as evidence of a difference somewhere, not as a pairwise conclusion.",
+    "Check rank totals before accepting a numerical answer."
+   ],
+   "ask": {
+    "q": "What is the first decision when choosing between H and Q?",
+    "nudge": "Independent groups or related treatments in blocks."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 4,
+   "title": "Mastery test",
+   "objective": "Demonstrate the multi-sample rank-test skills independently.",
+   "setId": "nonparam_t3_mastery"
+  }
+ ]
+}

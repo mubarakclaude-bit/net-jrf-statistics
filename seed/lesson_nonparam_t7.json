@@ -1,0 +1,696 @@
+{
+ "id": "nonparamt7",
+ "topicId": "nonparam-t7",
+ "moduleId": "nonparam",
+ "title": "Empirical distribution function and properties",
+ "breadcrumb": "Non-parametric methods → Empirical distribution function → Definition and properties",
+ "engine": "B",
+ "engineName": "Count observations at or below x, then divide by n.",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 96,
+ "objectives": [
+  "Construct the empirical distribution function from a sample.",
+  "Describe monotonicity, right-continuity, limits and jump sizes, including ties.",
+  "Derive the pointwise expectation and variance of the empirical CDF.",
+  "Calculate empirical quantiles using the inverse-CDF convention.",
+  "State the Glivenko–Cantelli theorem and connect the EDF to KS testing."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Cumulative distribution function",
+   "why": "The empirical CDF estimates the population CDF at each threshold."
+  },
+  {
+   "id": "p2",
+   "name": "Indicator variables",
+   "why": "The empirical CDF is an average of indicator variables."
+  },
+  {
+   "id": "p3",
+   "name": "Order statistics and quantiles",
+   "why": "Empirical quantiles are selected from the ordered sample."
+  }
+ ],
+ "traps": [
+  "The definition uses Xᵢ≤x, not Xᵢ<x.",
+  "A tie of size m creates a jump m/n, not 1/n.",
+  "Fₙ is nondecreasing and right-continuous; it never decreases.",
+  "E[Fₙ(x)]=F(x), while Var[Fₙ(x)]=F(x){1−F(x)}/n.",
+  "Uniform convergence is stronger than pointwise convergence.",
+  "The inverse-CDF median convention for even n may differ from averaging the two middle values."
+ ],
+ "howto": "Sort the sample, count observations at or below each threshold, and divide by n. At a tie, include the full tied group in the jump. Use the expectation and variance formulas for pointwise inference; use the inverse-CDF convention explicitly when finding quantiles.",
+ "revision": {
+  "sheet": [
+   "Fₙ(x)=1/n ΣI(Xᵢ≤x).",
+   "Fₙ is nondecreasing, right-continuous, zero below the sample minimum and one at/above the maximum.",
+   "Jump at x with multiplicity mₓ: mₓ/n.",
+   "E[Fₙ(x)]=F(x) for iid observations.",
+   "Var[Fₙ(x)]=F(x){1−F(x)}/n.",
+   "For x≤y, Cov(Fₙ(x),Fₙ(y))=[F(x)−F(x)F(y)]/n.",
+   "Empirical inverse-CDF quantile: Fₙ⁻¹(p)=X_(ceil(np)), 0<p≤1.",
+   "Glivenko–Cantelli: supₓ|Fₙ(x)−F(x)|→0 almost surely.",
+   "KS uses supₓ|Fₙ(x)−F₀(x)|.",
+   "For even n, inverse-CDF median may be lower central order statistic; some sample median conventions average the middle pair."
+  ],
+  "cards": [
+   [
+    "Definition",
+    "Fₙ(x)=count(Xᵢ≤x)/n"
+   ],
+   [
+    "Jump size",
+    "mₓ/n"
+   ],
+   [
+    "Expectation",
+    "F(x)"
+   ],
+   [
+    "Variance",
+    "F(x){1−F(x)}/n"
+   ],
+   [
+    "Quantile index",
+    "ceil(np)"
+   ],
+   [
+    "Glivenko–Cantelli",
+    "Uniform convergence almost surely"
+   ],
+   [
+    "KS link",
+    "sup|Fₙ−F₀|"
+   ],
+   [
+    "Even-n median",
+    "State the convention"
+   ]
+  ],
+  "tricks": [
+   "Use ≤x: equal observations count.",
+   "Check all jumps sum to one.",
+   "Variance is largest at F(x)=0.5 and equals 1/(4n)."
+  ],
+  "shortcuts": [
+   "Tie jump = multiplicity/n.",
+   "Pointwise variance = F(1−F)/n.",
+   "Empirical p-quantile index = ceil(np)."
+  ],
+  "remember": [
+   "EDF is a complete sample distribution summary.",
+   "Uniform convergence controls the largest gap over all x."
+  ]
+ },
+ "refs": [
+  {
+   "title": "Nonparametric Statistical Methods",
+   "where": "Empirical distribution and goodness-of-fit",
+   "site": "Hollander, Wolfe and Chicken",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Standard treatment of empirical distribution functions."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+   "where": "Empirical distribution and goodness-of-fit",
+   "site": "NIST",
+   "url": "https://www.itl.nist.gov/div898/handbook/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Applied reference for EDF and goodness-of-fit."
+  },
+  {
+   "title": "Penn State STAT 415",
+   "where": "Nonparametric methods",
+   "site": "Penn State",
+   "url": "https://online.stat.psu.edu/stat415/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Accessible supporting material for distribution functions."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints."
+ },
+ "provenance": "The empirical distribution function topic is included in the 2026 syllabus audit. The inspected June 2026 nonparametric Q33/Q42 variants do not contain a direct EDF-theorem stem; the lesson therefore teaches the syllabus definition, jump properties, unbiasedness, variance, inverse-CDF quantiles and Glivenko–Cantelli result. Constructed numeric examples are independently recomputed in the verification script.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Start with cumulative probability",
+   "objective": "Connect a CDF, a sample proportion and an indicator.",
+   "ask": {
+    "q": "What does F(x)=P(X≤x) measure?",
+    "nudge": "The probability accumulated up to and including x."
+   },
+   "body": [
+    "A cumulative distribution function records the probability that a random variable is at most a chosen threshold. It accumulates probability from left to right.",
+    "The empirical distribution function replaces the population probability with the fraction of sample observations at or below the threshold."
+   ],
+   "items": [
+    {
+     "ask": "What does the indicator I(Xᵢ≤x) equal?",
+     "recall": "One if Xᵢ≤x, and zero otherwise.",
+     "refresh": [
+      "An indicator records whether a condition is true. It equals one when the observation is at most x and zero otherwise.",
+      "Adding these indicators counts the sample observations that are at most x. Dividing by n converts the count to a proportion."
+     ]
+    },
+    {
+     "ask": "What is a sample proportion?",
+     "recall": "A count divided by the sample size.",
+     "refresh": [
+      "If 6 of 10 observations satisfy a condition, the sample proportion is 6/10=0.6.",
+      "An empirical CDF is a cumulative sample proportion: it counts all observations up to the current threshold, not only those equal to it."
+     ]
+    },
+    {
+     "ask": "What does nondecreasing mean?",
+     "recall": "The function can stay constant or increase, but cannot fall as x increases.",
+     "refresh": [
+      "As the threshold increases, every observation already counted remains counted. New observations may be added, but none are removed.",
+      "Therefore a CDF is nondecreasing. The same property holds for the empirical CDF."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "A staircase that records the sample",
+   "objective": "Understand why the empirical CDF is a step function.",
+   "ask": {
+    "q": "What happens at a distinct observed value?",
+    "nudge": "The empirical CDF jumps upward by 1/n."
+   },
+   "body": [
+    "Sort the observations. Before the smallest value the empirical CDF is zero. At each distinct observed value it jumps by the number of observations tied there divided by n.",
+    "Between observed values the function is flat. After the largest value it equals one. This staircase records the complete empirical distribution."
+   ],
+   "scenario": {
+    "teaser": "A sample of customer waiting times.",
+    "title": "Estimating the five-minute proportion",
+    "body": [
+     "A survey records the waiting times of 10 customers. The empirical distribution function at five minutes is the proportion of the observed waiting times that are no greater than five minutes. As the time threshold moves from left to right, this cumulative proportion can stay flat or jump upward; it never decreases. If three customers have exactly the same waiting time, the empirical CDF makes one jump of size 3/10 at that value. This step curve gives a complete summary of the observed distribution and is the basis of the one-sample KS statistic."
+    ],
+    "q": "If three of the 10 customers have exactly the same waiting time, how large is the jump at that value?",
+    "answer": "The jump is 3/10=0.3."
+   }
+  },
+  {
+   "kind": "explore",
+   "id": "s2",
+   "mins": 6,
+   "title": "Construct the empirical CDF",
+   "objective": "Translate observations into cumulative proportions.",
+   "ask": {
+    "q": "For sample values 2, 3, 3, 4, 6, what is Fₙ(3)?",
+    "nudge": "Three of the five observations are at most 3."
+   },
+   "body": [
+    "For observations 2, 3, 3, 4, 6, the empirical CDF at x=3 is 3/5=0.6. It includes both observations equal to 3 and the observation equal to 2.",
+    "The jump at x=3 is 2/5 because two observations are tied there. Just before x=3, Fₙ is 1/5; at x=3, it becomes 3/5."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 9,
+   "title": "Definition and sample properties",
+   "objective": "State the empirical CDF formula and its main properties.",
+   "ask": {
+    "q": "What is the jump size at a value observed m times?",
+    "nudge": "m/n."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Definition",
+     "body": "Fₙ(x)=1/n Σᵢ₌₁ⁿ I(Xᵢ≤x). It is the sample proportion of observations no greater than x."
+    },
+    {
+     "t": "def",
+     "h": "Shape",
+     "body": "Fₙ is nondecreasing, right-continuous, equals zero below the sample minimum and equals one at or above the sample maximum."
+    },
+    {
+     "t": "formula",
+     "h": "Jump size",
+     "body": "At a value x occurring mₓ times, Fₙ(x)−Fₙ(x⁻)=mₓ/n. With no ties, each jump is 1/n."
+    },
+    {
+     "t": "formula",
+     "h": "Pointwise moments",
+     "body": "For an iid sample, E[Fₙ(x)]=F(x) and Var[Fₙ(x)]=F(x){1−F(x)}/n."
+    },
+    {
+     "t": "step",
+     "h": "Uniform convergence",
+     "body": "The Glivenko–Cantelli theorem states supₓ|Fₙ(x)−F(x)|→0 almost surely as n→∞. The empirical CDF converges uniformly to the population CDF."
+    }
+   ],
+   "flow": {
+    "title": "Build the empirical CDF",
+    "alt": "Choose a threshold, count observations at or below it, divide by n, and repeat across thresholds to obtain a nondecreasing step function.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "Choose threshold x",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 1,
+      "label": "Count Xᵢ≤x",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 1,
+      "label": "Divide by n",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 1,
+      "label": "Plot cumulative proportion",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 4,
+      "c": 1,
+      "label": "Repeat across x",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     },
+     {
+      "from": "d",
+      "to": "e"
+     }
+    ],
+    "note": "At tied values the jump equals tie frequency divided by sample size."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 10,
+   "title": "Worked example: tied observations",
+   "objective": "Calculate the CDF value and jump at a tie.",
+   "ask": {
+    "q": "Why is Fₙ(3) equal to 3/5 rather than 2/5?",
+    "nudge": "It includes all observations less than or equal to 3."
+   },
+   "problem": "The sample is 2, 3, 3, 4, 6. Find Fₙ(3), Fₙ(3⁻) and the jump at 3.",
+   "steps": [
+    {
+     "say": "Count observations at most 3.",
+     "math": "2, 3, 3 → count=3",
+     "why": "The definition uses Xᵢ≤x, including values equal to x."
+    },
+    {
+     "say": "Divide by n=5.",
+     "math": "Fₙ(3)=3/5=0.6",
+     "why": "The empirical CDF is a cumulative proportion."
+    },
+    {
+     "say": "Count observations strictly below 3.",
+     "math": "Only 2 → Fₙ(3⁻)=1/5=0.2",
+     "why": "The left limit excludes values equal to 3."
+    },
+    {
+     "say": "Subtract to obtain the jump.",
+     "math": "0.6−0.2=0.4=2/5",
+     "why": "There are two observations tied at 3, so the jump is tie frequency divided by n."
+    }
+   ],
+   "after": "The value of the CDF at x includes observations equal to x; the left limit does not."
+  },
+  {
+   "kind": "recall",
+   "id": "s5",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the definition and shape.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "Formula for Fₙ(x)?",
+     "a": "(1/n)ΣI(Xᵢ≤x)."
+    },
+    {
+     "q": "Jump size for m ties in a sample of size n?",
+     "a": "m/n."
+    },
+    {
+     "q": "Can an empirical CDF decrease?",
+     "a": "No; it is nondecreasing."
+    },
+    {
+     "q": "What is Fₙ(x) above the sample maximum?",
+     "a": "One."
+    },
+    {
+     "q": "What does the Glivenko–Cantelli theorem state?",
+     "a": "Uniform convergence of Fₙ to F almost surely."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s6",
+   "mins": 8,
+   "title": "Complete the CDF calculation",
+   "objective": "Fill the cumulative count and jump.",
+   "problem": "A sample of size 8 has five observations at or below x, of which two equal x. Find Fₙ(x), Fₙ(x⁻) and the jump.",
+   "steps": [
+    {
+     "say": "Calculate the empirical CDF.",
+     "blank": {
+      "prompt": "Fₙ(x)=5/8=…",
+      "answer": "0.625",
+      "accept": [
+       "0.625"
+      ],
+      "hint": "Divide five by eight."
+     },
+     "why": "Five of eight observations are at most x."
+    },
+    {
+     "say": "Find the left limit.",
+     "blank": {
+      "prompt": "Fₙ(x⁻)=(5−2)/8=…",
+      "answer": "0.375",
+      "accept": [
+       "0.375"
+      ],
+      "hint": "Remove the two observations equal to x before dividing."
+     },
+     "why": "The left limit counts only observations strictly below x."
+    },
+    {
+     "say": "Find the jump.",
+     "blank": {
+      "prompt": "Fₙ(x)−Fₙ(x⁻)=2/8=…",
+      "answer": "0.25",
+      "accept": [
+       "0.250"
+      ],
+      "hint": "The jump equals the tie frequency divided by n."
+     },
+     "why": "Two observations are tied at x, so the jump is 2/8."
+    }
+   ],
+   "after": "Check that the jump is exactly the relative frequency of the tied observations.",
+   "ask": {
+    "q": "Which observations enter the numerator of Fₙ(x)?",
+    "nudge": "All observations less than or equal to x, including ties at x."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Sampling properties and quantiles",
+   "objective": "Use the empirical CDF to estimate probabilities and quantiles.",
+   "ask": {
+    "q": "If F(x)=0.4 and n=10, what is Var[Fₙ(x)]?",
+    "nudge": "Use F(x){1−F(x)}/n."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Unbiasedness",
+     "body": "For iid observations, E[Fₙ(x)]=F(x). At a fixed x, the empirical CDF is an unbiased estimator of the population CDF."
+    },
+    {
+     "t": "formula",
+     "h": "Variance",
+     "body": "Var[Fₙ(x)]=F(x){1−F(x)}/n. The variance decreases as n increases."
+    },
+    {
+     "t": "def",
+     "h": "Empirical quantile",
+     "body": "For 0<p≤1, define Fₙ⁻¹(p)=inf{x:Fₙ(x)≥p}. With ordered observations this is X_(ceil(np)) under the inverse-CDF convention."
+    },
+    {
+     "t": "step",
+     "h": "Median caution",
+     "body": "The inverse-CDF empirical median for even n selects the lower central order statistic. Some sample-median conventions average the two middle observations; state the convention used."
+    },
+    {
+     "t": "def",
+     "h": "Link to KS",
+     "body": "The one-sample KS statistic is supₓ|Fₙ(x)−F₀(x)|. The empirical CDF is therefore the central object in goodness-of-fit comparisons."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Guided calculation: pointwise variance",
+   "objective": "Calculate the sampling variance of Fₙ(x).",
+   "problem": "At a fixed x, the population CDF is F(x)=0.4 and the sample size is n=10. Find E[Fₙ(x)] and Var[Fₙ(x)].",
+   "hints": [
+    "Use unbiasedness for the expectation.",
+    "Substitute F(x) and n into F(1−F)/n.",
+    "Check that a proportion variance is nonnegative and no larger than 1/(4n)."
+   ],
+   "answer": "E[Fₙ(x)]=0.4 and Var[Fₙ(x)]=0.4×0.6/10=0.024.",
+   "check": "The maximum pointwise variance is 1/(4n)=0.025, so 0.024 is plausible.",
+   "solution": [
+    {
+     "say": "Use the expectation property.",
+     "math": "E[Fₙ(x)]=F(x)=0.4",
+     "why": "The empirical CDF is unbiased at each fixed x."
+    },
+    {
+     "say": "Substitute into the variance.",
+     "math": "Var[Fₙ(x)]=0.4(1−0.4)/10",
+     "why": "Use the Bernoulli-proportion variance divided by n."
+    },
+    {
+     "say": "Evaluate.",
+     "math": "0.4×0.6/10=0.24/10=0.024",
+     "why": "The variance is nonnegative and below the maximum 1/(4n)=0.025."
+    }
+   ],
+   "scenario": {
+    "teaser": "A sample estimates the proportion of households below a travel-time threshold.",
+    "title": "Estimating a population proportion",
+    "body": [
+     "A public-health analyst uses the empirical CDF to estimate the proportion of households whose travel time is at most 30 minutes. With a random sample, the empirical proportion is unbiased for the corresponding population probability, and its variance is F(x){1−F(x)}/n. Increasing the sample size reduces this pointwise variance. The empirical CDF also converges uniformly to the true CDF with probability one, a result known as the Glivenko–Cantelli theorem."
+    ],
+    "q": "Why does increasing n improve pointwise precision of the empirical CDF?",
+    "answer": "Its variance is F(x){1−F(x)}/n, which decreases as n increases."
+   },
+   "ask": {
+    "q": "Which formula gives the pointwise variance of Fₙ(x)?",
+    "nudge": "F(x){1−F(x)}/n."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 6,
+   "title": "Six statements to challenge",
+   "objective": "Check the empirical CDF properties.",
+   "intro": "Mark each claim true or false before revealing the reason.",
+   "items": [
+    {
+     "claim": "Fₙ(x) counts observations strictly less than x.",
+     "tf": false,
+     "why": "False. The definition uses Xᵢ≤x, so observations equal to x are included."
+    },
+    {
+     "claim": "Fₙ is nondecreasing.",
+     "tf": true,
+     "why": "True. Increasing x cannot remove observations already counted."
+    },
+    {
+     "claim": "A tie of size m creates a jump of m/n.",
+     "tf": true,
+     "why": "True. The cumulative count increases by m at that value."
+    },
+    {
+     "claim": "E[Fₙ(x)]=F(x) for an iid sample.",
+     "tf": true,
+     "why": "True. It is the average of n Bernoulli indicators with success probability F(x)."
+    },
+    {
+     "claim": "Var[Fₙ(x)] increases as n increases.",
+     "tf": false,
+     "why": "False. The variance is F(x){1−F(x)}/n, which decreases with sample size."
+    },
+    {
+     "claim": "Glivenko–Cantelli gives uniform convergence almost surely.",
+     "tf": true,
+     "why": "True. The supremum distance between empirical and population CDFs tends to zero almost surely."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 8,
+   "title": "Guided calculation: empirical quantile",
+   "objective": "Find an order statistic from the inverse-CDF definition.",
+   "problem": "A sample has n=12 ordered observations. Find the empirical 0.75-quantile using Fₙ⁻¹(p)=X_(ceil(np)).",
+   "hints": [
+    "Multiply p by n.",
+    "Take the ceiling of the result.",
+    "Select that order statistic from the sorted sample."
+   ],
+   "answer": "ceil(0.75×12)=ceil(9)=9, so the empirical quantile is X_(9).",
+   "check": "The empirical CDF reaches at least 0.75 at the ninth ordered observation.",
+   "solution": [
+    {
+     "say": "Calculate np.",
+     "math": "np=0.75×12=9",
+     "why": "The inverse-CDF convention uses the ceiling of np."
+    },
+    {
+     "say": "Take the ceiling.",
+     "math": "ceil(9)=9",
+     "why": "The index is an integer order-statistic position."
+    },
+    {
+     "say": "Identify the quantile.",
+     "math": "Fₙ⁻¹(0.75)=X_(9)",
+     "why": "The ninth ordered observation is the first at which the empirical CDF reaches 0.75."
+    }
+   ],
+   "ask": {
+    "q": "How do you find the inverse-CDF empirical p-quantile index?",
+    "nudge": "Take ceil(np)."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s11",
+   "mins": 6,
+   "title": "Assumptions and interpretation",
+   "objective": "Know what the empirical CDF can and cannot claim.",
+   "ask": {
+    "q": "Does uniform convergence mean Fₙ(x)=F(x) for every finite sample?",
+    "nudge": "No; it means the maximum gap tends to zero as n grows."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Sampling framework",
+     "body": "The standard unbiasedness, variance and Glivenko–Cantelli statements are presented for an iid sample from a population distribution F."
+    },
+    {
+     "t": "step",
+     "h": "Pointwise vs uniform",
+     "body": "Pointwise convergence concerns one fixed x. Uniform convergence controls the largest absolute gap over all x simultaneously."
+    },
+    {
+     "t": "def",
+     "h": "Interpretation",
+     "body": "Fₙ is a complete nonparametric summary of the observed univariate sample. It does not by itself establish causality or explain why the population distribution has its shape."
+    }
+   ]
+  },
+  {
+   "kind": "recall",
+   "id": "s12",
+   "mins": 3,
+   "title": "Second recall",
+   "objective": "Retrieve the key properties and formulas.",
+   "intro": "Answer, then reveal.",
+   "items": [
+    {
+     "q": "E[Fₙ(x)]?",
+     "a": "F(x)."
+    },
+    {
+     "q": "Var[Fₙ(x)]?",
+     "a": "F(x){1−F(x)}/n."
+    },
+    {
+     "q": "Jump at a tie of size m?",
+     "a": "m/n."
+    },
+    {
+     "q": "Empirical p-quantile index?",
+     "a": "ceil(np), under the inverse-CDF convention."
+    },
+    {
+     "q": "Glivenko–Cantelli convergence?",
+     "a": "supₓ|Fₙ(x)−F(x)|→0 almost surely."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "What you should now be able to do",
+   "objective": "Construct, analyse and interpret the empirical CDF.",
+   "body": [
+    "Calculate Fₙ(x) as the fraction of observations at most x, including ties at x.",
+    "Describe its step shape, right-continuity, monotonicity and jump sizes.",
+    "Use unbiasedness and the pointwise variance formula for probability estimation.",
+    "Find empirical quantiles using the inverse-CDF order-statistic convention.",
+    "State Glivenko–Cantelli uniform convergence and connect the EDF to KS goodness-of-fit."
+   ],
+   "ask": {
+    "q": "What does Glivenko–Cantelli add beyond pointwise convergence?",
+    "nudge": "Uniform control of the maximum gap over all x."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 4,
+   "title": "Mastery test",
+   "objective": "Demonstrate the empirical CDF skills independently.",
+   "setId": "nonparam_t7_mastery"
+  }
+ ]
+}
