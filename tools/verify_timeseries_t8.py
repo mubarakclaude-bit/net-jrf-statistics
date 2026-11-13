@@ -28,6 +28,8 @@ def main():
     norm=[x/mean for x in vals]
     for x,e in zip(norm,[0.9154228855721393,1.044776119402985,1.0945273631840795,0.945273631840796]): close(x,e)
     close(sum(norm)/4,1); n+=6
-    close(1-0.3,0.7); n+=1
+    theta=1-0.3
+    close(theta,0.7)
+    close(0.3*(1-0.7),0.09); n+=2
     finish(8,8,n)
 if __name__ == "__main__": main()
