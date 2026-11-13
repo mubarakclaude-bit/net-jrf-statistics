@@ -14,7 +14,7 @@ def main():
         nchecks+=2
     close(exact_var_mean_ar1(0.8,1,200),0.12222222222222222,1e-8); nchecks+=1
     close(25/200,0.125); nchecks+=1
-    close(exact_var_mean_ar1(0.5,1,200),0.01986754966887417,1e-8); nchecks+=1
+    close(exact_var_mean_ar1(0.5,1,200),0.019866666666666664,1e-8); nchecks+=1
     close(exact_var_mean_ar1(0.9,1,50),1.623006,1e-5); nchecks+=1
     # Fixed random effect: y_t=Z+e_t, Var(Z)=tau².
     for tau2 in [1,4,9,0.25]:
