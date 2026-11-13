@@ -4,8 +4,8 @@
 
 - Repository baseline: `main` at the start of this task; dedicated branch: `audit/math-integrity-2026-11-14`.
 - Inventory: 129 files matching `seed/lesson_*.json` were counted from the live `seed/` directory.
-- Lessons opened and screened in this work segment: 65 of 129 (`lesson_pr1.json` through `lesson_pr13.json`; `lesson_t1.json`–`lesson_t3.json` and `lesson_t5.json`–`lesson_t17.json`; `lesson_rg1.json`–`lesson_rg15.json`; `lesson_stochastic_t1.json`–`lesson_stochastic_t9.json`; `lesson_ts1.json`–`lesson_ts11.json`; plus `lesson_design_t1.json`).
-- The Probability module's 13 lesson files, 16 Statistical Inference lesson files, 15 Regression lesson files 9 Stochastic Processes lesson files and 11 Time Series lesson files have received a first-pass review of numerical worked/guided examples; additional cross-scene/formula review remains before marking any module fully verified.
+- Lessons opened and screened in this work segment: 100 of 129 (`lesson_pr1.json` through `lesson_pr13.json`; `lesson_t1.json`–`lesson_t3.json` and `lesson_t5.json`–`lesson_t17.json`; `lesson_rg1.json`–`lesson_rg15.json`; `lesson_stochastic_t1.json`–`lesson_stochastic_t9.json`; `lesson_ts1.json`–`lesson_ts11.json`; `lesson_ma1.json`–`lesson_ma16.json` plus `lesson_mle.json`; `lesson_multivariate_t1.json`–`lesson_multivariate_t9.json`; `lesson_sampling_t1.json`–`lesson_sampling_t9.json`; plus `lesson_design_t1.json`).
+- The Probability module's 13 lesson files, 16 Statistical Inference lesson files, 15 Regression lesson files 9 Stochastic Processes lesson files 11 Time Series lesson files, 16 Mathematics lessons plus the MLE lesson, 9 Multivariate Analysis lessons and 9 Sampling Theory lessons have received a first-pass review of numerical worked/guided examples; additional cross-scene/formula review remains before marking any module fully verified.
 - This is an in-progress audit. No claim is made that all 129 lessons have been mathematically verified.
 - No application code, shared manifest, deployment, Claude-owned file, or unrelated lesson was changed.
 
@@ -60,7 +60,7 @@
 
 The following 13 lesson files were opened and screened: `lesson_pr1.json` through `lesson_pr13.json`. A confirmed finite-sample order-statistic expectation error is recorded as MA-003. The remaining numerical examples inspected in this first pass did not yield another confirmed arithmetic contradiction, but this is not a final certification of every formula, table or assumption in the module.
 
-### MA-007 — MA(1) inversion gives incorrect coefficient roots
+### MA-008 — Power-series endpoint conclusion contradicts the interval of convergence\n\n- File: `seed/lesson_ma4.json`\n- Scene: `s4`\n- Severity: **Major** — the lesson correctly proves both endpoints converge but also labels the open interior as the interval/option answer.\n- Evidence: At `x=4` and `x=6`, the endpoint series is `Σ 1/((n+1)(n+2)) = Σ[1/(n+1)−1/(n+2)]`, which telescopes to 1. Both endpoints are included, so the full convergence set is `[4,6]`, not `(4,6)`.\n- Before: one step called `(4,6)` the answer/option while the final step correctly said `[4,6]`.\n- After: the lesson now distinguishes the open interior from the full interval and gives `[4,6]` as the answer to the stated question.\n\n### MA-007 — MA(1) inversion gives incorrect coefficient roots
 
 - File: `seed/lesson_ts2.json`
 - Scene: `s10`
@@ -95,7 +95,7 @@ The following 16 lesson files were opened and screened: `lesson_t1.json`–`less
 - Before: the answer repeated the two-state period-2 conclusion, and the hints discussed return-time gcds instead of class entry/returnability.
 - After: the answer and hints now address the transient outside state and the two distinct closed recurrent classes.
 
-## Time Series first-pass review
+## Mathematics, Multivariate Analysis and Sampling first-pass review\n\nThe 16 Mathematics lessons (`lesson_ma1.json`–`lesson_ma16.json`) and `lesson_mle.json`, all 9 Multivariate Analysis lessons, and all 9 Sampling Theory lessons were opened and screened for numerical worked/guided examples. MA-008 is the confirmed endpoint/interval contradiction in the inspected Mathematics examples. The numerical examples inspected in the other lessons did not yield another confirmed arithmetic contradiction in this first pass. These modules are not yet certified in full.\n\n## Time Series first-pass review
 
 The 11 lesson files `lesson_ts1.json` through `lesson_ts11.json` were opened and screened. MA-007 is the confirmed numerical coefficient inversion error in the inspected worked examples. The other numerical examples inspected in this first pass did not yield another confirmed arithmetic contradiction. This is not a final certification of every time-series formula, model convention, asymptotic approximation or forecasting assumption.
 
@@ -105,7 +105,7 @@ The following 15 lesson files were opened and screened: `lesson_rg1.json` throug
 
 ## Independent verification
 
-Five dedicated standard-library verifiers were added. `tools/verify_math_integrity_design_t1.py` reconstructs both ANOVA calculations using exact rational arithmetic and checks the learner-facing JSON values, including the displayed RBD table. `tools/verify_math_integrity_probability_pr1.py` independently evaluates the harmonic-number expression for the exponential sample median and checks that the lesson distinguishes it from the population median. `tools/verify_math_integrity_inference_t9.py` checks the expanded normal likelihood-ratio identity and the corrected learner-facing expression. `tools/verify_math_integrity_stochastic_t4.py` checks that the T4 answer text matches the alternating-chain and multiple-closed-class scenarios. `tools/verify_math_integrity_timeseries_ts2.py` recomputes both MA(1) roots and checks the corrected learner-facing values.
+Six dedicated standard-library verifiers were added. `tools/verify_math_integrity_design_t1.py` reconstructs both ANOVA calculations using exact rational arithmetic and checks the learner-facing JSON values, including the displayed RBD table. `tools/verify_math_integrity_probability_pr1.py` independently evaluates the harmonic-number expression for the exponential sample median and checks that the lesson distinguishes it from the population median. `tools/verify_math_integrity_inference_t9.py` checks the expanded normal likelihood-ratio identity and the corrected learner-facing expression. `tools/verify_math_integrity_stochastic_t4.py` checks that the T4 answer text matches the alternating-chain and multiple-closed-class scenarios. `tools/verify_math_integrity_timeseries_ts2.py` recomputes both MA(1) roots and checks the corrected learner-facing values. `tools/verify_math_integrity_math_ma4.py` verifies the telescoping endpoint series and checks the full closed interval.
 
 Expected verifier output:
 - PASS: design_t1 s4 CRD arithmetic and learner-facing conclusion
@@ -114,16 +114,16 @@ Expected verifier output:
 - PASS: exponential population median = 4.852030; expected sample median for n=9 = 5.219444 (exactly 1879/360)
 - PASS: normal likelihood-ratio identity `10Σxᵢ − 525n`
 - PASS: T4 alternating chain is closed, recurrent and period 2; outside state is transient with two distinct recurrent classes
-- PASS: MA(1) roots for ρ₁=−0.49 are 0.8173495 and 1.2234668; invertible root is 0.8173495
+- PASS: MA(1) roots for ρ₁=−0.49 are 0.8173495 and 1.2234668; invertible root is 0.8173495\n- PASS: endpoint series telescopes to 1; convergence interval is [4,6]
 
 Execution status: neither verifier has yet been run from a full local repository checkout in this environment. The numerical calculations were independently recomputed in Python. The PR currently has no associated GitHub Actions workflow runs, so repository CI/validators remain unverified; do not interpret the expected PASS lines above as executed test results.
 
 ## Scope and limitations
 
-The 129-file inventory is confirmed. `lesson_design_t1.json` has had two worked examples recalculated and corrected; `lesson_pr1.json` has one finite-sample order-statistic error corrected; and `lesson_t9.json` has one incomplete algebra expression corrected. The 13 Probability, 16 Statistical Inference, 15 Regression, 9 Stochastic Processes and 11 Time Series lessons have received first-pass screening, but none of these modules is certified in full. `lesson_stochastic_t4.json` has two confirmed answer/hint mismatches corrected. All other lessons remain **not yet verified**. The remaining audit must extract numerical examples and check the displayed source data, intermediate arithmetic, formulas, assumptions, df, units, rounding and learner-facing conclusions. Existing lesson verifiers are not treated as sufficient evidence by themselves.
+The 129-file inventory is confirmed. `lesson_design_t1.json` has had two worked examples recalculated and corrected; `lesson_pr1.json` has one finite-sample order-statistic error corrected; and `lesson_t9.json` has one incomplete algebra expression corrected. The 13 Probability, 16 Statistical Inference, 15 Regression, 9 Stochastic Processes, 11 Time Series, 16 Mathematics plus MLE, 9 Multivariate Analysis and 9 Sampling Theory lessons have received first-pass screening, but none of these modules is certified in full. `lesson_stochastic_t4.json` has two confirmed answer/hint mismatches corrected; `lesson_ma4.json` has its interval-of-convergence conclusion reconciled. All other lessons remain **not yet verified**. The remaining audit must extract numerical examples and check the displayed source data, intermediate arithmetic, formulas, assumptions, df, units, rounding and learner-facing conclusions. Existing lesson verifiers are not treated as sufficient evidence by themselves.
 
 ## Change record
 
-- Lesson files changed: `seed/lesson_design_t1.json`, `seed/lesson_pr1.json`, `seed/lesson_t9.json`, `seed/lesson_stochastic_t4.json`, `seed/lesson_ts2.json`
-- New dedicated verifiers: `tools/verify_math_integrity_design_t1.py`, `tools/verify_math_integrity_probability_pr1.py`, `tools/verify_math_integrity_inference_t9.py`, `tools/verify_math_integrity_stochastic_t4.py`, `tools/verify_math_integrity_timeseries_ts2.py`
+- Lesson files changed: `seed/lesson_design_t1.json`, `seed/lesson_pr1.json`, `seed/lesson_t9.json`, `seed/lesson_stochastic_t4.json`, `seed/lesson_ts2.json`, `seed/lesson_ma4.json`
+- New dedicated verifiers: `tools/verify_math_integrity_design_t1.py`, `tools/verify_math_integrity_probability_pr1.py`, `tools/verify_math_integrity_inference_t9.py`, `tools/verify_math_integrity_stochastic_t4.py`, `tools/verify_math_integrity_timeseries_ts2.py`, `tools/verify_math_integrity_math_ma4.py`
 - No shared manifest, app code, deployment, or merge.
