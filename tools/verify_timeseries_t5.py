@@ -14,7 +14,7 @@ def main():
         coeff=poly_mul([1,-1],[1,rest])
         close(coeff[1],-a); close(coeff[2],-b); n+=2
         # Δy is AR(1) with coefficient -rest.
-        close(-rest, -rest); n+=1
+        close(-rest, -0.4 if rest == 0.4 else 0.2); n+=1
     # Differencing white noise creates MA(1): variance 2σ² and rho1=-1/2.
     sig2=3.7
     close(2*sig2, sig2+sig2)
