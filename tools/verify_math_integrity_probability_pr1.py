@@ -18,7 +18,7 @@ def main():
     n, r, theta = 9, 5, 7
     population_median = theta * __import__("math").log(2)
     expected_sample_median = theta * (harmonic(n) - harmonic(n-r))
-    assert expected_sample_median == Fraction(328823, 63000)
+    assert expected_sample_median == Fraction(1879, 360)
     assert "5.219" in scene["answer"]
     assert "4.852" in scene["answer"]
     assert "5.219444" in scene["check"]
