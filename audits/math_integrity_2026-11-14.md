@@ -4,7 +4,7 @@
 
 - Repository baseline: `main` at the start of this task; dedicated branch: `audit/math-integrity-2026-11-14`.
 - Inventory: 129 files matching `seed/lesson_*.json` were counted from the live `seed/` directory.
-- Mathematical audit completed in this work segment: 1 of 129 lessons (`lesson_design_t1.json`).
+- Mathematical audit completed in this work segment: 2 of 129 lessons (`lesson_design_t1.json`, `lesson_pr1.json`).
 - This is an in-progress audit. No claim is made that all 129 lessons have been mathematically verified.
 - No application code, shared manifest, deployment, Claude-owned file, or unrelated lesson was changed.
 
@@ -37,9 +37,18 @@
 - Before: displayed Block 1 as (8,10,9,13) and treatment totals as (24,30,27,39), while the calculation steps used the problem-statement observations and their totals. The conclusion incorrectly said **F=20.4**, while the check already said F=58.
 - After: displayed Block 1 and treatment totals now match the stated observations; the conclusion and check consistently report F=58 and the exact SS/df/MS reconciliation.
 
+### MA-003 — Exponential sample median: population median confused with expected sample median
+
+- File: `seed/lesson_pr1.json`
+- Scene: `s8`
+- Severity: **Major** — the yes/no conclusion was directionally correct, but the numerical explanation answered a different quantity.
+- Evidence: The prompt asks whether the sample median of 9 exponential observations with mean 7 has expectation 7. The lesson correctly computes the *population median* as `7 ln 2 ≈ 4.852`, but then labels that as the sample median's estimate/expectation. For an exponential sample, `E(X_(r)) = θ(H_n − H_(n−r))`. Here the sample median is `X_(5)`, so `E(X_(5)) = 7(H_9 − H_4) = 5.219444`. Thus the sample median is not unbiased for the population median in this finite sample; its expectation is 5.2194, not 4.852 and not 7.
+- Before: the answer/check/solution implied the sample median of nine had value/expectation about 4.85.
+- After: the lesson explicitly distinguishes the population median (4.852) from the expected sample median (5.2194), and gives the order-statistic expectation formula.
+
 ## Independent verification
 
-A dedicated standard-library verifier was added at `tools/verify_math_integrity_design_t1.py`. It independently reconstructs both ANOVA calculations using exact rational arithmetic and checks the learner-facing JSON values, including the displayed RBD table.
+Two dedicated standard-library verifiers were added. `tools/verify_math_integrity_design_t1.py` reconstructs both ANOVA calculations using exact rational arithmetic and checks the learner-facing JSON values, including the displayed RBD table. `tools/verify_math_integrity_probability_pr1.py` independently evaluates the harmonic-number expression for the exponential sample median and checks that the lesson distinguishes it from the population median.
 
 Expected verifier output:
 - PASS: design_t1 s4 CRD arithmetic and learner-facing conclusion
