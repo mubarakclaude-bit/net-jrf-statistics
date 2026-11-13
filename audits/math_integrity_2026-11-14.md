@@ -60,7 +60,16 @@
 
 The following 13 lesson files were opened and screened: `lesson_pr1.json` through `lesson_pr13.json`. A confirmed finite-sample order-statistic expectation error is recorded as MA-003. The remaining numerical examples inspected in this first pass did not yield another confirmed arithmetic contradiction, but this is not a final certification of every formula, table or assumption in the module.
 
-### MA-007 — MA(1) inversion gives incorrect coefficient roots\n\n- File: `seed/lesson_ts2.json`\n- Scene: `s10`\n- Severity: **Major** — the numerical roots used to recover the MA coefficient from the lag-one autocorrelation are incorrect.\n- Evidence: With `ρ₁ = −0.49`, solve `0.49θ² − θ + 0.49 = 0`. The discriminant is `1 − 4(0.49)² = 0.0396`; the roots are `θ ≈ 0.8173495` and `θ ≈ 1.2234668`. Both reproduce `|ρ₁|=0.49`; invertibility selects the root with absolute value below one, `θ ≈ 0.81735`.\n- Before: roots were reported as approximately `0.8571` and `1.1667`, and the invertible coefficient as `0.86`. Substitution gives an autocorrelation near −0.494, not −0.49.\n- After: corrected both roots and the invertible coefficient in the worked explanation.\n\n## Stochastic Processes first-pass review
+### MA-007 — MA(1) inversion gives incorrect coefficient roots
+
+- File: `seed/lesson_ts2.json`
+- Scene: `s10`
+- Severity: **Major** — the numerical roots used to recover the MA coefficient from the lag-one autocorrelation are incorrect.
+- Evidence: With `ρ₁ = −0.49`, solve `0.49θ² − θ + 0.49 = 0`. The discriminant is `1 − 4(0.49)² = 0.0396`; the roots are `θ ≈ 0.8173495` and `θ ≈ 1.2234668`. Both reproduce `|ρ₁|=0.49`; invertibility selects the root with absolute value below one, `θ ≈ 0.81735`.
+- Before: roots were reported as approximately `0.8571` and `1.1667`, and the invertible coefficient as `0.86`. Substitution gives an autocorrelation near −0.494, not −0.49.
+- After: corrected both roots and the invertible coefficient in the worked explanation.
+
+## Stochastic Processes first-pass review
 
 The nine lesson files `lesson_stochastic_t1.json` through `lesson_stochastic_t9.json` were opened and screened. Two critical answer/hint mismatches were confirmed in T4 scenes s4 and s5 and corrected. The numerical examples inspected in the other eight files did not yield another confirmed arithmetic contradiction in this first pass. This is not a final certification of every stochastic-process formula, transition matrix, assumption or boundary case.
 
@@ -86,7 +95,11 @@ The following 16 lesson files were opened and screened: `lesson_t1.json`–`less
 - Before: the answer repeated the two-state period-2 conclusion, and the hints discussed return-time gcds instead of class entry/returnability.
 - After: the answer and hints now address the transient outside state and the two distinct closed recurrent classes.
 
-## Time Series first-pass review\n\nThe 11 lesson files `lesson_ts1.json` through `lesson_ts11.json` were opened and screened. MA-007 is the confirmed numerical coefficient inversion error in the inspected worked examples. The other numerical examples inspected in this first pass did not yield another confirmed arithmetic contradiction. This is not a final certification of every time-series formula, model convention, asymptotic approximation or forecasting assumption.\n\n## Regression first-pass review
+## Time Series first-pass review
+
+The 11 lesson files `lesson_ts1.json` through `lesson_ts11.json` were opened and screened. MA-007 is the confirmed numerical coefficient inversion error in the inspected worked examples. The other numerical examples inspected in this first pass did not yield another confirmed arithmetic contradiction. This is not a final certification of every time-series formula, model convention, asymptotic approximation or forecasting assumption.
+
+## Regression first-pass review
 
 The following 15 lesson files were opened and screened: `lesson_rg1.json` through `lesson_rg15.json`. The numerical examples inspected in this first pass did not produce another confirmed arithmetic contradiction. This is not a final certification of all formulas, assumptions, covariance expressions or inferential interpretations in the Regression module.
 
@@ -100,7 +113,8 @@ Expected verifier output:
 - PASS: exact rational checks; F(s4)=52/5=10.4; F(s8)=58
 - PASS: exponential population median = 4.852030; expected sample median for n=9 = 5.219444 (exactly 1879/360)
 - PASS: normal likelihood-ratio identity `10Σxᵢ − 525n`
-- PASS: T4 alternating chain is closed, recurrent and period 2; outside state is transient with two distinct recurrent classes\n- PASS: MA(1) roots for ρ₁=−0.49 are 0.8173495 and 1.2234668; invertible root is 0.8173495
+- PASS: T4 alternating chain is closed, recurrent and period 2; outside state is transient with two distinct recurrent classes
+- PASS: MA(1) roots for ρ₁=−0.49 are 0.8173495 and 1.2234668; invertible root is 0.8173495
 
 Execution status: neither verifier has yet been run from a full local repository checkout in this environment. The numerical calculations were independently recomputed in Python. The PR currently has no associated GitHub Actions workflow runs, so repository CI/validators remain unverified; do not interpret the expected PASS lines above as executed test results.
 
