@@ -203,7 +203,7 @@ Independent calculations were recomputed during review, including the two ANOVA 
 
 **Validation run:** GitHub Actions run `43496184130` executed against this draft PR. The repository `check.sh` contracts/seed validation passed (36 checks, 0 failed); the content check passed (129 lessons, 167 topics); subsequent repository checks reported 13/13, 12/12, 19/19 and 6/6 checks passing. The changed-lesson `vcheck.js` step passed 9 of 10 changed lesson files and failed only `seed/lesson_t9.json` because it has fewer than three references. The base `main` version also has exactly two references, so this is a pre-existing house-standard issue, not introduced by the algebra correction. Because this step failed, the workflow skipped ID-stability, formula-render/self-cited-answer and dedicated-verifier execution.
 
-The browser job's build and `test.js` passed; `clicktest.js` was still running at the time of this report, with hosted-adapter and feature tests pending. The independent acceptance job passed all six scenarios.
+The browser job's build and `test.js` passed, but `clicktest.js` was cancelled after the validation job failed; hosted-adapter and feature tests were skipped. The independent acceptance job passed all six scenarios.
 
 The dedicated verifier scripts have not yet been executed; the expected PASS messages in those files are not test results.
 
