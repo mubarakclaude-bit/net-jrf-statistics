@@ -369,7 +369,7 @@ class Topic16ContingencyTests(unittest.TestCase):
         pearson = 2 * (25 / 17 + 25 / 13)
         yates = 2 * (20.25 / 17 + 20.25 / 13)
         self.assertTrue(close(pearson, 6.7873303167, tol=1e-8))
-        self.assertTrue(close(yates, 5.4988687783, tol=1e-8))
+        self.assertTrue(close(yates, 5.4977375566, tol=1e-8))
         self.assertLess(yates, pearson)
 
 
