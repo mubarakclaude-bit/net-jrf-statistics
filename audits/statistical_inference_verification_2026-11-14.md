@@ -90,7 +90,7 @@ The wording now explains the threshold correctly and identifies 3+ as a broader 
 
 ## Verification implementation
 
-Added `tools/verify_inference_math.py`, a consolidated standard-library verifier with topic-specific unittest groups. It contains independent regression calculations for T1–T8 and T10–T17, including:
+Added `verify_inference_math.py`, a consolidated standard-library verifier with topic-specific unittest groups. It contains independent regression calculations for T1–T8 and T10–T17, including:
 
 - Bernoulli conditional likelihood and normal sufficient-statistic variance reconstruction.
 - Poisson/Bernoulli completeness and UMVUE calculations.
@@ -115,7 +115,7 @@ It also checks:
 ### Test execution status
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
-- The verifier file has been added but **has not yet been executed from a full repository checkout**.
+- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. The first CI run is pending at report authoring time.
 - GitHub Actions/PR checks are therefore still pending at report authoring time.
 - No test result is claimed merely because the verifier file exists.
 
@@ -130,7 +130,7 @@ Modified:
 - `seed/inference_t14_mastery.json`
 
 Added:
-- `tools/verify_inference_math.py`
+- `verify_inference_math.py`
 - `audits/statistical_inference_verification_2026-11-14.md`
 
 No other lesson or module files were changed.
@@ -140,5 +140,5 @@ No other lesson or module files were changed.
 1. **T4 content gap:** The catalog and 20-item mastery pool exist, but the lesson JSON is absent from current main. This task does not author a replacement lesson or change catalog/application architecture.
 2. **T9 dependency:** T9 is reserved for PR #93. A follow-up should compare that PR's T9 verifier and lesson changes against this audit's scope before integrating.
 3. **Mastery key depth:** All available non-T9 pools were checked for item count, IDs, answer labels and multi-statement verdict/key consistency. Numerical/single-choice examples were independently recalculated on a representative basis; an exhaustive manual proof of every single-choice/numeric key remains outstanding and must not be inferred from these structural checks.
-4. **Verifier execution:** Run `python tools/verify_inference_math.py` from a full checkout and resolve any failures before treating the audit as complete.
+4. **Verifier execution:** Run `python verify_inference_math.py` from a full checkout and resolve any failures before treating the audit as complete.
 5. No branch merge, production deployment, Vercel push or workflow/configuration change was made.
