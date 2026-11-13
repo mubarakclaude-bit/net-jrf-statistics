@@ -14,7 +14,8 @@ def load_topic(topic, lesson_no):
     pool = json.loads((SEED / f"timeseries_t{lesson_no}_mastery.json").read_text(encoding="utf-8"))
     assert lesson["topicId"] == f"timeseries-t{topic}"
     quiz = next(s for s in lesson["scenes"] if s["kind"] == "quiz")
-    assert quiz["setId"] == pool["id"] or quiz["setId"] == f"timeseries_t{lesson_no}_mastery"
+    assert pool["topicId"] == f"timeseries-t{topic}"
+    assert quiz["setId"] == f"timeseries_t{lesson_no}_mastery"
     return lesson, pool
 
 def check_pool(pool):
