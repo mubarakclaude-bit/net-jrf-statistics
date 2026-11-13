@@ -424,8 +424,13 @@
           "why": "The correction factor converts uncorrected sums of squares into deviations around the grand mean."
         },
         {
-          "say": "Calculate total and treatment sums of squares.",
-          "math": "SS_Total=850−800.3333=49.6667.\\nSS_Treatment=(30²+42²+26²)/4−800.3333=34.6667.",
+          "say": "Calculate the total sum of squares.",
+          "math": "SS_Total=850−800.3333=49.6667.",
+          "why": "Treatment SS is the between-group variation. It uses each treatment total squared and divided by its replication count."
+        },
+        {
+          "say": "Calculate the treatment sum of squares.",
+          "math": "SS_Treatment=(30²+42²+26²)/4−800.3333=34.6667.",
           "why": "Treatment SS is the between-group variation. It uses each treatment total squared and divided by its replication count."
         },
         {
@@ -621,23 +626,73 @@
           "why": "Each block has all four treatments, so this is a complete RBD with one observation per cell."
         },
         {
-          "say": "Calculate total SS from the twelve squared responses.",
-          "math": "Σy²=9²+9²+9²+13²+9²+11²+10²+14²+7²+9²+8²+12²=1248.\\nSS_Total=1248−1200=48.",
+          "say": "Sum the squared observations.",
+          "math": "Σy²=9²+9²+9²+13²+9²+11²+10²+14²+7²+9²+8²+12²=1248.",
           "why": "This measures every response's squared deviation from the grand mean."
         },
         {
-          "say": "Calculate treatment and block SS separately.",
-          "math": "T=(25,29,27,39); SS_T=(25²+29²+27²+39²)/3−1200=116/3.\\nB=(40,44,36); SS_B=(40²+44²+36²)/4−1200=8.",
+          "say": "Calculate the total sum of squares.",
+          "math": "SS_Total=1248−1200=48.",
+          "why": "This measures every response's squared deviation from the grand mean."
+        },
+        {
+          "say": "Record the treatment totals.",
+          "math": "T=(25,29,27,39)",
           "why": "Treatment totals are divided by the number of blocks, three; block totals are divided by the number of treatments, four."
         },
         {
-          "say": "Find error SS and check the decomposition.",
-          "math": "SS_E=48−116/3−8=4/3.\\nCheck: 116/3+8+4/3=48.",
+          "say": "Calculate the treatment sum of squares.",
+          "math": "SS_T=(25²+29²+27²+39²)/3−1200=116/3.",
+          "why": "Treatment totals are divided by the number of blocks, three; block totals are divided by the number of treatments, four."
+        },
+        {
+          "say": "Record the block totals.",
+          "math": "B=(40,44,36)",
+          "why": "Treatment totals are divided by the number of blocks, three; block totals are divided by the number of treatments, four."
+        },
+        {
+          "say": "Calculate the block sum of squares.",
+          "math": "SS_B=(40²+44²+36²)/4−1200=8.",
+          "why": "Treatment totals are divided by the number of blocks, three; block totals are divided by the number of treatments, four."
+        },
+        {
+          "say": "Calculate the error sum of squares.",
+          "math": "SS_E=48−116/3−8=4/3.",
           "why": "Once treatment and block effects are removed, the remaining sum of squares is the residual error."
         },
         {
-          "say": "Calculate degrees of freedom and mean squares.",
-          "math": "df_T=3; df_B=2; df_E=6; df_Total=11.\\nMS_T=(116/3)/3=116/9; MS_E=(4/3)/6=2/9.",
+          "say": "Check that the components add back to the total.",
+          "math": "116/3+8+4/3=48.",
+          "why": "Once treatment and block effects are removed, the remaining sum of squares is the residual error."
+        },
+        {
+          "say": "Calculate the degrees of freedom.",
+          "math": "df_T=3",
+          "why": "The df add 3+2+6=11. That verifies the allocation."
+        },
+        {
+          "say": "Calculate the degrees of freedom.",
+          "math": "df_B=2",
+          "why": "The df add 3+2+6=11. That verifies the allocation."
+        },
+        {
+          "say": "Calculate the degrees of freedom.",
+          "math": "df_E=6",
+          "why": "The df add 3+2+6=11. That verifies the allocation."
+        },
+        {
+          "say": "Calculate the degrees of freedom.",
+          "math": "df_Total=11.",
+          "why": "The df add 3+2+6=11. That verifies the allocation."
+        },
+        {
+          "say": "Calculate the mean squares.",
+          "math": "MS_T=(116/3)/3=116/9",
+          "why": "The df add 3+2+6=11. That verifies the allocation."
+        },
+        {
+          "say": "Calculate the mean squares.",
+          "math": "MS_E=(4/3)/6=2/9.",
           "why": "The df add 3+2+6=11. That verifies the allocation."
         },
         {
