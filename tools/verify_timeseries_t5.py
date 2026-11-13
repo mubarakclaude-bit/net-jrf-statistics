@@ -20,9 +20,9 @@ def main():
     close(2*sig2, sig2+sig2)
     close(-sig2/(2*sig2),-0.5); n+=2
     # Dickey-Fuller reparameterisation: delta=phi-1; unit root iff delta=0.
-    for phi in [1.0,0.99,0.8,0.2]:
+    for phi,expected_delta in [(1.0,0.0),(0.99,-0.01),(0.8,-0.2),(0.2,-0.8)]:
         delta=phi-1
-        close(delta,phi-1)
+        close(delta,expected_delta)
         if phi==1.0: assert delta==0
         else: assert delta<0
         n+=1
