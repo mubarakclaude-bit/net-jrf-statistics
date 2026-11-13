@@ -1,184 +1,186 @@
 # Paper 2 mathematical integrity audit — 2026-11-14
 
-## Status
+## Status and coverage
 
-- Repository baseline: `main` at the start of this task; dedicated branch: `audit/math-integrity-2026-11-14`.
-- Inventory: 129 files matching `seed/lesson_*.json` were counted from the live `seed/` directory.
-- Lessons opened and screened in this work segment: 129 of 129 Paper 2 lesson files (all files matching `seed/lesson_*.json`).json` through `lesson_pr13.json`; `lesson_t1.json`–`lesson_t3.json` and `lesson_t5.json`–`lesson_t17.json`; `lesson_rg1.json`–`lesson_rg15.json`; `lesson_stochastic_t1.json`–`lesson_stochastic_t9.json`; `lesson_ts1.json`–`lesson_ts11.json`; `lesson_ma1.json`–`lesson_ma16.json` plus `lesson_mle.json`; `lesson_multivariate_t1.json`–`lesson_multivariate_t9.json`; `lesson_sampling_t1.json`–`lesson_sampling_t9.json`; plus `lesson_design_t1.json`).
-- The Probability module's 13 lesson files, 16 Statistical Inference lesson files, 15 Regression lesson files 9 Stochastic Processes lesson files 11 Time Series lesson files, 16 Mathematics lessons plus the MLE lesson, 9 Multivariate Analysis lessons and 9 Sampling Theory lessons have received a first-pass review of numerical worked/guided examples; additional cross-scene/formula review remains before marking any module fully verified.
-- This is an in-progress audit. No claim is made that all 129 lessons have been mathematically verified.
-- No application code, shared manifest, deployment, Claude-owned file, or unrelated lesson was changed.
+- Repository: `mubarakclaude-bit/net-jrf-statistics`
+- Base: current `main` at task start
+- Branch: `audit/math-integrity-2026-11-14`
+- Inventory: **129** files matching `seed/lesson_*.json`
+- First-pass screening: **129/129 lesson files opened and screened** for learner-facing worked/guided numerical examples.
+- This is **not** a claim that all 129 lessons have been mathematically verified. Theory/revision scenes, every displayed formula/table, assumptions and all edge cases still require a deeper second pass.
+
+Module inventory screened:
+
+| Module | Lesson files |
+|---|---:|
+| Probability | 13 |
+| Statistical Inference | 16 |
+| Regression | 15 |
+| Stochastic Processes | 9 |
+| Time Series | 11 |
+| Mathematics | 16 |
+| MLE | 1 |
+| Multivariate Analysis | 9 |
+| Sampling Theory | 9 |
+| Design of Experiments | 8 |
+| Official Statistics | 5 |
+| Nonparametric Methods | 8 |
+| R Programming | 9 |
+| **Total** | **129** |
 
 ## Confirmed findings
 
-### MA-001 — CRD worked example conclusion contradicts its own calculation
+Severity counts: **4 critical, 8 major, 1 minor**. Thirteen confirmed learner-facing issues were found across ten lesson files.
 
-- File: `seed/lesson_design_t1.json`
-- Scene: `s4`
-- Severity: **Critical** — the learner-facing final statistic is materially wrong.
-- Evidence: The displayed observations are A=(8,9,6,7), B=(10,12,9,11), C=(7,8,5,6). Independently:
-  - Treatment totals: (30,42,26); grand total G=98; N=12; sum of squares = 850.
-  - CF = 98²/12 = 2401/3; total SS = 850 − 2401/3 = 149/3 = 49.6667.
-  - Treatment SS = (30²+42²+26²)/4 − 2401/3 = 104/3 = 34.6667.
-  - Error SS = 15; df = (2,9); MS_T=52/3; MS_E=5/3.
-  - Correct F = (52/3)/(5/3) = **52/5 = 10.4**.
-- Before: concluding explanation said **F=147.0**.
-- After: conclusion now says **F=10.4**, preserves df (2,9), and avoids asserting rejection without a critical value or p-value.
+### MA-001 — CRD conclusion contradicts its calculation
 
-### MA-002 — RBD displayed table, treatment totals and conclusion conflict
+- File: `seed/lesson_design_t1.json`; scene: `s4`
+- Severity: **Critical**
+- Data: A=(8,9,6,7), B=(10,12,9,11), C=(7,8,5,6); G=98, N=12, Σy²=850.
+- CF=98²/12=2401/3; SS_Total=149/3; SS_T=104/3; SS_E=15.
+- df=(2,9); MS_T=52/3; MS_E=5/3.
+- Correct F=(52/3)/(5/3)=**10.4**.
+- Before: conclusion said F=147.0. After: conclusion says F=10.4 and avoids making a rejection claim without a critical value or p-value.
 
-- File: `seed/lesson_design_t1.json`
-- Scene: `s8`
-- Severity: **Critical** — the displayed data and the final answer did not describe one coherent worked example.
-- Evidence: The problem statement gives rows (blocks):
-  - (9,9,9,13), (9,11,10,14), (7,9,8,12).
-  - These imply treatment totals (25,29,27,39), block totals (40,44,36), G=120, sum of squares=1248, CF=1200.
-  - SS_Total=48; SS_T=116/3; SS_Block=8; SS_Error=4/3.
-  - df=(3,2,6); MS_T=116/9; MS_E=2/9; correct treatment F=**58** with df (3,6).
-- Before: displayed Block 1 as (8,10,9,13) and treatment totals as (24,30,27,39), while the calculation steps used the problem-statement observations and their totals. The conclusion incorrectly said **F=20.4**, while the check already said F=58.
-- After: displayed Block 1 and treatment totals now match the stated observations; the conclusion and check consistently report F=58 and the exact SS/df/MS reconciliation.
+### MA-002 — RBD table, totals and conclusion conflict
 
-### MA-003 — Exponential sample median: population median confused with expected sample median
+- File: `seed/lesson_design_t1.json`; scene: `s8`
+- Severity: **Critical**
+- Problem-statement rows: (9,9,9,13), (9,11,10,14), (7,9,8,12).
+- Correct treatment totals=(25,29,27,39); block totals=(40,44,36); G=120; Σy²=1248; CF=1200.
+- SS_Total=48; SS_T=116/3; SS_Block=8; SS_Error=4/3.
+- df=(3,2,6); MS_T=116/9; MS_E=2/9; treatment F=**58** with df (3,6).
+- Before: displayed Block 1=(8,10,9,13), treatment totals=(24,30,27,39), and conclusion F=20.4, while the calculation used the problem-statement data and the check said 58.
+- After: table and totals match the stated data; conclusion and check consistently report F=58.
 
-- File: `seed/lesson_pr1.json`
-- Scene: `s8`
-- Severity: **Major** — the yes/no conclusion was directionally correct, but the numerical explanation answered a different quantity.
-- Evidence: The prompt asks whether the sample median of 9 exponential observations with mean 7 has expectation 7. The lesson correctly computes the *population median* as `7 ln 2 ≈ 4.852`, but then labels that as the sample median's estimate/expectation. For an exponential sample, `E(X_(r)) = θ(H_n − H_(n−r))`. Here the sample median is `X_(5)`, so `E(X_(5)) = 7(H_9 − H_4) = 5.219444`. Thus the sample median is not unbiased for the population median in this finite sample; its expectation is 5.2194, not 4.852 and not 7.
-- Before: the answer/check/solution implied the sample median of nine had value/expectation about 4.85.
-- After: the lesson explicitly distinguishes the population median (4.852) from the expected sample median (5.2194), and gives the order-statistic expectation formula.
+### MA-003 — Population median confused with expected sample median
 
-### MA-004 — Normal likelihood-ratio derivation contains an incomplete algebra expression
+- File: `seed/lesson_pr1.json`; scene: `s8`
+- Severity: **Major**
+- For an exponential population with mean θ=7, the population median is 7 ln 2≈4.852.
+- The sample median for n=9 is X_(5), and E[X_(5)]=θ(H₉−H₄)=**1879/360≈5.219444**.
+- Before: the answer implied that the expected sample median was about 4.85.
+- After: population median and expected sample median are distinguished, and the order-statistic expectation is shown.
 
-- File: `seed/lesson_t9.json`
-- Scene: `s4`
-- Severity: **Minor** — the final likelihood-ratio test and numerical critical value are correct, but one intermediate line is malformed and cannot be followed as written.
-- Evidence: The difference of squared residuals is `Σ[(xᵢ−50)²−(xᵢ−55)²] = 10Σxᵢ − 525n`. The lesson instead displayed `10Σxᵢ − 25n(50+55)/…`, with an unfinished denominator/ellipsis.
-- Before: incomplete expression.
-- After: the exact simplified identity `10Σxᵢ − 525n = 2(55−50)Σxᵢ − n(55²−50²)` is shown.
+### MA-004 — Incomplete normal likelihood-ratio algebra
 
-## Probability module first-pass review
+- File: `seed/lesson_t9.json`; scene: `s4`
+- Severity: **Minor**
+- Correct identity: Σ[(xᵢ−50)²−(xᵢ−55)²]=10Σxᵢ−525n.
+- Before: the intermediate line contained the unfinished expression `10Σxᵢ − 25n(50+55)/…`.
+- After: the complete identity `10Σxᵢ − 525n = 2(55−50)Σxᵢ − n(55²−50²)` is displayed.
 
-The following 13 lesson files were opened and screened: `lesson_pr1.json` through `lesson_pr13.json`. A confirmed finite-sample order-statistic expectation error is recorded as MA-003. The remaining numerical examples inspected in this first pass did not yield another confirmed arithmetic contradiction, but this is not a final certification of every formula, table or assumption in the module.
+### MA-005 — Alternating-chain answer describes a different chain
 
-### MA-008 — Power-series endpoint conclusion contradicts the interval of convergence
-
-- File: `seed/lesson_ma4.json`
-- Scene: `s4`
-- Severity: **Major** — the lesson correctly proves both endpoints converge but also labels the open interior as the interval/option answer.
-- Evidence: At `x=4` and `x=6`, the endpoint series is `Σ 1/((n+1)(n+2)) = Σ[1/(n+1)−1/(n+2)]`, which telescopes to 1. Both endpoints are included, so the full convergence set is `[4,6]`, not `(4,6)`.
-- Before: one step called `(4,6)` the answer/option while the final step correctly said `[4,6]`.
-- After: the lesson now distinguishes the open interior from the full interval and gives `[4,6]` as the answer to the stated question.
-
-### MA-007 — MA(1) inversion gives incorrect coefficient roots
-
-- File: `seed/lesson_ts2.json`
-- Scene: `s10`
-- Severity: **Major** — the numerical roots used to recover the MA coefficient from the lag-one autocorrelation are incorrect.
-- Evidence: With `ρ₁ = −0.49`, solve `0.49θ² − θ + 0.49 = 0`. The discriminant is `1 − 4(0.49)² = 0.0396`; the roots are `θ ≈ 0.8173495` and `θ ≈ 1.2234668`. Both reproduce `|ρ₁|=0.49`; invertibility selects the root with absolute value below one, `θ ≈ 0.81735`.
-- Before: roots were reported as approximately `0.8571` and `1.1667`, and the invertible coefficient as `0.86`. Substitution gives an autocorrelation near −0.494, not −0.49.
-- After: corrected both roots and the invertible coefficient in the worked explanation.
-
-## Stochastic Processes first-pass review
-
-The nine lesson files `lesson_stochastic_t1.json` through `lesson_stochastic_t9.json` were opened and screened. Two critical answer/hint mismatches were confirmed in T4 scenes s4 and s5 and corrected. The numerical examples inspected in the other eight files did not yield another confirmed arithmetic contradiction in this first pass. This is not a final certification of every stochastic-process formula, transition matrix, assumption or boundary case.
-
-## Statistical Inference first-pass review
-
-The following 16 lesson files were opened and screened: `lesson_t1.json`–`lesson_t3.json` and `lesson_t5.json`–`lesson_t17.json`. MA-004 is the confirmed presentation/algebra defect in the inspected worked examples. The sufficiency scene in `lesson_t1.json` was checked in full: it correctly classifies `x̄` as minimal sufficient and the larger pair `(ΣXᵢ, X₁)` as sufficient but not minimal; no change was made there. This first pass is not a final certification of every inference formula, assumption or table.
-
-### MA-005 — Alternating-chain answer belongs to a different Markov chain
-
-- File: `seed/lesson_stochastic_t4.json`
-- Scene: `s4`
-- Severity: **Critical** — the final answer contradicts the stated transition matrix and the correct worked steps.
-- Evidence: For `P=[[0,1],[1,0]]`, states 1 and 2 form one closed communicating class. Each state returns only at even times, so both are recurrent with period 2.
-- Before: the answer described an operating chain with a separate absorbing shutdown state and called the operating states transient. No shutdown state exists in the problem.
-- After: the answer now identifies the two-state class as closed, recurrent and period 2.
+- File: `seed/lesson_stochastic_t4.json`; scene: `s4`
+- Severity: **Critical**
+- Problem: P=[[0,1],[1,0]]. States 1 and 2 form one closed communicating class; each state returns only at even times, so both are recurrent with period 2.
+- Before: answer described an unrelated operating/shutdown chain and called the operating states transient.
+- After: answer identifies the two-state class as closed, recurrent and period 2.
 
 ### MA-006 — Multiple-closed-classes answer and hints are mismatched
 
-- File: `seed/lesson_stochastic_t4.json`
-- Scene: `s5`
-- Severity: **Critical** — the answer describes the preceding alternating chain rather than the problem's multiple-class structure.
-- Evidence: The problem specifies two disjoint closed communicating classes and an outside state that can enter either class but cannot be reached from them. The outside state is transient; each closed class is recurrent; stationary distributions can be mixed across the two closed classes, so uniqueness is not guaranteed.
-- Before: the answer repeated the two-state period-2 conclusion, and the hints discussed return-time gcds instead of class entry/returnability.
-- After: the answer and hints now address the transient outside state and the two distinct closed recurrent classes.
+- File: `seed/lesson_stochastic_t4.json`; scene: `s5`
+- Severity: **Critical**
+- Problem: two disjoint closed communicating classes C₁,C₂ and an outside state that can enter either but cannot be reached from them.
+- Correct result: the outside state is transient; C₁ and C₂ are separate recurrent classes; stationary distributions can be mixed across the closed classes, so uniqueness is not guaranteed.
+- Before: answer repeated the preceding two-state period-2 conclusion; hints discussed return-time gcds.
+- After: answer and hints address the transient outside state and the two distinct closed recurrent classes.
+
+### MA-007 — Incorrect MA(1) coefficient roots
+
+- File: `seed/lesson_ts2.json`; scene: `s10`
+- Severity: **Major**
+- For ρ₁=−0.49, solve 0.49θ²−θ+0.49=0. The discriminant is 0.0396; roots are **0.8173495** and **1.2234668**.
+- The invertible root is θ≈**0.81735**.
+- Before: roots were reported as 0.8571 and 1.1667, with invertible coefficient 0.86.
+- After: both roots and the invertible coefficient are corrected.
+
+### MA-008 — Power-series interval omits convergent endpoints
+
+- File: `seed/lesson_ma4.json`; scene: `s4`
+- Severity: **Major**
+- At x=4 and x=6, Σ1/((n+1)(n+2)) telescopes to 1, so both endpoints converge.
+- The full interval is **[4,6]**, not (4,6).
+- Before: one step called (4,6) the answer/option while the final step correctly included both endpoints.
+- After: the lesson distinguishes the open interior from the full interval and states [4,6].
 
 ### MA-009 — R missing-value steps use a different vector
 
-- File: `seed/lesson_rprog_t6.json`
-- Scene: `s6`
-- Severity: **Major** — the prompt's data and the worked steps referred to different observations.
-- Evidence: The prompt gives `x=c(NA,4,NA,8,10)`, whose observed values are 4, 8 and 10. The steps instead used 2, 6 and 10 and computed their mean.
-- After: the steps now identify 4, 8 and 10 and correctly count length 5, missing 2 and observed 3.
+- File: `seed/lesson_rprog_t6.json`; scene: `s6`
+- Severity: **Major**
+- Prompt vector: c(NA,4,NA,8,10); observed values are 4,8,10.
+- Before: solution used 2,6,10 and calculated their mean.
+- After: solution identifies 4,8,10 and correctly counts length 5, missing 2, observed 3.
 
 ### MA-010 — R summary steps belong to another NA example
 
-- File: `seed/lesson_rprog_t6.json`
-- Scene: `s8`
-- Severity: **Major** — the prompt asks for sum, mean and median of `c(1,NA,3,9)`, but the steps counted a five-element vector with two missing values.
-- Evidence: The correct observed set is (1,3,9), giving sum 13, mean 13/3 and median 3.
-- After: the steps now compute those three requested summaries directly.
+- File: `seed/lesson_rprog_t6.json`; scene: `s8`
+- Severity: **Major**
+- Prompt vector: c(1,NA,3,9); correct summaries are sum=13, mean=13/3 and median=3.
+- Before: solution counted a five-element vector with two missing values.
+- After: solution computes the three requested summaries.
 
 ### MA-011 — R format() example has unrelated list-extraction steps
 
-- File: `seed/lesson_rprog_t7.json`
-- Scene: `s8`
-- Severity: **Major** — the explanation was copied from a nested-list example and did not address formatting.
-- Evidence: The prompt asks whether `y=format(x,nsmall=2)` is numeric or character. The correct result is character; `x` remains numeric, and `nsmall` specifies a minimum number of decimal places rather than rounding to exactly two.
-- After: the worked steps explain the return type, unchanged source object and meaning of `nsmall`.
+- File: `seed/lesson_rprog_t7.json`; scene: `s8`
+- Severity: **Major**
+- Prompt asks whether y=format(x,nsmall=2) is numeric or character.
+- Correct result: y is character; x remains numeric; nsmall specifies a minimum number of decimal places, not rounding to exactly two.
+- Before: solution described nested-list extraction.
+- After: solution explains the return type, unchanged source object and nsmall argument.
 
-### MA-012 — R CSV import/export prompt has data-frame filtering steps
+### MA-012 — R CSV prompt has unrelated data-frame filtering steps
 
-- File: `seed/lesson_rprog_t8.json`
-- Scene: `s6`
-- Severity: **Major** — the solution steps did not address the requested file operations.
-- Evidence: The prompt asks for importing `sample.csv` and exporting a cleaned data frame without row names; the original steps described row filtering and selected IDs.
-- After: the steps now match `read.csv()`, `write.csv()` and `row.names=FALSE`.
+- File: `seed/lesson_rprog_t8.json`; scene: `s6`
+- Severity: **Major**
+- Prompt asks for CSV import and export without row names.
+- Before: solution described filtering rows by score.
+- After: solution matches read.csv(), write.csv() and row.names=FALSE.
 
 ### MA-013 — Document-review prompt has unrelated LaTeX math-mode steps
 
-- File: `seed/lesson_rprog_t9.json`
-- Scene: `s8`
-- Severity: **Major** — the solution steps answered a different LaTeX question.
-- Evidence: The prompt asks for tracked edits, comments and bibliography management; the original steps described inline/display math delimiters.
-- After: the steps now cover Track Changes, comments and a citation/reference manager.
+- File: `seed/lesson_rprog_t9.json`; scene: `s8`
+- Severity: **Major**
+- Prompt asks for tracked edits, comments and bibliography management.
+- Before: solution described inline/display mathematics.
+- After: solution covers Track Changes, comments and a citation/reference manager.
 
-## Mathematics, Multivariate Analysis and Sampling first-pass review
+## Independent verification and test status
 
-The 16 Mathematics lessons (`lesson_ma1.json`–`lesson_ma16.json`) and `lesson_mle.json`, all 9 Multivariate Analysis lessons, and all 9 Sampling Theory lessons were opened and screened for numerical worked/guided examples. MA-008 is the confirmed endpoint/interval contradiction in the inspected Mathematics examples. The numerical examples inspected in the other lessons did not yield another confirmed arithmetic contradiction in this first pass. These modules are not yet certified in full.
+Seven dedicated standard-library verifier files were added:
 
-## Time Series first-pass review
+1. `tools/verify_math_integrity_design_t1.py`
+2. `tools/verify_math_integrity_probability_pr1.py`
+3. `tools/verify_math_integrity_inference_t9.py`
+4. `tools/verify_math_integrity_stochastic_t4.py`
+5. `tools/verify_math_integrity_timeseries_ts2.py`
+6. `tools/verify_math_integrity_math_ma4.py`
+7. `tools/verify_math_integrity_rprog_scenes.py`
 
-The 11 lesson files `lesson_ts1.json` through `lesson_ts11.json` were opened and screened. MA-007 is the confirmed numerical coefficient inversion error in the inspected worked examples. The other numerical examples inspected in this first pass did not yield another confirmed arithmetic contradiction. This is not a final certification of every time-series formula, model convention, asymptotic approximation or forecasting assumption.
+Independent calculations were recomputed during review, including the two ANOVA F statistics, the exponential order-statistic expectation, the normal likelihood-ratio identity, the MA(1) roots, the telescoping endpoint series and the Spearman exact-tail count. These calculations support the corrections above.
 
-## Regression first-pass review
+**Execution limitation:** the verifier scripts have not been run from a full local repository checkout in this environment. The current draft PR has no reported GitHub Actions workflow run; repository validators and CI therefore remain unverified. The expected PASS messages in the verifier scripts are not test results.
 
-The following 15 lesson files were opened and screened: `lesson_rg1.json` through `lesson_rg15.json`. The numerical examples inspected in this first pass did not produce another confirmed arithmetic contradiction. This is not a final certification of all formulas, assumptions, covariance expressions or inferential interpretations in the Regression module.
+## Scope limitations
 
-## Independent verification
-
-Seven dedicated standard-library verifiers were added. `tools/verify_math_integrity_design_t1.py` reconstructs both ANOVA calculations using exact rational arithmetic and checks the learner-facing JSON values, including the displayed RBD table. `tools/verify_math_integrity_probability_pr1.py` independently evaluates the harmonic-number expression for the exponential sample median and checks that the lesson distinguishes it from the population median. `tools/verify_math_integrity_inference_t9.py` checks the expanded normal likelihood-ratio identity and the corrected learner-facing expression. `tools/verify_math_integrity_stochastic_t4.py` checks that the T4 answer text matches the alternating-chain and multiple-closed-class scenarios. `tools/verify_math_integrity_timeseries_ts2.py` recomputes both MA(1) roots and checks the corrected learner-facing values. `tools/verify_math_integrity_math_ma4.py` verifies the telescoping endpoint series and checks the full closed interval. `tools/verify_math_integrity_rprog_scenes.py` checks the R prompt/solution alignment and the corrected NA, formatting, CSV and document-review examples.
-
-Expected verifier output:
-- PASS: design_t1 s4 CRD arithmetic and learner-facing conclusion
-- PASS: design_t1 s8 RBD arithmetic, table totals and learner-facing conclusion
-- PASS: exact rational checks; F(s4)=52/5=10.4; F(s8)=58
-- PASS: exponential population median = 4.852030; expected sample median for n=9 = 5.219444 (exactly 1879/360)
-- PASS: normal likelihood-ratio identity `10Σxᵢ − 525n`
-- PASS: T4 alternating chain is closed, recurrent and period 2; outside state is transient with two distinct recurrent classes
-- PASS: MA(1) roots for ρ₁=−0.49 are 0.8173495 and 1.2234668; invertible root is 0.8173495
-- PASS: endpoint series telescopes to 1; convergence interval is [4,6]
-- PASS: R worked-step consistency assertions for the five corrected scenes
-
-Execution status: neither verifier has yet been run from a full local repository checkout in this environment. The numerical calculations were independently recomputed in Python. The PR currently has no associated GitHub Actions workflow runs, so repository CI/validators remain unverified; do not interpret the expected PASS lines above as executed test results.
-
-## Scope and limitations
-
-The 129-file inventory is confirmed. `lesson_design_t1.json` has had two worked examples recalculated and corrected; `lesson_pr1.json` has one finite-sample order-statistic error corrected; and `lesson_t9.json` has one incomplete algebra expression corrected. All 129 lesson files have received first-pass screening, but none is certified as mathematically verified in full. The audit identified 13 confirmed learner-facing issues across 10 lesson files; details and severity are recorded above. Other modules had no additional confirmed issue in this first-pass screen, but remain subject to deeper formula/table/assumption verification. A second pass remains necessary to inspect theory and revision scenes, check every numerical table and formula, and independently verify assumptions, df, units, rounding and learner-facing conclusions. Existing lesson verifiers are not treated as sufficient evidence by themselves.
+All 129 lesson files have received first-pass screening, but none is certified as mathematically verified in full. The second pass must inspect theory/revision scenes, every numerical table and formula, assumptions, degrees of freedom, units, rounding and all learner-facing conclusions. Existing verifiers are not treated as sufficient evidence by themselves.
 
 ## Change record
 
-- Lesson files changed (10): `seed/lesson_design_t1.json`, `seed/lesson_pr1.json`, `seed/lesson_t9.json`, `seed/lesson_stochastic_t4.json`, `seed/lesson_ts2.json`, `seed/lesson_ma4.json`, `seed/lesson_rprog_t6.json`, `seed/lesson_rprog_t7.json`, `seed/lesson_rprog_t8.json`, `seed/lesson_rprog_t9.json`
-- New dedicated verifiers (7): `tools/verify_math_integrity_design_t1.py`, `tools/verify_math_integrity_probability_pr1.py`, `tools/verify_math_integrity_inference_t9.py`, `tools/verify_math_integrity_stochastic_t4.py`, `tools/verify_math_integrity_timeseries_ts2.py`, `tools/verify_math_integrity_math_ma4.py`, `tools/verify_math_integrity_rprog_scenes.py`
-- No shared manifest, app code, deployment, or merge.
+- Lesson JSON files changed: **10**
+  - `seed/lesson_design_t1.json`
+  - `seed/lesson_pr1.json`
+  - `seed/lesson_t9.json`
+  - `seed/lesson_stochastic_t4.json`
+  - `seed/lesson_ts2.json`
+  - `seed/lesson_ma4.json`
+  - `seed/lesson_rprog_t6.json`
+  - `seed/lesson_rprog_t7.json`
+  - `seed/lesson_rprog_t8.json`
+  - `seed/lesson_rprog_t9.json`
+- New dedicated verifier files: **7**
+- Audit report: `audits/math_integrity_2026-11-14.md`
+- No application code, shared manifests, or unrelated modules changed.
+- No Claude-owned files, databases or infrastructure used.
+- No merge and no Vercel deployment.
