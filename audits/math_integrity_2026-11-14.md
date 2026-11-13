@@ -60,7 +60,16 @@
 
 The following 13 lesson files were opened and screened: `lesson_pr1.json` through `lesson_pr13.json`. A confirmed finite-sample order-statistic expectation error is recorded as MA-003. The remaining numerical examples inspected in this first pass did not yield another confirmed arithmetic contradiction, but this is not a final certification of every formula, table or assumption in the module.
 
-### MA-008 — Power-series endpoint conclusion contradicts the interval of convergence\n\n- File: `seed/lesson_ma4.json`\n- Scene: `s4`\n- Severity: **Major** — the lesson correctly proves both endpoints converge but also labels the open interior as the interval/option answer.\n- Evidence: At `x=4` and `x=6`, the endpoint series is `Σ 1/((n+1)(n+2)) = Σ[1/(n+1)−1/(n+2)]`, which telescopes to 1. Both endpoints are included, so the full convergence set is `[4,6]`, not `(4,6)`.\n- Before: one step called `(4,6)` the answer/option while the final step correctly said `[4,6]`.\n- After: the lesson now distinguishes the open interior from the full interval and gives `[4,6]` as the answer to the stated question.\n\n### MA-007 — MA(1) inversion gives incorrect coefficient roots
+### MA-008 — Power-series endpoint conclusion contradicts the interval of convergence
+
+- File: `seed/lesson_ma4.json`
+- Scene: `s4`
+- Severity: **Major** — the lesson correctly proves both endpoints converge but also labels the open interior as the interval/option answer.
+- Evidence: At `x=4` and `x=6`, the endpoint series is `Σ 1/((n+1)(n+2)) = Σ[1/(n+1)−1/(n+2)]`, which telescopes to 1. Both endpoints are included, so the full convergence set is `[4,6]`, not `(4,6)`.
+- Before: one step called `(4,6)` the answer/option while the final step correctly said `[4,6]`.
+- After: the lesson now distinguishes the open interior from the full interval and gives `[4,6]` as the answer to the stated question.
+
+### MA-007 — MA(1) inversion gives incorrect coefficient roots
 
 - File: `seed/lesson_ts2.json`
 - Scene: `s10`
@@ -95,7 +104,11 @@ The following 16 lesson files were opened and screened: `lesson_t1.json`–`less
 - Before: the answer repeated the two-state period-2 conclusion, and the hints discussed return-time gcds instead of class entry/returnability.
 - After: the answer and hints now address the transient outside state and the two distinct closed recurrent classes.
 
-## Mathematics, Multivariate Analysis and Sampling first-pass review\n\nThe 16 Mathematics lessons (`lesson_ma1.json`–`lesson_ma16.json`) and `lesson_mle.json`, all 9 Multivariate Analysis lessons, and all 9 Sampling Theory lessons were opened and screened for numerical worked/guided examples. MA-008 is the confirmed endpoint/interval contradiction in the inspected Mathematics examples. The numerical examples inspected in the other lessons did not yield another confirmed arithmetic contradiction in this first pass. These modules are not yet certified in full.\n\n## Time Series first-pass review
+## Mathematics, Multivariate Analysis and Sampling first-pass review
+
+The 16 Mathematics lessons (`lesson_ma1.json`–`lesson_ma16.json`) and `lesson_mle.json`, all 9 Multivariate Analysis lessons, and all 9 Sampling Theory lessons were opened and screened for numerical worked/guided examples. MA-008 is the confirmed endpoint/interval contradiction in the inspected Mathematics examples. The numerical examples inspected in the other lessons did not yield another confirmed arithmetic contradiction in this first pass. These modules are not yet certified in full.
+
+## Time Series first-pass review
 
 The 11 lesson files `lesson_ts1.json` through `lesson_ts11.json` were opened and screened. MA-007 is the confirmed numerical coefficient inversion error in the inspected worked examples. The other numerical examples inspected in this first pass did not yield another confirmed arithmetic contradiction. This is not a final certification of every time-series formula, model convention, asymptotic approximation or forecasting assumption.
 
@@ -114,7 +127,8 @@ Expected verifier output:
 - PASS: exponential population median = 4.852030; expected sample median for n=9 = 5.219444 (exactly 1879/360)
 - PASS: normal likelihood-ratio identity `10Σxᵢ − 525n`
 - PASS: T4 alternating chain is closed, recurrent and period 2; outside state is transient with two distinct recurrent classes
-- PASS: MA(1) roots for ρ₁=−0.49 are 0.8173495 and 1.2234668; invertible root is 0.8173495\n- PASS: endpoint series telescopes to 1; convergence interval is [4,6]
+- PASS: MA(1) roots for ρ₁=−0.49 are 0.8173495 and 1.2234668; invertible root is 0.8173495
+- PASS: endpoint series telescopes to 1; convergence interval is [4,6]
 
 Execution status: neither verifier has yet been run from a full local repository checkout in this environment. The numerical calculations were independently recomputed in Python. The PR currently has no associated GitHub Actions workflow runs, so repository CI/validators remain unverified; do not interpret the expected PASS lines above as executed test results.
 
