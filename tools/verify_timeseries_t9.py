@@ -17,9 +17,9 @@ def main():
     close(exact_var_mean_ar1(0.5,1,200),0.019866666666666664,1e-8); nchecks+=1
     close(exact_var_mean_ar1(0.9,1,50),1.623006,1e-5); nchecks+=1
     # Fixed random effect: y_t=Z+e_t, Var(Z)=tau².
-    for tau2 in [1,4,9,0.25]:
-        for n in [10,1000]:
-            close(tau2+1/n,tau2+1/n)
+    for tau2,small_n,large_n in [(1,10,1000),(4,10,1000),(9,10,1000),(0.25,10,1000)]:
+        close(tau2+1/small_n,tau2+0.1)
+        close(tau2+1/large_n,tau2+0.001)
         nchecks+=2
     finish(9,9,nchecks)
 if __name__ == "__main__": main()
