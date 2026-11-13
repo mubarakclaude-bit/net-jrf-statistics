@@ -60,11 +60,33 @@
 
 The following 13 lesson files were opened and screened: `lesson_pr1.json` through `lesson_pr13.json`. A confirmed finite-sample order-statistic expectation error is recorded as MA-003. The remaining numerical examples inspected in this first pass did not yield another confirmed arithmetic contradiction, but this is not a final certification of every formula, table or assumption in the module.
 
-## Stochastic Processes first-pass review\n\nThe nine lesson files `lesson_stochastic_t1.json` through `lesson_stochastic_t9.json` were opened and screened. Two critical answer/hint mismatches were confirmed in T4 scenes s4 and s5 and corrected. The numerical examples inspected in the other eight files did not yield another confirmed arithmetic contradiction in this first pass. This is not a final certification of every stochastic-process formula, transition matrix, assumption or boundary case.\n\n## Statistical Inference first-pass review
+## Stochastic Processes first-pass review
+
+The nine lesson files `lesson_stochastic_t1.json` through `lesson_stochastic_t9.json` were opened and screened. Two critical answer/hint mismatches were confirmed in T4 scenes s4 and s5 and corrected. The numerical examples inspected in the other eight files did not yield another confirmed arithmetic contradiction in this first pass. This is not a final certification of every stochastic-process formula, transition matrix, assumption or boundary case.
+
+## Statistical Inference first-pass review
 
 The following 16 lesson files were opened and screened: `lesson_t1.json`–`lesson_t3.json` and `lesson_t5.json`–`lesson_t17.json`. MA-004 is the confirmed presentation/algebra defect in the inspected worked examples. The sufficiency scene in `lesson_t1.json` was checked in full: it correctly classifies `x̄` as minimal sufficient and the larger pair `(ΣXᵢ, X₁)` as sufficient but not minimal; no change was made there. This first pass is not a final certification of every inference formula, assumption or table.
 
-### MA-005 — Alternating-chain answer belongs to a different Markov chain\n\n- File: `seed/lesson_stochastic_t4.json`\n- Scene: `s4`\n- Severity: **Critical** — the final answer contradicts the stated transition matrix and the correct worked steps.\n- Evidence: For `P=[[0,1],[1,0]]`, states 1 and 2 form one closed communicating class. Each state returns only at even times, so both are recurrent with period 2.\n- Before: the answer described an operating chain with a separate absorbing shutdown state and called the operating states transient. No shutdown state exists in the problem.\n- After: the answer now identifies the two-state class as closed, recurrent and period 2.\n\n### MA-006 — Multiple-closed-classes answer and hints are mismatched\n\n- File: `seed/lesson_stochastic_t4.json`\n- Scene: `s5`\n- Severity: **Critical** — the answer describes the preceding alternating chain rather than the problem's multiple-class structure.\n- Evidence: The problem specifies two disjoint closed communicating classes and an outside state that can enter either class but cannot be reached from them. The outside state is transient; each closed class is recurrent; stationary distributions can be mixed across the two closed classes, so uniqueness is not guaranteed.\n- Before: the answer repeated the two-state period-2 conclusion, and the hints discussed return-time gcds instead of class entry/returnability.\n- After: the answer and hints now address the transient outside state and the two distinct closed recurrent classes.\n\n## Regression first-pass review
+### MA-005 — Alternating-chain answer belongs to a different Markov chain
+
+- File: `seed/lesson_stochastic_t4.json`
+- Scene: `s4`
+- Severity: **Critical** — the final answer contradicts the stated transition matrix and the correct worked steps.
+- Evidence: For `P=[[0,1],[1,0]]`, states 1 and 2 form one closed communicating class. Each state returns only at even times, so both are recurrent with period 2.
+- Before: the answer described an operating chain with a separate absorbing shutdown state and called the operating states transient. No shutdown state exists in the problem.
+- After: the answer now identifies the two-state class as closed, recurrent and period 2.
+
+### MA-006 — Multiple-closed-classes answer and hints are mismatched
+
+- File: `seed/lesson_stochastic_t4.json`
+- Scene: `s5`
+- Severity: **Critical** — the answer describes the preceding alternating chain rather than the problem's multiple-class structure.
+- Evidence: The problem specifies two disjoint closed communicating classes and an outside state that can enter either class but cannot be reached from them. The outside state is transient; each closed class is recurrent; stationary distributions can be mixed across the two closed classes, so uniqueness is not guaranteed.
+- Before: the answer repeated the two-state period-2 conclusion, and the hints discussed return-time gcds instead of class entry/returnability.
+- After: the answer and hints now address the transient outside state and the two distinct closed recurrent classes.
+
+## Regression first-pass review
 
 The following 15 lesson files were opened and screened: `lesson_rg1.json` through `lesson_rg15.json`. The numerical examples inspected in this first pass did not produce another confirmed arithmetic contradiction. This is not a final certification of all formulas, assumptions, covariance expressions or inferential interpretations in the Regression module.
 
@@ -77,7 +99,8 @@ Expected verifier output:
 - PASS: design_t1 s8 RBD arithmetic, table totals and learner-facing conclusion
 - PASS: exact rational checks; F(s4)=52/5=10.4; F(s8)=58
 - PASS: exponential population median = 4.852030; expected sample median for n=9 = 5.219444 (exactly 1879/360)
-- PASS: normal likelihood-ratio identity `10Σxᵢ − 525n`\n- PASS: T4 alternating chain is closed, recurrent and period 2; outside state is transient with two distinct recurrent classes
+- PASS: normal likelihood-ratio identity `10Σxᵢ − 525n`
+- PASS: T4 alternating chain is closed, recurrent and period 2; outside state is transient with two distinct recurrent classes
 
 Execution status: neither verifier has yet been run from a full local repository checkout in this environment. The numerical calculations were independently recomputed in Python. The PR currently has no associated GitHub Actions workflow runs, so repository CI/validators remain unverified; do not interpret the expected PASS lines above as executed test results.
 
