@@ -1,0 +1,706 @@
+{
+ "id": "nonparamt8",
+ "topicId": "nonparam-t8",
+ "moduleId": "nonparam",
+ "title": "Linear rank tests for location and scale",
+ "breadcrumb": "Non-parametric methods → Linear rank tests → Location and scale",
+ "engine": "B",
+ "engineName": "Choose scores to match location or scale.",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 96,
+ "objectives": [
+  "Define a linear rank statistic using scores assigned to pooled ranks.",
+  "Relate Wilcoxon rank-sum scores to the Mann–Whitney U statistic.",
+  "Recognise alternative location score systems.",
+  "Distinguish Ansari–Bradley and Mood scale score patterns.",
+  "Select a location or scale test and state its assumptions and direction."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Pooled ranks and rank sums",
+   "why": "Linear rank statistics are formed from ranks in the combined sample."
+  },
+  {
+   "id": "p2",
+   "name": "Location and scale",
+   "why": "The alternative determines whether scores should respond to ordering or dispersion."
+  },
+  {
+   "id": "p3",
+   "name": "Two-independent-sample design",
+   "why": "The standard two-sample linear rank framework assumes independent samples."
+  }
+ ],
+ "traps": [
+  "A linear rank statistic is T=Σa(Rᵢ); the score function matters.",
+  "Wilcoxon rank sum uses a(r)=r; U subtracts n₁(n₁+1)/2.",
+  "Ansari–Bradley scores are high near the pooled centre.",
+  "Mood scores are high at the pooled extremes.",
+  "A scale test is not automatically a test of variance without its centre assumptions.",
+  "Interpret a large statistic using the score direction and sample label."
+ ],
+ "howto": "First identify whether the alternative is location or scale. For location, ordinary rank scores increase with rank. For scale, use a score pattern sensitive to centre or tails. State which sample's scores are being added and what a large total means.",
+ "revision": {
+  "sheet": [
+   "General linear rank statistic: T=Σa(Rᵢ).",
+   "Wilcoxon rank sum: a(r)=r; T=R₁.",
+   "Mann–Whitney: U₁=R₁−n₁(n₁+1)/2.",
+   "Normal scores (van der Waerden) and Savage scores are alternative location score systems.",
+   "Ansari–Bradley: a(r)=min(r,N+1−r), high near centre.",
+   "Mood: a(r)=[r−(N+1)/2]², high at extremes.",
+   "Siegel–Tukey ranks from extremes inward for scale comparisons.",
+   "Fligner–Killeen ranks absolute deviations from group medians.",
+   "Location interpretation of rank-sum is clearest for similarly shaped distributions.",
+   "Scale procedures require attention to common centres, symmetry and centring assumptions."
+  ],
+  "cards": [
+   [
+    "Linear rank statistic",
+    "T=Σa(Rᵢ)"
+   ],
+   [
+    "Wilcoxon score",
+    "a(r)=r"
+   ],
+   [
+    "Mann–Whitney",
+    "R₁−n₁(n₁+1)/2"
+   ],
+   [
+    "Ansari–Bradley",
+    "min(r,N+1−r), centre-high"
+   ],
+   [
+    "Mood",
+    "[r−(N+1)/2]², tail-high"
+   ],
+   [
+    "Siegel–Tukey",
+    "Extreme-inward ranks"
+   ],
+   [
+    "Fligner–Killeen",
+    "Ranks of absolute deviations"
+   ],
+   [
+    "First decision",
+    "Location or scale?"
+   ]
+  ],
+  "tricks": [
+   "Ordinary ranks rise with value: location.",
+   "Ansari–Bradley rises toward the centre: concentration.",
+   "Mood rises toward the tails: dispersion."
+  ],
+  "shortcuts": [
+   "Wilcoxon scores = pooled ranks.",
+   "Ansari–Bradley = centre scores.",
+   "Mood = squared distance from rank centre."
+  ],
+  "remember": [
+   "Score function must match the alternative.",
+   "Always state which sample's score total is being interpreted."
+  ]
+ },
+ "refs": [
+  {
+   "title": "Nonparametric Statistical Methods",
+   "where": "Choosing rank-based procedures",
+   "site": "Hollander, Wolfe and Chicken",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Standard reference for nonparametric test assumptions and selection."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+   "where": "Nonparametric methods",
+   "site": "NIST",
+   "url": "https://www.itl.nist.gov/div898/handbook/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Reference for distributional and rank-based tests."
+  },
+  {
+   "title": "Penn State STAT 415",
+   "where": "Nonparametric tests",
+   "site": "Penn State",
+   "url": "https://online.stat.psu.edu/stat415/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Accessible test-selection explanations."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints."
+ },
+ "provenance": "June 2026 Q33/Q42 variants include Wilcoxon–Mann–Whitney location-test selection, rank-sum conversion, tie handling and ordinal-scale requirements. No direct June 2026 question on Ansari–Bradley or Mood scale scores was identified in the inspected nonparametric variants. Scale examples are constructed and numerically checked.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Start with ranks and score functions",
+   "objective": "Understand how pooled ranks become a test statistic.",
+   "ask": {
+    "q": "What is a pooled rank?",
+    "nudge": "The position of an observation in the combined ordered sample."
+   },
+   "body": [
+    "A rank test replaces observations with positions in an ordered list. A linear rank statistic assigns a score to each rank and adds the scores for one sample.",
+    "The score function is chosen for the scientific alternative. Scores that increase with rank target a location ordering; scores large near the centre or at the extremes can target scale."
+   ],
+   "items": [
+    {
+     "ask": "Why pool observations from two independent samples before ranking?",
+     "recall": "To put both groups on one common ordering.",
+     "refresh": [
+      "A pooled ranking shows where every observation lies relative to observations from both groups. Ranking each sample separately would erase this cross-group ordering.",
+      "The combined ranks are the input to a two-sample rank-sum or linear-rank statistic."
+     ]
+    },
+    {
+     "ask": "What is a location difference?",
+     "recall": "A shift in the typical position or centre of a distribution.",
+     "refresh": [
+      "A location alternative asks whether one population tends to produce larger or smaller observations than another.",
+      "A rank-sum score increasing with rank is sensitive to systematic ordering. A median interpretation is clearest when distribution shapes are comparable."
+     ]
+    },
+    {
+     "ask": "What is a scale difference?",
+     "recall": "A difference in spread or variability around a centre.",
+     "refresh": [
+      "Two groups can have the same centre but different dispersion. One may be more concentrated and the other more spread out.",
+      "A scale test must use information about distance from the centre or extremeness, rather than simply asking which group has larger values."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "Location and scale are different alternatives",
+   "objective": "See why the score pattern must match the question.",
+   "ask": {
+    "q": "If two groups share a centre but one is more dispersed, is this a location or scale question?",
+    "nudge": "It is a scale question."
+   },
+   "body": [
+    "A location test asks whether observations from one group tend to be higher than observations from another. A scale test asks whether one group is more spread out around its centre.",
+    "A single rank score pattern cannot be optimal for every alternative. Linear rank methods make the score choice explicit."
+   ],
+   "scenario": {
+    "teaser": "Two independent groups and a location alternative.",
+    "title": "Comparing typical outcomes",
+    "body": [
+     "A researcher compares an outcome from two independent groups. The question is whether one group tends to have larger values, which is a location question. A linear rank statistic assigns a score to each pooled rank and adds the scores belonging to one group. Choosing ordinary rank scores gives the Wilcoxon rank-sum statistic, which is equivalent to Mann–Whitney U after subtracting a fixed minimum rank sum. Other score systems, such as normal scores, target different location alternatives."
+    ],
+    "q": "What does the ordinary Wilcoxon rank-sum score do?",
+    "answer": "It assigns increasing scores to pooled ranks and sums the ranks belonging to one group."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s2",
+   "mins": 6,
+   "title": "Look at three score patterns",
+   "objective": "Compare location scores with scale scores.",
+   "ask": {
+    "q": "Which ranks receive larger Ansari–Bradley scores?",
+    "nudge": "Ranks near the centre of the pooled ordering."
+   },
+   "body": [
+    "For N=8, ordinary Wilcoxon scores are 1,2,3,4,5,6,7,8. Ansari–Bradley scores are 1,2,3,4,4,3,2,1, largest near the centre.",
+    "Mood scores are squared distances from the pooled centre (N+1)/2. They are largest at the extremes."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 9,
+   "title": "Linear rank statistics for location",
+   "objective": "Define the general statistic and the Wilcoxon score choice.",
+   "ask": {
+    "q": "What score function gives the Wilcoxon rank-sum statistic?",
+    "nudge": "a(r)=r, the pooled rank itself."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "General linear rank statistic",
+     "body": "T=Σᵢ₌₁ⁿ¹ a(Rᵢ), where Rᵢ is a pooled rank and a(r) is the selected score function."
+    },
+    {
+     "t": "formula",
+     "h": "Wilcoxon rank-sum",
+     "body": "Choose a(r)=r. Then T=R₁, the pooled rank sum for sample 1. Mann–Whitney U₁=R₁−n₁(n₁+1)/2."
+    },
+    {
+     "t": "def",
+     "h": "Other location scores",
+     "body": "Normal scores (van der Waerden) and Savage scores transform rank positions differently and are selected for particular location alternatives."
+    },
+    {
+     "t": "step",
+     "h": "Interpretation",
+     "body": "A large rank-sum statistic indicates sample 1 tends to occupy higher pooled ranks. Direction depends on the sample label and score convention."
+    }
+   ],
+   "flow": {
+    "title": "Choose the score family",
+    "alt": "A directional shift leads to increasing location scores; a spread difference leads to centre- or tail-sensitive scale scores.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "State alternative",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Location shift",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 1,
+      "c": 2,
+      "label": "Scale difference",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 0,
+      "label": "Wilcoxon / normal scores",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 2,
+      "c": 2,
+      "label": "Ansari–Bradley / Mood",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 3,
+      "c": 1,
+      "label": "Check assumptions",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "a",
+      "to": "c"
+     },
+     {
+      "from": "b",
+      "to": "d"
+     },
+     {
+      "from": "c",
+      "to": "e"
+     },
+     {
+      "from": "d",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ],
+    "note": "The score function must match the alternative."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 10,
+   "title": "Worked example: rank sum to U",
+   "objective": "Convert a linear rank statistic into Mann–Whitney U.",
+   "ask": {
+    "q": "Why subtract n₁(n₁+1)/2 from R₁?",
+    "nudge": "It is the minimum possible rank sum for n₁ observations."
+   },
+   "problem": "A sample of size n₁=5 has pooled rank sum R₁=28. Calculate U₁.",
+   "steps": [
+    {
+     "say": "Identify the linear rank score.",
+     "math": "a(r)=r; T=R₁=28",
+     "why": "Wilcoxon rank-sum uses pooled ranks as scores."
+    },
+    {
+     "say": "Calculate the minimum rank sum.",
+     "math": "5×6/2=15",
+     "why": "The first five ranks sum to 15."
+    },
+    {
+     "say": "Convert to U.",
+     "math": "U₁=28−15=13",
+     "why": "Subtracting the minimum rank sum gives the Mann–Whitney form."
+    },
+    {
+     "say": "Check the interpretation.",
+     "math": "U₁+U₂=n₁n₂",
+     "why": "The two U statistics add to the product of sample sizes."
+    }
+   ],
+   "after": "The rank sum is 28; the Mann–Whitney statistic is 13. Do not report R₁ as U₁."
+  },
+  {
+   "kind": "recall",
+   "id": "s5",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the central matching rules.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "General linear rank statistic?",
+     "a": "T=Σa(Rᵢ)."
+    },
+    {
+     "q": "Wilcoxon score a(r)?",
+     "a": "a(r)=r."
+    },
+    {
+     "q": "Mann–Whitney from rank sum?",
+     "a": "U₁=R₁−n₁(n₁+1)/2."
+    },
+    {
+     "q": "Ansari–Bradley scores are largest where?",
+     "a": "Near the centre of pooled ranks."
+    },
+    {
+     "q": "Mood scale scores are largest where?",
+     "a": "At the extremes, far from the pooled centre."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s6",
+   "mins": 8,
+   "title": "Complete the test-selection grid",
+   "objective": "Fill the missing procedure from the design.",
+   "problem": "For n₁=4 and pooled rank sum R₁=22, find U₁.",
+   "steps": [
+    {
+     "say": "Find the minimum rank sum.",
+     "blank": {
+      "prompt": "4×5/2=…",
+      "answer": "10",
+      "accept": [
+       "10.0"
+      ],
+      "hint": "Use n₁(n₁+1)/2."
+     },
+     "why": "The smallest four ranks sum to 10."
+    },
+    {
+     "say": "Subtract from R₁.",
+     "blank": {
+      "prompt": "U₁=22−10=…",
+      "answer": "12",
+      "accept": [
+       "12.0"
+      ],
+      "hint": "Subtract the minimum possible rank sum."
+     },
+     "why": "This is the Mann–Whitney form of the rank-sum statistic."
+    },
+    {
+     "say": "State the test direction.",
+     "blank": {
+      "prompt": "A larger R₁ means sample 1 tends to occupy … pooled ranks.",
+      "answer": "higher",
+      "accept": [
+       "larger"
+      ],
+      "hint": "Wilcoxon scores increase with rank."
+     },
+     "why": "Increasing scores give greater weight to observations at higher pooled positions."
+    }
+   ],
+   "after": "The score function determines what a large statistic means.",
+   "ask": {
+    "q": "Which minimum rank sum is subtracted from R₁ to obtain U₁?",
+    "nudge": "n₁(n₁+1)/2."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Linear rank tests for scale",
+   "objective": "Compare centre-sensitive and tail-sensitive scores.",
+   "ask": {
+    "q": "Which score pattern gives high scores near the pooled centre?",
+    "nudge": "Ansari–Bradley."
+   },
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Ansari–Bradley",
+     "body": "For N pooled ranks, a(r)=min(r,N+1−r). Scores are small at both extremes and large near the centre. A more concentrated sample tends to receive a larger score sum."
+    },
+    {
+     "t": "formula",
+     "h": "Mood scale scores",
+     "body": "A(r)=[r−(N+1)/2]². Scores are largest at the extremes and smallest near the centre. A more dispersed sample tends to accumulate larger Mood scores."
+    },
+    {
+     "t": "def",
+     "h": "Siegel–Tukey and Fligner–Killeen",
+     "body": "Siegel–Tukey assigns ranks from the extremes inward to compare scale. Fligner–Killeen ranks absolute deviations from group medians for a robust scale comparison."
+    },
+    {
+     "t": "step",
+     "h": "Assumption caution",
+     "body": "Scale tests generally require comparable centres or a suitable centring step. Check each procedure's symmetry and sampling assumptions before interpreting it as a pure variance test."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Guided calculation: scale scores",
+   "objective": "Calculate Ansari–Bradley score totals.",
+   "problem": "For N=8, Ansari–Bradley scores are 1,2,3,4,4,3,2,1. Sample A occupies ranks 1,2,7,8. Find its score sum.",
+   "hints": [
+    "Read the score for each pooled rank.",
+    "Select the four scores for ranks 1,2,7,8.",
+    "Add them and compare with the centre ranks."
+   ],
+   "answer": "The scores are 1, 2, 2 and 1, so the Ansari–Bradley total is 6.",
+   "check": "The centre ranks receive larger scores; an extreme-rank sample should have a smaller total.",
+   "solution": [
+    {
+     "say": "Read the four scores.",
+     "math": "a(1)=1; a(2)=2; a(7)=2; a(8)=1",
+     "why": "The score function is symmetric around the pooled centre."
+    },
+    {
+     "say": "Add the scores.",
+     "math": "T_A=1+2+2+1=6",
+     "why": "This is the score sum for sample A."
+    },
+    {
+     "say": "Compare central ranks.",
+     "math": "Ranks 3,4,5,6 receive 3,4,4,3; total=14",
+     "why": "Ansari–Bradley scores are largest near the centre."
+    }
+   ],
+   "scenario": {
+    "teaser": "Two production lines have similar centres but possibly different spread.",
+    "title": "Comparing process variability",
+    "body": [
+     "A quality team compares variability in two independent production lines. The group centres are similar, but one line may have more spread. A scale test should respond to how far observations lie from the centre, not simply whether one group has larger values. Ansari–Bradley gives larger scores to central pooled ranks, while Mood's scale test gives larger scores to ranks far from the pooled centre. The score pattern must match the alternative being tested."
+    ],
+    "q": "Which score family gives high scores to central pooled ranks?",
+    "answer": "Ansari–Bradley scores."
+   },
+   "ask": {
+    "q": "What does a larger Ansari–Bradley score sum indicate under a common-centre scale alternative?",
+    "nudge": "A more concentrated sample."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 6,
+   "title": "Six statements to challenge",
+   "objective": "Detect common test-selection errors.",
+   "intro": "Mark each claim true or false before revealing the reason.",
+   "items": [
+    {
+     "claim": "A linear rank statistic sums scores assigned to pooled ranks.",
+     "tf": true,
+     "why": "True. T=Σa(Rᵢ) for the observations in the selected sample."
+    },
+    {
+     "claim": "Wilcoxon rank-sum uses a(r)=r.",
+     "tf": true,
+     "why": "True. The score is the pooled rank itself."
+    },
+    {
+     "claim": "Mann–Whitney U equals the Wilcoxon rank sum R₁.",
+     "tf": false,
+     "why": "False. U₁=R₁−n₁(n₁+1)/2."
+    },
+    {
+     "claim": "Ansari–Bradley scores are largest near the pooled centre.",
+     "tf": true,
+     "why": "True. The score min(r,N+1−r) is centre-sensitive."
+    },
+    {
+     "claim": "Mood scale scores are largest at the extremes.",
+     "tf": true,
+     "why": "True. Mood uses squared distance from the pooled rank centre."
+    },
+    {
+     "claim": "A scale test can always be interpreted as a pure variance test without checking centre assumptions.",
+     "tf": false,
+     "why": "False. Scale-test interpretation depends on centring and shape assumptions."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 8,
+   "title": "Guided calculation: a quick numeric check",
+   "objective": "Calculate a statistic only after identifying its test.",
+   "problem": "Study A asks whether one independent group tends to have larger values than another. Study B asks whether two groups with similar centres differ in spread. Which score family is appropriate for each?",
+   "hints": [
+    "Study A is a location alternative.",
+    "Study B is a scale alternative.",
+    "Choose increasing rank scores for location and centre/tail-sensitive scores for scale."
+   ],
+   "answer": "Study A: Wilcoxon rank-sum/Mann–Whitney or another location score system. Study B: Ansari–Bradley or Mood, with assumptions checked.",
+   "check": "Do not choose a location rank-sum solely because it is familiar when the target is spread.",
+   "solution": [
+    {
+     "say": "Identify Study A.",
+     "math": "Larger values → location",
+     "why": "The alternative is directional ordering in pooled ranks."
+    },
+    {
+     "say": "Choose location scores.",
+     "math": "Wilcoxon rank-sum: a(r)=r",
+     "why": "Scores increase with pooled rank."
+    },
+    {
+     "say": "Identify Study B.",
+     "math": "Similar centres, different spread → scale",
+     "why": "The test must respond to distance from the centre or extremeness."
+    },
+    {
+     "say": "Choose scale scores.",
+     "math": "Ansari–Bradley or Mood",
+     "why": "Their scores target dispersion rather than a simple location shift."
+    }
+   ],
+   "ask": {
+    "q": "Which score pattern is appropriate when the target is spread rather than location?",
+    "nudge": "A scale-oriented score such as Ansari–Bradley or Mood."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s11",
+   "mins": 6,
+   "title": "Assumptions and interpretation",
+   "objective": "State what a rank-score result can support.",
+   "ask": {
+    "q": "Why check score direction before interpreting a large statistic?",
+    "nudge": "The score function and sample label determine which alternative produces a large value."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Location interpretation",
+     "body": "Wilcoxon–Mann–Whitney compares independent distributions through pooled ordering. A simple median-shift interpretation is strongest when distributions have similar shapes."
+    },
+    {
+     "t": "def",
+     "h": "Scale interpretation",
+     "body": "Ansari–Bradley and Mood target spread differences under their stated conditions. Check whether groups share a centre or whether the procedure uses a suitable centring step."
+    },
+    {
+     "t": "step",
+     "h": "Exam response structure",
+     "body": "Name the target (location or scale), state the design (independent or paired), identify the score pattern, and explain what a large statistic means for the labelled sample."
+    }
+   ]
+  },
+  {
+   "kind": "recall",
+   "id": "s12",
+   "mins": 3,
+   "title": "Second recall",
+   "objective": "Retrieve the full test map.",
+   "intro": "Answer, then reveal.",
+   "items": [
+    {
+     "q": "Wilcoxon rank score?",
+     "a": "a(r)=r."
+    },
+    {
+     "q": "U from R₁?",
+     "a": "R₁−n₁(n₁+1)/2."
+    },
+    {
+     "q": "Ansari–Bradley score?",
+     "a": "min(r,N+1−r)."
+    },
+    {
+     "q": "Mood score?",
+     "a": "[r−(N+1)/2]²."
+    },
+    {
+     "q": "What is the first decision?",
+     "a": "Whether the alternative concerns location or scale."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "What you should now be able to do",
+   "objective": "Select the test from design and target.",
+   "body": [
+    "Define a linear rank statistic as a sum of scores assigned to pooled ranks.",
+    "Use ordinary increasing scores for Wilcoxon rank-sum and convert R₁ to Mann–Whitney U.",
+    "Recognise Ansari–Bradley centre-sensitive scores and Mood tail-sensitive scores.",
+    "Identify Siegel–Tukey and Fligner–Killeen as scale-oriented rank procedures.",
+    "State design, score direction and assumptions before interpreting a statistic."
+   ],
+   "ask": {
+    "q": "What should be identified before interpreting a linear rank statistic?",
+    "nudge": "The alternative, score function and sample label."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 4,
+   "title": "Mastery test",
+   "objective": "Demonstrate accurate test selection on mixed designs.",
+   "setId": "nonparam_t8_mastery"
+  }
+ ]
+}

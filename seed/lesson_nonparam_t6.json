@@ -1,0 +1,710 @@
+{
+ "id": "nonparamt6",
+ "topicId": "nonparam-t6",
+ "moduleId": "nonparam",
+ "title": "Kolmogorov–Smirnov and runs tests",
+ "breadcrumb": "Non-parametric methods → Distribution and randomness → KS and runs tests",
+ "engine": "B",
+ "engineName": "CDF gap for KS; sequence order for runs.",
+ "version": "1.0",
+ "status": "approved",
+ "estMin": 96,
+ "objectives": [
+  "Construct the empirical distribution function and describe its properties.",
+  "Calculate one-sample and two-sample KS statistics as maximum CDF gaps.",
+  "State the continuity and parameter-specification cautions for classical KS inference.",
+  "Count runs and calculate their null expectation and variance.",
+  "Choose KS or runs from the research target and interpret the result."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "Cumulative distribution function",
+   "why": "KS compares empirical and theoretical or empirical CDFs."
+  },
+  {
+   "id": "p2",
+   "name": "Proportions and ordered observations",
+   "why": "The empirical CDF is a cumulative sample proportion."
+  },
+  {
+   "id": "p3",
+   "name": "Counting sequences",
+   "why": "The runs test counts consecutive blocks of identical labels."
+  }
+ ],
+ "traps": [
+  "KS uses the maximum absolute CDF gap, not an average gap.",
+  "One-sample KS assumes a fully specified continuous reference CDF for standard critical values.",
+  "Estimated null parameters require an adjusted calibration.",
+  "Two-sample KS compares two independent empirical CDFs.",
+  "Runs tests sequence order, conditional on the two label counts.",
+  "Too few runs suggests clustering; too many suggests alternation."
+ ],
+ "howto": "For KS, tabulate empirical and reference CDFs and find the largest absolute vertical gap. For runs, write the sequence, count each maximal block, then compare with the null distribution based on n₁ and n₂. Keep the target explicit: CDF fit or sequence randomness.",
+ "revision": {
+  "sheet": [
+   "Fₙ(x)=number of observations ≤x divided by n; it is a nondecreasing right-continuous step function.",
+   "One-sample KS: D=supₓ|Fₙ(x)−F₀(x)|.",
+   "Two-sample KS: D=supₓ|Fₙ(x)−Gₘ(x)|.",
+   "Classical one-sample KS critical values assume a continuous fully specified F₀.",
+   "If parameters are estimated or data are discrete/tied, use an adjusted calibration.",
+   "A run is a maximal consecutive block of one label.",
+   "E(R)=1+2n₁n₂/(n₁+n₂).",
+   "Var(R)=2n₁n₂(2n₁n₂−N)/[N²(N−1)].",
+   "Too few runs → clustering; too many runs → excessive alternation.",
+   "KS asks about distributions; runs asks about sequence order."
+  ],
+  "cards": [
+   [
+    "Empirical CDF",
+    "Fₙ(x)=count(Xᵢ≤x)/n"
+   ],
+   [
+    "One-sample KS",
+    "sup|Fₙ−F₀|"
+   ],
+   [
+    "Two-sample KS",
+    "sup|Fₙ−Gₘ|"
+   ],
+   [
+    "KS statistic",
+    "Maximum absolute vertical gap"
+   ],
+   [
+    "Run",
+    "Maximal consecutive identical labels"
+   ],
+   [
+    "Expected runs",
+    "1+2n₁n₂/N"
+   ],
+   [
+    "Runs variance",
+    "2n₁n₂(2n₁n₂−N)/[N²(N−1)]"
+   ],
+   [
+    "Few runs",
+    "Clustering"
+   ],
+   [
+    "Many runs",
+    "Alternation"
+   ]
+  ],
+  "tricks": [
+   "Check both sides of an empirical CDF jump.",
+   "KS takes the maximum gap, not the sum.",
+   "Count a new run only when the label changes."
+  ],
+  "shortcuts": [
+   "CDF fit → KS; sequence order → runs.",
+   "One-sample KS with estimated parameters needs adjusted critical values.",
+   "Expected runs = 1 + 2n₁n₂/N."
+  ],
+  "remember": [
+   "The KS statistic is a maximum distance.",
+   "Runs depend on order, not just category counts."
+  ]
+ },
+ "refs": [
+  {
+   "title": "Nonparametric Statistical Methods",
+   "where": "Distribution-free goodness-of-fit and runs procedures",
+   "site": "Hollander, Wolfe and Chicken",
+   "url": "",
+   "type": "Textbook",
+   "free": false,
+   "checked": "2026-11-12",
+   "why": "Standard reference for KS and runs test theory."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods",
+   "where": "Goodness-of-fit and nonparametric methods",
+   "site": "NIST",
+   "url": "https://www.itl.nist.gov/div898/handbook/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Applied reference for goodness-of-fit testing."
+  },
+  {
+   "title": "Penn State STAT 415",
+   "where": "Nonparametric methods",
+   "site": "Penn State",
+   "url": "https://online.stat.psu.edu/stat415/",
+   "type": "Free online textbook",
+   "free": true,
+   "checked": "2026-11-12",
+   "why": "Accessible support for distribution-free methods."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints."
+ },
+ "provenance": "The June 2026 nonparametric Q33/Q42 variants inspected for this module emphasise Mann–Whitney, signed-rank and Kruskal–Wallis; no direct KS or runs-test stem was identified in those variants. The KS and runs examples here are constructed teaching examples. The verifier recomputes the maximum CDF gap, runs expectation and variance.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 7,
+   "title": "Start with CDFs and sequences",
+   "objective": "Distinguish a distribution question from an order question.",
+   "ask": {
+    "q": "What does F(x)=P(X≤x) represent?",
+    "nudge": "The probability that X is at most x."
+   },
+   "body": [
+    "Two different questions appear in this lesson. A distribution question asks how observations accumulate below each value. A sequence question asks how labels are arranged over time or order.",
+    "Kolmogorov–Smirnov compares cumulative distribution functions. The runs test examines the order of two types of observations."
+   ],
+   "items": [
+    {
+     "ask": "What does F(x)=P(X≤x) mean?",
+     "recall": "The probability that X is at most x.",
+     "refresh": [
+      "A cumulative distribution function accumulates probability from the far left up to x, including x. It is nondecreasing and takes values between zero and one.",
+      "As x moves across the real line, F(x) records the cumulative probability already included. This is the population version of the empirical step curve."
+     ]
+    },
+    {
+     "ask": "What is an empirical proportion?",
+     "recall": "A count divided by the total sample size.",
+     "refresh": [
+      "If 7 of 20 observations are at most x, the empirical proportion is 7/20=0.35. The numerator is a cumulative count, not the count equal to x.",
+      "The empirical distribution function uses these cumulative proportions as x moves across the observed values."
+     ]
+    },
+    {
+     "ask": "What is a run in a binary sequence?",
+     "recall": "A maximal consecutive group of the same label.",
+     "refresh": [
+      "In PPPFFP, the runs are PPP, FF and P, so there are three runs. A new run begins whenever the label changes.",
+      "The number of runs depends on order, not only on total counts. Two sequences with the same numbers of P and F can have very different run counts."
+     ]
+    }
+   ]
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 7,
+   "title": "Two curves or one sequence",
+   "objective": "Understand what each test measures.",
+   "ask": {
+    "q": "Which test looks for the largest vertical gap between CDFs?",
+    "nudge": "Kolmogorov–Smirnov."
+   },
+   "body": [
+    "The empirical distribution function is a step curve. A reference CDF is a theoretical curve. KS measures the largest vertical gap between them, or between two empirical CDFs.",
+    "The runs test ignores numerical magnitudes and examines whether two labels are clustered or alternate unusually often. The data must be in a meaningful sequence."
+   ],
+   "scenario": {
+    "teaser": "A component-lifetime distribution is checked against a model.",
+    "title": "Reliability model fit",
+    "body": [
+     "A reliability engineer records lifetimes from a sample of components and wants to assess whether the population lifetime distribution follows a specified continuous model. The empirical distribution function is compared with the reference cumulative distribution function at every observed value. The Kolmogorov–Smirnov statistic is the largest absolute vertical difference between the two curves. The test concerns the whole distribution, not only its mean or median. If model parameters are estimated from the same sample, the usual one-sample KS critical values need adjustment."
+    ],
+    "q": "What feature of the data is compared by the KS test?",
+    "answer": "The empirical CDF and the specified reference CDF, using their largest absolute vertical gap."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s2",
+   "mins": 6,
+   "title": "Build the empirical distribution function",
+   "objective": "Convert ordered observations into cumulative proportions.",
+   "ask": {
+    "q": "For n=5, what is Fₙ(x) at the third ordered observation if there are no ties?",
+    "nudge": "Three of five observations are at most that value, so 3/5."
+   },
+   "body": [
+    "For ordered observations x₍₁₎≤…≤x₍ₙ₎, Fₙ(x)=number of observations at most x divided by n.",
+    "It is a step function. With distinct observations, it jumps by 1/n at each observation. With ties, the jump at the tied value is the number tied divided by n."
+   ]
+  },
+  {
+   "kind": "theory",
+   "id": "s3",
+   "mins": 9,
+   "title": "Kolmogorov–Smirnov statistics",
+   "objective": "Define one-sample and two-sample KS.",
+   "ask": {
+    "q": "What is D in a one-sample KS test?",
+    "nudge": "The supremum of the absolute difference between empirical and reference CDFs."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Empirical distribution function",
+     "body": "Fₙ(x)=n⁻¹ΣI(Xᵢ≤x). It is a right-continuous step function with total mass one."
+    },
+    {
+     "t": "formula",
+     "h": "One-sample KS",
+     "body": "D=supₓ|Fₙ(x)−F₀(x)|, where F₀ is a specified continuous reference CDF."
+    },
+    {
+     "t": "formula",
+     "h": "Two-sample KS",
+     "body": "Dₙₘ=supₓ|Fₙ(x)−Gₘ(x)|, where the two empirical CDFs come from independent samples."
+    },
+    {
+     "t": "step",
+     "h": "Critical-value caution",
+     "body": "The usual distribution-free one-sample KS reference assumes a fully specified continuous F₀. If parameters are estimated from the same data, use an adjusted procedure such as Lilliefors or simulation. Discrete outcomes and ties also change the null calibration."
+    }
+   ],
+   "flow": {
+    "title": "Choose KS or runs",
+    "alt": "A CDF or distribution-fit target leads to KS; a sequence-order randomness target leads to runs.",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 1,
+      "label": "State the target",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Distribution / CDF",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 1,
+      "c": 2,
+      "label": "Sequence order",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 2,
+      "c": 0,
+      "label": "One- or two-sample KS",
+      "kind": "step"
+     },
+     {
+      "id": "e",
+      "r": 2,
+      "c": 2,
+      "label": "Runs test",
+      "kind": "step"
+     },
+     {
+      "id": "f",
+      "r": 3,
+      "c": 1,
+      "label": "Interpret null result",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "a",
+      "to": "c"
+     },
+     {
+      "from": "b",
+      "to": "d"
+     },
+     {
+      "from": "c",
+      "to": "e"
+     },
+     {
+      "from": "d",
+      "to": "f"
+     },
+     {
+      "from": "e",
+      "to": "f"
+     }
+    ],
+    "note": "KS compares CDFs; runs assesses randomness in the order of two labels."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s4",
+   "mins": 10,
+   "title": "Worked example: one-sample KS",
+   "objective": "Calculate the maximum CDF gap.",
+   "ask": {
+    "q": "Why inspect both sides of each empirical jump?",
+    "nudge": "The largest gap may occur just before or just after a jump."
+   },
+   "problem": "For five ordered observations, the reference CDF values at the observations are 0.10, 0.35, 0.55, 0.75 and 0.95. Find D.",
+   "steps": [
+    {
+     "say": "Write the empirical CDF values just after each observation.",
+     "math": "Fₙ(xᵢ)=i/5=(0.20,0.40,0.60,0.80,1.00)",
+     "why": "With five distinct ordered observations, each jump is 1/5."
+    },
+    {
+     "say": "Calculate Fₙ−F₀.",
+     "math": "(0.10,0.05,0.05,0.05,0.05)",
+     "why": "Subtract the reference CDF from the empirical CDF at each observed value."
+    },
+    {
+     "say": "Check the left limits for the opposite direction.",
+     "math": "F₀(xᵢ)−Fₙ(xᵢ⁻)=(0.10,0.15,0.15,0.15,0.15)",
+     "why": "Before the ith jump, the empirical CDF is (i−1)/5. The maximum opposite-side gap is 0.15."
+    },
+    {
+     "say": "Take the largest absolute gap.",
+     "math": "D=max(0.10,0.15)=0.15",
+     "why": "The KS statistic is the largest vertical separation, not the average separation."
+    }
+   ],
+   "after": "The example gives D=0.15. A p-value or decision also needs sample size and the correct null calibration."
+  },
+  {
+   "kind": "recall",
+   "id": "s5",
+   "mins": 3,
+   "title": "Pause and retrieve",
+   "objective": "Recall the CDF and KS definitions.",
+   "intro": "Answer before revealing.",
+   "items": [
+    {
+     "q": "Empirical CDF at x?",
+     "a": "Number of observations ≤x divided by n."
+    },
+    {
+     "q": "One-sample KS statistic?",
+     "a": "sup|Fₙ−F₀|."
+    },
+    {
+     "q": "Two-sample KS compares?",
+     "a": "Two independent empirical CDFs."
+    },
+    {
+     "q": "What does D measure?",
+     "a": "The largest absolute vertical gap."
+    },
+    {
+     "q": "What changes if parameters are estimated?",
+     "a": "The usual fully specified KS critical values are not valid; use adjusted calibration."
+    }
+   ]
+  },
+  {
+   "kind": "completion",
+   "id": "s6",
+   "mins": 8,
+   "title": "Complete the KS calculation",
+   "objective": "Fill the missing empirical CDF and maximum gap.",
+   "problem": "For n=5 distinct ordered observations, Fₙ(x₄)=4/5 and the reference CDF at x₄ is 0.75. The largest gap across all points is 0.15. Complete the checks.",
+   "steps": [
+    {
+     "say": "Calculate the empirical CDF at x₄.",
+     "blank": {
+      "prompt": "Fₙ(x₄)=4/5=…",
+      "answer": "0.8",
+      "accept": [
+       "0.80"
+      ],
+      "hint": "Divide four by five."
+     },
+     "why": "Four of the five observations are at most x₄."
+    },
+    {
+     "say": "Find the absolute gap at x₄.",
+     "blank": {
+      "prompt": "|0.80−0.75|=…",
+      "answer": "0.05",
+      "accept": [
+       "0.050"
+      ],
+      "hint": "Subtract the two CDF values."
+     },
+     "why": "This is one pointwise gap, not necessarily the overall D."
+    },
+    {
+     "say": "Compare with the largest gap.",
+     "blank": {
+      "prompt": "D=max(pointwise gaps)=…",
+      "answer": "0.15",
+      "accept": [
+       "0.150"
+      ],
+      "hint": "Use the largest gap supplied in the question."
+     },
+     "why": "KS uses the maximum absolute difference across x."
+    }
+   ],
+   "after": "Do not confuse one pointwise gap with the maximum over the whole CDF.",
+   "ask": {
+    "q": "Which two functions are compared to obtain the one-sample KS statistic?",
+    "nudge": "The empirical CDF and the specified reference CDF."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 8,
+   "title": "Runs test",
+   "objective": "Test whether the order of two labels is random.",
+   "ask": {
+    "q": "What causes a new run?",
+    "nudge": "A change from one label to the other."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Count runs",
+     "body": "A run is a maximal consecutive sequence of one label. In PPPFFP there are three runs: PPP, FF and P."
+    },
+    {
+     "t": "formula",
+     "h": "Expected number of runs",
+     "body": "For n₁ labels of type 1 and n₂ labels of type 2, N=n₁+n₂, E(R)=1+2n₁n₂/N."
+    },
+    {
+     "t": "formula",
+     "h": "Variance",
+     "body": "Var(R)=2n₁n₂(2n₁n₂−N)/[N²(N−1)], for positive n₁ and n₂."
+    },
+    {
+     "t": "step",
+     "h": "Interpretation",
+     "body": "Too few runs suggests clustering; too many suggests excessive alternation. For small samples use the exact runs distribution. A normal approximation uses the null mean and variance when justified."
+    },
+    {
+     "t": "def",
+     "h": "Conditioning",
+     "body": "The standard runs test conditions on the observed counts n₁ and n₂. The sequence order must be meaningful, and labels should arise under the intended random-order model."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 8,
+   "title": "Guided calculation: expected runs",
+   "objective": "Calculate the null expectation from two label counts.",
+   "problem": "A sequence has six successes and four failures. Find E(R).",
+   "hints": [
+    "Identify n₁, n₂ and N.",
+    "Substitute into 1+2n₁n₂/N.",
+    "Check the result against the possible run-count range."
+   ],
+   "answer": "E(R)=1+2×6×4/10=5.8 runs.",
+   "check": "This is the expected number of runs under randomness, not the observed count.",
+   "solution": [
+    {
+     "say": "Identify counts.",
+     "math": "n₁=6; n₂=4; N=10",
+     "why": "The formula uses the two category counts."
+    },
+    {
+     "say": "Substitute.",
+     "math": "E(R)=1+2×6×4/10",
+     "why": "Keep the denominator as the total number of labels."
+    },
+    {
+     "say": "Evaluate.",
+     "math": "E(R)=1+48/10=5.8",
+     "why": "This is the null expectation of the run count."
+    }
+   ],
+   "scenario": {
+    "teaser": "A chronological pass/fail sequence from a production line.",
+    "title": "Checking sequence randomness",
+    "body": [
+     "A factory records the order of 12 inspected items as pass or fail. The counts are six passes and six failures. The analyst asks whether the sequence contains unusually long blocks or alternates too often. A run is a maximal consecutive block of the same label. The runs test conditions on the two label counts and studies the number of runs. It does not compare a sample distribution with a theoretical CDF; that is the KS test's target."
+    ],
+    "q": "What does an unusually small number of runs suggest?",
+    "answer": "Clustering of identical labels rather than random mixing."
+   },
+   "ask": {
+    "q": "Which formula gives the expected number of runs?",
+    "nudge": "1+2n₁n₂/(n₁+n₂)."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s9",
+   "mins": 6,
+   "title": "Six statements to challenge",
+   "objective": "Separate CDF and sequence concepts.",
+   "intro": "Mark each claim true or false before revealing the reason.",
+   "items": [
+    {
+     "claim": "The empirical CDF is nondecreasing.",
+     "tf": true,
+     "why": "True. Adding observations as x increases cannot reduce the cumulative count."
+    },
+    {
+     "claim": "The one-sample KS statistic is the average CDF gap.",
+     "tf": false,
+     "why": "False. It is the maximum absolute vertical gap."
+    },
+    {
+     "claim": "The two-sample KS test compares independent empirical CDFs.",
+     "tf": true,
+     "why": "True. The two samples are independent under the standard two-sample procedure."
+    },
+    {
+     "claim": "The runs test uses only total counts and ignores order.",
+     "tf": false,
+     "why": "False. It conditions on the counts and tests the observed order through the number of runs."
+    },
+    {
+     "claim": "Too few runs can indicate clustering.",
+     "tf": true,
+     "why": "True. Long blocks of the same label reduce the number of runs."
+    },
+    {
+     "claim": "Standard KS critical values apply unchanged when null parameters are estimated from the sample.",
+     "tf": false,
+     "why": "False. Parameter estimation changes the null distribution; an adjusted calibration is needed."
+    }
+   ]
+  },
+  {
+   "kind": "guided",
+   "id": "s10",
+   "mins": 8,
+   "title": "Guided transfer: identify the target",
+   "objective": "Choose between one-sample KS, two-sample KS and runs.",
+   "problem": "A study asks: (a) do waiting times follow a specified exponential CDF? (b) do two independent regions have the same waiting-time distribution? (c) is the order of high/low demand days random? Match each question to a test.",
+   "hints": [
+    "A specified theoretical CDF points to one-sample goodness-of-fit.",
+    "Two independent empirical distributions point to two-sample KS.",
+    "An ordered high/low sequence points to runs."
+   ],
+   "answer": "(a) one-sample KS; (b) two-sample KS; (c) runs test.",
+   "check": "Choose by target: one reference CDF, two empirical CDFs, or sequence order.",
+   "solution": [
+    {
+     "say": "Question (a): one sample against a specified distribution.",
+     "math": "One-sample KS",
+     "why": "Compare the empirical CDF with the specified exponential CDF."
+    },
+    {
+     "say": "Question (b): two independent regions.",
+     "math": "Two-sample KS",
+     "why": "Compare the two empirical CDFs."
+    },
+    {
+     "say": "Question (c): order of high/low labels.",
+     "math": "Runs test",
+     "why": "The target is randomness in the sequence arrangement."
+    }
+   ],
+   "ask": {
+    "q": "What target distinguishes runs from KS?",
+    "nudge": "Sequence order versus distributional fit."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s11",
+   "mins": 6,
+   "title": "Assumptions and exam cautions",
+   "objective": "Avoid common KS and runs-test misinterpretations.",
+   "ask": {
+    "q": "Why are ordinary KS critical values problematic for a discrete reference distribution?",
+    "nudge": "The distribution-free KS null calibration assumes a continuous reference CDF."
+   },
+   "blocks": [
+    {
+     "t": "def",
+     "h": "KS assumptions",
+     "body": "The classical one-sample KS test assumes independent observations from a continuous distribution with fully specified CDF. The two-sample form assumes independent samples from continuous distributions. Ties and discreteness require adjusted methods."
+    },
+    {
+     "t": "step",
+     "h": "Estimated parameters",
+     "body": "If reference distribution parameters are estimated from the same sample, standard KS critical values are not valid as-is. Use an adjusted test such as Lilliefors for supported cases or a parametric bootstrap."
+    },
+    {
+     "t": "def",
+     "h": "Runs assumptions",
+     "body": "The sequence order must be meaningful. The test conditions on counts of two labels and tests randomness of their arrangement; it is not a test for a particular continuous distribution."
+    }
+   ]
+  },
+  {
+   "kind": "recall",
+   "id": "s12",
+   "mins": 3,
+   "title": "Second recall",
+   "objective": "Retrieve the final formulas and target cues.",
+   "intro": "Answer, then reveal.",
+   "items": [
+    {
+     "q": "One-sample KS D?",
+     "a": "sup|Fₙ−F₀|."
+    },
+    {
+     "q": "Two-sample KS D?",
+     "a": "sup|Fₙ−Gₘ|."
+    },
+    {
+     "q": "Expected runs?",
+     "a": "1+2n₁n₂/(n₁+n₂)."
+    },
+    {
+     "q": "Too many runs suggest?",
+     "a": "Excessive alternation."
+    },
+    {
+     "q": "Too few runs suggest?",
+     "a": "Clustering."
+    }
+   ]
+  },
+  {
+   "kind": "summary",
+   "id": "s13",
+   "mins": 3,
+   "title": "What you should now be able to do",
+   "objective": "Calculate KS gaps and match sequence questions to runs.",
+   "body": [
+    "Construct the empirical distribution function as cumulative count divided by n.",
+    "Calculate one-sample or two-sample KS as the maximum absolute CDF gap.",
+    "Use appropriate calibration: continuous fully specified null for classical one-sample KS; adjusted methods if parameters are estimated or data are discrete.",
+    "Define runs and calculate their null expectation and variance from n₁ and n₂.",
+    "Interpret too few runs as clustering and too many as alternation; do not confuse runs with distributional fit."
+   ],
+   "ask": {
+    "q": "What does a small or large number of runs suggest?",
+    "nudge": "Few runs suggest clustering; many suggest alternation."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s14",
+   "mins": 4,
+   "title": "Mastery test",
+   "objective": "Demonstrate KS and runs-test skills independently.",
+   "setId": "nonparam_t6_mastery"
+  }
+ ]
+}
