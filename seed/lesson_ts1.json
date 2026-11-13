@@ -265,8 +265,8 @@
    "objective": "See why each restriction exists before meeting the algebra.",
    "body": [
     "Stationarity is about the process existing at all. If shocks are amplified rather than damped as they are carried forward, the variance grows without limit and there is no stable distribution to describe. The condition on the coefficients is what guarantees the damping.",
-    "Invertibility is about something else entirely: whether the model can be USED. An invertible MA can be rewritten as an infinite autoregression, so the unobservable shock εₜ can be reconstructed from the observed past. A non-invertible one cannot, which means the residuals cannot be computed from the data and forecasting from observables is impossible.",
-    "There is a second reason for invertibility, and it is the sharper one: identifiability. An MA(1) with θ and one with 1/θ have exactly the same autocorrelation function — ρ₁ = −θ/(1 + θ²) is unchanged by replacing θ with 1/θ. So the data cannot distinguish them, and restricting to |θ| < 1 picks exactly one representative from each such pair.",
+    "Invertibility is about recovering the innovations in a chosen MA parameterisation. If its MA polynomial is invertible, the shocks can be recovered as a convergent function of the observed past. If the chosen parameterisation is non-invertible, that particular inverse diverges — but the same second-order process has an equivalent invertible MA parameterisation after rescaling the innovation variance. Forecasting from observations uses that canonical representation; it is not impossible merely because one non-invertible parameterisation was written down.",
+    "There is a second reason for the invertibility restriction: identification. An MA(1) with coefficient θ and one with 1/θ have the same autocorrelation function, since ρ₁ = −θ/(1 + θ²) is unchanged. To make the full autocovariance structure match, the innovation variance must also be rescaled. Restricting to |θ| < 1 selects the canonical representative.",
     "That is why invertibility is a convention with teeth rather than a technicality: without it the parameter would not be estimable, because two different values would fit identically."
    ],
    "scenario": {
@@ -665,12 +665,12 @@
     {
      "t": "step",
      "h": "Why non-identifiability follows",
-     "body": "An MA(1) with coefficient θ has ρ₁ = −θ/(1 + θ²) and ρₖ = 0 beyond. Replacing θ by 1/θ leaves ρ₁ unchanged, since −(1/θ)/(1 + 1/θ²) = −θ/(θ² + 1). So θ and 1/θ are observationally identical, and exactly one of the pair satisfies |θ| < 1. Invertibility therefore selects one representative per equivalence class, which is what makes the parameter estimable. Checked numerically: at θ = 0.5 and θ = 2 the simulated ρ₁ was −0.3996 against the exact −0.4 in both cases."
+     "body": "An MA(1) with coefficient θ has ρ₁ = −θ/(1 + θ²) and ρₖ = 0 beyond. Replacing θ by 1/θ leaves ρ₁ unchanged. The variance can also be matched by rescaling the innovation variance: if θ* = 1/θ, choose σ*² = θ²σ², so γ₀* = σ*²(1 + θ*²) = σ²(1 + θ²). Thus the two parameterisations have the same autocovariance structure; the invertibility restriction selects the canonical representative. Checked numerically at θ = 0.5 and θ = 2."
     },
     {
      "t": "step",
      "h": "The practical payoff",
-     "body": "Forecasting needs εₜ expressed in terms of observed yₜ, yₜ₋₁, …, which is exactly the infinite-AR representation. So invertibility is not decoration: without it the one-step forecast cannot be computed from the data. Topic 7.11 builds forecasts on precisely this representation, and topic 7.10's Wold decomposition is the general statement that any stationary process has an infinite-MA form."
+     "body": "For a chosen MA parameterisation, invertibility makes the inverse filter converge and recovers its innovations from observed yₜ, yₜ₋₁, …. This is the convenient canonical representation used for estimation and forecasting. A non-invertible MA process still has an observationally equivalent invertible representation (with a corresponding innovation-variance rescaling), so forecasting from the observed process remains possible after choosing that canonical form."
     }
    ],
    "ask": {
