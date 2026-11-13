@@ -3,11 +3,11 @@ from math import sqrt
 
 def main():
     n=0
-    for t,mu,sig2 in [(5,0.5,4),(20,0.5,4),(40,0.5,4),(10,0.3,4)]:
-        close(t*mu, t*mu); close(t*sig2,t*sig2); n+=2
-    for t,k in [(10,5),(20,20),(25,75),(100,20),(100,50)]:
+    for t,mu,sig2,expected_mean,expected_var in [(5,0.5,4,2.5,20),(20,0.5,4,10,80),(40,0.5,4,20,160),(10,0.3,4,3,40)]:
+        close(t*mu, expected_mean); close(t*sig2,expected_var); n+=2
+    for t,k,expected in [(10,5,0.816496580927726),(20,20,0.7071067811865476),(25,75,0.5),(100,20,0.9128709291752769),(100,50,0.816496580927726)]:
         rho=sqrt(t/(t+k))
-        close(rho*rho,t/(t+k))
+        close(rho,expected)
         cov=t
         close(cov/sqrt(t*(t+k)),rho); n+=2
     # Over-differenced white noise: exact MA(1) moments.
