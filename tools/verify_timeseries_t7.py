@@ -23,8 +23,10 @@ def main():
     close(fma1(0.7,1,0),0.09/(2*pi))
     close(fma1(0.7,1,pi),2.89/(2*pi)); n+=2
     close(simpson(lambda w:fma1(0.7,1,w),-pi,pi),1+0.7**2,1e-9); n+=1
-    close(1/(2*pi)*2*pi,1.0); n+=1
+    white_noise=lambda w: 1/(2*pi)
+    close(white_noise(0),0.15915494309189535)
+    close(simpson(white_noise,-pi,pi),1.0,1e-9); n+=2
     # If variance of a smoothed ordinate scales as 1/m, halving its SD needs m x4.
-    close((1/2)**0.5,1/(4**0.5)); n+=1
+    close((1/(4**0.5))/(1/(1**0.5)),0.5); n+=1
     finish(7,7,n)
 if __name__ == "__main__": main()
