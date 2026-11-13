@@ -104,7 +104,47 @@ The following 16 lesson files were opened and screened: `lesson_t1.json`–`less
 - Before: the answer repeated the two-state period-2 conclusion, and the hints discussed return-time gcds instead of class entry/returnability.
 - After: the answer and hints now address the transient outside state and the two distinct closed recurrent classes.
 
-### MA-009 — R missing-value steps use a different vector\n\n- File: `seed/lesson_rprog_t6.json`\n- Scene: `s6`\n- Severity: **Major** — the prompt's data and the worked steps referred to different observations.\n- Evidence: The prompt gives `x=c(NA,4,NA,8,10)`, whose observed values are 4, 8 and 10. The steps instead used 2, 6 and 10 and computed their mean.\n- After: the steps now identify 4, 8 and 10 and correctly count length 5, missing 2 and observed 3.\n\n### MA-010 — R summary steps belong to another NA example\n\n- File: `seed/lesson_rprog_t6.json`\n- Scene: `s8`\n- Severity: **Major** — the prompt asks for sum, mean and median of `c(1,NA,3,9)`, but the steps counted a five-element vector with two missing values.\n- Evidence: The correct observed set is (1,3,9), giving sum 13, mean 13/3 and median 3.\n- After: the steps now compute those three requested summaries directly.\n\n### MA-011 — R format() example has unrelated list-extraction steps\n\n- File: `seed/lesson_rprog_t7.json`\n- Scene: `s8`\n- Severity: **Major** — the explanation was copied from a nested-list example and did not address formatting.\n- Evidence: The prompt asks whether `y=format(x,nsmall=2)` is numeric or character. The correct result is character; `x` remains numeric, and `nsmall` specifies a minimum number of decimal places rather than rounding to exactly two.\n- After: the worked steps explain the return type, unchanged source object and meaning of `nsmall`.\n\n### MA-012 — R CSV import/export prompt has data-frame filtering steps\n\n- File: `seed/lesson_rprog_t8.json`\n- Scene: `s6`\n- Severity: **Major** — the solution steps did not address the requested file operations.\n- Evidence: The prompt asks for importing `sample.csv` and exporting a cleaned data frame without row names; the original steps described row filtering and selected IDs.\n- After: the steps now match `read.csv()`, `write.csv()` and `row.names=FALSE`.\n\n### MA-013 — Document-review prompt has unrelated LaTeX math-mode steps\n\n- File: `seed/lesson_rprog_t9.json`\n- Scene: `s8`\n- Severity: **Major** — the solution steps answered a different LaTeX question.\n- Evidence: The prompt asks for tracked edits, comments and bibliography management; the original steps described inline/display math delimiters.\n- After: the steps now cover Track Changes, comments and a citation/reference manager.\n\n## Mathematics, Multivariate Analysis and Sampling first-pass review
+### MA-009 — R missing-value steps use a different vector
+
+- File: `seed/lesson_rprog_t6.json`
+- Scene: `s6`
+- Severity: **Major** — the prompt's data and the worked steps referred to different observations.
+- Evidence: The prompt gives `x=c(NA,4,NA,8,10)`, whose observed values are 4, 8 and 10. The steps instead used 2, 6 and 10 and computed their mean.
+- After: the steps now identify 4, 8 and 10 and correctly count length 5, missing 2 and observed 3.
+
+### MA-010 — R summary steps belong to another NA example
+
+- File: `seed/lesson_rprog_t6.json`
+- Scene: `s8`
+- Severity: **Major** — the prompt asks for sum, mean and median of `c(1,NA,3,9)`, but the steps counted a five-element vector with two missing values.
+- Evidence: The correct observed set is (1,3,9), giving sum 13, mean 13/3 and median 3.
+- After: the steps now compute those three requested summaries directly.
+
+### MA-011 — R format() example has unrelated list-extraction steps
+
+- File: `seed/lesson_rprog_t7.json`
+- Scene: `s8`
+- Severity: **Major** — the explanation was copied from a nested-list example and did not address formatting.
+- Evidence: The prompt asks whether `y=format(x,nsmall=2)` is numeric or character. The correct result is character; `x` remains numeric, and `nsmall` specifies a minimum number of decimal places rather than rounding to exactly two.
+- After: the worked steps explain the return type, unchanged source object and meaning of `nsmall`.
+
+### MA-012 — R CSV import/export prompt has data-frame filtering steps
+
+- File: `seed/lesson_rprog_t8.json`
+- Scene: `s6`
+- Severity: **Major** — the solution steps did not address the requested file operations.
+- Evidence: The prompt asks for importing `sample.csv` and exporting a cleaned data frame without row names; the original steps described row filtering and selected IDs.
+- After: the steps now match `read.csv()`, `write.csv()` and `row.names=FALSE`.
+
+### MA-013 — Document-review prompt has unrelated LaTeX math-mode steps
+
+- File: `seed/lesson_rprog_t9.json`
+- Scene: `s8`
+- Severity: **Major** — the solution steps answered a different LaTeX question.
+- Evidence: The prompt asks for tracked edits, comments and bibliography management; the original steps described inline/display math delimiters.
+- After: the steps now cover Track Changes, comments and a citation/reference manager.
+
+## Mathematics, Multivariate Analysis and Sampling first-pass review
 
 The 16 Mathematics lessons (`lesson_ma1.json`–`lesson_ma16.json`) and `lesson_mle.json`, all 9 Multivariate Analysis lessons, and all 9 Sampling Theory lessons were opened and screened for numerical worked/guided examples. MA-008 is the confirmed endpoint/interval contradiction in the inspected Mathematics examples. The numerical examples inspected in the other lessons did not yield another confirmed arithmetic contradiction in this first pass. These modules are not yet certified in full.
 
@@ -128,7 +168,8 @@ Expected verifier output:
 - PASS: normal likelihood-ratio identity `10Σxᵢ − 525n`
 - PASS: T4 alternating chain is closed, recurrent and period 2; outside state is transient with two distinct recurrent classes
 - PASS: MA(1) roots for ρ₁=−0.49 are 0.8173495 and 1.2234668; invertible root is 0.8173495
-- PASS: endpoint series telescopes to 1; convergence interval is [4,6]\n- PASS: R worked-step consistency assertions for the five corrected scenes
+- PASS: endpoint series telescopes to 1; convergence interval is [4,6]
+- PASS: R worked-step consistency assertions for the five corrected scenes
 
 Execution status: neither verifier has yet been run from a full local repository checkout in this environment. The numerical calculations were independently recomputed in Python. The PR currently has no associated GitHub Actions workflow runs, so repository CI/validators remain unverified; do not interpret the expected PASS lines above as executed test results.
 
