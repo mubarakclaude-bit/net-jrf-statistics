@@ -7,7 +7,7 @@ def ar1_variance(phi,sig2,k):
 def main():
     n=0
     phi,y,sig2=0.7,2,1
-    for k,forecast,var in [(1,1.4,1),(2,0.98,1.49),(10,0.056,1.9592156862745098)]:
+    for k,forecast,var in [(1,1.4,1),(2,0.98,1.49),(10,0.0564950498,1.9592197594843606)]:
         close(phi**k*y,forecast,1e-6); close(ar1_variance(phi,sig2,k),var,1e-6); n+=2
     close(sig2/(1-phi**2),1.9607843137254901); n+=1
     # AR(2) recursion with actual values available at first step.
