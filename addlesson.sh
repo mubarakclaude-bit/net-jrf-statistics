@@ -23,7 +23,7 @@ PY=$1; STEM=$2; TID=${3:-}; DOC=${4:-}; SET=${5:-}
 # Once a lesson is merged, its seed JSON is the source of truth (docs/CONTENT_GUIDE.md, 3a). Running its generator script
 # again would overwrite every later edit made to the JSON, so that needs an explicit REGENERATE=1. A lesson that is new in
 # this branch is not on the base branch yet, so it is never blocked: the usual "run until clean" loop is unchanged.
-BASEREF=${BASE_REF:-origin/multi-author-hosting}
+BASEREF=${BASE_REF:-origin/main}
 if [ "${REGENERATE:-}" != "1" ] && git rev-parse --verify -q "$BASEREF" >/dev/null 2>&1 && git cat-file -e "$BASEREF:seed/$STEM.json" 2>/dev/null; then
   echo "FAILED: seed/$STEM.json is already merged ($BASEREF). Running $PY again would overwrite any edits made to the JSON since."
   echo "  To change an existing lesson, edit seed/$STEM.json directly (docs/CONTENT_GUIDE.md, 3a), then run:"

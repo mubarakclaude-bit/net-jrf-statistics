@@ -1,0 +1,380 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""regression-t3 (topic 6.3): ANOVA decomposition and the F test from R². Anchor Q9.
+Every figure below is computed in verify_regression_t1_t4.py; nothing is recalled."""
+import json, io, os, re, random
+
+OUT  = "seed/lesson_rg3.json"
+POOL = "seed/regression_t3_mastery.json"
+
+S = []
+
+S.append({"kind":"foundation","id":"s0","mins":7,"title":"Before the lesson — four things it will assume",
+ "objective":"Check the sums of squares, the F distribution, the null hypothesis and the residual degrees of freedom.",
+ "ask":{"q":"What do TSS, RegSS and RSS each measure, and how do they relate?","nudge":"Total, explained, unexplained."},
+ "body":["A regression splits the variation in y into two parts. One part is explained by the fitted line. The rest is the residual. The analysis of variance is the bookkeeping that records those two parts, divides each by its degrees of freedom, and compares them with a ratio.",
+         "Q9 of the June paper asked for that ratio written in terms of R² alone, with the degrees of freedom in the right places. The answer was marked A where the key is B. The two options differ by where k − 1 and n − k sit, which is a verification slip, not a method gap. This lesson therefore builds the F ratio from the sums of squares first, then rewrites it in R², and checks the result on numbers.",
+         "No symbol is introduced before the case it names. The five-student data of topic 6.1 are used again: x = 1, 2, 3, 4, 5 and y = 2, 4, 5, 4, 5."],
+ "items":[
+  {"ask":"Define TSS, RegSS and RSS and state how they relate in a model with an intercept.",
+   "recall":"TSS = Σ(y − ȳ)², RegSS = Σ(ŷ − ȳ)², RSS = Σ(y − ŷ)², and TSS = RegSS + RSS.",
+   "refresh":["TSS is the total variation of y around its mean. RegSS is the variation of the fitted values around the same mean. RSS is what the fitted values fail to explain. For the five-student data: TSS = 6, RegSS = 3.6, RSS = 2.4.",
+              "The identity TSS = RegSS + RSS is Pythagoras on the right-angled triangle from topic 6.1. It needs the column of ones in X; without an intercept the centring no longer works."]},
+  {"ask":"What is an F distribution?",
+   "recall":"The ratio of two independent chi-squares, each divided by its degrees of freedom.",
+   "refresh":["If A ~ χ²(a) and B ~ χ²(b) are independent, then (A/a)/(B/b) follows an F distribution with (a, b) degrees of freedom. Numerator degrees of freedom come first.",
+              "F is never negative and is skewed to the right. A large value says the numerator average is much bigger than the denominator average."]},
+  {"ask":"What does the overall F test test?",
+   "recall":"H₀: all slope coefficients are zero, against at least one non-zero.",
+   "refresh":["The model has k coefficients, one of them the intercept. The overall test asks whether the k − 1 slopes could all be zero, which would make the regression no better than a constant.",
+              "Reject when F exceeds the upper 5% point of F(k − 1, n − k). Failing to reject means the data do not distinguish the model from a flat line; it does not prove the slopes are zero."]},
+  {"ask":"How many degrees of freedom does the residual sum of squares carry?",
+   "recall":"n − k.",
+   "refresh":["From topic 6.1: the residual vector lives in a space of dimension tr(M) = n − k. For five observations and two coefficients that is 3.",
+              "The regression sum of squares carries k − 1, because the fitted values around their mean live in a space of dimension tr(H) − 1 = k − 1. The total carries n − 1, and (k − 1) + (n − k) = n − 1."]}]})
+
+S.append({"kind":"intuition","id":"s1","mins":7,"title":"Splitting the variation, then comparing averages",
+ "objective":"Describe the ANOVA split and why the F ratio compares per-degree-of-freedom averages.",
+ "body":["The variation in y is the sum of squared distances from its mean. Fit a line and that total splits in two: what the line explains and what it leaves. If the line is useless, the explained part is only what chance would produce, and its average per degree of freedom is about the same as the residual's average per degree of freedom.",
+         "That is why the test is a ratio of averages. Each sum of squares is divided by the number of independent directions it covers: k − 1 for the regression, n − k for the residual. Under the null both averages estimate σ², so their ratio hovers around 1. A ratio well above 1 says the line is explaining more than chance would.",
+         "R² is the explained share of the total, RegSS/TSS. Because RegSS = R²·TSS and RSS = (1 − R²)·TSS, TSS cancels from the ratio. F depends on the data only through R², n and k."],
+ "scenario":{"teaser":"A line that explains 60% of the variation, and still is not significant.",
+  "title":"R² of 0.6 with five points",
+  "body":["For the five-student data, x = 1, 2, 3, 4, 5 and y = 2, 4, 5, 4, 5, the total variation is TSS = 6. The fitted line explains RegSS = 3.6 of it, so R² = 3.6/6 = 0.6, and leaves RSS = 2.4.",
+          "Sixty per cent sounds like a good fit. The F ratio says otherwise. The regression carries k − 1 = 1 degree of freedom and the residual carries n − k = 3, so F = (3.6/1)/(2.4/3) = 3.6/0.8 = 4.5. The 5% critical value of F(1, 3) is 10.128. The observed 4.5 is far below it, with a p-value of 0.124.",
+          "With only five points a line can fit well by luck. The test accounts for that by asking how large a ratio chance alone produces when there are just three residual degrees of freedom. The answer is: large, so 4.5 is unremarkable."],
+  "q":"If the same R² of 0.6 came from n = 50 observations, would F be bigger or smaller than 4.5?",
+  "answer":"Bigger. F = (0.6/1)/(0.4/48) = 72, because dividing by n − k = 48 instead of 3 makes the residual average small. The same fit is far stronger evidence with more data."},
+ "ask":{"q":"Why can R² be high while the overall F test fails to reject?","nudge":"Count the residual degrees of freedom."}})
+
+S.append({"kind":"explore","id":"s2","mins":7,"title":"A small sample needs a large correlation",
+ "objective":"See that in simple regression the F test is a test on r², and find how large r must be at n = 5.",
+ "viz":{"type":"r-null","caption":"Set n = 5. The null density of r is a semicircle, and the 5% two-sided critical value is |r| = 0.878."},
+ "body":["In simple regression R² equals the square of the correlation r between x and y, and F equals the square of the slope's t statistic. So the F test is a test on r. The picture shows the distribution of r when the true correlation is zero.",
+         "Set n = 5. The 5% critical value is |r| = 0.878, so the critical R² is 0.771. The five-student data have r = 0.775, so R² = 0.6 sits inside the acceptance region. Move n up to 20 and the critical |r| drops to about 0.44.",
+         "Nothing about the line changed between those two sample sizes. Only the amount of evidence changed."],
+ "ask":{"q":"At n = 5 what R² is needed for significance at 5%?","nudge":"Square the critical |r| you read off."}})
+
+S.append({"kind":"theory","id":"s3","mins":9,"title":"The ANOVA table and F in R² form",
+ "objective":"State the table, the F ratio and its R² form.",
+ "blocks":[
+  {"t":"formula","h":"The ANOVA table","body":"Source        SS       df       MS                F\nRegression    RegSS    k − 1    RegSS/(k − 1)     MSR/MSE\nResidual      RSS      n − k    RSS/(n − k) = s²\nTotal         TSS      n − 1"},
+  {"t":"formula","h":"F in terms of R²   (the form asked in Q9)","body":"F = [R²/(k − 1)] / [(1 − R²)/(n − k)]\n  = (R²/(1 − R²)) · ((n − k)/(k − 1))\nwith (k − 1, n − k) degrees of freedom."},
+  {"t":"step","h":"Why TSS cancels","body":"RegSS = R²·TSS and RSS = (1 − R²)·TSS. Substituting, the TSS in the numerator and the TSS in the denominator divide out, leaving the ratio above. The numerator is divided by k − 1, the denominator by n − k, and these must not be swapped: the first counts the slopes, the second counts the leftover."},
+  {"t":"def","h":"Simple regression","body":"For one regressor, k = 2: F has (1, n − 2) degrees of freedom and F = t², where t is the slope's t statistic. Also R² = r², the squared correlation of x and y."},
+  {"t":"step","h":"Limits of the formula","body":"If R² = 0 then F = 0. As R² approaches 1 the denominator goes to 0 and F goes to infinity. F is increasing in R² for fixed n and k."}],
+ "table":{"caption":"Five-student data, the whole table","head":["Source","SS","df","MS","F"],
+  "rows":[["Regression","3.6","1","3.6","4.5"],["Residual","2.4","3","0.8",""],["Total","6.0","4","",""]]},
+ "flow":{"title":"From R² to the decision","alt":"A top-to-bottom flow. Take R squared, n and k. Form F as R squared over k minus 1 divided by 1 minus R squared over n minus k. Compare with the upper 5 percent point of F with k minus 1 and n minus k degrees of freedom. Reject if larger.",
+  "nodes":[{"id":"a","r":0,"c":1,"label":"R², n, k","kind":"start"},
+           {"id":"b","r":1,"c":1,"label":"F = [R²/(k − 1)] / [(1 − R²)/(n − k)]","kind":"step"},
+           {"id":"c","r":2,"c":1,"label":"Compare with F(k − 1, n − k) upper point","kind":"step"},
+           {"id":"d","r":3,"c":0,"label":"F larger: reject H₀, some slope is not zero","kind":"end"},
+           {"id":"e","r":3,"c":2,"label":"F smaller: do not reject","kind":"end"}],
+  "edges":[{"from":"a","to":"b"},{"from":"b","to":"c"},{"from":"c","to":"d"},{"from":"c","to":"e"}],
+  "note":"Two things go wrong in practice: swapped degrees of freedom, and n used where n − k belongs."},
+ "ask":{"q":"Which degrees of freedom divide the R² term, and which divide 1 − R²?","nudge":"Slopes versus leftover."}})
+
+S.append({"kind":"worked","id":"s4","mins":8,"title":"The full ANOVA for the five-student data",
+ "objective":"Compute every entry of the table and test it three ways.",
+ "ask":{"q":"What three equivalent quantities does the test use here?","nudge":"F, t and r."},
+ "problem":"x = 1, 2, 3, 4, 5 and y = 2, 4, 5, 4, 5. Build the ANOVA table, form F, and test H₀: slope = 0 at 5%.",
+ "steps":[
+  {"say":"Fit and take the three sums of squares.","math":"ŷ = 2.2 + 0.6x = (2.8, 3.4, 4.0, 4.6, 5.2),   ȳ = 4\nTSS = 4 + 0 + 1 + 0 + 1 = 6\nRegSS = 1.44 + 0.36 + 0 + 0.36 + 1.44 = 3.6\nRSS = 0.64 + 0.36 + 1 + 0.36 + 0.04 = 2.4","why":"Check: 3.6 + 2.4 = 6. If the parts do not add to the total the arithmetic has slipped."},
+  {"say":"Degrees of freedom and mean squares.","math":"df: regression k − 1 = 1,  residual n − k = 3,  total n − 1 = 4\nMSR = 3.6/1 = 3.6,   MSE = s² = 2.4/3 = 0.8","why":"The degrees of freedom must add: 1 + 3 = 4."},
+  {"say":"Form F.","math":"F = 3.6/0.8 = 4.5","why":"The numerator average is 4.5 times the denominator average."},
+  {"say":"Re-derive F from R² alone.","math":"R² = 3.6/6 = 0.6\nF = (0.6/1)/(0.4/3) = 0.6/0.13333 = 4.5","why":"The two routes must agree. This is the arithmetic check for Q9's form."},
+  {"say":"Check against the slope's t statistic.","math":"se(b) = √(0.8/10) = 0.2828,   t = 0.6/0.2828 = 2.1213\nt² = 4.5 = F","why":"For one regressor F = t². Also r = 0.7746 and r² = 0.6 = R²."},
+  {"say":"Decide.","math":"F(1, 3) upper 5% point = 10.128 = (3.182)²\n4.5 < 10.128   ⟹   do not reject.   p = 0.124","why":"The same decision from t: 2.1213 < 3.182. The three tests are one test."},
+  {"say":"Tie to topic 6.1.","math":"tr(H) = 2 ⟹ k = 2;   tr(M) = 3 = n − k","why":"The degrees of freedom came from traces. RegSS = y′(H − J)y, where J averages over all five observations."}],
+ "after":"Whenever you compute F, rebuild it a second way before you trust it."})
+
+S.append({"kind":"recall","id":"s5","mins":2,"title":"Pause and recall","objective":"Retrieve the formula and the degrees of freedom.",
+ "intro":"Answer each before revealing it.",
+ "items":[{"q":"Write F in terms of R², n and k.","a":"F = [R²/(k − 1)] / [(1 − R²)/(n − k)], with (k − 1, n − k) degrees of freedom."},
+          {"q":"What is the unbiased estimator of σ²?","a":"RSS/(n − k) = MSE."},
+          {"q":"In simple regression, how are F and t related?","a":"F = t²."},
+          {"q":"What happens to F as R² approaches 1?","a":"It tends to infinity."},
+          {"q":"What is the numerator degrees of freedom?","a":"k − 1, the number of slopes."}]})
+
+S.append({"kind":"completion","id":"s6","mins":8,"title":"Your turn — an ANOVA from a printout",
+ "objective":"Complete the table from RegSS = 66870 on 3 df and RSS = 5344 on 16 df.",
+ "problem":"An ANOVA table gives RegSS = 66870 with 3 df and RSS = 5344 with 16 df. Find the mean squares, F, and R².",
+ "steps":[
+  {"say":"Divide each sum of squares by its degrees of freedom.",
+   "blank":{"prompt":"What is the regression mean square MSR?","answer":"22290","accept":["22290","22,290","66870/3"],"hint":"66870 divided by 3."},
+   "why":"66870/3 = 22290."},
+  {"say":"Residual mean square.",
+   "blank":{"prompt":"What is MSE?","answer":"334","accept":["334","5344/16"],"hint":"5344 divided by 16."},
+   "why":"5344/16 = 334. This is s²."},
+  {"say":"Take the ratio.",
+   "blank":{"prompt":"What is F, to two decimals?","answer":"66.74","accept":["66.74","66.7","66.73","66.737","66.7365"],"hint":"22290 divided by 334."},
+   "why":"22290/334 = 66.7365. Compare the common wrong answer 66870/5344 = 12.51, which skips the degrees of freedom."},
+  {"say":"TSS is the sum of the two. Then find R².",
+   "blank":{"prompt":"What is R², to three decimals?","answer":"0.926","accept":["0.926","0.93","0.9260","66870/72214"],"hint":"RegSS over TSS = 66870/72214."},
+   "why":"R² = 0.926. Using the R² form: (0.926/3)/(0.074/16) = 0.30867/0.004625 = 66.74. Same F."}],
+ "after":"Four numbers come out of a printout: two mean squares, their ratio and R². They must tell one story."})
+
+S.append({"kind":"theory","id":"s7","mins":7,"title":"Why the ratio is an F: two quadratic forms",
+ "objective":"Explain the distribution of F under H₀ and what the mean squares estimate.",
+ "blocks":[
+  {"t":"step","h":"The two sums of squares as quadratic forms","body":"Let J = 11′/n be the matrix that averages. Then TSS = y′(I − J)y, RegSS = y′(H − J)y, RSS = y′My. With an intercept, J is part of H, so H − J is symmetric idempotent with trace k − 1. M has trace n − k."},
+  {"t":"step","h":"Independence","body":"(H − J)M = HM − JM = 0 − 0 = 0, because HM = 0 and JM = 0 (J's direction lies in X). Two quadratic forms in normal errors whose matrices multiply to zero are independent."},
+  {"t":"step","h":"Distribution under H₀","body":"When all slopes are zero, (H − J)Xβ = 0, so RegSS = u′(H − J)u, and RegSS/σ² ~ χ²(k − 1). RSS/σ² ~ χ²(n − k) always. Independent, so F = [RegSS/(k − 1)]/[RSS/(n − k)] ~ F(k − 1, n − k)."},
+  {"t":"formula","h":"What the mean squares estimate","body":"E(MSE) = σ² always.\nE(MSR) = σ² + β′X′(H − J)Xβ/(k − 1), which is σ² only under H₀.\nSo F is near 1 under H₀ and larger when slopes are non-zero."},
+  {"t":"step","h":"A trap: TSS/(n − 1)","body":"TSS/(n − 1) is not unbiased for σ² when slopes are non-zero. In the five-student set-up with σ² = 4, slope 0.5 and Sxx = 10, E(TSS/(n − 1)) = 4 + 0.25 × 10/4 = 4.625. A simulation of 200,000 samples gave 4.626."},
+  {"t":"step","h":"One restriction","body":"For a single coefficient the partial F equals the square of its t statistic. In a check on random data with n = 20, k = 4 the partial F and t² agreed to eight digits."}],
+ "ask":{"q":"Why are the numerator and denominator of F independent?","nudge":"The product of their matrices."}})
+
+S.append({"kind":"guided","id":"s8","mins":8,"title":"On your own — F from R² with n and k",
+ "objective":"Apply the R² form to a new case and check it.",
+ "problem":"A regression with n = 20 observations and k = 4 coefficients has R² = 0.9. Find F and decide at 5%, given the upper 5% point of F(3, 16) is 3.239.",
+ "hints":["Direction: write down the degrees of freedom first: k − 1 on top, n − k below.",
+          "Method: F = [R²/(k − 1)]/[(1 − R²)/(n − k)].",
+          "Next step: compute R²/(1 − R²) = 9, then multiply by (n − k)/(k − 1) = 16/3."],
+ "answer":"F = 48, far above 3.239, so reject H₀.",
+ "check":"R²/(1 − R²) = 9; times 16/3 gives 48, and F must exceed that 9 because the factor 16/3 is above 1.",
+ "scenario":{"teaser":"A fit that explains one per cent of the variation, and the test says it matters.",
+  "title":"R² of 0.01 and n = 1000",
+  "body":["A study regresses an outcome on one predictor using 1000 observations. R² is 0.01, so the predictor explains one per cent of the variation. A colleague calls the result trivial.",
+          "The overall F is (0.01/1)/(0.99/998) = 10.08. The 5% critical value of F(1, 998) is 3.85, so the test rejects comfortably. Both statements are correct. R² measures how much of the variation is explained. F measures whether the explained part could be chance.",
+          "With a thousand observations a weak but real effect is detectable. Statistical significance tells you the effect is not zero, and R² tells you how much it matters. Neither replaces the other."],
+  "q":"Which of R² and F says the effect is real, and which says it is large?",
+  "answer":"F says it is real (not zero). R² says how large a share of the variation it explains, which here is small."},
+ "solution":[
+  {"say":"Degrees of freedom.","math":"numerator k − 1 = 3,   denominator n − k = 16","why":"This is where Q9's options differ, so fix them first."},
+  {"say":"Ratio of R² terms.","math":"R²/(k − 1) = 0.9/3 = 0.3\n(1 − R²)/(n − k) = 0.1/16 = 0.00625","why":"Keep the two divisions apart."},
+  {"say":"Divide.","math":"F = 0.3/0.00625 = 48","why":"Reject: 48 > 3.239."}]})
+
+S.append({"kind":"trapcheck","id":"s9","mins":6,"title":"Six statements","objective":"Spot the wrong versions of the F formula and its interpretation.",
+ "intro":"Decide true or false on all six before revealing any.",
+ "items":[
+  {"claim":"With R² = 0.6, n = 5, k = 2, swapping the degrees of freedom gives the right F.","tf":False,"why":"The correct F is 4.5. Swapping gives (0.6/3)/(0.4/1) = 0.5."},
+  {"claim":"F = R²/(1 − R²) is enough, with no degrees-of-freedom factors.","tf":False,"why":"That gives 1.5 for the five-student data. It leaves out the factor (n − k)/(k − 1) = 3."},
+  {"claim":"In simple regression F is the square of the slope's t statistic.","tf":True,"why":"For the five-student data t = 2.1213 and t² = 4.5 = F."},
+  {"claim":"A significant F means every slope is non-zero.","tf":False,"why":"It means at least one is. The overall test cannot say which."},
+  {"claim":"TSS = RegSS + RSS holds even for a model with no intercept.","tf":False,"why":"The centring needs the column of ones in X. Without it the decomposition does not hold in this form."},
+  {"claim":"The unbiased estimator of σ² is RSS/(n − k).","tf":True,"why":"E(RSS) = σ²(n − k), from tr(M) in topic 6.1."}]})
+
+S.append({"kind":"guided","id":"s10","mins":8,"title":"Transfer — recover R² from a reported F",
+ "objective":"Invert the F formula, a direction the lesson has not shown.",
+ "problem":"A report gives F = 66.7365 on (3, 16) degrees of freedom. Find R².",
+ "hints":["Direction: you know F, k − 1 = 3 and n − k = 16, and want R².",
+          "Method: write F = (R²/(1 − R²))·(16/3) and solve for R²/(1 − R²).",
+          "Next step: if R²/(1 − R²) = x, then R² = x/(1 + x)."],
+ "answer":"R² = 0.926.",
+ "check":"F is huge, so R² must be close to 1.",
+ "solution":[
+  {"say":"Isolate the ratio.","math":"R²/(1 − R²) = F·(k − 1)/(n − k) = 66.7365 × 3/16 = 12.5131","why":"Undo the factor (n − k)/(k − 1)."},
+  {"say":"Solve.","math":"R² = 12.5131/(1 + 12.5131) = 0.9260","why":"A common wrong step is F/(F + 16) = 0.807, which forgets the (k − 1) factor."}]})
+
+S.append({"kind":"theory","id":"s11","mins":6,"title":"Where this sits in the syllabus",
+ "objective":"Place the F test against the topics around it.",
+ "blocks":[
+  {"t":"step","h":"What it builds on","body":"The quadratic forms y′Hy and y′My come from topic 6.1. Their distribution under normality uses the chi-square count n − k from there."},
+  {"t":"step","h":"What it feeds","body":"Topic 6.4 reads R² and adjusted R² off the same table and compares nested models with an F test built the same way. Topic 6.5 explains why a significant F can sit beside insignificant t values."},
+  {"t":"step","h":"What it does not cover","body":"Single-factor and two-factor designed experiments use the same table but belong to the design-of-experiments module. This lesson treats only the regression case."}],
+ "ask":{"q":"Which topic uses R² and adjusted R² to compare models?","nudge":"The next one."}})
+
+S.append({"kind":"recall","id":"s12","mins":2,"title":"Second recall","objective":"Retrieve the parts that fade first.",
+ "intro":"Answer, then reveal.",
+ "items":[{"q":"What are the five-student MSR, MSE and F?","a":"3.6, 0.8, 4.5."},
+          {"q":"Critical F(1, 3) at 5%?","a":"10.128, which is 3.182 squared."},
+          {"q":"What is F when R² = 0.9, n = 20, k = 4?","a":"48."},
+          {"q":"What is wrong with F = (R²/(n − k))/((1 − R²)/(k − 1))?","a":"The degrees of freedom are swapped."},
+          {"q":"Why can R² = 0.01 be significant?","a":"With n = 1000, F = 10.08, above 3.85."}]})
+
+S.append({"kind":"summary","id":"s13","mins":3,"title":"What you should now be able to do","objective":"Check the lesson against its objectives.",
+ "body":["Build the ANOVA table from TSS, RegSS and RSS with k − 1, n − k and n − 1 degrees of freedom.",
+         "Write F = [R²/(k − 1)]/[(1 − R²)/(n − k)] and check it against the mean-square ratio.",
+         "Use F = t² and R² = r² in simple regression.",
+         "Recover R² from F, and F from R², without swapping degrees of freedom.",
+         "Explain why the null distribution is F, using HM = 0 and traces."]})
+
+S.append({"kind":"theory","id":"s14","mins":8,"ext":True,"title":"Extension — F as a partial F for one restriction",
+ "objective":"Show that a single-restriction F equals t².",
+ "blocks":[
+  {"t":"step","h":"The restricted fit","body":"Drop the j-th regressor. The extra residual sum of squares is RSS_r − RSS_f, with one degree of freedom."},
+  {"t":"step","h":"The identity","body":"(RSS_r − RSS_f)/(RSS_f/(n − k)) = b_j²/(s²·c_jj), where c_jj is the j-th diagonal of (X′X)⁻¹. The right side is the square of the t statistic b_j/(s√c_jj)."},
+  {"t":"step","h":"Numerical check","body":"On a random data set with n = 20 and k = 4 the partial F was 3.6614 and the squared t statistic was 3.6614."}],
+ "ask":{"q":"Why does the t test lose its sign?","nudge":"Squaring."}})
+
+S.append({"kind":"quiz","id":"s15","mins":12,"title":"Mastery test",
+ "objective":"Demonstrate it independently, on questions you have not seen.","setId":"regression_t3_mastery"})
+
+CORE = [s for s in S if not s.get("ext")]
+
+LES = {
+ "id":"regressiont3", "topicId":"regression-t3", "moduleId":"regression",
+ "title":"ANOVA Decomposition and the F Test from R²",
+ "breadcrumb":"Regression → Inference in the linear model → ANOVA and the overall F test",
+ "engine":"B", "engineName":"F is a ratio of per-degree-of-freedom averages; written in R² it is [R²/(k − 1)] / [(1 − R²)/(n − k)]",
+ "version":"1.0", "status":"approved",
+ "estMin":sum(s["mins"] for s in CORE),
+ "objectives":["Build the ANOVA table with the correct degrees of freedom k − 1, n − k and n − 1.",
+               "Write F in terms of R², n and k, and check it against the mean-square ratio.",
+               "Use F = t² and R² = r² in simple regression, and the F-to-R² inversion.",
+               "State why the unbiased estimator of σ² is RSS/(n − k) and why TSS/(n − 1) is not.",
+               "Interpret a high R² with a non-significant F, and a low R² with a significant F."],
+ "prereq":[{"id":"p1","name":"TSS, RegSS and RSS","why":"The table is built from these three sums of squares."},
+           {"id":"p2","name":"The F distribution","why":"F is a ratio of independent chi-square averages."},
+           {"id":"p3","name":"The null hypothesis of the overall test","why":"It says the k − 1 slopes are all zero."},
+           {"id":"p4","name":"Residual degrees of freedom n − k","why":"The denominator uses tr(M) from topic 6.1."}],
+ "traps":["Swapping k − 1 and n − k in the R² form (Q9 asked for exactly this form).",
+          "Leaving out the degrees-of-freedom factor and using R²/(1 − R²).",
+          "Using n − 1 in the denominator.",
+          "Reading a significant F as 'every slope is non-zero'.",
+          "Treating a high R² as significance when n is tiny."],
+ "revision":{
+   "sheet":["TSS = RegSS + RSS (with intercept). R² = RegSS/TSS.",
+            "df: regression k − 1, residual n − k, total n − 1; they add.",
+            "F = MSR/MSE = [R²/(k − 1)] / [(1 − R²)/(n − k)] on (k − 1, n − k) df.   [Q9: key B]",
+            "Simple regression: F = t², R² = r².",
+            "s² = RSS/(n − k) unbiased; TSS/(n − 1) is not unless slopes are zero.",
+            "Five-student data: TSS 6, RegSS 3.6, RSS 2.4, F = 4.5 < 10.128, p = 0.124.",
+            "ANOVA printout: 22290 and 334, F = 66.74, R² = 0.926.",
+            "R² = 0.9, n = 20, k = 4 gives F = 48. R² = 0.01, n = 1000 gives F = 10.08, which is significant.",
+            "Under H₀, RegSS/σ² ~ χ²(k − 1), independent of RSS/σ² ~ χ²(n − k), since (H − J)M = 0."],
+   "cards":[["F in R² form","[R²/(k − 1)] / [(1 − R²)/(n − k)]"],["Degrees of freedom of F","(k − 1, n − k)"],["F in simple regression","t²"],["Unbiased σ²","RSS/(n − k)"],["F as R² tends to 1","tends to infinity"],["Q9 answer","B: R² over k − 1, divided by 1 − R² over n − k"]],
+   "tricks":["Slopes on top, leftover below.","Rebuild F a second way before trusting it.","Sums of squares add; degrees of freedom add."],
+   "shortcuts":["F(1, 3) 5% point is 10.128.","F = (R²/(1 − R²)) · (n − k)/(k − 1).","From F: R²/(1 − R²) = F(k − 1)/(n − k)."],
+   "remember":["Divide each sum of squares by its own degrees of freedom.","A significant F says some slope is non-zero."]},
+ "howto":"If short of time, the lesson is scenes 4 (table and R² form), 5 (worked example) and 7 (the printout). The extension can be skipped. It deliberately does not cover R² and model comparison (6.4), multicollinearity (6.5) or designed experiments.",
+ "refs":[{"title":"Econometrics","where":"Chapter 5, Normal Regression; Chapter 9, Hypothesis Tests","site":"Bruce Hansen","url":"","type":"Free online textbook","free":True,"checked":"2026-11-06","why":"The F test and its link to R², scenes 3 and 7."},
+         {"title":"Applied Regression Analysis","where":"Chapter 2, The F test for overall regression","site":"Draper and Smith","url":"","type":"Textbook","free":False,"checked":"2026-11-06","why":"The ANOVA table and its degrees of freedom, scene 3."},
+         {"title":"Introductory Econometrics","where":"Chapter 4, Section 4.5","site":"Jeffrey Wooldridge","url":"","type":"Textbook","free":False,"checked":"2026-11-06","why":"The F statistic in R² form, scenes 3 and 8."}],
+ "mastery":{"minQ":10,"pass":80,"draw":10,"fmtMin":{"numeric":70,"multi":70},
+            "diffMix":{"easy":3,"moderate":5,"hard":2},"noHints":True,"retestDays":7,
+            "note":"Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on "
+                   "numerical and multi-statement items, answered without hints. Each paper is "
+                   "drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style "
+                   "paper; NTA publishes no official difficulty split."},
+ "provenance":"Anchor Q9 (key B, marked A, wrong): F for the multiple regression model in terms of R², with k − 1 and n − k; the transcribed option text is garbled, so the key was checked by deriving F from R² here rather than from the extracted options. The backlog's note that Q9 might belong to topic 6.1 was resolved from the full stem: it is the F statistic, hence topic 6.3. Verified by computing in verify_regression_t1_t4.py: TSS 6, RegSS 3.6, RSS 2.4, R² 0.6 = r², F 4.5 by both routes, t = 2.1213 with t² = F, F(1,3) critical 10.128 = 3.1824², critical r 0.8783, p-value 0.124; the printout RegSS 66870/3 and RSS 5344/16 giving 22290, 334, F 66.7365, R² 0.926; the wrong forms on the same data (swapped 0.5, undivided 1.5, n − 1 version 6.0, k for k − 1 2.25); R² = 0.9 giving 48; R² = 0.01 and n = 1000 giving 10.08 against a critical 3.851; the inversion R² = 0.926 and its wrong form 0.807; TSS = RegSS + RSS on a random multiple regression; partial F = t² to eight digits. By simulation (200,000 draws): E(RSS/(n − k)) = 3.9993 for σ² = 4 and E(TSS/(n − 1)) = 4.626 against 4.625. Bank defects: variant stems j26v-q09-02 to -04 and -08 to -10 carry the next item's text in their explanation field; the stems were usable and the keys were checked. Scope: R² comparison is left to 6.4; designed experiments are not covered.",
+ "scenes":S}
+
+def q(i, fmt, diff, stem, opts, ans, exp, **kw):
+    d = {"id":"regression-t3-m-%02d"%i, "format":fmt, "topic":"regression-t3",
+         "diff":diff, "stem":stem, "options":opts, "answer":ans, "explanation":exp}
+    d.update(kw); return d
+
+def verd(a,b,c,dd):
+    return {"A":{"tf":a[0],"why":a[1]},"B":{"tf":b[0],"why":b[1]},
+            "C":{"tf":c[0],"why":c[1]},"D":{"tf":dd[0],"why":dd[1]}}
+
+I = []
+I.append(q(1,"single","easy","In multiple regression with an intercept, R² equals:",
+  ["RegSS/TSS","RegSS/RSS","1 − RegSS/TSS","RSS/TSS"],"A",
+  "R² is the explained share of the total variation, RegSS/TSS, which also equals 1 − RSS/TSS. The ratio RegSS/RSS is not bounded by 1, and RSS/TSS is the unexplained share."))
+I.append(q(2,"single","easy","In a linear model with k parameters and n observations, the unbiased estimator of σ² is:",
+  ["RSS/(n − k)","RSS/n","TSS/(n − k)","RSS/(n − 1)"],"A",
+  "E(RSS) = σ²(n − k), from the trace of the residual maker, so dividing by n − k gives an unbiased estimator. Dividing by n is biased downward, and TSS includes the explained variation."))
+I.append(q(3,"single","easy","The degrees of freedom of the overall F statistic in a model with n observations and k parameters (including the intercept) are:",
+  ["(k − 1, n − k)","(n − k, k − 1)","(k, n − k)","(k − 1, n − 1)"],"A",
+  "The numerator counts the k − 1 slopes and the denominator counts the n − k residual directions. Swapping them or using n − 1 changes the critical value."))
+I.append(q(4,"single","easy","In simple linear regression, the overall F and the t statistic of the slope are related by:",
+  ["F = t²","F = t","F = √t","they are unrelated"],"A",
+  "With one regressor the F test has one numerator degree of freedom, and an F(1, m) variable is the square of a t(m) variable. For the five-student data t = 2.1213 and F = 4.5."))
+I.append(q(5,"single","easy","As R² approaches 1 with n and k fixed, the F statistic:",
+  ["tends to infinity","approaches 1","approaches 0","stays constant"],"A",
+  "F = [R²/(k − 1)]/[(1 − R²)/(n − k)] and the denominator tends to 0, so F grows without bound. At R² = 0 the numerator is 0 and so is F."))
+I.append(q(6,"numeric","easy","An ANOVA table gives RegSS = 66870 with 3 df and RSS = 5344 with 16 df. The F-ratio is:",
+  ["66.74","12.51","0.08","0.015"],"A",
+  "MSR = 66870/3 = 22290 and MSE = 5344/16 = 334, so F = 22290/334 = 66.74. The value 12.51 is 66870/5344, which skips the degrees of freedom. The values 0.08 and 0.015 are inverted ratios.",
+  check="MSR is far above MSE, so F is far above 1; the answer must be a large number, which rules out 0.08 and 0.015."))
+I.append(q(7,"single","moderate","For the multiple linear regression model y = Xβ + ε with n observations and k parameters, the F statistic for testing the significance of the complete regression (except the intercept) is:",
+  ["[R²/(k − 1)] / [(1 − R²)/(n − k)]","[R²/(n − k)] / [(1 − R²)/(k − 1)]","[R²/k] / [(1 − R²)/(n − k)]","[R²/(k − 1)] / [(1 − R²)/(n − 1)]"],"A",
+  "RegSS = R²·TSS is divided by its k − 1 degrees of freedom and RSS = (1 − R²)·TSS by n − k. The other forms swap the divisors, use k instead of k − 1, or use the total degrees of freedom n − 1."))
+I.append(q(8,"numeric","moderate","In a simple regression with n = 5 observations and R² = 0.6, the overall F statistic is:",
+  ["4.5","1.5","0.5","6.0"],"A",
+  "F = (0.6/1)/(0.4/3) = 0.6/0.13333 = 4.5. The value 1.5 is R²/(1 − R²) without the degrees of freedom, 0.5 comes from swapping them, and 6.0 comes from using n − 1 = 4.",
+  check="F = R²/(1 − R²) × (n − k)/(k − 1) = 1.5 × 3, and the factor 3 exceeds 1, so F must be above 1.5."))
+I.append(q(9,"numeric","moderate","With n = 20 observations, k = 4 parameters and R² = 0.9, the overall F is:",
+  ["48","9","27","144"],"A",
+  "F = (0.9/3)/(0.1/16) = 0.3/0.00625 = 48. The value 9 is R²/(1 − R²). Multiplying by 3 instead of 16/3 gives 27, and by 16 gives 144.",
+  check="R²/(1 − R²) = 9, and the factor (n − k)/(k − 1) = 16/3 lies between 5 and 6, so F lies between 45 and 54."))
+I.append(q(10,"single","moderate","The decomposition TSS = RegSS + RSS holds for the OLS fit of:",
+  ["a model that includes an intercept","any model, with or without an intercept","a model with exactly one regressor","only models with normal errors"],"A",
+  "The identity needs the residuals to be orthogonal to the fitted deviations from the mean, which uses the column of ones. It holds regardless of normality and of the number of regressors, but fails in general without an intercept."))
+I.append(q(11,"multi","moderate","For the ANOVA of a linear regression with an intercept, n observations and k parameters.",
+  ["A, B and D only","A, B and C only","B, C and D only","A, B, C and D"],"A",
+  "Degrees of freedom add to n − 1, the residual mean square is unbiased for σ², and under H₀ with normal errors the ratio is F. The regression mean square estimates σ² only under H₀.",
+  statements=["The degrees of freedom add: (k − 1) + (n − k) = n − 1","E(MSE) = σ²","E(MSR) = σ² whether or not the slopes are zero","Under H₀ and normal errors, MSR/MSE follows F(k − 1, n − k)"],
+  verdicts=verd((True,"This is the bookkeeping check on the table."),
+                (True,"E(RSS) = σ²(n − k)."),
+                (False,"E(MSR) = σ² plus a non-negative term that is zero only under H₀."),
+                (True,"The two quadratic forms are independent chi-squares."))))
+I.append(q(12,"single","moderate","Which of the following is NOT a correct expression for the overall F statistic?",
+  ["[R²/(n − k)] / [(1 − R²)/(k − 1)]","MSR/MSE","[RegSS/(k − 1)] / [RSS/(n − k)]","[R²/(k − 1)] / [(1 − R²)/(n − k)]"],"A",
+  "The first expression has the degrees of freedom swapped: it puts n − k under R² and k − 1 under 1 − R². The other three are the same statistic written three ways."))
+I.append(q(13,"numeric","moderate","In a simple regression the slope's t statistic is 2.1213. The overall F statistic is:",
+  ["4.5","2.12","1.5","9.0"],"A",
+  "F = t² = 2.1213² = 4.5. The value 2.12 is t itself and 9.0 is 2t².",
+  check="For one regressor F is the square of t, so a t just above 2 gives an F just above 4."))
+I.append(q(14,"single","moderate","In a linear model with an intercept, R² equals:",
+  ["the squared correlation between y and the fitted values","the correlation between y and x","the ratio MSR/MSE","the proportion RSS/TSS"],"A",
+  "Cov(y, ŷ) = Var(ŷ), so corr(y, ŷ)² = RegSS/TSS = R². It equals r² between y and x only when there is a single regressor."))
+I.append(q(15,"single","moderate","A simple regression on 5 points has R² = 0.6 and F = 4.5. The upper 5% point of F(1, 3) is 10.128. The correct conclusion is:",
+  ["the slope is not significant at the 5% level","the slope is significant at the 5% level","R² must be wrong because 0.6 is large","the test cannot be done with 5 points"],"A",
+  "4.5 is below 10.128 (p = 0.124). A high R² on very few degrees of freedom is easily produced by chance. The test is valid; it simply has little power."))
+I.append(q(16,"multi","moderate","The overall F test in a multiple regression with an intercept.",
+  ["A, B and D only","A and B only","B, C and D only","A, B, C and D"],"A",
+  "F can be computed from R², n and k, and it tests that all slopes are jointly zero. Rejection says at least one slope is non-zero, not that every one is. At R² = 0, F = 0.",
+  statements=["It can be computed from R², n and k","It tests H₀: all slope coefficients are zero","Rejection implies every slope coefficient is non-zero","If R² = 0 then F = 0"],
+  verdicts=verd((True,"F = [R²/(k − 1)]/[(1 − R²)/(n − k)]."),
+                (True,"The intercept is not tested."),
+                (False,"Rejection says at least one slope differs from zero."),
+                (True,"The numerator is zero."))))
+I.append(q(17,"numeric","hard","A regression with one regressor has R² = 0.01 and n = 1000. The overall F is:",
+  ["10.08","99","1.0","0.01"],"A",
+  "F = (0.01/1)/(0.99/998) = 0.01 × 998/0.99 = 10.08, above the 5% point of F(1, 998), about 3.85. The value 99 is the inverted ratio (1 − R²)/R².",
+  check="R²/(1 − R²) ≈ 0.0101 and the factor (n − k)/(k − 1) = 998, so the product is about 10."))
+I.append(q(18,"numeric","hard","In y = α + 0.5x + u with σ² = 4, n = 5 and Σ(x − x̄)² = 10, the expected value of TSS/(n − 1) is:",
+  ["4.625","4","4.5","5"],"A",
+  "E(TSS) = (n − 2)σ² + σ² + β²Sxx = (n − 1)σ² + β²Sxx, so E(TSS/(n − 1)) = 4 + 0.25 × 10/4 = 4.625. It exceeds σ² = 4 because the signal in x adds to the total.",
+  check="The answer must be above σ² = 4 since a non-zero slope adds variation; it cannot equal 4."))
+I.append(q(19,"numeric","hard","The slope of a regressor in a model with k = 4 and n = 20 has t = −2.5. The F statistic for the single restriction that this slope is zero is:",
+  ["6.25","2.5","−2.5","1.58"],"A",
+  "For one restriction, partial F = t² = 6.25. An F statistic is never negative, so −2.5 is impossible, and 1.58 is √2.5.",
+  check="F cannot be negative, which removes −2.5, and t² of a value above 2 exceeds 4."))
+I.append(q(20,"numeric","hard","An F of 66.7365 is reported on (3, 16) degrees of freedom. The R² is:",
+  ["0.926","0.807","0.074","0.500"],"A",
+  "R²/(1 − R²) = F(k − 1)/(n − k) = 66.7365 × 3/16 = 12.513, so R² = 12.513/13.513 = 0.926. The value 0.807 forgets the factor k − 1, and 0.074 is 1 − R².",
+  check="An F this large must come from an R² near 1, which excludes 0.074 and 0.500."))
+
+LET = "ABCD"
+_r = random.Random(20260612); PAT = list("ABCD" * 5); _r.shuffle(PAT)
+WANT = {"regression-t3-m-%02d" % (i + 1): PAT[i] for i in range(20)}
+
+def swapletters(t, a, b):
+    sw = lambda L: b if L == a else a if L == b else L
+    def fix(m):
+        head, body = m.group(1), m.group(2)
+        return head + re.sub(r"[ABCD]", lambda n: sw(n.group(0)), body)
+    return re.sub(r"([Oo]ptions?\s+)([ABCD](?:\s*(?:,|and|or)\s*[ABCD])*)", fix, t)
+
+def relabel(items):
+    for it in items:
+        w = WANT.get(it["id"])
+        if not w or not it.get("options"): continue
+        i, j = LET.index(it["answer"]), LET.index(w)
+        if i == j: continue
+        o = it["options"]; o[i], o[j] = o[j], o[i]
+        it["answer"] = w
+        a, b = LET[i], LET[j]
+        for fld in ("explanation", "check"):
+            if it.get(fld): it[fld] = swapletters(it[fld], a, b)
+    return items
+
+relabel(I)
+_k = {}
+for _it in I: _k[_it["answer"]] = _k.get(_it["answer"], 0) + 1
+print("key spread:", {L: _k.get(L, 0) for L in LET}, "cap", -(-len(I) * 2 // 5))
+
+POOLD = {"moduleId":"regression","topicId":"regression-t3","source":"mastery",
+         "label":"ANOVA decomposition and the F test from R² — mastery test (unseen)","count":len(I),"items":I}
+
+os.makedirs("seed", exist_ok=True)
+with io.open(OUT,"w",encoding="utf-8") as f:  json.dump(LES,f,ensure_ascii=False,indent=1)
+with io.open(POOL,"w",encoding="utf-8") as f: json.dump(POOLD,f,ensure_ascii=False,indent=1)
+print("wrote %s: %d scenes (%d core), estMin %d"%(OUT,len(S),len(CORE),LES["estMin"]))
+print("wrote %s: %d items"%(POOL,len(I)))

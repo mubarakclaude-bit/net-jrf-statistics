@@ -58,7 +58,8 @@
       "url": "https://www.itl.nist.gov/div898/handbook/",
       "type": "reference",
       "free": true,
-      "why": "Accessible reference for experimental design and ANOVA."
+      "why": "Accessible reference for experimental design and ANOVA.",
+      "checked": "2026-11-13"
     },
     {
       "title": "Penn State STAT 503",
@@ -67,7 +68,8 @@
       "url": "https://online.stat.psu.edu/stat503/",
       "type": "course",
       "free": true,
-      "why": "Open course material on design principles and standard layouts."
+      "why": "Open course material on design principles and standard layouts.",
+      "checked": "2026-11-13"
     },
     {
       "title": "Montgomery, Design and Analysis of Experiments",
@@ -76,7 +78,8 @@
       "url": "https://www.wiley.com/",
       "type": "book",
       "free": false,
-      "why": "Standard reference for layout construction, analysis and design efficiency."
+      "why": "Standard reference for layout construction, analysis and design efficiency.",
+      "checked": "2026-11-13"
     }
   ],
   "traps": [
@@ -482,8 +485,13 @@
           "why": "Total SS measures variation around the grand mean."
         },
         {
-          "say": "Calculate treatment and block SS.",
-          "math": "SS_T=(36²+46²+41²)/4−1260.75=12.5.\\nSS_B=(28²+33²+26²+36²)/3−1260.75=251/12.",
+          "say": "Calculate the treatment sum of squares.",
+          "math": "SS_T=(36²+46²+41²)/4−1260.75=12.5.",
+          "why": "Treatment totals are divided by the number of blocks; block totals by the number of treatments."
+        },
+        {
+          "say": "Calculate the block sum of squares.",
+          "math": "SS_B=(28²+33²+26²+36²)/3−1260.75=251/12.",
           "why": "Treatment totals are divided by the number of blocks; block totals by the number of treatments."
         },
         {
@@ -492,8 +500,38 @@
           "why": "The three components must add to total SS."
         },
         {
-          "say": "Calculate df, mean squares and F.",
-          "math": "df_T=2; df_B=3; df_E=6; df_Total=11.\\nMS_T=12.5/2=6.25; MS_E=(5/6)/6=5/36.\\nF_T=6.25/(5/36)=45.",
+          "say": "Calculate the degrees of freedom.",
+          "math": "df_T=2",
+          "why": "The treatment test uses residual mean square, not block mean square."
+        },
+        {
+          "say": "Calculate the degrees of freedom.",
+          "math": "df_B=3",
+          "why": "The treatment test uses residual mean square, not block mean square."
+        },
+        {
+          "say": "Calculate the degrees of freedom.",
+          "math": "df_E=6",
+          "why": "The treatment test uses residual mean square, not block mean square."
+        },
+        {
+          "say": "Calculate the degrees of freedom.",
+          "math": "df_Total=11.",
+          "why": "The treatment test uses residual mean square, not block mean square."
+        },
+        {
+          "say": "Calculate the mean squares.",
+          "math": "MS_T=12.5/2=6.25",
+          "why": "The treatment test uses residual mean square, not block mean square."
+        },
+        {
+          "say": "Calculate the mean squares.",
+          "math": "MS_E=(5/6)/6=5/36.",
+          "why": "The treatment test uses residual mean square, not block mean square."
+        },
+        {
+          "say": "Continue the calculation with the next quantity.",
+          "math": "F_T=6.25/(5/36)=45.",
           "why": "The treatment test uses residual mean square, not block mean square."
         }
       ],
@@ -595,8 +633,28 @@
           "why": "A square arrangement is not enough; the treatment labels must occur once in every row and every column."
         },
         {
-          "say": "Calculate the correction factor and total SS.",
-          "math": "G=96; N=9; CF=96²/9=1024.\\nΣy²=1044; SS_Total=20.",
+          "say": "Record the grand total and sample size.",
+          "math": "G=96",
+          "why": "The grand total is counted once, and the corrected total SS is the sum of squared observations minus CF."
+        },
+        {
+          "say": "Continue the calculation with the next quantity.",
+          "math": "N=9",
+          "why": "The grand total is counted once, and the corrected total SS is the sum of squared observations minus CF."
+        },
+        {
+          "say": "Calculate the correction factor.",
+          "math": "CF=96²/9=1024.",
+          "why": "The grand total is counted once, and the corrected total SS is the sum of squared observations minus CF."
+        },
+        {
+          "say": "Sum the squared observations.",
+          "math": "Σy²=1044",
+          "why": "The grand total is counted once, and the corrected total SS is the sum of squared observations minus CF."
+        },
+        {
+          "say": "Calculate the total sum of squares.",
+          "math": "SS_Total=20.",
           "why": "The grand total is counted once, and the corrected total SS is the sum of squared observations minus CF."
         },
         {
@@ -610,8 +668,13 @@
           "why": "Rows, columns and treatments are separate additive sources."
         },
         {
-          "say": "Obtain error SS and degrees of freedom.",
-          "math": "SS_Error=20−8/3−8−14/3=14/3.\\ndf: rows=2, columns=2, treatments=2, error=2, total=8.",
+          "say": "Calculate the error sum of squares.",
+          "math": "SS_Error=20−8/3−8−14/3=14/3.",
+          "why": "The source df add to 2+2+2+2=8, equal to p²−1."
+        },
+        {
+          "say": "List the degrees of freedom for each source.",
+          "math": "rows=2, columns=2, treatments=2, error=2, total=8.",
           "why": "The source df add to 2+2+2+2=8, equal to p²−1."
         },
         {

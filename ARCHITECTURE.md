@@ -90,3 +90,21 @@ production branch; the Claude artifact is retired and no separate publishing ste
 `automation/max-pipeline` carries a review-agent workflow (`agents/CONTRACTS.md`,
 `docs/LESSON_PRODUCTION_ARCHITECTURE.md`); it describes *who reviews what*, and this file describes *how the code
 and data are organised*. They are complementary and should be reconciled when that branch merges.
+
+## Release decisions (2026-11-12)
+
+1. **Production branch: `main`.** Vercel builds from it; `vercel.json` deploys only `main` and no other branch. CI (`validate`,
+   `browser`, `acceptance`) is the verification, so previews are not needed.
+2. **The two lineages are reconciled once, by merge, not rebase.** Architecture and tooling come from `multi-author-hosting`; lesson
+   and pool content comes from `main`. After the reconcile merges, `multi-author-hosting` is retired.
+3. **Content PRs carry content only**: lessons, pools, verifiers, reports. They never edit `test.js`, `seed/meta_lessons.json` (both
+   generated) or any workflow. One branch per group of lessons, one commit, one push, one merge, so each group costs one deployment.
+4. **One CI definition: `validate.yml`.** The four module-specific workflows (mathst2-package, probability-package,
+   seed-and-app-validation, official-statistics-validation) were retired in the reconcile PR, not later: they ran `check.sh` without
+   `npm ci` or read the removed `seed/meta_lessons.json`, so they failed on every PR, and two defined a job named `validate`,
+   the name the merge ruleset requires. `validate.yml` already checks every pool, every changed lesson and every changed verifier.
+   `math-unit2-anchors.yml` and `content-map.yml` remain.
+5. **Contracts are enforced on all content.** Content written before a contract existed is fixed by its owner; it is not hidden in
+   `contracts/legacy-exceptions.json`.
+6. **What is live is read from `/manifest.json`** (`counts.lessons`). No document states a lesson count.
+7. **Nobody but the owner merges.**

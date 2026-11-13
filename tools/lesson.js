@@ -133,7 +133,7 @@ function check(topicId) {
   ok = run("vcheck.js (house standard)", "node", ["vcheck.js", file]) && ok;
   ok = run("audit-lesson.py (formulas render, answers not self-cited, answer keys spread)", py, ["-I", "tools/audit-lesson.py", file]) && ok;
   if (quiz) ok = run("generated index wiring", "node", ["tools/gen-index.js", "--expect", topicId, lesson.id, quiz.setId]) && ok;
-  ok = run("seed set and contracts", "node", ["tools/validate-contracts.js"]) && ok;
+  ok = run("contracts for this topic's lesson and pool (the whole seed set is checked by npm run check)", "node", ["tools/validate-contracts.js", "--files", file].concat(quiz ? ["seed/" + quiz.setId + ".json"] : [])) && ok;
   const verifier = path.join(ROOT, "verify_" + w.moduleId + "_t" + (topicId.match(/(\d+)$/) || [])[1] + ".py");
   const anyVerifier = fs.readdirSync(ROOT).some(f => /^verify_.*\.py$/.test(f) && fs.readFileSync(path.join(ROOT, f), "utf8").includes(topicId.replace("-", "_")) );
   console.log((fs.existsSync(verifier) || anyVerifier ? "PASS " : "WARN ") + "a verification script covers this topic" + (fs.existsSync(verifier) || anyVerifier ? "" : " (expected " + path.basename(verifier) + ")"));

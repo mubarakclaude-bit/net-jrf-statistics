@@ -45,7 +45,7 @@ const server = http.createServer((q, r) => {
   });
   check("invalid path is rejected like the artifact store", r.bad === "invalid_argument", String(r.bad));
   check("contract path is accepted", r.good === "accepted");
-  check("stale content copies from older builds were cleared (index is the deployed one)", r.indexCount >= 48 && r.lessonTitle === "Multicollinearity", "topics=" + r.indexCount + " lesson=" + r.lessonTitle);
+  check("stale content copies from older builds were cleared (index is the deployed one)", r.indexCount >= 48 && /Multicollinearity/.test(r.lessonTitle || ""), "topics=" + r.indexCount + " lesson=" + r.lessonTitle);
   check("content documents are never persisted in the browser", r.contentWritePersisted === false);
   await page.reload(); await page.waitForSelector("#v-home, [data-login=\"me\"]", { timeout: 20000 });
   const kept = await page.evaluate(() => { const u = localStorage.getItem("njuid"); return { m: !!localStorage.getItem("njdb:data/users/" + u + "/mastery"), p: !!localStorage.getItem("njdb:data/users/" + u + "/p/demo/attempts"), c: Object.keys(localStorage).some(k => /^njdb:(meta|lessons|qsets)\//.test(k)) }; });

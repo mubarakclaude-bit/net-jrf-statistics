@@ -1,0 +1,622 @@
+{
+ "id": "rprogt1",
+ "topicId": "rprog-t1",
+ "moduleId": "rprog",
+ "title": "sort, rank, order, which and range",
+ "breadcrumb": "Module 9 · R Programming · Vector ordering and position functions",
+ "engine": "B",
+ "engineName": "NET JRF Statistics lesson engine",
+ "version": "1.0",
+ "status": "review",
+ "estMin": 55,
+ "objectives": [
+  "Predict sort(), order() and rank() outputs.",
+  "Use order() as a permutation to reorder vectors.",
+  "Interpret which() and distinguish positions from values.",
+  "Interpret range() and calculate statistical range.",
+  "Avoid one-based indexing, ties and missing-value traps."
+ ],
+ "prereq": [
+  {
+   "id": "p1",
+   "name": "R vectors and c()",
+   "why": "The functions operate on vectors."
+  },
+  {
+   "id": "p2",
+   "name": "Logical comparisons",
+   "why": "which() receives logical conditions."
+  },
+  {
+   "id": "p3",
+   "name": "One-based indexing",
+   "why": "R positions start at 1."
+  }
+ ],
+ "traps": [
+  "sort returns sorted values; order returns positions that arrange the vector.",
+  "rank returns ranks in original order, not sorted values.",
+  "which returns positions where TRUE, not matching values.",
+  "R vector positions are one-based.",
+  "range returns minimum and maximum, not their difference.",
+  "diff(range(x)) computes statistical range.",
+  "which.max returns the first maximum's position.",
+  "rank ties use average ranks by default.",
+  "sort removes NA by default; range propagates NA unless na.rm=TRUE; which omits NA conditions."
+ ],
+ "revision": {
+  "sheet": [
+   "sort(x) returns values in ascending order by default.",
+   "order(x) returns the permutation of positions that arranges x; x[order(x)] gives sorted values.",
+   "rank(x) returns ranks in original positions; average is the default tie method.",
+   "which(logical_vector) returns one-based positions of TRUE entries, not the values.",
+   "range(x) returns c(min(x),max(x)); diff(range(x)) gives max minus min.",
+   "which.max(x) returns the first maximum's position; max(x) returns the maximum value.",
+   "For c(3,1,2): sort=c(1,2,3), order=c(2,3,1), rank=c(3,1,2).",
+   "For c(2,-1,4,-6): which(x>0)=c(1,3); x[x>0]=c(2,4).",
+   "R indexing starts at 1; positions and values are not interchangeable.",
+   "Tied values receive average ranks unless ties.method is specified.",
+   "sort removes NA by default; range needs na.rm=TRUE to ignore NA.",
+   "sort=values; order=permutation; rank=standing; which=TRUE positions."
+  ],
+  "cards": [
+   [
+    "sort",
+    "Sorted values"
+   ],
+   [
+    "order",
+    "Sorting permutation"
+   ],
+   [
+    "rank",
+    "Ranks in original order"
+   ],
+   [
+    "which",
+    "TRUE positions"
+   ],
+   [
+    "range",
+    "Minimum and maximum"
+   ],
+   [
+    "diff(range)",
+    "Maximum minus minimum"
+   ]
+  ],
+  "tricks": [
+   "sort returns values; order returns positions.",
+   "Use x[order(x)] to apply the permutation.",
+   "which returns indices; x[condition] returns values.",
+   "range gives endpoints; subtract to get the statistical range.",
+   "Check the default average tie rank."
+  ],
+  "shortcuts": [
+   "Write original positions above the vector before order or rank.",
+   "Evaluate the logical condition before applying which.",
+   "Write min and max separately before subtracting for range.",
+   "Preserve original order unless the function explicitly rearranges it."
+  ],
+  "remember": [
+   "sort = sorted values.",
+   "order = positions for sorting.",
+   "rank = ranks in original positions.",
+   "which = positions where TRUE.",
+   "range = two endpoints."
+  ]
+ },
+ "howto": "Write the vector with its one-based positions. Identify whether the requested function returns values, a permutation, ranks or logical-match positions. Compute in the function's output order, checking tie and missing-value defaults only when relevant.",
+ "refs": [
+  {
+   "title": "R Documentation: sort, order and rank",
+   "where": "Base R documentation",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/sort.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Authoritative definitions of sorting, ordering and ranking."
+  },
+  {
+   "title": "R Documentation: which",
+   "where": "Finding TRUE indices",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/which.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Semantics of which, which.min and which.max."
+  },
+  {
+   "title": "R Documentation: range",
+   "where": "Range of values",
+   "site": "R Core Team",
+   "url": "https://stat.ethz.ch/R-manual/R-devel/library/base/html/range.html",
+   "type": "Official documentation",
+   "free": true,
+   "checked": "2026-11-11",
+   "why": "Range endpoints and missing-value handling."
+  }
+ ],
+ "mastery": {
+  "minQ": 10,
+  "pass": 80,
+  "draw": 10,
+  "fmtMin": {
+   "numeric": 70,
+   "multi": 70
+  },
+  "diffMix": {
+   "easy": 3,
+   "moderate": 5,
+   "hard": 2
+  },
+  "noHints": true,
+  "retestDays": 7,
+  "note": "Platform mastery settings; not an NTA rule."
+ },
+ "anchors": [
+  {
+   "paper": "j26",
+   "q": 16
+  }
+ ],
+ "provenance": "Catalog rprog-t1 (Apply, importance 2, estimated 0.67 questions and 1.3 marks). Anchored to June 2026 Paper 2 Q16; repository study variants j26v-q16-01 to -05 cover sort, order, rank, range and which.",
+ "scenes": [
+  {
+   "kind": "foundation",
+   "id": "s0",
+   "mins": 6,
+   "title": "Values, positions and ranks",
+   "objective": "Separate vector values from positions.",
+   "body": [
+    "R output questions become easier when you identify whether a function returns rearranged values, positions, ranks or logical matches.",
+    "R uses one-based indexing. The first element is at position 1, the second at position 2, and so on. A returned index is not necessarily a data value.",
+    "For x=c(3,1,2), the smallest value 1 is at position 2; the largest value 3 is at position 1."
+   ],
+   "items": [
+    {
+     "ask": "What is the position of value 1 in x=c(3,1,2)?",
+     "recall": "Position 2.",
+     "refresh": [
+      "R uses one-based indexing, so the first element is position 1, the second is position 2 and the third is position 3. In c(3,1,2), the value 1 occupies the second position.",
+      "A position is not the value itself. If a function returns 2, it may mean the second element rather than the number two as an observed value. Check whether the function returns indices or data values."
+     ]
+    },
+    {
+     "ask": "What does a rank describe?",
+     "recall": "The relative standing of a value.",
+     "refresh": [
+      "A rank tells where a value stands after comparison with the other values. It is attached to the original observation, so the output remains aligned with the original vector order.",
+      "For c(3,1,2), the value 3 has rank 3, the value 1 has rank 1 and the value 2 has rank 2. The rank vector is c(3,1,2), although sorted values are c(1,2,3)."
+     ]
+    },
+    {
+     "ask": "If a function returns c(2,3,1), what should you check?",
+     "recall": "Whether these are values or positions.",
+     "refresh": [
+      "The numbers 2, 3 and 1 could be data values, ranks or positions. The function name determines their meaning, so never interpret a returned vector from its numbers alone. First ask whether the function is rearranging the original data, reporting a location, or assigning a relative rank.",
+      "For order(c(3,1,2)), c(2,3,1) is a permutation of positions: take the second, then third, then first element to obtain ascending values. This permutation is useful because it can be applied to another vector, such as student IDs, to preserve the relationship between paired observations."
+     ]
+    }
+   ],
+   "ask": {
+    "q": "For x=c(3,1,2), which position contains the minimum?",
+    "nudge": "Find value 1 in the original vector."
+   }
+  },
+  {
+   "kind": "intuition",
+   "id": "s1",
+   "mins": 5,
+   "title": "One vector, four different answers",
+   "objective": "Predict the roles of sort, order, rank and which.",
+   "body": [
+    "For x=c(3,1,2), sort(x) returns c(1,2,3): the values are rearranged into ascending order.",
+    "order(x) returns c(2,3,1): original positions in the order that would sort the vector. Thus x[order(x)] is c(1,2,3).",
+    "rank(x) returns c(3,1,2): ranks in original positions. which(x>1) returns c(1,3): positions where the condition is TRUE."
+   ],
+   "scenario": {
+    "teaser": "Sort scores and retain IDs",
+    "title": "A tutor's data-cleaning task",
+    "body": [
+     "A tutor stores scores in x=c(72,55,91) and student IDs in the same order. The tutor wants to display scores from lowest to highest without losing the link between each score and its student ID. Calling sort(x) gives ordered scores but not their original positions.",
+     "order(x) supplies those positions. Applying the same permutation to the ID vector and score vector keeps each student attached to the correct score. This is a common reason to use order() rather than sort() in data analysis."
+    ],
+    "q": "Which function gives original positions needed to reorder both scores and IDs?",
+    "answer": "order(x)."
+   },
+   "ask": {
+    "q": "What is x[order(x)] for x=c(3,1,2)?",
+    "nudge": "Use the positions returned by order, then extract those elements."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s2",
+   "mins": 7,
+   "title": "sort() and order()",
+   "objective": "Distinguish sorted values from sorting positions.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "sort()",
+     "body": "sort(x) returns vector values in ascending order by default. sort(x,decreasing=TRUE) returns descending values."
+    },
+    {
+     "t": "formula",
+     "h": "order()",
+     "body": "order(x) returns a permutation of original positions that arranges x in ascending order. The sorted vector is x[order(x)]."
+    },
+    {
+     "t": "step",
+     "h": "Example",
+     "body": "For x=c(3,1,2), order(x)=c(2,3,1). Extracting x[c(2,3,1)] gives c(1,2,3)."
+    }
+   ],
+   "flow": {
+    "title": "How to read the output",
+    "nodes": [
+     {
+      "id": "a",
+      "r": 0,
+      "c": 0,
+      "label": "Name the function",
+      "kind": "start"
+     },
+     {
+      "id": "b",
+      "r": 1,
+      "c": 0,
+      "label": "Values or positions?",
+      "kind": "step"
+     },
+     {
+      "id": "c",
+      "r": 2,
+      "c": 0,
+      "label": "If order(), index x",
+      "kind": "step"
+     },
+     {
+      "id": "d",
+      "r": 3,
+      "c": 0,
+      "label": "Check output order",
+      "kind": "end"
+     }
+    ],
+    "edges": [
+     {
+      "from": "a",
+      "to": "b"
+     },
+     {
+      "from": "b",
+      "to": "c"
+     },
+     {
+      "from": "c",
+      "to": "d"
+     }
+    ]
+   },
+   "ask": {
+    "q": "Which expression returns sorted values using order()?",
+    "nudge": "Use the permutation as an index into x."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s3",
+   "mins": 7,
+   "title": "Calculate sort and order by hand",
+   "objective": "Compute a sorting permutation.",
+   "problem": "Let x=c(8,3,6,1). Find sort(x), order(x) and x[order(x)].",
+   "steps": [
+    {
+     "say": "Write original positions.",
+     "math": "Position: 1 2 3 4; value: 8 3 6 1.",
+     "why": "Positions distinguish values from locations."
+    },
+    {
+     "say": "Arrange values ascending.",
+     "math": "1, 3, 6, 8.",
+     "why": "This is sort(x)."
+    },
+    {
+     "say": "Record original positions in sorted order.",
+     "math": "1 is at 4; 3 at 2; 6 at 3; 8 at 1.",
+     "why": "The permutation is c(4,2,3,1)."
+    },
+    {
+     "say": "Extract x using the permutation.",
+     "math": "x[order(x)]=c(1,3,6,8).",
+     "why": "Indexing by the permutation reproduces sorted values."
+    }
+   ],
+   "ask": {
+    "q": "What does order(x,decreasing=TRUE) return?",
+    "nudge": "List positions from largest value to smallest."
+   }
+  },
+  {
+   "kind": "recall",
+   "id": "s4",
+   "mins": 4,
+   "title": "Retrieve the function meanings",
+   "objective": "Recall each function's output type.",
+   "intro": "Say the output type before revealing the answer.",
+   "items": [
+    {
+     "q": "sort(x)",
+     "a": "Sorted values."
+    },
+    {
+     "q": "order(x)",
+     "a": "A permutation of original positions."
+    },
+    {
+     "q": "rank(x)",
+     "a": "Ranks aligned with original positions."
+    },
+    {
+     "q": "which(condition)",
+     "a": "Positions where condition is TRUE."
+    },
+    {
+     "q": "range(x)",
+     "a": "The minimum and maximum values."
+    }
+   ],
+   "ask": {
+    "q": "What does order(x) return?",
+    "nudge": "It is a permutation of positions."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s5",
+   "mins": 7,
+   "title": "rank(): positions keep their original order",
+   "objective": "Compute ranks and handle ties.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "Rank vector",
+     "body": "rank(x) assigns a rank to each element while keeping output aligned with original positions. For x=c(3,1,2), rank(x)=c(3,1,2)."
+    },
+    {
+     "t": "def",
+     "h": "Ties",
+     "body": "The default ties.method is average. If x=c(4,4,9), the tied 4s occupy ranks 1 and 2, so each receives rank 1.5; 9 receives rank 3."
+    },
+    {
+     "t": "step",
+     "h": "Other methods",
+     "body": "Options include first, last, min, max and random. Use the method stated in the question; otherwise the default is average."
+    }
+   ],
+   "ask": {
+    "q": "For x=c(5,5,8), what is rank(x) by default?",
+    "nudge": "The tied smallest values share the average of ranks 1 and 2."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s6",
+   "mins": 6,
+   "title": "Interpret a ranking question",
+   "objective": "Compute ranks with ties.",
+   "problem": "For x=c(12,7,7,20), find rank(x) using R's default tie method.",
+   "hints": [
+    "Sort conceptually: 7, 7, 12, 20.",
+    "The two 7s occupy ranks 1 and 2; the default gives their average.",
+    "Keep ranks in original order 12, 7, 7, 20."
+   ],
+   "answer": "c(3,1.5,1.5,4)",
+   "check": "Ranks in original order are 3, 1.5, 1.5, 4.",
+   "solution": [
+    {
+     "say": "Determine sorted order.",
+     "math": "7, 7, 12, 20.",
+     "why": "This identifies rank positions before mapping them back."
+    },
+    {
+     "say": "Average tied ranks.",
+     "math": "(1+2)/2=1.5.",
+     "why": "R's default ties.method is average."
+    },
+    {
+     "say": "Return ranks in original order.",
+     "math": "12→3; 7→1.5; 7→1.5; 20→4.",
+     "why": "rank() does not sort observations."
+    }
+   ],
+   "ask": {
+    "q": "What changes if ties.method='min' is used?",
+    "nudge": "Each tied value receives the smallest rank in its group."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s7",
+   "mins": 7,
+   "title": "which(): logical conditions become positions",
+   "objective": "Distinguish indices from selected values.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "which()",
+     "body": "which(x>0) returns indices at which the logical condition is TRUE. For x=c(2,-1,4,-6), which(x>0)=c(1,3)."
+    },
+    {
+     "t": "formula",
+     "h": "Logical indexing",
+     "body": "x[x>0] returns values satisfying the condition: c(2,4). The condition is the same, but the returned object differs."
+    },
+    {
+     "t": "def",
+     "h": "Related functions",
+     "body": "which.max(x) returns the position of the first maximum; max(x) returns the maximum value. which.min() similarly returns the first minimum's position."
+    }
+   ],
+   "ask": {
+    "q": "For x=c(2,-1,4,-6), what does x[x>0] return?",
+    "nudge": "Logical indexing selects values, not positions."
+   }
+  },
+  {
+   "kind": "guided",
+   "id": "s8",
+   "mins": 6,
+   "title": "which() versus values",
+   "objective": "Compute positions and selected values.",
+   "problem": "For x=c(1,6,-14,-154,0), find which(x<0) and x[x<0].",
+   "steps": [
+    {
+     "say": "Evaluate the condition at each position.",
+     "math": "FALSE, FALSE, TRUE, TRUE, FALSE.",
+     "why": "Negative values occur in positions 3 and 4."
+    },
+    {
+     "say": "Apply which().",
+     "math": "which(x<0)=c(3,4).",
+     "why": "which returns positions where the condition is TRUE."
+    },
+    {
+     "say": "Apply logical indexing.",
+     "math": "x[x<0]=c(-14,-154).",
+     "why": "Logical indexing returns selected values."
+    }
+   ],
+   "ask": {
+    "q": "What does which.max(c(3,8,5)) return?",
+    "nudge": "The maximum 8 occurs at position 2."
+   },
+   "hints": [
+    "Mark each value's position and test whether it is negative.",
+    "which() returns positions; logical indexing returns the values.",
+    "The negative entries are at positions 3 and 4, with values -14 and -154."
+   ],
+   "answer": "which(x<0)=c(3,4); x[x<0]=c(-14,-154).",
+   "check": "Indices 3 and 4; values -14 and -154.",
+   "solution": [
+    {
+     "say": "Evaluate the condition.",
+     "math": "FALSE, FALSE, TRUE, TRUE, FALSE.",
+     "why": "Only the third and fourth entries are negative."
+    },
+    {
+     "say": "Apply which().",
+     "math": "which(x<0)=c(3,4).",
+     "why": "which returns positions of TRUE values."
+    },
+    {
+     "say": "Use logical indexing.",
+     "math": "x[x<0]=c(-14,-154).",
+     "why": "Logical indexing extracts the matching data values."
+    }
+   ],
+   "scenario": {
+    "teaser": "Find negative transactions",
+    "title": "A quick audit of account adjustments",
+    "body": [
+     "An analyst receives a numeric vector of account adjustments: x=c(1,6,-14,-154,0). The analyst needs to locate every negative adjustment and then inspect the corresponding amounts. The first request is about the positions of the negative entries; the second request is about the values themselves.",
+     "The analyst can evaluate x<0 to create a logical vector. which(x<0) reports the positions where the condition is TRUE, while x[x<0] extracts the negative amounts. These outputs answer different questions and should not be confused when preparing a data audit."
+    ],
+    "q": "Which expression returns the negative adjustment amounts rather than their positions?",
+    "answer": "x[x<0]."
+   }
+  },
+  {
+   "kind": "theory",
+   "id": "s9",
+   "mins": 6,
+   "title": "range(): endpoints are not the difference",
+   "objective": "Interpret range and calculate the statistical range.",
+   "blocks": [
+    {
+     "t": "formula",
+     "h": "range()",
+     "body": "range(x) returns two numbers: c(min(x),max(x)). It reports lower and upper endpoints, not their difference."
+    },
+    {
+     "t": "formula",
+     "h": "Statistical range",
+     "body": "The statistical range is max(x)−min(x), calculated in R as diff(range(x)) for a numeric vector without missing values."
+    },
+    {
+     "t": "step",
+     "h": "Example",
+     "body": "For x=c(1,6,-14,-154,0), range(x)=c(-154,6), while diff(range(x))=160."
+    }
+   ],
+   "ask": {
+    "q": "What does range(c(4,9,1)) return?",
+    "nudge": "Write the minimum first and maximum second."
+   }
+  },
+  {
+   "kind": "trapcheck",
+   "id": "s10",
+   "mins": 5,
+   "title": "Exam traps: values or positions?",
+   "objective": "Avoid common function-output confusions.",
+   "intro": "Decide whether each statement is correct.",
+   "items": [
+    {
+     "claim": "sort(c(3,1,2)) returns c(1,2,3).",
+     "tf": true,
+     "why": "sort returns values in ascending order by default."
+    },
+    {
+     "claim": "order(c(3,1,2)) returns c(1,2,3).",
+     "tf": false,
+     "why": "It returns original positions c(2,3,1), not sorted values."
+    },
+    {
+     "claim": "which(c(2,-1,4)>0) returns c(2,4).",
+     "tf": false,
+     "why": "which returns positions c(1,3); c(2,4) are selected values."
+    },
+    {
+     "claim": "range(c(1,6,-14,-154,0)) returns c(-154,6).",
+     "tf": true,
+     "why": "range returns minimum then maximum."
+    }
+   ],
+   "ask": {
+    "q": "Which function returns the statistical range as one number?",
+    "nudge": "Take the difference between range's two endpoints."
+   }
+  },
+  {
+   "kind": "summary",
+   "id": "s11",
+   "mins": 4,
+   "title": "The five-function exam selector",
+   "objective": "Consolidate the output rules.",
+   "body": [
+    "sort(x) returns sorted values. order(x) returns original positions that arrange values; x[order(x)] extracts the sorted vector.",
+    "rank(x) returns ranks in original order. The default tie method is average. Check if another method is specified.",
+    "which(condition) returns one-based positions of TRUE entries. Logical indexing x[condition] returns values. which.max() returns the first maximum's position.",
+    "range(x) returns minimum and maximum. diff(range(x)) returns statistical range. Missing-value defaults can matter: sort removes NA by default, range requires na.rm=TRUE to ignore NA, and which omits NA conditions.",
+    "Identify whether the answer is a value, position, rank or pair of endpoints before calculating."
+   ],
+   "ask": {
+    "q": "State the fastest distinction between sort(x) and order(x).",
+    "nudge": "One returns rearranged data; the other returns the permutation."
+   }
+  },
+  {
+   "kind": "quiz",
+   "id": "s12",
+   "mins": 2,
+   "title": "Mastery test",
+   "objective": "Demonstrate independent R output reasoning.",
+   "setId": "rprog_t1_mastery"
+  }
+ ]
+}

@@ -1,7 +1,9 @@
 # NET JRF Statistics app — build state and authoring pattern
 
-Artifact: https://claude.ai/artifact/4Bms3mCU8e32yxNuFZy1Ft (page Version 48)
-Store: 114 docs. `meta/lessons` v40 (43 topics), `meta/catalog` v3 (167 topics, 21 modules).
+> **Historical snapshot (2026-11-05).** The Claude artifact and its store are retired as a publishing target; the repository is the
+> source of truth and the current lesson count is `counts.lessons` in `site/manifest.json`. The figures below are not kept current.
+
+Artifact (retired): page Version 48. Store: 114 docs. `meta/lessons` v40 (43 topics), `meta/catalog` v3 (167 topics, 21 modules).
 
 **Module numbers come from `seed/meta_syllabus.json` labels, not Roman numerals:** 1 probability,
 2 maths, 3A/3B sampling/design, 4 inference, 5 non-parametric, 6 regression, 7 time series,
@@ -13,7 +15,7 @@ fresh chat can author a lesson from a cold start instead of inheriting a long co
 Admin tab's prompt pack was rewritten to bootstrap from that repo rather than describe the
 standard in prose.
 
-## Lessons live (43)
+## Lessons live (43 at 2026-11-05; see the manifest for the current list)
 
 **Module 4 — Estimation Theory (inference): COMPLETE, 17 of 17.**
 4.1 Sufficiency (94 min) · 4.2 Completeness/Basu (51) · 4.3 Rao–Blackwell/Lehmann–Scheffé (51) ·
@@ -137,7 +139,7 @@ a file and grep. clicktest now walks 25 lessons and takes several minutes.
 - One verification script at the END computing every figure, rather than checks interleaved.
 - `addlesson.sh` instead of four separate steps.
 - Short `provenance`.
-- Batch all store writes into one `ArtifactData` batch call.
+- ~~Batch all store writes into one `ArtifactData` batch call.~~ Obsolete: there is no store write; merging publishes.
 - Read large store documents with `out_dir` so they land on disk, not in context.
 
 ## Visualisations available (src/30-viz.js)

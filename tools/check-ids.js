@@ -2,7 +2,7 @@
 /* Ids are what a learner's progress is stored against, so a change that drops one silently resets or orphans their work.
  * This compares every seed file a change touches with its version on the base branch and fails when an id has gone.
  *
- *   node tools/check-ids.js [<base-ref-or-sha>]        default base: origin/multi-author-hosting
+ *   node tools/check-ids.js [<base-ref-or-sha>]        default base: origin/main
  *
  * It fails when, compared with the base:
  *   - a lesson's id or topicId changed                          (progress is keyed by both)
@@ -17,7 +17,7 @@
  * Run from the repository root; IDS_ROOT overrides the root (tests only). Standard library only. */
 const fs = require("fs"), path = require("path"), { execFileSync } = require("child_process");
 const ROOT = process.env.IDS_ROOT ? path.resolve(process.env.IDS_ROOT) : path.join(__dirname, "..");
-const base = process.argv[2] || "origin/multi-author-hosting";
+const base = process.argv[2] || "origin/main";
 const git = (...a) => execFileSync("git", ["-C", ROOT, ...a], { encoding: "utf8", maxBuffer: 1 << 28 });
 
 let changed;
