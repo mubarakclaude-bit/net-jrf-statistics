@@ -4,7 +4,7 @@
 
 - Repository baseline: `main` at the start of this task; dedicated branch: `audit/math-integrity-2026-11-14`.
 - Inventory: 129 files matching `seed/lesson_*.json` were counted from the live `seed/` directory.
-- Mathematical audit completed in this work segment: 2 of 129 lessons (`lesson_design_t1.json`, `lesson_pr1.json`).
+- Lessons opened and screened in this work segment: 14 of 129 (`lesson_pr1.json` through `lesson_pr13.json`, plus `lesson_design_t1.json`).\n- The probability module's 13 lesson files have received a first-pass review of numerical worked/guided examples; additional cross-scene/formula review remains before marking the module fully verified.
 - This is an in-progress audit. No claim is made that all 129 lessons have been mathematically verified.
 - No application code, shared manifest, deployment, Claude-owned file, or unrelated lesson was changed.
 
@@ -46,7 +46,7 @@
 - Before: the answer/check/solution implied the sample median of nine had value/expectation about 4.85.
 - After: the lesson explicitly distinguishes the population median (4.852) from the expected sample median (5.2194), and gives the order-statistic expectation formula.
 
-## Independent verification
+## Probability module first-pass review\n\nThe following 13 lesson files were opened and screened: `lesson_pr1.json` through `lesson_pr13.json`. A confirmed finite-sample order-statistic expectation error is recorded as MA-003. The remaining numerical examples inspected in this first pass did not yield another confirmed arithmetic contradiction, but this is not a final certification of every formula, table or assumption in the module.\n\n## Independent verification
 
 Two dedicated standard-library verifiers were added. `tools/verify_math_integrity_design_t1.py` reconstructs both ANOVA calculations using exact rational arithmetic and checks the learner-facing JSON values, including the displayed RBD table. `tools/verify_math_integrity_probability_pr1.py` independently evaluates the harmonic-number expression for the exponential sample median and checks that the lesson distinguishes it from the population median.
 
@@ -59,7 +59,7 @@ Execution status: not yet run in a local checkout in this environment. The verif
 
 ## Scope and limitations
 
-The 129-file inventory is confirmed, but only `lesson_design_t1.json` has received full scene-level mathematical examination so far. Other lessons remain **not yet verified**. The remaining audit must extract numerical examples and check the displayed source data, intermediate arithmetic, formulas, assumptions, df, units, rounding and learner-facing conclusions. Existing lesson verifiers are not treated as sufficient evidence by themselves.
+The 129-file inventory is confirmed. `lesson_design_t1.json` has had two worked examples recalculated and corrected. The 13 probability lessons have received a first-pass screen, with `lesson_pr1.json` corrected; the probability module is not yet certified in full. All other lessons remain **not yet verified**. The remaining audit must extract numerical examples and check the displayed source data, intermediate arithmetic, formulas, assumptions, df, units, rounding and learner-facing conclusions. Existing lesson verifiers are not treated as sufficient evidence by themselves.
 
 ## Change record
 
