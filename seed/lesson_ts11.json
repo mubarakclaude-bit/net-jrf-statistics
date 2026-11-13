@@ -304,7 +304,7 @@
    "viz": {
     "type": "ar-acf",
     "p1": 0.7,
-    "p2": 0.0,
+    "p2": 0,
     "caption": "An AR(1) with φ = 0.7. For this process the k-step forecast multiplier IS ρₖ, so the ACF read off this chart is literally the forecast function."
    },
    "body": [
@@ -765,7 +765,7 @@
      "why": "False except for white noise. The interval is ŷ ± z√(σ²Σ(j<k)ψⱼ²), which widens with k towards ±z√γ₀. For an AR(1) the widening factor from one step to the limit is 1/√(1 − φ²) — 1.40 at φ = 0.7 and 2.29 at φ = 0.9. A flat band is a reporting error."
     },
     {
-     "claim": "Forecasting an MA process requires invertibility.",
+     "claim": "Recovering innovations by inverting a stated MA polynomial requires that parameterisation to be invertible.",
      "tf": true,
      "why": "True. The forecast involves εₜ, which is unobserved, so it must be reconstructed from the data via εₜ = yₜ + θyₜ₋₁ + θ²yₜ₋₂ + ⋯ — convergent only when |θ| < 1. Without invertibility no forecast can be formed from observables, which is the practical reason topic 7.1 imposes the condition."
     }
@@ -888,7 +888,7 @@
     "Give the MA(q) forecast and say why it is forecastable for exactly q steps.",
     "Say that the one-step error variance is σ² for any model with ψ₀ = 1.",
     "Construct a prediction interval that widens correctly, and say what it still understates.",
-    "Explain why forecasting needs invertibility.",
+    "Explain why the canonical MA representation is taken to be invertible.",
     "Contrast with the random walk, where neither the forecast nor the variance settles."
    ]
   },
@@ -908,7 +908,7 @@
     {
      "t": "step",
      "h": "Why that applies here",
-     "body": "Taking X to be the observed past and Y to be yₜ₊ₖ gives the result directly. Note that it holds for ANY predictor, linear or not — the conditional expectation is optimal among all functions of the past. For a general linear process the conditional expectation happens to be linear, so the best predictor and the best linear predictor coincide, which is what makes the weight-based formula exact rather than merely best-in-class."
+     "body": "Taking X to be the observed past and Y to be yₜ₊ₖ gives the optimality result directly: the conditional expectation minimises mean-squared error among all predictors. The weight-based expression derived from a Wold representation is, in general, the BEST LINEAR predictor under second-order assumptions. It equals the full conditional expectation when additional conditions make that expectation linear (for example, Gaussianity or suitable independent innovations); uncorrelated Wold innovations alone do not guarantee this."
     },
     {
      "t": "formula",
