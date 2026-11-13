@@ -11,7 +11,7 @@ def main():
     # Factor unit-root AR(2) polynomials independently.
     for a,b,rest in [(0.6,0.4,0.4),(1.2,-0.2,-0.2)]:
         # (1-B)(1-rest*B) = 1-(1+rest)B+rest B^2
-        coeff=poly_mul([1,-1],[1,-rest])
+        coeff=poly_mul([1,-1],[1,rest])
         close(coeff[1],-a); close(coeff[2],-b); n+=2
         # Δy is AR(1) with coefficient -rest.
         close(-rest, -rest); n+=1
