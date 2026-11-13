@@ -4,8 +4,8 @@
 
 - Repository baseline: `main` at the start of this task; dedicated branch: `audit/math-integrity-2026-11-14`.
 - Inventory: 129 files matching `seed/lesson_*.json` were counted from the live `seed/` directory.
-- Lessons opened and screened in this work segment: 30 of 129 (`lesson_pr1.json` through `lesson_pr13.json`; `lesson_t1.json`–`lesson_t3.json` and `lesson_t5.json`–`lesson_t17.json`; plus `lesson_design_t1.json`).
-- The Probability module's 13 lesson files and 16 Statistical Inference lesson files have received a first-pass review of numerical worked/guided examples; additional cross-scene/formula review remains before marking either module fully verified.
+- Lessons opened and screened in this work segment: 45 of 129 (`lesson_pr1.json` through `lesson_pr13.json`; `lesson_t1.json`–`lesson_t3.json` and `lesson_t5.json`–`lesson_t17.json`; `lesson_rg1.json`–`lesson_rg15.json`; plus `lesson_design_t1.json`).
+- The Probability module's 13 lesson files, 16 Statistical Inference lesson files and 15 Regression lesson files have received a first-pass review of numerical worked/guided examples; additional cross-scene/formula review remains before marking any module fully verified.
 - This is an in-progress audit. No claim is made that all 129 lessons have been mathematically verified.
 - No application code, shared manifest, deployment, Claude-owned file, or unrelated lesson was changed.
 
@@ -64,6 +64,10 @@ The following 13 lesson files were opened and screened: `lesson_pr1.json` throug
 
 The following 16 lesson files were opened and screened: `lesson_t1.json`–`lesson_t3.json` and `lesson_t5.json`–`lesson_t17.json`. MA-004 is the confirmed presentation/algebra defect in the inspected worked examples. The sufficiency scene in `lesson_t1.json` was checked in full: it correctly classifies `x̄` as minimal sufficient and the larger pair `(ΣXᵢ, X₁)` as sufficient but not minimal; no change was made there. This first pass is not a final certification of every inference formula, assumption or table.
 
+## Regression first-pass review
+
+The following 15 lesson files were opened and screened: `lesson_rg1.json` through `lesson_rg15.json`. The numerical examples inspected in this first pass did not produce another confirmed arithmetic contradiction. This is not a final certification of all formulas, assumptions, covariance expressions or inferential interpretations in the Regression module.
+
 ## Independent verification
 
 Three dedicated standard-library verifiers were added. `tools/verify_math_integrity_design_t1.py` reconstructs both ANOVA calculations using exact rational arithmetic and checks the learner-facing JSON values, including the displayed RBD table. `tools/verify_math_integrity_probability_pr1.py` independently evaluates the harmonic-number expression for the exponential sample median and checks that the lesson distinguishes it from the population median. `tools/verify_math_integrity_inference_t9.py` checks the expanded normal likelihood-ratio identity and the corrected learner-facing expression.
@@ -79,7 +83,7 @@ Execution status: neither verifier has yet been run from a full local repository
 
 ## Scope and limitations
 
-The 129-file inventory is confirmed. `lesson_design_t1.json` has had two worked examples recalculated and corrected; `lesson_pr1.json` has one finite-sample order-statistic error corrected; and `lesson_t9.json` has one incomplete algebra expression corrected. The 13 Probability and 16 Statistical Inference lessons have received first-pass screening, but neither module is certified in full. All other lessons remain **not yet verified**. The remaining audit must extract numerical examples and check the displayed source data, intermediate arithmetic, formulas, assumptions, df, units, rounding and learner-facing conclusions. Existing lesson verifiers are not treated as sufficient evidence by themselves.
+The 129-file inventory is confirmed. `lesson_design_t1.json` has had two worked examples recalculated and corrected; `lesson_pr1.json` has one finite-sample order-statistic error corrected; and `lesson_t9.json` has one incomplete algebra expression corrected. The 13 Probability, 16 Statistical Inference and 15 Regression lessons have received first-pass screening, but none of these modules is certified in full. All other lessons remain **not yet verified**. The remaining audit must extract numerical examples and check the displayed source data, intermediate arithmetic, formulas, assumptions, df, units, rounding and learner-facing conclusions. Existing lesson verifiers are not treated as sufficient evidence by themselves.
 
 ## Change record
 
