@@ -16,10 +16,14 @@ def main():
         close(p1*r1+p2,r2)
         n+=3
     # AR(1) Yule-Walker and geometric ACF, including a negative coefficient.
-    for phi in [-0.5,0.6,0.9]:
-        close(phi,phi)
-        for k in range(1,6):
-            close(phi**k, phi**k); n+=1
+    expected_acfs = {
+        -0.5: [-0.5, 0.25, -0.125, 0.0625, -0.03125],
+        0.6: [0.6, 0.36, 0.216, 0.1296, 0.07776],
+        0.9: [0.9, 0.81, 0.729, 0.6561, 0.59049],
+    }
+    for phi, expected in expected_acfs.items():
+        for k, value in enumerate(expected, start=1):
+            close(phi**k, value); n+=1
     # The lag-2 YW relation is the k=2 recursion.
     p1,p2=0.5,0.3
     r1=p1/(1-p2); r2=p1*r1+p2
