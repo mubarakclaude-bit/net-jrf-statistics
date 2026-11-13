@@ -8,9 +8,9 @@ def ar2_moments(phi1,phi2,sig2):
 
 def main():
     n=0
-    for phi,sig2 in [(0.8,1),(0.8,4),(-0.6,1)]:
-        close(sig2/(1-phi**2), sig2/(1-phi**2))
-        close(phi**2, abs(phi)**2); n+=2
+    for phi,sig2,expected in [(0.8,1,2.777777777777778),(0.8,4,11.111111111111112),(-0.6,1,1.5625)]:
+        close(sig2/(1-phi**2), expected)
+        close(phi**1, phi); n+=2
     r1,r2,g0=ar2_moments(0.5,0.3,1)
     close(r1,0.7142857142857143); close(r2,0.6571428571428571); close(g0,2.2435897435897436); n+=3
     rhos=[1.0,r1,r2]
