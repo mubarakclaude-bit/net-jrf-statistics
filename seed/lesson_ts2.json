@@ -776,7 +776,7 @@
     "In (f), compare |ρ₁| with the MA(1) bound."
    ],
    "answer": "(a) AR(1). (b) MA(1). (c) MA(3). (d) PACF cuts at 1, but suspect non-stationarity — test before fitting. (e) ARMA. (f) MA(1) with θ close to 1 — probably over-differenced.",
-   "check": "Part (d) is the trap: the PACF cut-off at lag 1 suggests AR(1) with φ = 0.9, but 0.9ᵏ gives 0.90, 0.81, 0.73, 0.66, which decays faster than the observed 0.90, 0.85, 0.82, 0.79. An ACF that decays almost linearly is the classic non-stationary signature, so the unit-root test of topic 7.5 comes before any fitting. Part (f) sits just under the 0.5 bound, and solving −θ/(1+θ²) = −0.49 gives θ ≈ 0.86 — near the invertibility boundary, which points at over-differencing.",
+   "check": "Part (d) is the trap: the PACF cut-off at lag 1 suggests AR(1) with φ = 0.9, but 0.9ᵏ gives 0.90, 0.81, 0.73, 0.66, which decays faster than the observed 0.90, 0.85, 0.82, 0.79. An ACF that decays almost linearly is the classic non-stationary signature, so the unit-root test of topic 7.5 comes before any fitting. Part (f) sits just under the 0.5 bound, and solving −θ/(1+θ²) = −0.49 gives θ ≈ 0.817 — near the invertibility boundary, which points at over-differencing.",
    "solution": [
     {
      "say": "(a), (b) and (c): clean readings.",
@@ -795,7 +795,7 @@
     },
     {
      "say": "(f) The near-boundary MA(1).",
-     "math": "ρ₁ = −0.49, just inside the bound of 0.5\n−θ/(1+θ²) = −0.49 ⟹ 0.49θ² − θ + 0.49 = 0\nθ = (1 ± √(1 − 0.9604))/0.98 ≈ 0.8571 or 1.1667\ninvertible ⟹ θ ≈ 0.857",
+     "math": "ρ₁ = −0.49, just inside the bound of 0.5\n−θ/(1+θ²) = −0.49 ⟹ 0.49θ² − θ + 0.49 = 0\nθ = (1 ± √0.0396)/0.98 ≈ 0.81735 or 1.22347\ninvertible ⟹ θ ≈ 0.857",
      "why": "Close to the boundary, which is the over-differencing signature of topic 7.6 — differencing white noise gives exactly θ = 1 and ρ₁ = −0.5. Check whether the differencing was necessary before fitting."
     }
    ]
