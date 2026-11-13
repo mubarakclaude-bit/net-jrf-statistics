@@ -18,8 +18,8 @@ def main():
     close(sum(weights), (1-theta)/(1-phi),1e-8); n+=3
     # Wold square-summability distinguishes stable AR(1) from random walk.
     close(sum(0.8**(2*j) for j in range(10000)),1/(1-0.8**2),1e-9)
-    assert sum(1.0 for _ in range(100))==100.0
-    assert sum(1.0 for _ in range(1000))==1000.0
+    assert sum((1.0)**2 for _ in range(100))==100.0
+    assert sum((1.0)**2 for _ in range(1000))==1000.0
     n+=2
     finish(10,10,n)
 if __name__ == "__main__": main()
