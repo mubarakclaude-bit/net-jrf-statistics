@@ -146,6 +146,47 @@ Severity counts: **4 critical, 8 major, 1 minor**. Thirteen confirmed learner-fa
 - Before: solution described inline/display mathematics.
 - After: solution covers Track Changes, comments and a citation/reference manager.
 
+### MA-009 — R missing-value steps use a different vector
+
+- File: `seed/lesson_rprog_t6.json`; scene: `s6`
+- Severity: **Major**
+- Prompt vector: c(NA,4,NA,8,10); observed values are 4,8,10.
+- Before: solution used 2,6,10 and calculated their mean.
+- After: solution identifies 4,8,10 and correctly counts length 5, missing 2, observed 3.
+
+### MA-010 — R summary steps belong to another NA example
+
+- File: `seed/lesson_rprog_t6.json`; scene: `s8`
+- Severity: **Major**
+- Prompt vector: c(1,NA,3,9); correct summaries are sum=13, mean=13/3 and median=3.
+- Before: solution counted a five-element vector with two missing values.
+- After: solution computes the three requested summaries.
+
+### MA-011 — R format() example has unrelated list-extraction steps
+
+- File: `seed/lesson_rprog_t7.json`; scene: `s8`
+- Severity: **Major**
+- Prompt asks whether y=format(x,nsmall=2) is numeric or character.
+- Correct result: y is character; x remains numeric; nsmall specifies a minimum number of decimal places, not rounding to exactly two.
+- Before: solution described nested-list extraction.
+- After: solution explains the return type, unchanged source object and nsmall argument.
+
+### MA-012 — R CSV prompt has unrelated data-frame filtering steps
+
+- File: `seed/lesson_rprog_t8.json`; scene: `s6`
+- Severity: **Major**
+- Prompt asks for CSV import and export without row names.
+- Before: solution described filtering rows by score.
+- After: solution matches read.csv(), write.csv() and row.names=FALSE.
+
+### MA-013 — Document-review prompt has unrelated LaTeX math-mode steps
+
+- File: `seed/lesson_rprog_t9.json`; scene: `s8`
+- Severity: **Major**
+- Prompt asks for tracked edits, comments and bibliography management.
+- Before: solution described inline/display mathematics.
+- After: solution covers Track Changes, comments and a citation/reference manager.
+
 ## Independent verification and test status
 
 Seven dedicated standard-library verifier files were added:
