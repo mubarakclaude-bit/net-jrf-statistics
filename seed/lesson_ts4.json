@@ -522,8 +522,8 @@
     },
     {
      "say": "A sanity check on the magnitude.",
-     "math": "AR(1) with φ = 0.5 would give 1/(1 − 0.25) = 1.3333\nAR(2) here gives 2.2436 — larger",
-     "why": "Adding a second positive lag increases persistence and so increases the variance. If the formula had returned something below 1, that would signal an error, since the variance of an AR process always exceeds σ²."
+     "math": "AR(1) with φ = 0.5 would give 1/(1 − 0.25) = 1.3333\nAR(2) here gives 2.2436 — larger\nIn general γ₀ ≥ σ², with strict inequality when at least one non-zero lag contributes.",
+     "why": "The current innovation contributes σ² and any non-zero past-shock weights add non-negative variance. Thus γ₀ is at least σ², and is strictly greater when the AR dynamics are non-zero. Here the positive second lag increases persistence and gives the larger value."
     }
    ],
    "after": "Answering the question above: at the k = 1 equation, where γ₋₁ had to be recognised as γ₁. The transferable procedure is to write the k = 1 to k = p equations with the symmetry applied, solve for the starting autocorrelations, then take k = 0 for the variance — remembering that only that last equation carries σ²."
