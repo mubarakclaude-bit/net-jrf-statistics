@@ -359,3 +359,27 @@ Eleven additional questions were imported from pages 205–216, all in Probabili
 ### Page held out
 
 - **Page 207:** held out because 'right place' is not defined precisely (correct square versus correct row), and none of the printed formula options unambiguously matches either natural interpretation.
+
+
+## Batch 22 — pages 217–228
+
+Twelve further questions were imported from pages 217–228, all in Probability:
+- Honour-card draws from a standard deck, p217.
+- Ball-count algebra from a stated colour probability, p218.
+- Sum-at-most-four probability for two dice, p219.
+- Alternating red/yellow die game with the first red roll losing, p220.
+- Ordered sequence probability for a square-biased eight-faced die, p221.
+- Contiguous block arrangement of girls in a row, p222.
+- Hypergeometric selection of two girls and one boy, p223.
+- Count of non-venomous snakes from a single-draw probability, p224.
+- Probability neither interview candidate is selected, p225.
+- Selection from two classes, p226.
+- Three red cards from a standard deck, p227.
+- Contiguous-block arrangement with five boys and an unknown number of girls, p228.
+
+### Source-key and wording notes
+
+- **Page 217:** the correct probability is 11/221, but none of the printed numerical options matches. Option C was corrected to 11/221.
+- **Page 224:** the wording is unclear around the number of snakes caught; the revised stem makes the single-snake interpretation explicit, which gives 135 non-venomous snakes.
+- **Page 225:** the source does not state independence; the revised stem states the independence assumption required for the accepted 60% answer.
+- Single-choice items were standardised to four options to match the repository's Paper 2 question schema. For page 216, the correct 8/81 was moved into option D and the source's 'None of these' was removed.
