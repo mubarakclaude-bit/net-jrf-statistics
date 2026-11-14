@@ -446,3 +446,23 @@ Nine further questions were imported from pages 265–268, 270–273 and 276:
 - **Page 269:** the Beta-prime transformation notation in the requested CDF is ambiguous in the scan; no transformation is guessed.
 - **Page 274:** the MGF and event threshold are not sufficiently legible to reconcile with the listed probability options.
 - **Page 275:** the piecewise density and support endpoints are too faint to verify normalisation or the requested interval probability.
+
+
+## Batch 27 — pages 279–288
+
+Eight additional questions were imported from pages 279–282 and 285–288, all in Probability:
+- Ratio of independent sums of squared normal differences and sums, p279 (F distribution).
+- Sum of three iid geometric variables with a negative-binomial probability, p280.
+- Beta(m,2) parameter recovery from a median condition and its variance, p281.
+- Conditional inclusion-exclusion for three events, p282.
+- Mixture of a geometric number of fair-coin tosses and a conditional binomial variable, p285.
+- Expected waiting time for an odd sum of two independent Poisson(1) variables, p286.
+- Central limit theorem for iid variables with variance 2, p287.
+- Iterated expectation for a conditional second moment, p288.
+
+### Pages held out after inspection
+
+- **Page 277:** the interval endpoints in the uniform-distribution question are unreadable.
+- **Page 278:** the density and four weighted estimator formulas are too faint to identify reliably.
+- **Page 283:** the density and transformation power in W are not sufficiently legible to identify the target distribution.
+- **Page 284:** section cover, no question.
