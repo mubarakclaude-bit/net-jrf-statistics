@@ -184,7 +184,7 @@
    "format": "multi",
    "topic": "inference-t15",
    "diff": "moderate",
-   "stem": "A study reports p = 0.001 for a difference of 0.02 units, from a sample of n = 10000 with σ = 1. Which statements are correct?",
+   "stem": "A study reports p = 0.0455 for a difference of 0.02 units, from a sample of n = 10000 with σ = 1. Which statements are correct?",
    "options": [
     "A and C only",
     "A, B and C only",
@@ -192,7 +192,7 @@
     "C and D only"
    ],
    "answer": "A",
-   "explanation": "A is true — the difference is real and a correct test detected it. B is false: significance concerns consistency with the null, not magnitude, and 0.02 of a standard deviation is negligible by any convention. C is true, and it is the standard remedy. D is false — the test is working exactly as designed; what is inadequate is reporting the p-value alone.",
+   "explanation": "A is true — p = 0.0455 is below 0.05, so the result is statistically significant at the 5% level. B is false: significance concerns consistency with the null, not magnitude, and 0.02 of a standard deviation is negligible by any convention. C is true, and it is the standard remedy. D is false — the test is working as designed; what is inadequate is reporting the p-value alone.",
    "statements": [
     "The result is statistically significant at any conventional level.",
     "The result shows the difference is large enough to act on.",
@@ -202,11 +202,11 @@
    "verdicts": {
     "A": {
      "tf": true,
-     "why": "True. With a standard error of 0.01 the difference is two standard errors or more, so the data are inconsistent with the null."
+     "why": "True. The standard error is 1/√10000 = 0.01, so z = 0.02/0.01 = 2 and the two-sided p-value is approximately 0.0455."
     },
     "B": {
      "tf": false,
-     "why": "False. Significance says the departure is real, not that it is big. An effect of 0.02 standard deviations is about a tenth of what is conventionally called small."
+     "why": "False. Significance says the departure is statistically detectable, not that it is large. An effect of 0.02 standard deviations is negligible in practical terms."
     },
     "C": {
      "tf": true,
@@ -357,11 +357,11 @@
    "options": [
     "the one-sample t test, since it is robust to non-normality",
     "the chi-square test on the variance",
-    "a distribution-free test such as the sign or Wilcoxon signed-rank test",
+    "no standard sign or Wilcoxon signed-rank test directly tests the mean under skewness; more data or additional assumptions are needed",
     "the z test, since σ can be estimated by s"
    ],
    "answer": "C",
-   "explanation": "The t test's robustness comes from the central limit theorem acting on x̄, and with eight observations and visible skew there is not enough sample for that protection. A distribution-free test makes no normality assumption and is the standard answer to 'small sample, clearly non-normal'. The variance test would be testing the wrong parameter and is the most normality-sensitive test available, and substituting s into a z test is simply the t test with the wrong reference distribution."
+   "explanation": "The sign test targets a population median, and the Wilcoxon signed-rank test targets a symmetric location parameter; neither is a distribution-free test of the population mean under arbitrary skewness. With only eight visibly skewed observations, the usual t approximation is not well protected either. The defensible conclusion is that the stated information does not justify a standard test of the mean: obtain more data or specify and justify an appropriate model. The variance test targets the wrong parameter, and substituting s into a z test is not valid."
   }
  ]
 }
