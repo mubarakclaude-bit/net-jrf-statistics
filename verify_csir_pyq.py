@@ -260,7 +260,7 @@ def main() -> None:
     # answer-key sheet ends at Q44, so these assertions protect derived keys.
     expected = {
         "csir-est-q56": ("AB", 2017, "December"),
-        "csir-est-q57": ("A", 2017, "December"),
+        "csir-est-q57": ("AB", 2017, "December"),
         "csir-est-q58": ("ABCD", 2017, "December"),
         "csir-est-q59": ("AD", 2017, "December"),
         "csir-est-q60": ("AC", 2017, "June"),
@@ -291,7 +291,7 @@ def main() -> None:
     assert "rank(X)>p" in q60["explanation"] and "rank(X)=p" in q60["explanation"]
     q68 = next(x for x in estimation["items"] if x["id"] == "csir-est-q68")
     assert "cannot define a probability density" in q68["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 93
+    assert len(estimation["items"]) == estimation["count"] == 96
 
     # Further source questions from pages 36–49.
     for qid, truth, year, session in [
