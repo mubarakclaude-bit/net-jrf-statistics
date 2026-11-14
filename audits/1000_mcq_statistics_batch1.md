@@ -176,3 +176,19 @@ Six additional questions were imported from visually inspected pages 89, 90, 91,
 - **Page 96:** duplicate of page 95; not imported twice.
 
 The page 89 estimator uses completeness and sufficiency of Σ|Xᵢ|. Page 90's interval follows directly from the stated pivotal CDF for the sample range. Page 93's product density is evaluated by a change of variables and equals the N(0,σ²) density.
+
+
+## Batch 12 — pages 97–108
+
+Nine additional questions were imported from visually checked pages 98–101, 103–107:
+- **Probability (6):** expectation of a linear combination without assuming independence, p98; discrete square-root transformation of a PMF, p99; density transformation, p100; conditional covariance from a joint PMF table, p107; conditional expectation of one binomial count given the total, p103; two-standard-deviation location in a sample-mean distribution, p106.
+- **Multivariate Analysis (1):** regression coefficient of one independent Poisson variable on their sum, p101.
+- **Statistical Inference (2):** UMVU estimator of the upper endpoint N of a discrete uniform distribution, p104; limiting distribution of the maximum-likelihood estimator for Uniform(0,θ), p105.
+
+### Pages held out after inspection
+
+- **Page 97:** held out because the stated 90% confidence interval (X̄−1, X̄+1) with σ=4 implies a minimum sample size of 44 using z₀.₉₅≈1.645, but 44 is absent from the printed choices.
+- **Page 102:** held out because the normal means are not specified. The ratio (X+Y)/|X−Y| has a t₁/Cauchy law only under a zero-mean condition; that assumption is absent from the scan.
+- **Page 108:** is a cover page, not a question; no entry added.
+
+For page 98, only the mean statement is keyed as universally valid because independence is not stated; the variance formula in the source would require additional assumptions. Page 104's estimator is verified by a telescoping expectation sum and completeness of the sample maximum.
