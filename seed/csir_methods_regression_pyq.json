@@ -1,0 +1,98 @@
+{
+  "moduleId": "regression",
+  "topicId": null,
+  "source": "pyq",
+  "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
+  "count": 4,
+  "clean": 4,
+  "items": [
+    {
+      "id": "csir-meth-q08",
+      "format": "single",
+      "year": 2022,
+      "session": "September",
+      "topic": "regression-t2 · relationship between the two simple-regression slopes",
+      "stem": "For a bivariate data set, one analyst fits Y on X and another fits X on Y, both by ordinary least squares with an intercept. Which pair (slope of Y on X, slope of X on Y) is possible?",
+      "options": [
+        "(−0.5, 2.5)",
+        "(0.5, 2.5)",
+        "(−2.0, 0.4)",
+        "(−2.0, −0.4)"
+      ],
+      "answer": "D",
+      "explanation": "The two regression slopes are b(Y on X)=r·sY/sX and b(X on Y)=r·sX/sY. Multiplying them cancels the standard deviations and gives r². Therefore the slopes must have the same sign, and their product must lie between 0 and 1. Option D has two negative slopes and product (−2)(−0.4)=0.8, which is possible. The other options either have opposite signs or a product greater than 1. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation or regression is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-q09",
+      "format": "multi",
+      "year": 2022,
+      "session": "September",
+      "topic": "regression-t2 · OLS normal equations without an intercept",
+      "stem": "Consider the multiple regression model Yᵢ=β₁Xᵢ₁+⋯+βₚXᵢₚ+εᵢ, with no intercept. Let êᵢ be the ordinary least-squares residual. Which statements are always true?",
+      "options": [
+        "Statement 1 only",
+        "Statement 2 only",
+        "Statements 1 and 2 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "statements": [
+        "Σᵢ êᵢ=0 and ΣᵢXᵢ₁êᵢ=0.",
+        "ΣᵢXᵢⱼêᵢ=0 for every regressor j.",
+        "Σᵢêᵢ=0 and ΣᵢXᵢⱼêᵢ=0 for every regressor j.",
+        "ΣᵢYᵢêᵢ=0."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The model has no intercept, so the sum of residuals need not be zero."
+        },
+        "B": {
+          "tf": true,
+          "why": "The OLS normal equations make the residual vector orthogonal to every column of the design matrix."
+        },
+        "C": {
+          "tf": false,
+          "why": "It adds the unsupported claim that residuals must sum to zero."
+        },
+        "D": {
+          "tf": false,
+          "why": "Y′ê=ê′ê, which is generally positive unless all residuals are zero."
+        }
+      },
+      "explanation": "OLS chooses the coefficients to minimise the sum of squared residuals. Differentiating that sum with respect to each coefficient gives the normal equations X′ê=0. In ordinary notation, this means ΣᵢXᵢⱼêᵢ=0 for every regressor j. A zero sum of residuals follows only when the model contains an intercept, represented by a column of ones. This model has no intercept, so statement 1 and statement 3 are not always true. Also, Y=Xβ̂+ê, hence Y′ê=β̂′X′ê+ê′ê=ê′ê, not generally zero. Only statement 2 is always true. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation or regression is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-q13",
+      "format": "single",
+      "year": 2020,
+      "session": "30 November",
+      "topic": "regression-t1 · leverage and the hat matrix",
+      "stem": "A simple linear regression with an intercept is fitted to 50 observations, and the explanatory-variable values are not all equal. Which value could be the leverage of one observation?",
+      "options": [
+        "0",
+        "0.01",
+        "0.1",
+        "1.1"
+      ],
+      "answer": "C",
+      "explanation": "In simple linear regression with an intercept, the leverage of observation i is hᵢᵢ=1/n+(xᵢ−x̄)²/Σⱼ(xⱼ−x̄)². The second term is non-negative, so every leverage is at least 1/50=0.02. A diagonal element of the hat matrix is also at most 1. Thus 0 and 0.01 are too small, and 1.1 is too large. The value 0.1 is within the possible range and can occur. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation or regression is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-q34",
+      "format": "single",
+      "year": 2016,
+      "session": "December",
+      "topic": "regression-t2 · effect of changing measurement units on OLS",
+      "stem": "In a simple linear regression Yᵢ=α+βXᵢ+εᵢ, both X and Y are converted from square feet to square metres by multiplying every observation by the same conversion constant c. What happens to the fitted intercept and slope?",
+      "options": [
+        "The intercept may change, but the slope will not change",
+        "The slope may change, but the intercept will not change",
+        "Both the intercept and slope may change",
+        "Neither the intercept nor the slope will change"
+      ],
+      "answer": "A",
+      "explanation": "Let Xᵢ*=cXᵢ and Yᵢ*=cYᵢ. The OLS slope is Σ(Xᵢ−X̄)(Yᵢ−Ȳ)/Σ(Xᵢ−X̄)². After conversion, the numerator and denominator are both multiplied by c², so their ratio β̂ is unchanged. The intercept is α̂=Ȳ−β̂X̄; after conversion it becomes cȲ−β̂(cX̄)=cα̂. So the intercept changes with the measurement scale, while the slope remains the same when both variables use the same conversion factor. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation or regression is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    }
+  ]
+}
