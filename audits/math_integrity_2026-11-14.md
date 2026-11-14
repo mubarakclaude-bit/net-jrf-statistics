@@ -246,3 +246,6 @@ The Rao–Blackwell correction is guarded by the top-level verifier `verify_infe
 - **Lesson 4.14:** corrected the Poisson pooling explanation (5.289 is above 5), replaced the misleading independent-cell heuristic with the multinomial projection argument for the (k-1) chi-square limit, and qualified the Yates-correction claim.
 
 Added `verify_inference_second_pass.py` to guard these corrections. Further second-pass work remains open; this is not a module-wide sign-off.
+
+
+The new verifier is a top-level `verify_*.py` entry point so the repository's changed-verifier CI runner discovers and executes it.
