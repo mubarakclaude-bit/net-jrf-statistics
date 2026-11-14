@@ -362,7 +362,8 @@ def main() -> None:
     assert q75["answer"] == "A" and "dimension n−1" in q75["explanation"]
     contrast_lesson = json.loads((ROOT / "seed" / "lesson_t3.json").read_text(encoding="utf-8"))
     contrast_text = " ".join(
-        b.get("body", "") for s in contrast_lesson["scenes"] for b in s.get("blocks", [])
+        b.get("h", "") + " " + b.get("body", "")
+        for s in contrast_lesson["scenes"] for b in s.get("blocks", [])
     )
     regression_lesson = json.loads((ROOT / "seed" / "lesson_rg2.json").read_text(encoding="utf-8"))
     regression_text = " ".join(
