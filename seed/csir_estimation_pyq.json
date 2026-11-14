@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 32,
-  "clean": 32,
+  "count": 33,
+  "clean": 33,
   "items": [
     {
       "id": "csir-est-q01",
@@ -975,6 +975,47 @@
         }
       },
       "explanation": "A sequence of estimators Tₙ is consistent for p if it converges in probability to p as the sample size increases. We examine each sequence.\n\n1. For Tₙ=(1/n)∑Xᵢ, the observations are iid and E(Xᵢ)=p. By the law of large numbers, their sample average converges in probability to E(Xᵢ)=p. Thus statement 1 is true.\n\n2. The estimator (Xₙ+Xₙ₊₁)/2 always uses just two Bernoulli observations. Increasing n changes which two observations are used, but it does not increase the number averaged. Its variance is p(1−p)/2, which does not approach zero for 0<p<1. Therefore it does not concentrate around p and is not consistent. Statement 2 is false.\n\n3. Since a Bernoulli variable can only be 0 or 1, squaring it does not change it: Xᵢ²=Xᵢ. Hence (1/n)∑Xᵢ²=(1/n)∑Xᵢ for every n. This is the same consistent estimator as in statement 1. Statement 3 is true.\n\n4. Let Zᵢ=X₂ᵢ₋₁−X₂ᵢ. The pairs use disjoint independent observations, so the Zᵢ are iid. Also E(Zᵢ)=E(X₂ᵢ₋₁)−E(X₂ᵢ)=p−p=0. By the law of large numbers, their average converges to 0, not to p. Since p>0, statement 4 is false.\n\nTherefore only sequences 1 and 3 are consistent: option A. Other-exam relevance: consistency, Bernoulli sampling and the law of large numbers are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q13",
+      "type": "practice",
+      "format": "multi",
+      "year": 2022,
+      "session": "September",
+      "topic": "inference-t7 · Bayesian estimation of a normal mean and proper versus improper priors",
+      "stem": "Suppose one observation X follows a normal distribution with unknown mean μ∈ℝ and known variance 1. Under squared-error loss, which statements about the Bayes estimator of μ are correct?",
+      "statements": [
+        "For a proper prior distribution on μ, the resulting Bayes estimator cannot be unbiased for every value of μ.",
+        "There exists a proper prior distribution for which the Bayes estimator is unbiased for every value of μ.",
+        "Every improper prior distribution necessarily gives a biased Bayes estimator.",
+        "There exists an improper prior distribution for which the Bayes estimator is unbiased for every value of μ."
+      ],
+      "options": [
+        "Statements 1 and 4 only",
+        "Statements 1 and 2 only",
+        "Statements 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "A proper prior produces a nonconstant marginal density m(x); the posterior mean x + d(log m(x))/dx therefore cannot equal x for every x. The normal location model has X as its unique unbiased estimator, so a proper-prior posterior mean cannot be unbiased for all μ. The flat improper prior gives posterior mean X, which is unbiased."
+        },
+        "B": {
+          "tf": false,
+          "why": "No proper prior can give a posterior mean that is unbiased for every μ in this normal location model."
+        },
+        "C": {
+          "tf": false,
+          "why": "The flat improper prior π(μ)∝1 gives posterior N(X,1), whose mean is X and is unbiased for μ."
+        },
+        "D": {
+          "tf": true,
+          "why": "With the flat improper prior, the likelihood is proportional to exp{−(μ−X)²/2}; normalising it as a posterior gives N(X,1), so the posterior mean is X and Eμ(X)=μ."
+        }
+      },
+      "explanation": "For squared-error loss, the Bayes estimator is the posterior mean E(μ|X).\n\n1. Consider first a proper prior π(μ). The marginal density of the observation is m(x)=∫φ(x−μ)π(μ)dμ, where φ is the standard normal density. For this normal location model, the posterior mean can be written as δ(x)=E(μ|X=x)=x + d[log m(x)]/dx. If δ(x) were unbiased for every μ, completeness of the normal location family implies that it must equal the usual unbiased estimator X. That would require d[log m(x)]/dx=0 for all x, so m(x) would have to be constant. A constant function over the whole real line cannot be a proper probability density. Thus a proper prior cannot produce a Bayes estimator that is unbiased for every μ. Statement 1 is true and statement 2 is false.\n\n2. Now use the flat improper prior π(μ)∝1. Multiplying this prior by the likelihood gives π(μ|X=x)∝exp{−(x−μ)²/2}. This is the density kernel of N(x,1). Therefore the posterior mean is δ(x)=x. Since Eμ(X)=μ, this estimator is unbiased. So statement 4 is true and statement 3 is false.\n\nHence statements 1 and 4 only are correct: option A. Note that 'unbiased' here means unbiased for every μ in the parameter space, not merely having zero bias at one particular parameter value. Other-exam relevance: Bayesian estimation, posterior means, loss functions and the role of proper and improper priors are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
