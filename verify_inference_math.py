@@ -2,7 +2,7 @@
 """Independent Paper 2 Statistical Inference mathematical regression suite.
 
 Run from the repository root:
-    python tools/verify_inference_math.py
+    python verify_inference_math.py
 
 Uses only the Python standard library. The suite deliberately separates:
   * mathematical regression calculations (independently recomputed),
