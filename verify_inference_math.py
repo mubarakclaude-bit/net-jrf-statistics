@@ -411,6 +411,39 @@ class FollowUpCorrectionTests(unittest.TestCase):
         self.assertEqual(item["answer"], "C")
         self.assertIn("Option C is the correct pair", item["explanation"])
 
+    def test_t15_reported_p_value_matches_difference_and_standard_error(self):
+        z = 0.02 / (1 / math.sqrt(10000))
+        p_value = math.erfc(z / math.sqrt(2))
+        self.assertTrue(close(p_value, 0.0455, tol=1e-4))
+        pool = load_json(SEED / "inference_t15_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t15-m-12")
+        self.assertIn("p = 0.0455", item["stem"])
+
+    def test_t15_distribution_free_tests_do_not_claim_general_mean_test(self):
+        pool = load_json(SEED / "inference_t15_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t15-m-20")
+        self.assertIn("does not directly test the mean", item["options"][2])
+        self.assertIn("median", item["explanation"].lower())
+
+    def test_t8_minimax_uses_lower_bound_not_constant_risk_alone(self):
+        pool = load_json(SEED / "inference_t8_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inference-t8-m-11")
+        self.assertIn("minimax lower bound", item["explanation"])
+        self.assertIn("Constant risk alone is NOT sufficient", item["explanation"])
+
+    def test_t5_uniform_moment_estimate_uses_feasibility_not_admissibility(self):
+        pool = load_json(SEED / "inference_t5_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t5-m-09")
+        self.assertIn("outside the sample-compatible parameter region", item["explanation"])
+        self.assertNotIn("inadmissible", item["explanation"].lower())
+
+    def test_t1_uniform_endpoint_convention_is_consistent(self):
+        pool = load_json(SEED / "inference_t1_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t1-m-06")
+        self.assertIn("U[0, θ]", item["stem"])
+        self.assertIn("θ ≥ 3.6", item["explanation"])
+
+
     def test_standard_deviation_interval_uses_corrected_rounding(self):
         pool = load_json(SEED / "inference_t13_mastery.json")
         item = next(q for q in pool["items"] if q["id"] == "inf-t13-m-16")
