@@ -259,7 +259,7 @@ def main() -> None:
     expected = {
         "csir-est-q56": ("AB", 2017, "December"),
         "csir-est-q57": ("A", 2017, "December"),
-        "csir-est-q58": ("BCD", 2017, "December"),
+        "csir-est-q58": ("ABCD", 2017, "December"),
         "csir-est-q59": ("AD", 2017, "December"),
         "csir-est-q60": ("AC", 2017, "June"),
         "csir-est-q62": ("ACD", 2016, "December"),
