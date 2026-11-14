@@ -295,3 +295,13 @@ Added `verify_timeseries_precision.py` to guard these distinctions. The wider ti
 
 
 A consistency scan of the time-series edits also updated the remaining Wold/invertibility explanation and every Yule–Walker revision prompt that still stated the finite-sample stationarity property without its biased-sample-ACF and nonsingularity conditions.
+
+
+## Time-series identification second pass — ACF/PACF
+
+- **MA(1) PACF:** corrected a sign error in the closed-form PACF expression; the worked numerical values already used the correct negative-sign formula.
+- **AR/ARMA identification:** corrected two worked classifications where the stated PACF values fell inside the given significance band after lag 2. Both examples are AR(2), not ARMA.
+- **AR ACF:** replaced the absolute claim that an AR ACF is non-zero at every lag with the correct tail-off rule. Special coefficient patterns can produce isolated zero autocorrelations without a finite cut-off.
+- **Mastery pool:** corrected the MA(1) reciprocal-root calculation for sample (ho_1=-0.49) to approximately 0.81735 and 1.22347, and updated the AR ACF question to allow isolated zero autocorrelations.
+
+Added `verify_timeseries_identification.py` to guard the formula, classifications and numerical answer.

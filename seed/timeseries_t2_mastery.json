@@ -1,364 +1,364 @@
 {
- "moduleId": "timeseries",
- "topicId": "timeseries-t2",
- "source": "mastery",
- "label": "ACF and PACF identification — mastery test (unseen)",
- "count": 20,
- "items": [
-  {
-   "id": "ts-t2-m-01",
-   "format": "single",
-   "topic": "timeseries-t2",
-   "diff": "easy",
-   "stem": "For an AR(p) process, the partial autocorrelation function:",
-   "options": [
-    "decays geometrically without cutting off",
-    "cuts off after lag 1",
-    "cuts off after lag p",
-    "is zero at every lag"
-   ],
-   "answer": "C",
-   "explanation": "φₖₖ is the coefficient on yₜ₋ₖ in a regression of yₜ on its first k lags, and an AR(p) has no dependence on lags beyond p, so that coefficient is zero for k > p. The ACF, by contrast, decays forever."
-  },
-  {
-   "id": "ts-t2-m-02",
-   "format": "single",
-   "topic": "timeseries-t2",
-   "diff": "easy",
-   "stem": "For an MA(q) process, the autocorrelation function:",
-   "options": [
-    "decays geometrically",
-    "cuts off after lag q",
-    "cuts off after lag 1 whatever q is",
-    "oscillates indefinitely"
-   ],
-   "answer": "B",
-   "explanation": "yₜ and yₜ₋ₖ involve disjoint windows of the shock sequence once k > q, so they share no εⱼ and the covariance is exactly zero. The cut-off is an algebraic fact rather than an approximation."
-  },
-  {
-   "id": "ts-t2-m-03",
-   "format": "single",
-   "topic": "timeseries-t2",
-   "diff": "easy",
-   "stem": "If NEITHER the ACF nor the PACF cuts off, the indicated model class is:",
-   "options": [
-    "white noise",
-    "AR",
-    "MA",
-    "ARMA"
-   ],
-   "answer": "D",
-   "explanation": "Both functions decaying is the signature of a mixed model: a finite AR has a finite PACF and a finite MA a finite ACF, so neither being finite points to both components being present. The route is then to fit small candidates, ARMA(1,1) first, and compare by an information criterion."
-  },
-  {
-   "id": "ts-t2-m-04",
-   "format": "numeric",
-   "topic": "timeseries-t2",
-   "diff": "easy",
-   "stem": "For a sample of n = 100 observations the usual significance bands for the sample ACF are approximately:",
-   "options": [
-    "±0.05",
-    "±0.10",
-    "±0.20",
-    "±0.50"
-   ],
-   "answer": "C",
-   "explanation": "The standard error of a sample autocorrelation under the white-noise null is about 1/√n = 0.10, so the bands at roughly two standard errors are ±0.20. They are pointwise, so about one lag in twenty falls outside by chance.",
-   "check": "At n = 400 the bands would halve to ±0.10, since they scale as 1/√n."
-  },
-  {
-   "id": "ts-t2-m-05",
-   "format": "numeric",
-   "topic": "timeseries-t2",
-   "diff": "easy",
-   "stem": "For an AR(1) process with coefficient φ, the autocorrelation at lag k is:",
-   "options": [
-    "φ/k",
-    "φᵏ",
-    "kφ",
-    "φ/(1 − φ)"
-   ],
-   "answer": "B",
-   "explanation": "The ACF of an AR(1) is exactly φᵏ, decaying geometrically and alternating in sign when φ is negative. Simulation at φ = 0.7 gave 0.7001, 0.4903 and 0.3433 at lags 1, 2 and 3, against 0.7000, 0.4900 and 0.3430.",
-   "check": "At k = 1 this must give ρ₁ = φ, which is how the coefficient of an AR(1) is read straight off the ACF."
-  },
-  {
-   "id": "ts-t2-m-06",
-   "format": "single",
-   "topic": "timeseries-t2",
-   "diff": "easy",
-   "stem": "The identification rule is often summarised as 'the letters are crossed'. This means:",
-   "options": [
-    "neither function reads either order",
-    "the ACF reads AR order and the PACF reads MA order",
-    "both functions read both orders",
-    "the ACF reads MA order and the PACF reads AR order"
-   ],
-   "answer": "D",
-   "explanation": "The ACF cuts off for an MA and the PACF cuts off for an AR, so each function identifies the OTHER letter's order. Getting this the wrong way round is the commonest error in the topic."
-  },
-  {
-   "id": "ts-t2-m-07",
-   "format": "numeric",
-   "topic": "timeseries-t2",
-   "diff": "moderate",
-   "stem": "An MA(1) process under the convention yₜ = εₜ − θεₜ₋₁ with θ = 0.5 has lag-1 autocorrelation:",
-   "options": [
-    "−0.50",
-    "+0.40",
-    "−0.40",
-    "+0.25"
-   ],
-   "answer": "C",
-   "explanation": "ρ₁ = −θ/(1 + θ²) = −0.5/1.25 = −0.40. Note the sign: under the minus convention a POSITIVE θ gives a NEGATIVE lag-1 autocorrelation. Simulated as −0.3996 over a long series.",
-   "check": "Under the plus convention the answer would be +0.40, so the convention must be read from the question."
-  },
-  {
-   "id": "ts-t2-m-08",
-   "format": "numeric",
-   "topic": "timeseries-t2",
-   "diff": "moderate",
-   "stem": "The largest possible modulus of the lag-1 autocorrelation of an MA(1) process is:",
-   "options": [
-    "1.0",
-    "0.5",
-    "0.25",
-    "0.707"
-   ],
-   "answer": "B",
-   "explanation": "Maximising |θ|/(1 + θ²) gives a derivative vanishing at θ² = 1, so the maximum is 1/2 attained at θ = ±1. Since θ = ±1 is the invertibility boundary, an invertible MA(1) has |ρ₁| strictly below 0.5 — which makes this a useful one-number check on a sample ACF.",
-   "check": "A sample ρ₁ of −0.7 would therefore rule out an MA(1), since the quadratic 0.7θ² − θ + 0.7 = 0 has a negative discriminant."
-  },
-  {
-   "id": "ts-t2-m-09",
-   "format": "single",
-   "topic": "timeseries-t2",
-   "diff": "moderate",
-   "stem": "A stationary series of 400 observations has sample ACF 0.71, 0.66, 0.54, 0.44 tapering, and sample PACF 0.71, 0.30, 0.02, −0.01. The indicated model is:",
-   "options": [
-    "MA(4)",
-    "MA(2)",
-    "ARMA(1,1)",
-    "AR(2)"
-   ],
-   "answer": "D",
-   "explanation": "The bands are ±2/√400 = ±0.10. The PACF has exactly two values outside them and then cuts off, so p = 2, while the ACF merely decays. These are the figures for φ = (0.5, 0.3): ρ₁ = 0.7143, ρ₂ = 0.6571, and the second PACF stem equals φ₂ = 0.3 exactly."
-  },
-  {
-   "id": "ts-t2-m-10",
-   "format": "numeric",
-   "topic": "timeseries-t2",
-   "diff": "moderate",
-   "stem": "An MA(1) has sample ρ₁ = −0.40. The invertible coefficient is:",
-   "options": [
-    "θ = 0.4",
-    "θ = 2.0",
-    "θ = 0.5",
-    "θ = −0.5"
-   ],
-   "answer": "C",
-   "explanation": "Solving −θ/(1+θ²) = −0.40 gives 0.4θ² − θ + 0.4 = 0, so θ = (1 ± 0.6)/0.8 = 2 or 0.5. The two roots are reciprocals — the non-identifiability of topic 7.1 — and invertibility selects 0.5.",
-   "check": "Substituting back: −0.5/(1 + 0.25) = −0.40 ✓, and −2/(1 + 4) = −0.40 ✓ — both give the same value, which is exactly why the restriction is needed."
-  },
-  {
-   "id": "ts-t2-m-11",
-   "format": "single",
-   "topic": "timeseries-t2",
-   "diff": "moderate",
-   "stem": "An AR(1) with φ = −0.7 has an ACF that alternates in sign. This indicates:",
-   "options": [
-    "an MA component",
-    "a negative coefficient, with the PACF still cutting off at lag 1",
-    "non-stationarity",
-    "a seasonal effect"
-   ],
-   "answer": "B",
-   "explanation": "The ACF is φᵏ = −0.7, +0.49, −0.343, so the alternation comes from the sign of φ and carries no information about order. The PACF still shows exactly one stem. Sign pattern and cut-off point answer different questions and should be read separately."
-  },
-  {
-   "id": "ts-t2-m-12",
-   "format": "multi",
-   "topic": "timeseries-t2",
-   "diff": "moderate",
-   "stem": "Consider the identification rule and its use.",
-   "options": [
-    "A, B and C only",
-    "A and C only",
-    "B and D only",
-    "A, B, C and D"
-   ],
-   "answer": "A",
-   "explanation": "A is true — the exactness comes from disjoint shock windows. B is true: φₚₚ = φₚ, so the last stem gives the last coefficient. C is true, and it follows from maximising θ/(1+θ²). D is false — the ACF of an AR decays forever, since a stationary AR has an MA(∞) representation giving every lag non-zero weight.",
-   "statements": [
-    "The ACF of an MA(q) is EXACTLY zero beyond lag q, not merely small.",
-    "The last PACF value of an AR(p) equals φₚ.",
-    "No MA(1) can have |ρ₁| greater than 0.5.",
-    "The ACF of an AR(p) becomes exactly zero beyond lag p."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True. yₜ and yₜ₋ₖ involve disjoint sets of shocks once k > q, so the covariance is algebraically zero — no approximation involved."
+  "moduleId": "timeseries",
+  "topicId": "timeseries-t2",
+  "source": "mastery",
+  "label": "ACF and PACF identification — mastery test (unseen)",
+  "count": 20,
+  "items": [
+    {
+      "id": "ts-t2-m-01",
+      "format": "single",
+      "topic": "timeseries-t2",
+      "diff": "easy",
+      "stem": "For an AR(p) process, the partial autocorrelation function:",
+      "options": [
+        "decays geometrically without cutting off",
+        "cuts off after lag 1",
+        "cuts off after lag p",
+        "is zero at every lag"
+      ],
+      "answer": "C",
+      "explanation": "φₖₖ is the coefficient on yₜ₋ₖ in a regression of yₜ on its first k lags, and an AR(p) has no dependence on lags beyond p, so that coefficient is zero for k > p. The ACF, by contrast, decays forever."
     },
-    "B": {
-     "tf": true,
-     "why": "True: φₚₚ = φₚ. At φ = (0.5, 0.3) the PACF is 0.7143 then 0.3000, the second value being φ₂ exactly. It gives a free estimate off the plot."
+    {
+      "id": "ts-t2-m-02",
+      "format": "single",
+      "topic": "timeseries-t2",
+      "diff": "easy",
+      "stem": "For an MA(q) process, the autocorrelation function:",
+      "options": [
+        "decays geometrically",
+        "cuts off after lag q",
+        "cuts off after lag 1 whatever q is",
+        "oscillates indefinitely"
+      ],
+      "answer": "B",
+      "explanation": "yₜ and yₜ₋ₖ involve disjoint windows of the shock sequence once k > q, so they share no εⱼ and the covariance is exactly zero. The cut-off is an algebraic fact rather than an approximation."
     },
-    "C": {
-     "tf": true,
-     "why": "True. Maximising θ/(1+θ²) gives 0.5 at θ = ±1, the invertibility boundary, so an invertible MA(1) has |ρ₁| strictly below 0.5."
+    {
+      "id": "ts-t2-m-03",
+      "format": "single",
+      "topic": "timeseries-t2",
+      "diff": "easy",
+      "stem": "If NEITHER the ACF nor the PACF cuts off, the indicated model class is:",
+      "options": [
+        "white noise",
+        "AR",
+        "MA",
+        "ARMA"
+      ],
+      "answer": "D",
+      "explanation": "Both functions decaying is the signature of a mixed model: a finite AR has a finite PACF and a finite MA a finite ACF, so neither being finite points to both components being present. The route is then to fit small candidates, ARMA(1,1) first, and compare by an information criterion."
     },
-    "D": {
-     "tf": false,
-     "why": "False — that is the crossed-letters error. The PACF cuts off for an AR; the ACF decays forever as φᵏ for an AR(1), never reaching zero at any finite lag."
+    {
+      "id": "ts-t2-m-04",
+      "format": "numeric",
+      "topic": "timeseries-t2",
+      "diff": "easy",
+      "stem": "For a sample of n = 100 observations the usual significance bands for the sample ACF are approximately:",
+      "options": [
+        "±0.05",
+        "±0.10",
+        "±0.20",
+        "±0.50"
+      ],
+      "answer": "C",
+      "explanation": "The standard error of a sample autocorrelation under the white-noise null is about 1/√n = 0.10, so the bands at roughly two standard errors are ±0.20. They are pointwise, so about one lag in twenty falls outside by chance.",
+      "check": "At n = 400 the bands would halve to ±0.10, since they scale as 1/√n."
+    },
+    {
+      "id": "ts-t2-m-05",
+      "format": "numeric",
+      "topic": "timeseries-t2",
+      "diff": "easy",
+      "stem": "For an AR(1) process with coefficient φ, the autocorrelation at lag k is:",
+      "options": [
+        "φ/k",
+        "φᵏ",
+        "kφ",
+        "φ/(1 − φ)"
+      ],
+      "answer": "B",
+      "explanation": "The ACF of an AR(1) is exactly φᵏ, decaying geometrically and alternating in sign when φ is negative. Simulation at φ = 0.7 gave 0.7001, 0.4903 and 0.3433 at lags 1, 2 and 3, against 0.7000, 0.4900 and 0.3430.",
+      "check": "At k = 1 this must give ρ₁ = φ, which is how the coefficient of an AR(1) is read straight off the ACF."
+    },
+    {
+      "id": "ts-t2-m-06",
+      "format": "single",
+      "topic": "timeseries-t2",
+      "diff": "easy",
+      "stem": "The identification rule is often summarised as 'the letters are crossed'. This means:",
+      "options": [
+        "neither function reads either order",
+        "the ACF reads AR order and the PACF reads MA order",
+        "both functions read both orders",
+        "the ACF reads MA order and the PACF reads AR order"
+      ],
+      "answer": "D",
+      "explanation": "The ACF cuts off for an MA and the PACF cuts off for an AR, so each function identifies the OTHER letter's order. Getting this the wrong way round is the commonest error in the topic."
+    },
+    {
+      "id": "ts-t2-m-07",
+      "format": "numeric",
+      "topic": "timeseries-t2",
+      "diff": "moderate",
+      "stem": "An MA(1) process under the convention yₜ = εₜ − θεₜ₋₁ with θ = 0.5 has lag-1 autocorrelation:",
+      "options": [
+        "−0.50",
+        "+0.40",
+        "−0.40",
+        "+0.25"
+      ],
+      "answer": "C",
+      "explanation": "ρ₁ = −θ/(1 + θ²) = −0.5/1.25 = −0.40. Note the sign: under the minus convention a POSITIVE θ gives a NEGATIVE lag-1 autocorrelation. Simulated as −0.3996 over a long series.",
+      "check": "Under the plus convention the answer would be +0.40, so the convention must be read from the question."
+    },
+    {
+      "id": "ts-t2-m-08",
+      "format": "numeric",
+      "topic": "timeseries-t2",
+      "diff": "moderate",
+      "stem": "The largest possible modulus of the lag-1 autocorrelation of an MA(1) process is:",
+      "options": [
+        "1.0",
+        "0.5",
+        "0.25",
+        "0.707"
+      ],
+      "answer": "B",
+      "explanation": "Maximising |θ|/(1 + θ²) gives a derivative vanishing at θ² = 1, so the maximum is 1/2 attained at θ = ±1. Since θ = ±1 is the invertibility boundary, an invertible MA(1) has |ρ₁| strictly below 0.5 — which makes this a useful one-number check on a sample ACF.",
+      "check": "A sample ρ₁ of −0.7 would therefore rule out an MA(1), since the quadratic 0.7θ² − θ + 0.7 = 0 has a negative discriminant."
+    },
+    {
+      "id": "ts-t2-m-09",
+      "format": "single",
+      "topic": "timeseries-t2",
+      "diff": "moderate",
+      "stem": "A stationary series of 400 observations has sample ACF 0.71, 0.66, 0.54, 0.44 tapering, and sample PACF 0.71, 0.30, 0.02, −0.01. The indicated model is:",
+      "options": [
+        "MA(4)",
+        "MA(2)",
+        "ARMA(1,1)",
+        "AR(2)"
+      ],
+      "answer": "D",
+      "explanation": "The bands are ±2/√400 = ±0.10. The PACF has exactly two values outside them and then cuts off, so p = 2, while the ACF merely decays. These are the figures for φ = (0.5, 0.3): ρ₁ = 0.7143, ρ₂ = 0.6571, and the second PACF stem equals φ₂ = 0.3 exactly."
+    },
+    {
+      "id": "ts-t2-m-10",
+      "format": "numeric",
+      "topic": "timeseries-t2",
+      "diff": "moderate",
+      "stem": "An MA(1) has sample ρ₁ = −0.40. The invertible coefficient is:",
+      "options": [
+        "θ = 0.4",
+        "θ = 2.0",
+        "θ = 0.5",
+        "θ = −0.5"
+      ],
+      "answer": "C",
+      "explanation": "Solving −θ/(1+θ²) = −0.40 gives 0.4θ² − θ + 0.4 = 0, so θ = (1 ± 0.6)/0.8 = 2 or 0.5. The two roots are reciprocals — the non-identifiability of topic 7.1 — and invertibility selects 0.5.",
+      "check": "Substituting back: −0.5/(1 + 0.25) = −0.40 ✓, and −2/(1 + 4) = −0.40 ✓ — both give the same value, which is exactly why the restriction is needed."
+    },
+    {
+      "id": "ts-t2-m-11",
+      "format": "single",
+      "topic": "timeseries-t2",
+      "diff": "moderate",
+      "stem": "An AR(1) with φ = −0.7 has an ACF that alternates in sign. This indicates:",
+      "options": [
+        "an MA component",
+        "a negative coefficient, with the PACF still cutting off at lag 1",
+        "non-stationarity",
+        "a seasonal effect"
+      ],
+      "answer": "B",
+      "explanation": "The ACF is φᵏ = −0.7, +0.49, −0.343, so the alternation comes from the sign of φ and carries no information about order. The PACF still shows exactly one stem. Sign pattern and cut-off point answer different questions and should be read separately."
+    },
+    {
+      "id": "ts-t2-m-12",
+      "format": "multi",
+      "topic": "timeseries-t2",
+      "diff": "moderate",
+      "stem": "Consider the identification rule and its use.",
+      "options": [
+        "A, B and C only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "A is true — the exactness comes from disjoint shock windows. B is true: φₚₚ = φₚ, so the last stem gives the last coefficient. C is true, and it follows from maximising |θ|/(1+θ²). D is false — the ACF of an AR decays forever, since a stationary AR has an MA(∞) representation giving every lag non-zero weight.",
+      "statements": [
+        "The ACF of an MA(q) is EXACTLY zero beyond lag q, not merely small.",
+        "The last PACF value of an AR(p) equals φₚ.",
+        "No MA(1) can have |ρ₁| greater than 0.5.",
+        "The ACF of an AR(p) becomes exactly zero beyond lag p."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True. yₜ and yₜ₋ₖ involve disjoint sets of shocks once k > q, so the covariance is algebraically zero — no approximation involved."
+        },
+        "B": {
+          "tf": true,
+          "why": "True: φₚₚ = φₚ. At φ = (0.5, 0.3) the PACF is 0.7143 then 0.3000, the second value being φ₂ exactly. It gives a free estimate off the plot."
+        },
+        "C": {
+          "tf": true,
+          "why": "True. Maximising θ/(1+θ²) gives 0.5 at θ = ±1, the invertibility boundary, so an invertible MA(1) has |ρ₁| strictly below 0.5."
+        },
+        "D": {
+          "tf": false,
+          "why": "False — that is the crossed-letters error. The PACF cuts off for an AR; the ACF decays forever as φᵏ for an AR(1), never reaching zero at any finite lag."
+        }
+      }
+    },
+    {
+      "id": "ts-t2-m-13",
+      "format": "numeric",
+      "topic": "timeseries-t2",
+      "diff": "moderate",
+      "stem": "An AR(2) with φ = (0.5, 0.3) has lag-1 autocorrelation:",
+      "options": [
+        "0.3000",
+        "0.5000",
+        "0.8000",
+        "0.7143"
+      ],
+      "answer": "D",
+      "explanation": "ρ₁ = φ₁/(1 − φ₂) = 0.5/0.7 = 0.7143, simulated as 0.7145. Note it exceeds φ₁ itself, because the second lag reinforces the first. Subsequent values follow ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂, giving 0.6571, 0.5429 and 0.3971.",
+      "check": "Setting φ₂ = 0 must recover ρ₁ = φ₁, the AR(1) case, which it does."
+    },
+    {
+      "id": "ts-t2-m-14",
+      "format": "single",
+      "topic": "timeseries-t2",
+      "diff": "moderate",
+      "stem": "A sample ACF over 20 lags shows one isolated value just outside the ±2/√n band, at lag 7, on data with no weekly structure. The best response is:",
+      "options": [
+        "fit an AR(7)",
+        "fit an MA(7)",
+        "ignore it — the bands are pointwise and one or two excursions are expected",
+        "difference the series"
+      ],
+      "answer": "C",
+      "explanation": "Each lag has about a 5% chance of falling outside its band by chance, so over 20 lags one or two excursions are the expected number. An isolated spike at an uninterpretable lag is noise. A spike at lag 12 on monthly data would be different — interpretability is what distinguishes real structure from an accidental excursion."
+    },
+    {
+      "id": "ts-t2-m-15",
+      "format": "single",
+      "topic": "timeseries-t2",
+      "diff": "moderate",
+      "stem": "A sample ACF reads 0.90, 0.85, 0.82, 0.79, 0.76 and the PACF cuts off after lag 1. The best reading is:",
+      "options": [
+        "fit an AR(1) with φ = 0.9",
+        "suspect non-stationarity — the ACF decays too slowly for an AR(1) with φ = 0.9",
+        "fit an MA(1)",
+        "fit an ARMA(1,1)"
+      ],
+      "answer": "B",
+      "explanation": "An AR(1) with φ = 0.9 would give 0.90, 0.81, 0.73, 0.66, 0.59 — decaying considerably faster than observed. An ACF that decays almost linearly is the classic unit-root signature, so the Dickey–Fuller test of topic 7.5 comes before any fitting. The PACF's apparent cut-off is misleading here."
+    },
+    {
+      "id": "ts-t2-m-16",
+      "format": "single",
+      "topic": "timeseries-t2",
+      "diff": "moderate",
+      "stem": "The PACF at lag k is best described as:",
+      "options": [
+        "the derivative of the ACF at lag k",
+        "the correlation between yₜ and yₜ₋ₖ",
+        "the kth power of ρ₁",
+        "the coefficient on yₜ₋ₖ in a regression of yₜ on its first k lags"
+      ],
+      "answer": "D",
+      "explanation": "That regression interpretation is what makes the PACF identify AR order: it asks whether the kth lag adds anything once the earlier ones are in the model, and for an AR(p) the answer is no beyond lag p. Option B is the ordinary autocorrelation, which does not partial out the intervening lags."
+    },
+    {
+      "id": "ts-t2-m-17",
+      "format": "multi",
+      "topic": "timeseries-t2",
+      "diff": "hard",
+      "stem": "Consider finer points of identification.",
+      "options": [
+        "A, B and C only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "A is true — a longer ACF than an AR(1) would give is the usual reason to try ARMA(1,1). B is true, and the formula shows the decay is genuine at every lag. C is true: φ₁₁ = ρ₁ by construction. D is false — the residual ACF should show NO structure if the model has captured the autocorrelation.",
+      "statements": [
+        "An ARMA(1,1) can reproduce a slowly decaying ACF with only two parameters.",
+        "The PACF of an MA(1) is −(−θ)ᵏ(1−θ²)/(1−θ^(2(k+1))), non-zero at every lag.",
+        "The ACF and PACF always agree at lag 1.",
+        "After fitting, the residual ACF should show the same structure as the data ACF."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True, and it is why ARMA(1,1) is the standard first candidate when an ACF decays too slowly for a plausible low-order AR."
+        },
+        "B": {
+          "tf": true,
+          "why": "True. The numerator vanishes only at |θ| = 1, the invertibility boundary, so every partial autocorrelation of a non-degenerate MA(1) is strictly non-zero — the decay is genuine, not a truncation. At θ = 0.5: −0.4000, −0.1905, −0.0952, −0.0488."
+        },
+        "C": {
+          "tf": true,
+          "why": "True: φ₁₁ = ρ₁ by construction, since there are no intervening lags to partial out. The two functions diverge from lag 2 onwards."
+        },
+        "D": {
+          "tf": false,
+          "why": "False — the opposite. If the fitted model captured the autocorrelation, the residuals should be indistinguishable from white noise, which is what a portmanteau test checks. Leftover structure sends you back to identification."
+        }
+      }
+    },
+    {
+      "id": "ts-t2-m-18",
+      "format": "numeric",
+      "topic": "timeseries-t2",
+      "diff": "hard",
+      "stem": "A sample ACF has ρ₁ = −0.49, with nothing beyond lag 1 outside the bands. The implied invertible MA(1) coefficient, and the concern it raises, are:",
+      "options": [
+        "θ ≈ 1.17, so the series is not invertible",
+        "θ ≈ 0.49, comfortably inside the invertible region",
+        "θ ≈ 0.857, close to the boundary — suspect over-differencing",
+        "no MA(1) is possible, since |ρ₁| is too large"
+      ],
+      "answer": "C",
+      "explanation": "Solving 0.49θ² − θ + 0.49 = 0 gives θ = (1 ± √(1 − 0.9604))/0.98 = (1 ± 0.1990)/0.98, that is approximately 0.81735 or 1.22347. Invertibility selects 0.81735, which is close to the boundary of 1. Since differencing an already-stationary series produces exactly θ = 1 with ρ₁ = −0.5, a value this close suggests the series may have been over-differenced.",
+      "check": "|ρ₁| = 0.49 is just inside the bound of 0.5, so a real solution exists — the discriminant 1 − 4(0.49)² = 0.0396 is positive but small."
+    },
+    {
+      "id": "ts-t2-m-19",
+      "format": "single",
+      "topic": "timeseries-t2",
+      "diff": "hard",
+      "stem": "An AR(1) and an ARMA(1,1) are fitted to the same series; the ARMA has a marginally higher log-likelihood and both pass residual checks. The sound conclusion is:",
+      "options": [
+        "prefer the ARMA(1,1), since it fits better",
+        "prefer the AR(1) unless the improvement exceeds an information criterion's penalty",
+        "the two models are statistically indistinguishable in all respects",
+        "refit with a higher order until the likelihood stops improving"
+      ],
+      "answer": "B",
+      "explanation": "The AR(1) is the ARMA(1,1) with the MA coefficient set to zero, so the larger model can never fit worse and a higher likelihood is guaranteed whether or not the extra parameter corresponds to anything real. AIC penalises 2 per parameter and BIC log n per parameter, and a marginal improvement typically fails both — as does the estimated MA coefficient's confidence interval, which will cover zero."
+    },
+    {
+      "id": "ts-t2-m-20",
+      "format": "single",
+      "topic": "timeseries-t2",
+      "diff": "hard",
+      "stem": "Why does the ACF of a generic stationary AR process usually tail off rather than cut off after a fixed lag?",
+      "options": [
+        "because the PACF cuts off instead",
+        "because the ACF is always positive",
+        "because of estimation error",
+        "because a stationary AR has an MA(∞) representation, giving every lag non-zero weight"
+      ],
+      "answer": "D",
+      "explanation": "A stationary AR process has an MA(∞) representation, so its ACF generally has an infinite tail rather than a finite cut-off. However, special coefficient patterns can make isolated autocorrelations exactly zero — for example, an AR(2) with φ₁ = 0 has zero odd-lag autocorrelations. The safe identification rule is 'tails off', not 'non-zero at every lag'."
     }
-   }
-  },
-  {
-   "id": "ts-t2-m-13",
-   "format": "numeric",
-   "topic": "timeseries-t2",
-   "diff": "moderate",
-   "stem": "An AR(2) with φ = (0.5, 0.3) has lag-1 autocorrelation:",
-   "options": [
-    "0.3000",
-    "0.5000",
-    "0.8000",
-    "0.7143"
-   ],
-   "answer": "D",
-   "explanation": "ρ₁ = φ₁/(1 − φ₂) = 0.5/0.7 = 0.7143, simulated as 0.7145. Note it exceeds φ₁ itself, because the second lag reinforces the first. Subsequent values follow ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂, giving 0.6571, 0.5429 and 0.3971.",
-   "check": "Setting φ₂ = 0 must recover ρ₁ = φ₁, the AR(1) case, which it does."
-  },
-  {
-   "id": "ts-t2-m-14",
-   "format": "single",
-   "topic": "timeseries-t2",
-   "diff": "moderate",
-   "stem": "A sample ACF over 20 lags shows one isolated value just outside the ±2/√n band, at lag 7, on data with no weekly structure. The best response is:",
-   "options": [
-    "fit an AR(7)",
-    "fit an MA(7)",
-    "ignore it — the bands are pointwise and one or two excursions are expected",
-    "difference the series"
-   ],
-   "answer": "C",
-   "explanation": "Each lag has about a 5% chance of falling outside its band by chance, so over 20 lags one or two excursions are the expected number. An isolated spike at an uninterpretable lag is noise. A spike at lag 12 on monthly data would be different — interpretability is what distinguishes real structure from an accidental excursion."
-  },
-  {
-   "id": "ts-t2-m-15",
-   "format": "single",
-   "topic": "timeseries-t2",
-   "diff": "moderate",
-   "stem": "A sample ACF reads 0.90, 0.85, 0.82, 0.79, 0.76 and the PACF cuts off after lag 1. The best reading is:",
-   "options": [
-    "fit an AR(1) with φ = 0.9",
-    "suspect non-stationarity — the ACF decays too slowly for an AR(1) with φ = 0.9",
-    "fit an MA(1)",
-    "fit an ARMA(1,1)"
-   ],
-   "answer": "B",
-   "explanation": "An AR(1) with φ = 0.9 would give 0.90, 0.81, 0.73, 0.66, 0.59 — decaying considerably faster than observed. An ACF that decays almost linearly is the classic unit-root signature, so the Dickey–Fuller test of topic 7.5 comes before any fitting. The PACF's apparent cut-off is misleading here."
-  },
-  {
-   "id": "ts-t2-m-16",
-   "format": "single",
-   "topic": "timeseries-t2",
-   "diff": "moderate",
-   "stem": "The PACF at lag k is best described as:",
-   "options": [
-    "the derivative of the ACF at lag k",
-    "the correlation between yₜ and yₜ₋ₖ",
-    "the kth power of ρ₁",
-    "the coefficient on yₜ₋ₖ in a regression of yₜ on its first k lags"
-   ],
-   "answer": "D",
-   "explanation": "That regression interpretation is what makes the PACF identify AR order: it asks whether the kth lag adds anything once the earlier ones are in the model, and for an AR(p) the answer is no beyond lag p. Option B is the ordinary autocorrelation, which does not partial out the intervening lags."
-  },
-  {
-   "id": "ts-t2-m-17",
-   "format": "multi",
-   "topic": "timeseries-t2",
-   "diff": "hard",
-   "stem": "Consider finer points of identification.",
-   "options": [
-    "A, B and C only",
-    "A and C only",
-    "B and D only",
-    "A, B, C and D"
-   ],
-   "answer": "A",
-   "explanation": "A is true — a longer ACF than an AR(1) would give is the usual reason to try ARMA(1,1). B is true, and the formula shows the decay is genuine at every lag. C is true: φ₁₁ = ρ₁ by construction. D is false — the residual ACF should show NO structure if the model has captured the autocorrelation.",
-   "statements": [
-    "An ARMA(1,1) can reproduce a slowly decaying ACF with only two parameters.",
-    "The PACF of an MA(1) is −(−θ)ᵏ(1−θ²)/(1−θ^(2(k+1))), non-zero at every lag.",
-    "The ACF and PACF always agree at lag 1.",
-    "After fitting, the residual ACF should show the same structure as the data ACF."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True, and it is why ARMA(1,1) is the standard first candidate when an ACF decays too slowly for a plausible low-order AR."
-    },
-    "B": {
-     "tf": true,
-     "why": "True. The numerator vanishes only at |θ| = 1, the invertibility boundary, so every partial autocorrelation of a non-degenerate MA(1) is strictly non-zero — the decay is genuine, not a truncation. At θ = 0.5: −0.4000, −0.1905, −0.0952, −0.0488."
-    },
-    "C": {
-     "tf": true,
-     "why": "True: φ₁₁ = ρ₁ by construction, since there are no intervening lags to partial out. The two functions diverge from lag 2 onwards."
-    },
-    "D": {
-     "tf": false,
-     "why": "False — the opposite. If the fitted model captured the autocorrelation, the residuals should be indistinguishable from white noise, which is what a portmanteau test checks. Leftover structure sends you back to identification."
-    }
-   }
-  },
-  {
-   "id": "ts-t2-m-18",
-   "format": "numeric",
-   "topic": "timeseries-t2",
-   "diff": "hard",
-   "stem": "A sample ACF has ρ₁ = −0.49, with nothing beyond lag 1 outside the bands. The implied invertible MA(1) coefficient, and the concern it raises, are:",
-   "options": [
-    "θ ≈ 1.17, so the series is not invertible",
-    "θ ≈ 0.49, comfortably inside the invertible region",
-    "θ ≈ 0.857, close to the boundary — suspect over-differencing",
-    "no MA(1) is possible, since |ρ₁| is too large"
-   ],
-   "answer": "C",
-   "explanation": "Solving 0.49θ² − θ + 0.49 = 0 gives θ = (1 ± √(1 − 0.9604))/0.98, that is 0.857 or 1.167. Invertibility selects 0.857, which is close to the boundary of 1. Since differencing an already-stationary series produces exactly θ = 1 with ρ₁ = −0.5, a value this close suggests the series may have been over-differenced.",
-   "check": "|ρ₁| = 0.49 is just inside the bound of 0.5, so a real solution exists — the discriminant 1 − 4(0.49)² = 0.0396 is positive but small."
-  },
-  {
-   "id": "ts-t2-m-19",
-   "format": "single",
-   "topic": "timeseries-t2",
-   "diff": "hard",
-   "stem": "An AR(1) and an ARMA(1,1) are fitted to the same series; the ARMA has a marginally higher log-likelihood and both pass residual checks. The sound conclusion is:",
-   "options": [
-    "prefer the ARMA(1,1), since it fits better",
-    "prefer the AR(1) unless the improvement exceeds an information criterion's penalty",
-    "the two models are statistically indistinguishable in all respects",
-    "refit with a higher order until the likelihood stops improving"
-   ],
-   "answer": "B",
-   "explanation": "The AR(1) is the ARMA(1,1) with the MA coefficient set to zero, so the larger model can never fit worse and a higher likelihood is guaranteed whether or not the extra parameter corresponds to anything real. AIC penalises 2 per parameter and BIC log n per parameter, and a marginal improvement typically fails both — as does the estimated MA coefficient's confidence interval, which will cover zero."
-  },
-  {
-   "id": "ts-t2-m-20",
-   "format": "single",
-   "topic": "timeseries-t2",
-   "diff": "hard",
-   "stem": "Why does the ACF of a stationary AR process never reach exactly zero at any finite lag?",
-   "options": [
-    "because the PACF cuts off instead",
-    "because the ACF is always positive",
-    "because of estimation error",
-    "because a stationary AR has an MA(∞) representation, giving every lag non-zero weight"
-   ],
-   "answer": "D",
-   "explanation": "From yₜ = φyₜ₋₁ + εₜ, repeated substitution gives yₜ = Σφʲεₜ₋ⱼ, so yₜ and yₜ₋ₖ share infinitely many shocks for every k and the covariance is non-zero at every lag. This is topic 7.1's duality, and it is the structural reason the ACF cannot identify AR order while the PACF can."
-  }
- ]
+  ]
 }
