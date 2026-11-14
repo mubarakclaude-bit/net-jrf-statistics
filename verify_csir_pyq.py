@@ -112,6 +112,10 @@ def main() -> None:
     assert "".join(sorted(k for k, value in multcorr_q15["verdicts"].items() if value["tf"])) == "ABC"
     assert "ρ²·p/[1+(p−1)ρ]" in multcorr_q15["explanation"]
     assert "R→√ρ" in multcorr_q15["explanation"]
+    unit_q34 = next(x for x in methods["items"] if x["id"] == "csir-meth-q34")
+    assert unit_q34["year"] == 2016 and unit_q34["session"] == "December" and unit_q34["answer"] == "A"
+    assert "supplied answer-key sheet lists A and D" in unit_q34["explanation"]
+    assert "α̂*=cα̂" in unit_q34["explanation"]
     regression_q01 = next(x for x in methods["items"] if x["id"] == "csir-meth-q01")
     assert regression_q01["type"] == "practice" and regression_q01["answer"] == "A"
     assert "SSE=5−3.84=1.16" in regression_q01["explanation"]
