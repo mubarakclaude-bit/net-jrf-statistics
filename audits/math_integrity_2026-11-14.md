@@ -232,3 +232,6 @@ The new verifier must pass on the exact updated PR head before these corrections
 The Rao–Blackwell lesson's statement that the tower-property proof has “no conditions beyond δ being unbiased” was too broad in the context of the full theorem. Unbiasedness requires integrability; the variance-reduction comparison additionally requires finite variance. The construction, theorem statement, tower-property explanation and total-variance proof now state those conditions explicitly.
 
 Added a dedicated regression verifier, `verify_inference_raoblackwell.py`, to ensure the assumptions remain visible. This is a focused theorem-statement correction, not a claim that the Statistical Inference module has completed exhaustive verification.
+
+
+The Rao–Blackwell correction is guarded by the top-level verifier `verify_inference_raoblackwell.py`, which the existing changed-verifier runner discovers. CI must pass on the latest PR head before the correction is marked verified.
