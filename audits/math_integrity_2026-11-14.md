@@ -386,3 +386,10 @@ The overlap comparison identified corrections that should be integrated without 
 - Retained this branch's correct warning that the sign of the formal AR(2) variance expression is not a general stationarity test; its Yule–Walker variance formula is derived under stationarity.
 
 Three independent numerical anchor scripts from the Probability audit branch were added: verify_probability_t5.py, verify_probability_t7.py and verify_probability_t13.py. These checks supplement, but do not replace, lesson-level mathematical review.
+
+
+## Additional consistency corrections after reconciliation CI
+
+Workflow 43608695008 confirmed that the new numerical anchors for Probability T5, T7 and T13 pass, while an existing Probability foundations verifier still expected the old “discriminator” block heading and an exact n = 1 equality phrase. The lesson heading and verifier contract have been aligned to describe the ratio as a consistency check and to assert the equality case explicitly.
+
+A further cross-file consistency scan corrected residual Time Series wording: a nonstationary AR process can have finite variance at each finite time even though it lacks a finite time-invariant stationary variance; a non-invertible MA parameterisation does not make the observed process unforecastable; and the stationary AR variance lower bound permits equality for white noise. The AR(1) forecast-interval and finite-MA horizon qualifications are now consistent in the lesson provenance and mastery material.

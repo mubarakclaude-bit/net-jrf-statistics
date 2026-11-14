@@ -13,7 +13,7 @@ def main():
     s3 = next(s for s in pr5["scenes"] if s["id"] == "s3")
     row = next(r for r in s3["table"]["rows"] if r[0].startswith("Hypergeometric"))
     assert "equal when n = 1" in row[4]
-    ratio = next(b for b in s3["blocks"] if b["h"] == "The variance-to-mean ratio — the discriminator")
+    ratio = next(b for b in s3["blocks"] if b["h"] == "The variance-to-mean ratio — a consistency check")
     assert "≤ q" in ratio["body"]
     assert "equality when n = 1" in ratio["body"]
     assert "strict inequality when n > 1" in ratio["body"]
