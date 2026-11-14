@@ -299,7 +299,7 @@ def main() -> None:
     assert any("unbiased and consistent estimator of σ" in b.get("h", "") and "E|X|" in b.get("body", "") for b in mle_scene7["blocks"])
 
     # Source Estimation PDF Questions 56–68 (pages 29–35). The supplied
-    # answer-key sheet ends at Q44, so these assertions protect derived keys.
+    # answer-key page 64 lists Q56–Q62; the checks preserve literal-statement reviews and flagged key discrepancies.
     expected = {
         "csir-est-q56": ("AB", 2017, "December"),
         "csir-est-q57": ("AB", 2017, "December"),
@@ -331,6 +331,17 @@ def main() -> None:
     assert "Var(X)=θ" in q56["explanation"] and "θ²" in q56["explanation"]
     q60 = next(x for x in estimation["items"] if x["id"] == "csir-est-q60")
     assert "rank(X)>p" in q60["explanation"] and "rank(X)=p" in q60["explanation"]
+    q57 = next(x for x in estimation["items"] if x["id"] == "csir-est-q57")
+    assert "lists A and C" in q57["explanation"] and "A and B only" in q57["explanation"]
+    assert "page 64" in q60["explanation"] and "A,C,D" in q60["explanation"]
+    q61 = next(x for x in estimation["items"] if x["id"] == "csir-est-q61")
+    q62 = next(x for x in estimation["items"] if x["id"] == "csir-est-q62")
+    assert "page 64" in q61["explanation"] and "Q61 is listed as B" in q61["explanation"]
+    assert "page 64" in q62["explanation"] and "Q62 is listed as A,C,D" in q62["explanation"]
+    mle_text = " ".join(
+        b.get("body", "") for s in mle_lesson["scenes"] for b in s.get("blocks", [])
+    )
+    assert "integer nearest to X̄" in mle_text and "halfway between two integers" in mle_text
     q68 = next(x for x in estimation["items"] if x["id"] == "csir-est-q68")
     assert "cannot define a probability density" in q68["explanation"]
     assert len(estimation["items"]) == estimation["count"] == 99
