@@ -336,3 +336,10 @@ For (n=8) and (T=24), the UMVUE of (e^{-\lambda}) is (((n-1)/n)^T=(7/8)^{24}=0.0
 File: `verify_inference_math.py`. Severity: **Verification coverage**.
 
 The `unittest.main()` entry point appeared before `Topic04AndConsistencyRegressionTests`, so direct execution invoked test discovery before that final class had been defined. The entry point was moved to the end of the file. A further T4 numerical regression test was added, bringing the suite to **70 test methods**, all now defined before test discovery begins.
+
+
+### INF-035 — T6 introductory explanation overstated pointwise Cramér–Rao attainment
+
+File: `seed/lesson_t6.json`, scene `s1`. Severity: **Minor — conceptual precision**.
+
+The original wording said that finding an unbiased estimator whose variance equals the Cramér–Rao bound makes it “the best unbiased estimator” without distinguishing attainment at one parameter value from a uniform minimum-variance result. Equality at a particular θ establishes minimum variance among unbiased estimators at that θ, under the theorem's regularity conditions; a UMVUE claim for the model requires the minimum-variance property for every θ. The introductory explanation now makes that distinction explicitly. A source-content regression test guards both qualifications and rejects the old overstatement.
