@@ -338,3 +338,9 @@ CI verifier assertions were aligned with the exact qualified wording in the SPRT
 
 
 The UMPU mastery item was rewritten so its correct option states the sufficient-condition result rather than the overstrong “only when symmetric” claim. The opening Wold explanation now explicitly states the deterministic-plus-purely-nondeterministic decomposition.
+
+
+## Regression assumptions — lessons 6.6 and 6.14
+
+- **Serial correlation:** qualified the no-bias statement to strict exogeneity, (E(u_t\mid X_1,\ldots,X_n)=0), rather than the ambiguous word “exogenous”.
+- **Measurement error:** made the true-regressor exogeneity condition (Cov(X,u)=0) explicit alongside the classical measurement-error orthogonality conditions. The reliability-ratio explanation now states the assumptions required for attenuation.
