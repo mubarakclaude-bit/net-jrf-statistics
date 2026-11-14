@@ -432,3 +432,17 @@ Nine further questions were imported from pages 254–260, 262 and 264:
 - **Page 247:** duplicate of the Poisson reciprocal expectation already imported from p188.
 - **Page 261:** the notation defining S and T and the condition on their expectations/variances are too corrupted to derive the requested correlation.
 - **Page 263:** the geometric support convention is not stated; the two common conventions give different means (1/p versus (1−p)/p).
+
+
+## Batch 26 — pages 265–276
+
+Nine further questions were imported from pages 265–268, 270–273 and 276:
+- **Probability (8):** variance of a linear combination of iid standard normals, p265; Uniform-to-chi-square logarithmic transformation, p266; conditional distribution of two iid geometric variables given their sum, p267; mode of χ²₃, p268; expectation of the standard normal CDF at a symmetric normal variable, p270; χ²₂ survival quantile, p271; coverage of the sample range around a population median, p272; normalisation of a five-point symmetric PMF, p276.
+- **Statistical Inference (1):** MLE of the scale parameter for a Laplace sample, p273.
+
+### Pages held out after inspection
+
+- **Page 253:** the estimator expressions and confidence-interval quantiles are obscured.
+- **Page 269:** the Beta-prime transformation notation in the requested CDF is ambiguous in the scan; no transformation is guessed.
+- **Page 274:** the MGF and event threshold are not sufficiently legible to reconcile with the listed probability options.
+- **Page 275:** the piecewise density and support endpoints are too faint to verify normalisation or the requested interval probability.
