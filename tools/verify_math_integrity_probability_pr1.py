@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 LESSON = ROOT / "seed" / "lesson_pr1.json"
+POOL = ROOT / "seed" / "probability_t1_mastery.json"
 
 
 def harmonic(n):
@@ -14,6 +15,13 @@ def harmonic(n):
 
 def main():
     lesson = json.loads(LESSON.read_text(encoding="utf-8"))
+    pool = json.loads(POOL.read_text(encoding="utf-8"))
+    median_item = next(q for q in pool["items"] if q["id"] == "pr-t1-m-08")
+    symmetry = next(s for s in lesson["scenes"] if s["id"] == "s7")["blocks"][1]["body"]
+    assert "relevant expectations exist" in symmetry
+    assert "E|X| < ∞" in symmetry
+    assert "finite expectation" in median_item["stem"]
+    assert "E|X| < ∞" in median_item["explanation"]
     scene = next(s for s in lesson["scenes"] if s["id"] == "s8")
     n, r, theta = 9, 5, 7
     population_median = theta * __import__("math").log(2)

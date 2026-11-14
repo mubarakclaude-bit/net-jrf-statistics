@@ -194,3 +194,9 @@ All 129 lesson files have received first-pass screening, but none is certified a
 - No application code, shared manifests, or unrelated modules changed.
 - No Claude-owned files, databases or infrastructure used.
 - No merge and no Vercel deployment.
+
+
+## Additional qualification identified in the second pass
+
+- Probability T1 symmetry shortcut: the statement that the sample median has expectation μ for a symmetric population implicitly requires that the sample-median expectation exists. A simple sufficient condition is a finite first absolute moment, E|X| < ∞. The lesson and mastery item now state this qualification; the order-statistic reflection argument remains valid under the existence of the relevant expectations.
+- The dedicated Probability T1 verifier now checks both the exact exponential order-statistic calculation and the symmetry/integrability qualification in the lesson and mastery pool.

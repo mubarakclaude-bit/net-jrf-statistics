@@ -1,365 +1,365 @@
 {
- "moduleId": "probability",
- "topicId": "probability-t1",
- "source": "mastery",
- "label": "Order statistics — mastery test (unseen)",
- "count": 20,
- "items": [
-  {
-   "id": "pr-t1-m-01",
-   "format": "numeric",
-   "topic": "probability-t1",
-   "diff": "easy",
-   "stem": "In samples of size 5 from a U[0, 1] population, the mean of the distribution of the median is:",
-   "options": [
-    "1/2",
-    "1/3",
-    "1/4",
-    "1"
-   ],
-   "answer": "A",
-   "explanation": "The median of five observations is X₍₃₎, and E(X₍ᵣ₎) = r/(n+1) = 3/6 = 1/2. Equivalently X₍₃₎ ~ Beta(3,3), whose mean is 3/(3+3). Quicker still: U[0,1] is symmetric about 1/2, so its sample median has expectation 1/2 for every n. This is June 2026 Q13.",
-   "check": "Option D, 1, is the population's upper limit, not a mean. Any answer outside (0,1) or at an endpoint should be rejected immediately."
-  },
-  {
-   "id": "pr-t1-m-02",
-   "format": "single",
-   "topic": "probability-t1",
-   "diff": "easy",
-   "stem": "For a sample of size n from U(0, 1), the rᵗʰ order statistic follows:",
-   "options": [
-    "Beta(n − r + 1, r)",
-    "Beta(r, n − r)",
-    "Beta(r, n − r + 1)",
-    "Gamma(r, n)"
-   ],
-   "answer": "C",
-   "explanation": "Substituting F(x) = x and f(x) = 1 into the general density gives [n!/((r−1)!(n−r)!)] x^(r−1)(1−x)^(n−r), which is exactly the Beta(r, n−r+1) density. Note the parameters sum to n + 1, which is what makes the mean r/(n+1). Option A reverses them, giving the distribution of X₍ₙ₋ᵣ₊₁₎."
-  },
-  {
-   "id": "pr-t1-m-03",
-   "format": "single",
-   "topic": "probability-t1",
-   "diff": "easy",
-   "stem": "The cdf of the largest order statistic X₍ₙ₎ is:",
-   "options": [
-    "n[F(x)]ⁿ⁻¹",
-    "1 − [1 − F(x)]ⁿ",
-    "1 − [F(x)]ⁿ",
-    "[F(x)]ⁿ"
-   ],
-   "answer": "D",
-   "explanation": "The maximum is at most x exactly when all n observations are, and independence makes that a product of n identical factors. Option B is the cdf of the MINIMUM, and option A is the density of the maximum rather than its cdf."
-  },
-  {
-   "id": "pr-t1-m-04",
-   "format": "numeric",
-   "topic": "probability-t1",
-   "diff": "easy",
-   "stem": "For a sample of size 4 from U(0, 1), E(X₍₂₎) is:",
-   "options": [
-    "1/3",
-    "2/5",
-    "2/4",
-    "1/5"
-   ],
-   "answer": "B",
-   "explanation": "E(X₍ᵣ₎) = r/(n+1) = 2/5 = 0.4. Equivalently Beta(2, 3) has mean 2/(2+3). The four order statistics have means 0.2, 0.4, 0.6 and 0.8 — equally spaced at 1/(n+1) = 0.2.",
-   "check": "The denominator is n + 1 = 5, not n = 4. Option C uses n and is the standard slip."
-  },
-  {
-   "id": "pr-t1-m-05",
-   "format": "numeric",
-   "topic": "probability-t1",
-   "diff": "easy",
-   "stem": "For a sample of size 5 from U(0, 1), E(X₍₅₎) is:",
-   "options": [
-    "4/6",
-    "1/6",
-    "5/6",
-    "1"
-   ],
-   "answer": "C",
-   "explanation": "The maximum is r = n = 5, so E = 5/(5+1) = 5/6 ≈ 0.8333. Checking independently, the maximum's density is 5x⁴ on (0,1), whose mean is ∫5x⁵dx = 5/6. The maximum's mean approaches 1 as n grows but never reaches it.",
-   "check": "The expected maximum must be below 1 and above 1/2, which rules out options B and D at once."
-  },
-  {
-   "id": "pr-t1-m-06",
-   "format": "single",
-   "topic": "probability-t1",
-   "diff": "easy",
-   "stem": "For a population with pdf f(x) = e^(−x), x ≥ 0, the cdf of X₍₇₎ in a sample of size 7 is:",
-   "options": [
-    "7(1 − e^(−x))⁶",
-    "1 − e^(−7x)",
-    "1 − (e^(−x))⁷",
-    "(1 − e^(−x))⁷"
-   ],
-   "answer": "D",
-   "explanation": "The population cdf is F(x) = 1 − e^(−x), and the largest order statistic has cdf [F(x)]ⁿ, so (1 − e^(−x))⁷. Option B is the cdf of the MINIMUM of the seven, which is exponential with mean 1/7, and option A is a density, not a cdf."
-  },
-  {
-   "id": "pr-t1-m-07",
-   "format": "single",
-   "topic": "probability-t1",
-   "diff": "moderate",
-   "stem": "For a sample of size n from an exponential population with mean θ, X₍₁₎ has mean:",
-   "options": [
-    "θ/n",
-    "θ",
-    "nθ",
-    "θ/n²"
-   ],
-   "answer": "A",
-   "explanation": "P(X₍₁₎ > x) = [1 − F(x)]ⁿ = (e^(−x/θ))ⁿ = e^(−nx/θ), which is the survival function of an exponential with mean θ/n. So the minimum of n exponentials is exponential again with the rate multiplied by n — a consequence of the memoryless property, and why a series system of many components fails early."
-  },
-  {
-   "id": "pr-t1-m-08",
-   "format": "single",
-   "topic": "probability-t1",
-   "diff": "moderate",
-   "stem": "For a sample from any distribution symmetric about μ, the sample median has expectation:",
-   "options": [
-    "μ only as n → ∞",
-    "μ, for every sample size",
-    "the population mean only if the population is normal",
-    "μ only for odd n"
-   ],
-   "answer": "B",
-   "explanation": "Symmetry pairs X₍ᵣ₎ with X₍ₙ₋ᵣ₊₁₎ as mirror images about μ, so E(X₍ᵣ₎) + E(X₍ₙ₋ᵣ₊₁₎) = 2μ. For odd n the median is its own mirror image, and for even n it is the average of a mirror pair — so the result holds either way, exactly, at every n. This is why the sample median is the standard robust estimator of location."
-  },
-  {
-   "id": "pr-t1-m-09",
-   "format": "numeric",
-   "topic": "probability-t1",
-   "diff": "moderate",
-   "stem": "The expected value of the sample range from U(0, 1) with n observations is:",
-   "options": [
-    "(n − 1)/n",
-    "n/(n + 1)",
-    "(n − 1)/(n + 1)",
-    "1 − 2/n"
-   ],
-   "answer": "C",
-   "explanation": "E(R) = E(X₍ₙ₎) − E(X₍₁₎) = n/(n+1) − 1/(n+1) = (n−1)/(n+1). The subtraction needs only linearity of expectation, so the dependence between the minimum and the maximum is irrelevant here — though it would matter for Var(R).",
-   "check": "At n = 2 this gives 1/3, which is the known mean absolute difference of two uniforms; at n = 20 it gives 0.905."
-  },
-  {
-   "id": "pr-t1-m-10",
-   "format": "single",
-   "topic": "probability-t1",
-   "diff": "moderate",
-   "stem": "The joint density of all n order statistics from a continuous population with density f is:",
-   "options": [
-    "[F(xₙ)]ⁿ f(x₁)⋯f(xₙ)",
-    "f(x₁)⋯f(xₙ) for all x₁, …, xₙ",
-    "n f(x₁)⋯f(xₙ) for x₁ < ⋯ < xₙ",
-    "n! f(x₁)⋯f(xₙ) for x₁ < ⋯ < xₙ, zero otherwise"
-   ],
-   "answer": "D",
-   "explanation": "The n! counts the orderings of the original labelled sample that sort to the same vector, and the density is zero outside the increasing region. Option B would make the order statistics independent, which they never are — sorting forces X₍₁₎ ≤ X₍₂₎ ≤ ⋯, so their marginal densities must never be multiplied."
-  },
-  {
-   "id": "pr-t1-m-11",
-   "format": "numeric",
-   "topic": "probability-t1",
-   "diff": "moderate",
-   "stem": "For a sample of size 3 from U(0, 1), the variance of the median is:",
-   "options": [
-    "1/12",
-    "1/20",
-    "1/16",
-    "1/5"
-   ],
-   "answer": "B",
-   "explanation": "The median of three is X₍₂₎ ~ Beta(2, 2). Var = r(n−r+1)/((n+1)²(n+2)) = 2×2/(16 × 5) = 4/80 = 1/20 = 0.05. The Beta formula ab/((a+b)²(a+b+1)) = 4/(16 × 5) agrees, which is a useful cross-check.",
-   "check": "sd = √0.05 ≈ 0.224, about a quarter of the whole interval — a reminder of how little three observations pin down."
-  },
-  {
-   "id": "pr-t1-m-12",
-   "format": "multi",
-   "topic": "probability-t1",
-   "diff": "moderate",
-   "stem": "Consider order statistics X₍₁₎ ≤ ⋯ ≤ X₍ₙ₎ from an independent continuous sample.",
-   "options": [
-    "A and C only",
-    "A, B and C only",
-    "B and D only",
-    "A, C and D only"
-   ],
-   "answer": "A",
-   "explanation": "A is true, the defining product for the maximum. B is false — the order statistics are never independent, since sorting forces the ordering. C is true: expectation is linear, so no independence is needed for the mean of a difference. D is false: the cdf of the minimum is 1 − [1 − F]ⁿ, not 1 − Fⁿ.",
-   "statements": [
-    "P(X₍ₙ₎ ≤ x) = [F(x)]ⁿ.",
-    "X₍₁₎ and X₍ₙ₎ are independent.",
-    "E(X₍ₙ₎ − X₍₁₎) = E(X₍ₙ₎) − E(X₍₁₎) regardless of their dependence.",
-    "P(X₍₁₎ ≤ x) = 1 − [F(x)]ⁿ."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True. The maximum is at most x exactly when all n observations are, and independence of the sample makes that a product."
+  "moduleId": "probability",
+  "topicId": "probability-t1",
+  "source": "mastery",
+  "label": "Order statistics — mastery test (unseen)",
+  "count": 20,
+  "items": [
+    {
+      "id": "pr-t1-m-01",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "diff": "easy",
+      "stem": "In samples of size 5 from a U[0, 1] population, the mean of the distribution of the median is:",
+      "options": [
+        "1/2",
+        "1/3",
+        "1/4",
+        "1"
+      ],
+      "answer": "A",
+      "explanation": "The median of five observations is X₍₃₎, and E(X₍ᵣ₎) = r/(n+1) = 3/6 = 1/2. Equivalently X₍₃₎ ~ Beta(3,3), whose mean is 3/(3+3). Quicker still: U[0,1] is symmetric about 1/2, so its sample median has expectation 1/2 for every n. This is June 2026 Q13.",
+      "check": "Option D, 1, is the population's upper limit, not a mean. Any answer outside (0,1) or at an endpoint should be rejected immediately."
     },
-    "B": {
-     "tf": false,
-     "why": "False. Order statistics are never independent: X₍₁₎ ≤ X₍ₙ₎ always holds, which no pair of independent continuous variables satisfies."
+    {
+      "id": "pr-t1-m-02",
+      "format": "single",
+      "topic": "probability-t1",
+      "diff": "easy",
+      "stem": "For a sample of size n from U(0, 1), the rᵗʰ order statistic follows:",
+      "options": [
+        "Beta(n − r + 1, r)",
+        "Beta(r, n − r)",
+        "Beta(r, n − r + 1)",
+        "Gamma(r, n)"
+      ],
+      "answer": "C",
+      "explanation": "Substituting F(x) = x and f(x) = 1 into the general density gives [n!/((r−1)!(n−r)!)] x^(r−1)(1−x)^(n−r), which is exactly the Beta(r, n−r+1) density. Note the parameters sum to n + 1, which is what makes the mean r/(n+1). Option A reverses them, giving the distribution of X₍ₙ₋ᵣ₊₁₎."
     },
-    "C": {
-     "tf": true,
-     "why": "True. Expectation is linear, so the mean of a difference is the difference of the means whatever the dependence. Only the VARIANCE of the range needs the covariance."
+    {
+      "id": "pr-t1-m-03",
+      "format": "single",
+      "topic": "probability-t1",
+      "diff": "easy",
+      "stem": "The cdf of the largest order statistic X₍ₙ₎ is:",
+      "options": [
+        "n[F(x)]ⁿ⁻¹",
+        "1 − [1 − F(x)]ⁿ",
+        "1 − [F(x)]ⁿ",
+        "[F(x)]ⁿ"
+      ],
+      "answer": "D",
+      "explanation": "The maximum is at most x exactly when all n observations are, and independence makes that a product of n identical factors. Option B is the cdf of the MINIMUM, and option A is the density of the maximum rather than its cdf."
     },
-    "D": {
-     "tf": false,
-     "why": "False. That expression is P(not all observations exceed x), a different event. The minimum's cdf is 1 − [1 − F(x)]ⁿ."
+    {
+      "id": "pr-t1-m-04",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "diff": "easy",
+      "stem": "For a sample of size 4 from U(0, 1), E(X₍₂₎) is:",
+      "options": [
+        "1/3",
+        "2/5",
+        "2/4",
+        "1/5"
+      ],
+      "answer": "B",
+      "explanation": "E(X₍ᵣ₎) = r/(n+1) = 2/5 = 0.4. Equivalently Beta(2, 3) has mean 2/(2+3). The four order statistics have means 0.2, 0.4, 0.6 and 0.8 — equally spaced at 1/(n+1) = 0.2.",
+      "check": "The denominator is n + 1 = 5, not n = 4. Option C uses n and is the standard slip."
+    },
+    {
+      "id": "pr-t1-m-05",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "diff": "easy",
+      "stem": "For a sample of size 5 from U(0, 1), E(X₍₅₎) is:",
+      "options": [
+        "4/6",
+        "1/6",
+        "5/6",
+        "1"
+      ],
+      "answer": "C",
+      "explanation": "The maximum is r = n = 5, so E = 5/(5+1) = 5/6 ≈ 0.8333. Checking independently, the maximum's density is 5x⁴ on (0,1), whose mean is ∫5x⁵dx = 5/6. The maximum's mean approaches 1 as n grows but never reaches it.",
+      "check": "The expected maximum must be below 1 and above 1/2, which rules out options B and D at once."
+    },
+    {
+      "id": "pr-t1-m-06",
+      "format": "single",
+      "topic": "probability-t1",
+      "diff": "easy",
+      "stem": "For a population with pdf f(x) = e^(−x), x ≥ 0, the cdf of X₍₇₎ in a sample of size 7 is:",
+      "options": [
+        "7(1 − e^(−x))⁶",
+        "1 − e^(−7x)",
+        "1 − (e^(−x))⁷",
+        "(1 − e^(−x))⁷"
+      ],
+      "answer": "D",
+      "explanation": "The population cdf is F(x) = 1 − e^(−x), and the largest order statistic has cdf [F(x)]ⁿ, so (1 − e^(−x))⁷. Option B is the cdf of the MINIMUM of the seven, which is exponential with mean 1/7, and option A is a density, not a cdf."
+    },
+    {
+      "id": "pr-t1-m-07",
+      "format": "single",
+      "topic": "probability-t1",
+      "diff": "moderate",
+      "stem": "For a sample of size n from an exponential population with mean θ, X₍₁₎ has mean:",
+      "options": [
+        "θ/n",
+        "θ",
+        "nθ",
+        "θ/n²"
+      ],
+      "answer": "A",
+      "explanation": "P(X₍₁₎ > x) = [1 − F(x)]ⁿ = (e^(−x/θ))ⁿ = e^(−nx/θ), which is the survival function of an exponential with mean θ/n. So the minimum of n exponentials is exponential again with the rate multiplied by n — a consequence of the memoryless property, and why a series system of many components fails early."
+    },
+    {
+      "id": "pr-t1-m-08",
+      "format": "single",
+      "topic": "probability-t1",
+      "diff": "moderate",
+      "stem": "For a sample from a population symmetric about μ, assuming the sample median has a finite expectation, its expectation is:",
+      "options": [
+        "μ only as n → ∞",
+        "μ, for every sample size",
+        "the population mean only if the population is normal",
+        "μ only for odd n"
+      ],
+      "answer": "B",
+      "explanation": "Reflecting every observation about μ reflects the sample median about μ. If the sample-median expectation exists, symmetry therefore forces it to equal μ, for odd and even sample sizes. A simple sufficient condition is E|X| < ∞. Symmetry is sufficient, not an if-and-only-if characterisation."
+    },
+    {
+      "id": "pr-t1-m-09",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "diff": "moderate",
+      "stem": "The expected value of the sample range from U(0, 1) with n observations is:",
+      "options": [
+        "(n − 1)/n",
+        "n/(n + 1)",
+        "(n − 1)/(n + 1)",
+        "1 − 2/n"
+      ],
+      "answer": "C",
+      "explanation": "E(R) = E(X₍ₙ₎) − E(X₍₁₎) = n/(n+1) − 1/(n+1) = (n−1)/(n+1). The subtraction needs only linearity of expectation, so the dependence between the minimum and the maximum is irrelevant here — though it would matter for Var(R).",
+      "check": "At n = 2 this gives 1/3, which is the known mean absolute difference of two uniforms; at n = 20 it gives 0.905."
+    },
+    {
+      "id": "pr-t1-m-10",
+      "format": "single",
+      "topic": "probability-t1",
+      "diff": "moderate",
+      "stem": "The joint density of all n order statistics from a continuous population with density f is:",
+      "options": [
+        "[F(xₙ)]ⁿ f(x₁)⋯f(xₙ)",
+        "f(x₁)⋯f(xₙ) for all x₁, …, xₙ",
+        "n f(x₁)⋯f(xₙ) for x₁ < ⋯ < xₙ",
+        "n! f(x₁)⋯f(xₙ) for x₁ < ⋯ < xₙ, zero otherwise"
+      ],
+      "answer": "D",
+      "explanation": "The n! counts the orderings of the original labelled sample that sort to the same vector, and the density is zero outside the increasing region. Option B would make the order statistics independent, which they never are — sorting forces X₍₁₎ ≤ X₍₂₎ ≤ ⋯, so their marginal densities must never be multiplied."
+    },
+    {
+      "id": "pr-t1-m-11",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "diff": "moderate",
+      "stem": "For a sample of size 3 from U(0, 1), the variance of the median is:",
+      "options": [
+        "1/12",
+        "1/20",
+        "1/16",
+        "1/5"
+      ],
+      "answer": "B",
+      "explanation": "The median of three is X₍₂₎ ~ Beta(2, 2). Var = r(n−r+1)/((n+1)²(n+2)) = 2×2/(16 × 5) = 4/80 = 1/20 = 0.05. The Beta formula ab/((a+b)²(a+b+1)) = 4/(16 × 5) agrees, which is a useful cross-check.",
+      "check": "sd = √0.05 ≈ 0.224, about a quarter of the whole interval — a reminder of how little three observations pin down."
+    },
+    {
+      "id": "pr-t1-m-12",
+      "format": "multi",
+      "topic": "probability-t1",
+      "diff": "moderate",
+      "stem": "Consider order statistics X₍₁₎ ≤ ⋯ ≤ X₍ₙ₎ from an independent continuous sample.",
+      "options": [
+        "A and C only",
+        "A, B and C only",
+        "B and D only",
+        "A, C and D only"
+      ],
+      "answer": "A",
+      "explanation": "A is true, the defining product for the maximum. B is false — the order statistics are never independent, since sorting forces the ordering. C is true: expectation is linear, so no independence is needed for the mean of a difference. D is false: the cdf of the minimum is 1 − [1 − F]ⁿ, not 1 − Fⁿ.",
+      "statements": [
+        "P(X₍ₙ₎ ≤ x) = [F(x)]ⁿ.",
+        "X₍₁₎ and X₍ₙ₎ are independent.",
+        "E(X₍ₙ₎ − X₍₁₎) = E(X₍ₙ₎) − E(X₍₁₎) regardless of their dependence.",
+        "P(X₍₁₎ ≤ x) = 1 − [F(x)]ⁿ."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True. The maximum is at most x exactly when all n observations are, and independence of the sample makes that a product."
+        },
+        "B": {
+          "tf": false,
+          "why": "False. Order statistics are never independent: X₍₁₎ ≤ X₍ₙ₎ always holds, which no pair of independent continuous variables satisfies."
+        },
+        "C": {
+          "tf": true,
+          "why": "True. Expectation is linear, so the mean of a difference is the difference of the means whatever the dependence. Only the VARIANCE of the range needs the covariance."
+        },
+        "D": {
+          "tf": false,
+          "why": "False. That expression is P(not all observations exceed x), a different event. The minimum's cdf is 1 − [1 − F(x)]ⁿ."
+        }
+      }
+    },
+    {
+      "id": "pr-t1-m-13",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "diff": "moderate",
+      "stem": "Ten independent components each have exponential lifetime with mean 500 hours. The expected time to the FIRST failure is:",
+      "options": [
+        "5000 hours",
+        "500 hours",
+        "50 hours",
+        "1464 hours"
+      ],
+      "answer": "C",
+      "explanation": "The minimum of n exponentials with mean θ is exponential with mean θ/n = 500/10 = 50 hours. Option D is the expected time to the LAST failure, θH₁₀ = 500 × 2.9290 = 1464 hours — so a series system of these components averages 50 hours while a parallel one lasts nearly thirty times as long.",
+      "check": "The first of ten failures must come well before the mean life of one component, so any answer at or above 500 is wrong by inspection."
+    },
+    {
+      "id": "pr-t1-m-14",
+      "format": "single",
+      "topic": "probability-t1",
+      "diff": "moderate",
+      "stem": "For a sample of size 5 from U(0, 1), which order statistic has the LARGEST variance?",
+      "options": [
+        "all five have the same variance",
+        "the minimum X₍₁₎",
+        "the maximum X₍₅₎",
+        "the median X₍₃₎"
+      ],
+      "answer": "D",
+      "explanation": "Var(X₍ᵣ₎) = r(6−r)/252, which is maximised at r = 3: 0.0357 for the median against 0.0198 at either end. The boundaries at 0 and 1 pin the extremes down while the middle is free to move. For a population with unbounded tails, such as the normal, the ordering reverses — so it is the population's shape that decides, not a general rule about extremes."
+    },
+    {
+      "id": "pr-t1-m-15",
+      "format": "single",
+      "topic": "probability-t1",
+      "diff": "moderate",
+      "stem": "The general density of X₍ᵣ₎ is f₍ᵣ₎(x) = C · [F(x)]^(r−1) [1 − F(x)]^(n−r) f(x). The constant C is:",
+      "options": [
+        "n!/(r!(n − r)!)",
+        "n!/((r − 1)!(n − r)!)",
+        "n!/((r − 1)!(n − r + 1)!)",
+        "1/((r − 1)!(n − r)!)"
+      ],
+      "answer": "B",
+      "explanation": "Read it as a multinomial count: r − 1 observations fall below x, one sits at x, and n − r fall above, so C = n!/((r−1)! · 1! · (n−r)!). There is no factor for the single observation at x because 1! = 1. For U(0,1) this constant is exactly 1/B(r, n−r+1); at n = 5, r = 3 it is 30."
+    },
+    {
+      "id": "pr-t1-m-16",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "diff": "moderate",
+      "stem": "For U(0, θ), the maximum X₍ₙ₎ is the maximum likelihood estimator of θ. Its expectation is:",
+      "options": [
+        "(n + 1)θ/n",
+        "θ",
+        "nθ/(n + 1)",
+        "θ/n"
+      ],
+      "answer": "C",
+      "explanation": "Scaling: if U ~ U(0,1) then θU ~ U(0,θ), so E(X₍ₙ₎) = θ · n/(n+1). The MLE is therefore biased downwards — necessarily so, since the maximum of a sample can never exceed θ — and (n+1)X₍ₙ₎/n is the unbiased version, which is option A.",
+      "check": "The estimate can never exceed θ, so its expectation must be strictly below θ — which rules out θ itself and (n+1)θ/n at once, leaving only a value below θ."
+    },
+    {
+      "id": "pr-t1-m-17",
+      "format": "multi",
+      "topic": "probability-t1",
+      "diff": "hard",
+      "stem": "Consider the probability integral transform and its consequences for order statistics.",
+      "options": [
+        "A, B and C only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "A is true and is the transform itself. B is true because F is non-decreasing, so sorting is preserved. C is true, and it is why distribution-free quantile intervals exist. D is false — expectation does not pass through a non-linear function, so E(X₍ᵣ₎) is not F⁻¹ of the Beta mean in general.",
+      "statements": [
+        "If X is continuous with cdf F, then F(X) ~ Uniform(0, 1).",
+        "F(X₍ᵣ₎) = U₍ᵣ₎, so F(X₍ᵣ₎) ~ Beta(r, n − r + 1) for every continuous population.",
+        "The p-quantile of X₍ᵣ₎ equals F⁻¹ applied to the p-quantile of Beta(r, n − r + 1).",
+        "E(X₍ᵣ₎) = F⁻¹(r/(n + 1)) for every continuous population."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True. P(F(X) ≤ u) = P(X ≤ F⁻¹(u)) = F(F⁻¹(u)) = u, so F(X) is exactly standard uniform."
+        },
+        "B": {
+          "tf": true,
+          "why": "True. F is non-decreasing, so it preserves order and F(X₍ᵣ₎) is the rᵗʰ order statistic of the transformed uniform sample — which makes the Beta result general, not special to the uniform."
+        },
+        "C": {
+          "tf": true,
+          "why": "True. Quantiles DO pass through a monotone transformation, which is exactly why exact distribution-free confidence intervals for a population quantile can be built from the Beta or the binomial."
+        },
+        "D": {
+          "tf": false,
+          "why": "False. Quantiles survive a monotone transformation but expectations do not: E(g(X)) ≠ g(E(X)) for non-linear g. The formula would hold only if F⁻¹ were linear."
+        }
+      }
+    },
+    {
+      "id": "pr-t1-m-18",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "diff": "hard",
+      "stem": "For a unit exponential population, P(X₍₇₎ ≤ 2) in a sample of size 7 is approximately:",
+      "options": [
+        "0.361",
+        "0.865",
+        "0.040",
+        "0.639"
+      ],
+      "answer": "A",
+      "explanation": "(1 − e^(−2))⁷ = (0.86466)⁷ = 0.3614. Option B is F(2) for a single observation, and option C is the same expression at x = 1. So even with seven observations, the largest exceeds 2 about 64% of the time — raising a value to the 7th power punishes it hard.",
+      "check": "0.86466⁷ must be well below 0.86466; a rough check is 0.865⁷ ≈ e^(7 ln 0.865) = e^(−1.017) ≈ 0.36."
+    },
+    {
+      "id": "pr-t1-m-19",
+      "format": "single",
+      "topic": "probability-t1",
+      "diff": "hard",
+      "stem": "Why are the middle order statistics of a uniform sample more variable than the extremes, while for a normal sample the reverse holds?",
+      "options": [
+        "because the normal's order statistics are independent while the uniform's are not",
+        "because the normal has a larger variance than the uniform",
+        "because the uniform is discrete at its endpoints",
+        "on the uniform scale the middle is always most variable, and moving to X stretches by 1/f, which is huge in the normal's tails"
+      ],
+      "answer": "D",
+      "explanation": "The probability integral transform puts every continuous population on the uniform scale, where Var(U₍ᵣ₎) = r(n−r+1)/((n+1)²(n+2)) is largest in the middle. Moving back to X stretches by dx/du = 1/f(x). For the uniform f = 1 everywhere so the pattern survives; for the normal f is tiny in the tails, so the stretching there overwhelms it. The same factor 1/f appears in the large-sample variance of a sample quantile."
+    },
+    {
+      "id": "pr-t1-m-20",
+      "format": "single",
+      "topic": "probability-t1",
+      "diff": "hard",
+      "stem": "A dam is designed using the largest annual flood in 80 years of record. The probability that a single new year exceeds that record is:",
+      "options": [
+        "1/80",
+        "1/81, by exchangeability alone",
+        "1/2, since the record is the median",
+        "it cannot be found without knowing the flood distribution"
+      ],
+      "answer": "B",
+      "explanation": "Among 81 independent and identically distributed years, every ordering is equally likely, so each year is equally likely to be the largest; the chance the new one takes the record is 1/81. The argument uses only symmetry among exchangeable years, which is why option D is wrong — no distributional knowledge is needed. Over thirty years such exceedances are not remote, which is why a record is not a design ceiling."
     }
-   }
-  },
-  {
-   "id": "pr-t1-m-13",
-   "format": "numeric",
-   "topic": "probability-t1",
-   "diff": "moderate",
-   "stem": "Ten independent components each have exponential lifetime with mean 500 hours. The expected time to the FIRST failure is:",
-   "options": [
-    "5000 hours",
-    "500 hours",
-    "50 hours",
-    "1464 hours"
-   ],
-   "answer": "C",
-   "explanation": "The minimum of n exponentials with mean θ is exponential with mean θ/n = 500/10 = 50 hours. Option D is the expected time to the LAST failure, θH₁₀ = 500 × 2.9290 = 1464 hours — so a series system of these components averages 50 hours while a parallel one lasts nearly thirty times as long.",
-   "check": "The first of ten failures must come well before the mean life of one component, so any answer at or above 500 is wrong by inspection."
-  },
-  {
-   "id": "pr-t1-m-14",
-   "format": "single",
-   "topic": "probability-t1",
-   "diff": "moderate",
-   "stem": "For a sample of size 5 from U(0, 1), which order statistic has the LARGEST variance?",
-   "options": [
-    "all five have the same variance",
-    "the minimum X₍₁₎",
-    "the maximum X₍₅₎",
-    "the median X₍₃₎"
-   ],
-   "answer": "D",
-   "explanation": "Var(X₍ᵣ₎) = r(6−r)/252, which is maximised at r = 3: 0.0357 for the median against 0.0198 at either end. The boundaries at 0 and 1 pin the extremes down while the middle is free to move. For a population with unbounded tails, such as the normal, the ordering reverses — so it is the population's shape that decides, not a general rule about extremes."
-  },
-  {
-   "id": "pr-t1-m-15",
-   "format": "single",
-   "topic": "probability-t1",
-   "diff": "moderate",
-   "stem": "The general density of X₍ᵣ₎ is f₍ᵣ₎(x) = C · [F(x)]^(r−1) [1 − F(x)]^(n−r) f(x). The constant C is:",
-   "options": [
-    "n!/(r!(n − r)!)",
-    "n!/((r − 1)!(n − r)!)",
-    "n!/((r − 1)!(n − r + 1)!)",
-    "1/((r − 1)!(n − r)!)"
-   ],
-   "answer": "B",
-   "explanation": "Read it as a multinomial count: r − 1 observations fall below x, one sits at x, and n − r fall above, so C = n!/((r−1)! · 1! · (n−r)!). There is no factor for the single observation at x because 1! = 1. For U(0,1) this constant is exactly 1/B(r, n−r+1); at n = 5, r = 3 it is 30."
-  },
-  {
-   "id": "pr-t1-m-16",
-   "format": "numeric",
-   "topic": "probability-t1",
-   "diff": "moderate",
-   "stem": "For U(0, θ), the maximum X₍ₙ₎ is the maximum likelihood estimator of θ. Its expectation is:",
-   "options": [
-    "(n + 1)θ/n",
-    "θ",
-    "nθ/(n + 1)",
-    "θ/n"
-   ],
-   "answer": "C",
-   "explanation": "Scaling: if U ~ U(0,1) then θU ~ U(0,θ), so E(X₍ₙ₎) = θ · n/(n+1). The MLE is therefore biased downwards — necessarily so, since the maximum of a sample can never exceed θ — and (n+1)X₍ₙ₎/n is the unbiased version, which is option A.",
-   "check": "The estimate can never exceed θ, so its expectation must be strictly below θ — which rules out θ itself and (n+1)θ/n at once, leaving only a value below θ."
-  },
-  {
-   "id": "pr-t1-m-17",
-   "format": "multi",
-   "topic": "probability-t1",
-   "diff": "hard",
-   "stem": "Consider the probability integral transform and its consequences for order statistics.",
-   "options": [
-    "A, B and C only",
-    "A and C only",
-    "B and D only",
-    "A, B, C and D"
-   ],
-   "answer": "A",
-   "explanation": "A is true and is the transform itself. B is true because F is non-decreasing, so sorting is preserved. C is true, and it is why distribution-free quantile intervals exist. D is false — expectation does not pass through a non-linear function, so E(X₍ᵣ₎) is not F⁻¹ of the Beta mean in general.",
-   "statements": [
-    "If X is continuous with cdf F, then F(X) ~ Uniform(0, 1).",
-    "F(X₍ᵣ₎) = U₍ᵣ₎, so F(X₍ᵣ₎) ~ Beta(r, n − r + 1) for every continuous population.",
-    "The p-quantile of X₍ᵣ₎ equals F⁻¹ applied to the p-quantile of Beta(r, n − r + 1).",
-    "E(X₍ᵣ₎) = F⁻¹(r/(n + 1)) for every continuous population."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True. P(F(X) ≤ u) = P(X ≤ F⁻¹(u)) = F(F⁻¹(u)) = u, so F(X) is exactly standard uniform."
-    },
-    "B": {
-     "tf": true,
-     "why": "True. F is non-decreasing, so it preserves order and F(X₍ᵣ₎) is the rᵗʰ order statistic of the transformed uniform sample — which makes the Beta result general, not special to the uniform."
-    },
-    "C": {
-     "tf": true,
-     "why": "True. Quantiles DO pass through a monotone transformation, which is exactly why exact distribution-free confidence intervals for a population quantile can be built from the Beta or the binomial."
-    },
-    "D": {
-     "tf": false,
-     "why": "False. Quantiles survive a monotone transformation but expectations do not: E(g(X)) ≠ g(E(X)) for non-linear g. The formula would hold only if F⁻¹ were linear."
-    }
-   }
-  },
-  {
-   "id": "pr-t1-m-18",
-   "format": "numeric",
-   "topic": "probability-t1",
-   "diff": "hard",
-   "stem": "For a unit exponential population, P(X₍₇₎ ≤ 2) in a sample of size 7 is approximately:",
-   "options": [
-    "0.361",
-    "0.865",
-    "0.040",
-    "0.639"
-   ],
-   "answer": "A",
-   "explanation": "(1 − e^(−2))⁷ = (0.86466)⁷ = 0.3614. Option B is F(2) for a single observation, and option C is the same expression at x = 1. So even with seven observations, the largest exceeds 2 about 64% of the time — raising a value to the 7th power punishes it hard.",
-   "check": "0.86466⁷ must be well below 0.86466; a rough check is 0.865⁷ ≈ e^(7 ln 0.865) = e^(−1.017) ≈ 0.36."
-  },
-  {
-   "id": "pr-t1-m-19",
-   "format": "single",
-   "topic": "probability-t1",
-   "diff": "hard",
-   "stem": "Why are the middle order statistics of a uniform sample more variable than the extremes, while for a normal sample the reverse holds?",
-   "options": [
-    "because the normal's order statistics are independent while the uniform's are not",
-    "because the normal has a larger variance than the uniform",
-    "because the uniform is discrete at its endpoints",
-    "on the uniform scale the middle is always most variable, and moving to X stretches by 1/f, which is huge in the normal's tails"
-   ],
-   "answer": "D",
-   "explanation": "The probability integral transform puts every continuous population on the uniform scale, where Var(U₍ᵣ₎) = r(n−r+1)/((n+1)²(n+2)) is largest in the middle. Moving back to X stretches by dx/du = 1/f(x). For the uniform f = 1 everywhere so the pattern survives; for the normal f is tiny in the tails, so the stretching there overwhelms it. The same factor 1/f appears in the large-sample variance of a sample quantile."
-  },
-  {
-   "id": "pr-t1-m-20",
-   "format": "single",
-   "topic": "probability-t1",
-   "diff": "hard",
-   "stem": "A dam is designed using the largest annual flood in 80 years of record. The probability that a single new year exceeds that record is:",
-   "options": [
-    "1/80",
-    "1/81, by exchangeability alone",
-    "1/2, since the record is the median",
-    "it cannot be found without knowing the flood distribution"
-   ],
-   "answer": "B",
-   "explanation": "Among 81 independent and identically distributed years, every ordering is equally likely, so each year is equally likely to be the largest; the chance the new one takes the record is 1/81. The argument uses only symmetry among exchangeable years, which is why option D is wrong — no distributional knowledge is needed. Over thirty years such exceedances are not remote, which is why a record is not a design ceiling."
-  }
- ]
+  ]
 }
