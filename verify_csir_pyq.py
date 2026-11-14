@@ -358,6 +358,11 @@ def main() -> None:
     assert q81["answer"] == "D" and "Var(t₂)≤Var(t₁)" in q81["explanation"]
     q83 = next(x for x in estimation["items"] if x["id"] == "csir-est-q83")
     assert "one-based geometric" in q83["explanation"] and "n/ΣXᵢ" in q83["explanation"]
+    q86 = next(x for x in estimation["items"] if x["id"] == "csir-est-q86")
+    assert q86["answer"] == "C" and "page 64" in q86["explanation"]
+    q87 = next(x for x in estimation["items"] if x["id"] == "csir-est-q87")
+    assert q87["answer"] == "B" and "ln(1+n/ΣYᵢ)" in q87["explanation"]
+    assert "rounding observations" in mle_text and "geometric distribution" in mle_text
     t5_lesson = json.loads((ROOT / "seed" / "lesson_t5.json").read_text(encoding="utf-8"))
     t5_text = " ".join(
         b.get("h", "") + " " + b.get("body", "")
