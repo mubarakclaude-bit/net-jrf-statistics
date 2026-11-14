@@ -535,19 +535,19 @@
       "verdicts": {
         "A": {
           "tf": true,
-          "why": "The likelihood is constant for every θ in the feasible interval [maxᵢ(Xᵢ²+Yᵢ²)−1, minᵢ(Xᵢ²+Yᵢ²)]. Both endpoints and every value between them maximise the likelihood."
+          "why": "The lower endpoint maxᵢ(Xᵢ²+Yᵢ²)−1 is a feasible MLE because the likelihood is constant over the full feasible interval."
         },
         "B": {
-          "tf": false,
-          "why": "The feasible interval is determined by the squared radial distances Xᵢ²+Yᵢ², not separate maxima and minima of the x- and y-coordinates."
+          "tf": true,
+          "why": "The upper endpoint minᵢ(Xᵢ²+Yᵢ²) is also feasible and maximises the constant likelihood over that interval."
         },
         "C": {
           "tf": true,
-          "why": "The inner and outer annulus constraints give the feasible interval. Since the annulus area is π[(θ+1)−θ]=π, the density height is constant throughout that interval."
+          "why": "Every value between the two endpoints is feasible and gives the same likelihood, so every such value is an MLE."
         },
         "D": {
           "tf": false,
-          "why": "The support requires θ≤Xᵢ²+Yᵢ²≤θ+1 for every observation. Combining these inequalities gives the radial-distance interval, not the coordinate-wise interval in statement 4."
+          "why": "The coordinate-wise expression is not the support interval. The constraints involve the radial sums Xᵢ²+Yᵢ² for each observation."
         }
       },
       "explanation": "For each observed point, the annulus condition θ≤Xᵢ²+Yᵢ²≤θ+1 must hold. The left inequalities give θ≤minᵢ(Xᵢ²+Yᵢ²). The right inequalities give θ≥maxᵢ(Xᵢ²+Yᵢ²)−1. Thus the likelihood is positive only when θ lies in [maxᵢ(Xᵢ²+Yᵢ²)−1, minᵢ(Xᵢ²+Yᵢ²)]. The area of the annulus is π(θ+1)−πθ=π, so the uniform density is 1/π and the joint likelihood is constant over the feasible interval. Every value in that interval is therefore an MLE, including both endpoints. Statements 1, 2 and 3 are correct. Statement 4 uses separate coordinate extrema and is not the support interval. Other-exam relevance: MLEs with parameter-dependent support and non-unique maximisers are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; This is topic overlap, not a claim that this exact question appeared in those other examinations."
