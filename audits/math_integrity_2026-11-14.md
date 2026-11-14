@@ -225,3 +225,10 @@ Added `tools/verify_math_integrity_probability_foundations.py` to guard these co
 
 
 The new verifier must pass on the exact updated PR head before these corrections are treated as CI-verified. The wider Probability second pass remains open; no full-module sign-off is implied.
+
+
+## Second-pass continuation — Statistical Inference lesson 4.3
+
+The Rao–Blackwell lesson's statement that the tower-property proof has “no conditions beyond δ being unbiased” was too broad in the context of the full theorem. Unbiasedness requires integrability; the variance-reduction comparison additionally requires finite variance. The construction, theorem statement, tower-property explanation and total-variance proof now state those conditions explicitly.
+
+Added a dedicated regression verifier, `verify_inference_raoblackwell.py`, to ensure the assumptions remain visible. This is a focused theorem-statement correction, not a claim that the Statistical Inference module has completed exhaustive verification.
