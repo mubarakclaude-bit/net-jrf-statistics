@@ -284,3 +284,11 @@ Added `verify_inference_mastery_alignment.py` to check these pool/lesson consist
 - **Lesson 4.17:** changed the equal-tail statement from a necessary-and-sufficient claim to the correct sufficient-condition framing: symmetry guarantees the unbiasedness condition in the standard setting, while the general test must satisfy both size and unbiasedness equations. Also replaced the misleading “coin flip” phrase with the actual unbiasedness requirement and stated regularity/randomisation qualifications for UMPU existence.
 
 Added `verify_inference_remaining_precision.py` to guard the residual fixes.
+
+
+## Time-series second-pass continuation — Stationarity and Yule–Walker
+
+- **Stationarity and Invertibility:** corrected the Wold statement to include the deterministic component and the purely-nondeterministic qualification. Also clarified that invertibility makes the innovation representation recoverable and identifiable; it does not mean a non-invertible process is inherently unforecastable, since an observationally equivalent invertible representation can be used.
+- **Yule–Walker:** qualified the finite-sample stationarity guarantee to the standard biased sample autocorrelation sequence. The unbiased sample autocovariance sequence need not produce a positive-definite Toeplitz matrix and does not carry the same unconditional guarantee. The mastery explanation now uses the same convention.
+
+Added `verify_timeseries_precision.py` to guard these distinctions. The wider time-series module remains under second-pass review.
