@@ -350,3 +350,24 @@ The original wording said that finding an unbiased estimator whose variance equa
 File: `seed/inference_t6_mastery.json`. Severity: **Assessment metadata / CI contract**.
 
 The 20-item pool was labelled 5 easy, 10 moderate and 5 hard, while the repository's published mastery-paper contract requires 6/10/4. On re-review, the Fisher-information identity multi-statement item (`inf-t6-m-13`) is a moderate application of standard identities, while the combined efficiency, finite-sample MLE, score-attainment and UMVUE synthesis item (`inf-t6-m-17`) is appropriately hard. Their labels were exchanged, yielding the required 6/10/4 mix without changing either question, answer key or explanation. A verifier regression now asserts both the aggregate mix and these two reviewed classifications.
+
+
+### INF-037 — T2 mastery difficulty labels did not match the required paper mix
+
+File: `seed/inference_t2_mastery.json`. Severity: **Assessment metadata / CI contract**.
+
+The pool was labelled 4 easy, 11 moderate and 5 hard rather than 6/10/4. Two direct formula-substitution items were under-labelled as moderate: the Uniform maximum UMVUE calculation (`inf-t2-m-02`) and the Poisson UMVUE of λ (`inf-t2-m-18`). Both were reclassified easy. The known-variance normal Basu independence application (`inf-t2-m-16`) was reclassified from hard to moderate. Question text, keys and explanations are unchanged.
+
+### INF-038 — T3 mastery difficulty labels did not match the required paper mix
+
+File: `seed/inference_t3_mastery.json`. Severity: **Assessment metadata / CI contract**.
+
+The pool was labelled 4 easy, 10 moderate and 6 hard. Two direct UMVUE formula-substitution items (`inf-t3-m-02`, `inf-t3-m-04`) were reclassified easy. The normal UMVUE of μ² calculation (`inf-t3-m-09`) and the Bernoulli conditional-expectation/Rao–Blackwell calculation (`inf-t3-m-16`) were reclassified moderate rather than hard. No question text, key or explanation changed.
+
+### INF-039 — T5 mastery difficulty labels did not match the required paper mix
+
+File: `seed/inference_t5_mastery.json`. Severity: **Assessment metadata / CI contract**.
+
+The pool was labelled 6 easy, 9 moderate and 5 hard. The Uniform(0,θ) method-of-moments feasibility check (`inf-t5-m-09`) was reclassified from hard to moderate: it requires a moment estimate followed by a sample-compatibility check, but does not require the multi-step synthesis expected of a hard item. Question text, answer key and explanation are unchanged.
+
+A new regression test now verifies the 6/10/4 mix across all 16 available non-T9 inference pools and guards the reviewed classifications. T9 remains excluded while PR #93 owns it.

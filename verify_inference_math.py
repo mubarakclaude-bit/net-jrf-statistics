@@ -609,5 +609,29 @@ class Topic04AndConsistencyRegressionTests(unittest.TestCase):
         self.assertEqual(next(q for q in pool["items"] if q["id"] == "inf-t6-m-17")["diff"], "hard")
 
 
+
+    def test_all_available_inference_mastery_pools_follow_6_10_4_mix(self):
+        # T9 is deliberately deferred to PR #93; audit the 16 available pools.
+        for topic in (1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17):
+            pool = load_json(SEED / f"inference_t{topic}_mastery.json")
+            counts = {level: sum(q["diff"] == level for q in pool["items"])
+                      for level in ("easy", "moderate", "hard")}
+            self.assertEqual(counts, {"easy": 6, "moderate": 10, "hard": 4},
+                             msg=f"T{topic} difficulty mix: {counts}")
+        # Guard the reviewed borderline reclassifications, not just the totals.
+        expected = {
+            (2, "inf-t2-m-02"): "easy", (2, "inf-t2-m-18"): "easy",
+            (2, "inf-t2-m-16"): "moderate",
+            (3, "inf-t3-m-02"): "easy", (3, "inf-t3-m-04"): "easy",
+            (3, "inf-t3-m-09"): "moderate", (3, "inf-t3-m-16"): "moderate",
+            (5, "inf-t5-m-09"): "moderate",
+            (6, "inf-t6-m-13"): "moderate", (6, "inf-t6-m-17"): "hard",
+        }
+        for (topic, item_id), level in expected.items():
+            pool = load_json(SEED / f"inference_t{topic}_mastery.json")
+            item = next(q for q in pool["items"] if q["id"] == item_id)
+            self.assertEqual(item["diff"], level, msg=item_id)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
