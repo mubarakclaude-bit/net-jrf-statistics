@@ -435,7 +435,7 @@ class FollowUpCorrectionTests(unittest.TestCase):
         pool = load_json(SEED / "inference_t5_mastery.json")
         item = next(q for q in pool["items"] if q["id"] == "inf-t5-m-09")
         self.assertIn("outside the sample-compatible parameter region", item["explanation"])
-        self.assertNotIn("inadmissible", item["explanation"].lower())
+        self.assertIn("not the decision-theoretic claim", item["explanation"].lower())
 
     def test_t1_uniform_endpoint_convention_is_consistent(self):
         pool = load_json(SEED / "inference_t1_mastery.json")
