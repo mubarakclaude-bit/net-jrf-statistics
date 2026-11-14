@@ -388,6 +388,7 @@ class Topic17UMPTests(unittest.TestCase):
         self.assertLess(1 / 2.0, 1 / 1.0)
 
 
+# Regression guards for the second-pass content audit corrections.
 class FollowUpCorrectionTests(unittest.TestCase):
     def test_sprt_intercepts_depend_on_hypotheses_and_error_rates(self):
         p0, p1, alpha, beta = 0.3, 0.6, 0.05, 0.10
