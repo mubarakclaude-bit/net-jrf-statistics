@@ -16,7 +16,8 @@ q1=next(x for x in P["items"] if x["id"]=="mv-t9-m-01")
 assert q1["answer"]=="B" and "shared covariance" in q1["options"][1]
 assert Counter(x["diff"] for x in P["items"])=={"easy":6,"moderate":10,"hard":4}
 assert Counter(x["format"] for x in P["items"])=={"single":12,"numeric":5,"multi":3}
-assert Counter(x["answer"] for x in P["items"])=={"A":5,"B":5,"C":5,"D":5}
+# One corrected key moves mv-t9-m-01 from D to B; preserve correctness over artificial key balance.
+assert Counter(x["answer"] for x in P["items"])=={"A":5,"B":6,"C":5,"D":4}
 for x in P["items"]:
  assert len(x["options"])==4 and len(x["explanation"])>=40
  if x["format"]=="numeric": assert x.get("check")
