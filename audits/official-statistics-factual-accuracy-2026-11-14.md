@@ -114,7 +114,7 @@ Academic secondary biographies (including MacTutor) are used only where an insti
 | AHS/SRS/CRS | **Corrected:** AHS is a separate historical sample survey; SRS is a sample registration system; CRS is the legal administrative registration system. They are not interchangeable. |
 | CPI 2024 | Base 2024=100, COICOP 2018, 358 items, HCES 2023–24 weights, 1,465 villages and **1,407** urban markets. The previous 1,395 urban-market count was corrected. Six-group comparison weights are not confused with COICOP division weights. |
 | IIP 2022–23 | 1,042 products / 463 item groups and the first-release/revised-release chronology are stated. Sectoral linking factors are included; the new water-supply sector has no direct old-series factor. |
-| WPI/PPI | The 2022–23 WPI basket and June 2026 producer-price introduction are described. The lesson now states a five-year WPI transition rather than implying permanent parallel publication or immediate discontinuation. **The OEA source page could not be retrieved directly; the transition detail requires reviewer confirmation against the full OEA release before merge.** |
+| WPI/PPI | The 2022–23 WPI basket and June 2026 producer-price introduction are described. The lesson now states a five-year WPI transition rather than implying permanent parallel publication or immediate discontinuation. The transition, 957-item basket, launch date and linking-factor availability were verified against the accessible primary PIB press release (Release ID 2267963). The OEA portal itself timed out, but this is not a source blocker. |
 | RBI | CPI-Combined is the inflation-target index; the 2026–31 target period is added. |
 
 **Primary sources (verified 14 November 2026 unless noted):**
@@ -125,7 +125,8 @@ Academic secondary biographies (including MacTutor) are used only where an insti
 - MoSPI/PIB, CPI 2024=100 release: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2227012&reg=3&lang=1
 - MoSPI/PIB, IIP 2022–23 release: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2267531&reg=3&lang=1
 - MoSPI/PIB, revised IIP release using Output PPI: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2278961&lang=1&reg=3
-- OEA/DPIIT, WPI/PPI 2022–23 portal: https://eaindustry.nic.in/download_data_2223.asp (**portal retrieval timed out; full release not page-verified**)
+- PIB / Ministry of Commerce and Industry, WPI base 2022–23 and PPI launch (2 June 2026, Release ID 2267963): https://www.pib.gov.in/PressReleasePage.aspx?PRID=2267963&lang=1&noshow=1&reg=3 (**full release text checked**)
+- OEA/DPIIT, WPI/PPI 2022–23 portal: https://eaindustry.nic.in/download_data_2223.asp (**portal retrieval timed out; the primary PIB release above was accessible**)
 - RBI, Monetary Policy Framework: https://www.rbi.org.in/Scripts/FS_Overview.aspx?fn=2752
 
 ### T5 — Census and vital statistics
