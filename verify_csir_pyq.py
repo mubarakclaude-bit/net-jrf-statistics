@@ -82,6 +82,10 @@ def main() -> None:
     assert q10["answer"] == "A"
     assert "".join(sorted(k for k, v in q10["verdicts"].items() if v["tf"])) == "AC"
     assert "Xᵢ²=Xᵢ" in q10["explanation"] and "converges to 0, not to p" in q10["explanation"]
+    q13 = next(x for x in estimation["items"] if x["id"] == "csir-est-q13")
+    assert q13["type"] == "practice" and q13["answer"] == "A"
+    assert "".join(sorted(k for k, v in q13["verdicts"].items() if v["tf"])) == "AD"
+    assert "π(μ)∝1" in q13["explanation"] and "posterior mean is δ(x)=x" in q13["explanation"]
     q05 = next(x for x in estimation["items"] if x["id"] == "csir-est-q05")
     assert "".join(sorted(k for k, v in q05["verdicts"].items() if v["tf"])) == "ACD"
     q12 = next(x for x in estimation["items"] if x["id"] == "csir-est-q12")
