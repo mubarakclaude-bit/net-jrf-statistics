@@ -273,3 +273,22 @@ Twelve further questions were imported from pages 157–168:
 - Mean from a product of binomial MGFs, p168.
 
 All 12 entries are in Probability and include worked derivations and PDF page provenance. Page 159, 162 and 164 are numeric-answer items with explicit verification checks.
+
+
+## Batch 18 — pages 169–180
+
+Eight questions were imported from pages 169, 170, 174, 175, 176, 178, 179 and 180, all in Probability:
+- Symmetry argument for an expected ratio of iid Uniform variables, p169.
+- Maximum of three iid Uniform variables, p170.
+- Perfect-square divisors of an integer, p174.
+- Conditional binomial thinning of a Poisson variable and conditional expectation, p175.
+- Sum of two Uniform variables and a triangular density, p176.
+- Gamma variance from a given mean, p178.
+- Maximising a binomial point probability as a function of p, p179.
+- Conditional probability given a union of independent events, p180.
+
+### Pages held out after inspection
+
+- **Page 171:** held out because the numerator and denominator sums overlap, so the displayed ratio is not a standard F ratio of independent chi-square variables as claimed.
+- **Pages 172–173:** held out because the weighted-average formula is too faint/ambiguous and the visible variance options do not reconcile with the most direct reading of the weights and stated variance.
+- **Page 177:** held out because the numerator is included in the denominator, so the displayed ratio cannot have the stated standard F distribution under the usual independent-gamma construction.
