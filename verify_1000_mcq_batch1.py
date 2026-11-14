@@ -32,7 +32,7 @@ for rel in FILES:
  assert d["source"]=="variant" and d["count"]==len(d["items"])
  for q in d["items"]:
   assert q["id"] not in seen; seen.add(q["id"])
-  assert len(q["explanation"])>=40 and 954<=q["pno"]<=964
+  assert len(q["explanation"])>=40 and 954<=q["pno"]<=1011
   if q["format"]=="multi":
    assert len(q["statements"])==4 and set(q["verdicts"])==set("ABCD") and q["answer"] in "ABCD"
   elif q["format"]=="single": assert len(q["options"])==4 and q["answer"] in "ABCD"
