@@ -70,6 +70,11 @@ def load_banks():
 
 def main() -> None:
     estimation, methods, sampling = load_banks()
+    q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
+    assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
+    assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
+    assert "Var(p_WR)=P(1−P)/n" in q24["explanation"]
+    assert "Var(p₁)" not in q24["explanation"]  # Source uses p₁/p₂; worked solution uses named designs.
     q05 = next(x for x in estimation["items"] if x["id"] == "csir-est-q05")
     assert "".join(sorted(k for k, v in q05["verdicts"].items() if v["tf"])) == "ACD"
     q12 = next(x for x in estimation["items"] if x["id"] == "csir-est-q12")
