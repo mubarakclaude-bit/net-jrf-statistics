@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 39,
-  "clean": 39,
+  "count": 40,
+  "clean": 40,
   "items": [
     {
       "id": "csir-est-q01",
@@ -1190,6 +1190,47 @@
         }
       },
       "explanation": "The supplied answer list on page 63 gives Question 41 as statements 2 and 4. First find the posterior distribution. The prior density is constant on 0<θ<1, and the likelihood is proportional to θ⁻² when θ>x. Therefore the posterior density is proportional to θ⁻² on x<θ<1. Its normalising integral is ∫ₓ¹θ⁻²dθ=1/x−1=(1−x)/x. Hence π(θ|x)=x/[(1−x)θ²], for x<θ<1. Under squared-error loss, the Bayes estimate is the posterior mean: E(θ|x)=∫ₓ¹θ·x/[(1−x)θ²]dθ = [x/(1−x)]∫ₓ¹(1/θ)dθ = −x log(x)/(1−x). Thus statement 2 is true and statement 1 is false. Under absolute-error loss, any posterior median is a Bayes estimate. The posterior CDF is F(m|x)=[x/(1−x)]∫ₓᵐθ⁻²dθ=(m−x)/[m(1−x)]. Set this equal to 1/2: 2(m−x)=m(1−x), so m(1+x)=2x and m=2x/(1+x). Thus statement 4 is true and statement 3 is false. Therefore statements 2 and 4 are correct, option B. Other-exam relevance: Bayesian posterior distributions, posterior means, posterior medians and loss functions are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q42",
+      "type": "practice",
+      "format": "multi",
+      "year": 2019,
+      "session": "December",
+      "topic": "design-t1 · one-way random-effects ANOVA; unbiased variance-component estimators versus constrained maximum likelihood",
+      "stem": "Consider the one-way random-effects model Yᵢⱼ=μ+bᵢ+εᵢⱼ, i=1,…,5; j=1,…,10, where bᵢ are i.i.d. N(0,τ²) and εᵢⱼ are i.i.d. N(0,σ²), with all random variables mutually independent. The parameter space is μ∈R, σ²≥0 and τ²≥0. Let σ̂²ᵤ and τ̂²ᵤ be the usual unbiased ANOVA estimators of σ² and τ², and let σ̂²ₘ and τ̂²ₘ be the maximum-likelihood estimators. Which event can occur with positive probability for some parameter values?",
+      "statements": [
+        "σ̂²ᵤ is negative.",
+        "τ̂²ᵤ is negative.",
+        "σ̂²ₘ is negative.",
+        "τ̂²ₘ is negative."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statement 2 only",
+        "Statement 3 only",
+        "Statement 4 only"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The unbiased ANOVA estimator of the within-group variance is the within-group mean square, which is a sum of squares divided by positive degrees of freedom and therefore cannot be negative."
+        },
+        "B": {
+          "tf": true,
+          "why": "The unbiased estimator of the random-effect variance is (MS_B−MS_W)/10. The between-group mean square can be smaller than the within-group mean square, so this difference can be negative with positive probability."
+        },
+        "C": {
+          "tf": false,
+          "why": "The parameter space requires σ²≥0. A maximum-likelihood estimate constrained to this parameter space cannot be negative."
+        },
+        "D": {
+          "tf": false,
+          "why": "The parameter space requires τ²≥0. A maximum-likelihood estimate constrained to this parameter space cannot be negative."
+        }
+      },
+      "explanation": "The source question is printed as Question 42 (December 2019) on page 19 of the supplied Estimation PDF. The answer list on page 63 gives statement 2 only. To see why, use the balanced one-way random-effects ANOVA formulas. There are a=5 groups and r=10 observations per group. Let MS_W be the within-group mean square and MS_B the between-group mean square. Their expectations are E(MS_W)=σ² and E(MS_B)=σ²+10τ². Therefore the usual unbiased ANOVA estimators are σ̂²ᵤ=MS_W and τ̂²ᵤ=(MS_B−MS_W)/10. The first is a nonnegative sum of squared within-group deviations divided by its degrees of freedom, so it cannot be negative. The second is a difference of two random mean squares. There is positive probability that MS_B<MS_W (for example, when τ²=0), making τ̂²ᵤ negative. This does not imply that the true variance τ² is negative; it reflects that an unbiased estimator is not constrained to be nonnegative in every sample. Finally, the parameter space explicitly requires σ²≥0 and τ²≥0. The maximum-likelihood estimators are maximised over this constrained parameter space, so neither MLE can be negative. Hence statement 2 alone is correct, option B. Other-exam relevance: random-effects models, ANOVA expected mean squares and variance-component estimation are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
