@@ -8,14 +8,15 @@
   "engineName": "Diagnose near-linear dependence among regressors and reason about what it changes in OLS.",
   "version": "1.0",
   "status": "approved",
-  "estMin": 90,
+  "estMin": 105,
   "objectives": [
     "Distinguish perfect from near multicollinearity using the rank and conditioning of the design matrix.",
     "Explain why multicollinearity inflates sampling variances and standard errors of affected coefficient estimates.",
     "Identify what multicollinearity does not automatically cause: OLS bias or loss of overall fit.",
     "Interpret high R² with weak individual t-statistics and unstable coefficient estimates.",
     "Evaluate remedies and distinguish prediction goals from coefficient-interpretation goals.",
-    "Answer the June 2026 Paper 2 Q38 negation question and its linked variants."
+    "Answer the June 2026 Paper 2 Q38 negation question and its linked variants.",
+    "Calculate the multiple correlation coefficient under an equicorrelated predictor structure and interpret its limiting value as the number of predictors grows."
   ],
   "prereq": [
     {
@@ -41,7 +42,8 @@
     "A high R² with individually insignificant t-statistics can be a symptom, not a proof, of multicollinearity.",
     "Multicollinearity does not automatically destroy prediction within the observed predictor range.",
     "Dropping a relevant predictor can introduce omitted-variable bias; it is not a harmless universal remedy.",
-    "The June 2026 Q38 asks what is NOT a consequence: bias is the correct answer (C)."
+    "The June 2026 Q38 asks what is NOT a consequence: bias is the correct answer (C).",
+    "Do not confuse the multiple correlation R with the pairwise correlation ρ; adding predictors can increase R even when every pairwise correlation is fixed."
   ],
   "howto": "Check whether regressors are strongly linearly related; inspect correlations, VIFs and condition indices; connect the pattern to coefficient standard errors and stability; distinguish inference from prediction; select a remedy that preserves the scientific model and target.",
   "refs": [
@@ -88,7 +90,9 @@
       "Prediction within the observed predictor region may remain adequate; extrapolation and coefficient interpretation are more fragile.",
       "VIF_j=1/(1−R_j²), where R_j² comes from regressing x_j on the other regressors.",
       "Perfect collinearity prevents unique separate coefficient estimation with ordinary OLS.",
-      "Remedies depend on the goal: collect more informative data, redesign the study, combine predictors only with substantive justification, use dimension reduction or regularisation when prediction is the goal."
+      "Remedies depend on the goal: collect more informative data, redesign the study, combine predictors only with substantive justification, use dimension reduction or regularisation when prediction is the goal.",
+      "If Corr(Y,Xᵢ)=ρ and Corr(Xᵢ,Xⱼ)=ρ for i≠j, with p>1 and 0≤ρ<1, then R²=pρ²/[1+(p−1)ρ].",
+      "For fixed ρ, as p→∞, R²→ρ and R→√ρ, not 1 unless ρ=1."
     ],
     "cards": [
       [
@@ -126,17 +130,23 @@
       [
         "June 2026 Q38",
         "NOT a consequence: OLS estimates are biased (option C)."
+      ],
+      [
+        "Equicorrelated predictors",
+        "R²=pρ²/[1+(p−1)ρ] when all predictor-predictor and response-predictor correlations equal ρ."
       ]
     ],
     "tricks": [
       "For a negation stem, identify the standard consequences first, then select the one that is not on the list.",
       "High R² + low individual t-statistics is a classic exam clue, but not a logical proof on its own.",
-      "Ask whether the question concerns bias, variance, inference or prediction; do not mix these."
+      "Ask whether the question concerns bias, variance, inference or prediction; do not mix these.",
+      "For the equicorrelation question, first recognise the all-ones eigenvector of the predictor correlation matrix."
     ],
     "shortcuts": [
       "Multicollinearity → variance/SE up; |t| often down; bias does not automatically appear.",
       "VIF above 10 is a common rule-of-thumb flag, not a universal theorem or cutoff.",
-      "Perfect collinearity means no unique ordinary OLS solution for all separate coefficients."
+      "Perfect collinearity means no unique ordinary OLS solution for all separate coefficients.",
+      "With p equicorrelated predictors, R=ρ√[p/(1+(p−1)ρ)] for ρ≥0."
     ],
     "remember": [
       "Large standard errors do not mean coefficient estimates must be large in magnitude.",
@@ -646,6 +656,87 @@
       "ask": {
         "q": "Why might ridge regression be considered for prediction but not as an automatic fix for unbiased OLS inference?",
         "nudge": "Penalisation trades some bias for lower variance."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s16",
+      "mins": 8,
+      "title": "Multiple correlation with equicorrelated predictors",
+      "objective": "Derive the multiple correlation coefficient when every predictor has the same correlation with the response and with the other predictors.",
+      "body": [
+        "The multiple correlation R measures the correlation between Y and its best linear prediction from the full set of predictors X₁,…,Xₚ. It is not the same as the pairwise correlation between Y and one predictor.",
+        "Suppose Corr(Y,Xᵢ)=ρ for every i, and Corr(Xᵢ,Xⱼ)=ρ for every distinct pair i,j, with p>1 and 0≤ρ<1. The predictor correlation matrix has 1 on its diagonal and ρ off the diagonal.",
+        "Write Rₓ=(1−ρ)I+ρJ, where J is the p×p matrix of ones. The vector of correlations between Y and the predictors is r=ρ·1.",
+        "The vector of ones is an eigenvector of Rₓ with eigenvalue 1+(p−1)ρ. Therefore Rₓ⁻¹1=1/[1+(p−1)ρ]·1.",
+        "The squared multiple correlation is R²=r′Rₓ⁻¹r=pρ²/[1+(p−1)ρ]. Since ρ≥0, R=ρ√[p/{1+(p−1)ρ}].",
+        "For ρ>0, this R is greater than ρ. At ρ=0, both are zero. For fixed ρ, as p grows, R² approaches ρ and R approaches √ρ."
+      ],
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "Equicorrelation predictor matrix",
+          "body": "Rₓ = (1−ρ)I + ρJ"
+        },
+        {
+          "t": "formula",
+          "h": "Response-predictor correlation vector",
+          "body": "r = ρ·1ₚ"
+        },
+        {
+          "t": "formula",
+          "h": "Squared multiple correlation",
+          "body": "R² = r′Rₓ⁻¹r = pρ²/[1+(p−1)ρ]"
+        },
+        {
+          "t": "formula",
+          "h": "Multiple correlation",
+          "body": "R = ρ√[p/{1+(p−1)ρ}],   ρ≥0"
+        },
+        {
+          "t": "note",
+          "h": "The limiting value",
+          "body": "For fixed ρ, R²→ρ and R→√ρ as p→∞. It does not generally tend to one."
+        }
+      ],
+      "ask": {
+        "q": "If ρ=0.25 and p=4, what is R²?",
+        "nudge": "Substitute 4(0.25)²/[1+3(0.25)]."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s17",
+      "mins": 7,
+      "title": "Worked example — four correlated predictors",
+      "objective": "Calculate R and compare it with the pairwise correlation.",
+      "problem": "Suppose p=4 predictors each have correlation ρ=0.25 with Y and with every other predictor. Find the multiple correlation coefficient R.",
+      "steps": [
+        {
+          "say": "Write the formula for the squared multiple correlation.",
+          "math": "R² = pρ²/[1+(p−1)ρ]",
+          "why": "The formula follows from R²=r′Rₓ⁻¹r for the equicorrelation matrix."
+        },
+        {
+          "say": "Substitute p=4 and ρ=0.25.",
+          "math": "R² = 4(0.25)²/[1+3(0.25)] = 0.25/1.75 = 1/7 ≈ 0.1429",
+          "why": "The denominator is 1.75 and the numerator is 0.25."
+        },
+        {
+          "say": "Take the nonnegative square root.",
+          "math": "R = √(1/7) ≈ 0.378",
+          "why": "A multiple correlation coefficient is nonnegative by definition."
+        },
+        {
+          "say": "Compare with the pairwise correlation.",
+          "math": "R ≈ 0.378 > ρ = 0.25",
+          "why": "The combined predictor set has a stronger linear relationship with Y than any one predictor alone."
+        }
+      ],
+      "after": "The multiple correlation combines the predictors. It can exceed the common pairwise correlation even though every pairwise correlation is held fixed.",
+      "ask": {
+        "q": "As p grows while ρ=0.25 remains fixed, what value does R approach?",
+        "nudge": "The limit is √ρ, not one."
       }
     },
     {
