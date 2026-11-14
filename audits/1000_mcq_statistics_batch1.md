@@ -157,3 +157,22 @@ Ten more questions were added from visually inspected pages 74–77 and 79–84:
 - **Page 78:** held out because the displayed density and conditional moments imply Var(Y)=15−16/π, which does not match the printed options as legible in the scan.
 
 The page 77 bound is derived from the displayed zero-truncated Poisson PMF. The page 79 interval uses the normal/Wald approximation and z=2.576 for 99% confidence. The page 82 answer uses independent thinning of the stated Poisson car-arrival process.
+
+
+## Batch 11 — pages 85–96
+
+Six additional questions were imported from visually inspected pages 89, 90, 91, 92, 93 and 95:
+- **Statistical Inference (3):** UMVU estimation of a power of the Laplace scale parameter, p89; confidence interval for the endpoint of a Uniform(0,θ) distribution using the sample range, p90; Neyman–Pearson critical region and type II error for a discrete model, p92.
+- **Probability (2):** exactly two exceedances for three iid variables with density 3x², p91; product of an independent arcsine variable and Rayleigh variable, p93.
+- **Multivariate Analysis (1):** correlation of a standard bivariate normal pair expressed through P(XY>0), p95.
+
+### Pages held out after inspection
+
+- **Page 85:** held out because the displayed function 1/x on (θ−1,θ+1) does not integrate to one as printed, so it is not a valid density without an omitted normalising factor.
+- **Page 86:** held out because the printed target state in P(X₃=…|X₀=1) is not consistent with the stated state space {0,1,2}, and the listed numerical options do not match the transition-matrix calculation under the legible diagram.
+- **Page 87:** held out because the displayed rejection region uses |X−2Y|≤z_(α/2)√5, whose null probability is 1−α under the usual upper-tail critical-value convention, not any listed answer. The inequality may have been intended as ≥.
+- **Page 88:** held out because direct integration of the displayed density gives P(min(X,Y)≤1/2)≈0.5898, which does not match any printed option.
+- **Page 94:** held out because the relationship between the displayed chi-square CDF expression and the variable p in the answer choices is not fully stated in the scan.
+- **Page 96:** duplicate of page 95; not imported twice.
+
+The page 89 estimator uses completeness and sufficiency of Σ|Xᵢ|. Page 90's interval follows directly from the stated pivotal CDF for the sample range. Page 93's product density is evaluated by a change of variables and equals the N(0,σ²) density.
