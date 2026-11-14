@@ -369,7 +369,7 @@ def main() -> None:
     regression_text = " ".join(
         b.get("body", "") for s in regression_lesson["scenes"] for b in s.get("blocks", [])
     )
-    assert "zero-mean contrasts" in contrast_text and "squared contrast" in contrast_text
+    assert "coefficients sum to zero" in contrast_text and "squared coefficients sum to one" in contrast_text
     assert "V⁻¹1" in regression_text and "dimension n−1" in regression_text
     assert "constrained normal mean" in mle_text.lower() and "max(X̄,0)" in mle_text
     assert "Uniform location" in mle_text and "Var(X̄)" in mle_text
