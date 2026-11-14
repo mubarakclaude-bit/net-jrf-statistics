@@ -16,8 +16,17 @@ for q in P['items']:
  if q['format']=='numeric': assert q.get('check')
  if q['format']=='multi': assert len(q['statements'])==4 and all(isinstance(q['verdicts'][k]['tf'],bool) and q['verdicts'][k]['why'] for k in 'ABCD')
 assert sum(s['kind']=='guided' for s in L['scenes'])>=2 and any(s.get('flow') for s in L['scenes'])
-obs=[2,6,10]; assert sum(obs)/len(obs)==6
+obs=[4,8,10]; assert sum(obs)/len(obs)==22/3
 assert len([None,4,None,8,10])==5 and sum(x is None for x in [None,4,None,8,10])==2
 assert sum(x is not None for x in [None,4,None,8,10])==3
 assert (1+3+9)/3==13/3 and max([1,3,9])-min([1,3,9])==8
 print('PASS: R T6 structure, mastery contract and NA/summary arithmetic.')
+
+# The worked explanations must match the exact vectors in the guided prompts.
+s6 = next(s for s in L['scenes'] if s['id'] == 's6')
+s8 = next(s for s in L['scenes'] if s['id'] == 's8')
+assert '4, 8 and 10' in s6['solution'][1]['math']
+assert 'sum(!is.na(x))=3' in s6['solution'][2]['math']
+assert 'Observed values: 1, 3, 9' in s8['solution'][0]['math']
+assert 'mean=13/3' in s8['solution'][1]['math']
+assert 'median=3' in s8['solution'][2]['math']
