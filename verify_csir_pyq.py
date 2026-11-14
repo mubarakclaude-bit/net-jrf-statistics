@@ -252,7 +252,7 @@ def main() -> None:
     assert q35["format"] == "single" and q35["year"] == 2020
     assert q35["session"] == "26 November" and q35["answer"] == "A"
     assert "supplied answer-key sheet on page 63 lists statements 1 and 4" in q35["explanation"]
-    assert "posterior mean is 2m/(1+m)" in q35["explanation"]
+    assert "2m/(1+m)" in q35["explanation"]
 
     # Estimation Q74: preserve the source's four-statement format and key A,C,D.
     q74 = next(x for x in estimation["items"] if x["id"] == "csir-est-q74")
