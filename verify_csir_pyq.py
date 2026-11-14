@@ -78,7 +78,8 @@ def main() -> None:
     assert "nσ̂²/σ² ~ χ²(n−1)" in q11["explanation"]
     assert "((n−1)σ̂²)/σ²" not in q11["statements"][0]
     regression_pyq = next(x for x in methods["items"] if x["id"] == "csir-meth-q05")
-    assert "least-squares estimate of α" in regression_pyq["stem"]
+    assert regression_pyq["topic"].startswith("regression-t2")
+    assert regression_pyq["year"] == 2023 and regression_pyq["session"] == "June"
     assert not any(x["id"] == "csir-est-q07" for x in methods["items"])
     print(
         f"PASS: {sum(len(x['items']) for x in (estimation, methods))} CSIR PYQs; "
