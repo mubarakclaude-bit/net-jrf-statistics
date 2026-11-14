@@ -192,3 +192,19 @@ Nine additional questions were imported from visually checked pages 98–101, 10
 - **Page 108:** is a cover page, not a question; no entry added.
 
 For page 98, only the mean statement is keyed as universally valid because independence is not stated; the variance formula in the source would require additional assumptions. Page 104's estimator is verified by a telescoping expectation sum and completeness of the sample maximum.
+
+
+## Batch 13 — pages 110–120
+
+Eight additional questions were imported from pages 110, 112, 113, 116, 117 and selected items on page 119:
+- **Probability (8):** a sequence of CDFs that fails to converge in distribution, p110; extreme-value limit for n times the sample minimum when the density is positive at zero, p112; Slutsky/continuous-mapping statements, p113; convergence of a centered Binomial(n,1/2) proportion, p116; equivalence and implication facts among convergence modes, p117; possible values of a probability, p119 Q2; Bertrand's paradox, p119 Q3; complement probability consistency, p119 Q5.
+
+### Exclusions and duplicates
+
+- **Pages 109, 111, 114 and 118:** these questions were already imported in the earlier order-statistics/convergence batch; no duplicates added.
+- **Page 115:** repeats the definition of almost-sure convergence already covered by page 117; not imported separately.
+- **Page 119 Q4:** the supplied values P(A∪B)=0.1 and P(A∩B)=0.5 are impossible because an intersection is a subset of the union; the scan's accepted answer does not repair the inconsistency.
+- **Page 119 Q6:** insufficient information is provided to identify P(A∩B) without P(B∩C) or equivalent additional information.
+- **Page 120:** duplicates questions 2 and 3 from page 119; not imported twice.
+
+For p112, the limit uses the local approximation F(x)~x/4 implied by the stated density limit. For p116, both convergence-in-probability and convergence-in-distribution statements are included because both follow from the variance tending to zero.
