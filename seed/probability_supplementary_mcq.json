@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 954–957, 961, 964)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 14,
+  "count": 28,
   "items": [
     {
       "id": "mcq1000-p954",
@@ -329,6 +329,249 @@
       "explanation": "For a random sum with N independent of the iid summands, Var(S_N)=E(N)Var(X)+Var(N)[E(X)]². For N~Poisson(2), E(N)=Var(N)=2. Therefore Var(S_N)=2(1)+2(2²)=2+8=10.",
       "check": "Use the random-sum variance formula; do not confuse it with E(N)Var(X) alone.",
       "pno": 1011,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p109",
+      "format": "single",
+      "topic": "probability-t9",
+      "stem": "For each n≥1, define Fₙ(x)=1−(1−1/n)ⁿˣ for x>0 and Fₙ(x)=0 otherwise. What is the limiting distribution of Xₙ?",
+      "options": [
+        "No limiting distribution exists",
+        "Exp(λ) for some λ>1",
+        "Exp(1)",
+        "No Exp(λ) limit exists for any λ>0"
+      ],
+      "answer": "C",
+      "explanation": "For each fixed x>0, (1−1/n)ⁿˣ=[(1−1/n)ⁿ]ˣ tends to e^(−x), because (1−1/n)ⁿ→e^(−1). Hence Fₙ(x)→1−e^(−x) for x>0, which is the CDF of an exponential random variable with rate 1. Therefore Xₙ converges in distribution to Exp(1).",
+      "pno": 109,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p111",
+      "format": "single",
+      "topic": "probability-t9",
+      "stem": "Let Xₙ→X in probability. Which statement is FALSE?",
+      "options": [
+        "For every real k, kXₙ→kX in probability.",
+        "If Xₙ→k in probability for a constant k, then Xₙ²→k² in probability.",
+        "For any positive-valued function g:R→[0,∞), g(Xₙ)→g(X) in probability.",
+        "If Xₙ→1 in probability, then Xₙ⁻¹→1 in probability."
+      ],
+      "answer": "C",
+      "explanation": "The continuous mapping theorem requires g to be continuous at the limiting value X (almost surely). Positivity alone does not guarantee continuity. The first two statements follow from continuous transformations, and x↦1/x is continuous at x=1, so the fourth statement is true. Thus statement C is false as written.",
+      "pno": 111,
+      "sourcePdf": "1000 MCQ statistics.pdf",
+      "repaired": "The source accepted answer identifies the arbitrary positive-valued function statement as false; continuity is the missing condition."
+    },
+    {
+      "id": "mcq1000-p114",
+      "format": "multi",
+      "topic": "probability-t9",
+      "stem": "Let X~Exp(1) and define Xₙ=X/n for n=1,2,… . Which statements are true?",
+      "statements": [
+        "The variables Xₙ are dependent.",
+        "The variables Xₙ are independent.",
+        "The sequence Xₙ converges to 0 in probability.",
+        "The sequence Xₙ converges to 1 in probability."
+      ],
+      "options": [
+        "A and B only",
+        "A and C only",
+        "B and D only",
+        "A, C and D only"
+      ],
+      "answer": "B",
+      "explanation": "Every Xₙ is a deterministic multiple of the same random variable X, so the sequence is dependent. Also Xₙ=X/n→0 almost surely for every finite value of X; almost-sure convergence implies convergence in probability. Therefore A and C are true.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "All terms are functions of the same X; for example X₂=X₁/2, so they are not independent."
+        },
+        "B": {
+          "tf": false,
+          "why": "The terms are deterministically linked through the same random variable."
+        },
+        "C": {
+          "tf": true,
+          "why": "X/n tends to zero almost surely, hence in probability."
+        },
+        "D": {
+          "tf": false,
+          "why": "The limit is zero, not one."
+        }
+      },
+      "pno": 114,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p118",
+      "format": "single",
+      "topic": "probability-t1",
+      "stem": "Let X₁,X₂,… be iid Exp(1), X₍ₙ₎=max(X₁,…,Xₙ), and Yₙ=X₍ₙ₎−aₙ. Which choice of aₙ makes {Yₙ} converge in distribution?",
+      "options": [
+        "aₙ=1/log(n)",
+        "aₙ=e^(−n)",
+        "aₙ=1/n",
+        "aₙ=log(n)"
+      ],
+      "answer": "D",
+      "explanation": "For an Exp(1) sample, P(X₍ₙ₎≤x)=(1−e^(−x))ⁿ for x≥0. Set x=log n+y. Then P(X₍ₙ₎−log n≤y)=(1−e^(−y)/n)ⁿ→exp(−e^(−y)), the standard Gumbel CDF. Thus the required centering is aₙ=log n.",
+      "pno": 118,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p123",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "stem": "Ten iid observations are drawn from Uniform(0,1). Find E[X₍₁₀₎], the expected maximum.",
+      "options": [],
+      "answer": "10/11",
+      "explanation": "For a sample of size n from Uniform(0,1), the k-th order statistic has a Beta(k,n−k+1) distribution and mean k/(n+1). For the maximum k=n=10, E[X₍₁₀₎]=10/11.",
+      "pno": 123,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p124",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "stem": "Ten iid observations are drawn from Uniform(0,1). Find Var(X₍₁₀₎), the variance of the maximum.",
+      "options": [],
+      "answer": "0.0069",
+      "explanation": "The maximum X₍ₙ₎ has Beta(n,1) distribution. Its variance is n/[(n+1)²(n+2)]. For n=10 this is 10/(11²×12)=10/1452≈0.006887, which rounds to 0.0069.",
+      "pno": 124,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p125",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "stem": "Ten iid observations are drawn from Exp(1). Find E[X₍₁₎], the expected minimum.",
+      "options": [],
+      "answer": "0.1",
+      "explanation": "The minimum of n independent exponential random variables with rate λ is exponential with rate nλ. Its expectation is 1/(nλ). With n=10 and λ=1, the expected minimum is 1/10=0.1.",
+      "pno": 125,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p126",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "stem": "For an iid sample of size n from Exp(λ), find E[X₍ᵣ₊₁₎−X₍ᵣ₎] for 1≤r<n.",
+      "options": [],
+      "answer": "1/[λ(n−r)]",
+      "explanation": "The spacings of exponential order statistics are independent exponentials. The spacing X₍ᵣ₊₁₎−X₍ᵣ₎ has rate λ(n−r), because n−r observations remain above the r-th order statistic. Its expectation is therefore 1/[λ(n−r)].",
+      "pno": 126,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p127",
+      "format": "multi",
+      "topic": "probability-t1",
+      "stem": "Let X₁,…,Xₙ be iid Exp(λ), with order statistics X₍₁₎≤…≤X₍ₙ₎. Which statements are correct?",
+      "statements": [
+        "X₍ᵣ₎ and X₍ᵣ₊₁₎ are independent.",
+        "X₍ᵣ₎ and X₍ᵣ₊₁₎−X₍ᵣ₎ are independent.",
+        "X₍ᵣ₎−X₍ᵣ₋₁₎ and X₍ₛ₎−X₍ₛ₋₁₎ are independent for distinct valid r,s.",
+        "X₍ᵣ₊₁₎−X₍ᵣ₎~Exp(λ(n−r))."
+      ],
+      "options": [
+        "A only",
+        "A and B only",
+        "B, C and D only",
+        "A, B, C and D"
+      ],
+      "answer": "C",
+      "explanation": "For an exponential sample, the successive order-statistic spacings are independent exponentials with rates nλ,(n−1)λ,…,λ. Therefore adjacent order statistics themselves are not independent, but X₍ᵣ₎ is independent of the next spacing, distinct spacings are independent, and the spacing after rank r has rate λ(n−r). Statements B, C and D are true.",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Adjacent order statistics share the lower observations and are not independent."
+        },
+        "B": {
+          "tf": true,
+          "why": "The memoryless property yields independence of the order statistic and the next spacing."
+        },
+        "C": {
+          "tf": true,
+          "why": "Distinct exponential order-statistic spacings are independent."
+        },
+        "D": {
+          "tf": true,
+          "why": "The next spacing has exponential rate λ(n−r)."
+        }
+      },
+      "pno": 127,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p128",
+      "format": "single",
+      "topic": "probability-t1",
+      "stem": "If X₁,…,Xₙ are iid Uniform(0,1), what is the distribution of the k-th order statistic X₍ₖ₎?",
+      "options": [
+        "Beta(k,n−k+1)",
+        "Beta(2k,n−k+1)",
+        "Beta(k,n−k)",
+        "Beta(n−k+1,k)"
+      ],
+      "answer": "A",
+      "explanation": "The CDF of X₍ₖ₎ is the probability that at least k observations are at most x. Differentiating gives f₍ₖ₎(x)=n!/[(k−1)!(n−k)!] x^(k−1)(1−x)^(n−k), 0<x<1. This is the Beta(k,n−k+1) density.",
+      "pno": 128,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p129",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "stem": "Three iid observations have density f(x)=2x for 0<x<1. Find the probability that their minimum exceeds the population median.",
+      "options": [],
+      "answer": "1/8",
+      "explanation": "The CDF is F(x)=x² on (0,1). The population median m solves F(m)=1/2, so m=1/√2. By independence, P(min(X₁,X₂,X₃)>m)=[P(X>m)]³=[1−F(m)]³=(1/2)³=1/8.",
+      "pno": 129,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p130",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "stem": "For a sample of size 4 from f(x)=2x, 0<x<1, let Y₁≤Y₂≤Y₃≤Y₄ be the order statistics. Find the joint density f_{Y₃,Y₄}(y₃,y₄).",
+      "options": [],
+      "answer": "48 y₃⁵ y₄, 0<y₃≤y₄<1",
+      "explanation": "The joint density of order statistics Y₍ₖ₎ and Y₍ₗ₎ is n!/[(k−1)!(l−k−1)!(n−l)!] times F(yₖ)^(k−1)[F(yₗ)−F(yₖ)]^(l−k−1)[1−F(yₗ)]^(n−l)f(yₖ)f(yₗ). Here n=4,k=3,l=4, F(y)=y² and f(y)=2y. The coefficient is 4!/(2!0!0!)=12, so the density is 12(y₃²)²(2y₃)(2y₄)=48y₃⁵y₄ on 0<y₃≤y₄<1.",
+      "pno": 130,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p131-q9",
+      "format": "single",
+      "topic": "probability-t1",
+      "stem": "For a sample of size 4 from f(x)=2x, 0<x<1, with order statistics Y₁≤Y₂≤Y₃≤Y₄, find f_{Y₃|Y₄}(y₃|y₄).",
+      "options": [
+        "3y₃⁴/y₄⁵",
+        "4y₃⁵/y₄⁶",
+        "6y₃⁵/y₄⁶",
+        "7y₃⁶/y₄⁷"
+      ],
+      "answer": "C",
+      "explanation": "From the joint density on page 130, f_{Y₃,Y₄}(y₃,y₄)=48y₃⁵y₄. The marginal density of Y₄, the maximum, is 8y₄⁷. Dividing joint by marginal gives f_{Y₃|Y₄}(y₃|y₄)=6y₃⁵/y₄⁶ for 0<y₃≤y₄<1.",
+      "pno": 131,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p131-q10",
+      "format": "single",
+      "topic": "probability-t1",
+      "stem": "For a sample of size 4 from f(x)=2x, 0<x<1, with order statistics Y₁≤Y₂≤Y₃≤Y₄, evaluate E[Y₃|Y₄=y₄].",
+      "options": [
+        "7y₄/8",
+        "5y₄/6",
+        "3y₄/4",
+        "6y₄/7"
+      ],
+      "answer": "D",
+      "explanation": "Using f_{Y₃|Y₄}(y₃|y₄)=6y₃⁵/y₄⁶ for 0<y₃≤y₄, integrate y₃ times this density: E[Y₃|Y₄=y₄]=(6/y₄⁶)∫₀^{y₄}y₃⁶dy₃=(6/y₄⁶)(y₄⁷/7)=6y₄/7.",
+      "pno": 131,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]

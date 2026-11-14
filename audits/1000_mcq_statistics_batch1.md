@@ -5,7 +5,7 @@
 
 ## Batch 1 — pages 954–964
 
-Twenty-three source-derived questions were added as supplementary practice, not attributed official PYQs.
+Thirty-seven source-derived questions were added as supplementary practice, not attributed official PYQs.
 
 | PDF page | Module/topic | Result |
 |---:|---|---|
@@ -43,9 +43,15 @@ Thirteen more questions were imported from visually checked pages 967, 971, 973,
 - **Page 1009:** held out because θ>1 is an open parameter restriction; √X_(n) is not always an attained MLE when X_(n)≤1.
 - **Pages 977 and 996:** duplicates of the Uniform(−1,2) law-of-large-numbers question already imported from page 964; not imported again.
 
+## Batch 3 — convergence and order-statistic pages
+
+Fourteen additional questions were imported from pages 109, 111, 114, 118 and 123–131. They cover convergence in distribution, the continuous mapping theorem, dependence and convergence in probability, extreme-value centring for exponential maxima, moments of uniform and exponential order statistics, exponential spacings, Beta order-statistic distributions, and joint/conditional densities for the third and fourth order statistics from f(x)=2x.
+
+No new answer-key correction was required in this batch. Page 111's accepted answer is mathematically correct: positivity alone is insufficient for the continuous mapping theorem; continuity of g at the limiting value is required.
+
 ## Verification and boundaries
 
 - `verify_1000_mcq_batch1.py` checks key numerical identities, pool structure, unique IDs, answer formats and explanations.
-- Imported count: Probability 14, Multivariate 4, Inference 3, Stochastic 2 (23 total).
+- Imported count: Probability 28, Multivariate 4, Inference 3, Stochastic 2 (37 total).
 - No examination/year/session attribution is inferred.
 - The full page-by-page topic classification, duplicate reconciliation against all bank content, and remaining-page question import are still pending. This is only the first batch.
