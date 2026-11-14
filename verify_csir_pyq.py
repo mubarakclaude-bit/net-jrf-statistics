@@ -308,7 +308,6 @@ def main() -> None:
         ("csir-est-q73", 2015, "December", "C"),
         ("csir-est-q82", 2014, "June", "C"),
         ("csir-est-q84", 2013, "December", "C"),
-        ("csir-est-q87", 2013, "December", "B"),
         ("csir-est-q88", 2013, "December", "C"),
         ("csir-est-q89", 2013, "June", "A"),
     ]:
@@ -327,7 +326,7 @@ def main() -> None:
     assert q77["answer"] == "C" and q77["topic"].startswith("regression-t7")
     for qid, truth, year, session in [
         ("csir-samp-q69", "ABC", 2016, "June"),
-        ("csir-samp-q81", "ABC", 2015, "June"),
+        ("csir-samp-q81", "ABCD", 2015, "June"),
     ]:
         q = next(x for x in sampling["items"] if x["id"] == qid)
         assert q["type"] == "practice" and q["format"] == "multi"
@@ -360,6 +359,7 @@ def main() -> None:
     for qid, year, session, answer in [
         ("csir-est-q92", 2012, "December", "C"),
         ("csir-est-q95", 2012, "June", "C"),
+        ("csir-est-q96", 2012, "June", "A"),
     ]:
         q = next(x for x in estimation["items"] if x["id"] == qid)
         assert q["type"] == "practice" and q["format"] == "single"
@@ -390,9 +390,18 @@ def main() -> None:
     q104 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q104")
     assert q104["type"] == "practice" and q104["format"] == "single"
     assert q104["answer"] == "D" and "119" in q104["explanation"] and "120" in q104["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 95
+    assert len(estimation["items"]) == estimation["count"] == 96
     assert len(methods["items"]) == methods["count"] == 11
     assert len(sampling["items"]) == sampling["count"] == 9
+
+    q87 = next(x for x in estimation["items"] if x["id"] == "csir-est-q87")
+    assert q87["type"] == "practice" and q87["format"] == "multi"
+    assert "".join(sorted(k for k, v in q87["verdicts"].items() if v["tf"])) == "BC"
+    q104 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q104")
+    assert q104["answer"] == "D" and "119" in q104["explanation"] and "120" in q104["explanation"]
+    q81 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q81")
+    assert "".join(sorted(k for k, v in q81["verdicts"].items() if v["tf"])) == "ABCD"
+    assert len(estimation["items"]) == estimation["count"] == 96
 
     print(
         f"PASS: {sum(len(x['items']) for x in (estimation, methods, sampling))} CSIR PYQs; "
