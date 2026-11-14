@@ -6,7 +6,7 @@
   "breadcrumb": "Module 9 · R Programming · Data frames, I/O and graphics",
   "engine": "B",
   "engineName": "NET JRF Statistics lesson engine",
-  "version": "1.0",
+  "version": "1.1",
   "status": "review",
   "estMin": 70,
   "objectives": [
@@ -165,7 +165,7 @@
     "note": "Platform mastery settings; not an NTA rule."
   },
   "anchors": [],
-  "provenance": "Catalog rprog-t8: Data frames, data input/output, graphics and plots. Content aligned to base R documentation; no unsupported PYQ anchor is claimed.",
+  "provenance": "Catalog rprog-t8: Data frames, data input/output, graphics and plots. Content aligned to base R documentation; no unsupported PYQ anchor is claimed. Independent audit 2026-11-14 replaced a copied data-frame-subsetting solution in the CSV I/O scene with the requested import/export calls.",
   "scenes": [
     {
       "kind": "foundation",
@@ -421,19 +421,19 @@
       },
       "solution": [
         {
-          "say": "Inspect the dimensions.",
-          "math": "There are 3 rows and 2 columns.",
-          "why": "The id and score vectors each contain three entries."
+          "say": "Import the comma-separated file.",
+          "math": "df <- read.csv('sample.csv')",
+          "why": "read.csv() reads the CSV input into a data frame."
         },
         {
-          "say": "Evaluate the row condition.",
-          "math": "score > 50 gives FALSE, TRUE, TRUE.",
-          "why": "Only the second and third scores exceed 50."
+          "say": "Export the cleaned data frame.",
+          "math": "write.csv(df,'clean.csv',row.names=FALSE)",
+          "why": "write.csv() writes the output file; row.names=FALSE prevents row names from being added as an extra column."
         },
         {
-          "say": "Read the qualifying ids.",
-          "math": "The selected ids are 2 and 3.",
-          "why": "The logical condition selects complete rows two and three."
+          "say": "Keep the two directions distinct.",
+          "math": "read.csv() imports; write.csv() exports.",
+          "why": "The function names and argument order match the requested input and output operations."
         }
       ]
     },
