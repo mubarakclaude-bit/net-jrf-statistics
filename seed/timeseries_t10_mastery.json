@@ -1,366 +1,366 @@
 {
- "moduleId": "timeseries",
- "topicId": "timeseries-t10",
- "source": "mastery",
- "label": "General linear process and Wold decomposition — mastery test (unseen)",
- "count": 20,
- "items": [
-  {
-   "id": "ts-t10-m-01",
-   "format": "single",
-   "topic": "timeseries-t10",
-   "diff": "easy",
-   "stem": "The general linear process is written:",
-   "options": [
-    "yₜ = μ + Σ ψⱼyₜ₋ⱼ",
-    "yₜ = μ + Σ(j≥0) ψⱼεₜ₊ⱼ",
-    "yₜ = μ + Σ(j≥0) ψⱼεₜ₋ⱼ with ψ₀ = 1",
-    "yₜ = μ + ψεₜ"
-   ],
-   "answer": "C",
-   "explanation": "The sum is ONE-SIDED over past and present shocks — option B would use future shocks, which makes the process non-causal and useless for forecasting. Option A is an autoregression in y, not a linear process in the shocks."
-  },
-  {
-   "id": "ts-t10-m-02",
-   "format": "numeric",
-   "topic": "timeseries-t10",
-   "diff": "easy",
-   "stem": "The condition the weights of a general linear process must satisfy is:",
-   "options": [
-    "Σψⱼ = 1",
-    "Σψⱼ² < ∞",
-    "ψⱼ > 0 for all j",
-    "Σψⱼ < ∞ only"
-   ],
-   "answer": "B",
-   "explanation": "Square-summability, because γ₀ = σ²Σψⱼ² and the variance must be finite for stationarity. For an AR(1) the sum is 1/(1 − φ²), finite exactly when |φ| < 1, so the condition IS the stationarity condition in that case.",
-   "check": "A random walk has ψⱼ = 1 for all j, so Σψⱼ² diverges — correctly ruling it out as non-stationary."
-  },
-  {
-   "id": "ts-t10-m-03",
-   "format": "numeric",
-   "topic": "timeseries-t10",
-   "diff": "easy",
-   "stem": "The ψ weights of an AR(1) process with coefficient φ are:",
-   "options": [
-    "ψⱼ = φ/j",
-    "ψⱼ = φ",
-    "ψⱼ = jφ",
-    "ψⱼ = φʲ"
-   ],
-   "answer": "D",
-   "explanation": "Substituting repeatedly into yₜ = φyₜ₋₁ + εₜ gives yₜ = Σφʲεₜ₋ⱼ. Read as an impulse response, a unit shock has effect 1 now, φ next period, φ² after that — geometric decay.",
-   "check": "At φ = 0.7 the weights are 1, 0.7, 0.49, 0.343, so Σψⱼ² = 1/(1 − 0.49) = 1.9608, which is the AR(1) variance."
-  },
-  {
-   "id": "ts-t10-m-04",
-   "format": "numeric",
-   "topic": "timeseries-t10",
-   "diff": "easy",
-   "stem": "The autocovariance at lag k of a general linear process is:",
-   "options": [
-    "σ²ψₖ",
-    "σ²Σⱼ ψⱼ²",
-    "σ²Σⱼ ψⱼψⱼ₊ₖ",
-    "σ²Σⱼ ψⱼ"
-   ],
-   "answer": "C",
-   "explanation": "The inner product of the weight sequence with its shift by k. Option B is the special case k = 0, the variance. Verified to six decimals against σ²φᵏ/(1 − φ²) for an AR(1) at several φ and k.",
-   "check": "At k = 0 the formula must reduce to σ²Σψⱼ², the variance, which it does."
-  },
-  {
-   "id": "ts-t10-m-05",
-   "format": "single",
-   "topic": "timeseries-t10",
-   "diff": "easy",
-   "stem": "The Wold decomposition states that every weakly stationary process can be written as:",
-   "options": [
-    "a finite autoregression",
-    "a deterministic component plus a one-sided infinite moving average of uncorrelated shocks",
-    "a finite moving average",
-    "a sum of independent identically distributed terms"
-   ],
-   "answer": "B",
-   "explanation": "The decomposition is unique, with the deterministic part perfectly predictable from its own infinite past and the second part a general linear process with ψ₀ = 1 and Σψⱼ² < ∞. Option D overstates it: the shocks are uncorrelated, not independent."
-  },
-  {
-   "id": "ts-t10-m-06",
-   "format": "single",
-   "topic": "timeseries-t10",
-   "diff": "easy",
-   "stem": "The ψ weight sequence of a process can be interpreted as:",
-   "options": [
-    "the sequence of forecast errors",
-    "the autocorrelation function",
-    "the spectral density",
-    "the impulse response — the path traced after a single unit shock"
-   ],
-   "answer": "D",
-   "explanation": "A unit shock at time t contributes ψ₀ to yₜ, ψ₁ to yₜ₊₁ and so on, so the weights literally are the response path. For an AR(1) with φ = 0.7 that response is 1, 0.7, 0.49, 0.343 — about 34% of the shock still present three periods later."
-  },
-  {
-   "id": "ts-t10-m-07",
-   "format": "numeric",
-   "topic": "timeseries-t10",
-   "diff": "moderate",
-   "stem": "For an AR(1) with φ = 0.7 and σ² = 1, the variance computed from the weights is:",
-   "options": [
-    "0.7000",
-    "3.3333",
-    "1.9608",
-    "1.4900"
-   ],
-   "answer": "C",
-   "explanation": "γ₀ = Σψⱼ² = Σ(0.7ʲ)² = Σ0.49ʲ = 1/0.51 = 1.960784, confirmed by direct summation over 4,000 terms and matching topic 7.4's σ²/(1 − φ²). Option B is Σψⱼ = 1/(1 − 0.7) = 3.33, the long-run multiplier — a different sum over the same weights.",
-   "check": "The variance must exceed σ² = 1 for any stationary AR process, and 1.96 does."
-  },
-  {
-   "id": "ts-t10-m-08",
-   "format": "numeric",
-   "topic": "timeseries-t10",
-   "diff": "moderate",
-   "stem": "For an AR(1) with φ = 0.8, the cumulative long-run effect of a unit shock is:",
-   "options": [
-    "2.7778",
-    "5.0",
-    "0.8",
-    "25"
-   ],
-   "answer": "B",
-   "explanation": "Σψⱼ = Σ0.8ʲ = 1/(1 − 0.8) = 5. Option A is Σψⱼ² = 1/(1 − 0.64) = 2.7778, the variance; option D is the long-run VARIANCE σ²(Σψⱼ)² = 25. All three are sums over the same weights and must be kept apart.",
-   "check": "Σψⱼ must exceed Σψⱼ² here, since each weight 0.8ʲ is below 1 and squaring shrinks it: 5 against 2.7778 ✓."
-  },
-  {
-   "id": "ts-t10-m-09",
-   "format": "numeric",
-   "topic": "timeseries-t10",
-   "diff": "moderate",
-   "stem": "The ψ weights of an ARMA(1,1) with yₜ − φyₜ₋₁ = εₜ − θεₜ₋₁ are:",
-   "options": [
-    "ψ₀ = 1 and ψⱼ = φʲ − θ",
-    "ψⱼ = φʲ − θʲ",
-    "ψⱼ = φʲθʲ",
-    "ψ₀ = 1 and ψⱼ = φ^(j−1)(φ − θ) for j ≥ 1"
-   ],
-   "answer": "D",
-   "explanation": "From expanding (1 − θB)/(1 − φB) = (1 − θB)(1 + φB + φ²B² + ⋯). The cumulative sum is (1 − θ)/(1 − φ).",
-   "check": "Setting θ = 0 must recover the AR(1) weights φʲ, and ψⱼ = φ^(j−1)(φ) = φʲ ✓."
-  },
-  {
-   "id": "ts-t10-m-10",
-   "format": "numeric",
-   "topic": "timeseries-t10",
-   "diff": "moderate",
-   "stem": "An MA(3) has weights ψ = (1, −0.5, 0.3, −0.1). Its lag-3 autocovariance, with σ² = 1, is:",
-   "options": [
-    "−0.15",
-    "0",
-    "−0.1",
-    "1.35"
-   ],
-   "answer": "C",
-   "explanation": "At lag 3 the only surviving product in Σψⱼψⱼ₊₃ is ψ₀ψ₃ = (1)(−0.1) = −0.1, since ψ₄ onwards are zero. Option D is γ₀ = 1 + 0.25 + 0.09 + 0.01 = 1.35.",
-   "check": "γ₄ must be exactly 0, since shifting a four-term sequence by four leaves no overlap — which is the MA cut-off."
-  },
-  {
-   "id": "ts-t10-m-11",
-   "format": "single",
-   "topic": "timeseries-t10",
-   "diff": "moderate",
-   "stem": "The Wold decomposition requires the shocks εₜ to be:",
-   "options": [
-    "independent and identically distributed",
-    "uncorrelated with mean 0 and constant variance, but not necessarily independent",
-    "independent and normally distributed",
-    "uncorrelated and normally distributed"
-   ],
-   "answer": "B",
-   "explanation": "Only uncorrelatedness is required, which is why a Wold representation captures all the LINEAR dependence and may leave non-linear dependence untouched. Financial returns are the standard case: nearly uncorrelated, so the weights are nearly trivial, yet their squares are strongly autocorrelated."
-  },
-  {
-   "id": "ts-t10-m-12",
-   "format": "multi",
-   "topic": "timeseries-t10",
-   "diff": "moderate",
-   "stem": "Consider the general linear process and Wold's theorem.",
-   "options": [
-    "A, B and C only",
-    "A and C only",
-    "B and D only",
-    "A, B, C and D"
-   ],
-   "answer": "A",
-   "explanation": "A is true — γ₀ = σ²Σψⱼ² requires convergence. B is true: the shift leaves no overlap beyond lag q. C is true, and it is why ARMA families remain needed. D is false — Σψⱼ² is the variance factor and Σψⱼ the multiplier, 2.78 against 5 at φ = 0.8.",
-   "statements": [
-    "Square-summability of the weights is what makes the variance finite.",
-    "The overlap formula makes an MA(q)'s autocovariance cut off after lag q.",
-    "Wold's theorem guarantees the weights exist without constructing them.",
-    "Σψⱼ and Σψⱼ² are the same quantity."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True: γ₀ = σ²Σψⱼ², so the sum must converge. For an AR(1) it is 1/(1 − φ²), finite exactly when |φ| < 1 — square-summability IS stationarity there."
+  "moduleId": "timeseries",
+  "topicId": "timeseries-t10",
+  "source": "mastery",
+  "label": "General linear process and Wold decomposition — mastery test (unseen)",
+  "count": 20,
+  "items": [
+    {
+      "id": "ts-t10-m-01",
+      "format": "single",
+      "topic": "timeseries-t10",
+      "diff": "easy",
+      "stem": "The general linear process is written:",
+      "options": [
+        "yₜ = μ + Σ ψⱼyₜ₋ⱼ",
+        "yₜ = μ + Σ(j≥0) ψⱼεₜ₊ⱼ",
+        "yₜ = μ + Σ(j≥0) ψⱼεₜ₋ⱼ with ψ₀ = 1",
+        "yₜ = μ + ψεₜ"
+      ],
+      "answer": "C",
+      "explanation": "The sum is ONE-SIDED over past and present shocks — option B would use future shocks, which makes the process non-causal and useless for forecasting. Option A is an autoregression in y, not a linear process in the shocks."
     },
-    "B": {
-     "tf": true,
-     "why": "True. Shifting a weight sequence of length q+1 by more than q leaves no overlapping terms, so every product in Σψⱼψⱼ₊ₖ is zero and γₖ = 0 exactly."
+    {
+      "id": "ts-t10-m-02",
+      "format": "numeric",
+      "topic": "timeseries-t10",
+      "diff": "easy",
+      "stem": "The condition the weights of a general linear process must satisfy is:",
+      "options": [
+        "Σψⱼ = 1",
+        "Σψⱼ² < ∞",
+        "ψⱼ > 0 for all j",
+        "Σψⱼ < ∞ only"
+      ],
+      "answer": "B",
+      "explanation": "Square-summability, because γ₀ = σ²Σψⱼ² and the variance must be finite for stationarity. For an AR(1) the sum is 1/(1 − φ²), finite exactly when |φ| < 1, so the condition IS the stationarity condition in that case.",
+      "check": "A random walk has ψⱼ = 1 for all j, so Σψⱼ² diverges — correctly ruling it out as non-stationary."
     },
-    "C": {
-     "tf": true,
-     "why": "True, and it is why finite ARMA models are necessary rather than superseded: an infinite weight sequence cannot be estimated from finite data, so a parsimonious parametric family is needed."
+    {
+      "id": "ts-t10-m-03",
+      "format": "numeric",
+      "topic": "timeseries-t10",
+      "diff": "easy",
+      "stem": "The ψ weights of an AR(1) process with coefficient φ are:",
+      "options": [
+        "ψⱼ = φ/j",
+        "ψⱼ = φ",
+        "ψⱼ = jφ",
+        "ψⱼ = φʲ"
+      ],
+      "answer": "D",
+      "explanation": "Substituting repeatedly into yₜ = φyₜ₋₁ + εₜ gives yₜ = Σφʲεₜ₋ⱼ. Read as an impulse response, a unit shock has effect 1 now, φ next period, φ² after that — geometric decay.",
+      "check": "At φ = 0.7 the weights are 1, 0.7, 0.49, 0.343, so Σψⱼ² = 1/(1 − 0.49) = 1.9608, which is the AR(1) variance."
     },
-    "D": {
-     "tf": false,
-     "why": "False. σ²Σψⱼ² is the variance while Σψⱼ is the cumulative long-run effect of a unit shock. At φ = 0.8 they are 2.78 and 5; at φ = 0.95, 10.26 and 20."
+    {
+      "id": "ts-t10-m-04",
+      "format": "numeric",
+      "topic": "timeseries-t10",
+      "diff": "easy",
+      "stem": "The autocovariance at lag k of a general linear process is:",
+      "options": [
+        "σ²ψₖ",
+        "σ²Σⱼ ψⱼ²",
+        "σ²Σⱼ ψⱼψⱼ₊ₖ",
+        "σ²Σⱼ ψⱼ"
+      ],
+      "answer": "C",
+      "explanation": "The inner product of the weight sequence with its shift by k. Option B is the special case k = 0, the variance. Verified to six decimals against σ²φᵏ/(1 − φ²) for an AR(1) at several φ and k.",
+      "check": "At k = 0 the formula must reduce to σ²Σψⱼ², the variance, which it does."
+    },
+    {
+      "id": "ts-t10-m-05",
+      "format": "single",
+      "topic": "timeseries-t10",
+      "diff": "easy",
+      "stem": "The Wold decomposition states that every weakly stationary process can be written as:",
+      "options": [
+        "a finite autoregression",
+        "a deterministic component plus a one-sided infinite moving average of uncorrelated shocks",
+        "a finite moving average",
+        "a sum of independent identically distributed terms"
+      ],
+      "answer": "B",
+      "explanation": "The decomposition is unique, with the deterministic part perfectly predictable from its own infinite past and the second part a general linear process with ψ₀ = 1 and Σψⱼ² < ∞. Option D overstates it: the shocks are uncorrelated, not independent."
+    },
+    {
+      "id": "ts-t10-m-06",
+      "format": "single",
+      "topic": "timeseries-t10",
+      "diff": "easy",
+      "stem": "The ψ weight sequence of a process can be interpreted as:",
+      "options": [
+        "the sequence of forecast errors",
+        "the autocorrelation function",
+        "the spectral density",
+        "the impulse response — the path traced after a single unit shock"
+      ],
+      "answer": "D",
+      "explanation": "A unit shock at time t contributes ψ₀ to yₜ, ψ₁ to yₜ₊₁ and so on, so the weights literally are the response path. For an AR(1) with φ = 0.7 that response is 1, 0.7, 0.49, 0.343 — about 34% of the shock still present three periods later."
+    },
+    {
+      "id": "ts-t10-m-07",
+      "format": "numeric",
+      "topic": "timeseries-t10",
+      "diff": "moderate",
+      "stem": "For an AR(1) with φ = 0.7 and σ² = 1, the variance computed from the weights is:",
+      "options": [
+        "0.7000",
+        "3.3333",
+        "1.9608",
+        "1.4900"
+      ],
+      "answer": "C",
+      "explanation": "γ₀ = Σψⱼ² = Σ(0.7ʲ)² = Σ0.49ʲ = 1/0.51 = 1.960784, confirmed by direct summation over 4,000 terms and matching topic 7.4's σ²/(1 − φ²). Option B is Σψⱼ = 1/(1 − 0.7) = 3.33, the long-run multiplier — a different sum over the same weights.",
+      "check": "The variance is at least σ² because ψ₀ = 1 contributes σ² and all other squared weights are non-negative; it is strictly greater for φ ≠ 0."
+    },
+    {
+      "id": "ts-t10-m-08",
+      "format": "numeric",
+      "topic": "timeseries-t10",
+      "diff": "moderate",
+      "stem": "For an AR(1) with φ = 0.8, the cumulative long-run effect of a unit shock is:",
+      "options": [
+        "2.7778",
+        "5.0",
+        "0.8",
+        "25"
+      ],
+      "answer": "B",
+      "explanation": "Σψⱼ = Σ0.8ʲ = 1/(1 − 0.8) = 5. Option A is Σψⱼ² = 1/(1 − 0.64) = 2.7778, the variance; option D is the long-run VARIANCE σ²(Σψⱼ)² = 25. All three are sums over the same weights and must be kept apart.",
+      "check": "Σψⱼ must exceed Σψⱼ² here, since each weight 0.8ʲ is below 1 and squaring shrinks it: 5 against 2.7778 ✓."
+    },
+    {
+      "id": "ts-t10-m-09",
+      "format": "numeric",
+      "topic": "timeseries-t10",
+      "diff": "moderate",
+      "stem": "The ψ weights of an ARMA(1,1) with yₜ − φyₜ₋₁ = εₜ − θεₜ₋₁ are:",
+      "options": [
+        "ψ₀ = 1 and ψⱼ = φʲ − θ",
+        "ψⱼ = φʲ − θʲ",
+        "ψⱼ = φʲθʲ",
+        "ψ₀ = 1 and ψⱼ = φ^(j−1)(φ − θ) for j ≥ 1"
+      ],
+      "answer": "D",
+      "explanation": "From expanding (1 − θB)/(1 − φB) = (1 − θB)(1 + φB + φ²B² + ⋯). The cumulative sum is (1 − θ)/(1 − φ).",
+      "check": "Setting θ = 0 must recover the AR(1) weights φʲ, and ψⱼ = φ^(j−1)(φ) = φʲ ✓."
+    },
+    {
+      "id": "ts-t10-m-10",
+      "format": "numeric",
+      "topic": "timeseries-t10",
+      "diff": "moderate",
+      "stem": "An MA(3) has weights ψ = (1, −0.5, 0.3, −0.1). Its lag-3 autocovariance, with σ² = 1, is:",
+      "options": [
+        "−0.15",
+        "0",
+        "−0.1",
+        "1.35"
+      ],
+      "answer": "C",
+      "explanation": "At lag 3 the only surviving product in Σψⱼψⱼ₊₃ is ψ₀ψ₃ = (1)(−0.1) = −0.1, since ψ₄ onwards are zero. Option D is γ₀ = 1 + 0.25 + 0.09 + 0.01 = 1.35.",
+      "check": "γ₄ must be exactly 0, since shifting a four-term sequence by four leaves no overlap — which is the MA cut-off."
+    },
+    {
+      "id": "ts-t10-m-11",
+      "format": "single",
+      "topic": "timeseries-t10",
+      "diff": "moderate",
+      "stem": "The Wold decomposition requires the shocks εₜ to be:",
+      "options": [
+        "independent and identically distributed",
+        "uncorrelated with mean 0 and constant variance, but not necessarily independent",
+        "independent and normally distributed",
+        "uncorrelated and normally distributed"
+      ],
+      "answer": "B",
+      "explanation": "Only uncorrelatedness is required, which is why a Wold representation captures all the LINEAR dependence and may leave non-linear dependence untouched. Financial returns are the standard case: nearly uncorrelated, so the weights are nearly trivial, yet their squares are strongly autocorrelated."
+    },
+    {
+      "id": "ts-t10-m-12",
+      "format": "multi",
+      "topic": "timeseries-t10",
+      "diff": "moderate",
+      "stem": "Consider the general linear process and Wold's theorem.",
+      "options": [
+        "A, B and C only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "A is true — γ₀ = σ²Σψⱼ² requires convergence. B is true: the shift leaves no overlap beyond lag q. C is true, and it is why ARMA families remain needed. D is false — Σψⱼ² is the variance factor and Σψⱼ the multiplier, 2.78 against 5 at φ = 0.8.",
+      "statements": [
+        "Square-summability of the weights is what makes the variance finite.",
+        "The overlap formula makes an MA(q)'s autocovariance cut off after lag q.",
+        "Wold's theorem guarantees the weights exist without constructing them.",
+        "Σψⱼ and Σψⱼ² are the same quantity."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True: γ₀ = σ²Σψⱼ², so the sum must converge. For an AR(1) it is 1/(1 − φ²), finite exactly when |φ| < 1 — square-summability IS stationarity there."
+        },
+        "B": {
+          "tf": true,
+          "why": "True. Shifting a weight sequence of length q+1 by more than q leaves no overlapping terms, so every product in Σψⱼψⱼ₊ₖ is zero and γₖ = 0 exactly."
+        },
+        "C": {
+          "tf": true,
+          "why": "True, and it is why finite ARMA models are necessary rather than superseded: an infinite weight sequence cannot be estimated from finite data, so a parsimonious parametric family is needed."
+        },
+        "D": {
+          "tf": false,
+          "why": "False. σ²Σψⱼ² is the variance while Σψⱼ is the cumulative long-run effect of a unit shock. At φ = 0.8 they are 2.78 and 5; at φ = 0.95, 10.26 and 20."
+        }
+      }
+    },
+    {
+      "id": "ts-t10-m-13",
+      "format": "single",
+      "topic": "timeseries-t10",
+      "diff": "moderate",
+      "stem": "Is a random walk a general linear process?",
+      "options": [
+        "Only after differencing twice",
+        "Yes, with ψⱼ = 1 for all j",
+        "Yes, with ψⱼ = 0 for j ≥ 1",
+        "No — its weights are all 1, so Σψⱼ² diverges"
+      ],
+      "answer": "D",
+      "explanation": "The weights ψⱼ = 1 mean a shock never decays, so the variance σ²Σψⱼ² is infinite and the process is not stationary — topic 7.6's result recovered from the weights. Wold's theorem applies to stationary processes, so it says nothing about this case. Differencing ONCE gives white noise, which is a general linear process."
+    },
+    {
+      "id": "ts-t10-m-14",
+      "format": "numeric",
+      "topic": "timeseries-t10",
+      "diff": "moderate",
+      "stem": "An ARMA(1,1) has φ = 0.5 and θ = 0.5. The process is:",
+      "options": [
+        "an MA(1) with θ = 0.5",
+        "an AR(1) with φ = 0.5",
+        "white noise, since ψⱼ = 0 for all j ≥ 1",
+        "non-stationary"
+      ],
+      "answer": "C",
+      "explanation": "ψⱼ = φ^(j−1)(φ − θ) = φ^(j−1)(0) = 0 for every j ≥ 1, so only ψ₀ = 1 survives. The AR and MA polynomials share the factor (1 − 0.5B), which cancels: (1 − 0.5B)yₜ = (1 − 0.5B)εₜ gives yₜ = εₜ.",
+      "check": "Σψⱼ = 1, consistent with (1 − θ)/(1 − φ) = 0.5/0.5 = 1, and the ACF is flat."
+    },
+    {
+      "id": "ts-t10-m-15",
+      "format": "single",
+      "topic": "timeseries-t10",
+      "diff": "moderate",
+      "stem": "Why is the normalisation ψ₀ = 1 imposed?",
+      "options": [
+        "because it makes the weights sum to 1",
+        "because replacing (ψⱼ, σ) by (cψⱼ, σ/c) leaves every autocovariance unchanged",
+        "because it guarantees stationarity",
+        "because it makes the process Gaussian"
+      ],
+      "answer": "B",
+      "explanation": "Since γₖ = σ²Σψⱼψⱼ₊ₖ, scaling the weights by c and the shock standard deviation by 1/c gives exactly the same autocovariances, so the pair is not identified without a normalisation. This is topic 7.1's non-identifiability in general form, and fixing ψ₀ = 1 also makes ψⱼ the response to a UNIT shock."
+    },
+    {
+      "id": "ts-t10-m-16",
+      "format": "single",
+      "topic": "timeseries-t10",
+      "diff": "moderate",
+      "stem": "A fitted model leaves a flat residual ACF and passes a portmanteau test, yet performs poorly in use. The most likely omission is:",
+      "options": [
+        "too few autoregressive terms",
+        "a trend in the mean",
+        "a seasonal component",
+        "dependence in the second moment, such as volatility clustering"
+      ],
+      "answer": "D",
+      "explanation": "A flat residual ACF establishes that the LINEAR structure is adequate, which is all Wold's theorem concerns — its shocks are uncorrelated, not independent. Volatility clustering leaves returns nearly uncorrelated while their squares are strongly autocorrelated, so the check is the ACF of the SQUARED residuals, and the repair is a conditional variance model such as GARCH."
+    },
+    {
+      "id": "ts-t10-m-17",
+      "format": "multi",
+      "topic": "timeseries-t10",
+      "diff": "hard",
+      "stem": "Consider what the ψ weights determine elsewhere in the theory.",
+      "options": [
+        "A, B and C only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "A is true when Σ|ψⱼ| < ∞ — at φ = 0.8 that gives 5² = 25, matching topic 7.9. B is true: the forecast error variance at horizon k is σ²Σ(j<k)ψⱼ². C is true, and it is how the deterministic component is told apart in the frequency domain. D is false — the ARMA(1,1) response is a single exponential scaled by (φ − θ), the same shape as an AR(1)'s.",
+      "statements": [
+        "When Σ|ψⱼ| < ∞, the long-run variance of the sample mean is σ²(Σψⱼ)².",
+        "The k-step forecast error variance is σ² times the sum of the first k squared weights.",
+        "A deterministic sinusoid appears as a spectral line rather than part of the continuous density.",
+        "An ARMA(1,1) impulse response has a different shape from an AR(1)'s."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True when the weights are absolutely summable, so the long-run variance exists. At φ = 0.8, Σψⱼ = 5 and the long-run variance is 25 — exactly the figure that topic 7.9 computed by a different route."
+        },
+        "B": {
+          "tf": true,
+          "why": "True: σ²Σ(j<k)ψⱼ². At k = 1 that is σ²ψ₀² = σ², the one-step error, and as k grows it rises to σ²Σψⱼ² = γ₀, the process variance."
+        },
+        "C": {
+          "tf": true,
+          "why": "True. The continuous spectral density belongs to the MA(∞) part, while a perfectly predictable periodic component concentrates all its power at one frequency — which is how the two halves of the Wold decomposition are distinguished spectrally."
+        },
+        "D": {
+          "tf": false,
+          "why": "False — the shapes are the same. Beyond ψ₁ each ARMA(1,1) weight is the previous one times φ, so the response is a single exponential scaled by (φ − θ), differing from an AR(1)'s only in its initial size. That similarity is why the two can be hard to distinguish in a short sample."
+        }
+      }
+    },
+    {
+      "id": "ts-t10-m-18",
+      "format": "numeric",
+      "topic": "timeseries-t10",
+      "diff": "hard",
+      "stem": "For an AR(1) with φ = 0.95 and σ² = 1, Σψⱼ² and Σψⱼ are respectively:",
+      "options": [
+        "10.2564 and 10.2564",
+        "20 and 10.2564",
+        "10.2564 and 20",
+        "400 and 20"
+      ],
+      "answer": "C",
+      "explanation": "Σψⱼ² = 1/(1 − 0.9025) = 10.2564 is the variance; Σψⱼ = 1/(1 − 0.95) = 20 is the long-run multiplier. Both diverge as φ approaches 1 but at different rates, being geometric in φ² and in φ respectively. Option D's 400 is the long-run VARIANCE σ²(Σψⱼ)².",
+      "check": "At φ = 0.99 the pair becomes 50.2513 and 100, confirming the different rates."
+    },
+    {
+      "id": "ts-t10-m-19",
+      "format": "single",
+      "topic": "timeseries-t10",
+      "diff": "hard",
+      "stem": "A long-run multiplier is estimated less reliably than a one-step forecast from the same model because:",
+      "options": [
+        "it requires more data to compute",
+        "it depends on the whole tail of the weight sequence, where a finite sample is least informative",
+        "it is not identified at all",
+        "forecasts are always more accurate than structural quantities"
+      ],
+      "answer": "B",
+      "explanation": "The one-step forecast error variance is σ²ψ₀² = σ², using the first weight alone, whereas Σψⱼ sums every weight including those at long lags. Small coefficient differences compound in the tail: φ = 0.7 gives 3.33 and φ = 0.8 gives 5, and near a unit root φ̂ = 0.95 against 0.98 gives 20 against 50. So the quantity should be reported with model uncertainty included."
+    },
+    {
+      "id": "ts-t10-m-20",
+      "format": "single",
+      "topic": "timeseries-t10",
+      "diff": "hard",
+      "stem": "Wold's theorem gives every weakly stationary process a deterministic component plus a purely nondeterministic MA(∞) component. The correct conclusion for modelling practice is:",
+      "options": [
+        "no model is needed, since the form is already known",
+        "only moving-average models should be fitted",
+        "autoregressive models are theoretically invalid",
+        "finite ARMA models are needed as parsimonious families for the weight sequence"
+      ],
+      "answer": "D",
+      "explanation": "The theorem is an existence result: it guarantees the weights exist without producing them, and an infinite sequence cannot be estimated from finite data. A finite ARMA model parameterises the weight sequence compactly — ψⱼ = φʲ for an AR(1), φ^(j−1)(φ−θ) for an ARMA(1,1) — which is what makes an infinite object estimable. So the theorem makes such models necessary rather than redundant."
     }
-   }
-  },
-  {
-   "id": "ts-t10-m-13",
-   "format": "single",
-   "topic": "timeseries-t10",
-   "diff": "moderate",
-   "stem": "Is a random walk a general linear process?",
-   "options": [
-    "Only after differencing twice",
-    "Yes, with ψⱼ = 1 for all j",
-    "Yes, with ψⱼ = 0 for j ≥ 1",
-    "No — its weights are all 1, so Σψⱼ² diverges"
-   ],
-   "answer": "D",
-   "explanation": "The weights ψⱼ = 1 mean a shock never decays, so the variance σ²Σψⱼ² is infinite and the process is not stationary — topic 7.6's result recovered from the weights. Wold's theorem applies to stationary processes, so it says nothing about this case. Differencing ONCE gives white noise, which is a general linear process."
-  },
-  {
-   "id": "ts-t10-m-14",
-   "format": "numeric",
-   "topic": "timeseries-t10",
-   "diff": "moderate",
-   "stem": "An ARMA(1,1) has φ = 0.5 and θ = 0.5. The process is:",
-   "options": [
-    "an MA(1) with θ = 0.5",
-    "an AR(1) with φ = 0.5",
-    "white noise, since ψⱼ = 0 for all j ≥ 1",
-    "non-stationary"
-   ],
-   "answer": "C",
-   "explanation": "ψⱼ = φ^(j−1)(φ − θ) = φ^(j−1)(0) = 0 for every j ≥ 1, so only ψ₀ = 1 survives. The AR and MA polynomials share the factor (1 − 0.5B), which cancels: (1 − 0.5B)yₜ = (1 − 0.5B)εₜ gives yₜ = εₜ.",
-   "check": "Σψⱼ = 1, consistent with (1 − θ)/(1 − φ) = 0.5/0.5 = 1, and the ACF is flat."
-  },
-  {
-   "id": "ts-t10-m-15",
-   "format": "single",
-   "topic": "timeseries-t10",
-   "diff": "moderate",
-   "stem": "Why is the normalisation ψ₀ = 1 imposed?",
-   "options": [
-    "because it makes the weights sum to 1",
-    "because replacing (ψⱼ, σ) by (cψⱼ, σ/c) leaves every autocovariance unchanged",
-    "because it guarantees stationarity",
-    "because it makes the process Gaussian"
-   ],
-   "answer": "B",
-   "explanation": "Since γₖ = σ²Σψⱼψⱼ₊ₖ, scaling the weights by c and the shock standard deviation by 1/c gives exactly the same autocovariances, so the pair is not identified without a normalisation. This is topic 7.1's non-identifiability in general form, and fixing ψ₀ = 1 also makes ψⱼ the response to a UNIT shock."
-  },
-  {
-   "id": "ts-t10-m-16",
-   "format": "single",
-   "topic": "timeseries-t10",
-   "diff": "moderate",
-   "stem": "A fitted model leaves a flat residual ACF and passes a portmanteau test, yet performs poorly in use. The most likely omission is:",
-   "options": [
-    "too few autoregressive terms",
-    "a trend in the mean",
-    "a seasonal component",
-    "dependence in the second moment, such as volatility clustering"
-   ],
-   "answer": "D",
-   "explanation": "A flat residual ACF establishes that the LINEAR structure is adequate, which is all Wold's theorem concerns — its shocks are uncorrelated, not independent. Volatility clustering leaves returns nearly uncorrelated while their squares are strongly autocorrelated, so the check is the ACF of the SQUARED residuals, and the repair is a conditional variance model such as GARCH."
-  },
-  {
-   "id": "ts-t10-m-17",
-   "format": "multi",
-   "topic": "timeseries-t10",
-   "diff": "hard",
-   "stem": "Consider what the ψ weights determine elsewhere in the theory.",
-   "options": [
-    "A, B and C only",
-    "A and C only",
-    "B and D only",
-    "A, B, C and D"
-   ],
-   "answer": "A",
-   "explanation": "A is true — at φ = 0.8 that gives 5² = 25, matching topic 7.9. B is true: the forecast error variance at horizon k is σ²Σ(j<k)ψⱼ². C is true, and it is how the deterministic component is told apart in the frequency domain. D is false — the ARMA(1,1) response is a single exponential scaled by (φ − θ), the same shape as an AR(1)'s.",
-   "statements": [
-    "The long-run variance of the sample mean is σ²(Σψⱼ)².",
-    "The k-step forecast error variance is σ² times the sum of the first k squared weights.",
-    "A deterministic sinusoid appears as a spectral line rather than part of the continuous density.",
-    "An ARMA(1,1) impulse response has a different shape from an AR(1)'s."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True, and it ties this lesson to topic 7.9: at φ = 0.8, Σψⱼ = 5, so the long-run variance is 25 — exactly the figure that topic computed by a different route."
-    },
-    "B": {
-     "tf": true,
-     "why": "True: σ²Σ(j<k)ψⱼ². At k = 1 that is σ²ψ₀² = σ², the one-step error, and as k grows it rises to σ²Σψⱼ² = γ₀, the process variance."
-    },
-    "C": {
-     "tf": true,
-     "why": "True. The continuous spectral density belongs to the MA(∞) part, while a perfectly predictable periodic component concentrates all its power at one frequency — which is how the two halves of the Wold decomposition are distinguished spectrally."
-    },
-    "D": {
-     "tf": false,
-     "why": "False — the shapes are the same. Beyond ψ₁ each ARMA(1,1) weight is the previous one times φ, so the response is a single exponential scaled by (φ − θ), differing from an AR(1)'s only in its initial size. That similarity is why the two can be hard to distinguish in a short sample."
-    }
-   }
-  },
-  {
-   "id": "ts-t10-m-18",
-   "format": "numeric",
-   "topic": "timeseries-t10",
-   "diff": "hard",
-   "stem": "For an AR(1) with φ = 0.95 and σ² = 1, Σψⱼ² and Σψⱼ are respectively:",
-   "options": [
-    "10.2564 and 10.2564",
-    "20 and 10.2564",
-    "10.2564 and 20",
-    "400 and 20"
-   ],
-   "answer": "C",
-   "explanation": "Σψⱼ² = 1/(1 − 0.9025) = 10.2564 is the variance; Σψⱼ = 1/(1 − 0.95) = 20 is the long-run multiplier. Both diverge as φ approaches 1 but at different rates, being geometric in φ² and in φ respectively. Option D's 400 is the long-run VARIANCE σ²(Σψⱼ)².",
-   "check": "At φ = 0.99 the pair becomes 50.2513 and 100, confirming the different rates."
-  },
-  {
-   "id": "ts-t10-m-19",
-   "format": "single",
-   "topic": "timeseries-t10",
-   "diff": "hard",
-   "stem": "A long-run multiplier is estimated less reliably than a one-step forecast from the same model because:",
-   "options": [
-    "it requires more data to compute",
-    "it depends on the whole tail of the weight sequence, where a finite sample is least informative",
-    "it is not identified at all",
-    "forecasts are always more accurate than structural quantities"
-   ],
-   "answer": "B",
-   "explanation": "The one-step forecast error variance is σ²ψ₀² = σ², using the first weight alone, whereas Σψⱼ sums every weight including those at long lags. Small coefficient differences compound in the tail: φ = 0.7 gives 3.33 and φ = 0.8 gives 5, and near a unit root φ̂ = 0.95 against 0.98 gives 20 against 50. So the quantity should be reported with model uncertainty included."
-  },
-  {
-   "id": "ts-t10-m-20",
-   "format": "single",
-   "topic": "timeseries-t10",
-   "diff": "hard",
-   "stem": "Wold's theorem shows every stationary process is an MA(∞). The correct conclusion for modelling practice is:",
-   "options": [
-    "no model is needed, since the form is already known",
-    "only moving-average models should be fitted",
-    "autoregressive models are theoretically invalid",
-    "finite ARMA models are needed as parsimonious families for the weight sequence"
-   ],
-   "answer": "D",
-   "explanation": "The theorem is an existence result: it guarantees the weights exist without producing them, and an infinite sequence cannot be estimated from finite data. A finite ARMA model parameterises the weight sequence compactly — ψⱼ = φʲ for an AR(1), φ^(j−1)(φ−θ) for an ARMA(1,1) — which is what makes an infinite object estimable. So the theorem makes such models necessary rather than redundant."
-  }
- ]
+  ]
 }

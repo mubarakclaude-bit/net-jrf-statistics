@@ -1,361 +1,361 @@
 {
- "moduleId": "timeseries",
- "topicId": "timeseries-t7",
- "source": "mastery",
- "label": "Spectral density and the periodogram — mastery test (unseen)",
- "count": 20,
- "items": [
-  {
-   "id": "ts-t7-m-01",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "easy",
-   "stem": "For estimating the spectral density function of a time series, one can use:",
-   "options": [
-    "the Yule–Walker equations",
-    "the autocorrelation function",
-    "the partial autocorrelation function",
-    "the periodogram"
-   ],
-   "answer": "D",
-   "explanation": "The periodogram is the sample analogue of the spectral density — the squared modulus of the discrete Fourier transform of the data, equivalently the transform of the sample autocovariances. The other three are real tools for other jobs: the ACF describes lag structure, the PACF identifies AR order, and Yule–Walker estimates AR coefficients. This is June 2026 Q7."
-  },
-  {
-   "id": "ts-t7-m-02",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "easy",
-   "stem": "The spectral density function is the Fourier transform of the:",
-   "options": [
-    "sample mean",
-    "partial autocorrelation function",
-    "residuals",
-    "autocovariance function"
-   ],
-   "answer": "D",
-   "explanation": "f(ω) = (1/2π)Σₖ γₖe^(−iωk), and inverting recovers the autocovariances — so the two descriptions carry exactly the same information. Because γₖ = γ₋ₖ the density is real and even, which is why plotting it on [0, π] loses nothing."
-  },
-  {
-   "id": "ts-t7-m-03",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "easy",
-   "stem": "The spectral density of a white noise process is:",
-   "options": [
-    "linear in ω",
-    "peaked at zero",
-    "constant over all frequencies",
-    "zero everywhere"
-   ],
-   "answer": "C",
-   "explanation": "Only γ₀ = σ² is non-zero, so the transform has a single term and f(ω) = σ²/(2π) at every frequency — 0.159155 when σ² = 1. Equal variance at every frequency is where the name 'white' comes from, by analogy with white light."
-  },
-  {
-   "id": "ts-t7-m-04",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "easy",
-   "stem": "∫f(ω)dω over the full range (−π, π) equals:",
-   "options": [
-    "1",
-    "the mean",
-    "0",
-    "γ₀"
-   ],
-   "answer": "D",
-   "explanation": "Putting k = 0 in the inversion formula gives exactly the process variance. So the spectral density decomposes the variance across frequencies, and the area under it is that variance. It equals 1 only when the variance happens to be 1, which is why option A is a trap."
-  },
-  {
-   "id": "ts-t7-m-05",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "easy",
-   "stem": "For an AR(1) with φ = 0.8, the spectral density is largest at:",
-   "options": [
-    "ω = π/2",
-    "low frequencies",
-    "high frequencies",
-    "it is flat"
-   ],
-   "answer": "B",
-   "explanation": "The denominator 1 − 2φcos ω + φ² = 1.64 − 1.6cos ω is smallest at ω = 0, where it is (1 − 0.8)² = 0.04. So f(0) = 3.9789 against f(π) = 0.0491, a ratio of 81. Positive autocorrelation means slow smooth movement, which is low-frequency behaviour."
-  },
-  {
-   "id": "ts-t7-m-06",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "easy",
-   "stem": "Bartlett, Tukey–Hanning and Parzen are names of:",
-   "options": [
-    "ARIMA models",
-    "tests for stationarity",
-    "sampling schemes",
-    "spectral windows"
-   ],
-   "answer": "D",
-   "explanation": "They are the standard weighting schemes for smoothing a periodogram — equivalently lag windows, since weighting neighbouring frequencies corresponds to tapering the sample autocovariances. They differ in how sharply they cut off and therefore in how much they smear genuine peaks."
-  },
-  {
-   "id": "ts-t7-m-07",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "moderate",
-   "stem": "The periodogram as an estimator of the spectral density is:",
-   "options": [
-    "consistent",
-    "asymptotically unbiased but inconsistent",
-    "biased and inconsistent",
-    "unbiased and consistent"
-   ],
-   "answer": "B",
-   "explanation": "At a fixed frequency I(ω) is asymptotically f(ω)·χ²₂/2, so its mean tends to f(ω) but its variance tends to f(ω)², which does not involve n. Verified over 4,000 replications of white noise: the mean ran 0.156 to 0.162 against the true 0.159155 while the standard deviation stayed at 0.156 to 0.162 across n = 64 to 16,384."
-  },
-  {
-   "id": "ts-t7-m-08",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "moderate",
-   "stem": "To obtain a consistent estimator of the spectral density one:",
-   "options": [
-    "differences the series",
-    "increases the sample size only",
-    "smooths the periodogram with a window",
-    "uses the PACF"
-   ],
-   "answer": "C",
-   "explanation": "More data gives ordinates at more frequencies rather than better precision at any one, since each ordinate carries two degrees of freedom whatever n is. Averaging over m neighbouring ordinates reduces the standard deviation as 1/√m — verified as 0.152, 0.070, 0.035 and 0.018 at m = 1, 5, 21 and 81. Consistency requires m → ∞ with m/n → 0."
-  },
-  {
-   "id": "ts-t7-m-09",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "moderate",
-   "stem": "For an MA(1) with θ = 0.7 and σ² = 1 under the convention yₜ = εₜ − θεₜ₋₁, the spectral density is proportional to:",
-   "options": [
-    "1/(1.49 − 1.4cos ω)",
-    "1.49 + 1.4cos ω",
-    "1.49 − 1.4cos ω",
-    "0.49cos ω"
-   ],
-   "answer": "C",
-   "explanation": "|1 − θe^(−iω)|² = 1 + θ² − 2θcos ω = 1.49 − 1.4cos ω, giving 0.09 at ω = 0 and 2.89 at ω = π. Option B is what the PLUS convention yₜ = εₜ + θεₜ₋₁ would give, so the convention must be read from the question; option A has the AR form, with the polynomial in the denominator."
-  },
-  {
-   "id": "ts-t7-m-10",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "moderate",
-   "stem": "The PACF is primarily used to:",
-   "options": [
-    "estimate the spectrum",
-    "identify the order of an AR process",
-    "test stationarity",
-    "estimate the mean"
-   ],
-   "answer": "B",
-   "explanation": "The PACF cuts off after lag p for an AR(p), which is what identifies the order; the ACF cuts off after lag q for an MA(q). Neither estimates a spectrum — that is the periodogram's job, and offering both as distractors is exactly what June 2026's question did."
-  },
-  {
-   "id": "ts-t7-m-11",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "moderate",
-   "stem": "The cumulative periodogram is used to test whether a series is:",
-   "options": [
-    "invertible",
-    "seasonal",
-    "stationary",
-    "white noise"
-   ],
-   "answer": "D",
-   "explanation": "Under white noise the spectral density is flat, so the cumulative sum of periodogram ordinates should rise linearly in frequency; the maximum departure from that line is compared with Kolmogorov–Smirnov-type bounds. It is the frequency-domain counterpart of the Ljung–Box test and is applied to residuals after fitting."
-  },
-  {
-   "id": "ts-t7-m-12",
-   "format": "numeric",
-   "topic": "timeseries-t7",
-   "diff": "moderate",
-   "stem": "For an AR(1) with φ = 0.5 and σ² = 1, f(0) and the total area under the density are:",
-   "options": [
-    "0.1592 and 1.0000",
-    "0.6366 and 1.3333",
-    "3.9789 and 2.7778",
-    "0.6366 and 1.0000"
-   ],
-   "answer": "B",
-   "explanation": "The denominator at ω = 0 is (1 − 0.5)² = 0.25, so f(0) = 1/(2π × 0.25) = 0.6366, and the area must be γ₀ = σ²/(1 − φ²) = 1/0.75 = 1.3333. Option C is the φ = 0.8 case.",
-   "check": "The area check is the standard safeguard: it must equal σ²/(1 − φ²), which is 1.3333 here, confirmed by Simpson integration."
-  },
-  {
-   "id": "ts-t7-m-13",
-   "format": "multi",
-   "topic": "timeseries-t7",
-   "diff": "moderate",
-   "stem": "Consider the periodogram and its properties.",
-   "options": [
-    "A, B and C only",
-    "A and C only",
-    "B and D only",
-    "A, B, C and D"
-   ],
-   "answer": "A",
-   "explanation": "A is true, and it is why the estimator is inconsistent. B is true: the mean tends to f(ω). C is true and is the mechanism. D is false — more data improves resolution, not the precision at any single frequency.",
-   "statements": [
-    "Var[I(ω)] tends to f(ω)², which does not depend on n.",
-    "E[I(ω)] tends to f(ω), so the periodogram is asymptotically unbiased.",
-    "Each periodogram ordinate carries about two degrees of freedom whatever n is.",
-    "Increasing n reduces the variance of the periodogram at a fixed frequency."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True. I(ω) is asymptotically f(ω)·χ²₂/2, whose variance is f(ω)². Verified: the standard deviation stayed near 0.16 for n from 64 to 16,384."
+  "moduleId": "timeseries",
+  "topicId": "timeseries-t7",
+  "source": "mastery",
+  "label": "Spectral density and the periodogram — mastery test (unseen)",
+  "count": 20,
+  "items": [
+    {
+      "id": "ts-t7-m-01",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "easy",
+      "stem": "For estimating the spectral density function of a time series, one can use:",
+      "options": [
+        "the Yule–Walker equations",
+        "the autocorrelation function",
+        "the partial autocorrelation function",
+        "the periodogram"
+      ],
+      "answer": "D",
+      "explanation": "The periodogram is the sample analogue of the spectral density — the squared modulus of the discrete Fourier transform of the data, equivalently the transform of the sample autocovariances. The other three are real tools for other jobs: the ACF describes lag structure, the PACF identifies AR order, and Yule–Walker estimates AR coefficients. This is June 2026 Q7."
     },
-    "B": {
-     "tf": true,
-     "why": "True — the mean tracks the true density, which is why the estimator is unbiased in the limit despite being useless on its own at one frequency."
+    {
+      "id": "ts-t7-m-02",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "easy",
+      "stem": "The spectral density function is the Fourier transform of the:",
+      "options": [
+        "sample mean",
+        "partial autocorrelation function",
+        "residuals",
+        "autocovariance function"
+      ],
+      "answer": "D",
+      "explanation": "f(ω) = (1/2π)Σₖ γₖe^(−iωk), and inverting recovers the autocovariances — so the two descriptions carry exactly the same information. Because γₖ = γ₋ₖ the density is real and even, which is why plotting it on [0, π] loses nothing."
     },
-    "C": {
-     "tf": true,
-     "why": "True. The ordinate is built from a sine and a cosine coefficient at that frequency, and there are only ever two of them however long the series."
+    {
+      "id": "ts-t7-m-03",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "easy",
+      "stem": "The spectral density of a white noise process is:",
+      "options": [
+        "linear in ω",
+        "peaked at zero",
+        "constant over all frequencies",
+        "zero everywhere"
+      ],
+      "answer": "C",
+      "explanation": "Only γ₀ = σ² is non-zero, so the transform has a single term and f(ω) = σ²/(2π) at every frequency — 0.159155 when σ² = 1. Equal variance at every frequency is where the name 'white' comes from, by analogy with white light."
     },
-    "D": {
-     "tf": false,
-     "why": "False, and it is the heart of the matter. Doubling n halves the spacing between Fourier frequencies, giving more ordinates rather than better ones. Smoothing is what converts that extra resolution into precision."
+    {
+      "id": "ts-t7-m-04",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "easy",
+      "stem": "∫f(ω)dω over the full range (−π, π) equals:",
+      "options": [
+        "1",
+        "the mean",
+        "0",
+        "γ₀"
+      ],
+      "answer": "D",
+      "explanation": "Putting k = 0 in the inversion formula gives exactly the process variance. So the spectral density decomposes the variance across frequencies, and the area under it is that variance. It equals 1 only when the variance happens to be 1, which is why option A is a trap."
+    },
+    {
+      "id": "ts-t7-m-05",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "easy",
+      "stem": "For an AR(1) with φ = 0.8, the spectral density is largest at:",
+      "options": [
+        "ω = π/2",
+        "low frequencies",
+        "high frequencies",
+        "it is flat"
+      ],
+      "answer": "B",
+      "explanation": "The denominator 1 − 2φcos ω + φ² = 1.64 − 1.6cos ω is smallest at ω = 0, where it is (1 − 0.8)² = 0.04. So f(0) = 3.9789 against f(π) = 0.0491, a ratio of 81. Positive autocorrelation means slow smooth movement, which is low-frequency behaviour."
+    },
+    {
+      "id": "ts-t7-m-06",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "easy",
+      "stem": "Bartlett, Tukey–Hanning and Parzen are names of:",
+      "options": [
+        "ARIMA models",
+        "tests for stationarity",
+        "sampling schemes",
+        "spectral windows"
+      ],
+      "answer": "D",
+      "explanation": "They are the standard weighting schemes for smoothing a periodogram — equivalently lag windows, since weighting neighbouring frequencies corresponds to tapering the sample autocovariances. They differ in how sharply they cut off and therefore in how much they smear genuine peaks."
+    },
+    {
+      "id": "ts-t7-m-07",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "moderate",
+      "stem": "The periodogram as an estimator of the spectral density is:",
+      "options": [
+        "consistent",
+        "asymptotically unbiased but inconsistent",
+        "biased and inconsistent",
+        "unbiased and consistent"
+      ],
+      "answer": "B",
+      "explanation": "At an interior Fourier frequency I(ω) is asymptotically f(ω)·χ²₂/2, so its mean tends to f(ω) but its variance tends to f(ω)², which does not involve n. At zero and Nyquist the limiting law has one degree of freedom. Verified over 4,000 replications of white noise at an interior frequency: the mean ran 0.156 to 0.162 against the true 0.159155 while the standard deviation stayed near 0.159 across n = 64 to 16,384."
+    },
+    {
+      "id": "ts-t7-m-08",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "moderate",
+      "stem": "To obtain a consistent estimator of the spectral density one:",
+      "options": [
+        "differences the series",
+        "increases the sample size only",
+        "smooths the periodogram with a window",
+        "uses the PACF"
+      ],
+      "answer": "C",
+      "explanation": "At an interior frequency, more data gives ordinates at more frequencies rather than better precision at any one, since each ordinate carries two degrees of freedom whatever n is. Zero and Nyquist are special one-degree-of-freedom endpoints. Averaging over m neighbouring ordinates reduces the standard deviation as 1/√m; consistency requires m → ∞ with m/n → 0."
+    },
+    {
+      "id": "ts-t7-m-09",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "moderate",
+      "stem": "For an MA(1) with θ = 0.7 and σ² = 1 under the convention yₜ = εₜ − θεₜ₋₁, the spectral density is proportional to:",
+      "options": [
+        "1/(1.49 − 1.4cos ω)",
+        "1.49 + 1.4cos ω",
+        "1.49 − 1.4cos ω",
+        "0.49cos ω"
+      ],
+      "answer": "C",
+      "explanation": "|1 − θe^(−iω)|² = 1 + θ² − 2θcos ω = 1.49 − 1.4cos ω, giving 0.09 at ω = 0 and 2.89 at ω = π. Option B is what the PLUS convention yₜ = εₜ + θεₜ₋₁ would give, so the convention must be read from the question; option A has the AR form, with the polynomial in the denominator."
+    },
+    {
+      "id": "ts-t7-m-10",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "moderate",
+      "stem": "The PACF is primarily used to:",
+      "options": [
+        "estimate the spectrum",
+        "identify the order of an AR process",
+        "test stationarity",
+        "estimate the mean"
+      ],
+      "answer": "B",
+      "explanation": "The PACF cuts off after lag p for an AR(p), which is what identifies the order; the ACF cuts off after lag q for an MA(q). The raw ACF is not itself a spectral density, but its Fourier transform and lag-window smoothings of sample autocovariances are standard spectral estimators. The periodogram is the direct unsmoothed estimator, which is what June 2026's question targeted."
+    },
+    {
+      "id": "ts-t7-m-11",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "moderate",
+      "stem": "The cumulative periodogram is used to test whether a series is:",
+      "options": [
+        "invertible",
+        "seasonal",
+        "stationary",
+        "white noise"
+      ],
+      "answer": "D",
+      "explanation": "Under white noise the spectral density is flat, so the cumulative sum of periodogram ordinates should rise linearly in frequency; the maximum departure from that line is compared with Kolmogorov–Smirnov-type bounds. It is the frequency-domain counterpart of the Ljung–Box test and is applied to residuals after fitting."
+    },
+    {
+      "id": "ts-t7-m-12",
+      "format": "numeric",
+      "topic": "timeseries-t7",
+      "diff": "moderate",
+      "stem": "For an AR(1) with φ = 0.5 and σ² = 1, f(0) and the total area under the density are:",
+      "options": [
+        "0.1592 and 1.0000",
+        "0.6366 and 1.3333",
+        "3.9789 and 2.7778",
+        "0.6366 and 1.0000"
+      ],
+      "answer": "B",
+      "explanation": "The denominator at ω = 0 is (1 − 0.5)² = 0.25, so f(0) = 1/(2π × 0.25) = 0.6366, and the area must be γ₀ = σ²/(1 − φ²) = 1/0.75 = 1.3333. Option C is the φ = 0.8 case.",
+      "check": "The area check is the standard safeguard: it must equal σ²/(1 − φ²), which is 1.3333 here, confirmed by Simpson integration."
+    },
+    {
+      "id": "ts-t7-m-13",
+      "format": "multi",
+      "topic": "timeseries-t7",
+      "diff": "moderate",
+      "stem": "Consider the periodogram and its properties.",
+      "options": [
+        "A, B and C only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "A is true, and it is why the estimator is inconsistent. B is true: the mean tends to f(ω). C is true and is the mechanism. D is false — more data improves resolution, not the precision at any single frequency.",
+      "statements": [
+        "Var[I(ω)] tends to f(ω)², which does not depend on n.",
+        "E[I(ω)] tends to f(ω), so the periodogram is asymptotically unbiased.",
+        "At interior Fourier frequencies, each periodogram ordinate carries about two degrees of freedom asymptotically; zero and Nyquist are special.",
+        "Increasing n reduces the variance of the periodogram at a fixed frequency."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True for interior Fourier frequencies. I(ω) is asymptotically f(ω)·χ²₂/2, whose variance is f(ω)². At zero and Nyquist the limiting law has one degree of freedom."
+        },
+        "B": {
+          "tf": true,
+          "why": "True — the mean tracks the true density, which is why the estimator is unbiased in the limit despite being useless on its own at one frequency."
+        },
+        "C": {
+          "tf": true,
+          "why": "True. The ordinate is built from a sine and a cosine coefficient at that frequency, and there are only ever two of them however long the series."
+        },
+        "D": {
+          "tf": false,
+          "why": "False, and it is the heart of the matter. Doubling n halves the spacing between Fourier frequencies, giving more ordinates rather than better ones. Smoothing is what converts that extra resolution into precision."
+        }
+      }
+    },
+    {
+      "id": "ts-t7-m-14",
+      "format": "numeric",
+      "topic": "timeseries-t7",
+      "diff": "moderate",
+      "stem": "A monthly series has an annual cycle. Its spectral density peaks at approximately:",
+      "options": [
+        "ω = 0",
+        "ω = 12",
+        "ω = 0.524",
+        "ω = 3.142"
+      ],
+      "answer": "C",
+      "explanation": "A cycle of period p observations corresponds to ω = 2π/p, so an annual cycle in monthly data gives 2π/12 = π/6 ≈ 0.5236 radians per month. Option D is ω = π, the highest representable frequency, which corresponds to a period of 2 observations.",
+      "check": "Frequencies lie in [0, π], so any answer above π is impossible — which rules out option B at once."
+    },
+    {
+      "id": "ts-t7-m-15",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "moderate",
+      "stem": "An AR(1) with φ = −0.6 concentrates its variance at:",
+      "options": [
+        "all frequencies equally",
+        "low frequencies, near ω = 0",
+        "ω = π/2",
+        "high frequencies, near ω = π"
+      ],
+      "answer": "D",
+      "explanation": "With φ negative the denominator 1 − 2φcos ω + φ² becomes 1.36 + 1.2cos ω, which is smallest at ω = π where cos ω = −1, giving 0.16. A negative coefficient makes the series tend to reverse sign each period, which is rapid alternation and therefore high-frequency."
+    },
+    {
+      "id": "ts-t7-m-16",
+      "format": "numeric",
+      "topic": "timeseries-t7",
+      "diff": "moderate",
+      "stem": "A smoothed spectral estimate's standard deviation falls as 1/√m in the band width m. To halve it, m must be multiplied by:",
+      "options": [
+        "2",
+        "4",
+        "√2",
+        "8"
+      ],
+      "answer": "B",
+      "explanation": "Halving a quantity proportional to 1/√m needs √m to double, so m must quadruple. The verification figures agree: the standard deviation fell from 0.152 at m = 1 to 0.070 at m = 5, slightly better than halved with m a little above 4.",
+      "check": "Useful smoothing bands are therefore wide, which is precisely why the bias they introduce has to be taken seriously."
+    },
+    {
+      "id": "ts-t7-m-17",
+      "format": "multi",
+      "topic": "timeseries-t7",
+      "diff": "hard",
+      "stem": "Consider the bias–variance trade-off in smoothing a periodogram.",
+      "options": [
+        "A, B and C only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "A is true, verified across m = 1 to 81. B is true: bias depends on the curvature of the true density. C is true and is the formal consistency requirement. D is false — selecting for smoothness selects for a wide window and therefore for maximum bias.",
+      "statements": [
+        "Variance falls roughly as 1/m in the band width.",
+        "Bias grows with the window width and with the curvature of the true density.",
+        "Consistency requires m → ∞ and m/n → 0.",
+        "Choosing the window width by how smooth the estimate looks is a sound procedure."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True. The standard deviation went 0.152, 0.070, 0.035, 0.018 at m = 1, 5, 21, 81 — tracking 1/√m closely."
+        },
+        "B": {
+          "tf": true,
+          "why": "True, which is why a flat spectrum suffers no bias at any width while a sharp peak suffers a great deal. The second derivative of a constant is zero."
+        },
+        "C": {
+          "tf": true,
+          "why": "True. The first condition kills the variance and the second kills the bias; both are needed, so no fixed band works for every sample size."
+        },
+        "D": {
+          "tf": false,
+          "why": "False. Smoothness is controlled by the window width, not by the data — any spectrum looks smooth with a wide enough band. Selecting for appearance therefore selects for maximum bias. The sound procedure is to examine several widths and keep features that persist."
+        }
+      }
+    },
+    {
+      "id": "ts-t7-m-18",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "hard",
+      "stem": "Why does the periodogram fail to become more precise as the sample grows?",
+      "options": [
+        "the Fourier transform loses information",
+        "the autocovariances are estimated with bias",
+        "each ordinate is built from two coefficients — a sine and a cosine — however long the series",
+        "the series must be stationary"
+      ],
+      "answer": "C",
+      "explanation": "At each interior Fourier frequency there are two sample quantities available, so the ordinate behaves like a scaled χ²₂ with two degrees of freedom whatever n is. At zero and Nyquist only one real coefficient is present. Doubling n halves the spacing between interior frequencies, giving more ordinates rather than better ones — extra resolution rather than extra precision. Smoothing is what converts the one into the other."
+    },
+    {
+      "id": "ts-t7-m-19",
+      "format": "numeric",
+      "topic": "timeseries-t7",
+      "diff": "hard",
+      "stem": "For an MA(1) with θ = 0.7 and σ² = 1 under the minus convention, the area under the spectral density over (−π, π) is:",
+      "options": [
+        "2.89",
+        "1.00",
+        "0.09",
+        "1.49"
+      ],
+      "answer": "D",
+      "explanation": "The density is (1.49 − 1.4cos ω)/(2π), and ∫cos ω dω over a full period is 0, so only the constant survives: (1/2π)(1.49)(2π) = 1.49. That equals γ₀ = σ²(1 + θ²) = 1.49 as it must. Options C and A are f(0) and f(π) up to the 2π factor.",
+      "check": "Confirmed by Simpson integration as 1.4900. This area check is the quickest way to catch a lost factor of 2π."
+    },
+    {
+      "id": "ts-t7-m-20",
+      "format": "single",
+      "topic": "timeseries-t7",
+      "diff": "hard",
+      "stem": "A sample ACF shows values near 0.08 at lags 7, 14 and 21, each inside the ±2/√n band, and the analyst concludes there is no weekly cycle. The best objection is:",
+      "options": [
+        "the confidence band is computed wrongly",
+        "a cycle spreads its evidence across every multiple of lag 7, so lag-by-lag tests have little power; the spectrum pools it at one frequency",
+        "the ACF cannot detect cycles at all",
+        "more data would make each autocorrelation significant"
+      ],
+      "answer": "B",
+      "explanation": "Periodic structure distributes its signal across all harmonics of the period, so each individual autocorrelation carries only a fraction of it and falls inside the sampling band. The spectral density gathers those contributions at the single frequency 2π/7. The caveat is that one tall periodogram ordinate is not evidence either, since its standard deviation is about as large as the quantity it estimates — the peak counts only once it survives smoothing."
     }
-   }
-  },
-  {
-   "id": "ts-t7-m-14",
-   "format": "numeric",
-   "topic": "timeseries-t7",
-   "diff": "moderate",
-   "stem": "A monthly series has an annual cycle. Its spectral density peaks at approximately:",
-   "options": [
-    "ω = 0",
-    "ω = 12",
-    "ω = 0.524",
-    "ω = 3.142"
-   ],
-   "answer": "C",
-   "explanation": "A cycle of period p observations corresponds to ω = 2π/p, so an annual cycle in monthly data gives 2π/12 = π/6 ≈ 0.5236 radians per month. Option D is ω = π, the highest representable frequency, which corresponds to a period of 2 observations.",
-   "check": "Frequencies lie in [0, π], so any answer above π is impossible — which rules out option B at once."
-  },
-  {
-   "id": "ts-t7-m-15",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "moderate",
-   "stem": "An AR(1) with φ = −0.6 concentrates its variance at:",
-   "options": [
-    "all frequencies equally",
-    "low frequencies, near ω = 0",
-    "ω = π/2",
-    "high frequencies, near ω = π"
-   ],
-   "answer": "D",
-   "explanation": "With φ negative the denominator 1 − 2φcos ω + φ² becomes 1.36 + 1.2cos ω, which is smallest at ω = π where cos ω = −1, giving 0.16. A negative coefficient makes the series tend to reverse sign each period, which is rapid alternation and therefore high-frequency."
-  },
-  {
-   "id": "ts-t7-m-16",
-   "format": "numeric",
-   "topic": "timeseries-t7",
-   "diff": "moderate",
-   "stem": "A smoothed spectral estimate's standard deviation falls as 1/√m in the band width m. To halve it, m must be multiplied by:",
-   "options": [
-    "2",
-    "4",
-    "√2",
-    "8"
-   ],
-   "answer": "B",
-   "explanation": "Halving a quantity proportional to 1/√m needs √m to double, so m must quadruple. The verification figures agree: the standard deviation fell from 0.152 at m = 1 to 0.070 at m = 5, slightly better than halved with m a little above 4.",
-   "check": "Useful smoothing bands are therefore wide, which is precisely why the bias they introduce has to be taken seriously."
-  },
-  {
-   "id": "ts-t7-m-17",
-   "format": "multi",
-   "topic": "timeseries-t7",
-   "diff": "hard",
-   "stem": "Consider the bias–variance trade-off in smoothing a periodogram.",
-   "options": [
-    "A, B and C only",
-    "A and C only",
-    "B and D only",
-    "A, B, C and D"
-   ],
-   "answer": "A",
-   "explanation": "A is true, verified across m = 1 to 81. B is true: bias depends on the curvature of the true density. C is true and is the formal consistency requirement. D is false — selecting for smoothness selects for a wide window and therefore for maximum bias.",
-   "statements": [
-    "Variance falls roughly as 1/m in the band width.",
-    "Bias grows with the window width and with the curvature of the true density.",
-    "Consistency requires m → ∞ and m/n → 0.",
-    "Choosing the window width by how smooth the estimate looks is a sound procedure."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True. The standard deviation went 0.152, 0.070, 0.035, 0.018 at m = 1, 5, 21, 81 — tracking 1/√m closely."
-    },
-    "B": {
-     "tf": true,
-     "why": "True, which is why a flat spectrum suffers no bias at any width while a sharp peak suffers a great deal. The second derivative of a constant is zero."
-    },
-    "C": {
-     "tf": true,
-     "why": "True. The first condition kills the variance and the second kills the bias; both are needed, so no fixed band works for every sample size."
-    },
-    "D": {
-     "tf": false,
-     "why": "False. Smoothness is controlled by the window width, not by the data — any spectrum looks smooth with a wide enough band. Selecting for appearance therefore selects for maximum bias. The sound procedure is to examine several widths and keep features that persist."
-    }
-   }
-  },
-  {
-   "id": "ts-t7-m-18",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "hard",
-   "stem": "Why does the periodogram fail to become more precise as the sample grows?",
-   "options": [
-    "the Fourier transform loses information",
-    "the autocovariances are estimated with bias",
-    "each ordinate is built from two coefficients — a sine and a cosine — however long the series",
-    "the series must be stationary"
-   ],
-   "answer": "C",
-   "explanation": "At each Fourier frequency there are only ever two sample quantities available, so the ordinate behaves like a scaled χ²₂ with two degrees of freedom whatever n is. Doubling n halves the spacing between frequencies, giving more ordinates rather than better ones — extra resolution rather than extra precision. Smoothing is what converts the one into the other."
-  },
-  {
-   "id": "ts-t7-m-19",
-   "format": "numeric",
-   "topic": "timeseries-t7",
-   "diff": "hard",
-   "stem": "For an MA(1) with θ = 0.7 and σ² = 1 under the minus convention, the area under the spectral density over (−π, π) is:",
-   "options": [
-    "2.89",
-    "1.00",
-    "0.09",
-    "1.49"
-   ],
-   "answer": "D",
-   "explanation": "The density is (1.49 − 1.4cos ω)/(2π), and ∫cos ω dω over a full period is 0, so only the constant survives: (1/2π)(1.49)(2π) = 1.49. That equals γ₀ = σ²(1 + θ²) = 1.49 as it must. Options C and A are f(0) and f(π) up to the 2π factor.",
-   "check": "Confirmed by Simpson integration as 1.4900. This area check is the quickest way to catch a lost factor of 2π."
-  },
-  {
-   "id": "ts-t7-m-20",
-   "format": "single",
-   "topic": "timeseries-t7",
-   "diff": "hard",
-   "stem": "A sample ACF shows values near 0.08 at lags 7, 14 and 21, each inside the ±2/√n band, and the analyst concludes there is no weekly cycle. The best objection is:",
-   "options": [
-    "the confidence band is computed wrongly",
-    "a cycle spreads its evidence across every multiple of lag 7, so lag-by-lag tests have little power; the spectrum pools it at one frequency",
-    "the ACF cannot detect cycles at all",
-    "more data would make each autocorrelation significant"
-   ],
-   "answer": "B",
-   "explanation": "Periodic structure distributes its signal across all harmonics of the period, so each individual autocorrelation carries only a fraction of it and falls inside the sampling band. The spectral density gathers those contributions at the single frequency 2π/7. The caveat is that one tall periodogram ordinate is not evidence either, since its standard deviation is about as large as the quantity it estimates — the peak counts only once it survives smoothing."
-  }
- ]
+  ]
 }

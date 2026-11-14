@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+"""Single CI entry point for the focused Paper 2 mathematical audit gates."""
+from verify_inference_mastery_gate import main as inference_main
+from verify_inference_remaining_precision import main as inference_precision_main
+from verify_timeseries_precision import main as timeseries_precision_main
+from verify_timeseries_identification import main as timeseries_identification_main
+from verify_timeseries_variance import main as timeseries_variance_main
+from verify_unit_root_acf_precision import main as unit_root_main
+from verify_timeseries_spectrum import main as spectrum_main
+from verify_timeseries_ergodicity import main as ergodicity_main
+from verify_timeseries_wold_forecast import main as wold_forecast_main
+from verify_regression_assumption_precision import main as regression_assumption_main
+from verify_sampling_murthy_variance import main as murthy_variance_main
+
+def main():
+    inference_main()
+    inference_precision_main()
+    timeseries_precision_main()
+    timeseries_identification_main()
+    timeseries_variance_main()
+    unit_root_main()
+    spectrum_main()
+    ergodicity_main()
+    wold_forecast_main()
+    regression_assumption_main()
+    murthy_variance_main()
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,442 @@
+# Paper 2 mathematical integrity audit — 2026-11-14
+
+## Status and coverage
+
+- Repository: `mubarakclaude-bit/net-jrf-statistics`
+- Base: `main` at task start: `678e7a19e417da26f03d42c2fb2cf50c5df0e158`
+- Branch: `audit/math-integrity-2026-11-14`
+- Last completed pre-reconciliation head: `77d8ece1af8408c48b53c3f3a251cd5227ebc5f4`.
+- Workflow [43607857603](https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43607857603) completed successfully on that head: validation, acceptance (six scenarios), and browser (build, strict app test, every-lesson clicktest, hosted-storage conformance, and feature browser tests). The manual full-inventory step is skipped by workflow design.
+- The subsequent selective PR95/PR96 reconciliation and additional audit notes are recorded below; the new head requires its own CI run before release sign-off.
+- Inventory: **129** files matching `seed/lesson_*.json`
+- First-pass screening: **129/129 lesson files opened and screened** for learner-facing worked/guided numerical examples.
+- This is **not** a claim that all 129 lessons have been mathematically verified. Theory/revision scenes, every displayed formula/table, assumptions and all edge cases still require a deeper second pass.
+
+Module inventory screened:
+
+| Module | Lesson files |
+|---|---:|
+| Probability | 13 |
+| Statistical Inference | 16 |
+| Regression | 15 |
+| Stochastic Processes | 9 |
+| Time Series | 11 |
+| Mathematics | 16 |
+| MLE | 1 |
+| Multivariate Analysis | 9 |
+| Sampling Theory | 9 |
+| Design of Experiments | 8 |
+| Official Statistics | 5 |
+| Nonparametric Methods | 8 |
+| R Programming | 9 |
+| **Total** | **129** |
+
+## Confirmed findings
+
+Severity counts: **4 critical, 9 major, 1 minor**. Fourteen confirmed learner-facing issues were found across ten lesson files.
+
+### MA-001 — CRD conclusion contradicts its calculation
+
+- File: `seed/lesson_design_t1.json`; scene: `s4`
+- Severity: **Critical**
+- Data: A=(8,9,6,7), B=(10,12,9,11), C=(7,8,5,6); G=98, N=12, Σy²=850.
+- CF=98²/12=2401/3; SS_Total=149/3; SS_T=104/3; SS_E=15.
+- df=(2,9); MS_T=52/3; MS_E=5/3.
+- Correct F=(52/3)/(5/3)=**10.4**.
+- Before: conclusion said F=147.0. After: conclusion says F=10.4 and avoids making a rejection claim without a critical value or p-value.
+
+### MA-002 — RBD table, totals and conclusion conflict
+
+- File: `seed/lesson_design_t1.json`; scene: `s8`
+- Severity: **Critical**
+- Problem-statement rows: (9,9,9,13), (9,11,10,14), (7,9,8,12).
+- Correct treatment totals=(25,29,27,39); block totals=(40,44,36); G=120; Σy²=1248; CF=1200.
+- SS_Total=48; SS_T=116/3; SS_Block=8; SS_Error=4/3.
+- df=(3,2,6); MS_T=116/9; MS_E=2/9; treatment F=**58** with df (3,6).
+- Before: displayed Block 1=(8,10,9,13), treatment totals=(24,30,27,39), and conclusion F=20.4, while the calculation used the problem-statement data and the check said 58.
+- After: table and totals match the stated data; conclusion and check consistently report F=58.
+
+### MA-003 — Population median confused with expected sample median
+
+- File: `seed/lesson_pr1.json`; scene: `s8`
+- Severity: **Major**
+- For an exponential population with mean θ=7, the population median is 7 ln 2≈4.852.
+- The sample median for n=9 is X_(5), and E[X_(5)]=θ(H₉−H₄)=**1879/360≈5.219444**.
+- Before: the answer implied that the expected sample median was about 4.85.
+- After: population median and expected sample median are distinguished, and the order-statistic expectation is shown.
+
+### MA-004 — Incomplete normal likelihood-ratio algebra
+
+- File: `seed/lesson_t9.json`; scene: `s4`
+- Severity: **Minor**
+- Correct identity: Σ[(xᵢ−50)²−(xᵢ−55)²]=10Σxᵢ−525n.
+- Before: the intermediate line contained the unfinished expression `10Σxᵢ − 25n(50+55)/…`.
+- After: the complete identity `10Σxᵢ − 525n = 2(55−50)Σxᵢ − n(55²−50²)` is displayed.
+
+### MA-005 — Alternating-chain answer describes a different chain
+
+- File: `seed/lesson_stochastic_t4.json`; scene: `s4`
+- Severity: **Critical**
+- Problem: P=[[0,1],[1,0]]. States 1 and 2 form one closed communicating class; each state returns only at even times, so both are recurrent with period 2.
+- Before: answer described an unrelated operating/shutdown chain and called the operating states transient.
+- After: answer identifies the two-state class as closed, recurrent and period 2.
+
+### MA-006 — Multiple-closed-classes answer and hints are mismatched
+
+- File: `seed/lesson_stochastic_t4.json`; scene: `s5`
+- Severity: **Critical**
+- Problem: two disjoint closed communicating classes C₁,C₂ and an outside state that can enter either but cannot be reached from them.
+- Correct result: the outside state is transient; C₁ and C₂ are separate recurrent classes; stationary distributions can be mixed across the closed classes, so uniqueness is not guaranteed.
+- Before: answer repeated the preceding two-state period-2 conclusion; hints discussed return-time gcds.
+- After: answer and hints address the transient outside state and the two distinct closed recurrent classes.
+
+### MA-007 — Incorrect MA(1) coefficient roots
+
+- File: `seed/lesson_ts2.json`; scene: `s10`
+- Severity: **Major**
+- For ρ₁=−0.49, solve 0.49θ²−θ+0.49=0. The discriminant is 0.0396; roots are **0.8173495** and **1.2234668**.
+- The invertible root is θ≈**0.81735**.
+- Before: roots were reported as 0.8571 and 1.1667, with invertible coefficient 0.86.
+- After: both roots and the invertible coefficient are corrected.
+
+### MA-008 — Power-series interval omits convergent endpoints
+
+- File: `seed/lesson_ma4.json`; scene: `s4`
+- Severity: **Major**
+- At x=4 and x=6, Σ1/((n+1)(n+2)) telescopes to 1, so both endpoints converge.
+- The full interval is **[4,6]**, not (4,6).
+- Before: one step called (4,6) the answer/option while the final step correctly included both endpoints.
+- After: the lesson distinguishes the open interior from the full interval and states [4,6]. The mastery explanation also now states that endpoint convergence may be absolute or conditional; sign cancellation is not required in every case.
+
+### MA-014 — Final MA(1) invertible-root value remained stale
+
+- File: `seed/lesson_ts2.json`; scene: `s10`, part (f)
+- Severity: **Major**
+- The displayed quadratic gives roots 0.8173495 and 1.2234668; invertibility selects 0.81735.
+- Before: despite the corrected roots in the preceding line, the final learner-facing conclusion still said `invertible ⟹ θ ≈ 0.857`.
+- After: the final line now says `invertible ⟹ θ ≈ 0.81735`; the dedicated verifier asserts the exact final value and rejects any remaining `0.857` text.
+
+### MA-009 — R missing-value steps use a different vector
+
+- File: `seed/lesson_rprog_t6.json`; scene: `s6`
+- Severity: **Major**
+- Prompt vector: c(NA,4,NA,8,10); observed values are 4,8,10.
+- Before: solution used 2,6,10 and calculated their mean.
+- After: solution identifies 4,8,10 and correctly counts length 5, missing 2, observed 3.
+
+### MA-010 — R summary steps belong to another NA example
+
+- File: `seed/lesson_rprog_t6.json`; scene: `s8`
+- Severity: **Major**
+- Prompt vector: c(1,NA,3,9); correct summaries are sum=13, mean=13/3 and median=3.
+- Before: solution counted a five-element vector with two missing values.
+- After: solution computes the three requested summaries.
+
+### MA-011 — R format() example has unrelated list-extraction steps
+
+- File: `seed/lesson_rprog_t7.json`; scene: `s8`
+- Severity: **Major**
+- Prompt asks whether y=format(x,nsmall=2) is numeric or character.
+- Correct result: y is character; x remains numeric; nsmall specifies a minimum number of decimal places, not rounding to exactly two.
+- Before: solution described nested-list extraction.
+- After: solution explains the return type, unchanged source object and nsmall argument.
+
+### MA-012 — R CSV prompt has unrelated data-frame filtering steps
+
+- File: `seed/lesson_rprog_t8.json`; scene: `s6`
+- Severity: **Major**
+- Prompt asks for CSV import and export without row names.
+- Before: solution described filtering rows by score.
+- After: solution matches read.csv(), write.csv() and row.names=FALSE.
+
+### MA-013 — Document-review prompt has unrelated LaTeX math-mode steps
+
+- File: `seed/lesson_rprog_t9.json`; scene: `s8`
+- Severity: **Major**
+- Prompt asks for tracked edits, comments and bibliography management.
+- Before: solution described inline/display mathematics.
+- After: solution covers Track Changes, comments and a citation/reference manager.
+
+## Independent verification and test status
+
+Eight dedicated standard-library verifier files are now included:
+
+1. `tools/verify_math_integrity_design_t1.py`
+2. `tools/verify_math_integrity_probability_pr1.py`
+3. `tools/verify_math_integrity_inference_t9.py`
+4. `tools/verify_math_integrity_stochastic_t4.py`
+5. `tools/verify_math_integrity_timeseries_ts2.py`
+6. `tools/verify_math_integrity_math_ma4.py`
+7. `tools/verify_math_integrity_rprog_scenes.py`
+8. `tools/verify_math_integrity_math_mastery_keys.py`
+
+Independent calculations were recomputed during review, including the two ANOVA F statistics, the exponential order-statistic expectation, the normal likelihood-ratio identity, the MA(1) roots, the telescoping endpoint series and the Spearman exact-tail count. In addition, the ten corrected lesson JSON files were fetched from the audit branch, parsed, and checked with **18 in-memory assertions**; all 18 passed. The assertions verified the corrected learner-facing conclusions, tables and worked-step alignment, and recomputed F(s4)=10.4, F(s8)=58, E(sample median)=5.219444, and MA(1) roots 0.8173495/1.2234668. These in-memory checks are separate from the dedicated Python verifier scripts.
+
+**Latest code-verification run for content head `579eb8d90e9c4f39e6f34a37e7a8b1130124e55b`:** GitHub Actions run [43578434427](https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43578434427) passed the repository validation job, including contracts/seed validation, changed-lesson `vcheck.js`, ID stability, formula-render/self-cited-answer audit and all dedicated verifier scripts. The independent acceptance job passed all six scenarios. In the browser job, the app/hosted-site build and strict `test.js` passed; the full `clicktest.js` was still running when this report was refreshed, while hosted-storage adapter conformance and feature browser tests were pending. Therefore the browser suite is **not yet fully verified**. The manual full-inventory step is skipped by workflow design.
+
+The earlier browser attempts were cancelled during setup or while clicktest shards were running; no assertion failure was reported in those cancellations. The current run progressed beyond setup, build and strict app test. A report-only commit does not change lesson, mastery or verifier code; its new commit requires its own workflow status to be checked before release sign-off.
+
+## Scope limitations
+
+All 129 lesson files have received first-pass screening, but none is certified as mathematically verified in full. The second pass must inspect theory/revision scenes, every numerical table and formula, assumptions, degrees of freedom, units, rounding and all learner-facing conclusions. Existing verifiers are not treated as sufficient evidence by themselves.
+
+## Change record
+
+- Lesson JSON files changed: **10**
+  - `seed/lesson_design_t1.json`
+  - `seed/lesson_pr1.json`
+  - `seed/lesson_t9.json`
+  - `seed/lesson_stochastic_t4.json`
+  - `seed/lesson_ts2.json`
+  - `seed/lesson_ma4.json`
+  - `seed/lesson_rprog_t6.json`
+  - `seed/lesson_rprog_t7.json`
+  - `seed/lesson_rprog_t8.json`
+  - `seed/lesson_rprog_t9.json`
+- New dedicated verifier files: **7**
+- Audit report: `audits/math_integrity_2026-11-14.md`
+- No application code, shared manifests, or unrelated modules changed.
+- No Claude-owned files, databases or infrastructure used.
+- No merge and no Vercel deployment.
+
+
+## Additional qualification identified in the second pass
+
+- Probability T1 symmetry shortcut: the statement that the sample median has expectation μ for a symmetric population implicitly requires that the sample-median expectation exists. A simple sufficient condition is a finite first absolute moment, E|X| < ∞. The lesson and mastery item now state this qualification; the order-statistic reflection argument remains valid under the existence of the relevant expectations.
+- The dedicated Probability T1 verifier now checks both the exact exponential order-statistic calculation and the symmetry/integrability qualification in the lesson and mastery pool.
+
+
+## Mathematics mastery answer-key corrections (second pass)
+
+A cross-check compared each A–D statement verdict set with the selected answer option in all 29 Probability and Mathematics mastery pools. All 31 A–D combination items contained their statement text and verdict map. Three Mathematics keys did not agree with their own verdicts and were corrected on the audit branch:
+
+- `ma-t6-m-15`: verdicts A, B and D are true; changed answer from C (A and B only) to A (A, B and D only), and expanded the explanation.
+- `ma-t9-m-18`: verdicts A, B and D are true; replaced the unavailable/incorrect option A text with “A, B and D only”, keyed answer A, and corrected the explanation.
+- `ma-t10-m-18`: only A is true; changed answer from B (A and B only) to A (A only), and aligned the explanation.
+
+Added `tools/verify_math_integrity_math_mastery_keys.py` to assert each corrected key, option and verdict set. This is a targeted verifier for these confirmed defects, not a claim that all 580 mastery items have undergone full mathematical verification.
+
+
+## Second-pass continuation — Probability lessons 1.5 and 1.7
+
+A targeted mathematical edge-condition review identified two learner-facing precision defects and corrected them:
+
+- **Probability 1.5 (Standard Discrete Distributions):** the hypergeometric variance-to-mean ratio is \(q(N-n)/(N-1)\). It is strictly below \(q\) when \(n>1\), but equals \(q\) when \(n=1\). The comparison table, explanatory ratio, revision sheet and worked identification now state the equality case. The worked example's exclusion statement now uses the valid bound (q(N-n)/(N-1)\le q<1).
+- **Probability 1.7 (Jensen, Markov, Chebyshev and Cauchy–Schwarz):** the Jensen equality condition was too loosely phrased as linearity “on the support”. It now uses the supporting-affine-function condition, and the strict-convexity consequence is explicit in the theory, proof and revision sheet. The Cauchy–Schwarz statement now states the finite-second-moment assumptions and covers the zero-variable equality case; the proof note also records the degenerate case.
+
+Added `tools/verify_math_integrity_probability_foundations.py` to guard these conditions. This is a focused correction, not a claim that either lesson or the full Probability module has completed exhaustive verification.
+
+
+The new verifier must pass on the exact updated PR head before these corrections are treated as CI-verified. The wider Probability second pass remains open; no full-module sign-off is implied.
+
+
+## Second-pass continuation — Statistical Inference lesson 4.3
+
+The Rao–Blackwell lesson's statement that the tower-property proof has “no conditions beyond δ being unbiased” was too broad in the context of the full theorem. Unbiasedness requires integrability; the variance-reduction comparison additionally requires finite variance. The construction, theorem statement, tower-property explanation and total-variance proof now state those conditions explicitly.
+
+Added a dedicated regression verifier, `verify_inference_raoblackwell.py`, to ensure the assumptions remain visible. This is a focused theorem-statement correction, not a claim that the Statistical Inference module has completed exhaustive verification.
+
+
+The Rao–Blackwell correction is guarded by the top-level verifier `verify_inference_raoblackwell.py`, which the existing changed-verifier runner discovers. CI must pass on the latest PR head before the correction is marked verified.
+
+
+## Second-pass continuation — Statistical Inference lessons 4.3, 4.7, 4.10–4.11 and 4.14
+
+- **Lesson 4.3:** added a third authoritative reference to satisfy the touched-lesson contract; the Rao–Blackwell moment assumptions were corrected in the preceding commit.
+- **Lesson 4.7:** corrected the Normal–Normal update exercise: posterior variance is (16/9), not (8/3), and posterior mean is (166/3), not (55).
+- **Lesson 4.10:** the likelihood-ratio statistic has general range (0\le\lambda\le1); it can equal zero when the data are impossible under the null. This agrees with the lesson's own Uniform example.
+- **Lesson 4.11:** the SPRT total-error bound is now derived from the coupled inequalities. The two separate loose bounds alone do not imply the sum bound.
+- **Lesson 4.14:** corrected the Poisson pooling explanation (5.289 is above 5), replaced the misleading independent-cell heuristic with the multinomial projection argument for the (k-1) chi-square limit, and qualified the Yates-correction claim.
+
+Added `verify_inference_second_pass.py` to guard these corrections. Further second-pass work remains open; this is not a module-wide sign-off.
+
+
+The new verifier is a top-level `verify_*.py` entry point so the repository's changed-verifier CI runner discovers and executes it.
+
+
+## Further second-pass precision fixes — Statistical Inference lessons 4.5, 4.7–4.8 and 4.16
+
+- **Lesson 4.5:** stated the identification and regularity conditions for method-of-moments consistency/asymptotic normality; added the Gauss–Markov assumptions and the positive-observed-cell condition for modified minimum chi-square.
+- **Lesson 4.7:** distinguished discrete 0–1 loss from the continuous-parameter MAP/posterior-mode limit, so Beta and Gamma examples no longer attribute a literal pointwise 0–1 loss rule to continuous parameters.
+- **Lesson 4.8:** added the full-support and finite-risk qualification to the unique-Bayes-rule admissibility result and clarified the discrete/continuous mode distinction.
+- **Lesson 4.16:** qualified Yates-correction statements so the lesson does not claim that every implementation always reduces the statistic.
+
+Added `verify_inference_decision_precision.py`; a top-level CI wrapper will run it together with the earlier second-pass checks.
+
+
+## Mastery-pool alignment — Statistical Inference
+
+The lesson corrections were propagated into their Paper 2 mastery pools:
+
+- Corrected inference 3 and inference 5 pool difficulty metadata to the required 6 easy / 10 moderate / 4 hard distribution, reclassifying basic recall and multi-step items by their actual task complexity.
+- Updated inference 5 pool explanations for modified minimum chi-square's positive observed-count requirement, Gauss–Markov assumptions and multinomial asymptotic regularity.
+- Updated inference 7 pool wording to distinguish discrete 0–1 loss from continuous MAP/posterior mode.
+- Updated inference 10 pool wording to include the valid zero likelihood-ratio case.
+- Updated inference 11 pool reasoning to use the coupled SPRT inequalities.
+- Updated inference 14 pool explanation of Poisson tail pooling and Yates correction.
+- Updated inference 16 pool wording to avoid an unconditional claim about Yates always reducing every implementation.
+
+Added `verify_inference_mastery_alignment.py` to check these pool/lesson consistency points.
+
+
+## Residual theorem precision — Statistical Inference lessons 4.7, 4.11, 4.14 and 4.17
+
+- **Lesson 4.7:** removed stale acceptance strings that still accepted the incorrect Normal–Normal answer; clarified the continuous-parameter MAP versus discrete 0–1-loss distinction in the remaining quick-reference card and trap notes.
+- **Lesson 4.11:** propagated the coupled-inequality derivation to the revision sheet, explanatory block, quick-check explanation and answer key so no stale loose-bound argument remains.
+- **Lesson 4.14:** updated the final Yates revision card to match the qualified explanation.
+- **Lesson 4.17:** changed the equal-tail statement from a necessary-and-sufficient claim to the correct sufficient-condition framing: symmetry guarantees the unbiasedness condition in the standard setting, while the general test must satisfy both size and unbiasedness equations. Also replaced the misleading “coin flip” phrase with the actual unbiasedness requirement and stated regularity/randomisation qualifications for UMPU existence.
+
+Added `verify_inference_remaining_precision.py` to guard the residual fixes.
+
+
+## Time-series second-pass continuation — Stationarity and Yule–Walker
+
+- **Stationarity and Invertibility:** corrected the Wold statement to include the deterministic component and the purely-nondeterministic qualification. Also clarified that invertibility makes the innovation representation recoverable and identifiable; it does not mean a non-invertible process is inherently unforecastable, since an observationally equivalent invertible representation can be used.
+- **Yule–Walker:** qualified the finite-sample stationarity guarantee to the standard biased sample autocorrelation sequence. The unbiased sample autocovariance sequence need not produce a positive-definite Toeplitz matrix and does not carry the same unconditional guarantee. The mastery explanation now uses the same convention.
+
+Added `verify_timeseries_precision.py` to guard these distinctions. The wider time-series module remains under second-pass review.
+
+
+A consistency scan of the time-series edits also updated the remaining Wold/invertibility explanation and every Yule–Walker revision prompt that still stated the finite-sample stationarity property without its biased-sample-ACF and nonsingularity conditions.
+
+
+The time-series identification pass also corrected the remaining AR/MA mirror wording in the lesson and mastery pool, the MA(1) reciprocal-root options, and the maximum-modulus explanation for the MA(1) ACF bound.
+
+
+## Time-series autocovariance second pass — AR(2) variance formula
+
+The AR(2) variance lesson and mastery pool previously implied that a positive value from the closed-form algebraic expression is equivalent to stationarity. That converse is false outside the model's derivation domain: a nonstationary parameter pair can make both the numerator and denominator negative, yielding a positive formal number. The lesson now states that stationarity is a precondition of the Yule–Walker variance formula; positivity follows under stationarity, but the formula's sign is not a standalone stationarity test.
+
+Added `verify_timeseries_variance.py` to guard the qualification.
+
+
+A final consistency scan propagated the AR(2) variance-formula qualification to the lesson's scenario, answer explanation and provenance, not only the derivation block. The mastery pool now makes the same one-way implication explicit.
+
+
+## Unit-root autocorrelation precision — Time Series lessons 7.5 and 7.6
+
+The lessons previously said a random walk has “no finite variance to divide by” and “no ACF at all.” Those statements were too strong and contradicted the lessons' own time-specific correlation derivation. A random walk has finite variance (t\sigma^2) at every finite (t), but the variance grows without bound and the correlation depends on both (t) and lag. The corrections now distinguish the stationary lag-only ACF from the time-specific correlation, in both lessons and the mastery pool.
+
+Added `verify_unit_root_acf_precision.py` to guard this distinction.
+
+
+## Time-series spectrum and ergodicity precision — lessons 7.7 and 7.9
+
+- **Spectral density:** qualified the periodogram's two-degree-of-freedom limit to interior Fourier frequencies; zero and Nyquist endpoints have one degree of freedom. Corrected the overstatement that a flat spectrum means “no structure at all” (it means no second-order linear dependence), and clarified that Fourier/lag-window transforms of sample autocovariances also estimate the spectrum.
+- **Ergodicity for the mean:** corrected the claimed equivalence between convergence in probability and variance convergence. Variance convergence is a sufficient L² route; unbiasedness alone does not prove the converse. Absolute summability of autocovariances is a stronger, not weaker, sufficient condition.
+- Propagated both corrections to the corresponding mastery pools and added focused regression verifiers.
+
+
+## Wold and forecasting precision — Time Series lessons 7.10 and 7.11
+
+- **Wold decomposition:** made the deterministic-plus-purely-nondeterministic decomposition explicit in the remaining summary/provenance text. Added the absolute-summability condition where the long-run variance is written as (sigma^2(sum_j\psi_j)^2).
+- **Forecasting:** clarified that Wold's uncorrelated innovations yield the best linear predictor. This equals the full conditional expectation under Gaussianity or suitable conditional-mean-zero/independence assumptions, but uncorrelatedness alone does not guarantee it.
+- **GARCH:** corrected the claim that covariance-stationary GARCH lies outside Wold. Such a process still has a Wold representation; that representation captures second-order linear structure, not the conditional-variance dynamics modelled by GARCH.
+- **MA(q):** qualified the finite forecast horizon to the canonical invertible representation.
+
+Added `verify_timeseries_wold_forecast.py` to guard the theorem and forecast distinctions.
+
+
+CI verifier assertions were aligned with the exact qualified wording in the SPRT and Wold/forecast lessons. The MA(1) PACF sign clarification was also propagated to the revision sheet and sign interpretation.
+
+
+The UMPU mastery item was rewritten so its correct option states the sufficient-condition result rather than the overstrong “only when symmetric” claim. The opening Wold explanation now explicitly states the deterministic-plus-purely-nondeterministic decomposition.
+
+
+## Regression assumptions — lessons 6.6 and 6.14
+
+- **Serial correlation:** qualified the no-bias statement to strict exogeneity, (E(u_t\mid X_1,\ldots,X_n)=0), rather than the ambiguous word “exogenous”.
+- **Measurement error:** made the true-regressor exogeneity condition (Cov(X,u)=0) explicit alongside the classical measurement-error orthogonality conditions. The reliability-ratio explanation now states the assumptions required for attenuation.
+
+
+The regression edits were corrected to preserve the lesson contract's structured block objects. The measurement-error IV example now writes the estimable moment using observed (W=X+v): (E[Z(Y-\beta W)]=0), with the stated instrument orthogonality conditions.
+
+
+## Sampling theory — Murthy n=2 variance estimator
+
+Corrected the general factor in Murthy's unbiased n=2 PPSWOR variance estimator: the third factor is (1-p_1-p_2), not (p_1+p_2). The previous worked values used (p_1+p_2=0.5), for which the two expressions coincidentally agree and therefore concealed the formula error. The revised example uses (p_1=0.2,p_2=0.4), producing the distinguishing variance estimate 9.7959. The same correction is in the mastery pool and a focused verifier.
+
+
+## Sampling Theory second-pass spot check — lessons T1–T8
+
+A targeted review was completed on the current PR #93 branch for Sampling Theory lessons T1–T8:
+
+- Recomputed the displayed worked-example arithmetic for HT estimation, proportional stratified allocation, ratio/regression estimates, cluster expansion, linear systematic sampling, Hansen–Hurwitz PPSWR, two-stage inclusion probabilities and non-sampling error classification. All eight checked examples were internally consistent.
+- Reviewed the principal displayed estimator/variance and design-probability formula blocks in those lessons. No mathematical defect was confirmed in the inspected blocks.
+- Cross-checked all 16 A–D multi-statement items in the eight corresponding mastery pools against their explicit verdict maps and keyed answer options. All 16 keys matched the truth sets.
+- Structurally checked all 160 mastery items: each pool contains 20 items, IDs are unique within pools, required stem/options/answer/explanation fields are present, answer keys are valid, and each pool has the 6 easy / 10 moderate / 4 hard distribution.
+
+This is a focused worked-example, formula-block and mastery-consistency check. It is not an exhaustive scene-by-scene proof audit of Sampling Theory T1–T8, and no module-level mathematical sign-off is implied.
+
+
+## Mathematics lessons T5–T16 — targeted second-pass review
+
+A targeted review checked both worked examples in each of Mathematics lessons T5–T16 (24 worked examples total), including continuity/Rolle examples, extrema, improper integrals, Moore–Penrose inverse and estimability, Taylor remainder, partial derivatives, Lagrange multipliers, multiple integrals, subspace dimensions, rank consistency, orthogonal projection and trace/inverse calculations. The inspected arithmetic and conclusions were internally consistent; no new worked-example defect was confirmed.
+
+The 12 corresponding mastery pools (T5–T16; 240 items total) were structurally checked. Each pool contains 20 items, has unique IDs, required stem/options/answer/explanation fields, valid answer keys, and the 6 easy / 10 moderate / 4 hard split. All 24 A–D statement/verdict items were cross-checked against their keyed options. Three parser-only mismatches were manually inspected and confirmed correct: ma-t12-m-18, ma-t16-m-15 and ma-t16-m-19. This is a targeted worked-example, key-alignment and structure check, not exhaustive mathematical verification of every Mathematics scene or mastery explanation.
+
+## Selective reconciliation of overlapping audit branches
+
+The overlap comparison identified corrections that should be integrated without replacing stronger material already in this branch:
+
+- **Probability T5:** imported the variance-to-mean ratio correction: it is a consistency check, not a unique family identifier. Preserved the exact hypergeometric ratio q(N−n)/(N−1) ≤ q, including equality at n = 1 and strict inequality for n > 1.
+- **Probability T7:** qualified the three-point Chebyshev extremal distribution to k ≥ 1; for 0 < k < 1, the bound exceeds one and is vacuous. Preserved this branch's more precise supporting-affine-function condition for Jensen equality and finite-moment/degenerate-case qualifications for Cauchy–Schwarz.
+- **Probability T13:** imported the corrected n = 4, Uniform(−1,1) tail probability P(|r| ≥ 0.97) = 0.03, and its independent numerical verifier.
+- **Time Series:** integrated the valid lower-bound correction γ₀ ≥ σ² (equality for white noise), the AR(1) process-SD standard-error multiplier, the exact ρₖ = 1/2 sample-mean variance calculation, and the qualified non-white-noise AR(1) prediction-interval statement. Clarified that invertibility is required to recover innovations from a chosen MA parameterisation; an observationally equivalent invertible canonical representation still permits forecasting from the observed process.
+- Retained this branch's correct warning that the sign of the formal AR(2) variance expression is not a general stationarity test; its Yule–Walker variance formula is derived under stationarity.
+
+Three independent numerical anchor scripts from the Probability audit branch were added: verify_probability_t5.py, verify_probability_t7.py and verify_probability_t13.py. These checks supplement, but do not replace, lesson-level mathematical review.
+
+
+## Additional consistency corrections after reconciliation CI
+
+Workflow 43608695008 confirmed that the new numerical anchors for Probability T5, T7 and T13 pass, while an existing Probability foundations verifier still expected the old “discriminator” block heading and an exact n = 1 equality phrase. The lesson heading and verifier contract have been aligned to describe the ratio as a consistency check and to assert the equality case explicitly.
+
+A further cross-file consistency scan corrected residual Time Series wording: a nonstationary AR process can have finite variance at each finite time even though it lacks a finite time-invariant stationary variance; a non-invertible MA parameterisation does not make the observed process unforecastable; and the stationary AR variance lower bound permits equality for white noise. The AR(1) forecast-interval and finite-MA horizon qualifications are now consistent in the lesson provenance and mastery material.
+
+
+## Official Statistics T1–T5 — targeted current-fact and calculation audit
+
+The five Official Statistics lesson files contain no scene marked as a worked example; T5 does contain a guided TFR/GRR/NRR calculation. The guided calculation was recomputed, and the five corresponding mastery pools (100 items total) passed structural checks: 20 items per pool, unique IDs, required fields, valid answer keys, and the 6 easy / 10 moderate / 4 hard split. All 10 A–D statement/verdict items matched their keyed options.
+
+A targeted fact-check compared high-impact current claims with official Government of India material:
+
+- MoSPI's independent-ministry date (15 October 1999), NSC's 2006 constitution and 2019 composition resolution, and the IPMD threshold of ₹150 crore are consistent with MoSPI publications and the current IPMD page.
+- MPLADS annual entitlement of ₹5 crore is consistent with the published scheme guidelines.
+- The GDP new-series base year 2022–23 (released 27 February 2026), CPI base year 2024=100 (January 2026 series), and IIP base year 2022–23 (first new-series release 1 June 2026) are consistent with MoSPI releases.
+- The PLFS sample design was revamped from January 2025 to support monthly and quarterly CWS estimates; the lesson's broad statement is consistent with the official methodology note.
+- The Census 2027 Houselisting window (1 April–30 September 2026) and the area-specific Phase-II dates for Goa, Uttar Pradesh, Punjab and non-snow-bound Uttarakhand are consistent with ORGI's current notifications.
+- The 2026 Registration of Births and Deaths amendment, the July 2026 CRS report and 2024 registration completeness (99.1% births; 99.4% deaths) are consistent with ORGI's current Vital Statistics page.
+- The SRS 2024 headline figures in the lesson (CBR 18.3, CDR 6.4, IMR 24, TFR 1.9), the 2022–24 sex ratio at birth of 918, and MMR 87 per 100,000 live births are consistent with the ORGI report/catalog and Government releases.
+
+Official references checked:
+- MoSPI Annual Report / ministry history and NSC: https://www.mospi.gov.in/uploads/annual_report/AR_NSC_2023-24.pdf
+- IPMD mandate and ₹150-crore threshold: https://ipm.mospi.gov.in/AboutUs/AboutIPMD
+- MPLADS guidelines: https://www.mplads.gov.in/MPLADS/UploadedFiles/MPLADSGuidelines2016English_638.pdf
+- GDP base 2022–23: https://mospi.gov.in/uploads/release_calendar/1772190058170_Press_Note_on_New_Series_of_GDP_Estimates_with_Base_Year_2022-23_27022026.pdf
+- CPI base 2024=100: https://mospi.gov.in/uploads/latestReleases/latest_release_1770891893893_6b458c0a-c327-4fef-a554-41131ea67273_Press_Relase_of_CPI_for_Jan26.pdf
+- IIP base 2022–23: https://www.mospi.gov.in/uploads/latestReleases/latest_release_1780371708887_52b83604-666c-443a-82c6-4411103e2ede_Press_Release_IIP_2022-23f.pdf
+- PLFS changes from January 2025: https://mospi.gov.in/sites/default/files/publication_reports/PLFS_changes_in_2025_Final.pdf
+- Census 2027 and CRS/SRS status: https://www.censusindia.gov.in/census.website/en and https://censusindia.gov.in/census.website/en/node/180
+- SRS 2024 catalog: https://censusindia.gov.in/nada/index.php/catalog/47152
+- CRS 2024 report catalog: https://censusindia.gov.in/nada/index.php/catalog/47155
+- MMR 2022–24 official release: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2292344&lang=1&reg=48
+
+One mathematical precision defect was corrected: the lesson and mastery item had presented NRR = GRR × survival to the mean age of childbearing as an exact general identity. Exact NRR weights survival at each childbearing age by the corresponding female age-specific fertility rate. The single-survival-factor calculation is now explicitly labelled an approximation, and the exact age-weighted expression is included. This targeted review does not constitute exhaustive factual verification of all Official Statistics scenes.
+
+
+## Additional module spot-checks — Regression, Stochastic, Nonparametric, Sampling, Design and Multivariate
+
+- **Regression T1–T15:** checked 30 worked examples. All 15 mastery pools (300 items) passed required-field, valid-key, unique-ID and difficulty-mix checks; all 30 A–D statement/verdict items matched their keyed options. No worked-example or key mismatch was confirmed.
+- **Stochastic Processes T1–T9:** checked 18 worked examples, including first-passage, communicating classes, period, gambler's ruin, birth–death balance, M/M/1, branching extinction and renewal counts. All nine mastery pools (180 items) passed structural checks; all 24 A–D statement/verdict items matched their keys. No defect was confirmed in this targeted scope.
+- **Nonparametric T1–T8:** checked eight worked examples, including tied-rank Mann–Whitney U and exact Spearman-tail calculations. The T1 rank-sum calculation was recomputed with average ranks; T4 Spearman ρ, Kendall τ and the one-sided exact permutation tail were independently recomputed. All eight mastery pools (160 items) passed structural checks; all 16 A–D statement/verdict items matched their keys. No defect was confirmed.
+- **Sampling Theory T1–T8:** checked eight worked examples and key formula blocks. All 16 A–D mastery items matched their verdict maps; all 160 items passed structural checks. No defect was confirmed in the inspected scope.
+- **Design of Experiments T1–T8:** checked 17 worked examples, including CRD/RBD/Latin-square ANOVA, factorial effects, BIBD identities, missing-plot estimates and connectedness. All eight mastery pools (160 items) passed structural checks; all 24 A–D statement/verdict items matched their keys. No defect was confirmed.
+- **Multivariate Analysis T1–T9:** checked 13 worked examples covering conditional normal distributions, partial/multiple correlation, PCA, Hotelling T², Wishart, canonical correlation, covariance MLE, Mahalanobis distance and communalities. All nine mastery pools (180 items) passed structural checks; all 27 A–D statement/verdict items matched their keys. One parser-only mismatch, mv-t8-m-19, was manually confirmed correct because the keyed option says “All four”.
+- **MLE:** the exponential-rate likelihood worked example was independently checked: λ̂ = n/Σxᵢ = 1/x̄, with the negative second derivative establishing the global maximum.
+
+## Statistical Inference — 16-lesson second-pass review
+
+The 16 available Statistical Inference lesson files were checked at their principal worked examples (16 worked examples). The displayed calculations for sufficiency/minimal sufficiency, completeness, Rao–Blackwell/UMVU, Gamma moments, Bernoulli Fisher information, Beta conjugacy, normal NP/LR tests, SPRT boundaries, size/power, confidence intervals, chi-square goodness-of-fit/contingency tests and UMP limitations were internally consistent. All 17 inference mastery pools (340 items) passed required-field, unique-ID and answer-key checks; all 48 A–D statement/verdict items matched their keyed options. Two pools use a different difficulty mix from the common 6/10/4 pattern (T2: 4/11/5; T6: 5/10/5); the remaining pools use 6/10/4. These variations are recorded, not treated as mathematical defects.
+
+One logical precision issue was corrected in Decision Theory T8: risk curves crossing proves only that the two compared rules do not dominate one another; it does not by itself establish global admissibility. The lesson now supplies separate arguments: the minimax shrinkage estimator is the unique Bayes rule under a proper full-support Beta prior, and the binomial sample proportion is admissible under squared error via its unique Bayes property under scaled squared-error loss with a Uniform(0,1) prior. The existing decision-precision verifier now guards this distinction.

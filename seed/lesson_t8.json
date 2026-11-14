@@ -1,905 +1,911 @@
 {
- "id": "inferencet8",
- "moduleId": "inference",
- "topicId": "inference-t8",
- "title": "Decision Theory: Loss, Risk, Admissibility and Minimax",
- "breadcrumb": "Statistical Inference → Decision theory → Loss, risk, admissibility, minimax",
- "engine": "B",
- "engineName": "Estimation and inference — risk as a curve, and the two ways of collapsing it to a number",
- "estMin": 93,
- "version": "1.1",
- "status": "approved",
- "provenance": "Review pass, October 2026: 3 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. Authored for this platform in October 2026. The central worked example was computed from the binomial sum rather than quoted: for n = 9, the rule (x + 1.5)/12 has risk E[(d − p)²] equal to 0.015625 at p = 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 and 0.9 — constant in p, and matching the closed form 1/(4(1 + √n)²) = 1/64. The MLE's risk p(1−p)/9 has worst case 1/36 = 0.027778 at p = 0.5, and the two curves cross where p(1−p)/9 = 1/64, giving p = (1 ± √0.4375)/2 = 0.169281 and 0.830719, both verified to eight decimal places. The identification of (x + √n/2)/(n + √n) as the Bayes rule under Beta(√n/2, √n/2) follows from the Beta(a,a) posterior mean (x + a)/(n + 2a) with a = √n/2, and is what ties this topic to 4.7. The n = 16 case in scenes 7 and 10 was derived the same way: risk 1/100, crossings at p = 0.2 and 0.8.",
- "objectives": [
-  "Define loss, decision rule, risk and Bayes risk, and say which are functions of θ and which are numbers.",
-  "Decide whether one rule dominates another, and hence whether a rule is admissible.",
-  "Define the minimax criterion and compute a minimax value by flattening a risk curve.",
-  "Apply the three relations between Bayes, minimax and admissible rules, and state what does not follow.",
-  "Derive the minimax estimator of a binomial proportion and identify the least favourable prior.",
-  "Translate a testing problem into decision-theoretic language and say why Neyman–Pearson is not minimax."
- ],
- "prereq": [
-  {
-   "id": "p1",
-   "name": "Loss functions, decision rules and expectation over the sample",
-   "why": "Risk is an expectation over the data with θ fixed, and keeping that straight is most of the topic."
-  },
-  {
-   "id": "p2",
-   "name": "The bias-variance decomposition of mean squared error",
-   "why": "Under squared-error loss, risk = variance + bias², and that identity does all the arithmetic here."
-  },
-  {
-   "id": "p3",
-   "name": "Mean and variance of a binomial count and proportion",
-   "why": "The worked example and the guided problem are both binomial, and p(1−p)/n is the curve everything is compared against."
-  },
-  {
-   "id": "p4",
-   "name": "Bayes estimators as posterior summaries",
-   "why": "Minimax rules are found by choosing a prior that flattens the risk, so the posterior-mean formula is the candidate family."
-  }
- ],
- "mastery": {
-  "minQ": 10,
-  "pass": 80,
-  "draw": 10,
-  "fmtMin": {
-   "numeric": 70,
-   "multi": 70
-  },
-  "diffMix": {
-   "easy": 3,
-   "moderate": 5,
-   "hard": 2
-  },
-  "noHints": true,
-  "retestDays": 7,
-  "note": "Platform settings, not an NTA rule. Ten drawn from a pool of twenty at 3 easy / 5 moderate / 2 hard; a retake draws again, holding the mix and pulling back items previously got wrong."
- },
- "refs": [
-  {
-   "title": "Elementary Decision Theory",
-   "where": "Loss, risk, Bayes risk, admissibility, minimax and least favourable priors",
-   "site": "University of Washington STAT 581, Yen-Chi Chen",
-   "url": "https://faculty.washington.edu/yenchic/26A_stat581/Lec1_decision.html",
-   "type": "Graduate lecture notes",
-   "free": true,
-   "checked": "2026-10-14",
-   "why": "Covers every definition in this lesson in the same order, including the least favourable prior, which most undergraduate texts leave out. The closest free match to scenes 4 and 10."
-  },
-  {
-   "title": "Mathematical Statistics 18.655 — lecture notes",
-   "where": "Session 4, The Decision Theoretic Framework",
-   "site": "MIT OpenCourseWare",
-   "url": "https://ocw.mit.edu/courses/18-655-mathematical-statistics-spring-2016/pages/lecture-notes/",
-   "type": "Graduate lecture notes (PDF)",
-   "free": true,
-   "checked": "2026-10-14",
-   "why": "Sets up the decision problem formally and proves the relation this lesson leans on: a Bayes rule with constant risk is minimax."
-  },
-  {
-   "title": "Theory of Point Estimation, 2nd edition",
-   "where": "Chapter 1 (decision theory) and Chapter 5 (minimax estimation)",
-   "site": "Lehmann and Casella",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-10-14",
-   "why": "The standard source for admissibility and minimaxity. Chapter 5 derives the binomial minimax estimator (x + sqrt(n)/2)/(n + sqrt(n)) that scene 5 builds from scratch, and proves it is minimax.",
-   "isbn": "978-0387985022"
-  },
-  {
-   "title": "Statistical Inference, 2nd edition",
-   "where": "Section 7.3.4, Loss function optimality",
-   "site": "Casella and Berger",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-10-14",
-   "why": "The gentler account, at the level NET asks. Read this first if the Lehmann and Casella treatment is heavier than you need.",
-   "isbn": "978-0534243128"
-  },
-  {
-   "title": "Testing Statistical Hypotheses, 3rd edition",
-   "where": "Chapter 1, The general decision problem",
-   "site": "Lehmann and Romano",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-10-14",
-   "why": "Where the translation of testing into decision-theoretic language in scene 9 comes from, and why Neyman-Pearson constrains one error rather than minimising the maximum.",
-   "isbn": "978-0387988641"
-  }
- ],
- "revision": {
-  "sheet": [
-   "Risk R(θ,δ) = E_θ[L(θ,δ(X))] — a FUNCTION of θ. Bayes risk r(π,δ) = ∫R(θ,δ)π(θ)dθ — a NUMBER.",
-   "Squared-error loss: risk = MSE = variance + bias². For an unbiased rule, risk = variance.",
-   "δ₁ dominates δ₂: risk no larger at every θ, strictly smaller at some θ. Undominated = admissible.",
-   "Minimax rule: minimises sup_θ R(θ,δ). Minimax value = inf_δ sup_θ R(θ,δ).",
-   "Bayes rule: minimises Bayes risk. Squared error → posterior mean; absolute → median; 0–1 → mode.",
-   "Weighted absolute loss, k₁ below and k₂ above → the k₁/(k₁+k₂) posterior quantile.",
-   "RELATION 1: a Bayes rule with CONSTANT risk is minimax; its prior is the least favourable prior.",
-   "RELATION 2: a UNIQUE Bayes rule is admissible.",
-   "RELATION 3: a UNIQUE minimax rule is admissible.",
-   "NOT true: admissible ⇒ minimax; minimax ⇒ admissible; Bayes ⇒ minimax without constant risk.",
-   "MLE of binomial p: risk p(1−p)/n, worst case 1/(4n) at p = 0.5.",
-   "Minimax estimator of binomial p: (x + √n/2)/(n + √n), constant risk 1/(4(1+√n)²).",
-   "Least favourable prior for that problem: Beta(√n/2, √n/2).",
-   "n = 9: estimator (x+1.5)/12, risk 1/64 = 0.0156; MLE worst case 1/36 = 0.0278; curves cross at 0.1693, 0.8307.",
-   "n = 16: estimator (x+2)/20, risk 1/100 = 0.01; MLE worst case 1/64; curves cross at 0.2 and 0.8.",
-   "x̄ for a normal mean has constant risk σ²/n and is minimax.",
-   "A constant rule 'always answer c' is ADMISSIBLE (risk 0 at θ = c) but not minimax.",
-   "The MLE of a normal mean vector is INADMISSIBLE for dimension ≥ 3 — James–Stein.",
-   "Testing as a decision problem: 0–1 loss, risk = P(type I) on H₀ and P(type II) on H₁.",
-   "Neyman–Pearson constrains size and maximises power; it does not minimise the maximum error, so it is not minimax.",
-   "Bayes rules form a complete class: every admissible rule is a Bayes rule or a limit of them.",
-   "Randomisation is needed for exact size with discrete statistics; it never helps estimation under convex loss."
+  "id": "inferencet8",
+  "moduleId": "inference",
+  "topicId": "inference-t8",
+  "title": "Decision Theory: Loss, Risk, Admissibility and Minimax",
+  "breadcrumb": "Statistical Inference → Decision theory → Loss, risk, admissibility, minimax",
+  "engine": "B",
+  "engineName": "Estimation and inference — risk as a curve, and the two ways of collapsing it to a number",
+  "estMin": 93,
+  "version": "1.1",
+  "status": "approved",
+  "provenance": "Review pass, October 2026: 3 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. Authored for this platform in October 2026. The central worked example was computed from the binomial sum rather than quoted: for n = 9, the rule (x + 1.5)/12 has risk E[(d − p)²] equal to 0.015625 at p = 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 and 0.9 — constant in p, and matching the closed form 1/(4(1 + √n)²) = 1/64. The MLE's risk p(1−p)/9 has worst case 1/36 = 0.027778 at p = 0.5, and the two curves cross where p(1−p)/9 = 1/64, giving p = (1 ± √0.4375)/2 = 0.169281 and 0.830719, both verified to eight decimal places. The identification of (x + √n/2)/(n + √n) as the Bayes rule under Beta(√n/2, √n/2) follows from the Beta(a,a) posterior mean (x + a)/(n + 2a) with a = √n/2, and is what ties this topic to 4.7. The n = 16 case in scenes 7 and 10 was derived the same way: risk 1/100, crossings at p = 0.2 and 0.8.",
+  "objectives": [
+    "Define loss, decision rule, risk and Bayes risk, and say which are functions of θ and which are numbers.",
+    "Decide whether one rule dominates another, and hence whether a rule is admissible.",
+    "Define the minimax criterion and compute a minimax value by flattening a risk curve.",
+    "Apply the three relations between Bayes, minimax and admissible rules, and state what does not follow.",
+    "Derive the minimax estimator of a binomial proportion and identify the least favourable prior.",
+    "Translate a testing problem into decision-theoretic language and say why Neyman–Pearson is not minimax."
   ],
-  "cards": [
-   [
-    "Risk versus Bayes risk",
-    "Risk is a function of θ; Bayes risk averages it over a prior to one number"
-   ],
-   [
-    "Squared-error risk of an estimator",
-    "Variance + bias²"
-   ],
-   [
-    "δ₁ dominates δ₂ means",
-    "Risk no larger everywhere, strictly smaller somewhere"
-   ],
-   [
-    "Admissible means",
-    "Nothing dominates it — a weak certificate, not a recommendation"
-   ],
-   [
-    "Minimax rule",
-    "Minimises the worst-case risk, sup_θ R(θ,δ)"
-   ],
-   [
-    "The relation that finds minimax rules",
-    "A Bayes rule with constant risk is minimax"
-   ],
-   [
-    "Least favourable prior",
-    "The prior whose best achievable Bayes risk equals the minimax value"
-   ],
-   [
-    "Minimax estimator of a binomial p",
-    "(x + √n/2)/(n + √n), risk 1/(4(1+√n)²)"
-   ],
-   [
-    "MLE of binomial p: risk and worst case",
-    "p(1−p)/n, worst case 1/(4n) at p = 0.5"
-   ],
-   [
-    "Is a constant rule admissible?",
-    "Yes — its risk is zero at one θ, so nothing beats it everywhere"
-   ],
-   [
-    "Famous inadmissibility result",
-    "James–Stein dominates the MLE for a normal mean vector, dimension ≥ 3"
-   ],
-   [
-    "Weighted absolute loss, k₁ under and k₂ over",
-    "The k₁/(k₁+k₂) posterior quantile"
-   ]
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Loss functions, decision rules and expectation over the sample",
+      "why": "Risk is an expectation over the data with θ fixed, and keeping that straight is most of the topic."
+    },
+    {
+      "id": "p2",
+      "name": "The bias-variance decomposition of mean squared error",
+      "why": "Under squared-error loss, risk = variance + bias², and that identity does all the arithmetic here."
+    },
+    {
+      "id": "p3",
+      "name": "Mean and variance of a binomial count and proportion",
+      "why": "The worked example and the guided problem are both binomial, and p(1−p)/n is the curve everything is compared against."
+    },
+    {
+      "id": "p4",
+      "name": "Bayes estimators as posterior summaries",
+      "why": "Minimax rules are found by choosing a prior that flattens the risk, so the posterior-mean formula is the candidate family."
+    }
   ],
-  "tricks": [
-   {
-    "hook": "Risk is a curve; Bayes risk and the minimax value are numbers",
-    "why": "Every confusion in the topic comes from treating risk as a number. Two curves cross, which is why admissibility exists as a concept at all."
-   },
-   {
-    "hook": "Flat risk plus Bayes equals minimax",
-    "why": "Both conditions are needed. Flat alone is not enough — 'always report x₁' is flat and dominated."
-   },
-   {
-    "hook": "Admissible is a low bar",
-    "why": "A rule that ignores the data is admissible. It certifies only that nothing beats you everywhere."
-   },
-   {
-    "hook": "Root n over two",
-    "why": "a = √n/2 in (x + a)/(n + 2a) is the flattening choice, giving risk 1/(4(1+√n)²) and prior Beta(√n/2, √n/2). Three results from one number."
-   },
-   {
-    "hook": "Neyman-Pearson constrains, minimax equalises",
-    "why": "NP caps one error and minimises the other; a minimax test makes the two errors equal. That is why NP is not a minimax criterion."
-   }
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Platform settings, not an NTA rule. Ten drawn from a pool of twenty at 3 easy / 5 moderate / 2 hard; a retake draws again, holding the mix and pulling back items previously got wrong."
+  },
+  "refs": [
+    {
+      "title": "Elementary Decision Theory",
+      "where": "Loss, risk, Bayes risk, admissibility, minimax and least favourable priors",
+      "site": "University of Washington STAT 581, Yen-Chi Chen",
+      "url": "https://faculty.washington.edu/yenchic/26A_stat581/Lec1_decision.html",
+      "type": "Graduate lecture notes",
+      "free": true,
+      "checked": "2026-10-14",
+      "why": "Covers every definition in this lesson in the same order, including the least favourable prior, which most undergraduate texts leave out. The closest free match to scenes 4 and 10."
+    },
+    {
+      "title": "Mathematical Statistics 18.655 — lecture notes",
+      "where": "Session 4, The Decision Theoretic Framework",
+      "site": "MIT OpenCourseWare",
+      "url": "https://ocw.mit.edu/courses/18-655-mathematical-statistics-spring-2016/pages/lecture-notes/",
+      "type": "Graduate lecture notes (PDF)",
+      "free": true,
+      "checked": "2026-10-14",
+      "why": "Sets up the decision problem formally and proves the relation this lesson leans on: a Bayes rule with constant risk is minimax."
+    },
+    {
+      "title": "Theory of Point Estimation, 2nd edition",
+      "where": "Chapter 1 (decision theory) and Chapter 5 (minimax estimation)",
+      "site": "Lehmann and Casella",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-10-14",
+      "why": "The standard source for admissibility and minimaxity. Chapter 5 derives the binomial minimax estimator (x + sqrt(n)/2)/(n + sqrt(n)) that scene 5 builds from scratch, and proves it is minimax.",
+      "isbn": "978-0387985022"
+    },
+    {
+      "title": "Statistical Inference, 2nd edition",
+      "where": "Section 7.3.4, Loss function optimality",
+      "site": "Casella and Berger",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-10-14",
+      "why": "The gentler account, at the level NET asks. Read this first if the Lehmann and Casella treatment is heavier than you need.",
+      "isbn": "978-0534243128"
+    },
+    {
+      "title": "Testing Statistical Hypotheses, 3rd edition",
+      "where": "Chapter 1, The general decision problem",
+      "site": "Lehmann and Romano",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-10-14",
+      "why": "Where the translation of testing into decision-theoretic language in scene 9 comes from, and why Neyman-Pearson constrains one error rather than minimising the maximum.",
+      "isbn": "978-0387988641"
+    }
   ],
-  "shortcuts": [
-   "For an unbiased rule, risk is just the variance — no bias term to compute.",
-   "Check any claimed minimax risk for constancy: if it still depends on θ, the flattening condition was not used.",
-   "Any option asserting that minimax implies admissible, or the reverse, without a uniqueness qualifier is wrong.",
-   "Any option calling a constant rule inadmissible is wrong.",
-   "Any option calling the MLE always admissible is wrong — James–Stein, dimension ≥ 3.",
-   "If a loss is asymmetric, the Bayes rule moves AWAY from the costlier error, not towards it."
-  ],
-  "remember": [
-   "To settle domination, find where the two risk curves cross; one crossing is enough to rule it out both ways.",
-   "To find a minimax rule, flatten the risk inside a conjugate family of Bayes rules."
-  ],
-  "traps": [
-   "Treating risk as a single number rather than a function of θ.",
-   "Asserting minimax ⇒ admissible, or admissible ⇒ minimax, without the uniqueness condition.",
-   "Calling a Bayes rule minimax when its risk is not constant.",
-   "Calling the data-ignoring constant rule inadmissible.",
-   "Claiming the MLE is always admissible, or forgetting the dimension ≥ 3 condition on James–Stein.",
-   "Confusing the minimax value with the smallest risk attainable at some θ.",
-   "Forgetting the bias term when a rule is biased, and so reporting a variance as a risk.",
-   "Applying asymmetric weights the wrong way round and moving the estimate towards the costlier error.",
-   "Assuming an unbiased estimator must be admissible."
-  ]
- },
- "traps": [
-  "Risk is a function of θ; Bayes risk and the minimax value are the numbers derived from it.",
-  "Admissible does not imply minimax, and minimax does not imply admissible without uniqueness.",
-  "A Bayes rule is minimax only if its risk is constant — and constant risk alone is not sufficient either.",
-  "A rule that ignores the data entirely is admissible, which is what makes admissibility weak.",
-  "The MLE of a normal mean vector is inadmissible for dimension three or more, by James–Stein.",
-  "Neyman–Pearson constrains the size and maximises power; it does not minimise the maximum error probability.",
-  "Under squared-error loss, risk includes the squared bias, so a biased rule's variance is not its risk.",
-  "For weighted absolute loss the Bayes rule is a quantile, not the median, and it moves away from the costlier error."
- ],
- "scenes": [
-  {
-   "kind": "foundation",
-   "id": "s0",
-   "title": "Before the lesson — four things it will assume",
-   "mins": 5,
-   "objective": "Have loss, expectation over the sample, and the bias-variance split ready, so risk is a quantity you can compute rather than a definition to recite.",
-   "body": [
-    "Decision theory is the frame the rest of Unit IV sits inside. Estimation, testing and interval construction are all decisions; loss and risk are the language that lets them be compared. The syllabus sets this topic at State, so the examinable content is definitions and relations rather than hard derivations — but the definitions are only usable if you can compute a risk, and that is what these four checks are for.",
-    "If they are solid, the whole topic is four definitions and three relations between them."
-   ],
-   "items": [
-    {
-     "ask": "What is a loss function, a decision rule, and the risk of a decision rule?",
-     "recall": "A loss function L(θ, a) is the penalty for taking action a when the truth is θ. A decision rule δ(x) maps each possible sample to an action. The risk is the expected loss over the sampling distribution, R(θ, δ) = E_θ[L(θ, δ(X))] — a function of θ, not a number.",
-     "refresh": [
-      "Keep the three apart. The loss is a penalty for one θ and one action; it involves no randomness. The rule is what you will do for each possible dataset; it involves no θ. The risk averages the loss over the data for a FIXED θ, which is why it is a function of θ and why two rules can be compared only by comparing two curves.",
-      "That last point is the whole difficulty of the topic. If risk were a single number, the best rule would be the one with the smallest number. Because it is a curve, two rules can cross, and then neither is better — which is what admissibility is about.",
-      "Note what is averaged over. Risk averages over the SAMPLE with θ held fixed; Bayes risk goes one step further and averages over θ as well, using a prior. Those are two different operations and the exam separates them."
-     ]
-    },
-    {
-     "ask": "Under squared-error loss, what does the risk of an estimator equal?",
-     "recall": "The mean squared error, which decomposes as R(θ, θ̂) = Var_θ(θ̂) + [bias_θ(θ̂)]². With L(θ, a) = (θ − a)², risk and MSE are the same object.",
-     "refresh": [
-      "Write it out: E[(θ̂ − θ)²] = E[(θ̂ − E θ̂ + E θ̂ − θ)²]. The cross term vanishes because E[θ̂ − Eθ̂] = 0, leaving the variance plus the squared bias.",
-      "This is the identity that makes the whole topic computable. Every risk in this lesson is obtained by writing down a variance and a bias and adding the square of the second to the first — no integration required.",
-      "It also explains why biased estimators are not automatically worse. A rule that accepts some bias to buy a large variance reduction can have lower risk, and the shrinkage estimators in this lesson are exactly that trade made deliberately."
-     ]
-    },
-    {
-     "ask": "What are the mean and variance of a binomial count, and of the sample proportion?",
-     "recall": "For X ~ Bin(n, p): E[X] = np and Var(X) = np(1 − p). For the proportion p̂ = X/n: E[p̂] = p, so it is unbiased, and Var(p̂) = p(1 − p)/n.",
-     "refresh": [
-      "Because p̂ is unbiased, its squared-error risk is just its variance, p(1 − p)/n. That is a curve in p: zero at the two ends and largest at p = 0.5, where it equals 1/(4n).",
-      "That shape is the key to the main example in this lesson. The MLE's risk is excellent when p is near 0 or 1 and at its worst in the middle, so a rule with a flat risk curve can beat it in the middle while losing at the ends.",
-      "Keep 1/(4n) in mind as a number. For n = 9 the MLE's worst-case risk is 1/36 = 0.0278, and the lesson will produce a rule whose risk is 1/64 = 0.0156 everywhere."
-     ]
-    },
-    {
-     "ask": "What is the Bayes estimator under squared-error loss, from the previous topic?",
-     "recall": "The posterior mean. With a Beta(α, β) prior and x successes in n trials, that is (α + x)/(α + β + n); with the symmetric prior Beta(a, a) it is (x + a)/(n + 2a).",
-     "refresh": [
-      "This topic and the last are two views of the same machinery. In 4.7 the prior was the point and the loss was the afterthought; here the loss is the point and the prior becomes a device.",
-      "The connection worth carrying in advance: a Bayes rule is one that minimises Bayes risk for a stated prior. It turns out that a Bayes rule whose ordinary risk happens to be CONSTANT in θ is minimax, and that is how minimax rules are actually found.",
-      "So the formula (x + a)/(n + 2a) is about to be used not as a Bayesian answer but as a family of candidate rules, with a chosen to flatten the risk curve."
-     ]
-    }
-   ]
-  },
-  {
-   "kind": "intuition",
-   "id": "s1",
-   "title": "Two curves that cross",
-   "mins": 5,
-   "objective": "See why 'which estimator is better' is usually the wrong question, and what the two standard repairs are.",
-   "body": [
-    "Everything awkward about this topic comes from one fact: risk is a function of the unknown parameter, and two rules' risk curves generally cross.",
-    "Suppose one rule has risk 0.02 everywhere and another has risk that is 0.01 near the ends of the parameter range and 0.03 in the middle. Which is better? The honest answer is that the question is malformed. The second is better if θ is near an end and worse if it is in the middle, and you do not know which it is — that is the whole point of having to estimate it.",
-    "There are only two serious ways out, and the syllabus names both. The first is to give up on a total ordering and ask only the weaker question: is there a rule that is at least as good as this one everywhere, and strictly better somewhere? If so, this rule is INADMISSIBLE and should be discarded; nothing is lost by dropping it. If not, it is ADMISSIBLE, and admissibility is a very low bar — it certifies only that the rule is not uniformly beatable, not that it is good. The constant rule 'always answer 7' is admissible, because nothing beats it when θ happens to be 7.",
-    "The second way out is to impose an ordering by force, by judging each rule on its worst case. The MINIMAX rule is the one whose highest risk over all θ is lowest. That turns curves into numbers and always produces an answer, at the cost of being governed entirely by the least favourable parameter value — a pessimist's criterion.",
-    "The third option, which is what Bayesians do, is to average the risk over a prior instead of taking its maximum. That also turns a curve into a number, and the number depends on the prior. The striking fact, and the one this lesson builds to, is that these two repairs meet: the minimax rule is usually a Bayes rule for a particular prior, the one that makes the problem hardest."
-   ],
-   "aside": {
-    "h": "The sentence to carry into the exam",
-    "body": "Admissible means not uniformly beatable — a weak certificate. Minimax means the best worst case. Bayes means the best average against a prior. The three are different questions, and a rule can satisfy one and not another."
-   },
-   "ask": {
-    "q": "The rule 'ignore the data and always answer 0.5' is admissible under squared-error loss. Does that tell you anything good about it?",
-    "nudge": "Ask what would have to be true of a competing rule for it to beat this one everywhere, including at θ = 0.5."
-   }
-  },
-  {
-   "kind": "explore",
-   "id": "s2",
-   "title": "Watch two risk curves cross",
-   "mins": 6,
-   "objective": "Read admissibility and the minimax value straight off the picture.",
-   "viz": {
-    "type": "risk-curves",
-    "n": 9,
-    "sd": 3,
-    "m": 0,
-    "w": 0.5
-   },
-   "body": [
-    "Three risk curves for estimating a normal mean: the sample mean in pink, a constant guess in teal, and a shrinkage rule between them in ochre. The horizontal axis is θ, the vertical axis is squared-error risk.",
-    "Start with the sample mean alone by setting the shrinkage weight to 1. Its risk is a flat line at σ²/n = 1.0 — flat because x̄ is unbiased, so its risk is a variance that does not depend on θ. That flatness is what makes it minimax: its worst case equals its everywhere-case, and no rule can do better in the worst case.",
-    "Now drag the weight to 0. The rule ignores the data and always answers m. Its risk is the parabola (θ − m)²: exactly zero when θ happens to equal m, and growing without limit as θ moves away. This is the cleanest possible demonstration that no rule dominates another everywhere — at θ = m this absurd rule beats every estimator ever devised, which is precisely why admissibility is a weak criterion.",
-    "Set the weight to 0.5 and look at where the ochre curve crosses the pink line. To the left and right of the crossings the sample mean is better; between them the shrinkage rule is. Neither dominates, so BOTH are admissible. But read the two worst cases off the readout: the sample mean's is 1.0, the shrinkage rule's is larger. So the sample mean is minimax and the shrinkage rule is not — admissible and minimax are different questions, and this frame is the difference.",
-    "Finally move the target m away from zero and watch the whole ochre curve slide with it. The shrinkage rule's advantage is purchased near wherever you aim it, and paid for everywhere else."
-   ],
-   "ask": {
-    "q": "At weight 0.5 the shrinkage rule's risk at θ = m is 0.25, a quarter of the sample mean's. Why is that not an argument for using it?",
-    "nudge": "Ask what you would need to know in order to collect that advantage, and whether you know it."
-   }
-  },
-  {
-   "kind": "theory",
-   "id": "s3",
-   "title": "The four definitions and the three relations",
-   "mins": 9,
-   "objective": "State every definition in the topic precisely, and the relations the exam asks you to apply.",
-   "blocks": [
-    {
-     "t": "def",
-     "h": "The decision problem",
-     "body": "A parameter space Θ, an action space A, a loss function L : Θ × A → [0, ∞), and a family of distributions {f(x | θ)}. A decision rule δ maps each sample x to an action δ(x) ∈ A. For estimation A = Θ and δ is an estimator; for testing A = {accept, reject} and δ is a test. A randomised rule chooses among actions by a probability distribution, which matters because randomised rules are sometimes needed to attain a stated size and sometimes needed for a minimax solution to exist."
-    },
-    {
-     "t": "formula",
-     "h": "Risk, and Bayes risk",
-     "body": "Risk: R(θ, δ) = E_θ[L(θ, δ(X))] = ∫ L(θ, δ(x)) f(x | θ) dx. A function of θ. Bayes risk, against a prior π: r(π, δ) = ∫ R(θ, δ) π(θ) dθ = E_π[R(θ, δ)]. A single number. The distinction is the one most worth getting right: risk integrates over the DATA, Bayes risk integrates over the data and then over the PARAMETER."
-    },
-    {
-     "t": "def",
-     "h": "Domination and admissibility",
-     "body": "δ₁ dominates δ₂ if R(θ, δ₁) ≤ R(θ, δ₂) for every θ, with strict inequality for at least one θ. δ₂ is then inadmissible. A rule is admissible if no rule dominates it. Admissibility is a NEGATIVE property — it says nothing beats you everywhere — and it is weak: a constant rule is admissible, and inadmissible rules can still be perfectly reasonable in practice."
-    },
-    {
-     "t": "formula",
-     "h": "Minimax",
-     "body": "δ* is minimax if sup_θ R(θ, δ*) = inf_δ sup_θ R(θ, δ). The minimax value is that common quantity. The criterion is complete — it always ranks two rules — and it is pessimistic, because the ranking is decided entirely by each rule's worst parameter value."
-    },
-    {
-     "t": "def",
-     "h": "Bayes rules",
-     "body": "δ_π is a Bayes rule with respect to π if it minimises r(π, δ). Under squared-error loss it is the posterior mean; under absolute-error loss the posterior median; under 0–1 loss the posterior mode. The practical route to a Bayes rule is therefore always the same: find the posterior, then take the summary the loss names."
-    },
-    {
-     "t": "formula",
-     "h": "The three relations the exam asks for",
-     "body": "(1) A Bayes rule with CONSTANT risk is minimax. (2) A unique Bayes rule is admissible. (3) If a minimax rule is unique, it is admissible. The first is the one that does work: it converts the hard problem of minimising a supremum into the easy problem of choosing a prior that flattens the risk curve. The prior that does so is called the LEAST FAVOURABLE prior, because it makes the problem as hard as possible."
-    },
-    {
-     "t": "step",
-     "h": "Why relation (1) is true, in one paragraph",
-     "body": "Let δ_π be Bayes for π with risk constant at c. For any rule δ, its worst-case risk is at least its average risk against π, which is at least the Bayes risk of δ_π, which equals c because the risk is constant. So sup_θ R(θ, δ) ≥ c = sup_θ R(θ, δ_π) for every δ, which is the definition of δ_π being minimax. The whole argument is 'a maximum is at least an average', used once."
-    },
-    {
-     "t": "trap",
-     "h": "What is NOT true",
-     "body": "Minimax does not imply admissible, and admissible does not imply minimax — the explore scene showed both failures in one picture. An unbiased estimator need not be admissible; the sample variance with divisor n − 1 is the standard counterexample under squared-error loss. And the MLE is not generally admissible: in estimating a normal mean vector in three or more dimensions, the James–Stein shrinkage estimator dominates it everywhere, which is the most famous inadmissibility result in statistics."
-    }
-   ],
-   "ask": {
-    "q": "How do loss, risk, admissibility and minimaxity differ?",
-    "nudge": "Loss is for a realised action and parameter; risk averages loss under sampling; admissibility rules out uniformly better procedures; minimaxity minimises worst-case risk."
-   }
-  },
-  {
-   "kind": "worked",
-   "id": "s4",
-   "title": "Worked in full — the minimax estimator of a binomial p",
-   "mins": 8,
-   "objective": "Build a minimax rule from scratch by flattening a risk curve, and verify it.",
-   "problem": "X ~ Bin(9, p) and the loss is squared error. (a) Find the risk of the MLE p̂ = X/9 and its worst case. (b) Within the family δ_a(x) = (x + a)/(9 + 2a), find the value of a making the risk constant in p. (c) State the minimax value, and (d) decide whether either rule dominates the other.",
-   "steps": [
-    {
-     "say": "(a) The MLE is unbiased, so its risk is its variance.",
-     "math": "R(p, p̂) = Var(X/9) = 9p(1−p)/81 = p(1−p)/9",
-     "why": "A curve, not a number: zero at p = 0 and p = 1, maximal at p = 0.5. Unbiasedness is what removes the bias term and leaves a pure variance."
-    },
-    {
-     "say": "Its worst case is at the middle.",
-     "math": "sup_p p(1−p)/9 = (1/4)/9 = 1/36 = 0.027778  at p = 0.5",
-     "why": "This is the number any competitor has to beat in the worst case. Note 1/(4n) is the general form."
-    },
-    {
-     "say": "(b) Write the bias and variance of δ_a, with N = 9 + 2a.",
-     "math": "E[δ_a] = (9p + a)/N,  bias = (9p + a)/N − p = (a − 2ap)/N;   Var(δ_a) = 9p(1−p)/N²",
-     "why": "The bias is linear in p and the variance quadratic, so the risk is a quadratic in p. Making it constant means killing the coefficients of p and p²."
-    },
-    {
-     "say": "Add variance and squared bias, and collect in p.",
-     "math": "R = [9p − 9p² + a² − 4a²p + 4a²p²]/N² = [a² + (9 − 4a²)p + (4a² − 9)p²]/N²",
-     "why": "The p and p² coefficients are 9 − 4a² and −(9 − 4a²): negatives of each other. So a single condition kills both at once, which is why this family works."
-    },
-    {
-     "say": "Set the coefficient to zero and solve for a.",
-     "math": "9 − 4a² = 0  ⟹  a = 3/2 = √9/2,  i.e.  a = √n/2",
-     "why": "The general answer is a = √n/2, so the minimax estimator of a binomial proportion is (x + √n/2)/(n + √n). For n = 9 that is (x + 1.5)/12."
-    },
-    {
-     "say": "(c) Evaluate the constant.",
-     "math": "R = a²/N² = (1.5)²/12² = 2.25/144 = 0.015625 = 1/64;   general form 1/(4(1 + √n)²)",
-     "why": "Check the general form: 1/(4(1+3)²) = 1/64 ✓. And 0.015625 < 0.027778, so this rule's worst case beats the MLE's by a wide margin. Because the risk is constant AND the rule is Bayes for Beta(1.5, 1.5) — the posterior mean (x + a)/(n + 2a) — relation (1) applies and the rule is minimax."
-    },
-    {
-     "say": "(d) Compare the two curves to settle domination.",
-     "math": "p(1−p)/9 = 1/64  ⟹  p² − p + 9/64 = 0  ⟹  p = (1 ± √0.4375)/2 = 0.1693, 0.8307",
-     "why": "Below 0.1693 and above 0.8307 the MLE has the smaller risk; between them the minimax rule does. The curves cross, so neither dominates and both are admissible. At p = 0.1 the MLE's risk is 0.0100 against 0.0156 — the minimax rule is genuinely worse there, and that is the price of insuring against the worst case."
-    },
-    {
-     "say": "State the least favourable prior, which is the by-product.",
-     "math": "Beta(√n/2, √n/2) = Beta(1.5, 1.5)",
-     "why": "This prior makes the problem hardest, in the sense that the best achievable Bayes risk against it equals the minimax value. It is also the bridge back to 4.7: the minimax rule here IS a posterior mean, with the prior chosen by a flatness condition rather than by belief."
-    }
-   ],
-   "after": "Four numbers to carry: MLE worst case 1/36 = 0.0278, minimax value 1/64 = 0.0156, the estimator (x + √n/2)/(n + √n), and the least favourable prior Beta(√n/2, √n/2). And one method: to find a minimax rule, take a conjugate family of Bayes rules and choose the prior parameter that flattens the risk.",
-   "ask": {
-    "q": "To establish that an estimator is minimax in a finite decision problem, what risks must you compare?",
-    "nudge": "Find its maximum risk over the parameter space and show no competing estimator can achieve a smaller maximum risk."
-   }
-  },
-  {
-   "kind": "recall",
-   "id": "s5",
-   "title": "Pause and recall",
-   "mins": 3,
-   "objective": "Retrieve the definitions and relations before the harder material.",
-   "intro": "Answer aloud, then look. Everything here was in the last two scenes.",
-   "items": [
-    {
-     "q": "Define the risk of a decision rule, and say what it is a function of.",
-     "a": "R(θ, δ) = E_θ[L(θ, δ(X))] — the expected loss over the sampling distribution, for a fixed θ. It is a function of θ, which is why two rules can cross."
-    },
-    {
-     "q": "Define Bayes risk, and say how it differs from risk.",
-     "a": "r(π, δ) = ∫ R(θ, δ) π(θ) dθ. Risk averages over the data with θ fixed; Bayes risk averages that over θ too, using a prior, so it is a single number."
-    },
-    {
-     "q": "What does it mean for a rule to be inadmissible?",
-     "a": "Some other rule has risk no larger at every θ and strictly smaller at some θ. A rule is admissible if no such rule exists."
-    },
-    {
-     "q": "Define the minimax rule.",
-     "a": "The rule minimising sup_θ R(θ, δ) — the best worst case. The common value of inf_δ sup_θ R is the minimax value."
-    },
-    {
-     "q": "State the relation that is actually used to find minimax rules.",
-     "a": "A Bayes rule with constant risk is minimax, and the prior that achieves it is the least favourable prior."
-    },
-    {
-     "q": "Give the minimax estimator of a binomial p under squared-error loss, and its risk.",
-     "a": "(x + √n/2)/(n + √n), with constant risk 1/(4(1 + √n)²). For n = 9 that is (x + 1.5)/12 and 1/64."
-    }
-   ]
-  },
-  {
-   "kind": "completion",
-   "id": "s6",
-   "title": "Your turn, with the scaffolding removed — five judgements",
-   "mins": 7,
-   "objective": "Apply each definition to a case you have not been shown.",
-   "problem": "Fill in each blank. The arithmetic is small; what is tested is which definition applies.",
-   "steps": [
-    {
-     "say": "Estimating a normal mean with known σ², the rule δ(x) = x̄ has risk σ²/n at every θ.",
-     "blank": {
-      "prompt": "Is it minimax, and why in one clause?",
-      "answer": "yes, because its risk is constant",
-      "accept": [
-       "yes - constant risk",
-       "minimax, constant risk",
-       "yes, constant risk so worst case = risk everywhere",
-       "yes because the risk does not depend on theta"
-      ],
-      "hint": "Its worst case equals its everywhere-case, and no rule can do better in the worst case."
-     },
-     "why": "The flat-risk argument is the one relation in this topic that does real work."
-    },
-    {
-     "say": "The rule 'ignore the data and always answer 3' has risk (θ − 3)², which is 0 at θ = 3.",
-     "blank": {
-      "prompt": "Is it admissible, and is it minimax?",
-      "answer": "admissible but not minimax",
-      "accept": [
-       "admissible, not minimax",
-       "yes admissible; no not minimax",
-       "it is admissible but its worst case is unbounded so not minimax",
-       "admissible but not minimax (unbounded worst case)"
-      ],
-      "hint": "Nothing can beat it at θ = 3, but its supremum of risk is infinite."
-     },
-     "why": "This single example shows admissibility is weak and that admissible does not imply minimax."
-    },
-    {
-     "say": "For a Bin(16, p) problem under squared-error loss.",
-     "blank": {
-      "prompt": "The minimax estimator and its risk?",
-      "answer": "(x + 2)/20, risk 1/100 = 0.01",
-      "accept": [
-       "(x+2)/20 and 0.01",
-       "(x + 2)/20, 1/100",
-       "(x+2)/20, risk 0.01",
-       "estimator (x+2)/20 risk 1/(4(1+4)^2)=0.01"
-      ],
-      "hint": "a = √n/2 and the risk is 1/(4(1 + √n)²), with √16 = 4."
-     },
-     "why": "Substituting into the general form is the fastest marks in the topic; n = 16 is chosen to make √n an integer."
-    },
-    {
-     "say": "A rule is the unique Bayes rule for some proper prior.",
-     "blank": {
-      "prompt": "What does that establish about it?",
-      "answer": "it is admissible",
-      "accept": [
-       "admissible",
-       "that it is admissible",
-       "it must be admissible",
-       "admissibility (a unique Bayes rule is admissible)"
-      ],
-      "hint": "One of the three relations in scene 4, and it needs the uniqueness."
-     },
-     "why": "The relation runs this way only: a unique Bayes rule is admissible, not the converse."
-    },
-    {
-     "say": "Estimating a normal mean VECTOR in three or more dimensions, the MLE is the vector of sample means.",
-     "blank": {
-      "prompt": "What is known about its admissibility, and by which result?",
-      "answer": "it is inadmissible, by the James-Stein estimator",
-      "accept": [
-       "inadmissible - James-Stein",
-       "inadmissible, James-Stein shrinkage dominates it",
-       "not admissible (James-Stein)",
-       "inadmissible by James Stein"
-      ],
-      "hint": "A shrinkage estimator dominates it everywhere once the dimension is at least 3."
-     },
-     "why": "The most famous inadmissibility result in statistics, and the standard counterexample to 'the MLE is always sensible'."
-    }
-   ],
-   "after": "Note what the second blank does to intuition: a rule that ignores the data entirely is admissible. Admissibility certifies only that a rule is not uniformly beatable, and that is a very low bar."
-  },
-  {
-   "kind": "theory",
-   "id": "s7",
-   "title": "Testing as a decision problem, and the loose ends",
-   "mins": 7,
-   "objective": "Carry the testing translation and the remaining vocabulary the syllabus names.",
-   "blocks": [
-    {
-     "t": "def",
-     "h": "Testing in decision language",
-     "body": "Take A = {0, 1}, with 1 meaning reject H₀, and the 0–1 loss L(θ, a) = 0 for a correct decision and 1 for an error. Then the risk is the probability of error: R(θ, δ) = P_θ(type I error) for θ ∈ H₀ and P_θ(type II error) for θ ∈ H₁. The whole Neyman–Pearson apparatus is one risk function, cut in two by which hypothesis θ belongs to."
-    },
-    {
-     "t": "formula",
-     "h": "Why Neyman–Pearson is not a minimax criterion",
-     "body": "Neyman–Pearson does not minimise the maximum of the two error probabilities. It CONSTRAINS one — size at most α — and minimises the other. That asymmetric treatment is a choice, justified by the two errors having different consequences, and it is why the framework needs a null hypothesis at all. A minimax test would instead equalise the two errors, which it does by choosing α to make them equal."
-    },
-    {
-     "t": "def",
-     "h": "Unbiasedness and invariance as restrictions",
-     "body": "Both are ways of shrinking the class of rules until a best one exists. Restrict to unbiased tests and a uniformly most powerful unbiased, or UMPU, test can exist where no UMP test does; restrict to invariant rules and a UMP invariant test can exist. The logic is the same as restricting to unbiased estimators before looking for a minimum-variance one: you cannot optimise over everything, so you optimise over a class and then defend the class."
-    },
-    {
-     "t": "def",
-     "h": "Complete class, and essentially complete class",
-     "body": "A class C of rules is complete if every rule outside it is dominated by some rule in C — so nothing is lost by restricting attention to C. The central result of the subject is that, under mild conditions, the Bayes rules form a complete class: every admissible rule is a Bayes rule or a limit of Bayes rules. That is why Bayesian machinery turns up in the search for minimax and admissible rules even when nobody involved holds a prior belief."
-    },
-    {
-     "t": "step",
-     "h": "Randomised rules, and why they are needed",
-     "body": "A randomised rule picks an action by a coin toss whose bias may depend on the data. Two places they are unavoidable: attaining an exact size α with a discrete test statistic, where no non-randomised critical region has the right probability; and guaranteeing that a minimax rule exists, since the set of risk points need not be closed without them. Under a convex loss such as squared error, randomisation never helps for estimation — a result that follows from Jensen's inequality."
-    },
-    {
-     "t": "trap",
-     "h": "Five statements that look right and are not",
-     "body": "Admissible does not imply minimax; minimax does not imply admissible. A Bayes rule need not be minimax unless its risk is constant. The MLE is not generally admissible. An unbiased estimator need not be admissible. And the minimax value is not the smallest risk achievable at any θ — it is the smallest achievable WORST CASE, which is a different and much larger number."
-    }
-   ],
-   "flow": {
-    "caption": "One risk curve, two ways of collapsing it, three relations between the answers",
-    "nodes": [
-     {
-      "id": "d",
-      "r": 0,
-      "c": 0,
-      "w": 4,
-      "label": "Θ, actions A, loss L(θ,a), rule δ(x)",
-      "kind": "start"
-     },
-     {
-      "id": "r",
-      "r": 1,
-      "c": 0,
-      "w": 4,
-      "label": "Risk R(θ,δ) = E_θ[L(θ,δ(X))] — a function of θ",
-      "kind": "note"
-     },
-     {
-      "id": "s",
-      "r": 2,
-      "c": 0,
-      "w": 2,
-      "label": "Take the supremum over θ",
-      "kind": "step"
-     },
-     {
-      "id": "a",
-      "r": 2,
-      "c": 2,
-      "w": 2,
-      "label": "Average over a prior π",
-      "kind": "step"
-     },
-     {
-      "id": "mm",
-      "r": 3,
-      "c": 0,
-      "w": 2,
-      "label": "Minimax rule",
-      "kind": "end"
-     },
-     {
-      "id": "bb",
-      "r": 3,
-      "c": 2,
-      "w": 2,
-      "label": "Bayes rule",
-      "kind": "end"
-     },
-     {
-      "id": "k",
-      "r": 4,
-      "c": 0,
-      "w": 4,
-      "label": "Constant risk + Bayes ⟹ minimax · unique Bayes ⟹ admissible",
-      "kind": "note"
-     }
+  "revision": {
+    "sheet": [
+      "Risk R(θ,δ) = E_θ[L(θ,δ(X))] — a FUNCTION of θ. Bayes risk r(π,δ) = ∫R(θ,δ)π(θ)dθ — a NUMBER.",
+      "Squared-error loss: risk = MSE = variance + bias². For an unbiased rule, risk = variance.",
+      "δ₁ dominates δ₂: risk no larger at every θ, strictly smaller at some θ. Undominated = admissible.",
+      "Minimax rule: minimises sup_θ R(θ,δ). Minimax value = inf_δ sup_θ R(θ,δ).",
+      "Bayes rule: minimises Bayes risk. Squared error → posterior mean; absolute → median; discrete 0–1 → mode; continuous parameter → MAP as a shrinking-neighbourhood limit.",
+      "Weighted absolute loss, k₁ below and k₂ above → the k₁/(k₁+k₂) posterior quantile.",
+      "RELATION 1: a Bayes rule with CONSTANT risk is minimax; its prior is the least favourable prior.",
+      "RELATION 2: a UNIQUE Bayes rule is admissible.",
+      "RELATION 3: a UNIQUE minimax rule is admissible.",
+      "NOT true: admissible ⇒ minimax; minimax ⇒ admissible; Bayes ⇒ minimax without constant risk.",
+      "MLE of binomial p: risk p(1−p)/n, worst case 1/(4n) at p = 0.5.",
+      "Minimax estimator of binomial p: (x + √n/2)/(n + √n), constant risk 1/(4(1+√n)²).",
+      "Least favourable prior for that problem: Beta(√n/2, √n/2).",
+      "n = 9: estimator (x+1.5)/12, risk 1/64 = 0.0156; MLE worst case 1/36 = 0.0278; curves cross at 0.1693, 0.8307.",
+      "n = 16: estimator (x+2)/20, risk 1/100 = 0.01; MLE worst case 1/64; curves cross at 0.2 and 0.8.",
+      "x̄ for a normal mean has constant risk σ²/n and is minimax.",
+      "A constant rule 'always answer c' is ADMISSIBLE (risk 0 at θ = c) but not minimax.",
+      "The MLE of a normal mean vector is INADMISSIBLE for dimension ≥ 3 — James–Stein.",
+      "Testing as a decision problem: 0–1 loss, risk = P(type I) on H₀ and P(type II) on H₁.",
+      "Neyman–Pearson constrains size and maximises power; it does not minimise the maximum error, so it is not minimax.",
+      "Bayes rules form a complete class: every admissible rule is a Bayes rule or a limit of them.",
+      "Randomisation is needed for exact size with discrete statistics; it never helps estimation under convex loss."
     ],
-    "edges": [
-     {
-      "from": "d",
-      "to": "r"
-     },
-     {
-      "from": "r",
-      "to": "s"
-     },
-     {
-      "from": "r",
-      "to": "a"
-     },
-     {
-      "from": "s",
-      "to": "mm"
-     },
-     {
-      "from": "a",
-      "to": "bb"
-     },
-     {
-      "from": "bb",
-      "to": "k"
-     },
-     {
-      "from": "mm",
-      "to": "k"
-     }
+    "cards": [
+      [
+        "Risk versus Bayes risk",
+        "Risk is a function of θ; Bayes risk averages it over a prior to one number"
+      ],
+      [
+        "Squared-error risk of an estimator",
+        "Variance + bias²"
+      ],
+      [
+        "δ₁ dominates δ₂ means",
+        "Risk no larger everywhere, strictly smaller somewhere"
+      ],
+      [
+        "Admissible means",
+        "Nothing dominates it — a weak certificate, not a recommendation"
+      ],
+      [
+        "Minimax rule",
+        "Minimises the worst-case risk, sup_θ R(θ,δ)"
+      ],
+      [
+        "The relation that finds minimax rules",
+        "A Bayes rule with constant risk is minimax"
+      ],
+      [
+        "Least favourable prior",
+        "The prior whose best achievable Bayes risk equals the minimax value"
+      ],
+      [
+        "Minimax estimator of a binomial p",
+        "(x + √n/2)/(n + √n), risk 1/(4(1+√n)²)"
+      ],
+      [
+        "MLE of binomial p: risk and worst case",
+        "p(1−p)/n, worst case 1/(4n) at p = 0.5"
+      ],
+      [
+        "Is a constant rule admissible?",
+        "Yes — its risk is zero at one θ, so nothing beats it everywhere"
+      ],
+      [
+        "Famous inadmissibility result",
+        "James–Stein dominates the MLE for a normal mean vector, dimension ≥ 3"
+      ],
+      [
+        "Weighted absolute loss, k₁ under and k₂ over",
+        "The k₁/(k₁+k₂) posterior quantile"
+      ]
+    ],
+    "tricks": [
+      {
+        "hook": "Risk is a curve; Bayes risk and the minimax value are numbers",
+        "why": "Every confusion in the topic comes from treating risk as a number. Two curves cross, which is why admissibility exists as a concept at all."
+      },
+      {
+        "hook": "Flat risk plus Bayes equals minimax",
+        "why": "Both conditions are needed. Flat alone is not enough — 'always report x₁' is flat and dominated."
+      },
+      {
+        "hook": "Admissible is a low bar",
+        "why": "A rule that ignores the data is admissible. It certifies only that nothing beats you everywhere."
+      },
+      {
+        "hook": "Root n over two",
+        "why": "a = √n/2 in (x + a)/(n + 2a) is the flattening choice, giving risk 1/(4(1+√n)²) and prior Beta(√n/2, √n/2). Three results from one number."
+      },
+      {
+        "hook": "Neyman-Pearson constrains, minimax equalises",
+        "why": "NP caps one error and minimises the other; a minimax test makes the two errors equal. That is why NP is not a minimax criterion."
+      }
+    ],
+    "shortcuts": [
+      "For an unbiased rule, risk is just the variance — no bias term to compute.",
+      "Check any claimed minimax risk for constancy: if it still depends on θ, the flattening condition was not used.",
+      "Any option asserting that minimax implies admissible, or the reverse, without a uniqueness qualifier is wrong.",
+      "Any option calling a constant rule inadmissible is wrong.",
+      "Any option calling the MLE always admissible is wrong — James–Stein, dimension ≥ 3.",
+      "If a loss is asymmetric, the Bayes rule moves AWAY from the costlier error, not towards it."
+    ],
+    "remember": [
+      "To settle domination, find where the two risk curves cross; one crossing is enough to rule it out both ways.",
+      "To find a minimax rule, flatten the risk inside a conjugate family of Bayes rules."
+    ],
+    "traps": [
+      "Treating risk as a single number rather than a function of θ.",
+      "Asserting minimax ⇒ admissible, or admissible ⇒ minimax, without the uniqueness condition.",
+      "Calling a Bayes rule minimax when its risk is not constant.",
+      "Calling the data-ignoring constant rule inadmissible.",
+      "Claiming the MLE is always admissible, or forgetting the dimension ≥ 3 condition on James–Stein.",
+      "Confusing the minimax value with the smallest risk attainable at some θ.",
+      "Forgetting the bias term when a rule is biased, and so reporting a variance as a risk.",
+      "Applying asymmetric weights the wrong way round and moving the estimate towards the costlier error.",
+      "Assuming an unbiased estimator must be admissible."
     ]
-   },
-   "scenario": {
-    "teaser": "The minimax rule's worst case is 44% better. At p = 0.1 it is 56% worse. Both figures are the same rule.",
-    "title": "What insuring against the worst case actually costs",
-    "body": [
-     "Minimax is usually presented as the cautious choice, and caution sounds free. It is not, and the binomial example prices it exactly. Take n = 9 and compare the MLE's risk p(1−p)/9 against the minimax rule's constant 1/64 = 0.015625.",
-     "At p = 0.5, where the MLE is at its worst, the MLE's risk is 1/36 = 0.027778 and the minimax rule's is 0.015625 — the minimax rule is 43.8% better. That is the advantage it was built for. Now move to p = 0.1: the MLE's risk is 0.010000 and the minimax rule's is still 0.015625, so the minimax rule is 56.2% WORSE. At p = 0.05 it is worse by a factor of nearly three — 0.015625 against 0.005278.",
-     "The two curves cross at p = 0.1693 and p = 0.8307, which are the exact roots of p(1−p)/9 = 1/64. So the minimax rule wins on roughly the middle two-thirds of the parameter range and loses on the outer third, sometimes heavily. Whether that is a good trade depends entirely on where p actually is, which is the one thing you do not know.",
-     "This is why minimax is a criterion and not a conclusion. It answers a specific question — what should I do if I must guard against the least favourable parameter value — and it answers it optimally. It does not answer 'what is the best estimator', because that question has no answer once the risk curves cross. An exam question asking you to 'compare' two estimators is asking for this structure: where each wins, where the curves cross, which has the better worst case, and whether either dominates.",
-     "The practical reading, worth a sentence in any answer: if you have genuine reason to think p is extreme, the MLE is better and you should say so. Minimax is insurance, and insurance is worth buying only when the risk you are insuring against is real."
-    ],
-    "close": "Minimax buys a better worst case and pays for it everywhere else; the price here is exact and computable."
-   },
-   "ask": {
-    "q": "How does a hypothesis test fit into decision theory?",
-    "nudge": "The action is reject or do not reject; the loss assigns costs to Type I and Type II errors, and risk is the resulting error probability weighted by loss."
-   }
   },
-  {
-   "kind": "explore",
-   "id": "s8",
-   "title": "The least favourable prior, seen as a flatness condition",
-   "mins": 6,
-   "objective": "Watch a risk curve flatten as a prior parameter is tuned, which is how minimax rules are found.",
-   "viz": {
-    "type": "risk-curves",
-    "n": 9,
-    "sd": 3,
-    "m": 0,
-    "w": 1
-   },
-   "body": [
-    "This frame opens with the shrinkage weight at 1, so the only curve that matters is the flat pink line at σ²/n = 1.0 — the sample mean. Hold that picture: FLAT IS THE GOAL. A rule with flat risk has nothing to fear from an adversary choosing θ, because every θ costs the same.",
-    "Now drop the weight slightly, to 0.95. The curve tilts: slightly better near the target, slightly worse away from it, and its supremum over the frame rises above 1.0. Every departure from flatness hands the adversary a parameter value to exploit, and the readout's worst-case line records the damage.",
-    "That is the whole logic of the worked example, in a different problem. There, the family of candidate rules was δ_a(x) = (x + a)/(n + 2a) — the posterior means of the Beta(a, a) priors — and the risk was a quadratic in p with the p and p² coefficients equal to 9 − 4a² and its negative. One value of a, namely √n/2, killed both and left a constant. The prior that did it, Beta(√n/2, √n/2), is the least favourable prior.",
-    "So 'least favourable' is not a statement about belief. It names the prior against which the best achievable Bayes risk is largest — the hardest problem in the family — and the striking fact is that solving that one hardest problem solves the minimax problem too. Note the direction of the argument: you do not verify minimaxity by checking every rule. You produce one rule, show its risk is constant, show it is Bayes for some prior, and the relation does the rest.",
-    "One caution the picture makes obvious. Flat risk is sufficient for minimaxity only alongside being a Bayes rule. A rule can have constant risk and be poor — 'always answer the first observation' has constant risk σ², flat as anything, and is dominated by x̄ for every n > 1."
-   ],
-   "ask": {
-    "q": "'Always report x₁' has constant risk σ², which is flat. Why does that not make it minimax?",
-    "nudge": "The relation has two conditions, and this rule satisfies only one of them. Which?"
-   }
-  },
-  {
-   "kind": "guided",
-   "id": "s9",
-   "title": "Now without the steps — settle admissibility and minimaxity",
-   "mins": 8,
-   "objective": "Compare two rules completely: domination, admissibility, and which is minimax.",
-   "problem": "X ~ Bin(16, p), squared-error loss. Consider δ₁(x) = x/16 and δ₂(x) = (x + 2)/20. (a) Write both risk functions. (b) Does either dominate the other? (c) Which is minimax, and what is the minimax value? (d) Are both admissible?",
-   "hints": [
-    "δ₁ is unbiased, so its risk is a variance. For δ₂, note that 2 = √16/2, so it is the minimax rule and its risk should come out constant.",
-    "Set the two risks equal and solve the resulting quadratic in p to find where the curves cross.",
-    "Domination requires one curve to be below the other at EVERY p. A single crossing settles the question."
-   ],
-   "solution": [
+  "traps": [
+    "Risk is a function of θ; Bayes risk and the minimax value are the numbers derived from it.",
+    "Admissible does not imply minimax, and minimax does not imply admissible without uniqueness.",
+    "A Bayes rule is minimax only if its risk is constant — and constant risk alone is not sufficient either.",
+    "A rule that ignores the data entirely is admissible, which is what makes admissibility weak.",
+    "The MLE of a normal mean vector is inadmissible for dimension three or more, by James–Stein.",
+    "Neyman–Pearson constrains the size and maximises power; it does not minimise the maximum error probability.",
+    "Under squared-error loss, risk includes the squared bias, so a biased rule's variance is not its risk.",
+    "For weighted absolute loss the Bayes rule is a quantile, not the median, and it moves away from the costlier error."
+  ],
+  "scenes": [
     {
-     "say": "(a) δ₁ is unbiased, so its risk is Var(X/16).",
-     "math": "R(p, δ₁) = 16p(1−p)/256 = p(1−p)/16"
+      "kind": "foundation",
+      "id": "s0",
+      "title": "Before the lesson — four things it will assume",
+      "mins": 5,
+      "objective": "Have loss, expectation over the sample, and the bias-variance split ready, so risk is a quantity you can compute rather than a definition to recite.",
+      "body": [
+        "Decision theory is the frame the rest of Unit IV sits inside. Estimation, testing and interval construction are all decisions; loss and risk are the language that lets them be compared. The syllabus sets this topic at State, so the examinable content is definitions and relations rather than hard derivations — but the definitions are only usable if you can compute a risk, and that is what these four checks are for.",
+        "If they are solid, the whole topic is four definitions and three relations between them."
+      ],
+      "items": [
+        {
+          "ask": "What is a loss function, a decision rule, and the risk of a decision rule?",
+          "recall": "A loss function L(θ, a) is the penalty for taking action a when the truth is θ. A decision rule δ(x) maps each possible sample to an action. The risk is the expected loss over the sampling distribution, R(θ, δ) = E_θ[L(θ, δ(X))] — a function of θ, not a number.",
+          "refresh": [
+            "Keep the three apart. The loss is a penalty for one θ and one action; it involves no randomness. The rule is what you will do for each possible dataset; it involves no θ. The risk averages the loss over the data for a FIXED θ, which is why it is a function of θ and why two rules can be compared only by comparing two curves.",
+            "That last point is the whole difficulty of the topic. If risk were a single number, the best rule would be the one with the smallest number. Because it is a curve, two rules can cross, and then neither is better — which is what admissibility is about.",
+            "Note what is averaged over. Risk averages over the SAMPLE with θ held fixed; Bayes risk goes one step further and averages over θ as well, using a prior. Those are two different operations and the exam separates them."
+          ]
+        },
+        {
+          "ask": "Under squared-error loss, what does the risk of an estimator equal?",
+          "recall": "The mean squared error, which decomposes as R(θ, θ̂) = Var_θ(θ̂) + [bias_θ(θ̂)]². With L(θ, a) = (θ − a)², risk and MSE are the same object.",
+          "refresh": [
+            "Write it out: E[(θ̂ − θ)²] = E[(θ̂ − E θ̂ + E θ̂ − θ)²]. The cross term vanishes because E[θ̂ − Eθ̂] = 0, leaving the variance plus the squared bias.",
+            "This is the identity that makes the whole topic computable. Every risk in this lesson is obtained by writing down a variance and a bias and adding the square of the second to the first — no integration required.",
+            "It also explains why biased estimators are not automatically worse. A rule that accepts some bias to buy a large variance reduction can have lower risk, and the shrinkage estimators in this lesson are exactly that trade made deliberately."
+          ]
+        },
+        {
+          "ask": "What are the mean and variance of a binomial count, and of the sample proportion?",
+          "recall": "For X ~ Bin(n, p): E[X] = np and Var(X) = np(1 − p). For the proportion p̂ = X/n: E[p̂] = p, so it is unbiased, and Var(p̂) = p(1 − p)/n.",
+          "refresh": [
+            "Because p̂ is unbiased, its squared-error risk is just its variance, p(1 − p)/n. That is a curve in p: zero at the two ends and largest at p = 0.5, where it equals 1/(4n).",
+            "That shape is the key to the main example in this lesson. The MLE's risk is excellent when p is near 0 or 1 and at its worst in the middle, so a rule with a flat risk curve can beat it in the middle while losing at the ends.",
+            "Keep 1/(4n) in mind as a number. For n = 9 the MLE's worst-case risk is 1/36 = 0.0278, and the lesson will produce a rule whose risk is 1/64 = 0.0156 everywhere."
+          ]
+        },
+        {
+          "ask": "What is the Bayes estimator under squared-error loss, from the previous topic?",
+          "recall": "The posterior mean. With a Beta(α, β) prior and x successes in n trials, that is (α + x)/(α + β + n); with the symmetric prior Beta(a, a) it is (x + a)/(n + 2a).",
+          "refresh": [
+            "This topic and the last are two views of the same machinery. In 4.7 the prior was the point and the loss was the afterthought; here the loss is the point and the prior becomes a device.",
+            "The connection worth carrying in advance: a Bayes rule is one that minimises Bayes risk for a stated prior. It turns out that a Bayes rule whose ordinary risk happens to be CONSTANT in θ is minimax, and that is how minimax rules are actually found.",
+            "So the formula (x + a)/(n + 2a) is about to be used not as a Bayesian answer but as a family of candidate rules, with a chosen to flatten the risk curve."
+          ]
+        }
+      ]
     },
     {
-     "say": "δ₂ is δ_a with a = 2 = √16/2, so it is the minimax rule and its risk is the constant from the general form.",
-     "math": "R(p, δ₂) = 1/(4(1 + √16)²) = 1/(4 × 25) = 1/100 = 0.01"
+      "kind": "intuition",
+      "id": "s1",
+      "title": "Two curves that cross",
+      "mins": 5,
+      "objective": "See why 'which estimator is better' is usually the wrong question, and what the two standard repairs are.",
+      "body": [
+        "Everything awkward about this topic comes from one fact: risk is a function of the unknown parameter, and two rules' risk curves generally cross.",
+        "Suppose one rule has risk 0.02 everywhere and another has risk that is 0.01 near the ends of the parameter range and 0.03 in the middle. Which is better? The honest answer is that the question is malformed. The second is better if θ is near an end and worse if it is in the middle, and you do not know which it is — that is the whole point of having to estimate it.",
+        "There are only two serious ways out, and the syllabus names both. The first is to give up on a total ordering and ask only the weaker question: is there a rule that is at least as good as this one everywhere, and strictly better somewhere? If so, this rule is INADMISSIBLE and should be discarded; nothing is lost by dropping it. If not, it is ADMISSIBLE, and admissibility is a very low bar — it certifies only that the rule is not uniformly beatable, not that it is good. The constant rule 'always answer 7' is admissible, because nothing beats it when θ happens to be 7.",
+        "The second way out is to impose an ordering by force, by judging each rule on its worst case. The MINIMAX rule is the one whose highest risk over all θ is lowest. That turns curves into numbers and always produces an answer, at the cost of being governed entirely by the least favourable parameter value — a pessimist's criterion.",
+        "The third option, which is what Bayesians do, is to average the risk over a prior instead of taking its maximum. That also turns a curve into a number, and the number depends on the prior. The striking fact, and the one this lesson builds to, is that these two repairs meet: the minimax rule is usually a Bayes rule for a particular prior, the one that makes the problem hardest."
+      ],
+      "aside": {
+        "h": "The sentence to carry into the exam",
+        "body": "Admissible means not uniformly beatable — a weak certificate. Minimax means the best worst case. Bayes means the best average against a prior. The three are different questions, and a rule can satisfy one and not another."
+      },
+      "ask": {
+        "q": "The rule 'ignore the data and always answer 0.5' is admissible under squared-error loss. Does that tell you anything good about it?",
+        "nudge": "Ask what would have to be true of a competing rule for it to beat this one everywhere, including at θ = 0.5."
+      }
     },
     {
-     "say": "(b) Set them equal to locate the crossings.",
-     "math": "p(1−p)/16 = 1/100  ⟹  p² − p + 0.16 = 0  ⟹  p = (1 ± √0.36)/2 = (1 ± 0.6)/2 = 0.2, 0.8"
+      "kind": "explore",
+      "id": "s2",
+      "title": "Watch two risk curves cross",
+      "mins": 6,
+      "objective": "Read admissibility and the minimax value straight off the picture.",
+      "viz": {
+        "type": "risk-curves",
+        "n": 9,
+        "sd": 3,
+        "m": 0,
+        "w": 0.5
+      },
+      "body": [
+        "Three risk curves for estimating a normal mean: the sample mean in pink, a constant guess in teal, and a shrinkage rule between them in ochre. The horizontal axis is θ, the vertical axis is squared-error risk.",
+        "Start with the sample mean alone by setting the shrinkage weight to 1. Its risk is a flat line at σ²/n = 1.0 — flat because x̄ is unbiased, so its risk is a variance that does not depend on θ. That flatness is what makes it minimax: its worst case equals its everywhere-case, and no rule can do better in the worst case.",
+        "Now drag the weight to 0. The rule ignores the data and always answers m. Its risk is the parabola (θ − m)²: exactly zero when θ happens to equal m, and growing without limit as θ moves away. This is the cleanest possible demonstration that no rule dominates another everywhere — at θ = m this absurd rule beats every estimator ever devised, which is precisely why admissibility is a weak criterion.",
+        "Set the weight to 0.5 and look at where the ochre curve crosses the pink line. To the left and right of the crossings the sample mean is better; between them the shrinkage rule is. Neither dominates the other, so this establishes pairwise non-domination only. Crossing alone does not establish admissibility against every possible rule. The readout still shows the sample mean has the smaller worst-case risk, so it is minimax in this comparison; minimaxity and admissibility are separate properties.",
+        "Finally move the target m away from zero and watch the whole ochre curve slide with it. The shrinkage rule's advantage is purchased near wherever you aim it, and paid for everywhere else."
+      ],
+      "ask": {
+        "q": "At weight 0.5 the shrinkage rule's risk at θ = m is 0.25, a quarter of the sample mean's. Why is that not an argument for using it?",
+        "nudge": "Ask what you would need to know in order to collect that advantage, and whether you know it."
+      }
     },
     {
-     "say": "Read off which is lower where.",
-     "math": "p < 0.2 or p > 0.8 → δ₁ lower;   0.2 < p < 0.8 → δ₂ lower",
-     "why": "For instance at p = 0.1, R(δ₁) = 0.09/16 = 0.005625 against 0.01; at p = 0.5, R(δ₁) = 0.25/16 = 0.015625 against 0.01."
+      "kind": "theory",
+      "id": "s3",
+      "title": "The four definitions and the three relations",
+      "mins": 9,
+      "objective": "State every definition in the topic precisely, and the relations the exam asks you to apply.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "The decision problem",
+          "body": "A parameter space Θ, an action space A, a loss function L : Θ × A → [0, ∞), and a family of distributions {f(x | θ)}. A decision rule δ maps each sample x to an action δ(x) ∈ A. For estimation A = Θ and δ is an estimator; for testing A = {accept, reject} and δ is a test. A randomised rule chooses among actions by a probability distribution, which matters because randomised rules are sometimes needed to attain a stated size and sometimes needed for a minimax solution to exist."
+        },
+        {
+          "t": "formula",
+          "h": "Risk, and Bayes risk",
+          "body": "Risk: R(θ, δ) = E_θ[L(θ, δ(X))] = ∫ L(θ, δ(x)) f(x | θ) dx. A function of θ. Bayes risk, against a prior π: r(π, δ) = ∫ R(θ, δ) π(θ) dθ = E_π[R(θ, δ)]. A single number. The distinction is the one most worth getting right: risk integrates over the DATA, Bayes risk integrates over the data and then over the PARAMETER."
+        },
+        {
+          "t": "def",
+          "h": "Domination and admissibility",
+          "body": "δ₁ dominates δ₂ if R(θ, δ₁) ≤ R(θ, δ₂) for every θ, with strict inequality for at least one θ. δ₂ is then inadmissible. A rule is admissible if no rule dominates it. Admissibility is a NEGATIVE property — it says nothing beats you everywhere — and it is weak: a constant rule is admissible, and inadmissible rules can still be perfectly reasonable in practice."
+        },
+        {
+          "t": "formula",
+          "h": "Minimax",
+          "body": "δ* is minimax if sup_θ R(θ, δ*) = inf_δ sup_θ R(θ, δ). The minimax value is that common quantity. The criterion is complete — it always ranks two rules — and it is pessimistic, because the ranking is decided entirely by each rule's worst parameter value."
+        },
+        {
+          "t": "def",
+          "h": "Bayes rules",
+          "body": "δ_π is a Bayes rule with respect to π if it minimises r(π, δ). Under squared-error loss it is the posterior mean; under absolute-error loss the posterior median; for a discrete parameter, under 0–1 loss it is the posterior mode. For a continuous parameter the corresponding MAP rule is a shrinking-neighbourhood limit. The practical route to a Bayes rule is therefore always the same: find the posterior, then take the summary the loss names."
+        },
+        {
+          "t": "formula",
+          "h": "The three relations the exam asks for",
+          "body": "(1) A Bayes rule with CONSTANT risk is minimax. (2) A unique Bayes rule under a full-support prior (with finite risks) is admissible. Without full support, uniqueness on the prior-supported region does not rule out domination elsewhere. (3) If a minimax rule is unique, it is admissible. The first is the one that does work: it converts the hard problem of minimising a supremum into the easy problem of choosing a prior that flattens the risk curve. The prior that does so is called the LEAST FAVOURABLE prior, because it makes the problem as hard as possible."
+        },
+        {
+          "t": "step",
+          "h": "Why relation (1) is true, in one paragraph",
+          "body": "Let δ_π be Bayes for π with risk constant at c. For any rule δ, its worst-case risk is at least its average risk against π, which is at least the Bayes risk of δ_π, which equals c because the risk is constant. So sup_θ R(θ, δ) ≥ c = sup_θ R(θ, δ_π) for every δ, which is the definition of δ_π being minimax. The whole argument is 'a maximum is at least an average', used once."
+        },
+        {
+          "t": "trap",
+          "h": "What is NOT true",
+          "body": "Minimax does not imply admissible, and admissible does not imply minimax — the explore scene showed both failures in one picture. An unbiased estimator need not be admissible; the sample variance with divisor n − 1 is the standard counterexample under squared-error loss. And the MLE is not generally admissible: in estimating a normal mean vector in three or more dimensions, the James–Stein shrinkage estimator dominates it everywhere, which is the most famous inadmissibility result in statistics."
+        }
+      ],
+      "ask": {
+        "q": "How do loss, risk, admissibility and minimaxity differ?",
+        "nudge": "Loss is for a realised action and parameter; risk averages loss under sampling; admissibility rules out uniformly better procedures; minimaxity minimises worst-case risk."
+      }
     },
     {
-     "say": "So neither dominates.",
-     "math": "the curves cross at p = 0.2 and p = 0.8 ⟹ no domination either way"
+      "kind": "worked",
+      "id": "s4",
+      "title": "Worked in full — the minimax estimator of a binomial p",
+      "mins": 8,
+      "objective": "Build a minimax rule from scratch by flattening a risk curve, and verify it.",
+      "problem": "X ~ Bin(9, p) and the loss is squared error. (a) Find the risk of the MLE p̂ = X/9 and its worst case. (b) Within the family δ_a(x) = (x + a)/(9 + 2a), find the value of a making the risk constant in p. (c) State the minimax value, and (d) decide whether either rule dominates the other.",
+      "steps": [
+        {
+          "say": "(a) The MLE is unbiased, so its risk is its variance.",
+          "math": "R(p, p̂) = Var(X/9) = 9p(1−p)/81 = p(1−p)/9",
+          "why": "A curve, not a number: zero at p = 0 and p = 1, maximal at p = 0.5. Unbiasedness is what removes the bias term and leaves a pure variance."
+        },
+        {
+          "say": "Its worst case is at the middle.",
+          "math": "sup_p p(1−p)/9 = (1/4)/9 = 1/36 = 0.027778  at p = 0.5",
+          "why": "This is the number any competitor has to beat in the worst case. Note 1/(4n) is the general form."
+        },
+        {
+          "say": "(b) Write the bias and variance of δ_a, with N = 9 + 2a.",
+          "math": "E[δ_a] = (9p + a)/N,  bias = (9p + a)/N − p = (a − 2ap)/N;   Var(δ_a) = 9p(1−p)/N²",
+          "why": "The bias is linear in p and the variance quadratic, so the risk is a quadratic in p. Making it constant means killing the coefficients of p and p²."
+        },
+        {
+          "say": "Add variance and squared bias, and collect in p.",
+          "math": "R = [9p − 9p² + a² − 4a²p + 4a²p²]/N² = [a² + (9 − 4a²)p + (4a² − 9)p²]/N²",
+          "why": "The p and p² coefficients are 9 − 4a² and −(9 − 4a²): negatives of each other. So a single condition kills both at once, which is why this family works."
+        },
+        {
+          "say": "Set the coefficient to zero and solve for a.",
+          "math": "9 − 4a² = 0  ⟹  a = 3/2 = √9/2,  i.e.  a = √n/2",
+          "why": "The general answer is a = √n/2, so the minimax estimator of a binomial proportion is (x + √n/2)/(n + √n). For n = 9 that is (x + 1.5)/12."
+        },
+        {
+          "say": "(c) Evaluate the constant.",
+          "math": "R = a²/N² = (1.5)²/12² = 2.25/144 = 0.015625 = 1/64;   general form 1/(4(1 + √n)²)",
+          "why": "Check the general form: 1/(4(1+3)²) = 1/64 ✓. And 0.015625 < 0.027778, so this rule's worst case beats the MLE's by a wide margin. Because the risk is constant AND the rule is Bayes for Beta(1.5, 1.5) — the posterior mean (x + a)/(n + 2a) — relation (1) applies and the rule is minimax."
+        },
+        {
+          "say": "(d) Compare the two curves to settle domination.",
+          "math": "p(1−p)/9 = 1/64  ⟹  p² − p + 9/64 = 0  ⟹  p = (1 ± √0.4375)/2 = 0.1693, 0.8307",
+          "why": "Below 0.1693 and above 0.8307 the MLE has the smaller risk; between them the minimax rule does. The curves cross, so neither of these two rules dominates the other. Crossing alone does not establish admissibility against all possible rules. The next step gives the separate admissibility argument for the sample proportion; the minimax rule is admissible because it is the unique Bayes rule under the proper full-support Beta(3/2, 3/2) prior."
+        },
+        {
+          "say": "State the least favourable prior, which is the by-product.",
+          "math": "Beta(√n/2, √n/2) = Beta(1.5, 1.5)",
+          "why": "This prior makes the problem hardest, in the sense that the best achievable Bayes risk against it equals the minimax value. It is also the bridge back to 4.7: the minimax rule here IS a posterior mean, with the prior chosen by a flatness condition rather than by belief."
+        },
+        {
+          "say": "Why the sample proportion is admissible",
+          "math": "Under the scaled squared-error loss L*(a,p) = (a−p)²/[p(1−p)], a Uniform(0,1) prior gives posterior Beta(x+1, n−x+1) and the unique Bayes action x/n. Any rule dominating x/n under ordinary squared-error loss would also dominate it under L*, because dividing each risk by p(1−p)>0 preserves the ordering. This is impossible, so x/n is admissible under ordinary squared error.",
+          "why": "This is the separate proof. Crossing risk curves alone establishes only pairwise non-domination, not global admissibility. The minimax shrinkage rule is admissible separately because it is the unique Bayes rule under the proper full-support Beta(3/2, 3/2) prior."
+        }
+      ],
+      "after": "Four numbers to carry: MLE worst case 1/36 = 0.0278, minimax value 1/64 = 0.0156, the estimator (x + √n/2)/(n + √n), and the least favourable prior Beta(√n/2, √n/2). And one method: to find a minimax rule, take a conjugate family of Bayes rules and choose the prior parameter that flattens the risk.",
+      "ask": {
+        "q": "To establish that an estimator is minimax in a finite decision problem, what risks must you compare?",
+        "nudge": "Find its maximum risk over the parameter space and show no competing estimator can achieve a smaller maximum risk."
+      }
     },
     {
-     "say": "(c) Compare the worst cases.",
-     "math": "sup R(δ₁) = 1/64 = 0.015625 at p = 0.5;   sup R(δ₂) = 0.01  ⟹  δ₂ is minimax, value 0.01"
+      "kind": "recall",
+      "id": "s5",
+      "title": "Pause and recall",
+      "mins": 3,
+      "objective": "Retrieve the definitions and relations before the harder material.",
+      "intro": "Answer aloud, then look. Everything here was in the last two scenes.",
+      "items": [
+        {
+          "q": "Define the risk of a decision rule, and say what it is a function of.",
+          "a": "R(θ, δ) = E_θ[L(θ, δ(X))] — the expected loss over the sampling distribution, for a fixed θ. It is a function of θ, which is why two rules can cross."
+        },
+        {
+          "q": "Define Bayes risk, and say how it differs from risk.",
+          "a": "r(π, δ) = ∫ R(θ, δ) π(θ) dθ. Risk averages over the data with θ fixed; Bayes risk averages that over θ too, using a prior, so it is a single number."
+        },
+        {
+          "q": "What does it mean for a rule to be inadmissible?",
+          "a": "Some other rule has risk no larger at every θ and strictly smaller at some θ. A rule is admissible if no such rule exists."
+        },
+        {
+          "q": "Define the minimax rule.",
+          "a": "The rule minimising sup_θ R(θ, δ) — the best worst case. The common value of inf_δ sup_θ R is the minimax value."
+        },
+        {
+          "q": "State the relation that is actually used to find minimax rules.",
+          "a": "A Bayes rule with constant risk is minimax, and the prior that achieves it is the least favourable prior."
+        },
+        {
+          "q": "Give the minimax estimator of a binomial p under squared-error loss, and its risk.",
+          "a": "(x + √n/2)/(n + √n), with constant risk 1/(4(1 + √n)²). For n = 9 that is (x + 1.5)/12 and 1/64."
+        }
+      ]
     },
     {
-     "say": "(d) Admissibility follows from (b).",
-     "math": "neither is dominated ⟹ both admissible"
+      "kind": "completion",
+      "id": "s6",
+      "title": "Your turn, with the scaffolding removed — five judgements",
+      "mins": 7,
+      "objective": "Apply each definition to a case you have not been shown.",
+      "problem": "Fill in each blank. The arithmetic is small; what is tested is which definition applies.",
+      "steps": [
+        {
+          "say": "Estimating a normal mean with known σ², the rule δ(x) = x̄ has risk σ²/n at every θ.",
+          "blank": {
+            "prompt": "Is it minimax, and why in one clause?",
+            "answer": "yes, because its risk is constant",
+            "accept": [
+              "yes - constant risk",
+              "minimax, constant risk",
+              "yes, constant risk so worst case = risk everywhere",
+              "yes because the risk does not depend on theta"
+            ],
+            "hint": "Its worst case equals its everywhere-case, and no rule can do better in the worst case."
+          },
+          "why": "The flat-risk argument is the one relation in this topic that does real work."
+        },
+        {
+          "say": "The rule 'ignore the data and always answer 3' has risk (θ − 3)², which is 0 at θ = 3.",
+          "blank": {
+            "prompt": "Is it admissible, and is it minimax?",
+            "answer": "admissible but not minimax",
+            "accept": [
+              "admissible, not minimax",
+              "yes admissible; no not minimax",
+              "it is admissible but its worst case is unbounded so not minimax",
+              "admissible but not minimax (unbounded worst case)"
+            ],
+            "hint": "Nothing can beat it at θ = 3, but its supremum of risk is infinite."
+          },
+          "why": "This single example shows admissibility is weak and that admissible does not imply minimax."
+        },
+        {
+          "say": "For a Bin(16, p) problem under squared-error loss.",
+          "blank": {
+            "prompt": "The minimax estimator and its risk?",
+            "answer": "(x + 2)/20, risk 1/100 = 0.01",
+            "accept": [
+              "(x+2)/20 and 0.01",
+              "(x + 2)/20, 1/100",
+              "(x+2)/20, risk 0.01",
+              "estimator (x+2)/20 risk 1/(4(1+4)^2)=0.01"
+            ],
+            "hint": "a = √n/2 and the risk is 1/(4(1 + √n)²), with √16 = 4."
+          },
+          "why": "Substituting into the general form is the fastest marks in the topic; n = 16 is chosen to make √n an integer."
+        },
+        {
+          "say": "A rule is the unique Bayes rule for a proper full-support prior, with finite risks.",
+          "blank": {
+            "prompt": "What does that establish about it?",
+            "answer": "it is admissible",
+            "accept": [
+              "admissible",
+              "that it is admissible",
+              "it must be admissible",
+              "admissibility (a unique Bayes rule is admissible)"
+            ],
+            "hint": "One of the three relations in scene 4, and it needs the uniqueness."
+          },
+          "why": "The relation runs this way only: a unique Bayes rule is admissible, not the converse."
+        },
+        {
+          "say": "Estimating a normal mean VECTOR in three or more dimensions, the MLE is the vector of sample means.",
+          "blank": {
+            "prompt": "What is known about its admissibility, and by which result?",
+            "answer": "it is inadmissible, by the James-Stein estimator",
+            "accept": [
+              "inadmissible - James-Stein",
+              "inadmissible, James-Stein shrinkage dominates it",
+              "not admissible (James-Stein)",
+              "inadmissible by James Stein"
+            ],
+            "hint": "A shrinkage estimator dominates it everywhere once the dimension is at least 3."
+          },
+          "why": "The most famous inadmissibility result in statistics, and the standard counterexample to 'the MLE is always sensible'."
+        }
+      ],
+      "after": "Note what the second blank does to intuition: a rule that ignores the data entirely is admissible. Admissibility certifies only that a rule is not uniformly beatable, and that is a very low bar."
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "title": "Testing as a decision problem, and the loose ends",
+      "mins": 7,
+      "objective": "Carry the testing translation and the remaining vocabulary the syllabus names.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Testing in decision language",
+          "body": "Take A = {0, 1}, with 1 meaning reject H₀, and the 0–1 loss L(θ, a) = 0 for a correct decision and 1 for an error. Then the risk is the probability of error: R(θ, δ) = P_θ(type I error) for θ ∈ H₀ and P_θ(type II error) for θ ∈ H₁. The whole Neyman–Pearson apparatus is one risk function, cut in two by which hypothesis θ belongs to."
+        },
+        {
+          "t": "formula",
+          "h": "Why Neyman–Pearson is not a minimax criterion",
+          "body": "Neyman–Pearson does not minimise the maximum of the two error probabilities. It CONSTRAINS one — size at most α — and minimises the other. That asymmetric treatment is a choice, justified by the two errors having different consequences, and it is why the framework needs a null hypothesis at all. A minimax test would instead equalise the two errors, which it does by choosing α to make them equal."
+        },
+        {
+          "t": "def",
+          "h": "Unbiasedness and invariance as restrictions",
+          "body": "Both are ways of shrinking the class of rules until a best one exists. Restrict to unbiased tests and a uniformly most powerful unbiased, or UMPU, test can exist where no UMP test does; restrict to invariant rules and a UMP invariant test can exist. The logic is the same as restricting to unbiased estimators before looking for a minimum-variance one: you cannot optimise over everything, so you optimise over a class and then defend the class."
+        },
+        {
+          "t": "def",
+          "h": "Complete class, and essentially complete class",
+          "body": "A class C of rules is complete if every rule outside it is dominated by some rule in C — so nothing is lost by restricting attention to C. The central result of the subject is that, under mild conditions, the Bayes rules form a complete class: every admissible rule is a Bayes rule or a limit of Bayes rules. That is why Bayesian machinery turns up in the search for minimax and admissible rules even when nobody involved holds a prior belief."
+        },
+        {
+          "t": "step",
+          "h": "Randomised rules, and why they are needed",
+          "body": "A randomised rule picks an action by a coin toss whose bias may depend on the data. Two places they are unavoidable: attaining an exact size α with a discrete test statistic, where no non-randomised critical region has the right probability; and guaranteeing that a minimax rule exists, since the set of risk points need not be closed without them. Under a convex loss such as squared error, randomisation never helps for estimation — a result that follows from Jensen's inequality."
+        },
+        {
+          "t": "trap",
+          "h": "Five statements that look right and are not",
+          "body": "Admissible does not imply minimax; minimax does not imply admissible. A Bayes rule need not be minimax unless its risk is constant. The MLE is not generally admissible. An unbiased estimator need not be admissible. And the minimax value is not the smallest risk achievable at any θ — it is the smallest achievable WORST CASE, which is a different and much larger number."
+        }
+      ],
+      "flow": {
+        "caption": "One risk curve, two ways of collapsing it, three relations between the answers",
+        "nodes": [
+          {
+            "id": "d",
+            "r": 0,
+            "c": 0,
+            "w": 4,
+            "label": "Θ, actions A, loss L(θ,a), rule δ(x)",
+            "kind": "start"
+          },
+          {
+            "id": "r",
+            "r": 1,
+            "c": 0,
+            "w": 4,
+            "label": "Risk R(θ,δ) = E_θ[L(θ,δ(X))] — a function of θ",
+            "kind": "note"
+          },
+          {
+            "id": "s",
+            "r": 2,
+            "c": 0,
+            "w": 2,
+            "label": "Take the supremum over θ",
+            "kind": "step"
+          },
+          {
+            "id": "a",
+            "r": 2,
+            "c": 2,
+            "w": 2,
+            "label": "Average over a prior π",
+            "kind": "step"
+          },
+          {
+            "id": "mm",
+            "r": 3,
+            "c": 0,
+            "w": 2,
+            "label": "Minimax rule",
+            "kind": "end"
+          },
+          {
+            "id": "bb",
+            "r": 3,
+            "c": 2,
+            "w": 2,
+            "label": "Bayes rule",
+            "kind": "end"
+          },
+          {
+            "id": "k",
+            "r": 4,
+            "c": 0,
+            "w": 4,
+            "label": "Constant risk + Bayes ⟹ minimax · unique Bayes ⟹ admissible",
+            "kind": "note"
+          }
+        ],
+        "edges": [
+          {
+            "from": "d",
+            "to": "r"
+          },
+          {
+            "from": "r",
+            "to": "s"
+          },
+          {
+            "from": "r",
+            "to": "a"
+          },
+          {
+            "from": "s",
+            "to": "mm"
+          },
+          {
+            "from": "a",
+            "to": "bb"
+          },
+          {
+            "from": "bb",
+            "to": "k"
+          },
+          {
+            "from": "mm",
+            "to": "k"
+          }
+        ]
+      },
+      "scenario": {
+        "teaser": "The minimax rule's worst case is 44% better. At p = 0.1 it is 56% worse. Both figures are the same rule.",
+        "title": "What insuring against the worst case actually costs",
+        "body": [
+          "Minimax is usually presented as the cautious choice, and caution sounds free. It is not, and the binomial example prices it exactly. Take n = 9 and compare the MLE's risk p(1−p)/9 against the minimax rule's constant 1/64 = 0.015625.",
+          "At p = 0.5, where the MLE is at its worst, the MLE's risk is 1/36 = 0.027778 and the minimax rule's is 0.015625 — the minimax rule is 43.8% better. That is the advantage it was built for. Now move to p = 0.1: the MLE's risk is 0.010000 and the minimax rule's is still 0.015625, so the minimax rule is 56.2% WORSE. At p = 0.05 it is worse by a factor of nearly three — 0.015625 against 0.005278.",
+          "The two curves cross at p = 0.1693 and p = 0.8307, which are the exact roots of p(1−p)/9 = 1/64. So the minimax rule wins on roughly the middle two-thirds of the parameter range and loses on the outer third, sometimes heavily. Whether that is a good trade depends entirely on where p actually is, which is the one thing you do not know.",
+          "This is why minimax is a criterion and not a conclusion. It answers a specific question — what should I do if I must guard against the least favourable parameter value — and it answers it optimally. It does not answer 'what is the best estimator', because that question has no answer once the risk curves cross. An exam question asking you to 'compare' two estimators is asking for this structure: where each wins, where the curves cross, which has the better worst case, and whether either dominates.",
+          "The practical reading, worth a sentence in any answer: if you have genuine reason to think p is extreme, the MLE is better and you should say so. Minimax is insurance, and insurance is worth buying only when the risk you are insuring against is real."
+        ],
+        "close": "Minimax buys a better worst case and pays for it everywhere else; the price here is exact and computable."
+      },
+      "ask": {
+        "q": "How does a hypothesis test fit into decision theory?",
+        "nudge": "The action is reject or do not reject; the loss assigns costs to Type I and Type II errors, and risk is the resulting error probability weighted by loss."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s8",
+      "title": "The least favourable prior, seen as a flatness condition",
+      "mins": 6,
+      "objective": "Watch a risk curve flatten as a prior parameter is tuned, which is how minimax rules are found.",
+      "viz": {
+        "type": "risk-curves",
+        "n": 9,
+        "sd": 3,
+        "m": 0,
+        "w": 1
+      },
+      "body": [
+        "This frame opens with the shrinkage weight at 1, so the only curve that matters is the flat pink line at σ²/n = 1.0 — the sample mean. Hold that picture: FLAT IS THE GOAL. A rule with flat risk has nothing to fear from an adversary choosing θ, because every θ costs the same.",
+        "Now drop the weight slightly, to 0.95. The curve tilts: slightly better near the target, slightly worse away from it, and its supremum over the frame rises above 1.0. Every departure from flatness hands the adversary a parameter value to exploit, and the readout's worst-case line records the damage.",
+        "That is the whole logic of the worked example, in a different problem. There, the family of candidate rules was δ_a(x) = (x + a)/(n + 2a) — the posterior means of the Beta(a, a) priors — and the risk was a quadratic in p with the p and p² coefficients equal to 9 − 4a² and its negative. One value of a, namely √n/2, killed both and left a constant. The prior that did it, Beta(√n/2, √n/2), is the least favourable prior.",
+        "So 'least favourable' is not a statement about belief. It names the prior against which the best achievable Bayes risk is largest — the hardest problem in the family — and the striking fact is that solving that one hardest problem solves the minimax problem too. Note the direction of the argument: you do not verify minimaxity by checking every rule. You produce one rule, show its risk is constant, show it is Bayes for some prior, and the relation does the rest.",
+        "One caution the picture makes obvious. Flat risk is sufficient for minimaxity only alongside being a Bayes rule. A rule can have constant risk and be poor — 'always answer the first observation' has constant risk σ², flat as anything, and is dominated by x̄ for every n > 1."
+      ],
+      "ask": {
+        "q": "'Always report x₁' has constant risk σ², which is flat. Why does that not make it minimax?",
+        "nudge": "The relation has two conditions, and this rule satisfies only one of them. Which?"
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "title": "Now without the steps — settle admissibility and minimaxity",
+      "mins": 8,
+      "objective": "Compare two rules completely: domination, admissibility, and which is minimax.",
+      "problem": "X ~ Bin(16, p), squared-error loss. Consider δ₁(x) = x/16 and δ₂(x) = (x + 2)/20. (a) Write both risk functions. (b) Does either dominate the other? (c) Which is minimax, and what is the minimax value? (d) Are both admissible?",
+      "hints": [
+        "δ₁ is unbiased, so its risk is a variance. For δ₂, note that 2 = √16/2, so it is the minimax rule and its risk should come out constant.",
+        "Set the two risks equal and solve the resulting quadratic in p to find where the curves cross.",
+        "Domination requires one curve to be below the other at EVERY p. A single crossing settles the question."
+      ],
+      "solution": [
+        {
+          "say": "(a) δ₁ is unbiased, so its risk is Var(X/16).",
+          "math": "R(p, δ₁) = 16p(1−p)/256 = p(1−p)/16"
+        },
+        {
+          "say": "δ₂ is δ_a with a = 2 = √16/2, so it is the minimax rule and its risk is the constant from the general form.",
+          "math": "R(p, δ₂) = 1/(4(1 + √16)²) = 1/(4 × 25) = 1/100 = 0.01"
+        },
+        {
+          "say": "(b) Set them equal to locate the crossings.",
+          "math": "p(1−p)/16 = 1/100  ⟹  p² − p + 0.16 = 0  ⟹  p = (1 ± √0.36)/2 = (1 ± 0.6)/2 = 0.2, 0.8"
+        },
+        {
+          "say": "Read off which is lower where.",
+          "math": "p < 0.2 or p > 0.8 → δ₁ lower;   0.2 < p < 0.8 → δ₂ lower",
+          "why": "For instance at p = 0.1, R(δ₁) = 0.09/16 = 0.005625 against 0.01; at p = 0.5, R(δ₁) = 0.25/16 = 0.015625 against 0.01."
+        },
+        {
+          "say": "So neither dominates.",
+          "math": "the curves cross at p = 0.2 and p = 0.8 ⟹ no domination either way"
+        },
+        {
+          "say": "(c) Compare the worst cases.",
+          "math": "sup R(δ₁) = 1/64 = 0.015625 at p = 0.5;   sup R(δ₂) = 0.01  ⟹  δ₂ is minimax, value 0.01"
+        },
+        {
+          "say": "Admissibility requires a separate argument; it does not follow from pairwise non-domination alone.",
+          "math": "Neither rule dominates the other. δ₁ = X/16 is admissible as the sample proportion by the separate scaled-loss Bayes argument. δ₂ = (X+2)/20 is the unique Bayes rule under the proper full-support Beta(2,2) prior, so it is admissible as well.",
+          "why": "The crossing proves only that neither of these two rules dominates the other. The sample-proportion result and the unique-Bayes result establish admissibility against every competing rule."
+        }
+      ],
+      "answer": "R(p, δ₁) = p(1−p)/16 and R(p, δ₂) = 0.01. The curves cross at p = 0.2 and 0.8, so neither dominates the other. δ₁ = X/16 is admissible by the separate sample-proportion argument under scaled squared-error loss; δ₂ is the unique Bayes rule under Beta(2,2), a proper full-support prior, and is therefore admissible. δ₂ is minimax with minimax value 0.01, against δ₁'s worst case of 1/64 = 0.015625.",
+      "check": "Three checks. The crossing points must be symmetric about 0.5, because R(δ₁) is, and 0.2 and 0.8 are. The minimax value must be below the other rule's worst case — 0.01 < 0.015625 ✓. And δ₂'s risk must be genuinely constant; if yours depends on p, the coefficient-killing condition a = √n/2 was not used.",
+      "scenario": {
+        "teaser": "Why a prior nobody believes in is the key to a criterion that mentions no prior at all.",
+        "title": "Minimax as a game against nature",
+        "body": [
+          "The minimax criterion makes no reference to a prior, and yet the only practical way to find a minimax rule runs through one. That looks like a trick. It is not; it is the structure of a two-person game, and seeing it that way makes the relation in scene 4 obvious rather than magical.",
+          "Set the problem up as a game. You choose a decision rule δ. An adversary — call it nature — chooses the parameter θ. The payoff nature collects from you is the risk R(θ, δ). You want to minimise it; nature wants to maximise it. You move first, in the sense that nature may choose θ knowing your rule, which is exactly what 'worst case' means: your loss is sup_θ R(θ, δ), and you pick δ to make that as small as possible.",
+          "Now allow nature a mixed strategy — a probability distribution over θ rather than a single value. A distribution over the parameter is a prior, and nature's expected payoff against it is the Bayes risk r(π, δ). Nature's best mixed strategy is the one that maximises the best Bayes risk you can achieve against it, and that distribution is precisely what the LEAST FAVOURABLE prior is: nature's optimal play.",
+          "At the equilibrium of such a game, the two orders of play agree — the minimum of the maxima equals the maximum of the minima. Your equilibrium strategy is the Bayes rule against nature's optimal prior, and nature is indifferent between every θ it has put mass on, which is to say your risk is CONSTANT across them. That indifference is the flat risk curve. It is not a lucky coincidence that flat risk certifies minimaxity; it is what equilibrium looks like from your side of the board.",
+          "Two things follow that are worth carrying. First, the least favourable prior is a device, not a belief — in the binomial problem it came out as Beta(√n/2, √n/2), which nobody would assert as a description of the world. Second, this is why Bayes rules form a complete class: the equilibrium strategies of the game are Bayes rules, so anything that is not one (or a limit of them) is beatable, which is what inadmissible means."
+        ],
+        "close": "Minimax is the equilibrium of a game against nature; the least favourable prior is nature's optimal play, and flat risk is the indifference that marks the equilibrium."
+      }
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s10",
+      "title": "Six statements — verdict on each before you look",
+      "mins": 6,
+      "objective": "Meet the exact implications this topic invites you to assert and that do not hold.",
+      "intro": "Each is either a standard result or an implication running the wrong way.",
+      "items": [
+        {
+          "claim": "A Bayes rule whose risk is constant in θ is minimax.",
+          "tf": true,
+          "why": "The argument is one line: any rule's worst-case risk is at least its average risk against the prior, which is at least the Bayes risk, which equals the constant. This is the relation that makes minimax problems solvable."
+        },
+        {
+          "claim": "Every minimax rule is admissible.",
+          "tf": false,
+          "why": "Not in general. Minimaxity is about the worst case only, and a rule can have the best worst case while being dominated elsewhere. A UNIQUE minimax rule is admissible, and that qualifier is the whole content of the statement."
+        },
+        {
+          "claim": "The risk of a decision rule is a single number summarising its quality.",
+          "tf": false,
+          "why": "Risk is a FUNCTION of θ. Bayes risk is the single number, obtained by averaging risk over a prior, and the minimax value is another, obtained by taking its supremum. Collapsing risk to a number is what the whole topic is about."
+        },
+        {
+          "claim": "Under squared-error loss the risk of an estimator equals its variance plus the square of its bias.",
+          "tf": true,
+          "why": "The MSE decomposition, with the cross term vanishing. It is how every risk in this topic is actually computed, and it is why a biased rule can have lower risk than an unbiased one."
+        },
+        {
+          "claim": "The maximum likelihood estimator is always admissible.",
+          "tf": false,
+          "why": "For a normal mean vector in three or more dimensions the James–Stein shrinkage estimator dominates it at every parameter value — the most famous inadmissibility result in statistics. The MLE has many virtues; admissibility is not reliably among them."
+        },
+        {
+          "claim": "The rule that ignores the data and always reports a fixed constant is inadmissible.",
+          "tf": false,
+          "why": "It is admissible. At the parameter value equal to that constant its risk is zero, so no rule can have risk no larger everywhere and strictly smaller somewhere. This is the standard demonstration that admissibility is a weak criterion."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "title": "Transfer — a loss that is not squared error",
+      "mins": 7,
+      "objective": "Build a Bayes rule and judge a rule's admissibility when the loss is asymmetric.",
+      "problem": "A component's lifetime parameter θ is estimated, and under-estimating is twice as costly as over-estimating: L(θ, a) = 2(θ − a) if a < θ, and (a − θ) if a ≥ θ. The posterior for θ has been computed. (a) What posterior summary is the Bayes rule here? (b) If a competing rule has risk equal to that of the Bayes rule at every θ, what can be said about admissibility? (c) Why does this loss make the squared-error answer wrong?",
+      "hints": [
+        "This is a weighted absolute-error loss. Recall that plain absolute-error loss gives the median, and ask what weighting the two sides does to that result.",
+        "For weighted absolute loss with weights k₁ below and k₂ above, the Bayes rule is a QUANTILE of the posterior, not the median.",
+        "For (b), apply the definition of domination literally — it requires a strict inequality somewhere."
+      ],
+      "solution": [
+        {
+          "say": "(a) Identify the loss. It is absolute error with unequal weights, 2 for under-estimation and 1 for over-estimation.",
+          "math": "L = k₁(θ − a) for a < θ with k₁ = 2;  k₂(a − θ) for a ≥ θ with k₂ = 1"
+        },
+        {
+          "say": "The Bayes rule for weighted absolute loss is the k₁/(k₁ + k₂) quantile of the posterior.",
+          "math": "quantile at 2/(2 + 1) = 2/3  ⟹  the posterior 66.7th percentile"
+        },
+        {
+          "say": "Sanity-check the direction and the special case.",
+          "math": "k₁ = k₂ ⟹ quantile 1/2 = the median ✓;  k₁ > k₂ ⟹ quantile above the median",
+          "why": "Under-estimating costs more, so the rule deliberately aims high. If your answer had moved below the median, the weights were applied the wrong way round."
+        },
+        {
+          "say": "(b) Apply the definition of domination.",
+          "math": "equal risk at every θ ⟹ no strict inequality anywhere ⟹ neither dominates the other",
+          "why": "Domination needs risk no larger everywhere AND strictly smaller somewhere. Equal risks fail the second condition, so the two rules are risk-equivalent and the admissibility of one says nothing about the other beyond that neither beats it."
+        },
+        {
+          "say": "(c) Say why squared error gives the wrong answer here.",
+          "math": "squared error is symmetric: L(θ, θ+c) = L(θ, θ−c). This loss has L(θ, θ−c) = 2c and L(θ, θ+c) = c",
+          "why": "A symmetric loss cannot express 'under-estimating is worse', so its Bayes rule — the posterior mean — sits in the wrong place. The loss function, not the posterior, is what encodes the asymmetry of consequences."
+        }
+      ],
+      "answer": "(a) The 2/3 quantile of the posterior — weighted absolute loss with weights k₁ below and k₂ above gives the k₁/(k₁+k₂) quantile, which reduces to the median when the weights are equal. (b) Neither dominates: equal risk everywhere fails the strict-inequality requirement. (c) Squared-error loss is symmetric and so cannot represent the asymmetry, and its Bayes rule, the posterior mean, is therefore aimed at the wrong point.",
+      "check": "The structural check that catches the commonest error: when under-estimation is the costlier mistake, the estimate must move UP from the median, not down. If your quantile came out at 1/3, the weights were transposed."
+    },
+    {
+      "kind": "summary",
+      "id": "s12",
+      "title": "What you should now be able to do unaided",
+      "mins": 4,
+      "objective": "Compress the topic to four definitions, three relations and one method.",
+      "body": [
+        "The definitions. A decision rule δ maps data to actions. Its risk R(θ, δ) = E_θ[L(θ, δ(X))] is a FUNCTION of θ. Bayes risk r(π, δ) = ∫ R(θ, δ) π(θ) dθ is a NUMBER. δ₁ dominates δ₂ if its risk is no larger everywhere and strictly smaller somewhere; a rule nothing dominates is admissible. A minimax rule minimises sup_θ R(θ, δ).",
+        "The relations. A Bayes rule with constant risk is minimax, and the prior achieving it is the least favourable prior. A unique Bayes rule is admissible. A unique minimax rule is admissible. Nothing else holds: admissible does not imply minimax, minimax does not imply admissible, and a Bayes rule is not minimax unless its risk is constant.",
+        "The computation. Under squared-error loss, risk = variance + bias². That identity does all the arithmetic in this topic. For an unbiased rule the risk is just the variance, so the MLE of a binomial p has risk p(1−p)/n with worst case 1/(4n).",
+        "To find a minimax rule, take a conjugate family of Bayes rules and pick the prior parameter that flattens the risk. For Bin(n, p) under squared error this gives the minimax estimator (x + √n/2)/(n + √n), with constant risk 1/(4(1 + √n)²) and least favourable prior Beta(√n/2, √n/2). For n = 9: estimator (x + 1.5)/12, risk 1/64 = 0.0156, against the MLE's worst case of 1/36 = 0.0278. The curves cross at p = 0.1693 and 0.8307, so neither dominates the other; the sample proportion is admissible by the separate scaled-loss Bayes argument, and the minimax rule is admissible by its unique proper full-support Bayes representation.",
+        "The losses and their Bayes rules. Squared error → posterior mean. Absolute error → posterior median. Discrete 0–1 loss → posterior mode; for continuous parameters use MAP as the shrinking-neighbourhood limit. Weighted absolute error with weights k₁ below and k₂ above → the k₁/(k₁+k₂) posterior quantile.",
+        "The translations. Testing is a decision problem with 0–1 loss, where risk is the probability of error — type I on H₀ and type II on H₁. Neyman–Pearson constrains one error and minimises the other rather than minimising the maximum, which is why it is not a minimax criterion. Unbiasedness and invariance are restrictions imposed so that a best rule exists within a class. Bayes rules form a complete class, which is why they appear in every search for admissible and minimax rules.",
+        "The counterexamples worth keeping. A constant rule is admissible — so admissibility is weak. The MLE for a normal mean vector in dimension three or more is inadmissible, by James–Stein. And 'always report x₁' has perfectly constant risk and is still dominated by x̄, because constant risk alone is not enough: the rule has to be Bayes as well."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s13",
+      "title": "Mastery test",
+      "mins": 12,
+      "objective": "Ten unseen questions, drawn 3 easy / 5 moderate / 2 hard.",
+      "setId": "inference_t8_mastery"
     }
-   ],
-   "answer": "R(p, δ₁) = p(1−p)/16 and R(p, δ₂) = 0.01. The curves cross at p = 0.2 and 0.8, so neither dominates and both are admissible. δ₂ is minimax with minimax value 0.01, against δ₁'s worst case of 1/64 = 0.015625.",
-   "check": "Three checks. The crossing points must be symmetric about 0.5, because R(δ₁) is, and 0.2 and 0.8 are. The minimax value must be below the other rule's worst case — 0.01 < 0.015625 ✓. And δ₂'s risk must be genuinely constant; if yours depends on p, the coefficient-killing condition a = √n/2 was not used.",
-   "scenario": {
-    "teaser": "Why a prior nobody believes in is the key to a criterion that mentions no prior at all.",
-    "title": "Minimax as a game against nature",
-    "body": [
-     "The minimax criterion makes no reference to a prior, and yet the only practical way to find a minimax rule runs through one. That looks like a trick. It is not; it is the structure of a two-person game, and seeing it that way makes the relation in scene 4 obvious rather than magical.",
-     "Set the problem up as a game. You choose a decision rule δ. An adversary — call it nature — chooses the parameter θ. The payoff nature collects from you is the risk R(θ, δ). You want to minimise it; nature wants to maximise it. You move first, in the sense that nature may choose θ knowing your rule, which is exactly what 'worst case' means: your loss is sup_θ R(θ, δ), and you pick δ to make that as small as possible.",
-     "Now allow nature a mixed strategy — a probability distribution over θ rather than a single value. A distribution over the parameter is a prior, and nature's expected payoff against it is the Bayes risk r(π, δ). Nature's best mixed strategy is the one that maximises the best Bayes risk you can achieve against it, and that distribution is precisely what the LEAST FAVOURABLE prior is: nature's optimal play.",
-     "At the equilibrium of such a game, the two orders of play agree — the minimum of the maxima equals the maximum of the minima. Your equilibrium strategy is the Bayes rule against nature's optimal prior, and nature is indifferent between every θ it has put mass on, which is to say your risk is CONSTANT across them. That indifference is the flat risk curve. It is not a lucky coincidence that flat risk certifies minimaxity; it is what equilibrium looks like from your side of the board.",
-     "Two things follow that are worth carrying. First, the least favourable prior is a device, not a belief — in the binomial problem it came out as Beta(√n/2, √n/2), which nobody would assert as a description of the world. Second, this is why Bayes rules form a complete class: the equilibrium strategies of the game are Bayes rules, so anything that is not one (or a limit of them) is beatable, which is what inadmissible means."
-    ],
-    "close": "Minimax is the equilibrium of a game against nature; the least favourable prior is nature's optimal play, and flat risk is the indifference that marks the equilibrium."
-   }
-  },
-  {
-   "kind": "trapcheck",
-   "id": "s10",
-   "title": "Six statements — verdict on each before you look",
-   "mins": 6,
-   "objective": "Meet the exact implications this topic invites you to assert and that do not hold.",
-   "intro": "Each is either a standard result or an implication running the wrong way.",
-   "items": [
-    {
-     "claim": "A Bayes rule whose risk is constant in θ is minimax.",
-     "tf": true,
-     "why": "The argument is one line: any rule's worst-case risk is at least its average risk against the prior, which is at least the Bayes risk, which equals the constant. This is the relation that makes minimax problems solvable."
-    },
-    {
-     "claim": "Every minimax rule is admissible.",
-     "tf": false,
-     "why": "Not in general. Minimaxity is about the worst case only, and a rule can have the best worst case while being dominated elsewhere. A UNIQUE minimax rule is admissible, and that qualifier is the whole content of the statement."
-    },
-    {
-     "claim": "The risk of a decision rule is a single number summarising its quality.",
-     "tf": false,
-     "why": "Risk is a FUNCTION of θ. Bayes risk is the single number, obtained by averaging risk over a prior, and the minimax value is another, obtained by taking its supremum. Collapsing risk to a number is what the whole topic is about."
-    },
-    {
-     "claim": "Under squared-error loss the risk of an estimator equals its variance plus the square of its bias.",
-     "tf": true,
-     "why": "The MSE decomposition, with the cross term vanishing. It is how every risk in this topic is actually computed, and it is why a biased rule can have lower risk than an unbiased one."
-    },
-    {
-     "claim": "The maximum likelihood estimator is always admissible.",
-     "tf": false,
-     "why": "For a normal mean vector in three or more dimensions the James–Stein shrinkage estimator dominates it at every parameter value — the most famous inadmissibility result in statistics. The MLE has many virtues; admissibility is not reliably among them."
-    },
-    {
-     "claim": "The rule that ignores the data and always reports a fixed constant is inadmissible.",
-     "tf": false,
-     "why": "It is admissible. At the parameter value equal to that constant its risk is zero, so no rule can have risk no larger everywhere and strictly smaller somewhere. This is the standard demonstration that admissibility is a weak criterion."
-    }
-   ]
-  },
-  {
-   "kind": "guided",
-   "id": "s11",
-   "title": "Transfer — a loss that is not squared error",
-   "mins": 7,
-   "objective": "Build a Bayes rule and judge a rule's admissibility when the loss is asymmetric.",
-   "problem": "A component's lifetime parameter θ is estimated, and under-estimating is twice as costly as over-estimating: L(θ, a) = 2(θ − a) if a < θ, and (a − θ) if a ≥ θ. The posterior for θ has been computed. (a) What posterior summary is the Bayes rule here? (b) If a competing rule has risk equal to that of the Bayes rule at every θ, what can be said about admissibility? (c) Why does this loss make the squared-error answer wrong?",
-   "hints": [
-    "This is a weighted absolute-error loss. Recall that plain absolute-error loss gives the median, and ask what weighting the two sides does to that result.",
-    "For weighted absolute loss with weights k₁ below and k₂ above, the Bayes rule is a QUANTILE of the posterior, not the median.",
-    "For (b), apply the definition of domination literally — it requires a strict inequality somewhere."
-   ],
-   "solution": [
-    {
-     "say": "(a) Identify the loss. It is absolute error with unequal weights, 2 for under-estimation and 1 for over-estimation.",
-     "math": "L = k₁(θ − a) for a < θ with k₁ = 2;  k₂(a − θ) for a ≥ θ with k₂ = 1"
-    },
-    {
-     "say": "The Bayes rule for weighted absolute loss is the k₁/(k₁ + k₂) quantile of the posterior.",
-     "math": "quantile at 2/(2 + 1) = 2/3  ⟹  the posterior 66.7th percentile"
-    },
-    {
-     "say": "Sanity-check the direction and the special case.",
-     "math": "k₁ = k₂ ⟹ quantile 1/2 = the median ✓;  k₁ > k₂ ⟹ quantile above the median",
-     "why": "Under-estimating costs more, so the rule deliberately aims high. If your answer had moved below the median, the weights were applied the wrong way round."
-    },
-    {
-     "say": "(b) Apply the definition of domination.",
-     "math": "equal risk at every θ ⟹ no strict inequality anywhere ⟹ neither dominates the other",
-     "why": "Domination needs risk no larger everywhere AND strictly smaller somewhere. Equal risks fail the second condition, so the two rules are risk-equivalent and the admissibility of one says nothing about the other beyond that neither beats it."
-    },
-    {
-     "say": "(c) Say why squared error gives the wrong answer here.",
-     "math": "squared error is symmetric: L(θ, θ+c) = L(θ, θ−c). This loss has L(θ, θ−c) = 2c and L(θ, θ+c) = c",
-     "why": "A symmetric loss cannot express 'under-estimating is worse', so its Bayes rule — the posterior mean — sits in the wrong place. The loss function, not the posterior, is what encodes the asymmetry of consequences."
-    }
-   ],
-   "answer": "(a) The 2/3 quantile of the posterior — weighted absolute loss with weights k₁ below and k₂ above gives the k₁/(k₁+k₂) quantile, which reduces to the median when the weights are equal. (b) Neither dominates: equal risk everywhere fails the strict-inequality requirement. (c) Squared-error loss is symmetric and so cannot represent the asymmetry, and its Bayes rule, the posterior mean, is therefore aimed at the wrong point.",
-   "check": "The structural check that catches the commonest error: when under-estimation is the costlier mistake, the estimate must move UP from the median, not down. If your quantile came out at 1/3, the weights were transposed."
-  },
-  {
-   "kind": "summary",
-   "id": "s12",
-   "title": "What you should now be able to do unaided",
-   "mins": 4,
-   "objective": "Compress the topic to four definitions, three relations and one method.",
-   "body": [
-    "The definitions. A decision rule δ maps data to actions. Its risk R(θ, δ) = E_θ[L(θ, δ(X))] is a FUNCTION of θ. Bayes risk r(π, δ) = ∫ R(θ, δ) π(θ) dθ is a NUMBER. δ₁ dominates δ₂ if its risk is no larger everywhere and strictly smaller somewhere; a rule nothing dominates is admissible. A minimax rule minimises sup_θ R(θ, δ).",
-    "The relations. A Bayes rule with constant risk is minimax, and the prior achieving it is the least favourable prior. A unique Bayes rule is admissible. A unique minimax rule is admissible. Nothing else holds: admissible does not imply minimax, minimax does not imply admissible, and a Bayes rule is not minimax unless its risk is constant.",
-    "The computation. Under squared-error loss, risk = variance + bias². That identity does all the arithmetic in this topic. For an unbiased rule the risk is just the variance, so the MLE of a binomial p has risk p(1−p)/n with worst case 1/(4n).",
-    "The method, and the one result to carry. To find a minimax rule, take a conjugate family of Bayes rules and pick the prior parameter that flattens the risk. For Bin(n, p) under squared error this gives the minimax estimator (x + √n/2)/(n + √n), with constant risk 1/(4(1 + √n)²) and least favourable prior Beta(√n/2, √n/2). For n = 9: estimator (x + 1.5)/12, risk 1/64 = 0.0156, against the MLE's worst case of 1/36 = 0.0278 — and the two risk curves cross at p = 0.1693 and 0.8307, so neither dominates and both are admissible.",
-    "The losses and their Bayes rules. Squared error → posterior mean. Absolute error → posterior median. 0–1 loss → posterior mode. Weighted absolute error with weights k₁ below and k₂ above → the k₁/(k₁+k₂) posterior quantile.",
-    "The translations. Testing is a decision problem with 0–1 loss, where risk is the probability of error — type I on H₀ and type II on H₁. Neyman–Pearson constrains one error and minimises the other rather than minimising the maximum, which is why it is not a minimax criterion. Unbiasedness and invariance are restrictions imposed so that a best rule exists within a class. Bayes rules form a complete class, which is why they appear in every search for admissible and minimax rules.",
-    "The counterexamples worth keeping. A constant rule is admissible — so admissibility is weak. The MLE for a normal mean vector in dimension three or more is inadmissible, by James–Stein. And 'always report x₁' has perfectly constant risk and is still dominated by x̄, because constant risk alone is not enough: the rule has to be Bayes as well."
-   ]
-  },
-  {
-   "kind": "quiz",
-   "id": "s13",
-   "title": "Mastery test",
-   "mins": 12,
-   "objective": "Ten unseen questions, drawn 3 easy / 5 moderate / 2 hard.",
-   "setId": "inference_t8_mastery"
-  }
- ]
+  ]
 }
