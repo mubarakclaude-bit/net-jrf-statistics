@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 8,
-  "clean": 8,
+  "count": 9,
+  "clean": 9,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -211,6 +211,47 @@
       ],
       "answer": "C",
       "explanation": "In simple linear regression with an intercept, the leverage of observation i is the diagonal element hᵢᵢ of the hat matrix. Its formula is hᵢᵢ=1/n+(xᵢ−x̄)²/∑ⱼ(xⱼ−x̄)².\n\nStep 1: The first term is 1/n=1/50=0.02. The second term is a square divided by a sum of squares, so it is nonnegative. Therefore every leverage satisfies hᵢᵢ≥0.02. This rules out 0 and 0.01.\n\nStep 2: A diagonal element of the projection (hat) matrix cannot exceed 1. Equivalently, the leverage values are nonnegative and their sum is the model rank, which is 2 here. Thus 1.1 is impossible.\n\nStep 3: The value 0.1 lies between the lower and upper bounds. It is attainable: it requires (x₁₁−x̄)²/Sxx=0.1−0.02=0.08, a feasible share of the total centred sum of squares for a sample of 50 observations.\n\nHence 0.1, option C, is admissible. The important exam shortcut is that with one predictor and an intercept, the minimum leverage is 1/n, not zero. Other-exam relevance: the hat matrix, leverage and influence diagnostics are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-q15",
+      "type": "practice",
+      "format": "multi",
+      "year": 2020,
+      "session": "26 November",
+      "topic": "regression-t5 · multiple correlation under an equicorrelated predictor structure",
+      "stem": "Let p>1 and 1>ρ≥0. In a multiple regression setting, suppose the correlation between Y and each predictor Xᵢ is ρ, and the correlation between every pair of distinct predictors Xᵢ and Xⱼ is also ρ. Which statements about the multiple correlation coefficient R between Y and (X₁,…,Xₚ) are correct?",
+      "statements": [
+        "R is greater than or equal to ρ.",
+        "R equals ρ when ρ=0.",
+        "R equals ρ only when ρ=0.",
+        "R tends to 1 as p tends to infinity."
+      ],
+      "options": [
+        "Statements 1, 2 and 3 only",
+        "Statements 1 and 4 only",
+        "Statements 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The squared multiple correlation is R²=pρ²/[1+(p−1)ρ]. For 0≤ρ<1 this gives R≥ρ; equality occurs at ρ=0."
+        },
+        "B": {
+          "tf": true,
+          "why": "When ρ=0, the correlation vector between Y and all predictors is zero, so R=0=ρ."
+        },
+        "C": {
+          "tf": true,
+          "why": "For ρ>0 and ρ<1, p/[1+(p−1)ρ] is greater than one, so R>ρ. Equality is therefore possible only at ρ=0 under the stated parameter range."
+        },
+        "D": {
+          "tf": false,
+          "why": "For fixed ρ, R² tends to ρ as p grows, so R tends to √ρ, not 1 unless ρ=1. The question restricts ρ<1."
+        }
+      },
+      "explanation": "The multiple correlation coefficient R measures how strongly Y is linearly related to the whole set of predictors taken together. We can calculate it from the predictor correlation matrix.\n\nStep 1: The p predictors have pairwise correlation ρ, so their correlation matrix is Rₓ=(1−ρ)I+ρJ, where I is the identity matrix and J is the matrix of ones. The vector of correlations between Y and the p predictors is r=ρ·1.\n\nStep 2: The squared multiple correlation is R²=r′Rₓ⁻¹r. The vector of ones is an eigenvector of Rₓ with eigenvalue 1+(p−1)ρ. Therefore Rₓ⁻¹1=1/[1+(p−1)ρ]·1.\n\nStep 3: Substitute r=ρ·1:\nR²=ρ²·1′Rₓ⁻¹1=ρ²·p/[1+(p−1)ρ]. Hence R=ρ√[p/{1+(p−1)ρ}], since ρ≥0.\n\nStep 4: Because 0≤ρ<1, we have 1+(p−1)ρ≤p. Thus the square-root factor is at least one and R≥ρ. If ρ=0, then R=0=ρ. If ρ>0, the denominator is strictly less than p, so R>ρ. Statements 1, 2 and 3 are true.\n\nStep 5: For fixed ρ, as p→∞, R²→ρ and therefore R→√ρ. Since the question states ρ<1, this limit is below one (unless the excluded boundary ρ=1 is considered). Statement 4 is false.\n\nTherefore statements 1, 2 and 3 only are correct: option A. Other-exam relevance: multiple correlation, predictor correlation matrices and multicollinearity are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
