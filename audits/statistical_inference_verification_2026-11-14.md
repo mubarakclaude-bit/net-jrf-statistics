@@ -279,7 +279,7 @@ It also checks:
 ### Test execution status
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
-- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It contains 72 regression tests, with the unittest entry point after all test classes so all 70 are discovered when run directly.
+- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It contains 73 regression tests, with the unittest entry point after all test classes so all 70 are discovered when run directly.
 - GitHub Actions run #1195 (run ID `43564757724`) completed successfully on commit `3830a2e7cc776f02414d503fbf3e8f964b595aed`: validate, acceptance and browser jobs all passed, including the verifier, build, lesson navigation, hosted storage conformance and feature browser tests.
 - Run #1447 (ID `43578350970`) on head `32e03a0` has passed validate and acceptance; the browser job is still running. The latest follow-up corrects a stale Gamma-median check hint and adds T4 pool plus T7 consistency regression guards, so the new head requires its own full green CI run.
 
