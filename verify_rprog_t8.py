@@ -20,3 +20,10 @@ rows=3; cols=2; assert rows*cols==6
 scores=[40,60,80]; assert sum(v>50 for v in scores)==2
 assert (6,4)[0]*(6,4)[1]==24
 print('PASS: R T8 structure, mastery contract, data-frame dimensions and filtering examples.')
+
+# Scene-level regression check for CSV import/export instructions.
+s6 = next(s for s in L['scenes'] if s['id']=='s6')
+assert 'read.csv' in s6['solution'][0]['math']
+assert 'write.csv' in s6['solution'][1]['math']
+assert 'row.names=FALSE' in s6['solution'][1]['math']
+print('PASS: T8 CSV I/O solution matches the import/export prompt.')
