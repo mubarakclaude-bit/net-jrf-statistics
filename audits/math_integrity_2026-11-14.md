@@ -305,3 +305,6 @@ The time-series identification pass also corrected the remaining AR/MA mirror wo
 The AR(2) variance lesson and mastery pool previously implied that a positive value from the closed-form algebraic expression is equivalent to stationarity. That converse is false outside the model's derivation domain: a nonstationary parameter pair can make both the numerator and denominator negative, yielding a positive formal number. The lesson now states that stationarity is a precondition of the Yule–Walker variance formula; positivity follows under stationarity, but the formula's sign is not a standalone stationarity test.
 
 Added `verify_timeseries_variance.py` to guard the qualification.
+
+
+A final consistency scan propagated the AR(2) variance-formula qualification to the lesson's scenario, answer explanation and provenance, not only the derivation block. The mastery pool now makes the same one-way implication explicit.

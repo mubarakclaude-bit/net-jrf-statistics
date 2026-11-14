@@ -13,6 +13,7 @@ def strings(x):
 def main():
     lesson="\n".join(strings(load("lesson_ts4.json")))
     assert "Do not use the sign of this algebraic expression as a stationarity test" in lesson
+    assert "positive if and only if" not in lesson
     pool=load("timeseries_t4_mastery.json")
     assert "positivity of the formal expression is not a general stationarity test" in pool["items"][12]["explanation"]
     assert "does not prove stationarity" in pool["items"][16]["verdicts"]["A"]["why"]
