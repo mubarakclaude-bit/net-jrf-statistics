@@ -4,7 +4,7 @@
 
 - Repository: `mubarakclaude-bit/net-jrf-statistics`
 - Base: current `main` at task start
-- Branch: `audit/math-integrity-2026-11-14`\n- Latest branch HEAD: `4673084458633cb0ad6e993055c8d01ef07a6eaa`
+- Branch: `audit/math-integrity-2026-11-14`\n- Latest branch HEAD: `6f4a398564a777e25341f67c19c795a4232581b9`
 - Inventory: **129** files matching `seed/lesson_*.json`
 - First-pass screening: **129/129 lesson files opened and screened** for learner-facing worked/guided numerical examples.
 - This is **not** a claim that all 129 lessons have been mathematically verified. Theory/revision scenes, every displayed formula/table, assumptions and all edge cases still require a deeper second pass.
@@ -30,7 +30,7 @@ Module inventory screened:
 
 ## Confirmed findings
 
-Severity counts: **4 critical, 8 major, 1 minor**. Thirteen confirmed learner-facing issues were found across ten lesson files.
+Severity counts: **4 critical, 9 major, 1 minor**. Fourteen confirmed learner-facing issues were found across ten lesson files.
 
 ### MA-001 — CRD conclusion contradicts its calculation
 
@@ -105,46 +105,13 @@ Severity counts: **4 critical, 8 major, 1 minor**. Thirteen confirmed learner-fa
 - Before: one step called (4,6) the answer/option while the final step correctly included both endpoints.
 - After: the lesson distinguishes the open interior from the full interval and states [4,6].
 
-### MA-009 — R missing-value steps use a different vector
+### MA-014 — Final MA(1) invertible-root value remained stale
 
-- File: `seed/lesson_rprog_t6.json`; scene: `s6`
+- File: `seed/lesson_ts2.json`; scene: `s10`, part (f)
 - Severity: **Major**
-- Prompt vector: c(NA,4,NA,8,10); observed values are 4,8,10.
-- Before: solution used 2,6,10 and calculated their mean.
-- After: solution identifies 4,8,10 and correctly counts length 5, missing 2, observed 3.
-
-### MA-010 — R summary steps belong to another NA example
-
-- File: `seed/lesson_rprog_t6.json`; scene: `s8`
-- Severity: **Major**
-- Prompt vector: c(1,NA,3,9); correct summaries are sum=13, mean=13/3 and median=3.
-- Before: solution counted a five-element vector with two missing values.
-- After: solution computes the three requested summaries.
-
-### MA-011 — R format() example has unrelated list-extraction steps
-
-- File: `seed/lesson_rprog_t7.json`; scene: `s8`
-- Severity: **Major**
-- Prompt asks whether y=format(x,nsmall=2) is numeric or character.
-- Correct result: y is character; x remains numeric; nsmall specifies a minimum number of decimal places, not rounding to exactly two.
-- Before: solution described nested-list extraction.
-- After: solution explains the return type, unchanged source object and nsmall argument.
-
-### MA-012 — R CSV prompt has unrelated data-frame filtering steps
-
-- File: `seed/lesson_rprog_t8.json`; scene: `s6`
-- Severity: **Major**
-- Prompt asks for CSV import and export without row names.
-- Before: solution described filtering rows by score.
-- After: solution matches read.csv(), write.csv() and row.names=FALSE.
-
-### MA-013 — Document-review prompt has unrelated LaTeX math-mode steps
-
-- File: `seed/lesson_rprog_t9.json`; scene: `s8`
-- Severity: **Major**
-- Prompt asks for tracked edits, comments and bibliography management.
-- Before: solution described inline/display mathematics.
-- After: solution covers Track Changes, comments and a citation/reference manager.
+- The displayed quadratic gives roots 0.8173495 and 1.2234668; invertibility selects 0.81735.
+- Before: despite the corrected roots in the preceding line, the final learner-facing conclusion still said `invertible ⟹ θ ≈ 0.857`.
+- After: the final line now says `invertible ⟹ θ ≈ 0.81735`; the dedicated verifier asserts the exact final value and rejects any remaining `0.857` text.
 
 ### MA-009 — R missing-value steps use a different vector
 
