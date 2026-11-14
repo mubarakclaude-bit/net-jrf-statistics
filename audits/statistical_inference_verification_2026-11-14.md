@@ -20,7 +20,7 @@ Status describes the mathematical audit of current lesson material and available
 | T1 | Sufficiency, factorisation, minimal sufficiency | CLARIFIED | Mastery item now states the closed-endpoint Uniform convention consistently with its boundary likelihood |
 | T2 | Completeness, exponential families, ancillarity, Basu | PASS — first pass | Poisson/Bernoulli completeness arguments, Uniform range counterexample and Basu conditions checked |
 | T3 | Rao–Blackwell and Lehmann–Scheffé | PASS — first pass | Poisson and Bernoulli UMVUE derivations, variance comparisons and transformation traps checked |
-| T4 | MLE: computation, invariance, properties | POOL PASS; LESSON BLOCKED | All 20 mastery items reviewed with no confirmed mathematical/key defect. Catalog entry and pool exist, but `seed/lesson_t4.json` is absent from current main; no substitute lesson source found in the seed tree |
+| T4 | MLE: computation, invariance, properties | POOL CORRECTED; LESSON BLOCKED | All 20 mastery items reviewed; corrected the rounded UMVUE value in `mle-m-12` (INF-033). Catalog entry and pool exist, but `seed/lesson_t4.json` is absent from current main |
 | T5 | Method of moments, minimum chi-square, least squares | CORRECTED | Uniform MOM items now distinguish the parameter space, sample-compatible region and decision-theoretic admissibility |
 | T6 | Cramér–Rao bound and Fisher information | PASS — first pass | Bernoulli, Poisson, normal and function-of-parameter bounds checked; equality-to-UMVUE wording now requires attainment throughout the model |
 | T7 | Bayesian estimation and conjugate priors | CORRECTED | Normal–normal posterior corrected; HPD equality and Bayesian/frequentist asymptotic claims qualified; squared-error convention made explicit; Gamma posterior median rounding corrected; see INF-001, INF-016, INF-020 and INF-030 |
@@ -273,13 +273,13 @@ It also checks:
 - The catalog has 17 inference topics.
 - Each non-deferred mastery pool has 20 uniquely identified items with valid topic IDs and answer-option labels.
 - Multi-statement answer keys agree with their individual true/false verdicts.
-- The T4 lesson-file gap is detectable; its 20-item mastery pool has been manually reviewed.
-- The corrected T1, T5, T7, T8, T10, T11, T12, T13, T14, T15, T16 and T17 source values/qualifications remain in place.
+- The T4 lesson-file gap is detectable; its 20-item mastery pool has been manually reviewed and the additional `mle-m-12` arithmetic correction is regression-tested.
+- The corrected T1, T4, T5, T7, T8, T10, T11, T12, T13, T14, T15, T16 and T17 source values/qualifications remain in place.
 
 ### Test execution status
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
-- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It contains 69 regression tests, with the unittest entry point after all test classes so the full suite is discovered when run directly.
+- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It contains 70 regression tests, with the unittest entry point after all test classes so all 70 are discovered when run directly.
 - GitHub Actions run #1195 (run ID `43564757724`) completed successfully on commit `3830a2e7cc776f02414d503fbf3e8f964b595aed`: validate, acceptance and browser jobs all passed, including the verifier, build, lesson navigation, hosted storage conformance and feature browser tests.
 - Run #1447 (ID `43578350970`) on head `32e03a0` has passed validate and acceptance; the browser job is still running. The latest follow-up corrects a stale Gamma-median check hint and adds T4 pool plus T7 consistency regression guards, so the new head requires its own full green CI run.
 
@@ -323,3 +323,16 @@ No other lesson or module files were changed.
 File: `seed/inference_t7_mastery.json`, item `inference-t7-m-17`. Severity: **Minor**.
 
 After correcting the median option and explanation to approximately 1.4585, the item's separate `check` hint still said 1.4583. The hint now uses 1.4585 and consistently compares the posterior mode, median and mean.
+
+
+### INF-033 — T4 Poisson UMVUE distractor contained an incorrect numerical value
+
+File: `seed/inference_t4_mastery.json`, item `mle-m-12`. Severity: **Minor**.
+
+For (n=8) and (T=24), the UMVUE of (e^{-\lambda}) is (((n-1)/n)^T=(7/8)^{24}=0.0405689\ldots), which rounds to **0.0406**, not 0.0424. The distractor and its explanation's reference value were corrected. The keyed MLE answer D, (e^{-3}\approx0.0498), was already correct and remains unchanged.
+
+### INF-034 — Python unittest entry point preceded the final test class
+
+File: `verify_inference_math.py`. Severity: **Verification coverage**.
+
+The `unittest.main()` entry point appeared before `Topic04AndConsistencyRegressionTests`, so direct execution invoked test discovery before that final class had been defined. The entry point was moved to the end of the file. A further T4 numerical regression test was added, bringing the suite to **70 test methods**, all now defined before test discovery begins.

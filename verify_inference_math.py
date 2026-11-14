@@ -554,10 +554,6 @@ class FinalEdgeCaseReviewTests(unittest.TestCase):
         self.assertIn("not a one-to-one transform", item["explanation"])
 
 
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
-
-
 class Topic04AndConsistencyRegressionTests(unittest.TestCase):
     def test_t4_mastery_pool_mle_examples(self):
         pool = load_json(SEED / "inference_t4_mastery.json")
@@ -581,3 +577,17 @@ class Topic04AndConsistencyRegressionTests(unittest.TestCase):
         self.assertIn("1.4585", item["options"][2])
         self.assertIn("1.4585", item["explanation"])
         self.assertIn("1.4585", item["check"])
+
+
+    def test_t4_poisson_zero_probability_umvue_value(self):
+        n, total = 8, 24
+        value = ((n - 1) / n) ** total
+        self.assertTrue(close(value, 0.0405689037637223, tol=1e-12))
+        pool = load_json(SEED / "inference_t4_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "mle-m-12")
+        self.assertIn("0.0406", item["options"][1])
+        self.assertNotIn("0.0424", item["options"][1])
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
