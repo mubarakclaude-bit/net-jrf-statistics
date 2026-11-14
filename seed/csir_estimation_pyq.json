@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 35,
-  "clean": 35,
+  "count": 37,
+  "clean": 37,
   "items": [
     {
       "id": "csir-est-q01",
@@ -1050,6 +1050,64 @@
       "answer": "D",
       "explanation": "Take logarithms to simplify the model. If X has density f(x|θ)=θx^(−θ−1), for x>1, then Y=log X has an exponential distribution with rate θ. Hence E(Y)=1/θ. By the law of large numbers, (1/n)∑log(Xᵢ) converges in probability to 1/θ. Since 1/θ is positive, taking the reciprocal gives n/∑log(Xᵢ) → θ in probability. Therefore option D is consistent. The other options do not converge to θ: the first sample mean converges to E(X)=θ/(θ−1), the second to 1/θ, and the third to 1/E(X)=(θ−1)/θ. Source check: the supplied Estimation CSIR NET scan, printed Question 36 on PDF page 16 (26 November 2020), lists these four expressions; the supplied answer-key page lists option 4. Other-exam relevance: consistency, transformations and the law of large numbers are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is topic overlap, not a claim that this exact question appeared in those other examinations.",
       "type": "practice"
+    },
+    {
+      "id": "csir-est-q38",
+      "type": "practice",
+      "format": "single",
+      "year": 2019,
+      "session": "December",
+      "topic": "inference-t1 · inference-t4 · factorisation, sufficiency and unbiased estimation for a triangular density",
+      "stem": "Let X₁,…,Xₙ (n≥2) be a random sample from the density fθ(x)=2(θ−x)/θ² for 0≤x≤θ and 0 otherwise, where θ>0 is unknown. Let X̄ be the sample mean and X₍ₙ₎=max(X₁,…,Xₙ). Which one of the following statements is correct?",
+      "options": [
+        "X₍ₙ₎ is sufficient for θ.",
+        "X₍ₙ₎ is unbiased for θ.",
+        "3X̄ is unbiased for θ.",
+        "3X̄ is sufficient for θ."
+      ],
+      "answer": "C",
+      "explanation": "The supplied answer list on page 63 gives Question 38 as statement 3. We check the four choices. First calculate the population mean: E(X)=∫₀^θ x·2(θ−x)/θ² dx = (2/θ²)[θ·(θ²/2)−(θ³/3)] = θ/3. Therefore E(3X̄)=3E(X̄)=3E(X)=θ, so 3X̄ is unbiased; statement 3 is correct. The maximum X₍ₙ₎ alone is not sufficient: the likelihood contains the factor ∏(θ−Xᵢ), which depends on the individual observations and cannot in general be reduced to the maximum alone. Also, the sample maximum is not unbiased for θ; it is strictly below θ with positive probability and its expectation is below θ. Finally, 3X̄ is not sufficient either, because the likelihood depends on the full product ∏(θ−Xᵢ), not only on the sample sum. Thus option C is the only correct statement. Other-exam relevance: factorisation, sufficient statistics and unbiased estimators are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q39",
+      "type": "practice",
+      "format": "multi",
+      "year": 2019,
+      "session": "December",
+      "topic": "inference-t1 · inference-t2 · inference-t4 · joint sufficiency, completeness and MLE in a uniform scale family",
+      "stem": "Suppose X₁,…,Xₙ are i.i.d. Uniform(θ,2θ), θ>0. Let X₍₁₎=min(X₁,…,Xₙ) and X₍ₙ₎=max(X₁,…,Xₙ). Which statements are correct?",
+      "statements": [
+        "(X₍₁₎,X₍ₙ₎) is jointly sufficient and complete for θ.",
+        "(X₍₁₎,X₍ₙ₎) is jointly sufficient but not complete for θ.",
+        "X₍ₙ₎/2 is a maximum-likelihood estimator of θ.",
+        "X₍₁₎ is a maximum-likelihood estimator of θ."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 2 and 3 only",
+        "Statements 1, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The pair of order statistics is sufficient, but it is not complete."
+        },
+        "B": {
+          "tf": true,
+          "why": "The likelihood depends on the sample through the minimum and maximum, so the pair is sufficient. The scale-free ratio X₍ₙ₎/X₍₁₎ is a non-degenerate ancillary function of this pair, which rules out completeness."
+        },
+        "C": {
+          "tf": true,
+          "why": "The likelihood is proportional to θ⁻ⁿ on the allowed interval X₍ₙ₎/2≤θ≤X₍₁₎. It decreases as θ increases, so its maximum is at θ=X₍ₙ₎/2."
+        },
+        "D": {
+          "tf": false,
+          "why": "The maximum-likelihood estimate is the lower endpoint X₍ₙ₎/2, not X₍₁₎."
+        }
+      },
+      "explanation": "The answer list on page 63 gives Question 39 as statements 2 and 3. Step 1: For a Uniform(θ,2θ) observation, the density is 1/θ when θ<x<2θ and zero otherwise. The joint likelihood is therefore L(θ)=θ⁻ⁿ provided every observation lies between θ and 2θ. In terms of the order statistics, this condition is X₍ₙ₎/2≤θ≤X₍₁₎. The likelihood depends on the sample only through the minimum and maximum, so the factorisation theorem shows that (X₍₁₎,X₍ₙ₎) is jointly sufficient. Step 2: It is not complete. The ratio R=X₍ₙ₎/X₍₁₎ has a distribution that does not depend on θ, because multiplying all observations by the scale θ leaves this ratio unchanged. R is non-degenerate. Hence R−E(R) is a non-zero function of the sufficient pair whose expectation is zero for every θ, contradicting completeness. Step 3: Within the allowed interval, L(θ)=θ⁻ⁿ decreases as θ increases. The largest likelihood is therefore attained at the smallest allowed value, θ̂=X₍ₙ₎/2. Statement 3 is true and statement 4 is false. Thus statements 2 and 3 are correct, option B. Other-exam relevance: sufficiency, completeness, ancillary statistics and maximum likelihood in scale families are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
