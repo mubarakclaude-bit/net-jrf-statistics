@@ -208,3 +208,13 @@ Eight additional questions were imported from pages 110, 112, 113, 116, 117 and 
 - **Page 120:** duplicates questions 2 and 3 from page 119; not imported twice.
 
 For p112, the limit uses the local approximation F(x)~x/4 implied by the stated density limit. For p116, both convergence-in-probability and convergence-in-distribution statements are included because both follow from the variance tending to zero.
+
+
+## Batch 14 — pages 121–132
+
+One additional question was imported from page 132: applying the weak law of large numbers to the sample average of squared iid observations, with limit E(X²)=μ²+σ².
+
+### Duplicate handling
+
+- **Pages 121–122:** repeat the probability consistency and set-probability questions from page 119 (including the inconsistent/underdetermined items already held out); no new entries were created.
+- **Pages 123–131:** already reviewed and imported in the earlier order-statistics batch; no duplicates were created.
