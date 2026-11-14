@@ -337,6 +337,8 @@ def main() -> None:
     assert "Var(X)=θ" in q56["explanation"] and "θ²" in q56["explanation"]
     q60 = next(x for x in estimation["items"] if x["id"] == "csir-est-q60")
     assert "rank(X)>p" in q60["explanation"] and "rank(X)=p" in q60["explanation"]
+    q63 = next(x for x in estimation["items"] if x["id"] == "csir-est-q63")
+    assert "page 64" in q63["explanation"] and "Q63 is listed as A,C" in q63["explanation"]
     q57 = next(x for x in estimation["items"] if x["id"] == "csir-est-q57")
     assert "lists A and C" in q57["explanation"] and "A and B only" in q57["explanation"]
     assert "page 64" in q60["explanation"] and "A,C,D" in q60["explanation"]
