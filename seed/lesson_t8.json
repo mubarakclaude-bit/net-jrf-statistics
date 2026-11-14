@@ -332,7 +332,7 @@
         "Three risk curves for estimating a normal mean: the sample mean in pink, a constant guess in teal, and a shrinkage rule between them in ochre. The horizontal axis is θ, the vertical axis is squared-error risk.",
         "Start with the sample mean alone by setting the shrinkage weight to 1. Its risk is a flat line at σ²/n = 1.0 — flat because x̄ is unbiased, so its risk is a variance that does not depend on θ. That flatness is what makes it minimax: its worst case equals its everywhere-case, and no rule can do better in the worst case.",
         "Now drag the weight to 0. The rule ignores the data and always answers m. Its risk is the parabola (θ − m)²: exactly zero when θ happens to equal m, and growing without limit as θ moves away. This is the cleanest possible demonstration that no rule dominates another everywhere — at θ = m this absurd rule beats every estimator ever devised, which is precisely why admissibility is a weak criterion.",
-        "Set the weight to 0.5 and look at where the ochre curve crosses the pink line. To the left and right of the crossings the sample mean is better; between them the shrinkage rule is. Neither dominates, so BOTH are admissible. But read the two worst cases off the readout: the sample mean's is 1.0, the shrinkage rule's is larger. So the sample mean is minimax and the shrinkage rule is not — admissible and minimax are different questions, and this frame is the difference.",
+        "Set the weight to 0.5 and look at where the ochre curve crosses the pink line. To the left and right of the crossings the sample mean is better; between them the shrinkage rule is. Neither dominates the other, so this establishes pairwise non-domination only. Crossing alone does not establish admissibility against every possible rule. The readout still shows the sample mean has the smaller worst-case risk, so it is minimax in this comparison; minimaxity and admissibility are separate properties.",
         "Finally move the target m away from zero and watch the whole ochre curve slide with it. The shrinkage rule's advantage is purchased near wherever you aim it, and paid for everywhere else."
       ],
       "ask": {
@@ -434,12 +434,17 @@
         {
           "say": "(d) Compare the two curves to settle domination.",
           "math": "p(1−p)/9 = 1/64  ⟹  p² − p + 9/64 = 0  ⟹  p = (1 ± √0.4375)/2 = 0.1693, 0.8307",
-          "why": "Below 0.1693 and above 0.8307 the MLE has the smaller risk; between them the minimax rule does. The curves cross, so neither dominates and both are admissible. At p = 0.1 the MLE's risk is 0.0100 against 0.0156 — the minimax rule is genuinely worse there, and that is the price of insuring against the worst case."
+          "why": "Below 0.1693 and above 0.8307 the MLE has the smaller risk; between them the minimax rule does. The curves cross, so neither of these two rules dominates the other. Crossing alone does not establish admissibility against all possible rules. The next step gives the separate admissibility argument for the sample proportion; the minimax rule is admissible because it is the unique Bayes rule under the proper full-support Beta(3/2, 3/2) prior."
         },
         {
           "say": "State the least favourable prior, which is the by-product.",
           "math": "Beta(√n/2, √n/2) = Beta(1.5, 1.5)",
           "why": "This prior makes the problem hardest, in the sense that the best achievable Bayes risk against it equals the minimax value. It is also the bridge back to 4.7: the minimax rule here IS a posterior mean, with the prior chosen by a flatness condition rather than by belief."
+        },
+        {
+          "say": "Why the sample proportion is admissible",
+          "math": "Under the scaled squared-error loss L*(a,p) = (a−p)²/[p(1−p)], a Uniform(0,1) prior gives posterior Beta(x+1, n−x+1) and the unique Bayes action x/n. Any rule dominating x/n under ordinary squared-error loss would also dominate it under L*, because dividing each risk by p(1−p)>0 preserves the ordering. This is impossible, so x/n is admissible under ordinary squared error.",
+          "why": "This is the separate proof. Crossing risk curves alone establishes only pairwise non-domination, not global admissibility. The minimax shrinkage rule is admissible separately because it is the unique Bayes rule under the proper full-support Beta(3/2, 3/2) prior."
         }
       ],
       "after": "Four numbers to carry: MLE worst case 1/36 = 0.0278, minimax value 1/64 = 0.0156, the estimator (x + √n/2)/(n + √n), and the least favourable prior Beta(√n/2, √n/2). And one method: to find a minimax rule, take a conjugate family of Bayes rules and choose the prior parameter that flattens the risk.",
@@ -778,11 +783,12 @@
           "math": "sup R(δ₁) = 1/64 = 0.015625 at p = 0.5;   sup R(δ₂) = 0.01  ⟹  δ₂ is minimax, value 0.01"
         },
         {
-          "say": "(d) Admissibility follows from (b).",
-          "math": "neither is dominated ⟹ both admissible"
+          "say": "Admissibility requires a separate argument; it does not follow from pairwise non-domination alone.",
+          "math": "Neither rule dominates the other. δ₁ = X/16 is admissible as the sample proportion by the separate scaled-loss Bayes argument. δ₂ = (X+2)/20 is the unique Bayes rule under the proper full-support Beta(2,2) prior, so it is admissible as well.",
+          "why": "The crossing proves only that neither of these two rules dominates the other. The sample-proportion result and the unique-Bayes result establish admissibility against every competing rule."
         }
       ],
-      "answer": "R(p, δ₁) = p(1−p)/16 and R(p, δ₂) = 0.01. The curves cross at p = 0.2 and 0.8, so neither dominates and both are admissible. δ₂ is minimax with minimax value 0.01, against δ₁'s worst case of 1/64 = 0.015625.",
+      "answer": "R(p, δ₁) = p(1−p)/16 and R(p, δ₂) = 0.01. The curves cross at p = 0.2 and 0.8, so neither dominates the other. δ₁ = X/16 is admissible by the separate sample-proportion argument under scaled squared-error loss; δ₂ is the unique Bayes rule under Beta(2,2), a proper full-support prior, and is therefore admissible. δ₂ is minimax with minimax value 0.01, against δ₁'s worst case of 1/64 = 0.015625.",
       "check": "Three checks. The crossing points must be symmetric about 0.5, because R(δ₁) is, and 0.2 and 0.8 are. The minimax value must be below the other rule's worst case — 0.01 < 0.015625 ✓. And δ₂'s risk must be genuinely constant; if yours depends on p, the coefficient-killing condition a = √n/2 was not used.",
       "scenario": {
         "teaser": "Why a prior nobody believes in is the key to a criterion that mentions no prior at all.",
@@ -887,7 +893,7 @@
         "The definitions. A decision rule δ maps data to actions. Its risk R(θ, δ) = E_θ[L(θ, δ(X))] is a FUNCTION of θ. Bayes risk r(π, δ) = ∫ R(θ, δ) π(θ) dθ is a NUMBER. δ₁ dominates δ₂ if its risk is no larger everywhere and strictly smaller somewhere; a rule nothing dominates is admissible. A minimax rule minimises sup_θ R(θ, δ).",
         "The relations. A Bayes rule with constant risk is minimax, and the prior achieving it is the least favourable prior. A unique Bayes rule is admissible. A unique minimax rule is admissible. Nothing else holds: admissible does not imply minimax, minimax does not imply admissible, and a Bayes rule is not minimax unless its risk is constant.",
         "The computation. Under squared-error loss, risk = variance + bias². That identity does all the arithmetic in this topic. For an unbiased rule the risk is just the variance, so the MLE of a binomial p has risk p(1−p)/n with worst case 1/(4n).",
-        "The method, and the one result to carry. To find a minimax rule, take a conjugate family of Bayes rules and pick the prior parameter that flattens the risk. For Bin(n, p) under squared error this gives the minimax estimator (x + √n/2)/(n + √n), with constant risk 1/(4(1 + √n)²) and least favourable prior Beta(√n/2, √n/2). For n = 9: estimator (x + 1.5)/12, risk 1/64 = 0.0156, against the MLE's worst case of 1/36 = 0.0278 — and the two risk curves cross at p = 0.1693 and 0.8307, so neither dominates and both are admissible.",
+        "To find a minimax rule, take a conjugate family of Bayes rules and pick the prior parameter that flattens the risk. For Bin(n, p) under squared error this gives the minimax estimator (x + √n/2)/(n + √n), with constant risk 1/(4(1 + √n)²) and least favourable prior Beta(√n/2, √n/2). For n = 9: estimator (x + 1.5)/12, risk 1/64 = 0.0156, against the MLE's worst case of 1/36 = 0.0278. The curves cross at p = 0.1693 and 0.8307, so neither dominates the other; the sample proportion is admissible by the separate scaled-loss Bayes argument, and the minimax rule is admissible by its unique proper full-support Bayes representation.",
         "The losses and their Bayes rules. Squared error → posterior mean. Absolute error → posterior median. Discrete 0–1 loss → posterior mode; for continuous parameters use MAP as the shrinking-neighbourhood limit. Weighted absolute error with weights k₁ below and k₂ above → the k₁/(k₁+k₂) posterior quantile.",
         "The translations. Testing is a decision problem with 0–1 loss, where risk is the probability of error — type I on H₀ and type II on H₁. Neyman–Pearson constrains one error and minimises the other rather than minimising the maximum, which is why it is not a minimax criterion. Unbiasedness and invariance are restrictions imposed so that a best rule exists within a class. Bayes rules form a complete class, which is why they appear in every search for admissible and minimax rules.",
         "The counterexamples worth keeping. A constant rule is admissible — so admissibility is weak. The MLE for a normal mean vector in dimension three or more is inadmissible, by James–Stein. And 'always report x₁' has perfectly constant risk and is still dominated by x̄, because constant risk alone is not enough: the rule has to be Bayes as well."

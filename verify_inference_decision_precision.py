@@ -21,6 +21,9 @@ def main():
     t8="\n".join(strings(load("lesson_t8.json")))
     assert "full-support prior" in t8
     assert "shrinking-neighbourhood limit" in t8
+    assert "Crossing alone does not establish admissibility" in t8
+    assert "scaled squared-error loss" in t8 and "unique Bayes action x/n" in t8
+    assert "neither dominates and both are admissible" not in t8
     t10="\n".join(strings(load("lesson_t10.json")))
     assert "0 ≤ λ ≤ 1" in t10
     t11="\n".join(strings(load("lesson_t11.json")))
