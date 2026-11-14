@@ -510,6 +510,10 @@ def main() -> None:
     q104 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q104")
     assert q104["type"] == "practice" and q104["format"] == "single"
     assert q104["answer"] == "D" and "119" in q104["explanation"] and "120" in q104["explanation"]
+    q105 = next(x for x in estimation["items"] if x["id"] == "csir-est-q105")
+    assert q105["answer"] == "A" and "page 65" in q105["explanation"]
+    assert "hypergeometric likelihood" in srs_text and "both are maximisers" in srs_text
+    assert "known to be zero" in contrast_text and "complete sufficient" in contrast_text
     assert len(estimation["items"]) == estimation["count"] == 100
     assert len(methods["items"]) == methods["count"] == 13
     assert len(sampling["items"]) == sampling["count"] == 9
