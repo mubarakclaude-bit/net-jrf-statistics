@@ -24,7 +24,7 @@ def main():
     assert "sufficient for equal tails" in t17
     assert "beating a coin flip" not in t17
     p=load("inference_t17_mastery.json")
-    assert "Symmetry is sufficient" in p["items"][12]["explanation"]
+    assert "Symmetry of the null distribution is sufficient" in p["items"][12]["explanation"]
     print("PASS: corrected posterior acceptance strings and continuous MAP distinction")
     print("PASS: SPRT total-error derivation consistent across lesson")
     print("PASS: Yates correction wording consistent")

@@ -335,3 +335,6 @@ Added `verify_timeseries_wold_forecast.py` to guard the theorem and forecast dis
 
 
 CI verifier assertions were aligned with the exact qualified wording in the SPRT and Wold/forecast lessons. The MA(1) PACF sign clarification was also propagated to the revision sheet and sign interpretation.
+
+
+The UMPU mastery item was rewritten so its correct option states the sufficient-condition result rather than the overstrong “only when symmetric” claim. The opening Wold explanation now explicitly states the deterministic-plus-purely-nondeterministic decomposition.
