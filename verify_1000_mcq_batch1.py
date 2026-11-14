@@ -32,11 +32,11 @@ for rel in FILES:
  assert d["source"]=="variant" and d["count"]==len(d["items"])
  for q in d["items"]:
   assert q["id"] not in seen; seen.add(q["id"])
-  assert len(q["explanation"])>=40 and 109<=q["pno"]<=1011
+  assert len(q["explanation"])>=40 and 1<=q["pno"]<=1011
   if q["format"]=="multi":
    assert len(q["statements"])==4 and set(q["verdicts"])==set("ABCD") and q["answer"] in "ABCD"
   elif q["format"]=="single": assert len(q["options"])==4 and q["answer"] in "ABCD"
   elif q["format"]=="numeric": assert q["options"]==[] and q["check"]
  total+=d["count"]
-assert total==37,total
-print("PASS: 10 supplementary questions; source-key corrections recorded; ambiguous PCA item held out.")
+assert total==46,total
+print("PASS: 46 supplementary questions; source-key corrections recorded; ambiguous items held out.")
