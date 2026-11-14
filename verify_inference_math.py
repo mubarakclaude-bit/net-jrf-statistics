@@ -412,6 +412,12 @@ class FollowUpCorrectionTests(unittest.TestCase):
         self.assertEqual(item["answer"], "C")
         self.assertIn("Option C is the correct pair", item["explanation"])
 
+    def test_likelihood_ratio_range_includes_zero(self):
+        pool = load_json(SEED / "inference_t10_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t10-m-02")
+        self.assertEqual(item["options"][1], "0 ≤ λ ≤ 1")
+        self.assertIn("can equal zero", item["explanation"])
+
     def test_t15_reported_p_value_matches_difference_and_standard_error(self):
         z = 0.02 / (1 / math.sqrt(10000))
         p_value = math.erfc(z / math.sqrt(2))
