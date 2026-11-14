@@ -23,7 +23,7 @@ Status describes the mathematical audit of current lesson material and available
 | T4 | MLE: computation, invariance, properties | BLOCKED — lesson absent | Catalog entry and 20-item mastery pool exist, but `seed/lesson_t4.json` is absent from current main; no substitute lesson source found in the seed tree |
 | T5 | Method of moments, minimum chi-square, least squares | CORRECTED | Uniform MOM items now distinguish the parameter space, sample-compatible region and decision-theoretic admissibility |
 | T6 | Cramér–Rao bound and Fisher information | PASS — first pass | Bernoulli, Poisson, normal and function-of-parameter bounds checked; equality-to-UMVUE wording now requires attainment throughout the model |
-| T7 | Bayesian estimation and conjugate priors | CORRECTED | Normal–normal posterior corrected; HPD equality and Bayesian/frequentist asymptotic claims qualified; squared-error convention made explicit; see INF-001, INF-016 and INF-020 |
+| T7 | Bayesian estimation and conjugate priors | CORRECTED | Normal–normal posterior corrected; HPD equality and Bayesian/frequentist asymptotic claims qualified; squared-error convention made explicit; Gamma posterior median rounding corrected; see INF-001, INF-016, INF-020 and INF-030 |
 | T8 | Decision theory: loss, risk, admissibility, minimax | CORRECTED | Normal-mean minimax explanation states the lower bound; Bayes-rule admissibility is qualified by prior support and regularity; constant risk alone is not treated as sufficient |
 | T9 | Neyman–Pearson, MLR, UMP | DEFERRED | Conflicts with open draft PR #93; left untouched |
 | T10 | Likelihood ratio test and Wilks | CORRECTED | General likelihood-ratio range now includes zero consistently in both pool explanations |
@@ -239,6 +239,19 @@ File: `seed/inference_t15_mastery.json`, item `inf-t15-m-19`. Severity: **Major*
 
 Bonferroni family-wise error control remains valid when applied after testing, provided the full family of outcomes searched is included. For five tests and an unadjusted p-value of 0.03, the adjusted p-value is 0.15 (equivalently, compare 0.03 with 0.01), so the result is not significant. The stem, options, key and explanation were rewritten; any undisclosed additional searches must also be included in the family.
 
+
+### INF-030 — T7 Gamma posterior median was rounded incorrectly
+
+File: `seed/inference_t7_mastery.json`, item `inference-t7-m-17`. Severity: **Minor**.
+
+For the posterior Gamma(12, rate 8), the median is approximately 1.458545, which rounds to **1.4585** to four decimal places, not 1.4583. The option and explanation were corrected; the posterior mean (1.5000) and mode (1.3750) remain unchanged.
+
+### INF-031 — T10 conflated the Neyman–Pearson ratio with a truncated generalized likelihood ratio
+
+File: `seed/inference_t10_mastery.json`, item `inf-t10-m-11`. Severity: **Major**.
+
+For simple H₀ versus simple H₁, the Neyman–Pearson most powerful test rejects for small values of L(θ₀)/L(θ₁). The generalized likelihood-ratio statistic defined elsewhere in the pool as sup over H₀ divided by sup over the full parameter space becomes min(1, L(θ₀)/L(θ₁)) for two disjoint simple hypotheses; it is not a one-to-one transform of the Neyman–Pearson ratio over the full range. The item was rewritten to ask directly for the Neyman–Pearson rejection rule and to explain the distinction.
+
 ## Verification implementation
 
 Added `verify_inference_math.py`, a consolidated standard-library verifier with topic-specific unittest groups. It contains independent regression calculations for T1–T8 and T10–T17, including:
@@ -266,9 +279,9 @@ It also checks:
 ### Test execution status
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
-- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It now contains 65 regression tests.
+- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It now contains 67 regression tests.
 - GitHub Actions run #1195 (run ID `43564757724`) completed successfully on commit `3830a2e7cc776f02414d503fbf3e8f964b595aed`: validate, acceptance and browser jobs all passed, including the verifier, build, lesson navigation, hosted storage conformance and feature browser tests.
-- Run #1304 (ID `43577320883`) was in progress on the prior branch head `b1cc450` when this second-pass update began. This commit changes mastery explanations and adds seven regression tests; its own branch-head CI run must complete successfully before these changes are considered validated.
+- Run #1304 (ID `43577320883`) was in progress on the prior branch head `b1cc450` when this second-pass update began. This commit changes mastery explanations and adds nine regression tests; its own branch-head CI run must complete successfully before these changes are considered validated.
 
 ## Files changed
 

@@ -538,3 +538,19 @@ class SecondPassMasteryReviewTests(unittest.TestCase):
         bonf = next(q for q in t15["items"] if q["id"] == "inf-t15-m-19")
         self.assertEqual(bonf["answer"], "A")
         self.assertIn("full family", bonf["explanation"])
+
+
+class FinalEdgeCaseReviewTests(unittest.TestCase):
+    def test_t7_gamma_posterior_median_rounding(self):
+        # scipy reference value for Gamma(shape=12, rate=8), rounded to 4 dp.
+        pool = load_json(SEED / "inference_t7_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inference-t7-m-17")
+        self.assertEqual(item["options"][2], "1.4585")
+        self.assertIn("median is approximately 1.4585", item["explanation"])
+
+    def test_t10_npy_ratio_is_not_conflated_with_generalized_lrt(self):
+        pool = load_json(SEED / "inference_t10_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t10-m-11")
+        self.assertEqual(item["answer"], "A")
+        self.assertIn("small values of L(θ₀)/L(θ₁)", item["options"][0])
+        self.assertIn("not a one-to-one transform", item["explanation"])
