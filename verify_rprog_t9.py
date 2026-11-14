@@ -19,3 +19,13 @@ assert sum(s['kind']=='guided' for s in L['scenes'])>=2 and any(s.get('flow') fo
 assert 5*3==15 and 4*2==8
 assert '.tex' != '.pdf'
 print('PASS: R T9 structure, mastery contract and document-preparation examples.')
+
+# Both guided solutions must explain their actual document-preparation prompts.
+s6 = next(s for s in L['scenes'] if s['id'] == 's6')
+s8 = next(s for s in L['scenes'] if s['id'] == 's8')
+math_modes = ' '.join(x['math']+' '+x['why'] for x in s6['solution'])
+review_tools = ' '.join(x['math']+' '+x['why'] for x in s8['solution'])
+assert 'beta' in math_modes and 'bar{x}' in math_modes
+assert 'Track Changes' in review_tools and 'comments' in review_tools and 'reference manager' in review_tools
+assert '.tex file' not in math_modes and 'PDF is a common' not in math_modes
+assert 'sample-mean equation' not in review_tools
