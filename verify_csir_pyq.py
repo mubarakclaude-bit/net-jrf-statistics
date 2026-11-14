@@ -274,7 +274,7 @@ def main() -> None:
         assert q["type"] == "practice" and q["format"] == "multi"
         assert q["year"] == year and q["session"] == session
         assert "".join(sorted(k for k, v in q["verdicts"].items() if v["tf"])) == truth
-        assert ("supplied answer list" in q["explanation"] or "supplied answer-key" in q["explanation"] or "No printed answer-key entry" in q["explanation"])
+        assert ("supplied answer list" in q["explanation"] or "supplied answer-key" in q["explanation"] or "No printed answer-key entry" in q["explanation"] or "answer key on page" in q["explanation"] or "Printed answer-key cross-check" in q["explanation"])
     for qid, year, session, answer in [
         ("csir-est-q61", 2016, "December", "B"),
         ("csir-est-q64", 2016, "June", "C"),
