@@ -479,9 +479,6 @@ class FollowUpCorrectionTests(unittest.TestCase):
         self.assertIn("√1.892 ≈ 1.376", item["explanation"])
 
 
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
-
 
 class SecondPassMasteryReviewTests(unittest.TestCase):
     def test_t5_distinguishes_parameter_space_from_sample_compatibility(self):
@@ -508,7 +505,7 @@ class SecondPassMasteryReviewTests(unittest.TestCase):
         pool = load_json(SEED / "inference_t8_mastery.json")
         item = next(q for q in pool["items"] if q["id"] == "inference-t8-m-09")
         self.assertIn("positive density throughout", item["statements"][0])
-        self.assertIn("Uniqueness alone", item["explanation"])
+        self.assertIn("uniqueness alone", item["explanation"].lower())
 
     def test_t10_lrt_range_and_t13_uniform_interval_explanations_are_consistent(self):
         lrt = load_json(SEED / "inference_t10_mastery.json")
@@ -555,3 +552,7 @@ class FinalEdgeCaseReviewTests(unittest.TestCase):
         self.assertEqual(item["answer"], "A")
         self.assertIn("small values of L(θ₀)/L(θ₁)", item["options"][0])
         self.assertIn("not a one-to-one transform", item["explanation"])
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

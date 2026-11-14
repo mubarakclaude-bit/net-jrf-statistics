@@ -279,7 +279,7 @@ It also checks:
 ### Test execution status
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
-- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It now contains 67 regression tests.
+- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It contains 67 regression tests, with the unittest entry point after all test classes so the full suite is discovered when run directly.
 - GitHub Actions run #1195 (run ID `43564757724`) completed successfully on commit `3830a2e7cc776f02414d503fbf3e8f964b595aed`: validate, acceptance and browser jobs all passed, including the verifier, build, lesson navigation, hosted storage conformance and feature browser tests.
 - Run #1304 (ID `43577320883`) was in progress on the prior branch head `b1cc450` when this second-pass update began. This commit changes mastery explanations and adds nine regression tests; its own branch-head CI run must complete successfully before these changes are considered validated.
 
