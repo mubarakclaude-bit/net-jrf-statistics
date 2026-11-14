@@ -352,6 +352,20 @@ def main() -> None:
     assert "Uniform(θ,5θ)" in q71["stem"]
     assert "X₍ₙ₎/5≤θ≤X₍₁₎" in q71["explanation"]
     assert q71["answer"] == "D" and "Q71 is listed as D" in q71["explanation"]
+    q80 = next(x for x in estimation["items"] if x["id"] == "csir-est-q80")
+    assert q80["answer"] == "B" and "finite-sample admissibility caveat" in q80["explanation"]
+    q81 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q81")
+    assert q81["answer"] == "D" and "Var(t₂)≤Var(t₁)" in q81["explanation"]
+    q83 = next(x for x in estimation["items"] if x["id"] == "csir-est-q83")
+    assert "one-based geometric" in q83["explanation"] and "n/ΣXᵢ" in q83["explanation"]
+    t5_lesson = json.loads((ROOT / "seed" / "lesson_t5.json").read_text(encoding="utf-8"))
+    t5_text = " ".join(
+        b.get("h", "") + " " + b.get("body", "")
+        for s in t5_lesson["scenes"] for b in s.get("blocks", [])
+    )
+    assert "two-normal mixture" in t5_text and "admissibility" in t5_text
+    assert "one-based geometric" in mle_text and "n/ΣXᵢ" in mle_text
+    assert "one known population unit" in srs_text and "t₂=y₁" in srs_text
     q72 = next(x for x in estimation["items"] if x["id"] == "csir-est-q72")
     assert q72["topic"].startswith("inference-t3")
     q73 = next(x for x in estimation["items"] if x["id"] == "csir-est-q73")
