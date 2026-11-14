@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 46,
-  "clean": 46,
+  "count": 48,
+  "clean": 48,
   "items": [
     {
       "id": "csir-est-q01",
@@ -1435,6 +1435,88 @@
         }
       },
       "explanation": "The source prints this as Question 49 (December 2018) on page 24. The supplied answer list on page 63 ends at Question 44, so no printed answer-key entry for Q49 is available; the result is derived directly. The joint likelihood is L(θ)=(1/θ)ⁿ∏Xᵢ^((1−θ)/θ). Its dependence on the sample is only through ∏Xᵢ, or equivalently through ∑ln Xᵢ. By the factorisation theorem, the product and the average log are both sufficient, so statements A and B are true. For the MLE, write the log-likelihood as ℓ(θ)=−n ln θ+[(1−θ)/θ]∑ln Xᵢ. Differentiating gives ℓ′(θ)=−n/θ−(1/θ²)∑ln Xᵢ. Setting this equal to zero yields θ̂=−(1/n)∑ln Xᵢ. Since −ln Xᵢ>0 and the transformed variables have an exponential distribution with mean θ, this stationary point is the likelihood maximum. Therefore statement D is true and statement C is false. The correct combination is A, B and D, option B. Other-exam relevance: sufficient statistics, factorisation and maximum likelihood for transformed distributions are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q50",
+      "type": "practice",
+      "format": "multi",
+      "year": 2018,
+      "session": "December",
+      "topic": "inference-t7 · Poisson-Gamma conjugacy, posterior distribution, marginal negative-binomial distribution and Bayes estimation",
+      "stem": "Suppose Y|θ follows a Poisson distribution with mean θ, θ>0, and the prior density is π(θ)∝e^(−αθ)θ^(β−1), where α>0 and β>0. Which statements are true?",
+      "statements": [
+        "The marginal distribution of Y is hypergeometric.",
+        "The posterior distribution of θ given Y=y is Gamma.",
+        "The prior is conjugate for the Poisson likelihood.",
+        "Under squared-error loss, the Bayes estimate of θ is (β+y)/(α+1)."
+      ],
+      "options": [
+        "A and B only",
+        "B and C only",
+        "B, C and D only",
+        "All four statements"
+      ],
+      "answer": "C",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Mixing a Poisson likelihood with a Gamma prior gives a negative-binomial marginal distribution, not a hypergeometric distribution."
+        },
+        "B": {
+          "tf": true,
+          "why": "Multiplying the Poisson likelihood by the Gamma prior gives a Gamma posterior with shape β+y and rate α+1."
+        },
+        "C": {
+          "tf": true,
+          "why": "The posterior remains in the Gamma family, so the Gamma prior is conjugate to the Poisson likelihood."
+        },
+        "D": {
+          "tf": true,
+          "why": "Squared-error loss uses the posterior mean. For Gamma(shape β+y, rate α+1), the mean is (β+y)/(α+1)."
+        }
+      },
+      "explanation": "The source prints this as Question 50 (December 2018) on page 25. The supplied answer list on page 63 ends at Question 44, so no printed key is available; the result is derived directly. The prior is Gamma with shape β and rate α: π(θ)∝θ^(β−1)e^(−αθ). For an observed count Y=y, the Poisson likelihood is proportional to e^(−θ)θ^y. Multiplying prior and likelihood gives π(θ|y)∝θ^(β+y−1)e^(−(α+1)θ), which is Gamma(shape β+y, rate α+1). Thus statement B is true, and because the posterior remains Gamma, the prior is conjugate, making statement C true. Under squared-error loss, the Bayes estimate is the posterior mean, (β+y)/(α+1), so D is true. The marginal distribution is obtained by integrating out θ: P(Y=y)=Γ(β+y)/[Γ(β)y!]·α^β/(α+1)^(β+y), which is negative binomial, not hypergeometric. Therefore A is false. Statements B, C and D are correct, option C. Other-exam relevance: conjugate Bayesian analysis, Poisson-Gamma mixtures and posterior mean estimation are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q51",
+      "type": "practice",
+      "format": "multi",
+      "year": 2018,
+      "session": "June",
+      "topic": "inference-t1 · sufficient statistics for a Bernoulli sample and one-to-one transformations",
+      "stem": "Let X₁ and X₂ be i.i.d. Bernoulli(θ), where 0<θ<1. Which of the following statistics are sufficient for θ?",
+      "statements": [
+        "X₁+2X₂",
+        "X₁−X₂",
+        "X₁²+X₂²",
+        "X₁²+X₂"
+      ],
+      "options": [
+        "A and B only",
+        "A, C and D only",
+        "B, C and D only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The four possible sample outcomes (0,0), (1,0), (0,1), (1,1) give statistic values 0, 1, 2 and 3. It is one-to-one with the full sample, so it is sufficient."
+        },
+        "B": {
+          "tf": false,
+          "why": "The statistic equals zero for both (0,0) and (1,1). Given this value, the conditional probability of (1,1) is θ²/[θ²+(1−θ)²], which depends on θ; hence it is not sufficient."
+        },
+        "C": {
+          "tf": true,
+          "why": "For Bernoulli variables Xᵢ²=Xᵢ, so this statistic is X₁+X₂, the usual sufficient success count."
+        },
+        "D": {
+          "tf": true,
+          "why": "Again X₁²=X₁, so the statistic reduces to X₁+X₂ and is sufficient."
+        }
+      },
+      "explanation": "The source prints this as Question 51 (June 2018) on page 25. The supplied answer list on page 63 ends at Question 44, so no printed key is available; the result is derived directly. The joint probability mass function is θ^(x₁+x₂)(1−θ)^(2−x₁−x₂), so the total number of successes X₁+X₂ is sufficient by factorisation. For statement A, the statistic X₁+2X₂ takes four distinct values: 0 for (0,0), 1 for (1,0), 2 for (0,1), and 3 for (1,1). It therefore identifies the entire observed sample, so it is sufficient. Statement B is not sufficient: X₁−X₂=0 occurs for both (0,0) and (1,1), and conditional on this value, the probability of (1,1) is θ²/[θ²+(1−θ)²], which depends on θ. Finally, for Bernoulli variables Xᵢ²=Xᵢ. Thus statements C and D both reduce to X₁+X₂, so both are sufficient. The correct combination is A, C and D, option B. Other-exam relevance: factorisation, sufficient statistics and Bernoulli likelihoods are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
