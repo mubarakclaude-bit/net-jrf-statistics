@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parent
 FILES = (
     ROOT / "seed" / "csir_estimation_pyq.json",
     ROOT / "seed" / "csir_methods_regression_pyq.json",
+    ROOT / "seed" / "csir_sampling_pyq.json",
 )
 
 
@@ -68,7 +69,7 @@ def load_banks():
 
 
 def main() -> None:
-    estimation, methods = load_banks()
+    estimation, methods, sampling = load_banks()
     q05 = next(x for x in estimation["items"] if x["id"] == "csir-est-q05")
     assert "".join(sorted(k for k, v in q05["verdicts"].items() if v["tf"])) == "ACD"
     q12 = next(x for x in estimation["items"] if x["id"] == "csir-est-q12")
@@ -82,9 +83,9 @@ def main() -> None:
     assert regression_pyq["year"] == 2023 and regression_pyq["session"] == "June"
     assert not any(x["id"] == "csir-est-q07" for x in methods["items"])
     print(
-        f"PASS: {sum(len(x['items']) for x in (estimation, methods))} CSIR PYQs; "
+        f"PASS: {sum(len(x['items']) for x in (estimation, methods, sampling))} CSIR PYQs; "
         "unique IDs, four-option keys, multi-statement verdict alignment, "
-        "worked-solution attribution and targeted normal-MLE checks."
+        "worked-solution attribution and targeted normal-MLE checks; all three banks included."
     )
 
 
