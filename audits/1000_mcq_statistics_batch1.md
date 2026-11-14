@@ -73,7 +73,7 @@ The page 4 item was standardised to the app's multi-select format because the so
 
 ## Batch 5 — pages 13–24
 
-Six additional questions were imported from visually checked pages 13, 16, 17, 19, 21 and 22: four Probability questions (conditional expectation, exponential scale distribution, zero covariance versus independence, and a mixture-exponential hazard function) and two Statistical Inference questions (method-of-moments endpoints for a uniform distribution, and power of a Neyman–Pearson test). The explanations show the intermediate steps and state the assumptions used.
+Six additional questions were imported from visually checked pages 13, 16, 17, 19, 21 and 22: three Probability questions (conditional expectation, exponential scale distribution, zero covariance versus independence, and a mixture-exponential hazard function) and two Statistical Inference questions (method-of-moments endpoints for a uniform distribution, and power of a Neyman–Pearson test). The explanations show the intermediate steps and state the assumptions used.
 
 ### Pages held out after inspection
 
@@ -105,7 +105,7 @@ Two further items were added from visually checked pages 27 and 35: a one-sample
 
 ## Batch 7 — pages 37–48
 
-Five further questions were imported from visually checked pages 38, 46, 47 and 48: four Probability questions (normalisation and marginal PMFs of a discrete joint distribution; the Beta-prime representation of an F statistic; the large-denominator-df limit of F; and the product of independent beta variables) and one Statistical Inference question (unbiasedness, consistency, sufficiency and UMVU). The explanations derive the normalising constant and marginal sums, and identify the relevant distributional identities.
+Four further questions were imported from visually checked pages 38, 46, 47 and 48: four Probability questions (normalisation and marginal PMFs of a discrete joint distribution; the Beta-prime representation of an F statistic; the large-denominator-df limit of F; and the product of independent beta variables) and one Statistical Inference question (unbiasedness, consistency, sufficiency and UMVU). The explanations derive the normalising constant and marginal sums, and identify the relevant distributional identities.
 
 ### Duplicate and exclusion handling
 
