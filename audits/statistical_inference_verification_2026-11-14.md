@@ -154,6 +154,12 @@ File: `seed/inference_t16_mastery.json`, item `inf-t16-m-20`. Severity: **Minor*
 
 The original option said a significant chi-square test establishes that at least one cell departs “appreciably” from independence. Statistical significance alone does not establish practical magnitude, particularly with large samples. The option now says “statistically detectably,” and the explanation distinguishes evidence of association from effect size and notes Cramér's V as a magnitude measure.
 
+### INF-016 — Bayesian interval statements omitted regularity and overstated symmetry requirement
+
+File: `seed/inference_t7_mastery.json`, item `inference-t7-m-15`. Severity: **Minor**.
+
+The original explanation said HPD and equal-tailed intervals coincide only for symmetric unimodal posteriors. Symmetry is sufficient, but not necessary: an equal-tailed interval can also be an HPD interval when its endpoints happen to have equal posterior density. The explanation now states the correct shortest-set property and qualifies the equality case. The asymptotic equivalence claim between Bayesian credible intervals and frequentist confidence intervals is also explicitly tied to standard Bernstein–von Mises conditions, including a fixed prior with positive density near the true parameter.
+
 ## Verification implementation
 
 Added `verify_inference_math.py`, a consolidated standard-library verifier with topic-specific unittest groups. It contains independent regression calculations for T1–T8 and T10–T17, including:
@@ -181,9 +187,9 @@ It also checks:
 ### Test execution status
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
-- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It now contains 57 regression tests.
+- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It now contains 58 regression tests.
 - GitHub Actions run #1195 (run ID `43564757724`) completed successfully on commit `3830a2e7cc776f02414d503fbf3e8f964b595aed`: validate, acceptance and browser jobs all passed, including the verifier, build, lesson navigation, hosted storage conformance and feature browser tests.
-- The additional T1, T5, T8, T10 and T15 edits and the expanded 57-test verifier were committed after that run. A fresh CI run on the latest branch head is required before those follow-up edits are considered validated.
+- The additional T1, T5, T8, T10 and T15 edits and the expanded 58-test verifier were committed after that run. A fresh CI run on the latest branch head is required before those follow-up edits are considered validated.
 
 ## Files changed
 
@@ -203,6 +209,7 @@ Modified:
 - `seed/inference_t10_mastery.json`
 - `seed/inference_t17_mastery.json`
 - `seed/inference_t16_mastery.json`
+- `seed/inference_t7_mastery.json`
 
 Added:
 - `verify_inference_math.py`
