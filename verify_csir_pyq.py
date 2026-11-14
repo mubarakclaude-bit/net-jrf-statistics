@@ -292,6 +292,12 @@ def main() -> None:
     q19 = next(x for x in estimation["items"] if x["id"] == "csir-est-q19")
     assert q19["format"] == "single" and (q19["year"], q19["session"], q19["answer"]) == (2022, "February", "A")
     assert "page 8" in q19["explanation"] and "unbiased" in q19["explanation"]
+    q31 = next(x for x in estimation["items"] if x["id"] == "csir-est-q31")
+    assert q31["format"] == "multi" and (q31["year"], q31["session"], q31["answer"]) == (2020, "26 November", "D")
+    assert "".join(sorted(k for k, v in q31["verdicts"].items() if v["tf"])) == "ABCD"
+    design_lesson = json.loads((ROOT / "seed" / "lesson_design_t1.json").read_text(encoding="utf-8"))
+    design_text = " ".join(b.get("body", "") for s in design_lesson["scenes"] for b in s.get("blocks", []))
+    assert "β₁+γ₂" in design_text and "26 November 2020, Q31" in design_text
     mle_lesson = json.loads((ROOT / "seed" / "lesson_mle.json").read_text(encoding="utf-8"))
     mle_scene3 = next(s for s in mle_lesson["scenes"] if s["id"] == "s3")
     mle_scene7 = next(s for s in mle_lesson["scenes"] if s["id"] == "s7")
@@ -344,7 +350,7 @@ def main() -> None:
     assert "integer nearest to X̄" in mle_text and "halfway between two integers" in mle_text
     q68 = next(x for x in estimation["items"] if x["id"] == "csir-est-q68")
     assert "cannot define a probability density" in q68["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 99
+    assert len(estimation["items"]) == estimation["count"] == 100
 
     # Further source questions from pages 36–49.
     for qid, truth, year, session in [
@@ -445,7 +451,7 @@ def main() -> None:
     q104 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q104")
     assert q104["type"] == "practice" and q104["format"] == "single"
     assert q104["answer"] == "D" and "119" in q104["explanation"] and "120" in q104["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 99
+    assert len(estimation["items"]) == estimation["count"] == 100
     assert len(methods["items"]) == methods["count"] == 12
     assert len(sampling["items"]) == sampling["count"] == 9
 
@@ -472,7 +478,7 @@ def main() -> None:
     assert q54["answer"] == "B" and "page 64" in q54["explanation"]
     q55 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q55")
     assert q55["answer"] == "C" and "page 64" in q55["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 99
+    assert len(estimation["items"]) == estimation["count"] == 100
 
     q75 = next(x for x in methods["items"] if x["id"] == "csir-meth-q75")
     assert q75["type"] == "practice" and q75["format"] == "multi"
