@@ -109,6 +109,12 @@ def main() -> None:
     assert q103["session"] == "December" and q103["answer"] == "A"
     assert "".join(sorted(k for k, v in q103["verdicts"].items() if v["tf"])) == "AD"
 
+    # Estimation Q74: preserve the source's four-statement format and key A,C,D.
+    q74 = next(x for x in estimation["items"] if x["id"] == "csir-est-q74")
+    assert q74["format"] == "multi" and q74["year"] == 2015
+    assert q74["session"] == "December" and q74["answer"] == "A"
+    assert "".join(sorted(k for k, v in q74["verdicts"].items() if v["tf"])) == "ACD"
+
     # Hold out source questions whose printed parameter/key combination is
     # mathematically inconsistent or whose scan transcription is unresolved.
     assert not any(x["id"] in {"csir-est-q16", "csir-est-q19"} for x in estimation["items"])

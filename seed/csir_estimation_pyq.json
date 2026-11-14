@@ -194,19 +194,43 @@
     },
     {
       "id": "csir-est-q74",
-      "format": "single",
+      "format": "multi",
       "year": 2015,
       "session": "December",
-      "topic": "inference-t4 · constrained normal MLE",
-      "stem": "Let X₁,…,Xₙ be independent observations from N(μ,1), with the restriction μ≥0. What is the maximum-likelihood estimator of μ?",
+      "topic": "inference-t4 · constrained normal MLE, bias, sufficiency and consistency",
+      "stem": "Let X₁,…,Xₙ be i.i.d. N(μ,1), where μ∈[0,∞). Let μ̂ be the maximum-likelihood estimator of μ. Which statements are true?",
       "options": [
-        "max(X̄,0)",
-        "X̄",
-        "min(X̄,0)",
-        "0"
+        "Statements 1, 3 and 4 only",
+        "Statements 1 and 2 only",
+        "Statements 2, 3 and 4 only",
+        "All four statements"
       ],
       "answer": "A",
-      "explanation": "Without the restriction μ≥0, the normal likelihood is maximised at μ=X̄. Now impose the restriction. If X̄ is positive, it is allowed and remains the MLE. If X̄ is negative, it is outside the parameter space; the likelihood over μ≥0 is largest at the nearest allowed value, μ=0. Combining both cases gives μ̂MLE=max(X̄,0), option A. This is an example of maximising a likelihood under a boundary constraint. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+      "explanation": "The likelihood for μ is proportional to exp{−(1/2)Σ(Xᵢ−μ)²}, with μ restricted to be nonnegative. Without the restriction, the likelihood is maximised at the sample mean X̄ₙ. If X̄ₙ≥0, this value is allowed; if X̄ₙ<0, the largest likelihood over μ≥0 occurs at the boundary μ=0. Therefore μ̂=max(X̄ₙ,0), so statement 1 is true. For statement 2, take μ=0: X̄ₙ is symmetric about zero, and max(X̄ₙ,0) is positive on half the outcomes and zero otherwise, so its expectation is positive rather than zero. Thus μ̂ is not unbiased. The normal likelihood factorises through X̄ₙ, so statement 3 is true. Finally X̄ₙ→μ in probability and the maximum function is continuous; for μ≥0 its transformed limit is μ. Thus μ̂ is consistent and statement 4 is true. The printed answer key identifies statements A, C and D. Other-exam relevance: constrained maximum likelihood, sufficiency, bias and consistency are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those other examinations.",
+      "statements": [
+        "μ̂=max(X̄ₙ,0).",
+        "μ̂ is unbiased for μ.",
+        "X̄ₙ is sufficient for μ.",
+        "μ̂ is a consistent estimator of μ."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The unconstrained normal likelihood is maximised at X̄ₙ. Restricting μ to [0,∞) projects this value onto the allowed parameter space, giving max(X̄ₙ,0)."
+        },
+        "B": {
+          "tf": false,
+          "why": "At μ=0, μ̂=max(X̄ₙ,0) is positive with positive probability and has positive expectation, so it is not unbiased for every μ≥0."
+        },
+        "C": {
+          "tf": true,
+          "why": "For a normal sample with known variance, the joint density factors through X̄ₙ. Restricting the parameter space does not remove this sufficiency."
+        },
+        "D": {
+          "tf": true,
+          "why": "X̄ₙ converges in probability to μ. The function x↦max(x,0) is continuous and equals μ at every μ≥0, so μ̂ is consistent."
+        }
+      }
     },
     {
       "id": "csir-est-q103",
