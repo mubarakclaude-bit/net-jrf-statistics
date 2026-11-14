@@ -416,14 +416,14 @@ class FollowUpCorrectionTests(unittest.TestCase):
         pool = load_json(SEED / "inference_t7_mastery.json")
         item = next(q for q in pool["items"] if q["id"] == "inference-t7-m-15")
         self.assertIn("equality is possible", item["explanation"])
-        self.assertIn("Bernstein–von Mises", item["explanation"])
+        self.assertIn("Bernstein–von Mises", item["verdicts"]["D"]["why"])
         self.assertIn("not restricted to symmetric", item["verdicts"]["C"]["why"])
 
     def test_t16_significance_does_not_imply_practical_magnitude(self):
         pool = load_json(SEED / "inference_t16_mastery.json")
         item = next(q for q in pool["items"] if q["id"] == "inf-t16-m-20")
         self.assertIn("statistically detectably", item["options"][2])
-        self.assertIn("does not establish a practically large", item["explanation"])
+        self.assertIn("statistical significance alone establish a practically large", item["explanation"])
 
     def test_t17_symmetry_is_sufficient_not_necessary_for_equal_tail_umpu(self):
         pool = load_json(SEED / "inference_t17_mastery.json")
