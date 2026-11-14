@@ -12,7 +12,7 @@ def main():
     rg14=load("lesson_rg14.json")
     s14=" ".join(b["body"] for b in next(s for s in rg14["scenes"] if s["id"]=="s2")["blocks"])
     assert "Cov(X,u)=0" in s14
-    s14iv=" ".join(str(x) for x in next(s for s in rg14["scenes"] if s["id"]=="s11")["solution"])
+    s14iv=next(s for s in rg14["scenes"] if s["id"]=="s11")["solution"][3]["math"]
     assert "E[Z(Y−βW)]=0" in s14iv
     pool=load("regression_t14_mastery.json")
     assert "Cov(X,u)=0" in pool["items"][2]["explanation"]
