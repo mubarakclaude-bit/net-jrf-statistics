@@ -108,6 +108,8 @@ def main() -> None:
     multcorr_q15 = next(x for x in methods["items"] if x["id"] == "csir-meth-q15")
     assert multcorr_q15["type"] == "practice" and multcorr_q15["year"] == 2020
     assert multcorr_q15["session"] == "26 November" and multcorr_q15["answer"] == "A"
+    assert multcorr_q15["topic"].startswith("multivariate-t2")
+    assert "".join(sorted(k for k, value in multcorr_q15["verdicts"].items() if value["tf"])) == "ABC"
     assert "ρ²·p/[1+(p−1)ρ]" in multcorr_q15["explanation"]
     assert "R→√ρ" in multcorr_q15["explanation"]
     regression_q01 = next(x for x in methods["items"] if x["id"] == "csir-meth-q01")
