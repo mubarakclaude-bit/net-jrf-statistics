@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Check answer keys for three independently reviewed Mathematics mastery items."""
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,7 +25,8 @@ def main():
         actual = {k: v["tf"] for k, v in item["verdicts"].items()}
         assert actual == expected_verdicts, (item_id, actual)
         true_set = "".join(k for k in "ABCD" if actual[k])
-        assert true_set in expected_option, (item_id, true_set, expected_option)
+        selected = "".join(re.findall(r"\\b[ABCD]\\b", item["options"][ord(answer) - ord("A")]))
+        assert selected == true_set, (item_id, selected, true_set)
         print(f"PASS: {item_id} key, option and A-D verdicts agree")
 
 
