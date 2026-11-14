@@ -333,13 +333,12 @@ def main() -> None:
         assert q["type"] == "practice" and q["format"] == "multi"
         assert (q["year"], q["session"]) == (year, session)
         assert "".join(sorted(k for k, v in q["verdicts"].items() if v["tf"])) == truth
-    for qid, year, session, answer in [
-        ("csir-samp-q76", 2015, "December", "B"),
-        ("csir-samp-q78", 2015, "June", "A"),
-    ]:
-        q = next(x for x in sampling["items"] if x["id"] == qid)
-        assert q["type"] == "practice" and q["format"] == "single"
-        assert (q["year"], q["session"], q["answer"]) == (year, session, answer)
+    q76 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q76")
+    assert q76["type"] == "practice" and q76["format"] == "multi"
+    assert (q76["year"], q76["session"], q76["answer"]) == (2015, "December", "B")
+    q78 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q78")
+    assert q78["type"] == "practice" and q78["format"] == "single"
+    assert (q78["year"], q78["session"], q78["answer"]) == (2015, "June", "A")
     assert len(estimation["items"]) == estimation["count"] == 74
     assert len(methods["items"]) == methods["count"] == 11
     assert len(sampling["items"]) == sampling["count"] == 8
