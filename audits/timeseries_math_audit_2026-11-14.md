@@ -90,28 +90,25 @@ Ten topic-level scripts have been added. Each computes identities or numerical c
 
 The scripts contain approximately **197 independent numerical/formula checks** in total, in addition to the shared mastery-pool contract checks. This is the authored test count, **not a claim that the tests have passed execution**.
 
-## T2 coordination issue — do not edit on this branch
+## T2 coordination — correction owned by PR #93
 
-PR [#93](https://github.com/mubarakclaude-bit/net-jrf-statistics/pull/93) already owns `seed/lesson_ts2.json` and `tools/verify_math_integrity_timeseries_ts2.py`. This branch intentionally does not modify either file.
+PR [#93](https://github.com/mubarakclaude-bit/net-jrf-statistics/pull/93) owns `seed/lesson_ts2.json` and its dedicated verifier. The T2 findings identified during this audit were handed to that branch and corrected there:
 
-An additional issue was found while checking the T2 formula against its own values:
+- The MA(1) PACF closed form now uses  
+  `−θ^k(1−θ²)/(1−θ^(2(k+1)))`, consistent with the stated minus convention `ρ₁=−θ/(1+θ²)`.
+- At `θ=0.5`, the first four values are approximately `−0.400000, −0.190476, −0.094118, −0.046921`.
+- The roots for `ρ₁=−0.49` are `0.8173495` and `1.2234668`; the invertible root is `0.81735`.
+- Independent second-pass review then caught a residual stale final answer (`0.857`) in T2 scene s10(f). PR #93 now corrects that final learner-facing line to `0.81735` and strengthens its verifier to assert the exact value and reject any remaining `0.857` string.
 
-- The lesson's MA(1) PACF formula is written as  
-  (\phi_{kk}=-(-\theta)^k(1-\theta^2)/(1-\theta^{2(k+1)})).
-- Under the stated minus convention (\rho_1=-\theta/(1+\theta^2)), this sign pattern is inconsistent with the listed PACF values.
-- The correct expression is  
-  (\phi_{kk}=-\theta^k(1-\theta^2)/(1-\theta^{2(k+1)})).
-- At (\theta=0.5), the first four values are approximately (-0.400000, -0.190476, -0.094118, -0.046921). The lesson's displayed formula alternates signs for even (k), while its listed values are all negative; its third and fourth displayed magnitudes also differ from the recalculated values.
-- The T2 verifier currently present on PR #93 checks the MA(1) coefficient roots for (\rho_1=-0.49), but does not check this PACF closed form.
-
-This is a **confirmed unresolved T2 mathematical issue**. It is left untouched because PR #93 owns the file. It should be fixed and independently verified by the owner of that workstream before the overall 11-topic audit can be marked PASS.
+The T2 source and verifier remain unchanged on this PR #95 branch to preserve file ownership. The latest PR #93 head is undergoing a fresh CI run after these follow-up corrections; do not mark the combined 11-topic audit fully release-verified until that run passes.
 
 ## Execution and limitations
 
-- The scripts have not been run from a full repository checkout in this session.
-- A local checkout could not be obtained because the execution environment could not resolve GitHub; therefore no local Python, `npm`, `vcheck.js`, `mathrender.js`, browser, or full repository test result is claimed.
-- PR CI must execute all ten new scripts and the repository's applicable content/contract checks. Any failure must be fixed before merge.
-- The T2 formula issue remains outside this branch and requires coordination with PR #93.
+- PR #95's GitHub Actions run `43564752978` completed successfully: validation, all six acceptance scenarios, browser build, strict app test, clicktest, hosted storage adapter conformance and feature browser tests passed.
+- The ten topic-level verifiers and shared mastery-pool contract helper were included in the successful validation job. The manual full-inventory step was skipped by workflow design.
+- The successful run applies to PR #95 head `6594333bc307a276cf2eb4fdbfb36a1694355bcd`; any subsequent branch changes require fresh CI.
+- The T2 follow-up correction is owned by PR #93 and is still awaiting its latest-head CI result.
+- No local checkout or local test run is claimed; CI is the recorded execution evidence.
 - No shared manifest, architecture, app code, configuration, Paper 1 content, or unrelated module was modified.
 - No merge or deployment was performed.
 
