@@ -416,3 +416,19 @@ Nine further questions were imported from pages 241, 243, 245, 246 and 248–252
 ### Source-option correction
 
 - **Page 248:** for integer n, 16n²+7n+6 is always an integer. The printed options are all fractions below one; the correct option is corrected to 1.
+
+
+## Batch 25 — pages 253–264
+
+Nine further questions were imported from pages 254–260, 262 and 264:
+- **Probability (8):** completeness and sufficiency of the maximum absolute observation for Uniform(−θ,θ), p254; symmetry and indicator moments for a normal variable, p255; expected areas of a square and rectangle with uniform sides, p256; density from a specified hazard function, p258; support of a binomial variable identified from its MGF, p259; conditional expectation for two exchangeable geometric variables given their sum, p260; variance from a Poisson MGF, p262; expected transformed sample minimum using the probability integral transform, p264.
+- **Multivariate Analysis (1):** identifying a valid correlation matrix, p257.
+
+### Pages held out after inspection
+
+- **Page 253:** the scan obscures the estimator expressions and confidence-interval quantiles; the true/false selections cannot be verified reliably.
+- **Page 242:** the displayed Pareto-like function is not normalisable on the stated support x>0; the usual x>1 support is not printed clearly.
+- **Page 244:** the variable is labelled discrete uniform, so its fractional part is zero; the listed continuous-uniform options do not match.
+- **Page 247:** duplicate of the Poisson reciprocal expectation already imported from p188.
+- **Page 261:** the notation defining S and T and the condition on their expectations/variances are too corrupted to derive the requested correlation.
+- **Page 263:** the geometric support convention is not stated; the two common conventions give different means (1/p versus (1−p)/p).
