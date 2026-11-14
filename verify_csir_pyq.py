@@ -38,6 +38,7 @@ def load_banks():
         assert data["clean"] == len(data["items"]), f"{path.name}: clean count mismatch"
         for item in data["items"]:
             item_id = item["id"]
+            assert item.get("type") == "practice", f"{item_id}: question type must be practice"
             assert item_id not in seen_ids, f"duplicate question id: {item_id}"
             seen_ids.add(item_id)
             assert item["answer"] in "ABCD", f"{item_id}: invalid answer key"
@@ -76,6 +77,11 @@ def main() -> None:
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
     assert "Var(p₂)=P(1−P)/n" in q24["explanation"]
     assert "Var(p₁)=P(1−P)/n" in q24["explanation"]
+    q10 = next(x for x in estimation["items"] if x["id"] == "csir-est-q10")
+    assert q10["type"] == "practice" and q10["year"] == 2022 and q10["session"] == "September"
+    assert q10["answer"] == "A"
+    assert "".join(sorted(k for k, v in q10["verdicts"].items() if v["tf"])) == "AC"
+    assert "Xᵢ²=Xᵢ" in q10["explanation"] and "converges to 0, not to p" in q10["explanation"]
     q05 = next(x for x in estimation["items"] if x["id"] == "csir-est-q05")
     assert "".join(sorted(k for k, v in q05["verdicts"].items() if v["tf"])) == "ACD"
     q12 = next(x for x in estimation["items"] if x["id"] == "csir-est-q12")
@@ -89,6 +95,8 @@ def main() -> None:
     assert regression_pyq["year"] == 2023 and regression_pyq["session"] == "June"
     assert not any(x["id"] == "csir-est-q07" for x in methods["items"])
 
+    # Estimation Q10: Bernoulli estimator sequences; only the sample mean and
+    # its identical squared-observation form are consistent for p.
     # Estimation Q9: the supplied key says "does not exist", but direct
     # likelihood differentiation gives one positive global maximiser.
     q09 = next(x for x in estimation["items"] if x["id"] == "csir-est-q09")
