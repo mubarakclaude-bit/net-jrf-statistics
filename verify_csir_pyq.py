@@ -111,6 +111,11 @@ def main() -> None:
     assert q47["topic"].startswith("design-t1")
     assert "".join(sorted(k for k, value in q47["verdicts"].items() if value["tf"])) == "CD"
     assert "σ²+(1/10)" in q47["explanation"] and "page 23" in q47["explanation"]
+    q49 = next(x for x in estimation["items"] if x["id"] == "csir-est-q49")
+    assert q49["year"] == 2018 and q49["session"] == "December" and q49["answer"] == "B"
+    assert q49["topic"].startswith("inference-t1")
+    assert "".join(sorted(k for k, value in q49["verdicts"].items() if value["tf"])) == "ABD"
+    assert "−(1/n)∑ln Xᵢ" in q49["explanation"] and "page 24" in q49["explanation"]
     q48 = next(x for x in estimation["items"] if x["id"] == "csir-est-q48")
     assert q48["year"] == 2018 and q48["session"] == "December" and q48["answer"] == "B"
     assert "no printed answer-key entry" in q48["explanation"] and "(0.88,0.91)" in q48["explanation"]
