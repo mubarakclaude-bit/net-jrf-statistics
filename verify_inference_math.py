@@ -481,3 +481,60 @@ class FollowUpCorrectionTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+
+class SecondPassMasteryReviewTests(unittest.TestCase):
+    def test_t5_distinguishes_parameter_space_from_sample_compatibility(self):
+        pool = load_json(SEED / "inference_t5_mastery.json")
+        multi = next(q for q in pool["items"] if q["id"] == "inf-t5-m-03")
+        response = next(q for q in pool["items"] if q["id"] == "inf-t5-m-15")
+        self.assertIn("sample-compatible parameter region", multi["statements"][3])
+        self.assertIn("remains inside the parameter space", multi["verdicts"]["D"]["why"])
+        self.assertIn("not decision-theoretically inadmissible", response["explanation"])
+
+    def test_t6_crlb_attainment_requires_global_condition_for_umvue_claim(self):
+        pool = load_json(SEED / "inference_t6_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t6-m-07")
+        self.assertIn("for every θ", item["statements"][1])
+        self.assertIn("isolated parameter value", item["verdicts"]["B"]["why"])
+
+    def test_t7_bayes_estimator_uses_explicit_loss_convention(self):
+        pool = load_json(SEED / "inference_t7_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inference-t7-m-20")
+        self.assertIn("squared-error-loss convention", item["stem"])
+        self.assertIn("not a universal theorem", item["explanation"])
+
+    def test_t8_bayes_admissibility_has_prior_support_conditions(self):
+        pool = load_json(SEED / "inference_t8_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inference-t8-m-09")
+        self.assertIn("positive density throughout", item["statements"][0])
+        self.assertIn("Uniqueness alone", item["explanation"])
+
+    def test_t10_lrt_range_and_t13_uniform_interval_explanations_are_consistent(self):
+        lrt = load_json(SEED / "inference_t10_mastery.json")
+        item = next(q for q in lrt["items"] if q["id"] == "inf-t10-m-12")
+        self.assertIn("0 ≤ λ ≤ 1", item["explanation"])
+        ci = load_json(SEED / "inference_t13_mastery.json")
+        item = next(q for q in ci["items"] if q["id"] == "inf-t13-m-20")
+        self.assertIn("Option D is the correct interval", item["explanation"])
+
+    def test_t11_sprt_advantage_is_not_promised_as_a_fixed_fraction(self):
+        pool = load_json(SEED / "inference_t11_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t11-m-15")
+        self.assertIn("can require substantially fewer", item["options"][1])
+        self.assertIn("not a universal guarantee", item["explanation"])
+
+    def test_t12_and_t15_testing_language_handles_size_and_multiplicity_correctly(self):
+        t12 = load_json(SEED / "inference_t12_mastery.json")
+        item = next(q for q in t12["items"] if q["id"] == "inf-t12-m-12")
+        self.assertIn("significance level α", item["statements"][0])
+        t15 = load_json(SEED / "inference_t15_mastery.json")
+        fwer = next(q for q in t15["items"] if q["id"] == "inf-t15-m-09")
+        self.assertIn("can exceed", fwer["options"][3])
+        interval = next(q for q in t15["items"] if q["id"] == "inf-t15-m-12")
+        self.assertIn("subject-matter threshold", interval["verdicts"]["C"]["why"])
+        robust = next(q for q in t15["items"] if q["id"] == "inf-t15-m-17")
+        self.assertIn("finite-variance", robust["statements"][0])
+        bonf = next(q for q in t15["items"] if q["id"] == "inf-t15-m-19")
+        self.assertEqual(bonf["answer"], "A")
+        self.assertIn("full family", bonf["explanation"])

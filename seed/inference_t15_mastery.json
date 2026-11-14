@@ -143,10 +143,10 @@
     "the power of each test to fall",
     "the null hypotheses to become dependent",
     "the p-values to become invalid individually",
-    "the family-wise error rate to exceed 0.05"
+    "the family-wise error rate can exceed 0.05"
    ],
    "answer": "D",
-   "explanation": "Each individual test still has size 0.05 and each p-value is still correct for its own test, so the third option is wrong. What grows is the probability of at least one false rejection across the family — 0.226 at five tests and 0.642 at twenty. The power of each test is unaffected unless the level is lowered to compensate."
+   "explanation": "Testing many hypotheses at 0.05 can raise the family-wise error rate above 0.05. For independent true nulls, five tests give 1−0.95⁵ = 0.226 and twenty give 1−0.95²⁰ = 0.642. The exact inflation depends on dependence among tests; perfect dependence is an exception, so 'can exceed' is the accurate general wording."
   },
   {
    "id": "inf-t15-m-10",
@@ -192,11 +192,11 @@
     "C and D only"
    ],
    "answer": "A",
-   "explanation": "A is true — p = 0.0455 is below 0.05, so the result is statistically significant at the 5% level. B is false: significance concerns consistency with the null, not magnitude, and 0.02 of a standard deviation is negligible by any convention. C is true, and it is the standard remedy. D is false — the test is working as designed; what is inadequate is reporting the p-value alone.",
+   "explanation": "A is true — p = 0.0455 is below 0.05, so the result is statistically significant at the 5% level. B is false: significance concerns compatibility with the null, not whether the effect is large enough to act on. C is true: a confidence interval quantifies plausible effect sizes and helps assess practical importance against a subject-matter threshold. D is false — the test is working as designed; the issue is reporting the p-value without magnitude.",
    "statements": [
     "The result is statistically significant at the 5% level.",
     "The result shows the difference is large enough to act on.",
-    "Reporting a confidence interval would settle whether the difference matters.",
+    "Reporting a confidence interval would help quantify the difference and assess its practical importance.",
     "The test is invalid because the sample is too large."
    ],
    "verdicts": {
@@ -210,7 +210,7 @@
     },
     "C": {
      "tf": true,
-     "why": "True. The interval (0.0004, 0.0396) excludes zero, which is the significance, and bounds the effect below 0.04, which is the importance — both facts in one line."
+     "why": "True. The interval quantifies the plausible effect sizes and can be compared with a pre-defined threshold for practical importance. It does not decide what counts as important without subject-matter context."
     },
     "D": {
      "tf": false,
@@ -291,9 +291,9 @@
     "A, B and C only"
    ],
    "answer": "A",
-   "explanation": "A is true — the central limit theorem makes x̄ close to normal for moderate n, so the t test's real size stays near its nominal level under mild departures. B is true, and it is the sharpest contrast in the topic: the variance statistic depends on the fourth moment and has no such protection. C is false — dependence can make the standard error badly wrong, usually too small, so the test rejects far too often. D is true, which is why the Welch version is often preferred.",
+   "explanation": "A is true under the stated finite-variance and mild-departure qualifications: the central limit theorem supports approximate normality of x̄ for sufficiently large n. B is true, and it is the sharp contrast in the topic: the variance statistic depends on the fourth moment and has no comparable protection. C is false — dependence can make the standard error badly wrong, often too small. D is true, which is why the Welch version is often preferred when variances and sample sizes differ.",
    "statements": [
-    "A test on a mean is fairly robust to non-normality when n is moderate.",
+    "Under finite-variance and mild-departure conditions, a test on a mean is often fairly robust to non-normality for moderate n.",
     "A test on a variance is highly sensitive to non-normality.",
     "A modest failure of independence has little effect on a test's real size.",
     "Unequal variances matter more for a pooled two-sample t test when the sample sizes differ."
@@ -301,7 +301,7 @@
    "verdicts": {
     "A": {
      "tf": true,
-     "why": "True. The statistic depends on the data through x̄, which the central limit theorem pushes towards normality regardless of population shape."
+     "why": "True with the stated qualifications. The central limit theorem supports approximate normality of the sample mean when the variance is finite and the sample is sufficiently large; severe skewness, heavy tails or small samples can still cause problems."
     },
     "B": {
      "tf": true,
@@ -338,15 +338,15 @@
    "format": "single",
    "topic": "inference-t15",
    "diff": "hard",
-   "stem": "A researcher tests five outcomes at α = 0.05, finds one significant at p = 0.03, and reports only that outcome. Applying the Bonferroni correction afterwards would:",
+   "stem": "A researcher tests five outcomes at α = 0.05, finds one with unadjusted p = 0.03, and reports only that outcome. Which statement about applying Bonferroni correction is correct?",
    "options": [
-    "make the reported result valid, since 0.03 > 0.01 means it is no longer claimed",
-    "not repair the problem, because the choice of which outcome to report was itself made using the data",
-    "be unnecessary, since each test had the correct size",
-    "require the level to be raised rather than lowered"
+    "Bonferroni can be applied after testing if all five outcomes are included; the adjusted p-value is 0.15, so this result is not significant at 0.05",
+    "A post-hoc correction is invalid because α must always be set before seeing data",
+    "No adjustment is needed, since each test had the correct individual size",
+    "The correction requires the level to be raised rather than lowered"
    ],
-   "answer": "B",
-   "explanation": "An error rate is a property of a decision rule, and the rule has to be fixed before the data for the rate to be computable. The procedure actually run was 'report the smallest p-value among five', and no adjustment applied after the fact describes that procedure. The correction is useful only when planned in advance; the honest alternative here is to treat the finding as a hypothesis for a future sample."
+   "answer": "A",
+   "explanation": "Bonferroni's family-wise error control does not depend on whether the correction was planned before or after seeing the data, provided the full family of five tested outcomes is included. The adjusted p-value is min(5 × 0.03, 1) = 0.15 (equivalently, compare 0.03 with 0.05/5 = 0.01), so the result is not significant after correction. If more outcomes were searched than the five disclosed, the family must include those too."
   },
   {
    "id": "inf-t15-m-20",

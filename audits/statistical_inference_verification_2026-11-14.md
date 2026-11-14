@@ -13,7 +13,7 @@
 
 ## Topic-by-topic status
 
-Status describes the first-pass mathematical audit of the current lesson material and the available mastery pool. It does not certify every individual single-choice/numeric mastery item: those still require a full manual key-by-key pass. The regression suite provides repeatable independent calculations and checks the pool structure and all multi-statement keys.
+Status describes the mathematical audit of current lesson material and available mastery pools. A manual first-pass review has now covered all 20 items in each available non-T9 pool (320 items total), alongside independent calculations and automated checks. This is not a formal proof of every possible distractor or theorem nuance; the verifier checks repeatable calculations, structure and multi-statement key consistency.
 
 | Topic | Catalog subject | Status | Notes |
 |---|---|---|---|
@@ -21,17 +21,17 @@ Status describes the first-pass mathematical audit of the current lesson materia
 | T2 | Completeness, exponential families, ancillarity, Basu | PASS — first pass | Poisson/Bernoulli completeness arguments, Uniform range counterexample and Basu conditions checked |
 | T3 | Rao–Blackwell and Lehmann–Scheffé | PASS — first pass | Poisson and Bernoulli UMVUE derivations, variance comparisons and transformation traps checked |
 | T4 | MLE: computation, invariance, properties | BLOCKED — lesson absent | Catalog entry and 20-item mastery pool exist, but `seed/lesson_t4.json` is absent from current main; no substitute lesson source found in the seed tree |
-| T5 | Method of moments, minimum chi-square, least squares | CORRECTED | Uniform MOM estimate wording now distinguishes sample feasibility from decision-theoretic admissibility |
-| T6 | Cramér–Rao bound and Fisher information | PASS — first pass | Bernoulli, Poisson, normal and function-of-parameter bounds checked |
-| T7 | Bayesian estimation and conjugate priors | CORRECTED | Normal–normal posterior corrected; HPD equality and Bayesian/frequentist asymptotic claims qualified; see INF-001 and INF-016 |
-| T8 | Decision theory: loss, risk, admissibility, minimax | CORRECTED | Normal-mean minimax explanation now states the minimax lower bound; constant risk alone is not treated as sufficient |
+| T5 | Method of moments, minimum chi-square, least squares | CORRECTED | Uniform MOM items now distinguish the parameter space, sample-compatible region and decision-theoretic admissibility |
+| T6 | Cramér–Rao bound and Fisher information | PASS — first pass | Bernoulli, Poisson, normal and function-of-parameter bounds checked; equality-to-UMVUE wording now requires attainment throughout the model |
+| T7 | Bayesian estimation and conjugate priors | CORRECTED | Normal–normal posterior corrected; HPD equality and Bayesian/frequentist asymptotic claims qualified; squared-error convention made explicit; see INF-001, INF-016 and INF-020 |
+| T8 | Decision theory: loss, risk, admissibility, minimax | CORRECTED | Normal-mean minimax explanation states the lower bound; Bayes-rule admissibility is qualified by prior support and regularity; constant risk alone is not treated as sufficient |
 | T9 | Neyman–Pearson, MLR, UMP | DEFERRED | Conflicts with open draft PR #93; left untouched |
-| T10 | Likelihood ratio test and Wilks | CORRECTED | General likelihood-ratio range now includes zero when the null likelihood is zero |
-| T11 | SPRT | CORRECTED | Wald boundary explanation and boundary-intercept dependence corrected; see INF-005 and INF-006 |
-| T12 | Size and power computation | CORRECTED | Mastery item `inf-t12-m-10` had an incorrect answer key; see INF-002 |
-| T13 | Confidence intervals and pivots | CORRECTED | Variance-interval endpoint rounding corrected in lesson and mastery item; see INF-003 |
+| T10 | Likelihood ratio test and Wilks | CORRECTED | General likelihood-ratio range now includes zero consistently in both pool explanations |
+| T11 | SPRT | CORRECTED | Wald boundary/intercept explanations corrected; average-sample-size advantage no longer promises a fixed factor; see INF-005, INF-006 and INF-023 |
+| T12 | Size and power computation | CORRECTED | Power key corrected; size is distinguished from the preselected significance level; see INF-002 and INF-024 |
+| T13 | Confidence intervals and pivots | CORRECTED | Variance-interval endpoint rounding and Uniform-pivot interval explanation corrected; see INF-003, INF-007 and INF-025 |
 | T14 | Chi-square goodness of fit | CORRECTED | Poisson tail pooling explanation corrected; statistic and df independently recomputed; see INF-004 |
-| T15 | Choosing the right test | CORRECTED | Corrected a p-value/data mismatch and clarified that sign/Wilcoxon procedures do not generally test a skewed population mean |
+| T15 | Choosing the right test | CORRECTED | Corrected p-value/data mismatch and sign/Wilcoxon target; qualified family-wise error, robustness and interval interpretation; corrected post-hoc Bonferroni guidance; see INF-008, INF-009 and INF-026–INF-029 |
 | T16 | Contingency tables: independence and homogeneity | CORRECTED | Expected counts, Pearson/Yates statistics and df checked; significance/practical-magnitude wording clarified; see INF-015 |
 | T17 | UMP unbiased and UMP invariant tests | CORRECTED | Exponential-rate one-sided direction/cutoffs checked; equal-tail symmetry condition qualified; see INF-014 |
 
@@ -160,6 +160,85 @@ File: `seed/inference_t7_mastery.json`, item `inference-t7-m-15`. Severity: **Mi
 
 The original explanation said HPD and equal-tailed intervals coincide only for symmetric unimodal posteriors. Symmetry is sufficient, but not necessary: an equal-tailed interval can also be an HPD interval when its endpoints happen to have equal posterior density. The explanation now states the correct shortest-set property and qualifies the equality case. The asymptotic equivalence claim between Bayesian credible intervals and frequentist confidence intervals is also explicitly tied to standard Bernstein–von Mises conditions, including a fixed prior with positive density near the true parameter.
 
+
+### INF-017 — T5 confused parameter-space membership with sample compatibility
+
+File: `seed/inference_t5_mastery.json`, item `inf-t5-m-03`. Severity: **Minor**.
+
+For U(0, θ), the method-of-moments estimate 2x̄ is positive and therefore remains in the parameter space θ > 0, even when it is below the observed maximum and hence incompatible with that realised sample. The original statement said it could fall outside the parameter space, while its verdict described sample incompatibility. The statement and verdict now distinguish these concepts.
+
+### INF-018 — T5 answer option called a sample-incompatible MOM estimate “inadmissible”
+
+File: `seed/inference_t5_mastery.json`, item `inf-t5-m-15`. Severity: **Minor**.
+
+The keyed option used “inadmissible” even though the explanation correctly said the issue was sample compatibility, not decision-theoretic domination. The option now says the realised estimate lies outside the sample-compatible parameter region and recommends the boundary MLE with its rationale.
+
+### INF-019 — T6 CRLB equality condition did not state the global requirement for UMVUE status
+
+File: `seed/inference_t6_mastery.json`, item `inf-t6-m-07`. Severity: **Minor**.
+
+Attaining the Cramér–Rao bound at one parameter value does not by itself establish a uniformly minimum-variance unbiased estimator over the model. The statement now requires equality for every θ (under the stated regularity conditions), and its verdict explains the distinction.
+
+### INF-020 — T7 Bayes estimate question omitted its loss convention
+
+File: `seed/inference_t7_mastery.json`, item `inference-t7-m-20`. Severity: **Clarification**.
+
+A Bayes estimator is defined relative to a loss function; without one, the posterior mean is not universally implied. The stem now explicitly invokes the module's squared-error-loss convention, and the explanation says this is a convention rather than a general Bayesian theorem.
+
+### INF-021 — T8 stated Bayes-rule admissibility without prior-support conditions
+
+File: `seed/inference_t8_mastery.json`, item `inference-t8-m-09`. Severity: **Minor**.
+
+A Bayes rule is not automatically admissible under every prior: a prior that omits parts of the parameter space can fail to penalise improvements there. The statement now gives a standard sufficient condition using a proper full-support prior, finite Bayes risk and regularity; the verdict no longer implies uniqueness alone is enough.
+
+### INF-022 — T10 repeated an obsolete strict-positive likelihood-ratio range
+
+File: `seed/inference_t10_mastery.json`, item `inf-t10-m-12`. Severity: **Minor**.
+
+The pool's item m-02 had correctly established 0 ≤ λ ≤ 1, including λ = 0 when the null likelihood vanishes. Item m-12's explanation still said 0 < λ ≤ 1. Its explanation and verdict now use the general non-negative range consistently.
+
+### INF-023 — T11 overstated the SPRT's average sample-size reduction as a fixed factor
+
+File: `seed/inference_t11_mastery.json`, item `inf-t11-m-15`. Severity: **Minor**.
+
+The SPRT can substantially reduce average sample size, but “about half” is not a universal guarantee. The option now says it *can* require substantially fewer observations, and the explanation confines the roughly-half comparison to the numerical example in this pool.
+
+### INF-024 — T12 conflated the chosen significance level with the realised test size
+
+File: `seed/inference_t12_mastery.json`, item `inf-t12-m-12`. Severity: **Minor**.
+
+For a discrete test the actual size may be below the target level. The statement now says the significance level α is chosen before data collection, while the verdict clarifies that actual size is determined by the rejection rule and can be smaller.
+
+### INF-025 — T13 Uniform confidence-interval explanation pointed to the correct option as wrong
+
+File: `seed/inference_t13_mastery.json`, item `inf-t13-m-20`. Severity: **Minor**.
+
+The keyed interval is (X₍ₙ₎, X₍ₙ₎/α^(1/n)); the lower endpoint must be at least the observed maximum. The original explanation incorrectly said option D ignored that lower constraint, although D was the keyed correct interval. The explanation now identifies D as correct and explains why the other options fail.
+
+### INF-026 — T15 described family-wise error inflation as unconditional
+
+File: `seed/inference_t15_mastery.json`, item `inf-t15-m-09`. Severity: **Minor**.
+
+Testing many hypotheses at 0.05 can raise family-wise error above 0.05, but the exact inflation depends on dependence among tests; perfect dependence is an exception. The option now says “can exceed,” and the explanation gives the independent-test examples without implying unconditional inflation.
+
+### INF-027 — T15 overstated what a confidence interval says about practical importance
+
+File: `seed/inference_t15_mastery.json`, item `inf-t15-m-12`. Severity: **Minor**.
+
+A confidence interval quantifies plausible effect sizes and can be compared with a subject-matter threshold; it cannot decide practical importance without that context. The statement and verdict were rewritten to reflect this.
+
+### INF-028 — T15 robustness statement omitted finite-variance and mild-departure qualifications
+
+File: `seed/inference_t15_mastery.json`, item `inf-t15-m-17`. Severity: **Minor**.
+
+The central limit theorem does not guarantee robust small-sample inference under arbitrary heavy tails or severe skewness. The mean-test statement now specifies finite variance and mild departures, and the verdict states the limitation explicitly.
+
+### INF-029 — T15 incorrectly claimed Bonferroni adjustment cannot be applied after seeing the data
+
+File: `seed/inference_t15_mastery.json`, item `inf-t15-m-19`. Severity: **Major**.
+
+Bonferroni family-wise error control remains valid when applied after testing, provided the full family of outcomes searched is included. For five tests and an unadjusted p-value of 0.03, the adjusted p-value is 0.15 (equivalently, compare 0.03 with 0.01), so the result is not significant. The stem, options, key and explanation were rewritten; any undisclosed additional searches must also be included in the family.
+
 ## Verification implementation
 
 Added `verify_inference_math.py`, a consolidated standard-library verifier with topic-specific unittest groups. It contains independent regression calculations for T1–T8 and T10–T17, including:
@@ -187,9 +266,9 @@ It also checks:
 ### Test execution status
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
-- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It now contains 58 regression tests.
+- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It now contains 64 regression tests.
 - GitHub Actions run #1195 (run ID `43564757724`) completed successfully on commit `3830a2e7cc776f02414d503fbf3e8f964b595aed`: validate, acceptance and browser jobs all passed, including the verifier, build, lesson navigation, hosted storage conformance and feature browser tests.
-- Later changes added T1, T5, T7, T8, T10, T15, T16 and T17 mastery clarifications and expanded the verifier to 58 tests. The latest branch-head run #1296 (run ID `43577249567`) was queued at report update time; it must complete successfully before the latest edits are considered validated.
+- Run #1304 (ID `43577320883`) was in progress on the prior branch head `b1cc450` when this second-pass update began. This commit changes mastery explanations and adds six regression tests; its own branch-head CI run must complete successfully before these changes are considered validated.
 
 ## Files changed
 
@@ -221,6 +300,6 @@ No other lesson or module files were changed.
 
 1. **T4 content gap:** The catalog and 20-item mastery pool exist, but the lesson JSON is absent from current main. This task does not author a replacement lesson or change catalog/application architecture.
 2. **T9 dependency:** T9 is reserved for PR #93. A follow-up should compare that PR's T9 verifier and lesson changes against this audit's scope before integrating.
-3. **Mastery key depth:** All available non-T9 pools were checked for item count, IDs, answer labels and multi-statement verdict/key consistency. Manual review has expanded beyond representative examples and has identified/corrected additional single-choice/numeric inconsistencies, but an exhaustive proof of every single-choice/numeric key remains outstanding and must not be inferred from these checks.
+3. **Mastery key depth:** All available non-T9 pools were checked for item count, IDs, answer labels and multi-statement verdict/key consistency. Manual first-pass review has now covered all 320 items in available non-T9 pools. That review is not a formal proof of every single-choice/numeric key; a second independent reviewer or further item-by-item calculation is still advisable for high-stakes release.
 4. **Verifier execution:** Run `python verify_inference_math.py` from a full checkout and resolve any failures before treating the audit as complete.
 5. No branch merge, production deployment, Vercel push or workflow/configuration change was made.
