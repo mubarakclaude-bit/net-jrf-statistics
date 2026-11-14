@@ -18,7 +18,7 @@ FILES = (
 def option_statement_set(option: str) -> str:
     if "all four" in option.lower():
         return "ABCD"
-    if "statement" in option.lower():
+    if "statement" in option.lower() or "sequence" in option.lower():
         numbers = [int(x) for x in re.findall(r"\d+", option)]
         return "".join(sorted("ABCD"[n - 1] for n in numbers if 1 <= n <= 4))
     return "".join(sorted(set(re.findall(r"\b([ABCD])\b", option))))
