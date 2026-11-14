@@ -24,6 +24,6 @@ for p in range(2,12):
         assert denominator>0 and error_df>0
 s4=next(s for s in L["scenes"] if s["id"]=="s4")
 boundary=next(b for b in s4["blocks"] if b["h"]=="Why the formula differs")
-assert "requires p≥3" in boundary["body"] and "zero residual degrees of freedom" in boundary["body"]
+assert "requires p≥3" in boundary["body"] and "error df" in boundary["body"] and "is zero" in boundary["body"]
 assert "p must be at least 3" in P["items"][4]["explanation"]
 print("PASS: Latin-square missing-value estimator is restricted to p>=3; p=2 has zero denominator and error df.")
