@@ -4,7 +4,7 @@
 
 - Repository: `mubarakclaude-bit/net-jrf-statistics`
 - Base: current `main` at task start
-- Branch: `audit/math-integrity-2026-11-14`\n- Latest branch HEAD: `7460aab96e1ce8b63d9557293d54b8eed940e174`
+- Branch: `audit/math-integrity-2026-11-14`\n- Latest lesson/verifier content verified at: `579eb8d90e9c4f39e6f34a37e7a8b1130124e55b` (the report-only update that follows will advance the branch HEAD; use PR #93 for the live branch SHA).
 - Inventory: **129** files matching `seed/lesson_*.json`
 - First-pass screening: **129/129 lesson files opened and screened** for learner-facing worked/guided numerical examples.
 - This is **not** a claim that all 129 lessons have been mathematically verified. Theory/revision scenes, every displayed formula/table, assumptions and all edge cases still require a deeper second pass.
@@ -103,7 +103,7 @@ Severity counts: **4 critical, 9 major, 1 minor**. Fourteen confirmed learner-fa
 - At x=4 and x=6, Σ1/((n+1)(n+2)) telescopes to 1, so both endpoints converge.
 - The full interval is **[4,6]**, not (4,6).
 - Before: one step called (4,6) the answer/option while the final step correctly included both endpoints.
-- After: the lesson distinguishes the open interior from the full interval and states [4,6].
+- After: the lesson distinguishes the open interior from the full interval and states [4,6]. The mastery explanation also now states that endpoint convergence may be absolute or conditional; sign cancellation is not required in every case.
 
 ### MA-014 — Final MA(1) invertible-root value remained stale
 
@@ -168,13 +168,11 @@ Seven dedicated standard-library verifier files were added:
 
 Independent calculations were recomputed during review, including the two ANOVA F statistics, the exponential order-statistic expectation, the normal likelihood-ratio identity, the MA(1) roots, the telescoping endpoint series and the Spearman exact-tail count. In addition, the ten corrected lesson JSON files were fetched from the audit branch, parsed, and checked with **18 in-memory assertions**; all 18 passed. The assertions verified the corrected learner-facing conclusions, tables and worked-step alignment, and recomputed F(s4)=10.4, F(s8)=58, E(sample median)=5.219444, and MA(1) roots 0.8173495/1.2234668. These in-memory checks are separate from the dedicated Python verifier scripts.
 
-**Validation run:** GitHub Actions run `43496184130` executed against this draft PR. The repository `check.sh` contracts/seed validation passed (36 checks, 0 failed); the content check passed (129 lessons, 167 topics); subsequent repository checks reported 13/13, 12/12, 19/19 and 6/6 checks passing. The changed-lesson `vcheck.js` step passed 9 of 10 changed lesson files and failed only `seed/lesson_t9.json` because it has fewer than three references. The base `main` version also has exactly two references, so this is a pre-existing house-standard issue, not introduced by the algebra correction. Because this step failed, the workflow skipped ID-stability, formula-render/self-cited-answer and dedicated-verifier execution.
+**Latest code-verification run for content head `579eb8d90e9c4f39e6f34a37e7a8b1130124e55b`:** GitHub Actions run [43578434427](https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43578434427) passed the repository validation job, including contracts/seed validation, changed-lesson `vcheck.js`, ID stability, formula-render/self-cited-answer audit and all dedicated verifier scripts. The independent acceptance job passed all six scenarios. In the browser job, the app/hosted-site build and strict `test.js` passed; the full `clicktest.js` was still running when this report was refreshed, while hosted-storage adapter conformance and feature browser tests were pending. Therefore the browser suite is **not yet fully verified**. The manual full-inventory step is skipped by workflow design.
 
-The browser job's build and `test.js` passed, but `clicktest.js` was cancelled after the validation job failed; hosted-adapter and feature tests were skipped. The independent acceptance job passed all six scenarios.
+The earlier browser attempts were cancelled during setup or while clicktest shards were running; no assertion failure was reported in those cancellations. The current run progressed beyond setup, build and strict app test. A report-only commit does not change lesson, mastery or verifier code; its new commit requires its own workflow status to be checked before release sign-off.
 
-The dedicated verifier scripts have not yet been executed; the expected PASS messages in those files are not test results.
-
-## Scope limitations
+## ## Scope limitations
 
 All 129 lesson files have received first-pass screening, but none is certified as mathematically verified in full. The second pass must inspect theory/revision scenes, every numerical table and formula, assumptions, degrees of freedom, units, rounding and all learner-facing conclusions. Existing verifiers are not treated as sufficient evidence by themselves.
 
