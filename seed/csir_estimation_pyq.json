@@ -560,13 +560,37 @@
       "topic": "inference-t7 · Beta-Binomial conjugacy and Bayes estimation under squared-error loss",
       "stem": "In a clinical trial, let θ be the probability of recovery. A Beta(0.5,0.5) prior is assigned to θ. If 6 of 10 patients recover, which expressions are Bayes estimates of θ under squared-error loss?",
       "options": [
+        "Statements 1 and 4 only",
+        "Statements 1 and 2 only",
+        "Statements 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "explanation": "For a binomial sample with 6 recoveries and 4 non-recoveries, the likelihood is proportional to θ⁶(1−θ)⁴. The prior Beta(0.5,0.5) has density proportional to θ^(−1/2)(1−θ)^(−1/2). Multiplying prior and likelihood gives a posterior proportional to θ^(6+0.5−1)(1−θ)^(4+0.5−1), so θ|data follows Beta(6.5,4.5). Under squared-error loss, the Bayes estimator is the posterior mean: 6.5/(6.5+4.5)=6.5/11=13/22. Therefore option 1 is the numerical value and option 4 is the same posterior expectation written symbolically. Both are correct. Option 2 (11/20) is the observed sample proportion and is not the posterior mean here; option 3 is not the posterior mean either. Other-exam relevance: conjugate Bayesian estimation and posterior expected loss are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; this is topic overlap, not a claim of an exact repeat.",
+      "statements": [
         "13/22",
         "11/20",
         "1/2",
         "E(θ | 6 of the 10 patients recovered)"
       ],
-      "answer": "A and D",
-      "explanation": "For a binomial sample with 6 recoveries and 4 non-recoveries, the likelihood is proportional to θ⁶(1−θ)⁴. The prior Beta(0.5,0.5) has density proportional to θ^(−1/2)(1−θ)^(−1/2). Multiplying prior and likelihood gives a posterior proportional to θ^(6+0.5−1)(1−θ)^(4+0.5−1), so θ|data follows Beta(6.5,4.5). Under squared-error loss, the Bayes estimator is the posterior mean: 6.5/(6.5+4.5)=6.5/11=13/22. Therefore option 1 is the numerical value and option 4 is the same posterior expectation written symbolically. Both are correct. Option 2 (11/20) is the observed sample proportion and is not the posterior mean here; option 3 is not the posterior mean either. Other-exam relevance: conjugate Bayesian estimation and posterior expected loss are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; this is topic overlap, not a claim of an exact repeat."
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The posterior is Beta(6.5,4.5), whose mean is 13/22. Option 4 is the same posterior expectation written symbolically, so statements 1 and 4 are true."
+        },
+        "B": {
+          "tf": false,
+          "why": "11/20 is not the posterior mean for Beta(6.5,4.5)."
+        },
+        "C": {
+          "tf": false,
+          "why": "1/2 is not the posterior mean for Beta(6.5,4.5)."
+        },
+        "D": {
+          "tf": false,
+          "why": "Only statements 1 and 4 give the posterior mean; statements 2 and 3 do not."
+        }
+      }
     },
     {
       "id": "csir-est-q18",
