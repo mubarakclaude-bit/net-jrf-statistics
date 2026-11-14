@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 44,
-  "clean": 44,
+  "count": 45,
+  "clean": 45,
   "items": [
     {
       "id": "csir-est-q01",
@@ -1353,6 +1353,47 @@
         }
       },
       "explanation": "The source prints this as Question 46 (June 2019) on page 22. The supplied answer list on page 63 ends at Question 44, so no printed answer-key entry for Q46 is available; the answer is derived directly from the stated model. The diamond-shaped support is Sθ={(x,y): |x|+|y|≤θ}. By symmetry, E(X)=E(Y)=0 and E(XY)=0. Therefore Cov(X,Y)=E(XY)−E(X)E(Y)=0, so statement A is true. However, zero covariance does not imply independence. Here, if |X| is close to θ, the support forces |Y| to be close to zero; the joint support is not a rectangle of the form A×B, so X and Y are dependent. Statement B is false. Statement C is the support condition itself, so it is true. The area of the diamond is 2θ², hence the density is 1/(2θ²) on the support. For two independent observations, the likelihood is (2θ²)⁻² when θ is at least both observed values of |xᵢ|+|yᵢ|, and zero otherwise. On the allowed range the likelihood decreases as θ increases. Thus the MLE is the smallest admissible θ: max{|x₁|+|y₁|, |x₂|+|y₂|}. Statement D is true. Therefore A, C and D are correct, option C. Other-exam relevance: joint distributions, dependence versus uncorrelatedness, support restrictions and boundary maximum likelihood are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q47",
+      "type": "practice",
+      "format": "multi",
+      "year": 2019,
+      "session": "June",
+      "topic": "design-t1 · random-intercept model; bias and consistency when the number of clusters is fixed",
+      "stem": "Let b₁,…,b₁₀ be i.i.d. N(0,τ²), and let εᵢⱼ be i.i.d. N(0,σ²), independent of the bᵢ. Define Xᵢⱼ=bᵢ+εᵢⱼ for i=1,…,10 and j=1,…,n. Consider Tₙ=(1/(10n))∑ᵢ₌₁¹⁰∑ⱼ₌₁ⁿXᵢⱼ² as an estimator of σ². Which statements are correct?",
+      "statements": [
+        "Tₙ is unbiased for σ².",
+        "Tₙ is consistent for σ² as n→∞.",
+        "Tₙ is unbiased for σ² only when τ²=0.",
+        "Tₙ is consistent for σ² as n→∞ only when τ²=0."
+      ],
+      "options": [
+        "A and B only",
+        "A and C only",
+        "C and D only",
+        "B and D only"
+      ],
+      "answer": "C",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "E(Xᵢⱼ²)=σ²+τ², so E(Tₙ)=σ²+τ², not σ² when τ²>0."
+        },
+        "B": {
+          "tf": false,
+          "why": "With only ten clusters, increasing n estimates each realised bᵢ² contribution more accurately; the average of those ten random effects does not disappear."
+        },
+        "C": {
+          "tf": true,
+          "why": "The bias is τ², so the estimator is unbiased exactly when τ²=0."
+        },
+        "D": {
+          "tf": true,
+          "why": "As n grows, Tₙ converges to σ²+(1/10)∑bᵢ². This equals σ² almost surely only when τ²=0."
+        }
+      },
+      "explanation": "The source prints this as Question 47 (June 2019) on page 23. The supplied answer list on page 63 ends at Question 44, so no printed key is available; the truth values are derived from the model. For each observation, Xᵢⱼ=bᵢ+εᵢⱼ, with independent zero-mean components. Thus E(Xᵢⱼ²)=Var(Xᵢⱼ)=τ²+σ², and E(Tₙ)=τ²+σ². Therefore Tₙ is biased for σ² whenever τ²>0, and it is unbiased only when τ²=0. This makes statement C true and A false. Now keep the number of clusters fixed at 10 and let n increase. Within each cluster, (1/n)∑ⱼXᵢⱼ² converges almost surely to bᵢ²+σ². Averaging over the ten clusters gives Tₙ→σ²+(1/10)∑ᵢ₌₁¹⁰bᵢ² almost surely. If τ²>0, this random-effect contribution does not vanish as n→∞, so Tₙ is not consistent for σ². If τ²=0, all bᵢ are zero almost surely and the limit is σ². Hence statement D is true and B is false. The correct combination is C and D, option C. Other-exam relevance: random-effects models, bias, consistency and asymptotics with a fixed number of clusters are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
