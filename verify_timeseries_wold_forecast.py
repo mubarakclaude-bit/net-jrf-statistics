@@ -19,7 +19,7 @@ def main():
     assert "When Σ|ψⱼ| < ∞" in p10["items"][16]["statements"][0]
     assert "deterministic component plus a purely nondeterministic MA(∞)" in p10["items"][19]["stem"]
     ts11="\n".join(strings(load("lesson_ts11.json")))
-    assert "best LINEAR PREDICTOR" in ts11
+    assert "best linear predictor" in ts11.lower()
     assert "not necessarily the full conditional expectation" in ts11
     assert "still admit a Wold decomposition" in ts11
     p11=load("timeseries_t11_mastery.json")

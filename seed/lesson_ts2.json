@@ -70,7 +70,7 @@
       "So 1–2 excursions in 20 lags are expected. Ignore an isolated spike at an uninterpretable lag.",
       "A spike at the seasonal period (12 monthly, 4 quarterly) IS structure — model it seasonally.",
       "An ACF decaying almost linearly (0.90, 0.85, 0.82, …) means non-stationarity — test before fitting.",
-      "MA(1) PACF in closed form: φₖₖ = −(−θ)ᵏ(1−θ²)/(1−θ^(2(k+1))) — alternating, decaying, never zero.",
+      "MA(1) PACF in closed form: φₖₖ = −θᵏ(1−θ²)/(1−θ^(2(k+1))). For θ > 0 all lags are negative; for θ < 0 the signs alternate. For 0 < |θ| < 1 the values decay and are nonzero at every lag.",
       "The cycle: identify → estimate → check the residual ACF → return if it fails."
     ],
     "cards": [
@@ -654,7 +654,7 @@
         {
           "t": "step",
           "h": "The PACF of an MA(1), explicitly",
-          "body": "From the infinite-AR representation the PACF of an MA(1) is φₖₖ = −θᵏ(1 − θ²)/(1 − θ^(2(k+1))). It alternates in sign and decays, never reaching zero — which is the formal statement of 'the PACF decays'. The point of writing it down is to confirm that 'decays' means a genuinely non-zero value at every lag, not merely something small."
+          "body": "From the infinite-AR representation the PACF of an MA(1) is φₖₖ = −θᵏ(1 − θ²)/(1 − θ^(2(k+1))). Its sign follows −θᵏ: for θ > 0 all lags are negative, while for θ < 0 the signs alternate. For 0 < |θ| < 1 it decays and never reaches zero — which is the formal statement of 'the PACF decays'."
         },
         {
           "t": "step",

@@ -16,8 +16,8 @@ def main():
     assert "Discrete 0–1 loss → posterior mode" in t7
     assert "literal pointwise 0–1 loss is degenerate" in t7
     t11="\n".join(strings(load("lesson_t11.json")))
-    assert "two separate loose marginal bounds do not prove" in t11
-    assert "two separate loose marginal bounds do NOT by themselves imply" in t11
+    assert "two separate loose marginal bounds alone do not prove" in t11
+    assert "separate loose marginal bounds alone do not prove" in t11
     t14="\n".join(strings(load("lesson_t14.json")))
     assert "Always smaller, so conservative" not in t14
     t17="\n".join(strings(load("lesson_t17.json")))

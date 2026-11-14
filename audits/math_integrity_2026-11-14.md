@@ -332,3 +332,6 @@ Added `verify_unit_root_acf_precision.py` to guard this distinction.
 - **MA(q):** qualified the finite forecast horizon to the canonical invertible representation.
 
 Added `verify_timeseries_wold_forecast.py` to guard the theorem and forecast distinctions.
+
+
+CI verifier assertions were aligned with the exact qualified wording in the SPRT and Wold/forecast lessons. The MA(1) PACF sign clarification was also propagated to the revision sheet and sign interpretation.
