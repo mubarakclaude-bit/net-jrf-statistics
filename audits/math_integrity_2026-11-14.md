@@ -274,3 +274,13 @@ The lesson corrections were propagated into their Paper 2 mastery pools:
 - Updated inference 16 pool wording to avoid an unconditional claim about Yates always reducing every implementation.
 
 Added `verify_inference_mastery_alignment.py` to check these pool/lesson consistency points.
+
+
+## Residual theorem precision — Statistical Inference lessons 4.7, 4.11, 4.14 and 4.17
+
+- **Lesson 4.7:** removed stale acceptance strings that still accepted the incorrect Normal–Normal answer; clarified the continuous-parameter MAP versus discrete 0–1-loss distinction in the remaining quick-reference card and trap notes.
+- **Lesson 4.11:** propagated the coupled-inequality derivation to the revision sheet, explanatory block, quick-check explanation and answer key so no stale loose-bound argument remains.
+- **Lesson 4.14:** updated the final Yates revision card to match the qualified explanation.
+- **Lesson 4.17:** changed the equal-tail statement from a necessary-and-sufficient claim to the correct sufficient-condition framing: symmetry guarantees the unbiasedness condition in the standard setting, while the general test must satisfy both size and unbiasedness equations. Also replaced the misleading “coin flip” phrase with the actual unbiasedness requirement and stated regularity/randomisation qualifications for UMPU existence.
+
+Added `verify_inference_remaining_precision.py` to guard the residual fixes.

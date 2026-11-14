@@ -163,8 +163,8 @@
         "The posterior median"
       ],
       [
-        "0–1 loss gives",
-        "The posterior mode"
+        "Discrete 0–1 loss gives",
+        "The posterior mode; continuous parameters use MAP as a small-neighbourhood limit"
       ],
       [
         "Jeffreys' prior",
@@ -224,10 +224,10 @@
     "traps": [
       "Swapping the Poisson and exponential updates — the single most productive error in the topic.",
       "Putting n rather than n − x into the second Beta parameter.",
-      "Saying a uniform prior makes the Bayes estimator the MLE, without specifying 0–1 loss.",
+      "Saying a uniform prior makes the Bayes estimator the MLE without naming the loss: the posterior mode/MAP equals the MLE, but the posterior mean generally does not.",
       "Averaging variances instead of adding precisions in the Normal–Normal case.",
       "Taking Jeffreys' prior for a probability to be the uniform prior.",
-      "Reporting a posterior mean when the question states absolute-error or 0–1 loss.",
+      "Reporting a posterior mean when the question asks for absolute-error loss, discrete 0–1 loss, or the continuous-parameter MAP.",
       "Giving a credible interpretation to a confidence interval, or the reverse.",
       "Treating the bias of a Bayes estimator as evidence that it is wrong.",
       "Assuming mean, median and mode coincide on a skewed posterior because they did in the normal case."
@@ -284,7 +284,7 @@
         },
         {
           "ask": "What is a loss function, and what are the three standard ones?",
-          "recall": "A function L(θ, θ̂) measuring the penalty for estimating θ̂ when the truth is θ. The three standard choices are squared-error loss (θ − θ̂)², absolute-error loss |θ − θ̂|, and 0–1 loss, which charges 1 unless the estimate is exactly right.",
+          "recall": "A function L(θ, θ̂) measuring the penalty for estimating θ̂ when the truth is θ. The three standard choices are squared-error loss (θ − θ̂)², absolute-error loss |θ − θ̂|, and 0–1 loss, which charges 1 unless the estimate is exactly right. For a continuous parameter, literal pointwise 0–1 loss is degenerate; MAP is the limiting rule under shrinking neighbourhoods.",
           "refresh": [
             "The loss function is not decoration. In the Bayesian framework the estimate is whatever minimises the expected loss computed under the posterior, so changing the loss changes the estimator even though the posterior is unchanged.",
             "Squared error gives the posterior MEAN and absolute error the posterior MEDIAN. Discrete 0–1 loss gives the posterior MODE; for continuous parameters, use the MAP/posterior mode, understood as a shrinking-neighbourhood limit.",
@@ -583,7 +583,7 @@
         },
         {
           "q": "Which posterior summary does each of the three standard losses give?",
-          "a": "Squared error → posterior mean. Absolute error → posterior median. 0–1 loss → posterior mode."
+          "a": "Squared error → posterior mean. Absolute error → posterior median. Discrete 0–1 loss → posterior mode; continuous parameter → MAP as a shrinking-neighbourhood limit."
         },
         {
           "q": "What weight does the posterior mean place on the prior mean in the Beta–Binomial case?",
@@ -655,11 +655,11 @@
             "prompt": "The posterior variance and mean?",
             "answer": "variance 16/9 = 1.7778, mean 166/3 = 55.3333",
             "accept": [
-              "2.667 and 55",
-              "variance 2.6667, mean 55",
-              "8/3 and 55",
-              "var = 2.667, mean = 55",
-              "posterior variance 2.667 posterior mean 55"
+              "1.7778 and 55.3333",
+              "variance 1.7778, mean 55.3333",
+              "16/9 and 166/3",
+              "var = 1.7778, mean = 55.3333",
+              "posterior variance 1.7778 posterior mean 55.3333"
             ],
             "hint": "Precisions add: 1/16 + 4/8. Then take the precision-weighted average of 50 and 56."
           },

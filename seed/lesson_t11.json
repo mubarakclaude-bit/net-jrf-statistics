@@ -66,7 +66,7 @@
       "At the hypotheses: E(N|H₀) ≈ [α log A + (1 − α) log B]/E₀[Z] and E(N|H₁) ≈ [(1 − β) log A + β log B]/E₁[Z].",
       "Worked ASN: E₀[Z] = −0.18379, E₁[Z] = 0.19204, giving 10.85 under H₀ and 12.37 under H₁ against a fixed-sample 22 — about half.",
       "The ASN is largest for θ between θ₀ and θ₁, where the walk wanders rather than drifting.",
-      "True error rates: α' ≤ α/(1 − β), β' ≤ β/(1 − α), and α' + β' ≤ α + β. The cause is overshoot past a boundary.",
+      "True error rates obey coupled path inequalities; these imply α' + β' ≤ α + β. The two separate loose marginal bounds do not by themselves prove the sum bound. Overshoot explains why the nominal and realised rates need not be equal.",
       "Wald proved termination with probability 1 and finite E(N). Practical plans still truncate, which disturbs the error rates.",
       "Wald–Wolfowitz: among all tests with error probabilities at most α and β, the SPRT minimises the expected sample size under both H₀ and H₁.",
       "Limitations: simple against simple only; unbounded sample size; optimality at the two hypotheses only; observations must be assessable one at a time."
@@ -611,7 +611,7 @@
         {
           "t": "step",
           "h": "The error probabilities are not exactly α and β",
-          "body": "Because the running total overshoots a boundary rather than landing exactly on it, the true error rates α' and β' differ slightly from the nominal α and β. Wald's bounds give α' ≤ α/(1 − β) and β' ≤ β/(1 − α), and the practical statement worth remembering is α' + β' ≤ α + β. So the test is at least as good as advertised in total, though the split between the two may shift. For small α and β the discrepancy is negligible."
+          "body": "Because the running total overshoots a boundary rather than landing exactly on it, the true error rates α' and β' differ slightly from the nominal α and β. The coupled path inequalities are α' ≤ α(1 − β')/(1 − β) and β' ≤ β(1 − α')/(1 − α). Rearranging and adding these gives α' + β' ≤ α + β. The separate loose marginal bounds alone do not prove this total-error statement. For small α and β the discrepancy is negligible."
         },
         {
           "t": "step",
@@ -710,7 +710,7 @@
         {
           "claim": "The true error probabilities of an SPRT are exactly the nominal α and β.",
           "tf": false,
-          "why": "False, because the ratio overshoots a boundary rather than landing on it. The true rates satisfy α' ≤ α/(1 − β) and β' ≤ β/(1 − α), and in particular α' + β' ≤ α + β — so the test is no worse in total, though the split can shift. For small α and β the difference is negligible."
+          "why": "False, because the ratio overshoots a boundary rather than landing on it. The coupled path inequalities imply α' + β' ≤ α + β; the two separate loose marginal bounds alone do not prove the sum. The split between the two error rates can still shift."
         }
       ]
     },
@@ -806,7 +806,7 @@
         },
         {
           "q": "What inequality bounds the true error rates of an SPRT?",
-          "a": "α' + β' ≤ α + β, with α' ≤ α/(1 − β) and β' ≤ β/(1 − α). The overshoot past a boundary is why they are not exact."
+          "a": "α' + β' ≤ α + β, derived from the coupled path inequalities. The overshoot past a boundary is why the realised error rates need not equal the nominal rates."
         },
         {
           "q": "Where is the average sample number largest?",
