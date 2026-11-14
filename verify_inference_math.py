@@ -530,7 +530,7 @@ class SecondPassMasteryReviewTests(unittest.TestCase):
         fwer = next(q for q in t15["items"] if q["id"] == "inf-t15-m-09")
         self.assertIn("can exceed", fwer["options"][3])
         interval = next(q for q in t15["items"] if q["id"] == "inf-t15-m-12")
-        self.assertIn("subject-matter threshold", interval["verdicts"]["C"]["why"])
+        self.assertIn("pre-defined threshold for practical importance", interval["verdicts"]["C"]["why"])
         robust = next(q for q in t15["items"] if q["id"] == "inf-t15-m-17")
         self.assertIn("finite-variance", robust["statements"][0])
         bonf = next(q for q in t15["items"] if q["id"] == "inf-t15-m-19")
