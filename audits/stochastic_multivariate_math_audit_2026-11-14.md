@@ -8,9 +8,9 @@ Date: 14 November 2026
 - Paper 2 only. No Paper 1, application code, shared manifests, workflows or deployment files changed.
 
 ## Coverage in this pass
-- Stochastic Processes T1–T4: inspected learner-facing worked/guided calculations and all four 20-item mastery pools (80 items); independently recomputed key transition, stationary-vector, hitting-time and period calculations.
-- Multivariate Analysis T1–T3: inspected worked/completion/guided numerical scenes and all three 20-item mastery pools (60 items); independently recomputed conditional normal moments, Schur complements, partial/multiple correlations, PCA eigenvalues and explained-variance calculations.
-- This is a scoped audit of these selected topics/scenes and pools, not a certification of all Paper 2 content. Stochastic T5–T9 and Multivariate T4–T9 remain unaudited in this pass. Other theory/revision statements outside the inspected scenes also remain subject to further review.
+- Stochastic Processes T1–T9: inspected selected learner-facing worked/guided numerical scenes and all nine 20-item mastery pools (180 items); independently recomputed transition, stationary-vector, hitting-time, period, Poisson-process, gambler’s-ruin, queue, branching and renewal calculations.
+- Multivariate Analysis T1–T9: inspected worked/completion/guided numerical scenes and all nine 20-item mastery pools (180 items); independently recomputed conditional normal moments, Schur complements, partial/multiple correlations, PCA eigenvalues, Hotelling transformations, Wishart degrees of freedom, canonical correlations, covariance MLEs and Mahalanobis distances.
+- This remains a scoped audit of selected learner-facing scenes and mastery pools, not a certification of every theory/revision statement or every possible derivation in Paper 2.
 
 ## Confirmed finding
 
@@ -36,3 +36,37 @@ Date: 14 November 2026
 - Added: this audit report
 - No merge or deployment.
 - No Claude-owned files, databases, artifacts or infrastructure used.
+
+## Additional confirmed findings
+
+### SM-002 — Hotelling T² mastery item has no correct option
+- File: `seed/multivariate_t4_mastery.json`; item `mv-t4-m-07`.
+- For n=10, p=2 and T²=8, F=[(10−2)/(2×9)]×8=32/9≈3.556.
+- Before: the options were 2.0, 3.2, 4.0 and 8.0; the explanation instructed learners to choose the nearest value 4.0.
+- After: option C contains the exact value 32/9≈3.556.
+
+### SM-003 — Second Hotelling T² mastery item has no correct option
+- File: `seed/multivariate_t4_mastery.json`; item `mv-t4-m-13`.
+- For p=3, n=12 and T²=9, F=[(12−3)/(3×11)]×9=27/11≈2.455.
+- Before: options were 2, 1, 3 and 9; the explanation again advised choosing the nearest value.
+- After: option A contains 27/11≈2.455.
+
+### SM-004 — Covariance MLE explanation cites the wrong option ordering
+- File: `seed/multivariate_t7_mastery.json`; item `mv-t7-m-17`.
+- The centred outer-product sum is [[6,3],[3,2]]; dividing by n=3 gives [[2,1],[1,2/3]].
+- The mastery item’s correct option is B, as its answer key already stated. The explanation incorrectly said “official option D” without distinguishing the original exam’s option ordering.
+- After: the explanation explicitly says B for this mastery item and D for the original June 2026 paper.
+
+### SM-005 — Factor-analysis mastery answer key selects an incorrect option
+- File: `seed/multivariate_t9_mastery.json`; item `mv-t9-m-01`.
+- The purpose of common factor analysis is to explain shared covariance among observed variables; this is option B.
+- Before: answer key was D (“Estimate a regression slope”), contradicting the explanation.
+- After: answer key corrected to B.
+
+## Additional verifier changes
+- `verify_multivariate_t4.py`: exact-fraction assertions for both Hotelling F values and their corrected options.
+- `verify_multivariate_t7.py`: asserts the mastery item’s option B and the distinction from the original paper’s option D.
+- `verify_multivariate_t9.py`: asserts the correct answer key B for item `mv-t9-m-01`.
+
+## Stochastic Processes T5–T9 spot-check outcome
+No additional confirmed numerical or answer-key defects were identified in the worked calculations and mastery pools inspected in this pass. Stochastic T4’s two already-known learner-facing answer mismatches remain owned by PR #93 and are not duplicated here.
