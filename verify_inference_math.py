@@ -412,6 +412,12 @@ class FollowUpCorrectionTests(unittest.TestCase):
         self.assertEqual(item["answer"], "C")
         self.assertIn("Option C is the correct pair", item["explanation"])
 
+    def test_t17_symmetry_is_sufficient_not_necessary_for_equal_tail_umpu(self):
+        pool = load_json(SEED / "inference_t17_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t17-m-13")
+        self.assertIn("sufficient condition", item["stem"])
+        self.assertIn("not a necessary condition", item["explanation"])
+
     def test_likelihood_ratio_range_includes_zero(self):
         pool = load_json(SEED / "inference_t10_mastery.json")
         item = next(q for q in pool["items"] if q["id"] == "inf-t10-m-02")
