@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 97,
-  "clean": 97,
+  "count": 99,
+  "clean": 99,
   "items": [
     {
       "id": "csir-est-q01",
@@ -3094,6 +3094,40 @@
       ],
       "answer": "A",
       "explanation": "The source prints this as Question 35 (26 November 2020), page 16. The supplied answer-key sheet on page 63 lists statements 1 and 4. We check the posterior directly because a Bayes estimator under squared-error loss is the posterior mean. Write m=X₍₃₎. For three independent Uniform(0,θ) observations, the likelihood is proportional to θ⁻³ when θ≥m and zero otherwise. The prior is uniform on (0,1), so the posterior density is proportional to θ⁻³ on m<θ<1. Its normalising integral is ∫ₘ¹θ⁻³dθ=(m⁻²−1)/2. Hence the posterior mean is [∫ₘ¹θ·θ⁻³dθ]/[(m⁻²−1)/2] = [(1/m)−1]/[(m⁻²−1)/2] = 2m/(1+m). Under squared-error loss, this posterior mean is the unique Bayes action (up to posterior-almost-sure equality). Therefore statement 1 is true. The remaining proposed expressions, 1/m, m and (1−m)/m, are not generally equal to 2m/(1+m), so statements 2, 3 and 4 are false. The mathematically supported answer is statement 1 only (option A). This conflicts with the supplied printed key (1 and 4); the discrepancy is explicitly retained rather than silently following the key. Other-exam relevance: posterior distributions, Bayes estimators and squared-error loss overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q16",
+      "type": "practice",
+      "format": "single",
+      "year": 2022,
+      "session": "February",
+      "topic": "inference-t4 · maximum likelihood with annular parameter-dependent support and parameter-space constraints",
+      "stem": "Let (X₁,Y₁),…,(Xₙ,Yₙ) be independent observations from the uniform distribution on Sθ={(x,y): θ ≤ x²+y² ≤ θ+1}, where θ>1 is unknown. Which of the following statements is correct?",
+      "options": [
+        "maxᵢ(Xᵢ²+Yᵢ²)−1 is a maximum likelihood estimate of θ.",
+        "minᵢ(Xᵢ²+Yᵢ²) is a maximum likelihood estimate of θ.",
+        "Every value between maxᵢ(Xᵢ²+Yᵢ²)−1 and minᵢ(Xᵢ²+Yᵢ²) is a maximum likelihood estimate of θ.",
+        "Every value between maxᵢXᵢ²+maxᵢYᵢ²−1 and minᵢXᵢ²+minᵢYᵢ² is a maximum likelihood estimate of θ."
+      ],
+      "answer": "B",
+      "explanation": "Write Rᵢ=Xᵢ²+Yᵢ², Rmin=minᵢRᵢ and Rmax=maxᵢRᵢ. The annulus Sθ has area π[(θ+1)−θ]=π, so the joint likelihood is π⁻ⁿ when every observation satisfies θ≤Rᵢ≤θ+1, and is zero otherwise. Therefore the likelihood is positive exactly for θ in [Rmax−1,Rmin]∩(1,∞). For a sample drawn from this model, there is a true θ₀>1 with θ₀≤Rᵢ≤θ₀+1. Hence Rmin>1 and Rmax−Rmin≤1. Taking θ=Rmin is always admissible: it is greater than 1 and Rmax≤Rmin+1. Thus statement 2 is always an MLE. Statement 1 is not guaranteed because Rmax−1 can be ≤1, outside the parameter space. Statement 3 is not guaranteed because the interval can include values ≤1. Statement 4 uses separate coordinatewise extrema and does not describe the radial support condition. The supplied answer key on source page 63 lists statement 1 only; that conflicts with the parameter restriction θ>1 and the likelihood calculation. We retain the mathematically valid result, statement 2, and explicitly flag the printed-key discrepancy rather than silently reproducing it. Source: supplied Estimation CSIR NET PDF, page 7 (Q16, February 2022); answer key page 63. Other-exam relevance: parameter-dependent support, likelihood maximisation and constrained parameter spaces overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q19",
+      "type": "practice",
+      "format": "single",
+      "year": 2022,
+      "session": "February",
+      "topic": "inference-t4 · unbiasedness and consistency of scale estimators under a normal model",
+      "stem": "Consider a sequence of i.i.d. observations X₁,X₂,… from N(0,σ²). Which of the following are unbiased and consistent estimators of σ?",
+      "options": [
+        "√(π/2) · (1/n)∑ᵢ₌₁ⁿ|Xᵢ|",
+        "√[(1/n)∑ᵢ₌₁ⁿXᵢ²]",
+        "√[(1/(n−1))∑ᵢ₌₁ⁿ(Xᵢ−X̄)²]",
+        "√[(1/(2π))(X₁²+Xₙ²)]"
+      ],
+      "answer": "A",
+      "explanation": "For X∼N(0,σ²), the absolute value has a half-normal distribution and E|X|=σ√(2/π). Therefore E[√(π/2)|X|]=σ, and by linearity E[√(π/2)(1/n)Σ|Xᵢ|]=σ. This proves option A is unbiased. By the strong law of large numbers, (1/n)Σ|Xᵢ| converges almost surely to E|X|=σ√(2/π), so the scaled estimator converges almost surely to σ; it is consistent as well. Option B is the root mean square. It converges to σ by the law of large numbers, but for finite n its expectation is strictly less than √E(X²)=σ by Jensen's inequality (the square-root function is strictly concave and the sample mean of squares is non-degenerate), so it is biased. Option C is the usual sample standard deviation; it is consistent, but is not unbiased for σ (the unbiased estimator is the sample variance for σ², not its square root for σ). Option D depends only on X₁ and Xₙ; as n grows it does not average an increasing number of independent observations and its distribution does not concentrate at σ, so it is not consistent. The supplied answer key on source page 63 lists option 1, agreeing with the derivation. Source: supplied Estimation CSIR NET PDF, page 8 (Q19, February 2022); answer key page 63. Other-exam relevance: half-normal moments, unbiased estimation, Jensen's inequality and consistency via the law of large numbers overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
