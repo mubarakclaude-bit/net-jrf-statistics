@@ -172,7 +172,7 @@ Independent calculations were recomputed during review, including the two ANOVA 
 
 The earlier browser attempts were cancelled during setup or while clicktest shards were running; no assertion failure was reported in those cancellations. The current run progressed beyond setup, build and strict app test. A report-only commit does not change lesson, mastery or verifier code; its new commit requires its own workflow status to be checked before release sign-off.
 
-## ## Scope limitations
+## Scope limitations
 
 All 129 lesson files have received first-pass screening, but none is certified as mathematically verified in full. The second pass must inspect theory/revision scenes, every numerical table and formula, assumptions, degrees of freedom, units, rounding and all learner-facing conclusions. Existing verifiers are not treated as sufficient evidence by themselves.
 
