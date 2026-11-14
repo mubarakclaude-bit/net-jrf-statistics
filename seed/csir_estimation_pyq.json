@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 50,
-  "clean": 50,
+  "count": 63,
+  "clean": 63,
   "items": [
     {
       "id": "csir-est-q01",
@@ -1575,6 +1575,443 @@
       ],
       "answer": "A",
       "explanation": "The source prints this as Question 53 (December 2017) on page 27. The supplied answer list on page 63 ends at Question 44, so no printed key is available; compare the likelihood at the three allowed parameter values. The likelihood is L(θ)=fθ(0)fθ(2). At θ=0, both observations come from the Laplace component: f₀(0)=1/2 and f₀(2)=e^(−2)/2≈0.067668, giving L(0)≈0.033834. At θ=1/2, f(0)=[φ(0)+1/2]/2≈0.449471 and f(2)=[φ(2)+e^(−2)/2]/2≈0.060829, giving L(1/2)≈0.02734. At θ=1, the likelihood is φ(0)φ(2)≈0.02154. Since L(0) is largest among the three permitted values, the MLE is θ̂=0, option A. Other-exam relevance: likelihood comparison, mixture distributions and estimation over a discrete parameter space are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q56",
+      "format": "multi",
+      "year": 2017,
+      "session": "December",
+      "topic": "inference-t4 · unbiased estimation of a variance parameter under Poisson and normal models",
+      "stem": "Let X₁,…,Xₙ be a random sample from a distribution with density or mass function fθ, and let S²=(1/(n−1))Σ(Xᵢ−X̄)². For which of the following models is S² an unbiased estimator of θ?",
+      "statements": [
+        "X has a Poisson distribution with mean θ>0.",
+        "X has a normal distribution N(0,θ), where θ>0.",
+        "X has an exponential distribution with mean θ>0.",
+        "X has an exponential distribution with rate θ>0."
+      ],
+      "options": [
+        "A and B only",
+        "A and C only",
+        "B and D only",
+        "All four models"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "For a Poisson(θ) variable, Var(X)=θ. The usual sample variance with denominator n−1 is unbiased for the population variance, so E(S²)=θ."
+        },
+        "B": {
+          "tf": true,
+          "why": "For N(0,θ), the variance is θ. Again E(S²)=Var(X)=θ."
+        },
+        "C": {
+          "tf": false,
+          "why": "An exponential distribution with mean θ has variance θ², so E(S²)=θ², not θ in general."
+        },
+        "D": {
+          "tf": false,
+          "why": "An exponential distribution with rate θ has variance 1/θ², not θ in general."
+        }
+      },
+      "explanation": "The source prints this as Question 56 (December 2017), page 29. The supplied answer list ends at Question 44, so the key below is independently derived. The sample variance S²=(1/(n−1))Σ(Xᵢ−X̄)² is unbiased for the population variance: E(S²)=Var(X). Therefore, check the variance of each proposed distribution, not merely its mean. (A) If X~Poisson(θ), then E(X)=Var(X)=θ, so E(S²)=θ. (B) If X~N(0,θ), the second parameter is the variance, so Var(X)=θ and E(S²)=θ. (C) An exponential distribution parameterised by its mean θ has Var(X)=θ², so this does not estimate θ unbiasedly. (D) An exponential distribution with rate θ has Var(X)=1/θ², again not θ. Thus the true statements are A and B, option A. The scan's wording is singular, but two listed models satisfy the condition; the bank preserves both mathematically correct choices and marks the item as multi-answer. Other-exam relevance: unbiased sample variance, Poisson and normal variance formulas, and parameterisation of exponential distributions overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; this does not claim the exact question appeared in those exams.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q57",
+      "format": "multi",
+      "year": 2017,
+      "session": "December",
+      "topic": "inference-t4 · consistency, variance comparison and sufficiency for independent heteroscedastic normal observations",
+      "stem": "Let X₁,…,Xₙ be independent, with Xᵢ~N(μ,i), i=1,…,n. Define X̄ₙ=(1/n)ΣXᵢ and Sₙ=[Σ(Xᵢ/i)]/[Σ(1/i)]. Which statements are true?",
+      "statements": [
+        "E(X̄ₙ)=E(Sₙ) for every n.",
+        "Var(Sₙ)<Var(X̄ₙ) for all sufficiently large n.",
+        "X̄ₙ is consistent for μ.",
+        "X̄ₙ is sufficient for μ."
+      ],
+      "options": [
+        "A only",
+        "A and B only",
+        "A and C only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Both are weighted or unweighted linear combinations whose coefficients sum to one, so both have expectation μ."
+        },
+        "B": {
+          "tf": false,
+          "why": "Var(X̄ₙ)=1, whereas Var(Sₙ)=nΣ(1/i²)/[Σ(1/i)]², which grows on the order of n/(log n)² and therefore eventually exceeds 1."
+        },
+        "C": {
+          "tf": false,
+          "why": "Var(X̄ₙ)=Σi/n²=n(n+1)/(2n²)→1/2, not zero. Since its variance does not tend to zero while its expectation is μ, this sequence is not consistent."
+        },
+        "D": {
+          "tf": false,
+          "why": "With known unequal variances i, the likelihood depends on μ through the precision-weighted sum ΣXᵢ/i, not the ordinary sample mean alone."
+        }
+      },
+      "explanation": "The source prints this as Question 57 (December 2017), page 29. No printed key is available in the supplied answer list, which ends at Q44. First, E(Xᵢ)=μ for every i. Hence E(X̄ₙ)=μ. For Sₙ, the weights are (1/i)/Hₙ, where Hₙ=Σ(1/i); they sum to one, so E(Sₙ)=μ as well. Thus A is true. Since the observations are independent and Var(Xᵢ)=i, Var(X̄ₙ)=(1/n²)Σi=n(n+1)/(2n²)=(n+1)/(2n), which tends to 1/2 rather than zero. Therefore X̄ₙ does not converge in probability to μ and C is false. For the weighted estimator, Var(Sₙ)=Σ[(1/i)/Hₙ]²·i=nΣ(1/i²)/Hₙ². The numerator sum tends to π²/6, while Hₙ grows approximately log n, so this variance behaves like a positive constant times n/(log n)² and grows without bound. It is not eventually smaller than Var(X̄ₙ); B is false. Finally, the normal likelihood with known variances i has μ-dependent exponent proportional to Σ(Xᵢ−μ)²/i, so the relevant data summary is ΣXᵢ/i. The ordinary mean is not sufficient; D is false. Only A is true. Other-exam relevance: weighted estimation, consistency and sufficiency in heteroscedastic normal models overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q58",
+      "format": "multi",
+      "year": 2017,
+      "session": "December",
+      "topic": "inference-t4 · MLE consistency under a many-to-one sign transformation and bounded parameter space",
+      "stem": "Let X₁,…,Xₙ be a random sample from N(θ,1), where −100≤θ≤100, and define Yᵢ=0 if Xᵢ<0 and Yᵢ=1 if Xᵢ≥0. Let θ̂ₙ and θ̃ₙ be the MLEs of θ based on the X-sample and Y-sample, respectively. Which statements are true?",
+      "statements": [
+        "limₙ→∞ E(θ̂ₙ)=0.",
+        "limₙ→∞ E(θ̃ₙ)=θ.",
+        "θ̂ₙ is a consistent estimator of θ.",
+        "θ̃ₙ is a consistent estimator of θ."
+      ],
+      "options": [
+        "A and B only",
+        "B and C only",
+        "B, C and D only",
+        "All four statements"
+      ],
+      "answer": "C",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The full-data MLE is the sample mean (projected onto the parameter interval if necessary), and its expectation tends to θ, not zero."
+        },
+        "B": {
+          "tf": true,
+          "why": "Yᵢ is Bernoulli with success probability Φ(θ). The sign-based MLE is Φ⁻¹(Ȳ), clipped to the parameter interval at the endpoints; it converges to θ. Because it is bounded between −100 and 100, its expectation also converges to θ."
+        },
+        "C": {
+          "tf": true,
+          "why": "The sample mean converges in probability to θ by the law of large numbers, and the parameter constraint does not change this limit for θ in the interval."
+        },
+        "D": {
+          "tf": true,
+          "why": "Ȳ converges to Φ(θ), and the inverse normal cdf is continuous at Φ(θ) for finite θ, giving θ̃ₙ→θ in probability."
+        }
+      },
+      "explanation": "The source prints this as Question 58 (December 2017), page 30. The supplied answer list ends at Q44, so this answer is derived. From the full normal sample, the likelihood is maximised at X̄ₙ when it lies in [−100,100], otherwise at the nearest endpoint. Since θ is in this interval and X̄ₙ→θ in probability, the constrained MLE is consistent. Its expectation tends to θ (indeed the unconstrained sample mean has expectation θ), not zero; A is false and C is true. For the sign-only sample, P(Yᵢ=1)=P(Xᵢ≥0)=Φ(θ), where Φ is the standard normal cdf. The Bernoulli likelihood is maximised by matching the fitted success probability to Ȳₙ; therefore θ̃ₙ=Φ⁻¹(Ȳₙ), with endpoint values clipped to the allowed parameter interval when Ȳₙ is 0 or 1. By the law of large numbers, Ȳₙ→Φ(θ), so continuity of Φ⁻¹ gives θ̃ₙ→θ in probability. This proves D. Also θ̃ₙ is bounded in [−100,100]. Boundedness together with convergence in probability to θ implies convergence of expectations to θ, so B is true. Thus B, C and D are true, option C. Other-exam relevance: MLEs, consistency, Bernoulli likelihoods and transformations of normal observations overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q59",
+      "format": "multi",
+      "year": 2017,
+      "session": "December",
+      "topic": "inference-t4 · maximum likelihood with right-censored exponential lifetime data and parameter constraints",
+      "stem": "Twenty independent identical items have exponential lifetimes with mean θ, where 0<θ≤10. Testing begins at time 0 and stops when all 20 items have failed or at a fixed time T>0, whichever occurs first. Which statements about the MLE of θ are correct?",
+      "statements": [
+        "The MLE of θ always exists.",
+        "The MLE of θ may not exist.",
+        "If it exists, the MLE is an unbiased estimator of θ.",
+        "If it exists, the MLE is bounded with probability one."
+      ],
+      "options": [
+        "A and D only",
+        "A and C only",
+        "B and D only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The parameter space is (0,10]. If no item fails before T, the likelihood increases up to the included endpoint θ=10. If r>0 failures are observed, the likelihood has a positive maximiser, truncated at 10 if needed."
+        },
+        "B": {
+          "tf": false,
+          "why": "The upper endpoint is included and the likelihood has a maximiser for both r=0 and r>0."
+        },
+        "C": {
+          "tf": false,
+          "why": "The censored-data MLE is a nonlinear, boundary-constrained function of the observed failure count and exposure time; it is not unbiased for all θ."
+        },
+        "D": {
+          "tf": true,
+          "why": "Every admissible MLE lies in the parameter space (0,10], so it is bounded by 10."
+        }
+      },
+      "explanation": "The source prints this as Question 59 (December 2017), page 30. No printed answer-key entry is available. Let r be the number of observed failures before the stopping time, and let E be the total time on test: the sum of the r observed failure times plus T for each of the 20−r survivors. For an exponential lifetime with mean θ, the likelihood, apart from factors not involving θ, is L(θ)∝θ^(−r)exp(−E/θ), with 0<θ≤10. If r>0, the log-likelihood is −r log θ−E/θ plus a constant. Differentiating gives −r/θ+E/θ²=0, so the unconstrained maximiser is E/r. Under the parameter restriction, the MLE is min(E/r,10). If r=0, L(θ)∝exp(−E/θ), which increases with θ, so the maximum occurs at θ=10. Therefore the MLE always exists: A true and B false. It always lies in (0,10], so D is true. It is not generally unbiased: censoring and the boundary truncation alter its sampling expectation, and an MLE is not automatically unbiased. Thus C is false. Correct answer: A and D only, option A. Other-exam relevance: likelihood under censoring, exponential lifetime models and constrained MLEs overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q60",
+      "format": "multi",
+      "year": 2017,
+      "session": "June",
+      "topic": "regression-t2 · estimability, BLUE and unbiased residual variance estimation in the general linear model",
+      "stem": "Consider the linear model Y=Xβ+ε, where X is an n×p design matrix, p<n, E(ε)=0 and Var(ε)=σ²I. Let β̂ solve the normal equations XᵀXβ̂=XᵀY. Which statements are true?",
+      "statements": [
+        "If cᵀβ is estimable, then cᵀβ̂ is its BLUE.",
+        "All linear parametric functions are estimable if and only if rank(X)>p.",
+        "If rank(X)<p, then some linear parametric functions are not estimable.",
+        "(Y−Xβ̂)ᵀ(Y−Xβ̂)/(n−p) is always an unbiased estimator of σ²."
+      ],
+      "options": [
+        "A and C only",
+        "A and D only",
+        "B and C only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The Gauss–Markov theorem applies to every estimable linear function; its least-squares estimator is the BLUE even when X is rank deficient."
+        },
+        "B": {
+          "tf": false,
+          "why": "For an n×p matrix, rank(X) cannot exceed p. All p-dimensional linear functions are estimable exactly when rank(X)=p, not when rank(X)>p."
+        },
+        "C": {
+          "tf": true,
+          "why": "If rank(X)<p, the row space of X is a proper subspace of Rᵖ, so at least one coefficient contrast is not estimable."
+        },
+        "D": {
+          "tf": false,
+          "why": "The residual sum of squares has expectation (n−rank(X))σ². Dividing by n−p is unbiased only when rank(X)=p."
+        }
+      },
+      "explanation": "The source prints this as Question 60 (June 2017), page 31. The supplied answer list ends at Q44. Let r=rank(X). In the general linear model, a linear function cᵀβ is estimable precisely when c lies in the row space of X. For any such c, the least-squares estimator cᵀβ̂ is unbiased and, by the Gauss–Markov theorem, has minimum variance among linear unbiased estimators. Thus A is true. Since X has p columns, rank(X)≤p; the condition printed in B, rank(X)>p, is impossible. The correct condition for every linear function of β to be estimable is full column rank, rank(X)=p. Thus B is false. If rank(X)<p, the row space is a proper subspace of Rᵖ, so some coefficient contrasts are not estimable; C is true. Finally, E(SSE)=(n−r)σ². Therefore SSE/(n−p) is unbiased only if r=p; the question does not assume full rank. D is false. The answer is A and C only, option A. Note: the scan explicitly prints “rank(X)>p” in statement B; it has not been silently corrected. Other-exam relevance: Gauss–Markov theory, estimability, rank conditions and residual variance estimation overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q61",
+      "format": "single",
+      "year": 2016,
+      "session": "December",
+      "topic": "inference-t4 · MLE when the parameter is restricted to the integers",
+      "stem": "Let X₁,…,Xₙ be independent N(θ,1) random variables, where θ is restricted to the integers {...,−2,−1,0,1,2,...}. What is the maximum-likelihood estimator of θ?",
+      "options": [
+        "X̄",
+        "The integer closest to X̄",
+        "The largest integer not exceeding X̄",
+        "The sample median"
+      ],
+      "answer": "B",
+      "explanation": "The source prints this as Question 61 (December 2016), page 32. No printed key is available in the supplied answer list. The likelihood is proportional to exp{−(1/2)Σ(Xᵢ−θ)²}. Use the identity Σ(Xᵢ−θ)²=Σ(Xᵢ−X̄)²+n(X̄−θ)². The first term does not depend on θ, so maximising the likelihood is equivalent to choosing the allowed integer that minimises (X̄−θ)². That is the integer nearest to X̄. If X̄ is exactly halfway between two integers, both are maximisers; the phrase “integer closest” includes this tie. Therefore option B is correct. Other-exam relevance: constrained and discrete-parameter maximum likelihood estimation overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q62",
+      "format": "multi",
+      "year": 2016,
+      "session": "December",
+      "topic": "inference-t4 · UMVU sample variance and maximum likelihood estimation of normal variance and standard deviation",
+      "stem": "Let X₁,…,Xₙ be an independent random sample from N(μ,σ²), where μ is unrestricted and σ²>0. Which statements are correct?",
+      "statements": [
+        "S²=Σ(Xᵢ−X̄)²/(n−1) is the minimum-variance unbiased estimator of σ².",
+        "The square root of S² is the minimum-variance unbiased estimator of σ.",
+        "Σ(Xᵢ−X̄)²/n is the maximum-likelihood estimator of σ².",
+        "The square root of Σ(Xᵢ−X̄)²/n is the maximum-likelihood estimator of σ."
+      ],
+      "options": [
+        "A and C only",
+        "A, C and D only",
+        "B and D only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "For a normal sample, S² is unbiased for σ² and is a function of the complete sufficient statistic (ΣXᵢ,ΣXᵢ²), so it is UMVU."
+        },
+        "B": {
+          "tf": false,
+          "why": "The square root of an unbiased variance estimator is not generally unbiased for σ; Jensen's inequality gives E(√S²)<σ for a non-degenerate sample."
+        },
+        "C": {
+          "tf": true,
+          "why": "With μ unknown, maximising the normal likelihood gives μ̂=X̄ and σ̂²=Σ(Xᵢ−X̄)²/n."
+        },
+        "D": {
+          "tf": true,
+          "why": "The MLE of σ is the square root of the MLE of σ², namely √[Σ(Xᵢ−X̄)²/n]."
+        }
+      },
+      "explanation": "The source prints this as Question 62 (December 2016), page 32. The supplied answer list ends at Q44. For a normal sample with unknown mean and variance, the sample variance S²=Σ(Xᵢ−X̄)²/(n−1) is unbiased for σ². The pair (ΣXᵢ,ΣXᵢ²) is complete and sufficient for (μ,σ²) in the full normal family, and S² is a function of it. By Lehmann–Scheffé, S² is the UMVU estimator of σ²; A is true. But taking a square root does not preserve unbiasedness. In fact, because the square-root function is concave, E(√S²)<√E(S²)=σ for a non-degenerate sample, so B is false. For maximum likelihood, the normal log-likelihood is maximised first at μ̂=X̄. Substituting this into the likelihood and differentiating with respect to σ² gives σ̂²_ML=Σ(Xᵢ−X̄)²/n, not the n−1 version. Hence C is true, and the MLE of σ is its square root, making D true. Correct combination: A, C and D only, option B. Other-exam relevance: UMVU estimation, normal likelihood and bias of nonlinear transformations overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q63",
+      "format": "multi",
+      "year": 2016,
+      "session": "December",
+      "topic": "inference-t4 · sufficiency and unbiased estimation for a uniform location-scale family",
+      "stem": "Let X₁,…,Xₙ be independent Uniform(1−θ,1+θ) random variables, where θ>0. Write X_(1)=min(X₁,…,Xₙ), X_(n)=max(X₁,…,Xₙ), and X̄=(1/n)ΣXᵢ. Which statements are true?",
+      "statements": [
+        "(X_(1), X̄, X_(n)) is sufficient for θ.",
+        "(X_(n)−X_(1))/2 is unbiased for θ.",
+        "(3/n)Σ(Xᵢ−1)² is unbiased for θ².",
+        "(3/n)Σ(Xᵢ−X̄)² is unbiased for θ²."
+      ],
+      "options": [
+        "A and C only",
+        "A and B only",
+        "B and D only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The joint density is constant on the event X_(1)≥1−θ and X_(n)≤1+θ, so the likelihood depends on the sample through its minimum and maximum. Adding X̄ does not destroy sufficiency."
+        },
+        "B": {
+          "tf": false,
+          "why": "For this uniform distribution, E[X_(n)−X_(1)]=2θ(n−1)/(n+1), so half the range has expectation θ(n−1)/(n+1), not θ."
+        },
+        "C": {
+          "tf": true,
+          "why": "E[(X−1)²]=Var(X)=θ²/3. Therefore the expectation of (3/n)Σ(Xᵢ−1)² equals θ²."
+        },
+        "D": {
+          "tf": false,
+          "why": "The expected centred sum of squares is (n−1)Var(X)=(n−1)θ²/3. Multiplying by 3/n gives (n−1)θ²/n, not θ²."
+        }
+      },
+      "explanation": "The source prints this as Question 63 (December 2016), page 33. The scan says “Which of the following is true?” but two statements are mathematically true, so the item is retained as multi-answer rather than forcing a single answer. The joint density is (2θ)^(−n) when every observation lies between 1−θ and 1+θ, and zero otherwise. The sample enters the likelihood through the smallest and largest observations, so (X_(1),X_(n)) is sufficient; any statistic that includes these two, such as (X_(1),X̄,X_(n)), is also sufficient. Thus A is true. For a sample from a uniform interval of width 2θ, E(X_(n)−X_(1))=2θ(n−1)/(n+1), so the half-range is biased downward; B is false. Also X−1 is Uniform(−θ,θ), so E[(X−1)²]=θ²/3. By linearity, E[(3/n)Σ(Xᵢ−1)²]=θ², proving C. Finally, E[Σ(Xᵢ−X̄)²]=(n−1)Var(X)=(n−1)θ²/3; after multiplying by 3/n the expectation is (n−1)θ²/n, not θ². D is false. Hence A and C only are true, option A. Other-exam relevance: order statistics, sufficiency and unbiased estimation in uniform models overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q64",
+      "format": "single",
+      "year": 2016,
+      "session": "June",
+      "topic": "inference-t4 · MLE over a finite parameter space",
+      "stem": "Let X₁,…,Xₙ be a random sample from N(θ,1), where θ∈{1,2}. Which statement about the maximum-likelihood estimator of θ is correct?",
+      "options": [
+        "The MLE does not exist.",
+        "The MLE is X̄.",
+        "The MLE exists but is not X̄.",
+        "The MLE is an unbiased estimator of θ."
+      ],
+      "answer": "C",
+      "explanation": "The source prints this as Question 64 (June 2016), page 33. No printed answer-key entry is available. The normal likelihood is proportional to exp{−(1/2)Σ(Xᵢ−θ)²}. Using Σ(Xᵢ−θ)²=Σ(Xᵢ−X̄)²+n(X̄−θ)², choose whichever permitted value, 1 or 2, is closer to X̄. Equivalently, the MLE is 1 when X̄<1.5 and 2 when X̄>1.5; at X̄=1.5 both values maximise the likelihood. The estimator therefore exists, but it takes only the values 1 and 2 and is not the unrestricted sample mean. It is not generally unbiased either. Hence option C is correct. Other-exam relevance: MLE under a finite/discrete parameter space overlaps with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q65",
+      "format": "single",
+      "year": 2016,
+      "session": "June",
+      "topic": "regression-t2 · Gauss–Markov optimal linear unbiased estimation with correlated mean structure",
+      "stem": "Let Y₁,Y₂,Y₃ be uncorrelated observations with common variance σ² and expectations E(Y₁)=β₁, E(Y₂)=β₂ and E(Y₃)=β₁+β₂. What is the BLUE of β₁+β₂?",
+      "options": [
+        "Y₃",
+        "Y₁+Y₂",
+        "(Y₁+Y₂+2Y₃)/3",
+        "(Y₁+Y₂+Y₃)/2"
+      ],
+      "answer": "C",
+      "explanation": "The source prints this as Question 65 (June 2016), page 34. No printed key is available. Consider a linear estimator aY₁+bY₂+cY₃. For it to be unbiased for β₁+β₂, its expectation aβ₁+bβ₂+c(β₁+β₂) must have coefficient 1 for both β₁ and β₂. Thus a+c=1 and b+c=1, so a=b=1−c. Since the observations are uncorrelated and have common variance σ², the estimator variance is σ²[a²+b²+c²]=σ²[2(1−c)²+c²]. Differentiate with respect to c: −4(1−c)+2c=0, giving c=2/3 and a=b=1/3. The BLUE is (Y₁+Y₂+2Y₃)/3, option C. This is a direct small Gauss–Markov optimisation: enforce unbiasedness first, then minimise the variance. Other-exam relevance: BLUE, linear unbiased estimation and variance minimisation overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q66",
+      "format": "single",
+      "year": 2016,
+      "session": "June",
+      "topic": "inference-t4 · exponential lifetime likelihood and reliability of a series system",
+      "stem": "A series system has two independent components. Each component lifetime has exponential density f(x)=λe^(−λx), x>0, with λ>0. Given n independent observed lifetimes X₁,…,Xₙ for one component and their mean X̄, what is the MLE of the system reliability at mission time t>0?",
+      "options": [
+        "(1−e^(−t/X̄))²",
+        "1−(1−e^(−t/X̄))²",
+        "e^(−2t/X̄)",
+        "1−e^(−2t/X̄)"
+      ],
+      "answer": "C",
+      "explanation": "The source prints this as Question 66 (June 2016), page 34. No printed answer-key entry is available. For an exponential lifetime with rate λ, the reliability of one component at time t is R₁(t)=P(X>t)=e^(−λt). The two components are independent and are connected in series, so the system works only if both components survive beyond t. Therefore R_system(t)=R₁(t)²=e^(−2λt). For an exponential sample, the likelihood is proportional to λⁿexp(−λΣXᵢ), and differentiating its log gives λ̂=n/ΣXᵢ=1/X̄. Substitute this MLE into the system reliability: R̂_system(t)=exp(−2t/X̄). This is option C. Other-exam relevance: exponential lifetime models, reliability and invariance of maximum-likelihood estimators overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q67",
+      "format": "multi",
+      "year": 2016,
+      "session": "June",
+      "topic": "inference-t5 · method of moments and consistency for a shifted Gamma distribution",
+      "stem": "Let X₁,…,Xₙ be a random sample from f(x;μ,α)=(1/Γ(α))(x−μ)^(α−1)e^(−(x−μ)), x≥μ, where −∞<μ<∞ and α>0. Which statements about method-of-moments estimators are correct?",
+      "statements": [
+        "Method-of-moments estimators of both α and μ do not exist.",
+        "The method-of-moments estimator of α exists and is consistent.",
+        "The method-of-moments estimator of μ exists and is consistent.",
+        "Both method-of-moments estimators exist but are not consistent."
+      ],
+      "options": [
+        "A only",
+        "B and C only",
+        "B and D only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The first two moments provide two equations for the two unknown parameters, and they have a valid solution when the sample variance is positive."
+        },
+        "B": {
+          "tf": true,
+          "why": "The population variance is α, so the method-of-moments estimator is the sample second central moment (with denominator n), which converges to α by the law of large numbers."
+        },
+        "C": {
+          "tf": true,
+          "why": "The population mean is μ+α. Subtracting the variance parameter estimate from the sample mean gives μ̂_MOM=X̄−m₂, and this converges to μ."
+        },
+        "D": {
+          "tf": false,
+          "why": "Both estimators are functions of consistent sample moments, so both are consistent."
+        }
+      },
+      "explanation": "The source prints this as Question 67 (June 2016), page 35. The supplied answer list ends at Q44, so this is independently derived. The distribution is a Gamma(α, rate 1) variable shifted to the right by μ. For a Gamma variable with shape α and rate 1, the mean is α and variance is α. After shifting, E(X)=μ+α and Var(X)=α. The method-of-moments equations are therefore m₁=μ+α and m₂−m₁²=α, where m₁=X̄ and m₂=(1/n)ΣXᵢ² are the first two raw sample moments. Solving gives α̂_MOM=m₂−m₁² and μ̂_MOM=m₁−α̂_MOM. By the law of large numbers, m₁→E(X) and m₂→E(X²), so α̂_MOM→Var(X)=α and μ̂_MOM→E(X)−α=μ. Both estimators exist (apart from the degenerate zero-variance sample event) and are consistent. Thus B and C are true, option B. Other-exam relevance: method of moments, Gamma distributions, consistency and transformations of moments overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-est-q68",
+      "format": "multi",
+      "year": 2016,
+      "session": "June",
+      "topic": "inference-t7 · Bayesian estimation for a Poisson likelihood with an exponential prior",
+      "stem": "Let X|λ have a Poisson distribution with parameter λ, and let λ have the exponential prior density f(λ)=e^(−λ), λ>0. Under squared-error loss, which statements are correct?",
+      "statements": [
+        "The Bayes estimator of e^λ is 2^(X+1).",
+        "The posterior mean of λ is (X+1)/2.",
+        "The posterior distribution of λ is Gamma.",
+        "The Bayes estimator of e^(2λ) is 2^(2(X+1))."
+      ],
+      "options": [
+        "A, B and C only",
+        "A and B only",
+        "B, C and D only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The posterior is Gamma(shape X+1, rate 2). Its exponential moment at 1 is (2/(2−1))^(X+1)=2^(X+1)."
+        },
+        "B": {
+          "tf": true,
+          "why": "The mean of a Gamma distribution with shape X+1 and rate 2 is (X+1)/2."
+        },
+        "C": {
+          "tf": true,
+          "why": "Multiplying the Poisson likelihood by the exponential prior gives a Gamma posterior kernel."
+        },
+        "D": {
+          "tf": false,
+          "why": "The posterior moment E[e^(2λ)|X] is infinite because the Gamma posterior rate is 2 and the requested exponential argument is also 2; the moment-generating function is finite only for t<2."
+        }
+      },
+      "explanation": "The source prints this as Question 68 (June 2016), page 35. No printed answer-key entry is available. The prior is exponential with rate 1, which is Gamma(shape 1, rate 1). The Poisson likelihood is proportional to λˣe^(−λ). Multiplying prior and likelihood gives the posterior kernel λˣe^(−2λ), so λ|X=x~Gamma(shape x+1, rate 2). Its posterior mean is (x+1)/2, proving B, and the posterior is Gamma, proving C. Under squared-error loss, the Bayes estimator of a function g(λ) is its posterior expectation. For a Gamma(k, rate r) variable, E(e^(tλ))=(r/(r−t))^k when t<r. With k=x+1 and r=2, E(e^λ|x)=(2/(2−1))^(x+1)=2^(x+1), so A is true. But E(e^(2λ)|x) is not finite: t=2 equals the posterior rate, and the integral diverges. Thus D is false. The correct combination is A, B and C only, option A. Other-exam relevance: Poisson-Gamma conjugacy, posterior moments and Bayes estimation under squared-error loss overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi.",
+      "type": "practice"
     }
   ]
 }
