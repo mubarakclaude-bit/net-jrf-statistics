@@ -120,7 +120,7 @@
    "SRS 2024 rates: CBR 18.3, CDR 6.4, natural growth 11.9, IMR 24, TFR 1.9.",
    "Sex ratio at birth 918 (2022-24), females per 1,000 males; Chhattisgarh 978 and Kerala 974 highest, Uttarakhand 872 lowest.",
    "MMR 87 per 1,00,000 live births (2022-24), from 130 (2014-16); SDG target 70 by 2030.",
-   "TFR = 5 × Σ ASFR (five-year groups, rates per woman); GRR = TFR × proportion female; NRR = GRR × survival.",
+   "TFR = 5 × Σ ASFR (five-year groups, rates per woman); GRR = TFR × proportion female; exact NRR age-weights survival by age: NRR = (5/1000) × Σ(ASFRₓ × p_f × lₓ). Simplified shortcut: NRR ≈ GRR × a fertility-weighted representative survival factor.",
    "Life table: dₓ = lₓ − lₓ₊₁; qₓ = dₓ / lₓ; e₀ = life expectancy at birth; abridged = five-year intervals.",
    "The 2026 amendment to the RBD Act: for registration more than two years after an event, a Judicial Magistrate First Class order is required.",
    "CRS 2024 completeness: 99.1% births and 99.4% deaths; national report released July 2026."
@@ -270,10 +270,10 @@
     },
     {
      "ask": "Define GFR, ASFR, TFR, GRR and NRR, and give the relations between them.",
-     "recall": "GFR = births per 1,000 women aged 15-49. ASFR is the same, computed within an age group. TFR = sum of ASFRs across the reproductive span, times the width of each age group — the number of children a woman would bear under current rates. GRR = TFR × proportion of births that are female. NRR = GRR × probability of a girl surviving to the mean age of childbearing.",
+     "recall": "GFR = births per 1,000 women aged 15-49. ASFR is the same, computed within an age group. TFR = sum of ASFRs across the reproductive span, times the width of each age group — the number of children a woman would bear under current rates. GRR = TFR × proportion of births that are female. Exact NRR weights female age-specific fertility by the probability of a daughter surviving to each childbearing age: NRR = (5/1000) × Σ(ASFRₓ × p_f × lₓ) for five-year groups. When a question supplies one survival probability to the mean age of childbearing, NRR ≈ GRR × that representative factor; this is a simplified approximation, not the exact general identity.",
      "refresh": [
       "The sequence refines a single idea. GFR fixes the crude birth rate's worst fault by using only women of reproductive age. ASFR then splits that by age, so the measure no longer depends on how women are distributed across the span. TFR sums the ASFRs into one number with a meaning you can state in words.",
-      "GRR narrows TFR to daughters, because only daughters reproduce in the next generation. NRR narrows it again by letting some of those daughters die before they reproduce, so NRR = 1 is exactly replacement: each generation reproduces itself. NRR < 1 means an eventual decline, however large the current population.",
+      "GRR narrows TFR to daughters, because only daughters reproduce in the next generation. Exact NRR then weights those daughters by survival to each childbearing age. A common classroom shortcut uses a single fertility-weighted representative survival factor: NRR ≈ GRR × s̄. NRR = 1 is exact replacement; NRR < 1 means below replacement under the rates, however large the current population.",
       "With five-year age groups, TFR = 5 × Σ ASFR, with ASFRs expressed per woman. Forgetting the factor of 5, or forgetting to divide by 1,000, is the most common arithmetic slip in this topic."
      ]
     },
@@ -832,7 +832,7 @@
    "title": "Compute TFR, GRR and NRR from age-specific rates",
    "mins": 8,
    "objective": "Do the arithmetic the measurement half of this topic actually asks for.",
-   "problem": "For a population, the age-specific fertility rates per 1,000 women are: 15-19: 30, 20-24: 120, 25-29: 130, 30-34: 60, 35-39: 20, 40-44: 8, 45-49: 2. The sex ratio at birth is 918 females per 1,000 males, and the probability that a newborn girl survives to the mean age of childbearing is 0.95. Find the TFR, the GRR and the NRR, and say whether the population is replacing itself.",
+   "problem": "For a population, the age-specific fertility rates per 1,000 women are: 15-19: 30, 20-24: 120, 25-29: 130, 30-34: 60, 35-39: 20, 40-44: 8, 45-49: 2. The sex ratio at birth is 918 females per 1,000 males. For this exercise, use the simplified single-survival-factor approximation and take the representative probability that a newborn girl survives to the mean age of childbearing as 0.95. Find the TFR, GRR and approximate NRR, and say whether the population is replacing itself.",
    "hints": [
     "Sum the ASFRs first, then deal with the width of the age groups and the per-1,000 scale.",
     "GRR narrows TFR to daughters only, so you need the proportion of births that are female — not the ratio as given.",
@@ -852,16 +852,16 @@
      "math": "GRR = 1.85 × 0.4786 = 0.8855"
     },
     {
-     "say": "NRR allows for mortality among those daughters before they reach childbearing.",
-     "math": "NRR = 0.8855 × 0.95 = 0.8412"
+     "say": "Use the supplied single survival factor as the simplified approximation. In the exact NRR calculation, survival is weighted by fertility at each childbearing age; here one representative factor is supplied.",
+     "math": "NRR ≈ GRR × representative survival = 0.8855 × 0.95 = 0.8412"
     },
     {
-     "say": "NRR is below 1, so each generation of women is being replaced by about 0.84 of a generation; under these rates the population would eventually decline, even though a young age structure can keep it growing for decades. Note also that TFR = 1.85 is below the replacement level of 2.1, which says the same thing in the cruder measure.",
-     "math": "NRR = 0.84 < 1 → below replacement"
+     "say": "Under this single-factor approximation, NRR is below 1, so each generation of women is being replaced by about 0.84 of a generation. The exact NRR would require age-specific survival probabilities weighted by the ASFR schedule. A young age structure can nevertheless keep the total population growing for decades.",
+     "math": "Approximate NRR ≈ 0.84 < 1 → below replacement under the stated approximation"
     }
    ],
-   "answer": "TFR = 1.85, GRR = 0.885, NRR = 0.841. The population is below replacement.",
-   "check": "Three checks that catch most errors. TFR must be a plausible number of children, so a few units, not hundreds — if you got 370 or 1,850 you forgot the per-1,000 scale or the factor of 5. GRR must be a little under half of TFR. NRR must be below GRR, because survival is a probability below 1."
+   "answer": "TFR = 1.85, GRR = 0.885, approximate NRR = 0.841 under the stated single-survival-factor assumption. The population is below replacement under this approximation.",
+   "check": "Three checks that catch most errors. TFR must be a plausible number of children, so a few units, not hundreds — if you got 370 or 1,850 you forgot the per-1,000 scale or the factor of 5. GRR must be a little under half of TFR. In this simplified example, approximate NRR must be below GRR because the representative survival probability is below 1; an exact NRR calculation weights survival separately at each childbearing age."
   },
   {
    "kind": "trapcheck",
@@ -948,7 +948,7 @@
     "The 2023 amendment. In force 1 October 2023: a national database under the Registrar General, state databases under Chief Registrars, the birth certificate as a single document of proof, registration through the central CRS portal, and use of the database to update the National Population Register, electoral rolls and ration records. CRS 2024 registration completeness: 99.1% of births, 99.4% of deaths in 2024 — measured against SRS-based estimates.",
     "The SRS. Pilot 1964-65, full scale 1969-70. Continuous recording by a part-time local enumerator, an independent half-yearly retrospective survey by a supervisor, matching by the Directorate of Census Operations, field verification of mismatches. 8,839 sampling units and over 8.981 million people by 2023, sized so that IMR has a relative standard error below 15%. Publishes the annual bulletin, the Statistical Report, special bulletins on maternal mortality and causes of death, and abridged life tables.",
     "The figures, with their periods. SRS 2024: CBR 18.3, CDR 6.4, natural growth rate 11.9, IMR 24, TFR 1.9. Sex ratio at birth 918 for 2022-24, females per 1,000 males. MMR 87 per 1,00,000 live births for 2022-24, from 88 for 2021-23 and 130 for 2014-16, against an SDG target of 70 by 2030.",
-    "The formulae. CBR and CDR per 1,000 mid-year population; IMR per 1,000 live births; MMR per 1,00,000 live births. TFR = 5 × Σ ASFR with five-year groups and rates per woman. GRR = TFR × proportion of births female. NRR = GRR × survival of a daughter to the mean age of childbearing, and NRR = 1 is exact replacement. Life table: dₓ = lₓ − lₓ₊₁, qₓ = dₓ / lₓ, e₀ is life expectancy at birth.",
+    "The formulae. CBR and CDR per 1,000 mid-year population; IMR per 1,000 live births; MMR per 1,00,000 live births. TFR = 5 × Σ ASFR with five-year groups and rates per woman. GRR = TFR × proportion of births female. Exact NRR = (5/1000) × Σ(ASFRₓ × p_f × lₓ), weighting survival to each childbearing age; the shortcut NRR ≈ GRR × a representative survival factor is an approximation. NRR = 1 is exact replacement. Life table: dₓ = lₓ − lₓ₊₁, qₓ = dₓ / lₓ, e₀ is life expectancy at birth.",
     "The habit. For any rate in this topic, name the system behind the numerator and the system behind the denominator separately. Nearly every question about where a figure came from, or how much to trust it, falls out of that one step."
    ]
   },

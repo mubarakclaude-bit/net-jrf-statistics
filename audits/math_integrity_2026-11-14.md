@@ -393,3 +393,33 @@ Three independent numerical anchor scripts from the Probability audit branch wer
 Workflow 43608695008 confirmed that the new numerical anchors for Probability T5, T7 and T13 pass, while an existing Probability foundations verifier still expected the old “discriminator” block heading and an exact n = 1 equality phrase. The lesson heading and verifier contract have been aligned to describe the ratio as a consistency check and to assert the equality case explicitly.
 
 A further cross-file consistency scan corrected residual Time Series wording: a nonstationary AR process can have finite variance at each finite time even though it lacks a finite time-invariant stationary variance; a non-invertible MA parameterisation does not make the observed process unforecastable; and the stationary AR variance lower bound permits equality for white noise. The AR(1) forecast-interval and finite-MA horizon qualifications are now consistent in the lesson provenance and mastery material.
+
+
+## Official Statistics T1–T5 — targeted current-fact and calculation audit
+
+The five Official Statistics lesson files contain no scene marked as a worked example; T5 does contain a guided TFR/GRR/NRR calculation. The guided calculation was recomputed, and the five corresponding mastery pools (100 items total) passed structural checks: 20 items per pool, unique IDs, required fields, valid answer keys, and the 6 easy / 10 moderate / 4 hard split. All 10 A–D statement/verdict items matched their keyed options.
+
+A targeted fact-check compared high-impact current claims with official Government of India material:
+
+- MoSPI's independent-ministry date (15 October 1999), NSC's 2006 constitution and 2019 composition resolution, and the IPMD threshold of ₹150 crore are consistent with MoSPI publications and the current IPMD page.
+- MPLADS annual entitlement of ₹5 crore is consistent with the published scheme guidelines.
+- The GDP new-series base year 2022–23 (released 27 February 2026), CPI base year 2024=100 (January 2026 series), and IIP base year 2022–23 (first new-series release 1 June 2026) are consistent with MoSPI releases.
+- The PLFS sample design was revamped from January 2025 to support monthly and quarterly CWS estimates; the lesson's broad statement is consistent with the official methodology note.
+- The Census 2027 Houselisting window (1 April–30 September 2026) and the area-specific Phase-II dates for Goa, Uttar Pradesh, Punjab and non-snow-bound Uttarakhand are consistent with ORGI's current notifications.
+- The 2026 Registration of Births and Deaths amendment, the July 2026 CRS report and 2024 registration completeness (99.1% births; 99.4% deaths) are consistent with ORGI's current Vital Statistics page.
+- The SRS 2024 headline figures in the lesson (CBR 18.3, CDR 6.4, IMR 24, TFR 1.9), the 2022–24 sex ratio at birth of 918, and MMR 87 per 100,000 live births are consistent with the ORGI report/catalog and Government releases.
+
+Official references checked:
+- MoSPI Annual Report / ministry history and NSC: https://www.mospi.gov.in/uploads/annual_report/AR_NSC_2023-24.pdf
+- IPMD mandate and ₹150-crore threshold: https://ipm.mospi.gov.in/AboutUs/AboutIPMD
+- MPLADS guidelines: https://www.mplads.gov.in/MPLADS/UploadedFiles/MPLADSGuidelines2016English_638.pdf
+- GDP base 2022–23: https://mospi.gov.in/uploads/release_calendar/1772190058170_Press_Note_on_New_Series_of_GDP_Estimates_with_Base_Year_2022-23_27022026.pdf
+- CPI base 2024=100: https://mospi.gov.in/uploads/latestReleases/latest_release_1770891893893_6b458c0a-c327-4fef-a554-41131ea67273_Press_Relase_of_CPI_for_Jan26.pdf
+- IIP base 2022–23: https://www.mospi.gov.in/uploads/latestReleases/latest_release_1780371708887_52b83604-666c-443a-82c6-4411103e2ede_Press_Release_IIP_2022-23f.pdf
+- PLFS changes from January 2025: https://mospi.gov.in/sites/default/files/publication_reports/PLFS_changes_in_2025_Final.pdf
+- Census 2027 and CRS/SRS status: https://www.censusindia.gov.in/census.website/en and https://censusindia.gov.in/census.website/en/node/180
+- SRS 2024 catalog: https://censusindia.gov.in/nada/index.php/catalog/47152
+- CRS 2024 report catalog: https://censusindia.gov.in/nada/index.php/catalog/47155
+- MMR 2022–24 official release: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2292344&lang=1&reg=48
+
+One mathematical precision defect was corrected: the lesson and mastery item had presented NRR = GRR × survival to the mean age of childbearing as an exact general identity. Exact NRR weights survival at each childbearing age by the corresponding female age-specific fertility rate. The single-survival-factor calculation is now explicitly labelled an approximation, and the exact age-weighted expression is included. This targeted review does not constitute exhaustive factual verification of all Official Statistics scenes.
