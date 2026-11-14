@@ -1,361 +1,361 @@
 {
- "moduleId": "timeseries",
- "topicId": "timeseries-t5",
- "source": "mastery",
- "label": "Unit roots, differencing and ARIMA — mastery test (unseen)",
- "count": 20,
- "items": [
-  {
-   "id": "ts-t5-m-01",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "easy",
-   "stem": "The process yₜ = yₜ₋₁ + εₜ is:",
-   "options": [
-    "an MA(1) process",
-    "stationary",
-    "a random walk, non-stationary",
-    "invertible but not stationary"
-   ],
-   "answer": "C",
-   "explanation": "It is the AR(1) with φ = 1 exactly. Unrolling gives yₜ as the sum of all shocks to date, so Var(yₜ) = tσ²ε grows without limit and stationarity fails. It is the simplest unit-root process, ARIMA(0, 1, 0)."
-  },
-  {
-   "id": "ts-t5-m-02",
-   "format": "numeric",
-   "topic": "timeseries-t5",
-   "diff": "easy",
-   "stem": "For the random walk with drift yₜ = μ + yₜ₋₁ + εₜ starting from y₀ = 0, the mean and variance of yₜ are:",
-   "options": [
-    "μ and σ²ε",
-    "μ and tσ²ε",
-    "μt and tσ²ε",
-    "μt and σ²ε"
-   ],
-   "answer": "C",
-   "explanation": "Unrolling gives yₜ = μt + (ε₁ + … + εₜ), so the drift accumulates into a mean of μt and the uncorrelated shocks accumulate into a variance of tσ²ε. Both depend on t, so neither the constant-mean nor the constant-variance requirement of stationarity holds.",
-   "check": "Both quantities must carry a factor of t, because both the drift and the shocks accumulate. An answer where either is free of t has not unrolled the recursion."
-  },
-  {
-   "id": "ts-t5-m-03",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "easy",
-   "stem": "If φ₁ + φ₂ = 1 in an AR(2) process, the process:",
-   "options": [
-    "is white noise",
-    "has a unit root",
-    "is invertible",
-    "is stationary"
-   ],
-   "answer": "B",
-   "explanation": "φ(1) = 1 − φ₁ − φ₂ = 0, so z = 1 is a root of the AR polynomial and (1 − B) factors out. The process is not stationary, has no ACF, and must be differenced before any ACF-based method applies."
-  },
-  {
-   "id": "ts-t5-m-04",
-   "format": "numeric",
-   "topic": "timeseries-t5",
-   "diff": "easy",
-   "stem": "An ARIMA(2, 1, 0) process becomes stationary after:",
-   "options": [
-    "two differencings",
-    "one differencing",
-    "no differencing",
-    "taking logarithms"
-   ],
-   "answer": "B",
-   "explanation": "The middle number of ARIMA(p, d, q) is d, the number of differencings required — here 1. The 2 is the AR order of what remains, so after one differencing the series is a stationary AR(2). Confusing p with d is the standard error.",
-   "check": "Read the middle number. It is d, not the AR order and not the MA order."
-  },
-  {
-   "id": "ts-t5-m-05",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "easy",
-   "stem": "The MA(1) process yₜ = εₜ − θεₜ₋₁ is invertible if:",
-   "options": [
-    "|θ| > 1",
-    "always",
-    "θ = 1",
-    "|θ| < 1"
-   ],
-   "answer": "D",
-   "explanation": "The MA polynomial is 1 − θz, whose root 1/θ lies outside the unit circle exactly when |θ| < 1. This is the same condition on θ that stationarity imposes on φ for an AR(1) — the invertibility region mirrors the stationarity region."
-  },
-  {
-   "id": "ts-t5-m-06",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "easy",
-   "stem": "The Dickey–Fuller test is used to test for:",
-   "options": [
-    "normality",
-    "autocorrelation of residuals",
-    "heteroscedasticity",
-    "a unit root"
-   ],
-   "answer": "D",
-   "explanation": "It tests whether a series has a unit root, and the unit root is its NULL hypothesis — so failing to reject points towards differencing the series. The alternative is stationarity."
-  },
-  {
-   "id": "ts-t5-m-07",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "moderate",
-   "stem": "A sample ACF that decays very slowly and almost linearly, and is still large at lag 20, suggests:",
-   "options": [
-    "seasonality",
-    "an MA process",
-    "a unit root — difference the series",
-    "white noise"
-   ],
-   "answer": "C",
-   "explanation": "A stationary AR or MA ACF decays geometrically and would be negligible by lag 20. A random walk's ACF is √(t/(t+k)), which at t = 100 is still 0.913 at lag 20 and 0.816 at lag 50 — exactly this slow, near-linear pattern. The remedy is differencing, confirmed formally by a Dickey–Fuller test."
-  },
-  {
-   "id": "ts-t5-m-08",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "moderate",
-   "stem": "For yₜ = 1.2yₜ₋₁ − 0.2yₜ₋₂ + εₜ, the differenced series Δyₜ is:",
-   "options": [
-    "MA(1)",
-    "AR(1) with φ = −0.2",
-    "white noise",
-    "AR(1) with φ = 0.2"
-   ],
-   "answer": "D",
-   "explanation": "The coefficients sum to 1.2 − 0.2 = 1, so there is a unit root. Factoring: 1 − 1.2B + 0.2B² = (1 − B)(1 − 0.2B), so (1 − 0.2B)Δyₜ = εₜ and therefore Δyₜ = +0.2Δyₜ₋₁ + εₜ. The sign comes from the factor (1 − 0.2B); reading −0.2 off the original equation gives the wrong answer."
-  },
-  {
-   "id": "ts-t5-m-09",
-   "format": "numeric",
-   "topic": "timeseries-t5",
-   "diff": "moderate",
-   "stem": "For a random walk with y₀ = 0 observed at t = 100, the correlation between y₁₀₀ and y₁₁₀ is:",
-   "options": [
-    "0.995",
-    "0.953",
-    "0.913",
-    "0.500"
-   ],
-   "answer": "B",
-   "explanation": "Corr(yₜ, yₜ₊ₖ) = √(t/(t + k)) = √(100/110) = 0.953. The first option is the lag-1 value √(100/101) and the third is the lag-20 value √(100/120). The point is how slowly this falls: a stationary AR(1) with φ = 0.9 would already be at 0.9¹⁰ = 0.35 by lag 10.",
-   "check": "The correlation depends on both t and k — which is itself proof of non-stationarity, since a stationary ACF depends on k alone."
-  },
-  {
-   "id": "ts-t5-m-10",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "moderate",
-   "stem": "For a process with φ₁ = 0.4, φ₂ = 0.3, θ₁ = 0.6, θ₂ = 0.4 (MA written with minus signs), the process is:",
-   "options": [
-    "stationary and invertible",
-    "stationary but not invertible",
-    "invertible but not stationary",
-    "neither"
-   ],
-   "answer": "B",
-   "explanation": "Stationarity uses the φ triangle: 0.4 + 0.3 = 0.7 < 1 ✓, 0.3 − 0.4 = −0.1 < 1 ✓, |0.3| < 1 ✓ — stationary. Invertibility uses the same triangle on the θ values: 0.6 + 0.4 = 1.0, which is not less than 1 ✗. The MA part sits exactly on the boundary, an MA unit root, so the process is not invertible."
-  },
-  {
-   "id": "ts-t5-m-11",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "moderate",
-   "stem": "Which statement about a finite moving-average process is correct?",
-   "options": [
-    "it is never stationary",
-    "it is stationary only if |θ| < 1",
-    "it is always stationary, whatever its coefficients",
-    "its stationarity depends on the sample size"
-   ],
-   "answer": "C",
-   "explanation": "A finite MA is a weighted sum of finitely many shocks, so its variance is finite and its autocovariances depend only on the lag — stationarity is automatic. The |θ| < 1 condition is for INVERTIBILITY, not stationarity, and conflating the two is the trap this question sets."
-  },
-  {
-   "id": "ts-t5-m-12",
-   "format": "multi",
-   "topic": "timeseries-t5",
-   "diff": "moderate",
-   "stem": "Consider a series with a unit root.",
-   "options": [
-    "A, B and D only",
-    "A and C only",
-    "B and C only",
-    "A, B and C only"
-   ],
-   "answer": "A",
-   "explanation": "A is true — the variance of a random walk is tσ²ε. B is true: with no finite variance there is nothing to divide the autocovariances by. C is false — a unit root is the boundary case, and it is roots INSIDE the unit circle that give explosive behaviour. D is true, and it is the practical hazard the regression literature is built around.",
-   "statements": [
-    "The variance grows without limit as t increases.",
-    "There is no autocorrelation function.",
-    "The process is explosive, with values growing geometrically.",
-    "Regressing one such series on another can produce a spurious relationship."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True. For a random walk Var(yₜ) = tσ²ε, which grows linearly in t and has no limit."
+  "moduleId": "timeseries",
+  "topicId": "timeseries-t5",
+  "source": "mastery",
+  "label": "Unit roots, differencing and ARIMA — mastery test (unseen)",
+  "count": 20,
+  "items": [
+    {
+      "id": "ts-t5-m-01",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "easy",
+      "stem": "The process yₜ = yₜ₋₁ + εₜ is:",
+      "options": [
+        "an MA(1) process",
+        "stationary",
+        "a random walk, non-stationary",
+        "invertible but not stationary"
+      ],
+      "answer": "C",
+      "explanation": "It is the AR(1) with φ = 1 exactly. Unrolling gives yₜ as the sum of all shocks to date, so Var(yₜ) = tσ²ε grows without limit and stationarity fails. It is the simplest unit-root process, ARIMA(0, 1, 0)."
     },
-    "B": {
-     "tf": true,
-     "why": "True. The ACF divides autocovariances by the variance, and there is no finite variance to divide by."
+    {
+      "id": "ts-t5-m-02",
+      "format": "numeric",
+      "topic": "timeseries-t5",
+      "diff": "easy",
+      "stem": "For the random walk with drift yₜ = μ + yₜ₋₁ + εₜ starting from y₀ = 0, the mean and variance of yₜ are:",
+      "options": [
+        "μ and σ²ε",
+        "μ and tσ²ε",
+        "μt and tσ²ε",
+        "μt and σ²ε"
+      ],
+      "answer": "C",
+      "explanation": "Unrolling gives yₜ = μt + (ε₁ + … + εₜ), so the drift accumulates into a mean of μt and the uncorrelated shocks accumulate into a variance of tσ²ε. Both depend on t, so neither the constant-mean nor the constant-variance requirement of stationarity holds.",
+      "check": "Both quantities must carry a factor of t, because both the drift and the shocks accumulate. An answer where either is free of t has not unrolled the recursion."
     },
-    "C": {
-     "tf": false,
-     "why": "False. A unit root sits exactly ON the unit circle and gives a wandering, not an exploding, series. Explosive behaviour needs a root strictly inside the circle, equivalently coefficients summing to more than 1."
+    {
+      "id": "ts-t5-m-03",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "easy",
+      "stem": "If φ₁ + φ₂ = 1 in an AR(2) process, the process:",
+      "options": [
+        "is white noise",
+        "has a unit root",
+        "is invertible",
+        "is stationary"
+      ],
+      "answer": "B",
+      "explanation": "φ(1) = 1 − φ₁ − φ₂ = 0, so z = 1 is a root of the AR polynomial and (1 − B) factors out. The process is not stationary. Its variance is finite at each finite t but grows without bound, and its correlation depends on both t and lag, so there is no time-invariant ACF depending only on lag. Difference it before applying stationary ACF-based identification methods."
     },
-    "D": {
-     "tf": true,
-     "why": "True. Two independent random walks that both happen to drift produce a strong apparent relationship, and the problem worsens as the sample grows."
+    {
+      "id": "ts-t5-m-04",
+      "format": "numeric",
+      "topic": "timeseries-t5",
+      "diff": "easy",
+      "stem": "An ARIMA(2, 1, 0) process becomes stationary after:",
+      "options": [
+        "two differencings",
+        "one differencing",
+        "no differencing",
+        "taking logarithms"
+      ],
+      "answer": "B",
+      "explanation": "The middle number of ARIMA(p, d, q) is d, the number of differencings required — here 1. The 2 is the AR order of what remains, so after one differencing the series is a stationary AR(2). Confusing p with d is the standard error.",
+      "check": "Read the middle number. It is d, not the AR order and not the MA order."
+    },
+    {
+      "id": "ts-t5-m-05",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "easy",
+      "stem": "The MA(1) process yₜ = εₜ − θεₜ₋₁ is invertible if:",
+      "options": [
+        "|θ| > 1",
+        "always",
+        "θ = 1",
+        "|θ| < 1"
+      ],
+      "answer": "D",
+      "explanation": "The MA polynomial is 1 − θz, whose root 1/θ lies outside the unit circle exactly when |θ| < 1. This is the same condition on θ that stationarity imposes on φ for an AR(1) — the invertibility region mirrors the stationarity region."
+    },
+    {
+      "id": "ts-t5-m-06",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "easy",
+      "stem": "The Dickey–Fuller test is used to test for:",
+      "options": [
+        "normality",
+        "autocorrelation of residuals",
+        "heteroscedasticity",
+        "a unit root"
+      ],
+      "answer": "D",
+      "explanation": "It tests whether a series has a unit root, and the unit root is its NULL hypothesis — so failing to reject points towards differencing the series. The alternative is stationarity."
+    },
+    {
+      "id": "ts-t5-m-07",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "moderate",
+      "stem": "A sample ACF that decays very slowly and almost linearly, and is still large at lag 20, suggests:",
+      "options": [
+        "seasonality",
+        "an MA process",
+        "a unit root — difference the series",
+        "white noise"
+      ],
+      "answer": "C",
+      "explanation": "A stationary AR or MA ACF decays geometrically and would be negligible by lag 20. A random walk's ACF is √(t/(t+k)), which at t = 100 is still 0.913 at lag 20 and 0.816 at lag 50 — exactly this slow, near-linear pattern. The remedy is differencing, confirmed formally by a Dickey–Fuller test."
+    },
+    {
+      "id": "ts-t5-m-08",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "moderate",
+      "stem": "For yₜ = 1.2yₜ₋₁ − 0.2yₜ₋₂ + εₜ, the differenced series Δyₜ is:",
+      "options": [
+        "MA(1)",
+        "AR(1) with φ = −0.2",
+        "white noise",
+        "AR(1) with φ = 0.2"
+      ],
+      "answer": "D",
+      "explanation": "The coefficients sum to 1.2 − 0.2 = 1, so there is a unit root. Factoring: 1 − 1.2B + 0.2B² = (1 − B)(1 − 0.2B), so (1 − 0.2B)Δyₜ = εₜ and therefore Δyₜ = +0.2Δyₜ₋₁ + εₜ. The sign comes from the factor (1 − 0.2B); reading −0.2 off the original equation gives the wrong answer."
+    },
+    {
+      "id": "ts-t5-m-09",
+      "format": "numeric",
+      "topic": "timeseries-t5",
+      "diff": "moderate",
+      "stem": "For a random walk with y₀ = 0 observed at t = 100, the correlation between y₁₀₀ and y₁₁₀ is:",
+      "options": [
+        "0.995",
+        "0.953",
+        "0.913",
+        "0.500"
+      ],
+      "answer": "B",
+      "explanation": "Corr(yₜ, yₜ₊ₖ) = √(t/(t + k)) = √(100/110) = 0.953. The first option is the lag-1 value √(100/101) and the third is the lag-20 value √(100/120). The point is how slowly this falls: a stationary AR(1) with φ = 0.9 would already be at 0.9¹⁰ = 0.35 by lag 10.",
+      "check": "The correlation depends on both t and k — which is itself proof of non-stationarity, since a stationary ACF depends on k alone."
+    },
+    {
+      "id": "ts-t5-m-10",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "moderate",
+      "stem": "For a process with φ₁ = 0.4, φ₂ = 0.3, θ₁ = 0.6, θ₂ = 0.4 (MA written with minus signs), the process is:",
+      "options": [
+        "stationary and invertible",
+        "stationary but not invertible",
+        "invertible but not stationary",
+        "neither"
+      ],
+      "answer": "B",
+      "explanation": "Stationarity uses the φ triangle: 0.4 + 0.3 = 0.7 < 1 ✓, 0.3 − 0.4 = −0.1 < 1 ✓, |0.3| < 1 ✓ — stationary. Invertibility uses the same triangle on the θ values: 0.6 + 0.4 = 1.0, which is not less than 1 ✗. The MA part sits exactly on the boundary, an MA unit root, so the process is not invertible."
+    },
+    {
+      "id": "ts-t5-m-11",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "moderate",
+      "stem": "Which statement about a finite moving-average process is correct?",
+      "options": [
+        "it is never stationary",
+        "it is stationary only if |θ| < 1",
+        "it is always stationary, whatever its coefficients",
+        "its stationarity depends on the sample size"
+      ],
+      "answer": "C",
+      "explanation": "A finite MA is a weighted sum of finitely many shocks, so its variance is finite and its autocovariances depend only on the lag — stationarity is automatic. The |θ| < 1 condition is for INVERTIBILITY, not stationarity, and conflating the two is the trap this question sets."
+    },
+    {
+      "id": "ts-t5-m-12",
+      "format": "multi",
+      "topic": "timeseries-t5",
+      "diff": "moderate",
+      "stem": "Consider a series with a unit root.",
+      "options": [
+        "A, B and D only",
+        "A and C only",
+        "B and C only",
+        "A, B and C only"
+      ],
+      "answer": "A",
+      "explanation": "A is true — the variance of a random walk is tσ²ε, finite for each finite t but unbounded as t grows. B is true in the stationary-ACF sense: the correlation is still defined at each t and lag, but it is not a function of lag alone. C is false — a unit root is the boundary case, and roots inside the unit circle give explosive behaviour. D is true, and it is the practical hazard the regression literature is built around.",
+      "statements": [
+        "The variance grows without limit as t increases.",
+        "There is no time-invariant autocorrelation function depending only on lag.",
+        "The process is explosive, with values growing geometrically.",
+        "Regressing one such series on another can produce a spurious relationship."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True. For a random walk Var(yₜ) = tσ²ε, which grows linearly in t and has no limit."
+        },
+        "B": {
+          "tf": true,
+          "why": "True in the stationary-ACF sense. The time-specific correlation exists, but depends on both t and k; there is no lag-only ACF because the variance is not constant."
+        },
+        "C": {
+          "tf": false,
+          "why": "False. A unit root sits exactly ON the unit circle and gives a wandering, not an exploding, series. Explosive behaviour needs a root strictly inside the circle, equivalently coefficients summing to more than 1."
+        },
+        "D": {
+          "tf": true,
+          "why": "True. Two independent random walks that both happen to drift produce a strong apparent relationship, and the problem worsens as the sample grows."
+        }
+      }
+    },
+    {
+      "id": "ts-t5-m-13",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "moderate",
+      "stem": "In the Dickey–Fuller regression Δyₜ = δyₜ₋₁ + εₜ, the hypotheses are:",
+      "options": [
+        "H₀: δ = 1 against H₁: δ < 1",
+        "H₀: δ = 0 against H₁: δ > 0",
+        "H₀: δ = 0 against H₁: δ < 0",
+        "H₀: δ < 0 against H₁: δ = 0"
+      ],
+      "answer": "C",
+      "explanation": "Starting from yₜ = φyₜ₋₁ + εₜ and subtracting yₜ₋₁ gives δ = φ − 1. A unit root means φ = 1, so δ = 0 — the null. Stationarity means φ < 1, so δ < 0, and the alternative is one-sided in the negative direction."
+    },
+    {
+      "id": "ts-t5-m-14",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "moderate",
+      "stem": "A Dickey–Fuller test returns a p-value of 0.31. The correct action is:",
+      "options": [
+        "conclude the series is stationary and model it directly",
+        "treat the series as non-stationary and difference it",
+        "conclude a unit root has been proved",
+        "conclude the test is invalid"
+      ],
+      "answer": "B",
+      "explanation": "The null is the unit root, so a large p-value means insufficient evidence against non-stationarity, and the appropriate action is to difference. It does not PROVE a unit root — the test has low power against a φ near 1 — but differencing is the conservative and conventional response."
+    },
+    {
+      "id": "ts-t5-m-15",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "moderate",
+      "stem": "Over-differencing a series that was already stationary:",
+      "options": [
+        "introduces a unit root into the MA part",
+        "has no effect",
+        "removes all autocorrelation",
+        "always improves forecasts"
+      ],
+      "answer": "A",
+      "explanation": "Differencing a stationary series multiplies its model by (1 − B), which puts a unit root in the MA part — detectable as artificially strong negative autocorrelation at lag 1 and an inflated variance. It is why the rule is to difference as few times as makes the series stationary and no more."
+    },
+    {
+      "id": "ts-t5-m-16",
+      "format": "numeric",
+      "topic": "timeseries-t5",
+      "diff": "moderate",
+      "stem": "For the process yₜ = yₜ₋₁ + εₜ − 0.4εₜ₋₁, the classification and ARIMA order are:",
+      "options": [
+        "stationary and invertible, ARIMA(1, 0, 1)",
+        "invertible but not stationary, ARIMA(0, 1, 1)",
+        "stationary but not invertible, ARIMA(0, 1, 1)",
+        "neither, ARIMA(1, 1, 1)"
+      ],
+      "answer": "B",
+      "explanation": "The AR coefficient is exactly 1, a unit root, so the process is not stationary whatever the MA part does. The MA part has |−0.4| < 1 so it is invertible. No AR terms remain after differencing, one difference, one MA term: ARIMA(0, 1, 1), and Δyₜ = εₜ − 0.4εₜ₋₁ is a stationary invertible MA(1).",
+      "check": "Check the AR part first; a unit root there settles non-stationarity. Then count: p = 0, d = 1, q = 1."
+    },
+    {
+      "id": "ts-t5-m-17",
+      "format": "multi",
+      "topic": "timeseries-t5",
+      "diff": "hard",
+      "stem": "Consider the Dickey–Fuller test and its critical values.",
+      "options": [
+        "A, B and D only",
+        "A and C only",
+        "B and C only",
+        "A, B and C only"
+      ],
+      "answer": "A",
+      "explanation": "A is true and is the reason the standard theory fails. B is true — the critical values are around −2.9 at 5% with a constant, against about −1.65 from the t distribution. C is false: using the t table makes the test reject too EASILY, declaring stationarity that is not supported. D is true, and it is why the two tests are often run together.",
+      "statements": [
+        "Under the null the regressor yₜ₋₁ is non-stationary, so the usual asymptotic theory does not apply.",
+        "The correct critical values are more negative than the ordinary t values.",
+        "Using an ordinary t table makes the test too conservative.",
+        "The KPSS test reverses the hypotheses, taking stationarity as its null."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True. Σyₜ₋₁² grows like n² rather than n under the null, so the limit is not normal — it involves integrals of Brownian motion and was tabulated by simulation."
+        },
+        "B": {
+          "tf": true,
+          "why": "True — about −2.9 at the 5% level with a constant, against roughly −1.65 from the t distribution."
+        },
+        "C": {
+          "tf": false,
+          "why": "False, and the direction matters. More negative correct values mean the t table rejects too readily, so the error is declaring stationarity that the data do not support — the more damaging direction."
+        },
+        "D": {
+          "tf": true,
+          "why": "True. KPSS takes stationarity as its null, so the two are often run together; agreement is reassuring and disagreement shows the data cannot settle the question."
+        }
+      }
+    },
+    {
+      "id": "ts-t5-m-18",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "hard",
+      "stem": "Two AR(2) processes both have a unit root: yₜ = 0.6yₜ₋₁ + 0.4yₜ₋₂ + εₜ and yₜ = 1.2yₜ₋₁ − 0.2yₜ₋₂ + εₜ. Their differenced series are:",
+      "options": [
+        "AR(1) with φ = −0.4 and AR(1) with φ = 0.2",
+        "both AR(1) with φ = 0.2",
+        "AR(1) with φ = 0.6 and AR(1) with φ = 1.2",
+        "both white noise"
+      ],
+      "answer": "A",
+      "explanation": "The polynomials factor as (1 − B)(1 + 0.4B) and (1 − B)(1 − 0.2B) respectively, so the differenced series satisfy Δyₜ = −0.4Δyₜ₋₁ + εₜ and Δyₜ = +0.2Δyₜ₋₁ + εₜ. Both are ARIMA(1, 1, 0) and the surviving coefficients have opposite signs — the sign comes from the factorisation, never from the original equation, which is what the third option wrongly assumes."
+    },
+    {
+      "id": "ts-t5-m-19",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "hard",
+      "stem": "Why is invertibility required of a moving-average model, given that a finite MA is always stationary?",
+      "options": [
+        "because without it the variance is infinite",
+        "because the ACF would not decay",
+        "because the mean would depend on time",
+        "because the shocks cannot otherwise be recovered from the data, and two parameter values give the same ACF"
+      ],
+      "answer": "D",
+      "explanation": "Using an MA model means recovering the unobserved shocks from the observed series, which requires inverting the MA operator — and that inversion converges only under the invertibility condition. The identification point is just as important: the MA(1) with θ = 1.5 has exactly the same ACF as the one with θ = 1/1.5, so without invertibility the parameter is not determined by the data."
+    },
+    {
+      "id": "ts-t5-m-20",
+      "format": "single",
+      "topic": "timeseries-t5",
+      "diff": "hard",
+      "stem": "An analyst reads p and q from the sample ACF and PACF of an undifferenced series that has a unit root. The result is:",
+      "options": [
+        "uninformative, because the slow decay of a non-stationary ACF swamps any AR or MA pattern",
+        "valid, since the ACF and PACF are computed the same way regardless",
+        "valid only if the series has drift",
+        "an over-differenced model"
+      ],
+      "answer": "A",
+      "explanation": "A unit-root series has an ACF near 1 at every short lag and decaying almost linearly, so it carries no usable information about order — it would suggest a very high AR order at every attempt. This is why d must be determined FIRST, and why a question describing a slowly decaying ACF is asking about differencing rather than about model order."
     }
-   }
-  },
-  {
-   "id": "ts-t5-m-13",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "moderate",
-   "stem": "In the Dickey–Fuller regression Δyₜ = δyₜ₋₁ + εₜ, the hypotheses are:",
-   "options": [
-    "H₀: δ = 1 against H₁: δ < 1",
-    "H₀: δ = 0 against H₁: δ > 0",
-    "H₀: δ = 0 against H₁: δ < 0",
-    "H₀: δ < 0 against H₁: δ = 0"
-   ],
-   "answer": "C",
-   "explanation": "Starting from yₜ = φyₜ₋₁ + εₜ and subtracting yₜ₋₁ gives δ = φ − 1. A unit root means φ = 1, so δ = 0 — the null. Stationarity means φ < 1, so δ < 0, and the alternative is one-sided in the negative direction."
-  },
-  {
-   "id": "ts-t5-m-14",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "moderate",
-   "stem": "A Dickey–Fuller test returns a p-value of 0.31. The correct action is:",
-   "options": [
-    "conclude the series is stationary and model it directly",
-    "treat the series as non-stationary and difference it",
-    "conclude a unit root has been proved",
-    "conclude the test is invalid"
-   ],
-   "answer": "B",
-   "explanation": "The null is the unit root, so a large p-value means insufficient evidence against non-stationarity, and the appropriate action is to difference. It does not PROVE a unit root — the test has low power against a φ near 1 — but differencing is the conservative and conventional response."
-  },
-  {
-   "id": "ts-t5-m-15",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "moderate",
-   "stem": "Over-differencing a series that was already stationary:",
-   "options": [
-    "introduces a unit root into the MA part",
-    "has no effect",
-    "removes all autocorrelation",
-    "always improves forecasts"
-   ],
-   "answer": "A",
-   "explanation": "Differencing a stationary series multiplies its model by (1 − B), which puts a unit root in the MA part — detectable as artificially strong negative autocorrelation at lag 1 and an inflated variance. It is why the rule is to difference as few times as makes the series stationary and no more."
-  },
-  {
-   "id": "ts-t5-m-16",
-   "format": "numeric",
-   "topic": "timeseries-t5",
-   "diff": "moderate",
-   "stem": "For the process yₜ = yₜ₋₁ + εₜ − 0.4εₜ₋₁, the classification and ARIMA order are:",
-   "options": [
-    "stationary and invertible, ARIMA(1, 0, 1)",
-    "invertible but not stationary, ARIMA(0, 1, 1)",
-    "stationary but not invertible, ARIMA(0, 1, 1)",
-    "neither, ARIMA(1, 1, 1)"
-   ],
-   "answer": "B",
-   "explanation": "The AR coefficient is exactly 1, a unit root, so the process is not stationary whatever the MA part does. The MA part has |−0.4| < 1 so it is invertible. No AR terms remain after differencing, one difference, one MA term: ARIMA(0, 1, 1), and Δyₜ = εₜ − 0.4εₜ₋₁ is a stationary invertible MA(1).",
-   "check": "Check the AR part first; a unit root there settles non-stationarity. Then count: p = 0, d = 1, q = 1."
-  },
-  {
-   "id": "ts-t5-m-17",
-   "format": "multi",
-   "topic": "timeseries-t5",
-   "diff": "hard",
-   "stem": "Consider the Dickey–Fuller test and its critical values.",
-   "options": [
-    "A, B and D only",
-    "A and C only",
-    "B and C only",
-    "A, B and C only"
-   ],
-   "answer": "A",
-   "explanation": "A is true and is the reason the standard theory fails. B is true — the critical values are around −2.9 at 5% with a constant, against about −1.65 from the t distribution. C is false: using the t table makes the test reject too EASILY, declaring stationarity that is not supported. D is true, and it is why the two tests are often run together.",
-   "statements": [
-    "Under the null the regressor yₜ₋₁ is non-stationary, so the usual asymptotic theory does not apply.",
-    "The correct critical values are more negative than the ordinary t values.",
-    "Using an ordinary t table makes the test too conservative.",
-    "The KPSS test reverses the hypotheses, taking stationarity as its null."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True. Σyₜ₋₁² grows like n² rather than n under the null, so the limit is not normal — it involves integrals of Brownian motion and was tabulated by simulation."
-    },
-    "B": {
-     "tf": true,
-     "why": "True — about −2.9 at the 5% level with a constant, against roughly −1.65 from the t distribution."
-    },
-    "C": {
-     "tf": false,
-     "why": "False, and the direction matters. More negative correct values mean the t table rejects too readily, so the error is declaring stationarity that the data do not support — the more damaging direction."
-    },
-    "D": {
-     "tf": true,
-     "why": "True. KPSS takes stationarity as its null, so the two are often run together; agreement is reassuring and disagreement shows the data cannot settle the question."
-    }
-   }
-  },
-  {
-   "id": "ts-t5-m-18",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "hard",
-   "stem": "Two AR(2) processes both have a unit root: yₜ = 0.6yₜ₋₁ + 0.4yₜ₋₂ + εₜ and yₜ = 1.2yₜ₋₁ − 0.2yₜ₋₂ + εₜ. Their differenced series are:",
-   "options": [
-    "AR(1) with φ = −0.4 and AR(1) with φ = 0.2",
-    "both AR(1) with φ = 0.2",
-    "AR(1) with φ = 0.6 and AR(1) with φ = 1.2",
-    "both white noise"
-   ],
-   "answer": "A",
-   "explanation": "The polynomials factor as (1 − B)(1 + 0.4B) and (1 − B)(1 − 0.2B) respectively, so the differenced series satisfy Δyₜ = −0.4Δyₜ₋₁ + εₜ and Δyₜ = +0.2Δyₜ₋₁ + εₜ. Both are ARIMA(1, 1, 0) and the surviving coefficients have opposite signs — the sign comes from the factorisation, never from the original equation, which is what the third option wrongly assumes."
-  },
-  {
-   "id": "ts-t5-m-19",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "hard",
-   "stem": "Why is invertibility required of a moving-average model, given that a finite MA is always stationary?",
-   "options": [
-    "because without it the variance is infinite",
-    "because the ACF would not decay",
-    "because the mean would depend on time",
-    "because the shocks cannot otherwise be recovered from the data, and two parameter values give the same ACF"
-   ],
-   "answer": "D",
-   "explanation": "Using an MA model means recovering the unobserved shocks from the observed series, which requires inverting the MA operator — and that inversion converges only under the invertibility condition. The identification point is just as important: the MA(1) with θ = 1.5 has exactly the same ACF as the one with θ = 1/1.5, so without invertibility the parameter is not determined by the data."
-  },
-  {
-   "id": "ts-t5-m-20",
-   "format": "single",
-   "topic": "timeseries-t5",
-   "diff": "hard",
-   "stem": "An analyst reads p and q from the sample ACF and PACF of an undifferenced series that has a unit root. The result is:",
-   "options": [
-    "uninformative, because the slow decay of a non-stationary ACF swamps any AR or MA pattern",
-    "valid, since the ACF and PACF are computed the same way regardless",
-    "valid only if the series has drift",
-    "an over-differenced model"
-   ],
-   "answer": "A",
-   "explanation": "A unit-root series has an ACF near 1 at every short lag and decaying almost linearly, so it carries no usable information about order — it would suggest a very high AR order at every attempt. This is why d must be determined FIRST, and why a question describing a slowly decaying ACF is asking about differencing rather than about model order."
-  }
- ]
+  ]
 }

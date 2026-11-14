@@ -308,3 +308,10 @@ Added `verify_timeseries_variance.py` to guard the qualification.
 
 
 A final consistency scan propagated the AR(2) variance-formula qualification to the lesson's scenario, answer explanation and provenance, not only the derivation block. The mastery pool now makes the same one-way implication explicit.
+
+
+## Unit-root autocorrelation precision — Time Series lessons 7.5 and 7.6
+
+The lessons previously said a random walk has “no finite variance to divide by” and “no ACF at all.” Those statements were too strong and contradicted the lessons' own time-specific correlation derivation. A random walk has finite variance (t\sigma^2) at every finite (t), but the variance grows without bound and the correlation depends on both (t) and lag. The corrections now distinguish the stationary lag-only ACF from the time-specific correlation, in both lessons and the mastery pool.
+
+Added `verify_unit_root_acf_precision.py` to guard this distinction.
