@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 38,
-  "clean": 38,
+  "count": 39,
+  "clean": 39,
   "items": [
     {
       "id": "csir-est-q01",
@@ -1149,6 +1149,47 @@
         }
       },
       "explanation": "The supplied answer list on page 63 gives Question 40 as statements 2, 3 and 4. We test each statement using the law of large numbers. Statement 1 uses pairs of independent observations. For each pair, E[(X₂ᵢ₋₁−X₂ᵢ)²]=E(X₂ᵢ₋₁²)+E(X₂ᵢ²)−2E(X₂ᵢ₋₁)E(X₂ᵢ)=σ²+σ²=2σ². Therefore the average of these squared differences converges to 2σ², not σ²; statement 1 is false. For statement 3, E(Xᵢ²)=Var(Xᵢ)+[E(Xᵢ)]²=σ². The law of large numbers gives (1/n)∑Xᵢ²→σ², so statement 3 is true. For statement 2, write (1/n)∑(Xᵢ−X̄)²=(1/n)∑Xᵢ²−X̄². The first term converges to σ² and X̄ converges to E(X)=0, so X̄² converges to zero. Hence statement 2 is true. Statement 4 is n/(n−1) times statement 2. Since n/(n−1)→1, it has the same limit σ² and is also consistent. Thus statements 2, 3 and 4 are correct, option B. Other-exam relevance: consistency, sample moments and the law of large numbers are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q41",
+      "type": "practice",
+      "format": "multi",
+      "year": 2019,
+      "session": "December",
+      "topic": "inference-t7 · Bayesian estimation under squared-error and absolute-error loss with a truncated scale prior",
+      "stem": "Suppose the conditional density of X given θ is f(x|θ)=2x/θ² for 0<x<θ and zero otherwise. The prior distribution of θ is Uniform(0,1). Based on one observation x, which statements about the Bayes estimates are correct?",
+      "statements": [
+        "Under squared-error loss, the Bayes estimate is −x logₑx.",
+        "Under squared-error loss, the Bayes estimate is −x logₑx/(1−x).",
+        "Under absolute-error loss, the Bayes estimate is x.",
+        "Under absolute-error loss, the Bayes estimate is 2x/(1+x)."
+      ],
+      "options": [
+        "Statements 1 and 3 only",
+        "Statements 2 and 4 only",
+        "Statements 1, 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The posterior mean contains the normalising factor 1/(1−x), which is missing from statement 1."
+        },
+        "B": {
+          "tf": true,
+          "why": "Squared-error loss is minimised by the posterior mean, and absolute-error loss is minimised by the posterior median. These are −x log(x)/(1−x) and 2x/(1+x), respectively."
+        },
+        "C": {
+          "tf": false,
+          "why": "The posterior median is 2x/(1+x), not x."
+        },
+        "D": {
+          "tf": true,
+          "why": "The posterior median is found by setting the posterior CDF equal to one-half, which gives 2x/(1+x)."
+        }
+      },
+      "explanation": "The supplied answer list on page 63 gives Question 41 as statements 2 and 4. First find the posterior distribution. The prior density is constant on 0<θ<1, and the likelihood is proportional to θ⁻² when θ>x. Therefore the posterior density is proportional to θ⁻² on x<θ<1. Its normalising integral is ∫ₓ¹θ⁻²dθ=1/x−1=(1−x)/x. Hence π(θ|x)=x/[(1−x)θ²], for x<θ<1. Under squared-error loss, the Bayes estimate is the posterior mean: E(θ|x)=∫ₓ¹θ·x/[(1−x)θ²]dθ = [x/(1−x)]∫ₓ¹(1/θ)dθ = −x log(x)/(1−x). Thus statement 2 is true and statement 1 is false. Under absolute-error loss, any posterior median is a Bayes estimate. The posterior CDF is F(m|x)=[x/(1−x)]∫ₓᵐθ⁻²dθ=(m−x)/[m(1−x)]. Set this equal to 1/2: 2(m−x)=m(1−x), so m(1+x)=2x and m=2x/(1+x). Thus statement 4 is true and statement 3 is false. Therefore statements 2 and 4 are correct, option B. Other-exam relevance: Bayesian posterior distributions, posterior means, posterior medians and loss functions are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
