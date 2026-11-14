@@ -13,14 +13,15 @@ def strings(x):
 def main():
     ts1="\n".join(strings(load("lesson_ts1.json")))
     assert "deterministic component" in ts1 and "purely nondeterministic" in ts1
-    assert "process remains forecastable" in ts1
+    assert "Forecasting from observations remains possible" in ts1
     p1=load("timeseries_t1_mastery.json")
     assert "equivalent invertible representation" in p1["items"][15]["explanation"]
     ts3="\n".join(strings(load("lesson_ts3.json")))
     assert "standard biased sample autocorrelation sequence" in ts3
+    assert "Yule–Walker estimates are always stationary by construction" not in ts3
     p3=load("timeseries_t3_mastery.json")
     assert "standard biased sample autocorrelation sequence" in p3["items"][16]["statements"][2]
-    print("PASS: Wold decomposition includes the deterministic component qualification")
-    print("PASS: invertibility is distinguished from forecastability")
-    print("PASS: Yule–Walker stationarity guarantee states the sample-ACF convention")
+    print("PASS: Wold decomposition qualification")
+    print("PASS: invertibility distinguished from forecastability")
+    print("PASS: Yule–Walker stationarity guarantee states sample-ACF convention")
 if __name__=="__main__": main()

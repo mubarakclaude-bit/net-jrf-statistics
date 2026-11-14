@@ -292,3 +292,6 @@ Added `verify_inference_remaining_precision.py` to guard the residual fixes.
 - **Yule–Walker:** qualified the finite-sample stationarity guarantee to the standard biased sample autocorrelation sequence. The unbiased sample autocovariance sequence need not produce a positive-definite Toeplitz matrix and does not carry the same unconditional guarantee. The mastery explanation now uses the same convention.
 
 Added `verify_timeseries_precision.py` to guard these distinctions. The wider time-series module remains under second-pass review.
+
+
+A consistency scan of the time-series edits also updated the remaining Wold/invertibility explanation and every Yule–Walker revision prompt that still stated the finite-sample stationarity property without its biased-sample-ACF and nonsingularity conditions.
