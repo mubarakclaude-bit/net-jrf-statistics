@@ -19,7 +19,7 @@
       ],
       "answer": "C",
       "explanation": "From γ₀ = φγ₁ + σ² and γ₁ = φγ₀, substituting gives γ₀ = φ²γ₀ + σ², hence γ₀ = σ²/(1 − φ²). The σ² term comes from E(yₜεₜ), which is not zero because yₜ contains εₜ.",
-      "check": "The result must exceed σ², since 1 − φ² < 1 for any stationary φ — the process is more variable than its shocks."
+      "check": "The variance is at least σ² because the current innovation contributes σ² and all additional squared weights are non-negative; it is strictly greater when φ ≠ 0."
     },
     {
       "id": "ts-t4-m-02",
@@ -178,7 +178,7 @@
       "statements": [
         "For an AR(2), ρ₁ is φ₁/(1 − φ₂) rather than φ₁.",
         "The recursion for k ≥ 1 determines the shape of the autocovariance function but not its scale.",
-        "The variance of a stationary AR process always exceeds σ².",
+        "The variance of a stationary AR process is at least σ².",
         "The symmetry γ₋ₖ = γₖ plays no role in the AR(2) derivation."
       ],
       "verdicts": {
@@ -192,7 +192,7 @@
         },
         "C": {
           "tf": true,
-          "why": "True. Shocks accumulate through the MA(∞) representation, giving γ₀ = σ²Σψⱼ² > σ². For an AR(1) the amplification factor is 1/(1 − φ²), which is always above 1."
+          "why": "True. The current innovation contributes σ² and all past-shock weights add non-negative squared terms, so γ₀ = σ²Σψⱼ² ≥ σ². Equality occurs for white noise (all AR coefficients zero); otherwise the inequality is strict."
         },
         "D": {
           "tf": false,

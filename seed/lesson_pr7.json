@@ -69,7 +69,7 @@
       "  Normal truth: 0.317311, 0.133614, 0.045500, 0.002700 at k = 1, 1.5, 2, 3.",
       "  Ratios truth/bound: 0.317, 0.301, 0.182, 0.024 — the slack GROWS with k.",
       "  Laplace at k=2: 0.059106 (ratio 0.236), closest of the smooth cases. Uniform: exactly 0 past k = √3.",
-      "  TIGHT: mass 1/(2k²) at each of μ ± kσ, rest at μ. At k=2 that is 0.125, 0.75, 0.125.",
+      "  TIGHT for k ≥ 1: mass 1/(2k²) at each of μ ± kσ, rest at μ. At k=2 that is 0.125, 0.75, 0.125.",
       "    Variance verified 1.000000; P(|X| ≥ k) = 1/k² exactly at k = 2 and 3. So it CANNOT be improved.",
       "ONE-SIDED (Cantelli): P(X − μ ≥ kσ) ≤ 1/(1 + k²) — 0.2 at k = 2, better than halving 1/4.",
       "CAUCHY–SCHWARZ: |E(XY)| ≤ √(E(X²)E(Y²)), equality iff Y = cX.",
@@ -122,7 +122,7 @@
         "0.25 against 0.0455"
       ],
       [
-        "Attains Chebyshev",
+        "Attains Chebyshev for k ≥ 1",
         "Mass 1/(2k²) at each of μ ± kσ"
       ],
       [
@@ -157,7 +157,7 @@
       "Chebyshev at k = 1 is vacuous."
     ]
   },
-  "howto": "Section 1 settles the one thing the exam question turns on — the direction of Jensen — with a two-value example you can check in your head, and then gives the caveat that matters for anyone trying to verify it numerically: E(1/X) diverges for an exponential, so the obvious simulation produces a figure that grows with the sample size. Section 2's chart is the quantitative half: it draws Chebyshev's bound against the true tail for five distributions, showing the bound overstating a normal's tail by a factor of 5.5 at k = 2 and 41 at k = 3, and then lets you select the three-point distribution that attains it exactly, which is the answer to why the inequality cannot be improved. Section 3 states all four inequalities with their assumptions and both tail identities, and section 4 works the June 2026 question statement by statement — its design is worth noticing, since statements C and D have identical written form and differ only in whether the function is convex or concave. Section 6 applies each tool once, section 8 builds the extremal distributions, and section 10 drills the arithmetic including the vacuous k = 1 case. If short of time, sections 1, 3 and 4 are the lesson. Section 11 shows the four reappearing as the weak law, the Cramér–Rao bound, the information inequality and the Chernoff bound, which is the argument for learning them properly. The optional section proves all four in a few lines each, which is what makes the assumptions memorable.",
+  "howto": "Section 1 settles the one thing the exam question turns on — the direction of Jensen — with a two-value example you can check in your head, and then gives the caveat that matters for anyone trying to verify it numerically: E(1/X) diverges for an exponential, so the obvious simulation produces a figure that grows with the sample size. Section 2's chart is the quantitative half: it draws Chebyshev's bound against the true tail for five distributions, showing the bound overstating a normal's tail by a factor of 5.5 at k = 2 and 41 at k = 3, and then lets you select the three-point distribution that attains it exactly for k ≥ 1, which is the answer to why the inequality cannot be improved. Section 3 states all four inequalities with their assumptions and both tail identities, and section 4 works the June 2026 question statement by statement — its design is worth noticing, since statements C and D have identical written form and differ only in whether the function is convex or concave. Section 6 applies each tool once, section 8 builds the extremal distributions, and section 10 drills the arithmetic including the vacuous k = 1 case. If short of time, sections 1, 3 and 4 are the lesson. Section 11 shows the four reappearing as the weak law, the Cramér–Rao bound, the information inequality and the Chernoff bound, which is the argument for learning them properly. The optional section proves all four in a few lines each, which is what makes the assumptions memorable.",
   "refs": [
     {
       "title": "An Introduction to Probability Theory and Its Applications",
@@ -322,7 +322,7 @@
         "Start with the Normal at k = 2. The bound is 0.25 and the truth is 0.045500 — the bound overstates the tail by a factor of 5.5. Move to k = 3 and the gap widens sharply: 0.111111 against 0.002700, a factor of 41. For a normal, Chebyshev is very nearly useless as a numerical statement.",
         "Switch to the Laplace. At k = 2 the truth is 0.059106, a ratio of 0.236 — closer to the bound than the normal, because its tails are heavier. That is the general pattern: the heavier the tail, the less slack.",
         "Switch to the Uniform and set k to 1.7. The truth is 0.018505 while the bound is 0.346. Push k past √3 ≈ 1.732 and the true tail becomes exactly ZERO, because a standardised uniform cannot reach beyond that, while the bound is still a third. A bounded distribution is where the inequality is most wasteful.",
-        "Now select the 3-point option. The two curves coincide exactly, at every k. This is the distribution Chebyshev's proof cannot improve on: put probability 1/(2k²) at each of −k and +k and the rest at 0. Its variance is exactly 1, and P(|X| ≥ k) = 2 × 1/(2k²) = 1/k² — the bound attained with equality. At k = 2 that is mass 0.125 at each of ±2 and 0.75 at zero.",
+        "Now select the 3-point option. For k ≥ 1, the two curves coincide exactly. Put probability 1/(2k²) at each of −k and +k and the remaining mass 1 − 1/k² at 0. This is a valid distribution precisely when k ≥ 1; its variance is exactly 1 and P(|X| ≥ k) = 1/k². For 0 < k < 1 the bound 1/k² exceeds 1 and is vacuous, so this extremal distribution is not a valid equality case.",
         "That last case is the answer to why the inequality is loose. It is DISTRIBUTION-FREE: it must hold for every distribution with a finite variance, so it must hold for this one, and no smaller bound could. The slack is not a defect but the price of assuming almost nothing."
       ],
       "ask": {
@@ -355,7 +355,7 @@
         {
           "t": "formula",
           "h": "Chebyshev's inequality",
-          "body": "For any X with mean μ and finite variance σ², and any k > 0,\n    P(|X − μ| ≥ kσ) ≤ 1/k².\nIt follows from Markov applied to the non-negative variable (X − μ)² at the level k²σ², which is where the square comes from. At k = 2 the bound is 1/4; a normal puts 0.045500 there and a Laplace 0.059106. It is attained by the three-point distribution with mass 1/(2k²) at each of μ ± kσ."
+          "body": "For any X with mean μ and finite variance σ², and any k > 0,\n    P(|X − μ| ≥ kσ) ≤ 1/k².\nIt follows from Markov applied to the non-negative variable (X − μ)² at the level k²σ², which is where the square comes from. At k = 2 the bound is 1/4; a normal puts 0.045500 there and a Laplace 0.059106. For k ≥ 1, equality is attained by the three-point distribution with mass 1/(2k²) at each of μ ± kσ and the remaining mass 1 − 1/k² at μ. For 0 < k < 1 the bound exceeds 1 and is vacuous."
         },
         {
           "t": "formula",
@@ -678,7 +678,7 @@
         {
           "t": "step",
           "h": "The source of the slack",
-          "body": "A distribution-free bound must hold for the worst distribution satisfying its assumptions, so its value is set by that worst case and not by the case in front of you. Chebyshev's worst case is the three-point distribution with mass 1/(2k²) at each of μ ± kσ, which attains 1/k² exactly. Markov's is the two-point variable at 0 and a. No smaller bound is available without further assumptions."
+          "body": "A distribution-free bound must hold for the worst distribution satisfying its assumptions, so its value is set by that worst case and not by the case in front of you. For k ≥ 1, Chebyshev's worst case is the three-point distribution with mass 1/(2k²) at each of μ ± kσ and the remaining mass at μ, which attains 1/k² exactly. For 0 < k < 1 the bound exceeds 1 and is vacuous. Markov's is the two-point variable at 0 and a. No smaller bound is available without further assumptions."
         },
         {
           "t": "step",
@@ -719,7 +719,7 @@
         "For (c), ∫₀^∞ 2x e^(−x)dx."
       ],
       "answer": "(a) Mass 1/8 at each of ±2 and 3/4 at 0; variance 1 and P(|X| ≥ 2) = 1/4 exactly. (b) Bound 1/3 = 0.3333 against the truth e^(−3) = 0.049787, a factor of 6.7. (c) 2 × 1! = 2. (d) 0.317, 0.182, 0.024 — the slack grows rapidly with k.",
-      "check": "In (a) the general recipe is mass 1/(2k²) at each of ±k, which at k = 2 is 1/8 = 0.125; the variance is 2(1/8)(4) = 1 ✓ and the tail probability is 2(1/8) = 0.25 = 1/k² ✓, both verified at k = 2 and k = 3. In (d) the trend matters more than the numbers: Chebyshev's bound decays as 1/k² while a normal's tail decays like e^(−k²/2), so the ratio collapses and the bound becomes progressively more useless the further out you go.",
+      "check": "For k ≥ 1, the general recipe is mass 1/(2k²) at each of ±k, which at k = 2 is 1/8 = 0.125; the variance is 2(1/8)(4) = 1 ✓ and the tail probability is 2(1/8) = 0.25 = 1/k² ✓, both verified at k = 2 and k = 3. In (d) the trend matters more than the numbers: Chebyshev's bound decays as 1/k² while a normal's tail decays like e^(−k²/2), so the ratio collapses and the bound becomes progressively more useless the further out you go.",
       "scenario": {
         "teaser": "An engineer uses Chebyshev to set a tolerance and the result is commercially unusable.",
         "title": "A bound too safe to use",
@@ -781,9 +781,9 @@
           "why": "False — it requires X ≥ 0. Without non-negativity the statement fails: a variable with mean 0 taking large positive and negative values would have P(X ≥ a) bounded by 0, which is absurd. Non-negativity is what makes the proof's discarded region contribute nothing negative."
         },
         {
-          "claim": "Chebyshev's inequality cannot be improved without further assumptions.",
+          "claim": "For k ≥ 1, Chebyshev's inequality cannot be improved without further assumptions.",
           "tf": true,
-          "why": "True. The three-point distribution with mass 1/(2k²) at each of μ ± kσ and the rest at μ has variance exactly σ² and tail probability exactly 1/k², so it attains the bound. Any smaller bound would be false for that distribution, and it satisfies the inequality's only assumption of a finite variance."
+          "why": "True. For k ≥ 1, the three-point distribution with mass 1/(2k²) at each of μ ± kσ and the remaining mass at μ has variance exactly σ² and tail probability exactly 1/k², so it attains the bound. Any smaller bound would be false for that distribution. For 0 < k < 1, the displayed bound exceeds 1 and is vacuous."
         },
         {
           "claim": "For a non-negative integer-valued X, E(X) = Σ(k≥1) P(X ≥ k).",
@@ -880,7 +880,7 @@
           "a": "x² and 1/x (on x > 0) are convex; log x and √x are concave."
         },
         {
-          "q": "Which distribution attains Chebyshev's bound?",
+          "q": "For k ≥ 1, which distribution attains Chebyshev's bound?",
           "a": "Mass 1/(2k²) at each of μ ± kσ, the rest at μ. Variance σ², tail exactly 1/k²."
         },
         {

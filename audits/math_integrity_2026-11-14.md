@@ -5,8 +5,9 @@
 - Repository: `mubarakclaude-bit/net-jrf-statistics`
 - Base: `main` at task start: `678e7a19e417da26f03d42c2fb2cf50c5df0e158`
 - Branch: `audit/math-integrity-2026-11-14`
-- Latest lesson/verifier content and report reviewed at: `753f699346fd2c0cacd476b34a3d6a22c44043ce`.
-- Latest workflow for that head: [43586732656](https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43586732656) completed successfully: validation, acceptance (six scenarios), and browser (build, strict app test, every-lesson clicktest, hosted-storage conformance, and feature browser tests). The manual full-inventory step is skipped by workflow design.
+- Last completed pre-reconciliation head: `77d8ece1af8408c48b53c3f3a251cd5227ebc5f4`.
+- Workflow [43607857603](https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43607857603) completed successfully on that head: validation, acceptance (six scenarios), and browser (build, strict app test, every-lesson clicktest, hosted-storage conformance, and feature browser tests). The manual full-inventory step is skipped by workflow design.
+- The subsequent selective PR95/PR96 reconciliation and additional audit notes are recorded below; the new head requires its own CI run before release sign-off.
 - Inventory: **129** files matching `seed/lesson_*.json`
 - First-pass screening: **129/129 lesson files opened and screened** for learner-facing worked/guided numerical examples.
 - This is **not** a claim that all 129 lessons have been mathematically verified. Theory/revision scenes, every displayed formula/table, assumptions and all edge cases still require a deeper second pass.
@@ -366,3 +367,22 @@ A targeted review was completed on the current PR #93 branch for Sampling Theory
 - Structurally checked all 160 mastery items: each pool contains 20 items, IDs are unique within pools, required stem/options/answer/explanation fields are present, answer keys are valid, and each pool has the 6 easy / 10 moderate / 4 hard distribution.
 
 This is a focused worked-example, formula-block and mastery-consistency check. It is not an exhaustive scene-by-scene proof audit of Sampling Theory T1–T8, and no module-level mathematical sign-off is implied.
+
+
+## Mathematics lessons T5–T16 — targeted second-pass review
+
+A targeted review checked both worked examples in each of Mathematics lessons T5–T16 (24 worked examples total), including continuity/Rolle examples, extrema, improper integrals, Moore–Penrose inverse and estimability, Taylor remainder, partial derivatives, Lagrange multipliers, multiple integrals, subspace dimensions, rank consistency, orthogonal projection and trace/inverse calculations. The inspected arithmetic and conclusions were internally consistent; no new worked-example defect was confirmed.
+
+The 12 corresponding mastery pools (T5–T16; 240 items total) were structurally checked. Each pool contains 20 items, has unique IDs, required stem/options/answer/explanation fields, valid answer keys, and the 6 easy / 10 moderate / 4 hard split. All 24 A–D statement/verdict items were cross-checked against their keyed options. Three parser-only mismatches were manually inspected and confirmed correct: ma-t12-m-18, ma-t16-m-15 and ma-t16-m-19. This is a targeted worked-example, key-alignment and structure check, not exhaustive mathematical verification of every Mathematics scene or mastery explanation.
+
+## Selective reconciliation of overlapping audit branches
+
+The overlap comparison identified corrections that should be integrated without replacing stronger material already in this branch:
+
+- **Probability T5:** imported the variance-to-mean ratio correction: it is a consistency check, not a unique family identifier. Preserved the exact hypergeometric ratio q(N−n)/(N−1) ≤ q, including equality at n = 1 and strict inequality for n > 1.
+- **Probability T7:** qualified the three-point Chebyshev extremal distribution to k ≥ 1; for 0 < k < 1, the bound exceeds one and is vacuous. Preserved this branch's more precise supporting-affine-function condition for Jensen equality and finite-moment/degenerate-case qualifications for Cauchy–Schwarz.
+- **Probability T13:** imported the corrected n = 4, Uniform(−1,1) tail probability P(|r| ≥ 0.97) = 0.03, and its independent numerical verifier.
+- **Time Series:** integrated the valid lower-bound correction γ₀ ≥ σ² (equality for white noise), the AR(1) process-SD standard-error multiplier, the exact ρₖ = 1/2 sample-mean variance calculation, and the qualified non-white-noise AR(1) prediction-interval statement. Clarified that invertibility is required to recover innovations from a chosen MA parameterisation; an observationally equivalent invertible canonical representation still permits forecasting from the observed process.
+- Retained this branch's correct warning that the sign of the formal AR(2) variance expression is not a general stationarity test; its Yule–Walker variance formula is derived under stationarity.
+
+Three independent numerical anchor scripts from the Probability audit branch were added: verify_probability_t5.py, verify_probability_t7.py and verify_probability_t13.py. These checks supplement, but do not replace, lesson-level mathematical review.

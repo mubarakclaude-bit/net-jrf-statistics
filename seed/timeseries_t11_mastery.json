@@ -87,7 +87,7 @@
       "format": "single",
       "topic": "timeseries-t11",
       "diff": "easy",
-      "stem": "Forecasting an MA process requires invertibility because:",
+      "stem": "The canonical MA representation is taken to be invertible for forecasting because:",
       "options": [
         "otherwise the forecast would be biased",
         "it guarantees a finite variance",
@@ -95,7 +95,7 @@
         "the unobserved shocks must be reconstructed from the observed past"
       ],
       "answer": "D",
-      "explanation": "The forecast involves εₜ, which is never observed, so it must be computed as εₜ = yₜ + θyₜ₋₁ + θ²yₜ₋₂ + ⋯ — convergent only when |θ| < 1. Without invertibility no forecast can be formed from observables at all. A finite MA has finite variance whatever its coefficients."
+      "explanation": "In a chosen MA parameterisation, invertibility makes the inverse filter converge so its innovations can be recovered from the observed past. A non-invertible MA process has an observationally equivalent invertible representation after rescaling the innovation variance; forecasts from observations use that canonical form."
     },
     {
       "id": "ts-t11-m-07",
@@ -177,7 +177,7 @@
       "statements": [
         "The forecast error variance increases with the horizon and converges to γ₀.",
         "The one-step error variance is σ² for any model with ψ₀ = 1.",
-        "A prediction interval must widen with the horizon.",
+        "For an AR(1) with φ ≠ 0, a prediction interval widens as the forecast horizon increases.",
         "An MA(2) process is forecastable three steps ahead."
       ],
       "verdicts": {
@@ -191,7 +191,7 @@
         },
         "C": {
           "tf": true,
-          "why": "True, except for white noise, where the limit is attained at the first step. For an AR(1) the fan-out factor is 1/√(1 − φ²): 1.40 at φ = 0.7 and 2.29 at φ = 0.9."
+          "why": "True for the stated non-white-noise AR(1): its error variance σ²(1−φ^(2k))/(1−φ²) increases with k and approaches γ₀. White noise is the constant-width exception; a finite MA reaches its limiting width after its order rather than widening indefinitely."
         },
         "D": {
           "tf": false,

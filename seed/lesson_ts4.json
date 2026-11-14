@@ -126,7 +126,7 @@
       "Check the three stationarity conditions BEFORE substituting into any formula.",
       "For an AR(1), ρ₁ is the coefficient; for an AR(2) it is not — divide by (1 − φ₂).",
       "A negative φ₂ ENLARGES 1 − φ₂, so it reduces ρ₁ relative to φ₁.",
-      "Any AR variance must exceed σ². A value below it means an error somewhere.",
+      "Any stationary AR variance is at least σ². It is strictly greater when at least one non-zero past-shock weight contributes; white noise gives equality.",
       "ρ₂ = φ₁ρ₁ + φ₂ is quicker than restarting the recursion from scratch.",
       "At φ₂ = 0 every AR(2) formula must collapse to the AR(1) one — a free check."
     ],
@@ -522,8 +522,8 @@
         },
         {
           "say": "A sanity check on the magnitude.",
-          "math": "AR(1) with φ = 0.5 would give 1/(1 − 0.25) = 1.3333\nAR(2) here gives 2.2436 — larger",
-          "why": "Adding a second positive lag increases persistence and so increases the variance. If the formula had returned something below 1, that would signal an error, since the variance of an AR process always exceeds σ²."
+          "math": "AR(1) with φ = 0.5 would give 1/(1 − 0.25) = 1.3333\nAR(2) here gives 2.2436 — larger\nIn general γ₀ ≥ σ², with strict inequality when at least one non-zero lag contributes.",
+          "why": "The current innovation contributes σ² and any non-zero past-shock weights add non-negative variance. Thus γ₀ is at least σ², and is strictly greater when the AR dynamics are non-zero. Here the positive second lag increases persistence and gives the larger value."
         }
       ],
       "after": "Answering the question above: at the k = 1 equation, where γ₋₁ had to be recognised as γ₁. The transferable procedure is to write the k = 1 to k = p equations with the symmetry applied, solve for the starting autocorrelations, then take k = 0 for the variance — remembering that only that last equation carries σ²."

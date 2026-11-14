@@ -203,7 +203,7 @@
       "format": "numeric",
       "topic": "timeseries-t9",
       "diff": "moderate",
-      "stem": "For an AR(1) with φ = 0.95, by what factor should a naive standard error σ̂/√n be multiplied?",
+      "stem": "For an AR(1) with φ = 0.95, by what factor should the naive standard error sᵧ/√n (where sᵧ estimates the process standard deviation √γ₀) be multiplied?",
       "options": [
         "about 39",
         "about 6.24",
@@ -212,7 +212,7 @@
       ],
       "answer": "B",
       "explanation": "The variance correction relative to γ₀/n is (1 + φ)/(1 − φ) = 1.95/0.05 = 39, so the STANDARD ERROR correction is √39 = 6.245. Option A is the variance factor, not the standard-error factor — confusing the two is the natural error here.",
-      "check": "A standard-error multiplier must be the square root of a variance multiplier, so it has to be the smaller of the two candidates."
+      "check": "Relative to the iid formula using the process standard deviation, the variance multiplier is (1+φ)/(1−φ) = 39, so the standard-error multiplier is √39 ≈ 6.245. If the naive formula instead used the innovation SD, the multiplier would be 1/(1−φ) = 20."
     },
     {
       "id": "ts-t9-m-13",
@@ -306,7 +306,7 @@
         },
         "C": {
           "tf": true,
-          "why": "True. With ρₖ = 1/2 at every lag the bracket is approximately n − 1, so Var(ȳₙ) ≈ (γ₀/n)(n − 1) tends to a positive constant — exactly 1 + 1/n with γ₀ = 2, matching the direct calculation."
+          "why": "True. Here ρₖ = 1/2 for every k ≥ 1, so the bracket is 1 + Σ(k=1..n−1)(1−k/n) = (n+1)/2. It is therefore O(n), cancelling the outer 1/n. With γ₀ = 2 this gives Var(ȳₙ) = (2/n)((n+1)/2) = 1 + 1/n, matching the direct calculation."
         },
         "D": {
           "tf": false,

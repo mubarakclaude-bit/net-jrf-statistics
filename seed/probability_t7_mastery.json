@@ -189,11 +189,11 @@
     "A, B, C and D"
    ],
    "answer": "A",
-   "explanation": "A is true — 1/x is convex. B is true: Chebyshev is Markov applied to (X − μ)². C is true, and it is why the bound cannot be improved. D is false — Markov requires non-negativity.",
+   "explanation": "A and B are true. C is true for k ≥ 1, when the three-point extremal distribution is a valid probability law; for 0 < k < 1 the Chebyshev bound exceeds 1 and is vacuous. D is false because Markov requires non-negativity.",
    "statements": [
     "E(1/X) ≥ 1/E(X) for a positive random variable.",
     "Chebyshev's inequality follows from Markov's.",
-    "There is a distribution attaining Chebyshev's bound exactly.",
+    "For k ≥ 1, there is a distribution attaining Chebyshev's bound exactly.",
     "Markov's inequality holds for any variable with a finite mean."
    ],
    "verdicts": {
@@ -207,7 +207,7 @@
     },
     "C": {
      "tf": true,
-     "why": "True: mass 1/(2k²) at each of μ ± kσ with the rest at μ. Verified at k = 2 and 3, where the variance comes to exactly 1.000000 and the tail probability exactly 1/k². So no smaller bound could be true for every distribution with a finite variance."
+     "why": "True for k ≥ 1: mass 1/(2k²) at each of μ ± kσ and the remaining mass at μ gives variance σ² and tail probability 1/k². For 0 < k < 1 the bound exceeds 1 and this construction would require a negative central mass."
     },
     "D": {
      "tf": false,
@@ -236,7 +236,7 @@
    "format": "single",
    "topic": "probability-t7",
    "diff": "moderate",
-   "stem": "Which distribution attains Chebyshev's bound at a given k?",
+   "stem": "For k ≥ 1, which distribution attains Chebyshev's bound?",
    "options": [
     "the exponential",
     "the normal",
@@ -244,7 +244,7 @@
     "none — the bound is never attained"
    ],
    "answer": "C",
-   "explanation": "Its variance is 2 × (1/(2k²)) × (kσ)² = σ² as required, and P(|X − μ| ≥ kσ) = 2/(2k²) = 1/k² exactly. Verified at k = 2, where the masses are 0.125, 0.75, 0.125, and at k = 3. Because this distribution satisfies the inequality's only assumption, no smaller bound is possible."
+   "explanation": "For k ≥ 1, put mass 1/(2k²) at each of μ ± kσ and the remaining mass 1 − 1/k² at μ. The remaining mass is non-negative precisely when k ≥ 1. Its variance is 2 × (1/(2k²)) × (kσ)² = σ², and P(|X − μ| ≥ kσ) = 1/k² exactly, so it attains Chebyshev's bound. For 0 < k < 1 the bound exceeds 1 and is vacuous; this three-point construction would require a negative central mass."
   },
   {
    "id": "pr-t7-m-15",
