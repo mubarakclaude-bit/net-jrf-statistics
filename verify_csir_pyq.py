@@ -116,6 +116,14 @@ def main() -> None:
     assert q50["topic"].startswith("inference-t7")
     assert "".join(sorted(k for k, value in q50["verdicts"].items() if value["tf"])) == "BCD"
     assert "Gamma(shape β+y, rate α+1)" in q50["explanation"] and "page 25" in q50["explanation"]
+    q54 = next(x for x in estimation["items"] if x["id"] == "csir-est-q54")
+    assert q54["year"] == 2017 and q54["session"] == "December" and q54["answer"] == "B"
+    assert q54["topic"].startswith("inference-t1")
+    assert "n/(n+1)" in q54["explanation"] and "page 28" in q54["explanation"]
+    q55 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q55")
+    assert q55["year"] == 2017 and q55["session"] == "December" and q55["answer"] == "C"
+    assert q55["topic"].startswith("sampling-t10")
+    assert "n(N−1)/[N(n−1)]" in q55["explanation"] and "page 28" in q55["explanation"]
     q53 = next(x for x in estimation["items"] if x["id"] == "csir-est-q53")
     assert q53["year"] == 2017 and q53["session"] == "December" and q53["answer"] == "A"
     assert q53["topic"].startswith("inference-t4")
