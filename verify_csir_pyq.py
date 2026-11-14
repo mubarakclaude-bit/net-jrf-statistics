@@ -41,7 +41,7 @@ def load_banks():
             assert item["answer"] in "ABCD", f"{item_id}: invalid answer key"
             assert len(item["options"]) == 4, f"{item_id}: expected four options"
             assert len(item.get("explanation", "")) >= 50, f"{item_id}: missing worked explanation"
-            for topic_id in re.findall(r"\\b[a-z]+-t\\d+\\b", item.get("topic", "")):
+            for topic_id in re.findall(r"\b[a-z]+-t\d+\b", item.get("topic", "")):
                 assert topic_id in lesson_topics, f"{item_id}: no lesson covers {topic_id}"
             explanation = item["explanation"]
             assert "Other-exam relevance:" in explanation, f"{item_id}: missing other-exam note"
