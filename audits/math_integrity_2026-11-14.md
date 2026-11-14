@@ -249,3 +249,13 @@ Added `verify_inference_second_pass.py` to guard these corrections. Further seco
 
 
 The new verifier is a top-level `verify_*.py` entry point so the repository's changed-verifier CI runner discovers and executes it.
+
+
+## Further second-pass precision fixes — Statistical Inference lessons 4.5, 4.7–4.8 and 4.16
+
+- **Lesson 4.5:** stated the identification and regularity conditions for method-of-moments consistency/asymptotic normality; added the Gauss–Markov assumptions and the positive-observed-cell condition for modified minimum chi-square.
+- **Lesson 4.7:** distinguished discrete 0–1 loss from the continuous-parameter MAP/posterior-mode limit, so Beta and Gamma examples no longer attribute a literal pointwise 0–1 loss rule to continuous parameters.
+- **Lesson 4.8:** added the full-support and finite-risk qualification to the unique-Bayes-rule admissibility result and clarified the discrete/continuous mode distinction.
+- **Lesson 4.16:** qualified Yates-correction statements so the lesson does not claim that every implementation always reduces the statistic.
+
+Added `verify_inference_decision_precision.py`; a top-level CI wrapper will run it together with the earlier second-pass checks.

@@ -14,7 +14,7 @@
     "Write a posterior as proportional to prior times likelihood and recognise the resulting kernel.",
     "State and apply the Beta–Binomial, Gamma–Poisson, Gamma–Exponential and Normal–Normal conjugate updates.",
     "Express a posterior mean as a weighted average of the prior mean and the MLE, and give the weight.",
-    "Give the Bayes estimator under squared-error, absolute-error and 0–1 loss, and say when they differ.",
+    "Give the Bayes estimator under squared-error and absolute-error loss; distinguish discrete 0–1 loss from the continuous-parameter MAP rule.",
     "Construct a credible interval and distinguish its interpretation from that of a confidence interval.",
     "State Jeffreys' prior, compute it for a Bernoulli probability, and say what an improper prior requires."
   ],
@@ -121,7 +121,7 @@
       "Dirichlet(α₁..α_k) + multinomial  →  Dirichlet(α₁+n₁, …, α_k+n_k).",
       "Inverse-Gamma is conjugate to the normal variance with the mean known.",
       "Posterior mean = w(prior mean) + (1−w)(MLE); w = (α+β)/(α+β+n), or β/(β+n), or the precision share.",
-      "Squared-error loss → posterior MEAN. Absolute-error → posterior MEDIAN. 0–1 loss → posterior MODE.",
+      "Squared-error loss → posterior MEAN. Absolute-error → posterior MEDIAN. Discrete 0–1 loss → posterior MODE; for a continuous parameter, MAP is the small-neighbourhood limit of this rule.",
       "Symmetric posterior: mean = median = mode. Right-skewed Gamma: mode < median < mean.",
       "Gamma(A,B) rate form: mean A/B, mode (A−1)/B, median ≈ (A−1/3)/B.",
       "Uniform prior on a probability = Beta(1,1); posterior mean (x+1)/(n+2), Laplace's rule of succession.",
@@ -287,7 +287,7 @@
           "recall": "A function L(θ, θ̂) measuring the penalty for estimating θ̂ when the truth is θ. The three standard choices are squared-error loss (θ − θ̂)², absolute-error loss |θ − θ̂|, and 0–1 loss, which charges 1 unless the estimate is exactly right.",
           "refresh": [
             "The loss function is not decoration. In the Bayesian framework the estimate is whatever minimises the expected loss computed under the posterior, so changing the loss changes the estimator even though the posterior is unchanged.",
-            "The three results worth memorising: squared error gives the posterior MEAN, absolute error gives the posterior MEDIAN, and 0–1 loss gives the posterior MODE. Nothing else in this topic is as reliably examined.",
+            "Squared error gives the posterior MEAN and absolute error the posterior MEDIAN. Discrete 0–1 loss gives the posterior MODE; for continuous parameters, use the MAP/posterior mode, understood as a shrinking-neighbourhood limit.",
             "This is also where decision theory, which is the next topic, joins on. Risk is expected loss averaged over the data; Bayes risk averages it over the prior as well. The vocabulary is shared and the exam moves between them freely."
           ]
         }
@@ -396,7 +396,7 @@
         {
           "t": "trap",
           "h": "Which summary of the posterior to report",
-          "body": "The posterior is the answer; a single number is a decision. Squared-error loss gives the posterior MEAN, absolute-error loss the posterior MEDIAN, and 0–1 loss the posterior MODE. For a symmetric posterior all three coincide, which is why the Normal–Normal case hides the distinction; for a skewed Beta or Gamma posterior they are three different numbers and the question has to say which loss applies."
+          "body": "The posterior is the answer; a single number is a decision. Squared-error loss gives the posterior MEAN and absolute-error loss the posterior MEDIAN. For a discrete parameter, 0–1 loss gives the posterior MODE; for a continuous Beta or Gamma parameter, the MAP/posterior mode is the limiting rule under shrinking-neighbourhood loss, not the literal pointwise 0–1 loss. For a symmetric posterior the usual summaries coincide; for a skewed posterior they differ."
         }
       ],
       "flow": {
@@ -517,7 +517,7 @@
       "title": "Worked in full — a Beta prior and a binomial sample",
       "mins": 7,
       "objective": "Produce the posterior, its three summaries, and the weighted-average decomposition, in one pass.",
-      "problem": "A prior for a success probability θ is Beta(2, 3). In n = 10 independent trials, x = 7 successes are observed. Find the posterior; give the Bayes estimate under squared-error loss and under 0–1 loss; and express the first as a weighted average of the prior mean and the MLE.",
+      "problem": "A prior for a success probability θ is Beta(2, 3). In n = 10 independent trials, x = 7 successes are observed. Find the posterior; give the Bayes estimate under squared-error loss and the MAP/posterior mode for the continuous parameter; and express the first as a weighted average of the prior mean and the MLE.",
       "steps": [
         {
           "say": "Write the two kernels, dropping everything free of θ.",
@@ -540,7 +540,7 @@
           "why": "Compare the MLE of 0.7 and the prior mean of 2/5 = 0.4. The posterior mean lies strictly between them, as a pooled average must."
         },
         {
-          "say": "0–1 loss wants the posterior mode.",
+          "say": "For continuous θ, use the MAP/posterior mode — the shrinking-neighbourhood analogue of discrete 0–1 loss.",
           "math": "mode = (A−1)/(A+B−2) = 8/13 = 0.6154",
           "why": "Both parameters exceed 1, so the mode exists and is interior. It is above the mean here because Beta(9, 6) is left-skewed — for a Beta with A > B the mode sits to the right of the mean."
         },
@@ -668,7 +668,7 @@
         {
           "say": "The posterior from the first blank is Beta(16, 14), which is close to symmetric but not exactly so.",
           "blank": {
-            "prompt": "Under 0–1 loss, what is the estimate?",
+            "prompt": "What is the MAP/posterior-mode estimate for this continuous parameter?",
             "answer": "the posterior mode, 15/28 = 0.5357",
             "accept": [
               "posterior mode 0.5357",
@@ -834,12 +834,12 @@
         {
           "claim": "A uniform prior on a probability makes the Bayes estimator identical to the MLE.",
           "tf": false,
-          "why": "It makes the posterior MODE identical to the MLE. The posterior mean, which is the estimator under squared-error loss, is (x + 1)/(n + 2) — Laplace's rule of succession. The claim is true only if 0–1 loss is specified."
+          "why": "It makes the posterior MODE identical to the MLE. For a continuous parameter this is the MAP rule, the limit of shrinking-neighbourhood loss; literal pointwise 0–1 loss is appropriate for discrete parameter spaces. The posterior mean, which minimises squared-error loss, is (x + 1)/(n + 2) — Laplace's rule of succession."
         },
         {
           "claim": "Under absolute-error loss the Bayes estimator is the posterior median.",
           "tf": true,
-          "why": "Squared error gives the mean, absolute error the median, 0–1 loss the mode. For a symmetric posterior all three agree, which is why the normal case does not reveal the distinction."
+          "why": "Squared error gives the mean and absolute error the median. Discrete 0–1 loss gives the mode; for continuous parameters, MAP is the shrinking-neighbourhood analogue. The normal case can hide the distinction because its posterior is symmetric."
         },
         {
           "claim": "Jeffreys' prior for a Bernoulli probability is the uniform prior on (0, 1).",
@@ -859,7 +859,7 @@
       "title": "Transfer — a skewed posterior and a loss that is not squared error",
       "mins": 7,
       "objective": "Handle a case where the three posterior summaries differ, and justify the one you report.",
-      "problem": "Counts of defects per batch are modelled as Poisson(λ). A Gamma(3, 2) prior, rate form, is used. A sample of n = 7 batches gives Σxᵢ = 14. Find the posterior, then give the Bayes estimate under squared-error loss, under 0–1 loss, and under absolute-error loss. Which differs most from the MLE, and why are they not all equal?",
+      "problem": "Counts of defects per batch are modelled as Poisson(λ). A Gamma(3, 2) prior, rate form, is used. A sample of n = 7 batches gives Σxᵢ = 14. Find the posterior, then give the Bayes estimate under squared-error loss, the MAP/posterior mode, and under absolute-error loss. Which differs most from the MLE, and why are they not all equal?",
       "hints": [
         "The posterior is a Gamma, and the Poisson update sends the sum of the counts to the shape.",
         "Mean and mode of a Gamma(A, B) in rate form are A/B and (A − 1)/B. The median has no closed form, but a standard approximation is (A − 1/3)/B.",
@@ -875,7 +875,7 @@
           "math": "A/B = 17/9 = 1.8889"
         },
         {
-          "say": "0–1 loss — the posterior mode.",
+          "say": "MAP/posterior mode — the continuous-parameter analogue of discrete 0–1 loss.",
           "math": "(A − 1)/B = 16/9 = 1.7778"
         },
         {
@@ -895,7 +895,7 @@
           "math": "mean − mode = 1/9 = 0.1111, the skew of Gamma(17,9) expressed in the summaries"
         }
       ],
-      "answer": "Posterior Gamma(17, 9). Squared-error estimate 1.889, 0–1 estimate 1.778, absolute-error estimate 1.852. The mode differs most from the MLE of 2.0. They are not equal because the Gamma posterior is right-skewed, and mean, median and mode coincide only for a symmetric posterior — so the loss function genuinely changes the answer here, unlike in the normal case.",
+      "answer": "Posterior Gamma(17, 9). Squared-error estimate 1.889, MAP estimate 1.778, absolute-error estimate 1.852. The mode differs most from the MLE of 2.0. They are not equal because the Gamma posterior is right-skewed, and mean, median and mode coincide only for a symmetric posterior — so the loss function genuinely changes the answer here, unlike in the normal case.",
       "check": "Three checks that catch most errors. All three summaries must lie between the prior mean 1.5 and the MLE 2.0. They must come in the order mode < median < mean for a right-skewed posterior. And the weighted-average decomposition must reproduce the mean exactly — if it does not, the shape and rate were swapped in the update."
     },
     {
@@ -908,7 +908,7 @@
         "The mechanism. Posterior ∝ likelihood × prior; the denominator normalises and is dropped. Write both kernels in the parameter, multiply so the exponents add, and recognise the result. No integration is needed in any conjugate case, which is what conjugacy is for.",
         "The five updates. Beta(α, β) with x of n → Beta(α + x, β + n − x). Gamma(α, β) with a Poisson sample → Gamma(α + Σxᵢ, β + n). Gamma(α, β) with an exponential sample → Gamma(α + n, β + Σxᵢ) — the reverse, and the commonest error in the topic. Normal prior with known variance → precisions add, 1/σₙ² = 1/τ² + n/σ², and the mean is the precision-weighted average. Dirichlet with a multinomial sample → add the category counts.",
         "The weighted average. In each case the posterior mean is w × (prior mean) + (1 − w) × (MLE), with w the prior's share of the pooled evidence: (α + β)/(α + β + n) for Beta–Binomial, β/(β + n) for Gamma–Poisson, and the precision share for Normal–Normal. The posterior mean therefore lies between the prior mean and the MLE, and the prior washes out as n grows.",
-        "The loss results. Squared error → posterior mean. Absolute error → posterior median. 0–1 loss → posterior mode. For a symmetric posterior all three coincide; for a skewed Beta or Gamma they are three different numbers and the ordering follows the skew. Asked for 'the Bayes estimator' with no loss named, give the posterior mean.",
+        "The loss results: squared error → posterior mean; absolute error → posterior median; discrete 0–1 loss → posterior mode. For a continuous parameter, use the MAP/posterior mode as the shrinking-neighbourhood analogue. For a skewed Beta or Gamma posterior the mean, median and mode differ. Asked for 'the Bayes estimator' with no loss named, give the posterior mean.",
         "Priors. Jeffreys' prior is ∝ √I(θ), which is invariant to reparameterisation; for a Bernoulli it is Beta(½, ½), not the uniform. A uniform prior on a probability is Beta(1, 1) and behaves like one success and one failure, so its posterior mean is Laplace's (x + 1)/(n + 2). Improper priors do not integrate but may still give proper posteriors, which must be checked.",
         "The distinction. A credible interval is a probability statement about the parameter given the data; a confidence interval is a statement about the procedure over repeated samples. They converge in large samples and mean different things in every sample, and the exam tests this directly.",
         "The habit. Derive the posterior from the kernels, then check it against the standard update rule. The two must agree, and when they do not, the exponents are out by one or the shape and rate have been swapped."
