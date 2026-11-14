@@ -141,3 +141,19 @@ Ten additional questions were added from visually inspected pages 61–70:
 - **Page 72:** held out because the independence assumptions needed for the gamma–beta and exponential-ratio statements are not explicit in the scan. Since the question asks for incorrect statements, those missing assumptions affect the answer key.
 
 Page 62 is keyed conservatively: only the Cramér theorem statement is accepted as written; no joint-normality or independence assumptions are silently added to the other two statements. Page 63 explicitly states the usual unbiased sample-variance convention used for the chi-square result. Page 67 uses the exponential rate parameterisation indicated by the matching printed expression.
+
+
+## Batch 10 — pages 73–84
+
+Ten more questions were added from visually inspected pages 74–77 and 79–84:
+- **Statistical Inference (3):** factorisation/sufficiency for a beta-family sample, p74; Cramér–Rao bound for the zero-truncated Poisson parameter, p77; 99% confidence interval for a population proportion, p79.
+- **Probability (5):** joint probability under a factorised exponential density, p75; a logarithmic transformation of a Uniform(0,1) variable, p76; CLT approximation for a sample mean, p81; existence of moments for a Pareto-type density, p83; probability mass at the minimum support point from a negative-binomial MGF, p84.
+- **Multivariate Analysis (1):** correlation of linear combinations of independent variables, p80.
+- **Stochastic Processes (1):** thinning of a Poisson arrival process and the Erlang waiting-time tail, p82.
+
+### Pages held out after inspection
+
+- **Page 73:** held out because two of the three displayed limits have finite limits (A and C), while the source asks for a single limit without a multiple-answer format.
+- **Page 78:** held out because the displayed density and conditional moments imply Var(Y)=15−16/π, which does not match the printed options as legible in the scan.
+
+The page 77 bound is derived from the displayed zero-truncated Poisson PMF. The page 79 interval uses the normal/Wald approximation and z=2.576 for 99% confidence. The page 82 answer uses independent thinning of the stated Poisson car-arrival process.
