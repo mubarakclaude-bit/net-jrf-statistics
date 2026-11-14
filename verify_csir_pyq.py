@@ -89,6 +89,7 @@ def main() -> None:
     q28 = next(x for x in estimation["items"] if x["id"] == "csir-est-q28")
     assert q28["type"] == "practice" and q28["year"] == 2020 and q28["session"] == "30 November"
     assert q28["answer"] == "C"
+    assert q28["topic"].startswith("multivariate-t7")
     assert "2Sₓᵧ=ρ(Sₓₓ+Sᵧᵧ)" in q28["explanation"]
     assert "usual sample correlation coefficient" in q28["explanation"]
     q05 = next(x for x in estimation["items"] if x["id"] == "csir-est-q05")
