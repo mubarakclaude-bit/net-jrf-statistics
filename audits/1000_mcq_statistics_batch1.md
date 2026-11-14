@@ -69,3 +69,17 @@ Rendered and checked the opening pages against the scan. Added eight more items 
 - **Page 11:** held out because the stated chi-square CDF value at 34.382 for 25 degrees of freedom is approximately 0.9000, which does not match any printed option.
 
 The page 4 item was standardised to the app's multi-select format because the source lists three true statements but does not provide a combination-choice list. Page 5's exact probability is 126/2^10=63/2^9 (option C).
+
+
+## Batch 5 — pages 13–24
+
+Six additional questions were imported from visually checked pages 13, 16, 17, 19, 21 and 22: four Probability questions (conditional expectation, exponential scale distribution, zero covariance versus independence, and a mixture-exponential hazard function) and two Statistical Inference questions (method-of-moments endpoints for a uniform distribution, and power of a Neyman–Pearson test). The explanations show the intermediate steps and state the assumptions used.
+
+### Pages held out after inspection
+
+- **Page 14:** held out because the support of the joint density is incomplete in the scan and the conditional notation in the options is ambiguous.
+- **Page 15:** held out because the two MLE/sufficiency statements are contradictory without a uniqueness condition; the item cannot be keyed unambiguously as printed.
+- **Page 18:** held out because the Markov graph labels/transitions are not sufficiently legible and the final two options are duplicated.
+- **Page 20:** held out because the degrees-of-freedom symbols in the chi-square statements are unreadable in the scan.
+- **Page 23:** held out because more than one listed statement is false as written, despite the single-answer wording.
+- **Page 24:** held out because the limit expression and normalising terms are not legible enough to transcribe without guessing.
