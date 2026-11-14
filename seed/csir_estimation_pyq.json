@@ -210,19 +210,43 @@
     },
     {
       "id": "csir-est-q103",
-      "format": "single",
+      "format": "multi",
       "year": 2011,
-      "session": "June",
-      "topic": "inference-t1 · inference-t4 · sufficiency and MLE for a Pareto-type model",
-      "stem": "A random sample has density f(x|θ)=θ/x² for x≥θ and 0 otherwise, where θ>0. Which statistic is the maximum-likelihood estimator of θ?",
+      "session": "December",
+      "topic": "inference-t1 · inference-t4 · sufficient statistic and MLE for a Pareto-type model",
+      "stem": "Let X₁,…,Xₙ be i.i.d. with density f(x|θ)=θ/x² for x≥θ and 0 otherwise, where θ>0. Define X₍₁₎=min(X₁,…,Xₙ) and X₍ₙ₎=max(X₁,…,Xₙ). Which statements are correct?",
       "options": [
-        "X₍₁₎=min(X₁,…,Xₙ)",
-        "X₍ₙ₎=max(X₁,…,Xₙ)",
-        "X̄",
-        "The sample median"
+        "Statements 1 and 4 only",
+        "Statements 1, 2 and 4 only",
+        "Statements 2 and 3 only",
+        "All four statements"
       ],
       "answer": "A",
-      "explanation": "The likelihood is L(θ)=θⁿ/(X₁²⋯Xₙ²) when θ≤every observation, and zero otherwise. The condition is θ≤X₍₁₎. In the allowed region, all data-dependent factors are fixed and θⁿ increases with θ. The largest permitted value is therefore θ̂MLE=X₍₁₎, the sample minimum. The factorisation also shows that the sample minimum is sufficient for θ. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+      "explanation": "Write the joint likelihood: L(θ)=θⁿ/(X₁²⋯Xₙ²) when 0<θ≤X₍₁₎, and L(θ)=0 otherwise. For sufficiency, separate it as gθ(X₍₁₎)h(X₁,…,Xₙ): the factor involving θ and the support restriction depends on the sample through X₍₁₎, while h=1/(∏Xᵢ²) is free of θ. Thus X₍₁₎ is sufficient. The product-based quantity in statement 2 alone is not sufficient because it does not determine X₍₁₎ and hence cannot determine the support restriction. For the MLE, within the allowed range 0<θ≤X₍₁₎, θⁿ increases as θ increases. The largest allowed value is therefore θ̂MLE=X₍₁₎. X₍ₙ₎ is not the MLE. So statements 1 and 4 only are correct. Other-exam relevance: sufficient statistics, factorisation and maximum-likelihood estimation are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where inference is in the syllabus. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations.",
+      "statements": [
+        "X₍₁₎ is a sufficient statistic for θ.",
+        "1/(n∏ᵢ₌₁ⁿXᵢ²) is a sufficient statistic for θ.",
+        "X₍ₙ₎ is the maximum-likelihood estimator of θ.",
+        "X₍₁₎ is the maximum-likelihood estimator of θ."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The joint density is [θⁿ/(∏Xᵢ²)] I(0<θ≤X₍₁₎). The sample enters the parameter-dependent support through X₍₁₎, so the factorisation theorem gives sufficiency."
+        },
+        "B": {
+          "tf": false,
+          "why": "This quantity does not retain the sample minimum. Two samples can have the same product but different minima, and therefore different likelihood support in θ; it is not sufficient."
+        },
+        "C": {
+          "tf": false,
+          "why": "The likelihood is zero when θ exceeds the sample minimum. The maximum observation does not determine the largest allowed θ."
+        },
+        "D": {
+          "tf": true,
+          "why": "On 0<θ≤X₍₁₎, the likelihood is proportional to θⁿ and increases with θ. Its maximum is attained at θ=X₍₁₎."
+        }
+      }
     },
     {
       "id": "csir-est-q114",
