@@ -8,7 +8,11 @@ R=Path(__file__).resolve().parent
 L=json.loads((R/"seed/lesson_design_t1.json").read_text(encoding="utf-8"))
 P=json.loads((R/"seed/design_t1_mastery.json").read_text(encoding="utf-8"))
 assert L["id"]=="designt1" and L["topicId"]=="design-t1" and L["moduleId"]=="design"
-assert len(L["scenes"])==15 and L["scenes"][-1]["setId"]=="design_t1_mastery"
+assert len(L["scenes"])==16 and L["scenes"][-1]["setId"]=="design_t1_mastery"
+q31_scene=next(s for s in L["scenes"] if s["id"]=="s15")
+assert "two-way" in q31_scene["title"].lower()
+assert "Σβᵢ=0" in q31_scene["blocks"][1]["body"] and "Σγⱼ=0" in q31_scene["blocks"][1]["body"]
+assert "all four listed quantities" in q31_scene["blocks"][4]["body"]
 assert L["scenes"].count(L["scenes"][-1])==1
 assert len(P["items"])==P["count"]==20
 assert Counter(q["diff"] for q in P["items"])=={"easy":6,"moderate":10,"hard":4}
