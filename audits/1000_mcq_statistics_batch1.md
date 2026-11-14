@@ -334,3 +334,28 @@ Seven further questions were imported from pages 193, 194, 198, 199–200, 201, 
 - **Page 197:** the function 2x/a² on 0<x<a integrates to one for every a>0, so the instruction to determine a has no unique answer; the printed choices do not resolve this.
 
 Page 202 uses the exact hypergeometric model: C(9750,100)/C(10000,100)≈0.0785077. The simpler binomial approximation is ≈0.07952 and is noted in the explanation.
+
+
+## Batch 21 — pages 205–216
+
+Eleven additional questions were imported from pages 205–216, all in Probability:
+- Two-colour draw without replacement from a bag with ratio information, p205.
+- Complement counting for three balls not all of one colour, p206.
+- Cube-face corner incidence, p208.
+- At least one success among three independent race outcomes, p209.
+- Mixture of two toffee boxes with a parameter solved from a different-colour draw probability, p210.
+- Arrangements with a fixed cover, ordered theory pages and a contiguous drawing block, p211.
+- Repeated-letter arrangements with restrictions on vowel positions, p212.
+- At least one named player selected across two independent teams, p213.
+- Parity of the product of three fair dice, p214.
+- Total probability for choosing one of two bags, p215.
+- Three different colours in three draws with replacement, p216.
+
+### Source-key correction
+
+- **Page 208:** the source marks 1/5, but there are 8 corners and C(6,3)=20 equally likely triples of face positions. The correct probability is 8/20=2/5. The option was corrected and the discrepancy recorded.
+- **Page 216:** the derived probability is 8/81, which is not among the four numerical options; the source's 'None of these' option is therefore correct.
+
+### Page held out
+
+- **Page 207:** held out because 'right place' is not defined precisely (correct square versus correct row), and none of the printed formula options unambiguously matches either natural interpretation.
