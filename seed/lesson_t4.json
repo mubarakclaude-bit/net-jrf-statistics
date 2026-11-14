@@ -1,0 +1,674 @@
+{
+  "id": "inferencet4",
+  "moduleId": "inference",
+  "topicId": "inference-t4",
+  "title": "Maximum Likelihood Estimation: Computation, Invariance and Properties",
+  "breadcrumb": "Statistical Inference → Point Estimation → Maximum likelihood estimation",
+  "engine": "B",
+  "engineName": "Estimation and inference — choose the parameter value that makes the observed sample most likely",
+  "estMin": 68,
+  "version": "1.0",
+  "status": "approved",
+  "provenance": "Authored for the UGC NET/JRF Statistics Paper 2 learning module, November 2026, to fill the catalogued Statistical Inference T4 lesson gap. The lesson uses beginner-first derivations and worked examples for likelihood construction, log-likelihood differentiation, parameter-dependent support, constrained and non-unique maxima, invariance, and the normal MLE. The existing 20-item mastery pool remains the unseen assessment; CSIR-UGC NET PYQs are stored separately in the question bank with their source-year metadata. Numerical examples and distributional identities were recomputed before inclusion.",
+  "objectives": [
+    "Define the likelihood for an observed sample and distinguish it from a probability distribution for the parameter.",
+    "Construct and simplify a likelihood, take its logarithm, and solve the score equation for an interior maximum.",
+    "Check parameter restrictions, parameter-dependent support and boundary values before accepting a stationary point.",
+    "Find MLEs for Bernoulli, exponential, normal and uniform models.",
+    "Apply the invariance property to estimate a function of an unknown parameter.",
+    "Explain why MLEs can be biased or non-unique and state the regularity conditions behind their large-sample properties."
+  ],
+  "prereq": [
+    {
+      "id": "p1",
+      "name": "Probability mass functions and probability density functions",
+      "why": "The likelihood is built from the sample's joint probability or density. You need to know what is multiplied and what is held fixed."
+    },
+    {
+      "id": "p2",
+      "name": "Independence and the joint distribution of a random sample",
+      "why": "For an iid sample, the joint likelihood is the product of the individual densities or mass functions."
+    },
+    {
+      "id": "p3",
+      "name": "Differentiation, logarithms and maxima of functions",
+      "why": "The usual interior MLE is found by differentiating the log-likelihood, solving the score equation and checking that the result is a maximum."
+    },
+    {
+      "id": "p4",
+      "name": "Sample mean, sample variance and order statistics",
+      "why": "The common answers are x̄, the variance with divisor n, and the sample maximum. You should recognise each immediately."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. The existing unseen pool contains 20 questions and follows the module's 3 easy / 5 moderate / 2 hard draw.",
+    "draw": 10,
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    }
+  },
+  "refs": [
+    {
+      "title": "Statistical Inference, 2nd edition",
+      "where": "Chapter 7, especially the sections on maximum likelihood and invariance",
+      "site": "Casella and Berger",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-14",
+      "why": "A standard graduate-level reference for likelihood construction, MLE invariance, regularity conditions and asymptotic behaviour.",
+      "isbn": "978-0534243128"
+    },
+    {
+      "title": "Mathematical Statistics 18.655 — lecture notes",
+      "where": "Likelihood methods and large-sample estimation",
+      "site": "MIT OpenCourseWare",
+      "url": "https://ocw.mit.edu/courses/18-655-mathematical-statistics-spring-2016/pages/lecture-notes/",
+      "type": "Graduate lecture notes",
+      "free": true,
+      "checked": "2026-11-14",
+      "why": "A rigorous companion for learners who want to see the score equation, Fisher information and asymptotic normality developed beyond the exam-level derivations."
+    },
+    {
+      "title": "Theory of Point Estimation, 2nd edition",
+      "where": "Maximum likelihood estimation and its asymptotic properties",
+      "site": "Lehmann and Casella",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-14",
+      "why": "A deeper reference for non-unique estimators, parameter-space restrictions and the conditions needed for asymptotic efficiency.",
+      "isbn": "978-0387985022"
+    }
+  ],
+  "revision": {
+    "sheet": [
+      "Likelihood: L(θ;x) = ∏ᵢ f(xᵢ;θ) for an iid continuous sample, or ∏ᵢ p(xᵢ;θ) for a discrete sample. The observed x values are fixed; θ varies.",
+      "A likelihood is NOT a probability density for θ. It need not integrate to 1 over the parameter space.",
+      "Log-likelihood: ℓ(θ) = log L(θ). Since log is strictly increasing, L and ℓ have the same maximiser.",
+      "Interior candidate: solve U(θ) = dℓ/dθ = 0, then check the second derivative and compare any parameter-space boundaries.",
+      "Bernoulli(p): p̂ = x̄ = (number of successes)/n.",
+      "Exponential(rate λ): λ̂ = n/Σxᵢ = 1/x̄. The MLE of the mean 1/λ is 1/λ̂ = x̄.",
+      "Uniform(0,θ): θ̂ = x₍ₙ₎, the sample maximum. The likelihood is zero below x₍ₙ₎ and decreases above it.",
+      "Normal(μ,σ²), both unknown: μ̂ = x̄ and σ̂² = Σ(xᵢ−x̄)²/n. The unbiased estimator uses n−1 instead.",
+      "Normal sample identity: nσ̂²/σ² ~ χ²(n−1). Do not put n−1 in the numerator when σ̂² is the MLE.",
+      "Invariance: if θ̂ is an MLE of θ, then g(θ̂) is an MLE of g(θ) under the induced parameterisation.",
+      "Constrained MLE: maximise only over the allowed parameter space. If x̄ is outside μ≤c, the normal-mean MLE is c.",
+      "Non-unique MLE: a flat likelihood over a feasible interval gives every point in that interval as an MLE.",
+      "MLEs need not be unbiased or unique in finite samples. Consistency, asymptotic normality and efficiency require regularity conditions."
+    ],
+    "cards": [
+      [
+        "What is the likelihood?",
+        "The joint probability or density of the observed sample, viewed as a function of the unknown parameter. The data are fixed; the parameter varies."
+      ],
+      [
+        "Why take logarithms?",
+        "The log changes a product into a sum and is strictly increasing, so it keeps the same maximiser."
+      ],
+      [
+        "What is the score equation?",
+        "Differentiate the log-likelihood with respect to the parameter and set the derivative to zero. Then check that the candidate is actually a maximum."
+      ],
+      [
+        "MLE of a Bernoulli probability?",
+        "The sample proportion: p̂ = x̄ = number of successes divided by n."
+      ],
+      [
+        "MLE of an exponential rate?",
+        "λ̂ = n/ΣXᵢ = 1/x̄. The MLE of the mean is x̄ by invariance."
+      ],
+      [
+        "MLE of the upper endpoint of U(0,θ)?",
+        "The sample maximum x₍ₙ₎. Values below it have likelihood zero; above it the density height decreases."
+      ],
+      [
+        "Normal MLE of variance versus unbiased variance?",
+        "σ̂² = SSE/n; s² = SSE/(n−1). The MLE is smaller because it uses the larger denominator."
+      ],
+      [
+        "Does the MLE have to be unbiased?",
+        "No. The normal MLE of variance and the exponential rate MLE are standard finite-sample biased examples."
+      ],
+      [
+        "What does invariance say?",
+        "Apply the parameter function to the MLE: if θ̂ maximises the likelihood for θ, then g(θ̂) maximises the induced likelihood for g(θ)."
+      ],
+      [
+        "What if several parameter values give the same maximum?",
+        "All of them are MLEs. State the full set; do not invent a unique estimate."
+      ]
+    ],
+    "traps": [
+      "The likelihood is not a probability distribution over θ. Do not normalise it unless you are doing Bayesian inference.",
+      "The score equation gives candidates, not an automatic maximum. Check the sign of the second derivative, boundaries and the support.",
+      "For a normal sample, the MLE variance divides by n, not n−1. The n−1 divisor gives the unbiased sample variance.",
+      "For U(0,θ), the MLE is the sample maximum, not the sample mean.",
+      "If the support depends on θ, the likelihood may be maximised at a boundary even when the derivative is never zero.",
+      "A likelihood can be flat on an interval. MLEs need not be unique.",
+      "Consistency does not imply unbiasedness, and asymptotic efficiency does not mean the estimator is best for every finite sample."
+    ],
+    "tricks": [
+      {
+        "hook": "Freeze the data, move θ",
+        "why": "That is the difference between a likelihood and a probability distribution. It prevents the common mistake of treating L(θ) as a density for θ."
+      },
+      {
+        "hook": "Product first, log second",
+        "why": "Write the joint likelihood before taking logs. The log makes differentiation easier and does not change the maximiser."
+      },
+      {
+        "hook": "Check the support before differentiating",
+        "why": "Uniform and shifted models often put the maximum at an endpoint or over an interval."
+      },
+      {
+        "hook": "n for the MLE, n−1 for unbiased variance",
+        "why": "The normal MLE uses the likelihood denominator n. The correction to n−1 is a separate bias adjustment."
+      },
+      {
+        "hook": "A function of an MLE is an MLE",
+        "why": "Use invariance for odds, reciprocal means, probabilities and powers instead of starting a second optimisation."
+      }
+    ],
+    "shortcuts": [
+      "Bernoulli(p): p̂ = x̄.",
+      "Poisson(λ): λ̂ = x̄.",
+      "Exponential(rate λ): λ̂ = 1/x̄.",
+      "Uniform(0,θ): θ̂ = x₍ₙ₎.",
+      "Normal(μ,σ²): μ̂ = x̄ and σ̂² = SSE/n.",
+      "For a constrained normal mean μ≤c: μ̂ = min(x̄,c); for μ≥c: μ̂ = max(x̄,c)."
+    ],
+    "remember": [
+      "A likelihood is a function of the parameter after the observed data have been fixed.",
+      "A score root is only a candidate. Check parameter restrictions, support and boundaries.",
+      "MLEs are not guaranteed to be unbiased or unique.",
+      "For a normal sample, nσ̂²/σ² has a chi-square distribution with n−1 degrees of freedom."
+    ]
+  },
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "title": "Before the lesson — four things it will assume",
+      "mins": 6,
+      "objective": "Refresh the probability, calculus and sample-statistic facts that make maximum likelihood a short calculation rather than a long derivation.",
+      "body": [
+        "Maximum likelihood estimation asks a simple question: among all parameter values the model allows, which one makes the data we actually observed most likely?",
+        "The calculation is usually short. The mistakes come from forgetting what is held fixed, overlooking a parameter restriction, or treating a stationary point as the answer without checking the support."
+      ],
+      "items": [
+        {
+          "ask": "For an iid sample X₁,…,Xₙ with density f(x;θ), write the joint density.",
+          "recall": "f(x₁,…,xₙ;θ) = ∏ᵢ₌₁ⁿ f(xᵢ;θ).",
+          "refresh": [
+            "Independence lets the joint density factor into a product.",
+            "Once the sample is observed, x₁,…,xₙ are fixed numbers. The product is then viewed as a function of θ."
+          ]
+        },
+        {
+          "ask": "What does the logarithm do to a product, and does it change where the maximum occurs?",
+          "recall": "log(∏aᵢ) = Σlog(aᵢ). The logarithm is strictly increasing, so it preserves the maximiser.",
+          "refresh": [
+            "A product of many probabilities or densities is awkward to differentiate. Its logarithm is a sum, which is much easier.",
+            "Because log is strictly increasing, maximising L(θ) and maximising log L(θ) give the same parameter value."
+          ]
+        },
+        {
+          "ask": "Differentiate a simple function and state the second-derivative test for an interior maximum.",
+          "recall": "Find f′(θ)=0 for a stationary point. If f″(θ)<0 there, the point is a local maximum.",
+          "refresh": [
+            "The derivative being zero does not prove a maximum. It could be a minimum or a flat stationary point.",
+            "The second-derivative test is local. If the parameter space has a boundary, compare the boundary values too."
+          ]
+        },
+        {
+          "ask": "What are x̄ and x₍ₙ₎?",
+          "recall": "x̄ is the sample mean. x₍ₙ₎ is the largest observation, the sample maximum.",
+          "refresh": [
+            "Many common MLEs simplify to one of these two sample summaries.",
+            "For a uniform distribution with an unknown upper endpoint, the largest observation is the key value because the endpoint cannot be below any observed data point."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "title": "The data are fixed — the parameter is what moves",
+      "mins": 5,
+      "objective": "Build the correct mental picture of a likelihood before differentiating it.",
+      "body": [
+        "Suppose a coin is tossed ten times and seven heads are observed. The unknown parameter is p, the probability of heads. For a particular value of p, the probability of this exact sequence is p⁷(1−p)³.",
+        "Now freeze the observed result — seven heads and three tails. Let p move from 0 to 1. The expression p⁷(1−p)³ changes. The value of p where it is largest is the maximum likelihood estimate.",
+        "The important distinction is this: the likelihood is not a probability distribution for p. It is the probability of the observed data, treated as a function of p. It does not have to integrate to one over p.",
+        "Maximum likelihood does not promise an unbiased answer or a unique answer in every sample. It gives the parameter value that maximises the likelihood, subject to the model's parameter space."
+      ],
+      "aside": {
+        "h": "Why this method is so common",
+        "body": "The likelihood uses the full joint distribution of the sample. Under suitable regularity conditions, MLEs are consistent, asymptotically normal and asymptotically efficient. Those are large-sample results, not guarantees of finite-sample unbiasedness."
+      },
+      "ask": {
+        "q": "If a sample gives 7 heads and 3 tails, why is p̂ = 0.7 plausible?",
+        "nudge": "Write L(p)=p⁷(1−p)³ and think about which value balances the two factors."
+      },
+      "scenario": {
+        "teaser": "A quality inspector estimates the defect rate from a batch.",
+        "title": "Ten components, seven conforming successes",
+        "body": [
+          "A production line is sampled. Each component is classified as conforming or defective, and the model treats the outcomes as independent Bernoulli observations with an unknown success probability p.",
+          "The sample contains seven conforming components out of ten. The likelihood is proportional to p⁷(1−p)³. The value p=0.7 gives the highest likelihood because it matches the observed proportion.",
+          "The same idea works for any number of Bernoulli observations: the MLE is the sample proportion. It is also unbiased in this particular model, but do not generalise that property to every MLE."
+        ],
+        "q": "If the sample contains 18 conforming components out of 25, what is the MLE of p?",
+        "answer": "p̂ = 18/25 = 0.72. For Bernoulli data the MLE is the observed success proportion.",
+        "link": "The next scene derives this result by differentiating the log-likelihood."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "title": "Watch the likelihood peak at the data's preferred value",
+      "mins": 6,
+      "objective": "See how the exponential likelihood produces a rate estimate from the sample total.",
+      "viz": {
+        "type": "exp-likelihood",
+        "n": 5,
+        "sumx": 10
+      },
+      "body": [
+        "Take five independent observations from an exponential distribution with rate λ. The likelihood is L(λ)=λ⁵ exp(−10λ), apart from factors that do not involve λ.",
+        "The curve rises from zero, reaches one peak, and then falls. The peak is the MLE. Its location depends on two numbers: the sample size n and the sum of the observations.",
+        "The log-likelihood is 5 log λ − 10λ. Differentiating gives 5/λ − 10 = 0, so λ̂ = 0.5. The MLE of the mean 1/λ is then 2 by invariance."
+      ],
+      "ask": {
+        "q": "What changes in the likelihood if the sample total increases but the sample size stays the same?",
+        "nudge": "Use λ̂ = n/Σxᵢ. A larger total moves the peak towards smaller rate values."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "title": "The four-step likelihood method",
+      "mins": 9,
+      "objective": "Use one reliable sequence for constructing, maximising and checking a likelihood.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "1. Write the likelihood",
+          "body": "For an iid sample x₁,…,xₙ, L(θ) = ∏ᵢ f(xᵢ;θ) for a continuous model, or ∏ᵢ p(xᵢ;θ) for a discrete model. Treat the observed x values as fixed."
+        },
+        {
+          "t": "formula",
+          "h": "2. Take logarithms",
+          "body": "ℓ(θ) = log L(θ) = Σᵢ log f(xᵢ;θ). A strictly increasing transformation does not change the maximiser, and sums are easier to differentiate than products."
+        },
+        {
+          "t": "formula",
+          "h": "3. Solve the score equation",
+          "body": "U(θ) = dℓ(θ)/dθ = 0. Solve for an interior candidate. If there are several parameters, take partial derivatives with respect to each one."
+        },
+        {
+          "t": "note",
+          "h": "4. Check the candidate",
+          "body": "Check the second derivative, compare the likelihood at boundaries, and confirm the estimate belongs to the parameter space. If the support depends on θ, write the support restriction before differentiating."
+        },
+        {
+          "t": "trap",
+          "h": "A zero derivative is not the whole answer",
+          "body": "The score equation can have no root, multiple roots, or a root that is a minimum. A likelihood can also be maximised at a boundary or be flat over an interval."
+        },
+        {
+          "t": "note",
+          "h": "A function of an MLE",
+          "body": "If θ̂ is an MLE of θ, then g(θ̂) is an MLE of g(θ) under the induced parameterisation. This is the invariance property. It saves a fresh maximisation when the question asks for a probability, reciprocal, odds or power."
+        }
+      ],
+      "ask": {
+        "q": "Why should the support restriction be written before the derivative?",
+        "nudge": "For Uniform(0,θ), values θ smaller than the sample maximum have likelihood zero. The maximum is found at the edge of the allowed region."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "title": "Worked in full — the Bernoulli success probability",
+      "mins": 8,
+      "objective": "Derive the sample-proportion MLE from the likelihood, one algebra step at a time.",
+      "problem": "A random sample X₁,…,Xₙ comes from Bernoulli(p), where Xᵢ=1 denotes success and Xᵢ=0 denotes failure. Derive the MLE of p. Evaluate it when n=10 and the sample contains 7 successes.",
+      "steps": [
+        {
+          "say": "Write the probability of one observation and multiply across the independent sample.",
+          "math": "P(Xᵢ=xᵢ) = pˣⁱ(1−p)^(1−xᵢ)\nL(p) = ∏ᵢ pˣⁱ(1−p)^(1−xᵢ)"
+        },
+        {
+          "say": "Collect the powers. The sum of the zero-one observations is the number of successes.",
+          "math": "L(p) = p^(Σxᵢ)(1−p)^(n−Σxᵢ)"
+        },
+        {
+          "say": "Take the log-likelihood.",
+          "math": "ℓ(p) = (Σxᵢ)log p + (n−Σxᵢ)log(1−p)"
+        },
+        {
+          "say": "Differentiate and set the score equal to zero.",
+          "math": "dℓ/dp = (Σxᵢ)/p − (n−Σxᵢ)/(1−p) = 0\n(Σxᵢ)(1−p) = p(n−Σxᵢ)"
+        },
+        {
+          "say": "Collect the terms containing p.",
+          "math": "Σxᵢ = np\np̂ = (Σxᵢ)/n = x̄"
+        },
+        {
+          "say": "Substitute the observed sample proportion.",
+          "math": "p̂ = 7/10 = 0.7"
+        }
+      ],
+      "after": "The second derivative is −(Σxᵢ)/p² − (n−Σxᵢ)/(1−p)², which is negative for 0<p<1 when both outcomes occur. Thus the stationary point is a maximum. If all observations are successes or all are failures, the maximum is at the boundary p=1 or p=0.",
+      "ask": {
+        "q": "Does the same derivation work if the sample contains 18 successes out of 25?",
+        "nudge": "Only the total number of successes and the sample size enter the likelihood."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "title": "Pause and recall",
+      "mins": 4,
+      "objective": "Retrieve the key distinctions before moving to other families.",
+      "intro": "Answer each in your head before revealing. The aim is to retrieve the method, not reread it.",
+      "items": [
+        {
+          "q": "What is held fixed when maximising a likelihood?",
+          "a": "The observed sample. The likelihood is viewed as a function of the unknown parameter."
+        },
+        {
+          "q": "Why can we maximise the log-likelihood instead?",
+          "a": "The logarithm is strictly increasing, so it preserves the maximiser and turns products into sums."
+        },
+        {
+          "q": "What does the score equation give?",
+          "a": "Interior stationary candidates. They still need a maximum check and a parameter-space/boundary check."
+        },
+        {
+          "q": "What is the MLE of a Bernoulli success probability?",
+          "a": "The sample proportion x̄."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "title": "Your turn, with the scaffolding removed — exponential rate",
+      "mins": 8,
+      "objective": "Use the same likelihood steps for a continuous model and then apply invariance.",
+      "problem": "X₁,…,X₅ are iid Exponential(rate λ), with density f(x;λ)=λe^(−λx), x>0. The observed sample total is Σxᵢ=10. Find the MLE of λ, the MLE of the mean 1/λ, and the MLE of P(X>2).",
+      "steps": [
+        {
+          "say": "Write the likelihood and log-likelihood.",
+          "math": "L(λ) = λ⁵e^(−10λ)\nℓ(λ) = 5logλ − 10λ"
+        },
+        {
+          "say": "Differentiate and solve the score equation.",
+          "blank": {
+            "prompt": "Give λ̂.",
+            "answer": "0.5",
+            "accept": [
+              "0.5",
+              "1/2"
+            ],
+            "hint": "The score is 5/λ−10. Set it to zero and solve."
+          },
+          "why": "λ̂ = n/Σxᵢ = 5/10 = 0.5. The second derivative −5/λ² is negative."
+        },
+        {
+          "say": "Use invariance for the mean 1/λ.",
+          "blank": {
+            "prompt": "Give the MLE of the mean.",
+            "answer": "2",
+            "accept": [
+              "2",
+              "2.0"
+            ],
+            "hint": "Apply the function g(λ)=1/λ to the MLE."
+          },
+          "why": "The MLE of 1/λ is 1/λ̂ = 1/0.5 = 2."
+        },
+        {
+          "say": "For an exponential variable, P(X>t)=e^(−λt). Apply invariance again.",
+          "blank": {
+            "prompt": "Give the MLE of P(X>2).",
+            "answer": "e^(−1) ≈ 0.3679",
+            "accept": [
+              "e^-1",
+              "exp(-1)",
+              "0.3679",
+              "0.368"
+            ],
+            "hint": "Substitute λ̂=0.5 into e^(−2λ)."
+          },
+          "why": "The estimate is e^(−2×0.5)=e^(−1)≈0.3679."
+        }
+      ],
+      "after": "The rate estimate and its transformed quantities are all MLEs. Do not confuse the rate λ with the mean 1/λ: their estimates are reciprocals."
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "title": "Invariance, boundaries and non-unique maxima",
+      "mins": 9,
+      "objective": "Handle the cases where a routine derivative is not enough.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Invariance",
+          "body": "If θ̂ maximises L(θ), then g(θ̂) is an MLE of g(θ). Example: for Exponential(rate λ), λ̂=1/x̄, so the MLE of the mean 1/λ is x̄."
+        },
+        {
+          "t": "worked",
+          "h": "A constrained normal mean",
+          "body": "If Xᵢ~N(μ,1) and μ is restricted to μ≤5, the unrestricted MLE is x̄. If x̄=6, it is not allowed. The likelihood is largest at the nearest allowed value, so μ̂=5."
+        },
+        {
+          "t": "worked",
+          "h": "Uniform(0,θ)",
+          "body": "The likelihood is L(θ)=θ⁻ⁿ when θ≥x₍ₙ₎ and zero when θ<x₍ₙ₎. On the allowed region θ⁻ⁿ decreases as θ increases, so the maximum is at the smallest allowed value: θ̂=x₍ₙ₎."
+        },
+        {
+          "t": "worked",
+          "h": "A non-unique MLE",
+          "body": "For Uniform(θ,θ+1), every θ satisfying x₍ₙ₎−1≤θ≤x₍₁₎ gives the same likelihood height. If that interval contains several values, every one is an MLE. Report the full set or the listed valid values."
+        },
+        {
+          "t": "note",
+          "h": "Parameter-space restrictions matter",
+          "body": "A constrained maximum can lie at a boundary. A parameter-dependent support can create a flat feasible interval or a one-sided maximum. Always compare the likelihood over the entire allowed set."
+        }
+      ],
+      "ask": {
+        "q": "For a sample from Uniform(0,θ), why is the derivative alone not the safest way to find the MLE?",
+        "nudge": "The likelihood is zero below x₍ₙ₎ and decreases above it. The maximum occurs at the boundary x₍ₙ₎."
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s8",
+      "title": "The sample maximum sets the uniform endpoint",
+      "mins": 7,
+      "objective": "See why the MLE of the upper endpoint is the largest observed value.",
+      "viz": {
+        "type": "unif-likelihood",
+        "n": 5,
+        "xmax": 4.2
+      },
+      "body": [
+        "For Xᵢ~Uniform(0,θ), the density of each observation is 1/θ when 0<xᵢ<θ, and zero otherwise. The joint likelihood is θ⁻ⁿ only when every observation is below θ.",
+        "That support condition is θ>x₍ₙ₎. Below the largest observation, the likelihood is zero because the model could not have produced the data. Above it, the likelihood decreases as θ grows.",
+        "Therefore the maximum is at the smallest endpoint value that still permits the sample: θ̂=x₍ₙ₎. This is a boundary maximum, not a score-equation solution."
+      ],
+      "scenario": {
+        "teaser": "The largest measurement determines the endpoint of a uniform model.",
+        "title": "A sensor with an unknown upper operating limit",
+        "body": [
+          "Five readings from a sensor are 0.8, 1.2, 2.1, 3.5 and 4.2. The model says each reading is uniformly distributed between 0 and an unknown upper limit θ.",
+          "An upper limit below 4.2 is impossible because the sample already contains a reading of 4.2. Any larger limit is possible, but a larger θ spreads the same probability over a wider interval and lowers the density.",
+          "The most likely allowed value is therefore θ̂=4.2, the sample maximum."
+        ],
+        "q": "If the largest reading increases to 5.1, what happens to the MLE?",
+        "answer": "It becomes 5.1. The MLE of the upper endpoint tracks the sample maximum."
+      },
+      "ask": {
+        "q": "What is the likelihood at θ=4.0 when the sample maximum is 4.2?",
+        "nudge": "At least one observation lies outside the model's support."
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s9",
+      "title": "Now without the steps — the normal MLE",
+      "mins": 10,
+      "objective": "Derive both normal MLEs and keep the n versus n−1 denominators straight.",
+      "problem": "A sample of n=16 from N(μ,σ²), with both parameters unknown, has x̄=5 and Σ(xᵢ−x̄)²=60. Derive the MLEs of μ and σ². Then calculate the unbiased sample variance and compare them.",
+      "hints": [
+        "Start from the normal log-likelihood: −(n/2)log(2πσ²) − [1/(2σ²)]Σ(xᵢ−μ)². Differentiate first with respect to μ.",
+        "The μ score sets Σ(xᵢ−μ)=0. Substitute μ̂=x̄ into the likelihood before differentiating with respect to σ².",
+        "The MLE divides the residual sum of squares by n. The unbiased sample variance divides by n−1. Keep the two estimators separate."
+      ],
+      "solution": [
+        {
+          "say": "Differentiate with respect to μ and set the score to zero.",
+          "math": "∂ℓ/∂μ = (1/σ²)Σ(xᵢ−μ) = 0\nμ̂ = x̄ = 5"
+        },
+        {
+          "say": "Substitute μ̂=x̄ and differentiate with respect to σ².",
+          "math": "ℓ(σ²) = −(n/2)logσ² − SSE/(2σ²) + constant\n∂ℓ/∂σ² = −n/(2σ²) + SSE/(2σ⁴) = 0"
+        },
+        {
+          "say": "Solve for the variance MLE.",
+          "math": "nσ̂² = SSE\nσ̂² = SSE/n = 60/16 = 3.75"
+        },
+        {
+          "say": "Calculate the unbiased sample variance separately.",
+          "math": "s² = SSE/(n−1) = 60/15 = 4"
+        },
+        {
+          "say": "Compare the two values.",
+          "math": "σ̂² = 3.75 < s² = 4"
+        }
+      ],
+      "answer": "The MLEs are μ̂=5 and σ̂²=3.75. The unbiased sample variance is s²=4. The MLE is biased downward because E(σ̂²)=(n−1)σ²/n.",
+      "check": "A useful distributional check is nσ̂²/σ²~χ²(n−1). The numerator is n times the MLE variance, not (n−1) times it. The n−1 appears as the chi-square degrees of freedom and as the denominator of the unbiased sample variance."
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s10",
+      "title": "Six statements — verdict on each before you look",
+      "mins": 6,
+      "objective": "Separate the properties MLEs actually have from the properties learners often assume.",
+      "intro": "Decide true or false for each statement before revealing the reason.",
+      "items": [
+        {
+          "claim": "Every maximum likelihood estimator is unbiased for every finite sample size.",
+          "tf": false,
+          "why": "False. The normal MLE of variance divides by n and has expectation (n−1)σ²/n. The exponential rate MLE is also biased for finite n."
+        },
+        {
+          "claim": "Maximising the log-likelihood gives the same maximiser as maximising the likelihood.",
+          "tf": true,
+          "why": "True. The logarithm is strictly increasing on positive values, so it preserves the location of the maximum."
+        },
+        {
+          "claim": "A score equation root is automatically the global maximum.",
+          "tf": false,
+          "why": "False. It can be a minimum or another stationary point. Boundary values and the full parameter space must also be checked."
+        },
+        {
+          "claim": "For an iid sample from Uniform(0,θ), the MLE of θ is the sample maximum.",
+          "tf": true,
+          "why": "True. Values below the sample maximum have zero likelihood; above it the likelihood decreases."
+        },
+        {
+          "claim": "An MLE can be non-unique.",
+          "tf": true,
+          "why": "True. A likelihood may be constant over a feasible interval, as in a uniform location model with fixed interval width."
+        },
+        {
+          "claim": "If θ̂ is an MLE of θ, then g(θ̂) is an MLE of g(θ) under the induced parameterisation.",
+          "tf": true,
+          "why": "True. This is the invariance property and is useful for estimating functions such as reciprocals and probabilities."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s11",
+      "title": "Transfer — constrained and non-unique MLEs",
+      "mins": 10,
+      "objective": "Use the parameter space, not a memorised derivative, to solve two exam-style cases.",
+      "problem": "Part A: A sample 3, 6, 9 comes from N(μ,1) with μ≤5. Find the MLE. Part B: A sample has minimum 0.71 and maximum 1.68 from Uniform(θ−0.2,θ+0.8). Find the full set of MLEs and identify which listed value 0.9, 1.1, 0.7 or 1.3 is an MLE.",
+      "hints": [
+        "Part A: the unrestricted normal MLE is x̄. Compare it with the allowed set μ≤5.",
+        "Part B: every observation must lie between θ−0.2 and θ+0.8. Use the minimum to get an upper bound for θ and the maximum to get a lower bound.",
+        "For Part B, the interval width is fixed at 1, so every feasible θ gives the same likelihood height. There is not one unique maximum."
+      ],
+      "solution": [
+        {
+          "say": "Part A — calculate the unrestricted estimate.",
+          "math": "x̄ = (3+6+9)/3 = 6"
+        },
+        {
+          "say": "Apply the constraint μ≤5.",
+          "math": "6 is not allowed. The likelihood is maximised at the nearest allowed boundary: μ̂ = 5."
+        },
+        {
+          "say": "Part B — use the sample minimum 0.71.",
+          "math": "θ−0.2 < 0.71  ⇒  θ < 0.91"
+        },
+        {
+          "say": "Use the sample maximum 1.68.",
+          "math": "1.68 < θ+0.8  ⇒  θ > 0.88"
+        },
+        {
+          "say": "Combine the support restrictions.",
+          "math": "0.88 < θ < 0.91"
+        },
+        {
+          "say": "Check the listed values.",
+          "math": "0.9 is inside the interval; 0.7, 1.1 and 1.3 are outside. Therefore 0.9 is a listed MLE."
+        }
+      ],
+      "answer": "Part A: μ̂=5. Part B: every θ in (0.88,0.91) is an MLE; among the listed values only 0.9 belongs to the feasible interval.",
+      "check": "The likelihood in Part B is constant over the feasible interval because the support width is fixed at 1. If the support were allowed to shift but the width stayed fixed, the data restrict the location parameter to an interval rather than a single point."
+    },
+    {
+      "kind": "summary",
+      "id": "s12",
+      "title": "What you should now be able to do unaided",
+      "mins": 3,
+      "objective": "Close the lesson by retrieving the whole method in the order you will use it in an exam.",
+      "body": [
+        "Write the joint likelihood from the observed sample, keeping the data fixed and the parameter variable.",
+        "Take logs, differentiate, solve the score equation, and check the second derivative.",
+        "Check the support and parameter space before accepting the answer. A maximum may occur at a boundary or over an interval.",
+        "Recall the standard MLEs: Bernoulli p̂=x̄; exponential rate λ̂=1/x̄; Uniform(0,θ) θ̂=x₍ₙ₎; normal μ̂=x̄ and σ̂²=SSE/n.",
+        "Apply invariance to functions of the parameter, but do not confuse an MLE with an unbiased estimator or a Bayesian posterior summary.",
+        "The mastery test is ten unseen questions from the existing 20-item T4 pool. Hints are off; the pass is 80% overall with 70% floors on numerical and multi-statement items."
+      ]
+    },
+    {
+      "kind": "quiz",
+      "id": "s13",
+      "title": "Mastery test",
+      "mins": 12,
+      "objective": "Demonstrate maximum-likelihood reasoning independently on unseen questions.",
+      "setId": "inference_t4_mastery"
+    }
+  ]
+}
