@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import re
+from math import log, sqrt
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -87,6 +88,31 @@ def main() -> None:
     assert regression_pyq["topic"].startswith("regression-t2")
     assert regression_pyq["year"] == 2023 and regression_pyq["session"] == "June"
     assert not any(x["id"] == "csir-est-q07" for x in methods["items"])
+
+    # Estimation Q9: the supplied key says "does not exist", but direct
+    # likelihood differentiation gives one positive global maximiser.
+    q09 = next(x for x in estimation["items"] if x["id"] == "csir-est-q09")
+    assert q09["answer"] == "B"
+    assert "does not exist" not in q09["explanation"].lower()
+    n, sum_sq = 3, 5.0
+    theta_hat = (-1 + sqrt(1 + 4 * sum_sq / n)) / 2
+    def loglik(theta: float) -> float:
+        return -(n / 2) * log(theta) - sum_sq / (2 * theta) - (n * theta / 2)
+    assert theta_hat > 0
+    assert loglik(theta_hat) > loglik(theta_hat / 2)
+    assert loglik(theta_hat) > loglik(theta_hat * 2)
+
+    # Estimation Q103 must retain the source's multi-statement format and
+    # December 2011 attribution; the correct source statements are A and D.
+    q103 = next(x for x in estimation["items"] if x["id"] == "csir-est-q103")
+    assert q103["format"] == "multi" and q103["year"] == 2011
+    assert q103["session"] == "December" and q103["answer"] == "A"
+    assert "".join(sorted(k for k, v in q103["verdicts"].items() if v["tf"])) == "AD"
+
+    # Hold out source questions whose printed parameter/key combination is
+    # mathematically inconsistent or whose scan transcription is unresolved.
+    assert not any(x["id"] in {"csir-est-q16", "csir-est-q19"} for x in estimation["items"])
+
     print(
         f"PASS: {sum(len(x['items']) for x in (estimation, methods, sampling))} CSIR PYQs; "
         "unique IDs, four-option keys, multi-statement verdict alignment, "
