@@ -1,9 +1,9 @@
 {
   "moduleId": "probability",
   "source": "variant",
-  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 1–107, 109–131, 954–1011)",
+  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 1–120, 123–131, 954–1011)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 65,
+  "count": 73,
   "items": [
     {
       "id": "mcq1000-p954",
@@ -1516,6 +1516,230 @@
       "answer": "C",
       "explanation": "First calculate the marginal means. From the table, E(X)=2/3 and E(Y)=4/9. The only nonzero contribution to E(XY) is at (X,Y)=(1,1), with probability 1/6, so E(XY)=1/6. Therefore Cov(X,Y)=E(XY)−E(X)E(Y)=1/6−(2/3)(4/9)=1/6−8/27=−7/54. Option C is correct.",
       "pno": 107,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p110",
+      "format": "single",
+      "topic": "probability-t9",
+      "stem": "For which sequence of CDFs does Xₙ fail to converge in distribution? (A) Fₙ(x)=(x/(1+x))ⁿ for x>0 and 0 otherwise; (B) Fₙ(x)=(1−1/(1+nx))ⁿ for x>0 and 0 otherwise; (C) Fₙ(x)=1−(1−x/n)ⁿ for 0<x≤n and 0 otherwise; (D) Fₙ(x)=1−(1−x)ⁿ for 0≤x≤1 and 0 otherwise.",
+      "options": [
+        "A only",
+        "B only",
+        "C only",
+        "D only"
+      ],
+      "answer": "A",
+      "explanation": "For A, at every fixed finite x>0, x/(1+x)<1, so Fₙ(x)→0. The pointwise limit is zero at every finite x and is not a proper CDF because its limit as x→∞ is still zero; probability mass escapes to infinity. For B, the limit is e^(−1/x) for x>0, a valid CDF. For C, the limit is 1−e^(−x), the Exp(1) CDF. For D, the limit at every continuity point is the CDF of a point mass at zero. Therefore only A fails to converge in distribution.",
+      "pno": 110,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p112",
+      "format": "single",
+      "topic": "probability-t9",
+      "stem": "Let X₁,X₂,… be iid positive random variables with density f and limₓ→₀⁺f(x)=1/4. Define Yₙ=n min(X₁,…,Xₙ). What is the limiting distribution of Yₙ?",
+      "options": [
+        "Exponential with rate 2",
+        "Exponential with rate 1/4",
+        "Exponential with rate 1/2",
+        "Exponential with rate 4"
+      ],
+      "answer": "B",
+      "explanation": "Let Mₙ=min(X₁,…,Xₙ). For t≥0, P(nMₙ>t)=P(Mₙ>t/n)=[1−F(t/n)]ⁿ. Since f(x)→1/4 as x→0⁺, F(u)≈u/4 for small u. Thus F(t/n)≈t/(4n), and [1−F(t/n)]ⁿ→e^(−t/4). This is the survival function of an exponential distribution with rate 1/4. Hence Yₙ converges in distribution to Exp(rate 1/4), option B.",
+      "pno": 112,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p113",
+      "format": "multi",
+      "topic": "probability-t9",
+      "stem": "Suppose Xₙ converges in probability to 4 and Yₙ converges in probability to 3. Which statements are true?",
+      "statements": [
+        "XₙYₙ converges in probability to 4.",
+        "Yₙ/Xₙ converges in probability to 3/4.",
+        "Xₙ²Yₙ² converges in probability to 144.",
+        "Xₙ/Yₙ₋₁ does not converge in probability."
+      ],
+      "options": [
+        "A and B only",
+        "B and C only",
+        "A, B and C only",
+        "C and D only"
+      ],
+      "answer": "B",
+      "explanation": "Convergence in probability is preserved under continuous functions. Thus XₙYₙ converges to 4×3=12, not 4, so A is false. Since the denominator limit 4 is nonzero, Yₙ/Xₙ converges to 3/4, so B is true. Squaring and multiplying gives Xₙ²Yₙ²→4²×3²=144, so C is true. Also Yₙ₋₁→p3, so Xₙ/Yₙ₋₁→p4/3 by Slutsky's theorem; D is false.",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The product limit is 4×3=12, not 4."
+        },
+        "B": {
+          "tf": true,
+          "why": "The ratio limit is 3/4 because the denominator limit is nonzero."
+        },
+        "C": {
+          "tf": true,
+          "why": "The continuous mapping theorem gives 4²×3²=144."
+        },
+        "D": {
+          "tf": false,
+          "why": "Yₙ₋₁ also converges in probability to 3, so the ratio converges to 4/3."
+        }
+      },
+      "pno": 113,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p116",
+      "format": "multi",
+      "topic": "probability-t9",
+      "stem": "Let Yₙ=Kₙ/n, where Kₙ~Binomial(n,1/2), and define Xₙ=Yₙ−1/2. Which statements are true?",
+      "statements": [
+        "Xₙ converges in distribution to 0.",
+        "Xₙ converges in distribution to 1/2.",
+        "Xₙ converges in probability to 0.",
+        "Xₙ converges in probability to −1/2."
+      ],
+      "options": [
+        "A and C only",
+        "A and B only",
+        "B and D only",
+        "C and D only"
+      ],
+      "answer": "A",
+      "explanation": "The mean of Yₙ is 1/2 and its variance is (1/2)(1/2)/n=1/(4n). Therefore E(Xₙ)=0 and Var(Xₙ)=1/(4n). By Chebyshev's inequality, P(|Xₙ|>ε)≤1/(4nε²)→0 for every ε>0, so Xₙ converges in probability to zero. Convergence in probability implies convergence in distribution to the same constant. Thus A and C are true.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Convergence in probability to zero implies convergence in distribution to zero."
+        },
+        "B": {
+          "tf": false,
+          "why": "The limiting constant is zero, not one-half."
+        },
+        "C": {
+          "tf": true,
+          "why": "Chebyshev's inequality gives P(|Xₙ|>ε)≤1/(4nε²)→0."
+        },
+        "D": {
+          "tf": false,
+          "why": "Xₙ is centered at zero and converges to zero."
+        }
+      },
+      "pno": 116,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p117",
+      "format": "multi",
+      "topic": "probability-t9",
+      "stem": "Let Xₙ and X be random variables. Which statements are true?",
+      "statements": [
+        "Convergence in distribution Xₙ⇒X implies convergence in probability Xₙ→pX.",
+        "Xₙ converges in distribution to a constant k if and only if Xₙ converges in probability to k.",
+        "Convergence in probability Xₙ→pX implies almost-sure convergence Xₙ→a.s.X.",
+        "Almost-sure convergence Xₙ→a.s.X implies convergence in probability Xₙ→pX."
+      ],
+      "options": [
+        "A and B only",
+        "B and D only",
+        "A, C and D only",
+        "A and D only"
+      ],
+      "answer": "B",
+      "explanation": "Convergence in distribution does not generally imply convergence in probability to a random variable, so A is false. However, when the limiting distribution is a constant k, convergence in distribution to k is equivalent to convergence in probability to k; B is true. Convergence in probability does not generally imply almost-sure convergence, so C is false. Almost-sure convergence does imply convergence in probability, so D is true. Therefore B and D are correct.",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Convergence in distribution is weaker than convergence in probability for a random-variable limit."
+        },
+        "B": {
+          "tf": true,
+          "why": "For a constant limit, convergence in distribution and in probability are equivalent."
+        },
+        "C": {
+          "tf": false,
+          "why": "Convergence in probability need not imply almost-sure convergence."
+        },
+        "D": {
+          "tf": true,
+          "why": "Almost-sure convergence implies convergence in probability."
+        }
+      },
+      "pno": 117,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p119-q2",
+      "format": "multi",
+      "topic": "probability-t1",
+      "stem": "Which of the following are possible values of the probability of an event?",
+      "statements": [
+        "0",
+        "1",
+        "−0.5",
+        "None of the above"
+      ],
+      "options": [
+        "A and B only",
+        "A and C only",
+        "B and D only",
+        "D only"
+      ],
+      "answer": "A",
+      "explanation": "Every probability lies between zero and one, inclusive. Probability zero is possible for an impossible event, and probability one is possible for a certain event. A negative value such as −0.5 is not a probability. Therefore statements A and B are correct.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Zero is a valid probability."
+        },
+        "B": {
+          "tf": true,
+          "why": "One is a valid probability."
+        },
+        "C": {
+          "tf": false,
+          "why": "Probabilities cannot be negative."
+        },
+        "D": {
+          "tf": false,
+          "why": "A and B are valid values."
+        }
+      },
+      "pno": 119,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p119-q3",
+      "format": "single",
+      "topic": "probability-t1",
+      "stem": "How many valid but different results can arise from Bertrand's paradox, depending on how a random chord is selected?",
+      "options": [
+        "At least 3",
+        "1",
+        "2",
+        "0"
+      ],
+      "answer": "A",
+      "explanation": "Bertrand's paradox shows that the phrase 'choose a random chord' does not specify a unique probability model. Different, mathematically reasonable ways of selecting a chord lead to different probabilities for the same geometric event. The classical formulations produce at least three distinct valid results, so option A is correct.",
+      "pno": 119,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p119-q5",
+      "format": "single",
+      "topic": "probability-t1",
+      "stem": "Can an event A have P(A)=0.6 and P(Aᶜ)=0.5?",
+      "options": [
+        "No",
+        "Yes",
+        "Cannot say",
+        "It depends on the sample space"
+      ],
+      "answer": "A",
+      "explanation": "An event and its complement partition the sample space, so P(Aᶜ)=1−P(A). If P(A)=0.6, then P(Aᶜ)=0.4, not 0.5. The two given probabilities cannot both hold. Option A is correct.",
+      "pno": 119,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
