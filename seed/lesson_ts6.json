@@ -6,7 +6,7 @@
  "breadcrumb": "Time series → Non-stationarity → The random walk",
  "engine": "B",
  "engineName": "Time series — the process that accumulates every shock it receives",
- "version": "1.0",
+ "version": "1.1",
  "status": "approved",
  "estMin": 100,
  "objectives": [
@@ -21,7 +21,7 @@
   {
    "id": "p1",
    "name": "Expectation and variance of sums",
-   "why": "Every moment here comes from the variance of a sum of independent shocks."
+   "why": "Every moment here comes from the variance of a sum of uncorrelated shocks."
   },
   {
    "id": "p2",
@@ -200,20 +200,20 @@
   "retestDays": 7,
   "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
  },
- "provenance": "Authored November 2026, the third lesson of the time-series module. PYQ anchor: June 2026 Q23, which was answered CORRECTLY (marked D) — the mean and variance of a random walk with drift are tμ and tσ²ₑ. The lesson was built anyway because the question's nine variants extend well beyond it, into weak versus strict stationarity, the trend-stationary distinction, over-differencing and the ARIMA(0,1,0) label, and because the random walk is the canonical non-stationary process the rest of the module is defined against. Every figure was computed and cross-checked against a 200,000-path simulation with μ = 0.5 and σ = 2: the means at t = 1, 5, 20, 40 came to 0.495, 2.496, 9.990, 19.956 against the exact 0.5, 2.5, 10, 20, and the variances to 3.99, 19.99, 79.89, 159.36 against 4, 20, 80, 160; the driftless case gave mean −0.0102 and variance 79.89 at t = 20; and the correlation √(t/(t+k)) was confirmed at (t,k) = (10,5), (20,20), (5,45) and (30,30) as 0.8164, 0.7070, 0.3141 and 0.7075 against 0.8165, 0.7071, 0.3162 and 0.7071. The over-differencing result was verified separately: differencing white noise gives variance 2.0102 against the exact 2 and lag-1 autocorrelation −0.4998 against −0.5, with θ = 1 exactly on the invertibility boundary. Scope was set deliberately against the two time-series lessons already built: topic 7.5 owns unit-root testing, the Dickey–Fuller test and general ARIMA orders, and 7.3 owns Yule–Walker, so both are cross-referenced rather than repeated. Uses the existing `ar-acf` visualisation rather than a new one, since a random walk is the AR(1) case φ = 1 and the chart correctly refuses to draw an ACF there while naming the failed stationarity condition — which is the right picture for this topic. Previous-year questions are stored separately and carry their exam cycle.",
+ "provenance": "Authored November 2026, the third lesson of the time-series module. PYQ anchor: June 2026 Q23, which was answered CORRECTLY (marked D) — the mean and variance of a random walk with drift are tμ and tσ²ₑ. The lesson was built anyway because the question's nine variants extend well beyond it, into weak versus strict stationarity, the trend-stationary distinction, over-differencing and the ARIMA(0,1,0) label, and because the random walk is the canonical non-stationary process the rest of the module is defined against. Every figure was computed and cross-checked against a 200,000-path simulation with μ = 0.5 and σ = 2: the means at t = 1, 5, 20, 40 came to 0.495, 2.496, 9.990, 19.956 against the exact 0.5, 2.5, 10, 20, and the variances to 3.99, 19.99, 79.89, 159.36 against 4, 20, 80, 160; the driftless case gave mean −0.0102 and variance 79.89 at t = 20; and the correlation √(t/(t+k)) was confirmed at (t,k) = (10,5), (20,20), (5,45) and (30,30) as 0.8164, 0.7070, 0.3141 and 0.7075 against 0.8165, 0.7071, 0.3162 and 0.7071. The over-differencing result was verified separately: differencing white noise gives variance 2.0102 against the exact 2 and lag-1 autocorrelation −0.4998 against −0.5, with θ = 1 exactly on the invertibility boundary. Scope was set deliberately against the two time-series lessons already built: topic 7.5 owns unit-root testing, the Dickey–Fuller test and general ARIMA orders, and 7.3 owns Yule–Walker, so both are cross-referenced rather than repeated. Uses the existing `ar-acf` visualisation rather than a new one, since a random walk is the AR(1) case φ = 1 and the chart correctly refuses to draw an ACF there while naming the failed stationarity condition — which is the right picture for this topic. Previous-year questions are stored separately and carry their exam cycle. Mathematical audit update, 14 November 2026: variance and covariance calculations are stated using uncorrelated shocks; independence is sufficient but stronger than the white-noise assumption required for these second-moment results.",
  "scenes": [
   {
    "kind": "foundation",
    "id": "s0",
    "mins": 7,
    "title": "Before the lesson — four things it will assume",
-   "objective": "Fix what stationarity demands, and what accumulating independent shocks does.",
+   "objective": "Fix what stationarity demands, and what accumulating uncorrelated shocks does.",
    "ask": {
-    "q": "A series is the running total of independent shocks. Can its variance be constant?",
+    "q": "A series is the running total of uncorrelated shocks. Can its variance be constant?",
     "nudge": "Each new shock adds its own variance to the total, and nothing ever subtracts any."
    },
    "body": [
-    "A random walk is the simplest non-stationary process, and it is the one against which stationarity is defined. Everything about it follows from one line: it is the running total of independent shocks, so each shock stays in the series forever.",
+    "A random walk is the simplest non-stationary process, and it is the one against which stationarity is defined. Everything about it follows from one line: it is the running total of uncorrelated shocks, so each shock stays in the series forever.",
     "That has two immediate consequences. The variance grows without bound, because variances of independent terms add and nothing removes them. And the effect of any single shock is permanent, because the series never returns to a previous level — there is no level to return to.",
     "Both are exactly what stationarity forbids. So the random walk is the canonical counterexample, and it is also the canonical case where differencing fixes things: the first difference of a random walk is the shock itself, which is white noise.",
     "Four checks before starting."
@@ -327,7 +327,7 @@
     {
      "t": "formula",
      "h": "Mean and variance",
-     "body": "E(yₜ) = tμ          (the shocks have mean 0)\nVar(yₜ) = tσ²       (variances of independent shocks add)\nBoth grow with t. This is June 2026's answer, option D. Without drift the mean is 0 but the variance is still tσ², which is a separate practice variant — note the mean can be constant while the variance is not, and one failure is enough to destroy stationarity."
+     "body": "E(yₜ) = tμ          (the shocks have mean 0)\nVar(yₜ) = tσ²       (variances of uncorrelated shocks add)\nBoth grow with t. This is June 2026's answer, option D. Without drift the mean is 0 but the variance is still tσ², which is a separate practice variant — note the mean can be constant while the variance is not, and one failure is enough to destroy stationarity."
     },
     {
      "t": "formula",
@@ -497,7 +497,7 @@
     },
     {
      "say": "Take the variance.",
-     "math": "Var(yₜ) = Var(tμ + Σεᵢ) = Var(Σεᵢ)\n        = Σ Var(εᵢ)        [the shocks are independent]\n        = tσ²ₑ",
+     "math": "Var(yₜ) = Var(tμ + Σεᵢ) = Var(Σεᵢ)\n        = Σ Var(εᵢ)        [the shocks are uncorrelated]\n        = tσ²ₑ",
      "why": "The drift tμ is a constant at each t and contributes nothing to the variance. The shocks are uncorrelated, so there are no cross terms and the variances simply add — t of them, each σ²ₑ."
     },
     {

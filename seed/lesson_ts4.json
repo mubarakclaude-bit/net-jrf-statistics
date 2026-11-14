@@ -6,7 +6,7 @@
  "breadcrumb": "Time series → Foundations → Computing γₖ from the coefficients",
  "engine": "B",
  "engineName": "Time series — multiply through, take expectations, and solve",
- "version": "1.0",
+ "version": "1.1",
  "status": "approved",
  "estMin": 100,
  "objectives": [
@@ -126,7 +126,7 @@
    "Check the three stationarity conditions BEFORE substituting into any formula.",
    "For an AR(1), ρ₁ is the coefficient; for an AR(2) it is not — divide by (1 − φ₂).",
    "A negative φ₂ ENLARGES 1 − φ₂, so it reduces ρ₁ relative to φ₁.",
-   "Any AR variance must exceed σ². A value below it means an error somewhere.",
+   "Any AR variance is at least σ²; it is strictly greater when a non-zero past-shock weight contributes.",
    "ρ₂ = φ₁ρ₁ + φ₂ is quicker than restarting the recursion from scratch.",
    "At φ₂ = 0 every AR(2) formula must collapse to the AR(1) one — a free check."
   ],
@@ -201,7 +201,7 @@
   "retestDays": 7,
   "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
  },
- "provenance": "Authored November 2026, the seventh lesson of the time-series module. No PYQ anchor of its own: June 2026's four time-series questions are covered by lessons 7.3 (Yule–Walker), 7.5 (ACF of an AR(2)), 7.6 (random walk) and 7.7 (spectral density). This topic supplies the closed forms those four draw on, and the catalog gives it the same expected weight as every other time-series topic. The scope division from topic 7.3 is deliberate and is stated inside the lesson: the same set of equations runs forwards here, from coefficients to autocovariances, and backwards there, from sample autocorrelations to coefficient estimates. Every figure was verified by simulation over long series. AR(1) with φ = 0.7 and σ² = 1: γ₀ exact 1.9608 against simulated 1.9613, with ρₖ at lags 1, 2, 3 and 5 simulated as 0.7001, 0.4903, 0.3433 and 0.1686 against φᵏ of 0.7000, 0.4900, 0.3430 and 0.1681. AR(2) with (0.5, 0.3): ρ₁ = φ₁/(1−φ₂) = 0.7143 simulated 0.7145, ρ₂ = 0.6571 simulated 0.6577, ρ₃ = 0.5429 simulated 0.5432, ρ₅ = 0.3971 simulated 0.3975, and γ₀ = σ²(1−φ₂)/((1+φ₂)((1−φ₂)²−φ₁²)) = 2.2436 simulated 2.2466. The variance was computed two independent ways — step by step through the three equations in section 4, and from the closed form — agreeing exactly at 2.2436. One structural observation is made throughout the lesson because it is both a derivation check and an exam shortcut: the denominator of the AR(2) variance factors as (1+φ₂)(1−φ₂−φ₁)(1−φ₂+φ₁), and those three factors are precisely topic 7.1's three stationarity conditions, so the variance is positive if and only if the coefficients lie inside the triangle. A negative result is therefore a stationarity diagnosis rather than an arithmetic error, and the lesson treats it as such in a scenario and a pool item. The formula's two degenerate checks were also verified: at φ₂ = 0 it reduces to σ²/(1−φ₁²), and at φ₁ = 0 to σ²/(1−φ₂²), the latter correct because yₜ = φ₂yₜ₋₂ + εₜ is two interleaved AR(1) processes. Uses the existing `ar-acf` visualisation. Previous-year questions are stored separately and carry their exam cycle.",
+ "provenance": "Authored November 2026, the seventh lesson of the time-series module. No PYQ anchor of its own: June 2026's four time-series questions are covered by lessons 7.3 (Yule–Walker), 7.5 (ACF of an AR(2)), 7.6 (random walk) and 7.7 (spectral density). This topic supplies the closed forms those four draw on, and the catalog gives it the same expected weight as every other time-series topic. The scope division from topic 7.3 is deliberate and is stated inside the lesson: the same set of equations runs forwards here, from coefficients to autocovariances, and backwards there, from sample autocorrelations to coefficient estimates. Every figure was verified by simulation over long series. AR(1) with φ = 0.7 and σ² = 1: γ₀ exact 1.9608 against simulated 1.9613, with ρₖ at lags 1, 2, 3 and 5 simulated as 0.7001, 0.4903, 0.3433 and 0.1686 against φᵏ of 0.7000, 0.4900, 0.3430 and 0.1681. AR(2) with (0.5, 0.3): ρ₁ = φ₁/(1−φ₂) = 0.7143 simulated 0.7145, ρ₂ = 0.6571 simulated 0.6577, ρ₃ = 0.5429 simulated 0.5432, ρ₅ = 0.3971 simulated 0.3975, and γ₀ = σ²(1−φ₂)/((1+φ₂)((1−φ₂)²−φ₁²)) = 2.2436 simulated 2.2466. The variance was computed two independent ways — step by step through the three equations in section 4, and from the closed form — agreeing exactly at 2.2436. One structural observation is made throughout the lesson because it is both a derivation check and an exam shortcut: the denominator of the AR(2) variance factors as (1+φ₂)(1−φ₂−φ₁)(1−φ₂+φ₁), and those three factors are precisely topic 7.1's three stationarity conditions, so the variance is positive if and only if the coefficients lie inside the triangle. A negative result is therefore a stationarity diagnosis rather than an arithmetic error, and the lesson treats it as such in a scenario and a pool item. The formula's two degenerate checks were also verified: at φ₂ = 0 it reduces to σ²/(1−φ₁²), and at φ₁ = 0 to σ²/(1−φ₂²), the latter correct because yₜ = φ₂yₜ₋₂ + εₜ is two interleaved AR(1) processes. Uses the existing `ar-acf` visualisation. Previous-year questions are stored separately and carry their exam cycle. Mathematical audit update, 14 November 2026: made the AR variance lower bound inclusive, since white noise (all AR coefficients zero) has γ₀ = σ²; strict inequality requires at least one non-zero past-shock weight.",
  "scenes": [
   {
    "kind": "foundation",
@@ -522,8 +522,8 @@
     },
     {
      "say": "A sanity check on the magnitude.",
-     "math": "AR(1) with φ = 0.5 would give 1/(1 − 0.25) = 1.3333\nAR(2) here gives 2.2436 — larger",
-     "why": "Adding a second positive lag increases persistence and so increases the variance. If the formula had returned something below 1, that would signal an error, since the variance of an AR process always exceeds σ²."
+     "math": "AR(1) with φ = 0.5 would give 1/(1 − 0.25) = 1.3333\nAR(2) here gives 2.2436 — larger\nIn general γ₀ ≥ σ², with strict inequality when at least one non-zero lag contributes.",
+     "why": "The current innovation contributes σ² and any non-zero past-shock weights add non-negative variance. Thus γ₀ is at least σ², and is strictly greater when the AR dynamics are non-zero. Here the positive second lag increases persistence and gives the larger value."
     }
    ],
    "after": "Answering the question above: at the k = 1 equation, where γ₋₁ had to be recognised as γ₁. The transferable procedure is to write the k = 1 to k = p equations with the symmetry applied, solve for the starting autocorrelations, then take k = 0 for the variance — remembering that only that last equation carries σ²."

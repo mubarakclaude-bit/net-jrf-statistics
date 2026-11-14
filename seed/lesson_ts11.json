@@ -6,7 +6,7 @@
  "breadcrumb": "Time series → Forecasting → The optimal forecast and its uncertainty",
  "engine": "B",
  "engineName": "Time series — split the weight sequence at the horizon",
- "version": "1.0",
+ "version": "1.1",
  "status": "approved",
  "estMin": 100,
  "objectives": [
@@ -46,7 +46,7 @@
   "A forecast interval must WIDEN with the horizon, except for white noise.",
   "A long-horizon forecast equalling the mean confirms the model rather than refuting it.",
   "Intervals understate uncertainty, since the parameters are estimated and not known.",
-  "Forecasting needs invertibility — otherwise εₜ cannot be computed from the data.",
+  "The canonical MA representation is invertible, so its innovations can be recovered from the observed past.",
   "For an AR(2) with complex roots the forecast OSCILLATES about the mean; that is correct."
  ],
  "revision": {
@@ -206,7 +206,7 @@
   "retestDays": 7,
   "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
  },
- "provenance": "Authored November 2026, the eleventh and final lesson of the time-series module. No PYQ anchor of its own; it is where every earlier topic is used — the admissible regions of 7.1, the identification of 7.2, the autocovariances of 7.4, the weight representation of 7.10. Scope was set so that nothing is re-derived: 7.1 owns the invertibility condition and this lesson shows why forecasting needs it, 7.10 owns the ψ weights and this lesson splits them at the horizon, 7.8 owns exponential smoothing as a method, and 7.6 owns the random walk whose forecast variance grows without bound. Every figure was verified by simulation over 400,000 observations. For an AR(1) with φ = 0.7 and σ² = 1, the k-step forecast φᵏyₜ had error variance (1 − φ^(2k))/(1 − φ²) exactly 1.00000, 1.49000, 1.73010, 1.90540, 1.95922 and 1.96078 at k = 1, 2, 3, 5, 10 and 30, against simulated 0.99897, 1.48388, 1.71927, 1.88749, 1.93759 and 1.93893 — the limit being γ₀ = 1.96078, which topic 7.4 computed independently. For an MA(1) with θ = 0.6 under the minus convention, the one-step forecast −θεₜ had error variance exactly σ² = 1 against simulated 0.99801, and the two-step forecast of zero had error variance γ₀ = 1 + θ² = 1.36 against simulated 1.35464 — confirming that an MA(q) is forecastable for exactly q steps and that its limiting variance is attained rather than approached. Two practical points are given scenarios rather than footnotes, because both are examinable and both are commonly got wrong in applied work. The first is that a long-horizon forecast MATCHING the unconditional mean confirms a stationary model rather than refuting it, since the model's own optimal forecast converges to the mean — so an evaluation that compares them at a long horizon tests nothing, and a forecast that beats the mean is a warning of a mishandled trend or leaked information. The second is that a prediction interval must widen with the horizon, by a factor of up to 1/√(1 − φ²) — 1.40 at φ = 0.7 and 2.29 at φ = 0.9 — so a constant-width band is a reporting error for any process but white noise. The lesson also records the decomposition of that widening: 51% of the limiting variance at one step, 76% at two, 97% at five, which both explains why the band flattens and gives a principled basis for choosing an evaluation horizon from the partial sums of ψⱼ². Previous-year questions are stored separately and carry their exam cycle.",
+ "provenance": "Authored November 2026, the eleventh and final lesson of the time-series module. No PYQ anchor of its own; it is where every earlier topic is used — the admissible regions of 7.1, the identification of 7.2, the autocovariances of 7.4, the weight representation of 7.10. Scope was set so that nothing is re-derived: 7.1 owns the invertibility condition and this lesson shows why forecasting needs it, 7.10 owns the ψ weights and this lesson splits them at the horizon, 7.8 owns exponential smoothing as a method, and 7.6 owns the random walk whose forecast variance grows without bound. Every figure was verified by simulation over 400,000 observations. For an AR(1) with φ = 0.7 and σ² = 1, the k-step forecast φᵏyₜ had error variance (1 − φ^(2k))/(1 − φ²) exactly 1.00000, 1.49000, 1.73010, 1.90540, 1.95922 and 1.96078 at k = 1, 2, 3, 5, 10 and 30, against simulated 0.99897, 1.48388, 1.71927, 1.88749, 1.93759 and 1.93893 — the limit being γ₀ = 1.96078, which topic 7.4 computed independently. For an MA(1) with θ = 0.6 under the minus convention, the one-step forecast −θεₜ had error variance exactly σ² = 1 against simulated 0.99801, and the two-step forecast of zero had error variance γ₀ = 1 + θ² = 1.36 against simulated 1.35464 — confirming that an MA(q) is forecastable for exactly q steps and that its limiting variance is attained rather than approached. Two practical points are given scenarios rather than footnotes, because both are examinable and both are commonly got wrong in applied work. The first is that a long-horizon forecast MATCHING the unconditional mean confirms a stationary model rather than refuting it, since the model's own optimal forecast converges to the mean — so an evaluation that compares them at a long horizon tests nothing, and a forecast that beats the mean is a warning of a mishandled trend or leaked information. The second is that a prediction interval must widen with the horizon, by a factor of up to 1/√(1 − φ²) — 1.40 at φ = 0.7 and 2.29 at φ = 0.9 — so a constant-width band is a reporting error for any process but white noise. The lesson also records the decomposition of that widening: 51% of the limiting variance at one step, 76% at two, 97% at five, which both explains why the band flattens and gives a principled basis for choosing an evaluation horizon from the partial sums of ψⱼ². Previous-year questions are stored separately and carry their exam cycle. Mathematical audit update, 14 November 2026: distinguished the best linear predictor delivered by Wold weights from the full conditional expectation, which need not be linear when innovations are only uncorrelated; also clarified that invertibility is imposed on the canonical MA representation and that equivalent invertible representations permit forecasting from non-invertible parameterisations.",
  "scenes": [
   {
    "kind": "foundation",
@@ -304,7 +304,7 @@
    "viz": {
     "type": "ar-acf",
     "p1": 0.7,
-    "p2": 0.0,
+    "p2": 0,
     "caption": "An AR(1) with φ = 0.7. For this process the k-step forecast multiplier IS ρₖ, so the ACF read off this chart is literally the forecast function."
    },
    "body": [
@@ -329,7 +329,7 @@
     {
      "t": "def",
      "h": "The optimal forecast",
-     "body": "The minimum mean-squared-error forecast of yₜ₊ₖ given the information available at time t is the conditional expectation\n    ŷₜ(k) = E(yₜ₊ₖ | yₜ, yₜ₋₁, …).\nFor a Gaussian process this is also the conditional median, so it minimises mean absolute error as well. For a general linear process it is the best LINEAR predictor, which is what the Wold representation delivers."
+     "body": "The minimum mean-squared-error forecast of yₜ₊ₖ given the information available at time t is the conditional expectation\n    ŷₜ(k) = E(yₜ₊ₖ | yₜ, yₜ₋₁, …).\nFor a Gaussian process this is also the conditional median, so it minimises mean absolute error as well. For a general linear process, the Wold weight expression gives the best LINEAR predictor under second-order assumptions; it equals the full conditional expectation when additional conditions make that expectation linear."
     },
     {
      "t": "formula",
@@ -349,7 +349,7 @@
     {
      "t": "formula",
      "h": "The MA(q) case",
-     "body": "For an MA(1), yₜ = εₜ − θεₜ₋₁:\n    ŷₜ(1) = −θεₜ,  with error variance σ²\n    ŷₜ(k) = 0 for k ≥ 2,  with error variance σ²(1 + θ²) = γ₀.\nSo an MA(q) is forecastable for exactly q steps and no further — beyond that the forecast is the mean. At θ = 0.6: one-step variance 1 (simulated 0.998), two-step 1.36 (simulated 1.355). Note the one-step forecast needs εₜ, which only invertibility makes computable."
+     "body": "For an MA(1), yₜ = εₜ − θεₜ₋₁:\n    ŷₜ(1) = −θεₜ,  with error variance σ²\n    ŷₜ(k) = 0 for k ≥ 2,  with error variance σ²(1 + θ²) = γ₀.\nSo an MA(q) is forecastable for exactly q steps and no further — beyond that the forecast is the mean. At θ = 0.6: one-step variance 1 (simulated 0.998), two-step 1.36 (simulated 1.355). The one-step formula uses εₜ in the canonical invertible MA representation, where the innovation can be recovered from the observed past."
     },
     {
      "t": "formula",
@@ -426,7 +426,7 @@
       "id": "b",
       "r": 1,
       "c": 1,
-      "label": "Recover the shocks from the observed past (needs invertibility)",
+      "label": "Recover shocks from the observed past using the canonical invertible MA representation",
       "kind": "step"
      },
      {
@@ -609,7 +609,7 @@
       ],
       "hint": "ŷₜ(1) = −θεₜ, and beyond lag q the forecast is the mean."
      },
-     "why": "An MA(1) is forecastable one step and no further, because yₜ₊₂ = εₜ₊₂ − θεₜ₊₁ involves only future shocks. Note that εₜ had to be recoverable from the data, which is what invertibility provides."
+     "why": "An MA(1) is forecastable one step and no further, because yₜ₊₂ = εₜ₊₂ − θεₜ₊₁ involves only future shocks. Note that εₜ had to be recoverable from the data, which the canonical invertible representation provides."
     },
     {
      "say": "The same MA(1), the error variances.",
@@ -765,9 +765,9 @@
      "why": "False except for white noise. The interval is ŷ ± z√(σ²Σ(j<k)ψⱼ²), which widens with k towards ±z√γ₀. For an AR(1) the widening factor from one step to the limit is 1/√(1 − φ²) — 1.40 at φ = 0.7 and 2.29 at φ = 0.9. A flat band is a reporting error."
     },
     {
-     "claim": "Forecasting an MA process requires invertibility.",
+     "claim": "Recovering innovations by inverting a stated MA polynomial requires that parameterisation to be invertible.",
      "tf": true,
-     "why": "True. The forecast involves εₜ, which is unobserved, so it must be reconstructed from the data via εₜ = yₜ + θyₜ₋₁ + θ²yₜ₋₂ + ⋯ — convergent only when |θ| < 1. Without invertibility no forecast can be formed from observables, which is the practical reason topic 7.1 imposes the condition."
+     "why": "True for recovering innovations by inverting a specified MA polynomial: that parameterisation must be invertible for the inverse filter to converge. A non-invertible MA process nevertheless has an observationally equivalent invertible representation after rescaling the innovation variance, and forecasts from the observed process use that canonical form."
     }
    ]
   },
@@ -888,7 +888,7 @@
     "Give the MA(q) forecast and say why it is forecastable for exactly q steps.",
     "Say that the one-step error variance is σ² for any model with ψ₀ = 1.",
     "Construct a prediction interval that widens correctly, and say what it still understates.",
-    "Explain why forecasting needs invertibility.",
+    "Explain why the canonical MA representation is taken to be invertible.",
     "Contrast with the random walk, where neither the forecast nor the variance settles."
    ]
   },
@@ -908,7 +908,7 @@
     {
      "t": "step",
      "h": "Why that applies here",
-     "body": "Taking X to be the observed past and Y to be yₜ₊ₖ gives the result directly. Note that it holds for ANY predictor, linear or not — the conditional expectation is optimal among all functions of the past. For a general linear process the conditional expectation happens to be linear, so the best predictor and the best linear predictor coincide, which is what makes the weight-based formula exact rather than merely best-in-class."
+     "body": "Taking X to be the observed past and Y to be yₜ₊ₖ gives the optimality result directly: the conditional expectation minimises mean-squared error among all predictors. The weight-based expression derived from a Wold representation is, in general, the BEST LINEAR predictor under second-order assumptions. It equals the full conditional expectation when additional conditions make that expectation linear (for example, Gaussianity or suitable independent innovations); uncorrelated Wold innovations alone do not guarantee this."
     },
     {
      "t": "formula",
