@@ -6,7 +6,7 @@
   "breadcrumb": "Module 9 · R Programming · Summary functions and NA handling",
   "engine": "B",
   "engineName": "NET JRF Statistics lesson engine",
-  "version": "1.0",
+  "version": "1.1",
   "status": "review",
   "estMin": 60,
   "objectives": [
@@ -165,7 +165,7 @@
     "note": "Platform mastery settings; not an NTA rule."
   },
   "anchors": [],
-  "provenance": "Catalog rprog-t6: Summary functions and NA handling. Content aligned to base R summary and missing-value semantics; no unsupported PYQ anchor is claimed.",
+  "provenance": "Catalog rprog-t6: Summary functions and NA handling. Content aligned to base R summary and missing-value semantics; no unsupported PYQ anchor is claimed. Independent audit 2026-11-14 corrected two guided NA-summary solutions to match their stated vectors and questions.",
   "scenes": [
     {
       "kind": "foundation",
@@ -427,19 +427,19 @@
       },
       "solution": [
         {
+          "say": "Count all vector positions.",
+          "math": "length(x)=5.",
+          "why": "NA values still occupy positions in the vector."
+        },
+        {
           "say": "Identify the observed values.",
-          "math": "The non-missing values are 2, 6 and 10.",
-          "why": "na.rm=TRUE omits the two missing entries for this calculation."
+          "math": "The observed values are 4, 8 and 10.",
+          "why": "The two NA entries are missing; they are not replaced by other values."
         },
         {
-          "say": "Calculate the mean.",
-          "math": "(2 + 6 + 10) / 3 = 6.",
-          "why": "Add the three observed values and divide by their count."
-        },
-        {
-          "say": "Keep the counts separate.",
-          "math": "length = 5; missing = 2; observed = 3.",
-          "why": "The original vector still has five positions."
+          "say": "Count observed values.",
+          "math": "sum(!is.na(x))=3.",
+          "why": "There are three non-missing observations."
         }
       ]
     },
@@ -502,19 +502,19 @@
       },
       "solution": [
         {
-          "say": "Count all positions.",
-          "math": "length(x) = 5.",
-          "why": "Missing values still occupy positions in the vector."
+          "say": "Omit the missing value for the requested summaries.",
+          "math": "Observed values: 1, 3, 9.",
+          "why": "na.rm=TRUE removes NA only from each calculation, not from the original vector."
         },
         {
-          "say": "Count the missing entries.",
-          "math": "sum(is.na(x)) = 2.",
-          "why": "Two logical indicators are TRUE."
+          "say": "Calculate the sum and mean.",
+          "math": "sum=1+3+9=13; mean=13/3.",
+          "why": "There are three observed values."
         },
         {
-          "say": "Count the observed entries.",
-          "math": "sum(!is.na(x)) = 3.",
-          "why": "Three indicators are TRUE after negating the missingness flags."
+          "say": "Calculate the median.",
+          "math": "The ordered values are 1, 3, 9, so median=3.",
+          "why": "With three observations, the middle ordered value is the median."
         }
       ]
     },
