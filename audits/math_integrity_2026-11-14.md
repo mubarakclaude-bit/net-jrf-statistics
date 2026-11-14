@@ -344,3 +344,6 @@ The UMPU mastery item was rewritten so its correct option states the sufficient-
 
 - **Serial correlation:** qualified the no-bias statement to strict exogeneity, (E(u_t\mid X_1,\ldots,X_n)=0), rather than the ambiguous word “exogenous”.
 - **Measurement error:** made the true-regressor exogeneity condition (Cov(X,u)=0) explicit alongside the classical measurement-error orthogonality conditions. The reliability-ratio explanation now states the assumptions required for attenuation.
+
+
+The regression edits were corrected to preserve the lesson contract's structured block objects. The measurement-error IV example now writes the estimable moment using observed (W=X+v): (E[Z(Y-\beta W)]=0), with the stated instrument orthogonality conditions.
