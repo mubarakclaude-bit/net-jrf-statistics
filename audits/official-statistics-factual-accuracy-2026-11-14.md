@@ -47,8 +47,8 @@ The branch changes **10 JSON files** (five lessons and five mastery pools) and t
 **Primary sources (verified 14 November 2026):**
 - MoSPI, *Know Your Ministry*: https://mospi.gov.in/sites/default/files/publication_reports/Know_Your_Ministry_MoSPI_27022025.pdf
 - MoSPI, *National Statistical Commission — RTI Manual* (revised 12 January 2024): https://www.mospi.gov.in/sites/default/files/Manual/mannualNSCunderRTIAct_Revised12012024.pdf
-- MoSPI/PIB, new GDP/CPI/IIP series release: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2226269&reg=3&lang=1
-- MoSPI/PIB, new IIP series, base 2022–23: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2267531&reg=3&lang=1
+- MoSPI/PIB, new GDP/CPI/IIP series release: https://www.pib.gov.in/PressReleseDetailm.aspx?PRID=2226269&reg=3&lang=2
+- MoSPI/PIB, new IIP series, base 2022–23: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2267531&lang=1&reg=3
 - RBI, Monetary Policy Framework: https://www.rbi.org.in/Scripts/FS_Overview.aspx?fn=2752
 
 ### T2 — Commissions and committees
@@ -93,6 +93,7 @@ Secondary references already present in the lesson (Carnegie, PRS and current-af
 - Indian Statistical Institute, *Annual Report 2023–24*: https://asd.isical.ac.in/isical_web/files/about/publications/annual-reports/Annual_report_2023-24.pdf
 - Bose and Shrikhande, original 1959 PNAS paper: https://www.pnas.org/doi/10.1073/pnas.45.5.734
 - Bose–Mesner, original association-scheme article record/full text: https://digitalcommons.unl.edu/mathfacpub/7/
+- Samarendra Nath Roy, academic secondary biography (used only for dates/career context): https://mathshistory.st-andrews.ac.uk/Biographies/Roy/
 
 Academic secondary biographies (including MacTutor) are used only where an institutional primary biography was not located. Recommended books remain reading suggestions; no specific edition or page is claimed as checked.
 
@@ -145,6 +146,9 @@ Academic secondary biographies (including MacTutor) are used only where an insti
 
 **Primary sources (verified 14 November 2026):**
 - ORGI, Vital Statistics Division: https://censusindia.gov.in/census.website/en/node/180
+- India Code, *Census Act, 1948* (section 15): https://upload.indiacode.nic.in/showfile?actid=AC_CEN_5_40_00002_194837_1517807319480&filename=a1948-37.pdf&type=actfile
+- Legislative Department, *Constitution of India* (as on 1 May 2024; Union List Entry 69 and Concurrent List Entry 30): https://www.legislative.gov.in/static/uploads/2025/08/cb1b190ea633a1746368ed1fac35fb30.pdf
+- India Code, *Registration of Births and Deaths Act, 1969*: https://www.indiacode.nic.in/bitstream/123456789/1682/1/A1969-18.pdf
 - PIB, Census 2027 official backgrounder: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2255461
 - ORGI, Census 2027 general Phase-II Gazette catalogue record: https://censusindia.gov.in/nada/index.php/catalog/47179
 - ORGI, Census 2027 special schedule catalogue record: https://censusindia.gov.in/nada/index.php/catalog/47170
