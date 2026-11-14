@@ -106,6 +106,11 @@ def main() -> None:
     assert q44["year"] == 2019 and q44["session"] == "June" and q44["answer"] == "D"
     assert q44["topic"].startswith("inference-t4")
     assert "θ≥27" in q44["explanation"] and "page 20" in q44["explanation"]
+    q46 = next(x for x in estimation["items"] if x["id"] == "csir-est-q46")
+    assert q46["year"] == 2019 and q46["session"] == "June" and q46["answer"] == "C"
+    assert q46["topic"].startswith("probability-t8")
+    assert "".join(sorted(k for k, value in q46["verdicts"].items() if value["tf"])) == "ACD"
+    assert "no printed answer-key entry" in q46["explanation"] and "page 22" in q46["explanation"]
     q45 = next(x for x in estimation["items"] if x["id"] == "csir-est-q45")
     assert q45["year"] == 2019 and q45["session"] == "June" and q45["answer"] == "A"
     assert q45["topic"].startswith("inference-t4")
