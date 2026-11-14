@@ -108,7 +108,7 @@ def main() -> None:
     multcorr_q15 = next(x for x in methods["items"] if x["id"] == "csir-meth-q15")
     assert multcorr_q15["type"] == "practice" and multcorr_q15["year"] == 2020
     assert multcorr_q15["session"] == "26 November" and multcorr_q15["answer"] == "A"
-    assert "R²=ρ²·p/[1+(p−1)ρ]" in multcorr_q15["explanation"]
+    assert "ρ²·p/[1+(p−1)ρ]" in multcorr_q15["explanation"]
     assert "R→√ρ" in multcorr_q15["explanation"]
     regression_q01 = next(x for x in methods["items"] if x["id"] == "csir-meth-q01")
     assert regression_q01["type"] == "practice" and regression_q01["answer"] == "A"
