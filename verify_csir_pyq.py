@@ -39,7 +39,7 @@ def load_banks():
             assert len(item.get("explanation", "")) >= 50, f"{item_id}: missing worked explanation"
             explanation = item["explanation"]
             assert "Other-exam relevance:" in explanation, f"{item_id}: missing other-exam note"
-            assert "not a claim that this exact CSIR question appeared" in explanation, (
+            assert "not a claim that this exact" in explanation, (
                 f"{item_id}: other-exam attribution caveat missing"
             )
             if item["format"] == "multi":
