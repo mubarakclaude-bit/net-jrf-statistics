@@ -315,3 +315,20 @@ A final consistency scan propagated the AR(2) variance-formula qualification to 
 The lessons previously said a random walk has “no finite variance to divide by” and “no ACF at all.” Those statements were too strong and contradicted the lessons' own time-specific correlation derivation. A random walk has finite variance (t\sigma^2) at every finite (t), but the variance grows without bound and the correlation depends on both (t) and lag. The corrections now distinguish the stationary lag-only ACF from the time-specific correlation, in both lessons and the mastery pool.
 
 Added `verify_unit_root_acf_precision.py` to guard this distinction.
+
+
+## Time-series spectrum and ergodicity precision — lessons 7.7 and 7.9
+
+- **Spectral density:** qualified the periodogram's two-degree-of-freedom limit to interior Fourier frequencies; zero and Nyquist endpoints have one degree of freedom. Corrected the overstatement that a flat spectrum means “no structure at all” (it means no second-order linear dependence), and clarified that Fourier/lag-window transforms of sample autocovariances also estimate the spectrum.
+- **Ergodicity for the mean:** corrected the claimed equivalence between convergence in probability and variance convergence. Variance convergence is a sufficient L² route; unbiasedness alone does not prove the converse. Absolute summability of autocovariances is a stronger, not weaker, sufficient condition.
+- Propagated both corrections to the corresponding mastery pools and added focused regression verifiers.
+
+
+## Wold and forecasting precision — Time Series lessons 7.10 and 7.11
+
+- **Wold decomposition:** made the deterministic-plus-purely-nondeterministic decomposition explicit in the remaining summary/provenance text. Added the absolute-summability condition where the long-run variance is written as (sigma^2(sum_j\psi_j)^2).
+- **Forecasting:** clarified that Wold's uncorrelated innovations yield the best linear predictor. This equals the full conditional expectation under Gaussianity or suitable conditional-mean-zero/independence assumptions, but uncorrelatedness alone does not guarantee it.
+- **GARCH:** corrected the claim that covariance-stationary GARCH lies outside Wold. Such a process still has a Wold representation; that representation captures second-order linear structure, not the conditional-variance dynamics modelled by GARCH.
+- **MA(q):** qualified the finite forecast horizon to the canonical invertible representation.
+
+Added `verify_timeseries_wold_forecast.py` to guard the theorem and forecast distinctions.

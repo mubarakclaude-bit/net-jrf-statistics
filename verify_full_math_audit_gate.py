@@ -6,6 +6,9 @@ from verify_timeseries_precision import main as timeseries_precision_main
 from verify_timeseries_identification import main as timeseries_identification_main
 from verify_timeseries_variance import main as timeseries_variance_main
 from verify_unit_root_acf_precision import main as unit_root_main
+from verify_timeseries_spectrum import main as spectrum_main
+from verify_timeseries_ergodicity import main as ergodicity_main
+from verify_timeseries_wold_forecast import main as wold_forecast_main
 
 def main():
     inference_main()
@@ -14,6 +17,9 @@ def main():
     timeseries_identification_main()
     timeseries_variance_main()
     unit_root_main()
+    spectrum_main()
+    ergodicity_main()
+    wold_forecast_main()
 
 if __name__ == "__main__":
     main()

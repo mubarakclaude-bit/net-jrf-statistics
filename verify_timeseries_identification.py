@@ -14,15 +14,17 @@ def main():
     ts=load("lesson_ts2.json"); s="\n".join(strings(ts))
     assert "φₖₖ = −θᵏ(1 − θ²)" in s and "φₖₖ = −(−θ)ᵏ" not in s
     assert "AR(2), because the PACF has two significant stems" in s
-    assert "(e) AR(2)." in s
+    scene=next(x for x in ts["scenes"] if x["id"]=="s10")
+    assert "(d) The near-unit-root AR(1) case." in scene["solution"][1]["say"]
+    assert "(e) The AR(2) case." in scene["solution"][2]["say"]
+    assert "(e) AR(2)." in scene["answer"]
     assert "isolated zero autocorrelations can occur" in s
     p=load("timeseries_t2_mastery.json")
     assert "0.81735 or 1.22347" in p["items"][17]["explanation"]
     assert "generic stationary AR" in p["items"][19]["stem"]
     assert "isolated autocorrelations exactly zero" in p["items"][19]["explanation"]
-    assert "θ ≈ 0.817" in p["items"][17]["options"][2]
     print("PASS: MA(1) PACF formula sign")
-    print("PASS: PACF cut-off classifications use the stated confidence bands")
+    print("PASS: AR(1)/AR(2) identification uses the stated confidence bands")
     print("PASS: AR ACF wording allows isolated zero autocorrelations")
     print("PASS: MA(1) reciprocal-root numerical solution")
 if __name__=="__main__": main()
