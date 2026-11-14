@@ -598,5 +598,16 @@ class Topic04AndConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("it is the best unbiased estimator and you need no further argument", passage)
 
 
+    def test_t6_mastery_difficulty_mix_and_reviewed_classifications(self):
+        pool = load_json(SEED / "inference_t6_mastery.json")
+        counts = {level: sum(q["diff"] == level for q in pool["items"])
+                  for level in ("easy", "moderate", "hard")}
+        self.assertEqual(counts, {"easy": 6, "moderate": 10, "hard": 4})
+        # Multi-statement Fisher-information identity is moderate; the combined
+        # efficiency/attainment/UMVUE synthesis is the fourth hard item.
+        self.assertEqual(next(q for q in pool["items"] if q["id"] == "inf-t6-m-13")["diff"], "moderate")
+        self.assertEqual(next(q for q in pool["items"] if q["id"] == "inf-t6-m-17")["diff"], "hard")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

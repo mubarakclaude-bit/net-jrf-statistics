@@ -343,3 +343,10 @@ The `unittest.main()` entry point appeared before `Topic04AndConsistencyRegressi
 File: `seed/lesson_t6.json`, scene `s1`. Severity: **Minor — conceptual precision**.
 
 The original wording said that finding an unbiased estimator whose variance equals the Cramér–Rao bound makes it “the best unbiased estimator” without distinguishing attainment at one parameter value from a uniform minimum-variance result. Equality at a particular θ establishes minimum variance among unbiased estimators at that θ, under the theorem's regularity conditions; a UMVUE claim for the model requires the minimum-variance property for every θ. The introductory explanation now makes that distinction explicitly. A source-content regression test guards both qualifications and rejects the old overstatement.
+
+
+### INF-036 — T6 mastery difficulty labels did not match the required paper mix
+
+File: `seed/inference_t6_mastery.json`. Severity: **Assessment metadata / CI contract**.
+
+The 20-item pool was labelled 5 easy, 10 moderate and 5 hard, while the repository's published mastery-paper contract requires 6/10/4. On re-review, the Fisher-information identity multi-statement item (`inf-t6-m-13`) is a moderate application of standard identities, while the combined efficiency, finite-sample MLE, score-attainment and UMVUE synthesis item (`inf-t6-m-17`) is appropriately hard. Their labels were exchanged, yielding the required 6/10/4 mix without changing either question, answer key or explanation. A verifier regression now asserts both the aggregate mix and these two reviewed classifications.
