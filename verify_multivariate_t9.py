@@ -12,6 +12,8 @@ assert sum("scenario" in s for s in L["scenes"])>=2
 assert any("flow" in s for s in L["scenes"])
 assert all(len(t)>=140 for it in L["scenes"][0]["items"] for t in it["refresh"])
 assert len(P["items"])==P["count"]==20
+q1=next(x for x in P["items"] if x["id"]=="mv-t9-m-01")
+assert q1["answer"]=="B" and "shared covariance" in q1["options"][1]
 assert Counter(x["diff"] for x in P["items"])=={"easy":6,"moderate":10,"hard":4}
 assert Counter(x["format"] for x in P["items"])=={"single":12,"numeric":5,"multi":3}
 assert Counter(x["answer"] for x in P["items"])=={"A":5,"B":5,"C":5,"D":5}
