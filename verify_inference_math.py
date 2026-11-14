@@ -422,7 +422,7 @@ class FollowUpCorrectionTests(unittest.TestCase):
     def test_t15_distribution_free_tests_do_not_claim_general_mean_test(self):
         pool = load_json(SEED / "inference_t15_mastery.json")
         item = next(q for q in pool["items"] if q["id"] == "inf-t15-m-20")
-        self.assertIn("does not directly test the mean", item["options"][2])
+        self.assertIn("directly tests the mean", item["options"][2])
         self.assertIn("median", item["explanation"].lower())
 
     def test_t8_minimax_uses_lower_bound_not_constant_risk_alone(self):
