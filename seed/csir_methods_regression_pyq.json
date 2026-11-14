@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 12,
-  "clean": 12,
+  "count": 13,
+  "clean": 13,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -351,6 +351,47 @@
         }
       },
       "explanation": "The source prints this as Question 75 (December 2015), page 39. The supplied answer key on page 64 lists A and C. For a common mean, the GLS estimator is [1ᵀV⁻¹Y]/[1ᵀV⁻¹1]. Since V⁻¹ has the same diagonal value c and same off-diagonal value d, every row sum is c+(n−1)d. Thus V⁻¹1 is proportional to 1, and the GLS weights are equal. Therefore T₁=Ȳ. Ordinary least squares for a common mean also gives T₂=Ȳ, so A is true. A linear function aᵀY has expectation θΣaᵢ. It has zero expectation for every θ precisely when the coefficients sum to zero. This is one linear restriction on n coefficients, leaving a subspace of dimension n−1. Hence C is true and D false. B is false because it does not give the OLS and BLUE expressions correctly. Answer A and C only. Other-exam relevance: GLS, BLUE, covariance structures and linear unbiased estimation overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-q101",
+      "type": "practice",
+      "format": "multi",
+      "year": 2011,
+      "session": "December",
+      "topic": "regression-t2 · estimability and BLUE under a partially specified covariance structure",
+      "stem": "Let Y₁,Y₂,Y₃,Y₄ have expectations E(Y₁)=θ₁−θ₃, E(Y₂)=θ₁+θ₂−θ₃, E(Y₃)=θ₁−θ₃ and E(Y₄)=θ₁−θ₂−θ₃, where θ₁,θ₂,θ₃ are unknown. Suppose Var(Yᵢ)=σ² for i=1,2,3,4. No covariances are specified. Which statements are guaranteed by the printed assumptions?",
+      "statements": [
+        "θ₁, θ₂ and θ₃ are all estimable.",
+        "θ₁+θ₃ is estimable.",
+        "θ₁−θ₃ is estimable and (Y₁+Y₃)/2 is its BLUE.",
+        "θ₂ is estimable."
+      ],
+      "options": [
+        "A only",
+        "B only",
+        "C only",
+        "D only"
+      ],
+      "answer": "D",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The expectations identify θ₁−θ₃ and θ₂, but not θ₁ and θ₃ separately."
+        },
+        "B": {
+          "tf": false,
+          "why": "The coefficient vector for θ₁+θ₃ is not in the row space of the expectation design matrix."
+        },
+        "C": {
+          "tf": false,
+          "why": "θ₁−θ₃ is estimable, but the claim that (Y₁+Y₃)/2 is BLUE needs Cov(Y₁,Y₃)=0 (or another covariance condition). The question gives only marginal variances, so this BLUE claim is not guaranteed."
+        },
+        "D": {
+          "tf": true,
+          "why": "E[(Y₂−Y₄)/2]=[(θ₁+θ₂−θ₃)−(θ₁−θ₂−θ₃)]/2=θ₂, so θ₂ is estimable."
+        }
+      },
+      "explanation": "The printed answer key on PDF page 65 lists statement C only. Check the expectation equations directly. First, E(Y₁)=E(Y₃)=θ₁−θ₃, so θ₁−θ₃ is estimable. Also E[(Y₂−Y₄)/2]=θ₂, so statement D is definitely true. The individual parameters θ₁ and θ₃ cannot be separated, and θ₁+θ₃ is not identified by these four expectations, so A and B are false. Statement C contains two claims: the contrast θ₁−θ₃ is estimable, but the assertion that (Y₁+Y₃)/2 is BLUE requires a covariance assumption. Its variance is [2σ²+2Cov(Y₁,Y₃)]/4, and the question does not specify Cov(Y₁,Y₃) or any other off-diagonal covariance. Thus C is not guaranteed by the literal printed assumptions. The mathematically guaranteed statement is D only. The key's C-only answer conflicts with the estimability of θ₂ and also assumes information about covariances that is not printed. Treat this as a flawed-source item: do not memorise the key without noting the missing assumptions. Other-exam relevance: estimability, row-space conditions and BLUE calculations overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
