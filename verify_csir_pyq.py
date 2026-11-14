@@ -254,6 +254,43 @@ def main() -> None:
     # mathematically inconsistent or whose scan transcription is unresolved.
     assert not any(x["id"] in {"csir-est-q16", "csir-est-q19"} for x in estimation["items"])
 
+    # Source Estimation PDF Questions 56–68 (pages 29–35). The supplied
+    # answer-key sheet ends at Q44, so these assertions protect derived keys.
+    expected = {
+        "csir-est-q56": ("AB", 2017, "December"),
+        "csir-est-q57": ("A", 2017, "December"),
+        "csir-est-q58": ("BCD", 2017, "December"),
+        "csir-est-q59": ("AD", 2017, "December"),
+        "csir-est-q60": ("AC", 2017, "June"),
+        "csir-est-q62": ("ACD", 2016, "December"),
+        "csir-est-q63": ("AC", 2016, "December"),
+        "csir-est-q67": ("BC", 2016, "June"),
+        "csir-est-q68": ("ABC", 2016, "June"),
+    }
+    for qid, (truth, year, session) in expected.items():
+        q = next(x for x in estimation["items"] if x["id"] == qid)
+        assert q["type"] == "practice" and q["format"] == "multi"
+        assert q["year"] == year and q["session"] == session
+        assert "".join(sorted(k for k, v in q["verdicts"].items() if v["tf"])) == truth
+        assert "supplied answer list" in q["explanation"] or "supplied answer-key" in q["explanation"]
+    for qid, year, session, answer in [
+        ("csir-est-q61", 2016, "December", "B"),
+        ("csir-est-q64", 2016, "June", "C"),
+        ("csir-est-q65", 2016, "June", "C"),
+        ("csir-est-q66", 2016, "June", "C"),
+    ]:
+        q = next(x for x in estimation["items"] if x["id"] == qid)
+        assert q["type"] == "practice" and q["format"] == "single"
+        assert (q["year"], q["session"], q["answer"]) == (year, session, answer)
+        assert "page " in q["explanation"]
+    q56 = next(x for x in estimation["items"] if x["id"] == "csir-est-q56")
+    assert "Var(X)=θ" in q56["explanation"] and "θ²" in q56["explanation"]
+    q60 = next(x for x in estimation["items"] if x["id"] == "csir-est-q60")
+    assert "rank(X)>p" in q60["explanation"] and "rank(X)=p" in q60["explanation"]
+    q68 = next(x for x in estimation["items"] if x["id"] == "csir-est-q68")
+    assert "cannot define a probability density" in q68["explanation"]
+    assert len(estimation["items"]) == estimation["count"] == 63
+
     print(
         f"PASS: {sum(len(x['items']) for x in (estimation, methods, sampling))} CSIR PYQs; "
         "unique IDs, four-option keys, multi-statement verdict alignment, "
