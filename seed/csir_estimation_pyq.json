@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 40,
-  "clean": 40,
+  "count": 43,
+  "clean": 43,
   "items": [
     {
       "id": "csir-est-q01",
@@ -1231,6 +1231,87 @@
         }
       },
       "explanation": "The source question is printed as Question 42 (December 2019) on page 19 of the supplied Estimation PDF. The answer list on page 63 gives statement 2 only. To see why, use the balanced one-way random-effects ANOVA formulas. There are a=5 groups and r=10 observations per group. Let MS_W be the within-group mean square and MS_B the between-group mean square. Their expectations are E(MS_W)=σ² and E(MS_B)=σ²+10τ². Therefore the usual unbiased ANOVA estimators are σ̂²ᵤ=MS_W and τ̂²ᵤ=(MS_B−MS_W)/10. The first is a nonnegative sum of squared within-group deviations divided by its degrees of freedom, so it cannot be negative. The second is a difference of two random mean squares. There is positive probability that MS_B<MS_W (for example, when τ²=0), making τ̂²ᵤ negative. This does not imply that the true variance τ² is negative; it reflects that an unbiased estimator is not constrained to be nonnegative in every sample. Finally, the parameter space explicitly requires σ²≥0 and τ²≥0. The maximum-likelihood estimators are maximised over this constrained parameter space, so neither MLE can be negative. Hence statement 2 alone is correct, option B. Other-exam relevance: random-effects models, ANOVA expected mean squares and variance-component estimation are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q43",
+      "type": "practice",
+      "format": "multi",
+      "year": 2019,
+      "session": "December",
+      "topic": "inference-t4 · unbiased estimation of functions of a normal mean and variance",
+      "stem": "Let X₁, X₂ and X₃ be i.i.d. Normal random variables with mean θ and variance θ², where θ∈R is unknown. Which of the following estimators are unbiased for the stated targets?",
+      "statements": [
+        "(X₁+2X₂+3X₃)/6 is unbiased for θ.",
+        "(X₁²+4X₂²+9X₃²)/14 is unbiased for θ².",
+        "(2X₁+X₃²)/2 is unbiased for θ(1+θ).",
+        "X₂(1−X₂/2) is unbiased for θ(1−θ)."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 1, 3 and 4 only",
+        "Statements 2, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Statement 1 is unbiased for θ, but statement 2 has expectation 2θ², not θ²."
+        },
+        "B": {
+          "tf": true,
+          "why": "The expectations in statements 1, 3 and 4 equal their stated targets. Statement 2 has expectation 2θ²."
+        },
+        "C": {
+          "tf": false,
+          "why": "Statement 1 is also unbiased, while statement 2 is not."
+        },
+        "D": {
+          "tf": false,
+          "why": "Statement 2 is biased because E(Xᵢ²)=Var(Xᵢ)+[E(Xᵢ)]²=2θ²."
+        }
+      },
+      "explanation": "The source prints this as Question 43 (December 2019) on page 20. The answer list on page 63 gives statements 1, 3 and 4. Since E(Xᵢ)=θ and Var(Xᵢ)=θ², we have E(Xᵢ²)=2θ². Statement 1: E[(X₁+2X₂+3X₃)/6]=(1+2+3)θ/6=θ, so it is unbiased. Statement 2: E[(X₁²+4X₂²+9X₃²)/14]=(1+4+9)·2θ²/14=2θ², not θ², so it is biased. Statement 3: E[(2X₁+X₃²)/2]=(2θ+2θ²)/2=θ(1+θ), so it is unbiased. Statement 4: E[X₂(1−X₂/2)]=E(X₂)−E(X₂²)/2=θ−θ²=θ(1−θ), so it is unbiased. Therefore statements 1, 3 and 4 are correct, option B. Other-exam relevance: unbiased estimation, moments of normal distributions and functions of unknown parameters are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q44",
+      "type": "practice",
+      "format": "single",
+      "year": 2019,
+      "session": "June",
+      "topic": "inference-t4 · maximum likelihood with parameter-dependent support and boundary maximisation",
+      "stem": "A random sample of size 7 is drawn from the density fθ(x)=(1+x²)/[3θ(1+θ²)] for −2θ≤x≤θ, θ>0, and zero otherwise. The observations are 12, −54, 26, −2, 24, 17 and −39. What is the maximum-likelihood estimate of θ?",
+      "options": [
+        "12",
+        "24",
+        "26",
+        "27"
+      ],
+      "answer": "D",
+      "explanation": "The source prints this as Question 44 (June 2019) on page 20, and the supplied answer list on page 63 gives D. First use the support restriction. Every observation must satisfy −2θ≤xᵢ≤θ. The largest positive observation is 26, so θ≥26. The most negative observation is −54, so −54≥−2θ, which gives θ≥27. The other observations impose weaker lower bounds. Thus the full sample is possible only when θ≥27. For a sample of size 7, the likelihood is proportional to [3θ(1+θ²)]⁻⁷ times the product of (1+xᵢ²), provided θ≥27; the product involving the observations is constant with respect to θ. Since θ(1+θ²) is strictly increasing for θ>0, the likelihood decreases as θ increases over the allowed set. It is maximised at the smallest admissible value, θ̂=27. Therefore option D is correct. Other-exam relevance: maximum likelihood, parameter-dependent support and boundary estimates are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q45",
+      "type": "practice",
+      "format": "single",
+      "year": 2019,
+      "session": "June",
+      "topic": "inference-t4 · consistency and mean squared error minimisation for a scaled chi-square statistic",
+      "stem": "Let X₁, X₂, … be i.i.d. N(0,σ²), where σ²>0 is unknown. Consider Tₙ=Cₙ∑ᵢ₌₁ⁿXᵢ², with Cₙ>0. Which of the following statements are correct?",
+      "statements": [
+        "Tₙ is consistent for σ² if Cₙ=1/(n−1).",
+        "Tₙ is unbiased for σ² if Cₙ=1/n.",
+        "Tₙ is consistent for σ² if Cₙ=1/(n+1).",
+        "The mean squared error of Tₙ is minimised if Cₙ=1/(n+2)."
+      ],
+      "options": [
+        "All four statements are correct",
+        "Statements 1, 2 and 3 only",
+        "Statements 1 and 4 only",
+        "Statements 2 and 3 only"
+      ],
+      "answer": "A",
+      "explanation": "The source prints this as Question 45 (June 2019) on page 21. The supplied answer list on page 63 ends at Question 44, so no printed answer-key entry for Q45 is available; the answer below is derived directly from the model. Let Sₙ=∑Xᵢ². Since E(Xᵢ²)=σ² and Var(Xᵢ²)=2σ⁴ for a zero-mean normal variable, E(Sₙ)=nσ² and Var(Sₙ)=2nσ⁴. Thus E(Tₙ)=nCₙσ². For Cₙ=1/(n−1), the expectation multiplier n/(n−1) tends to 1; for Cₙ=1/(n+1), n/(n+1) also tends to 1. In both cases, the law of large numbers gives consistency because (1/n)Sₙ→σ² and the extra multiplier tends to 1. For Cₙ=1/n, E(Tₙ)=σ² exactly, so statement 2 is unbiased. Finally, MSE(Tₙ)=Var(Tₙ)+Bias(Tₙ)²=[2nCₙ²+(nCₙ−1)²]σ⁴=[(n²+2n)Cₙ²−2nCₙ+1]σ⁴. Differentiating this quadratic with respect to Cₙ gives the minimiser Cₙ=1/(n+2), so statement 4 is also correct. All four statements are true, option A. Other-exam relevance: consistency, unbiasedness, chi-square moments and MSE-optimal estimation are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
