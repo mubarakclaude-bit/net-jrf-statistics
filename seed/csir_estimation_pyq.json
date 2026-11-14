@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 33,
-  "clean": 33,
+  "count": 34,
+  "clean": 34,
   "items": [
     {
       "id": "csir-est-q01",
@@ -1016,6 +1016,23 @@
         }
       },
       "explanation": "For squared-error loss, the Bayes estimator is the posterior mean E(μ|X).\n\n1. Consider first a proper prior π(μ). The marginal density of the observation is m(x)=∫φ(x−μ)π(μ)dμ, where φ is the standard normal density. For this normal location model, the posterior mean can be written as δ(x)=E(μ|X=x)=x + d[log m(x)]/dx. If δ(x) were unbiased for every μ, completeness of the normal location family implies that it must equal the usual unbiased estimator X. That would require d[log m(x)]/dx=0 for all x, so m(x) would have to be constant. A constant function over the whole real line cannot be a proper probability density. Thus a proper prior cannot produce a Bayes estimator that is unbiased for every μ. Statement 1 is true and statement 2 is false.\n\n2. Now use the flat improper prior π(μ)∝1. Multiplying this prior by the likelihood gives π(μ|X=x)∝exp{−(x−μ)²/2}. This is the density kernel of N(x,1). Therefore the posterior mean is δ(x)=x. Since Eμ(X)=μ, this estimator is unbiased. So statement 4 is true and statement 3 is false.\n\nHence statements 1 and 4 only are correct: option A. Note that 'unbiased' here means unbiased for every μ in the parameter space, not merely having zero bias at one particular parameter value. Other-exam relevance: Bayesian estimation, posterior means, loss functions and the role of proper and improper priors are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q28",
+      "type": "practice",
+      "format": "single",
+      "year": 2020,
+      "session": "30 November",
+      "topic": "inference-t4 · maximum likelihood estimation of correlation in a bivariate normal model with equal marginal variances",
+      "stem": "Let (X₁,Y₁),…,(Xₙ,Yₙ), n≥4, be a random sample from a bivariate normal distribution with E(Xᵢ)=μ₁, E(Yᵢ)=μ₂, Var(Xᵢ)=Var(Yᵢ)=σ² and Corr(Xᵢ,Yᵢ)=ρ. All four parameters μ₁, μ₂, σ² and ρ are unknown. Define Sₓₓ=∑(Xᵢ−X̄)², Sᵧᵧ=∑(Yᵢ−Ȳ)² and Sₓᵧ=∑(Xᵢ−X̄)(Yᵢ−Ȳ). Which expression is the maximum-likelihood estimator of ρ?",
+      "options": [
+        "Sₓᵧ/√(SₓₓSᵧᵧ)",
+        "∑XᵢYᵢ/√[(∑Xᵢ²)(∑Yᵢ²)]",
+        "2Sₓᵧ/(Sₓₓ+Sᵧᵧ)",
+        "2Sₓᵧ/(Sₓₓ+Sᵧᵧ−2Sₓᵧ)"
+      ],
+      "answer": "C",
+      "explanation": "This model has equal marginal variances, so its covariance matrix is Σ=σ²[[1,ρ],[ρ,1]]. We must estimate the means, the common variance and the correlation together.\n\nStep 1: For a normal sample, the maximum-likelihood estimates of the two means are the sample means X̄ and Ȳ. After centring the observations, define A(ρ)=Sₓₓ+Sᵧᵧ−2ρSₓᵧ.\n\nStep 2: The determinant of Σ is σ⁴(1−ρ²), and the quadratic part of the log-likelihood is A(ρ)/[σ²(1−ρ²)]. Apart from constants, the log-likelihood is therefore ℓ(σ²,ρ)=−n log(σ²)−(n/2)log(1−ρ²)−A(ρ)/[2σ²(1−ρ²)].\n\nStep 3: For a fixed ρ, differentiate with respect to σ² and set the derivative to zero. This gives σ̂²(ρ)=A(ρ)/[2n(1−ρ²)]. Substitute this expression back into the log-likelihood. The part that depends on ρ becomes −n log A(ρ)+(n/2)log(1−ρ²), up to constants.\n\nStep 4: Differentiate this profile log-likelihood with respect to ρ and set it equal to zero:\n2Sₓᵧ/A(ρ)−ρ/(1−ρ²)=0.\nMultiplying through gives 2Sₓᵧ(1−ρ²)=ρ[Sₓₓ+Sᵧᵧ−2ρSₓᵧ]. The terms −2ρ²Sₓᵧ cancel from both sides, leaving 2Sₓᵧ=ρ(Sₓₓ+Sᵧᵧ).\n\nTherefore ρ̂=2Sₓᵧ/(Sₓₓ+Sᵧᵧ), which is option C. Option A is the usual sample correlation coefficient, but it is not the MLE under the additional equal-marginal-variance restriction in this model. The uncentred expression in option B ignores the unknown means, and option D is not the result of maximising the stated likelihood. Other-exam relevance: likelihood maximisation in multivariate normal models, covariance matrices and correlation estimation are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
