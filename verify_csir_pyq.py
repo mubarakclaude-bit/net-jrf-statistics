@@ -348,6 +348,10 @@ def main() -> None:
     q70 = next(x for x in estimation["items"] if x["id"] == "csir-est-q70")
     assert q70["answer"] == "A" and "page 64" in q70["explanation"]
     assert "median is less efficient than T₃" in q70["explanation"]
+    q71 = next(x for x in estimation["items"] if x["id"] == "csir-est-q71")
+    assert "Uniform(θ,5θ)" in q71["stem"]
+    assert "X₍ₙ₎/5≤θ≤X₍₁₎" in q71["explanation"]
+    assert q71["answer"] == "D" and "Q71 is listed as D" in q71["explanation"]
     assert "Uniform location" in mle_text and "Var(X̄)" in mle_text
     q57 = next(x for x in estimation["items"] if x["id"] == "csir-est-q57")
     assert "lists A and C" in q57["explanation"] and "A and B only" in q57["explanation"]
