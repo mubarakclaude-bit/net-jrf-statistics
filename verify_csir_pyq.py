@@ -296,7 +296,7 @@ def main() -> None:
     assert q31["format"] == "multi" and (q31["year"], q31["session"], q31["answer"]) == (2020, "26 November", "D")
     assert "".join(sorted(k for k, v in q31["verdicts"].items() if v["tf"])) == "ABCD"
     design_lesson = json.loads((ROOT / "seed" / "lesson_design_t1.json").read_text(encoding="utf-8"))
-    design_text = " ".join(b.get("body", "") for s in design_lesson["scenes"] for b in s.get("blocks", []))
+    design_text = " ".join(b.get("h", "") + " " + b.get("body", "") for s in design_lesson["scenes"] for b in s.get("blocks", []))
     assert "β₁+γ₂" in design_text and "26 November 2020, Q31" in design_text
     mle_lesson = json.loads((ROOT / "seed" / "lesson_mle.json").read_text(encoding="utf-8"))
     mle_scene3 = next(s for s in mle_lesson["scenes"] if s["id"] == "s3")
