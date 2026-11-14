@@ -147,8 +147,10 @@ Academic secondary biographies (including MacTutor) are used only where an insti
 **Primary sources (verified 14 November 2026):**
 - ORGI, Vital Statistics Division: https://censusindia.gov.in/census.website/en/node/180
 - India Code, *Census Act, 1948* (section 15): https://upload.indiacode.nic.in/showfile?actid=AC_CEN_5_40_00002_194837_1517807319480&filename=a1948-37.pdf&type=actfile
+- India Code, *Census Rules, 1990* (as amended): https://upload.indiacode.nic.in/showfile?actid=AC_CEN_5_40_00002_194837_1517807319480&filename=census_rule_1990%28with_amendments%29.pdf&type=rule
 - Legislative Department, *Constitution of India* (as on 1 May 2024; Union List Entry 69 and Concurrent List Entry 30): https://www.legislative.gov.in/static/uploads/2025/08/cb1b190ea633a1746368ed1fac35fb30.pdf
-- India Code, *Registration of Births and Deaths Act, 1969*: https://www.indiacode.nic.in/bitstream/123456789/1682/1/A1969-18.pdf
+- India Code, *Registration of Births and Deaths Act, 1969* (consolidated text including the 2023 amendment): https://upload.indiacode.nic.in/showfile?actid=AC_CEN_5_40_00006_196918_1517807324141&filename=a1969-18.pdf&type=actfile
+- India Code, *Registration of Births and Deaths Act, 1969* (earlier 2025 version): https://www.indiacode.nic.in/bitstream/123456789/1682/1/A1969-18.pdf
 - PIB, Census 2027 official backgrounder: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2255461
 - ORGI, Census 2027 general Phase-II Gazette catalogue record: https://censusindia.gov.in/nada/index.php/catalog/47179
 - ORGI, Census 2027 special schedule catalogue record: https://censusindia.gov.in/nada/index.php/catalog/47170
