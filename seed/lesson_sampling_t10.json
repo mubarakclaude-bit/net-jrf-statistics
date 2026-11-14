@@ -61,24 +61,27 @@
           "ask": "What does N represent?",
           "recall": "The number of units in the population.",
           "refresh": [
-            "N is the population size, not the sample size.",
-            "For example, a register of 100 households has N=100."
+            "A finite population contains N distinct units, each with a fixed value y_i for the variable being studied.",
+            "The population total is the sum of all these fixed values, and the population mean is that total divided by N.",
+            "For example, if the five household values are 2, 3, 4, 5 and 6, the population mean is 4; this target does not change when a sample is drawn."
           ]
         },
         {
           "ask": "What does n represent?",
           "recall": "The number of draws or observations in the sample.",
           "refresh": [
-            "The sample size is n. In SRSWR, n counts draws, including repeated selections.",
-            "In SRSWOR, n is the number of distinct selected units."
+            "The sample size n tells us how many observations are collected in one repetition of the sampling procedure.",
+            "Under sampling with replacement, n counts draws even if the same unit is selected more than once.",
+            "Under sampling without replacement, all n observations are distinct population units, so n cannot exceed N."
           ]
         },
         {
           "ask": "What is the population mean?",
           "recall": "Ȳ=Σy_i/N.",
           "refresh": [
-            "Add all N fixed population values.",
-            "Divide the total by N. This is the target that the sample mean estimates."
+            "To calculate the population mean, add the values of every unit in the finite population.",
+            "Divide this population total by N, the number of units; do not divide by the sample size.",
+            "The sample mean uses only the selected observations and varies from one possible sample to another, while the population mean remains fixed."
           ]
         }
       ],
@@ -102,8 +105,9 @@
         "teaser": "Five household cards",
         "title": "What happens after the first draw?",
         "body": [
-          "There are five cards labelled 1 to 5. If card 2 is drawn first and returned, card 2 can be drawn again. If it is not returned, the next draw must be one of the other four cards.",
-          "With replacement, each draw has the same five possible outcomes. Without replacement, the number of available cards decreases after every draw."
+          "There are five cards labelled 1, 2, 3, 4 and 5, one for each household. We draw two cards to represent a sample of size two.",
+          "If card 2 is drawn first and returned to the box, the second draw can again be card 2. The ordered sequence (2,2) is possible under sampling with replacement.",
+          "If card 2 is kept out after the first draw, the second draw must be one of the other four cards. The sequence (2,2) is impossible under sampling without replacement."
         ],
         "q": "Which design permits the same household to be selected twice?",
         "answer": "SRSWR, because the selected unit is returned before the next draw."
@@ -177,6 +181,17 @@
       "ask": {
         "q": "Does sampling without replacement make the sample mean biased?",
         "nudge": "No. Its expectation still equals the population mean."
+      },
+      "scenario": {
+        "teaser": "A small population with different values",
+        "title": "Unbiasedness does not depend on replacement",
+        "body": [
+          "Consider a fixed population with values 2, 4 and 6. Its population mean is 4.",
+          "Under SRSWR, each draw has expected value 4. The average of the draws therefore also has expectation 4, even though a unit can be repeated.",
+          "Under SRSWOR, each unit has the same chance of appearing in the sample. Averaging over all possible samples also gives 4, so the sample mean is unbiased under both designs."
+        ],
+        "q": "What changes between the designs if both sample means are unbiased?",
+        "answer": "Their variances differ because replacement changes dependence between draws."
       }
     },
     {
@@ -215,6 +230,66 @@
       "ask": {
         "q": "Why is the SRSWOR variance smaller for 0<n<N?",
         "nudge": "Its variance is the SRSWR variance multiplied by a factor less than one."
+      },
+      "flow": {
+        "title": "Compare the sampling designs",
+        "alt": "Identify replacement status, establish the sample space, select the matching expectation and variance formula, and compare precision.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Identify replacement status",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Write the sample space",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Check unbiasedness",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Choose the variance formula",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Apply the FPC and compare",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          }
+        ],
+        "note": "The replacement rule determines whether draws are independent and which variance formula applies."
       }
     },
     {
@@ -358,8 +433,44 @@
       ]
     },
     {
+      "kind": "guided",
+      "id": "s10s11",
+      "mins": 8,
+      "title": "Transfer: a sample proportion",
+      "objective": "Apply the two variance formulas to a binary characteristic.",
+      "problem": "A population contains N=8 households, of which 3 have a specified characteristic. A sample of n=2 is drawn. Calculate the variance of the sample proportion under SRSWR and SRSWOR.",
+      "hints": [
+        "Set P=3/8 and calculate P(1−P)/n for SRSWR.",
+        "For SRSWOR, multiply that result by (N−n)/(N−1).",
+        "Keep the exact fractions until the final comparison."
+      ],
+      "answer": "V(p_WR)=(3/8)(5/8)/2=15/128. V(p_WOR)=(15/128)(6/7)=45/448≈0.10045.",
+      "check": "The SRSWOR variance is smaller because the finite-population correction is 6/7.",
+      "solution": [
+        {
+          "say": "Calculate the with-replacement variance.",
+          "math": "V(p_WR)=P(1−P)/n=(3/8)(5/8)/2=15/128",
+          "why": "Each draw is an independent zero-one observation with success probability 3/8."
+        },
+        {
+          "say": "Calculate the finite-population correction.",
+          "math": "FPC=(8−2)/(8−1)=6/7",
+          "why": "There are fewer remaining units after each draw without replacement."
+        },
+        {
+          "say": "Multiply to obtain the without-replacement variance.",
+          "math": "V(p_WOR)=(15/128)(6/7)=45/448≈0.10045",
+          "why": "The correction is below one, so this variance is smaller than 15/128."
+        }
+      ],
+      "ask": {
+        "q": "What remains unchanged when moving from SRSWR to SRSWOR?",
+        "nudge": "The sample proportion remains unbiased for the population proportion."
+      }
+    },
+    {
       "kind": "summary",
-      "id": "s10s10",
+      "id": "s10s11",
       "mins": 5,
       "title": "SRSWR and SRSWOR checklist",
       "objective": "Summarise the comparison.",
@@ -378,7 +489,7 @@
     },
     {
       "kind": "quiz",
-      "id": "s10s11",
+      "id": "s10s12",
       "mins": 4,
       "title": "Mastery check",
       "objective": "Demonstrate independent command of SRSWR and SRSWOR.",
@@ -393,7 +504,9 @@
       "σ²_N=(1/N)Σ(y_i−Ȳ)²; S²=(1/(N−1))Σ(y_i−Ȳ)².",
       "V(ȳ_WR)=σ²_N/n.",
       "V(ȳ_WOR)=(1−n/N)S²/n=[(N−n)/(N−1)]σ²_N/n.",
-      "FPC is at most one for 1≤n<N; it equals one at n=1 and is zero at a census."
+      "FPC is at most one for 1≤n<N; it equals one at n=1 and is zero at a census.",
+      "For a zero-one variable, the sample mean is the sample proportion.",
+      "SRSWR permits repeated units; SRSWOR does not."
     ],
     "cards": [
       [
@@ -424,11 +537,13 @@
     "tricks": [
       "Identify replacement status before choosing a formula.",
       "Use the variance convention shown in the question.",
-      "For a sample proportion, treat each observation as a zero-one variable."
+      "For a sample proportion, treat each observation as a zero-one variable.",
+      "Check n=1: the two designs have the same variance because the FPC equals one."
     ],
     "shortcuts": [
       "Both designs are unbiased; variance is the distinguishing property.",
-      "For SRSWOR, multiply the matching SRSWR variance by the FPC."
+      "For SRSWOR, multiply the matching SRSWR variance by the FPC.",
+      "For a proportion, replace the population variance by P(1−P) with the matching FPC convention."
     ],
     "remember": [
       "Unbiased does not mean minimum variance.",
@@ -456,6 +571,16 @@
       "free": false,
       "checked": "2026-11-14",
       "why": "Finite-population sampling designs and variance formulas."
+    },
+    {
+      "title": "Sampling Theory",
+      "where": "Simple random sampling and finite population correction",
+      "site": "W. G. Cochran / standard sampling theory text",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-14",
+      "why": "Supplementary reference for the finite-population correction and design variance."
     }
   ],
   "mastery": {
