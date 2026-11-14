@@ -388,5 +388,36 @@ class Topic17UMPTests(unittest.TestCase):
         self.assertLess(1 / 2.0, 1 / 1.0)
 
 
+class FollowUpCorrectionTests(unittest.TestCase):
+    def test_sprt_intercepts_depend_on_hypotheses_and_error_rates(self):
+        p0, p1, alpha, beta = 0.3, 0.6, 0.05, 0.10
+        A, B = (1 - beta) / alpha, beta / (1 - alpha)
+        k = math.log(p1 * (1 - p0) / (p0 * (1 - p1)))
+        a, b = math.log(A) / k, -math.log(B) / k
+        changed_p1 = 0.7
+        changed_k = math.log(changed_p1 * (1 - p0) / (p0 * (1 - changed_p1)))
+        self.assertNotEqual(a, math.log(A) / changed_k)
+        self.assertNotEqual(b, -math.log(B) / changed_k)
+        changed_A = (1 - beta) / 0.10
+        self.assertNotEqual(a, math.log(changed_A) / k)
+        pool = load_json(SEED / "inference_t11_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t11-m-09")
+        self.assertEqual(item["answer"], "A")
+        self.assertIn("both the hypotheses and the two error rates", item["options"][0].lower())
+
+    def test_sprt_boundary_explanation_matches_key(self):
+        pool = load_json(SEED / "inference_t11_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t11-m-04")
+        self.assertEqual(item["answer"], "C")
+        self.assertIn("Option C is the correct pair", item["explanation"])
+
+    def test_standard_deviation_interval_uses_corrected_rounding(self):
+        pool = load_json(SEED / "inference_t13_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t13-m-16")
+        self.assertIn("13.333", item["stem"])
+        self.assertEqual(item["options"][1], "(1.376, 3.651)")
+        self.assertIn("√1.892 ≈ 1.376", item["explanation"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
