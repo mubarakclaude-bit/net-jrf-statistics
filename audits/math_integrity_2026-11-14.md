@@ -212,3 +212,13 @@ A cross-check compared each A–D statement verdict set with the selected answer
 - `ma-t10-m-18`: only A is true; changed answer from B (A and B only) to A (A only), and aligned the explanation.
 
 Added `tools/verify_math_integrity_math_mastery_keys.py` to assert each corrected key, option and verdict set. This is a targeted verifier for these confirmed defects, not a claim that all 580 mastery items have undergone full mathematical verification.
+
+
+## Second-pass continuation — Probability lessons 1.5 and 1.7
+
+A targeted mathematical edge-condition review identified two learner-facing precision defects and corrected them:
+
+- **Probability 1.5 (Standard Discrete Distributions):** the hypergeometric variance-to-mean ratio is (q(N-n)/(N-1)). It is strictly below (q) when (n>1), but equals (q) when (n=1). The comparison table, explanatory ratio, revision sheet and worked identification now state the equality case. The worked example's exclusion statement now uses the valid bound (q(N-n)/(N-1)\le q<1).
+- **Probability 1.7 (Jensen, Markov, Chebyshev and Cauchy–Schwarz):** the Jensen equality condition was too loosely phrased as linearity “on the support”. It now uses the supporting-affine-function condition, and the strict-convexity consequence is explicit in the theory, proof and revision sheet. The Cauchy–Schwarz statement now states the finite-second-moment assumptions and covers the zero-variable equality case; the proof note also records the degenerate case.
+
+Added `tools/verify_math_integrity_probability_foundations.py` to guard these conditions. This is a focused correction, not a claim that either lesson or the full Probability module has completed exhaustive verification.
