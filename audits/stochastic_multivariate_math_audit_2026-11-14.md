@@ -67,6 +67,7 @@ Date: 14 November 2026
 - `verify_multivariate_t4.py`: exact-fraction assertions for both Hotelling F values and their corrected options.
 - `verify_multivariate_t7.py`: asserts the mastery item’s option B and the distinction from the original paper’s option D.
 - `verify_multivariate_t9.py`: asserts the correct answer key B for item `mv-t9-m-01`.
+- The first CI run exposed an outdated strict answer-letter-balance assertion after the legitimate T9 key correction. The verifier now expects the resulting 5/6/5/4 A/B/C/D distribution; correctness takes priority over artificial balance.
 
 ## Stochastic Processes T5–T9 spot-check outcome
 No additional confirmed numerical or answer-key defects were identified in the worked calculations and mastery pools inspected in this pass. Stochastic T4’s two already-known learner-facing answer mismatches remain owned by PR #93 and are not duplicated here.
