@@ -589,5 +589,14 @@ class Topic04AndConsistencyRegressionTests(unittest.TestCase):
         self.assertNotIn("0.0424", item["options"][1])
 
 
+    def test_t6_intro_distinguishes_pointwise_crlb_attainment_from_umvue(self):
+        lesson = load_json(SEED / "lesson_t6.json")
+        scene = next(s for s in lesson["scenes"] if s.get("id") == "s1")
+        passage = " ".join(scene["body"])
+        self.assertIn("at a particular θ", passage)
+        self.assertIn("for every θ", passage)
+        self.assertNotIn("it is the best unbiased estimator and you need no further argument", passage)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
