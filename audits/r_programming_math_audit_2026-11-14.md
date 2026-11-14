@@ -44,7 +44,7 @@ The prompt asks for CSV import and export calls, but the old solution described 
 
 **File:** `seed/lesson_rprog_t9.json`, scenes `s6` and `s8`.
 
-- Scene s6 asks for inline beta notation and a displayed sample-mean equation; its old solution discussed editable `.tex` source versus PDF output. The replacement gives the appropriate inline and display math modes with correctly escaped LaTeX.
+- Scene s6 asks for inline beta notation and a displayed sample-mean equation; its old solution discussed editable `.tex` source versus PDF output. The replacement gives the appropriate inline and display math modes using render-safe Unicode notation.
 - Scene s8 asks for tracked edits, comments and a consistent bibliography; its old solution discussed inline and display mathematics. The replacement explains Track Changes, comments and citation/reference managers.
 
 ## Coverage and non-findings
