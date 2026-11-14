@@ -28,6 +28,13 @@ assert F(2)+F(1,2)+F(1,2)==F(3) and F(2,3)*100==F(200,3)
 # Worked covariance example and correlation example.
 assert F(6)+F(2)==F(8) and F(6,8)==F(3,4)
 assert F(1)+F(3,5)==F(8,5) and F(1)-F(3,5)==F(2,5)
+# Mastery item mv-t3-m-11 uses a covariance matrix (not a correlation matrix):
+# its eigenvalues sum to the trace 5, and the first two explain 3.7/5 = 74%.
+item11 = next(q for q in P["items"] if q["id"] == "mv-t3-m-11")
+assert item11["stem"].startswith("A covariance matrix has eigenvalues")
+vals = [F(5,2), F(6,5), F(4,5), F(1,2)]
+assert sum(vals) == F(5)
+assert sum(vals[:2]) / sum(vals) == F(37,50)
 # Mastery numeric answers and key balance.
 assert P["items"][10]["answer"]=="C" and P["items"][16]["answer"]=="C" and P["items"][18]["answer"]=="D"
 print("PASS: June 2026 Q2 eigenstructure, trace and explained variance.")

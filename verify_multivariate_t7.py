@@ -15,6 +15,8 @@ for x in P["items"]:
  assert len(x["options"])==4 and len(x["explanation"])>=40
  if x["format"]=="numeric": assert x.get("check")
  if x["format"]=="multi": assert len(x["statements"])==4 and set(x["verdicts"])==set("ABCD")
+q17=next(x for x in P["items"] if x["id"]=="mv-t7-m-17")
+assert q17["answer"]=="B" and "mastery item" in q17["explanation"] and "original June 2026" in q17["explanation"]
 obs=[(1,2),(4,4),(4,3)]; n=len(obs)
 mean=tuple(sum(x[j] for x in obs)/n for j in range(2))
 dev=[(x[0]-mean[0],x[1]-mean[1]) for x in obs]
