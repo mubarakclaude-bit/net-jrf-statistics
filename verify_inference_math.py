@@ -412,6 +412,13 @@ class FollowUpCorrectionTests(unittest.TestCase):
         self.assertEqual(item["answer"], "C")
         self.assertIn("Option C is the correct pair", item["explanation"])
 
+    def test_t7_hpd_and_credible_interval_asymptotics_are_qualified(self):
+        pool = load_json(SEED / "inference_t7_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inference-t7-m-15")
+        self.assertIn("equality is possible", item["explanation"])
+        self.assertIn("Bernstein–von Mises", item["explanation"])
+        self.assertIn("not restricted to symmetric", item["verdicts"]["C"]["why"])
+
     def test_t16_significance_does_not_imply_practical_magnitude(self):
         pool = load_json(SEED / "inference_t16_mastery.json")
         item = next(q for q in pool["items"] if q["id"] == "inf-t16-m-20")
