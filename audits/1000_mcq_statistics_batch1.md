@@ -83,3 +83,21 @@ Six additional questions were imported from visually checked pages 13, 16, 17, 1
 - **Page 20:** held out because the degrees-of-freedom symbols in the chi-square statements are unreadable in the scan.
 - **Page 23:** held out because more than one listed statement is false as written, despite the single-answer wording.
 - **Page 24:** held out because the limit expression and normalising terms are not legible enough to transcribe without guessing.
+
+
+## Batch 6 — pages 25–36
+
+Two further items were added from visually checked pages 27 and 35: a one-sample large-sample test for a population proportion (Statistical Inference) and the exponential transformation of a Uniform(−1,1) variable (Probability). The z statistic is computed from the null standard error, and the transformed support is explicitly checked.
+
+### Pages held out after inspection
+
+- **Page 25:** held out because the four conditions are not fully legible, particularly the fourth characteristic-function expression.
+- **Page 26:** held out because the covariance matrix and the random-vector transformation are too faint to transcribe reliably.
+- **Page 28:** held out because the exact statement quantifiers and correlation condition are ambiguous in the scan.
+- **Page 29:** held out because the joint PMF's support and several conditional-probability expressions are unreadable.
+- **Page 30:** held out because the discrete PMF's parameterised cases and option expressions are not legible enough for a reliable method-of-moments derivation.
+- **Page 31:** held out because the density's piecewise formula and interval endpoint are not sufficiently clear.
+- **Page 32:** held out because the moment and event notation is ambiguous in the scan.
+- **Page 33:** held out because the definitions of the transformed variables are not legible enough to identify the requested distributions.
+- **Page 34:** held out because the joint-density support and event inequalities are partly obscured.
+- **Page 36:** held out because the density formula and the four estimator expressions cannot be transcribed with confidence.
