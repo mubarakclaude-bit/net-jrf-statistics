@@ -12,3 +12,19 @@ assert (3*20+3*18-48)/((3-1)*(3-1))==16.5
 assert (3*(14+12+13)-2*30)/((3-1)*(3-2))==28.5
 assert 12-1==11 and 17-1==16
 print("PASS: RBD and Latin-square missing-value calculations and error-df adjustment.")
+
+# Latin-square one-missing-value estimator boundary: p=2 is not estimable.
+# Its denominator and residual df are both zero; p>=3 is required.
+for p in range(2,12):
+    denominator=(p-1)*(p-2)
+    error_df=(p-1)*(p-2)
+    if p==2:
+        assert denominator==0 and error_df==0
+    else:
+        assert denominator>0 and error_df>0
+s4=next(s for s in L["scenes"] if s["id"]=="s4")
+boundary=next(b for b in s4["blocks"] if b["h"]=="Why the formula differs")
+assert "requires p≥3" in boundary["body"] and "error df" in boundary["body"] and "is zero" in boundary["body"]
+m5=next(q for q in P["items"] if q["id"]=="design-t7-m-05")
+assert "p must be at least 3" in m5["explanation"]
+print("PASS: Latin-square missing-value estimator is restricted to p>=3; p=2 has zero denominator and error df.")
