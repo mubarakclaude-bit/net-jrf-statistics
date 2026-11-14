@@ -314,3 +314,23 @@ Ten further questions were imported from pages 181–183, 185–186 and 188–19
 - **Page 187:** held out because the definition of Y is missing from the displayed question; the success-probability options cannot be evaluated without it.
 
 Page 192 is keyed conservatively: the source does not explicitly state independence, so only E(X+Y²)=n+1 is guaranteed by the given marginal distributions. Page 185 is a numeric-answer item with a direct lognormal-MGF check; page 189's t moment is checked using ν/(ν−2).
+
+
+## Batch 20 — pages 193–204
+
+Seven further questions were imported from pages 193, 194, 198, 199–200, 201, 202 and 204, all in Probability:
+- Independent-event conditional probability from sum/product constraints, p193.
+- Normalising constant for the standard Cauchy density, p194.
+- A max transformation of a Uniform(0,1) variable, p198.
+- Determinant-zero probability for a random symmetric 3×3 matrix, pp199–200.
+- Chebyshev upper bound for an exponential variable, p201.
+- Hypergeometric probability of a box containing no defectives, p202.
+- Conditional selection of the youngest student within a known section, p204.
+
+### Pages held out after inspection
+
+- **Page 195:** the displayed density is Cauchy, whose variance does not exist; none of the four finite numerical options is correct.
+- **Page 196:** the displayed power function appears to have support extending to infinity, under which it is not a normalisable density for the indicated positive shape parameter. The intended upper endpoint is not clear enough to repair safely.
+- **Page 197:** the function 2x/a² on 0<x<a integrates to one for every a>0, so the instruction to determine a has no unique answer; the printed choices do not resolve this.
+
+Page 202 uses the exact hypergeometric model: C(9750,100)/C(10000,100)≈0.0785077. The simpler binomial approximation is ≈0.07952 and is noted in the explanation.
