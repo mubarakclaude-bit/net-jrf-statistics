@@ -15,7 +15,8 @@
     "Derive and use the degrees-of-freedom identities for treatments, blocks, error and total.",
     "Calculate correction factor, total, treatment and residual sums of squares from treatment totals.",
     "Form mean squares and the appropriate F statistic, then state the conclusion without confusing statistical and practical significance.",
-    "Distinguish the unbiased ANOVA estimators from constrained maximum-likelihood estimators of variance components in a one-way random-effects model."
+    "Distinguish the unbiased ANOVA estimators from constrained maximum-likelihood estimators of variance components in a one-way random-effects model.",
+    "Determine estimability of main effects and contrasts in an additive two-way ANOVA model with sum-to-zero constraints."
   ],
   "prereq": [
     {
@@ -98,7 +99,8 @@
     "The F statistic is MS treatment divided by MS error, not by SS error.",
     "A significant treatment F says at least one treatment mean differs; it does not say every pair differs or that the effect is practically important.",
     "Blocking removes predictable nuisance variation from the residual; it does not increase the number of treatment replications.",
-    "In a one-way random-effects model, the unbiased method-of-moments estimate of the random-effect variance can be negative; a constrained MLE cannot be negative when the parameter space restricts variances to be nonnegative."
+    "In a one-way random-effects model, the unbiased method-of-moments estimate of the random-effect variance can be negative; a constrained MLE cannot be negative when the parameter space restricts variances to be nonnegative.",
+    "In an additive two-way fixed-effects model, both row and column sum-to-zero constraints identify the main effects; do not follow a printed answer key that conflicts with the stated constraints without checking estimability."
   ],
   "howto": "Read in order. Work through the two numerical examples with a pen. In each ANOVA table, check that the degrees of freedom and sums of squares add back to their totals before interpreting F. Then attempt the unseen mastery test without hints.",
   "revision": {
@@ -924,6 +926,49 @@
         "The two most useful checks are independent. The component degrees of freedom must add to N−1. The component sums of squares must add to total SS. Run both checks before reading the F ratio.",
         "A correct F ratio still needs a correct interpretation. Rejecting equal treatment means establishes that at least one mean differs. It does not identify every pair and it does not measure practical importance. The randomised design and error assumptions remain part of the conclusion."
       ]
+    },
+    {
+      "kind": "theory",
+      "id": "s15",
+      "mins": 10,
+      "title": "Two-way ANOVA: estimability under sum-to-zero constraints",
+      "objective": "Identify which main effects and contrasts are estimable in the additive two-way fixed-effects model.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "The additive two-way model",
+          "body": "For a complete I×J layout, write Yᵢⱼ=μ+βᵢ+γⱼ+εᵢⱼ, where i=1,…,I and j=1,…,J. The two sets of effects represent row and column contributions. This model has no interaction term."
+        },
+        {
+          "t": "formula",
+          "h": "Why constraints are needed",
+          "body": "Without constraints, the decomposition is not unique: adding a constant c to μ and subtracting c from every βᵢ leaves every fitted mean unchanged. A similar shift can be made between μ and the γⱼ effects. Use the identifying constraints Σᵢβᵢ=0 and Σⱼγⱼ=0 to fix the parameterisation."
+        },
+        {
+          "t": "note",
+          "h": "Meaning of the constraints",
+          "body": "Under both sum-to-zero constraints, μ is the grand mean, βᵢ is the ith row mean minus the grand mean, and γⱼ is the jth column mean minus the grand mean in the complete balanced layout. Thus each individual main effect is identifiable in this stated parameterisation."
+        },
+        {
+          "t": "formula",
+          "h": "Estimable quantities",
+          "body": "The effects β₁ and γ₁ are estimable. Their contrasts, such as β₁−β₂, are estimable. A cross-factor sum such as β₁+γ₂ is also estimable because both component effects are identifiable under the stated constraints."
+        },
+        {
+          "t": "example",
+          "h": "Source-question check: 26 November 2020, Q31",
+          "body": "The scanned question states both Σβᵢ=0 and Σγⱼ=0. Therefore all four listed quantities—β₁, γ₁, β₁−β₂ and β₁+γ₂—are estimable. The supplied answer key lists statement 3 only. This conflicts with the model as printed; do not memorise the key without checking the constraints."
+        },
+        {
+          "t": "trap",
+          "h": "Exam traps",
+          "body": "Do not confuse a parameterisation problem with a non-estimable contrast. With no identifying constraints, individual effects may not be uniquely defined. Once both sum-to-zero constraints are imposed in this additive complete layout, the main effects and their linear combinations are identifiable. If an interaction term is added, check the design and constraints again rather than transferring this conclusion automatically."
+        }
+      ],
+      "ask": {
+        "q": "Under the stated constraints, is β₁+γ₂ estimable? Explain using the identifiability of each main effect.",
+        "nudge": "First identify β₁ from its row mean and γ₂ from its column mean, both relative to the grand mean."
+      }
     },
     {
       "kind": "quiz",
