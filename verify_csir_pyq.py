@@ -77,6 +77,12 @@ def main() -> None:
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
     assert "Var(p₂)=P(1−P)/n" in q24["explanation"]
     assert "Var(p₁)=P(1−P)/n" in q24["explanation"]
+    q37 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q37")
+    assert q37["type"] == "practice" and q37["year"] == 2020
+    assert q37["session"] == "26 November" and q37["answer"] == "A"
+    assert q37["topic"].startswith("sampling-t5")
+    assert "".join(sorted(k for k, value in q37["verdicts"].items() if value["tf"])) == "A"
+    assert "page 63" in q37["explanation"] and "usual sample variance" in q37["explanation"]
     q1 = next(x for x in estimation["items"] if x["id"] == "csir-est-q01")
     assert q1["answer"] == "A" and "printed key discrepancy" in q1["explanation"]
     q2 = next(x for x in estimation["items"] if x["id"] == "csir-est-q02")
