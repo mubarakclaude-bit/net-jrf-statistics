@@ -424,11 +424,6 @@ def main() -> None:
     # Q108 remains held: the source omits a lower bound on n, so strict efficiency claims are not universal.
     assert not any(x["id"] == "csir-est-q108" for x in estimation["items"])
 
-    q108 = next(x for x in estimation["items"] if x["id"] == "csir-est-q108")
-    assert q108["type"] == "practice" and q108["format"] == "multi"
-    assert (q108["year"], q108["session"], q108["answer"]) == (2011, "June", "C")
-    assert "".join(sorted(k for k, v in q108["verdicts"].items() if v["tf"])) == "BCD"
-    assert "page 59" in q108["explanation"] and "no printed answer" in q108["explanation"]
 
     print(
         f"PASS: {sum(len(x['items']) for x in (estimation, methods, sampling))} CSIR PYQs; "
