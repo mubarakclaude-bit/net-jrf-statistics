@@ -340,7 +340,7 @@ def main() -> None:
     q78 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q78")
     assert q78["type"] == "practice" and q78["format"] == "single"
     assert (q78["year"], q78["session"], q78["answer"]) == (2015, "June", "A")
-    assert len(methods["items"]) == methods["count"] == 11
+    assert len(methods["items"]) == methods["count"] == 12
     assert len(sampling["items"]) == sampling["count"] == 9
 
     for qid, truth, year, session in [
@@ -404,6 +404,14 @@ def main() -> None:
     q81 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q81")
     assert "".join(sorted(k for k, v in q81["verdicts"].items() if v["tf"])) == "ABCD"
     assert len(estimation["items"]) == estimation["count"] == 96
+
+    q75 = next(x for x in methods["items"] if x["id"] == "csir-meth-q75")
+    assert q75["type"] == "practice" and q75["format"] == "multi"
+    assert "".join(sorted(k for k, v in q75["verdicts"].items() if v["tf"])) == "AC"
+    q79 = next(x for x in estimation["items"] if x["id"] == "csir-est-q79")
+    q80 = next(x for x in estimation["items"] if x["id"] == "csir-est-q80")
+    assert "".join(sorted(k for k, v in q79["verdicts"].items() if v["tf"])) == "BC"
+    assert "".join(sorted(k for k, v in q80["verdicts"].items() if v["tf"])) == "BC"
 
     print(
         f"PASS: {sum(len(x['items']) for x in (estimation, methods, sampling))} CSIR PYQs; "
