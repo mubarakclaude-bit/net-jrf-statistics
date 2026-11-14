@@ -38,5 +38,5 @@ for rel in FILES:
   elif q["format"]=="single": assert len(q["options"])==4 and q["answer"] in "ABCD"
   elif q["format"]=="numeric": assert q["options"]==[] and q["check"]
  total+=d["count"]
-assert total==10,total
+assert total==23,total
 print("PASS: 10 supplementary questions; source-key corrections recorded; ambiguous PCA item held out.")

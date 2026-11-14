@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 954–957, 961, 964)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 6,
+  "count": 14,
   "items": [
     {
       "id": "mcq1000-p954",
@@ -192,6 +192,143 @@
       "explanation": "For Uniform(−1,2), E(X)=(-1+2)/2=1/2. By the weak law of large numbers, Sₙ/n converges in probability to 1/2. The event Sₙ≤n is Sₙ/n≤1. Since the threshold 1 is above the probability limit 1/2, the probability tends to one.",
       "check": "After dividing by n, compare the threshold 1 with the limiting sample mean 1/2. The threshold is larger, so the limit is 1.",
       "pno": 964,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p967",
+      "format": "single",
+      "topic": "probability-t5",
+      "stem": "r balls are drawn one at a time without replacement from a bag containing n white and m black balls. If Sᵣ is the number of black balls drawn, Var(Sᵣ) equals:",
+      "options": [
+        "mnr(m+n−r)/[(m+n)²(m+n+1)]",
+        "mnr(m+n−r)/[(m+n)²(m+n)]",
+        "mnr(m+n−r)/[(m+n)²(m+n−1)]",
+        "mnr(m+n−r)/[(m+n)²(m−n)]"
+      ],
+      "answer": "C",
+      "explanation": "Sᵣ has a hypergeometric distribution with population size N=m+n, number of black balls m, and sample size r. Its variance is r(m/N)(1−m/N)(N−r)/(N−1). Since 1−m/N=n/N, this becomes mnr(N−r)/[N²(N−1)]. Therefore option C is correct. The printed scan marks option A, which uses N+1; the correct finite-population denominator is N−1.",
+      "pno": 967,
+      "sourcePdf": "1000 MCQ statistics.pdf",
+      "repaired": "Source-key correction: the scan marks option A, but the hypergeometric variance formula gives option C."
+    },
+    {
+      "id": "mcq1000-p984",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "stem": "Let X₁,X₂,X₃,X₄ be iid continuous random variables. Find P(X₃<X₂<max(X₁,X₄)).",
+      "options": [],
+      "answer": "1/4",
+      "explanation": "Because the variables are iid and continuous, all 4! relative orderings are equally likely. The event requires X₃ to be below X₂ and at least one of X₁ or X₄ to be above X₂. Counting the rank permutations gives 6 favourable orderings out of 24, so the probability is 6/24=1/4.",
+      "check": "Count relative orderings; ties have probability zero.",
+      "pno": 984,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p988",
+      "format": "single",
+      "topic": "probability-t3",
+      "stem": "Suppose E(X)=E(Y). Which statement is NOT necessarily true?",
+      "options": [
+        "E[E(X|Y)]=E(Y)",
+        "Var(X−Y)=E[(X−Y)²]",
+        "E[Var(X|Y)]+Var(E[X|Y])=Var(X)",
+        "X and Y have the same probability distribution"
+      ],
+      "answer": "D",
+      "explanation": "By the tower property, E[E(X|Y)]=E(X)=E(Y), so A is true. Since E(X−Y)=0, Var(X−Y)=E[(X−Y)²], so B is true. C is the law of total variance. Equal means alone do not imply equal distributions; two random variables can have the same mean but different variances or shapes. Therefore D is the statement that is not necessarily true.",
+      "pno": 988,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p991",
+      "format": "numeric",
+      "topic": "probability-t1",
+      "stem": "A and B are independent Uniform(0,1) random variables. Let U=min(A,B) and V=max(A,B). Find Cov(U,V).",
+      "options": [],
+      "answer": "1/36",
+      "explanation": "For two iid Uniform(0,1) observations, E(U)=1/3 and E(V)=2/3. Also UV=AB, so E(UV)=E(A)E(B)=1/4 by independence. Hence Cov(U,V)=E(UV)−E(U)E(V)=1/4−(1/3)(2/3)=1/36.",
+      "check": "Use the order-statistic means and independence of A and B.",
+      "pno": 991,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p998",
+      "format": "multi",
+      "topic": "probability-t5",
+      "stem": "Let X and Y be iid Binomial(n,p). Which statements are true?",
+      "statements": [
+        "X+Y~Binomial(2n,p).",
+        "(X,Y) has a Multinomial(2n;p,p) distribution.",
+        "Var(X−Y)=E[(X−Y)²].",
+        "Cov(X+Y,X−Y)=0."
+      ],
+      "options": [
+        "A and B only",
+        "A, C and D only",
+        "B, C and D only",
+        "A, B, C and D"
+      ],
+      "answer": "B",
+      "explanation": "The sum of independent Binomial(n,p) variables is Binomial(2n,p), so A is true. The pair (X,Y) is not a single multinomial count vector from 2n trials, so B is false. Since E(X)=E(Y)=np, E(X−Y)=0 and therefore Var(X−Y)=E[(X−Y)²], making C true. Finally Cov(X+Y,X−Y)=Var(X)−Var(Y)=0 because X and Y have equal variances and are independent. A, C and D are true.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Independent binomial counts with the same success probability add to Binomial(2n,p)."
+        },
+        "B": {
+          "tf": false,
+          "why": "The joint law is a product of two independent binomial laws, not a multinomial count vector from one set of 2n trials."
+        },
+        "C": {
+          "tf": true,
+          "why": "The difference has mean zero, so its variance equals its second moment."
+        },
+        "D": {
+          "tf": true,
+          "why": "The covariance is Var(X)−Var(Y)=0."
+        }
+      },
+      "pno": 998,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p1002",
+      "format": "numeric",
+      "topic": "probability-t4",
+      "stem": "The MGF is M_X(t)=1/6+(1/3)eᵗ+(1/3)e²ᵗ+(1/6)e³ᵗ. Find P(X≤2).",
+      "options": [],
+      "answer": "5/6",
+      "explanation": "The coefficient of e^{kt} in a discrete MGF is P(X=k). Thus P(X=0)=1/6, P(X=1)=1/3, P(X=2)=1/3 and P(X=3)=1/6. Therefore P(X≤2)=1/6+1/3+1/3=5/6.",
+      "check": "Read the probability masses directly from the MGF coefficients.",
+      "pno": 1002,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p1005",
+      "format": "single",
+      "topic": "probability-t7",
+      "stem": "A discrete random variable has P(X=−1)=1/8, P(X=0)=6/8 and P(X=1)=1/8. Which statement is true?",
+      "options": [
+        "E(X)=1/2",
+        "Var(X)=1/2",
+        "P(|X−μ|≥2σ)≤1/4",
+        "P(|X−μ|≥2σ)≥1/4"
+      ],
+      "answer": "C",
+      "explanation": "The distribution is symmetric, so μ=E(X)=0. Its variance is E(X²)=1/8+1/8=1/4, hence σ=1/2. Chebyshev's inequality states P(|X−μ|≥kσ)≤1/k². Setting k=2 gives an upper bound of 1/4. The first two numerical statements are false, and the reversed inequality in D is not guaranteed. Therefore C is true.",
+      "pno": 1005,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p1011",
+      "format": "numeric",
+      "topic": "probability-t3",
+      "stem": "Let X₁,X₂,… be iid with mean 2 and variance 1. Independently, let N~Poisson(2), and define S_N=Σᵢ₌₁ᴺXᵢ. Find Var(S_N).",
+      "options": [],
+      "answer": "10",
+      "explanation": "For a random sum with N independent of the iid summands, Var(S_N)=E(N)Var(X)+Var(N)[E(X)]². For N~Poisson(2), E(N)=Var(N)=2. Therefore Var(S_N)=2(1)+2(2²)=2+8=10.",
+      "check": "Use the random-sum variance formula; do not confuse it with E(N)Var(X) alone.",
+      "pno": 1011,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
