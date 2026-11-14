@@ -412,6 +412,12 @@ class FollowUpCorrectionTests(unittest.TestCase):
         self.assertEqual(item["answer"], "C")
         self.assertIn("Option C is the correct pair", item["explanation"])
 
+    def test_t16_significance_does_not_imply_practical_magnitude(self):
+        pool = load_json(SEED / "inference_t16_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inf-t16-m-20")
+        self.assertIn("statistically detectably", item["options"][2])
+        self.assertIn("does not establish a practically large", item["explanation"])
+
     def test_t17_symmetry_is_sufficient_not_necessary_for_equal_tail_umpu(self):
         pool = load_json(SEED / "inference_t17_mastery.json")
         item = next(q for q in pool["items"] if q["id"] == "inf-t17-m-13")
