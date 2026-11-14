@@ -480,3 +480,16 @@ Eight questions were imported from pages 289–292, 294, 297, 298 and 300:
 - **Page 295:** the joint density and requested conditional expectation are not sufficiently legible to transcribe safely.
 - **Page 296:** the joint density and conditional-expectation options are blurred; the true/false selection cannot be verified.
 - **Page 299:** the normalising constant in the triangular joint density is unclear, so the derived sum density cannot be keyed without correcting an assumption.
+
+
+## Batch 29 — pages 301–312
+
+Nine questions were imported from pages 301–303, 306–308 and 310–312:
+- **Probability (1):** joint-density normalisation and conditional probability checks, p303.
+- **Statistical Inference (8):** least-squares slope with known intercept, p301; weighted least-squares slope with known heteroscedastic variances, p302; normal-mean MLE, p306; binomial-probability MLE, p307; numerical binomial MLE, p308; level of a Uniform(0,θ) test with a critical region outside the null support, p310; Neyman–Pearson critical value for a power-family density, p311; most powerful one-sided normal-mean test, p312.
+
+### Pages held out after inspection
+
+- **Page 304:** algebra gives α=3, β=−4, but then f(x)=3−4x becomes negative on part of (0,1), so it is not a valid density.
+- **Page 305:** the normal-family mean/variance known-versus-unknown assumption is not legible enough to select the correct MLE for σ².
+- **Page 309:** the population distribution label T(λ,·) and the estimator options are too corrupted to identify the method-of-moments target safely.
