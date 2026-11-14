@@ -55,3 +55,17 @@ No new answer-key correction was required in this batch. Page 111's accepted ans
 - Imported count: Probability 28, Multivariate 4, Inference 3, Stochastic 2 (37 total).
 - No examination/year/session attribution is inferred.
 - The full page-by-page topic classification, duplicate reconciliation against all bank content, and remaining-page question import are still pending. This is only the first batch.
+
+
+## Batch 4 — opening pages 1–12
+
+Rendered and checked the opening pages against the scan. Added nine more items from pages 1, 2, 4, 5, 7, 8, 9 and 12: eight Probability questions and one Statistical Inference question. They cover competing exponential variables, convolution of exponential variables, a Binomial(3, 1/2) PMF/MGF, a negative-binomial event, a linear combination of standard normals, a chi-square survival quantile, and unbiased estimation of a reciprocal Poisson parameter. The original options and algebra were checked against the page images.
+
+### Opening-page exclusions
+
+- **Page 3:** held out because the exponential parameterisation and sample context are not stated consistently enough to decide which MLE statements are intended.
+- **Page 6:** held out pending a careful interpretation of the repair interval and event-gap condition.
+- **Page 10:** held out because both options A and C fail the density conditions (A integrates to 1/2; C takes negative values on part of its support), although the source is framed as a single-answer item.
+- **Page 11:** held out because the stated chi-square CDF value at 34.382 for 25 degrees of freedom is approximately 0.9000, which does not match any printed option.
+
+The page 4 item was standardised to the app's multi-select format because the source lists three true statements but does not provide a combination-choice list. Page 5's exact probability is 126/2^10=63/2^9 (option C).
