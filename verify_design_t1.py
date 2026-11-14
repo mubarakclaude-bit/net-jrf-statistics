@@ -11,7 +11,7 @@ assert L["id"]=="designt1" and L["topicId"]=="design-t1" and L["moduleId"]=="des
 assert len(L["scenes"])==16 and L["scenes"][-1]["setId"]=="design_t1_mastery"
 q31_scene=next(s for s in L["scenes"] if s["id"]=="s15")
 assert "two-way" in q31_scene["title"].lower()
-assert "Σβᵢ=0" in q31_scene["blocks"][1]["body"] and "Σγⱼ=0" in q31_scene["blocks"][1]["body"]
+assert "Σᵢβᵢ=0" in q31_scene["blocks"][1]["body"] and "Σⱼγⱼ=0" in q31_scene["blocks"][1]["body"]
 assert "all four listed quantities" in q31_scene["blocks"][4]["body"]
 assert L["scenes"].count(L["scenes"][-1])==1
 assert len(P["items"])==P["count"]==20
