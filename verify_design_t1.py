@@ -8,7 +8,7 @@ R=Path(__file__).resolve().parent
 L=json.loads((R/"seed/lesson_design_t1.json").read_text(encoding="utf-8"))
 P=json.loads((R/"seed/design_t1_mastery.json").read_text(encoding="utf-8"))
 assert L["id"]=="designt1" and L["topicId"]=="design-t1" and L["moduleId"]=="design"
-assert len(L["scenes"])==14 and L["scenes"][-1]["setId"]=="design_t1_mastery"
+assert len(L["scenes"])==15 and L["scenes"][-1]["setId"]=="design_t1_mastery"
 assert L["scenes"].count(L["scenes"][-1])==1
 assert len(P["items"])==P["count"]==20
 assert Counter(q["diff"] for q in P["items"])=={"easy":6,"moderate":10,"hard":4}
@@ -22,6 +22,12 @@ for q in P["items"]:
         truth="".join(k for k in "ABCD" if q["verdicts"][k]["tf"])
         key=q["answer"]; correct=q["options"]["ABCD".index(key)]
         assert correct == {"ABC":"A, B and C only","ABD":"A, B and D only"}[truth]
+# One-way random-effects lesson coverage and variance-component identities.
+re_scene=next(s for s in L["scenes"] if s["id"]=="s14")
+re_text=" ".join([re_scene["title"],re_scene["objective"]]+[b["h"]+" "+b["body"] for b in re_scene["blocks"]])
+assert "E(MS_W)=σ²" in re_text and "E(MS_B)=σ²+rτ²" in re_text
+assert "τ̂²ᵤ=(MS_B−MS_W)/r" in re_text and "constrained" in re_text
+assert (F(4-9,10), F(9,1)) == (F(-1,2),F(9,1))
 # CRD worked data.
 crd=[[8,9,6,7],[10,12,9,11],[7,8,5,6]]
 vals=[x for row in crd for x in row]; N=len(vals); G=sum(vals)
