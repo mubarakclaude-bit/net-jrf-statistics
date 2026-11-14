@@ -399,3 +399,20 @@ Seventeen further questions were imported from pages 229–230 and 232–240:
 - **Page 234:** the sample median for the displayed double-exponential sample is 2, but 2 is absent from the printed answer options; held out due to the source-option mismatch.
 
 The p229 questions are individually identified by question number because six distinct items share one source page. The p235 matrix-rank item is stored in Multivariate Analysis; the two estimator items are stored in Statistical Inference.
+
+
+## Batch 24 — pages 241–252
+
+Nine further questions were imported from pages 241, 243, 245, 246 and 248–252:
+- **Probability (7):** parity of a difference of independent binomials, p241; ordering probability for three iid exponentials, p245; shifted-exponential quantile, p246; integer-valued polynomial for a uniformly selected integer, p248; odd-integrand expectation under a symmetric normal distribution, p250; Gamma mode, p251; non-existence of a positive-argument MGF for the Beta-prime distribution, p252.
+- **Statistical Inference (2):** coverage probability of a Student-t confidence interval, p243; Neyman–Pearson critical region for Laplace scale testing, p249.
+
+### Pages held out after inspection
+
+- **Page 242:** the displayed function θ/x^(θ+1) on x>0 is not a normalisable density; the usual Pareto support x>1 is not shown, so no distribution is inferred.
+- **Page 244:** X is explicitly labelled DiscreteUniform(0,n), so its fractional part is identically zero; none of the continuous Uniform options is correct.
+- **Page 247:** duplicate of the Poisson expectation E[1/(X+1)] already imported from page 188.
+
+### Source-option correction
+
+- **Page 248:** for integer n, 16n²+7n+6 is always an integer. The printed options are all fractions below one; the correct option is corrected to 1.
