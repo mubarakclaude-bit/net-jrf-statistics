@@ -1,9 +1,9 @@
 {
   "moduleId": "probability",
   "source": "variant",
-  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 1, 2, 4, 5, 7–9, 12–13, 16, 19, 21, 35, 109–131, 954–1011)",
+  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 1, 2, 4, 5, 7–9, 12–13, 16, 19, 21, 35, 38, 46–47, 109–131, 954–1011)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 40,
+  "count": 43,
   "items": [
     {
       "id": "mcq1000-p954",
@@ -918,6 +918,103 @@
         }
       },
       "pno": 35,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p038",
+      "format": "multi",
+      "topic": "probability-t2",
+      "stem": "The joint PMF is P(X=x,Y=y)=c(x+y), for x=1,2,3 and y=1,2,3. Which statements are correct?",
+      "statements": [
+        "The normalising constant is c=1/37.",
+        "The normalising constant is c=1/36.",
+        "The marginal PMF of X is f_X(x)=(x+2)/12, x=1,2,3.",
+        "The marginal PMF of Y is f_Y(y)=(y+2)/12, y=1,2,3."
+      ],
+      "options": [
+        "A and B only",
+        "B and C only",
+        "B, C and D only",
+        "A, C and D only"
+      ],
+      "answer": "C",
+      "explanation": "The probabilities must add to one. Summing x+y over all nine pairs gives ΣΣ(x+y)=3(1+2+3)+3(1+2+3)=36, so c=1/36. For a fixed x, f_X(x)=Σ_y c(x+y)=c(3x+6)=(x+2)/12. By symmetry, f_Y(y)=(y+2)/12. Thus statements B, C and D are correct.",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The total of x+y over all nine pairs is 36, not 37."
+        },
+        "B": {
+          "tf": true,
+          "why": "Normalisation gives c=1/36."
+        },
+        "C": {
+          "tf": true,
+          "why": "Summing c(x+y) over y=1,2,3 gives (x+2)/12."
+        },
+        "D": {
+          "tf": true,
+          "why": "Summing c(x+y) over x=1,2,3 gives (y+2)/12."
+        }
+      },
+      "pno": 38,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p046",
+      "format": "multi",
+      "topic": "probability-t6",
+      "stem": "If F has an F distribution with numerator and denominator degrees of freedom m and n, which statements are correct?",
+      "statements": [
+        "(m/n)F has a Beta distribution of the second kind with parameters (m/2,n/2).",
+        "F itself has a Beta distribution of the second kind with parameters (m/2,n/2).",
+        "The ratio of two independent chi-square variables with m and n degrees of freedom has a Beta distribution of the second kind with parameters (m/2,n/2).",
+        "As n→∞, mF converges in distribution to χ² with m degrees of freedom."
+      ],
+      "options": [
+        "A, C and D only",
+        "A and D only",
+        "A and C only",
+        "B and D only"
+      ],
+      "answer": "A",
+      "explanation": "Write F=(U/m)/(V/n), where U~χ²_m and V~χ²_n are independent. Then (m/n)F=U/V, which has a Beta-prime (Beta distribution of the second kind) distribution with parameters m/2 and n/2. The unscaled F variable is not itself Beta-prime with those same parameters; it is a scaled version. Also, as n becomes large, V/n converges in probability to 1, so mF=m(U/m)/(V/n) converges in distribution to U~χ²_m. Statements A and D are correct.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Multiplying F by m/n gives the ratio U/V of independent chi-square variables."
+        },
+        "B": {
+          "tf": false,
+          "why": "The scale factor m/n is needed; F itself is not U/V."
+        },
+        "C": {
+          "tf": true,
+          "why": "The ratio U/V of independent chi-square variables is Beta-prime with parameters m/2 and n/2."
+        },
+        "D": {
+          "tf": true,
+          "why": "As V/n tends to 1, mF tends to U, which is chi-square with m degrees of freedom."
+        }
+      },
+      "pno": 46,
+      "sourcePdf": "1000 MCQ statistics.pdf",
+      "repaired": "The source's options A and C both express the Beta-prime ratio identity if C is read as U/V. The original C is therefore true as written; the correct combination is A, C and D only."
+    },
+    {
+      "id": "mcq1000-p047",
+      "format": "single",
+      "topic": "probability-t6",
+      "stem": "Let X~Beta(a,b) and Y~Beta(c,d) be independent, with a=c+d. What is the distribution of XY?",
+      "options": [
+        "Gamma(c,b+d)",
+        "Beta(c,b+d)",
+        "Uniform(c,b+d)",
+        "Exponential(c,b+d)"
+      ],
+      "answer": "B",
+      "explanation": "The product identity for independent beta variables states that if X~Beta(c+d,b) and Y~Beta(c,d), then XY~Beta(c,b+d). Here a=c+d, so the condition is exactly satisfied. The product therefore has a Beta distribution with first shape parameter c and second shape parameter b+d. Option B is correct.",
+      "pno": 47,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
