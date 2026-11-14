@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 20,
-  "clean": 20,
+  "count": 24,
+  "clean": 24,
   "items": [
     {
       "id": "csir-est-q01",
@@ -511,6 +511,94 @@
       ],
       "answer": "C",
       "explanation": "Because the observations are normal with known variance, X̄ is sufficient for θ. It is also complete for this one-parameter normal location family. The Lehmann–Scheffé theorem says that an unbiased function of X̄ is the UMVU estimator. We use the moment-generating function of a normal random variable: if Z~N(μ,v), then E(e^(tZ))=exp(tμ+t²v/2). Here X̄~N(θ,σ²/n). Therefore E[e^(2X̄)]=exp(2θ+(2²/2)(σ²/n))=exp(2θ+2σ²/n). To remove the extra factor exp(2σ²/n), multiply by exp(−2σ²/n). Thus E[exp(2X̄−2σ²/n)]=e^(2θ), so option C is unbiased. Since it is a function of the complete sufficient statistic X̄, it is the UMVU estimator. Other-exam relevance: normal moment-generating functions, complete sufficiency and UMVU estimation are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q16",
+      "format": "multi",
+      "year": 2022,
+      "session": "February",
+      "topic": "inference-t4 · MLE with parameter-dependent annular support and a non-unique maximiser",
+      "stem": "Let (X₁,Y₁),…,(Xₙ,Yₙ) be independent observations from a uniform distribution on Sθ={(x,y): θ≤x²+y²≤θ+1}, where θ>1 is unknown. Which statements are correct?",
+      "statements": [
+        "maxᵢ(Xᵢ²+Yᵢ²)−1 is a maximum-likelihood estimate of θ.",
+        "minᵢ(Xᵢ²+Yᵢ²) is a maximum-likelihood estimate of θ.",
+        "Any value between maxᵢ(Xᵢ²+Yᵢ²)−1 and minᵢ(Xᵢ²+Yᵢ²) is a maximum-likelihood estimate of θ.",
+        "Any value between maxᵢXᵢ²+maxᵢYᵢ²−1 and minᵢXᵢ²+minᵢYᵢ² is a maximum-likelihood estimate of θ."
+      ],
+      "options": [
+        "Statements 1, 2 and 3 only",
+        "Statements 1 and 4 only",
+        "Statements 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The likelihood is constant for every θ in the feasible interval [maxᵢ(Xᵢ²+Yᵢ²)−1, minᵢ(Xᵢ²+Yᵢ²)]. Both endpoints and every value between them maximise the likelihood."
+        },
+        "B": {
+          "tf": false,
+          "why": "The feasible interval is determined by the squared radial distances Xᵢ²+Yᵢ², not separate maxima and minima of the x- and y-coordinates."
+        },
+        "C": {
+          "tf": true,
+          "why": "The inner and outer annulus constraints give the feasible interval. Since the annulus area is π[(θ+1)−θ]=π, the density height is constant throughout that interval."
+        },
+        "D": {
+          "tf": false,
+          "why": "The support requires θ≤Xᵢ²+Yᵢ²≤θ+1 for every observation. Combining these inequalities gives the radial-distance interval, not the coordinate-wise interval in statement 4."
+        }
+      },
+      "explanation": "For each observed point, the annulus condition θ≤Xᵢ²+Yᵢ²≤θ+1 must hold. The left inequalities give θ≤minᵢ(Xᵢ²+Yᵢ²). The right inequalities give θ≥maxᵢ(Xᵢ²+Yᵢ²)−1. Thus the likelihood is positive only when θ lies in [maxᵢ(Xᵢ²+Yᵢ²)−1, minᵢ(Xᵢ²+Yᵢ²)]. The area of the annulus is π(θ+1)−πθ=π, so the uniform density is 1/π and the joint likelihood is constant over the feasible interval. Every value in that interval is therefore an MLE, including both endpoints. Statements 1, 2 and 3 are correct. Statement 4 uses separate coordinate extrema and is not the support interval. Other-exam relevance: MLEs with parameter-dependent support and non-unique maximisers are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; this is topic overlap, not a claim of an exact repeat."
+    },
+    {
+      "id": "csir-est-q17",
+      "format": "multi",
+      "year": 2022,
+      "session": "February",
+      "topic": "inference-t7 · Beta-Binomial conjugacy and Bayes estimation under squared-error loss",
+      "stem": "In a clinical trial, let θ be the probability of recovery. A Beta(0.5,0.5) prior is assigned to θ. If 6 of 10 patients recover, which expressions are Bayes estimates of θ under squared-error loss?",
+      "options": [
+        "13/22",
+        "11/20",
+        "1/2",
+        "E(θ | 6 of the 10 patients recovered)"
+      ],
+      "answer": "A and D",
+      "explanation": "For a binomial sample with 6 recoveries and 4 non-recoveries, the likelihood is proportional to θ⁶(1−θ)⁴. The prior Beta(0.5,0.5) has density proportional to θ^(−1/2)(1−θ)^(−1/2). Multiplying prior and likelihood gives a posterior proportional to θ^(6+0.5−1)(1−θ)^(4+0.5−1), so θ|data follows Beta(6.5,4.5). Under squared-error loss, the Bayes estimator is the posterior mean: 6.5/(6.5+4.5)=6.5/11=13/22. Therefore option 1 is the numerical value and option 4 is the same posterior expectation written symbolically. Both are correct. Option 2 (11/20) is the observed sample proportion and is not the posterior mean here; option 3 is not the posterior mean either. Other-exam relevance: conjugate Bayesian estimation and posterior expected loss are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; this is topic overlap, not a claim of an exact repeat."
+    },
+    {
+      "id": "csir-est-q18",
+      "format": "single",
+      "year": 2022,
+      "session": "February",
+      "topic": "inference-t4 · bias of the constrained normal maximum-likelihood estimator",
+      "stem": "Suppose X₁,…,Xₙ are i.i.d. N(θ,1), where θ≥0, and let T=max(X̄,0) be the maximum-likelihood estimator of θ. Which statement about its bias is correct?",
+      "options": [
+        "Eθ(T)−θ≥0 for every θ≥0",
+        "Eθ(T)−θ=0 for every θ≥0",
+        "Eθ(T)−θ<0 for every θ≥0",
+        "There is θ₀>0 such that the bias is negative for 0<θ<θ₀ and positive for θ≥θ₀"
+      ],
+      "answer": "A",
+      "explanation": "The sample mean X̄ has distribution N(θ,1/n). The constrained MLE is T=max(X̄,0). For every realised value, max(X̄,0)≥X̄. Taking expectations gives Eθ(T)≥Eθ(X̄)=θ. Hence the bias Eθ(T)−θ is nonnegative for every θ≥0. At θ=0 the inequality is strict because a normal random variable has positive probability of being negative, and replacing its negative values by zero raises its expectation. For θ>0 the same truncation also makes the expectation larger than θ. Thus statement 1 is correct. Other-exam relevance: constrained MLEs and their finite-sample bias are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; this is topic overlap, not a claim of an exact repeat."
+    },
+    {
+      "id": "csir-est-q19",
+      "format": "single",
+      "year": 2022,
+      "session": "February",
+      "topic": "inference-t4 · unbiasedness and consistency of estimators of a normal standard deviation",
+      "stem": "Let X₁,X₂,… be i.i.d. N(0,σ²), with σ>0. Which listed estimator is both unbiased and consistent for σ?",
+      "options": [
+        "√(π/(2n)) ∑ᵢ₌₁ⁿ |Xᵢ|",
+        "√((1/n)∑ᵢ₌₁ⁿ Xᵢ²)",
+        "√((1/(n−1))∑ᵢ₌₁ⁿ(Xᵢ−X̄)²)",
+        "√((X₁²+Xₙ²)/(2π))"
+      ],
+      "answer": "A",
+      "explanation": "For X~N(0,σ²), E|X|=σ√(2/π). Therefore E[√(π/(2n))∑|Xᵢ|]=√(π/(2n))·nσ√(2/π)=σ√n, so as written this expression would not be unbiased unless the factor includes 1/n. The scanned source formula is √(π/(2n²))∑|Xᵢ|, equivalently √(π/2)·(1/n)∑|Xᵢ|. Using that exact normalising factor gives expectation σ. By the law of large numbers, (1/n)∑|Xᵢ| converges in probability to E|X|=σ√(2/π), so the estimator is also consistent. The other options are not unbiased in finite samples: the root mean square and sample standard deviation have positive finite-sample bias, and the two-observation expression is not normalised to have expectation σ. Other-exam relevance: estimator bias, consistency and normal absolute moments are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; this is topic overlap, not a claim of an exact repeat."
     }
   ]
 }
