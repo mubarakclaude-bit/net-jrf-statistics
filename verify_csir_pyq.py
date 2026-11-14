@@ -75,6 +75,8 @@ def main() -> None:
     q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
     assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
+    assert "1<n<N" in q24["stem"] and "editorial clarification" in q24["stem"], "Q24 must disclose the added n>1 restriction"
+    assert "not present in the original CSIR question" in q24["explanation"], "Q24 must disclose the source-stem difference"
     assert "Var(p₂)=P(1−P)/n" in q24["explanation"]
     assert "Var(p₁)=P(1−P)/n" in q24["explanation"]
     q37 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q37")
