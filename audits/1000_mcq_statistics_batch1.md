@@ -101,3 +101,14 @@ Two further items were added from visually checked pages 27 and 35: a one-sample
 - **Page 33:** held out because the definitions of the transformed variables are not legible enough to identify the requested distributions.
 - **Page 34:** held out because the joint-density support and event inequalities are partly obscured.
 - **Page 36:** held out because the density formula and the four estimator expressions cannot be transcribed with confidence.
+
+
+## Batch 7 — pages 37–48
+
+Five further questions were imported from visually checked pages 38, 46, 47 and 48: four Probability questions (normalisation and marginal PMFs of a discrete joint distribution; the Beta-prime representation of an F statistic; the large-denominator-df limit of F; and the product of independent beta variables) and one Statistical Inference question (unbiasedness, consistency, sufficiency and UMVU). The explanations derive the normalising constant and marginal sums, and identify the relevant distributional identities.
+
+### Duplicate and exclusion handling
+
+- **Pages 37, 40, 41, 42, 43 and 44:** duplicates of earlier source questions already imported or held out: p35, p26, p23, p21, p16 and p17 respectively. No duplicate entries were created.
+- **Page 39:** held out because the two iid sequences and the almost-sure limiting expression are too faint to transcribe reliably.
+- **Page 45:** held out because the displayed MLE threshold depends on sample size, but the scan does not make that sample size clear enough to reproduce the printed 1/4 threshold.
