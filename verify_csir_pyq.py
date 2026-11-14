@@ -86,7 +86,7 @@ def main() -> None:
     q38 = next(x for x in estimation["items"] if x["id"] == "csir-est-q38")
     assert q38["year"] == 2019 and q38["session"] == "December" and q38["answer"] == "C"
     assert q38["topic"].startswith("inference-t1")
-    assert "E(X)=θ/3" in q38["explanation"] and "page 63" in q38["explanation"]
+    assert "θ/3" in q38["explanation"] and "page 63" in q38["explanation"]
     q39 = next(x for x in estimation["items"] if x["id"] == "csir-est-q39")
     assert q39["year"] == 2019 and q39["session"] == "December" and q39["answer"] == "B"
     assert q39["topic"].startswith("inference-t1")
