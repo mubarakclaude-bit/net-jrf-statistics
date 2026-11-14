@@ -416,6 +416,17 @@ def main() -> None:
     assert (q37["year"], q37["session"], q37["answer"]) == (2020, "26 November", "A")
     assert "".join(sorted(k for k, v in q37["verdicts"].items() if v["tf"])) == "A"
     assert "page 63" in q37["explanation"] and "sample variance" in q37["explanation"]
+    q52 = next(x for x in estimation["items"] if x["id"] == "csir-est-q52")
+    assert q52["type"] == "practice" and q52["format"] == "multi"
+    assert (q52["year"], q52["session"], q52["answer"]) == (2018, "June", "B")
+    assert "".join(k for k, v in q52["verdicts"].items() if v["tf"]) == "BC"
+    assert "page 64" in q52["explanation"] and "shifted Poisson" in q52["explanation"]
+    q53 = next(x for x in estimation["items"] if x["id"] == "csir-est-q53")
+    assert q53["answer"] == "A" and "page 64" in q53["explanation"]
+    q54 = next(x for x in estimation["items"] if x["id"] == "csir-est-q54")
+    assert q54["answer"] == "B" and "page 64" in q54["explanation"]
+    q55 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q55")
+    assert q55["answer"] == "C" and "page 64" in q55["explanation"]
     assert len(estimation["items"]) == estimation["count"] == 97
 
     q75 = next(x for x in methods["items"] if x["id"] == "csir-meth-q75")
