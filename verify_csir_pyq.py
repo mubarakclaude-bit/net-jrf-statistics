@@ -90,7 +90,7 @@ def main() -> None:
         for scene in complete_lesson["scenes"] for block in scene.get("blocks", [])
     )
     srs_text = " ".join(
-        block.get("body", "")
+        block.get("h", "") + " " + block.get("body", "")
         for scene in srs_lesson["scenes"] for block in scene.get("blocks", [])
     )
     assert "shifted Poisson" in bayes_text and "λ(1−p)" in bayes_text
