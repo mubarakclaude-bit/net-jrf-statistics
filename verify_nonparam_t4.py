@@ -42,3 +42,52 @@ assert exact_lower_tail(7, 20) == (350, 5040)
 assert exact_lower_tail(10, 108) == (599491, 3628800)
 assert [n*(n*n-1)//3 for n in (5, 6, 10)] == [40, 70, 330]
 print("PASS Spearman rho, Kendall tau, raw Pearson r, exact permutation tails and rank-difference bounds")
+
+# Population rank correlations are not the finite-sample expectation of Spearman's r_s.
+from math import asin, pi, isclose
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+lesson = json.loads((ROOT / "seed/lesson_np4.json").read_text(encoding="utf-8"))
+pool = json.loads((ROOT / "seed/nonparam_t4_mastery.json").read_text(encoding="utf-8"))
+
+# Spearman's no-tie formula: n=6, sum(d^2)=35 gives zero; 70 gives -1.
+rho_zero = 1 - 6*35/(6*(6**2-1))
+rho_reverse = 1 - 6*70/(6*(6**2-1))
+assert rho_zero == 0 and rho_reverse == -1
+
+# Exact null variances: equal at n=2, Kendall strictly smaller only for n>2.
+def var_spearman(n):
+    return 1/(n-1)
+
+def var_kendall(n):
+    return 2*(2*n+5)/(9*n*(n-1))
+
+assert var_spearman(2) == var_kendall(2) == 1
+assert var_kendall(3) < var_spearman(3)
+assert var_kendall(10) < var_spearman(10)
+
+# Bivariate-normal population coefficients vs the finite-sample E(r_s).
+r, n = 0.5, 10
+rho_population = 6/pi*asin(r/2)
+tau_population = 2/pi*asin(r)
+expected_sample_rs = 6/(pi*(n+1))*(asin(r)+(n-2)*asin(r/2))
+assert isclose(rho_population, 0.4825837395309974, rel_tol=0, abs_tol=1e-12)
+assert isclose(tau_population, 1/3, rel_tol=0, abs_tol=1e-12)
+assert isclose(expected_sample_rs, 0.4418790832952709, rel_tol=0, abs_tol=1e-12)
+assert not isclose(expected_sample_rs, rho_population, rel_tol=0, abs_tol=1e-6)
+
+s7 = next(s for s in lesson["scenes"] if s["id"] == "s7")
+normal = next(b for b in s7["blocks"] if b["h"] == "Under bivariate normality")
+variance = next(b for b in s7["blocks"] if b["h"] == "Null variances")
+assert "E(r_s)" in normal["body"] and "ρ_S" in normal["body"]
+assert "equal (both 1)" in variance["body"] and "n>2" in variance["body"]
+
+pool10 = next(q for q in pool["items"] if q["id"] == "np-t4-m-10")
+assert "Σd² = 35" in pool10["stem"] and pool10["answer"] == "C"
+pool14 = next(q for q in pool["items"] if q["id"] == "np-t4-m-14")
+pool20 = next(q for q in pool["items"] if q["id"] == "np-t4-m-20")
+assert "At n=2 both null variances equal 1" in pool14["check"]
+assert "equal at n=2" in pool20["explanation"]
+print("PASS: variance edge case and population/sample Spearman distinction")
