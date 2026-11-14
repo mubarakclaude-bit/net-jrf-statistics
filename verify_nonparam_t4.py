@@ -88,6 +88,6 @@ pool10 = next(q for q in pool["items"] if q["id"] == "np-t4-m-10")
 assert "Σd² = 35" in pool10["stem"] and pool10["answer"] == "C"
 pool14 = next(q for q in pool["items"] if q["id"] == "np-t4-m-14")
 pool20 = next(q for q in pool["items"] if q["id"] == "np-t4-m-20")
-assert "equal at n=2" in pool14["check"]
+assert "At n=2 both null variances equal 1" in pool14["check"]
 assert "equal at n=2" in pool20["explanation"]
 print("PASS: variance edge case and population/sample Spearman distinction")
