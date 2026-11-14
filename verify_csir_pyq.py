@@ -111,6 +111,16 @@ def main() -> None:
     assert q47["topic"].startswith("design-t1")
     assert "".join(sorted(k for k, value in q47["verdicts"].items() if value["tf"])) == "CD"
     assert "σ²+(1/10)" in q47["explanation"] and "page 23" in q47["explanation"]
+    q50 = next(x for x in estimation["items"] if x["id"] == "csir-est-q50")
+    assert q50["year"] == 2018 and q50["session"] == "December" and q50["answer"] == "C"
+    assert q50["topic"].startswith("inference-t7")
+    assert "".join(sorted(k for k, value in q50["verdicts"].items() if value["tf"])) == "BCD"
+    assert "Gamma(shape β+y, rate α+1)" in q50["explanation"] and "page 25" in q50["explanation"]
+    q51 = next(x for x in estimation["items"] if x["id"] == "csir-est-q51")
+    assert q51["year"] == 2018 and q51["session"] == "June" and q51["answer"] == "B"
+    assert q51["topic"].startswith("inference-t1")
+    assert "".join(sorted(k for k, value in q51["verdicts"].items() if value["tf"])) == "ACD"
+    assert "θ²/[θ²+(1−θ)²]" in q51["explanation"] and "page 25" in q51["explanation"]
     q49 = next(x for x in estimation["items"] if x["id"] == "csir-est-q49")
     assert q49["year"] == 2018 and q49["session"] == "December" and q49["answer"] == "B"
     assert q49["topic"].startswith("inference-t1")
