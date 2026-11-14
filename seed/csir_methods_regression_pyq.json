@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 9,
-  "clean": 9,
+  "count": 11,
+  "clean": 11,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -252,6 +252,64 @@
         }
       },
       "explanation": "The multiple correlation coefficient R measures how strongly Y is linearly related to the whole set of predictors taken together. We can calculate it from the predictor correlation matrix.\n\nStep 1: The p predictors have pairwise correlation ρ, so their correlation matrix is Rₓ=(1−ρ)I+ρJ, where I is the identity matrix and J is the matrix of ones. The vector of correlations between Y and the p predictors is r=ρ·1.\n\nStep 2: The squared multiple correlation is R²=r′Rₓ⁻¹r. The vector of ones is an eigenvector of Rₓ with eigenvalue 1+(p−1)ρ. Therefore Rₓ⁻¹1=1/[1+(p−1)ρ]·1.\n\nStep 3: Substitute r=ρ·1:\nR²=ρ²·1′Rₓ⁻¹1=ρ²·p/[1+(p−1)ρ]. Hence R=ρ√[p/{1+(p−1)ρ}], since ρ≥0.\n\nStep 4: Because 0≤ρ<1, we have 1+(p−1)ρ≤p. Thus the square-root factor is at least one and R≥ρ. If ρ=0, then R=0=ρ. If ρ>0, the denominator is strictly less than p, so R>ρ. Statements 1, 2 and 3 are true.\n\nStep 5: For fixed ρ, as p→∞, R²→ρ and therefore R→√ρ. Since the question states ρ<1, this limit is below one (unless the excluded boundary ρ=1 is considered). Statement 4 is false.\n\nTherefore statements 1, 2 and 3 only are correct: option A. Other-exam relevance: multiple correlation, predictor correlation matrices and multicollinearity are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations.\n\nSource-key audit: the supplied answer key lists only statements 1 and 2. However, statement 3 is also logically true: under 0≤ρ<1, equality R=ρ occurs at ρ=0; for ρ>0 the square-root factor is strictly greater than one. Thus the phrase “R equals ρ only if ρ=0” is correct. The bank therefore uses statements 1, 2 and 3 only, rather than reproducing the incomplete printed key."
+    },
+    {
+      "id": "csir-meth-q77",
+      "type": "practice",
+      "format": "single",
+      "year": 2015,
+      "session": "June",
+      "topic": "regression-t7 · generalized least squares and BLUE under known heteroscedastic variances",
+      "stem": "Consider Yᵢ=iβ+εᵢ, i=1,2,3, where the independent errors have mean zero and variances σ², 2σ² and 3σ², respectively. What is the BLUE of β?",
+      "options": [
+        "(Y₁+2Y₂+3Y₃)/6",
+        "(6/11)(Y₁+Y₂/2+Y₃/3)",
+        "(Y₁+Y₂+Y₃)/6",
+        "(3Y₁+2Y₂+Y₃)/10"
+      ],
+      "answer": "C",
+      "explanation": "The source prints this as Question 77 (June 2015), page 40. No printed answer-key entry is available. The model is through the origin with design values xᵢ=i and known error variances Var(εᵢ)=iσ². Generalised least squares gives β̂=[ΣxᵢYᵢ/Var(εᵢ)]/[Σxᵢ²/Var(εᵢ)]. Since xᵢ=i and Var(εᵢ)=iσ², the numerator is ΣYᵢ/σ² and the denominator is Σi/σ²=6/σ². Thus β̂=(Y₁+Y₂+Y₃)/6, option C. GLS is the BLUE because it uses inverse-variance weights; ordinary least squares is not efficient under these unequal variances. Other-exam relevance: GLS, heteroscedasticity and BLUE overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-q85",
+      "type": "practice",
+      "format": "multi",
+      "year": 2013,
+      "session": "December",
+      "topic": "regression-t7 · BLUE and variance estimation under heteroscedastic scaled observations",
+      "stem": "Let Y₁,…,Yₙ be uncorrelated with E(Yᵢ)=iθ and Var(Yᵢ)=i²σ². Define T₁=(1/n)Σ(Yᵢ/i) and T₂=[6/{n(n+1)(2n+1)}]ΣiYᵢ. Which statements are true?",
+      "statements": [
+        "T₁ is the BLUE of θ.",
+        "T₂ is the ordinary least-squares estimator of θ in the model Yᵢ=iθ+εᵢ.",
+        "Var(T₁)=σ²/n.",
+        "An unbiased estimator of σ² is [Σ(Yᵢ/i)²−(1/n)(ΣYᵢ/i)²]/(n−1)."
+      ],
+      "options": [
+        "A and C only",
+        "A, B and C only",
+        "A, C and D only",
+        "All four statements"
+      ],
+      "answer": "D",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Zᵢ=Yᵢ/i are uncorrelated with common mean θ and common variance σ²; their average is the BLUE."
+        },
+        "B": {
+          "tf": true,
+          "why": "OLS through the origin gives ΣiYᵢ/Σi², and Σi²=n(n+1)(2n+1)/6, exactly T₂."
+        },
+        "C": {
+          "tf": true,
+          "why": "Each Zᵢ has variance σ², so the variance of their average is σ²/n."
+        },
+        "D": {
+          "tf": true,
+          "why": "The displayed expression is the usual sample variance of Zᵢ=Yᵢ/i and is unbiased for σ²."
+        }
+      },
+      "explanation": "The source prints this as Question 85 (December 2013), page 46. No printed answer-key entry is available. Put Zᵢ=Yᵢ/i. Then E(Zᵢ)=θ and Var(Zᵢ)=σ², and the Zᵢ are uncorrelated. Their average T₁ is unbiased with variance σ²/n; equal weights minimise variance among linear unbiased combinations, so T₁ is BLUE. For the original regression through the origin, OLS minimises Σ(Yᵢ−iθ)². Differentiating gives θ̂_OLS=ΣiYᵢ/Σi². Since Σi²=n(n+1)(2n+1)/6, this is T₂. Finally, the usual sample variance of Z₁,…,Zₙ is [ΣZᵢ²−(1/n)(ΣZᵢ)²]/(n−1), unbiased for σ²; substituting Zᵢ=Yᵢ/i gives statement D. All four statements are true, option D. Other-exam relevance: BLUE, OLS, heteroscedasticity and unbiased variance estimation overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
