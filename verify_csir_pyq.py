@@ -92,6 +92,11 @@ def main() -> None:
     assert q39["topic"].startswith("inference-t1")
     assert "".join(sorted(k for k, value in q39["verdicts"].items() if value["tf"])) == "BC"
     assert "X₍ₙ₎/2" in q39["explanation"] and "not complete" in q39["explanation"]
+    q40 = next(x for x in estimation["items"] if x["id"] == "csir-est-q40")
+    assert q40["year"] == 2019 and q40["session"] == "December" and q40["answer"] == "B"
+    assert q40["topic"].startswith("inference-t4")
+    assert "".join(sorted(k for k, value in q40["verdicts"].items() if value["tf"])) == "BCD"
+    assert "2σ²" in q40["explanation"] and "page 63" in q40["explanation"]
     q1 = next(x for x in estimation["items"] if x["id"] == "csir-est-q01")
     assert q1["answer"] == "A" and "printed key discrepancy" in q1["explanation"]
     q2 = next(x for x in estimation["items"] if x["id"] == "csir-est-q02")
