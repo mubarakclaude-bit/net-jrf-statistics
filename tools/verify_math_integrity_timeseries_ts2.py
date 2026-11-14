@@ -23,7 +23,9 @@ def main():
     learner_text = json.dumps(scene, ensure_ascii=False)
     assert "0.81735" in learner_text
     assert "1.22347" in learner_text
-    assert "0.8571" not in learner_text
+    assert "invertible ⟹ θ ≈ 0.81735" in learner_text
+    assert "invertible ⟹ θ ≈ 0.857" not in learner_text
+    assert "0.857" not in learner_text
     print("PASS: MA(1) roots for rho_1=-0.49 are 0.8173495 and 1.2234668")
     print("PASS: both roots reproduce |rho_1|=0.49; invertible root is 0.8173495")
 
