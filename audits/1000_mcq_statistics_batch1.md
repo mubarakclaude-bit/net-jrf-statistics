@@ -240,3 +240,19 @@ Nine additional questions were imported from pages 133, 135, 136, 138–142 and 
 - **Page 143:** two printed options, Φ(−1.79) and 1−Φ(1.79), are mathematically identical. The single-choice item has duplicate correct options and is held out rather than arbitrarily selecting one.
 
 For page 138, the source's c=1/4 is retained under independent left/right choices; this independence interpretation is made explicit. For page 139, independence of ticket demands is made explicit for the CLT calculation. Page 144's exact calculation is approximately 0.9954; the source's accepted 0.99 is retained only as the closest listed choice and flagged for coarse rounding.
+
+
+## Batch 16 — pages 145–156
+
+Eleven additional questions were imported from pages 145–149 and 151–156:
+- **Probability (9):** exact tea-cup demand probability for 64 guests, p145; minimum n for a Gamma sum interval, p146; stability of the sample mean of iid Cauchy variables, p147; CLT for the average of squared standard normals, p149; reciprocal of a standard Cauchy variable, p151; minimum of iid Poisson variables, p153; expected maximum of two standard normals, p154; a Poisson CDF at its mean, p155; beta ratio from independent exponential sums, p156.
+- **Multivariate Analysis (2):** a false statement involving ratios of iid standard normals, p148; covariance matrix of cumulative sums of three independent standard normals, p152.
+
+### Pages held out after inspection
+
+- **Page 150:** held out because the scan omits or obscures the covariance matrix of the stated multivariate normal vector. Independence of the listed linear combinations cannot be determined from the mean vector alone.
+
+### Corrections to source answer key
+
+- **Page 146:** the source accepted answer is 385, obtained from a normal approximation. The exact Gamma(n,1) calculation gives P(0.9≤Y/n≤1.1)≈0.94982 for n=383 and 0.95012 for n=384. Therefore the exact smallest n is **384**. The answer option was corrected and the source's approximation noted.
+- **Page 145:** the total number of cups has Binomial(128,1/2) distribution. Exact probabilities P(S≤72)≈0.9337 and P(S≤73)≈0.9537 confirm the source's accepted answer 73.
