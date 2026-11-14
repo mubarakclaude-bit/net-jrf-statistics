@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 48,
-  "clean": 48,
+  "count": 49,
+  "clean": 49,
   "items": [
     {
       "id": "csir-est-q01",
@@ -1517,6 +1517,47 @@
         }
       },
       "explanation": "The source prints this as Question 51 (June 2018) on page 25. The supplied answer list on page 63 ends at Question 44, so no printed key is available; the result is derived directly. The joint probability mass function is θ^(x₁+x₂)(1−θ)^(2−x₁−x₂), so the total number of successes X₁+X₂ is sufficient by factorisation. For statement A, the statistic X₁+2X₂ takes four distinct values: 0 for (0,0), 1 for (1,0), 2 for (0,1), and 3 for (1,1). It therefore identifies the entire observed sample, so it is sufficient. Statement B is not sufficient: X₁−X₂=0 occurs for both (0,0) and (1,1), and conditional on this value, the probability of (1,1) is θ²/[θ²+(1−θ)²], which depends on θ. Finally, for Bernoulli variables Xᵢ²=Xᵢ. Thus statements C and D both reduce to X₁+X₂, so both are sufficient. The correct combination is A, C and D, option B. Other-exam relevance: factorisation, sufficient statistics and Bernoulli likelihoods are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q52",
+      "type": "practice",
+      "format": "multi",
+      "year": 2018,
+      "session": "June",
+      "topic": "inference-t7 · Bayesian estimation with a Poisson prior and binomial sampling; posterior distribution and estimator comparison",
+      "stem": "Suppose X|n follows Binomial(n,p), where 0<p<1 is known and n∈{0,1,2,…} is unknown. The prior distribution of n is Poisson with known mean λ>0. Which statements are correct?",
+      "statements": [
+        "The posterior distribution of n is Poisson with a mean different from λ.",
+        "If X=0, the posterior distribution of n is Poisson with mean λ(1−p).",
+        "Under squared-error loss, the Bayes estimate of n has frequentist bias (λ−n)/2 when p=1/2.",
+        "The Bayes estimate of n has larger variance than the unbiased estimator X/p."
+      ],
+      "options": [
+        "A and B only",
+        "B and C only",
+        "A, B and C only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "For a general observation X=x, the posterior is n=x+K where K is Poisson(λ(1−p)); it is a shifted Poisson, not generally a Poisson distribution for n itself."
+        },
+        "B": {
+          "tf": true,
+          "why": "When x=0, the shift is zero, so n|X=0 is Poisson with mean λ(1−p)."
+        },
+        "C": {
+          "tf": true,
+          "why": "The posterior mean is x+λ(1−p). Its expectation given n is np+λ(1−p), so the bias is (1−p)(λ−n), equal to (λ−n)/2 when p=1/2."
+        },
+        "D": {
+          "tf": false,
+          "why": "The Bayes estimate differs from X only by a constant, so its variance is np(1−p), whereas Var(X/p)=n(1−p)/p. The Bayes estimate has smaller variance for 0<p<1."
+        }
+      },
+      "explanation": "The source prints this as Question 52 (June 2018) on page 26. The supplied answer list on page 63 ends at Question 44, so no printed key is available; the statements are derived directly. The prior mass is P(n)=e^(−λ)λⁿ/n!, and the likelihood is proportional to C(n,x)pˣ(1−p)^(n−x), for n≥x. Put k=n−x. Then the posterior mass is proportional to [λ(1−p)]ᵏ/k!, after removing factors that do not depend on k. Hence n|X=x has the representation x+K, where K~Poisson(λ(1−p)). This is a shifted Poisson distribution, so statement A is false in general. When x=0, the shift disappears and statement B is true. Under squared-error loss, the Bayes estimate is the posterior mean δ(X)=X+λ(1−p). Given the fixed parameter n, E[δ(X)|n]=np+λ(1−p), so its frequentist bias is (1−p)(λ−n). At p=1/2 this is (λ−n)/2, making statement C true. Finally, adding a constant does not change variance, so Var[δ(X)|n]=Var(X|n)=np(1−p). The unbiased estimator X/p has variance n(1−p)/p, which is larger because p<1. Thus statement D is false. The correct combination is B and C, option B. Other-exam relevance: Bayesian estimation, conjugate/mixture distributions, posterior means and frequentist properties of Bayes estimators are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
