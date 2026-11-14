@@ -292,3 +292,25 @@ Eight questions were imported from pages 169, 170, 174, 175, 176, 178, 179 and 1
 - **Page 171:** held out because the numerator and denominator sums overlap, so the displayed ratio is not a standard F ratio of independent chi-square variables as claimed.
 - **Pages 172–173:** held out because the weighted-average formula is too faint/ambiguous and the visible variance options do not reconcile with the most direct reading of the weights and stated variance.
 - **Page 177:** held out because the numerator is included in the denominator, so the displayed ratio cannot have the stated standard F distribution under the usual independent-gamma construction.
+
+
+## Batch 19 — pages 181–192
+
+Ten further questions were imported from pages 181–183, 185–186 and 188–192, all in Probability:
+- Absolute ratio of two independent standard normals, p181.
+- Exponential survival probability at mean plus variance, p182.
+- Bayes' theorem with conditional probabilities, p183.
+- Variance of a lognormal transformation 10^X, p185.
+- Identifying an exponential distribution from its MGF, p186.
+- Reciprocal-shift expectation for a Poisson variable, p188.
+- Second moment of a t distribution with four degrees of freedom, p189.
+- Mean and variance from a discrete MGF, p190.
+- First decisive outcome in repeated fair-die rolls, p191.
+- Expectation identity involving chi-square and standard normal marginals, p192.
+
+### Pages held out after inspection
+
+- **Page 184:** held out because the order-statistic notation and parameter labels (a, d, n) are too ambiguous in the scan to determine which random variable Y is intended.
+- **Page 187:** held out because the definition of Y is missing from the displayed question; the success-probability options cannot be evaluated without it.
+
+Page 192 is keyed conservatively: the source does not explicitly state independence, so only E(X+Y²)=n+1 is guaranteed by the given marginal distributions. Page 185 is a numeric-answer item with a direct lognormal-MGF check; page 189's t moment is checked using ν/(ν−2).
