@@ -289,7 +289,7 @@ def main() -> None:
     assert "rank(X)>p" in q60["explanation"] and "rank(X)=p" in q60["explanation"]
     q68 = next(x for x in estimation["items"] if x["id"] == "csir-est-q68")
     assert "cannot define a probability density" in q68["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 84
+    assert len(estimation["items"]) == estimation["count"] == 95
 
     # Further source questions from pages 36–49.
     for qid, truth, year, session in [
@@ -341,7 +341,7 @@ def main() -> None:
     assert (q78["year"], q78["session"], q78["answer"]) == (2015, "June", "A")
     assert len(estimation["items"]) == estimation["count"] == 74
     assert len(methods["items"]) == methods["count"] == 11
-    assert len(sampling["items"]) == sampling["count"] == 8
+    assert len(sampling["items"]) == sampling["count"] == 9
 
     for qid, truth, year, session in [
         ("csir-est-q90", "ACD", 2013, "June"),
@@ -367,6 +367,36 @@ def main() -> None:
         assert (q["year"], q["session"], q["answer"]) == (year, session, answer)
         assert "not a claim that this exact" in q["explanation"]
     assert len(estimation["items"]) == estimation["count"] == 84
+
+    for qid, truth, year, session in [
+        ("csir-est-q102", "BCD", 2011, "December"),
+        ("csir-est-q107", "BCD", 2011, "June"),
+        ("csir-est-q108", "BCD", 2011, "June"),
+        ("csir-est-q109", "AC", 2011, "June"),
+        ("csir-est-q111", "ABD", 2024, "June"),
+        ("csir-est-q113", "ABC", 2024, "December"),
+        ("csir-est-q114-alt", "CD", 2024, "December"),
+        ("csir-est-q116", "ACD", 2025, "June"),
+        ("csir-est-q117", "AC", 2025, "June"),
+    ]:
+        q = next(x for x in estimation["items"] if x["id"] == qid)
+        assert q["type"] == "practice" and q["format"] == "multi"
+        assert (q["year"], q["session"]) == (year, session)
+        assert "".join(sorted(k for k, v in q["verdicts"].items() if v["tf"])) == truth
+        assert "not a claim that this exact" in q["explanation"]
+    for qid, year, session, answer in [
+        ("csir-est-q105", 2011, "June", "A"),
+        ("csir-est-q106", 2011, "June", "C"),
+    ]:
+        q = next(x for x in estimation["items"] if x["id"] == qid)
+        assert q["type"] == "practice" and q["format"] == "single"
+        assert (q["year"], q["session"], q["answer"]) == (year, session, answer)
+    q104 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q104")
+    assert q104["type"] == "practice" and q104["format"] == "single"
+    assert q104["answer"] == "D" and "119" in q104["explanation"] and "120" in q104["explanation"]
+    assert len(estimation["items"]) == estimation["count"] == 95
+    assert len(methods["items"]) == methods["count"] == 11
+    assert len(sampling["items"]) == sampling["count"] == 9
 
     print(
         f"PASS: {sum(len(x['items']) for x in (estimation, methods, sampling))} CSIR PYQs; "
