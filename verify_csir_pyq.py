@@ -86,6 +86,11 @@ def main() -> None:
     assert q13["type"] == "practice" and q13["answer"] == "A"
     assert "".join(sorted(k for k, v in q13["verdicts"].items() if v["tf"])) == "AD"
     assert "π(μ)∝1" in q13["explanation"] and "posterior mean is δ(x)=x" in q13["explanation"]
+    q28 = next(x for x in estimation["items"] if x["id"] == "csir-est-q28")
+    assert q28["type"] == "practice" and q28["year"] == 2020 and q28["session"] == "30 November"
+    assert q28["answer"] == "C"
+    assert "2Sₓᵧ=ρ(Sₓₓ+Sᵧᵧ)" in q28["explanation"]
+    assert "usual sample correlation coefficient" in q28["explanation"]
     q05 = next(x for x in estimation["items"] if x["id"] == "csir-est-q05")
     assert "".join(sorted(k for k, v in q05["verdicts"].items() if v["tf"])) == "ACD"
     q12 = next(x for x in estimation["items"] if x["id"] == "csir-est-q12")
