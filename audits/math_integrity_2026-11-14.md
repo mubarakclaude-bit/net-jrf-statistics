@@ -156,7 +156,7 @@ Severity counts: **4 critical, 9 major, 1 minor**. Fourteen confirmed learner-fa
 
 ## Independent verification and test status
 
-Seven dedicated standard-library verifier files were added:
+Eight dedicated standard-library verifier files are now included:
 
 1. `tools/verify_math_integrity_design_t1.py`
 2. `tools/verify_math_integrity_probability_pr1.py`
@@ -165,6 +165,7 @@ Seven dedicated standard-library verifier files were added:
 5. `tools/verify_math_integrity_timeseries_ts2.py`
 6. `tools/verify_math_integrity_math_ma4.py`
 7. `tools/verify_math_integrity_rprog_scenes.py`
+8. `tools/verify_math_integrity_math_mastery_keys.py`
 
 Independent calculations were recomputed during review, including the two ANOVA F statistics, the exponential order-statistic expectation, the normal likelihood-ratio identity, the MA(1) roots, the telescoping endpoint series and the Spearman exact-tail count. In addition, the ten corrected lesson JSON files were fetched from the audit branch, parsed, and checked with **18 in-memory assertions**; all 18 passed. The assertions verified the corrected learner-facing conclusions, tables and worked-step alignment, and recomputed F(s4)=10.4, F(s8)=58, E(sample median)=5.219444, and MA(1) roots 0.8173495/1.2234668. These in-memory checks are separate from the dedicated Python verifier scripts.
 
@@ -200,3 +201,14 @@ All 129 lesson files have received first-pass screening, but none is certified a
 
 - Probability T1 symmetry shortcut: the statement that the sample median has expectation μ for a symmetric population implicitly requires that the sample-median expectation exists. A simple sufficient condition is a finite first absolute moment, E|X| < ∞. The lesson and mastery item now state this qualification; the order-statistic reflection argument remains valid under the existence of the relevant expectations.
 - The dedicated Probability T1 verifier now checks both the exact exponential order-statistic calculation and the symmetry/integrability qualification in the lesson and mastery pool.
+
+
+## Mathematics mastery answer-key corrections (second pass)
+
+A cross-check compared each A–D statement verdict set with the selected answer option in all 29 Probability and Mathematics mastery pools. All 31 A–D combination items contained their statement text and verdict map. Three Mathematics keys did not agree with their own verdicts and were corrected on the audit branch:
+
+- `ma-t6-m-15`: verdicts A, B and D are true; changed answer from C (A and B only) to A (A, B and D only), and expanded the explanation.
+- `ma-t9-m-18`: verdicts A, B and D are true; replaced the unavailable/incorrect option A text with “A, B and D only”, keyed answer A, and corrected the explanation.
+- `ma-t10-m-18`: only A is true; changed answer from B (A and B only) to A (A only), and aligned the explanation.
+
+Added `tools/verify_math_integrity_math_mastery_keys.py` to assert each corrected key, option and verdict set. This is a targeted verifier for these confirmed defects, not a claim that all 580 mastery items have undergone full mathematical verification.
