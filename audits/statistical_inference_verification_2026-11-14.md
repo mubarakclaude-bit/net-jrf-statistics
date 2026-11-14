@@ -26,7 +26,7 @@ Status describes the first-pass mathematical audit of the current lesson materia
 | T7 | Bayesian estimation and conjugate priors | CORRECTED | Normal–normal posterior answer in completion scene s6 was wrong; see INF-001 |
 | T8 | Decision theory: loss, risk, admissibility, minimax | CORRECTED | Normal-mean minimax explanation now states the minimax lower bound; constant risk alone is not treated as sufficient |
 | T9 | Neyman–Pearson, MLR, UMP | DEFERRED | Conflicts with open draft PR #93; left untouched |
-| T10 | Likelihood ratio test and Wilks | PASS — first pass | Normal mean/variance LRTs and degrees-of-freedom examples recalculated |
+| T10 | Likelihood ratio test and Wilks | CORRECTED | General likelihood-ratio range now includes zero when the null likelihood is zero |
 | T11 | SPRT | PASS — first pass | Wald boundaries, Bernoulli log-ratio slope, sample path and ASN approximations recalculated |
 | T12 | Size and power computation | CORRECTED | Mastery item `inf-t12-m-10` had an incorrect answer key; see INF-002 |
 | T13 | Confidence intervals and pivots | CORRECTED | Variance-interval endpoint rounding corrected in lesson and mastery item; see INF-003 |
@@ -136,6 +136,12 @@ File: `seed/inference_t1_mastery.json`, item `inf-t1-m-06`. Severity: **Clarific
 
 The stem used the open-support notation U(0, θ) while the answer treated θ = x₍ₙ₎ as included in the likelihood support. The stem now uses U[0, θ], matching the stated closed-endpoint likelihood convention and the boundary MLE.
 
+### INF-013 — General likelihood-ratio range incorrectly excluded zero in T10
+
+File: `seed/inference_t10_mastery.json`, item `inf-t10-m-02`. Severity: **Minor**.
+
+For a general likelihood-ratio statistic, the null-constrained maximum can be zero when the observed data are impossible under every null parameter value, particularly in models with parameter-dependent support. Since likelihoods are non-negative and the null parameter space is contained in the unrestricted space, the general range is **0 ≤ λ ≤ 1**, not necessarily 0 < λ ≤ 1. The option and explanation were corrected; strict positivity holds when the maximised null likelihood is positive.
+
 ## Verification implementation
 
 Added `verify_inference_math.py`, a consolidated standard-library verifier with topic-specific unittest groups. It contains independent regression calculations for T1–T8 and T10–T17, including:
@@ -163,9 +169,9 @@ It also checks:
 ### Test execution status
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
-- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It now contains 54 regression tests.
+- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It now contains 55 regression tests.
 - GitHub Actions run #1195 (run ID `43564757724`) completed successfully on commit `3830a2e7cc776f02414d503fbf3e8f964b595aed`: validate, acceptance and browser jobs all passed, including the verifier, build, lesson navigation, hosted storage conformance and feature browser tests.
-- The additional T1, T5, T8 and T15 edits and the expanded 54-test verifier were committed after that run. A fresh CI run on the latest branch head is required before those follow-up edits are considered validated.
+- The additional T1, T5, T8, T10 and T15 edits and the expanded 55-test verifier were committed after that run. A fresh CI run on the latest branch head is required before those follow-up edits are considered validated.
 
 ## Files changed
 
@@ -182,6 +188,7 @@ Modified:
 - `seed/inference_t5_mastery.json`
 - `seed/inference_t8_mastery.json`
 - `seed/inference_t15_mastery.json`
+- `seed/inference_t10_mastery.json`
 
 Added:
 - `verify_inference_math.py`
