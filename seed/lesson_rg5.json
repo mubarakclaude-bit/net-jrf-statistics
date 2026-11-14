@@ -8,7 +8,7 @@
   "engineName": "Diagnose near-linear dependence among regressors and reason about what it changes in OLS.",
   "version": "1.0",
   "status": "approved",
-  "estMin": 105,
+  "estMin": 97,
   "objectives": [
     "Distinguish perfect from near multicollinearity using the rank and conditioning of the design matrix.",
     "Explain why multicollinearity inflates sampling variances and standard errors of affected coefficient estimates.",
@@ -659,85 +659,55 @@
       }
     },
     {
-      "kind": "theory",
-      "id": "s16",
-      "mins": 8,
-      "title": "Multiple correlation with equicorrelated predictors",
-      "objective": "Derive the multiple correlation coefficient when every predictor has the same correlation with the response and with the other predictors.",
-      "body": [
-        "The multiple correlation R measures the correlation between Y and its best linear prediction from the full set of predictors X₁,…,Xₚ. It is not the same as the pairwise correlation between Y and one predictor.",
-        "Suppose Corr(Y,Xᵢ)=ρ for every i, and Corr(Xᵢ,Xⱼ)=ρ for every distinct pair i,j, with p>1 and 0≤ρ<1. The predictor correlation matrix has 1 on its diagonal and ρ off the diagonal.",
-        "Write Rₓ=(1−ρ)I+ρJ, where J is the p×p matrix of ones. The vector of correlations between Y and the predictors is r=ρ·1.",
-        "The vector of ones is an eigenvector of Rₓ with eigenvalue 1+(p−1)ρ. Therefore Rₓ⁻¹1=1/[1+(p−1)ρ]·1.",
-        "The squared multiple correlation is R²=r′Rₓ⁻¹r=pρ²/[1+(p−1)ρ]. Since ρ≥0, R=ρ√[p/{1+(p−1)ρ}].",
-        "For ρ>0, this R is greater than ρ. At ρ=0, both are zero. For fixed ρ, as p grows, R² approaches ρ and R approaches √ρ."
-      ],
-      "blocks": [
-        {
-          "t": "formula",
-          "h": "Equicorrelation predictor matrix",
-          "body": "Rₓ = (1−ρ)I + ρJ"
-        },
-        {
-          "t": "formula",
-          "h": "Response-predictor correlation vector",
-          "body": "r = ρ·1ₚ"
-        },
-        {
-          "t": "formula",
-          "h": "Squared multiple correlation",
-          "body": "R² = r′Rₓ⁻¹r = pρ²/[1+(p−1)ρ]"
-        },
-        {
-          "t": "formula",
-          "h": "Multiple correlation",
-          "body": "R = ρ√[p/{1+(p−1)ρ}],   ρ≥0"
-        },
-        {
-          "t": "note",
-          "h": "The limiting value",
-          "body": "For fixed ρ, R²→ρ and R→√ρ as p→∞. It does not generally tend to one."
-        }
-      ],
-      "ask": {
-        "q": "If ρ=0.25 and p=4, what is R²?",
-        "nudge": "Substitute 4(0.25)²/[1+3(0.25)]."
-      }
-    },
-    {
       "kind": "worked",
       "id": "s17",
       "mins": 7,
       "title": "Worked example — four correlated predictors",
       "objective": "Calculate R and compare it with the pairwise correlation.",
-      "problem": "Suppose p=4 predictors each have correlation ρ=0.25 with Y and with every other predictor. Find the multiple correlation coefficient R.",
+      "problem": "Let p>1 predictors each have correlation ρ with Y and with every other predictor, where 0≤ρ<1. Derive the multiple correlation coefficient R, then calculate it for p=4 and ρ=0.25.",
       "steps": [
         {
-          "say": "Write the formula for the squared multiple correlation.",
-          "math": "R² = pρ²/[1+(p−1)ρ]",
-          "why": "The formula follows from R²=r′Rₓ⁻¹r for the equicorrelation matrix."
+          "say": "Write the predictor correlation matrix and the response-predictor correlation vector.",
+          "math": "Rₓ=(1−ρ)I+ρJ,   r=ρ·1ₚ",
+          "why": "The predictor matrix has 1 on its diagonal and ρ off the diagonal. Every correlation between Y and a predictor is ρ."
         },
         {
-          "say": "Substitute p=4 and ρ=0.25.",
-          "math": "R² = 4(0.25)²/[1+3(0.25)] = 0.25/1.75 = 1/7 ≈ 0.1429",
-          "why": "The denominator is 1.75 and the numerator is 0.25."
+          "say": "Use the eigenvalue for the all-ones vector.",
+          "math": "Rₓ1ₚ=[1+(p−1)ρ]1ₚ",
+          "why": "Each row contains one 1 and p−1 entries equal to ρ. Therefore the row sum, and the eigenvalue for 1ₚ, is 1+(p−1)ρ."
+        },
+        {
+          "say": "Apply the inverse matrix to the correlation vector.",
+          "math": "Rₓ⁻¹1ₚ=1/[1+(p−1)ρ]·1ₚ",
+          "why": "The all-ones vector remains an eigenvector of the inverse, with the reciprocal eigenvalue."
+        },
+        {
+          "say": "Use the multiple-correlation identity.",
+          "math": "R²=r′Rₓ⁻¹r=pρ²/[1+(p−1)ρ]",
+          "why": "Substitute r=ρ1ₚ. The inner product 1ₚ′1ₚ equals p."
         },
         {
           "say": "Take the nonnegative square root.",
-          "math": "R = √(1/7) ≈ 0.378",
-          "why": "A multiple correlation coefficient is nonnegative by definition."
+          "math": "R=ρ√[p/{1+(p−1)ρ}]",
+          "why": "A multiple correlation coefficient is nonnegative and ρ≥0 in this question."
         },
         {
-          "say": "Compare with the pairwise correlation.",
-          "math": "R ≈ 0.378 > ρ = 0.25",
-          "why": "The combined predictor set has a stronger linear relationship with Y than any one predictor alone."
+          "say": "Substitute p=4 and ρ=0.25.",
+          "math": "R²=4(0.25)²/[1+3(0.25)]=0.25/1.75=1/7≈0.1429",
+          "why": "The numerator is 0.25 and the denominator is 1.75."
+        },
+        {
+          "say": "Calculate R and compare it with the pairwise correlation.",
+          "math": "R=√(1/7)≈0.378 > ρ=0.25",
+          "why": "The full set of predictors has a stronger linear relationship with Y than any one predictor alone. For fixed ρ, as p grows, R²→ρ and R→√ρ, not one."
         }
       ],
-      "after": "The multiple correlation combines the predictors. It can exceed the common pairwise correlation even though every pairwise correlation is held fixed.",
+      "after": "For the exam statements, R≥ρ; equality occurs at ρ=0 under 0≤ρ<1. As p→∞ with ρ fixed, R approaches √ρ, so it does not approach one unless ρ=1, which is excluded.",
       "ask": {
         "q": "As p grows while ρ=0.25 remains fixed, what value does R approach?",
-        "nudge": "The limit is √ρ, not one."
-      }
+        "nudge": "Take the square root of the limit of R²."
+      },
+      "intro": "The multiple correlation R measures how strongly Y is related to the whole predictor set. In this special equicorrelation model, every predictor has correlation ρ with Y and every pair of predictors also has correlation ρ. We derive the formula, then calculate a numerical example."
     },
     {
       "kind": "summary",
