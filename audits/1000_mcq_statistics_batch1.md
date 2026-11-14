@@ -112,3 +112,17 @@ Four further questions were imported from visually checked pages 38, 46, 47 and 
 - **Pages 37, 40, 41, 42, 43 and 44:** duplicates of earlier source questions already imported or held out: p35, p26, p23, p21, p16 and p17 respectively. No duplicate entries were created.
 - **Page 39:** held out because the two iid sequences and the almost-sure limiting expression are too faint to transcribe reliably.
 - **Page 45:** held out because the displayed MLE threshold depends on sample size, but the scan does not make that sample size clear enough to reproduce the printed 1/4 threshold.
+
+
+## Batch 8 — pages 49–60
+
+Four additional questions were imported from visually checked pages 54, 56, 58 and 60: two Probability questions (a randomised linear combination of independent standard normals and mean/median/variance comparisons), one Stochastic Processes question (irreducibility, period, two-step return probability and stationary distribution of a three-state chain), and one Statistical Inference question (consistency of three estimators for Uniform(0,θ)).
+
+### Duplicate and exclusion handling
+
+- **Pages 51, 52 and 53:** duplicates of pages 14, 35 and 25 respectively; no duplicate entries were created.
+- **Page 49:** held out because all displayed endpoint-probability equalities follow from continuity, while the single-choice layout does not distinguish one answer.
+- **Page 50:** held out because the event-independence options appear to have multiple true statements and the original single-choice layout is not adequate.
+- **Page 55:** held out because the joint-Poisson probability expressions are too faint to transcribe accurately.
+- **Page 57:** held out because the completeness claim for the two-statistic normal-family statistic needs a more careful derivation than the scan's terse statements permit.
+- **Page 59:** held out because the logical wording of the UMVU/unbiasedness statements and one option is not sufficiently legible.
