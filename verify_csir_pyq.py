@@ -77,6 +77,12 @@ def main() -> None:
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
     assert "Var(p₂)=P(1−P)/n" in q24["explanation"]
     assert "Var(p₁)=P(1−P)/n" in q24["explanation"]
+    q1 = next(x for x in estimation["items"] if x["id"] == "csir-est-q01")
+    assert q1["answer"] == "A" and "printed key discrepancy" in q1["explanation"]
+    q2 = next(x for x in estimation["items"] if x["id"] == "csir-est-q02")
+    assert "Dropped" in q2["explanation"] and "unscored practice" in q2["explanation"]
+    q7 = next(x for x in estimation["items"] if x["id"] == "csir-est-q07")
+    assert q7["answer"] == "C" and "source-key discrepancy" in q7["explanation"]
     q10 = next(x for x in estimation["items"] if x["id"] == "csir-est-q10")
     assert q10["type"] == "practice" and q10["year"] == 2022 and q10["session"] == "September"
     assert q10["answer"] == "A"
