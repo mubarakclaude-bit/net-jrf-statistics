@@ -298,3 +298,10 @@ A consistency scan of the time-series edits also updated the remaining Wold/inve
 
 
 The time-series identification pass also corrected the remaining AR/MA mirror wording in the lesson and mastery pool, the MA(1) reciprocal-root options, and the maximum-modulus explanation for the MA(1) ACF bound.
+
+
+## Time-series autocovariance second pass — AR(2) variance formula
+
+The AR(2) variance lesson and mastery pool previously implied that a positive value from the closed-form algebraic expression is equivalent to stationarity. That converse is false outside the model's derivation domain: a nonstationary parameter pair can make both the numerator and denominator negative, yielding a positive formal number. The lesson now states that stationarity is a precondition of the Yule–Walker variance formula; positivity follows under stationarity, but the formula's sign is not a standalone stationarity test.
+
+Added `verify_timeseries_variance.py` to guard the qualification.
