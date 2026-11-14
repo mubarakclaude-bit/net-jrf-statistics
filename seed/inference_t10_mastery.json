@@ -28,12 +28,12 @@
    "stem": "The likelihood ratio statistic λ satisfies:",
    "options": [
     "0 < λ < ∞",
-    "0 < λ ≤ 1",
+    "0 ≤ λ ≤ 1",
     "−1 ≤ λ ≤ 1",
     "λ ≥ 1"
    ],
    "answer": "B",
-   "explanation": "Θ₀ is contained in Θ, so the denominator is a maximum over a larger set and can only be greater than or equal to the numerator. Hence λ ≤ 1, and it is strictly positive because both maximised likelihoods are positive. The claim 0 < λ < ∞ was a false option in June 2026 Q30."
+   "explanation": "Because Θ₀ is contained in Θ, the denominator is a maximum over a larger set and can only be greater than or equal to the numerator. Likelihoods are non-negative, so 0 ≤ λ ≤ 1. The ratio is strictly positive when the maximised null likelihood is positive, but it can equal zero if the observed data have zero likelihood throughout Θ₀ — possible in models with parameter-dependent support. The original strict lower bound silently assumed positive null likelihood."
   },
   {
    "id": "inf-t10-m-03",
@@ -168,15 +168,15 @@
    "format": "single",
    "topic": "inference-t10",
    "diff": "moderate",
-   "stem": "For a simple null against a simple alternative, the likelihood ratio test:",
+   "stem": "For testing a simple null H₀: θ = θ₀ against a simple alternative H₁: θ = θ₁, the Neyman–Pearson most powerful level-α test rejects for:",
    "options": [
-    "requires Wilks' theorem to find its critical value",
-    "is less powerful than the Neyman–Pearson test",
-    "cannot be constructed, since both hypotheses are simple",
-    "coincides with the Neyman–Pearson most powerful test"
+    "small values of L(θ₀)/L(θ₁)",
+    "large values of L(θ₀)/L(θ₁)",
+    "large values of L(θ₀) + L(θ₁)",
+    "only after applying Wilks' theorem"
    ],
-   "answer": "D",
-   "explanation": "With Θ = {θ₀, θ₁} the statistic is λ = L(θ₀)/max{L(θ₀), L(θ₁)}, which is not the Neyman–Pearson ratio itself but is a decreasing function of it. So the two tests have the same rejection region, and that region is most powerful. No asymptotics are needed — the exact distribution is available from the simple hypotheses."
+   "answer": "A",
+   "explanation": "The Neyman–Pearson lemma says to reject for small values of the null-to-alternative likelihood ratio L(θ₀)/L(θ₁), equivalently large values of L(θ₁)/L(θ₀), with the cutoff chosen to attain the required level. Be careful not to conflate this simple-hypothesis ratio with the generalized likelihood-ratio statistic sup_{Θ₀}L/sup_Θ L: for disjoint simple hypotheses the latter is min(1, L(θ₀)/L(θ₁)), which is not a one-to-one transform over the full range."
   },
   {
    "id": "inf-t10-m-12",
@@ -191,7 +191,7 @@
     "C and D only"
    ],
    "answer": "B",
-   "explanation": "A is true — it is the definition, with the whole space underneath. B is false: the range is 0 < λ ≤ 1, not 0 < λ < ∞. C is false: the asymptotic law is chi-square, and a normal limit is impossible for a statistic that cannot be negative. D is true, because the θ-free factor of the likelihood cancels between numerator and denominator. This is June 2026 Q30, whose official answer was A and D only.",
+   "explanation": "A is true — it is the definition, with the whole space underneath. B is false: the general range is 0 ≤ λ ≤ 1, not 0 < λ < ∞; the value zero is possible when every null likelihood is zero. C is false: the asymptotic law is chi-square, and a normal limit is impossible for a statistic that cannot be negative. D is true, because the θ-free factor of the likelihood cancels between numerator and denominator. This is June 2026 Q30, whose official answer was A and D only.",
    "statements": [
     "λ = sup f over θ in Θ₀ divided by sup f over θ in Θ.",
     "0 < λ < ∞.",
@@ -205,7 +205,7 @@
     },
     "B": {
      "tf": false,
-     "why": "False. Because Θ₀ lies inside Θ, the denominator can only be the larger maximum, so 0 < λ ≤ 1."
+     "why": "False. Since Θ₀ is contained in Θ, the denominator is at least the numerator; likelihoods are non-negative. Thus 0 ≤ λ ≤ 1, and λ can equal zero if all null likelihoods vanish for the observed data."
     },
     "C": {
      "tf": false,

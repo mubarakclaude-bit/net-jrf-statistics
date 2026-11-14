@@ -140,9 +140,9 @@
     "A, B, C and D"
    ],
    "answer": "C",
-   "explanation": "A and D hold. B is false without a uniqueness qualifier — a minimax rule need not be admissible, though a UNIQUE one is. C is false too: a Bayes rule is minimax only if its risk is constant, which most Bayes rules are not.",
+   "explanation": "A and D hold under their stated conditions. B is false without a uniqueness qualifier — a minimax rule need not be admissible, though a unique minimax rule is. C is false too: a Bayes rule is minimax when its risk is constant (with the Bayes lower-bound argument), which most Bayes rules are not. A Bayes rule's admissibility also needs suitable support/regularity conditions; uniqueness alone is not a universal guarantee.",
    "statements": [
-    "A unique Bayes rule is admissible.",
+    "A Bayes rule under a proper prior with positive density throughout the parameter space and finite Bayes risk is admissible, under standard regularity conditions.",
     "Every minimax rule is admissible.",
     "Every Bayes rule is minimax.",
     "A Bayes rule whose risk is constant in θ is minimax."
@@ -150,7 +150,7 @@
    "verdicts": {
     "A": {
      "tf": true,
-     "why": "The uniqueness is essential; without it the implication can fail."
+     "why": "True under the stated full-support and regularity conditions: a rule that improved risk at a parameter value would also improve integrated risk on a neighbourhood with positive prior mass. Uniqueness alone, without conditions on prior support and the model, is not enough."
     },
     "B": {
      "tf": false,
@@ -195,7 +195,7 @@
     "Minimax, because its risk is constant"
    ],
    "answer": "D",
-   "explanation": "Constant risk means the worst case equals the everywhere-case, and no rule can better it in the worst case — so x̄ is minimax. Shrinkage estimators beat it near their target and lose elsewhere, so they do not dominate it in one dimension, and the option denying minimaxity inverts the argument: constant risk is what makes a rule minimax, not what disqualifies it."
+   "explanation": "For the normal location problem with known variance and squared-error loss, x̄ has constant risk σ²/n, and the minimax lower bound for this problem is also σ²/n (for example, obtained as the limit of Bayes risks under increasingly diffuse normal priors). Hence x̄ attains the minimax bound. Constant risk alone is NOT sufficient to prove minimaxity: a constant-risk rule can have a larger worst-case risk than another rule, as the separate example in this pool illustrates."
   },
   {
    "id": "inference-t8-m-12",

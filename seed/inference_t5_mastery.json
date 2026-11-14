@@ -53,7 +53,7 @@
     "Method of moments estimators are consistent under mild conditions.",
     "Method of moments estimators are unbiased.",
     "Method of moments estimators are asymptotically more efficient than maximum likelihood estimators.",
-    "A method of moments estimate can fall outside the parameter space."
+    "A method-of-moments estimate can fall outside the sample-compatible parameter region, even while remaining inside the parameter space."
    ],
    "verdicts": {
     "A": {
@@ -70,7 +70,7 @@
     },
     "D": {
      "tf": true,
-     "why": "2x̄ can be below the sample maximum for U(0,θ), which no legal θ can be."
+     "why": "True. For U(0,θ), 2x̄ can be positive yet smaller than the observed maximum. It is then incompatible with this realised sample, although the estimate remains inside the parameter space θ>0; this is not a claim of decision-theoretic inadmissibility."
     }
    },
    "diff": "hard"
@@ -189,9 +189,9 @@
     "θ̃ = 6, and it is usable since 6 is close to 7"
    ],
    "answer": "A",
-   "explanation": "θ/2 = x̄ gives θ̃ = 2x̄ = 6. But an observation of 7 was recorded, and no θ below 7 can produce a 7 — the likelihood is exactly zero there, so the estimate is inadmissible. Report the MLE θ̂ = x₍₆₎ = 7, or the unbiased (n+1)x₍ₙ₎/n = 7(7)/6 ≈ 8.17, and say why.",
-   "check": "Always compare a uniform moment estimate with the sample maximum. 'Close' is not a defence: below the maximum means zero likelihood, not low likelihood.",
-   "diff": "hard"
+   "explanation": "θ/2 = x̄ gives θ̃ = 2x̄ = 6. But an observation of 7 was recorded, so any parameter value compatible with the observed sample must be at least 7 under the usual closed-endpoint convention. The moment estimate is therefore outside the sample-compatible parameter region; this is not the decision-theoretic claim that it is an inadmissible estimator. Report the boundary MLE θ̂ = x₍₆₎ = 7, or the unbiased (n+1)x₍ₙ₎/n = 7(7)/6 ≈ 8.17, and explain the distinction.",
+   "check": "Always compare a uniform moment estimate with the sample maximum. A value below the observed maximum is outside the sample-compatible parameter region; do not confuse this with decision-theoretic inadmissibility.",
+   "diff": "moderate"
   },
   {
    "id": "inf-t5-m-10",
@@ -309,11 +309,11 @@
    "options": [
     "round the estimate up to the sample maximum and present it as the moment estimate",
     "discard the largest observation and recompute",
-    "report that the estimate is inadmissible and give the MLE x₍ₙ₎ instead, with the reason",
+    "report that 2x̄ lies outside the sample-compatible parameter region and give the MLE x₍ₙ₎ instead, with the reason",
     "report 2x̄ anyway, since the method was applied correctly"
    ],
    "answer": "C",
-   "explanation": "The method was applied correctly and still produced something impossible, which is itself the examinable point: the moment estimate can land outside the parameter space. Saying so, and offering x₍ₙ₎ or the unbiased (n+1)x₍ₙ₎/n, is the complete answer. Rounding or discarding data would be inventing a different estimator and hiding the defect."
+   "explanation": "The method was applied correctly and still produced a value incompatible with the observed sample, which is itself the examinable point. Call it sample-incompatible, not decision-theoretically inadmissible. Reporting the boundary MLE x₍ₙ₎ (or the unbiased (n+1)x₍ₙ₎/n) with the reason completes the answer. Rounding or discarding data would invent a different estimator."
   },
   {
    "id": "inf-t5-m-16",
