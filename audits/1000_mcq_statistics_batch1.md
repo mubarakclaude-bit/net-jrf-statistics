@@ -126,3 +126,18 @@ Four additional questions were imported from visually checked pages 54, 56, 58 a
 - **Page 55:** held out because the joint-Poisson probability expressions are too faint to transcribe accurately.
 - **Page 57:** held out because the completeness claim for the two-statistic normal-family statistic needs a more careful derivation than the scan's terse statements permit.
 - **Page 59:** held out because the logical wording of the UMVU/unbiasedness statements and one option is not sufficiently legible.
+
+
+## Batch 9 — pages 61–72
+
+Ten additional questions were added from visually inspected pages 61–70:
+- **Statistical Inference (1):** MLE and Fisher information for the power density f(x;θ)=θx^(θ−1), p61.
+- **Probability (8):** Cramér's theorem for independent summands, p62; normal-sample variance moments, p63; Poisson moment identity/Cantelli bound, p64; WLLN threshold for independent two-point variables, p65; comparison probabilities for discrete uniforms, p66; maximum of four exponential variables, p67; zero correlation and Cauchy–Schwarz, p68; binomial variance maximum, p70.
+- **Multivariate/Regression (1):** inequality between regression-line coefficients, p69.
+
+### Pages held out after inspection
+
+- **Page 71:** held out because two printed inverse-matrix options appear visually identical or differ only in a faint exponent in the determinant. The mathematically correct inverse is clear, but the original option lettering cannot be trusted from this scan.
+- **Page 72:** held out because the independence assumptions needed for the gamma–beta and exponential-ratio statements are not explicit in the scan. Since the question asks for incorrect statements, those missing assumptions affect the answer key.
+
+Page 62 is keyed conservatively: only the Cramér theorem statement is accepted as written; no joint-normality or independence assumptions are silently added to the other two statements. Page 63 explicitly states the usual unbiased sample-variance convention used for the chi-square result. Page 67 uses the exponential rate parameterisation indicated by the matching printed expression.
