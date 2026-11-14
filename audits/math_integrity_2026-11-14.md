@@ -354,3 +354,15 @@ The regression edits were corrected to preserve the lesson contract's structured
 ## Sampling theory — Murthy n=2 variance estimator
 
 Corrected the general factor in Murthy's unbiased n=2 PPSWOR variance estimator: the third factor is (1-p_1-p_2), not (p_1+p_2). The previous worked values used (p_1+p_2=0.5), for which the two expressions coincidentally agree and therefore concealed the formula error. The revised example uses (p_1=0.2,p_2=0.4), producing the distinguishing variance estimate 9.7959. The same correction is in the mastery pool and a focused verifier.
+
+
+## Sampling Theory second-pass spot check — lessons T1–T8
+
+A targeted review was completed on the current PR #93 branch for Sampling Theory lessons T1–T8:
+
+- Recomputed the displayed worked-example arithmetic for HT estimation, proportional stratified allocation, ratio/regression estimates, cluster expansion, linear systematic sampling, Hansen–Hurwitz PPSWR, two-stage inclusion probabilities and non-sampling error classification. All eight checked examples were internally consistent.
+- Reviewed the principal displayed estimator/variance and design-probability formula blocks in those lessons. No mathematical defect was confirmed in the inspected blocks.
+- Cross-checked all 16 A–D multi-statement items in the eight corresponding mastery pools against their explicit verdict maps and keyed answer options. All 16 keys matched the truth sets.
+- Structurally checked all 160 mastery items: each pool contains 20 items, IDs are unique within pools, required stem/options/answer/explanation fields are present, answer keys are valid, and each pool has the 6 easy / 10 moderate / 4 hard distribution.
+
+This is a focused worked-example, formula-block and mastery-consistency check. It is not an exhaustive scene-by-scene proof audit of Sampling Theory T1–T8, and no module-level mathematical sign-off is implied.
