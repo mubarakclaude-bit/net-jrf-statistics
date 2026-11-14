@@ -20,3 +20,9 @@ rows=3; cols=2; assert rows*cols==6
 scores=[40,60,80]; assert sum(v>50 for v in scores)==2
 assert (6,4)[0]*(6,4)[1]==24
 print('PASS: R T8 structure, mastery contract, data-frame dimensions and filtering examples.')
+
+# CSV import/export guided solution must match its prompt.
+s6 = next(s for s in L['scenes'] if s['id'] == 's6')
+joined = ' '.join(x['math']+' '+x['why'] for x in s6['solution'])
+assert 'read.csv' in joined and 'write.csv' in joined and 'row.names=FALSE' in joined
+assert 'score > 50' not in joined
