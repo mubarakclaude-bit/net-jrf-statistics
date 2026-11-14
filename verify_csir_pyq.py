@@ -342,6 +342,9 @@ def main() -> None:
     q65 = next(x for x in estimation["items"] if x["id"] == "csir-est-q65")
     assert q65["answer"] == "C" and "page 64" in q65["explanation"]
     assert "Q65 is listed as C" in q65["explanation"]
+    q67 = next(x for x in estimation["items"] if x["id"] == "csir-est-q67")
+    assert q67["answer"] == "B" and "page 64" in q67["explanation"]
+    assert "Q67 is listed as B,C" in q67["explanation"]
     q57 = next(x for x in estimation["items"] if x["id"] == "csir-est-q57")
     assert "lists A and C" in q57["explanation"] and "A and B only" in q57["explanation"]
     assert "page 64" in q60["explanation"] and "A,C,D" in q60["explanation"]
