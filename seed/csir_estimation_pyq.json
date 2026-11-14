@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 94,
-  "clean": 94,
+  "count": 96,
+  "clean": 96,
   "items": [
     {
       "id": "csir-est-q01",
@@ -2995,6 +2995,88 @@
       ],
       "answer": "A",
       "explanation": "The source prints this as Question 96 (June 2012), page 53. The supplied answer key on page 65 lists option A. For a simple random sample without replacement from the integers 1,…,N, every population value is equally likely to be selected. The population mean is (1+N)/2. Therefore E(X̄)=(N+1)/2. Rearranging gives N=2E(X̄)−1, so E(2X̄−1)=N. Hence 2X̄−1 is unbiased for the unknown population size, option A. The scan's denominator in the displayed definition of X̄ is low-resolution and can look like capital N; it is read as n because X̄ is the sample mean of n sampled tickets, and that reading is consistent with the supplied key. Other-exam relevance: SRSWOR, order statistics and unbiased estimation of finite-population parameters overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Printed answer-key cross-check (source PDF page 65): Q96 is listed as A."
+    },
+    {
+      "id": "csir-est-q79",
+      "type": "practice",
+      "format": "multi",
+      "year": 2015,
+      "session": "June",
+      "topic": "inference-t3 · Rao–Blackwell variance bound in a Poisson–binomial hierarchical model",
+      "stem": "Let X|Y=y~Binomial(y,0.5) and Y~Poisson(λ), λ>0. Let T=T(X,Y) be any unbiased estimator of λ. Which statements are true?",
+      "statements": [
+        "Var(T)≤Var(Y) for all λ.",
+        "Var(T)≥Var(Y) for all λ.",
+        "Var(T)≥λ for all λ.",
+        "Var(T)=Var(Y) for all λ."
+      ],
+      "options": [
+        "A only",
+        "B and C only",
+        "B and D only",
+        "All four"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Y itself is an unbiased estimator of λ and is complete sufficient; Rao–Blackwell/UMVU theory says no unbiased estimator can have smaller variance than Y."
+        },
+        "B": {
+          "tf": true,
+          "why": "Y is the UMVU estimator of λ, so every unbiased estimator T has variance at least Var(Y)."
+        },
+        "C": {
+          "tf": true,
+          "why": "Since Y~Poisson(λ), Var(Y)=λ; statement C is equivalent to B."
+        },
+        "D": {
+          "tf": false,
+          "why": "An arbitrary unbiased estimator need not have the same variance as the UMVU estimator."
+        }
+      },
+      "explanation": "The source prints this as Question 79 (June 2015), page 41. The supplied answer key on page 64 lists B and C. The marginal distribution of Y is Poisson(λ), and the joint likelihood factors through Y; Y is complete sufficient for λ. Since E(Y)=λ, it is the UMVU estimator. Therefore every unbiased estimator T has Var(T)≥Var(Y)=λ. Both B and C are true. They are mathematically equivalent because Var(Y)=λ; the source lists them as separate statements, so both are retained as correct rather than treating the duplicated condition as a transcription error. A and D are false in general. Other-exam relevance: Poisson sufficiency, Rao–Blackwellisation and variance lower bounds overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q80",
+      "type": "practice",
+      "format": "multi",
+      "year": 2015,
+      "session": "June",
+      "topic": "inference-t5 · method of moments and unbiased estimation in a normal mixture model",
+      "stem": "Consider f(x;θ,σ)=0.9/σ·φ((x−θ)/σ)+0.1φ(x−θ), where θ∈R, σ>0 are unknown and φ is the standard normal density. Which statements are correct?",
+      "statements": [
+        "This model is not parametric.",
+        "Method-of-moments estimators for θ and σ exist.",
+        "An unbiased estimator of θ exists.",
+        "Consistent estimators of θ do not exist."
+      ],
+      "options": [
+        "A and B only",
+        "B and C only",
+        "A, C and D only",
+        "All four"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The model is a specified two-parameter family indexed by θ and σ, so it is parametric."
+        },
+        "B": {
+          "tf": true,
+          "why": "The first moment gives θ, and the second central moment gives σ² through Var(X)=0.9σ²+0.1; the formal moment equations can be solved."
+        },
+        "C": {
+          "tf": true,
+          "why": "Both mixture components are centred at θ, so E(X)=θ and the sample mean is unbiased."
+        },
+        "D": {
+          "tf": false,
+          "why": "The sample mean is consistent for θ by the law of large numbers."
+        }
+      },
+      "explanation": "The source prints this as Question 80 (June 2015), page 42. The supplied answer key on page 64 lists B and C. This is a parametric family because its density is specified by the two parameters θ and σ; A is false. Both normal mixture components have mean θ, so E(X)=θ. Also Var(X)=0.9σ²+0.1, because the two components share the same mean. The first two population moments therefore provide formal method-of-moments equations: θ̂=X̄ and σ̂²=[(1/n)ΣXᵢ²−X̄²−0.1]/0.9. Thus B is true in the usual algebraic method-of-moments sense. Note that for some finite samples the computed σ̂² can be non-positive, even though the model requires σ>0; this finite-sample admissibility caveat is retained. Since E(X)=θ and the variance is finite, X̄ is unbiased and consistent for θ, proving C and showing D is false. Correct combination B and C only, option B. Other-exam relevance: mixture models, method of moments and consistency overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
