@@ -3,8 +3,10 @@
 ## Status and coverage
 
 - Repository: `mubarakclaude-bit/net-jrf-statistics`
-- Base: current `main` at task start
-- Branch: `audit/math-integrity-2026-11-14`\n- Latest lesson/verifier content verified at: `579eb8d90e9c4f39e6f34a37e7a8b1130124e55b` (the report-only update that follows will advance the branch HEAD; use PR #93 for the live branch SHA).
+- Base: `main` at task start: `678e7a19e417da26f03d42c2fb2cf50c5df0e158`
+- Branch: `audit/math-integrity-2026-11-14`
+- Latest lesson/verifier content and report reviewed at: `753f699346fd2c0cacd476b34a3d6a22c44043ce`.
+- Latest workflow for that head: [43586732656](https://github.com/mubarakclaude-bit/net-jrf-statistics/actions/runs/43586732656) completed successfully: validation, acceptance (six scenarios), and browser (build, strict app test, every-lesson clicktest, hosted-storage conformance, and feature browser tests). The manual full-inventory step is skipped by workflow design.
 - Inventory: **129** files matching `seed/lesson_*.json`
 - First-pass screening: **129/129 lesson files opened and screened** for learner-facing worked/guided numerical examples.
 - This is **not** a claim that all 129 lessons have been mathematically verified. Theory/revision scenes, every displayed formula/table, assumptions and all edge cases still require a deeper second pass.
