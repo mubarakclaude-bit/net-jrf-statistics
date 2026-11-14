@@ -6,7 +6,7 @@
   "breadcrumb": "Module 9 · R Programming · Lists, factors and formatting",
   "engine": "B",
   "engineName": "NET JRF Statistics lesson engine",
-  "version": "1.0",
+  "version": "1.1",
   "status": "review",
   "estMin": 65,
   "objectives": [
@@ -164,7 +164,7 @@
     "note": "Platform mastery settings; not an NTA rule."
   },
   "anchors": [],
-  "provenance": "Catalog rprog-t7: Lists, factors, display and formatting. Content aligned to official base R documentation; no unsupported PYQ anchor is claimed.",
+  "provenance": "Catalog rprog-t7: Lists, factors, display and formatting. Content aligned to official base R documentation; no unsupported PYQ anchor is claimed. Independent audit 2026-11-14 replaced a copied nested-list solution in the format() scene with steps that distinguish character display output from the unchanged numeric source.",
   "scenes": [
     {
       "kind": "foundation",
@@ -490,19 +490,19 @@
       },
       "solution": [
         {
-          "say": "Extract the outer list element.",
-          "math": "x[[1]] is list(b = 12).",
-          "why": "Double brackets return the selected inner list."
+          "say": "Evaluate the formatting call.",
+          "math": "format(12.3456,nsmall=2) produces character text such as \"12.35\".",
+          "why": "format() creates a character representation for display."
         },
         {
-          "say": "Extract the nested value.",
-          "math": "x[[1]][[1]] is 12.",
-          "why": "The second extraction reaches the numeric element stored under b."
+          "say": "Check the types of both objects.",
+          "math": "typeof(y)=\"character\"; typeof(x)=\"double\".",
+          "why": "The assignment creates y as character output; x remains the original numeric object."
         },
         {
-          "say": "Distinguish the bracket forms.",
-          "math": "x[1] is a one-element sublist.",
-          "why": "Single brackets preserve the list container."
+          "say": "Distinguish formatting from numeric rounding.",
+          "math": "round(x,2)=12.35; format(x,nsmall=2) returns character.",
+          "why": "Use round() when a rounded numeric value is needed; format() is for presentation."
         }
       ]
     },

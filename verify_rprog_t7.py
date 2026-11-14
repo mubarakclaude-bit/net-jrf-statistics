@@ -21,3 +21,10 @@ assert [codes[x] for x in ['low','high','medium']]==[1,3,2]
 assert len(set(['a','b','a']))==2
 assert ['a','b'][0]=='a'
 print('PASS: R T7 structure, mastery contract, factor-level and list examples.')
+
+# Scene-level regression check for format() versus numeric rounding.
+s8 = next(s for s in L['scenes'] if s['id']=='s8')
+assert 'format(12.3456,nsmall=2)' in s8['solution'][0]['math']
+assert 'character' in s8['solution'][1]['math'] and 'double' in s8['solution'][1]['math']
+assert 'round(x,2)' in s8['solution'][2]['math']
+print('PASS: T7 format() solution distinguishes character display from numeric x.')
