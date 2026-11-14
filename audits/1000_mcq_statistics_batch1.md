@@ -218,3 +218,25 @@ One additional question was imported from page 132: applying the weak law of lar
 
 - **Pages 121–122:** repeat the probability consistency and set-probability questions from page 119 (including the inconsistent/underdetermined items already held out); no new entries were created.
 - **Pages 123–131:** already reviewed and imported in the earlier order-statistics batch; no duplicates were created.
+
+
+## Batch 15 — pages 133–144
+
+Nine additional questions were imported from pages 133, 135, 136, 138–142 and 144, all in Probability:
+- Binomial-to-Poisson limit with npₙ→1/4, p133.
+- Chebyshev lower bound for the mean of 100 Uniform(0,20) observations, p135.
+- Variance and weak law for independent three-point variables with growing support, p136.
+- Asymptotic expected proportion of birds not seen by adjacent birds, p138.
+- CLT approximation for total ticket demand, p139.
+- Weak-law evaluation of a multiple integral as a ratio of first and second moments, p140.
+- Two sufficient conditions for the strong law, p141.
+- CLT probability for total passenger weight, p142.
+- Sample-mean probability for normally distributed golf-match durations, p144.
+
+### Pages held out after inspection
+
+- **Page 134:** the strong-law question states only the marginal two-point probabilities and does not state independence; the accepted answer λ<1/2 relies on an independence assumption not present in the wording.
+- **Page 137:** the accepted key says WLLN holds if λ>0, but the covariance specification for a jointly normal sequence gives Var(X̄ₙ)=[n+2(n−1)λ]/n², which tends to zero for every admissible fixed λ. The source key is therefore not accepted as stated.
+- **Page 143:** two printed options, Φ(−1.79) and 1−Φ(1.79), are mathematically identical. The single-choice item has duplicate correct options and is held out rather than arbitrarily selecting one.
+
+For page 138, the source's c=1/4 is retained under independent left/right choices; this independence interpretation is made explicit. For page 139, independence of ticket demands is made explicit for the CLT calculation. Page 144's exact calculation is approximately 0.9954; the source's accepted 0.99 is retained only as the closest listed choice and flagged for coarse rounding.
