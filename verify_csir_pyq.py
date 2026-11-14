@@ -83,6 +83,7 @@ def main() -> None:
     assert "Dropped" in q2["explanation"] and "unscored practice" in q2["explanation"]
     q7 = next(x for x in estimation["items"] if x["id"] == "csir-est-q07")
     assert q7["answer"] == "C" and "source-key discrepancy" in q7["explanation"]
+    assert "Methods of Estimation PDF, printed Question 7" in q7["explanation"]
     q10 = next(x for x in estimation["items"] if x["id"] == "csir-est-q10")
     assert q10["type"] == "practice" and q10["year"] == 2022 and q10["session"] == "September"
     assert q10["answer"] == "A"
@@ -137,6 +138,7 @@ def main() -> None:
     # likelihood differentiation gives one positive global maximiser.
     q09 = next(x for x in estimation["items"] if x["id"] == "csir-est-q09")
     assert q09["answer"] == "B"
+    assert "Methods of Estimation PDF, printed Question 6" in q09["explanation"]
     assert "does not exist" not in q09["explanation"].lower()
     n, sum_sq = 3, 5.0
     theta_hat = (-1 + sqrt(1 + 4 * sum_sq / n)) / 2
