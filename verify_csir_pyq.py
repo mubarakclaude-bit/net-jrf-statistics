@@ -289,7 +289,7 @@ def main() -> None:
     assert "rank(X)>p" in q60["explanation"] and "rank(X)=p" in q60["explanation"]
     q68 = next(x for x in estimation["items"] if x["id"] == "csir-est-q68")
     assert "cannot define a probability density" in q68["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 74
+    assert len(estimation["items"]) == estimation["count"] == 84
 
     # Further source questions from pages 36–49.
     for qid, truth, year, session in [
@@ -343,6 +343,31 @@ def main() -> None:
     assert len(estimation["items"]) == estimation["count"] == 74
     assert len(methods["items"]) == methods["count"] == 11
     assert len(sampling["items"]) == sampling["count"] == 8
+
+    for qid, truth, year, session in [
+        ("csir-est-q90", "ACD", 2013, "June"),
+        ("csir-est-q91", "CD", 2013, "June"),
+        ("csir-est-q93", "BD", 2012, "December"),
+        ("csir-est-q94", "ABD", 2012, "December"),
+        ("csir-est-q97", "BCD", 2012, "June"),
+        ("csir-est-q98", "CD", 2012, "June"),
+        ("csir-est-q99", "ABCD", 2012, "June"),
+        ("csir-est-q100", "CD", 2012, "June"),
+    ]:
+        q = next(x for x in estimation["items"] if x["id"] == qid)
+        assert q["type"] == "practice" and q["format"] == "multi"
+        assert (q["year"], q["session"]) == (year, session)
+        assert "".join(sorted(k for k, v in q["verdicts"].items() if v["tf"])) == truth
+        assert "not a claim that this exact" in q["explanation"]
+    for qid, year, session, answer in [
+        ("csir-est-q92", 2012, "December", "C"),
+        ("csir-est-q95", 2012, "June", "C"),
+    ]:
+        q = next(x for x in estimation["items"] if x["id"] == qid)
+        assert q["type"] == "practice" and q["format"] == "single"
+        assert (q["year"], q["session"], q["answer"]) == (year, session, answer)
+        assert "not a claim that this exact" in q["explanation"]
+    assert len(estimation["items"]) == estimation["count"] == 84
 
     print(
         f"PASS: {sum(len(x['items']) for x in (estimation, methods, sampling))} CSIR PYQs; "
