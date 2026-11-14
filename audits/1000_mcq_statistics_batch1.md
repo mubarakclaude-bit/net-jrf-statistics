@@ -59,7 +59,7 @@ No new answer-key correction was required in this batch. Page 111's accepted ans
 
 ## Batch 4 — opening pages 1–12
 
-Rendered and checked the opening pages against the scan. Added nine more items from pages 1, 2, 4, 5, 7, 8, 9 and 12: eight Probability questions and one Statistical Inference question. They cover competing exponential variables, convolution of exponential variables, a Binomial(3, 1/2) PMF/MGF, a negative-binomial event, a linear combination of standard normals, a chi-square survival quantile, and unbiased estimation of a reciprocal Poisson parameter. The original options and algebra were checked against the page images.
+Rendered and checked the opening pages against the scan. Added eight more items from pages 1, 2, 4, 5, 7, 8, 9 and 12: seven Probability questions and one Statistical Inference question. They cover competing exponential variables, convolution of exponential variables, a Binomial(3, 1/2) PMF/MGF, a negative-binomial event, a linear combination of standard normals, a chi-square survival quantile, and unbiased estimation of a reciprocal Poisson parameter. The original options and algebra were checked against the page images.
 
 ### Opening-page exclusions
 
