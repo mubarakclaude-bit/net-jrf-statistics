@@ -1,366 +1,366 @@
 {
- "moduleId": "probability",
- "topicId": "probability-t7",
- "source": "mastery",
- "label": "Jensen, Markov, Chebyshev and Cauchy–Schwarz — mastery test (unseen)",
- "count": 20,
- "items": [
-  {
-   "id": "pr-t7-m-01",
-   "format": "single",
-   "topic": "probability-t7",
-   "diff": "easy",
-   "stem": "For a convex function g, Jensen's inequality states:",
-   "options": [
-    "E(g(X)) = g(E(X))",
-    "E(g(X)) ≤ g(E(X))",
-    "E(g(X)) ≥ g(E(X))",
-    "no general relation holds"
-   ],
-   "answer": "C",
-   "explanation": "Convexity means the curve lies above each of its tangents, and taking expectations about the tangent at E(X) gives the result. For a CONCAVE g it reverses to ≤. Equality holds only when g is linear on the support of X."
-  },
-  {
-   "id": "pr-t7-m-02",
-   "format": "single",
-   "topic": "probability-t7",
-   "diff": "easy",
-   "stem": "For a positive random variable X, E(1/X) compared with 1/E(X) is:",
-   "options": [
-    "smaller or equal",
-    "larger or equal",
-    "always equal",
-    "unrelated"
-   ],
-   "answer": "B",
-   "explanation": "1/x has second derivative 2/x³ > 0 on the positive half-line, so it is CONVEX and Jensen gives E(1/X) ≥ 1/E(X). Concretely, X taking 1 or 3 with probability ½ gives E(1/X) = 2/3 ≈ 0.667 against 1/E(X) = 0.5. Getting this direction wrong is the standard error in the topic."
-  },
-  {
-   "id": "pr-t7-m-03",
-   "format": "numeric",
-   "topic": "probability-t7",
-   "diff": "easy",
-   "stem": "For a non-negative random variable X with distribution function F, ∫₀^∞ [1 − F(x)]dx equals:",
-   "options": [
-    "1",
-    "E(X²)",
-    "Var(X)",
-    "E(X)"
-   ],
-   "answer": "D",
-   "explanation": "The integral of the survival function is the mean. It follows from swapping the order of integration in E(X) = ∫₀^∞(∫₀^x dy)f(x)dx. Verified by quadrature: 1.000000 for Exponential(1), 0.500000 for Exponential(2) and 1.500000 for Uniform(0,3), matching the means exactly.",
-   "check": "For Exponential(1), ∫₀^∞ e^(−x)dx = 1, which is indeed E(X)."
-  },
-  {
-   "id": "pr-t7-m-04",
-   "format": "numeric",
-   "topic": "probability-t7",
-   "diff": "easy",
-   "stem": "For a non-negative X, ∫₀^∞ 2x[1 − F(x)]dx equals:",
-   "options": [
-    "2E(X)",
-    "E(X)",
-    "E(X²)",
-    "Var(X)"
-   ],
-   "answer": "C",
-   "explanation": "The general identity is E(Xⁿ) = ∫₀^∞ n x^(n−1)[1 − F(x)]dx, and n = 2 produces the 2x factor. Verified by quadrature as 2.000000, 0.500000 and 3.000000 for Exponential(1), Exponential(2) and Uniform(0,3), matching E(X²) in each case.",
-   "check": "For Exponential(1), ∫₀^∞ 2x e^(−x)dx = 2Γ(2) = 2, which is E(X²)."
-  },
-  {
-   "id": "pr-t7-m-05",
-   "format": "numeric",
-   "topic": "probability-t7",
-   "diff": "easy",
-   "stem": "Markov's inequality states that for X ≥ 0 and a > 0:",
-   "options": [
-    "P(X ≥ a) ≤ E(X)/a²",
-    "P(X ≥ a) ≤ E(X)/a",
-    "P(X ≥ a) ≥ E(X)/a",
-    "P(X ≥ a) ≤ Var(X)/a²"
-   ],
-   "answer": "B",
-   "explanation": "Non-negativity is essential — without it the statement is false. It is proved from X ≥ a·1{X ≥ a} by taking expectations. Option D is closer to Chebyshev, which uses a variance rather than a mean.",
-   "check": "It is tight for X = a with probability p and 0 otherwise, where E(X) = pa and P(X ≥ a) = p exactly."
-  },
-  {
-   "id": "pr-t7-m-06",
-   "format": "numeric",
-   "topic": "probability-t7",
-   "diff": "easy",
-   "stem": "Chebyshev's inequality bounds P(|X − μ| ≥ 2σ) by:",
-   "options": [
-    "1",
-    "1/2",
-    "1/8",
-    "1/4"
-   ],
-   "answer": "D",
-   "explanation": "The bound is 1/k² with k = 2, so 0.25. For a standard normal the true probability is only 0.045500 — the bound overstates it by a factor of 5.5 — but Chebyshev holds for every distribution with a finite variance, which is why it must accommodate the worst case.",
-   "check": "At k = 1 the bound would be 1, which is no information at all, since every probability is at most 1."
-  },
-  {
-   "id": "pr-t7-m-07",
-   "format": "single",
-   "topic": "probability-t7",
-   "diff": "moderate",
-   "stem": "E(log X) ≤ log E(X) holds because log is:",
-   "options": [
-    "increasing",
-    "convex",
-    "concave",
-    "bounded"
-   ],
-   "answer": "C",
-   "explanation": "log x has second derivative −1/x² < 0, so it is concave and Jensen reverses. Being increasing is true but irrelevant — the direction of Jensen depends only on curvature. Note this statement and E(1/X) ≤ 1/E(X) have identical form, yet one is true and the other false, precisely because 1/x is convex."
-  },
-  {
-   "id": "pr-t7-m-08",
-   "format": "single",
-   "topic": "probability-t7",
-   "diff": "moderate",
-   "stem": "Var(X) ≥ 0 is a special case of Jensen's inequality applied to:",
-   "options": [
-    "log x",
-    "x²",
-    "1/x",
-    "√x"
-   ],
-   "answer": "B",
-   "explanation": "g(x) = x² is convex, so E(X²) ≥ (E(X))², and rearranging gives E(X²) − (E X)² = Var(X) ≥ 0. The other three functions are either concave or give different consequences — 1/x gives E(1/X) ≥ 1/E(X), and log x and √x both point the other way."
-  },
-  {
-   "id": "pr-t7-m-09",
-   "format": "single",
-   "topic": "probability-t7",
-   "diff": "moderate",
-   "stem": "The Cauchy–Schwarz inequality applied to random variables yields:",
-   "options": [
-    "E(X) ≥ 0",
-    "Markov's inequality",
-    "Var(X) ≥ 0",
-    "|ρ| ≤ 1"
-   ],
-   "answer": "D",
-   "explanation": "Applying |E(XY)| ≤ √(E(X²)E(Y²)) to the centred variables gives Cov(X,Y)² ≤ Var(X)Var(Y), which rearranges to |ρ| ≤ 1. So the familiar bound on a correlation coefficient is this inequality, and its equality condition — linear dependence — is what makes |ρ| = 1 mean a perfect linear relationship."
-  },
-  {
-   "id": "pr-t7-m-10",
-   "format": "numeric",
-   "topic": "probability-t7",
-   "diff": "moderate",
-   "stem": "For a non-negative integer-valued X, E(X) equals:",
-   "options": [
-    "Σ(k≥1) P(X = k)",
-    "Σ(k≥0) P(X ≥ k)",
-    "Σ(k≥1) P(X ≥ k)",
-    "Σ(k≥1) k P(X ≥ k)"
-   ],
-   "answer": "C",
-   "explanation": "The discrete analogue of the tail integral. Option B adds P(X ≥ 0) = 1, overstating by exactly 1; option A sums to 1, not to the mean. Verified for the geometric counting trials, where Σ(1−p)^(k−1) = 1/p gives 3.333333 at p = 0.3 and 2.000000 at p = 0.5.",
-   "check": "For Geometric(0.25) the sum is 1/0.25 = 4, which matches the known mean 1/p."
-  },
-  {
-   "id": "pr-t7-m-11",
-   "format": "numeric",
-   "topic": "probability-t7",
-   "diff": "moderate",
-   "stem": "A non-negative random variable has mean 6. Markov's bound on P(X ≥ 30) is:",
-   "options": [
-    "0.0333",
-    "0.2",
-    "5",
-    "0.8"
-   ],
-   "answer": "B",
-   "explanation": "E(X)/a = 6/30 = 0.2. The bound uses nothing but the mean and non-negativity, and is usually very loose: for an exponential with mean 6 the true probability is e^(−5) = 0.006738, thirty times smaller.",
-   "check": "Any probability bound must lie in [0, 1], which rules out option C immediately."
-  },
-  {
-   "id": "pr-t7-m-12",
-   "format": "multi",
-   "topic": "probability-t7",
-   "diff": "moderate",
-   "stem": "Consider the four inequalities.",
-   "options": [
-    "A, B and C only",
-    "A and C only",
-    "B and D only",
-    "A, B, C and D"
-   ],
-   "answer": "A",
-   "explanation": "A is true — 1/x is convex. B is true: Chebyshev is Markov applied to (X − μ)². C is true, and it is why the bound cannot be improved. D is false — Markov requires non-negativity.",
-   "statements": [
-    "E(1/X) ≥ 1/E(X) for a positive random variable.",
-    "Chebyshev's inequality follows from Markov's.",
-    "There is a distribution attaining Chebyshev's bound exactly.",
-    "Markov's inequality holds for any variable with a finite mean."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True. 1/x has second derivative 2/x³ > 0 on x > 0, so it is convex and Jensen points that way. On Uniform(1,3) the two sides are 0.549306 and 0.5."
+  "moduleId": "probability",
+  "topicId": "probability-t7",
+  "source": "mastery",
+  "label": "Jensen, Markov, Chebyshev and Cauchy–Schwarz — mastery test (unseen)",
+  "count": 20,
+  "items": [
+    {
+      "id": "pr-t7-m-01",
+      "format": "single",
+      "topic": "probability-t7",
+      "diff": "easy",
+      "stem": "For a convex function g, Jensen's inequality states:",
+      "options": [
+        "E(g(X)) = g(E(X))",
+        "E(g(X)) ≤ g(E(X))",
+        "E(g(X)) ≥ g(E(X))",
+        "no general relation holds"
+      ],
+      "answer": "C",
+      "explanation": "Convexity means the curve lies above each of its tangents, and taking expectations about the tangent at E(X) gives the result. For a CONCAVE g it reverses to ≤. Equality holds only when g is linear on the support of X."
     },
-    "B": {
-     "tf": true,
-     "why": "True — apply Markov to the non-negative variable (X − μ)² at the level k²σ². The squaring is what turns 1/a into 1/k², and it is also why a variance rather than a mean is required."
+    {
+      "id": "pr-t7-m-02",
+      "format": "single",
+      "topic": "probability-t7",
+      "diff": "easy",
+      "stem": "For a positive random variable X, E(1/X) compared with 1/E(X) is:",
+      "options": [
+        "smaller or equal",
+        "larger or equal",
+        "always equal",
+        "unrelated"
+      ],
+      "answer": "B",
+      "explanation": "1/x has second derivative 2/x³ > 0 on the positive half-line, so it is CONVEX and Jensen gives E(1/X) ≥ 1/E(X). Concretely, X taking 1 or 3 with probability ½ gives E(1/X) = 2/3 ≈ 0.667 against 1/E(X) = 0.5. Getting this direction wrong is the standard error in the topic."
     },
-    "C": {
-     "tf": true,
-     "why": "True: mass 1/(2k²) at each of μ ± kσ with the rest at μ. Verified at k = 2 and 3, where the variance comes to exactly 1.000000 and the tail probability exactly 1/k². So no smaller bound could be true for every distribution with a finite variance."
+    {
+      "id": "pr-t7-m-03",
+      "format": "numeric",
+      "topic": "probability-t7",
+      "diff": "easy",
+      "stem": "For a non-negative random variable X with distribution function F, ∫₀^∞ [1 − F(x)]dx equals:",
+      "options": [
+        "1",
+        "E(X²)",
+        "Var(X)",
+        "E(X)"
+      ],
+      "answer": "D",
+      "explanation": "The integral of the survival function is the mean. It follows from swapping the order of integration in E(X) = ∫₀^∞(∫₀^x dy)f(x)dx. Verified by quadrature: 1.000000 for Exponential(1), 0.500000 for Exponential(2) and 1.500000 for Uniform(0,3), matching the means exactly.",
+      "check": "For Exponential(1), ∫₀^∞ e^(−x)dx = 1, which is indeed E(X)."
     },
-    "D": {
-     "tf": false,
-     "why": "False — it requires X ≥ 0. The proof uses X ≥ a·1{X ≥ a}, which fails if X can be negative, and the conclusion is then simply untrue."
+    {
+      "id": "pr-t7-m-04",
+      "format": "numeric",
+      "topic": "probability-t7",
+      "diff": "easy",
+      "stem": "For a non-negative X, ∫₀^∞ 2x[1 − F(x)]dx equals:",
+      "options": [
+        "2E(X)",
+        "E(X)",
+        "E(X²)",
+        "Var(X)"
+      ],
+      "answer": "C",
+      "explanation": "The general identity is E(Xⁿ) = ∫₀^∞ n x^(n−1)[1 − F(x)]dx, and n = 2 produces the 2x factor. Verified by quadrature as 2.000000, 0.500000 and 3.000000 for Exponential(1), Exponential(2) and Uniform(0,3), matching E(X²) in each case.",
+      "check": "For Exponential(1), ∫₀^∞ 2x e^(−x)dx = 2Γ(2) = 2, which is E(X²)."
+    },
+    {
+      "id": "pr-t7-m-05",
+      "format": "numeric",
+      "topic": "probability-t7",
+      "diff": "easy",
+      "stem": "Markov's inequality states that for X ≥ 0 and a > 0:",
+      "options": [
+        "P(X ≥ a) ≤ E(X)/a²",
+        "P(X ≥ a) ≤ E(X)/a",
+        "P(X ≥ a) ≥ E(X)/a",
+        "P(X ≥ a) ≤ Var(X)/a²"
+      ],
+      "answer": "B",
+      "explanation": "Non-negativity is essential — without it the statement is false. It is proved from X ≥ a·1{X ≥ a} by taking expectations. Option D is closer to Chebyshev, which uses a variance rather than a mean.",
+      "check": "It is tight for X = a with probability p and 0 otherwise, where E(X) = pa and P(X ≥ a) = p exactly."
+    },
+    {
+      "id": "pr-t7-m-06",
+      "format": "numeric",
+      "topic": "probability-t7",
+      "diff": "easy",
+      "stem": "Chebyshev's inequality bounds P(|X − μ| ≥ 2σ) by:",
+      "options": [
+        "1",
+        "1/2",
+        "1/8",
+        "1/4"
+      ],
+      "answer": "D",
+      "explanation": "The bound is 1/k² with k = 2, so 0.25. For a standard normal the true probability is only 0.045500 — the bound overstates it by a factor of 5.5 — but Chebyshev holds for every distribution with a finite variance, which is why it must accommodate the worst case.",
+      "check": "At k = 1 the bound would be 1, which is no information at all, since every probability is at most 1."
+    },
+    {
+      "id": "pr-t7-m-07",
+      "format": "single",
+      "topic": "probability-t7",
+      "diff": "moderate",
+      "stem": "E(log X) ≤ log E(X) holds because log is:",
+      "options": [
+        "increasing",
+        "convex",
+        "concave",
+        "bounded"
+      ],
+      "answer": "C",
+      "explanation": "log x has second derivative −1/x² < 0, so it is concave and Jensen reverses. Being increasing is true but irrelevant — the direction of Jensen depends only on curvature. Note this statement and E(1/X) ≤ 1/E(X) have identical form, yet one is true and the other false, precisely because 1/x is convex."
+    },
+    {
+      "id": "pr-t7-m-08",
+      "format": "single",
+      "topic": "probability-t7",
+      "diff": "moderate",
+      "stem": "Var(X) ≥ 0 is a special case of Jensen's inequality applied to:",
+      "options": [
+        "log x",
+        "x²",
+        "1/x",
+        "√x"
+      ],
+      "answer": "B",
+      "explanation": "g(x) = x² is convex, so E(X²) ≥ (E(X))², and rearranging gives E(X²) − (E X)² = Var(X) ≥ 0. The other three functions are either concave or give different consequences — 1/x gives E(1/X) ≥ 1/E(X), and log x and √x both point the other way."
+    },
+    {
+      "id": "pr-t7-m-09",
+      "format": "single",
+      "topic": "probability-t7",
+      "diff": "moderate",
+      "stem": "The Cauchy–Schwarz inequality applied to random variables yields:",
+      "options": [
+        "E(X) ≥ 0",
+        "Markov's inequality",
+        "Var(X) ≥ 0",
+        "|ρ| ≤ 1"
+      ],
+      "answer": "D",
+      "explanation": "Applying |E(XY)| ≤ √(E(X²)E(Y²)) to the centred variables gives Cov(X,Y)² ≤ Var(X)Var(Y), which rearranges to |ρ| ≤ 1. So the familiar bound on a correlation coefficient is this inequality, and its equality condition — linear dependence — is what makes |ρ| = 1 mean a perfect linear relationship."
+    },
+    {
+      "id": "pr-t7-m-10",
+      "format": "numeric",
+      "topic": "probability-t7",
+      "diff": "moderate",
+      "stem": "For a non-negative integer-valued X, E(X) equals:",
+      "options": [
+        "Σ(k≥1) P(X = k)",
+        "Σ(k≥0) P(X ≥ k)",
+        "Σ(k≥1) P(X ≥ k)",
+        "Σ(k≥1) k P(X ≥ k)"
+      ],
+      "answer": "C",
+      "explanation": "The discrete analogue of the tail integral. Option B adds P(X ≥ 0) = 1, overstating by exactly 1; option A sums to 1, not to the mean. Verified for the geometric counting trials, where Σ(1−p)^(k−1) = 1/p gives 3.333333 at p = 0.3 and 2.000000 at p = 0.5.",
+      "check": "For Geometric(0.25) the sum is 1/0.25 = 4, which matches the known mean 1/p."
+    },
+    {
+      "id": "pr-t7-m-11",
+      "format": "numeric",
+      "topic": "probability-t7",
+      "diff": "moderate",
+      "stem": "A non-negative random variable has mean 6. Markov's bound on P(X ≥ 30) is:",
+      "options": [
+        "0.0333",
+        "0.2",
+        "5",
+        "0.8"
+      ],
+      "answer": "B",
+      "explanation": "E(X)/a = 6/30 = 0.2. The bound uses nothing but the mean and non-negativity, and is usually very loose: for an exponential with mean 6 the true probability is e^(−5) = 0.006738, thirty times smaller.",
+      "check": "Any probability bound must lie in [0, 1], which rules out option C immediately."
+    },
+    {
+      "id": "pr-t7-m-12",
+      "format": "multi",
+      "topic": "probability-t7",
+      "diff": "moderate",
+      "stem": "Consider the four inequalities.",
+      "options": [
+        "A, B and C only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "A is true — 1/x is convex. B is true: Chebyshev is Markov applied to (X − μ)². C is true, and it is why the bound cannot be improved. D is false — Markov requires non-negativity.",
+      "statements": [
+        "E(1/X) ≥ 1/E(X) for a positive random variable.",
+        "Chebyshev's inequality follows from Markov's.",
+        "There is a distribution attaining Chebyshev's bound exactly.",
+        "Markov's inequality holds for any variable with a finite mean."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True. 1/x has second derivative 2/x³ > 0 on x > 0, so it is convex and Jensen points that way. On Uniform(1,3) the two sides are 0.549306 and 0.5."
+        },
+        "B": {
+          "tf": true,
+          "why": "True — apply Markov to the non-negative variable (X − μ)² at the level k²σ². The squaring is what turns 1/a into 1/k², and it is also why a variance rather than a mean is required."
+        },
+        "C": {
+          "tf": true,
+          "why": "True: mass 1/(2k²) at each of μ ± kσ with the rest at μ. Verified at k = 2 and 3, where the variance comes to exactly 1.000000 and the tail probability exactly 1/k². So no smaller bound could be true for every distribution with a finite variance."
+        },
+        "D": {
+          "tf": false,
+          "why": "False — it requires X ≥ 0. The proof uses X ≥ a·1{X ≥ a}, which fails if X can be negative, and the conclusion is then simply untrue."
+        }
+      }
+    },
+    {
+      "id": "pr-t7-m-13",
+      "format": "numeric",
+      "topic": "probability-t7",
+      "diff": "moderate",
+      "stem": "X has mean 100 and standard deviation 10. Chebyshev's bound on P(|X − 100| ≥ 25) is:",
+      "options": [
+        "0.25",
+        "0.04",
+        "0.4",
+        "0.16"
+      ],
+      "answer": "D",
+      "explanation": "The deviation is 25/10 = 2.5 standard deviations, so k = 2.5 and the bound is 1/6.25 = 0.16. Option A would be the bound at k = 2, which is the error of not dividing by σ.",
+      "check": "For a normal the true probability at k = 2.5 is 0.012419, so the bound is about thirteen times too large — but it needs no distributional assumption."
+    },
+    {
+      "id": "pr-t7-m-14",
+      "format": "single",
+      "topic": "probability-t7",
+      "diff": "moderate",
+      "stem": "For k ≥ 1, which distribution attains Chebyshev's bound at k?",
+      "options": [
+        "the exponential",
+        "the normal",
+        "mass 1/(2k²) at each of μ ± kσ, the remainder at μ",
+        "none — the bound is never attained"
+      ],
+      "answer": "C",
+      "explanation": "For k ≥ 1, put mass 1/(2k²) at each of μ ± kσ and the remaining mass 1 − 1/k² at μ. Its variance is 2 × (1/(2k²)) × (kσ)² = σ², and P(|X − μ| ≥ kσ) = 2/(2k²) = 1/k² exactly. For k < 1 the proposed remaining mass would be negative and Chebyshev's bound exceeds 1, so the probability bound 1 is sharper."
+    },
+    {
+      "id": "pr-t7-m-15",
+      "format": "single",
+      "topic": "probability-t7",
+      "diff": "moderate",
+      "stem": "Why is Chebyshev's inequality so loose for a normal distribution?",
+      "options": [
+        "the normal has no finite variance",
+        "it is distribution-free, so its value is set by the worst case rather than by the normal",
+        "it applies only to discrete distributions",
+        "the inequality is incorrectly stated in most textbooks"
+      ],
+      "answer": "B",
+      "explanation": "The bound must hold for every distribution with a finite variance, including the three-point one that attains it, so it cannot be tighter. For a normal the ratio of truth to bound falls from 0.317 at k = 1 to 0.182 at k = 2 and 0.024 at k = 3 — the slack grows, because the bound decays as 1/k² while a normal tail decays like e^(−k²/2)."
+    },
+    {
+      "id": "pr-t7-m-16",
+      "format": "numeric",
+      "topic": "probability-t7",
+      "diff": "moderate",
+      "stem": "Var(X) = 9 and Var(Y) = 16. Cauchy–Schwarz bounds |Cov(X,Y)| by:",
+      "options": [
+        "7",
+        "25",
+        "144",
+        "12"
+      ],
+      "answer": "D",
+      "explanation": "Cov² ≤ Var(X)Var(Y) = 144, so |Cov| ≤ 12. Equality holds only when Y is a linear function of X, and dividing through gives |ρ| = |Cov|/12 ≤ 1 — the familiar statement.",
+      "check": "Option C is the product of the variances, which bounds the SQUARE of the covariance, not the covariance itself."
+    },
+    {
+      "id": "pr-t7-m-17",
+      "format": "multi",
+      "topic": "probability-t7",
+      "diff": "hard",
+      "stem": "Consider finer points about these bounds.",
+      "options": [
+        "A, B and C only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "A is true — the density is positive at 0 and the integral diverges. B is true: Cantelli gives 1/(1+k²) = 0.2 at k = 2. C is true, and it shows Markov's weakness lay in the choice of function. D is false — at k = 1 the bound is 1, which is vacuous.",
+      "statements": [
+        "E(1/X) is infinite for an Exponential(1) variable.",
+        "For a one-sided tail, Cantelli's bound 1/(1 + k²) improves on Chebyshev.",
+        "Markov applied to e^(tX) gives an exponentially small bound.",
+        "Chebyshev's inequality is informative at k = 1."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True. The density of Exponential(1) is 1 at the origin, so ∫(1/x)e^(−x)dx diverges there. Jensen still holds with an infinite left side, but a simulation drifts upward with n — roughly 15 at a million draws and 40 at ten million."
+        },
+        "B": {
+          "tf": true,
+          "why": "True: at k = 2 Cantelli gives 0.2 against the 0.25 that halving the two-sided bound would suggest. The improvement comes from using the one-sidedness, so a two-sided bound should never simply be halved."
+        },
+        "C": {
+          "tf": true,
+          "why": "True — that is the Chernoff bound, P(X ≥ a) ≤ E(e^(tX))/e^(ta) optimised over t. It shows the looseness of Markov came from applying it to X rather than to a rapidly growing function of X."
+        },
+        "D": {
+          "tf": false,
+          "why": "False. At k = 1 the bound is 1/1 = 1, and since every probability is at most 1 the inequality says nothing whatever. It becomes informative only beyond one standard deviation."
+        }
+      }
+    },
+    {
+      "id": "pr-t7-m-18",
+      "format": "single",
+      "topic": "probability-t7",
+      "diff": "hard",
+      "stem": "Let X be strictly positive almost surely, with the expectations in the statements defined. Which set of statements is correct? A. ∫₀^∞ 2x[1 − F(x)]dx = E(X²). B. ∫₀^∞ [1 − F(x)]dx = E(X). C. E(1/X) ≤ 1/E(X). D. E(log X) ≤ log E(X).",
+      "options": [
+        "B, C and D",
+        "A, B and C",
+        "A, B and D",
+        "C and D"
+      ],
+      "answer": "C",
+      "explanation": "A and B are the tail identities, both verified by quadrature on three distributions. D is true because log is concave. C is FALSE: 1/x is convex, so Jensen gives E(1/X) ≥ 1/E(X) — on Uniform(1,3) the two sides are 0.549306 and 0.5. This is the June 2026 question, and its difficulty is that C and D have identical written form and differ only in the curvature of the function."
+    },
+    {
+      "id": "pr-t7-m-19",
+      "format": "numeric",
+      "topic": "probability-t7",
+      "diff": "hard",
+      "stem": "For X ~ Exponential(1), compare Markov's bound at a = 3 with the true probability.",
+      "options": [
+        "bound 0.0498 against a truth of 0.3333",
+        "bound 0.3333 against a truth of 0.0498, a factor of 6.7",
+        "bound and truth both 0.3333",
+        "bound 0.3333 against a truth of 0.3333"
+      ],
+      "answer": "B",
+      "explanation": "The bound is E(X)/a = 1/3 = 0.333333 and the truth is e^(−3) = 0.049787. The gap widens further out: at a = 5 the bound is 0.2 against 0.006738, a factor of 30, because Markov's bound decays as 1/a while an exponential tail decays geometrically.",
+      "check": "Markov's bound must always be at least the true probability, so the larger of the two numbers has to be the bound."
+    },
+    {
+      "id": "pr-t7-m-20",
+      "format": "single",
+      "topic": "probability-t7",
+      "diff": "hard",
+      "stem": "Chebyshev's inequality is loose, yet it proves the weak law of large numbers. Why is the looseness not a problem there?",
+      "options": [
+        "because the weak law does not require an inequality",
+        "because the sample mean is normally distributed",
+        "because the bound becomes tight as n grows",
+        "because the bound σ²/(nε²) tends to zero whatever the constant, so only the limit matters"
+      ],
+      "answer": "D",
+      "explanation": "Applied to X̄ₙ, Chebyshev gives P(|X̄ₙ − μ| ≥ ε) ≤ σ²/(nε²), and a loose constant multiplying 1/n still goes to zero. That is the clearest case of a slack bound being entirely adequate: the inequality is a tool for proving asymptotic statements, not for computing probabilities that could be computed exactly."
     }
-   }
-  },
-  {
-   "id": "pr-t7-m-13",
-   "format": "numeric",
-   "topic": "probability-t7",
-   "diff": "moderate",
-   "stem": "X has mean 100 and standard deviation 10. Chebyshev's bound on P(|X − 100| ≥ 25) is:",
-   "options": [
-    "0.25",
-    "0.04",
-    "0.4",
-    "0.16"
-   ],
-   "answer": "D",
-   "explanation": "The deviation is 25/10 = 2.5 standard deviations, so k = 2.5 and the bound is 1/6.25 = 0.16. Option A would be the bound at k = 2, which is the error of not dividing by σ.",
-   "check": "For a normal the true probability at k = 2.5 is 0.012419, so the bound is about thirteen times too large — but it needs no distributional assumption."
-  },
-  {
-   "id": "pr-t7-m-14",
-   "format": "single",
-   "topic": "probability-t7",
-   "diff": "moderate",
-   "stem": "Which distribution attains Chebyshev's bound at a given k?",
-   "options": [
-    "the exponential",
-    "the normal",
-    "mass 1/(2k²) at each of μ ± kσ, the remainder at μ",
-    "none — the bound is never attained"
-   ],
-   "answer": "C",
-   "explanation": "Its variance is 2 × (1/(2k²)) × (kσ)² = σ² as required, and P(|X − μ| ≥ kσ) = 2/(2k²) = 1/k² exactly. Verified at k = 2, where the masses are 0.125, 0.75, 0.125, and at k = 3. Because this distribution satisfies the inequality's only assumption, no smaller bound is possible."
-  },
-  {
-   "id": "pr-t7-m-15",
-   "format": "single",
-   "topic": "probability-t7",
-   "diff": "moderate",
-   "stem": "Why is Chebyshev's inequality so loose for a normal distribution?",
-   "options": [
-    "the normal has no finite variance",
-    "it is distribution-free, so its value is set by the worst case rather than by the normal",
-    "it applies only to discrete distributions",
-    "the inequality is incorrectly stated in most textbooks"
-   ],
-   "answer": "B",
-   "explanation": "The bound must hold for every distribution with a finite variance, including the three-point one that attains it, so it cannot be tighter. For a normal the ratio of truth to bound falls from 0.317 at k = 1 to 0.182 at k = 2 and 0.024 at k = 3 — the slack grows, because the bound decays as 1/k² while a normal tail decays like e^(−k²/2)."
-  },
-  {
-   "id": "pr-t7-m-16",
-   "format": "numeric",
-   "topic": "probability-t7",
-   "diff": "moderate",
-   "stem": "Var(X) = 9 and Var(Y) = 16. Cauchy–Schwarz bounds |Cov(X,Y)| by:",
-   "options": [
-    "7",
-    "25",
-    "144",
-    "12"
-   ],
-   "answer": "D",
-   "explanation": "Cov² ≤ Var(X)Var(Y) = 144, so |Cov| ≤ 12. Equality holds only when Y is a linear function of X, and dividing through gives |ρ| = |Cov|/12 ≤ 1 — the familiar statement.",
-   "check": "Option C is the product of the variances, which bounds the SQUARE of the covariance, not the covariance itself."
-  },
-  {
-   "id": "pr-t7-m-17",
-   "format": "multi",
-   "topic": "probability-t7",
-   "diff": "hard",
-   "stem": "Consider finer points about these bounds.",
-   "options": [
-    "A, B and C only",
-    "A and C only",
-    "B and D only",
-    "A, B, C and D"
-   ],
-   "answer": "A",
-   "explanation": "A is true — the density is positive at 0 and the integral diverges. B is true: Cantelli gives 1/(1+k²) = 0.2 at k = 2. C is true, and it shows Markov's weakness lay in the choice of function. D is false — at k = 1 the bound is 1, which is vacuous.",
-   "statements": [
-    "E(1/X) is infinite for an Exponential(1) variable.",
-    "For a one-sided tail, Cantelli's bound 1/(1 + k²) improves on Chebyshev.",
-    "Markov applied to e^(tX) gives an exponentially small bound.",
-    "Chebyshev's inequality is informative at k = 1."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True. The density of Exponential(1) is 1 at the origin, so ∫(1/x)e^(−x)dx diverges there. Jensen still holds with an infinite left side, but a simulation drifts upward with n — roughly 15 at a million draws and 40 at ten million."
-    },
-    "B": {
-     "tf": true,
-     "why": "True: at k = 2 Cantelli gives 0.2 against the 0.25 that halving the two-sided bound would suggest. The improvement comes from using the one-sidedness, so a two-sided bound should never simply be halved."
-    },
-    "C": {
-     "tf": true,
-     "why": "True — that is the Chernoff bound, P(X ≥ a) ≤ E(e^(tX))/e^(ta) optimised over t. It shows the looseness of Markov came from applying it to X rather than to a rapidly growing function of X."
-    },
-    "D": {
-     "tf": false,
-     "why": "False. At k = 1 the bound is 1/1 = 1, and since every probability is at most 1 the inequality says nothing whatever. It becomes informative only beyond one standard deviation."
-    }
-   }
-  },
-  {
-   "id": "pr-t7-m-18",
-   "format": "single",
-   "topic": "probability-t7",
-   "diff": "hard",
-   "stem": "Let X be non-negative with distribution function F. Which set of statements is correct? A. ∫₀^∞ 2x[1 − F(x)]dx = E(X²). B. ∫₀^∞ [1 − F(x)]dx = E(X). C. E(1/X) ≤ 1/E(X). D. E(log X) ≤ log E(X).",
-   "options": [
-    "B, C and D",
-    "A, B and C",
-    "A, B and D",
-    "C and D"
-   ],
-   "answer": "C",
-   "explanation": "A and B are the tail identities, both verified by quadrature on three distributions. D is true because log is concave. C is FALSE: 1/x is convex, so Jensen gives E(1/X) ≥ 1/E(X) — on Uniform(1,3) the two sides are 0.549306 and 0.5. This is the June 2026 question, and its difficulty is that C and D have identical written form and differ only in the curvature of the function."
-  },
-  {
-   "id": "pr-t7-m-19",
-   "format": "numeric",
-   "topic": "probability-t7",
-   "diff": "hard",
-   "stem": "For X ~ Exponential(1), compare Markov's bound at a = 3 with the true probability.",
-   "options": [
-    "bound 0.0498 against a truth of 0.3333",
-    "bound 0.3333 against a truth of 0.0498, a factor of 6.7",
-    "bound and truth both 0.3333",
-    "bound 0.3333 against a truth of 0.3333"
-   ],
-   "answer": "B",
-   "explanation": "The bound is E(X)/a = 1/3 = 0.333333 and the truth is e^(−3) = 0.049787. The gap widens further out: at a = 5 the bound is 0.2 against 0.006738, a factor of 30, because Markov's bound decays as 1/a while an exponential tail decays geometrically.",
-   "check": "Markov's bound must always be at least the true probability, so the larger of the two numbers has to be the bound."
-  },
-  {
-   "id": "pr-t7-m-20",
-   "format": "single",
-   "topic": "probability-t7",
-   "diff": "hard",
-   "stem": "Chebyshev's inequality is loose, yet it proves the weak law of large numbers. Why is the looseness not a problem there?",
-   "options": [
-    "because the weak law does not require an inequality",
-    "because the sample mean is normally distributed",
-    "because the bound becomes tight as n grows",
-    "because the bound σ²/(nε²) tends to zero whatever the constant, so only the limit matters"
-   ],
-   "answer": "D",
-   "explanation": "Applied to X̄ₙ, Chebyshev gives P(|X̄ₙ − μ| ≥ ε) ≤ σ²/(nε²), and a loose constant multiplying 1/n still goes to zero. That is the clearest case of a slack bound being entirely adequate: the inequality is a tool for proving asymptotic statements, not for computing probabilities that could be computed exactly."
-  }
- ]
+  ]
 }
