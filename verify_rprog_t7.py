@@ -21,3 +21,9 @@ assert [codes[x] for x in ['low','high','medium']]==[1,3,2]
 assert len(set(['a','b','a']))==2
 assert ['a','b'][0]=='a'
 print('PASS: R T7 structure, mastery contract, factor-level and list examples.')
+
+# Formatting guided solution must explain format(), not unrelated list extraction.
+s8 = next(s for s in L['scenes'] if s['id'] == 's8')
+joined = ' '.join(x['math']+' '+x['why'] for x in s8['solution'])
+assert '12.35' in joined and 'character' in joined and 'numeric' in joined
+assert 'x[[1]]' not in joined
