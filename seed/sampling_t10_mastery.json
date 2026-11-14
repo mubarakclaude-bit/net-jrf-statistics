@@ -195,13 +195,13 @@
       "topic": "sampling-t10",
       "stem": "Which statements are true?",
       "options": [
-        "A and B only",
+        "A, B and D only",
         "A, B and C only",
         "B and D only",
         "All four"
       ],
-      "answer": "B",
-      "explanation": "A, B and C are true. The sample mean is unbiased under both designs; SRSWR draws are independent; and SRSWOR has a finite-population correction. Statement D incorrectly says SRSWOR draws are independent.",
+      "answer": "A",
+      "explanation": "A, B and D are true. The sample mean is unbiased under both designs, SRSWR draws are independent, and for 0<n<N the SRSWOR variance is smaller under the same population-variance convention. Statement C is false because SRSWOR draws are dependent: each selected unit is removed before the next draw.",
       "statements": [
         "The sample mean is unbiased under both SRSWR and SRSWOR.",
         "SRSWR draws are independent.",
@@ -218,12 +218,12 @@
           "why": "SRSWR draws are independent."
         },
         "C": {
-          "tf": true,
-          "why": "SRSWOR draws are independent."
+          "tf": false,
+          "why": "Under SRSWOR, a selected unit is not returned, so the available population changes and successive draws are dependent."
         },
         "D": {
-          "tf": false,
-          "why": "For 0<n<N, the SRSWOR variance is smaller when the same population variance convention is used."
+          "tf": true,
+          "why": "For 0<n<N, the SRSWOR variance is the SRSWR variance multiplied by the finite-population correction (N−n)/(N−1), which is below one."
         }
       }
     },
