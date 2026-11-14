@@ -99,6 +99,11 @@ def main() -> None:
     assert q11["statements"][0].startswith("nσ̂²/σ²")
     assert "nσ̂²/σ² ~ χ²(n−1)" in q11["explanation"]
     assert "((n−1)σ̂²)/σ²" not in q11["statements"][0]
+    leverage_q13 = next(x for x in methods["items"] if x["id"] == "csir-meth-q13")
+    assert leverage_q13["type"] == "practice" and leverage_q13["year"] == 2020
+    assert leverage_q13["session"] == "30 November" and leverage_q13["answer"] == "C"
+    assert "1/n=1/50=0.02" in leverage_q13["explanation"]
+    assert "0.1" in leverage_q13["explanation"] and "1.1" in leverage_q13["options"]
     regression_q01 = next(x for x in methods["items"] if x["id"] == "csir-meth-q01")
     assert regression_q01["type"] == "practice" and regression_q01["answer"] == "A"
     assert "SSE=5−3.84=1.16" in regression_q01["explanation"]
