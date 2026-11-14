@@ -246,6 +246,14 @@ def main() -> None:
     assert q103["session"] == "December" and q103["answer"] == "A"
     assert "".join(sorted(k for k, v in q103["verdicts"].items() if v["tf"])) == "AD"
 
+    # Q35 (26 Nov 2020): the posterior mean under squared-error loss is unique.
+    # The supplied key lists statements 1 and 4; direct posterior calculation supports 1 only.
+    q35 = next(x for x in estimation["items"] if x["id"] == "csir-est-q35")
+    assert q35["format"] == "single" and q35["year"] == 2020
+    assert q35["session"] == "26 November" and q35["answer"] == "A"
+    assert "supplied answer-key sheet on page 63 lists statements 1 and 4" in q35["explanation"]
+    assert "posterior mean is 2m/(1+m)" in q35["explanation"]
+
     # Estimation Q74: preserve the source's four-statement format and key A,C,D.
     q74 = next(x for x in estimation["items"] if x["id"] == "csir-est-q74")
     assert q74["format"] == "multi" and q74["year"] == 2015
@@ -291,7 +299,7 @@ def main() -> None:
     assert "rank(X)>p" in q60["explanation"] and "rank(X)=p" in q60["explanation"]
     q68 = next(x for x in estimation["items"] if x["id"] == "csir-est-q68")
     assert "cannot define a probability density" in q68["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 96
+    assert len(estimation["items"]) == estimation["count"] == 97
 
     # Further source questions from pages 36–49.
     for qid, truth, year, session in [
@@ -392,7 +400,7 @@ def main() -> None:
     q104 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q104")
     assert q104["type"] == "practice" and q104["format"] == "single"
     assert q104["answer"] == "D" and "119" in q104["explanation"] and "120" in q104["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 96
+    assert len(estimation["items"]) == estimation["count"] == 97
     assert len(methods["items"]) == methods["count"] == 12
     assert len(sampling["items"]) == sampling["count"] == 9
 
@@ -403,7 +411,7 @@ def main() -> None:
     assert q104["answer"] == "D" and "119" in q104["explanation"] and "120" in q104["explanation"]
     q81 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q81")
     assert "".join(sorted(k for k, v in q81["verdicts"].items() if v["tf"])) == "ABCD"
-    assert len(estimation["items"]) == estimation["count"] == 96
+    assert len(estimation["items"]) == estimation["count"] == 97
 
     q75 = next(x for x in methods["items"] if x["id"] == "csir-meth-q75")
     assert q75["type"] == "practice" and q75["format"] == "multi"
