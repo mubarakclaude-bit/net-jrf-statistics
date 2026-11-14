@@ -10,6 +10,7 @@ from verify_timeseries_spectrum import main as spectrum_main
 from verify_timeseries_ergodicity import main as ergodicity_main
 from verify_timeseries_wold_forecast import main as wold_forecast_main
 from verify_regression_assumption_precision import main as regression_assumption_main
+from verify_sampling_murthy_variance import main as murthy_variance_main
 
 def main():
     inference_main()
@@ -22,6 +23,7 @@ def main():
     ergodicity_main()
     wold_forecast_main()
     regression_assumption_main()
+    murthy_variance_main()
 
 if __name__ == "__main__":
     main()

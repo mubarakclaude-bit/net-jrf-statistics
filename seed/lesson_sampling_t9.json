@@ -483,28 +483,28 @@
       "mins": 9,
       "title": "Transfer: Murthy unordered estimator",
       "objective": "Calculate the n=2 unordered estimate and variance.",
-      "problem": "For the same two units, y₁=10, p₁=0.2, y₂=12, p₂=0.3. Calculate Murthy's unordered estimator and its variance estimate.",
+      "problem": "For two units selected under PPSWOR, let p₁=0.2, p₂=0.4, y₁=10 and y₂=16. Calculate Murthy's unordered estimator and its unbiased variance estimate.",
       "hints": [
         "Use the symmetric n=2 formula.",
         "Weight y₁/p₁ by 1−p₂ and y₂/p₂ by 1−p₁.",
         "Use the corresponding nonnegative variance formula."
       ],
-      "answer": "Ŷ_M=[(1−0.3)50+(1−0.2)40]/(2−0.2−0.3)=(35+32)/1.5=44.6667. v_M=[0.8×0.7×0.5/(1.5²)](10)²=12.4444.",
+      "answer": "The inverse-weighted values are 50 and 40. Ŷ_M=[0.6(50)+0.8(40)]/1.4=44.2857. v_M=[0.8×0.6×(1−0.2−0.4)/(1.4²)]×100=9.7959.",
       "check": "The estimate does not depend on the order of the two sampled units.",
       "solution": [
         {
-          "say": "Calculate inverse-weighted values.",
+          "say": "The inverse-weighted values are y₁/p₁=10/0.2=50 and y₂/p₂=16/0.4=40.",
           "math": "y₁/p₁=50; y₂/p₂=40",
           "why": "These are the weighted study values."
         },
         {
           "say": "Apply Murthy's symmetric estimator.",
-          "math": "Ŷ_M=[0.7(50)+0.8(40)]/1.5=44.6667",
+          "math": "Ŷ_M=[(1−p₂)50+(1−p₁)40]/(2−p₁−p₂)=[0.6(50)+0.8(40)]/1.4=62/1.4=44.2857.",
           "why": "The formula weights both possible orders into one unordered estimate."
         },
         {
           "say": "Calculate variance estimate.",
-          "math": "v_M=[0.8×0.7×0.5/2.25]×100=12.4444",
+          "math": "v_M=[(1−p₁)(1−p₂)(1−p₁−p₂)/(2−p₁−p₂)²](50−40)²=[0.8×0.6×0.4/(1.4²)]×100=9.7959.",
           "why": "All factors are nonnegative for these probabilities."
         }
       ],
@@ -550,7 +550,8 @@
       "For n=2: Ŷ_d=½[y₁(1+p₁)/p₁+y₂(1−p₁)/p₂].",
       "Murthy n=2: Ŷ_M=[(1−p₂)y₁/p₁+(1−p₁)y₂/p₂]/(2−p₁−p₂).",
       "The SYG sum is over unordered sample pairs i<j, so each pair is counted once.",
-      "If any required π_ij=0, the usual pairwise HT/SYG variance expression is unavailable for that pair."
+      "If any required π_ij=0, the usual pairwise HT/SYG variance expression is unavailable for that pair.",
+      "Murthy n=2 variance estimate: v_M=[(1−p₁)(1−p₂)(1−p₁−p₂)/(2−p₁−p₂)²](y₁/p₁−y₂/p₂)²."
     ],
     "cards": [
       [

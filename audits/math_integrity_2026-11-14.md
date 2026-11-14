@@ -347,3 +347,8 @@ The UMPU mastery item was rewritten so its correct option states the sufficient-
 
 
 The regression edits were corrected to preserve the lesson contract's structured block objects. The measurement-error IV example now writes the estimable moment using observed (W=X+v): (E[Z(Y-\beta W)]=0), with the stated instrument orthogonality conditions.
+
+
+## Sampling theory — Murthy n=2 variance estimator
+
+Corrected the general factor in Murthy's unbiased n=2 PPSWOR variance estimator: the third factor is (1-p_1-p_2), not (p_1+p_2). The previous worked values used (p_1+p_2=0.5), for which the two expressions coincidentally agree and therefore concealed the formula error. The revised example uses (p_1=0.2,p_2=0.4), producing the distinguishing variance estimate 9.7959. The same correction is in the mastery pool and a focused verifier.
