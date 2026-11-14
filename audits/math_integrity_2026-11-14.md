@@ -259,3 +259,18 @@ The new verifier is a top-level `verify_*.py` entry point so the repository's ch
 - **Lesson 4.16:** qualified Yates-correction statements so the lesson does not claim that every implementation always reduces the statistic.
 
 Added `verify_inference_decision_precision.py`; a top-level CI wrapper will run it together with the earlier second-pass checks.
+
+
+## Mastery-pool alignment — Statistical Inference
+
+The lesson corrections were propagated into their Paper 2 mastery pools:
+
+- Corrected inference 3 and inference 5 pool difficulty metadata to the required 6 easy / 10 moderate / 4 hard distribution, reclassifying basic recall and multi-step items by their actual task complexity.
+- Updated inference 5 pool explanations for modified minimum chi-square's positive observed-count requirement, Gauss–Markov assumptions and multinomial asymptotic regularity.
+- Updated inference 7 pool wording to distinguish discrete 0–1 loss from continuous MAP/posterior mode.
+- Updated inference 10 pool wording to include the valid zero likelihood-ratio case.
+- Updated inference 11 pool reasoning to use the coupled SPRT inequalities.
+- Updated inference 14 pool explanation of Poisson tail pooling and Yates correction.
+- Updated inference 16 pool wording to avoid an unconditional claim about Yates always reducing every implementation.
+
+Added `verify_inference_mastery_alignment.py` to check these pool/lesson consistency points.
