@@ -82,7 +82,7 @@ def main() -> None:
         for scene in bayes_lesson["scenes"] for block in scene.get("blocks", [])
     )
     mle_text = " ".join(
-        block.get("body", "")
+        block.get("h", "") + " " + block.get("body", "")
         for scene in mle_lesson["scenes"] for block in scene.get("blocks", [])
     )
     complete_text = " ".join(
