@@ -419,6 +419,7 @@ class FollowUpCorrectionTests(unittest.TestCase):
         pool = load_json(SEED / "inference_t15_mastery.json")
         item = next(q for q in pool["items"] if q["id"] == "inf-t15-m-12")
         self.assertIn("p = 0.0455", item["stem"])
+        self.assertEqual(item["statements"][0], "The result is statistically significant at the 5% level.")
 
     def test_t15_distribution_free_tests_do_not_claim_general_mean_test(self):
         pool = load_json(SEED / "inference_t15_mastery.json")
