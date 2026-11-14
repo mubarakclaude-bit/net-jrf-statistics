@@ -383,3 +383,19 @@ Twelve further questions were imported from pages 217–228, all in Probability:
 - **Page 224:** the wording is unclear around the number of snakes caught; the revised stem makes the single-snake interpretation explicit, which gives 135 non-venomous snakes.
 - **Page 225:** the source does not state independence; the revised stem states the independence assumption required for the accepted 60% answer.
 - Single-choice items were standardised to four options to match the repository's Paper 2 question schema. For page 216, the correct 8/81 was moved into option D and the source's 'None of these' was removed.
+
+
+## Batch 23 — pages 229–240
+
+Seventeen further questions were imported from pages 229–230 and 232–240:
+- **Probability (14):** two even-numbered balls from 1–21, p229 Q1; colour probability, p229 Q2; independent draw pattern with replacement, p229 Q3; at least three heads from four coins, p229 Q4; committee with at least two women, p229 Q5; no-green draw, p229 Q6; three different ball types, p230 Q7; neighbours around a round table, p230 Q9; ordered white-then-black draw, p230 Q10; expected payout in a conditional second-roll game, p232; expected range of five Uniform(0,1) observations, p233; reciprocal F-quantile relation, p236; difference of independent normal products, p237; expectation of a product involving independent uniforms, p239.
+- **Multivariate Analysis (1):** maximum attainable rank of a sum of outer products, p235.
+- **Statistical Inference (2):** Bernoulli MLE, p238; consistent estimator for θ in N(2θ,θ²), p240.
+
+### Pages held out after inspection
+
+- **Page 230 Q8:** the wording does not specify equal colour probabilities or the sampling model sufficiently to calculate the probability of at least one marble of each colour.
+- **Page 232:** the die game is interpreted as a payout equal to the number on the last roll; under that wording the expectation is $4.25.
+- **Page 234:** the sample median for the displayed double-exponential sample is 2, but 2 is absent from the printed answer options; held out due to the source-option mismatch.
+
+The p229 questions are individually identified by question number because six distinct items share one source page. The p235 matrix-rank item is stored in Multivariate Analysis; the two estimator items are stored in Statistical Inference.
