@@ -213,7 +213,7 @@ For a discrete test the actual size may be below the target level. The statement
 
 File: `seed/inference_t13_mastery.json`, item `inf-t13-m-20`. Severity: **Minor**.
 
-The keyed interval is (X₍ₙ₎, X₍ₙ₎/α^(1/n)); the lower endpoint must be at least the observed maximum. The original explanation incorrectly said option D ignored that lower constraint, although D was the keyed correct interval. The explanation now identifies D as correct and explains why the other options fail.
+The keyed interval is (X₍ₙ₎, X₍ₙ₎/α^(1/n)); the lower endpoint must be at least the observed maximum. The original explanation incorrectly said the keyed interval ignored that lower constraint. The explanation now derives the interval directly from the pivot and avoids naming the correct option, as required by the repository's self-cited-answer audit.
 
 ### INF-026 — T15 described family-wise error inflation as unconditional
 

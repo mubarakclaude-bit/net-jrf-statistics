@@ -516,7 +516,8 @@ class SecondPassMasteryReviewTests(unittest.TestCase):
         self.assertIn("0 ≤ λ ≤ 1", item["explanation"])
         ci = load_json(SEED / "inference_t13_mastery.json")
         item = next(q for q in ci["items"] if q["id"] == "inf-t13-m-20")
-        self.assertIn("Option D is the correct interval", item["explanation"])
+        self.assertIn("confidence interval therefore runs from the sample maximum", item["explanation"])
+        self.assertNotIn("Option D", item["explanation"])
 
     def test_t11_sprt_advantage_is_not_promised_as_a_fixed_fraction(self):
         pool = load_json(SEED / "inference_t11_mastery.json")
