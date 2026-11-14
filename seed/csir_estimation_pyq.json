@@ -1,0 +1,612 @@
+{
+  "moduleId": "inference",
+  "topicId": null,
+  "source": "pyq",
+  "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
+  "count": 23,
+  "clean": 23,
+  "items": [
+    {
+      "id": "csir-est-q01",
+      "format": "single",
+      "topic": "inference-t2 · inference-t3 · complete sufficient statistic and UMVU estimation",
+      "stem": "For n≥2, let X₁,…,Xₙ be a random sample from the density f(x|θ)=θx^(θ−1), 0<x<1, where θ>0 is unknown. Which estimator is the uniformly minimum-variance unbiased estimator of 1/θ?",
+      "options": [
+        "−(1/n)∑ᵢ₌₁ⁿ ln Xᵢ",
+        "−n/(∑ᵢ₌₁ⁿ ln Xᵢ)",
+        "−(n−1)/(∑ᵢ₌₁ⁿ ln Xᵢ)",
+        "−(2/n)∑ᵢ₌₁ⁿ ln Xᵢ"
+      ],
+      "answer": "A",
+      "explanation": "Put Yᵢ=−ln Xᵢ. For 0<Xᵢ<1, Yᵢ is positive. Its distribution is exponential with rate θ, so E(Yᵢ)=1/θ. Therefore E[(1/n)∑Yᵢ]=1/θ: the sample mean of the Yᵢ values is unbiased for the quantity asked. Since Y=∑Yᵢ has a Gamma distribution with shape n and rate θ, it is a complete sufficient statistic for θ. The estimator Y/n is a function of this complete sufficient statistic and is unbiased; by the Lehmann–Scheffé theorem it is UMVU. Replacing Yᵢ by −ln Xᵢ gives −(1/n)∑ln Xᵢ, option A. Other-exam relevance: this exponential-family, transformation and UMVU reasoning is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q02",
+      "format": "single",
+      "topic": "inference-t1 · minimal sufficiency for a normal model with parameter-dependent mean",
+      "stem": "For n≥2, let ε₁,…,εₙ be independent N(0,σ²) random variables and suppose Yᵢ=iα+i²α²+εᵢ, i=1,…,n, where α∈ℝ and σ>0 are unknown. Which of the following is a jointly minimal sufficient statistic for (α,σ²)?",
+      "options": [
+        "(∑ᵢYᵢ², ∑ᵢiYᵢ, ∑ᵢi²Yᵢ)",
+        "(∑ᵢYᵢ², ∑ᵢiYᵢ, ∑ᵢi²Yᵢ²)",
+        "(∑ᵢiYᵢ, ∑ᵢi²Yᵢ²)",
+        "(∑ᵢYᵢ, ∑ᵢiYᵢ)"
+      ],
+      "answer": "A",
+      "explanation": "The observations are independent normal variables with common variance σ² and means μᵢ=iα+i²α². The joint density is proportional to exp{−[1/(2σ²)]∑(Yᵢ−iα−i²α²)²}. Expand the square: ∑Yᵢ²−2α∑iYᵢ−2α²∑i²Yᵢ+∑(iα+i²α²)². The last term depends only on the known indices and α. Thus all sample dependence in the likelihood is through the three quantities ∑Yᵢ², ∑iYᵢ and ∑i²Yᵢ, making option A sufficient by factorisation. For this full two-parameter normal family, the likelihood-ratio criterion also shows that equality of the likelihood ratio for all (α,σ²) requires these three summaries to agree; hence the statistic is minimal sufficient. The other options omit at least one likelihood-dependent summary or use a different, insufficient quantity. Other-exam relevance: the same factorisation and minimal-sufficiency ideas are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where statistical inference is in the syllabus. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q03",
+      "format": "multi",
+      "topic": "inference-t1 · inference-t2 · inference-t3 · shifted exponential: sufficiency, completeness and UMVU",
+      "stem": "Let X₁,…,Xₙ be a random sample with density f(x|θ)=e^(θ−x) for x≥θ and 0 otherwise, where θ is unknown. Let X̄ be the sample mean and X₍₁₎=min(X₁,…,Xₙ). Which of the following combinations of statements is correct?",
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 1, 3 and 4 only",
+        "Statements 2, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "C",
+      "statements": [
+        "X̄ is the method-of-moments estimator of θ.",
+        "X₍₁₎ is the maximum-likelihood estimator of θ.",
+        "X₍₁₎−1/n is the uniformly minimum-variance unbiased estimator of θ.",
+        "X₍₁₎ is a sufficient statistic for θ."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "E(X)=θ+1, so equating X̄ to the population mean gives θ̂MM=X̄−1, not X̄."
+        },
+        "B": {
+          "tf": true,
+          "why": "The likelihood increases with θ over the allowed range θ≤X₍₁₎, so its maximum occurs at X₍₁₎."
+        },
+        "C": {
+          "tf": true,
+          "why": "The minimum has an exponential excess with mean 1/n. Subtracting 1/n removes its bias; completeness and sufficiency give the UMVU result."
+        },
+        "D": {
+          "tf": true,
+          "why": "The joint density depends on the observations through their minimum and a factor independent of θ. The factorisation theorem therefore gives sufficiency."
+        }
+      },
+      "explanation": "Step 1: The support condition requires θ≤X₍₁₎. The likelihood is L(θ)=exp(nθ−ΣXᵢ) for θ≤X₍₁₎ and zero otherwise. Since exp(nθ−ΣXᵢ) increases as θ increases, the largest allowed value, X₍₁₎, is the MLE. Step 2: E(X)=θ+1, so the method-of-moments estimate solves X̄=θ+1 and is X̄−1. Step 3: X₍₁₎ has mean θ+1/n, so X₍₁₎−1/n is unbiased. The minimum is also complete and sufficient in this shifted-exponential model, so the Lehmann–Scheffé theorem identifies it as UMVU. Thus statements 2, 3 and 4 are true. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q04",
+      "format": "single",
+      "year": 2023,
+      "session": "June",
+      "topic": "inference-t4 · constrained MLE for a normal mean",
+      "stem": "A random sample is 3, 6, 9 from a normal distribution with unknown mean μ restricted to μ≤5 and known variance 1. What is the maximum-likelihood estimate of μ?",
+      "options": [
+        "6",
+        "5",
+        "3",
+        "9"
+      ],
+      "answer": "B",
+      "explanation": "For a normal distribution with known variance, the likelihood is largest at the sample mean when μ is unrestricted. Here X̄=(3+6+9)/3=6. But μ is not allowed to exceed 5. We therefore maximise the likelihood over μ≤5. The allowed value closest to the unrestricted maximum 6 is the boundary μ=5. Hence the constrained MLE is 5 (option B). The key lesson is to check the parameter space before reporting the sample mean. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q06",
+      "format": "multi",
+      "year": 2023,
+      "session": "June",
+      "topic": "inference-t1 · inference-t2 · sufficiency and completeness",
+      "stem": "Which combination of statements about sufficient statistics, complete statistics and maximum-likelihood estimators is correct?",
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 1 and 3 only",
+        "Statements 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "statements": [
+        "A maximum-likelihood estimator need not be unique.",
+        "Every complete statistic is automatically sufficient.",
+        "A sufficient statistic need not be complete.",
+        "Every function of a sufficient statistic is sufficient."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Likelihoods can have more than one maximiser, so an MLE need not be unique."
+        },
+        "B": {
+          "tf": false,
+          "why": "Completeness is a property of expectations of functions of a statistic. It does not by itself imply sufficiency."
+        },
+        "C": {
+          "tf": true,
+          "why": "Sufficiency means no additional sample information about the parameter is left after conditioning on the statistic. Completeness is a separate property."
+        },
+        "D": {
+          "tf": false,
+          "why": "A function of a sufficient statistic can discard information. Only one-to-one transformations are guaranteed to preserve sufficiency."
+        }
+      },
+      "explanation": "The correct statements are 1 and 3. Sufficiency and completeness answer different questions. A sufficient statistic retains all sample information about the unknown parameter. A complete statistic has no non-zero function whose expectation is zero for every parameter value. One property does not automatically imply the other. Also, a many-to-one function of a sufficient statistic may lose information; for example, replacing a sample sum by its square can merge distinct values. Finally, a likelihood can be flat over an interval, giving several maximisers. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q07",
+      "format": "single",
+      "year": 2022,
+      "session": "September",
+      "topic": "inference-t5 · method of moments",
+      "stem": "A discrete random variable has P(X=1)=2(1−θ)/(2−θ) and P(X=2)=θ/(2−θ), where 0<θ<1. If X̄ is the sample mean, what is the method-of-moments estimator of θ?",
+      "options": [
+        "X̄",
+        "2(1−X̄)",
+        "2(1−1/X̄)",
+        "2/(2−X̄)"
+      ],
+      "answer": "C",
+      "explanation": "The method of moments equates a sample moment to the corresponding population moment. Here the first population moment is E(X)=1·P(X=1)+2·P(X=2). Substitute the probabilities: E(X)=2(1−θ)/(2−θ)+2θ/(2−θ)=2/(2−θ). Set X̄=2/(2−θ). Multiply by (2−θ): X̄(2−θ)=2. Thus 2X̄−X̄θ=2, so X̄θ=2X̄−2 and θ̂MM=2(X̄−1)/X̄=2(1−1/X̄). Option C. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q48",
+      "format": "single",
+      "year": 2018,
+      "session": "December",
+      "topic": "inference-t4 · MLE with parameter-dependent support and non-unique maximisers",
+      "stem": "The observations 0.80, 0.71, 0.90, 1.20, 1.68, 1.40, 0.88 and 1.62 come from a Uniform(θ−0.2, θ+0.8) distribution. Which listed value is a maximum-likelihood estimate of θ?",
+      "options": [
+        "0.7",
+        "0.9",
+        "1.1",
+        "1.3"
+      ],
+      "answer": "B",
+      "explanation": "For every observation to lie inside the uniform interval, the lower endpoint must be below the smallest observation and the upper endpoint above the largest observation. The minimum is 0.71, so θ−0.2<0.71 gives θ<0.91. The maximum is 1.68, so 1.68<θ+0.8 gives θ>0.88. Therefore every θ in the feasible interval (0.88,0.91) gives the same likelihood, because the density height is 1/(0.8+0.2)=1. The MLE is not unique. Of the listed choices, 0.9 lies in that interval, so option B is an MLE. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q54",
+      "format": "single",
+      "year": 2017,
+      "session": "December",
+      "topic": "inference-t1 · inference-t2 · inference-t4 · sufficiency, completeness, bias and consistency",
+      "stem": "Let X₁,…,Xₙ be a random sample from Uniform(0,3θ), θ>0, and define Tₙ=(1/3)max(X₁,…,Xₙ). Which statement is NOT true?",
+      "options": [
+        "Tₙ is consistent for θ",
+        "Tₙ is unbiased for θ",
+        "Tₙ is a sufficient statistic for θ",
+        "Tₙ is complete"
+      ],
+      "answer": "B",
+      "explanation": "Let M=max(X₁,…,Xₙ). For a Uniform(0,3θ) sample, E(M)=n(3θ)/(n+1). Therefore E(Tₙ)=E(M/3)=nθ/(n+1), which is smaller than θ for every finite n. So Tₙ is biased downward and statement B is false. As n grows, n/(n+1) approaches 1, and the sample maximum approaches the upper endpoint 3θ; hence Tₙ approaches θ and is consistent. The sample maximum is sufficient and complete for this one-parameter uniform scale family. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q71",
+      "format": "single",
+      "year": 2015,
+      "session": "December",
+      "topic": "inference-t4 · MLE for a uniform scale parameter",
+      "stem": "A random sample X₁,…,Xₙ is drawn from Uniform(0,5θ), where θ>0. Let X₍ₙ₎=max(X₁,…,Xₙ). What is the maximum-likelihood estimator of θ?",
+      "options": [
+        "X₍₁₎/5",
+        "X₍ₙ₎",
+        "X₍₁₎",
+        "X₍ₙ₎/5"
+      ],
+      "answer": "D",
+      "explanation": "The joint density is (1/(5θ))ⁿ when all observations are between 0 and 5θ, and zero otherwise. The support condition requires 5θ≥X₍ₙ₎, or θ≥X₍ₙ₎/5. Within this allowed region the likelihood (1/(5θ))ⁿ decreases as θ increases. To maximise it, choose the smallest allowed θ. Therefore θ̂MLE=X₍ₙ₎/5, option D. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q74",
+      "format": "single",
+      "year": 2015,
+      "session": "December",
+      "topic": "inference-t4 · constrained normal MLE",
+      "stem": "Let X₁,…,Xₙ be independent observations from N(μ,1), with the restriction μ≥0. What is the maximum-likelihood estimator of μ?",
+      "options": [
+        "max(X̄,0)",
+        "X̄",
+        "min(X̄,0)",
+        "0"
+      ],
+      "answer": "A",
+      "explanation": "Without the restriction μ≥0, the normal likelihood is maximised at μ=X̄. Now impose the restriction. If X̄ is positive, it is allowed and remains the MLE. If X̄ is negative, it is outside the parameter space; the likelihood over μ≥0 is largest at the nearest allowed value, μ=0. Combining both cases gives μ̂MLE=max(X̄,0), option A. This is an example of maximising a likelihood under a boundary constraint. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q103",
+      "format": "single",
+      "year": 2011,
+      "session": "June",
+      "topic": "inference-t1 · inference-t4 · sufficiency and MLE for a Pareto-type model",
+      "stem": "A random sample has density f(x|θ)=θ/x² for x≥θ and 0 otherwise, where θ>0. Which statistic is the maximum-likelihood estimator of θ?",
+      "options": [
+        "X₍₁₎=min(X₁,…,Xₙ)",
+        "X₍ₙ₎=max(X₁,…,Xₙ)",
+        "X̄",
+        "The sample median"
+      ],
+      "answer": "A",
+      "explanation": "The likelihood is L(θ)=θⁿ/(X₁²⋯Xₙ²) when θ≤every observation, and zero otherwise. The condition is θ≤X₍₁₎. In the allowed region, all data-dependent factors are fixed and θⁿ increases with θ. The largest permitted value is therefore θ̂MLE=X₍₁₎, the sample minimum. The factorisation also shows that the sample minimum is sufficient for θ. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q114",
+      "format": "multi",
+      "year": 2024,
+      "session": "December",
+      "topic": "probability-t1 · inference-t4 · order statistics, bias and consistency",
+      "stem": "Let X₁,…,Xₙ be a random sample from Uniform(0,θ+1), where θ is unknown and θ+1>0. Let Tₙ=max(X₁,…,Xₙ). Which combination of statements is correct?",
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 1 and 3 only",
+        "Statements 2 and 4 only",
+        "Statements 3 and 4 only"
+      ],
+      "answer": "D",
+      "statements": [
+        "Tₙ is a consistent estimator of θ.",
+        "Tₙ is an unbiased estimator of θ.",
+        "Tₙ−1 is a consistent estimator of θ.",
+        "limₙ→∞ Eθ(Tₙ)=θ+1."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Tₙ approaches the upper endpoint θ+1, not θ."
+        },
+        "B": {
+          "tf": false,
+          "why": "Its expectation is n(θ+1)/(n+1), which is not θ."
+        },
+        "C": {
+          "tf": true,
+          "why": "The sample maximum approaches the upper endpoint θ+1, so subtracting 1 makes it approach θ."
+        },
+        "D": {
+          "tf": true,
+          "why": "The expectation n(θ+1)/(n+1) tends to θ+1."
+        }
+      },
+      "explanation": "For a Uniform(0,b) sample, the expected maximum is nb/(n+1). Here b=θ+1, so E(Tₙ)=n(θ+1)/(n+1). As n increases, this expectation tends to θ+1, not θ; hence Tₙ is not a consistent estimator of θ. The maximum itself approaches θ+1, so Tₙ−1 approaches θ and is consistent. The expectation limit in statement 4 is also correct. Thus statements 3 and 4 are true. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q115",
+      "format": "multi",
+      "year": 2024,
+      "session": "December",
+      "topic": "probability-t1 · inference-t4 · order statistics, bias and consistency",
+      "stem": "Let X₁,…,Xₙ be a random sample from Uniform(θ,θ+1), where θ is unknown. Let Tₙ=min(X₁,…,Xₙ). Which combination of statements is correct?",
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 2 and 3 only",
+        "Statements 1 and 4 only",
+        "Statements 3 and 4 only"
+      ],
+      "answer": "B",
+      "statements": [
+        "Tₙ is an unbiased estimator of θ.",
+        "limₙ→∞ Eθ(Tₙ)=θ.",
+        "Tₙ is a consistent estimator of θ.",
+        "max(X₁,…,Xₙ) is a consistent estimator of θ."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The minimum has expectation θ+1/(n+1), so it is biased upward for finite n."
+        },
+        "B": {
+          "tf": true,
+          "why": "θ+1/(n+1) tends to θ as n grows."
+        },
+        "C": {
+          "tf": true,
+          "why": "The sample minimum approaches the lower endpoint θ, so it is consistent."
+        },
+        "D": {
+          "tf": false,
+          "why": "The sample maximum approaches the upper endpoint θ+1, not θ."
+        }
+      },
+      "explanation": "For a Uniform(θ,θ+1) sample, the expected minimum is θ+1/(n+1). This is not exactly θ for finite n, so the minimum is biased upward. However, the extra term 1/(n+1) tends to zero. Therefore E(Tₙ) tends to θ, and the sample minimum itself converges to θ. The sample maximum converges to θ+1, so it does not estimate θ consistently. Statements 2 and 3 are true. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-q56",
+      "format": "multi",
+      "year": 2014,
+      "session": "June",
+      "topic": "inference-t4 · non-unique MLE for a uniform location family",
+      "stem": "A sample of size 11 from Uniform(θ−1,θ+1) is: −0.71, 0.30, −0.40, −0.63, −0.81, −0.70, 0.10, −0.01, 0.02, −0.96, −0.92. Which listed values are maximum-likelihood estimates of θ?",
+      "options": [
+        "A and B only",
+        "A and C only",
+        "C and D only",
+        "B and D only"
+      ],
+      "answer": "C",
+      "statements": [
+        "A. θ=−0.96",
+        "B. θ=0.30",
+        "C. θ=0.02",
+        "D. θ=−0.54"
+      ],
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The feasible interval is −0.70<θ<0.04, so −0.96 is outside it."
+        },
+        "B": {
+          "tf": false,
+          "why": "The value 0.30 is also outside the feasible interval."
+        },
+        "C": {
+          "tf": true,
+          "why": "0.02 lies strictly between −0.70 and 0.04, so it is an MLE."
+        },
+        "D": {
+          "tf": true,
+          "why": "−0.54 lies strictly between −0.70 and 0.04, so it is also an MLE."
+        }
+      },
+      "explanation": "For Uniform(θ−1,θ+1), every observation must lie inside the interval. The smallest observation is −0.96 and the largest is 0.30. The lower-end condition θ−1<−0.96 gives θ<0.04. The upper-end condition 0.30<θ+1 gives θ>−0.70. Therefore every θ in (−0.70,0.04) gives the same maximum likelihood. Among the four listed values, 0.02 and −0.54 lie in this interval. Both are MLEs; the estimate is not unique. Other-exam relevance: the same concept is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation or regression is in the syllabus. This is a syllabus-overlap note, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q05",
+      "format": "multi",
+      "year": 2023,
+      "session": "June",
+      "topic": "inference-t4 · consistency of estimators and convergence in probability",
+      "stem": "Let X₁,…,X₂ₙ be independent and identically distributed N(μ,1) random variables, and let W be an independent standard Cauchy random variable. Which of the following statistics are consistent estimators of μ?",
+      "statements": [
+        "T₁ₙ=(1/n)∑ᵢ₌₁ⁿXᵢ",
+        "T₂ₙ=(1/n)∑ᵢ₌₁²ⁿXᵢ",
+        "T₃ₙ=(1/n)∑ᵢ₌₁ⁿX₂ᵢ₋₁",
+        "T₄ₙ=(1/n)(∑ᵢ₌₁ⁿXᵢ+W)"
+      ],
+      "options": [
+        "Statements 1, 3 and 4 only",
+        "Statements 1 and 3 only",
+        "Statements 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "T₁ₙ is the average of n independent observations with mean μ. By the weak law of large numbers, T₁ₙ converges in probability to μ."
+        },
+        "B": {
+          "tf": false,
+          "why": "T₂ₙ=(1/n)∑ᵢ₌₁²ⁿXᵢ=2[(1/(2n))∑ᵢ₌₁²ⁿXᵢ]. The bracketed average converges to μ, so T₂ₙ converges to 2μ, not μ in general."
+        },
+        "C": {
+          "tf": true,
+          "why": "The observations X₁,X₃,…,X₂ₙ₋₁ are still n independent and identically distributed N(μ,1) variables. Their average therefore converges in probability to μ."
+        },
+        "D": {
+          "tf": true,
+          "why": "T₄ₙ=X̄ₙ+W/n. Since W is a finite real-valued random variable, W/n converges to zero in probability. Slutsky's theorem then gives T₄ₙ converges in probability to μ."
+        }
+      },
+      "explanation": "Check each statistic separately. (1) The average of the first n independent N(μ,1) observations has mean μ and variance 1/n, which tends to zero. Hence it converges in probability to μ. (2) This statistic sums 2n observations but divides only by n. Its expectation is 2μ, not μ, so it is not generally consistent for μ. (3) The odd-indexed observations X₁,X₃,…,X₂ₙ₋₁ are still n independent observations from the same N(μ,1) distribution. Their average therefore has mean μ and variance 1/n, so it is consistent. (4) Rewrite T₄ₙ as the average of X₁,…,Xₙ plus W/n. A Cauchy variable does not have a finite mean or variance, but W/n nevertheless converges to zero in probability: P(|W/n|>ε)=P(|W|>nε) tends to zero for every ε>0. Thus adding W/n to a consistent average preserves its probability limit μ. The correct combination is 1, 3 and 4 only. Other-exam relevance: consistency and convergence-in-probability reasoning is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q09",
+      "format": "single",
+      "year": 2022,
+      "session": "September",
+      "topic": "inference-t4 · maximum likelihood when mean and variance share a parameter",
+      "stem": "Let X₁,…,Xₙ be a random sample from N(θ,θ), where the normal distribution has mean θ and variance θ, with θ>0 unknown. What is the maximum-likelihood estimator of θ?",
+      "options": [
+        "[-1−√(1+(4/n)∑ᵢ₌₁ⁿXᵢ²)]/2",
+        "[-1+√(1+(4/n)∑ᵢ₌₁ⁿXᵢ²)]/2",
+        "The maximum-likelihood estimator does not exist",
+        "max(X̄,0)"
+      ],
+      "answer": "B",
+      "explanation": "For one observation, the normal density is proportional to θ^(−1/2) exp{−(x−θ)²/(2θ)}. For n independent observations, the log-likelihood, after dropping constants that do not depend on θ, is ℓ(θ)=−(n/2)logθ−[1/(2θ)]∑(Xᵢ−θ)². Expand the square: ∑(Xᵢ−θ)²=∑Xᵢ²−2θ∑Xᵢ+nθ². Differentiate the log-likelihood with respect to θ and set it equal to zero. This gives −n/(2θ)+(∑Xᵢ²)/(2θ²)−n/2=0. Multiply by 2θ²: −nθ+∑Xᵢ²−nθ²=0, or nθ²+nθ−∑Xᵢ²=0. Divide by n and solve the quadratic: θ=[−1±√(1+(4/n)∑Xᵢ²)]/2. Since θ must be positive and the square root is greater than 1 except in the degenerate all-zero case, the admissible root is the positive root with + before the square root. It is option B. The log-likelihood tends to −∞ as θ approaches zero and as θ tends to infinity, so this stationary point is the global maximum. Other-exam relevance: likelihood differentiation with a parameter shared by the mean and variance is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where MLEs and normal models are in the syllabus. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q12",
+      "format": "multi",
+      "year": 2022,
+      "session": "September",
+      "topic": "inference-t7 · Bayesian estimation under squared-error and absolute-error loss",
+      "stem": "Suppose X₁,…,Xₙ are independent observations from a normal distribution with unknown mean θ and known variance σ². The prior distribution of θ is normal with mean μ₀ and variance τ². Which statements about the Bayes estimators are correct?",
+      "statements": [
+        "Under squared-error loss, the Bayes estimator is the mean of the posterior distribution.",
+        "Under squared-error loss, the Bayes estimator is the median of the posterior distribution.",
+        "Under absolute-error loss, the Bayes estimator is the median of the posterior distribution.",
+        "Under absolute-error loss, the Bayes estimator is the mean of the posterior distribution."
+      ],
+      "options": [
+        "Statements 1 and 3 only",
+        "Statements 1, 2 and 3 only",
+        "Statements 1, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "D",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Under squared-error loss, the posterior mean minimises posterior expected squared loss."
+        },
+        "B": {
+          "tf": true,
+          "why": "The posterior is normal, so it is symmetric and its mean equals its median. Thus the posterior median is also the posterior mean in this question."
+        },
+        "C": {
+          "tf": true,
+          "why": "Under absolute-error loss, any posterior median minimises posterior expected absolute loss."
+        },
+        "D": {
+          "tf": true,
+          "why": "A normal posterior is symmetric, so its mean and median coincide. The posterior mean is therefore also a median in this question."
+        }
+      },
+      "explanation": "Bayesian estimation chooses the value that minimises the posterior expected loss. Under squared-error loss, the minimiser is the posterior mean. Under absolute-error loss, the minimiser is a posterior median. In this question the likelihood is normal and the prior is normal, so the posterior distribution is also normal. A normal distribution is symmetric, and its mean and median are the same. Therefore both the posterior mean and posterior median are the same number. That makes statements 1 and 2 true for squared-error loss, and statements 3 and 4 true for absolute-error loss. All four statements are correct. For completeness, the posterior variance is V=(n/σ²+1/τ²)⁻¹ and the posterior mean is V[(nX̄/σ²)+(μ₀/τ²)]. Other-exam relevance: conjugate Bayesian estimation and the link between loss functions and posterior summaries are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where Bayesian estimation is in the syllabus. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q11",
+      "format": "multi",
+      "year": 2022,
+      "session": "September",
+      "topic": "inference-t4 · sampling distribution and bias of the normal MLE of variance",
+      "stem": "Let X₁,…,Xₙ be independent and identically distributed normal random variables with mean μ and variance σ². Let (μ̂,σ̂²) be the maximum-likelihood estimator of (μ,σ²). Which statements are correct?",
+      "statements": [
+        "nσ̂²/σ² has a chi-square distribution with n−1 degrees of freedom.",
+        "σ̂² is an unbiased estimator of σ².",
+        "The variance of σ̂² tends to zero as n tends to infinity.",
+        "[n²σ̂⁴]/[(n−1)(n+1)] is an unbiased estimator of σ⁴."
+      ],
+      "options": [
+        "Statements 1, 3 and 4 only",
+        "Statements 1 and 2 only",
+        "Statements 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The normal-sample result is ∑(Xᵢ−X̄)²/σ² ~ χ²(n−1). Since σ̂²=(1/n)∑(Xᵢ−X̄)², the correct scaling is nσ̂²/σ²."
+        },
+        "B": {
+          "tf": false,
+          "why": "The MLE divides the residual sum of squares by n, so E(σ̂²)=(n−1)σ²/n, not σ²."
+        },
+        "C": {
+          "tf": true,
+          "why": "Var(σ̂²)=2σ⁴(n−1)/n², which tends to zero as n tends to infinity."
+        },
+        "D": {
+          "tf": true,
+          "why": "If Q=nσ̂²/σ² ~ χ²(n−1), then E(Q²)=(n−1)(n+1). Hence E(σ̂⁴)=σ⁴(n−1)(n+1)/n², and the stated multiplier makes it unbiased for σ⁴."
+        }
+      },
+      "explanation": "For a normal sample, the maximum-likelihood estimator of variance is σ̂²=(1/n)∑(Xᵢ−X̄)². The standard normal-sample result is ∑(Xᵢ−X̄)²/σ² ~ χ²(n−1). Multiplying the MLE by n therefore gives nσ̂²/σ² ~ χ²(n−1), so statement 1 is true. Since a chi-square variable with n−1 degrees of freedom has mean n−1, E(σ̂²)=σ²(n−1)/n. This is not σ², so the MLE is biased downward and statement 2 is false. The same result gives Var(σ̂²)=2σ⁴(n−1)/n², which tends to zero, so statement 3 is true. To check statement 4, write σ̂⁴=(σ̂²)². If Q~χ²(n−1), then σ̂²=σ²Q/n and E(Q²)=(n−1)(n+1). Thus E(σ̂⁴)=σ⁴(n−1)(n+1)/n². Multiplying by n²/[(n−1)(n+1)] gives an unbiased estimator of σ⁴. Therefore statements 1, 3 and 4 are correct. Other-exam relevance: normal-theory sampling distributions, MLE bias and variance corrections are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics where estimation theory is in the syllabus. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q15",
+      "format": "single",
+      "year": 2022,
+      "session": "February",
+      "topic": "inference-t1 · sufficient statistics for an exponential model",
+      "stem": "Let X₁,…,Xₙ be a random sample from an exponential distribution with unknown mean θ>0. Which of the following is NOT a sufficient statistic for θ?",
+      "options": [
+        "1/(X₁+X₂+⋯+Xₙ)",
+        "X₁+X₂+⋯+Xₙ",
+        "Xₙ/(X₁+X₂+⋯+Xₙ₋₁)",
+        "(Xₙ, X₁+X₂+⋯+Xₙ₋₁)"
+      ],
+      "answer": "C",
+      "explanation": "For an exponential distribution with mean θ, the density of one observation is f(x|θ)=(1/θ)e^(−x/θ), for x>0. For an independent sample, the joint density is (1/θ)ⁿ exp{−(X₁+⋯+Xₙ)/θ}, provided all observations are positive. The sample enters the likelihood through the total S=X₁+⋯+Xₙ. By the factorisation theorem, S is sufficient for θ. Any one-to-one function of a sufficient statistic is also sufficient, so 1/S is sufficient. The pair (Xₙ, X₁+⋯+Xₙ₋₁) determines S by addition, so it also retains the sufficient statistic and is sufficient. But the ratio Xₙ/(X₁+⋯+Xₙ₋₁) does not determine S and does not retain all the information about θ in the likelihood. Hence option C is not sufficient. Other-exam relevance: the factorisation theorem and sufficiency for exponential families are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q21",
+      "format": "single",
+      "year": 2020,
+      "session": "30 November",
+      "topic": "inference-t2 · inference-t3 · inference-t4 · complete sufficient statistic and UMVU estimation in a normal model",
+      "stem": "Let X₁,…,Xₙ be independent and identically distributed N(θ,σ²) random variables, where σ² is known. Write X̄=(1/n)∑ᵢ₌₁ⁿXᵢ. Which expression is the minimum-variance unbiased estimator of e^(2θ)?",
+      "options": [
+        "exp(2X̄−σ²/n)",
+        "exp(2X̄−4σ²/n)",
+        "exp(2X̄−2σ²/n)",
+        "exp(2nX̄−2σ²/n)"
+      ],
+      "answer": "C",
+      "explanation": "Because the observations are normal with known variance, X̄ is sufficient for θ. It is also complete for this one-parameter normal location family. The Lehmann–Scheffé theorem says that an unbiased function of X̄ is the UMVU estimator. We use the moment-generating function of a normal random variable: if Z~N(μ,v), then E(e^(tZ))=exp(tμ+t²v/2). Here X̄~N(θ,σ²/n). Therefore E[e^(2X̄)]=exp(2θ+(2²/2)(σ²/n))=exp(2θ+2σ²/n). To remove the extra factor exp(2σ²/n), multiply by exp(−2σ²/n). Thus E[exp(2X̄−2σ²/n)]=e^(2θ), so option C is unbiased. Since it is a function of the complete sufficient statistic X̄, it is the UMVU estimator. Other-exam relevance: normal moment-generating functions, complete sufficiency and UMVU estimation are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-est-q16",
+      "format": "multi",
+      "year": 2022,
+      "session": "February",
+      "topic": "inference-t4 · MLE with parameter-dependent annular support and a non-unique maximiser",
+      "stem": "Let (X₁,Y₁),…,(Xₙ,Yₙ) be independent observations from a uniform distribution on Sθ={(x,y): θ≤x²+y²≤θ+1}, where θ>1 is unknown. Which statements are correct?",
+      "statements": [
+        "maxᵢ(Xᵢ²+Yᵢ²)−1 is a maximum-likelihood estimate of θ.",
+        "minᵢ(Xᵢ²+Yᵢ²) is a maximum-likelihood estimate of θ.",
+        "Any value between maxᵢ(Xᵢ²+Yᵢ²)−1 and minᵢ(Xᵢ²+Yᵢ²) is a maximum-likelihood estimate of θ.",
+        "Any value between maxᵢXᵢ²+maxᵢYᵢ²−1 and minᵢXᵢ²+minᵢYᵢ² is a maximum-likelihood estimate of θ."
+      ],
+      "options": [
+        "Statements 1, 2 and 3 only",
+        "Statements 1 and 4 only",
+        "Statements 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The lower endpoint maxᵢ(Xᵢ²+Yᵢ²)−1 is a feasible MLE because the likelihood is constant over the full feasible interval."
+        },
+        "B": {
+          "tf": true,
+          "why": "The upper endpoint minᵢ(Xᵢ²+Yᵢ²) is also feasible and maximises the constant likelihood over that interval."
+        },
+        "C": {
+          "tf": true,
+          "why": "Every value between the two endpoints is feasible and gives the same likelihood, so every such value is an MLE."
+        },
+        "D": {
+          "tf": false,
+          "why": "The coordinate-wise expression is not the support interval. The constraints involve the radial sums Xᵢ²+Yᵢ² for each observation."
+        }
+      },
+      "explanation": "For each observed point, the annulus condition θ≤Xᵢ²+Yᵢ²≤θ+1 must hold. The left inequalities give θ≤minᵢ(Xᵢ²+Yᵢ²). The right inequalities give θ≥maxᵢ(Xᵢ²+Yᵢ²)−1. Thus the likelihood is positive only when θ lies in [maxᵢ(Xᵢ²+Yᵢ²)−1, minᵢ(Xᵢ²+Yᵢ²)]. The area of the annulus is π(θ+1)−πθ=π, so the uniform density is 1/π and the joint likelihood is constant over the feasible interval. Every value in that interval is therefore an MLE, including both endpoints. Statements 1, 2 and 3 are correct. Statement 4 uses separate coordinate extrema and is not the support interval. Other-exam relevance: MLEs with parameter-dependent support and non-unique maximisers are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; This is topic overlap, not a claim that this exact question appeared in those other examinations."
+    },
+    {
+      "id": "csir-est-q17",
+      "format": "multi",
+      "year": 2022,
+      "session": "February",
+      "topic": "inference-t7 · Beta-Binomial conjugacy and Bayes estimation under squared-error loss",
+      "stem": "In a clinical trial, let θ be the probability of recovery. A Beta(0.5,0.5) prior is assigned to θ. If 6 of 10 patients recover, which expressions are Bayes estimates of θ under squared-error loss?",
+      "options": [
+        "Statements 1 and 4 only",
+        "Statements 1 and 2 only",
+        "Statements 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "explanation": "For a binomial sample with 6 recoveries and 4 non-recoveries, the likelihood is proportional to θ⁶(1−θ)⁴. The prior Beta(0.5,0.5) has density proportional to θ^(−1/2)(1−θ)^(−1/2). Multiplying prior and likelihood gives a posterior proportional to θ^(6+0.5−1)(1−θ)^(4+0.5−1), so θ|data follows Beta(6.5,4.5). Under squared-error loss, the Bayes estimator is the posterior mean: 6.5/(6.5+4.5)=6.5/11=13/22. Therefore option 1 is the numerical value and option 4 is the same posterior expectation written symbolically. Both are correct. Option 2 (11/20) is the observed sample proportion and is not the posterior mean here; option 3 is not the posterior mean either. Other-exam relevance: conjugate Bayesian estimation and posterior expected loss are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; This is topic overlap, not a claim that this exact question appeared in those other examinations.",
+      "statements": [
+        "13/22",
+        "11/20",
+        "1/2",
+        "E(θ | 6 of the 10 patients recovered)"
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The posterior is Beta(6.5,4.5), whose mean is 13/22. Option 4 is the same posterior expectation written symbolically, so statements 1 and 4 are true."
+        },
+        "B": {
+          "tf": false,
+          "why": "11/20 is not the posterior mean for Beta(6.5,4.5)."
+        },
+        "C": {
+          "tf": false,
+          "why": "1/2 is not the posterior mean for Beta(6.5,4.5)."
+        },
+        "D": {
+          "tf": true,
+          "why": "Under squared-error loss, the Bayes estimator is the posterior mean E(θ|data). This is exactly the expression in statement 4 and equals 13/22 in statement 1."
+        }
+      }
+    },
+    {
+      "id": "csir-est-q18",
+      "format": "single",
+      "year": 2022,
+      "session": "February",
+      "topic": "inference-t4 · bias of the constrained normal maximum-likelihood estimator",
+      "stem": "Suppose X₁,…,Xₙ are i.i.d. N(θ,1), where θ≥0, and let T=max(X̄,0) be the maximum-likelihood estimator of θ. Which statement about its bias is correct?",
+      "options": [
+        "Eθ(T)−θ≥0 for every θ≥0",
+        "Eθ(T)−θ=0 for every θ≥0",
+        "Eθ(T)−θ<0 for every θ≥0",
+        "There is θ₀>0 such that the bias is negative for 0<θ<θ₀ and positive for θ≥θ₀"
+      ],
+      "answer": "A",
+      "explanation": "The sample mean X̄ has distribution N(θ,1/n). The constrained MLE is T=max(X̄,0). For every realised value, max(X̄,0)≥X̄. Taking expectations gives Eθ(T)≥Eθ(X̄)=θ. Hence the bias Eθ(T)−θ is nonnegative for every θ≥0. At θ=0 the inequality is strict because a normal random variable has positive probability of being negative, and replacing its negative values by zero raises its expectation. For θ>0 the same truncation also makes the expectation larger than θ. Thus statement 1 is correct. Other-exam relevance: constrained MLEs and their finite-sample bias are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; This is topic overlap, not a claim that this exact question appeared in those other examinations."
+    }
+  ]
+}
