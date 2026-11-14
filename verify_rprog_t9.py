@@ -23,7 +23,7 @@ print('PASS: R T9 structure, mastery contract and document-preparation examples.
 # Scene-level regression checks for math modes and document-review features.
 s6 = next(s for s in L['scenes'] if s['id']=='s6')
 s8 = next(s for s in L['scenes'] if s['id']=='s8')
-assert 'inline' in s6['solution'][0]['why'] and 'display' in s6['solution'][1]['why']
+assert 'inline' in s6['solution'][0]['why'].lower() and 'display' in s6['solution'][1]['why'].lower()
 assert 'Track Changes' in s8['solution'][0]['math']
 assert 'comments' in s8['solution'][1]['math']
 assert 'citation/reference manager' in s8['solution'][2]['math']
