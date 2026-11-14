@@ -393,7 +393,7 @@ def main() -> None:
     assert q104["type"] == "practice" and q104["format"] == "single"
     assert q104["answer"] == "D" and "119" in q104["explanation"] and "120" in q104["explanation"]
     assert len(estimation["items"]) == estimation["count"] == 96
-    assert len(methods["items"]) == methods["count"] == 11
+    assert len(methods["items"]) == methods["count"] == 12
     assert len(sampling["items"]) == sampling["count"] == 9
 
     q87 = next(x for x in estimation["items"] if x["id"] == "csir-est-q87")
