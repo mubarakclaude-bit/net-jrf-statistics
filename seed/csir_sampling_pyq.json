@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Sampling Theory PYQs (2011–2025)",
-  "count": 4,
-  "clean": 4,
+  "count": 8,
+  "clean": 8,
   "items": [
     {
       "id": "csir-samp-q20",
@@ -145,6 +145,146 @@
       ],
       "answer": "C",
       "explanation": "The source prints this as Question 55 (December 2017) on page 28. The supplied answer list on page 63 ends at Question 44, so no printed key is available; the result follows from the SRSWOR variance formula. The sample proportion is unbiased: E(p)=P. Also Var(p)=[(N−n)/(N−1)]·P(1−P)/n. Since p(1−p)=p−p², take expectations: E[p(1−p)]=E(p)−E(p²)=P−{Var(p)+[E(p)]²}=P−Var(p)−P²=P(1−P)−Var(p). Substitute the variance: E[p(1−p)]=P(1−P)[1−(N−n)/(n(N−1))]. Simplifying the bracket gives N(n−1)/[n(N−1)]. Therefore multiplying p(1−p) by the reciprocal n(N−1)/[N(n−1)] produces an unbiased estimator of P(1−P). This is option C. Other-exam relevance: SRSWOR, finite-population correction, sample proportions and unbiased estimation are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-samp-q69",
+      "type": "practice",
+      "format": "multi",
+      "year": 2016,
+      "session": "June",
+      "topic": "sampling-t6 · PPS sampling with replacement, inclusion probabilities and Hansen–Hurwitz estimation",
+      "stem": "A sample of size 2 is drawn with replacement from four population units using probabilities p₁=0.2, p₂=0.3, p₃=0.1 and p₄=0.4. Let πᵢ and πᵢⱼ be first- and second-order inclusion probabilities. Which statements are correct?",
+      "statements": [
+        "T=(1/2)Σ(yᵢ/pᵢ), summed over the two draws and counting repeats, is unbiased for the population total.",
+        "π₁=0.36 and π₂=0.51.",
+        "π₁₂=0.12.",
+        "π₁+π₂+π₃+π₄=2."
+      ],
+      "options": [
+        "A, B and C only",
+        "A and D only",
+        "B and C only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Each draw's yᵢ/pᵢ has expectation Σyᵢ, so the average over two draws is unbiased for the total."
+        },
+        "B": {
+          "tf": true,
+          "why": "πᵢ=1−(1−pᵢ)², giving 0.36 and 0.51."
+        },
+        "C": {
+          "tf": true,
+          "why": "Both units 1 and 2 appear in two draws only for ordered outcomes (1,2) or (2,1), so π₁₂=2p₁p₂=0.12."
+        },
+        "D": {
+          "tf": false,
+          "why": "The sum of inclusion probabilities is the expected number of distinct sampled units, which is below 2 when repeats are possible."
+        }
+      },
+      "explanation": "The source prints this as Question 69 (June 2016), page 36. No printed answer-key entry is available. For each draw, the Hansen–Hurwitz contribution yᵢ/pᵢ has expectation Σpᵢ(yᵢ/pᵢ)=Σyᵢ, the population total. Averaging the two contributions remains unbiased, so A is true. The probability that unit i appears at least once is πᵢ=1−(1−pᵢ)². Hence π₁=1−0.8²=0.36 and π₂=1−0.7²=0.51, proving B. Both units 1 and 2 appear only for ordered outcomes (1,2) or (2,1), so π₁₂=2(0.2)(0.3)=0.12, proving C. The sum of inclusion probabilities is the expected number of distinct units selected; numerically it is 0.36+0.51+0.19+0.64=1.70, not 2. D is false. Correct combination A, B and C only, option A. Other-exam relevance: PPS sampling, inclusion probabilities and Hansen–Hurwitz estimation overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-samp-q76",
+      "type": "practice",
+      "format": "multi",
+      "year": 2015,
+      "session": "December",
+      "topic": "sampling-t6 · Hansen–Hurwitz estimation and variance estimation under PPS with replacement",
+      "stem": "A finite population has N units with values yᵢ and total Y=Σyᵢ. Draw n>1 units independently with replacement using probabilities pᵢ, Σpᵢ=1, and let T=(1/n)Σ(yᵢ/pᵢ), summed over draws. Which statements are true?",
+      "statements": [
+        "T is unbiased for the population mean Y/N.",
+        "T is unbiased for the population total Y.",
+        "Var(T)=0 if yᵢ is proportional to pᵢ for every i.",
+        "An unbiased estimator of Var(T) is [1/{n(n−1)}]Σ(yᵢ/pᵢ−T)², summed over draws."
+      ],
+      "options": [
+        "A and B only",
+        "B, C and D only",
+        "A, C and D only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "T is scaled to estimate the total; divide by N to estimate the population mean."
+        },
+        "B": {
+          "tf": true,
+          "why": "Each draw's yᵢ/pᵢ has expectation Σyᵢ=Y, so their average is unbiased for Y."
+        },
+        "C": {
+          "tf": true,
+          "why": "If yᵢ=cpᵢ, every draw contributes the same constant c, so T has zero variance."
+        },
+        "D": {
+          "tf": true,
+          "why": "The sample variance of the draw contributions divided by n is unbiased for the variance of their sample mean."
+        }
+      },
+      "explanation": "The source prints this as Question 76 (December 2015), page 40. No printed answer-key entry is available. Let Zⱼ be yᵢ/pᵢ for draw j. E(Zⱼ)=Σpᵢ(yᵢ/pᵢ)=Y, so T=Z̄ is unbiased for the total, not the mean; B is true and A false. If yᵢ=cpᵢ for all units, every Zⱼ=c, so T is constant and C is true. The sample variance s²_Z=(1/(n−1))Σ(Zⱼ−Z̄)² is unbiased for Var(Zⱼ). Since Var(T)=Var(Zⱼ)/n, s²_Z/n=[1/{n(n−1)}]Σ(Zⱼ−T)² is unbiased for Var(T), so D is true. Correct combination B, C and D only, option B. Other-exam relevance: PPS with replacement, Hansen–Hurwitz estimation and variance estimation overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-samp-q78",
+      "type": "practice",
+      "format": "single",
+      "year": 2015,
+      "session": "June",
+      "topic": "sampling-t2 · stratified sampling with equal stratum sizes and unequal allocation",
+      "stem": "A population has k strata of equal size M. Draw nᵢ units with replacement from stratum i. Let ȳᵢ be the sample mean, ȳ_s=(1/k)Σȳᵢ and ȳ_w=Σnᵢȳᵢ/n. Which statement is necessarily true?",
+      "options": [
+        "ȳ_s is unbiased but ȳ_w is not necessarily unbiased for the population mean.",
+        "ȳ_s is not unbiased but ȳ_w is unbiased for the population mean.",
+        "Both ȳ_s and ȳ_w are unbiased for the population mean.",
+        "Neither ȳ_s nor ȳ_w is unbiased for the population mean."
+      ],
+      "answer": "A",
+      "explanation": "The source prints this as Question 78 (June 2015), page 41. No printed answer-key entry is available. Since each stratum has the same population size, the population mean is Ȳ=(1/k)ΣȲᵢ. Each sample mean ȳᵢ is unbiased for its stratum mean, so E(ȳ_s)=(1/k)ΣE(ȳᵢ)=Ȳ. The weighted estimator ȳ_w uses weights nᵢ/n, which need not equal 1/k. Its expectation is Σ(nᵢ/n)Ȳᵢ, not generally the equal-stratum population mean unless allocation is equal or the stratum means happen to be equal. Thus option A is necessarily true. Other-exam relevance: stratified sampling, allocation and design-unbiased estimation overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-samp-q81",
+      "type": "practice",
+      "format": "multi",
+      "year": 2015,
+      "session": "June",
+      "topic": "sampling-t10 · SRSWOR estimation of a finite-population total with one known unit",
+      "stem": "An SRSWOR sample of size n is drawn from N population units. Let ȳ be its sample mean. If one population value y₁ is known, draw an SRSWOR sample of size n from the remaining N−1 units and let ȳ₀ be its sample mean. Define t₁=Nȳ and t₂=(N−1)ȳ₀+y₁. Which statements are necessarily true?",
+      "statements": [
+        "t₁ is unbiased for the population total.",
+        "t₂ is unbiased for the population total.",
+        "Var(t₁)=N²σ²(N−n)/[n(N−1)], where σ² is the finite-population variance.",
+        "Var(t₂)≤Var(t₁) for every population and all n,N."
+      ],
+      "options": [
+        "A, B and C only",
+        "A and B only",
+        "B, C and D only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "E(ȳ)=Y/N under SRSWOR, so E(Nȳ)=Y."
+        },
+        "B": {
+          "tf": true,
+          "why": "The known unit contributes y₁ exactly and (N−1)ȳ₀ is unbiased for the remaining population total."
+        },
+        "C": {
+          "tf": true,
+          "why": "This is the standard SRSWOR variance formula for the estimated total Nȳ."
+        },
+        "D": {
+          "tf": false,
+          "why": "Removing a known unit may increase or decrease the variance among the remaining units, so no universal variance ordering exists."
+        }
+      },
+      "explanation": "The source prints this as Question 81 (June 2015), page 43. No printed answer-key entry is available. Under SRSWOR, E(ȳ)=Y/N, so t₁=Nȳ is unbiased for the total. For t₂, y₁ is known exactly and ȳ₀ is unbiased for the mean of the remaining N−1 units; hence (N−1)ȳ₀+y₁ is also unbiased for Y. The usual SRSWOR variance formula gives Var(ȳ)=(N−n)σ²/[n(N−1)] under the stated finite-population variance convention. Multiplying by N² gives the expression in C. The variance of t₂ depends on the variance among the remaining N−1 units. Removing a particular known unit can make that remaining population more variable or less variable, so D is not necessarily true. Thus A, B and C only, option A. Other-exam relevance: SRSWOR, finite-population corrections and estimation of population totals overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
