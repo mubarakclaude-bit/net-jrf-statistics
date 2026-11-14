@@ -299,7 +299,7 @@ def main() -> None:
     assert "rank(X)>p" in q60["explanation"] and "rank(X)=p" in q60["explanation"]
     q68 = next(x for x in estimation["items"] if x["id"] == "csir-est-q68")
     assert "cannot define a probability density" in q68["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 98
+    assert len(estimation["items"]) == estimation["count"] == 97
 
     # Further source questions from pages 36–49.
     for qid, truth, year, session in [
@@ -400,7 +400,7 @@ def main() -> None:
     q104 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q104")
     assert q104["type"] == "practice" and q104["format"] == "single"
     assert q104["answer"] == "D" and "119" in q104["explanation"] and "120" in q104["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 98
+    assert len(estimation["items"]) == estimation["count"] == 97
     assert len(methods["items"]) == methods["count"] == 12
     assert len(sampling["items"]) == sampling["count"] == 9
 
@@ -411,7 +411,12 @@ def main() -> None:
     assert q104["answer"] == "D" and "119" in q104["explanation"] and "120" in q104["explanation"]
     q81 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q81")
     assert "".join(sorted(k for k, v in q81["verdicts"].items() if v["tf"])) == "ABCD"
-    assert len(estimation["items"]) == estimation["count"] == 98
+    q37 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q37")
+    assert q37["type"] == "practice" and q37["format"] == "multi"
+    assert (q37["year"], q37["session"], q37["answer"]) == (2020, "26 November", "A")
+    assert "".join(sorted(k for k, v in q37["verdicts"].items() if v["tf"])) == "A"
+    assert "page 63" in q37["explanation"] and "sample variance" in q37["explanation"]
+    assert len(estimation["items"]) == estimation["count"] == 97
 
     q75 = next(x for x in methods["items"] if x["id"] == "csir-meth-q75")
     assert q75["type"] == "practice" and q75["format"] == "multi"
