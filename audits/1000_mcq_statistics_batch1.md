@@ -256,3 +256,20 @@ Eleven additional questions were imported from pages 145–149 and 151–156:
 
 - **Page 146:** the source accepted answer is 385, obtained from a normal approximation. The exact Gamma(n,1) calculation gives P(0.9≤Y/n≤1.1)≈0.94982 for n=383 and 0.95012 for n=384. Therefore the exact smallest n is **384**. The answer option was corrected and the source's approximation noted.
 - **Page 145:** the total number of cups has Binomial(128,1/2) distribution. Exact probabilities P(S≤72)≈0.9337 and P(S≤73)≈0.9537 confirm the source's accepted answer 73.
+
+
+## Batch 17 — pages 157–168
+
+Twelve further questions were imported from pages 157–168:
+- Joint-density normalisation and conditional density, pp157–158.
+- Covariance and reciprocal covariance from a triangular joint density, pp159–160.
+- Ordering probability for two Gamma(2,3) variables and one independent Exponential(scale 3) variable, p161.
+- Uniform-in-p Chebyshev sample-size guarantee for Bernoulli observations, p162.
+- Expected median of an odd-sized standard normal sample, p163.
+- Odd-probability for a Poisson mixture from its MGF, p164.
+- Double integral over a triangular strip, p165.
+- Reciprocal moment of a chi-square variable, p166.
+- Negative-binomial cumulative limit using CLT, p167.
+- Mean from a product of binomial MGFs, p168.
+
+All 12 entries are in Probability and include worked derivations and PDF page provenance. Page 159, 162 and 164 are numeric-answer items with explicit verification checks.
