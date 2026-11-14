@@ -13,14 +13,14 @@
 
 ## Topic-by-topic status
 
-Status describes the mathematical audit of current lesson material and available mastery pools. A manual first-pass review has now covered all 20 items in each available non-T9 pool (320 items total), alongside independent calculations and automated checks. This is not a formal proof of every possible distractor or theorem nuance; the verifier checks repeatable calculations, structure and multi-statement key consistency.
+Status describes the mathematical audit of current lesson material and available mastery pools. A manual first-pass review has now covered all 20 items in each of the 16 available non-T9 pools (320 items total), alongside independent calculations and automated checks. This is not a formal proof of every possible distractor or theorem nuance; the verifier checks repeatable calculations, structure and multi-statement key consistency.
 
 | Topic | Catalog subject | Status | Notes |
 |---|---|---|---|
 | T1 | Sufficiency, factorisation, minimal sufficiency | CLARIFIED | Mastery item now states the closed-endpoint Uniform convention consistently with its boundary likelihood |
 | T2 | Completeness, exponential families, ancillarity, Basu | PASS — first pass | Poisson/Bernoulli completeness arguments, Uniform range counterexample and Basu conditions checked |
 | T3 | Rao–Blackwell and Lehmann–Scheffé | PASS — first pass | Poisson and Bernoulli UMVUE derivations, variance comparisons and transformation traps checked |
-| T4 | MLE: computation, invariance, properties | BLOCKED — lesson absent | Catalog entry and 20-item mastery pool exist, but `seed/lesson_t4.json` is absent from current main; no substitute lesson source found in the seed tree |
+| T4 | MLE: computation, invariance, properties | POOL PASS; LESSON BLOCKED | All 20 mastery items reviewed with no confirmed mathematical/key defect. Catalog entry and pool exist, but `seed/lesson_t4.json` is absent from current main; no substitute lesson source found in the seed tree |
 | T5 | Method of moments, minimum chi-square, least squares | CORRECTED | Uniform MOM items now distinguish the parameter space, sample-compatible region and decision-theoretic admissibility |
 | T6 | Cramér–Rao bound and Fisher information | PASS — first pass | Bernoulli, Poisson, normal and function-of-parameter bounds checked; equality-to-UMVUE wording now requires attainment throughout the model |
 | T7 | Bayesian estimation and conjugate priors | CORRECTED | Normal–normal posterior corrected; HPD equality and Bayesian/frequentist asymptotic claims qualified; squared-error convention made explicit; Gamma posterior median rounding corrected; see INF-001, INF-016, INF-020 and INF-030 |
@@ -273,15 +273,15 @@ It also checks:
 - The catalog has 17 inference topics.
 - Each non-deferred mastery pool has 20 uniquely identified items with valid topic IDs and answer-option labels.
 - Multi-statement answer keys agree with their individual true/false verdicts.
-- The T4 lesson-file gap is detectable.
+- The T4 lesson-file gap is detectable; its 20-item mastery pool has been manually reviewed.
 - The corrected T1, T5, T7, T8, T10, T11, T12, T13, T14, T15, T16 and T17 source values/qualifications remain in place.
 
 ### Test execution status
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
-- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It contains 67 regression tests, with the unittest entry point after all test classes so the full suite is discovered when run directly.
+- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It contains 69 regression tests, with the unittest entry point after all test classes so the full suite is discovered when run directly.
 - GitHub Actions run #1195 (run ID `43564757724`) completed successfully on commit `3830a2e7cc776f02414d503fbf3e8f964b595aed`: validate, acceptance and browser jobs all passed, including the verifier, build, lesson navigation, hosted storage conformance and feature browser tests.
-- Run #1304 (ID `43577320883`) was in progress on the prior branch head `b1cc450` when this second-pass update began. This commit changes mastery explanations and adds nine regression tests; its own branch-head CI run must complete successfully before these changes are considered validated.
+- Run #1447 (ID `43578350970`) on head `32e03a0` has passed validate and acceptance; the browser job is still running. The latest follow-up corrects a stale Gamma-median check hint and adds T4 pool plus T7 consistency regression guards, so the new head requires its own full green CI run.
 
 ## Files changed
 
@@ -316,3 +316,10 @@ No other lesson or module files were changed.
 3. **Mastery key depth:** All available non-T9 pools were checked for item count, IDs, answer labels and multi-statement verdict/key consistency. Manual first-pass review has now covered all 320 items in available non-T9 pools. That review is not a formal proof of every single-choice/numeric key; a second independent reviewer or further item-by-item calculation is still advisable for high-stakes release.
 4. **Verifier execution:** Run `python verify_inference_math.py` from a full checkout and resolve any failures before treating the audit as complete.
 5. No branch merge, production deployment, Vercel push or workflow/configuration change was made.
+
+
+### INF-032 — T7's answer hint retained the superseded Gamma posterior median
+
+File: `seed/inference_t7_mastery.json`, item `inference-t7-m-17`. Severity: **Minor**.
+
+After correcting the median option and explanation to approximately 1.4585, the item's separate `check` hint still said 1.4583. The hint now uses 1.4585 and consistently compares the posterior mode, median and mean.

@@ -556,3 +556,28 @@ class FinalEdgeCaseReviewTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+
+class Topic04AndConsistencyRegressionTests(unittest.TestCase):
+    def test_t4_mastery_pool_mle_examples(self):
+        pool = load_json(SEED / "inference_t4_mastery.json")
+        self.assertEqual(len(pool["items"]), 20)
+        # Beta(theta, 1) density: solve n/theta + sum(log x) = 0.
+        sample = (0.5, 0.25, 0.8)
+        theta_hat = -len(sample) / sum(math.log(x) for x in sample)
+        self.assertTrue(theta_hat > 0)
+        # Geometric trials-to-first-success and its invariant mean.
+        p_hat = 6 / 24
+        self.assertEqual(p_hat, 0.25)
+        self.assertEqual(1 / p_hat, 4)
+        # Uniform maximum: E[X_(n)] = n theta/(n+1).
+        n, theta = 3, 5.0
+        self.assertEqual(n * theta / (n + 1), 3.75)
+        self.assertEqual((n + 1) / n * (n * theta / (n + 1)), theta)
+
+    def test_t7_gamma_posterior_hint_matches_corrected_median(self):
+        pool = load_json(SEED / "inference_t7_mastery.json")
+        item = next(q for q in pool["items"] if q["id"] == "inference-t7-m-17")
+        self.assertIn("1.4585", item["options"][2])
+        self.assertIn("1.4585", item["explanation"])
+        self.assertIn("1.4585", item["check"])
