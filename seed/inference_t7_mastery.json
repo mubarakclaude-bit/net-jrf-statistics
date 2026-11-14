@@ -276,7 +276,7 @@
     "A, C and D only"
    ],
    "answer": "C",
-   "explanation": "A, B and D hold. C is false: the HPD interval is the SHORTEST set of the required posterior probability, so for a skewed posterior it is strictly shorter than the equal-tailed interval, not longer; the two coincide only when the posterior is symmetric and unimodal.",
+   "explanation": "A, B and D hold under the usual regularity conditions for posterior asymptotics (in particular, a fixed prior with positive density near the true parameter). C is false: an HPD set has minimum length among sets with the required posterior probability, so it cannot be longer than an equal-tailed interval. It is usually shorter for a skewed unimodal posterior, but equality is possible whenever the equal-tailed endpoints also have equal posterior density; symmetry is sufficient for equality, not necessary.",
    "statements": [
     "A credible interval is a probability statement about the parameter given the data.",
     "A confidence interval is a statement about the procedure under repeated sampling.",
@@ -294,11 +294,11 @@
     },
     "C": {
      "tf": false,
-     "why": "The HPD is the shortest such set by construction, so it is never longer — equal only under symmetry."
+     "why": "False. An HPD interval is a shortest credible interval, so it cannot be longer than an equal-tailed interval of the same posterior mass. It is generally shorter for skewed posteriors, but equality is not restricted to symmetric distributions."
     },
     "D": {
      "tf": true,
-     "why": "The weight on the prior tends to zero and the posterior variance approaches σ²/n."
+     "why": "True under standard Bernstein–von Mises regularity conditions, with a fixed prior whose density is positive near the true parameter: posterior credible intervals and corresponding frequentist confidence intervals have asymptotically equivalent behaviour. This is not an unconditional statement for every model or prior."
     }
    }
   },
