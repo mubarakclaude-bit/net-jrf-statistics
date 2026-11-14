@@ -1,9 +1,9 @@
 {
   "moduleId": "probability",
   "source": "variant",
-  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 1, 2, 4, 5, 7–9, 12–13, 16, 19, 21, 35, 38, 46–47, 54, 56, 109–131, 954–1011)",
+  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 1–70, 109–131, 954–1011)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 45,
+  "count": 52,
   "items": [
     {
       "id": "mcq1000-p954",
@@ -1095,6 +1095,193 @@
         }
       },
       "pno": 56,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p062",
+      "format": "single",
+      "topic": "probability-t6",
+      "stem": "Choose the correct statement about random variables X and Y.",
+      "options": [
+        "If X and Y each have a standard normal marginal distribution, then X+Y and X−Y are necessarily independent.",
+        "If X and Y are independent, then X+Y is normally distributed if and only if both X and Y are normally distributed.",
+        "If X and Y each have a standard normal marginal distribution, then both X+Y and X−Y necessarily have distribution N(0,2).",
+        "None of the above."
+      ],
+      "answer": "B",
+      "explanation": "Statement B is the Cramér decomposition theorem together with the closure property of independent normal variables. If X and Y are independent normal variables, their sum is normal. Conversely, if X and Y are independent and their sum is normal, Cramér's theorem says each summand must also be normal (allowing degenerate normal variables). Statements A and C need additional joint-normality or independence assumptions; normal marginal distributions alone do not guarantee them. Therefore B is the correct choice.",
+      "pno": 62,
+      "sourcePdf": "1000 MCQ statistics.pdf",
+      "repaired": "The scan does not state that X and Y are jointly normal or independent in A and C. Those assumptions have not been silently added."
+    },
+    {
+      "id": "mcq1000-p064",
+      "format": "multi",
+      "topic": "probability-t4",
+      "stem": "If X~Poisson(λ), λ>0, which statements are correct?",
+      "statements": [
+        "For a positive integer r, E(Xʳ)=λE((X+1)ʳ⁻¹).",
+        "E(Xʳ)=λʳE((X+1)⁻¹).",
+        "P(0≤X≤2λ)>1−1/λ.",
+        "E(X)=Var(X)=λ."
+      ],
+      "options": [
+        "A, C and D only",
+        "A and B only",
+        "B and C only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "For a Poisson variable, P(X=x)=e^(−λ)λˣ/x!. Re-indexing the sum gives E[Xʳ]=Σₓ≥1xʳP(X=x)=λΣₓ≥0(x+1)ʳ⁻¹P(X=x)=λE[(X+1)ʳ⁻¹], so A is true. B is not the Poisson moment identity. Also E(X)=Var(X)=λ, so D is true. For C, if λ≤1 the right side is nonpositive and the probability is positive. If λ>1, Cantelli's one-sided inequality gives P(X−λ≥λ)≤Var(X)/(Var(X)+λ²)=1/(1+λ). Hence P(X≤2λ)≥λ/(1+λ)>1−1/λ. So C is also true.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Re-indexing the Poisson probability sum gives the identity E[Xʳ]=λE[(X+1)ʳ⁻¹]."
+        },
+        "B": {
+          "tf": false,
+          "why": "This is not the Poisson factorial-moment identity."
+        },
+        "C": {
+          "tf": true,
+          "why": "For λ>1 use Cantelli's inequality; for λ≤1 the lower bound is nonpositive."
+        },
+        "D": {
+          "tf": true,
+          "why": "A Poisson(λ) variable has both mean and variance equal to λ."
+        }
+      },
+      "pno": 64,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p065",
+      "format": "single",
+      "topic": "probability-t9",
+      "stem": "Let {Xₙ} be independent random variables with P(Xₙ=nᵅ)=P(Xₙ=−nᵅ)=1/2. For which values of α does the sequence of sample averages n⁻¹Σₖ₌₁ⁿXₖ obey the weak law of large numbers?",
+      "options": [
+        "α<1/2",
+        "α=1/2",
+        "1/2<α≤1",
+        "α>1"
+      ],
+      "answer": "A",
+      "explanation": "Each Xₖ has mean zero and variance k^(2α). The variance of the average is Var(n⁻¹ΣXₖ)=n⁻²Σₖ₌₁ⁿk^(2α). The sum is of order n^(2α+1), so this variance is of order n^(2α−1). If α<1/2, it tends to zero and Chebyshev's inequality gives convergence of the average to zero in probability, which is the weak law. At α=1/2 the spread does not shrink, and for α>1/2 it grows; the normalized independent Rademacher sum retains non-vanishing spread. Thus the weak law holds exactly when α<1/2.",
+      "pno": 65,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p066",
+      "format": "single",
+      "topic": "probability-t1",
+      "stem": "Let X and Y be independent and each uniformly distributed on {1,2,…,n}. Which of the following statements is correct?",
+      "options": [
+        "P(X<Y)=(n−1)/(2n), but P(X=Y)≠1/n.",
+        "P(X=Y)=1/n, but P(X>Y)≠(n−1)/(2n).",
+        "P(X>Y)=(n−1)/(2n), but P(X<Y)≠(n−1)/(2n).",
+        "All of the above statements about the three probabilities are correct."
+      ],
+      "answer": "D",
+      "explanation": "There are n² equally likely ordered pairs (x,y). Exactly n pairs have x=y, so P(X=Y)=n/n²=1/n. By symmetry, P(X<Y)=P(X>Y). Since the three events X<Y, X=Y and X>Y partition all possibilities, each strict-order probability is [1−1/n]/2=(n−1)/(2n). Thus all three probability formulas are correct.",
+      "pno": 66,
+      "sourcePdf": "1000 MCQ statistics.pdf",
+      "repaired": "The source's option D says 'All of the above'; it is retained as the correct choice."
+    },
+    {
+      "id": "mcq1000-p067",
+      "format": "single",
+      "topic": "probability-t1",
+      "stem": "Let X₁,X₂,X₃,X₄ be iid exponential random variables with rate parameter λ>0, and let X₍₄₎=max(X₁,X₂,X₃,X₄). Find P(X₍₄₎≥3λ).",
+      "options": [
+        "(1−e^(−3λ))⁴",
+        "(1−e^(−3λ²))⁴",
+        "1−(1−e^(−3λ²))⁴",
+        "1−(e^(−3λ))⁴"
+      ],
+      "answer": "C",
+      "explanation": "For an exponential distribution with rate λ, the CDF is F(x)=1−e^(−λx), x≥0. The maximum is below 3λ only when all four observations are below 3λ. By independence, P(X₍₄₎<3λ)=[F(3λ)]⁴=(1−e^(−3λ²))⁴. Therefore P(X₍₄₎≥3λ)=1−(1−e^(−3λ²))⁴, which is option C.",
+      "pno": 67,
+      "sourcePdf": "1000 MCQ statistics.pdf",
+      "repaired": "The answer uses the rate parameterisation Exp(rate λ); this is the parameterisation consistent with the printed e^(−3λ²) option."
+    },
+    {
+      "id": "mcq1000-p068",
+      "format": "multi",
+      "topic": "probability-t3",
+      "stem": "Let X and Y be random variables with finite second moments. Which statements are correct?",
+      "statements": [
+        "If Corr(X,Y)=0, then X and Y are independent.",
+        "If Corr(X,Y)=0, then X and Y may or may not be independent.",
+        "[E(XY)]²≤E(X²)E(Y²).",
+        "[E(XY)]²≥E(X²)E(Y²)."
+      ],
+      "options": [
+        "A and C only",
+        "B and C only",
+        "A and D only",
+        "B and D only"
+      ],
+      "answer": "B",
+      "explanation": "Zero correlation means Cov(X,Y)=0. Independence implies zero covariance when the moments exist, but the converse is not generally true. For example, if X is symmetric about zero and Y=X², then Cov(X,Y)=0 even though Y is completely determined by X. So B is correct and A is false. The Cauchy–Schwarz inequality applied to X and Y gives [E(XY)]²≤E(X²)E(Y²), so C is true and D is false. Hence B and C are correct.",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Zero correlation does not generally imply independence."
+        },
+        "B": {
+          "tf": true,
+          "why": "Uncorrelated variables can be dependent or independent."
+        },
+        "C": {
+          "tf": true,
+          "why": "This is the Cauchy–Schwarz inequality for random variables."
+        },
+        "D": {
+          "tf": false,
+          "why": "The inequality is in the opposite direction."
+        }
+      },
+      "pno": 68,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p070",
+      "format": "multi",
+      "topic": "probability-t4",
+      "stem": "If X~Binomial(n,p), which statements about its variance are correct?",
+      "statements": [
+        "Var(X) is maximised at p=1/2.",
+        "Var(X) is maximised at p=1/3.",
+        "The maximum possible variance is n/4.",
+        "The maximum possible variance is n/8."
+      ],
+      "options": [
+        "A and C only",
+        "A and D only",
+        "B and C only",
+        "B and D only"
+      ],
+      "answer": "A",
+      "explanation": "For X~Binomial(n,p), Var(X)=np(1−p). The factor p(1−p)=p−p² is a concave quadratic. Differentiating gives 1−2p=0, so the maximum occurs at p=1/2. Substituting gives Var(X)=n(1/2)(1/2)=n/4. Therefore A and C are correct.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The quadratic p(1−p) is maximised at p=1/2."
+        },
+        "B": {
+          "tf": false,
+          "why": "At p=1/3 the variance is 2n/9, below n/4."
+        },
+        "C": {
+          "tf": true,
+          "why": "The maximum value is n/4."
+        },
+        "D": {
+          "tf": false,
+          "why": "The maximum is n/4, not n/8."
+        }
+      },
+      "pno": 70,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
