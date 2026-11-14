@@ -38,5 +38,5 @@ for rel in FILES:
   elif q["format"]=="single": assert len(q["options"])==4 and q["answer"] in "ABCD"
   elif q["format"]=="numeric": assert q["options"]==[] and q["check"]
  total+=d["count"]
-assert total==87,total
-print("PASS: 87 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+assert total==96,total
+print("PASS: 96 supplementary questions; source-key corrections recorded; ambiguous items held out.")
