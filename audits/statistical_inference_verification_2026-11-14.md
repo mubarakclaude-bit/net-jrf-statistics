@@ -371,3 +371,10 @@ File: `seed/inference_t5_mastery.json`. Severity: **Assessment metadata / CI con
 The pool was labelled 6 easy, 9 moderate and 5 hard. The Uniform(0,θ) method-of-moments feasibility check (`inf-t5-m-09`) was reclassified from hard to moderate: it requires a moment estimate followed by a sample-compatibility check, but does not require the multi-step synthesis expected of a hard item. Question text, answer key and explanation are unchanged.
 
 A new regression test now verifies the 6/10/4 mix across all 16 available non-T9 inference pools and guards the reviewed classifications. T9 remains excluded while PR #93 owns it.
+
+
+### INF-040 — T6 mastery difficulty labels still did not match the required paper mix
+
+File: `seed/inference_t6_mastery.json`. Severity: **Assessment metadata / CI contract**.
+
+A cross-pool sweep found that T6 still had 5 easy, 10 moderate and 5 hard labels after the first reclassification. The exponential-rate UMVUE efficiency calculation (`inf-t6-m-08`) is a two-step formula application with all required expressions supplied, so it was reclassified from hard to moderate. The conceptual check that a result below the Cramér–Rao bound signals failed regularity or arithmetic error (`inf-t6-m-15`) is a direct theorem-recognition item and was reclassified from moderate to easy. The pool now has the required 6/10/4 mix. Question text, keys and explanations are unchanged; the cross-pool verifier guards both labels.

@@ -625,7 +625,8 @@ class Topic04AndConsistencyRegressionTests(unittest.TestCase):
             (3, "inf-t3-m-02"): "easy", (3, "inf-t3-m-04"): "easy",
             (3, "inf-t3-m-09"): "moderate", (3, "inf-t3-m-16"): "moderate",
             (5, "inf-t5-m-09"): "moderate",
-            (6, "inf-t6-m-13"): "moderate", (6, "inf-t6-m-17"): "hard",
+            (6, "inf-t6-m-08"): "moderate", (6, "inf-t6-m-13"): "moderate",
+            (6, "inf-t6-m-15"): "easy", (6, "inf-t6-m-17"): "hard",
         }
         for (topic, item_id), level in expected.items():
             pool = load_json(SEED / f"inference_t{topic}_mastery.json")
