@@ -466,3 +466,17 @@ Eight additional questions were imported from pages 279–282 and 285–288, all
 - **Page 278:** the density and four weighted estimator formulas are too faint to identify reliably.
 - **Page 283:** the density and transformation power in W are not sufficiently legible to identify the target distribution.
 - **Page 284:** section cover, no question.
+
+
+## Batch 28 — pages 289–300
+
+Eight questions were imported from pages 289–292, 294, 297, 298 and 300:
+- **Probability (7):** CLT at the mean for iid exponential observations, p289; CLT and variance of the sample second moment for normal data, p290; limiting distribution of χ²ₙ/n, p291; a sequence converging in probability but with constant expectation, p292; correlation from a triangular bivariate density, p294; conditional density for joint density e^(−y) on 0<x<y, p297; conditional Gamma mean in a joint exponential-Gamma model, p298.
+- **Statistical Inference (1):** least-squares coefficient, variance and covariance formulas in simple linear regression, p300.
+
+### Pages held out after inspection
+
+- **Page 293:** the statement about almost-sure convergence depends on whether the sequence is independent; the scan does not state that assumption clearly, and the expectation expression is faint.
+- **Page 295:** the joint density and requested conditional expectation are not sufficiently legible to transcribe safely.
+- **Page 296:** the joint density and conditional-expectation options are blurred; the true/false selection cannot be verified.
+- **Page 299:** the normalising constant in the triangular joint density is unclear, so the derived sum density cannot be keyed without correcting an assumption.
