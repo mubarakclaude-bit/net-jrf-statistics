@@ -23,17 +23,17 @@ Status describes the first-pass mathematical audit of the current lesson materia
 | T4 | MLE: computation, invariance, properties | BLOCKED — lesson absent | Catalog entry and 20-item mastery pool exist, but `seed/lesson_t4.json` is absent from current main; no substitute lesson source found in the seed tree |
 | T5 | Method of moments, minimum chi-square, least squares | CORRECTED | Uniform MOM estimate wording now distinguishes sample feasibility from decision-theoretic admissibility |
 | T6 | Cramér–Rao bound and Fisher information | PASS — first pass | Bernoulli, Poisson, normal and function-of-parameter bounds checked |
-| T7 | Bayesian estimation and conjugate priors | CORRECTED | Normal–normal posterior answer in completion scene s6 was wrong; see INF-001 |
+| T7 | Bayesian estimation and conjugate priors | CORRECTED | Normal–normal posterior corrected; HPD equality and Bayesian/frequentist asymptotic claims qualified; see INF-001 and INF-016 |
 | T8 | Decision theory: loss, risk, admissibility, minimax | CORRECTED | Normal-mean minimax explanation now states the minimax lower bound; constant risk alone is not treated as sufficient |
 | T9 | Neyman–Pearson, MLR, UMP | DEFERRED | Conflicts with open draft PR #93; left untouched |
 | T10 | Likelihood ratio test and Wilks | CORRECTED | General likelihood-ratio range now includes zero when the null likelihood is zero |
-| T11 | SPRT | PASS — first pass | Wald boundaries, Bernoulli log-ratio slope, sample path and ASN approximations recalculated |
+| T11 | SPRT | CORRECTED | Wald boundary explanation and boundary-intercept dependence corrected; see INF-005 and INF-006 |
 | T12 | Size and power computation | CORRECTED | Mastery item `inf-t12-m-10` had an incorrect answer key; see INF-002 |
 | T13 | Confidence intervals and pivots | CORRECTED | Variance-interval endpoint rounding corrected in lesson and mastery item; see INF-003 |
 | T14 | Chi-square goodness of fit | CORRECTED | Poisson tail pooling explanation corrected; statistic and df independently recomputed; see INF-004 |
 | T15 | Choosing the right test | CORRECTED | Corrected a p-value/data mismatch and clarified that sign/Wilcoxon procedures do not generally test a skewed population mean |
-| T16 | Contingency tables: independence and homogeneity | PASS — first pass | Expected counts, Pearson/Yates statistics, df and association measures checked |
-| T17 | UMP unbiased and UMP invariant tests | PASS — first pass | Exponential-rate one-sided direction/cutoffs and normal two-sided UMPU/invariance arguments checked |
+| T16 | Contingency tables: independence and homogeneity | CORRECTED | Expected counts, Pearson/Yates statistics and df checked; significance/practical-magnitude wording clarified; see INF-015 |
+| T17 | UMP unbiased and UMP invariant tests | CORRECTED | Exponential-rate one-sided direction/cutoffs checked; equal-tail symmetry condition qualified; see INF-014 |
 
 ## Confirmed errors and corrections
 
@@ -182,14 +182,14 @@ It also checks:
 - Each non-deferred mastery pool has 20 uniquely identified items with valid topic IDs and answer-option labels.
 - Multi-statement answer keys agree with their individual true/false verdicts.
 - The T4 lesson-file gap is detectable.
-- The corrected T7, T12, T13 and T14 source values remain in place.
+- The corrected T1, T5, T7, T8, T10, T11, T12, T13, T14, T15, T16 and T17 source values/qualifications remain in place.
 
 ### Test execution status
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
 - The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It now contains 58 regression tests.
 - GitHub Actions run #1195 (run ID `43564757724`) completed successfully on commit `3830a2e7cc776f02414d503fbf3e8f964b595aed`: validate, acceptance and browser jobs all passed, including the verifier, build, lesson navigation, hosted storage conformance and feature browser tests.
-- The additional T1, T5, T8, T10 and T15 edits and the expanded 58-test verifier were committed after that run. A fresh CI run on the latest branch head is required before those follow-up edits are considered validated.
+- Later changes added T1, T5, T7, T8, T10, T15, T16 and T17 mastery clarifications and expanded the verifier to 58 tests. The latest branch-head run #1296 (run ID `43577249567`) was queued at report update time; it must complete successfully before the latest edits are considered validated.
 
 ## Files changed
 
