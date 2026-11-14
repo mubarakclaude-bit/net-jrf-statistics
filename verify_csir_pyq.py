@@ -72,6 +72,31 @@ def load_banks():
 
 def main() -> None:
     estimation, methods, sampling = load_banks()
+    # The question bank must remain connected to beginner-readable lesson coverage.
+    bayes_lesson = json.loads((ROOT / "seed" / "lesson_t7.json").read_text(encoding="utf-8"))
+    mle_lesson = json.loads((ROOT / "seed" / "lesson_mle.json").read_text(encoding="utf-8"))
+    complete_lesson = json.loads((ROOT / "seed" / "lesson_t2.json").read_text(encoding="utf-8"))
+    srs_lesson = json.loads((ROOT / "seed" / "lesson_sampling_t10.json").read_text(encoding="utf-8"))
+    bayes_text = " ".join(
+        block.get("body", "")
+        for scene in bayes_lesson["scenes"] for block in scene.get("blocks", [])
+    )
+    mle_text = " ".join(
+        block.get("body", "")
+        for scene in mle_lesson["scenes"] for block in scene.get("blocks", [])
+    )
+    complete_text = " ".join(
+        block.get("body", "")
+        for scene in complete_lesson["scenes"] for block in scene.get("blocks", [])
+    )
+    srs_text = " ".join(
+        block.get("body", "")
+        for scene in srs_lesson["scenes"] for block in scene.get("blocks", [])
+    )
+    assert "shifted Poisson" in bayes_text and "λ(1−p)" in bayes_text
+    assert "finite" in mle_text.lower() and "mixture" in mle_text.lower()
+    assert "Uniform" in complete_text and "differentiate in θ" in complete_text
+    assert "unbiased estimator of P(1−P)" in srs_text
     q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
     assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
