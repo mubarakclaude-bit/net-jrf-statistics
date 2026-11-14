@@ -347,7 +347,7 @@ def main() -> None:
     assert "Q67 is listed as B,C" in q67["explanation"]
     q70 = next(x for x in estimation["items"] if x["id"] == "csir-est-q70")
     assert q70["answer"] == "A" and "page 64" in q70["explanation"]
-    assert "median is less efficient than T₃" in q70["explanation"]
+    assert "the median is not." in q70["explanation"] and "Var(T₃)" in q70["explanation"]
     q71 = next(x for x in estimation["items"] if x["id"] == "csir-est-q71")
     assert "Uniform(θ,5θ)" in q71["stem"]
     assert "X₍ₙ₎/5≤θ≤X₍₁₎" in q71["explanation"]
