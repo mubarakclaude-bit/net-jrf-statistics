@@ -1,9 +1,9 @@
 {
   "moduleId": "probability",
   "source": "variant",
-  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 1, 2, 4, 5, 7–9, 12–13, 16, 19, 21, 35, 38, 46–47, 109–131, 954–1011)",
+  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 1, 2, 4, 5, 7–9, 12–13, 16, 19, 21, 35, 38, 46–47, 54, 56, 109–131, 954–1011)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 43,
+  "count": 46,
   "items": [
     {
       "id": "mcq1000-p954",
@@ -1016,6 +1016,127 @@
       "explanation": "The product identity for independent beta variables states that if X~Beta(c+d,b) and Y~Beta(c,d), then XY~Beta(c,b+d). Here a=c+d, so the condition is exactly satisfied. The product therefore has a Beta distribution with first shape parameter c and second shape parameter b+d. Option B is correct.",
       "pno": 47,
       "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p054",
+      "format": "multi",
+      "topic": "probability-t6",
+      "stem": "Let X₁,X₂ be independent standard normal variables, and let U₁,U₂ be iid Uniform(0,1), independent of X₁,X₂. Define M=(X₁U₁+X₂U₂)/√(U₁²+U₂²). Which statements are true?",
+      "statements": [
+        "E(M)=0.",
+        "Var(M)=1.",
+        "M has a standard Cauchy distribution.",
+        "M~N(0,1)."
+      ],
+      "options": [
+        "A, B and D only",
+        "A and C only",
+        "B and C only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "Condition on U₁ and U₂. Once their values are fixed, M is a linear combination of independent N(0,1) variables. Its conditional mean is zero. Its conditional variance is (U₁²+U₂²)/(U₁²+U₂²)=1. Therefore the conditional distribution is N(0,1), and it does not depend on the values of U₁,U₂. Removing the conditioning leaves M~N(0,1). Hence E(M)=0 and Var(M)=1, while M is not Cauchy. Statements A, B and D are true.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The conditional distribution is standard normal, so its mean is zero."
+        },
+        "B": {
+          "tf": true,
+          "why": "The conditional variance is one for every positive pair (U₁,U₂)."
+        },
+        "C": {
+          "tf": false,
+          "why": "The ratio is normal after conditioning; it is not a ratio of two independent standard normals."
+        },
+        "D": {
+          "tf": true,
+          "why": "The conditional distribution is N(0,1) and is the same for every U₁,U₂."
+        }
+      },
+      "pno": 54,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p056",
+      "format": "multi",
+      "topic": "probability-t6",
+      "stem": "Let X be non-degenerate. Which statements are correct?",
+      "statements": [
+        "If X is exponential, then median(X)<E(X).",
+        "If X is uniform on [a,b], then E(X)<median(X).",
+        "If X is binomial, then Var(X)<E(X).",
+        "If X is normal, then E(X)<Var(X)."
+      ],
+      "options": [
+        "A and C only",
+        "A and B only",
+        "B and D only",
+        "A, C and D only"
+      ],
+      "answer": "A",
+      "explanation": "For an exponential distribution with rate λ, the mean is 1/λ and the median is (ln 2)/λ. Since ln 2<1, the median is smaller than the mean, so A is true. For a uniform distribution on [a,b], the mean and median are both (a+b)/2, so the strict inequality in B is false. For X~Binomial(n,p), E(X)=np and Var(X)=np(1−p), which is smaller for 0<p<1, so C is true. A normal distribution can have many combinations of mean and variance, so E(X)<Var(X) is not universally true. Thus A and C are correct.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The exponential median is ln(2)/λ, while its mean is 1/λ."
+        },
+        "B": {
+          "tf": false,
+          "why": "For a uniform distribution, mean and median are equal."
+        },
+        "C": {
+          "tf": true,
+          "why": "np(1−p)<np for a non-degenerate binomial distribution."
+        },
+        "D": {
+          "tf": false,
+          "why": "There is no universal ordering between the mean and variance of a normal variable."
+        }
+      },
+      "pno": 56,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p060",
+      "format": "multi",
+      "topic": "inference-t6",
+      "stem": "Let X₁,…,Xₙ be a random sample from Uniform(0,θ), θ>0. Which of the following estimators are consistent for θ?",
+      "statements": [
+        "T₁=max(X₁,…,Xₙ).",
+        "T₂=((n+1)/n)T₁.",
+        "T₃=2X̄.",
+        "None of T₁,T₂,T₃ is consistent."
+      ],
+      "options": [
+        "A, B and C only",
+        "A and B only",
+        "B and D only",
+        "D only"
+      ],
+      "answer": "A",
+      "explanation": "For a Uniform(0,θ) sample, the sample maximum T₁ approaches θ as the sample size grows; in fact, T₁ converges almost surely to θ. Since (n+1)/n tends to one, multiplying T₁ by this factor does not change its probability limit, so T₂ is also consistent. The population mean is θ/2. By the law of large numbers, X̄ converges in probability to θ/2, so 2X̄ converges in probability to θ. Therefore all three estimators are consistent.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The sample maximum converges almost surely to the upper endpoint θ."
+        },
+        "B": {
+          "tf": true,
+          "why": "The multiplier (n+1)/n tends to one, preserving the limit θ."
+        },
+        "C": {
+          "tf": true,
+          "why": "The sample mean converges to E(X)=θ/2, so twice it converges to θ."
+        },
+        "D": {
+          "tf": false,
+          "why": "All three estimators listed are consistent."
+        }
+      },
+      "pno": 60,
+      "sourcePdf": "1000 MCQ statistics.pdf",
+      "repaired": "The source lists the estimators separately but has no 'all of these' option. The multi-select combination format expresses that all three are consistent."
     }
   ]
 }
