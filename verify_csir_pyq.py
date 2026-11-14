@@ -352,6 +352,25 @@ def main() -> None:
     assert "Uniform(θ,5θ)" in q71["stem"]
     assert "X₍ₙ₎/5≤θ≤X₍₁₎" in q71["explanation"]
     assert q71["answer"] == "D" and "Q71 is listed as D" in q71["explanation"]
+    q72 = next(x for x in estimation["items"] if x["id"] == "csir-est-q72")
+    assert q72["topic"].startswith("inference-t3")
+    q73 = next(x for x in estimation["items"] if x["id"] == "csir-est-q73")
+    assert q73["answer"] == "C" and "maxᵢ(Xᵢ+Yᵢ)" in q73["explanation"]
+    q74 = next(x for x in estimation["items"] if x["id"] == "csir-est-q74")
+    assert q74["answer"] == "A" and "max(X̄ₙ,0)" in q74["explanation"]
+    q75 = next(x for x in methods["items"] if x["id"] == "csir-meth-q75")
+    assert q75["answer"] == "A" and "dimension n−1" in q75["explanation"]
+    contrast_lesson = json.loads((ROOT / "seed" / "lesson_t3.json").read_text(encoding="utf-8"))
+    contrast_text = " ".join(
+        b.get("body", "") for s in contrast_lesson["scenes"] for b in s.get("blocks", [])
+    )
+    regression_lesson = json.loads((ROOT / "seed" / "lesson_rg2.json").read_text(encoding="utf-8"))
+    regression_text = " ".join(
+        b.get("body", "") for s in regression_lesson["scenes"] for b in s.get("blocks", [])
+    )
+    assert "zero-mean contrasts" in contrast_text and "squared contrast" in contrast_text
+    assert "V⁻¹1" in regression_text and "dimension n−1" in regression_text
+    assert "constrained normal mean" in mle_text.lower() and "max(X̄,0)" in mle_text
     assert "Uniform location" in mle_text and "Var(X̄)" in mle_text
     q57 = next(x for x in estimation["items"] if x["id"] == "csir-est-q57")
     assert "lists A and C" in q57["explanation"] and "A and B only" in q57["explanation"]
