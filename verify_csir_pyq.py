@@ -97,6 +97,20 @@ def main() -> None:
     assert q40["topic"].startswith("inference-t4")
     assert "".join(sorted(k for k, value in q40["verdicts"].items() if value["tf"])) == "BCD"
     assert "2σ²" in q40["explanation"] and "page 63" in q40["explanation"]
+    q43 = next(x for x in estimation["items"] if x["id"] == "csir-est-q43")
+    assert q43["year"] == 2019 and q43["session"] == "December" and q43["answer"] == "B"
+    assert q43["topic"].startswith("inference-t4")
+    assert "".join(sorted(k for k, value in q43["verdicts"].items() if value["tf"])) == "ACD"
+    assert "2θ²" in q43["explanation"] and "page 63" in q43["explanation"]
+    q44 = next(x for x in estimation["items"] if x["id"] == "csir-est-q44")
+    assert q44["year"] == 2019 and q44["session"] == "June" and q44["answer"] == "D"
+    assert q44["topic"].startswith("inference-t4")
+    assert "θ≥27" in q44["explanation"] and "page 20" in q44["explanation"]
+    q45 = next(x for x in estimation["items"] if x["id"] == "csir-est-q45")
+    assert q45["year"] == 2019 and q45["session"] == "June" and q45["answer"] == "A"
+    assert q45["topic"].startswith("inference-t4")
+    assert "no printed answer-key entry" in q45["explanation"]
+    assert "Cₙ=1/(n+2)" in q45["explanation"] and "MSE(Tₙ)" in q45["explanation"]
     q42 = next(x for x in estimation["items"] if x["id"] == "csir-est-q42")
     assert q42["year"] == 2019 and q42["session"] == "December" and q42["answer"] == "B"
     assert q42["topic"].startswith("design-t1")
