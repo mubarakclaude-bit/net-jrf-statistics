@@ -292,6 +292,11 @@ def main() -> None:
     q19 = next(x for x in estimation["items"] if x["id"] == "csir-est-q19")
     assert q19["format"] == "single" and (q19["year"], q19["session"], q19["answer"]) == (2022, "February", "A")
     assert "page 8" in q19["explanation"] and "unbiased" in q19["explanation"]
+    mle_lesson = json.loads((ROOT / "seed" / "lesson_mle.json").read_text(encoding="utf-8"))
+    mle_scene3 = next(s for s in mle_lesson["scenes"] if s["id"] == "s3")
+    mle_scene7 = next(s for s in mle_lesson["scenes"] if s["id"] == "s7")
+    assert any("annular support with θ>1" in b.get("h", "") and "θ̂=Rmin" in b.get("body", "") for b in mle_scene3["blocks"])
+    assert any("unbiased and consistent estimator of σ" in b.get("h", "") and "E|X|" in b.get("body", "") for b in mle_scene7["blocks"])
 
     # Source Estimation PDF Questions 56–68 (pages 29–35). The supplied
     # answer-key sheet ends at Q44, so these assertions protect derived keys.
