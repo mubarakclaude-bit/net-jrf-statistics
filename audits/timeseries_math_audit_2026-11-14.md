@@ -29,7 +29,7 @@ The current lessons contain 41 worked/guided/completion scenes and 10 trap-check
 | Topic | Manual review | Verifier | Notes |
 |---|---|---|---|
 | T1 Stationarity / invertibility | PASS after corrections | Pending | Canonical invertible MA representation and innovation-variance rescaling clarified. |
-| T2 ACF / PACF identification | BLOCKED — confirmed issue | Existing verifier in PR #93; scope owned there | PACF closed-form formula in s14 is inconsistent with its own listed values; see unresolved issue below. No T2 files changed here. |
+| T2 ACF / PACF identification | CORRECTED IN PR #93 BRANCH; pending its CI/merge | Dedicated verifier extended in PR #93 | PACF closed-form sign and displayed values corrected; independent Durbin–Levinson comparison added to the owning verifier. No T2 files changed in this PR. |
 | T3 Yule–Walker | PASS | Pending | AR(1)/AR(2) equations, coefficient recovery, stationarity checks and ACF recursion recalculated. |
 | T4 AR autocovariance | PASS after corrections | Pending | Variance lower bound corrected from strict (>\sigma^2) to inclusive (\geq\sigma^2). |
 | T5 Unit roots / ARIMA | PASS | Pending | Unit-root factorisation, differenced AR signs and Dickey–Fuller reparameterisation checked. |
