@@ -218,7 +218,7 @@ No homepage-only visit is represented as proof of a specific table, page, legal 
 
 **Not run / outstanding**
 - Local `npm ci`, `npm run check`, `npm run build`, `npm test` and repository shell validators were not run in this environment.
-- The latest GitHub Actions `Validate` run observed for the current branch head was **cancelled**. The new audit-report commit should trigger a fresh run; confirm its result before merge.
+- GitHub Actions results are tracked on the pull request and change with each commit. An earlier `Validate` run was cancelled; subsequent runs were triggered on later branch heads. Check PR #99 for the current head's final status before merge.
 - SRS 2024/MMR table-level checks and the OEA WPI/PPI transition detail remain outstanding as described above.
 
 ## Publication decision
