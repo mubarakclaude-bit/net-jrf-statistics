@@ -379,6 +379,10 @@ def main() -> None:
     assert q74["answer"] == "A" and "max(X̄ₙ,0)" in q74["explanation"]
     q75 = next(x for x in methods["items"] if x["id"] == "csir-meth-q75")
     assert q75["answer"] == "A" and "dimension n−1" in q75["explanation"]
+    q101 = next(x for x in methods["items"] if x["id"] == "csir-meth-q101")
+    assert q101["type"] == "practice" and q101["format"] == "multi"
+    assert q101["answer"] == "D" and "page 65" in q101["explanation"]
+    assert "Cov(Y₁,Y₃)" in q101["explanation"] and "statement D is definitely true" in q101["explanation"]
     contrast_lesson = json.loads((ROOT / "seed" / "lesson_t3.json").read_text(encoding="utf-8"))
     contrast_text = " ".join(
         b.get("h", "") + " " + b.get("body", "")
