@@ -14,7 +14,8 @@
     "Construct the ANOVA table for a balanced completely randomised design and a randomised block design.",
     "Derive and use the degrees-of-freedom identities for treatments, blocks, error and total.",
     "Calculate correction factor, total, treatment and residual sums of squares from treatment totals.",
-    "Form mean squares and the appropriate F statistic, then state the conclusion without confusing statistical and practical significance."
+    "Form mean squares and the appropriate F statistic, then state the conclusion without confusing statistical and practical significance.",
+    "Distinguish the unbiased ANOVA estimators from constrained maximum-likelihood estimators of variance components in a one-way random-effects model."
   ],
   "prereq": [
     {
@@ -96,7 +97,8 @@
     "In a complete RBD with a treatments and b blocks: treatment df=a−1, block df=b−1, error df=(a−1)(b−1), total df=ab−1.",
     "The F statistic is MS treatment divided by MS error, not by SS error.",
     "A significant treatment F says at least one treatment mean differs; it does not say every pair differs or that the effect is practically important.",
-    "Blocking removes predictable nuisance variation from the residual; it does not increase the number of treatment replications."
+    "Blocking removes predictable nuisance variation from the residual; it does not increase the number of treatment replications.",
+    "In a one-way random-effects model, the unbiased method-of-moments estimate of the random-effect variance can be negative; a constrained MLE cannot be negative when the parameter space restricts variances to be nonnegative."
   ],
   "howto": "Read in order. Work through the two numerical examples with a pen. In each ANOVA table, check that the degrees of freedom and sums of squares add back to their totals before interpreting F. Then attempt the unseen mastery test without hints.",
   "revision": {
@@ -110,7 +112,11 @@
       "RBD df: treatment a−1; blocks b−1; error (a−1)(b−1); total ab−1.",
       "Mean square: MS=SS/df; F=MS treatment/MS error.",
       "Under H₀ and model assumptions, treatment F has F(df treatment, df error).",
-      "Check: component SS add to total SS; component df add to total df."
+      "Check: component SS add to total SS; component df add to total df.",
+      "One-way random-effects model: Yᵢⱼ=μ+bᵢ+εᵢⱼ, with bᵢ~iid N(0,τ²), εᵢⱼ~iid N(0,σ²), independent.",
+      "For a balanced one-way random-effects design with a groups and r replicates per group: E(MS_W)=σ² and E(MS_B)=σ²+rτ².",
+      "Unbiased ANOVA estimators: σ̂²ᵤ=MS_W; τ̂²ᵤ=(MS_B−MS_W)/r. The second estimate can be negative.",
+      "If σ²≥0 and τ²≥0 define the parameter space, constrained maximum-likelihood estimates must obey these constraints and cannot be negative."
     ],
     "cards": [
       [
@@ -144,6 +150,22 @@
       [
         "F ratio",
         "MS treatment / MS error"
+      ],
+      [
+        "Within-group mean square",
+        "MS_W; estimates σ²"
+      ],
+      [
+        "Between-group mean square",
+        "MS_B; E(MS_B)=σ²+rτ²"
+      ],
+      [
+        "Unbiased random-effect variance",
+        "(MS_B−MS_W)/r; may be negative"
+      ],
+      [
+        "Constrained variance MLE",
+        "Nonnegative by parameter-space constraint"
       ]
     ],
     "tricks": [
@@ -158,12 +180,17 @@
       {
         "hook": "Mean before F",
         "why": "Divide each SS by its own df before forming the F ratio."
+      },
+      {
+        "hook": "Unbiased is not constrained",
+        "why": "An unbiased difference of mean squares can fall below zero in a sample. A constrained MLE is optimised only over allowed nonnegative variance values."
       }
     ],
     "shortcuts": [
       "Use the grand total once: CF=G²/N. Do not recompute a separate correction factor for treatments or blocks.",
       "For a balanced RBD, compute treatment and block SS from their totals, then obtain error SS by subtraction.",
-      "Use the df identity as an error detector before computing any mean square."
+      "Use the df identity as an error detector before computing any mean square.",
+      "For balanced one-way random effects, write E(MS_W)=σ² and E(MS_B)=σ²+rτ² before deriving the two ANOVA estimators."
     ],
     "remember": [
       "ANOVA partitions variation; the F ratio compares signal per degree of freedom with unexplained variation per degree of freedom.",
@@ -176,7 +203,7 @@
       "Subtracting CF more than once from a component sum of squares."
     ]
   },
-  "provenance": "Original GPT-authored teaching package for the repository's catalog topic design-t1. No official June 2026 PYQ is claimed. Formula derivations and all arithmetic examples are checked by verify_design_t1.py using exact integer/rational arithmetic. The lesson distinguishes balanced CRD and complete RBD. Unbalanced, missing-cell, factorial and Latin-square analyses are outside this topic's scope and are handled by adjacent catalog lessons.",
+  "provenance": "Original GPT-authored teaching package for the repository's catalog topic design-t1. No official June 2026 PYQ is claimed. Formula derivations and all arithmetic examples are checked by verify_design_t1.py using exact integer/rational arithmetic. The lesson distinguishes balanced CRD and complete RBD. Unbalanced, missing-cell, factorial and Latin-square analyses are outside this topic's scope and are handled by adjacent catalog lessons. A one-way random-effects extension has been added to explain expected mean squares, unbiased variance-component estimators and the possibility of a negative unbiased estimate, while distinguishing constrained maximum likelihood. The added derivation supports the December 2019 CSIR NET Estimation PYQ Q42.",
   "anchors": [],
   "scenes": [
     {
@@ -837,6 +864,54 @@
       ],
       "answer": "F=16 with df (2,8). The treatment test uses residual MS, not block MS; shifts are nuisance blocks rather than the error term.",
       "check": "df sum: 2+4+8=14. SS sum: 48+30+12=90."
+    },
+    {
+      "kind": "theory",
+      "id": "s14",
+      "mins": 10,
+      "title": "One-way random effects: why an unbiased variance estimate can be negative",
+      "objective": "Derive the ANOVA variance-component estimators and distinguish them from constrained maximum-likelihood estimates.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Random-intercept model",
+          "body": "Yᵢⱼ=μ+bᵢ+εᵢⱼ, i=1,…,a groups; j=1,…,r observations per group. The group effects bᵢ are independent N(0,τ²), and the errors εᵢⱼ are independent N(0,σ²), with the two collections independent. Here σ² is within-group error variance and τ² is between-group random-effect variance."
+        },
+        {
+          "t": "formula",
+          "h": "Expected mean squares",
+          "body": "Within-group mean square: E(MS_W)=σ².\nBetween-group mean square: E(MS_B)=σ²+rτ².\nThe replication count r multiplies the random-effect variance in the between-group expectation."
+        },
+        {
+          "t": "formula",
+          "h": "Unbiased ANOVA estimators",
+          "body": "σ̂²ᵤ=MS_W.\nτ̂²ᵤ=(MS_B−MS_W)/r.\nTaking expectations gives E(σ̂²ᵤ)=σ² and E(τ̂²ᵤ)=τ²."
+        },
+        {
+          "t": "note",
+          "h": "Why can the unbiased estimate be negative?",
+          "body": "MS_B and MS_W are random quantities. In a particular sample, MS_B can be smaller than MS_W. Their difference is then negative, and dividing by r does not change its sign. This does not mean the true variance τ² is negative; it means this unbiased estimator is not constrained to the parameter space in every sample."
+        },
+        {
+          "t": "worked",
+          "h": "A quick numerical check",
+          "body": "Suppose r=10, MS_B=4 and MS_W=9. Then σ̂²ᵤ=9 and τ̂²ᵤ=(4−9)/10=−0.5. A negative estimate is possible for the unbiased ANOVA estimator of τ²."
+        },
+        {
+          "t": "note",
+          "h": "What changes for maximum likelihood?",
+          "body": "If the model parameter space requires σ²≥0 and τ²≥0, the constrained likelihood is maximised only over nonnegative values. Therefore neither constrained MLE can be negative. Do not confuse a raw unbiased method-of-moments estimate with a constrained maximum-likelihood estimate."
+        },
+        {
+          "t": "trap",
+          "h": "Exam decision rule",
+          "body": "An event that an unbiased ANOVA estimate of a variance component is negative can have positive probability. An event that a constrained MLE of a nonnegative variance component is negative has probability zero."
+        }
+      ],
+      "ask": {
+        "q": "For r=10, MS_B=6 and MS_W=8, which unbiased ANOVA variance-component estimate is negative, and why does this not contradict τ²≥0?",
+        "nudge": "Calculate (MS_B−MS_W)/r. Separate the estimator's possible sample values from the parameter space for the true variance."
+      }
     },
     {
       "kind": "summary",
