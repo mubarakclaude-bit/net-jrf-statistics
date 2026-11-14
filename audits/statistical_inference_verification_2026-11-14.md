@@ -88,6 +88,24 @@ For the 100-shift Poisson example, λ-hat = 0.93. Expected frequencies are appro
 
 The wording now explains the threshold correctly and identifies 3+ as a broader upper-tail pooling choice rather than claiming the class 3 expectation is below 5.
 
+### INF-005 — SPRT boundary-constant explanation contradicted the answer key
+
+File: `seed/inference_t11_mastery.json`, item `inf-t11-m-04`. Severity: **Minor**.
+
+The keyed option C correctly gives A = (1 − β)/α = 18 and B = β/(1 − α) = 0.10526 for α = 0.05 and β = 0.10. The explanation incorrectly claimed that option C used the wrong formula. The explanation was rewritten to identify option C as correct and accurately explain the distractors.
+
+### INF-006 — SPRT boundary intercepts omitted dependence on hypotheses
+
+File: `seed/inference_t11_mastery.json`, item `inf-t11-m-09`. Severity: **Major**.
+
+For Bernoulli SPRT boundaries, a = log(A)/k and b = −log(B)/k, where A and B depend on α and β, while k = log[p₁(1 − p₀)/(p₀(1 − p₁))] depends on the two hypotheses. Therefore both intercepts depend on BOTH the hypotheses and the error rates. The old answer “the two error rates only” was wrong, and the original options did not contain a correct answer. The options and key were corrected to include “both the hypotheses and the two error rates.”
+
+### INF-007 — Residual variance-to-standard-deviation interval rounding in T13
+
+File: `seed/inference_t13_mastery.json`, item `inf-t13-m-16`. Severity: **Minor**.
+
+The item still quoted the superseded variance endpoint 13.331 and rounded √1.892 down to 1.375. Using the corrected interval endpoint 13.333, the standard-deviation interval is (1.376, 3.651) to three decimals. The stem, option and explanation were aligned with those values.
+
 ## Verification implementation
 
 Added `verify_inference_math.py`, a consolidated standard-library verifier with topic-specific unittest groups. It contains independent regression calculations for T1–T8 and T10–T17, including:
@@ -116,8 +134,8 @@ It also checks:
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
 - The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. The first CI run is pending at report authoring time.
-- GitHub Actions/PR checks are therefore still pending at report authoring time.
-- No test result is claimed merely because the verifier file exists.
+- The initial GitHub Actions run (run ID `43498262587`) completed successfully: validate, acceptance and browser jobs all passed, including build, lesson navigation, hosted storage conformance and feature browser tests.
+- Two follow-up content commits add the T11 and T13 corrections above; their CI checks must complete before this revised branch is treated as fully validated.
 
 ## Files changed
 
@@ -128,6 +146,8 @@ Modified:
 - `seed/inference_t13_mastery.json`
 - `seed/lesson_t14.json`
 - `seed/inference_t14_mastery.json`
+- `seed/inference_t11_mastery.json`
+- `seed/inference_t13_mastery.json`
 
 Added:
 - `verify_inference_math.py`
