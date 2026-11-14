@@ -235,3 +235,14 @@ Added a dedicated regression verifier, `verify_inference_raoblackwell.py`, to en
 
 
 The Rao–Blackwell correction is guarded by the top-level verifier `verify_inference_raoblackwell.py`, which the existing changed-verifier runner discovers. CI must pass on the latest PR head before the correction is marked verified.
+
+
+## Second-pass continuation — Statistical Inference lessons 4.3, 4.7, 4.10–4.11 and 4.14
+
+- **Lesson 4.3:** added a third authoritative reference to satisfy the touched-lesson contract; the Rao–Blackwell moment assumptions were corrected in the preceding commit.
+- **Lesson 4.7:** corrected the Normal–Normal update exercise: posterior variance is (16/9), not (8/3), and posterior mean is (166/3), not (55).
+- **Lesson 4.10:** the likelihood-ratio statistic has general range (0\le\lambda\le1); it can equal zero when the data are impossible under the null. This agrees with the lesson's own Uniform example.
+- **Lesson 4.11:** the SPRT total-error bound is now derived from the coupled inequalities. The two separate loose bounds alone do not imply the sum bound.
+- **Lesson 4.14:** corrected the Poisson pooling explanation (5.289 is above 5), replaced the misleading independent-cell heuristic with the multinomial projection argument for the (k-1) chi-square limit, and qualified the Yates-correction claim.
+
+Added `verify_inference_second_pass.py` to guard these corrections. Further second-pass work remains open; this is not a module-wide sign-off.

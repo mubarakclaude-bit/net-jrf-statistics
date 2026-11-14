@@ -1,947 +1,947 @@
 {
- "id": "inferencet14",
- "topicId": "inference-t14",
- "moduleId": "inference",
- "title": "Chi-square Goodness of Fit",
- "breadcrumb": "Statistical Inference → Testing of Hypotheses → Goodness of fit",
- "engine": "C",
- "engineName": "Testing — comparing a whole distribution with what was observed",
- "version": "1.0",
- "status": "approved",
- "estMin": 98,
- "objectives": [
-  "Compute expected frequencies from a claimed distribution and verify that they total n.",
-  "Compute the chi-square goodness-of-fit statistic term by term from counts.",
-  "Count the degrees of freedom as k − 1 − m across the standard cases, including after pooling.",
-  "Apply the upper-tail rejection rule and say why there is no lower critical value.",
-  "Check the minimum-expected-count condition, pool adjacent categories when it fails, and recount k.",
-  "Say where Yates' correction applies, and read the individual terms to localise a rejection."
- ],
- "prereq": [
-  {
-   "id": "p1",
-   "name": "Binomial and Poisson probabilities",
-   "why": "Expected frequencies come from evaluating a claimed distribution and multiplying by n. Every worked example here starts with a binomial or Poisson calculation."
-  },
-  {
-   "id": "p2",
-   "name": "The chi-square distribution and its tail values",
-   "why": "The verdict is always a comparison with an upper tail point. You need 5.991, 7.815, 9.488 and 11.070 available."
-  },
-  {
-   "id": "p3",
-   "name": "The likelihood ratio test and Wilks' theorem",
-   "why": "The degrees-of-freedom principle here is the one from topic 4.10, and the optional section shows that Pearson's statistic is the second-order approximation to −2 log λ."
-  },
-  {
-   "id": "p4",
-   "name": "Size and power of a test",
-   "why": "This is an approximate test, so the relationship between its nominal and actual size is the issue the expected-count condition addresses — topic 4.12's vocabulary."
-  }
- ],
- "traps": [
-  "The statistic uses FREQUENCIES, never proportions or percentages.",
-  "Σ(Oᵢ − Eᵢ) = 0 always — use it to check your expected counts total n.",
-  "The test is upper-tail only; a small statistic is agreement, not evidence.",
-  "The minimum-count rule applies to EXPECTED counts, not observed ones.",
-  "Pool first, then count k, then subtract — not the other way round.",
-  "A normal fit estimates TWO parameters, so df = k − 3.",
-  "Yates' correction is for 2 by 2 tables only.",
-  "Write the terms one per line; a lost term gives a plausibly wrong answer."
- ],
- "revision": {
-  "sheet": [
-   "Statistic: χ² = Σ(Oᵢ − Eᵢ)²/Eᵢ over all k categories, computed from counts.",
-   "Expected frequency = n × (probability of that category under H₀).",
-   "Σ(Oᵢ − Eᵢ) = 0 always, and ΣEᵢ = n. Check this before computing the statistic.",
-   "Degrees of freedom: df = k − 1 − m, with k counted AFTER pooling and m the number of parameters estimated from the data.",
-   "Fully specified distribution: m = 0, df = k − 1. June 2026 Q29 had k = 5, df = 4.",
-   "Poisson or binomial with one parameter fitted: df = k − 2. Seven classes gives 5.",
-   "Normal with both parameters fitted: df = k − 3. Eight classes gives 5.",
-   "Contingency table: df = (r − 1)(c − 1). A 4 by 3 table gives 6.",
-   "Equality of c proportions: a 2 by c table, df = c − 1. Four populations gives 3.",
-   "Upper tail only. Reject for large χ²; a small value means the fit is close.",
-   "Minimum expected count 5 per cell, on the EXPECTED counts. Pool adjacent categories when it fails, by subject-matter sense, never to change the verdict.",
-   "Yates' correction, for 2 by 2 tables only: Σ(|Oᵢ − Eᵢ| − 0.5)²/Eᵢ. It always reduces the statistic, so it is conservative.",
-   "Chi-square upper 5% points: 5.991 (2 df), 7.815 (3), 9.488 (4), 11.070 (5), 12.592 (6).",
-   "June 2026 Q29: four coins, 160 tosses, expected 10, 40, 60, 40, 10; terms 4.900, 3.600, 0.600, 2.025, 1.600; χ² = 12.725 on 4 df against 9.488, so reject.",
-   "Poisson fit worked example: λ̂ = 0.93, pooling to 4 classes, χ² = 0.752 on 2 df against 5.991, so the fit is not rejected.",
-   "Genetics 9:3:3:1 on 160 plants: expected 90, 30, 30, 10; χ² = 13.511 on 3 df against 7.815, so reject — and the smallest category contributes 6.400 of it.",
-   "The test is omnibus: it says the fit fails, not how. The individual terms localise it, and shuffling the categories does not change the statistic, so it cannot detect trend in an ordered variable.",
-   "Pearson's statistic is the second-order approximation to the multinomial −2 log λ = 2 Σ Oᵢ log(Oᵢ/Eᵢ), which is why the degrees of freedom match topic 4.10's rule."
+  "id": "inferencet14",
+  "topicId": "inference-t14",
+  "moduleId": "inference",
+  "title": "Chi-square Goodness of Fit",
+  "breadcrumb": "Statistical Inference → Testing of Hypotheses → Goodness of fit",
+  "engine": "C",
+  "engineName": "Testing — comparing a whole distribution with what was observed",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 98,
+  "objectives": [
+    "Compute expected frequencies from a claimed distribution and verify that they total n.",
+    "Compute the chi-square goodness-of-fit statistic term by term from counts.",
+    "Count the degrees of freedom as k − 1 − m across the standard cases, including after pooling.",
+    "Apply the upper-tail rejection rule and say why there is no lower critical value.",
+    "Check the minimum-expected-count condition, pool adjacent categories when it fails, and recount k.",
+    "Say where Yates' correction applies, and read the individual terms to localise a rejection."
   ],
-  "cards": [
-   [
-    "The statistic",
-    "Σ(Oᵢ − Eᵢ)²/Eᵢ, from counts — squared because the signed differences always cancel, divided by Eᵢ to put each on its own scale"
-   ],
-   [
-    "Degrees of freedom",
-    "k − 1 − m: k categories after pooling, minus one for the total, minus one per estimated parameter"
-   ],
-   [
-    "Fully specified distribution",
-    "m = 0 so df = k − 1; four fair coins over five classes gives 4"
-   ],
-   [
-    "Poisson with λ fitted",
-    "df = k − 2; seven classes gives 5"
-   ],
-   [
-    "Normal with both fitted",
-    "df = k − 3; eight classes gives 5 — two parameters, not one"
-   ],
-   [
-    "Contingency table",
-    "df = (r − 1)(c − 1); a 4 by 3 table gives 6"
-   ],
-   [
-    "Direction of the test",
-    "Upper tail only — a small statistic is agreement with H₀, not evidence against it"
-   ],
-   [
-    "The adequacy rule",
-    "Every EXPECTED count at least 5; an observed zero is fine if its expectation is adequate"
-   ],
-   [
-    "Pooling",
-    "Merge adjacent categories, then recount k before subtracting. Never merge to change the verdict"
-   ],
-   [
-    "Yates' correction",
-    "2 by 2 tables only: subtract 0.5 from each |O − E|. Always smaller, so conservative"
-   ],
-   [
-    "The check worth doing first",
-    "ΣEᵢ = n. Five seconds, and it catches most expected-count errors"
-   ],
-   [
-    "Where it comes from",
-    "The second-order approximation to the multinomial likelihood ratio statistic, which is why the df rule is the same"
-   ]
-  ],
-  "tricks": [
-   "Write the expected counts as a row and add them. If they do not total n, stop and find the error.",
-   "Lay the terms out one per line. A lost term gives an answer that is plausibly wrong, which is what the options exploit.",
-   "For a binomial over k classes, the expected counts are the binomial coefficients scaled by n/2ⁿ — for four coins and 160 tosses, 1, 4, 6, 4, 1 times 10.",
-   "Look at the largest term before writing the conclusion; it tells you which category drove the rejection, and questions sometimes ask.",
-   "If a question gives you λ̂ or p̂ rather than stating a parameter, that is the signal that m ≥ 1 and the degrees of freedom are not k − 1."
-  ],
-  "shortcuts": [
-   "df = k − 1 for a specified distribution, k − 2 for one fitted parameter, k − 3 for two. Count the parameters the question made you estimate.",
-   "A table of several proportions is a 2 by c table, so df = c − 1 without any further thought.",
-   "The critical values climb 5.991, 7.815, 9.488, 11.070, 12.592 for 2 to 6 degrees of freedom — worth knowing as a sequence, since a df error moves you one step along it."
-  ],
-  "remember": [
-   "Counts, not proportions. Check ΣE = n.",
-   "Pool first, count k second, subtract third.",
-   "Upper tail only. Yates is for 2 by 2 alone."
-  ]
- },
- "howto": "Read this in order; it is short on theory and long on bookkeeping, which is where the marks are. Section 4 is June 2026's own question worked term by term — the error on the paper was arithmetic, not conceptual, so the habits in that section are the content: check that the expected counts total n, and write the terms one per line. Section 6 adds the two complications that change the answer, an estimated parameter and pooling, and section 10 drills the degrees of freedom across every case the exam uses. If you are short of time, sections 4, 6 and 10 are the lesson. Attempt the question at the end of each section before opening the answer. The optional section at the end derives where the chi-square distribution comes from, which turns the k − 1 − m rule and the minimum-count condition from recipes into things you can reconstruct.",
- "refs": [
-  {
-   "title": "Goodness-of-Fit Tests",
-   "where": "Lesson 17",
-   "site": "Penn State STAT 415",
-   "url": "https://online.stat.psu.edu/stat415/lesson/17",
-   "type": "Course notes",
-   "free": true,
-   "checked": "2026-10-31",
-   "why": "The test derived and applied, including the degrees-of-freedom rule when parameters are estimated. The right companion to sections 3 and 6."
-  },
-  {
-   "title": "Mathematical Statistics 18.655 — lecture notes",
-   "where": "Sessions on testing and asymptotics",
-   "site": "MIT OpenCourseWare",
-   "url": "https://ocw.mit.edu/courses/18-655-mathematical-statistics-spring-2016/pages/lecture-notes/",
-   "type": "Lecture notes",
-   "free": true,
-   "checked": "2026-10-31",
-   "why": "The asymptotic argument behind the chi-square limit, which is what the optional section sketches."
-  },
-  {
-   "title": "Statistical Inference",
-   "where": "Weeks on testing of hypotheses",
-   "site": "NPTEL / SWAYAM — IIT Delhi, Prof. Niladri Chatterjee",
-   "url": "https://archive.nptel.ac.in/noc/courses/noc21/SEM1/noc21-ma23",
-   "type": "Video course",
-   "free": true,
-   "checked": "2026-10-31",
-   "why": "Indian syllabus conventions for the expected-count rule and for Yates' correction, which is the phrasing NET questions use."
-  },
-  {
-   "title": "Statistical Inference, 2nd edition",
-   "where": "Section 10.3.1",
-   "site": "Casella and Berger",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-10-31",
-   "why": "Pearson's statistic as an approximation to the likelihood ratio statistic, which is the derivation in the optional section."
-  },
-  {
-   "title": "An Introduction to Probability and Statistics, 3rd edition",
-   "where": "Chapter 10",
-   "site": "Rohatgi and Saleh",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-10-31",
-   "why": "Worked goodness-of-fit tests including fitted Poisson and normal distributions, with the pooling conventions set out."
-  }
- ],
- "mastery": {
-  "minQ": 10,
-  "pass": 80,
-  "draw": 10,
-  "fmtMin": {
-   "numeric": 70,
-   "multi": 70
-  },
-  "diffMix": {
-   "easy": 3,
-   "moderate": 5,
-   "hard": 2
-  },
-  "noHints": true,
-  "retestDays": 7,
-  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
- },
- "provenance": "Authored October 2026 for this platform against the UGC NET Statistics syllabus, and prioritised from the June 2026 paper, where Q29 gave the results of tossing four coins 160 times and asked for the calculated chi-square; the official answer is 12.725 and the stored response sheet shows 10.275 was marked, an arithmetic error rather than a conceptual one. That question is worked term by term in section 4. Q29 sits in the maths variant file rather than an inference one, which is why it did not appear in the inference block of the PYQ analysis, though it belongs to this topic. Of the 14 variants tagged to it, 5 were power-series items belonging to Q28 and were retagged on 2026-10-31; the remaining 9 — degrees of freedom for a fitted Poisson, degrees of freedom for a 4 by 3 table, the minimum expected frequency, the one-tailed nature of the test, where Yates' correction applies, an expected frequency under fairness, what the statistic must be computed from, the value of the sum of (O − E), and the test for several proportions — are each taught in a named section and appear in the pool. Every numerical value was computed rather than recalled: the expected counts 10, 40, 60, 40, 10 and the five terms 4.900, 3.600, 0.600, 2.025 and 1.600 summing to 12.725; the Poisson fit with lambda-hat 0.93, expected counts 39.455, 36.693, 17.062, 5.289, 1.230 and 0.271, pooled statistic 0.752 on 2 degrees of freedom; the genetics example giving 13.511 on 3 degrees of freedom with the fourth term contributing 6.400; and the chi-square upper 5% points 5.991, 7.815, 9.488, 11.070 and 12.592. Previous-year questions themselves are stored separately and carry their exam cycle.",
- "scenes": [
-  {
-   "kind": "foundation",
-   "id": "s0",
-   "mins": 6,
-   "title": "Before the lesson — four things it will assume",
-   "objective": "Recover the three small calculations this test is assembled from, and the one identity that checks your work.",
-   "ask": {
-    "q": "One of the four checks below is a check on YOUR arithmetic rather than a piece of theory. Which one, and what does it catch?",
-    "nudge": "Three of them produce numbers you will need. One produces a number you already know the answer to."
-   },
-   "body": [
-    "This test answers a question the earlier topics could not: does a whole distribution fit, rather than does one parameter equal one value. The data are counts in categories, and the test compares what you observed with what the claimed distribution predicts.",
-    "The statistic is one sum with one term per category, and the whole difficulty is bookkeeping — getting the expected counts right, counting the degrees of freedom right, and not losing a term. June 2026's question on this topic was pure arithmetic and the marked answer was wrong by one term's worth.",
-    "Four checks. Two produce the ingredients, one gives the reference distribution, and one is the identity that tells you whether your expected counts are right before you go any further."
-   ],
-   "items": [
+  "prereq": [
     {
-     "ask": "Four fair coins are tossed 160 times. How many of those 160 trials should produce exactly 2 heads?",
-     "recall": "160 × C(4,2)/2⁴ = 160 × 6/16 = 60.",
-     "refresh": [
-      "The number of heads in 4 tosses is Binomial(4, 1/2), so P(exactly 2) = C(4,2)/16 = 6/16.",
-      "An expected FREQUENCY is that probability multiplied by the number of trials: 160 × 6/16 = 60. Expected frequencies are counts, not proportions.",
-      "The five expected counts for 0 to 4 heads are 10, 40, 60, 40, 10 — the binomial coefficients 1, 4, 6, 4, 1 scaled by 160/16 = 10. You will use exactly these in section 4."
-     ]
+      "id": "p1",
+      "name": "Binomial and Poisson probabilities",
+      "why": "Expected frequencies come from evaluating a claimed distribution and multiplying by n. Every worked example here starts with a binomial or Poisson calculation."
     },
     {
-     "ask": "What are the upper 5% points of the chi-square distribution for 2, 3, 4 and 5 degrees of freedom?",
-     "recall": "5.991, 7.815, 9.488 and 11.070.",
-     "refresh": [
-      "These four cover almost every question in this topic, because the number of categories is rarely more than six.",
-      "The critical value grows with the degrees of freedom: more categories give the statistic more ways to be large by chance, so more is required before you reject.",
-      "Getting the degrees of freedom wrong therefore changes the verdict even when the statistic is computed perfectly, which is why two whole sections here are about counting them."
-     ]
+      "id": "p2",
+      "name": "The chi-square distribution and its tail values",
+      "why": "The verdict is always a comparison with an upper tail point. You need 5.991, 7.815, 9.488 and 11.070 available."
     },
     {
-     "ask": "In a goodness-of-fit test, what is the value of Σ(Oᵢ − Eᵢ) summed over all categories?",
-     "recall": "Exactly zero, always.",
-     "refresh": [
-      "The expected counts are built to sum to the same total as the observed counts, because both sum to n. So the signed differences must cancel.",
-      "This is the single most useful check in the topic. Compute your expected counts, add them up, and confirm they total n. If they do not, something is wrong before any squaring happens.",
-      "It is also why the statistic squares the differences — the signed differences carry no information at all in total, so only their magnitudes can."
-     ]
+      "id": "p3",
+      "name": "The likelihood ratio test and Wilks' theorem",
+      "why": "The degrees-of-freedom principle here is the one from topic 4.10, and the optional section shows that Pearson's statistic is the second-order approximation to −2 log λ."
     },
     {
-     "ask": "What does it mean to say a test statistic has an APPROXIMATE distribution?",
-     "recall": "That its true sampling distribution is not the stated one, but comes close as the sample grows — so the stated size of the test is only approximately achieved.",
-     "refresh": [
-      "Unlike the t and chi-square tests of topics 4.13 and 4.15, which are exact for normal data at any n, this test is approximate at every n.",
-      "That is why it carries a condition on the expected counts: the approximation is good when the counts are reasonably large and poor when they are small.",
-      "Topic 4.13's optional section showed what a poor approximation looks like in practice — a nominal 95% procedure delivering 78%. The same kind of failure is what the expected-count rule here exists to prevent."
-     ]
+      "id": "p4",
+      "name": "Size and power of a test",
+      "why": "This is an approximate test, so the relationship between its nominal and actual size is the issue the expected-count condition addresses — topic 4.12's vocabulary."
     }
-   ]
-  },
-  {
-   "kind": "intuition",
-   "id": "s1",
-   "mins": 7,
-   "title": "Comparing a whole distribution, not a single number",
-   "objective": "See why the differences are squared and divided by the expected count, before the formula arrives.",
-   "body": [
-    "Every test so far has been about one number — a mean, a variance, a proportion. This one is about a shape. You have a claim about how often each of several outcomes should occur, and a tally of how often each actually did.",
-    "Comparing them needs a single summary of how far apart two lists are. Raw differences will not do, because they cancel: the positive and negative discrepancies always add to exactly zero, whatever the data.",
-    "Squaring them fixes the cancelling. But squares alone would be misleading, because a discrepancy of 10 means something quite different when 20 were expected than when 1000 were. So each squared difference is divided by what was expected, which turns it into a discrepancy measured on its own scale.",
-    "That is the whole construction: sum of (observed minus expected) squared, over expected. The rest of the lesson is getting the expected counts right, counting the degrees of freedom, and knowing when the approximation can be trusted."
-   ],
-   "scenario": {
-    "teaser": "A spinning mill claims its yarn breaks follow a known pattern. The quality manager has a month of tallies.",
-    "title": "Does the claimed pattern hold?",
-    "body": [
-     "A spinning mill's machine supplier claims that yarn breaks per shift follow a particular distribution — mostly zero or one, occasionally two, rarely more. The mill's quality manager has a month of shift records: how many shifts had no breaks, how many had one, and so on.",
-     "No single number settles this. The average breaks per shift might match the claim perfectly while the shape is quite wrong — too many quiet shifts and too many disastrous ones, averaging out to the promised mean. A mean-based test would pass a machine that is behaving badly in exactly the way that matters.",
-     "So the comparison has to be category by category. For each count — zero breaks, one, two, three or more — the claim predicts how many shifts out of the month should fall there, and the records say how many did.",
-     "Now consider what a 'large' discrepancy means. Fifteen shifts observed where ten were expected is a serious mismatch. Fifteen hundred observed where fifteen hundred and five were expected is nothing. The same arithmetic difference of five means opposite things, and the test has to reflect that — which is why each squared difference is divided by the expected count rather than being added raw.",
-     "One more thing the manager will run into. If the claim predicts 0.3 shifts in the 'five or more breaks' category, that category contributes almost nothing real but can produce a wild term if a single such shift occurs: one observed against 0.3 expected contributes (0.7)²/0.3 = 1.63 on its own. Categories that thin have to be merged before the test is trustworthy, and section 8 is about exactly that."
+  ],
+  "traps": [
+    "The statistic uses FREQUENCIES, never proportions or percentages.",
+    "Σ(Oᵢ − Eᵢ) = 0 always — use it to check your expected counts total n.",
+    "The test is upper-tail only; a small statistic is agreement, not evidence.",
+    "The minimum-count rule applies to EXPECTED counts, not observed ones.",
+    "Pool first, then count k, then subtract — not the other way round.",
+    "A normal fit estimates TWO parameters, so df = k − 3.",
+    "Yates' correction is for 2 by 2 tables only.",
+    "Write the terms one per line; a lost term gives a plausibly wrong answer."
+  ],
+  "revision": {
+    "sheet": [
+      "Statistic: χ² = Σ(Oᵢ − Eᵢ)²/Eᵢ over all k categories, computed from counts.",
+      "Expected frequency = n × (probability of that category under H₀).",
+      "Σ(Oᵢ − Eᵢ) = 0 always, and ΣEᵢ = n. Check this before computing the statistic.",
+      "Degrees of freedom: df = k − 1 − m, with k counted AFTER pooling and m the number of parameters estimated from the data.",
+      "Fully specified distribution: m = 0, df = k − 1. June 2026 Q29 had k = 5, df = 4.",
+      "Poisson or binomial with one parameter fitted: df = k − 2. Seven classes gives 5.",
+      "Normal with both parameters fitted: df = k − 3. Eight classes gives 5.",
+      "Contingency table: df = (r − 1)(c − 1). A 4 by 3 table gives 6.",
+      "Equality of c proportions: a 2 by c table, df = c − 1. Four populations gives 3.",
+      "Upper tail only. Reject for large χ²; a small value means the fit is close.",
+      "Minimum expected count 5 per cell, on the EXPECTED counts. Pool adjacent categories when it fails, by subject-matter sense, never to change the verdict.",
+      "Yates' correction, for 2 by 2 tables only: Σ(|Oᵢ − Eᵢ| − 0.5)²/Eᵢ. It always reduces the statistic, so it is conservative.",
+      "Chi-square upper 5% points: 5.991 (2 df), 7.815 (3), 9.488 (4), 11.070 (5), 12.592 (6).",
+      "June 2026 Q29: four coins, 160 tosses, expected 10, 40, 60, 40, 10; terms 4.900, 3.600, 0.600, 2.025, 1.600; χ² = 12.725 on 4 df against 9.488, so reject.",
+      "Poisson fit worked example: λ̂ = 0.93, pooling to 4 classes, χ² = 0.752 on 2 df against 5.991, so the fit is not rejected.",
+      "Genetics 9:3:3:1 on 160 plants: expected 90, 30, 30, 10; χ² = 13.511 on 3 df against 7.815, so reject — and the smallest category contributes 6.400 of it.",
+      "The test is omnibus: it says the fit fails, not how. The individual terms localise it, and shuffling the categories does not change the statistic, so it cannot detect trend in an ordered variable.",
+      "Pearson's statistic is the second-order approximation to the multinomial −2 log λ = 2 Σ Oᵢ log(Oᵢ/Eᵢ), which is why the degrees of freedom match topic 4.10's rule."
     ],
-    "q": "Why would a test based only on the mean number of breaks per shift miss the problem described?",
-    "answer": "Because the mean is one number and a distribution is a shape. A machine producing many quiet shifts and a few disastrous ones can have exactly the promised average while being far more erratic than claimed — and the erratic behaviour is what costs the mill. The goodness-of-fit test compares every category at once, so it detects a wrong shape even when the average is right. This is the sense in which it is an omnibus test."
-   },
-   "ask": {
-    "q": "The signed differences always sum to zero. Why does that make squaring necessary rather than merely convenient?",
-    "nudge": "If you added the raw differences for any data set whatever, what number would you get?"
-   }
-  },
-  {
-   "kind": "explore",
-   "id": "s2",
-   "mins": 7,
-   "title": "Where this topic's answer gets decided",
-   "objective": "Put June 2026's own statistic on the reference distribution and see the verdict, and what moves it.",
-   "viz": {
-    "type": "chisq-tail",
-    "k": 4,
-    "alpha": 0.05,
-    "obs": 12.725
-   },
-   "body": [
-    "The curve is the chi-square distribution with 4 degrees of freedom — the reference distribution for June 2026's coin question, which had 5 categories and no estimated parameters. The marker sits at 12.725, the value that question's answer came to.",
-    "Read the critical value at α = 0.05: 9.488. The statistic is beyond it, so the fairness of those coins is rejected at the 5% level. Read the p-value too — about 0.013, so the result is significant at 5% but not at 1%.",
-    "Now the part worth experimenting with. Change the degrees of freedom to 3, as though one parameter had been estimated from the data. The critical value falls to 7.815 and the same statistic looks MORE significant. Change it to 5 and the critical value rises to 11.070. The statistic has not moved at all — only the bookkeeping has.",
-    "That is the trap this topic sets, and it is why the degrees-of-freedom rules get two sections. A question can be failed by a candidate whose arithmetic was perfect.",
-    "Last thing to try: slide the observed value down to 9.0 and up to 15.0 with 4 degrees of freedom, and watch the p-value cross 0.05 at exactly 9.488. The test is upper-tail only — a very SMALL statistic means the fit is close, which is never grounds for rejection."
-   ],
-   "ask": {
-    "q": "Why is there no lower critical value, when a chi-square statistic of nearly zero would be a remarkable coincidence?",
-    "nudge": "What hypothesis is being tested, and would a suspiciously perfect fit be evidence against it?"
-   }
-  },
-  {
-   "kind": "theory",
-   "id": "s3",
-   "mins": 9,
-   "title": "The statistic, the degrees of freedom, and the direction",
-   "objective": "Write the test down precisely, and settle the degrees-of-freedom rule that decides most questions.",
-   "blocks": [
-    {
-     "t": "formula",
-     "h": "The statistic",
-     "body": "With k categories, observed counts Oᵢ and expected counts Eᵢ computed under H₀,\n    χ² = Σ (Oᵢ − Eᵢ)² / Eᵢ,  summed over i = 1 to k.\nUnder H₀ this has, approximately, a chi-square distribution — the degrees of freedom are fixed by the rule below."
-    },
-    {
-     "t": "def",
-     "h": "What goes into it must be frequencies",
-     "body": "The Oᵢ and Eᵢ are COUNTS. Proportions or percentages substituted into the same formula give a different number with no distributional meaning, because the sample size has been divided out and the sample size is exactly what determines whether a discrepancy is large. A question asking what the statistic 'must be computed from' wants the word frequencies."
-    },
-    {
-     "t": "formula",
-     "h": "Degrees of freedom",
-     "body": "df = k − 1 − m\nwhere k is the number of categories AFTER any pooling, and m is the number of parameters estimated from the data in order to compute the expected counts.\nThe 1 is subtracted because the expected counts are forced to total n, which is one constraint. Each estimated parameter removes one more."
-    },
-    {
-     "t": "step",
-     "h": "The rule applied to the cases that get asked",
-     "body": "A fully specified distribution — fair coins, a claimed 9:3:3:1 ratio, a stated set of probabilities — estimates nothing, so m = 0 and df = k − 1. June 2026's coin question had k = 5 and df = 4.\nFitting a Poisson with λ estimated from the data estimates one parameter, so df = k − 1 − 1 = k − 2. With 7 classes that is 5.\nFitting a normal with both μ and σ² estimated gives m = 2 and df = k − 3.\nFor a contingency table the rule takes the special form (r − 1)(c − 1), which topic 4.16 derives; for a 4 by 3 table that is 6."
-    },
-    {
-     "t": "step",
-     "h": "The test is upper-tail only",
-     "body": "Reject H₀ when χ² is large. There is no lower critical value, because a small statistic means observed and expected are close — which is agreement with H₀, not evidence against it. This is the one-tailed-ness that a variant on this question asks about, and it holds even though the alternative 'the distribution is not as claimed' is in no sense one-sided. The one-sidedness is a property of the statistic, not of the hypothesis."
-    },
-    {
-     "t": "def",
-     "h": "The condition on the expected counts",
-     "body": "The chi-square distribution is an approximation that holds when the expected counts are reasonably large. The usual working rule is that every expected count should be at least 5; some texts allow a few cells as low as 1 provided most are above 5. Note that the condition is on the EXPECTED counts, never on the observed ones — an observed zero is perfectly acceptable if its expected count is adequate. When a category fails the rule, adjacent categories are merged, and section 8 does that."
-    }
-   ],
-   "table": {
-    "caption": "Degrees of freedom by situation. k is the number of categories after pooling; m is the number of parameters estimated from the data.",
-    "head": [
-     "Situation",
-     "m",
-     "df",
-     "Example"
+    "cards": [
+      [
+        "The statistic",
+        "Σ(Oᵢ − Eᵢ)²/Eᵢ, from counts — squared because the signed differences always cancel, divided by Eᵢ to put each on its own scale"
+      ],
+      [
+        "Degrees of freedom",
+        "k − 1 − m: k categories after pooling, minus one for the total, minus one per estimated parameter"
+      ],
+      [
+        "Fully specified distribution",
+        "m = 0 so df = k − 1; four fair coins over five classes gives 4"
+      ],
+      [
+        "Poisson with λ fitted",
+        "df = k − 2; seven classes gives 5"
+      ],
+      [
+        "Normal with both fitted",
+        "df = k − 3; eight classes gives 5 — two parameters, not one"
+      ],
+      [
+        "Contingency table",
+        "df = (r − 1)(c − 1); a 4 by 3 table gives 6"
+      ],
+      [
+        "Direction of the test",
+        "Upper tail only — a small statistic is agreement with H₀, not evidence against it"
+      ],
+      [
+        "The adequacy rule",
+        "Every EXPECTED count at least 5; an observed zero is fine if its expectation is adequate"
+      ],
+      [
+        "Pooling",
+        "Merge adjacent categories, then recount k before subtracting. Never merge to change the verdict"
+      ],
+      [
+        "Yates' correction",
+        "2 by 2 tables only: subtract 0.5 from each |O − E|. Always smaller, so conservative"
+      ],
+      [
+        "The check worth doing first",
+        "ΣEᵢ = n. Five seconds, and it catches most expected-count errors"
+      ],
+      [
+        "Where it comes from",
+        "The second-order approximation to the multinomial likelihood ratio statistic, which is why the df rule is the same"
+      ]
     ],
-    "rows": [
-     [
-      "Distribution fully specified",
-      "0",
-      "k − 1",
-      "fair coins, 5 classes → 4"
-     ],
-     [
-      "Poisson with λ estimated",
-      "1",
-      "k − 2",
-      "7 classes → 5"
-     ],
-     [
-      "Binomial with p estimated",
-      "1",
-      "k − 2",
-      "6 classes → 4"
-     ],
-     [
-      "Normal with μ and σ² estimated",
-      "2",
-      "k − 3",
-      "8 classes → 5"
-     ],
-     [
-      "r by c contingency table",
-      "—",
-      "(r − 1)(c − 1)",
-      "4 by 3 table → 6"
-     ],
-     [
-      "Equality of c proportions",
-      "—",
-      "c − 1",
-      "4 populations → 3"
-     ]
+    "tricks": [
+      "Write the expected counts as a row and add them. If they do not total n, stop and find the error.",
+      "Lay the terms out one per line. A lost term gives an answer that is plausibly wrong, which is what the options exploit.",
+      "For a binomial over k classes, the expected counts are the binomial coefficients scaled by n/2ⁿ — for four coins and 160 tosses, 1, 4, 6, 4, 1 times 10.",
+      "Look at the largest term before writing the conclusion; it tells you which category drove the rejection, and questions sometimes ask.",
+      "If a question gives you λ̂ or p̂ rather than stating a parameter, that is the signal that m ≥ 1 and the degrees of freedom are not k − 1."
+    ],
+    "shortcuts": [
+      "df = k − 1 for a specified distribution, k − 2 for one fitted parameter, k − 3 for two. Count the parameters the question made you estimate.",
+      "A table of several proportions is a 2 by c table, so df = c − 1 without any further thought.",
+      "The critical values climb 5.991, 7.815, 9.488, 11.070, 12.592 for 2 to 6 degrees of freedom — worth knowing as a sequence, since a df error moves you one step along it."
+    ],
+    "remember": [
+      "Counts, not proportions. Check ΣE = n.",
+      "Pool first, count k second, subtract third.",
+      "Upper tail only. Yates is for 2 by 2 alone."
     ]
-   },
-   "flow": {
-    "title": "Running a goodness-of-fit test",
-    "alt": "Flow chart for a chi-square goodness-of-fit test",
-    "nodes": [
-     {
-      "id": "a",
-      "r": 0,
-      "c": 1,
-      "label": "H₀: the data follow the claimed distribution",
-      "kind": "start"
-     },
-     {
-      "id": "b",
-      "r": 1,
-      "c": 1,
-      "label": "Compute the expected counts Eᵢ (estimate parameters if needed)",
-      "kind": "step"
-     },
-     {
-      "id": "c",
-      "r": 2,
-      "c": 1,
-      "label": "Check ΣEᵢ = n, and that every Eᵢ is at least 5",
-      "kind": "step"
-     },
-     {
-      "id": "d",
-      "r": 3,
-      "c": 0,
-      "label": "Pool thin categories and recount k",
-      "kind": "step"
-     },
-     {
-      "id": "e",
-      "r": 4,
-      "c": 1,
-      "label": "χ² = Σ(Oᵢ − Eᵢ)²/Eᵢ,  df = k − 1 − m",
-      "kind": "step"
-     },
-     {
-      "id": "f",
-      "r": 5,
-      "c": 1,
-      "label": "Reject for large χ² — upper tail only",
-      "kind": "end"
-     }
-    ],
-    "edges": [
-     {
-      "from": "a",
-      "to": "b"
-     },
-     {
-      "from": "b",
-      "to": "c"
-     },
-     {
-      "from": "c",
-      "to": "d",
-      "label": "some Eᵢ too small"
-     },
-     {
-      "from": "d",
-      "to": "e"
-     },
-     {
-      "from": "c",
-      "to": "e",
-      "label": "all adequate"
-     },
-     {
-      "from": "e",
-      "to": "f"
-     }
-    ],
-    "note": "The ΣEᵢ = n check costs five seconds and catches most expected-count errors before they propagate into the sum."
-   },
-   "ask": {
-    "q": "Why does forcing the expected counts to total n cost exactly one degree of freedom?",
-    "nudge": "If you knew k − 1 of the expected counts and the total, how many would still be unknown?"
-   }
   },
-  {
-   "kind": "worked",
-   "id": "s4",
-   "mins": 8,
-   "title": "Worked in full — June 2026, Q29",
-   "objective": "Compute the statistic term by term, which is where the marks in this topic actually are.",
-   "ask": {
-    "q": "The marked answer was 10.275, which is 2.45 short of 12.725. What kind of error produces a shortfall rather than a wild answer?",
-    "nudge": "Look at the five terms. Is any single one of them close to 2.45, and what would dropping or mis-dividing it do?"
-   },
-   "problem": "Four coins are tossed 160 times, giving observed frequencies of 17, 52, 54, 31 and 6 for 0, 1, 2, 3 and 4 heads respectively. Assuming the coins are unbiased, compute the expected frequencies and the chi-square goodness-of-fit statistic, and state the conclusion at the 5% level.",
-   "steps": [
+  "howto": "Read this in order; it is short on theory and long on bookkeeping, which is where the marks are. Section 4 is June 2026's own question worked term by term — the error on the paper was arithmetic, not conceptual, so the habits in that section are the content: check that the expected counts total n, and write the terms one per line. Section 6 adds the two complications that change the answer, an estimated parameter and pooling, and section 10 drills the degrees of freedom across every case the exam uses. If you are short of time, sections 4, 6 and 10 are the lesson. Attempt the question at the end of each section before opening the answer. The optional section at the end derives where the chi-square distribution comes from, which turns the k − 1 − m rule and the minimum-count condition from recipes into things you can reconstruct.",
+  "refs": [
     {
-     "say": "Write down the distribution under H₀ and turn it into expected counts.",
-     "math": "number of heads ~ Binomial(4, 1/2)\nprobabilities: 1/16, 4/16, 6/16, 4/16, 1/16\nexpected = 160 × those = 10, 40, 60, 40, 10",
-     "why": "The binomial coefficients 1, 4, 6, 4, 1 scaled by 160/16 = 10. Fast, and the shape is symmetric because the coins are fair — a useful sanity check in itself."
+      "title": "Goodness-of-Fit Tests",
+      "where": "Lesson 17",
+      "site": "Penn State STAT 415",
+      "url": "https://online.stat.psu.edu/stat415/lesson/17",
+      "type": "Course notes",
+      "free": true,
+      "checked": "2026-10-31",
+      "why": "The test derived and applied, including the degrees-of-freedom rule when parameters are estimated. The right companion to sections 3 and 6."
     },
     {
-     "say": "Check the total before going any further.",
-     "math": "10 + 40 + 60 + 40 + 10 = 160 = n ✓\nobserved total: 17 + 52 + 54 + 31 + 6 = 160 ✓",
-     "why": "This is the Σ(O − E) = 0 identity in practice. Five seconds, and it catches almost every expected-count mistake before it reaches the sum."
+      "title": "Mathematical Statistics 18.655 — lecture notes",
+      "where": "Sessions on testing and asymptotics",
+      "site": "MIT OpenCourseWare",
+      "url": "https://ocw.mit.edu/courses/18-655-mathematical-statistics-spring-2016/pages/lecture-notes/",
+      "type": "Lecture notes",
+      "free": true,
+      "checked": "2026-10-31",
+      "why": "The asymptotic argument behind the chi-square limit, which is what the optional section sketches."
     },
     {
-     "say": "Compute the five terms separately. Do not try to do this in one line.",
-     "math": "(17 − 10)²/10 = 49/10    = 4.900\n(52 − 40)²/40 = 144/40  = 3.600\n(54 − 60)²/60 = 36/60   = 0.600\n(31 − 40)²/40 = 81/40   = 2.025\n(6 − 10)²/10  = 16/10   = 1.600",
-     "why": "Writing the five terms out is the whole discipline. The commonest error in this topic is losing or mis-dividing one term, and a term-by-term layout makes that visible — note that the third term is small and the fourth is 2.025, close to the 2.45 gap in the marked answer."
+      "title": "Statistical Inference",
+      "where": "Weeks on testing of hypotheses",
+      "site": "NPTEL / SWAYAM — IIT Delhi, Prof. Niladri Chatterjee",
+      "url": "https://archive.nptel.ac.in/noc/courses/noc21/SEM1/noc21-ma23",
+      "type": "Video course",
+      "free": true,
+      "checked": "2026-10-31",
+      "why": "Indian syllabus conventions for the expected-count rule and for Yates' correction, which is the phrasing NET questions use."
     },
     {
-     "say": "Add them.",
-     "math": "χ² = 4.900 + 3.600 + 0.600 + 2.025 + 1.600 = 12.725",
-     "why": "This is the official answer, option C. The marked option was 10.275."
+      "title": "Statistical Inference, 2nd edition",
+      "where": "Section 10.3.1",
+      "site": "Casella and Berger",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-10-31",
+      "why": "Pearson's statistic as an approximation to the likelihood ratio statistic, which is the derivation in the optional section."
     },
     {
-     "say": "Count the degrees of freedom and conclude.",
-     "math": "k = 5 categories, m = 0 parameters estimated (fairness was assumed, not fitted)\ndf = 5 − 1 − 0 = 4\nχ²(0.05, 4) = 9.488,  and 12.725 > 9.488\n⟹ reject H₀ at the 5% level",
-     "why": "Nothing was estimated from the data — the hypothesis specified p = 1/2 — so m = 0. The evidence is against the coins being unbiased, and looking back at the terms it is the excess of 0-head and 1-head outcomes that drives it."
+      "title": "An Introduction to Probability and Statistics, 3rd edition",
+      "where": "Chapter 10",
+      "site": "Rohatgi and Saleh",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-10-31",
+      "why": "Worked goodness-of-fit tests including fitted Poisson and normal distributions, with the pooling conventions set out."
     }
-   ],
-   "after": "Two habits this question rewards. Write the expected counts as a row and check they sum to n, which takes seconds and prevents the worst errors. And lay the terms out one per line rather than accumulating in a calculator, because a lost term gives an answer that is plausibly wrong rather than obviously wrong — which is exactly what the four options are built to exploit."
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
   },
-  {
-   "kind": "recall",
-   "id": "s5",
-   "mins": 2,
-   "title": "Pause and recall",
-   "objective": "Retrieve the formula, the degrees-of-freedom rule and the direction.",
-   "intro": "Answer each before revealing it.",
-   "items": [
+  "provenance": "Authored October 2026 for this platform against the UGC NET Statistics syllabus, and prioritised from the June 2026 paper, where Q29 gave the results of tossing four coins 160 times and asked for the calculated chi-square; the official answer is 12.725 and the stored response sheet shows 10.275 was marked, an arithmetic error rather than a conceptual one. That question is worked term by term in section 4. Q29 sits in the maths variant file rather than an inference one, which is why it did not appear in the inference block of the PYQ analysis, though it belongs to this topic. Of the 14 variants tagged to it, 5 were power-series items belonging to Q28 and were retagged on 2026-10-31; the remaining 9 — degrees of freedom for a fitted Poisson, degrees of freedom for a 4 by 3 table, the minimum expected frequency, the one-tailed nature of the test, where Yates' correction applies, an expected frequency under fairness, what the statistic must be computed from, the value of the sum of (O − E), and the test for several proportions — are each taught in a named section and appear in the pool. Every numerical value was computed rather than recalled: the expected counts 10, 40, 60, 40, 10 and the five terms 4.900, 3.600, 0.600, 2.025 and 1.600 summing to 12.725; the Poisson fit with lambda-hat 0.93, expected counts 39.455, 36.693, 17.062, 5.289, 1.230 and 0.271, pooled statistic 0.752 on 2 degrees of freedom; the genetics example giving 13.511 on 3 degrees of freedom with the fourth term contributing 6.400; and the chi-square upper 5% points 5.991, 7.815, 9.488, 11.070 and 12.592. Previous-year questions themselves are stored separately and carry their exam cycle.",
+  "scenes": [
     {
-     "q": "Write the goodness-of-fit statistic.",
-     "a": "χ² = Σ(Oᵢ − Eᵢ)²/Eᵢ over all categories, with O and E being counts, not proportions."
-    },
-    {
-     "q": "Give the degrees-of-freedom rule.",
-     "a": "df = k − 1 − m, where k is the number of categories after pooling and m the number of parameters estimated from the data."
-    },
-    {
-     "q": "Four fair coins, 160 tosses. What are the five expected frequencies?",
-     "a": "10, 40, 60, 40, 10 — the coefficients 1, 4, 6, 4, 1 times 160/16."
-    },
-    {
-     "q": "Is the test one-tailed or two-tailed, and why?",
-     "a": "Upper tail only. A small statistic means observed and expected agree, which is not evidence against H₀."
-    },
-    {
-     "q": "What is the usual minimum expected count per cell, and is the rule about observed or expected counts?",
-     "a": "At least 5, and the rule is about EXPECTED counts. An observed zero is fine if its expected count is adequate."
-    }
-   ]
-  },
-  {
-   "kind": "completion",
-   "id": "s6",
-   "mins": 8,
-   "title": "Your turn — fitting a Poisson, where a parameter is estimated",
-   "objective": "Work the case where the data supplies a parameter, which changes the degrees of freedom.",
-   "problem": "The number of yarn breaks per shift was recorded for 100 shifts: 42 shifts with 0 breaks, 33 with 1, 17 with 2, 6 with 3 and 2 with 4. Test whether a Poisson distribution fits, estimating λ from the data. Use e^(−0.93) = 0.39455.",
-   "steps": [
-    {
-     "say": "First estimate the parameter, since the hypothesis does not supply it.",
-     "blank": {
-      "prompt": "Compute λ̂ from the data.",
-      "answer": "λ̂ = 0.93",
-      "accept": [
-       "0.93",
-       "93/100",
-       "0.930",
-       "lambda = 0.93"
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Before the lesson — four things it will assume",
+      "objective": "Recover the three small calculations this test is assembled from, and the one identity that checks your work.",
+      "ask": {
+        "q": "One of the four checks below is a check on YOUR arithmetic rather than a piece of theory. Which one, and what does it catch?",
+        "nudge": "Three of them produce numbers you will need. One produces a number you already know the answer to."
+      },
+      "body": [
+        "This test answers a question the earlier topics could not: does a whole distribution fit, rather than does one parameter equal one value. The data are counts in categories, and the test compares what you observed with what the claimed distribution predicts.",
+        "The statistic is one sum with one term per category, and the whole difficulty is bookkeeping — getting the expected counts right, counting the degrees of freedom right, and not losing a term. June 2026's question on this topic was pure arithmetic and the marked answer was wrong by one term's worth.",
+        "Four checks. Two produce the ingredients, one gives the reference distribution, and one is the identity that tells you whether your expected counts are right before you go any further."
       ],
-      "hint": "The MLE of a Poisson mean is the sample mean: total number of breaks divided by the number of shifts."
-     },
-     "why": "Total breaks = 0(42) + 1(33) + 2(17) + 3(6) + 4(2) = 93, over 100 shifts, so λ̂ = 0.93. Estimating it from the data is what will cost a degree of freedom later."
+      "items": [
+        {
+          "ask": "Four fair coins are tossed 160 times. How many of those 160 trials should produce exactly 2 heads?",
+          "recall": "160 × C(4,2)/2⁴ = 160 × 6/16 = 60.",
+          "refresh": [
+            "The number of heads in 4 tosses is Binomial(4, 1/2), so P(exactly 2) = C(4,2)/16 = 6/16.",
+            "An expected FREQUENCY is that probability multiplied by the number of trials: 160 × 6/16 = 60. Expected frequencies are counts, not proportions.",
+            "The five expected counts for 0 to 4 heads are 10, 40, 60, 40, 10 — the binomial coefficients 1, 4, 6, 4, 1 scaled by 160/16 = 10. You will use exactly these in section 4."
+          ]
+        },
+        {
+          "ask": "What are the upper 5% points of the chi-square distribution for 2, 3, 4 and 5 degrees of freedom?",
+          "recall": "5.991, 7.815, 9.488 and 11.070.",
+          "refresh": [
+            "These four cover almost every question in this topic, because the number of categories is rarely more than six.",
+            "The critical value grows with the degrees of freedom: more categories give the statistic more ways to be large by chance, so more is required before you reject.",
+            "Getting the degrees of freedom wrong therefore changes the verdict even when the statistic is computed perfectly, which is why two whole sections here are about counting them."
+          ]
+        },
+        {
+          "ask": "In a goodness-of-fit test, what is the value of Σ(Oᵢ − Eᵢ) summed over all categories?",
+          "recall": "Exactly zero, always.",
+          "refresh": [
+            "The expected counts are built to sum to the same total as the observed counts, because both sum to n. So the signed differences must cancel.",
+            "This is the single most useful check in the topic. Compute your expected counts, add them up, and confirm they total n. If they do not, something is wrong before any squaring happens.",
+            "It is also why the statistic squares the differences — the signed differences carry no information at all in total, so only their magnitudes can."
+          ]
+        },
+        {
+          "ask": "What does it mean to say a test statistic has an APPROXIMATE distribution?",
+          "recall": "That its true sampling distribution is not the stated one, but comes close as the sample grows — so the stated size of the test is only approximately achieved.",
+          "refresh": [
+            "Unlike the t and chi-square tests of topics 4.13 and 4.15, which are exact for normal data at any n, this test is approximate at every n.",
+            "That is why it carries a condition on the expected counts: the approximation is good when the counts are reasonably large and poor when they are small.",
+            "Topic 4.13's optional section showed what a poor approximation looks like in practice — a nominal 95% procedure delivering 78%. The same kind of failure is what the expected-count rule here exists to prevent."
+          ]
+        }
+      ]
     },
     {
-     "say": "Now the expected counts, including the open tail class that any Poisson needs.",
-     "blank": {
-      "prompt": "Give the expected counts for 0, 1, 2, 3, 4 and '5 or more'.",
-      "answer": "39.455, 36.693, 17.062, 5.289, 1.230 and 0.271",
-      "accept": [
-       "39.46, 36.69, 17.06, 5.29, 1.23, 0.27",
-       "39.455 36.693 17.062 5.289 1.230 0.271",
-       "about 39.5, 36.7, 17.1, 5.3, 1.2, 0.3"
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Comparing a whole distribution, not a single number",
+      "objective": "See why the differences are squared and divided by the expected count, before the formula arrives.",
+      "body": [
+        "Every test so far has been about one number — a mean, a variance, a proportion. This one is about a shape. You have a claim about how often each of several outcomes should occur, and a tally of how often each actually did.",
+        "Comparing them needs a single summary of how far apart two lists are. Raw differences will not do, because they cancel: the positive and negative discrepancies always add to exactly zero, whatever the data.",
+        "Squaring them fixes the cancelling. But squares alone would be misleading, because a discrepancy of 10 means something quite different when 20 were expected than when 1000 were. So each squared difference is divided by what was expected, which turns it into a discrepancy measured on its own scale.",
+        "That is the whole construction: sum of (observed minus expected) squared, over expected. The rest of the lesson is getting the expected counts right, counting the degrees of freedom, and knowing when the approximation can be trusted."
       ],
-      "hint": "Eₖ = 100 e^(−0.93) (0.93)^k / k!, and the last class takes whatever is left so the total is 100."
-     },
-     "why": "A Poisson has infinitely many possible values, so the categories must be closed off with an open class. Giving it the remainder guarantees ΣEᵢ = 100 exactly, which is the check from section 4."
+      "scenario": {
+        "teaser": "A spinning mill claims its yarn breaks follow a known pattern. The quality manager has a month of tallies.",
+        "title": "Does the claimed pattern hold?",
+        "body": [
+          "A spinning mill's machine supplier claims that yarn breaks per shift follow a particular distribution — mostly zero or one, occasionally two, rarely more. The mill's quality manager has a month of shift records: how many shifts had no breaks, how many had one, and so on.",
+          "No single number settles this. The average breaks per shift might match the claim perfectly while the shape is quite wrong — too many quiet shifts and too many disastrous ones, averaging out to the promised mean. A mean-based test would pass a machine that is behaving badly in exactly the way that matters.",
+          "So the comparison has to be category by category. For each count — zero breaks, one, two, three or more — the claim predicts how many shifts out of the month should fall there, and the records say how many did.",
+          "Now consider what a 'large' discrepancy means. Fifteen shifts observed where ten were expected is a serious mismatch. Fifteen hundred observed where fifteen hundred and five were expected is nothing. The same arithmetic difference of five means opposite things, and the test has to reflect that — which is why each squared difference is divided by the expected count rather than being added raw.",
+          "One more thing the manager will run into. If the claim predicts 0.3 shifts in the 'five or more breaks' category, that category contributes almost nothing real but can produce a wild term if a single such shift occurs: one observed against 0.3 expected contributes (0.7)²/0.3 = 1.63 on its own. Categories that thin have to be merged before the test is trustworthy, and section 8 is about exactly that."
+        ],
+        "q": "Why would a test based only on the mean number of breaks per shift miss the problem described?",
+        "answer": "Because the mean is one number and a distribution is a shape. A machine producing many quiet shifts and a few disastrous ones can have exactly the promised average while being far more erratic than claimed — and the erratic behaviour is what costs the mill. The goodness-of-fit test compares every category at once, so it detects a wrong shape even when the average is right. This is the sense in which it is an omnibus test."
+      },
+      "ask": {
+        "q": "The signed differences always sum to zero. Why does that make squaring necessary rather than merely convenient?",
+        "nudge": "If you added the raw differences for any data set whatever, what number would you get?"
+      }
     },
     {
-     "say": "Check the expected counts against the adequacy rule, and act on what you find.",
-     "blank": {
-      "prompt": "Which categories fail the minimum-expected-count rule, and what do you do?",
-      "answer": "3, 4 and '5 or more' are below 5 (5.289 is borderline), so pool them into a single '3 or more' class",
-      "accept": [
-       "4 and 5+ are too small, pool 3,4,5+ into '3 or more'",
-       "pool the last three into 3 or more",
-       "merge 3, 4 and 5+ since 1.23 and 0.27 are below 5"
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Where this topic's answer gets decided",
+      "objective": "Put June 2026's own statistic on the reference distribution and see the verdict, and what moves it.",
+      "viz": {
+        "type": "chisq-tail",
+        "k": 4,
+        "alpha": 0.05,
+        "obs": 12.725
+      },
+      "body": [
+        "The curve is the chi-square distribution with 4 degrees of freedom — the reference distribution for June 2026's coin question, which had 5 categories and no estimated parameters. The marker sits at 12.725, the value that question's answer came to.",
+        "Read the critical value at α = 0.05: 9.488. The statistic is beyond it, so the fairness of those coins is rejected at the 5% level. Read the p-value too — about 0.013, so the result is significant at 5% but not at 1%.",
+        "Now the part worth experimenting with. Change the degrees of freedom to 3, as though one parameter had been estimated from the data. The critical value falls to 7.815 and the same statistic looks MORE significant. Change it to 5 and the critical value rises to 11.070. The statistic has not moved at all — only the bookkeeping has.",
+        "That is the trap this topic sets, and it is why the degrees-of-freedom rules get two sections. A question can be failed by a candidate whose arithmetic was perfect.",
+        "Last thing to try: slide the observed value down to 9.0 and up to 15.0 with 4 degrees of freedom, and watch the p-value cross 0.05 at exactly 9.488. The test is upper-tail only — a very SMALL statistic means the fit is close, which is never grounds for rejection."
       ],
-      "hint": "Expected counts of 1.230 and 0.271 are far below 5. Merge them with their neighbour until the combined count is adequate."
-     },
-     "why": "Pooling gives observed 6 + 2 = 8 against expected 5.289 + 1.230 + 0.271 = 6.790. Categories are merged by adjacency, never by which ones would help the answer — and the decision is made from the EXPECTED counts, before the statistic is computed."
+      "ask": {
+        "q": "Why is there no lower critical value, when a chi-square statistic of nearly zero would be a remarkable coincidence?",
+        "nudge": "What hypothesis is being tested, and would a suspiciously perfect fit be evidence against it?"
+      }
     },
     {
-     "say": "Compute the statistic on the pooled classes.",
-     "blank": {
-      "prompt": "Compute χ² for the four classes 0, 1, 2 and '3 or more'.",
-      "answer": "χ² = 0.752",
-      "accept": [
-       "0.752",
-       "0.75",
-       "0.7523",
-       "about 0.75"
+      "kind": "theory",
+      "id": "s3",
+      "mins": 9,
+      "title": "The statistic, the degrees of freedom, and the direction",
+      "objective": "Write the test down precisely, and settle the degrees-of-freedom rule that decides most questions.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "The statistic",
+          "body": "With k categories, observed counts Oᵢ and expected counts Eᵢ computed under H₀,\n    χ² = Σ (Oᵢ − Eᵢ)² / Eᵢ,  summed over i = 1 to k.\nUnder H₀ this has, approximately, a chi-square distribution — the degrees of freedom are fixed by the rule below."
+        },
+        {
+          "t": "def",
+          "h": "What goes into it must be frequencies",
+          "body": "The Oᵢ and Eᵢ are COUNTS. Proportions or percentages substituted into the same formula give a different number with no distributional meaning, because the sample size has been divided out and the sample size is exactly what determines whether a discrepancy is large. A question asking what the statistic 'must be computed from' wants the word frequencies."
+        },
+        {
+          "t": "formula",
+          "h": "Degrees of freedom",
+          "body": "df = k − 1 − m\nwhere k is the number of categories AFTER any pooling, and m is the number of parameters estimated from the data in order to compute the expected counts.\nThe 1 is subtracted because the expected counts are forced to total n, which is one constraint. Each estimated parameter removes one more."
+        },
+        {
+          "t": "step",
+          "h": "The rule applied to the cases that get asked",
+          "body": "A fully specified distribution — fair coins, a claimed 9:3:3:1 ratio, a stated set of probabilities — estimates nothing, so m = 0 and df = k − 1. June 2026's coin question had k = 5 and df = 4.\nFitting a Poisson with λ estimated from the data estimates one parameter, so df = k − 1 − 1 = k − 2. With 7 classes that is 5.\nFitting a normal with both μ and σ² estimated gives m = 2 and df = k − 3.\nFor a contingency table the rule takes the special form (r − 1)(c − 1), which topic 4.16 derives; for a 4 by 3 table that is 6."
+        },
+        {
+          "t": "step",
+          "h": "The test is upper-tail only",
+          "body": "Reject H₀ when χ² is large. There is no lower critical value, because a small statistic means observed and expected are close — which is agreement with H₀, not evidence against it. This is the one-tailed-ness that a variant on this question asks about, and it holds even though the alternative 'the distribution is not as claimed' is in no sense one-sided. The one-sidedness is a property of the statistic, not of the hypothesis."
+        },
+        {
+          "t": "def",
+          "h": "The condition on the expected counts",
+          "body": "The chi-square distribution is an approximation that holds when the expected counts are reasonably large. The usual working rule is that every expected count should be at least 5; some texts allow a few cells as low as 1 provided most are above 5. Note that the condition is on the EXPECTED counts, never on the observed ones — an observed zero is perfectly acceptable if its expected count is adequate. When a category fails the rule, adjacent categories are merged, and section 8 does that."
+        }
       ],
-      "hint": "The four terms are (42 − 39.455)²/39.455, (33 − 36.693)²/36.693, (17 − 17.062)²/17.062 and (8 − 6.790)²/6.790."
-     },
-     "why": "The terms are 0.164, 0.372, 0.000 and 0.216, summing to 0.752. The third is essentially zero, which says the 2-break class fits almost perfectly."
+      "table": {
+        "caption": "Degrees of freedom by situation. k is the number of categories after pooling; m is the number of parameters estimated from the data.",
+        "head": [
+          "Situation",
+          "m",
+          "df",
+          "Example"
+        ],
+        "rows": [
+          [
+            "Distribution fully specified",
+            "0",
+            "k − 1",
+            "fair coins, 5 classes → 4"
+          ],
+          [
+            "Poisson with λ estimated",
+            "1",
+            "k − 2",
+            "7 classes → 5"
+          ],
+          [
+            "Binomial with p estimated",
+            "1",
+            "k − 2",
+            "6 classes → 4"
+          ],
+          [
+            "Normal with μ and σ² estimated",
+            "2",
+            "k − 3",
+            "8 classes → 5"
+          ],
+          [
+            "r by c contingency table",
+            "—",
+            "(r − 1)(c − 1)",
+            "4 by 3 table → 6"
+          ],
+          [
+            "Equality of c proportions",
+            "—",
+            "c − 1",
+            "4 populations → 3"
+          ]
+        ]
+      },
+      "flow": {
+        "title": "Running a goodness-of-fit test",
+        "alt": "Flow chart for a chi-square goodness-of-fit test",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "H₀: the data follow the claimed distribution",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Compute the expected counts Eᵢ (estimate parameters if needed)",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Check ΣEᵢ = n, and that every Eᵢ is at least 5",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 0,
+            "label": "Pool thin categories and recount k",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "χ² = Σ(Oᵢ − Eᵢ)²/Eᵢ,  df = k − 1 − m",
+            "kind": "step"
+          },
+          {
+            "id": "f",
+            "r": 5,
+            "c": 1,
+            "label": "Reject for large χ² — upper tail only",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d",
+            "label": "some Eᵢ too small"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          },
+          {
+            "from": "c",
+            "to": "e",
+            "label": "all adequate"
+          },
+          {
+            "from": "e",
+            "to": "f"
+          }
+        ],
+        "note": "The ΣEᵢ = n check costs five seconds and catches most expected-count errors before they propagate into the sum."
+      },
+      "ask": {
+        "q": "Why does forcing the expected counts to total n cost exactly one degree of freedom?",
+        "nudge": "If you knew k − 1 of the expected counts and the total, how many would still be unknown?"
+      }
     },
     {
-     "say": "Finally count the degrees of freedom and conclude.",
-     "blank": {
-      "prompt": "Give the degrees of freedom and the verdict at the 5% level.",
-      "answer": "df = 4 − 1 − 1 = 2, and since 0.752 < 5.991 the Poisson fit is not rejected",
-      "accept": [
-       "df 2, do not reject",
-       "2 df, no rejection, Poisson fits",
-       "df = 2 and 0.752 < 5.991 so accept the fit",
-       "2; fit is adequate"
+      "kind": "worked",
+      "id": "s4",
+      "mins": 8,
+      "title": "Worked in full — June 2026, Q29",
+      "objective": "Compute the statistic term by term, which is where the marks in this topic actually are.",
+      "ask": {
+        "q": "The marked answer was 10.275, which is 2.45 short of 12.725. What kind of error produces a shortfall rather than a wild answer?",
+        "nudge": "Look at the five terms. Is any single one of them close to 2.45, and what would dropping or mis-dividing it do?"
+      },
+      "problem": "Four coins are tossed 160 times, giving observed frequencies of 17, 52, 54, 31 and 6 for 0, 1, 2, 3 and 4 heads respectively. Assuming the coins are unbiased, compute the expected frequencies and the chi-square goodness-of-fit statistic, and state the conclusion at the 5% level.",
+      "steps": [
+        {
+          "say": "Write down the distribution under H₀ and turn it into expected counts.",
+          "math": "number of heads ~ Binomial(4, 1/2)\nprobabilities: 1/16, 4/16, 6/16, 4/16, 1/16\nexpected = 160 × those = 10, 40, 60, 40, 10",
+          "why": "The binomial coefficients 1, 4, 6, 4, 1 scaled by 160/16 = 10. Fast, and the shape is symmetric because the coins are fair — a useful sanity check in itself."
+        },
+        {
+          "say": "Check the total before going any further.",
+          "math": "10 + 40 + 60 + 40 + 10 = 160 = n ✓\nobserved total: 17 + 52 + 54 + 31 + 6 = 160 ✓",
+          "why": "This is the Σ(O − E) = 0 identity in practice. Five seconds, and it catches almost every expected-count mistake before it reaches the sum."
+        },
+        {
+          "say": "Compute the five terms separately. Do not try to do this in one line.",
+          "math": "(17 − 10)²/10 = 49/10    = 4.900\n(52 − 40)²/40 = 144/40  = 3.600\n(54 − 60)²/60 = 36/60   = 0.600\n(31 − 40)²/40 = 81/40   = 2.025\n(6 − 10)²/10  = 16/10   = 1.600",
+          "why": "Writing the five terms out is the whole discipline. The commonest error in this topic is losing or mis-dividing one term, and a term-by-term layout makes that visible — note that the third term is small and the fourth is 2.025, close to the 2.45 gap in the marked answer."
+        },
+        {
+          "say": "Add them.",
+          "math": "χ² = 4.900 + 3.600 + 0.600 + 2.025 + 1.600 = 12.725",
+          "why": "This is the official answer, option C. The marked option was 10.275."
+        },
+        {
+          "say": "Count the degrees of freedom and conclude.",
+          "math": "k = 5 categories, m = 0 parameters estimated (fairness was assumed, not fitted)\ndf = 5 − 1 − 0 = 4\nχ²(0.05, 4) = 9.488,  and 12.725 > 9.488\n⟹ reject H₀ at the 5% level",
+          "why": "Nothing was estimated from the data — the hypothesis specified p = 1/2 — so m = 0. The evidence is against the coins being unbiased, and looking back at the terms it is the excess of 0-head and 1-head outcomes that drives it."
+        }
       ],
-      "hint": "Four classes after pooling, minus one for the total, minus one for the estimated λ."
-     },
-     "why": "k is counted AFTER pooling, so k = 4 and not 6. One degree of freedom goes to the total and one to λ̂, leaving 2. The critical value is 5.991 and the statistic is nowhere near it, so the Poisson describes these shifts well."
+      "after": "Two habits this question rewards. Write the expected counts as a row and check they sum to n, which takes seconds and prevents the worst errors. And lay the terms out one per line rather than accumulating in a calculator, because a lost term gives an answer that is plausibly wrong rather than obviously wrong — which is exactly what the four options are built to exploit."
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 2,
+      "title": "Pause and recall",
+      "objective": "Retrieve the formula, the degrees-of-freedom rule and the direction.",
+      "intro": "Answer each before revealing it.",
+      "items": [
+        {
+          "q": "Write the goodness-of-fit statistic.",
+          "a": "χ² = Σ(Oᵢ − Eᵢ)²/Eᵢ over all categories, with O and E being counts, not proportions."
+        },
+        {
+          "q": "Give the degrees-of-freedom rule.",
+          "a": "df = k − 1 − m, where k is the number of categories after pooling and m the number of parameters estimated from the data."
+        },
+        {
+          "q": "Four fair coins, 160 tosses. What are the five expected frequencies?",
+          "a": "10, 40, 60, 40, 10 — the coefficients 1, 4, 6, 4, 1 times 160/16."
+        },
+        {
+          "q": "Is the test one-tailed or two-tailed, and why?",
+          "a": "Upper tail only. A small statistic means observed and expected agree, which is not evidence against H₀."
+        },
+        {
+          "q": "What is the usual minimum expected count per cell, and is the rule about observed or expected counts?",
+          "a": "At least 5, and the rule is about EXPECTED counts. An observed zero is fine if its expected count is adequate."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 8,
+      "title": "Your turn — fitting a Poisson, where a parameter is estimated",
+      "objective": "Work the case where the data supplies a parameter, which changes the degrees of freedom.",
+      "problem": "The number of yarn breaks per shift was recorded for 100 shifts: 42 shifts with 0 breaks, 33 with 1, 17 with 2, 6 with 3 and 2 with 4. Test whether a Poisson distribution fits, estimating λ from the data. Use e^(−0.93) = 0.39455.",
+      "steps": [
+        {
+          "say": "First estimate the parameter, since the hypothesis does not supply it.",
+          "blank": {
+            "prompt": "Compute λ̂ from the data.",
+            "answer": "λ̂ = 0.93",
+            "accept": [
+              "0.93",
+              "93/100",
+              "0.930",
+              "lambda = 0.93"
+            ],
+            "hint": "The MLE of a Poisson mean is the sample mean: total number of breaks divided by the number of shifts."
+          },
+          "why": "Total breaks = 0(42) + 1(33) + 2(17) + 3(6) + 4(2) = 93, over 100 shifts, so λ̂ = 0.93. Estimating it from the data is what will cost a degree of freedom later."
+        },
+        {
+          "say": "Now the expected counts, including the open tail class that any Poisson needs.",
+          "blank": {
+            "prompt": "Give the expected counts for 0, 1, 2, 3, 4 and '5 or more'.",
+            "answer": "39.455, 36.693, 17.062, 5.289, 1.230 and 0.271",
+            "accept": [
+              "39.46, 36.69, 17.06, 5.29, 1.23, 0.27",
+              "39.455 36.693 17.062 5.289 1.230 0.271",
+              "about 39.5, 36.7, 17.1, 5.3, 1.2, 0.3"
+            ],
+            "hint": "Eₖ = 100 e^(−0.93) (0.93)^k / k!, and the last class takes whatever is left so the total is 100."
+          },
+          "why": "A Poisson has infinitely many possible values, so the categories must be closed off with an open class. Giving it the remainder guarantees ΣEᵢ = 100 exactly, which is the check from section 4."
+        },
+        {
+          "say": "Check the expected counts against the adequacy rule, and act on what you find.",
+          "blank": {
+            "prompt": "Which categories fail the minimum-expected-count rule, and what do you do?",
+            "answer": "Classes 4 and '5 or more' are below 5; merge them with adjacent class 3 to form one '3 or more' class",
+            "accept": [
+              "4 and 5+ are too small, pool 3,4,5+ into '3 or more'",
+              "pool the last three into 3 or more",
+              "merge 3, 4 and 5+ since 1.23 and 0.27 are below 5"
+            ],
+            "hint": "Expected counts of 1.230 and 0.271 are far below 5. Merge them with their neighbour until the combined count is adequate."
+          },
+          "why": "Classes 4 and '5 or more' have expected counts 1.230 and 0.271, so they are combined with adjacent class 3. The resulting '3 or more' class has observed count 8 and expected count 5.289 + 1.230 + 0.271 = 6.790. Class 3 alone is 5.289, which is already above 5. Pooling is determined by expected counts and adjacency, not by which merge would help the answer."
+        },
+        {
+          "say": "Compute the statistic on the pooled classes.",
+          "blank": {
+            "prompt": "Compute χ² for the four classes 0, 1, 2 and '3 or more'.",
+            "answer": "χ² = 0.752",
+            "accept": [
+              "0.752",
+              "0.75",
+              "0.7523",
+              "about 0.75"
+            ],
+            "hint": "The four terms are (42 − 39.455)²/39.455, (33 − 36.693)²/36.693, (17 − 17.062)²/17.062 and (8 − 6.790)²/6.790."
+          },
+          "why": "The terms are 0.164, 0.372, 0.000 and 0.216, summing to 0.752. The third is essentially zero, which says the 2-break class fits almost perfectly."
+        },
+        {
+          "say": "Finally count the degrees of freedom and conclude.",
+          "blank": {
+            "prompt": "Give the degrees of freedom and the verdict at the 5% level.",
+            "answer": "df = 4 − 1 − 1 = 2, and since 0.752 < 5.991 the Poisson fit is not rejected",
+            "accept": [
+              "df 2, do not reject",
+              "2 df, no rejection, Poisson fits",
+              "df = 2 and 0.752 < 5.991 so accept the fit",
+              "2; fit is adequate"
+            ],
+            "hint": "Four classes after pooling, minus one for the total, minus one for the estimated λ."
+          },
+          "why": "k is counted AFTER pooling, so k = 4 and not 6. One degree of freedom goes to the total and one to λ̂, leaving 2. The critical value is 5.991 and the statistic is nowhere near it, so the Poisson describes these shifts well."
+        }
+      ],
+      "after": "Three things happened here that did not happen in section 4: a parameter was estimated, categories were pooled, and k had to be recounted afterwards. All three change the degrees of freedom, and all three are what the variant questions on this topic test. The arithmetic was the easy part."
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 7,
+      "title": "The conditions, and the standard repairs",
+      "objective": "Know when the approximation can be trusted and what to do when it cannot.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "Why there is a condition at all",
+          "body": "The chi-square distribution of the statistic is a large-sample approximation, not an exact result. Each term compares a count with its expectation, and the approximation behind it treats that count as roughly normal. A count whose expectation is 1 is nothing like normal — it is skewed and discrete — so a term built on it misbehaves, and the sum inherits the problem."
+        },
+        {
+          "t": "def",
+          "h": "The rule, stated as it is usually examined",
+          "body": "Every expected count should be at least 5. Some texts relax this to allow a minority of cells between 1 and 5 provided the average expected count is adequate, but 5 is the figure a question wants. The condition is on the EXPECTED counts and not the observed ones — this distinction is asked, and an observed count of zero in a cell whose expectation is 20 is not a problem at all."
+        },
+        {
+          "t": "step",
+          "h": "Pooling, and the discipline it requires",
+          "body": "When a category's expected count is too small, merge it with an adjacent category and recompute. Two rules govern it. Merge by adjacency and by subject-matter sense — the open tail class of a Poisson, the extreme categories of an ordered variable — and never by which merge would change the verdict. And recount k afterwards: the degrees of freedom use the number of categories you actually tested, which is what section 6 did when 6 classes became 4."
+        },
+        {
+          "t": "def",
+          "h": "Yates' correction",
+          "body": "For a 2 by 2 contingency table only, Yates' continuity correction replaces the statistic by Σ(|Oᵢ − Eᵢ| − 0.5)²/Eᵢ. It compensates for discreteness in the smallest table. The usual textbook expression subtracts 0.5 from each absolute deviation; some implementations cap the adjusted deviation at zero so the correction cannot increase a cell's contribution. It is generally conservative and can overcorrect, which is why an exact test may be preferable with very small counts. It applies to 2 by 2 tables and to nothing else: not to goodness of fit, not to larger tables. A question asking where Yates' correction applies is asking exactly this."
+        },
+        {
+          "t": "step",
+          "h": "When the approximation cannot be rescued",
+          "body": "If pooling would destroy the categories that the question is about, or the total sample is simply small, the honest route is an exact test — Fisher's exact test for a 2 by 2 table, or an exact multinomial calculation. The approximation is a convenience, and when its condition fails the answer is a different test rather than a bolder use of this one."
+        }
+      ],
+      "ask": {
+        "q": "Yates' correction always reduces the statistic. Why does that make it conservative rather than merely different?",
+        "nudge": "The test rejects for large values. What does a smaller statistic do to the chance of rejecting?"
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 8,
+      "title": "On your own — a fully specified ratio",
+      "objective": "Run the test where nothing is estimated, and read which category drives the result.",
+      "problem": "A genetics experiment on 160 plants predicts phenotype counts in the ratio 9:3:3:1. The observed counts are 100, 18, 24 and 18. Test the fit at the 5% level, and say which category contributes most to the result.",
+      "hints": [
+        "Direction — the ratio is fully specified, so nothing is estimated from the data. Turn 9:3:3:1 into probabilities by dividing by 16, then multiply by 160.",
+        "Second step — check that your expected counts total 160 before computing anything, and that every one of them is at least 5.",
+        "Last step — compute the four terms separately and look at their sizes before adding. The term that dominates tells you what the data is actually saying."
+      ],
+      "answer": "χ² = 13.511 on 3 degrees of freedom; 13.511 > 7.815, so the 9:3:3:1 ratio is rejected. The fourth category contributes most, 6.400 of the total.",
+      "check": "Three things an examiner looks for. The degrees of freedom are 3, not 4 and not 2 — the ratio was specified, so m = 0 and df = k − 1 = 3. The expected counts are 90, 30, 30, 10 and they total 160, which is the check worth doing first. And the interpretation matters: the largest term comes from the smallest category, where 18 were seen against 10 expected. A category with a small expected count has a large denominator effect, which is both why it dominates here and why the minimum-count rule exists — at 10 it is comfortably adequate, but it is the cell to watch.",
+      "scenario": {
+        "teaser": "A seed company's 9:3:3:1 claim is the basis of its product labelling.",
+        "title": "What the rejected ratio means commercially",
+        "body": [
+          "A 9:3:3:1 phenotype ratio is what classical Mendelian inheritance predicts for two independently assorting genes. A seed company selling a hybrid relies on it: the label tells growers what proportion of plants will show which trait.",
+          "When the test rejects, the useful question is not 'is the ratio wrong' but 'wrong in which direction'. The term-by-term breakdown answers it. Here three categories are close to prediction and the fourth — the double-recessive, the rarest type — appears 18 times where 10 were expected, contributing 6.4 of the 13.5 total.",
+          "That is a specific and actionable finding. An excess of double-recessives points at the two genes not assorting independently, which is linkage, and linkage is a biological claim the company can investigate rather than a vague failure of fit.",
+          "This is the general lesson about an omnibus test. It tells you the shape is wrong; the individual terms tell you where, and the where is usually what matters. A candidate who reports only 'reject at 5%' has answered the question asked and missed the information sitting in the working."
+        ],
+        "q": "Why is the term-by-term breakdown more useful to the company than the total statistic?",
+        "answer": "Because the total only says the claimed ratio does not hold, which the company cannot act on. The breakdown localises the failure to the double-recessive category and gives its direction — an excess rather than a shortfall — which points at a specific biological cause, linkage between the two genes. The total is the test; the terms are the diagnosis."
+      },
+      "solution": [
+        {
+          "say": "Turn the ratio into expected counts.",
+          "math": "probabilities 9/16, 3/16, 3/16, 1/16\nexpected = 160 × those = 90, 30, 30, 10",
+          "why": "160/16 = 10, so the expected counts are just the ratio numbers times 10. Note that all four are at least 5, so no pooling is needed."
+        },
+        {
+          "say": "Check the total.",
+          "math": "90 + 30 + 30 + 10 = 160 ✓\n100 + 18 + 24 + 18 = 160 ✓",
+          "why": "Both totals agree, so the expected counts are consistent and Σ(O − E) = 0 as it must be."
+        },
+        {
+          "say": "Compute the four terms.",
+          "math": "(100 − 90)²/90 = 100/90 = 1.111\n(18 − 30)²/30  = 144/30 = 4.800\n(24 − 30)²/30  = 36/30  = 1.200\n(18 − 10)²/10  = 64/10  = 6.400",
+          "why": "Laid out one per line, as in section 4. The fourth term is the largest despite having the smallest absolute discrepancy of the four — 8 against 12 for the second term — because its denominator is the smallest."
+        },
+        {
+          "say": "Add, count the degrees of freedom, and conclude.",
+          "math": "χ² = 1.111 + 4.800 + 1.200 + 6.400 = 13.511\ndf = k − 1 − m = 4 − 1 − 0 = 3\nχ²(0.05, 3) = 7.815,  13.511 > 7.815 ⟹ reject",
+          "why": "Nothing was estimated, so m = 0. The 9:3:3:1 ratio is rejected at the 5% level, and the dominant term identifies the double-recessive category as the source."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 6,
+      "title": "Six statements — verdict on each before you look",
+      "objective": "Rule on the claims the variant questions on this topic are built from.",
+      "intro": "Decide true or false on all six before revealing any.",
+      "items": [
+        {
+          "claim": "The chi-square statistic must be computed from frequencies, not from proportions or percentages.",
+          "tf": true,
+          "why": "True. Substituting proportions divides out the sample size, and the sample size is precisely what decides whether a discrepancy is large. The resulting number has no distributional meaning."
+        },
+        {
+          "claim": "In a goodness-of-fit test, Σ(Oᵢ − Eᵢ) equals zero.",
+          "tf": true,
+          "why": "True, always, because both the observed and the expected counts total n. It is the quickest check that your expected counts are right, and it is also why the differences must be squared before being combined."
+        },
+        {
+          "claim": "The goodness-of-fit test rejects H₀ for both very large and very small values of the statistic.",
+          "tf": false,
+          "why": "False. It is upper-tail only. A small value means observed and expected are close, which is agreement with the claimed distribution rather than evidence against it."
+        },
+        {
+          "claim": "The minimum-count rule of 5 applies to the observed counts in each cell.",
+          "tf": false,
+          "why": "False — it applies to the EXPECTED counts. An observed count of zero is perfectly acceptable in a cell whose expected count is 20; it is a small expectation that breaks the approximation."
+        },
+        {
+          "claim": "Fitting a Poisson distribution to 7 classes with λ estimated from the data gives 5 degrees of freedom.",
+          "tf": true,
+          "why": "True: df = k − 1 − m = 7 − 1 − 1 = 5. One degree of freedom goes to the constraint that the expected counts total n, and one to the estimated λ."
+        },
+        {
+          "claim": "Yates' correction should be applied whenever expected counts are small.",
+          "tf": false,
+          "why": "False. It applies to 2 by 2 contingency tables only — not to goodness-of-fit tests and not to larger tables. For small expected counts elsewhere the remedies are pooling or an exact test."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 7,
+      "title": "On your own — counting the degrees of freedom",
+      "objective": "Get the number that decides the verdict, across every case this topic asks about.",
+      "problem": "Give the degrees of freedom in each case. (a) A die is rolled and the six faces are tested for equal probability. (b) A binomial with p estimated from the data is fitted to 6 classes. (c) A normal distribution with both parameters estimated is fitted to 8 classes. (d) A 4 by 3 contingency table is tested for independence. (e) Four populations are tested for equality of a proportion. (f) A Poisson is fitted to 8 classes with λ estimated, but the last two classes have to be pooled.",
+      "hints": [
+        "For (a) to (c) and (f), use df = k − 1 − m, counting k after any pooling and m as the number of parameters taken from the data.",
+        "For (d), a contingency table uses (r − 1)(c − 1) rather than the k − 1 − m form; topic 4.16 derives why.",
+        "For (f), do the pooling first and then count. This is the case where candidates apply the rule to the original number of classes."
+      ],
+      "answer": "(a) 5  (b) 4  (c) 5  (d) 6  (e) 3  (f) 5",
+      "check": "The two cases that catch people are (c) and (f). In (c) a normal fit estimates TWO parameters, so three degrees of freedom are lost in total and not two — df = 8 − 1 − 2 = 5. In (f) the pooling reduces 8 classes to 7 before the rule is applied, giving 7 − 1 − 1 = 5; applying the rule to the original 8 would give 6 and change the critical value from 11.070 to 12.592. The general discipline: pool first, count k second, subtract third.",
+      "solution": [
+        {
+          "say": "(a) A fully specified distribution over six faces.",
+          "math": "k = 6, m = 0\ndf = 6 − 1 − 0 = 5",
+          "why": "Equal probability specifies every cell probability as 1/6, so nothing is estimated."
+        },
+        {
+          "say": "(b) A binomial with p taken from the data.",
+          "math": "k = 6, m = 1\ndf = 6 − 1 − 1 = 4",
+          "why": "One parameter estimated costs one degree of freedom, exactly as λ did for the Poisson."
+        },
+        {
+          "say": "(c) A normal fit, where two parameters are estimated.",
+          "math": "k = 8, m = 2\ndf = 8 − 1 − 2 = 5",
+          "why": "Both μ and σ² come from the data, so m = 2. Answering 6 here is the standard slip — it counts only one of the two."
+        },
+        {
+          "say": "(d) A contingency table.",
+          "math": "df = (r − 1)(c − 1) = (4 − 1)(3 − 1) = 3 × 2 = 6",
+          "why": "The table form, not k − 1 − m. It happens to agree with the general rule once the row and column totals are counted as estimated, which is what topic 4.16 shows."
+        },
+        {
+          "say": "(e) Equality of a proportion across four populations.",
+          "math": "df = c − 1 = 4 − 1 = 3",
+          "why": "This is a 2 by 4 table in disguise: (2 − 1)(4 − 1) = 3. A variant on this question asks which test is used for several proportions, and the answer is this chi-square test."
+        },
+        {
+          "say": "(f) A Poisson fit where pooling is needed.",
+          "math": "8 classes, last two pooled ⟹ k = 7\nm = 1 (λ estimated)\ndf = 7 − 1 − 1 = 5",
+          "why": "Pool first, then count. Using the original 8 would give 6 degrees of freedom and a critical value of 12.592 instead of 11.070 — enough to flip a borderline verdict."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s11",
+      "mins": 6,
+      "title": "What the test detects, and where it comes from",
+      "objective": "Place this test against the rest of the module, which is how the conceptual questions are framed.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "It is an omnibus test",
+          "body": "The alternative is simply 'the claimed distribution is wrong', with no direction and no shape. So a rejection says the fit fails without saying how, and a non-rejection says this sample could not show a failure. The diagnosis lives in the individual terms, which is why writing them out is worth doing even when only the total is asked for."
+        },
+        {
+          "t": "def",
+          "h": "It ignores the order of the categories",
+          "body": "The statistic is a sum over categories and its value is unchanged if you shuffle them. For an ordered variable — income bands, defect counts — that means it cannot see a trend. A systematic drift across ordered categories and a scatter of unrelated discrepancies can give the same statistic, and the test cannot distinguish them. When ordering matters, a test designed for trend is more powerful."
+        },
+        {
+          "t": "step",
+          "h": "Where the statistic comes from",
+          "body": "It is not an independent invention. For a multinomial model the likelihood ratio statistic of topic 4.10 is −2 log λ = 2 Σ Oᵢ log(Oᵢ/Eᵢ), and expanding that to second order about Oᵢ = Eᵢ gives exactly Σ(Oᵢ − Eᵢ)²/Eᵢ. So Pearson's statistic is the chi-square approximation to the likelihood ratio test, and the two agree closely when the fit is reasonable. That is also why both carry the same degrees of freedom, counted the same way."
+        },
+        {
+          "t": "step",
+          "h": "The family of tests that share this machinery",
+          "body": "Goodness of fit for a claimed distribution is this topic. A two-way table tested for independence or homogeneity is topic 4.16, with df = (r − 1)(c − 1). Equality of several proportions is the same calculation on a 2 by c table. And when the counts are too sparse for any of them, the exact tests take over. One statistic, one degrees-of-freedom principle, several names depending on what the table represents."
+        }
+      ],
+      "ask": {
+        "q": "The statistic is unchanged if the categories are shuffled. For which kind of variable is that a real loss, and why?",
+        "nudge": "Think about defect counts per shift: 0, 1, 2, 3 or more. Is there information in the fact that 3 comes after 2?"
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s12",
+      "mins": 2,
+      "title": "Second recall — the parts most likely to fade",
+      "objective": "Retrieve the counting rules and the two conditions, which is what the exam asks.",
+      "intro": "Answer, then reveal.",
+      "items": [
+        {
+          "q": "A normal distribution is fitted to 8 classes with both parameters estimated. Degrees of freedom?",
+          "a": "8 − 1 − 2 = 5. Two parameters estimated means two degrees of freedom lost on top of the total constraint."
+        },
+        {
+          "q": "Degrees of freedom for a 4 by 3 contingency table?",
+          "a": "(4 − 1)(3 − 1) = 6."
+        },
+        {
+          "q": "Where does Yates' correction apply?",
+          "a": "To 2 by 2 contingency tables only. It subtracts 0.5 from each absolute difference and always makes the statistic smaller."
+        },
+        {
+          "q": "Three coins are tossed 80 times. Expected frequency of exactly 2 heads under fairness?",
+          "a": "80 × C(3,2)/8 = 80 × 3/8 = 30."
+        },
+        {
+          "q": "If pooling reduces 8 classes to 7 in a Poisson fit, what are the degrees of freedom?",
+          "a": "7 − 1 − 1 = 5. Pool first, then count k."
+        },
+        {
+          "q": "Which test is used for the equality of several population proportions?",
+          "a": "The chi-square test, on a 2 by c table with c − 1 degrees of freedom."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 3,
+      "title": "What you should now be able to do unaided",
+      "objective": "Close the loop before the mastery test.",
+      "body": [
+        "Compute expected frequencies from a claimed distribution, and check that they total n before going further.",
+        "Compute Σ(Oᵢ − Eᵢ)²/Eᵢ term by term, from counts rather than proportions, without losing a term.",
+        "Count the degrees of freedom as k − 1 − m, with k taken after pooling and m the number of parameters estimated from the data.",
+        "Handle the four standard cases: a fully specified distribution, a Poisson or binomial with one parameter fitted, a normal with two, and a contingency table's (r − 1)(c − 1).",
+        "Apply the upper-tail rule, and say why there is no lower critical value.",
+        "Check the expected counts against the minimum of 5, pool adjacent categories when they fail, and recount k afterwards.",
+        "Say where Yates' correction applies and that it is conservative, and read the individual terms to localise a rejection."
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s14",
+      "mins": 8,
+      "ext": true,
+      "title": "Why the statistic is approximately chi-square",
+      "objective": "See where the distribution comes from, which explains the expected-count rule rather than leaving it a recipe.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "One term at a time",
+          "body": "Under H₀ the count vector is multinomial. For large n, the standardized residual vector Zᵢ = (Oᵢ − Eᵢ)/√Eᵢ is approximately multivariate normal with covariance matrix I − vvᵀ, where v = (√p₁,…,√pₖ)ᵀ and vᵀv = 1. This matrix is a projection of rank k − 1, because the counts must sum to n. Therefore ΣZᵢ², the Pearson statistic, converges to χ² with k − 1 degrees of freedom. The residuals are dependent; it is not correct to treat each term as an independent χ²₁."
+        },
+        {
+          "t": "step",
+          "h": "Adding the terms, and where the lost degree of freedom goes",
+          "body": "If the k terms were independent the sum would be chi-square with k degrees of freedom. They are not: the counts must total n, so Σ(Oᵢ − Eᵢ) = 0 is one exact linear constraint among them. A sum of squares of k quantities subject to one linear constraint behaves like a chi-square with k − 1. Each estimated parameter imposes a further constraint — the fitted distribution is forced to match the data in one more respect — and removes one more degree of freedom. That is the whole content of df = k − 1 − m."
+        },
+        {
+          "t": "def",
+          "h": "What the expected-count rule is really protecting",
+          "body": "The very first step was 'a binomial count is approximately normal'. That is what fails when Eᵢ is small. A count with expectation 1 is skewed and lumpy — it takes the value 0 about 37% of the time — and nothing about it resembles a normal variable. Its squared standardised value is then nothing like a chi-square with 1 degree of freedom, and because the terms are added, one bad term contaminates the whole sum. The minimum of 5 is a working threshold for 'normal enough', not a theorem."
+        },
+        {
+          "t": "formula",
+          "h": "The connection to the likelihood ratio test",
+          "body": "For the multinomial the likelihood ratio statistic is\n    −2 log λ = 2 Σ Oᵢ log(Oᵢ/Eᵢ).\nWrite Oᵢ = Eᵢ + dᵢ and expand the logarithm in powers of dᵢ/Eᵢ:\n    2 Σ Oᵢ log(Oᵢ/Eᵢ) ≈ Σ dᵢ²/Eᵢ + higher-order terms.\nSo Pearson's statistic is the second-order approximation to −2 log λ, which is why Wilks' theorem from topic 4.10 gives it the same chi-square limit and the same degrees of freedom."
+        },
+        {
+          "t": "step",
+          "h": "What this buys you in an exam",
+          "body": "Three things become memory-free. The degrees-of-freedom rule is derived rather than recalled, so the k − 1 − m form and the contingency table's (r − 1)(c − 1) stop being separate facts. The one-tailedness is obvious, since the statistic is a sum of squares and can only be large when the fit is poor. And the expected-count condition has a reason, so you can judge a borderline case instead of applying a threshold blindly."
+        }
+      ],
+      "ask": {
+        "q": "A category has expected count 1. Roughly how often does it contain no observations at all, and why does that break the normal approximation?",
+        "nudge": "Treat the count as Poisson with mean 1 and compute P(0). Compare that with how often a normal variable sits more than one standard deviation below its mean."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s15",
+      "mins": 12,
+      "title": "Mastery test",
+      "objective": "Demonstrate it independently, on questions you have not seen.",
+      "setId": "inference_t14_mastery"
     }
-   ],
-   "after": "Three things happened here that did not happen in section 4: a parameter was estimated, categories were pooled, and k had to be recounted afterwards. All three change the degrees of freedom, and all three are what the variant questions on this topic test. The arithmetic was the easy part."
-  },
-  {
-   "kind": "theory",
-   "id": "s7",
-   "mins": 7,
-   "title": "The conditions, and the standard repairs",
-   "objective": "Know when the approximation can be trusted and what to do when it cannot.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "Why there is a condition at all",
-     "body": "The chi-square distribution of the statistic is a large-sample approximation, not an exact result. Each term compares a count with its expectation, and the approximation behind it treats that count as roughly normal. A count whose expectation is 1 is nothing like normal — it is skewed and discrete — so a term built on it misbehaves, and the sum inherits the problem."
-    },
-    {
-     "t": "def",
-     "h": "The rule, stated as it is usually examined",
-     "body": "Every expected count should be at least 5. Some texts relax this to allow a minority of cells between 1 and 5 provided the average expected count is adequate, but 5 is the figure a question wants. The condition is on the EXPECTED counts and not the observed ones — this distinction is asked, and an observed count of zero in a cell whose expectation is 20 is not a problem at all."
-    },
-    {
-     "t": "step",
-     "h": "Pooling, and the discipline it requires",
-     "body": "When a category's expected count is too small, merge it with an adjacent category and recompute. Two rules govern it. Merge by adjacency and by subject-matter sense — the open tail class of a Poisson, the extreme categories of an ordered variable — and never by which merge would change the verdict. And recount k afterwards: the degrees of freedom use the number of categories you actually tested, which is what section 6 did when 6 classes became 4."
-    },
-    {
-     "t": "def",
-     "h": "Yates' correction",
-     "body": "For a 2 by 2 contingency table only, Yates' continuity correction replaces the statistic by Σ(|Oᵢ − Eᵢ| − 0.5)²/Eᵢ. It compensates for the discreteness of counts in the smallest possible table, where the approximation is worst, and it always makes the statistic smaller — so it is conservative. It applies to 2 by 2 tables and to nothing else: not to goodness of fit, not to larger tables. A question asking where Yates' correction applies is asking exactly this."
-    },
-    {
-     "t": "step",
-     "h": "When the approximation cannot be rescued",
-     "body": "If pooling would destroy the categories that the question is about, or the total sample is simply small, the honest route is an exact test — Fisher's exact test for a 2 by 2 table, or an exact multinomial calculation. The approximation is a convenience, and when its condition fails the answer is a different test rather than a bolder use of this one."
-    }
-   ],
-   "ask": {
-    "q": "Yates' correction always reduces the statistic. Why does that make it conservative rather than merely different?",
-    "nudge": "The test rejects for large values. What does a smaller statistic do to the chance of rejecting?"
-   }
-  },
-  {
-   "kind": "guided",
-   "id": "s8",
-   "mins": 8,
-   "title": "On your own — a fully specified ratio",
-   "objective": "Run the test where nothing is estimated, and read which category drives the result.",
-   "problem": "A genetics experiment on 160 plants predicts phenotype counts in the ratio 9:3:3:1. The observed counts are 100, 18, 24 and 18. Test the fit at the 5% level, and say which category contributes most to the result.",
-   "hints": [
-    "Direction — the ratio is fully specified, so nothing is estimated from the data. Turn 9:3:3:1 into probabilities by dividing by 16, then multiply by 160.",
-    "Second step — check that your expected counts total 160 before computing anything, and that every one of them is at least 5.",
-    "Last step — compute the four terms separately and look at their sizes before adding. The term that dominates tells you what the data is actually saying."
-   ],
-   "answer": "χ² = 13.511 on 3 degrees of freedom; 13.511 > 7.815, so the 9:3:3:1 ratio is rejected. The fourth category contributes most, 6.400 of the total.",
-   "check": "Three things an examiner looks for. The degrees of freedom are 3, not 4 and not 2 — the ratio was specified, so m = 0 and df = k − 1 = 3. The expected counts are 90, 30, 30, 10 and they total 160, which is the check worth doing first. And the interpretation matters: the largest term comes from the smallest category, where 18 were seen against 10 expected. A category with a small expected count has a large denominator effect, which is both why it dominates here and why the minimum-count rule exists — at 10 it is comfortably adequate, but it is the cell to watch.",
-   "scenario": {
-    "teaser": "A seed company's 9:3:3:1 claim is the basis of its product labelling.",
-    "title": "What the rejected ratio means commercially",
-    "body": [
-     "A 9:3:3:1 phenotype ratio is what classical Mendelian inheritance predicts for two independently assorting genes. A seed company selling a hybrid relies on it: the label tells growers what proportion of plants will show which trait.",
-     "When the test rejects, the useful question is not 'is the ratio wrong' but 'wrong in which direction'. The term-by-term breakdown answers it. Here three categories are close to prediction and the fourth — the double-recessive, the rarest type — appears 18 times where 10 were expected, contributing 6.4 of the 13.5 total.",
-     "That is a specific and actionable finding. An excess of double-recessives points at the two genes not assorting independently, which is linkage, and linkage is a biological claim the company can investigate rather than a vague failure of fit.",
-     "This is the general lesson about an omnibus test. It tells you the shape is wrong; the individual terms tell you where, and the where is usually what matters. A candidate who reports only 'reject at 5%' has answered the question asked and missed the information sitting in the working."
-    ],
-    "q": "Why is the term-by-term breakdown more useful to the company than the total statistic?",
-    "answer": "Because the total only says the claimed ratio does not hold, which the company cannot act on. The breakdown localises the failure to the double-recessive category and gives its direction — an excess rather than a shortfall — which points at a specific biological cause, linkage between the two genes. The total is the test; the terms are the diagnosis."
-   },
-   "solution": [
-    {
-     "say": "Turn the ratio into expected counts.",
-     "math": "probabilities 9/16, 3/16, 3/16, 1/16\nexpected = 160 × those = 90, 30, 30, 10",
-     "why": "160/16 = 10, so the expected counts are just the ratio numbers times 10. Note that all four are at least 5, so no pooling is needed."
-    },
-    {
-     "say": "Check the total.",
-     "math": "90 + 30 + 30 + 10 = 160 ✓\n100 + 18 + 24 + 18 = 160 ✓",
-     "why": "Both totals agree, so the expected counts are consistent and Σ(O − E) = 0 as it must be."
-    },
-    {
-     "say": "Compute the four terms.",
-     "math": "(100 − 90)²/90 = 100/90 = 1.111\n(18 − 30)²/30  = 144/30 = 4.800\n(24 − 30)²/30  = 36/30  = 1.200\n(18 − 10)²/10  = 64/10  = 6.400",
-     "why": "Laid out one per line, as in section 4. The fourth term is the largest despite having the smallest absolute discrepancy of the four — 8 against 12 for the second term — because its denominator is the smallest."
-    },
-    {
-     "say": "Add, count the degrees of freedom, and conclude.",
-     "math": "χ² = 1.111 + 4.800 + 1.200 + 6.400 = 13.511\ndf = k − 1 − m = 4 − 1 − 0 = 3\nχ²(0.05, 3) = 7.815,  13.511 > 7.815 ⟹ reject",
-     "why": "Nothing was estimated, so m = 0. The 9:3:3:1 ratio is rejected at the 5% level, and the dominant term identifies the double-recessive category as the source."
-    }
-   ]
-  },
-  {
-   "kind": "trapcheck",
-   "id": "s9",
-   "mins": 6,
-   "title": "Six statements — verdict on each before you look",
-   "objective": "Rule on the claims the variant questions on this topic are built from.",
-   "intro": "Decide true or false on all six before revealing any.",
-   "items": [
-    {
-     "claim": "The chi-square statistic must be computed from frequencies, not from proportions or percentages.",
-     "tf": true,
-     "why": "True. Substituting proportions divides out the sample size, and the sample size is precisely what decides whether a discrepancy is large. The resulting number has no distributional meaning."
-    },
-    {
-     "claim": "In a goodness-of-fit test, Σ(Oᵢ − Eᵢ) equals zero.",
-     "tf": true,
-     "why": "True, always, because both the observed and the expected counts total n. It is the quickest check that your expected counts are right, and it is also why the differences must be squared before being combined."
-    },
-    {
-     "claim": "The goodness-of-fit test rejects H₀ for both very large and very small values of the statistic.",
-     "tf": false,
-     "why": "False. It is upper-tail only. A small value means observed and expected are close, which is agreement with the claimed distribution rather than evidence against it."
-    },
-    {
-     "claim": "The minimum-count rule of 5 applies to the observed counts in each cell.",
-     "tf": false,
-     "why": "False — it applies to the EXPECTED counts. An observed count of zero is perfectly acceptable in a cell whose expected count is 20; it is a small expectation that breaks the approximation."
-    },
-    {
-     "claim": "Fitting a Poisson distribution to 7 classes with λ estimated from the data gives 5 degrees of freedom.",
-     "tf": true,
-     "why": "True: df = k − 1 − m = 7 − 1 − 1 = 5. One degree of freedom goes to the constraint that the expected counts total n, and one to the estimated λ."
-    },
-    {
-     "claim": "Yates' correction should be applied whenever expected counts are small.",
-     "tf": false,
-     "why": "False. It applies to 2 by 2 contingency tables only — not to goodness-of-fit tests and not to larger tables. For small expected counts elsewhere the remedies are pooling or an exact test."
-    }
-   ]
-  },
-  {
-   "kind": "guided",
-   "id": "s10",
-   "mins": 7,
-   "title": "On your own — counting the degrees of freedom",
-   "objective": "Get the number that decides the verdict, across every case this topic asks about.",
-   "problem": "Give the degrees of freedom in each case. (a) A die is rolled and the six faces are tested for equal probability. (b) A binomial with p estimated from the data is fitted to 6 classes. (c) A normal distribution with both parameters estimated is fitted to 8 classes. (d) A 4 by 3 contingency table is tested for independence. (e) Four populations are tested for equality of a proportion. (f) A Poisson is fitted to 8 classes with λ estimated, but the last two classes have to be pooled.",
-   "hints": [
-    "For (a) to (c) and (f), use df = k − 1 − m, counting k after any pooling and m as the number of parameters taken from the data.",
-    "For (d), a contingency table uses (r − 1)(c − 1) rather than the k − 1 − m form; topic 4.16 derives why.",
-    "For (f), do the pooling first and then count. This is the case where candidates apply the rule to the original number of classes."
-   ],
-   "answer": "(a) 5  (b) 4  (c) 5  (d) 6  (e) 3  (f) 5",
-   "check": "The two cases that catch people are (c) and (f). In (c) a normal fit estimates TWO parameters, so three degrees of freedom are lost in total and not two — df = 8 − 1 − 2 = 5. In (f) the pooling reduces 8 classes to 7 before the rule is applied, giving 7 − 1 − 1 = 5; applying the rule to the original 8 would give 6 and change the critical value from 11.070 to 12.592. The general discipline: pool first, count k second, subtract third.",
-   "solution": [
-    {
-     "say": "(a) A fully specified distribution over six faces.",
-     "math": "k = 6, m = 0\ndf = 6 − 1 − 0 = 5",
-     "why": "Equal probability specifies every cell probability as 1/6, so nothing is estimated."
-    },
-    {
-     "say": "(b) A binomial with p taken from the data.",
-     "math": "k = 6, m = 1\ndf = 6 − 1 − 1 = 4",
-     "why": "One parameter estimated costs one degree of freedom, exactly as λ did for the Poisson."
-    },
-    {
-     "say": "(c) A normal fit, where two parameters are estimated.",
-     "math": "k = 8, m = 2\ndf = 8 − 1 − 2 = 5",
-     "why": "Both μ and σ² come from the data, so m = 2. Answering 6 here is the standard slip — it counts only one of the two."
-    },
-    {
-     "say": "(d) A contingency table.",
-     "math": "df = (r − 1)(c − 1) = (4 − 1)(3 − 1) = 3 × 2 = 6",
-     "why": "The table form, not k − 1 − m. It happens to agree with the general rule once the row and column totals are counted as estimated, which is what topic 4.16 shows."
-    },
-    {
-     "say": "(e) Equality of a proportion across four populations.",
-     "math": "df = c − 1 = 4 − 1 = 3",
-     "why": "This is a 2 by 4 table in disguise: (2 − 1)(4 − 1) = 3. A variant on this question asks which test is used for several proportions, and the answer is this chi-square test."
-    },
-    {
-     "say": "(f) A Poisson fit where pooling is needed.",
-     "math": "8 classes, last two pooled ⟹ k = 7\nm = 1 (λ estimated)\ndf = 7 − 1 − 1 = 5",
-     "why": "Pool first, then count. Using the original 8 would give 6 degrees of freedom and a critical value of 12.592 instead of 11.070 — enough to flip a borderline verdict."
-    }
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s11",
-   "mins": 6,
-   "title": "What the test detects, and where it comes from",
-   "objective": "Place this test against the rest of the module, which is how the conceptual questions are framed.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "It is an omnibus test",
-     "body": "The alternative is simply 'the claimed distribution is wrong', with no direction and no shape. So a rejection says the fit fails without saying how, and a non-rejection says this sample could not show a failure. The diagnosis lives in the individual terms, which is why writing them out is worth doing even when only the total is asked for."
-    },
-    {
-     "t": "def",
-     "h": "It ignores the order of the categories",
-     "body": "The statistic is a sum over categories and its value is unchanged if you shuffle them. For an ordered variable — income bands, defect counts — that means it cannot see a trend. A systematic drift across ordered categories and a scatter of unrelated discrepancies can give the same statistic, and the test cannot distinguish them. When ordering matters, a test designed for trend is more powerful."
-    },
-    {
-     "t": "step",
-     "h": "Where the statistic comes from",
-     "body": "It is not an independent invention. For a multinomial model the likelihood ratio statistic of topic 4.10 is −2 log λ = 2 Σ Oᵢ log(Oᵢ/Eᵢ), and expanding that to second order about Oᵢ = Eᵢ gives exactly Σ(Oᵢ − Eᵢ)²/Eᵢ. So Pearson's statistic is the chi-square approximation to the likelihood ratio test, and the two agree closely when the fit is reasonable. That is also why both carry the same degrees of freedom, counted the same way."
-    },
-    {
-     "t": "step",
-     "h": "The family of tests that share this machinery",
-     "body": "Goodness of fit for a claimed distribution is this topic. A two-way table tested for independence or homogeneity is topic 4.16, with df = (r − 1)(c − 1). Equality of several proportions is the same calculation on a 2 by c table. And when the counts are too sparse for any of them, the exact tests take over. One statistic, one degrees-of-freedom principle, several names depending on what the table represents."
-    }
-   ],
-   "ask": {
-    "q": "The statistic is unchanged if the categories are shuffled. For which kind of variable is that a real loss, and why?",
-    "nudge": "Think about defect counts per shift: 0, 1, 2, 3 or more. Is there information in the fact that 3 comes after 2?"
-   }
-  },
-  {
-   "kind": "recall",
-   "id": "s12",
-   "mins": 2,
-   "title": "Second recall — the parts most likely to fade",
-   "objective": "Retrieve the counting rules and the two conditions, which is what the exam asks.",
-   "intro": "Answer, then reveal.",
-   "items": [
-    {
-     "q": "A normal distribution is fitted to 8 classes with both parameters estimated. Degrees of freedom?",
-     "a": "8 − 1 − 2 = 5. Two parameters estimated means two degrees of freedom lost on top of the total constraint."
-    },
-    {
-     "q": "Degrees of freedom for a 4 by 3 contingency table?",
-     "a": "(4 − 1)(3 − 1) = 6."
-    },
-    {
-     "q": "Where does Yates' correction apply?",
-     "a": "To 2 by 2 contingency tables only. It subtracts 0.5 from each absolute difference and always makes the statistic smaller."
-    },
-    {
-     "q": "Three coins are tossed 80 times. Expected frequency of exactly 2 heads under fairness?",
-     "a": "80 × C(3,2)/8 = 80 × 3/8 = 30."
-    },
-    {
-     "q": "If pooling reduces 8 classes to 7 in a Poisson fit, what are the degrees of freedom?",
-     "a": "7 − 1 − 1 = 5. Pool first, then count k."
-    },
-    {
-     "q": "Which test is used for the equality of several population proportions?",
-     "a": "The chi-square test, on a 2 by c table with c − 1 degrees of freedom."
-    }
-   ]
-  },
-  {
-   "kind": "summary",
-   "id": "s13",
-   "mins": 3,
-   "title": "What you should now be able to do unaided",
-   "objective": "Close the loop before the mastery test.",
-   "body": [
-    "Compute expected frequencies from a claimed distribution, and check that they total n before going further.",
-    "Compute Σ(Oᵢ − Eᵢ)²/Eᵢ term by term, from counts rather than proportions, without losing a term.",
-    "Count the degrees of freedom as k − 1 − m, with k taken after pooling and m the number of parameters estimated from the data.",
-    "Handle the four standard cases: a fully specified distribution, a Poisson or binomial with one parameter fitted, a normal with two, and a contingency table's (r − 1)(c − 1).",
-    "Apply the upper-tail rule, and say why there is no lower critical value.",
-    "Check the expected counts against the minimum of 5, pool adjacent categories when they fail, and recount k afterwards.",
-    "Say where Yates' correction applies and that it is conservative, and read the individual terms to localise a rejection."
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s14",
-   "mins": 8,
-   "ext": true,
-   "title": "Why the statistic is approximately chi-square",
-   "objective": "See where the distribution comes from, which explains the expected-count rule rather than leaving it a recipe.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "One term at a time",
-     "body": "Look at a single category with probability pᵢ under H₀. Its observed count Oᵢ is Binomial(n, pᵢ), with mean npᵢ = Eᵢ and variance npᵢ(1 − pᵢ). For large n a binomial count is approximately normal, so (Oᵢ − Eᵢ)/√Eᵢ is approximately normal with mean 0 and variance (1 − pᵢ) — close to standard normal when pᵢ is small. Squaring gives something close to a chi-square with 1 degree of freedom."
-    },
-    {
-     "t": "step",
-     "h": "Adding the terms, and where the lost degree of freedom goes",
-     "body": "If the k terms were independent the sum would be chi-square with k degrees of freedom. They are not: the counts must total n, so Σ(Oᵢ − Eᵢ) = 0 is one exact linear constraint among them. A sum of squares of k quantities subject to one linear constraint behaves like a chi-square with k − 1. Each estimated parameter imposes a further constraint — the fitted distribution is forced to match the data in one more respect — and removes one more degree of freedom. That is the whole content of df = k − 1 − m."
-    },
-    {
-     "t": "def",
-     "h": "What the expected-count rule is really protecting",
-     "body": "The very first step was 'a binomial count is approximately normal'. That is what fails when Eᵢ is small. A count with expectation 1 is skewed and lumpy — it takes the value 0 about 37% of the time — and nothing about it resembles a normal variable. Its squared standardised value is then nothing like a chi-square with 1 degree of freedom, and because the terms are added, one bad term contaminates the whole sum. The minimum of 5 is a working threshold for 'normal enough', not a theorem."
-    },
-    {
-     "t": "formula",
-     "h": "The connection to the likelihood ratio test",
-     "body": "For the multinomial the likelihood ratio statistic is\n    −2 log λ = 2 Σ Oᵢ log(Oᵢ/Eᵢ).\nWrite Oᵢ = Eᵢ + dᵢ and expand the logarithm in powers of dᵢ/Eᵢ:\n    2 Σ Oᵢ log(Oᵢ/Eᵢ) ≈ Σ dᵢ²/Eᵢ + higher-order terms.\nSo Pearson's statistic is the second-order approximation to −2 log λ, which is why Wilks' theorem from topic 4.10 gives it the same chi-square limit and the same degrees of freedom."
-    },
-    {
-     "t": "step",
-     "h": "What this buys you in an exam",
-     "body": "Three things become memory-free. The degrees-of-freedom rule is derived rather than recalled, so the k − 1 − m form and the contingency table's (r − 1)(c − 1) stop being separate facts. The one-tailedness is obvious, since the statistic is a sum of squares and can only be large when the fit is poor. And the expected-count condition has a reason, so you can judge a borderline case instead of applying a threshold blindly."
-    }
-   ],
-   "ask": {
-    "q": "A category has expected count 1. Roughly how often does it contain no observations at all, and why does that break the normal approximation?",
-    "nudge": "Treat the count as Poisson with mean 1 and compute P(0). Compare that with how often a normal variable sits more than one standard deviation below its mean."
-   }
-  },
-  {
-   "kind": "quiz",
-   "id": "s15",
-   "mins": 12,
-   "title": "Mastery test",
-   "objective": "Demonstrate it independently, on questions you have not seen.",
-   "setId": "inference_t14_mastery"
-  }
- ]
+  ]
 }
