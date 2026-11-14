@@ -24,3 +24,8 @@ elem=[[A[i][j]*B[i][j] for j in range(2)] for i in range(2)]
 prod=[[sum(A[i][k]*B[k][j] for k in range(2)) for j in range(2)] for i in range(2)]
 assert elem==[[2,0],[3,8]] and prod==[[4,4],[10,8]]
 print('PASS: R T4 structure and mastery contract; determinant and product-dimension arithmetic.')
+
+# Regression assertion for the dimension explanation attached to T4 mastery item m-02.
+pool_dim = next(q for q in P['items'] if q['id'] == 'rprog-t4-m-02')
+assert '3-row, 4-column' in pool_dim['explanation'] and 'c(3,4)' in pool_dim['explanation']
+assert '3 by 2 matrix' not in pool_dim['explanation']
