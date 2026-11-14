@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Estimation and Methods of Estimation (2011–2025) — verified question-bank pilot",
-  "count": 23,
-  "clean": 23,
+  "count": 32,
+  "clean": 32,
   "items": [
     {
       "id": "csir-est-q01",
@@ -607,6 +607,294 @@
       ],
       "answer": "A",
       "explanation": "The sample mean X̄ has distribution N(θ,1/n). The constrained MLE is T=max(X̄,0). For every realised value, max(X̄,0)≥X̄. Taking expectations gives Eθ(T)≥Eθ(X̄)=θ. Hence the bias Eθ(T)−θ is nonnegative for every θ≥0. At θ=0 the inequality is strict because a normal random variable has positive probability of being negative, and replacing its negative values by zero raises its expectation. For θ>0 the same truncation also makes the expectation larger than θ. Thus statement 1 is correct. Other-exam relevance: constrained MLEs and their finite-sample bias are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; This is topic overlap, not a claim that this exact question appeared in those other examinations."
+    },
+    {
+      "id": "csir-est-q22",
+      "format": "single",
+      "year": 2020,
+      "session": "30 November",
+      "topic": "inference-t7 · normal-normal conjugacy and Bayes estimation under squared-error loss",
+      "stem": "Let X₁,…,Xₙ be i.i.d. N(θ,1) random variables. Suppose the prior distribution of θ is N(0,σ²), where σ²>0. Under squared-error loss, let X̄=(1/n)∑ᵢ₌₁ⁿXᵢ. What is the Bayes estimator of θ?",
+      "options": [
+        "X̄/(1+σ²)",
+        "X̄",
+        "nσ²X̄/(1+nσ²)",
+        "n(X̄+σ²)/(1+nσ²)"
+      ],
+      "answer": "C",
+      "explanation": "The sample likelihood, viewed as a function of θ, is proportional to exp{−n(θ−X̄)²/2}. It is a normal kernel with precision n. The prior N(0,σ²) has precision 1/σ². Combining the two normal kernels gives a posterior normal distribution with precision n+1/σ² and mean [nX̄]/[n+1/σ²]. Multiplying the numerator and denominator by σ² gives nσ²X̄/(1+nσ²). Under squared-error loss, the Bayes estimator is the posterior mean. Therefore option 3 is correct. Other-exam relevance: normal conjugate priors and Bayes estimation are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is topic overlap, not a claim that this exact question appeared in those other examinations."
+    },
+    {
+      "id": "csir-est-q23",
+      "format": "single",
+      "year": 2020,
+      "session": "30 November",
+      "topic": "inference-t1 · factorisation theorem for a uniform distribution on parameter-dependent triangular support",
+      "stem": "Suppose (X₁,Y₁),…,(Xₙ,Yₙ) are independent observations from a distribution that is uniform on the triangle with vertices (0,0), (θ,0) and (0,θ), where θ>0. Which statistic is sufficient for θ?",
+      "options": [
+        "maxᵢXᵢ + maxᵢYᵢ",
+        "maxᵢ(Xᵢ+Yᵢ)",
+        "maxᵢ|Xᵢ−Yᵢ|",
+        "max{maxᵢXᵢ, maxᵢYᵢ}"
+      ],
+      "answer": "B",
+      "explanation": "The triangle is described by x≥0, y≥0 and x+y≤θ. Its area is θ²/2, so the uniform density is 2/θ² inside the triangle and zero outside. For n independent observations, the joint density is (2/θ²)ⁿ times an indicator that every observed point satisfies Xᵢ+Yᵢ≤θ. These inequalities are equivalent to maxᵢ(Xᵢ+Yᵢ)≤θ. The likelihood therefore depends on the sample through maxᵢ(Xᵢ+Yᵢ), and the factorisation theorem shows that this statistic is sufficient. Option 2 is correct. Other-exam relevance: sufficiency and parameter-dependent support are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is topic overlap, not a claim that this exact question appeared in those other examinations."
+    },
+    {
+      "id": "csir-est-q25",
+      "format": "multi",
+      "year": 2020,
+      "session": "30 November",
+      "topic": "inference-t1 · inference-t2 · inference-t3 · Poisson complete sufficiency and UMVU estimation",
+      "stem": "Let X₁,…,Xₙ be independent and identically distributed Poisson(λ) random variables, where λ>0 is unknown. Which of the following statements about estimating e^(−2λ) are true?",
+      "statements": [
+        "(1/n)∑ᵢ₌₁ⁿ(−1)^(Xᵢ) is an unbiased estimator of e^(−2λ).",
+        "(1/n)∑ᵢ₌₁ⁿ(−1)^(Xᵢ) is a consistent estimator of e^(−2λ).",
+        "((n−2)/n)^(∑ᵢ₌₁ⁿXᵢ) is the minimum-variance unbiased estimator of e^(−2λ).",
+        "((n−2)/n)^(∑ᵢ₌₁ⁿXᵢ) is a consistent estimator of e^(−2λ)."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 1, 2 and 3 only",
+        "All four statements",
+        "Statements 2, 3 and 4 only"
+      ],
+      "answer": "C",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The Poisson probability-generating function gives E[t^X]=exp{λ(t−1)}. At t=−1 this is e^(−2λ), so the sample average is unbiased."
+        },
+        "B": {
+          "tf": true,
+          "why": "The summands are i.i.d. and bounded between −1 and 1. The law of large numbers therefore gives convergence in probability of their average to e^(−2λ)."
+        },
+        "C": {
+          "tf": true,
+          "why": "S=∑Xᵢ is complete and sufficient for λ. Conditional on S, X₁ has a Binomial(S,1/n) distribution, so E[(−1)^(X₁)|S]=(1−2/n)^S=((n−2)/n)^S. This conditional expectation is unbiased and is a function of the complete sufficient statistic, so Lehmann–Scheffé makes it the UMVU estimator."
+        },
+        "D": {
+          "tf": true,
+          "why": "S/n converges in probability to λ and n log(1−2/n) tends to −2. Hence (1−2/n)^S converges in probability to e^(−2λ)."
+        }
+      },
+      "explanation": "Let S=∑Xᵢ. First use the Poisson generating function: E[t^X]=exp{λ(t−1)}. Substituting t=−1 gives E[(−1)^X]=e^(−2λ), proving statement 1. The variables (−1)^(Xᵢ) are independent, identically distributed and bounded, so their average converges in probability to its expectation by the law of large numbers; statement 2 is true. The sum S is sufficient and complete for λ in the Poisson family. Given S, the count X₁ is Binomial(S,1/n). Thus E[(−1)^(X₁)|S]=(1−2/n)^S. Rao–Blackwell and Lehmann–Scheffé show this is the UMVU estimator, proving statement 3. Finally, S/n→λ and n log(1−2/n)→−2, which gives (1−2/n)^S→e^(−2λ) in probability. Statement 4 is also true. All four statements are correct. Other-exam relevance: Poisson estimation, complete sufficiency, Rao–Blackwellisation and Lehmann–Scheffé are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is topic overlap, not a claim that this exact question appeared in those other examinations."
+    },
+    {
+      "id": "csir-est-q26",
+      "format": "multi",
+      "year": 2020,
+      "session": "30 November",
+      "topic": "inference-t1 · sufficient statistics for the variance of a zero-mean normal distribution",
+      "stem": "Let X₁,…,Xₙ be i.i.d. N(0,σ²) random variables, where σ²>0 is unknown. Which of the following statistics are sufficient for σ²?",
+      "statements": [
+        "T₁(X₁,…,Xₙ)=(X₁,X₂,…,Xₙ).",
+        "T₂(X₁,…,Xₙ)=(X₁²,X₂²,…,Xₙ²).",
+        "T₃(X₁,…,Xₙ)=∑ᵢ₌₁ⁿXᵢ².",
+        "T₄(X₁,…,Xₙ)=(X₁²+X₂², X₃²+X₄²+⋯+Xₙ²)."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 1, 2 and 3 only",
+        "Statements 2, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "D",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The full sample is sufficient because it retains every observation, so it cannot discard information about σ²."
+        },
+        "B": {
+          "tf": true,
+          "why": "The vector of squares determines the sum of squares ∑Xᵢ², which is sufficient for σ²."
+        },
+        "C": {
+          "tf": true,
+          "why": "The joint density is (2πσ²)^(−n/2) exp{−∑Xᵢ²/(2σ²)}. It depends on the sample through the sum of squares, so factorisation proves sufficiency."
+        },
+        "D": {
+          "tf": true,
+          "why": "Adding the two components of T₄ recovers ∑Xᵢ². Since T₄ determines a sufficient statistic, T₄ is also sufficient."
+        }
+      },
+      "explanation": "The joint density is (2πσ²)^(−n/2) exp{−(1/(2σ²))∑Xᵢ²}. By the factorisation theorem, S=∑Xᵢ² is sufficient for σ². T₁ is the complete observed sample, so it is sufficient. T₂ gives every squared observation and therefore determines S. T₃ is S itself. T₄ divides the squared observations into two groups, but adding its two components also gives S. Each statistic therefore determines a sufficient statistic, so all four are sufficient. The correct answer is option 4. Other-exam relevance: normal-family sufficiency and the factorisation theorem are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is topic overlap, not a claim that this exact question appeared in those other examinations."
+    },
+    {
+      "id": "csir-est-q27",
+      "format": "multi",
+      "year": 2020,
+      "session": "30 November",
+      "topic": "inference-t2 · inference-t3 · identifying sample means that are UMVU estimators",
+      "stem": "Consider a population with probability density or mass function fθ(x), depending on an unknown parameter θ. For an i.i.d. random sample X₁,…,Xₙ, let X̄ be the sample mean. In which of the following cases is X̄ the minimum-variance unbiased estimator of θ?",
+      "statements": [
+        "fθ(x) is proportional to exp(−θx), for x≥0 and θ>0.",
+        "fθ(x) is proportional to exp(−(θ−x)²), for −∞<x<∞ and −∞<θ<∞.",
+        "fθ(x) is proportional to θˣ/x!, for x=0,1,2,… and θ>0.",
+        "fθ(x) is proportional to θˣ, for x=0,1,2,… and 0<θ<1."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statements 2 and 3 only",
+        "Statements 1, 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "This is an exponential distribution with rate θ, whose mean is 1/θ. The sample mean estimates 1/θ, not θ."
+        },
+        "B": {
+          "tf": true,
+          "why": "After normalisation this is a normal location family with mean θ and known variance 1/2. The sample mean is unbiased and is a function of the complete sufficient statistic ∑Xᵢ, so it is UMVU."
+        },
+        "C": {
+          "tf": true,
+          "why": "After normalisation this is a Poisson(θ) family. The sample mean is unbiased for θ and is the UMVU estimator because the sample sum is complete sufficient."
+        },
+        "D": {
+          "tf": false,
+          "why": "The normalised mass function is (1−θ)θˣ, a geometric distribution on {0,1,…} with mean θ/(1−θ), not θ."
+        }
+      },
+      "explanation": "Check each model separately. In case 1, the normalised density is θe^(−θx), whose mean is 1/θ, so X̄ does not estimate θ unbiasedly. In case 2, the density is a normal location model with mean θ and known variance 1/2. Its sample mean is unbiased, and the sample sum is complete sufficient; Lehmann–Scheffé therefore gives the UMVU result. In case 3, the model is Poisson(θ), so E(X̄)=θ. The sample sum is complete sufficient, making X̄ UMVU. In case 4, normalisation gives P(X=x)=(1−θ)θˣ, whose mean is θ/(1−θ), so X̄ is not unbiased for θ. Thus only cases 2 and 3 qualify. Other-exam relevance: UMVU estimation, exponential families and complete sufficient statistics are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is topic overlap, not a claim that this exact question appeared in those other examinations."
+    },
+    {
+      "id": "csir-est-q29",
+      "format": "multi",
+      "year": 2020,
+      "session": "30 November",
+      "topic": "inference-t1 · inference-t2 · inference-t4 · complete sufficiency, ancillary statistics and covariance",
+      "stem": "Let X₁,…,Xₙ be a random sample from a normal distribution with unknown mean μ and known variance 1. Let X̄ be the sample mean and X₍₁₎=min{X₁,…,Xₙ}. Which statements are true?",
+      "statements": [
+        "X̄ is a complete sufficient statistic for μ.",
+        "X̄ is a minimal sufficient statistic for μ.",
+        "X̄−X₍₁₎ is an ancillary statistic.",
+        "Cov(X̄,X₍₁₎)=0."
+      ],
+      "options": [
+        "Statements 1, 2 and 3 only",
+        "Statements 1 and 4 only",
+        "Statements 2, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The normal location family with known variance is a full one-parameter exponential family. X̄ (equivalently the sum) is complete, sufficient and minimal sufficient."
+        },
+        "B": {
+          "tf": true,
+          "why": "The likelihood depends on μ through ∑Xᵢ, and the normal location family gives this statistic as minimal sufficient."
+        },
+        "C": {
+          "tf": true,
+          "why": "Adding a constant to every observation changes both X̄ and X₍₁₎ by the same amount. Their difference is unchanged, so its distribution does not depend on μ."
+        },
+        "D": {
+          "tf": false,
+          "why": "The covariance is positive, not zero. For a normal sample with unit variance, Cov(X̄,X₍₁₎)=1/n by the normal location identity for the sample minimum."
+        }
+      },
+      "explanation": "For a normal sample with known variance 1, the likelihood depends on μ through ∑Xᵢ, or equivalently X̄. This is a full one-parameter exponential family, so X̄ is complete and sufficient; the likelihood-ratio criterion also gives minimal sufficiency. For statement 3, shift every observation by μ: both the sample mean and sample minimum shift by μ, so their difference does not change. Its distribution is therefore free of μ, which is the definition of an ancillary statistic. Statement 4 is false. A useful identity for a standard normal sample is Cov(∑Xᵢ, X₍₁₎)=1; dividing by n gives Cov(X̄,X₍₁₎)=1/n, not zero. Hence statements 1, 2 and 3 only are true. Other-exam relevance: completeness, minimal sufficiency, ancillary statistics and order statistics are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is topic overlap, not a claim that this exact question appeared in those other examinations."
+    },
+    {
+      "id": "csir-est-q30",
+      "format": "single",
+      "year": 2020,
+      "session": "30 November",
+      "topic": "inference-t1 · inference-t2 · complete sufficient statistic in a one-parameter exponential family",
+      "stem": "Let X₁,…,Xₙ be i.i.d. with density f(x|θ)=(log θ)θˣ/(θ−1), for 0<x<1, where θ>1 is unknown. Let T=∑ᵢ₌₁ⁿXᵢ. Which description of T is correct?",
+      "options": [
+        "Sufficient, but not complete",
+        "Sufficient, but not minimal sufficient",
+        "Complete sufficient",
+        "Neither complete nor sufficient"
+      ],
+      "answer": "C",
+      "explanation": "Write η=log θ, so η>0. The density becomes f(x|η)=ηe^(ηx)/(e^η−1), for 0<x<1. For an independent sample, the joint density is a factor depending on η multiplied by exp(η∑Xᵢ). Thus T=∑Xᵢ is sufficient by factorisation. The natural parameter space η>0 contains an open interval, and this is a full one-parameter exponential family with fixed support. Its natural statistic T is complete as well as sufficient. Therefore option 3 is correct. Other-exam relevance: completeness and sufficiency in one-parameter exponential families are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is topic overlap, not a claim that this exact question appeared in those other examinations."
+    },
+    {
+      "id": "csir-est-q32",
+      "format": "multi",
+      "year": 2020,
+      "session": "26 November",
+      "topic": "inference-t7 · Beta-Binomial conjugacy and posterior median",
+      "stem": "Let X have a Binomial(n,p) distribution, where n is known. The prior distribution of p is uniform on [0,1]. Under squared-error loss, the observation is X=n. Which statements are correct?",
+      "statements": [
+        "The Bayes estimate of p is (n+1)/(n+2).",
+        "The Bayes estimate of p is 2^(−1/(n+1)).",
+        "The median of the posterior distribution of p is 2^(−1/(n+1)).",
+        "The median of the posterior distribution of p is (n+1)/(n+2)."
+      ],
+      "options": [
+        "Statements 1 and 3 only",
+        "Statements 1 and 4 only",
+        "Statements 2 and 3 only",
+        "Statements 2 and 4 only"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The posterior is Beta(n+1,1), whose mean under squared-error loss is (n+1)/(n+2) and whose median solves p^(n+1)=1/2, giving 2^(−1/(n+1))."
+        },
+        "B": {
+          "tf": false,
+          "why": "2^(−1/(n+1)) is the posterior median, not the posterior mean used under squared-error loss."
+        },
+        "C": {
+          "tf": true,
+          "why": "For a Beta(n+1,1) posterior, the CDF is p^(n+1). Setting it equal to 1/2 gives the median 2^(−1/(n+1))."
+        },
+        "D": {
+          "tf": false,
+          "why": "(n+1)/(n+2) is the posterior mean, not the posterior median."
+        }
+      },
+      "explanation": "A uniform prior is Beta(1,1). Observing X=n means all n trials are successes, so the likelihood is proportional to pⁿ. Multiplying by the prior gives a Beta(n+1,1) posterior. Under squared-error loss, the Bayes estimator is the posterior mean: (n+1)/(n+2), so statement 1 is true. The posterior CDF is F(p)=p^(n+1). The median m satisfies m^(n+1)=1/2, hence m=2^(−1/(n+1)); statement 3 is true. Statements 2 and 4 confuse the posterior mean and median. The correct combination is 1 and 3 only. Other-exam relevance: Beta-Binomial conjugacy and posterior summaries are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is topic overlap, not a claim that this exact question appeared in those other examinations."
+    },
+    {
+      "id": "csir-est-q33",
+      "format": "multi",
+      "year": 2020,
+      "session": "26 November",
+      "topic": "inference-t4 · method of moments and constrained Bernoulli maximum likelihood",
+      "stem": "Let X₁,…,Xₙ be i.i.d. Bernoulli random variables with P(X=x|θ)=θˣ(1−θ)^(1−x), for x=0 or 1 and 0≤θ≤1/2. Which statements are correct?",
+      "statements": [
+        "The method-of-moments estimator of θ is (1/(2n))∑ᵢ₌₁ⁿXᵢ.",
+        "The maximum-likelihood estimator of θ is minᵢXᵢ.",
+        "The method-of-moments estimator of θ is minᵢXᵢ.",
+        "The maximum-likelihood estimator of θ is min{X̄,1/2}."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statement 4 only",
+        "Statements 1 and 3 only",
+        "Statements 2 and 4 only"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "For Bernoulli(θ), E(X)=θ. Equating X̄ to θ gives the method-of-moments estimator X̄, not X̄/2."
+        },
+        "B": {
+          "tf": false,
+          "why": "The likelihood depends on the sample through the number of successes, not the minimum observation."
+        },
+        "C": {
+          "tf": false,
+          "why": "The minimum of Bernoulli observations is not the method-of-moments estimator."
+        },
+        "D": {
+          "tf": true,
+          "why": "Without the parameter restriction, the MLE is X̄. Restricting θ to [0,1/2] projects this value onto the parameter interval, giving min{X̄,1/2}."
+        }
+      },
+      "explanation": "For a Bernoulli(θ) variable, E(X)=θ. Equating the sample mean to the theoretical mean gives the method-of-moments estimator θ̂MM=X̄. Therefore statement 1, which has an extra factor 1/2, is false, and statement 3 is false. The likelihood is proportional to θ^(∑Xᵢ)(1−θ)^(n−∑Xᵢ). Its unconstrained maximiser is X̄. Since the allowed parameter space is 0≤θ≤1/2, the constrained maximiser is X̄ if X̄≤1/2 and 1/2 otherwise. This is min{X̄,1/2}, so statement 4 alone is true. Other-exam relevance: method of moments and constrained maximum likelihood are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is topic overlap, not a claim that this exact question appeared in those other examinations."
     }
   ]
 }
