@@ -104,6 +104,11 @@ def main() -> None:
     assert leverage_q13["session"] == "30 November" and leverage_q13["answer"] == "C"
     assert "1/n=1/50=0.02" in leverage_q13["explanation"]
     assert "0.1" in leverage_q13["explanation"] and "1.1" in leverage_q13["options"]
+    multcorr_q15 = next(x for x in methods["items"] if x["id"] == "csir-meth-q15")
+    assert multcorr_q15["type"] == "practice" and multcorr_q15["year"] == 2020
+    assert multcorr_q15["session"] == "26 November" and multcorr_q15["answer"] == "A"
+    assert "R²=ρ²·p/[1+(p−1)ρ]" in multcorr_q15["explanation"]
+    assert "R→√ρ" in multcorr_q15["explanation"]
     regression_q01 = next(x for x in methods["items"] if x["id"] == "csir-meth-q01")
     assert regression_q01["type"] == "practice" and regression_q01["answer"] == "A"
     assert "SSE=5−3.84=1.16" in regression_q01["explanation"]
