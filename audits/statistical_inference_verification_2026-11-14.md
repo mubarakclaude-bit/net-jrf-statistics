@@ -17,21 +17,21 @@ Status describes the first-pass mathematical audit of the current lesson materia
 
 | Topic | Catalog subject | Status | Notes |
 |---|---|---|---|
-| T1 | Sufficiency, factorisation, minimal sufficiency | PASS — first pass | Worked derivations and key examples recalculated; mastery structure and multi-statement keys checked |
+| T1 | Sufficiency, factorisation, minimal sufficiency | CLARIFIED | Mastery item now states the closed-endpoint Uniform convention consistently with its boundary likelihood |
 | T2 | Completeness, exponential families, ancillarity, Basu | PASS — first pass | Poisson/Bernoulli completeness arguments, Uniform range counterexample and Basu conditions checked |
 | T3 | Rao–Blackwell and Lehmann–Scheffé | PASS — first pass | Poisson and Bernoulli UMVUE derivations, variance comparisons and transformation traps checked |
 | T4 | MLE: computation, invariance, properties | BLOCKED — lesson absent | Catalog entry and 20-item mastery pool exist, but `seed/lesson_t4.json` is absent from current main; no substitute lesson source found in the seed tree |
-| T5 | Method of moments, minimum chi-square, least squares | PASS — first pass | Gamma/Uniform moment estimates, exponential-rate bias and OLS normal equations recalculated |
+| T5 | Method of moments, minimum chi-square, least squares | CORRECTED | Uniform MOM estimate wording now distinguishes sample feasibility from decision-theoretic admissibility |
 | T6 | Cramér–Rao bound and Fisher information | PASS — first pass | Bernoulli, Poisson, normal and function-of-parameter bounds checked |
 | T7 | Bayesian estimation and conjugate priors | CORRECTED | Normal–normal posterior answer in completion scene s6 was wrong; see INF-001 |
-| T8 | Decision theory: loss, risk, admissibility, minimax | PASS — first pass | Binomial minimax rule/risk, crossings and asymmetric absolute-loss quantile checked |
+| T8 | Decision theory: loss, risk, admissibility, minimax | CORRECTED | Normal-mean minimax explanation now states the minimax lower bound; constant risk alone is not treated as sufficient |
 | T9 | Neyman–Pearson, MLR, UMP | DEFERRED | Conflicts with open draft PR #93; left untouched |
 | T10 | Likelihood ratio test and Wilks | PASS — first pass | Normal mean/variance LRTs and degrees-of-freedom examples recalculated |
 | T11 | SPRT | PASS — first pass | Wald boundaries, Bernoulli log-ratio slope, sample path and ASN approximations recalculated |
 | T12 | Size and power computation | CORRECTED | Mastery item `inf-t12-m-10` had an incorrect answer key; see INF-002 |
 | T13 | Confidence intervals and pivots | CORRECTED | Variance-interval endpoint rounding corrected in lesson and mastery item; see INF-003 |
 | T14 | Chi-square goodness of fit | CORRECTED | Poisson tail pooling explanation corrected; statistic and df independently recomputed; see INF-004 |
-| T15 | Choosing the right test | PASS — first pass | Family-wise error, Bonferroni, p-value and test-selection examples checked |
+| T15 | Choosing the right test | CORRECTED | Corrected a p-value/data mismatch and clarified that sign/Wilcoxon procedures do not generally test a skewed population mean |
 | T16 | Contingency tables: independence and homogeneity | PASS — first pass | Expected counts, Pearson/Yates statistics, df and association measures checked |
 | T17 | UMP unbiased and UMP invariant tests | PASS — first pass | Exponential-rate one-sided direction/cutoffs and normal two-sided UMPU/invariance arguments checked |
 
@@ -106,6 +106,36 @@ File: `seed/inference_t13_mastery.json`, item `inf-t13-m-16`. Severity: **Minor*
 
 The item still quoted the superseded variance endpoint 13.331 and rounded √1.892 down to 1.375. Using the corrected interval endpoint 13.333, the standard-deviation interval is (1.376, 3.651) to three decimals. The stem, option and explanation were aligned with those values.
 
+### INF-008 — Reported p-value inconsistent with the stated effect and standard error in T15
+
+File: `seed/inference_t15_mastery.json`, item `inf-t15-m-12`. Severity: **Major**.
+
+The stem reported p = 0.001 for a difference of 0.02, n = 10,000 and σ = 1. The standard error is 0.01, so z = 2 and the two-sided p-value is approximately **0.0455**, not 0.001. The confidence interval already shown in the explanation, (0.0004, 0.0396), also corresponds to z = 2. The stem was corrected to p = 0.0455 and the explanation/verdict now describe significance at the 5% level without claiming that significance proves a real effect.
+
+### INF-009 — Sign/Wilcoxon procedures incorrectly presented as distribution-free tests of a skewed mean
+
+File: `seed/inference_t15_mastery.json`, item `inf-t15-m-20`. Severity: **Major**.
+
+The question asked for a test of the population mean with only eight clearly skewed observations, but keyed a sign or Wilcoxon signed-rank procedure. The sign test targets a median; the signed-rank test targets a symmetric location parameter, not the mean under arbitrary skewness. The keyed option was rewritten to state that the supplied information does not justify a standard test of the mean and that additional data or modelling assumptions are needed.
+
+### INF-010 — T8 minimax explanation inferred minimaxity from constant risk alone
+
+File: `seed/inference_t8_mastery.json`, item `inference-t8-m-11`. Severity: **Minor**.
+
+The original explanation said constant risk itself makes a rule minimax, which is false in general and contradicted the same pool's item m-18. The normal-mean sample average is minimax, but the justification also needs the normal location problem's minimax lower bound, which equals σ²/n. The explanation now states that lower bound and explicitly says constant risk alone is not sufficient.
+
+### INF-011 — T5 used “inadmissible” for an estimate outside the sample-compatible parameter region
+
+File: `seed/inference_t5_mastery.json`, item `inf-t5-m-09` and the D-verdict of `inf-t5-m-03`. Severity: **Minor**.
+
+For U(0, θ), the method-of-moments value 2x̄ can fall below the observed maximum. This makes that realised parameter value incompatible with the observed sample under the usual closed-endpoint convention; it does not, by itself, establish decision-theoretic inadmissibility of the estimator. The explanation and verdict were corrected to use sample-feasibility language.
+
+### INF-012 — T1 Uniform boundary convention made explicit
+
+File: `seed/inference_t1_mastery.json`, item `inf-t1-m-06`. Severity: **Clarification**.
+
+The stem used the open-support notation U(0, θ) while the answer treated θ = x₍ₙ₎ as included in the likelihood support. The stem now uses U[0, θ], matching the stated closed-endpoint likelihood convention and the boundary MLE.
+
 ## Verification implementation
 
 Added `verify_inference_math.py`, a consolidated standard-library verifier with topic-specific unittest groups. It contains independent regression calculations for T1–T8 and T10–T17, including:
@@ -133,9 +163,9 @@ It also checks:
 ### Test execution status
 
 - Independent calculations were recomputed during the audit using exact arithmetic where possible and numerical tolerances for rounded quantities.
-- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. The first CI run is pending at report authoring time.
-- The initial GitHub Actions run (run ID `43498262587`) completed successfully: validate, acceptance and browser jobs all passed, including build, lesson navigation, hosted storage conformance and feature browser tests.
-- Two follow-up content commits add the T11 and T13 corrections above; their CI checks must complete before this revised branch is treated as fully validated.
+- The verifier is at repository root so the existing `tools/run-verifiers.js` CI discovery rule (`verify_*.py` at root) executes it on this PR. It now contains 54 regression tests.
+- GitHub Actions run #1195 (run ID `43564757724`) completed successfully on commit `3830a2e7cc776f02414d503fbf3e8f964b595aed`: validate, acceptance and browser jobs all passed, including the verifier, build, lesson navigation, hosted storage conformance and feature browser tests.
+- The additional T1, T5, T8 and T15 edits and the expanded 54-test verifier were committed after that run. A fresh CI run on the latest branch head is required before those follow-up edits are considered validated.
 
 ## Files changed
 
@@ -148,6 +178,10 @@ Modified:
 - `seed/inference_t14_mastery.json`
 - `seed/inference_t11_mastery.json`
 - `seed/inference_t13_mastery.json`
+- `seed/inference_t1_mastery.json`
+- `seed/inference_t5_mastery.json`
+- `seed/inference_t8_mastery.json`
+- `seed/inference_t15_mastery.json`
 
 Added:
 - `verify_inference_math.py`
@@ -159,6 +193,6 @@ No other lesson or module files were changed.
 
 1. **T4 content gap:** The catalog and 20-item mastery pool exist, but the lesson JSON is absent from current main. This task does not author a replacement lesson or change catalog/application architecture.
 2. **T9 dependency:** T9 is reserved for PR #93. A follow-up should compare that PR's T9 verifier and lesson changes against this audit's scope before integrating.
-3. **Mastery key depth:** All available non-T9 pools were checked for item count, IDs, answer labels and multi-statement verdict/key consistency. Numerical/single-choice examples were independently recalculated on a representative basis; an exhaustive manual proof of every single-choice/numeric key remains outstanding and must not be inferred from these structural checks.
+3. **Mastery key depth:** All available non-T9 pools were checked for item count, IDs, answer labels and multi-statement verdict/key consistency. Manual review has expanded beyond representative examples and has identified/corrected additional single-choice/numeric inconsistencies, but an exhaustive proof of every single-choice/numeric key remains outstanding and must not be inferred from these checks.
 4. **Verifier execution:** Run `python verify_inference_math.py` from a full checkout and resolve any failures before treating the audit as complete.
 5. No branch merge, production deployment, Vercel push or workflow/configuration change was made.
