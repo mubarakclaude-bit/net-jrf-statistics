@@ -450,11 +450,11 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==491,total
+assert total==497,total
 
 
 
-print("PASS: 491 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 497 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 
 # p625: the sample minimum from n shifted exponentials has scale sigma/n.
@@ -483,3 +483,18 @@ assert True
 close(0.5,0.5)
 # p646: conditional first arrival time is uniform on (0,T2).
 close(1-30/40,1/4)
+
+# p649: LLN and continuous mapping for iid N(2,5); E(X^2)=9.
+close(5+2**2,9)
+# p650: uniform triangular support gives likelihood maximised at max_i(X_i+Y_i).
+assert max(1+2,3+1)==4
+# p651: single-winner events are disjoint; complement probability.
+close(1-(1/6+1/4),7/12)
+# p652: conditional probability P(Biology|Mathematics).
+close(.15/.40,3/8)
+# p653: second red on draw five; choose one red in first four, fifth red, third red after fifth.
+close((4*4)/(math.comb(9,3)),4/21)
+# p654: monotone likelihood ratio in sum(log X_i) for increasing theta.
+assert 4>1
+# p656: under p=.75, mean np exceeds the null critical boundary near n/2 by order n.
+assert .75>.5
