@@ -637,6 +637,11 @@ def main() -> None:
 
     # Methods of Estimation PDF: audited new additions from Questions 30–76.
     new_multi = {
+        "csir-meth-2015-jun-q46": ("BD", "B"),
+        "csir-meth-2015-jun-q48": ("AC", "A"),
+        "csir-meth-2013-jun-q59": ("CD", "D"),
+        "csir-meth-2012-jun-q67": ("", "D"),
+
         "csir-meth-2017-dec-q31": ("AB", "A"),
         "csir-meth-2017-dec-q32": ("ABD", "C"),
         "csir-meth-2016-jun-q36": ("AD", "A"),
