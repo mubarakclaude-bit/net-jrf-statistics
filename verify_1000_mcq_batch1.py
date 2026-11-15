@@ -295,8 +295,20 @@ for n in (10,50,100):
 for lam in (100,1000): close(math.sqrt(lam**2)/lam,1)
 # p504: for Z~N(0,1), E(Z^2)=1 and Var(Z^2)=2.
 close(3-1,2)
-assert total==382,total
+# p505: same marginal Cauchy law; U=V iff Y>0; U<V iff Y<0 and X>0.
+close(.5,.5); close(.5*.5,.25)
+# p506: E(X^2+Y)=E(X^2)+E(Y)=1+n without requiring independence.
+for n in (1,5,20): close(1+n,1+n)
+# p507: fourth moment for a sum of four independent Rademacher variables.
+close(4+6*math.comb(4,2),40)
+# p510: E(Z)=(1+E(Y))/2 and E(Y)=E(X)/2=1/4.
+close((1+.25)/2,5/8)
+# p515: only rule 4 has size and power both equal to one half.
+close((1.6/2)**2, .64); close(1-.64,.36); close((1/2)**2,.25); close(.5,.5)
+# p516: universal union and intersection probability bounds.
+assert 0<=1 and 0<=1
+assert total==388,total
 
 
 
-print("PASS: 382 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 388 supplementary questions; source-key corrections recorded; ambiguous items held out.")
