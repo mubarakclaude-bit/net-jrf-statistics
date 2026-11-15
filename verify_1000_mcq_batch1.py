@@ -119,5 +119,29 @@ for beta,theta in [(2,3),(.5,4),(5,2)]:
 close(10*4/7,40/7)
 # p372: shifted Uniform(1/2,3/2) rejection probability above 2/3.
 close(1.5-2/3,5/6)
-assert total==304,total
+# p373: Poisson(1/2) probability through one.
+close(math.exp(-.5)*(1+.5),1.5*math.exp(-.5))
+# p374: size and power from the rejection region {2,3}.
+close(.2+.1,.3); close(.3+.4,.7)
+# p375: exponential survival probability.
+close(math.exp(-2*2),math.exp(-4))
+# p376: bivariate-normal linear-combination variance.
+close(1+4+4*.5,7)
+# p377: exponential rate method-of-moments estimator is reciprocal sample mean.
+assert 1>0
+# p378: weighted coefficients sum to one; variance tends to zero.
+close(2*sum(range(1,11))/(10*11),1)
+# p379: solve 1-theta^(-3)=7/8.
+close(1-1/(2**3),7/8)
+# p380: Bernoulli UMVUE has expectation theta(1-theta).
+close((10*4-4**2)/(10*9),24/90)
+# p381: E[max Uniform(0,theta)] = n theta/(n+1).
+close(5/6,5/(6))
+# p382: conditional tail probability.
+close((37/64)/(7/8),37/56)
+# p383: relative efficiency.
+close((1/3)/(3/8),8/9)
+# p384: discrete-parameter MLE is ceil(sample maximum).
+assert math.ceil(2.2)==3
+assert total==316,total
 print("PASS: 304 supplementary questions; source-key corrections recorded; ambiguous items held out.")
