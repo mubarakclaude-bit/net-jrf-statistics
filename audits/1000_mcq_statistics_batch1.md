@@ -571,3 +571,16 @@ Ten questions were imported after visual review:
 - **Page 364:** only the conditional statement given X+Y=2 is universally true; the Bernoulli sum is not generally Binomial(2,pₓ+pᵧ), and the conditional probability given a sum of one depends on both parameters.
 - **Page 368:** the per-observation Fisher information is 1/θ², giving the bound θ²/n.
 - **Page 370:** the Gamma method-of-moments formula uses the second raw moment m′₂, not the variance alone.
+
+
+## Batch 35 — pages 373–384
+
+Twelve questions were imported after visual review:
+- **Probability (4):** identify a Poisson distribution from its MGF and calculate P(X≤1), p373; exponential survival probability from a CDF, p375; recover a scale parameter from a tail probability, p379; and a conditional probability from a density proportional to x², p382.
+- **Statistical Inference (7):** size and power of a discrete test, p374; exponential method-of-moments estimation, p377; a weighted unbiased and consistent estimator, p378; UMVUE for θ(1−θ) in the Bernoulli family, p380; MLE for Uniform(0,θ), p381; relative efficiency of two normal-mean estimators, p383; and the integer-parameter MLE for Uniform(0,θ), p384.
+- **Multivariate Analysis (1):** a linear combination of a bivariate normal vector, p376.
+
+### Pages held out after inspection
+
+- **Page 362:** section cover.
+- **Page 367:** the Poisson probability in the printed question does not match any option closely enough; it remains excluded.
