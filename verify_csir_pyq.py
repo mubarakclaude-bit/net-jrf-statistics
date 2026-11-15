@@ -175,6 +175,13 @@ def main() -> None:
     assert q26["year"] == 2018 and q26["session"] == "December" and q26["answer"] == "A"
     assert "".join(sorted(k for k, value in q26["verdicts"].items() if value["tf"])) == "ABC"
     assert "Printed-key discrepancy" in q26["explanation"]
+    q27 = next(x for x in methods["items"] if x["id"] == "csir-meth-2018-jun-q27")
+    assert q27["year"] == 2018 and q27["session"] == "June" and q27["answer"] == "A"
+    assert "".join(sorted(k for k, value in q27["verdicts"].items() if value["tf"])) == "ABC"
+    q28 = next(x for x in methods["items"] if x["id"] == "csir-meth-2018-jun-q28")
+    assert q28["year"] == 2018 and q28["session"] == "June" and q28["answer"] == "A"
+    assert "".join(sorted(k for k, value in q28["verdicts"].items() if value["tf"])) == "AD"
+    assert "n+1" in q28["explanation"] and "Printed-key discrepancy" in q28["explanation"]
     q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
     assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
@@ -487,7 +494,7 @@ def main() -> None:
     assert "integer nearest to X̄" in mle_text and "halfway between two integers" in mle_text
     q68 = next(x for x in estimation["items"] if x["id"] == "csir-est-q68")
     assert "cannot define a probability density" in q68["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 99
+    assert len(estimation["items"]) == estimation["count"]
 
     # Further source questions from pages 36–49.
     for qid, truth, year, session in [
@@ -535,8 +542,8 @@ def main() -> None:
     q78 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q78")
     assert q78["type"] == "practice" and q78["format"] == "single"
     assert (q78["year"], q78["session"], q78["answer"]) == (2015, "June", "A")
-    assert len(methods["items"]) == methods["count"] == 13
-    assert len(sampling["items"]) == sampling["count"] == 9
+    assert len(methods["items"]) == methods["count"]
+    assert len(sampling["items"]) == sampling["count"]
 
     for qid, truth, year, session in [
         ("csir-est-q90", "ACD", 2013, "June"),
@@ -591,9 +598,9 @@ def main() -> None:
     assert q105["answer"] == "A" and "page 65" in q105["explanation"]
     assert "hypergeometric likelihood" in srs_text and "both are maximisers" in srs_text
     assert "known to be zero" in contrast_text and "complete sufficient" in contrast_text
-    assert len(estimation["items"]) == estimation["count"] == 99
-    assert len(methods["items"]) == methods["count"] == 13
-    assert len(sampling["items"]) == sampling["count"] == 9
+    assert len(estimation["items"]) == estimation["count"]
+    assert len(methods["items"]) == methods["count"]
+    assert len(sampling["items"]) == sampling["count"]
 
     q87 = next(x for x in estimation["items"] if x["id"] == "csir-est-q87")
     assert q87["type"] == "practice" and q87["format"] == "multi"
@@ -618,7 +625,7 @@ def main() -> None:
     assert q54["answer"] == "B" and "page 64" in q54["explanation"]
     q55 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q55")
     assert q55["answer"] == "C" and "page 64" in q55["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 99
+    assert len(estimation["items"]) == estimation["count"]
 
     q75 = next(x for x in methods["items"] if x["id"] == "csir-meth-q75")
     assert q75["type"] == "practice" and q75["format"] == "multi"

@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 35,
-  "clean": 35,
+  "count": 37,
+  "clean": 37,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -833,7 +833,7 @@
       "verdicts": {
         "A": {
           "tf": true,
-          "why": "The first interval is not among the valid choices under the stated coverage calculation."
+          "why": "For U=X/θ, P(U≥√α)=1−α, so interval 1 has the required confidence coefficient."
         },
         "B": {
           "tf": false,
@@ -841,7 +841,7 @@
         },
         "C": {
           "tf": true,
-          "why": "For this interval, the coverage is (2−α)/2−α/2=1−α, so statement 3 is true."
+          "why": "The event is √(α/2)≤U≤√((2−α)/2), whose probability is 1−α."
         },
         "D": {
           "tf": false,
@@ -982,6 +982,70 @@
         }
       },
       "explanation": "Write Uᵢ=Xᵢ−θ. Then U₁,…,Uₙ are i.i.d. Uniform(0,1). Let U₍₁₎ and U₍ₙ₎ be their minimum and maximum.\n\n**Statement 1:** θ<X₍ₙ₎−α^(1/n) exactly when U₍ₙ₎>α^(1/n). Since P(U₍ₙ₎≤t)=tⁿ, the coverage is 1−(α^(1/n))ⁿ=1−α.\n\n**Statement 2:** X₍₁₎+α^(1/n)−1<θ exactly when U₍₁₎<1−α^(1/n). Since P(U₍₁₎≥t)=(1−t)ⁿ, the coverage is 1−(α^(1/n))ⁿ=1−α.\n\n**Statement 3:** The interval contains θ when U₍₁₎<1−α/2 and U₍ₙ₎>α/2. The two failure events (all Uᵢ≥1−α/2 and all Uᵢ≤α/2) are disjoint and each has probability (α/2)ⁿ. Thus coverage is 1−2(α/2)ⁿ, which is at least 1−α for n≥1. It is exact when n=1 and conservative for n>1.\n\n**Statement 4:** Coverage is P(U₍₁₎>α)=(1−α)ⁿ, which is smaller than 1−α for n>1. So it is not a valid general 100(1−α)% interval. Statements 1, 2 and 3 only are valid under the usual at-least-nominal coverage definition.\n\n**Printed-key discrepancy:** the supplied answer key on page 51 lists all four statements. Statement 4 does not achieve the stated coverage for n>1; the item preserves the key conflict and explains the probability calculation. Source: Methods of Estimation PDF, Question 26, December 2018, page 15; answer key page 51.\n\nOther-exam relevance: order statistics and confidence intervals for uniform location families are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2018-jun-q27",
+      "type": "practice",
+      "format": "multi",
+      "year": 2018,
+      "session": "June",
+      "topic": "regression-t2 · inference-t3 · full-rank linear models, BLUE and UMVU estimation",
+      "stem": "Consider the three-observation linear model Y=Xβ+ε, where β=(β₁,β₂,β₃)ᵀ, X is a 3×3 matrix with nonzero determinant, and ε₁,ε₂,ε₃ are i.i.d. N(0,σ²). Let β̂ be the least-squares estimator of β and let ℓ₁,ℓ₂,ℓ₃ be arbitrary real constants. Which statements are true?",
+      "statements": [
+        "The least-squares estimator β̂ is unique.",
+        "ℓ₁β̂₁+ℓ₂β̂₂+ℓ₃β̂₃ is the BLUE of ℓ₁β₁+ℓ₂β₂+ℓ₃β₃.",
+        "ℓ₁β̂₁+ℓ₂β̂₂+ℓ₃β̂₃ is the UMVU estimator of ℓ₁β₁+ℓ₂β₂+ℓ₃β₃.",
+        "ℓ₁β̂₁+ℓ₂β̂₂+ℓ₃β̂₃ is BLUE but not UMVU for the corresponding linear function."
+      ],
+      "options": [
+        "Statements 1, 2 and 3 only",
+        "Statements 1 and 4 only",
+        "Statements 2, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "explanation": "The nonzero determinant means X is invertible, so the three columns are linearly independent. The least-squares solution is therefore unique and equals β̂=X⁻¹Y. This proves statement 1.\n\nBecause the errors have mean zero and covariance matrix σ²I, β̂ is unbiased and has the smallest covariance matrix among all linear unbiased estimators. The Gauss–Markov theorem therefore gives the BLUE property for every linear combination ℓᵀβ. Statement 2 is true.\n\nUnder the stated normal model with full-rank square design, Y (equivalently β̂) contains the full sample information; the normal location-scale family is complete for the full mean vector and common variance. Thus the unbiased estimator ℓᵀβ̂ is also UMVU, so statement 3 is true. Statement 4 is false because it contradicts this UMVU property. The supplied answer key on page 51 lists statements 1, 2 and 3.\n\nOther-exam relevance: full-rank linear models, Gauss–Markov BLUE and UMVU estimation under normality are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 27, June 2018, page 16; answer key page 51."
+    },
+    {
+      "id": "csir-meth-2018-jun-q28",
+      "type": "practice",
+      "format": "multi",
+      "year": 2018,
+      "session": "June",
+      "topic": "inference-t13 · shortest confidence intervals for a normal variance using a chi-square pivot",
+      "stem": "Let X₁,…,Xₙ be i.i.d. N(μ,σ²), where both μ and σ² are unknown. Consider the confidence interval Iₐ,ᵦ=[S/b,S/a] for σ², where S=Σᵢ₌₁ⁿ(Xᵢ−X̄)² and b>a>0. Let Gₙ₋₁ be the CDF of a chi-square variable with n−1 degrees of freedom. Which statements are true?",
+      "statements": [
+        "It is possible to choose a and b with ab=1 so that Iₐ,ᵦ has 95% confidence.",
+        "If Gₙ₋₁(a)=1−Gₙ₋₁(b)=0.025, then Iₐ,ᵦ is the shortest 95% confidence interval.",
+        "If Iₐ,ᵦ is the shortest 95% confidence interval in expected length, then a and b satisfy b−a=(n−3)log(b/a).",
+        "If Gₙ₋₁(b)−Gₙ₋₁(a)=0.95, then E[length(Iₐ,ᵦ)]=(n−1)(1/a−1/b)σ²."
+      ],
+      "options": [
+        "Statements 1 and 4 only",
+        "Statements 1, 2 and 4 only",
+        "Statements 1, 3 and 4 only",
+        "Statements 1, 2, 3 and 4"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "By continuity, a with b=1/a can be chosen so that the chi-square probability between a and b is 0.95."
+        },
+        "B": {
+          "tf": false,
+          "why": "Equal-tail probability allocation is not generally the shortest interval when minimising the expected length of S[1/b,1/a]."
+        },
+        "C": {
+          "tf": false,
+          "why": "The expected-length optimum satisfies b−a=(n+1)log(b/a), not (n−3)log(b/a)."
+        },
+        "D": {
+          "tf": true,
+          "why": "E(S)=(n−1)σ², so the expected interval length is (n−1)σ²(1/a−1/b)."
+        }
+      },
+      "explanation": "The pivotal quantity Q=S/σ² has a chi-square distribution with ν=n−1 degrees of freedom. Therefore Iₐ,ᵦ covers σ² exactly when a≤Q≤b, and its confidence coefficient is Gν(b)−Gν(a).\n\nStatement 1 is true. Set b=1/a. As a increases continuously from 0 toward 1, Gν(1/a)−Gν(a) moves continuously from 1 toward 0. Hence some a gives coverage 0.95.\n\nStatement 2 is false in general. Equal-tail endpoints allocate 0.025 to each tail, but the interval length on the σ² scale is S(1/a−1/b), not simply b−a. The shortest expected-length interval need not be equal-tailed.\n\nFor statement 3, minimise E[length]=E(S)(1/a−1/b)=(n−1)σ²(1/a−1/b), subject to Gν(b)−Gν(a)=0.95. The first-order condition is a²gν(a)=b²gν(b), where gν is the chi-square density. Substituting gν(t)∝t^(ν/2−1)e^(−t/2) gives b−a=(ν+2)log(b/a)=(n+1)log(b/a), not (n−3)log(b/a). Thus statement 3 is false as printed.\n\nStatement 4 is true because E(S)=(n−1)σ². Therefore the expected length is (n−1)σ²(1/a−1/b).\n\n**Printed-key discrepancy:** the supplied answer key on page 51 lists statements 1, 3 and 4. The source's condition in statement 3 is inconsistent with minimising the expected length of the displayed interval; the derived first-order condition has n+1, not n−3. The bank preserves the source wording and flags the discrepancy. Source: Methods of Estimation PDF, Question 28, June 2018, page 17; answer key page 51.\n\nOther-exam relevance: chi-square pivots, confidence intervals for normal variance and shortest-interval optimisation are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }
