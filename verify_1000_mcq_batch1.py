@@ -242,4 +242,4 @@ assert total==355,total
 
 
 
-print("PASS: 347 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 355 supplementary questions; source-key corrections recorded; ambiguous items held out.")
