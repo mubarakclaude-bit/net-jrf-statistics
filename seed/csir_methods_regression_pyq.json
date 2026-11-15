@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 61,
-  "clean": 61,
+  "count": 63,
+  "clean": 63,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -1928,6 +1928,64 @@
         }
       },
       "explanation": "Let cᵀY=ΣcᵢYᵢ. The coefficient of μⱼ in E(cᵀY) is cⱼ−cⱼ₋₁, with indices interpreted cyclically. If E(cᵀY)=0 for every possible μ, then all these differences must be zero, so c₁=⋯=cₙ. This proves statement 1.\\n\\nA linear function dᵀμ is estimable exactly when Σdᵢ=0, because every observation mean is a difference of two successive μ parameters. Thus not every linear function is estimable, and statement 4 is false.\\n\\nFor μ₂−μ₃, Y₂ is already unbiased, and subtracting Ȳ does not change its expectation because E(Ȳ)=0. The coefficient vector of Y₂−Ȳ has sum zero and is the minimum-norm unbiased coefficient vector, so it gives the BLUE. Statement 3 is true.\\n\\nFor μ₁−μ₃, Y₁+Y₂ is unbiased, but it is not minimum variance. Since E(Ȳ)=0, the estimator Y₁+Y₂−2Ȳ remains unbiased and has a smaller coefficient-vector norm (the constant component is removed). Therefore statement 2 is false. Statements 1 and 3 only are correct. Source: Methods of Estimation PDF, Question 48, June 2015, page 29. The supplied answer-key page does not include Q48.\\n\\nOther-exam relevance: estimability, linear contrasts, null spaces and BLUE construction are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2013-jun-q59",
+      "type": "practice",
+      "format": "multi",
+      "year": 2013,
+      "session": "June",
+      "topic": "regression-t2 · estimability in a two-factor cell-means model with nested parameters",
+      "stem": "Consider Yᵢⱼₖ=μ+αᵢ+βᵢⱼ+εᵢⱼₖ, i,j,k=1,…,5, where the errors are i.i.d. N(0,σ²) and μ, αᵢ and βᵢⱼ are fixed parameters. Which statements are true?",
+      "statements": [
+        "μ is estimable.",
+        "Every linear function of α₁,…,α₅ is estimable.",
+        "μ+α₁+β₁₂ is estimable.",
+        "β₂₁−β₂₂ is estimable."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 1, 3 and 4 only",
+        "Statements 2, 3 and 4 only",
+        "Statements 3 and 4 only"
+      ],
+      "answer": "D",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "μ is confounded with the unrestricted αᵢ and βᵢⱼ terms; it cannot be separated from them without identifying constraints."
+        },
+        "B": {
+          "tf": false,
+          "why": "The αᵢ effects are not separately identifiable because each cell has its own unrestricted βᵢⱼ parameter."
+        },
+        "C": {
+          "tf": true,
+          "why": "μ+α₁+β₁₂ is the mean of the (i=1,j=2) cell and is directly estimable by that cell's sample mean."
+        },
+        "D": {
+          "tf": true,
+          "why": "β₂₁−β₂₂ is the difference between the means of two cells in the same i=2 row, so the common μ+α₂ term cancels."
+        }
+      },
+      "explanation": "The mean of cell (i,j) is μ+αᵢ+βᵢⱼ. Since each βᵢⱼ is unrestricted, the model identifies the cell means, but it does not identify μ and the αᵢ separately from the βᵢⱼ terms. For example, changing μ and compensating by changing all βᵢⱼ can leave every cell mean unchanged. Thus μ alone is not estimable, and arbitrary linear functions of the αᵢ are not all estimable. Statements 1 and 2 are false.\\n\\nThe cell mean μ+α₁+β₁₂ is directly estimated by the average of the observations in cell (1,2), so statement 3 is true. Also, subtracting the means of cells (2,1) and (2,2) gives (μ+α₂+β₂₁)−(μ+α₂+β₂₂)=β₂₁−β₂₂. This difference is estimable, so statement 4 is true. Therefore statements 3 and 4 only are correct. Source: Methods of Estimation PDF, Question 59, June 2013, page 36. The supplied answer-key page does not include Q59.\\n\\nOther-exam relevance: estimability, cell-means models and confounding in linear models are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2012-jun-q67",
+      "type": "practice",
+      "format": "single",
+      "year": 2012,
+      "session": "June",
+      "topic": "regression-t2 · standard error of a fitted value in simple linear regression",
+      "stem": "The source states the simple regression model Y=βX+ε and asks about the standard error of the least-squares predictor Ŷ₀ at X=x₀. Which statement follows from the model exactly as printed?",
+      "options": [
+        "It decreases as x₀ moves away from X̄.",
+        "It increases as x₀ moves away from X̄.",
+        "It increases as x₀ moves closer to 0.",
+        "It decreases as x₀ moves closer to 0."
+      ],
+      "answer": "D",
+      "explanation": "Read the model literally as a regression through the origin: Yᵢ=βXᵢ+εᵢ, with independent errors of common variance σ². The least-squares estimator is β̂=ΣXᵢYᵢ/ΣXᵢ², so the fitted value at x₀ is Ŷ₀=x₀β̂. Its variance is Var(Ŷ₀)=x₀²Var(β̂)=σ²x₀²/ΣXᵢ². Therefore its standard error is proportional to |x₀|. It decreases as x₀ moves closer to zero, so option D is correct under the model as printed.\\n\\n**Source wording ambiguity:** the question also prints X̄ in the stem, although X̄ is not needed for a through-origin regression. If an intercept had been intended, the standard error would instead depend on the distance |x₀−X̄| and option B would be the intended answer. The bank follows the literal displayed model and makes the ambiguity explicit rather than silently inserting an intercept. Source: Methods of Estimation PDF, Question 67, June 2012, page 41. The supplied answer-key page does not include Q67.\\n\\nOther-exam relevance: prediction variance, standard errors and regression through the origin are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
     }
   ]
 }
