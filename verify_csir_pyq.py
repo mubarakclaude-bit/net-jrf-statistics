@@ -151,6 +151,9 @@ def main() -> None:
     assert q11["year"] == 2022 and q11["session"] == "February" and q11["answer"] == "C"
     assert "".join(sorted(k for k, value in q11["verdicts"].items() if value["tf"])) == "ABC"
     assert "not guaranteed to be zero for D" in q11["explanation"]
+    q14 = next(x for x in methods["items"] if x["id"] == "csir-meth-2020-nov30-q14")
+    assert q14["year"] == 2020 and q14["session"] == "30 November" and q14["answer"] == "C"
+    assert q14["topic"].startswith("multivariate-t7") and "2Sₓᵧ/(Sₓₓ+Sᵧᵧ)" in q14["explanation"]
     q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
     assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
