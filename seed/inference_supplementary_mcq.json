@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 9, 17, 22, 27, 48, 60–61, 74, 77, 79, 89–90, 92, 104–105, 238, 240, 243, 249, 273, 300–302, 306–308, 310–313, 319–320, 323–327, 337, 363, 368–370, 374, 377–378, 380–381, 383–384, 387–388, 392, 395–396, 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 59,
+  "count": 64,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -1140,6 +1140,86 @@
       "answer": "A",
       "explanation": "For the Gamma family with known scale/rate β, the likelihood ratio between shape 2 and shape 1 is a positive constant times ∏Xᵢ. Thus it is increasing in the product of the observations. The Neyman–Pearson lemma says to reject H₀ for large likelihood-ratio values, giving the region ∏Xᵢ>K. The sum is not the likelihood-ratio statistic for this simple-versus-simple comparison.",
       "pno": 396,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p401",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "A single observation X comes from an exponential distribution with mean 1/λ. Test H₀: λ=2 against H₁: λ=4 using the rejection region X≥3. What are the Type-I error probability α and Type-II error probability β?",
+      "options": [
+        "α=e^(−6), β=1−e^(−12)",
+        "α=e^(−12), β=1−e^(−6)",
+        "α=1−e^(−12), β=e^(−6)",
+        "α=e^(−6), β=e^(−12)"
+      ],
+      "answer": "A",
+      "explanation": "For an exponential distribution with rate λ, P(X≥x)=e^(−λx). Under H₀ (λ=2), the Type-I error is the probability of rejecting: α=P₂(X≥3)=e^(−2×3)=e^(−6). Under H₁ (λ=4), the Type-II error is the probability of not rejecting: β=P₄(X<3)=1−P₄(X≥3)=1−e^(−4×3)=1−e^(−12).",
+      "pno": 401,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p402",
+      "format": "single",
+      "topic": "inference-t3",
+      "stem": "Let X₁,…,Xₙ be a random sample from a Poisson(θ) population and let T=ΣXᵢ. What is the UMVUE of θ²?",
+      "options": [
+        "T(T−1)/n²",
+        "T(T−1)/[n(n−1)]",
+        "T(T−1)/[n(n+1)]",
+        "T²/n"
+      ],
+      "answer": "A",
+      "explanation": "The sum T has a Poisson distribution with mean nθ. For a Poisson variable, E[T(T−1)]=(nθ)². Therefore E[T(T−1)/n²]=θ², so the proposed estimator is unbiased. Also T is complete and sufficient for θ in the Poisson family. By the Lehmann–Scheffé theorem, an unbiased function of this complete sufficient statistic is the unique UMVUE. Hence the answer is T(T−1)/n².",
+      "pno": 402,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p403",
+      "format": "single",
+      "topic": "inference-t4",
+      "stem": "Let X₁,…,Xₙ be a random sample from the Gamma density f(x)=αᵖx^(p−1)e^(−αx)/Γ(p), x>0, where p>0 is known and α>0 is unknown. Assume np>1. For the estimator α̂=p/X̄, what is E(α̂)?",
+      "options": [
+        "α",
+        "α/[1−1/(np)]",
+        "α/(1−np)",
+        "None of the above."
+      ],
+      "answer": "B",
+      "explanation": "Let S=ΣXᵢ=nX̄. Since each Xi is Gamma(shape p, rate α), S is Gamma(shape np, rate α). For a Gamma(k, rate α) variable with k>1, E(1/S)=α/(k−1). Therefore E(α̂)=E(np/S)=np·α/(np−1)=α/[1−1/(np)]. This is larger than α, so p/X̄ is biased upward. The condition np>1 is needed for this expectation to be finite; it is made explicit here because it is not printed in the source question.",
+      "pno": 403,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p404",
+      "format": "single",
+      "topic": "inference-t3",
+      "stem": "For an iid sample X₁,…,Xₙ from a population with mean μ and finite variance, consider E₁=[1/{n(n−1)}]Σ_{i≠j}XᵢXⱼ and E₂=X̄²−[1/{n(n−1)}]Σᵢ(Xᵢ−X̄)². Which statement about estimating μ² is correct?",
+      "options": [
+        "E₁ is unbiased but E₂ is biased.",
+        "E₁ is biased but E₂ is unbiased.",
+        "Both E₁ and E₂ are unbiased.",
+        "Both E₁ and E₂ are biased."
+      ],
+      "answer": "C",
+      "explanation": "For E₁, each product XiXj with i≠j has expectation E(Xi)E(Xj)=μ² by independence. There are n(n−1) ordered pairs, so E(E₁)=μ². For E₂, E(X̄²)=μ²+σ²/n. Also E[Σ(Xi−X̄)²]=(n−1)σ², so the expected correction term is (n−1)σ²/[n(n−1)]=σ²/n. Subtracting gives E(E₂)=μ². Both estimators are unbiased.",
+      "pno": 404,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p406",
+      "format": "single",
+      "topic": "inference-t1",
+      "stem": "A random sample X₁,…,Xₙ has density f(x;θ)=θ(1−x)^(θ−1), 0<x<1, θ>0. Which statistic is sufficient for θ?",
+      "options": [
+        "The sample mean.",
+        "The sample median.",
+        "Σᵢ₌₁ⁿlog(1−Xᵢ).",
+        "Σᵢ₌₁ⁿXᵢ²."
+      ],
+      "answer": "C",
+      "explanation": "The joint density is θⁿ∏(1−xᵢ)^(θ−1) on 0<xᵢ<1. Rewrite it as θⁿ exp{(θ−1)Σlog(1−xᵢ)} times the indicator of the fixed sample space. The sample enters the parameter-dependent part only through Σlog(1−Xᵢ). By the factorisation theorem, this statistic is sufficient for θ.",
+      "pno": 406,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
