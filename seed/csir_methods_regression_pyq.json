@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 56,
-  "clean": 56,
+  "count": 59,
+  "clean": 59,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -1729,6 +1729,105 @@
         }
       },
       "explanation": "Ordinary R² measures the fraction of response variation explained by the fitted model. Adding a regressor gives the least-squares procedure more freedom: it can always set the new coefficient to zero and reproduce the old fit. Therefore residual sum of squares cannot increase, and R² cannot decrease. Statement 1 is true.\\n\\nAdjusted R² includes a penalty for the number of regressors. It can go down when the added variable contributes too little explanatory power, so statement 2 is false.\\n\\nThe strict inequality R²>R²_adj holds in ordinary non-perfect fits with positive residual variation and added parameters, but if the fit is perfect then both equal 1. Therefore statement 3 is not true for every possible data set.\\n\\nWith an intercept, the correlation between observed and fitted values is √R² and is nonnegative, so statement 4 is true. Hence statements 1 and 4 only are correct. Source: Methods of Estimation PDF, Question 72, December 2011, page 43. The supplied answer-key page does not include Q72.\\n\\nOther-exam relevance: multiple regression, R², adjusted R² and fitted-value properties are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2012-dec-q65",
+      "type": "practice",
+      "format": "multi",
+      "year": 2012,
+      "session": "December",
+      "topic": "multivariate-t7 · Bayes and maximum-likelihood classification under multivariate normal populations",
+      "stem": "Let N(μ,Σ) denote a multivariate normal population. Which statements about classification between normal populations are correct?",
+      "statements": [
+        "For arbitrary Σ₁ and Σ₂, the Bayes classifier between N(μ₁,Σ₁) and N(μ₂,Σ₂) is always a linear threshold rule.",
+        "With a common covariance Σ, the Bayes misclassification probability between N(μ₁,Σ) and N(μ₂,Σ) is greater than that between N(2μ₁,2Σ) and N(2μ₂,2Σ).",
+        "When μ₁ and μ₂ are unknown and the common covariance is the identity, the maximum-likelihood classifier depends on the training data through the two sample mean vectors.",
+        "The Bayes classifier between N(1,0) and N(10,4) assigns the point 2 to the first population."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 2 and 3 only",
+        "Statements 1, 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Different covariance matrices generally produce a quadratic discriminant boundary, not a linear one."
+        },
+        "B": {
+          "tf": true,
+          "why": "The squared Mahalanobis distance is multiplied by 2 after doubling the means and covariance, increasing class separation and reducing Bayes error."
+        },
+        "C": {
+          "tf": true,
+          "why": "With known identity covariance and equal class priors, the likelihood comparison reduces to distances from the sample mean vectors."
+        },
+        "D": {
+          "tf": false,
+          "why": "N(1,0) is degenerate at 1 and assigns zero density to 2, whereas N(10,4) has positive density there; point 2 cannot be assigned to the first population."
+        }
+      },
+      "explanation": "Statement 1 is false. When two multivariate normal populations have different covariance matrices, the log-likelihood ratio contains quadratic terms in the observation. A linear boundary is guaranteed in the common-covariance case, not in the general case.\\n\\nFor statement 2, with equal covariance Σ, class separation is measured by the squared Mahalanobis distance Δ²=(μ₁−μ₂)ᵀΣ⁻¹(μ₁−μ₂). Replacing the means by 2μ₁ and 2μ₂ multiplies the difference by 2, while replacing Σ by 2Σ multiplies its inverse by 1/2. The new squared distance is therefore 2Δ², larger than before. Greater separation gives a smaller Bayes misclassification probability, so the original error is greater.\\n\\nStatement 3 is true under the common identity covariance and equal prior-probability classification setup: the training likelihood for each class is maximised at its sample mean, and the discriminant comparison uses those means. Statement 4 is false because a zero-variance normal distribution at 1 places all its probability at 1; the point 2 has zero likelihood under that class but positive likelihood under N(10,4). Thus statements 2 and 3 only are correct. Source: Methods of Estimation PDF, Question 65, December 2012, page 40. The supplied answer-key page does not include Q65.\\n\\nOther-exam relevance: multivariate normal distributions, discriminant analysis and Mahalanobis distance are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2011-jun-q74",
+      "type": "practice",
+      "format": "single",
+      "year": 2011,
+      "session": "June",
+      "topic": "inference-t4 · maximum likelihood for the population size in hypergeometric sampling",
+      "stem": "A hypergeometric random variable has P(X=x)=C(m,x)C(N−m,n−x)/C(N,n). An observation x=10 is obtained with m=40 and n=30, while N is unknown. What is the maximum-likelihood estimate of N?",
+      "options": [
+        "75",
+        "120",
+        "60",
+        "The MLE is not unique."
+      ],
+      "answer": "D",
+      "explanation": "The likelihood, apart from the factor C(40,10) that does not depend on N, is L(N)=C(N−40,20)/C(N,30), for integer N≥60. Compare consecutive likelihood values:\\n\\nL(N+1)/L(N)=[(N−39)/(N−59)]·[(N−29)/(N+1)].\\n\\nAfter expanding, this ratio is greater than 1 when N<119, equal to 1 when N=119, and less than 1 when N>119. Therefore L(119)=L(120) is the maximum. There are two maximising integer values, so the MLE is not unique. Option D is correct. Source: Methods of Estimation PDF, Question 74, June 2011, page 45. The supplied answer-key page does not include Q74.\\n\\nOther-exam relevance: hypergeometric likelihoods, finite-population sampling and discrete-parameter MLEs are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2011-jun-q76",
+      "type": "practice",
+      "format": "multi",
+      "year": 2011,
+      "session": "June",
+      "topic": "regression-t2 · estimability and BLUE in a linear model with redundant parameters",
+      "stem": "Consider four observations with E(X₁)=A+B+C, E(X₂)=A, E(X₃)=B and E(X₄)=A−B−C, where A, B, C and D are listed as parameters. Which statements are correct?",
+      "statements": [
+        "B+C is not estimable.",
+        "A, B and C are all estimable.",
+        "A+B+C is estimable.",
+        "X₂ is the BLUE of A."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 2 and 3 only",
+        "Statements 2, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "B+C=E(X₁)−E(X₂), so it is estimable."
+        },
+        "B": {
+          "tf": true,
+          "why": "A=E(X₂), B=E(X₃), and C=E(X₁)−E(X₂)−E(X₃), so each is estimable."
+        },
+        "C": {
+          "tf": true,
+          "why": "A+B+C is directly the expectation of X₁."
+        },
+        "D": {
+          "tf": false,
+          "why": "Under the usual independent equal-variance error model, (X₁+X₄)/2 is also unbiased for A and has smaller variance than X₂ alone; moreover, the source does not specify a covariance structure sufficient to assert X₂ is BLUE."
+        }
+      },
+      "explanation": "A parameter function is estimable if it can be written as a linear combination of the observation means. Here A=E(X₂) and B=E(X₃), so A and B are estimable. Also, C=E(X₁)−E(X₂)−E(X₃), so C is estimable. Thus statement 2 is true.\\n\\nThe sum B+C=E(X₁)−E(X₂), so statement 1 is false. The sum A+B+C is exactly E(X₁), so statement 3 is true.\\n\\nThe claim that X₂ is the BLUE of A is not supported. If the errors are independent with common variance σ², then (X₁+X₄)/2 is unbiased for A because E(X₁+X₄)=2A, and its variance is σ²/2, smaller than Var(X₂)=σ². The problem does not state a covariance structure that would make X₂ uniquely BLUE. Hence statements 2 and 3 only are defensible. Source: Methods of Estimation PDF, Question 76, June 2011, page 46. The supplied answer-key page does not include Q76.\\n\\nOther-exam relevance: estimability, redundant parameterisations and BLUE comparisons are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
     }
   ]
 }
