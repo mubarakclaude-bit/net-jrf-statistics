@@ -724,3 +724,22 @@ Four questions were imported after visual inspection:
 - **Page 489:** the density formula for the sample and unknown parameter is too corrupted to derive the MLE safely.
 - **Pages 490–491:** the density and confidence-interval expressions are too faint to identify the model and pivot.
 - **Page 492:** the chi-square/sum expression is incomplete in the scan.
+
+
+## Batch 46 — pages 493–504
+
+Three questions were imported after visual inspection:
+- **Probability (2):** large-parameter normal approximation for a Poisson variable, p501; and the CLT for the average of squared iid standard normal variables, p504.
+- **Statistical Inference (1):** unbiasedness and consistency of a weighted sample-mean estimator, p496.
+
+### Pages held out after inspection
+
+- **Page 493:** the discrete-uniform parameter notation and requested complete/minimal sufficient statistic are incomplete.
+- **Page 494:** the quadratic-form definitions and matrix expressions are too faint to determine the degrees of freedom and independence claims.
+- **Page 495:** more than one displayed estimator is not unbiased for θ under Uniform(0,θ), so the single-choice wording has multiple correct answers.
+- **Page 497:** the Bernoulli parameter interval and estimator expressions are corrupted.
+- **Page 498:** the two estimators used in the efficiency comparison are not legible enough to compute their variances.
+- **Page 499:** the exponential density and reliability target are too faint to reconstruct the likelihood safely.
+- **Page 500:** the displayed statistic and denominator are incomplete, so its sampling distribution cannot be keyed.
+- **Page 502:** two answer options repeat the same statement about Z and W, leaving the intended single-choice key ambiguous.
+- **Page 503:** the definition of Yᵢ and the normalising constants in the limiting expressions are illegible.
