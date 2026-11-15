@@ -596,3 +596,18 @@ Eleven questions were imported after checking the rendered scans:
 
 - **Page 393:** the stated CDF F(x)=1−exp(−x/2), x≥0, gives MGF M(t)=1/(1−2t), t<1/2. None of the four printed options matches this expression, so the question is not imported.
 - **Page 395 convention:** the confidence-interval item explicitly states the upper-tail chi-square critical-value convention to remove ambiguity in the source's χ² subscript notation.
+
+
+## Batch 37 — pages 397–408
+
+Ten questions were imported after inspecting the scanned pages:
+- **Probability (3):** conditional probability for a Bernoulli transformation, p398; rectangle probability from four bivariate CDF values, p400; point mass recovered from a CDF jump, p407.
+- **Multivariate Analysis (1):** identical marginals but dependent variables from a bivariate density, p399.
+- **Statistical Inference (5):** Type-I and Type-II errors for an exponential test, p401; UMVUE of θ² for a Poisson sample, p402; expectation and bias of a Gamma rate estimator, p403; two unbiased estimators of μ², p404; and a sufficient statistic from a one-parameter density, p406.
+- **Regression (1):** least-squares regression line from summary statistics, p405.
+
+### Pages held out after inspection
+
+- **Page 397:** the displayed sequence/normalisation expression in the weak-law condition is too blurred to transcribe without guessing.
+- **Page 403:** the source omits the condition np>1 needed for E(p/X̄) to be finite. The imported version states this condition explicitly and records the omission.
+- **Page 408:** the source asks for P(X+Y≤4) under p(x,y)=(x+2y)/27 on {0,1,2}². Direct summation gives 7/9, which is absent from all four printed options, so it is held out.
