@@ -905,7 +905,7 @@ For p638, the sign-only observations are Bernoulli with success probability Φ(�
 
 ## Batch 58 — pages 649–656
 
-Six additional questions were imported after visual inspection:
+Seven additional questions were imported after visual inspection:
 - **Probability (4):** four convergence-in-probability statements for independent Normal(2,5) variables, p649; complement probability for two mutually exclusive race winners, p651; conditional Biology readership given Mathematics readership, p652; and the position of the second red ball in sampling without replacement, p653.
 - **Statistical Inference (3):** maximum likelihood estimation for a uniform triangular support, p650; UMP upper-tail regions in the power-density family, p654; and limiting power of a Bernoulli one-sided test, p656.
 
