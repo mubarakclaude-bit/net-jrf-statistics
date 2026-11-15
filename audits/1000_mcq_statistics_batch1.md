@@ -828,3 +828,16 @@ Eleven additional questions were imported after visual inspection:
 - **Page 575:** held out because the conditioning notation around the absolute value and integer-part brackets is not sufficiently unambiguous in the scan to reproduce the exact event safely. The algebraic options alone do not resolve the intended conditioning event.
 
 The page 566 marginal was recomputed by integrating the joint density over its triangular support. On page 568, the probability integral transform gives iid Uniform(0,1) variables; applying −log produces iid Exp(1) variables, whose sum is Gamma(n,1). The page 574 functions are both valid CDFs because each is a continuous non-decreasing transformation of F with endpoint values 0 and 1.
+
+
+## Batch 53 — pages 577–588
+
+Eleven additional questions were imported after visual inspection:
+- **Probability (7):** a standard-normal probability obtained by factoring a cubic inequality, p577; a logarithmic transform of a Uniform(0,1) variable, p578; point masses and expectation recovered from a step CDF, p579; the MGF of a binomial-type PMF, p580; a closed-interval probability from a discontinuous CDF, p581; a weak-law/Chebyshev limit for a sum of uniforms, p585; and independence of events in a finite equally likely sample space, p587.
+- **Statistical Inference (4):** Neyman–Pearson testing for two values of a Rayleigh-type parameter, p582; a discrete-uniform UMP test, p583; Type I and Type II errors for an exponential test, p586; and the MLE for a power-family density, p588.
+
+### Page held out after inspection
+
+- **Page 584:** decorative/advertising page, not a question.
+
+The p582 test is keyed using the likelihood ratio: for the larger alternative value of λ, the likelihood ratio decreases with ΣXᵢ², so the rejection region is for small sums of squares. Page 583 uses the exact 0.1 null probability P₀(X≤4)=4/40. Page 585's limit is 1 because the threshold exceeds the mean by n^(3/4), which grows faster than the standard deviation of order n^(1/2).
