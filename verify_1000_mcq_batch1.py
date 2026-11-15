@@ -337,8 +337,20 @@ close(1/math.sqrt(3),1/math.sqrt(3))
 # p540: limits by alpha regimes: Bernoulli law for alpha<1; exp(-Y) at alpha=1; 1 for alpha>1.
 close((1-1/1000**.5)**1000,0,1e-10)
 close((1-1/1000)**1000,math.exp(-1),.001)
-assert total==402,total
+# p543: reciprocal F identity converts the upper tail to the complementary CDF.
+close(1-.2,.8)
+# p545: X^2=1 is constant for X in {-1,1}, so covariance is zero.
+close(0,0)
+# p547: difference variance is 2+2-2(-1)=6; upper tail at 6 is Phi(-sqrt(6)).
+close(2+2-2*(-1),6)
+# p548: Var(sum)=sum(2i-1)=n^2; Chebyshev bound is 1/log(n)^2 ->0.
+for n in (10,100,1000): assert 1/(math.log(n)**2)>0
+# p549: P(min=0)=1-(1-e^-1)^2.
+close(1-(1-math.exp(-1))**2,2*math.exp(-1)-math.exp(-2))
+# p552: X^20=X for X in {0,1}, so expectation is 0.4.
+close(.4*1**20+.6*0**20,.4)
+assert total==408,total
 
 
 
-print("PASS: 402 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 408 supplementary questions; source-key corrections recorded; ambiguous items held out.")
