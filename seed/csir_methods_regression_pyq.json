@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 13,
-  "clean": 13,
+  "count": 17,
+  "clean": 17,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -392,6 +392,98 @@
         }
       },
       "explanation": "The printed answer key on PDF page 65 lists statement C only. Check the expectation equations directly. First, E(Y₁)=E(Y₃)=θ₁−θ₃, so θ₁−θ₃ is estimable. Also E[(Y₂−Y₄)/2]=θ₂, so statement D is definitely true. The individual parameters θ₁ and θ₃ cannot be separated, and θ₁+θ₃ is not identified by these four expectations, so A and B are false. Statement C contains two claims: the contrast θ₁−θ₃ is estimable, but the assertion that (Y₁+Y₃)/2 is BLUE requires a covariance assumption. Its variance is [2σ²+2Cov(Y₁,Y₃)]/4, and the question does not specify Cov(Y₁,Y₃) or any other off-diagonal covariance. Thus C is not guaranteed by the literal printed assumptions. The mathematically guaranteed statement is D only. The key's C-only answer conflicts with the estimability of θ₂ and also assumes information about covariances that is not printed. Treat this as a flawed-source item: do not memorise the key without noting the missing assumptions. Other-exam relevance: estimability, row-space conditions and BLUE calculations overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2024-jun-q77",
+      "type": "practice",
+      "format": "single",
+      "year": 2024,
+      "session": "June",
+      "topic": "inference-t4 · maximum likelihood for a finite-support discrete distribution",
+      "stem": "A random variable has probability mass function P(X=0)=(1−θ)/2, P(X=1)=1/2 and P(X=2)=θ/2, where 0<θ<1. In a random sample of size 100, the observed counts at 0, 1 and 2 are 20, 30 and 50, respectively. What is the maximum-likelihood estimate of θ?",
+      "options": [
+        "1",
+        "5/7",
+        "1/2",
+        "2/7"
+      ],
+      "answer": "B",
+      "explanation": "Let n₀=20, n₁=30 and n₂=50. The likelihood is the product of the probabilities raised to their observed counts:\n\nL(θ)=[(1−θ)/2]²⁰(1/2)³⁰(θ/2)⁵⁰. All powers of 1/2 are constant with respect to θ, so we only need to maximise θ⁵⁰(1−θ)²⁰ for 0<θ<1.\n\nTake the logarithm: ℓ(θ)=50 ln θ+20 ln(1−θ)+constant. Differentiate: ℓ′(θ)=50/θ−20/(1−θ). Set this equal to zero: 50(1−θ)=20θ, so 50=70θ and θ̂=50/70=5/7. The log-likelihood is strictly concave, so this stationary point is the unique maximum. The answer is option 2 (B), matching the supplied answer key on page 53.\n\nOther-exam relevance: likelihood maximisation for a discrete parametric model is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 77, June 2024, page 46; answer key page 53."
+    },
+    {
+      "id": "csir-meth-2024-jun-q78",
+      "type": "practice",
+      "format": "single",
+      "year": 2024,
+      "session": "June",
+      "topic": "inference-t13 · chi-square pivot and a one-sided confidence interval for a normal variance",
+      "stem": "Let X₁ and X₂ be a random sample from N(0,σ²), where σ>0 is unknown. Suppose that (c(X₁²+X₂²),∞) is a confidence interval for σ² with confidence coefficient 0.95. What is c?",
+      "options": [
+        "−2 ln(0.05)",
+        "−2 ln(0.95)",
+        "1/[−2 ln(0.05)]",
+        "1/[−2 ln(0.95)]"
+      ],
+      "answer": "C",
+      "explanation": "Because X₁ and X₂ are independent N(0,σ²), the standard chi-square result gives (X₁²+X₂²)/σ² ~ χ² with 2 degrees of freedom. Let T=(X₁²+X₂²)/σ². The proposed interval contains the true σ² when c(X₁²+X₂²)≤σ², which is equivalent to cT≤1, or T≤1/c.\n\nFor a chi-square variable with 2 degrees of freedom, its cumulative distribution function is F(t)=1−e^(−t/2), for t≥0. We need P(T≤1/c)=0.95. Thus 1−exp[−1/(2c)]=0.95, so exp[−1/(2c)]=0.05. Taking logarithms gives 1/(2c)=−ln(0.05), hence c=1/[−2 ln(0.05)]. The answer is option 3 (C), matching the supplied answer key on page 53.\n\nOther-exam relevance: chi-square pivots and confidence intervals for normal variance are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 78, June 2024, page 46; answer key page 53."
+    },
+    {
+      "id": "csir-meth-2024-jun-q79",
+      "type": "practice",
+      "format": "single",
+      "year": 2024,
+      "session": "June",
+      "topic": "regression-t4 · regression R-squared and residual sum of squares from standardised variables",
+      "stem": "Suppose C, S and TI are standardised sample variables, each with sample mean 0 and sample variance 1, with covariances and variances computed using divisor 20. Let DI=C+S. The slopes in the simple regressions of DI on TI, DI on C, and S on TI are 0.8, 0.5 and 0.4, respectively. There are 21 observations. What is the residual sum of squares in the regression of DI on S?",
+      "options": [
+        "5",
+        "10",
+        "15",
+        "20"
+      ],
+      "answer": "C",
+      "explanation": "The sample variances of C and S are both 1. The slope in the regression of DI on C is Cov(DI,C)/Var(C). Since DI=C+S, this slope is [Var(C)+Cov(S,C)]/1=0.5. Therefore Cov(S,C)=−0.5.\n\nNow calculate the variance of DI: Var(DI)=Var(C+S)=Var(C)+Var(S)+2Cov(C,S)=1+1+2(−0.5)=1. The covariance between DI and S is Cov(C+S,S)=Cov(C,S)+Var(S)=−0.5+1=0.5. Hence the regression slope of DI on S is 0.5, and its coefficient of determination is R²=Cov(DI,S)²/[Var(DI)Var(S)]=(0.5)²/(1×1)=0.25.\n\nWith 21 observations and sample variances defined using divisor 20, the total sum of squares for DI is 20×Var(DI)=20. Therefore SSE=(1−R²)SST=(1−0.25)×20=15. The answer is option 3 (C), matching the supplied answer key on page 53.\n\nOther-exam relevance: regression slopes, covariance identities, R-squared and residual sum of squares are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 79, June 2024, page 47; answer key page 53."
+    },
+    {
+      "id": "csir-meth-2024-jun-q80",
+      "type": "practice",
+      "format": "multi",
+      "year": 2024,
+      "session": "June",
+      "topic": "inference-t4 · inference-t5 · maximum likelihood and method of moments for a uniform location-scale family",
+      "stem": "Let X₁,…,Xₙ, n≥2, be a random sample from Uniform(−θ,2θ), where θ>0 is unknown. Write X̄ for the sample mean, X₍₁₎=min(X₁,…,Xₙ) and X₍ₙ₎=max(X₁,…,Xₙ). Which statements are true?",
+      "statements": [
+        "The maximum-likelihood estimator of θ is min{X₍₁₎, X₍ₙ₎/2}.",
+        "The maximum-likelihood estimator of θ is max{−X₍₁₎, X₍ₙ₎/2}.",
+        "The method-of-moments estimator of θ is 2X̄.",
+        "The method-of-moments estimator of θ is 2X̄/3."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statements 2 and 3 only",
+        "Statements 1, 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The likelihood is positive only when θ is at least −X₍₁₎ and at least X₍ₙ₎/2. The minimum admissible value is their maximum, not their minimum."
+        },
+        "B": {
+          "tf": true,
+          "why": "The density is 1/(3θ) on [−θ,2θ]. The likelihood is proportional to θ⁻ⁿ on the admissible parameter set, so it is maximised at θ̂=max{−X₍₁₎,X₍ₙ₎/2}."
+        },
+        "C": {
+          "tf": true,
+          "why": "The population mean of Uniform(−θ,2θ) is [−θ+2θ]/2=θ/2. Equating X̄ to θ/2 gives θ̂MM=2X̄."
+        },
+        "D": {
+          "tf": false,
+          "why": "The population mean is θ/2, not 3θ/2, so the method-of-moments equation does not give 2X̄/3."
+        }
+      },
+      "explanation": "For a Uniform(−θ,2θ) distribution, the density is 1/(3θ) when every observation lies between −θ and 2θ, and is zero otherwise. The likelihood is therefore L(θ)=(3θ)⁻ⁿ provided θ≥−X₍₁₎ and θ≥X₍ₙ₎/2. Outside this range the likelihood is zero. Within the allowed range, (3θ)⁻ⁿ decreases as θ increases. So we choose the smallest allowed value: θ̂MLE=max{−X₍₁₎,X₍ₙ₎/2}. Statement 2 is true.\n\nFor the method of moments, first find the population mean. A uniform distribution on [a,b] has mean (a+b)/2. Here a=−θ and b=2θ, so E(X)=θ/2. Equating this to the sample mean gives X̄=θ/2 and θ̂MM=2X̄. Statement 3 is true. Therefore statements 2 and 3 only are correct. The four combination options are editorially supplied to make the source's statement-selection format usable in the bank; the supplied key lists statements 2 and 3 on page 53.\n\nOther-exam relevance: MLE with parameter-dependent support and method-of-moments estimation are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 80, June 2024, page 47; answer key page 53."
     }
   ]
 }
