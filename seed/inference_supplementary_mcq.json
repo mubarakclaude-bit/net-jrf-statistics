@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 9, 17, 22, 27, 48, 60–61, 74, 77, 79, 89–90, 92, 104–105, 238, 240, 243, 249, 273, 300–302, 306–308, 310–313, 319–320, 323–327, 337, 363, 368–370, 374, 377–378, 380–381, 383–384, 387–388, 392, 395–396, 401–404, 406, 409, 412–413, 417, 419, 422–425, 432, 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 81,
+  "count": 85,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -1560,6 +1560,94 @@
       },
       "explanation": "The joint density is proportional to (σ²)^(−n/2) exp{−ΣXᵢ²/(2σ²)}. By the factorisation theorem, the sample enters the parameter-dependent part only through ΣXᵢ². The full sample and the vector of squares both determine this sum. The sum itself is sufficient, and the pair of partial sums also determines the total sum. Hence all four statistics are sufficient.",
       "pno": 521,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p582",
+      "format": "multi",
+      "topic": "inference-t9",
+      "stem": "A random sample is drawn from f(x;λ)=2λxe⁻ˡᵃᵐᵇᵈᵃˣ² for x>0, λ>0. Test H₀:λ=1/2 against H₁:λ=3/4 at level α. Which statements are correct?",
+      "statements": [
+        "A most powerful test exists for every 0<α<1.",
+        "A most powerful test fails to exist for some α.",
+        "When it exists, the test rejects H₀ for small values of ΣXᵢ², i.e. ΣXᵢ²≤c.",
+        "When it exists, the test rejects H₀ for large values of ΣXᵢ², i.e. ΣXᵢ²≥c."
+      ],
+      "options": [
+        "Statement A only",
+        "Statements A and C only",
+        "Statements B and D only",
+        "Statements A, C and D"
+      ],
+      "answer": "B",
+      "explanation": "The hypotheses are simple: each specifies one value of λ. The Neyman–Pearson lemma therefore gives a most powerful level-α test for every α (with randomisation at a boundary if needed). For n observations, the likelihood is proportional to λⁿexp(−λΣXᵢ²). The likelihood ratio L(λ=3/4)/L(λ=1/2) is a positive constant times exp(−(1/4)ΣXᵢ²), which decreases as ΣXᵢ² increases. Evidence for H₁ is therefore strongest when the sum of squares is small, so the rejection region is ΣXᵢ²≤c. Statements A and C are true.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The Neyman–Pearson lemma applies to every pair of simple hypotheses."
+        },
+        "B": {
+          "tf": false,
+          "why": "A most powerful test exists at every level, allowing boundary randomisation."
+        },
+        "C": {
+          "tf": true,
+          "why": "The likelihood ratio decreases with the sum of squared observations."
+        },
+        "D": {
+          "tf": false,
+          "why": "Large sums of squares favour the smaller λ under H₀, not H₁."
+        }
+      },
+      "pno": 582,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p583",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "Let X be discrete uniform on {1,2,…,θ}, where θ∈{20,40}. Test H₀:θ=40 against H₁:θ=20 at significance level 0.1. The uniformly most powerful test rejects H₀ when:",
+      "options": [
+        "X≤4",
+        "X>4",
+        "X≥3",
+        "X<3"
+      ],
+      "answer": "A",
+      "explanation": "Under H₀, X is uniform on 1,…,40; under H₁, it is uniform on 1,…,20. The likelihood ratio is 2 for x≤20 and 0 for x>20, so the Neyman–Pearson test rejects H₀ for the smallest observations. To obtain size 0.1 under H₀, choose the first four values because P₀(X≤4)=4/40=0.1. Therefore the rejection region is X≤4.",
+      "pno": 583,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p586",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "A single observation X has an exponential distribution with mean 1/λ. Test H₀:λ=2 against H₁:λ=4 using rejection region X≥3. Find the Type I error α and Type II error β.",
+      "options": [
+        "α=e⁻⁶, β=1−e⁻¹²",
+        "α=e⁻¹², β=1−e⁻⁶",
+        "α=1−e⁻¹², β=e⁻⁶",
+        "α=e⁻⁶, β=e⁻¹²"
+      ],
+      "answer": "A",
+      "explanation": "For an exponential distribution with rate λ, P(X≥x)=e⁻ˡᵃᵐᵇᵈᵃˣ. A Type I error occurs when H₀ is true but X≥3, so α=Pλ=2(X≥3)=e⁻⁶. A Type II error occurs when H₁ is true but the test does not reject, that is X<3. Under λ=4 this probability is 1−Pλ=4(X≥3)=1−e⁻¹². Thus option A is correct.",
+      "pno": 586,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p588",
+      "format": "single",
+      "topic": "inference-t4",
+      "stem": "A random sample X₁,…,Xₙ has density f(x;θ)=θxᶿ⁻¹ for 0≤x≤1, θ>0. Find the maximum likelihood estimator of θ.",
+      "options": [
+        "−n/Σᵢ₌₁ⁿlog Xᵢ",
+        "−(1/n)Σᵢ₌₁ⁿlog Xᵢ",
+        "(Πᵢ₌₁ⁿXᵢ)¹ᐟⁿ",
+        "(Πᵢ₌₁ⁿXᵢ)/n"
+      ],
+      "answer": "A",
+      "explanation": "The likelihood is L(θ)=θⁿ∏Xᵢᶿ⁻¹. Taking logs gives ℓ(θ)=n log θ+(θ−1)Σlog Xᵢ. Differentiate: ℓ′(θ)=n/θ+Σlog Xᵢ. Set this equal to zero to obtain θ̂=−n/Σlog Xᵢ. Since ℓ″(θ)=−n/θ²<0, this stationary point is a maximum. The answer is option A.",
+      "pno": 588,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
