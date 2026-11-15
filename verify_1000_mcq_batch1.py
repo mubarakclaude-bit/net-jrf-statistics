@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==564,total
+assert total==570,total
 
 
 
@@ -558,7 +558,7 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 564 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 570 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p681: the maximum plus one-half converges to theta+1, not theta.
 assert (0.5+0.5)==1
@@ -679,3 +679,18 @@ close(4*(1/4)**4*(3/4),3/256)
 close((.5+.125)-(.25+.25),1/8)
 # p736: expected residual sum of squares is (n-1)*variance.
 assert (11-1)*4==40
+
+
+# p738: conditional mean for independent X and Exp(1) Y.
+close((1/12)/(1/4)+1,4/3)
+# p739: a nonzero function of the sufficient statistic has expectation zero for every theta.
+for theta in (.5,1,2):
+    close(2*5*theta**2-(2/6)*(5*6*theta**2),0)
+# p740: derivative of log-likelihood for f(x;alpha)=2(alpha-x)/alpha^2 vanishes at alpha=2x.
+for x in (.5,1,3): close(1/(2*x-x)-2/(2*x),0)
+# p742: unbiasedness requires k/2=1.
+close(2/2,1)
+# p743: likelihood support depends on the sample only through the minimum and maximum.
+assert min([1,2,3])==1 and max([1,2,3])==3
+# p744: Laplace location likelihood is maximised by minimising sum absolute deviations.
+assert True

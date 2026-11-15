@@ -1055,3 +1055,16 @@ Seven additional questions were imported after visual inspection:
 - **Page 733:** the systematic-sampling relative-efficiency question is held out pending clarification of the intended intraclass-correlation design and variance comparison. The marked answer 1/7 is not imported without a fully justified design-effect calculation.
 
 For p729, E(X)=2 but E(X²) diverges, so variance is not finite. For p730, |X|/5 is Uniform(0,1), and its negative logarithm is Exp(1). For p731, the support restriction is θ≥maxᵢ|Xᵢ|. For p732, E(Y|X=x)=x+β. For p734, the sum of four geometric(p=1/4) variables has a negative-binomial distribution. For p735, the jump at x=1/2 is 5/8−1/2=1/8. For p736, E(S)=(11−1)×4=40.
+
+
+## Batch 70 — pages 738–744
+
+Six additional questions were imported after visual inspection:
+- **Probability (1):** conditional expectation of the sum of an independent variable with density 2x on (0,1) and an Exponential(1) variable, p738.
+- **Statistical Inference (5):** sufficiency but non-completeness of (ΣXᵢ,ΣXᵢ²) for an N(θ,θ²) sample, p739; MLE for a one-observation triangular density, p740; unbiasedness constant for a weighted sample estimator, p742; sufficient statistic for both endpoints of a Uniform(α,β) distribution, p743; and MLE of the location parameter in a Laplace distribution, p744.
+
+### Held-out pages
+- **Page 737:** the scan asks for a condition for Xₙ→X but does not specify the mode of convergence. The marked statement is the definition of almost-sure convergence; without that qualifier, the item is ambiguous.
+- **Page 741:** under H₀ the type-I error is e⁻², but under H₁ the type-II error is P(X<2/θ₀)=1−e⁻⁴. The source options list e⁻⁴ rather than 1−e⁻⁴, so no option correctly gives the requested pair.
+
+For p738, independence gives E(X+Y|X≤1/2)=1/3+1=4/3. For p739, the statistic is sufficient but a nonzero function of it has expectation zero for all θ, proving non-completeness. Page 740's likelihood derivative gives α̂=2X. For p742, E(T)=kθ/2, so k=2. Page 743 follows from the likelihood support depending on the sample minimum and maximum. Page 744 maximises the Laplace likelihood by minimising the sum of absolute deviations, whose minimiser is a sample median.
