@@ -1,9 +1,9 @@
 {
   "moduleId": "inference",
   "source": "variant",
-  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 648 and later pages 959, 973, 999)",
+  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 656 and later pages 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 108,
+  "count": 111,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -2174,6 +2174,102 @@
       "answer": "B",
       "explanation": "Power is the probability of rejecting H₀ when H₁ is true. Under H₁, θ=0, so X has a standard Cauchy distribution, which is symmetric about zero. The function g(x)=x/√(1+x²) is strictly increasing and satisfies g(0)=0. Therefore choosing C=0 makes the rejection event exactly X>0. By symmetry, P(X>0)=1/2, so the power is 0.5. Hence option B is correct.",
       "pno": 645,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p650",
+      "format": "single",
+      "topic": "inference-t4",
+      "stem": "A random sample of size n is selected uniformly from the triangular region with vertices (0,0), (0,θ), and (θ,0), where θ>0. Let the observations be (Xᵢ,Yᵢ), i=1,…,n. What is the maximum likelihood estimator of θ?",
+      "options": [
+        "[X₍ₙ₎+Y₍ₙ₎]/2, where X₍ₙ₎=max Xᵢ and Y₍ₙ₎=max Yᵢ",
+        "max{X₍ₙ₎,Y₍ₙ₎}",
+        "max₁≤ᵢ≤ₙ(Xᵢ+Yᵢ)",
+        "X₍ₙ₎+Y₍ₙ₎"
+      ],
+      "answer": "C",
+      "explanation": "The triangular region has area θ²/2, so the density of one observation is 2/θ² inside the triangle and zero outside. For n independent observations, the likelihood is (2/θ²)ⁿ provided every observation satisfies Xᵢ+Yᵢ≤θ; otherwise it is zero. Thus θ must be at least maxᵢ(Xᵢ+Yᵢ). Within this allowed range, (2/θ²)ⁿ decreases as θ increases, so the likelihood is largest at the smallest allowed value: θ̂=maxᵢ(Xᵢ+Yᵢ).",
+      "pno": 650,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p654",
+      "format": "multi",
+      "topic": "inference-t12",
+      "stem": "Let X₁,…,Xₙ be a random sample from f(x;θ)=θx^(θ−1), 0<x<1, θ>0. The rejection region is {Σᵢ₌₁ⁿlog(Xᵢ)≥c}, where c is suitably chosen. For which testing problems is this a uniformly most powerful region?",
+      "statements": [
+        "H₀: θ=1 against H₁: θ>1.",
+        "H₀: θ=1 against H₁: θ≥4.",
+        "H₀: θ=4 against H₁: θ≤1.",
+        "H₀: θ=4 against H₁: θ≠1."
+      ],
+      "options": [
+        "1 and 2 only",
+        "1 and 3 only",
+        "2 and 4 only",
+        "1, 2 and 3 only"
+      ],
+      "answer": "A",
+      "explanation": "The likelihood is proportional to θⁿ exp[(θ−1)Σlog(Xᵢ)]. Therefore the likelihood ratio is increasing in T=Σlog(Xᵢ) when the alternative has larger θ, giving an upper-tail rejection region. This is the UMP form for the one-sided alternative θ>1. It also works for the composite alternative θ≥4 because the least-favourable boundary is θ=4 and the same monotone-likelihood-ratio ordering applies. For alternatives below 4, the appropriate rejection direction is lower-tail; a two-sided alternative does not have this single upper-tail UMP region.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The family has a monotone likelihood ratio in Σlog(Xᵢ), so the upper-tail region is UMP for θ>1."
+        },
+        "B": {
+          "tf": true,
+          "why": "For θ≥4, the boundary θ=4 is least favourable and the same upper-tail region is UMP."
+        },
+        "C": {
+          "tf": false,
+          "why": "When θ is below 4, evidence favours smaller values of Σlog(Xᵢ), so the UMP direction is lower-tail."
+        },
+        "D": {
+          "tf": false,
+          "why": "A two-sided alternative requires evidence in both directions; a single upper-tail region is not UMP."
+        }
+      },
+      "pno": 654,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p656",
+      "format": "multi",
+      "topic": "inference-t12",
+      "stem": "Let X₁,…,Xₙ be iid Bernoulli(p). Consider testing H₀:p=1/2 against H₁:p=3/4 using the test that rejects H₀ when Σᵢ₌₁ⁿXᵢ>cₙ, with size α=0.01. Which statement about the limiting power is true?",
+      "statements": [
+        "As n→∞, the power converges to 1/4.",
+        "As n→∞, the power converges to 1/2.",
+        "As n→∞, the power converges to 3/4.",
+        "As n→∞, the power converges to 1."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statement 2 only",
+        "Statement 3 only",
+        "Statement 4 only"
+      ],
+      "answer": "D",
+      "explanation": "The critical value cₙ is chosen so that the upper-tail rejection probability under p=1/2 is 0.01. Therefore cₙ is close to n/2 plus a term of order √n. Under the alternative p=3/4, the sum has mean 3n/4 and standard deviation of order √n. The alternative mean exceeds the null critical value by an amount of order n, which is much larger than the standard deviation. Consequently the probability of exceeding cₙ tends to one, so the limiting power is 1.",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The power does not settle at the fixed value 1/4; the alternative mean is far above the critical boundary."
+        },
+        "B": {
+          "tf": false,
+          "why": "The alternative distribution moves increasingly far into the rejection region as n grows."
+        },
+        "C": {
+          "tf": false,
+          "why": "The limiting rejection probability under p=3/4 is not the parameter value 3/4."
+        },
+        "D": {
+          "tf": true,
+          "why": "The critical boundary is near n/2 while the alternative sum is centred at 3n/4, so power tends to one."
+        }
+      },
+      "pno": 656,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
