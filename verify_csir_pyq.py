@@ -640,7 +640,6 @@ def main() -> None:
         "csir-meth-2015-jun-q46": ("BD", "B"),
         "csir-meth-2015-jun-q48": ("AC", "A"),
         "csir-meth-2013-jun-q59": ("CD", "D"),
-        "csir-meth-2012-jun-q67": ("", "D"),
 
         "csir-meth-2017-dec-q31": ("AB", "A"),
         "csir-meth-2017-dec-q32": ("ABD", "C"),
@@ -673,6 +672,7 @@ def main() -> None:
         ("csir-meth-2012-dec-q61", 2012, "December", "A"),
         ("csir-meth-2012-dec-q64", 2012, "December", "B"),
         ("csir-meth-2011-jun-q74", 2011, "June", "D"),
+        ("csir-meth-2012-jun-q67", 2012, "June", "D"),
     ]:
         q = next(x for x in methods["items"] if x["id"] == qid)
         assert q["type"] == "practice" and q["format"] == "single"
