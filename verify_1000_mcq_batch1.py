@@ -286,8 +286,17 @@ for prob in (.1,.2,.5,.8,.9): close(prob*(1-prob),(1-prob)*prob)
 close(math.comb(6,3)/(6**3),5/54)
 # p488: size and power for U(2,4) and U(3,9), critical region X>=3.5.
 close((4-3.5)/(4-2),.25); close((9-3.5)/(9-3),11/12); close(.25+11/12,7/6)
-assert total==379,total
+# p496: weighted estimator is unbiased; variance tends to zero for finite population variance.
+for n in (10,50,100):
+    weights=[2*i/(n*(n+1)) for i in range(1,n+1)]
+    close(sum(weights),1)
+    close(sum(w*w for w in weights),2*(2*n+1)/(3*n*(n+1)))
+# p501: Poisson mean and variance are both lambda; normalisation is (X-lambda)/sqrt(lambda).
+for lam in (100,1000): close(math.sqrt(lam**2)/lam,1)
+# p504: for Z~N(0,1), E(Z^2)=1 and Var(Z^2)=2.
+close(3-1,2)
+assert total==382,total
 
 
 
-print("PASS: 379 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 382 supplementary questions; source-key corrections recorded; ambiguous items held out.")
