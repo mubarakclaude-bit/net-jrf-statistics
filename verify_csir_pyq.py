@@ -124,6 +124,19 @@ def main() -> None:
     assert q84["year"] == 2024 and q84["session"] == "December" and q84["answer"] == "C"
     assert "min{X₍₁₎,1−X₍ₙ₎}" in q84["explanation"]
 
+    q86 = next(x for x in methods["items"] if x["id"] == "csir-meth-2024-dec-q86")
+    assert q86["year"] == 2024 and q86["session"] == "December" and q86["answer"] == "B"
+    assert "".join(sorted(k for k, value in q86["verdicts"].items() if value["tf"])) == "BC"
+    q87 = next(x for x in methods["items"] if x["id"] == "csir-meth-2025-jun-q87")
+    assert q87["year"] == 2025 and q87["session"] == "June" and q87["answer"] == "C"
+    assert "2/3" in q87["explanation"]
+    q88 = next(x for x in methods["items"] if x["id"] == "csir-meth-2025-jun-q88")
+    assert q88["year"] == 2025 and q88["session"] == "June" and q88["answer"] == "B"
+    assert "λ₂³−λ₁³=1−α" in q88["explanation"]
+    q89 = next(x for x in methods["items"] if x["id"] == "csir-meth-2025-jun-q89")
+    assert q89["year"] == 2025 and q89["session"] == "June" and q89["answer"] == "A"
+    assert "N(13,15)" in q89["explanation"]
+
     q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
     assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
