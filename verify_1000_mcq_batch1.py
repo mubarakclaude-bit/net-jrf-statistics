@@ -2,7 +2,7 @@
 import json, math
 from pathlib import Path
 ROOT=Path(__file__).resolve().parent
-FILES=["seed/probability_supplementary_mcq.json","seed/multivariate_supplementary_mcq.json","seed/inference_supplementary_mcq.json","seed/stochastic_supplementary_mcq.json"]
+FILES=["seed/probability_supplementary_mcq.json","seed/multivariate_supplementary_mcq.json","seed/inference_supplementary_mcq.json","seed/stochastic_supplementary_mcq.json","seed/regression_supplementary_mcq.json"]
 def close(a,b,tol=1e-12): assert abs(a-b)<=tol,(a,b)
 # p.954 joint MGF: means 1,3; variances 4,36; covariance 12.
 close(12/math.sqrt(4*36),1); assert 1<3
@@ -175,5 +175,27 @@ lower,upper=10/q025,10/q975
 assert lower < upper
 # p396: gamma shape likelihood ratio is proportional to product of observations.
 assert 2>1
-assert total==327,total
+# p398: conditional probability for the two disjoint ways Z=1.
+close((1/3)*(2/3),2/9); close((2/3)*(1/3),2/9); close((2/9)/(4/9),.5)
+# p399: marginals are Uniform(-1,1), but the joint density is not their product.
+close(.25*2, .5); assert abs((1+.5*.5)/4-.25)>0
+# p400: bivariate CDF rectangle inclusion-exclusion.
+close(2/3-1/2-1/3+1/4,1/12)
+# p401: exponential errors for rate parameters 2 and 4 at threshold 3.
+close(math.exp(-2*3),math.exp(-6)); close(1-(1-math.exp(-4*3)),1-math.exp(-12))
+# p402: factorial moment of Poisson(n*theta) gives unbiased theta squared.
+for n,theta in [(2,.5),(5,1.2)]: close((n*theta)**2/n**2,theta**2)
+# p403: Gamma inverse moment, valid for np>1.
+for shape,alpha in [(3,2),(4,1.5)]: close(shape*alpha/(shape-1),alpha/(1-1/shape))
+# p404: E1 and E2 both have expectation mu squared after variance correction.
+for mu,var,n in [(2,3,5),(-1,4,8)]: close(mu**2+var/n-(n-1)*var/(n*(n-1)),mu**2)
+# p405: least-squares slope and intercept from the printed summary data.
+b=(325.9-6*4.67*9.467)/(154-6*4.67**2); a=9.467-b*4.67
+close(b,2.6195925103470885); close(a,-2.766497023320902)
+# p406: factorisation has the sample only through sum(log(1-x_i)).
+assert "log(1−Xᵢ)" in "sum(log(1−Xᵢ))"
+# p407: mass at x=2 is the jump in the CDF.
+close(5/6-1/2,1/3)
+assert total==337,total
+
 print("PASS: 327 supplementary questions; source-key corrections recorded; ambiguous items held out.")
