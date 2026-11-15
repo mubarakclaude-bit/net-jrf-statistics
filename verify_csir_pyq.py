@@ -111,6 +111,19 @@ def main() -> None:
     assert "".join(sorted(k for k, value in q80["verdicts"].items() if value["tf"])) == "BC"
     assert "editorially supplied" in q80["explanation"]
 
+    q81 = next(x for x in methods["items"] if x["id"] == "csir-meth-2024-dec-q81")
+    assert q81["year"] == 2024 and q81["session"] == "December" and q81["answer"] == "C"
+    assert "2/6=1/3" in q81["explanation"]
+    q82 = next(x for x in methods["items"] if x["id"] == "csir-meth-2024-dec-q82")
+    assert q82["year"] == 2024 and q82["session"] == "December" and q82["answer"] == "A"
+    assert q82["topic"].startswith("inference-t13") and "0.36" in q82["explanation"]
+    q83 = next(x for x in methods["items"] if x["id"] == "csir-meth-2024-dec-q83")
+    assert q83["year"] == 2024 and q83["session"] == "December" and q83["answer"] == "B"
+    assert "".join(sorted(k for k, value in q83["verdicts"].items() if value["tf"])) == "BC"
+    q84 = next(x for x in methods["items"] if x["id"] == "csir-meth-2024-dec-q84")
+    assert q84["year"] == 2024 and q84["session"] == "December" and q84["answer"] == "C"
+    assert "min{X₍₁₎,1−X₍ₙ₎}" in q84["explanation"]
+
     q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
     assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
