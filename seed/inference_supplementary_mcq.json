@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 672 and later pages 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 118,
+  "count": 123,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -2406,6 +2406,110 @@
       "answer": "D",
       "explanation": "The likelihood is L(θ)=(2θ²)ⁿ∏Xᵢ^(−3), provided θ≤Xᵢ for every observation; otherwise it is zero. Thus the allowed parameter values satisfy θ≤min(X₁,…,Xₙ). Within this interval the factor θ^(2n) increases as θ increases. The likelihood is therefore maximised at the largest allowed value, θ̂=min(X₁,…,Xₙ).",
       "pno": 666,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p675",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "Let X have density f(x|θ)=2θx+1−θ for 0<x<1, where −1≤θ≤1. Based on one observation, find the most powerful rejection region of size α=0.2 for testing H₀:θ=0 against H₁:θ=1.",
+      "options": [
+        "X>4/5",
+        "X≤2/5",
+        "X>8/5",
+        "X<4/5"
+      ],
+      "answer": "A",
+      "explanation": "Under H₀:θ=0, the density is f₀(x)=1. Under H₁:θ=1, it is f₁(x)=2x. The likelihood ratio f₁(x)/f₀(x)=2x increases with x, so the Neyman–Pearson lemma says to reject H₀ for large values of X. Under H₀, X is Uniform(0,1). To make the test size 0.2, choose c so that P₀(X>c)=0.2, giving c=0.8=4/5.",
+      "pno": 675,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p676",
+      "format": "multi",
+      "topic": "inference-t3",
+      "stem": "Let (X,Y) have the joint distribution specified by X|Y=y~Binomial(y,0.5) and Y~Poisson(λ), λ>0. Let T=T(X,Y) be any unbiased estimator of λ. Which statements are true?",
+      "statements": [
+        "Var(T)≤Var(Y) for all λ.",
+        "Var(T)≥Var(Y) for all λ.",
+        "Var(T)≥λ for all λ.",
+        "Var(T)=Var(Y) for all λ."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statements 2 and 3 only",
+        "Statements 1 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "explanation": "The marginal variable Y is Poisson(λ), and the conditional distribution of X given Y does not involve λ. Thus Y is sufficient for λ. The Poisson family is complete, so Y is the unique unbiased function of the complete sufficient statistic and is the UMVU estimator of λ. By the Rao–Blackwell and Lehmann–Scheffé results, every unbiased estimator T based on (X,Y) has variance at least Var(Y)=λ. Therefore statements 2 and 3 are true.",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Y is the UMVU estimator, so no unbiased estimator can have smaller variance than Y."
+        },
+        "B": {
+          "tf": true,
+          "why": "The Lehmann–Scheffé theorem gives Var(T)≥Var(Y) for every unbiased estimator T."
+        },
+        "C": {
+          "tf": true,
+          "why": "Since Var(Y)=λ, the lower bound in statement 2 is exactly λ."
+        },
+        "D": {
+          "tf": false,
+          "why": "Equality holds only for estimators that attain the UMVU variance, not for every unbiased estimator."
+        }
+      },
+      "pno": 676,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p677",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "Let X have density f(x|λ)=λ²x e^(−λx), x>0, λ>0. For testing H₀:λ=2 against H₁:λ=1, the most powerful test of size α rejects H₀ when X>c. Which expression gives c?",
+      "options": [
+        "(1/4)χ²₄,α",
+        "(1/4)χ²₃,α",
+        "(1/4)χ²₂,α",
+        "(1/4)χ²₁,α"
+      ],
+      "answer": "A",
+      "explanation": "The likelihood ratio f(x|1)/f(x|2)=(1/4)e^x is increasing in x, so the Neyman–Pearson most powerful test rejects for large X. Under H₀, X has a Gamma distribution with shape 2 and rate 2. Therefore 4X has a chi-square distribution with 4 degrees of freedom. The size condition P₂(X>c)=α is equivalent to P(χ²₄>4c)=α. If χ²₄,α denotes the upper-tail α critical value, then c=(1/4)χ²₄,α.",
+      "pno": 677,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p679",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "A coin is tossed four times. Let p be the probability of heads in one toss and S the number of heads. Test H₀:p=1/2 against H₁:p≠1/2 by rejecting H₀ when S=0 or S=4. Find the Type I error α and the Type II error β when the true value is p=3/4.",
+      "options": [
+        "α=1/4, β=87/128",
+        "α=1/8, β=87/128",
+        "α=1/8, β=41/256",
+        "α=1/4, β=41/256"
+      ],
+      "answer": "B",
+      "explanation": "Under H₀, S~Binomial(4,1/2). The rejection probability is P(S=0)+P(S=4)=1/16+1/16=1/8, so α=1/8. When p=3/4, a Type II error occurs when S is 1, 2 or 3. Its probability is 4(3/4)(1/4)³+6(3/4)²(1/4)²+4(3/4)³(1/4)=87/128. Thus the correct pair is α=1/8 and β=87/128.",
+      "pno": 679,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p680",
+      "format": "single",
+      "topic": "inference-t4",
+      "stem": "Let X have density f(x|θ)=e^(−(x−θ)) for x>θ and zero otherwise, where θ is unknown. Four observations are 1.7, 1.9, 2.7 and 3.1. Find the maximum likelihood estimate of θ².",
+      "options": [
+        "6.7225",
+        "7.10",
+        "2.89",
+        "5.29"
+      ],
+      "answer": "C",
+      "explanation": "For independent observations, the likelihood is exp(−Σxᵢ+4θ) provided θ is smaller than every observation; otherwise it is zero. On the allowed interval θ≤min(xᵢ), this likelihood increases with θ. Hence the MLE is the sample minimum, θ̂=min(1.7,1.9,2.7,3.1)=1.7. By the invariance property of maximum likelihood estimators, the MLE of θ² is θ̂²=1.7²=2.89.",
+      "pno": 680,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]

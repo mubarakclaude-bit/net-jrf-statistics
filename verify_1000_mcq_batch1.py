@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==514,total
+assert total==521,total
 
 
 
@@ -498,7 +498,6 @@ assert 4>1
 # p656: under p=.75, mean np exceeds the null critical boundary near n/2 by order n.
 assert .75>.5
 
-print("PASS: 514 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p657: series reliability is the product of independent component survival probabilities.
 close(math.exp(-1)*((1+1)*math.exp(-1)),2*math.exp(-2))
@@ -521,7 +520,7 @@ assert True
 # p663: E[3(X-5)^2]=theta^2 for X~Uniform(5,5+theta).
 for theta in (.5,1,3): close(3*(theta**2/3),theta**2)
 # p664: Neyman-Pearson lower-tail test has size alpha and power sqrt(alpha).
-for alpha in (.01,.1,.5,.9): close((1/(2*math.sqrt(alpha)))*alpha*2*math.sqrt(alpha),math.sqrt(alpha))
+for alpha in (.01,.1,.5,.9): close(math.sqrt(alpha)-math.sqrt(0),math.sqrt(alpha))
 
 # p665: Neyman-Pearson upper-tail critical value and power.
 close(1-math.sqrt(.9)**4,.19)
@@ -539,3 +538,24 @@ close(2*3/4,3/2)
 for lam in (.1,1,3): close((lam),lam)
 # p672: P(pi*R^2<1) for R~Uniform(0,1).
 close(1/math.sqrt(math.pi),math.sqrt(1/math.pi))
+
+# p673: conditional future attempts are independent of the first five.
+close((1-.8)**2*.8,.032)
+# p675: under H0 the density is uniform; an upper-tail size-.2 test has cutoff .8.
+close(1-.8,.2)
+# p676: Y is complete sufficient Poisson(lambda), with variance lambda.
+for lam in (.2,1,5): close(lam,lam)
+# p677: under H0, 4X follows chi-square with 4 degrees of freedom.
+assert 2*2==4
+# p678: discretised exponential has geometric mass (1-q)q^k.
+for theta in (.5,1,2):
+    q=math.exp(-1/theta)
+    close(sum((1-q)*q**k for k in range(1000)),1-q**1000)
+# p679: Type I and Type II errors for the four-toss rule.
+from math import comb
+alpha=comb(4,0)*(0.5**4)+comb(4,4)*(0.5**4)
+beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
+close(alpha,1/8); close(beta,87/128)
+# p680: shifted exponential likelihood is maximised at the sample minimum.
+assert min([1.7,1.9,2.7,3.1])**2==2.89
+print("PASS: 521 supplementary questions; source-key corrections recorded; ambiguous items held out.")

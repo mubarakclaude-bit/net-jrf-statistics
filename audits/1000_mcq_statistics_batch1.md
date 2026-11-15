@@ -934,3 +934,14 @@ Eight additional questions were imported after visual inspection:
 - **Stochastic Processes (1):** variance of the index at which cumulative exponential inter-arrival times first exceed a fixed time, p671.
 
 All eight questions were legible and checked independently. The p665 rejection region is an upper tail because the likelihood ratio 2x² increases in x; the resulting power is 19/100. For p666, the likelihood increases in θ over θ≤min(Xᵢ), so the MLE is the sample minimum. The expected occupancy in p667 follows by linearity of expectation. Page 668 uses the probability that all components fail. For p669, Y is Uniform(0,1) and X|Y=y is exponential with mean y. Page 670 is a Poisson variable mixed with a conditional Binomial distribution. Page 671 identifies N as one plus a Poisson(λ) count over unit time. Page 672 reduces the area condition to R<1/√π.
+
+
+## Batch 62 — pages 673–680
+
+Seven additional questions were imported after visual inspection:
+- **Probability (2):** repeated independent target-destruction attempts conditioned on five initial failures, p673; and the geometric distribution induced by grouping an exponential observation into unit intervals, p678.
+- **Statistical Inference (5):** a Neyman–Pearson upper-tail test for a one-parameter density, p675; the UMVU variance lower bound when X|Y is Binomial and Y is Poisson, p676; a most powerful test for a Gamma(shape 2) family, p677; Type I and Type II errors for a four-toss binomial test, p679; and MLE of θ² for a shifted exponential model, p680.
+
+**Held out:** page 674 repeats the randomised normal linear-combination question already represented by page 560; it was not imported again.
+
+The p673 probability is 0.2²×0.8=0.032 because attempts after the first five remain independent. For p675, the likelihood ratio is 2x and the size-.2 upper-tail cutoff under Uniform(0,1) is 4/5. For p676, Y is complete sufficient for λ and has variance λ, so it is UMVU. For p677, under H₀, 4X~χ²₄, giving the upper-tail critical value χ²₄,α/4. For p678, P(Y=k)=(1−e^(−1/θ))e^(−k/θ), a geometric pmf on nonnegative integers. For p679, α=1/8 and β=87/128. For p680, the likelihood increases over θ≤min(Xᵢ), so θ̂=1.7 and the MLE of θ² is 2.89.
