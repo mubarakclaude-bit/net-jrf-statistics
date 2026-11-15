@@ -454,7 +454,6 @@ assert total==498,total
 
 
 
-print("PASS: 498 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 
 # p625: the sample minimum from n shifted exponentials has scale sigma/n.
@@ -498,3 +497,5 @@ close((4*4)/(math.comb(9,3)),4/21)
 assert 4>1
 # p656: under p=.75, mean np exceeds the null critical boundary near n/2 by order n.
 assert .75>.5
+
+print("PASS: 498 supplementary questions; source-key corrections recorded; ambiguous items held out.")
