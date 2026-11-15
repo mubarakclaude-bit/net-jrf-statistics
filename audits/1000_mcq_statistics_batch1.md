@@ -1083,3 +1083,18 @@ Eight additional Statistical Inference questions were imported after visual insp
 - **Page 752:** non-existence of an unbiased estimator, and hence UMVUE, for 1/p in a finite Bernoulli sample.
 
 The p745 likelihood is increasing in θ over θ≤X₍₁₎, so its maximum is the sample minimum. Page 746 gives α=P₁/₂(X≤3)=11/64. For p747, E(X²)=α(α+1)β², so the scaled sample second moment is consistent for β². Page 748 uses the exponential median θln2 and MLE invariance. Page 749 has type-I error P₁/₂(X≥4)=3/16. Page 750 equates X̄=1/λ. Page 751 uses the standard definitions of size and power. For p752, the expectation of any statistic on the finite Bernoulli sample space is polynomial in p, so it cannot equal 1/p over the full interval 0<p<1.
+
+
+## Batch 72 — pages 753–760
+
+Eight additional Statistical Inference questions were imported after visual inspection:
+- **Page 753:** sufficiency of the sum for two iid Poisson observations.
+- **Page 754:** UMVU estimator of θ² for a Normal sample with known unit variance.
+- **Page 755:** estimator of the variance of a zero-mean Normal distribution that attains the Cramér–Rao lower bound.
+- **Page 756:** unbiasedness and consistency of the sample mean and two sample-variance conventions (multi-select).
+- **Page 757:** sufficiency and completeness of the sum of squared deviations for a Normal model with known mean and unknown variance.
+- **Page 758:** failure of the usual Cramér–Rao regularity conditions for Uniform(0,θ).
+- **Page 759:** MLE for θ in a Uniform(θ,θ²) model.
+- **Page 760:** sufficient statistic for two Binomial(2,θ) observations.
+
+For p753, factorisation shows that X₁+X₂ is sufficient; its half is the UMVU estimator of λ. For p754, E(X̄²−1/n)=θ². For p755, ΣXᵢ²/n has variance 2σ⁴/n, equal to the CRLB when the mean is known to be zero. For p756, the n−1 denominator sample variance is unbiased; the n denominator version is biased but consistent. For p757, the scaled sum of squares has a chi-square distribution and is complete sufficient. Page 758 has parameter-dependent support, invalidating the usual CRLB regularity conditions. For p759, the likelihood decreases over the feasible interval, so the MLE is the square root of the sample maximum. For p760, the likelihood depends on θ through X₁+X₂.

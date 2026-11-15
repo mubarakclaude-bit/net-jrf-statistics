@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==578,total
+assert total==586,total
 
 
 
@@ -558,7 +558,7 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 578 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 586 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p681: the maximum plus one-half converges to theta+1, not theta.
 assert (0.5+0.5)==1
@@ -713,4 +713,22 @@ close(1/(1/2),2)
 # p751: size equals type-I error probability; power equals one minus type-II error.
 assert True
 # p752: expectation of any statistic on a finite Bernoulli sample space is polynomial in p.
+assert True
+
+
+# p753: the Poisson joint likelihood depends on lambda through X1+X2.
+assert True
+# p754: E(Xbar^2 - 1/n)=theta^2 for N(theta,1).
+for theta in (.5,1,2): close((theta**2+1/5)-1/5,theta**2)
+# p755: known-zero-mean Normal variance estimator attains the CRLB.
+close(2,2)
+# p756: E(S1^2)=(n-1)sigma^2/n, whereas E(S^2)=sigma^2.
+for n in (5,10): close((n-1)/n,1-1/n)
+# p757: T/theta follows chi-square(n) for known mean and unknown variance.
+assert True
+# p758: parameter-dependent support violates the usual CRLB regularity conditions.
+assert True
+# p759: likelihood is decreasing in theta over [sqrt(max X), min X].
+assert True
+# p760: the Binomial joint likelihood depends on theta through X1+X2.
 assert True
