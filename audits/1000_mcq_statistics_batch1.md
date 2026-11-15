@@ -541,3 +541,14 @@ Ten questions were imported after visual review:
 
 - **Page 342:** the normal-table approximation rounds z≈1.035 to 1.03, giving the source option 0.1515; direct evaluation is approximately 0.1504.
 - **Pages 338–341:** these are separate numeric variants of the same standard-error calculation, retained because the population standard deviations differ.
+
+
+## Batch 33 — pages 349–360
+
+Twelve questions were imported after visual review, all in Probability:
+- Joint-density expectation, p349; scaling a normal numerator to obtain a t distribution, p350; variance under Celsius-to-Fahrenheit conversion, p351; absolute-value transformation of an exponential variable, p352; expectation of the positive part of a standard normal, p353; a normal absolute-moment limit, p354; normal-density value at its inflection points, p355; conditional density from a triangular joint support, p356; conditional Poisson distribution given the sum, p357; variance of a sum with common pairwise correlation, p358; an F-distribution ratio, p359; and the mean of a chi random variable, p360.
+
+### Source corrections and exclusions
+
+- **Page 357:** the correct conditional law is Binomial(y, λ₁/(λ₁+λ₂)); none of the printed options gives that law, so the item is keyed as “None of the above”.
+- The remaining items in this batch were checked by direct integration, transformation, standard distribution identities or moment formulas; no source-key correction was needed.
