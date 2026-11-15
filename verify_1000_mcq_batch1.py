@@ -152,9 +152,11 @@ close(.25+.25+.5,1)
 assert 2**(-5)*math.exp(3*10/8) < 2**(-5)*math.exp(3*11/8)
 # p388: after removing the parameter-free exp(sum(x_i)) factor,
 # the likelihood kernel depends on the sample only through sum(x_i^2).
+sample_a=[1.0,2.0]; sample_b=[math.sqrt(2.5),math.sqrt(2.5)]
+assert sum(x*x for x in sample_a)==sum(x*x for x in sample_b)
 for theta in (.5,1,2):
-    x2=3.0
-    close(math.exp(-x2/(2*theta)-3*theta/2),math.exp(-x2/(2*theta)-3*theta/2))
+    close(math.exp(-sum(x*x for x in sample_a)/(2*theta)-2*theta/2),
+          math.exp(-sum(x*x for x in sample_b)/(2*theta)-2*theta/2))
 # p389: inclusion-exclusion and conditioning.
 close((.4+.5-.6-.1)/.6,1/3)
 # p390: inverse transformation Jacobian; density integrates to one.
@@ -174,4 +176,4 @@ assert lower < upper
 # p396: gamma shape likelihood ratio is proportional to product of observations.
 assert 2>1
 assert total==327,total
-print("PASS: 316 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 327 supplementary questions; source-key corrections recorded; ambiguous items held out.")
