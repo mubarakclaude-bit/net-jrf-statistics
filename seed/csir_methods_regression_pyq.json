@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 41,
-  "clean": 41,
+  "count": 44,
+  "clean": 44,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -1204,6 +1204,105 @@
         }
       },
       "explanation": "Least squares chooses the coefficients that make the residual sum of squares as small as possible. Model 2 has every choice available to Model 1, because we can set its extra coefficient β₂=0. It also has additional choices with β₂≠0. Therefore the minimum residual sum of squares in Model 2 cannot exceed that in Model 1: B≤A. This proves statement 1 and disproves statement 2.\\n\\nIf A=0, the observations lie exactly on a straight line. Model 2 can use the same straight line by choosing β₂=0, so B=0 as well. Hence statement 3 is impossible. Conversely, a quadratic curve can pass exactly through the observations while no straight line does; then B=0 and A>0. Statement 4 is possible. Therefore statements 1 and 4 only are correct.\\n\\nThe supplied answer key on page 51 lists A and D, which agrees. Source: Methods of Estimation PDF, Question 36, June 2016, page 22; printed answer key page 51.\\n\\nOther-exam relevance: nested regression models, least-squares fitting and residual sum of squares are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2016-jun-q38",
+      "type": "practice",
+      "format": "single",
+      "year": 2016,
+      "session": "June",
+      "topic": "inference-t13 · chi-square confidence interval for a normal variance with known mean",
+      "stem": "Let X₁,…,Xₙ be a random sample from N(μ,σ²), where μ is known and σ²>0 is unknown. Let χ²ₙ,α/2 and χ²ₙ,1−α/2 denote the upper-tail α/2 and 1−α/2 quantiles of a chi-square distribution with n degrees of freedom. Which expression is a 100(1−α)% confidence interval for σ²?",
+      "options": [
+        "(ΣXᵢ²/[nχ²ₙ,α/2], ΣXᵢ²/[nχ²ₙ,1−α/2])",
+        "(Σ(Xᵢ−μ)²/[(n−1)χ²ₙ−1,α/2], Σ(Xᵢ−μ)²/[(n−1)χ²ₙ−1,1−α/2])",
+        "(Σ(Xᵢ−X̄)²/[nχ²ₙ,α/2], Σ(Xᵢ−X̄)²/[nχ²ₙ,1−α/2])",
+        "(Σ(Xᵢ−μ)²/[nχ²ₙ,α/2], Σ(Xᵢ−μ)²/[nχ²ₙ,1−α/2])"
+      ],
+      "answer": "D",
+      "explanation": "Because μ is known, each standardized squared deviation (Xᵢ−μ)²/σ² contributes to a chi-square pivot. In fact, Q=Σ(Xᵢ−μ)²/σ² has a chi-square distribution with n degrees of freedom. Notice the degrees of freedom are n, not n−1: we have not estimated μ from the sample.\\n\\nUsing the upper-tail quantile convention in the question, P(χ²ₙ,1−α/2≤Q≤χ²ₙ,α/2)=1−α. Replace Q by its expression and solve the two inequalities for σ². Since all quantities are positive, the lower endpoint uses the larger chi-square quantile and the upper endpoint uses the smaller one. This gives [Σ(Xᵢ−μ)²/(nχ²ₙ,α/2), Σ(Xᵢ−μ)²/(nχ²ₙ,1−α/2)] under the source's quantile notation: option D.\\n\\nThe other options either use the wrong centering, the wrong degrees of freedom, or the sample mean even though μ is known. Source: Methods of Estimation PDF, Question 38, June 2016, page 23; printed answer key page 51 (D).\\n\\nOther-exam relevance: chi-square pivots and confidence intervals for normal variance are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2016-jun-q41",
+      "type": "practice",
+      "format": "multi",
+      "year": 2016,
+      "session": "June",
+      "topic": "regression-t7 · projection matrices, leverage and residual variances in the linear model",
+      "stem": "Consider Y=Xβ+ε, where X is n×p with rank p, E(ε)=0 and Var(ε)=σ²I. Let H=X(XᵀX)⁻¹Xᵀ=(hᵢⱼ) be the hat matrix. Which statements are correct?",
+      "statements": [
+        "0≤hᵢᵢ≤1 for every i.",
+        "If hᵢᵢ=0 or 1 for some i, then hᵢⱼ=0 for every j≠i.",
+        "Var(Ŷ)=σ²H, where Ŷ=HY.",
+        "Var(eᵢ)=σ²(1−hᵢᵢ), where eᵢ=Yᵢ−Ŷᵢ."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 1, 2 and 3 only",
+        "Statements 1, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "D",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "H is a symmetric idempotent projection matrix. Its diagonal elements are squared projection lengths and lie between zero and one."
+        },
+        "B": {
+          "tf": true,
+          "why": "For a projection matrix, Σⱼhᵢⱼ²=hᵢᵢ. If hᵢᵢ is 0 or 1, then hᵢᵢ−hᵢᵢ²=Σⱼ≠ᵢhᵢⱼ²=0, forcing every off-diagonal element in that row to be zero."
+        },
+        "C": {
+          "tf": true,
+          "why": "Ŷ=HY, so Var(Ŷ)=H(σ²I)Hᵀ=σ²H because H is symmetric and idempotent."
+        },
+        "D": {
+          "tf": true,
+          "why": "The residual vector is (I−H)Y, whose covariance matrix is σ²(I−H); its i-th diagonal element is σ²(1−hᵢᵢ)."
+        }
+      },
+      "explanation": "The hat matrix H=X(XᵀX)⁻¹Xᵀ is the matrix that projects the observed response vector Y onto the column space of X. It has two important properties: Hᵀ=H (symmetric) and H²=H (idempotent).\\n\\n1. The diagonal hᵢᵢ is the leverage of observation i. Since H is a projection matrix, 0≤hᵢᵢ≤1.\\n\\n2. From H²=H, the (i,i) entry gives Σⱼhᵢⱼ²=hᵢᵢ. Since H is symmetric, this becomes hᵢᵢ²+Σⱼ≠ᵢhᵢⱼ²=hᵢᵢ. Thus Σⱼ≠ᵢhᵢⱼ²=hᵢᵢ(1−hᵢᵢ). If hᵢᵢ=0 or 1, the sum of squares is zero, so all hᵢⱼ for j≠i are zero.\\n\\n3. Since Ŷ=HY, Var(Ŷ)=H Var(Y)Hᵀ=σ²HHᵀ=σ²H.\\n\\n4. The residual vector is e=(I−H)Y. Its covariance is σ²(I−H), so Var(eᵢ)=σ²(1−hᵢᵢ). All four statements are correct. Source: Methods of Estimation PDF, Question 41, June 2016, page 25; printed answer key page 51 (A, B, C, D).\\n\\nOther-exam relevance: projection matrices, leverage, fitted-value covariance and residual variance are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2015-dec-q49",
+      "type": "practice",
+      "format": "multi",
+      "year": 2015,
+      "session": "December",
+      "topic": "probability-t8 · compound geometric sums, moment-generating functions and characteristic functions",
+      "stem": "Let N,A₁,A₂,… be independent, with P(N=k)=(1−p)pᵏ for k=0,1,2,…, where 0<p<1. Let A₁,A₂,… be i.i.d. bounded random variables and define X=0 when N=0 and X=Σⱼ₌₁ᴺAⱼ when N≥1. Which statements are necessarily correct?",
+      "statements": [
+        "X is a bounded random variable.",
+        "M_X(t)=(1−p)/[1−pM_A(t)] for every real t.",
+        "φ_X(t)=(1−p)/[1−pφ_A(t)] for every real t.",
+        "X is symmetric about zero."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statement 2 only",
+        "Statement 3 only",
+        "Statements 3 and 4 only"
+      ],
+      "answer": "C",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "N has unbounded support. If Aᵢ=1 with probability one, then X=N, which is unbounded."
+        },
+        "B": {
+          "tf": false,
+          "why": "The geometric-series formula for the MGF is valid only where pM_A(t)<1; because N is unbounded, the MGF need not exist for every real t."
+        },
+        "C": {
+          "tf": true,
+          "why": "Conditioning on N gives φ_X(t)=Σₖ₌₀∞(1−p)pᵏφ_A(t)ᵏ, a convergent geometric series because |pφ_A(t)|≤p<1."
+        },
+        "D": {
+          "tf": false,
+          "why": "The summands need not be symmetric; for example, Aᵢ=1 almost surely makes X nonnegative."
+        }
+      },
+      "explanation": "Condition on the value of N, the number of terms in the sum. If N=k, independence gives the characteristic function of A₁+⋯+Aₖ as [φ_A(t)]ᵏ. Therefore\\n\\nφ_X(t)=Σₖ₌₀∞P(N=k)[φ_A(t)]ᵏ=(1−p)Σₖ₌₀∞[pφ_A(t)]ᵏ.\\n\\nA characteristic function always has absolute value at most one. Hence |pφ_A(t)|≤p<1, so the geometric series converges for every real t and equals (1−p)/[1−pφ_A(t)]. Statement 3 is true.\\n\\nThe same formal calculation for the moment-generating function uses M_A(t) instead of φ_A(t), but it converges only when pM_A(t)<1. Boundedness of A does not guarantee this condition for every real t, because the number N of summands can be arbitrarily large. For example, if A=1 almost surely, then X=N and its MGF is finite only when peᵗ<1. Thus statement 2 is false as written.\\n\\nSince N is unbounded, X need not be bounded; and since the summands need not be symmetric, X need not be symmetric. Statements 1 and 4 are false. Therefore statement 3 only is correct. The supplied scan's answer key on page 51 stops at Q41, so no printed key entry for Q49 is available in that key page; this answer is derived directly from the stated probability model. Source: Methods of Estimation PDF, Question 49, December 2015, page 30.\\n\\nOther-exam relevance: characteristic functions, moment-generating functions and compound distributions are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
     }
   ]
 }
