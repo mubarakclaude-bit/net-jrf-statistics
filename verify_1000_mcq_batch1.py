@@ -450,9 +450,23 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==469,total
+assert total==488,total
 
 
 
-print("PASS: 469 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 488 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
+
+# p625: the sample minimum from n shifted exponentials has scale sigma/n.
+for n, sigma in [(2,3.0),(5,2.0),(10,7.0)]:
+    close((n/sigma)*(sigma/n),1)
+# p628: delta-method variance of sqrt(sample mean) under a Poisson null is 1/(4m).
+for m,n in [(20,30),(50,80),(100,100)]:
+    close(1/(4*m)+1/(4*n), (1/m+1/n)/4)
+# p631: Poisson approximation for at most one no-show among 250 tickets.
+close(math.exp(-2.5)*(1+2.5),3.5*math.exp(-2.5))
+# p633: expectation is additive even when X and Y are dependent.
+close(1+float(4),5)
+# p636: reciprocal transformation leaves the standard Cauchy density unchanged.
+for z in (.25,1.0,3.0):
+    close((1/(math.pi*(1+(1/z)**2)))*(1/z**2),1/(math.pi*(1+z**2)))
