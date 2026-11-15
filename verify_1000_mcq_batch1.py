@@ -450,11 +450,11 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==497,total
+assert total==498,total
 
 
 
-print("PASS: 497 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 498 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 
 # p625: the sample minimum from n shifted exponentials has scale sigma/n.
