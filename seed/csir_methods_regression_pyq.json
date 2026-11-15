@@ -1591,19 +1591,19 @@
       "verdicts": {
         "A": {
           "tf": false,
-          "why": "Residual variances depend on the leverage values and need not be identical across observations."
+          "why": "Residual variances depend on leverage values and need not be identical across observations."
         },
         "B": {
           "tf": true,
-          "why": "The model with X and X² contains the model with X alone by setting the coefficient of X² to zero, so its residual sum of squares cannot increase and R² cannot decrease."
+          "why": "Adding X² cannot increase the least-squares residual sum of squares, so ordinary R² cannot decrease."
         },
         "C": {
           "tf": false,
-          "why": "Adjusted R² penalises additional regressors and can decrease when X² adds too little explanatory power."
+          "why": "Adjusted R² may decrease when the extra regressor adds too little explanatory power."
         },
         "D": {
           "tf": false,
-          "why": "The strict inequality is not necessary when the sample columns X and X² are orthogonal; in that case the coefficient variance can be equal to the simple-regression variance."
+          "why": "The coefficient variance is inflated when the regressors are correlated, but equality is possible when the centred X and X² columns are orthogonal; strict increase is not necessary."
         }
       },
       "explanation": "Statement 1 is false: even when the original errors have constant variance, the fitted residuals have covariance matrix σ²(I−H), so their individual variances are σ²(1−hᵢᵢ), which generally differ.\\n\\nStatement 2 is true. The expanded model can reproduce the original fit by setting the coefficient of X² equal to zero. Its least-squares residual sum of squares therefore cannot be larger, so the ordinary R² cannot be smaller.\\n\\nStatement 3 is false because adjusted R² includes a penalty for the extra predictor. If X² explains too little additional variation, adjusted R² decreases.\\n\\nStatement 4 is not necessarily true as written. In the two-regressor model, Var(β̂₁)=σ²/[Sxx(1−r²)], compared with σ²/Sxx in the simple model, where r is the sample correlation between the centred X and X² columns. This is greater when r≠0, but equal when r=0. Since the question asks what is necessarily correct, the strict greater-than statement cannot be selected without excluding r=0. Therefore statement 2 only is necessarily true. Source: Methods of Estimation PDF, Question 63, December 2012, page 39. The supplied answer-key page does not include Q63.\\n\\nOther-exam relevance: nested regression, R², adjusted R² and multicollinearity are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
