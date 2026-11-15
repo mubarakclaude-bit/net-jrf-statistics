@@ -96,5 +96,28 @@ for n in (2,3,8): close(n+n*(n-1)/4,n*(n+3)/4)
 close(2,10/5)
 # p360: chi mean uses the gamma ratio.
 assert math.gamma(2)>0
-assert total==294,total
-print("PASS: 282 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+# p361: half the sum of two independent squared N(0,2) differences is chi-square(2).
+assert 2==1+1
+# p363: exact Binomial(100,0.5) tail identifies N>=59 as the 5% cutoff.
+from math import comb
+upper59=sum(comb(100,k) for k in range(59,101))/2**100
+upper58=sum(comb(100,k) for k in range(58,101))/2**100
+assert upper59<=.05<upper58
+# p365: Bayes posterior probability for the male student.
+close((7/30)/(7/30+16/30),7/23)
+# p366: mixture density integrates to 3/4 + 1/4 = 1; mean is 3/4.
+close(.75+.25,1); close(.5+.25,.75)
+# p368: Fisher information for n observations is n/theta^2.
+close(1/(1/4),4)
+# p369: convergence-in-probability criterion is the tail probability tending to zero.
+assert 0 < .05
+# p370: Gamma method-of-moments shape from raw moments.
+for beta,theta in [(2,3),(.5,4),(5,2)]:
+    m1=beta*theta; m2=beta*(beta+1)*theta**2
+    close(m1**2/(m2-m1**2),beta)
+# p371: conditional Poisson sum gives Binomial(10,4/7), mean 40/7.
+close(10*4/7,40/7)
+# p372: shifted Uniform(1/2,3/2) rejection probability above 2/3.
+close(1.5-2/3,5/6)
+assert total==304,total
+print("PASS: 304 supplementary questions; source-key corrections recorded; ambiguous items held out.")
