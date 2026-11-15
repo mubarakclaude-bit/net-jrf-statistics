@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 59,
-  "clean": 59,
+  "count": 61,
+  "clean": 61,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -1846,6 +1846,88 @@
         }
       },
       "explanation": "A parameter function is estimable if it can be written as a linear combination of the observation means. Here A=E(X₂) and B=E(X₃), so A and B are estimable. Also, C=E(X₁)−E(X₂)−E(X₃), so C is estimable. Thus statement 2 is true.\\n\\nThe sum B+C=E(X₁)−E(X₂), so statement 1 is false. The sum A+B+C is exactly E(X₁), so statement 3 is true.\\n\\nThe claim that X₂ is the BLUE of A is not supported. If the errors are independent with common variance σ², then (X₁+X₄)/2 is unbiased for A because E(X₁+X₄)=2A, and its variance is σ²/2, smaller than Var(X₂)=σ². The problem does not state a covariance structure that would make X₂ uniquely BLUE. Hence statements 2 and 3 only are defensible. Source: Methods of Estimation PDF, Question 76, June 2011, page 46. The supplied answer-key page does not include Q76.\\n\\nOther-exam relevance: estimability, redundant parameterisations and BLUE comparisons are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2015-jun-q46",
+      "type": "practice",
+      "format": "multi",
+      "year": 2015,
+      "session": "June",
+      "topic": "regression-t2 · inference-t3 · normal linear-model MLEs, independence and residual quadratic forms",
+      "stem": "Consider Y~Nₙ(Xβ,σ²I), where X is n×(k+1) with rank k+1<n. Let β̂ and σ̂² be the maximum-likelihood estimators. Which statements are true?",
+      "statements": [
+        "Cov(β̂)=σ²XᵀX.",
+        "β̂ and σ̂² are independent.",
+        "σ̂² is sufficient for σ².",
+        "σ̂²=YᵀAY for a suitable matrix A of rank n−k−1."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 2 and 4 only",
+        "Statements 1, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The covariance is σ²(XᵀX)⁻¹, not σ²XᵀX."
+        },
+        "B": {
+          "tf": true,
+          "why": "Under normal errors, the least-squares coefficient estimator and residual sum of squares are independent."
+        },
+        "C": {
+          "tf": false,
+          "why": "With unknown β, the residual sum of squares alone is not sufficient for σ²; the likelihood also involves β̂ through the fitted component."
+        },
+        "D": {
+          "tf": true,
+          "why": "The MLE is RSS/n, and RSS=Yᵀ(I−H)Y with I−H a symmetric idempotent matrix of rank n−k−1."
+        }
+      },
+      "explanation": "For the normal linear model, β̂=(XᵀX)⁻¹XᵀY, so Cov(β̂)=σ²(XᵀX)⁻¹. Statement 1 is false because the inverse is essential.\\n\\nThe residual vector is e=(I−H)Y, where H=X(XᵀX)⁻¹Xᵀ. Under normality, the fitted component HY and residual component (I−H)Y are independent. Since β̂ is determined by HY and σ̂² is determined by the residual sum of squares, β̂ and σ̂² are independent. Statement 2 is true.\\n\\nThe joint likelihood contains both the fitted component involving β̂−β and the residual sum of squares. Thus the residual sum of squares alone is not sufficient for σ² when β is an unknown nuisance parameter. Statement 3 is false.\\n\\nFinally, σ̂²_MLE=RSS/n=Yᵀ(I−H)Y/n. The matrix I−H is idempotent and has rank n−(k+1)=n−k−1. Hence statement 4 is true. Therefore statements 2 and 4 only are correct. Source: Methods of Estimation PDF, Question 46, June 2015, page 27. The supplied answer-key page does not include Q46.\\n\\nOther-exam relevance: normal linear models, MLEs, independence of fitted and residual components, and quadratic forms are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2015-jun-q48",
+      "type": "practice",
+      "format": "multi",
+      "year": 2015,
+      "session": "June",
+      "topic": "regression-t2 · estimable contrasts and BLUEs in a cyclic difference model",
+      "stem": "Consider the linear model Yᵢ=μᵢ−μᵢ₊₁+εᵢ for i=1,…,n−1 and Yₙ=μₙ−μ₁+εₙ, where the errors are uncorrelated with mean zero and common variance. Let Ȳ=(1/n)ΣYᵢ. Which statements are correct?",
+      "statements": [
+        "If E(cᵀY)=0, then all components of c are equal.",
+        "Y₁+Y₂ is the BLUE of μ₁−μ₃.",
+        "Y₂−Ȳ is the BLUE of μ₂−μ₃.",
+        "Every linear function d₁μ₁+⋯+dₙμₙ is estimable."
+      ],
+      "options": [
+        "Statements 1 and 3 only",
+        "Statements 1 and 2 only",
+        "Statements 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The null space of the cyclic difference design is spanned by the all-ones vector, so a zero-mean linear combination must have equal coefficients."
+        },
+        "B": {
+          "tf": false,
+          "why": "Y₁+Y₂ is unbiased for μ₁−μ₃, but subtracting 2Ȳ reduces its variance while preserving unbiasedness; the BLUE is Y₁+Y₂−2Ȳ."
+        },
+        "C": {
+          "tf": true,
+          "why": "Y₂−Ȳ is unbiased for μ₂−μ₃ and has minimum variance among unbiased linear estimators because its coefficient vector has zero sum."
+        },
+        "D": {
+          "tf": false,
+          "why": "Only contrasts whose coefficients sum to zero are estimable; an arbitrary linear function need not satisfy this condition."
+        }
+      },
+      "explanation": "Let cᵀY=ΣcᵢYᵢ. The coefficient of μⱼ in E(cᵀY) is cⱼ−cⱼ₋₁, with indices interpreted cyclically. If E(cᵀY)=0 for every possible μ, then all these differences must be zero, so c₁=⋯=cₙ. This proves statement 1.\\n\\nA linear function dᵀμ is estimable exactly when Σdᵢ=0, because every observation mean is a difference of two successive μ parameters. Thus not every linear function is estimable, and statement 4 is false.\\n\\nFor μ₂−μ₃, Y₂ is already unbiased, and subtracting Ȳ does not change its expectation because E(Ȳ)=0. The coefficient vector of Y₂−Ȳ has sum zero and is the minimum-norm unbiased coefficient vector, so it gives the BLUE. Statement 3 is true.\\n\\nFor μ₁−μ₃, Y₁+Y₂ is unbiased, but it is not minimum variance. Since E(Ȳ)=0, the estimator Y₁+Y₂−2Ȳ remains unbiased and has a smaller coefficient-vector norm (the constant component is removed). Therefore statement 2 is false. Statements 1 and 3 only are correct. Source: Methods of Estimation PDF, Question 48, June 2015, page 29. The supplied answer-key page does not include Q48.\\n\\nOther-exam relevance: estimability, linear contrasts, null spaces and BLUE construction are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
     }
   ]
 }
