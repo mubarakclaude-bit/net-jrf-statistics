@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 64,
-  "clean": 64,
+  "count": 65,
+  "clean": 65,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -2002,6 +2002,47 @@
       ],
       "answer": "C",
       "explanation": "For one observed value X=3, the likelihood is Pθ₁,θ₂(X=3). Read the third row of the probability table: the four likelihood values are 8/11, 5/7, 3/4 and 2/3. Compare them: 8/11≈0.7273, 5/7≈0.7143, 3/4=0.75 and 2/3≈0.6667. The largest is 3/4, corresponding to (θ₁,θ₂)=(2,1/2), option C. With a finite parameter space, evaluate the likelihood at every allowed parameter value and select the largest. The printed answer key (Methods PDF page 52) gives C and agrees. Other-exam relevance: finite-parameter likelihood maximisation overlaps the estimation/inference syllabi of UGC NET/JRF Statistics, GATE Statistics and State SET Statistics; this does not imply this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Q57, December 2013, source page 35.",
+      "type": "practice"
+    },
+    {
+      "id": "csir-meth-2015-jun-q47",
+      "format": "multi",
+      "year": 2015,
+      "session": "June",
+      "topic": "multivariate-t7 · constrained bivariate-normal MLE with a common mean and equal marginal variances",
+      "stem": "Let (X₁,Y₁),…,(Xₙ,Yₙ) be a random sample from a bivariate normal distribution with E(Xᵢ)=E(Yᵢ)=μ, Var(Xᵢ)=Var(Yᵢ)=σ² and Cov(Xᵢ,Yᵢ)=ρσ². Let μ̂, σ̂² and ρ̂ be the maximum-likelihood estimators. Define Sₓ²=Σ(Xᵢ−X̄)², Sᵧ²=Σ(Yᵢ−Ȳ)² and Sₓᵧ=Σ(Xᵢ−X̄)(Yᵢ−Ȳ). Which statements are correct?",
+      "statements": [
+        "X₁−Y₁ and X₁+Y₁ are independent.",
+        "μ̂=(X̄+Ȳ)/2 and σ̂²=(Sₓ²+Sᵧ²)/(2n).",
+        "σ̂²(1+ρ̂)=(Sₓ²+Sᵧ²+2Sₓᵧ)/(2n).",
+        "σ̂²(1−ρ̂)=(Sₓ²+Sᵧ²−2Sₓᵧ)/(2n)."
+      ],
+      "options": [
+        "Statements 1 and 3 only",
+        "Statements 1, 2 and 3 only",
+        "Statements 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "For a bivariate normal pair with equal marginal variances, Cov(X−Y,X+Y)=Var(X)−Var(Y)=0. Zero covariance implies independence."
+        },
+        "B": {
+          "tf": false,
+          "why": "The common-mean constraint contributes n(X̄−Ȳ)²/2 to the pooled transformed sum of squares. The MLE of σ² is [Sₓ²+Sᵧ²+n(X̄−Ȳ)²/2]/(2n), not the expression shown."
+        },
+        "C": {
+          "tf": true,
+          "why": "The transformed variable U=(X+Y)/√2 has mean √2μ and variance σ²(1+ρ). Its MLE variance is its centred sum of squares divided by n, which equals (Sₓ²+Sᵧ²+2Sₓᵧ)/(2n)."
+        },
+        "D": {
+          "tf": false,
+          "why": "V=(X−Y)/√2 has known mean zero. Its variance MLE uses Σ(Xᵢ−Yᵢ)²/(2n), which equals [Sₓ²+Sᵧ²−2Sₓᵧ+n(X̄−Ȳ)²]/(2n). The displayed statement omits the nonnegative mean-difference term."
+        }
+      },
+      "explanation": "Use the orthogonal transformation Uᵢ=(Xᵢ+Yᵢ)/√2 and Vᵢ=(Xᵢ−Yᵢ)/√2. Since the original pair is jointly normal and has equal marginal variances, Cov(Uᵢ,Vᵢ)=0; therefore Uᵢ and Vᵢ are independent. This proves statement 1. Their distributions are Uᵢ~N(√2μ,σ²(1+ρ)) and Vᵢ~N(0,σ²(1−ρ)). The mean of U is unknown, while the mean of V is known to be zero. Thus the MLE of σ²(1+ρ) is Σ(Uᵢ−Ū)²/n=(Sₓ²+Sᵧ²+2Sₓᵧ)/(2n), proving statement 3. The MLE of σ²(1−ρ) is ΣVᵢ²/n=[Sₓ²+Sᵧ²−2Sₓᵧ+n(X̄−Ȳ)²]/(2n), so statement 4 omits a necessary term. Combining the two variance estimates gives μ̂=(X̄+Ȳ)/2 and σ̂²=[Sₓ²+Sᵧ²+n(X̄−Ȳ)²/2]/(2n), so statement 2 is false unless X̄=Ȳ. The correct statements are 1 and 3 only. The supplied answer key (Methods PDF page 52) lists A,B,C,D; this conflicts with the likelihood derivation, and the bank preserves that discrepancy rather than following the key blindly. Other-exam relevance: bivariate normal likelihood, orthogonal transformations and constrained covariance estimation overlap with UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi; this is syllabus overlap, not a claim that the exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 47, June 2015, page 28.",
       "type": "practice"
     }
   ]
