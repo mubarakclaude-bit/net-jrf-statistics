@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 21,
-  "clean": 21,
+  "count": 25,
+  "clean": 25,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -576,6 +576,98 @@
       ],
       "answer": "C",
       "explanation": "Let X₍₁₎ be the sample minimum and X₍ₙ₎ the sample maximum. The density is 1/(1−2θ) when every observation lies in [θ,1−θ], and zero otherwise. The likelihood is therefore L(θ)=(1−2θ)⁻ⁿ subject to θ≤X₍₁₎ and θ≤1−X₍ₙ₎. These support restrictions combine to θ≤min{X₍₁₎,1−X₍ₙ₎}.\n\nWithin the allowed parameter range, 1−2θ decreases as θ increases, so (1−2θ)⁻ⁿ increases as θ increases. The likelihood is maximised by taking θ as large as the support constraints permit. Thus θ̂MLE=min{X₍₁₎,1−X₍ₙ₎}, which is option 3 (C). This agrees with the supplied answer key on page 53.\n\nOther-exam relevance: MLEs for uniform distributions with parameter-dependent support are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 84, December 2024, page 48; answer key page 53."
+    },
+    {
+      "id": "csir-meth-2024-dec-q86",
+      "type": "practice",
+      "format": "multi",
+      "year": 2024,
+      "session": "December",
+      "topic": "inference-t13 · confidence intervals from the minimum of shifted exponential observations",
+      "stem": "Let X₁,…,Xₙ be a random sample from the density f(x|θ)=e^{−(x−θ)} for x≥θ and zero otherwise, where θ∈ℝ is unknown. Let X₍₁₎=min(X₁,…,Xₙ). Which statements give the stated confidence coefficient for θ?",
+      "statements": [
+        "(X₍₁₎−(2/n)ln 5, X₍₁₎) has confidence coefficient 0.97.",
+        "(X₍₁₎−(2/n)ln 5, X₍₁₎) has confidence coefficient 0.96.",
+        "(X₍₁₎−(1/n)ln 20, X₍₁₎) has confidence coefficient 0.95.",
+        "(X₍₁₎−(1/n)ln 20, X₍₁₎) has confidence coefficient 0.96."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statements 2 and 3 only",
+        "Statements 1, 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The coverage for the first interval is 1−exp[−n(2 ln 5/n)]=1−1/25=0.96, not 0.97."
+        },
+        "B": {
+          "tf": true,
+          "why": "The first interval has coefficient 0.96, and the second has coefficient 1−exp(−ln 20)=0.95."
+        },
+        "C": {
+          "tf": false,
+          "why": "Statement 1 is false, so the set 1,2,3 is not correct."
+        },
+        "D": {
+          "tf": false,
+          "why": "Statement 4 is false because the interval in statement 3 has coefficient 0.95, not 0.96."
+        }
+      },
+      "explanation": "The minimum of n independent shifted exponential observations has the form X₍₁₎=θ+E, where E is exponential with rate n. Thus P(E≤c)=1−e^(−nc). For an interval (X₍₁₎−c,X₍₁₎), the true θ is always below X₍₁₎, and it is above the lower endpoint exactly when E≤c. Therefore the confidence coefficient is 1−e^(−nc).\n\nFor c=(2/n)ln 5, the coefficient is 1−e^(−2 ln 5)=1−1/25=24/25=0.96. So statement 2 is true and statement 1 is false. For c=(1/n)ln 20, the coefficient is 1−e^(−ln 20)=1−1/20=0.95. So statement 3 is true and statement 4 is false. Therefore statements 2 and 3 only are correct. The combination options are editorially supplied; the supplied answer key lists statements 2 and 3 on page 53.\n\nOther-exam relevance: order statistics, exponential distributions and confidence intervals are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 86, December 2024, page 49; answer key page 53."
+    },
+    {
+      "id": "csir-meth-2025-jun-q87",
+      "type": "practice",
+      "format": "single",
+      "year": 2025,
+      "session": "June",
+      "topic": "inference-t4 · maximum likelihood for a finite-support discrete distribution",
+      "stem": "A discrete random variable X has probabilities P(X=0)=θ/3, P(X=1)=1−θ/2 and P(X=2)=θ/6, where 0<θ<1. In a sample of size 90, the observed counts at 0, 1 and 2 are 20, 60 and 10, respectively. What is the maximum-likelihood estimate of θ?",
+      "options": [
+        "1/3",
+        "1/2",
+        "2/3",
+        "3/4"
+      ],
+      "answer": "C",
+      "explanation": "The likelihood is proportional to (θ/3)²⁰(1−θ/2)⁶⁰(θ/6)¹⁰. Terms that do not depend on θ can be ignored, leaving L(θ)∝θ³⁰(1−θ/2)⁶⁰.\n\nTake logarithms: ℓ(θ)=30 ln θ+60 ln(1−θ/2)+constant. Differentiate: ℓ′(θ)=30/θ−30/(1−θ/2). Set this equal to zero: 30/θ=30/(1−θ/2), so θ=1−θ/2. Hence 3θ/2=1 and θ̂=2/3. The log-likelihood is concave on the parameter interval, so this is the maximum. The answer is option 3 (C), matching the supplied answer key on page 53.\n\nOther-exam relevance: likelihood estimation for discrete distributions is useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 87, June 2025, page 49; answer key page 53."
+    },
+    {
+      "id": "csir-meth-2025-jun-q88",
+      "type": "practice",
+      "format": "single",
+      "year": 2025,
+      "session": "June",
+      "topic": "inference-t13 · confidence intervals using a transformed pivotal variable",
+      "stem": "Let X have density f(x|θ)=3(θ−x)²/θ³ for 0<x<θ and zero otherwise. For λ₁,λ₂∈(0,1), λ₁<λ₂, consider the interval (X/(1−λ₁), X/(1−λ₂)). Which condition makes its confidence coefficient equal to 1−α?",
+      "options": [
+        "λ₂²−λ₁²=1−α",
+        "λ₂³−λ₁³=1−α",
+        "λ₂²−λ₁²=4(1−α)",
+        "λ₂³−λ₁³=9(1−α)"
+      ],
+      "answer": "B",
+      "explanation": "Let U=X/θ. Using x=θu in the density, U has density f_U(u)=3(1−u)² for 0<u<1. Its cumulative distribution function is F_U(u)=1−(1−u)³.\n\nThe interval contains θ when X/(1−λ₁)<θ<X/(1−λ₂). Dividing by θ and using U=X/θ gives 1−λ₂<U<1−λ₁. Therefore its coverage probability is F_U(1−λ₁)−F_U(1−λ₂). Substitute the CDF: [1−λ₁³]−[1−λ₂³]=λ₂³−λ₁³. For the confidence coefficient to be 1−α, we require λ₂³−λ₁³=1−α. This is option 2 (B), matching the supplied answer key on page 53.\n\nOther-exam relevance: confidence intervals based on pivots and transformations are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 88, June 2025, page 50; answer key page 53."
+    },
+    {
+      "id": "csir-meth-2025-jun-q89",
+      "type": "practice",
+      "format": "single",
+      "year": 2025,
+      "session": "June",
+      "topic": "inference-t7 · Bayesian estimation with an improper flat prior in the normal location model",
+      "stem": "Suppose X|θ~N(θ,15), and the prior density for θ is proportional to 1 on the real line. If the observed value is X=13, which statement is true?",
+      "options": [
+        "The posterior mean equals the maximum-likelihood estimate of θ, and the posterior variance equals Var(X|θ).",
+        "The posterior mean equals the maximum-likelihood estimate of θ, and the posterior variance is smaller than Var(X|θ).",
+        "The posterior mean is greater than the maximum-likelihood estimate of θ, and the posterior variance equals Var(X|θ).",
+        "The posterior mean is greater than the maximum-likelihood estimate of θ, and the posterior variance is smaller than Var(X|θ)."
+      ],
+      "answer": "A",
+      "explanation": "The likelihood as a function of θ is proportional to exp[−(13−θ)²/(2×15)]. The prior is flat, so multiplying by the prior does not change this kernel. After normalisation, the posterior distribution is N(13,15).\n\nThe posterior mean is therefore 13. The maximum-likelihood estimate in the normal location model is also the observed value, 13. The posterior variance is 15, which is exactly the sampling variance Var(X|θ)=15. Thus the posterior mean equals the MLE and the posterior variance equals the sampling variance. Option 1 (A) is correct, matching the supplied answer key on page 53. The flat prior is improper, but the resulting posterior is proper because the normal likelihood has a finite integral over θ.\n\nOther-exam relevance: conjugate/flat-prior Bayesian estimation and normal likelihoods are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 89, June 2025, page 50; answer key page 53."
     }
   ]
 }
