@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 39,
-  "clean": 39,
+  "count": 41,
+  "clean": 41,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -1122,6 +1122,88 @@
         }
       },
       "explanation": "A standard Cauchy variable Z has distribution function F(z)=1/2+(1/π)arctan(z). Therefore P(−c≤Z≤c)=2arctan(c)/π. If c=tan{π(1−α)/2}, then arctan(c)=π(1−α)/2 for 0<α<1, and the probability is exactly 1−α. This proves statement 1.\\n\\nThe Cauchy distribution is stable: if X₁ and X₂ are independent Cauchy(θ,1) variables, then (X₁+X₂)/2 is also Cauchy(θ,1). Thus the same symmetric interval around their average has coverage 1−α, proving statement 2.\\n\\nFor statements 3 and 4, the proposed lower and upper half-widths are not positive and correctly ordered throughout the full range 0<α<1. For example, when 1−α=0.8, tan{5π(1−α)/7}=tan(4π/7)<0, so the proposed lower endpoint is above the centre; its magnitude also makes it exceed the proposed upper endpoint. Hence these are not confidence intervals for every allowed α.\\n\\n**Printed-key discrepancy:** the answer key on page 51 lists all four intervals. The endpoint-order check shows that statements 3 and 4 fail for some permitted confidence levels. The bank records statements 1 and 2 only and flags the discrepancy. Source: Methods of Estimation PDF, Question 31, December 2017, page 19; printed answer key page 51.\\n\\nOther-exam relevance: pivotal quantities, confidence intervals and stable distributions are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2017-dec-q32",
+      "type": "practice",
+      "format": "multi",
+      "year": 2017,
+      "session": "December",
+      "topic": "regression-t2 · least-squares estimation with two exponential regressors",
+      "stem": "Consider the regression model Yᵢ=β₁eⁱ+β₂e⁻ⁱ+εᵢ, i=1,…,n, where εᵢ are independent N(0,σ²) random variables. Let β̂₁ and β̂₂ be the ordinary least-squares estimators. Which statements are correct?",
+      "statements": [
+        "E(β̂₁)=β₁.",
+        "E(β̂₂)=β₂.",
+        "Var(β̂₁)>Var(β̂₂).",
+        "Cov(β̂₁,β̂₂)<0."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 1, 2 and 3 only",
+        "Statements 1, 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "D",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The regression model is linear in its coefficients and has a full-rank design for n≥2 distinct index values; OLS is unbiased under zero-mean errors."
+        },
+        "B": {
+          "tf": true,
+          "why": "The same OLS unbiasedness result applies to the second coefficient."
+        },
+        "C": {
+          "tf": true,
+          "why": "The first design column eⁱ has a larger squared length than the second column e⁻ⁱ. For two positively correlated columns, the inverse Gram matrix gives the first coefficient the larger variance."
+        },
+        "D": {
+          "tf": true,
+          "why": "The off-diagonal entry of the inverse of the 2×2 Gram matrix is negative because the two design columns have a positive inner product."
+        }
+      },
+      "explanation": "Write the design matrix with first column x₁=(e,e²,…,eⁿ)ᵀ and second column x₂=(e⁻¹,e⁻²,…,e⁻ⁿ)ᵀ. The OLS estimator is β̂=(XᵀX)⁻¹XᵀY. Since E(Y)=Xβ and E(ε)=0, E(β̂)=β. Thus statements 1 and 2 are true.\\n\\nFor two regressors, put S₁₁=x₁ᵀx₁, S₂₂=x₂ᵀx₂ and S₁₂=x₁ᵀx₂. The covariance matrix is σ²(XᵀX)⁻¹=σ²/(S₁₁S₂₂−S₁₂²) [[S₂₂,−S₁₂],[−S₁₂,S₁₁]]. Here S₁₂>0, so the covariance of the two coefficient estimates is negative. Also, for i≥1, e²ⁱ>e⁻²ⁱ, hence S₁₁>S₂₂. The variance of β̂₁ is proportional to S₂₂, while the variance of β̂₂ is proportional to S₁₁. Therefore Var(β̂₁)<Var(β̂₂), not greater.\\n\\n**Important correction:** the printed key lists A, B and D. Statement C as printed says Var(β̂₁)>Var(β̂₂), but the inverse Gram-matrix formula gives the reverse inequality. Thus the mathematically correct statements are 1, 2 and 4 only (option C in the bank's combination list). Source: Methods of Estimation PDF, Question 32, December 2017, page 20; printed answer key page 51 lists A, B, D.\\n\\nOther-exam relevance: multiple regression, OLS unbiasedness and covariance matrices of coefficient estimators are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2016-jun-q36",
+      "type": "practice",
+      "format": "multi",
+      "year": 2016,
+      "session": "June",
+      "topic": "regression-t2 · nested least-squares models and residual sum-of-squares comparison",
+      "stem": "For observations (xᵢ,yᵢ), fit Model 1: yᵢ=β₀+β₁xᵢ and Model 2: yᵢ=β₀+β₁xᵢ+β₂xᵢ² by least squares. Let A and B be the residual sums of squares from Models 1 and 2, respectively. Which statements are correct?",
+      "statements": [
+        "A≥B.",
+        "A≤B.",
+        "It can happen that A=0 but B>0.",
+        "It can happen that B=0 but A>0."
+      ],
+      "options": [
+        "Statements 1 and 4 only",
+        "Statements 1, 2 and 4 only",
+        "Statements 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Model 1 is contained in Model 2 by setting β₂=0. The larger model cannot have a larger minimum residual sum of squares."
+        },
+        "B": {
+          "tf": false,
+          "why": "The inequality is in the opposite direction; adding a predictor cannot increase the minimum least-squares residual sum of squares."
+        },
+        "C": {
+          "tf": false,
+          "why": "If Model 1 fits every observation exactly, Model 2 can reproduce that fit by taking β₂=0, so B must also be zero."
+        },
+        "D": {
+          "tf": true,
+          "why": "A quadratic model can fit data exactly even when no straight line does; for example, three points on a non-linear quadratic curve."
+        }
+      },
+      "explanation": "Least squares chooses the coefficients that make the residual sum of squares as small as possible. Model 2 has every choice available to Model 1, because we can set its extra coefficient β₂=0. It also has additional choices with β₂≠0. Therefore the minimum residual sum of squares in Model 2 cannot exceed that in Model 1: B≤A. This proves statement 1 and disproves statement 2.\\n\\nIf A=0, the observations lie exactly on a straight line. Model 2 can use the same straight line by choosing β₂=0, so B=0 as well. Hence statement 3 is impossible. Conversely, a quadratic curve can pass exactly through the observations while no straight line does; then B=0 and A>0. Statement 4 is possible. Therefore statements 1 and 4 only are correct.\\n\\nThe supplied answer key on page 51 lists A and D, which agrees. Source: Methods of Estimation PDF, Question 36, June 2016, page 22; printed answer key page 51.\\n\\nOther-exam relevance: nested regression models, least-squares fitting and residual sum of squares are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
     }
   ]
 }
