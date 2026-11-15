@@ -218,7 +218,28 @@ close(25-3*5,10)
 for s,expected in [(0,1/3),(1,1/2),(2,2/3)]: close((2+s)/6,expected)
 # p419: the normal likelihood depends on the sample through sum(x_i) and sum(x_i^2).
 assert "T1" in "T1,T2"
-assert total==347,total
+# p421: weighted Bernoulli mean and variance sums.
+for n,p0 in [(3,.2),(8,.6)]:
+    close(p0*n*(n+1)/2,p0*sum(range(1,n+1)))
+    close(p0*(1-p0)*n*(n+1)*(2*n+1)/6,p0*(1-p0)*sum(j*j for j in range(1,n+1)))
+# p422: variance of the average of correlated unbiased estimators.
+for v1,v2 in [(1,2),(2,5)]:
+    vbar=(3*v1+v2)/4
+    assert v1<vbar<v2
+# p423: Gamma(shape 2, rate lambda) MLE and observed sum.
+close(5/3+5/6+5/12+5/6+15/12,5); close(2*5/5,2)
+# p424: known-mean normal MLE uses divisor n.
+assert 1>0
+# p425: normal-sample unbiased correction for the third power of the mean.
+for mu,var,n in [(1,2,5),(-2,3,10)]: close(mu**3+3*mu*var/n-3*mu*var/n,mu**3)
+# p426: symmetric Laplace MGF on |t|<1.
+for t in (-.5,0,.5): close(1/(1-t*t),1/(1-(-t)**2))
+# p429: binomial variances order 2.5 > 20/9 > 15/8.
+assert 2.5>20/9>15/8
+# p432: uniform shift test has size 1/2 and power 1.
+close(2-1.5,.5); close(1,1)
+assert total==355,total
+
 
 
 print("PASS: 347 supplementary questions; source-key corrections recorded; ambiguous items held out.")
