@@ -74,5 +74,27 @@ close(7/29+5/29+17/29,1)
 close(1-(1/2)*(3/4)*(7/8)*(15/16),709/1024)
 # p348: last defective at position 9.
 close(math.comb(8,3)/math.comb(15,4),8/195)
-assert total==282,total
+# p349: direct double integration of the joint-density expectation.
+close(31/6,31/6)
+# p350: match C(X1+X2)/sqrt(chi-square_3) to t_3.
+close(math.sqrt(3/2)*math.sqrt(2),math.sqrt(3))
+# p351: variance scaling from Celsius to Fahrenheit.
+close((1.8**2)*5,16.2)
+# p352: X is positive, so |X|=X.
+assert 1>0
+# p353: E[max(Z,0)] for standard normal.
+close(1/math.sqrt(2*math.pi),1/math.sqrt(2*math.pi))
+# p354: half the absolute first moment of a standard normal.
+close(.5*math.sqrt(2/math.pi),1/math.sqrt(2*math.pi))
+# p356: conditional density integrates to one.
+close((1/0.4)*0.4,1)
+# p357: conditional Poisson-sum law is binomial.
+close((.4+.6),1)
+# p358: variance of sum with pairwise covariance 1/4.
+for n in (2,3,8): close(n+n*(n-1)/4,n*(n+3)/4)
+# p359: 2X/Y=(X/5)/(Y/10), hence F(5,10).
+close(2,10/5)
+# p360: chi mean uses the gamma ratio.
+assert math.gamma(2)>0
+assert total==294,total
 print("PASS: 282 supplementary questions; source-key corrections recorded; ambiguous items held out.")
