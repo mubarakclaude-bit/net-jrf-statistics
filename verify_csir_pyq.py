@@ -652,7 +652,7 @@ def main() -> None:
         "csir-meth-2014-jun-q53": ("AC", "A"),
         "csir-meth-2014-jun-q54": ("ABCD", "D"),
         "csir-meth-2012-dec-q62": ("BD", "B"),
-        "csir-meth-2012-dec-q63": ("A", "A"),
+        "csir-meth-2012-dec-q63": ("B", "A"),
         "csir-meth-2012-dec-q65": ("BC", "B"),
         "csir-meth-2012-jun-q70": ("ABC", "A"),
         "csir-meth-2011-dec-q71": ("BD", "B"),
