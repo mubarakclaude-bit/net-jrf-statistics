@@ -804,3 +804,15 @@ Six questions were imported after visual inspection:
 - **Page 546:** the distribution probabilities and definition of the partial-sum statistic are not legible enough to identify the limit.
 - **Page 550:** the event threshold and summation expression in the limit are incomplete.
 - **Page 551:** the Poisson tail thresholds and comparison integral are too faint to determine the correct limiting probability statements.
+
+
+## Batch 51 — pages 553–564
+
+Nine questions were imported after visual inspection:
+- **Probability (9):** covariance of a sample mean and its first residual, p554; LLN for squared shifted-exponential observations, p555; probability that a continuous sample mean equals its mean exactly, p556; characteristic functions under products and mixtures, p557; conditional-normal construction of a standard normal variable, p560; characteristic function of a symmetric two-point variable, p561; dependence in a joint density proportional to x+y, p562; square transformation of a symmetric uniform variable, p563; and a comparison probability for two independent uniform variables, p564.
+
+### Pages held out after inspection
+
+- **Page 553:** the answer depends on the ordering of θ₁ and θ₂, which is not stated; the listed options do not cover both parameter orderings.
+- **Page 558:** the limiting statistic and summation bounds are too faint to identify.
+- **Page 559:** the statistic W and its scaling are unreadable, so the sampling distribution cannot be keyed.
