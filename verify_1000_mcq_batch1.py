@@ -557,5 +557,5 @@ alpha=comb(4,0)*(0.5**4)+comb(4,4)*(0.5**4)
 beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
-assert min([1.7,1.9,2.7,3.1])**2==2.89
+close(min([1.7,1.9,2.7,3.1])**2,2.89)
 print("PASS: 521 supplementary questions; source-key corrections recorded; ambiguous items held out.")
