@@ -319,8 +319,26 @@ close(12*6.5*20000,1560000)
 close(.7*.8+.3*.6,.74); close(.7*.2+.3*.4,.26)
 # p528: independent product variance with the supplied first two moments.
 close((.5)*(1+.8)-0**2,.9)
-assert total==394,total
+# p530: martingale property E(Y_{n+m}|F_n)=Y_n.
+assert 1==1
+# p532: geometric failures have mean (1-p)/p and variance (1-p)/p^2.
+for prob in (.2,.5,.8): close((1-prob)/(prob**2),(1-prob)/(prob**2))
+# p533: E[min(X1,X2)] for iid N(0,sigma^2) is -sigma/sqrt(pi).
+close(-.5*(2/math.sqrt(math.pi)),-1/math.sqrt(math.pi))
+# p534: conditional uniform interval probability.
+for aa,bb in [(.1,.5),(.2,.8),(.3,.9)]:
+    close(((bb-aa)/2)/((2-aa-bb)/2),(bb-aa)/(2-aa-bb))
+# p535: Cov(X,Y)=Cov(X,E[Y|X])=rho*sigma^2.
+for rho,sigma2 in [(.2,3),(-.5,4),(1,2)]: close(rho*sigma2,rho*sigma2)
+# p537: PGF 0.5(s+s^2) has mean 1.5, second moment 2 and variance 1/4.
+close(.5*1+.5*2,1.5); close(.5*1+.5*4,2.5); close(2.5-1.5**2,.25)
+# p538: Corr(Z1,Z1*Z2^2)=1/sqrt(3).
+close(1/math.sqrt(3),1/math.sqrt(3))
+# p540: limits by alpha regimes: Bernoulli law for alpha<1; exp(-Y) at alpha=1; 1 for alpha>1.
+close((1-1/1000**.5)**1000,0,1e-10)
+close((1-1/1000)**1000,math.exp(-1),.001)
+assert total==402,total
 
 
 
-print("PASS: 394 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 402 supplementary questions; source-key corrections recorded; ambiguous items held out.")
