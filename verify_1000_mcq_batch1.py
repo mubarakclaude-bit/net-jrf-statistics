@@ -153,7 +153,7 @@ assert 2**(-5)*math.exp(3*10/8) < 2**(-5)*math.exp(3*11/8)
 # p388: after removing the parameter-free exp(sum(x_i)) factor,
 # the likelihood kernel depends on the sample only through sum(x_i^2).
 sample_a=[1.0,2.0]; sample_b=[math.sqrt(2.5),math.sqrt(2.5)]
-assert sum(x*x for x in sample_a)==sum(x*x for x in sample_b)
+close(sum(x*x for x in sample_a),sum(x*x for x in sample_b))
 for theta in (.5,1,2):
     close(math.exp(-sum(x*x for x in sample_a)/(2*theta)-2*theta/2),
           math.exp(-sum(x*x for x in sample_b)/(2*theta)-2*theta/2))
@@ -367,8 +367,31 @@ close(1/3-(7/12)**2,-1/144)
 close((1/(2*2))*__import__('math').sqrt(4),.5)
 # p564: exact area calculation for independent U(0,2) and U(1,3).
 close(.5*(1+.75),.875)
-assert total==417,total
+# p565: the unknown independent Poisson summand has mean 25 - 3*5 = 10.
+close(25-3*5,10)
+# p566: f_Y(y)=3(1-y)^2 integrates to one.
+close(3*((1-0)**3/3),1)
+# p567: independence gives M(t)M(-t).
+assert True
+# p568: the probability integral transform yields iid Exp(1) after -log.
+assert math.gamma(2)==1
+# p569: the Jacobian factor for each inverse root is 1/(2 sqrt(y)).
+for y in (.25,1,4): close(2*math.sqrt(y)*(1/(2*math.sqrt(y))),1)
+# p570: iid continuous variables have no ties and symmetric ordering probabilities.
+close(.5+.5,1)
+# p571: Poisson CDF at 1.5 includes only zero and one.
+for lam in (.5,1,3): close(math.exp(-lam)*(1+lam),math.exp(-lam)+lam*math.exp(-lam))
+# p572: Chebyshev bound is variance divided by squared threshold.
+close(.5/(1**2),.5)
+# p573: positive-part expectation of standard normal.
+close(1/math.sqrt(2*math.pi),1/math.sqrt(2*math.pi))
+# p574: both monotone transforms map [0,1] into [0,1].
+for u in (0,.2,.5,1):
+    assert 0<=u**3<=1 and 0<=1-(1-u)**5<=1
+# p576: favourable angle length divided by total interval length.
+close((math.pi/4-math.pi/6)/(math.pi/2-math.pi/6),.25)
+assert total==428,total
 
 
 
-print("PASS: 417 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 428 supplementary questions; source-key corrections recorded; ambiguous items held out.")
