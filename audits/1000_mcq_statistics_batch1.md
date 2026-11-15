@@ -611,3 +611,16 @@ Ten questions were imported after inspecting the scanned pages:
 - **Page 397:** the displayed sequence/normalisation expression in the weak-law condition is too blurred to transcribe without guessing.
 - **Page 403:** the source omits the condition np>1 needed for E(p/X̄) to be finite. The imported version states this condition explicitly and records the omission.
 
+
+
+## Batch 39 — pages 409–420
+
+Nine questions were imported after visual review:
+- **Probability (4):** Gamma distribution of a sum of transformed uniforms, p411; characteristic function of a symmetric two-point variable, p414; almost-sure convergence for independent non-identically distributed variables, p415; and recovering a Poisson component from an independent Poisson sum, p416.
+- **Statistical Inference (5):** Type-I error and power from two densities, p409; MLE for a power density on (0,1), p412; coverage probability of an upper confidence limit, p413; constrained Bernoulli MLE, p417; and the joint sufficient statistic for a normal model with unknown mean and variance, p419.
+
+### Pages held out or matched to existing material
+
+- **Page 410:** duplicate of the exact Binomial(100, 1/2) one-sided 5% critical-value question already imported from page 363; not added twice.
+- **Page 418:** the minimum and maximum are sufficient, and the option containing minimum, mean and maximum is also sufficient. Since the source asks for a sufficient statistic rather than a minimal sufficient statistic, the single-choice item has more than one valid option and is held out.
+- **Page 420:** both the Borel–Cantelli conclusion in option A and the zero expectation limit in option C hold under the stated probabilities; the single-choice item is ambiguous and is held out.
