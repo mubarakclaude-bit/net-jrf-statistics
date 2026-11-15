@@ -404,7 +404,7 @@ The p229 questions are individually identified by question number because six di
 ## Batch 24 — pages 241–252
 
 Nine further questions were imported from pages 241, 243, 245, 246 and 248–252:
-- **Probability (7):** parity of a difference of independent binomials, p241; ordering probability for three iid exponentials, p245; shifted-exponential quantile, p246; integer-valued polynomial for a uniformly selected integer, p248; odd-integrand expectation under a symmetric normal distribution, p250; Gamma mode, p251; non-existence of a positive-argument MGF for the Beta-prime distribution, p252.
+- **Probability (6):** parity of a difference of independent binomials, p241; ordering probability for three iid exponentials, p245; shifted-exponential quantile, p246; integer-valued polynomial for a uniformly selected integer, p248; odd-integrand expectation under a symmetric normal distribution, p250; Gamma mode, p251; non-existence of a positive-argument MGF for the Beta-prime distribution, p252.
 - **Statistical Inference (2):** coverage probability of a Student-t confidence interval, p243; Neyman–Pearson critical region for Laplace scale testing, p249.
 
 ### Pages held out after inspection
@@ -630,7 +630,7 @@ Nine questions were imported after visual review:
 
 Eight questions were imported after checking the scans:
 - **Probability (2):** central limit theorem for a weighted sum of iid Bernoulli variables, p421; and ordering binomial variances for three success probabilities, p429.
-- **Statistical Inference (6):** efficiency comparison of two correlated unbiased estimators, p422; MLE for the rate of a Gamma(shape 2) density, p423; MLE of a normal variance with known mean, p424; an unbiased estimator of μ³ under normal sampling, p425; and size and power for a shifted-uniform test, p432.
+- **Statistical Inference (8):** efficiency comparison of two correlated unbiased estimators, p422; MLE for the rate of a Gamma(shape 2) density, p423; MLE of a normal variance with known mean, p424; an unbiased estimator of μ³ under normal sampling, p425; and size and power for a shifted-uniform test, p432.
 - **MGF note (p426):** the Laplace symmetry question was also added to Probability. The source says the MGF equality holds for all real t; the bank corrects this to the common MGF domain |t|<1.
 
 ### Pages held out after inspection
@@ -857,7 +857,7 @@ All twelve source questions on pages 589–600 were legible enough to verify. Th
 
 Fourteen questions from this range are now represented in the supplementary banks: eight were imported in the preceding commits and six are added in this update.
 
-- **Statistical Inference (6):** unbiased-estimator checks for a normal model with mean and variance linked to θ, p601; MLE set for a location parameter in a uniform model, p605; exponential-rate MLE by invariance, p607; size of an exponential test, p611; size-plus-power calculation for a uniform-family test, p612; and the non-uniqueness of the Laplace location MLE for an even sample, p615; plus the effect of a smaller known variance on a two-sided z-test p-value, p622.
+- **Statistical Inference (6):** unbiased-estimator checks for a normal model with mean and variance linked to θ, p601; consistency of variance estimators, p603; MLE set for a location parameter in a uniform model, p605; exponential-rate MLE by invariance, p607; size of an exponential test, p611; size-plus-power calculation for a uniform-family test, p612; and the non-uniqueness of the Laplace location MLE for an even sample, p615; plus the effect of a smaller known variance on a two-sided z-test p-value, p622.
 - **Probability (7):** conditional expectation from a triangular joint density, p606; a probability limit for a normal sample mean, p610; conditional probability from a CDF with an atom at zero, p614; density under a monotone square transformation, p616; normalising a density with two exponential tails, p620; and a CLT for the sample mean of squared standard normals, p623.
 
 ### Pages held out after visual inspection
