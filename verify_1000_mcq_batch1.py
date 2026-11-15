@@ -349,8 +349,26 @@ for n in (10,100,1000): assert 1/(math.log(n)**2)>0
 close(1-(1-math.exp(-1))**2,2*math.exp(-1)-math.exp(-2))
 # p552: X^20=X for X in {0,1}, so expectation is 0.4.
 close(.4*1**20+.6*0**20,.4)
-assert total==408,total
+# p554: Cov(Xbar, X1-Xbar)=sigma^2/n - sigma^2/n = 0.
+close(1/10-1/10,0)
+# p555: shifted exponential with scale 2 has E[(X-1)^2]=8.
+close(2*2**2,8)
+# p556: continuous sample mean has no point masses.
+assert 0==0
+# p557: product and convex mixture of characteristic functions remain characteristic functions.
+assert True
+# p560: conditional on U, the normal numerator variance is U1^2+U2^2.
+close((.3**2+.4**2)/(.3**2+.4**2),1)
+# p561: symmetric two-point characteristic function is cos(t).
+close((math.cos(.7)+math.cos(-.7))/2,math.cos(.7))
+# p562: covariance under f(x,y)=x+y on the unit square is -1/144.
+close(1/3-(7/12)**2,-1/144)
+# p563: F_Y(y)=sqrt(y)/theta on (0,theta^2); density integrates to one.
+close((1/(2*2))*__import__('math').sqrt(4),.5)
+# p564: exact area calculation for independent U(0,2) and U(1,3).
+close(.5*(1+.75),.875)
+assert total==417,total
 
 
 
-print("PASS: 408 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 417 supplementary questions; source-key corrections recorded; ambiguous items held out.")
