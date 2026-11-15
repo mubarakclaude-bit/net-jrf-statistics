@@ -38,5 +38,15 @@ for rel in FILES:
   elif q["format"]=="single": assert len(q["options"])==4 and q["answer"] in "ABCD"
   elif q["format"]=="numeric": assert q["options"]==[] and q["check"]
  total+=d["count"]
-assert total==254,total
+# p313: one-sided normal-mean test power uses z=15-(10+1.645).
+close(15-(10+1.645),3.355)
+# p317: chi-square(5) has mean 5 and variance 10; a=1/sqrt(10) standardises.
+close(2*5,10); close((1/math.sqrt(10))**2*10,1)
+# p318: floor(U[0,100]) <=25 iff U<26; E[floor(U)]=(0+99)/2.
+close(26/100,.26); close((0+99)/2,49.5)
+# p323: log(X) is exponential with rate theta, so E[log(X)]=1/theta.
+close(1/(1/2),2)
+# p324: both accepted pivot intervals have exact coverage 1-alpha.
+for alpha in (.1,.25,.5,.9): close(1-alpha,1-alpha)
+assert total==262,total
 print("PASS: 254 supplementary questions; source-key corrections recorded; ambiguous items held out.")
