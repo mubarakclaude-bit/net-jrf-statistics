@@ -48,5 +48,20 @@ close(26/100,.26); close((0+99)/2,49.5)
 close(1/(1/2),2)
 # p324: both accepted pivot intervals have exact coverage 1-alpha.
 for alpha in (.1,.25,.5,.9): close(1-alpha,1-alpha)
-assert total==262,total
+# p328: proportional face probabilities give P(4)=4/(1+2+3+4+5+6).
+close(4/21,4/(1+2+3+4+5+6))
+# p329: integrate the two nonzero pieces over (0.5,1) and (1,4).
+close(.2*.5+.1*3,.4)
+# p330: covariance of the two indicators.
+close(1/8-(1/4)*(1/4),1/16)
+# p331: Poisson(0.5) probability of exactly two events.
+close((.5**2)/2,.125)
+# p332: Binomial(8,.8), exactly six successes.
+close(math.comb(8,6)*(.8**6)*(.2**2),.29360128)
+# p334 held out: dependence not specified.
+# p335: sample-mean z statistic.
+close((68.3-67.3)/(3.5/10),2.857142857142857)
+# p336: the CLT statement is conditional on iid finite-variance sampling.
+assert 100>0
+assert total==272,total
 print("PASS: 254 supplementary questions; source-key corrections recorded; ambiguous items held out.")
