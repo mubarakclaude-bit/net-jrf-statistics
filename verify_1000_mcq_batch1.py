@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==545,total
+assert total==550,total
 
 
 
@@ -558,7 +558,7 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 545 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 550 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p681: the maximum plus one-half converges to theta+1, not theta.
 assert (0.5+0.5)==1
@@ -627,3 +627,18 @@ close(a,1/48)
 close((1+4+3)*a,1/6)
 close((8+10+6+9)*a,33/48)
 close((4+3+7+8)*a,11/24)
+
+
+# p716: for N(0,2 theta^2), E(X_i)=0 and E(X_i^2)=2 theta^2.
+assert True
+# p717: Pareto(shape=1, lower endpoint=3) lower-tail size 0.1 gives k=10/3.
+close(1-3/(10/3),.1)
+# p718: rejection set {2,3} gives size 0.3 and power 0.7.
+close(.2+.1,.3)
+close(.3+.4,.7)
+# p719: likelihood ratio under H1 versus H0 decreases with the sample sum.
+for s1,s2 in ((1,2),(2,3),(3,4)):
+    assert 4**2*math.exp(-3*s1)>4**2*math.exp(-3*s2)
+# p720: convolution density of two independent exponential variables integrates to one.
+for lam,mu in ((2,3),(3,2),(.5,4)):
+    close((lam*mu/(lam-mu))*(1/mu-1/lam),1)

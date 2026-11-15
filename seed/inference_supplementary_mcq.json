@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 672 and later pages 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 138,
+  "count": 142,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -2814,6 +2814,94 @@
       "explanation": "For a shifted exponential distribution with rate 1, the sample minimum satisfies X₍₁₎−θ~Exponential(rate n). The interval contains θ exactly when 0≤X₍₁₎−θ≤(2/n)ln(2.5). Therefore its coverage probability is 1−exp{−n[(2/n)ln(2.5)]}=1−exp[−2ln(2.5)]=1−1/(2.5²)=0.84. Hence the confidence coefficient is 84%.",
       "check": "P(θ is in the interval)=P(0≤X₍₁₎−θ≤(2/n)ln2.5)=1−e^(−2ln2.5)=1−1/6.25=0.84.",
       "pno": 700,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p716",
+      "format": "multi",
+      "topic": "inference-t3",
+      "stem": "Let X₁,…,Xₙ be a random sample from N(0,2θ²), where θ>0. Which of the following statements are true?",
+      "statements": [
+        "The full sample vector (X₁,…,Xₙ) is sufficient and complete for θ.",
+        "The full sample vector (X₁,…,Xₙ) is sufficient but not complete for θ.",
+        "Σᵢ₌₁ⁿXᵢ² is sufficient and complete for θ.",
+        "(1/(2n))Σᵢ₌₁ⁿXᵢ² is the uniformly minimum-variance unbiased estimator of θ²."
+      ],
+      "options": [
+        "1 and 2 only",
+        "2, 3 and 4 only",
+        "1, 3 and 4 only",
+        "All four"
+      ],
+      "answer": "B",
+      "explanation": "The full sample is sufficient, but it is not complete: for example, E(X₁)=0 for every θ>0 even though X₁ is not almost surely zero. By the factorisation theorem, T=ΣXᵢ² is sufficient for θ. Also T/(2θ²) has a chi-square distribution with n degrees of freedom, so T is a complete sufficient statistic for the positive scale parameter θ². Since E(Xᵢ²)=2θ², T/(2n) is unbiased and, as a function of the complete sufficient statistic, is the UMVU estimator of θ². Thus statements 2, 3 and 4 are true.",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The full sample vector is not complete because X₁ has expectation zero for every θ but is not almost surely zero."
+        },
+        "B": {
+          "tf": true,
+          "why": "The full sample is sufficient but not complete; the sum of squares is complete sufficient and yields the UMVU estimator."
+        },
+        "C": {
+          "tf": false,
+          "why": "Statement 1 is false, so this combination is not correct."
+        },
+        "D": {
+          "tf": false,
+          "why": "Statement 1 is false, so all four statements cannot be true."
+        }
+      },
+      "pno": 716,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p717",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "Let X have density f(x|θ)=(θ/x)(3/x)^θ for x>3, θ>0. For testing H₀:θ=1 against H₁:θ=2, the most powerful test of size α=0.1 rejects H₀ when X<k. Find k.",
+      "options": [
+        "1",
+        "10/3",
+        "11/3",
+        "4"
+      ],
+      "answer": "B",
+      "explanation": "The likelihood ratio is f(x|2)/f(x|1)=2(3/x)=6/x, which decreases as x increases. By the Neyman–Pearson lemma, the most powerful test rejects for small X, as stated. Under H₀ (θ=1), the density is 3/x² for x>3, so F₀(k)=1−3/k. Set the size equal to 0.1: 1−3/k=0.1. Thus 3/k=0.9 and k=3/0.9=10/3.",
+      "pno": 717,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p718",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "A random variable X has the following probability mass functions under H₀ and H₁: P₀(X=0,1,2,3)=(0.4,0.3,0.2,0.1) and P₁(X=0,1,2,3)=(0.1,0.2,0.3,0.4). Consider the test that rejects H₀ if X>3/2. What are its size α and power β?",
+      "options": [
+        "α=0.3, β=0.3",
+        "α=0.3, β=0.7",
+        "α=0.7, β=0.3",
+        "α=0.7, β=0.7"
+      ],
+      "answer": "B",
+      "explanation": "The rejection region X>3/2 consists of X=2 or X=3. Under H₀, its probability is 0.2+0.1=0.3, so the size is α=0.3. Under H₁, its probability is 0.3+0.4=0.7, so the power is β=0.7. Hence option B is correct.",
+      "pno": 718,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p719",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "Let X₁,…,Xₙ be iid with density f(x)=θαe^(−αx)+(1−θ)2αe^(−2αx), x≥0, where α>0 and 0≤θ≤1. For testing H₀:θ=1, α=1 against H₁:θ=0, α=2, which form does the most powerful test take?",
+      "options": [
+        "A most powerful test does not exist.",
+        "Reject H₀ when ΣXᵢ>c for some c>0.",
+        "Reject H₀ when ΣXᵢ<c for some c>0.",
+        "Reject H₀ when c₁<ΣXᵢ<c₂ for some 0<c₁<c₂."
+      ],
+      "answer": "C",
+      "explanation": "Under H₀, each observation has the Exp(rate 1) density e^(−x). Under H₁, each has the Exp(rate 4) density 4e^(−4x). The likelihood ratio L₁/L₀ for the full sample is 4ⁿexp(−3ΣXᵢ), which decreases as ΣXᵢ increases. The Neyman–Pearson lemma therefore gives a lower-tail rejection region: reject H₀ when ΣXᵢ<c. The source check mark indicates the upper-tail option, but the likelihood-ratio calculation shows that the correct region is the lower tail.",
+      "pno": 719,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]

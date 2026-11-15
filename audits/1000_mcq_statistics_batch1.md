@@ -1010,3 +1010,18 @@ Six additional probability questions were imported after visual inspection:
 - **Page 707:** the two missing cards are not specified as randomly missing; without that assumption, the spade probability depends on which cards are absent. The scan's intended 1/4 answer requires a random-missing-card assumption, so the item is held out as written.
 
 All six imported items were checked independently. The p705 answer uses the Binomial(5,0.9) model. Pages 708 and 709 use combinations/without-replacement probabilities. Page 710 explicitly records the independence assumption required to compute the contradiction probability. Page 711 uses the addition rule in the mutually exclusive case and the independence formula in the second case. Page 712 normalises the eight masses to obtain a=1/48 before summing the requested probabilities.
+
+
+## Batch 67 — pages 716–720
+
+Five additional questions were imported after visual inspection:
+- **Statistical Inference (4):** sufficiency, completeness and UMVU estimation for a Normal(0,2θ²) sample, p716; critical value for a most powerful test in a Pareto family, p717; size and power of a specified discrete test, p718; and the most powerful rejection region for two exponential-mixture parameter points, p719.
+- **Probability (1):** density of the sum of two independent exponential random variables with distinct rates, p720.
+
+### Corrections and held-out pages
+- **Page 719:** the source check mark points to the upper-tail option. The likelihood ratio under H₁ versus H₀ is 4ⁿexp(−3ΣXᵢ), which decreases in the sample sum. The mathematically correct most powerful region is therefore the lower tail, option C; the source mark is corrected in the imported item.
+- **Page 713:** held out because the number of binomial trials is missing from the scan. The keyed answer 0.2048 would be consistent with five trials and p=0.2, but that trial count is not visible and is not inferred.
+- **Page 714:** held out because the weighted expected value from the stated 75% five-point and 25% seven-point outcomes is 5.5, which does not match the marked option 5.25.
+- **Page 715:** held out because the fair-game payment does not reconcile with the stated payouts and overlapping card events; the source's marked value cannot be justified without an additional payout convention.
+
+For p716, the full sample vector is sufficient but not complete; the sum of squares is complete sufficient, and its scaled version gives the UMVU estimator. For p717, the likelihood ratio 6/x is decreasing and the H₀ lower-tail probability 0.1 gives k=10/3. For p718, the rejection region {2,3} has size 0.3 and power 0.7. For p719, the lower-tail form follows directly from the decreasing likelihood ratio. For p720, convolution of the two exponential densities yields the hypoexponential density shown in option C.
