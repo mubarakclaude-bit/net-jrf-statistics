@@ -260,8 +260,14 @@ close(.4*1+.35*.8+.25*.1,.705)
 close(math.exp(-2)*2**2/math.factorial(2),2*math.exp(-2))
 # p450: Uniform(2,8) has mean 5, P(X<=6)=2/3 and variance 3.
 close((2+8)/2,5); close((6-2)/(8-2),2/3); close((8-2)**2/12,3)
-assert total==366,total
+# p458: only B-G-B-G-B-G-B alternates with four boys and three girls.
+close(math.factorial(4)*math.factorial(3)/math.factorial(7),1/35)
+# p461: Bernoulli likelihood p^n is increasing on the open interval (0,1).
+assert (0.9**10)>(0.8**10) and 1 not in [0.0,0.9]
+# p467: E(log X) for Beta(theta,1) is -1/theta.
+for theta in (.5,1,2,6): close(theta*(-1/(theta**2)),-1/theta)
+assert total==369,total
 
 
 
-print("PASS: 366 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 369 supplementary questions; source-key corrections recorded; ambiguous items held out.")
