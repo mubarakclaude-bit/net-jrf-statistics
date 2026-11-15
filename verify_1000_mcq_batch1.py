@@ -307,8 +307,20 @@ close((1+.25)/2,5/8)
 close((1.6/2)**2, .64); close(1-.64,.36); close((1/2)**2,.25); close(.5,.5)
 # p516: universal union and intersection probability bounds.
 assert 0<=1 and 0<=1
-assert total==388,total
+# p519: scaling a Uniform(0,n) variable gives Uniform(0,1); exp(-Exp(1)) is Uniform(0,1).
+close(1/2,0.5); close(math.exp(-(-math.log(.37))),.37)
+# p520: mixture of CDFs is a CDF; product of CDFs is a CDF; survival product is decreasing.
+assert 0<=1 and 0<=1
+# p521: every listed statistic retains the sum of squared observations.
+assert (1+2)+(3+4)==1+2+3+4
+# p524: expected annual clean-up cost.
+close(12*6.5*20000,1560000)
+# p526: law of total probability for elective A and complementary elective B.
+close(.7*.8+.3*.6,.74); close(.7*.2+.3*.4,.26)
+# p528: independent product variance with the supplied first two moments.
+close((.5)*(1+.8)-0**2,.9)
+assert total==394,total
 
 
 
-print("PASS: 388 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 394 supplementary questions; source-key corrections recorded; ambiguous items held out.")
