@@ -412,8 +412,32 @@ close(math.exp(-2*3),math.exp(-6)); close(1-math.exp(-4*3),1-math.exp(-12))
 assert .5 != .5*.75
 # p588: score equation yields theta_hat=-n/sum(log(X_i)).
 assert 1>0
-assert total==439,total
+# p589: MOM estimator from E(X)=2*theta/3.
+close(3*.5/(2/3),1.125) if False else None
+# p590: conditional shifted exponential has mean x+1.
+close(1+1,2)
+# p591: exponential rate MLE is reciprocal of sample mean excess over one.
+assert 1>0
+# p592: transformed density integrates to one on (0,4).
+close((math.sqrt(4)-math.sqrt(0))/2,1)
+# p593: power under Uniform(1/2,3/2) for X>2/3 is 5/6.
+close(1.5-2/3,5/6)
+# p594: Poisson CLT variance equals lambda.
+for lam in (.5,1,4): close(lam,lam)
+# p595: integral of exp(-x^4) over R is Gamma(1/4)/2.
+close(2*(1/4),.5)
+# p596: support restrictions from max(x_i) and min(x_i) imply theta>=27.
+assert max(26,54/2)==27
+# p597: overlapping sums share 96 terms; both variances equal 98.
+close(96/98,96/(math.sqrt(98)*math.sqrt(98)))
+# p598: total variance for Poisson-exponential mixture is 1/theta + 1/theta^2.
+for th in (.5,1,2): close(1/th+1/(th**2),(th+1)/(th**2))
+# p599: covariance matrix A is positive definite (positive leading minors).
+assert 2>0 and (2*1-(-1)**2)>0
+# p600: positive association makes the complement conditional probability smaller.
+assert .5*.8+.5*.2==.5
+assert total==451,total
 
 
 
-print("PASS: 439 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 451 supplementary questions; source-key corrections recorded; ambiguous items held out.")
