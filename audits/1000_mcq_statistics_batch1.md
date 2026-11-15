@@ -691,3 +691,19 @@ Three questions were imported after visual review:
 - **Page 465:** the shifted-density formula is not legible enough to determine the MLE.
 - **Page 466:** the confidence-interval expression and options are incomplete in the scan.
 - **Page 468:** the covariance expression is too corrupted to identify the random variables and coefficients.
+
+
+## Batch 44 — pages 469–480
+
+Six questions were imported after visual review:
+- **Probability (5):** Cauchy reciprocal/sum stability and the distribution of a harmonic-type statistic, p469; correlation of two linear combinations of independent standard normals, p471; expectation of a product involving independent uniforms, p473; weak law, second-moment law and CLT statements from given moments, p476; and properties of the difference of two iid exponential variables, p480.
+- **Statistical Inference (1):** sufficient statistics for a normal location model with known variance, p470.
+
+### Pages held out after inspection
+
+- **Page 472:** the distribution symbol and the relation between the original variable and sample statistic are missing from the scan.
+- **Page 474:** same missing distribution symbols as the nearby question; insufficient information to reconstruct the claim safely.
+- **Page 475:** the conditional binomial formulae and sample-size notation are incomplete/blurred.
+- **Page 477:** duplicate of the moment/WLLN/CLT question on page 476; not imported twice.
+- **Page 478:** the Gamma shape parameters and ratio expressions are too faint to establish the intended Beta-distribution parameters.
+- **Page 479:** the expressions involving the two normal variables are partly illegible; the complete statement set cannot be validated.
