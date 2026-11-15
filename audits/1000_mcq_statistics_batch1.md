@@ -624,3 +624,18 @@ Nine questions were imported after visual review:
 - **Page 410:** duplicate of the exact Binomial(100, 1/2) one-sided 5% critical-value question already imported from page 363; not added twice.
 - **Page 418:** the minimum and maximum are sufficient, and the option containing minimum, mean and maximum is also sufficient. Since the source asks for a sufficient statistic rather than a minimal sufficient statistic, the single-choice item has more than one valid option and is held out.
 - **Page 420:** both the Borel–Cantelli conclusion in option A and the zero expectation limit in option C hold under the stated probabilities; the single-choice item is ambiguous and is held out.
+
+
+## Batch 40 — pages 421–432
+
+Eight questions were imported after checking the scans:
+- **Probability (2):** central limit theorem for a weighted sum of iid Bernoulli variables, p421; and ordering binomial variances for three success probabilities, p429.
+- **Statistical Inference (6):** efficiency comparison of two correlated unbiased estimators, p422; MLE for the rate of a Gamma(shape 2) density, p423; MLE of a normal variance with known mean, p424; an unbiased estimator of μ³ under normal sampling, p425; and size and power for a shifted-uniform test, p432.
+- **MGF note (p426):** the Laplace symmetry question was also added to Probability. The source says the MGF equality holds for all real t; the bank corrects this to the common MGF domain |t|<1.
+
+### Pages held out after inspection
+
+- **Page 427:** the parameter range for α is not specified clearly enough to validate the claim about power; other statements in the list are false as written.
+- **Page 428:** the density and parameterisation are too faint to transcribe safely.
+- **Page 430:** the printed power options do not match the direct Laplace-tail calculation unless missing 1/2 factors are supplied; held out pending a clearer source.
+- **Page 431:** the density formula is too blurred to identify its normalising constant and moments reliably.
