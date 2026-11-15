@@ -924,3 +924,13 @@ Eight additional questions were imported after visual inspection:
 - **Statistical Inference (5):** consistency versus unbiasedness of a smoothed Bernoulli estimator, p659; a one-sided one-sample t-test decision from seven observations, p660; a Student t distribution arising from an independent normal numerator and sample variance, p661; an unbiased estimator of θ² for a shifted uniform model, p663; and the Neyman–Pearson most powerful test for two specified densities, p664.
 
 All eight items were visually legible and independently checked. For p657, the series-system reliability is the product of the two survival probabilities. For p658, equal means give λ=np and hence np(1−p)<λ. The p659 estimator has bias (1/2−θ)/(√n+1), which tends to zero, and it is consistent. For p660, the observed t statistic is approximately −0.633, so the upper-tail test does not reject at either level. For p661, independence of X₁₀₀ and the first 99 observations gives t(98). Page 662 implies X and −X have the same distribution. Page 663 uses E[(X−5)²]=θ²/3. For p664, the likelihood ratio decreases in X, so the most powerful test rejects for X<α and has power √α.
+
+
+## Batch 61 — pages 665–672
+
+Eight additional questions were imported after visual inspection:
+- **Probability (5):** expected occupancy of the two extreme slots when ten balls are placed randomly into six slots, p667; reliability of a parallel system with independent components, p668; expectations from a joint density with a uniform mixing variable, p669; expectation under a Poisson–Binomial conditional construction, p670; and a random-radius circle area probability, p672.
+- **Statistical Inference (2):** power of a Neyman–Pearson most powerful test for two specified densities, p665; and MLE for a Pareto-type density with parameter-dependent support, p666.
+- **Stochastic Processes (1):** variance of the index at which cumulative exponential inter-arrival times first exceed a fixed time, p671.
+
+All eight questions were legible and checked independently. The p665 rejection region is an upper tail because the likelihood ratio 2x² increases in x; the resulting power is 19/100. For p666, the likelihood increases in θ over θ≤min(Xᵢ), so the MLE is the sample minimum. The expected occupancy in p667 follows by linearity of expectation. Page 668 uses the probability that all components fail. For p669, Y is Uniform(0,1) and X|Y=y is exponential with mean y. Page 670 is a Poisson variable mixed with a conditional Binomial distribution. Page 671 identifies N as one plus a Poisson(λ) count over unit time. Page 672 reduces the area condition to R<1/√π.
