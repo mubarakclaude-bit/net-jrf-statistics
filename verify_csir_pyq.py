@@ -680,6 +680,10 @@ def main() -> None:
         assert "Source: Methods of Estimation PDF" in q["explanation"]
     assert len(methods["items"]) == methods["count"]
 
+    q57 = next(x for x in methods["items"] if x["id"] == "csir-meth-2013-dec-q57")
+    assert q57["year"] == 2013 and q57["session"] == "December" and q57["answer"] == "C"
+    assert "8/11" in q57["explanation"] and "3/4" in q57["explanation"] and "page 52" in q57["explanation"]
+
     # Q108 remains held: the source omits a lower bound on n, so strict efficiency claims are not universal.
     assert not any(x["id"] == "csir-est-q108" for x in estimation["items"])
 
