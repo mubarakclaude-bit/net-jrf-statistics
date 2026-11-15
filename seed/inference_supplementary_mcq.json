@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 9, 17, 22, 27, 48, 60–61, 74, 77, 79, 89–90, 92, 104–105, 238, 240, 243, 249, 273, 300–302, 306–308, 310–313, 319–320, 323–327, 337, 363, 368–370, 374, 377–378, 380–381, 383–384, 387–388, 392, 395–396, 401–404, 406, 409, 412–413, 417, 419, 422–425, 432, 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 89,
+  "count": 94,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -1712,6 +1712,122 @@
       "answer": "D",
       "explanation": "The likelihood is zero unless every observation lies in [−2θ,θ]. The largest observation is 26, so θ≥26. The smallest is −54, so −54≥−2θ, giving θ≥27. Hence the full sample is possible only when θ≥27. On this allowed range, the likelihood is proportional to [3θ(1+θ²)]⁻⁷, which decreases as θ increases. It is therefore maximised at the smallest allowed value, θ̂=27.",
       "pno": 596,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p601",
+      "format": "multi",
+      "topic": "inference-t1",
+      "stem": "Let X₁,X₂,X₃ be iid Normal(θ,θ²), with θ∈R unknown. Which estimators are unbiased for the stated targets?",
+      "statements": [
+        "(X₁+2X₂+3X₃)/6 is unbiased for θ.",
+        "(X₁²+4X₂²+9X₃²)/14 is unbiased for θ².",
+        "(2X₁+X₃²)/2 is unbiased for θ(1+θ).",
+        "X₂(1−X₂/2) is unbiased for θ(1−θ)."
+      ],
+      "options": [
+        "Statement A only",
+        "Statements A, C and D only",
+        "Statements A and B only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "explanation": "For X~Normal(θ,θ²), E(X)=θ and E(X²)=Var(X)+[E(X)]²=2θ². Statement A has expectation (θ+2θ+3θ)/6=θ. Statement B has expectation (2θ²+4·2θ²+9·2θ²)/14=2θ², not θ². Statement C has expectation (2θ+2θ²)/2=θ+θ²=θ(1+θ). Statement D has expectation θ−(1/2)(2θ²)=θ−θ²=θ(1−θ). Therefore A, C and D are unbiased.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The coefficients sum to 6, so the expected weighted average is θ."
+        },
+        "B": {
+          "tf": false,
+          "why": "Its expectation is 2θ², not θ²."
+        },
+        "C": {
+          "tf": true,
+          "why": "Using E(X₃²)=2θ² gives θ+θ²."
+        },
+        "D": {
+          "tf": true,
+          "why": "Using E(X₂²)=2θ² gives θ−θ²."
+        }
+      },
+      "pno": 601,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p605",
+      "format": "multi",
+      "topic": "inference-t4",
+      "stem": "Let X₁,…,Xₙ be iid Uniform(2θ−1,2θ+1), θ∈R, and let Y₁=min(Xᵢ), Yₙ=max(Xᵢ). Which are maximum likelihood estimators of θ?",
+      "statements": [
+        "(Y₁+Yₙ)/4",
+        "(2Y₁+Yₙ+1)/6",
+        "(Y₁+3Yₙ−2)/8",
+        "Every statistic T satisfying (Yₙ−1)/2<T<(Y₁+1)/2"
+      ],
+      "options": [
+        "Statement A only",
+        "Statements A, B and C only",
+        "All four statements",
+        "Statements B and D only"
+      ],
+      "answer": "C",
+      "explanation": "The likelihood is constant for values of θ that place every observation inside the interval, and zero otherwise. The support conditions give (Yₙ−1)/2<θ<(Y₁+1)/2. Thus every θ strictly inside this interval is an MLE. The three displayed formulas A, B and C lie inside this interval because Yₙ−Y₁<2 for a sample from a continuous Uniform interval of width 2. Statement D describes the full set of MLEs. All four statements are therefore true.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The midpoint of the admissible interval lies strictly inside it."
+        },
+        "B": {
+          "tf": true,
+          "why": "This weighted combination lies strictly between the support-derived bounds."
+        },
+        "C": {
+          "tf": true,
+          "why": "This weighted combination also lies strictly between the support-derived bounds."
+        },
+        "D": {
+          "tf": true,
+          "why": "The likelihood is constant and maximal throughout the open admissible interval."
+        }
+      },
+      "pno": 605,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p607",
+      "format": "numeric",
+      "topic": "inference-t4",
+      "stem": "A random sample from an exponential distribution with rate λ has sample mean 3.7. Find the MLE of 1−e⁻ˡᵃᵐᵇᵈᵃ, rounded to two decimal places.",
+      "options": [],
+      "answer": "0.2369",
+      "explanation": "For an exponential distribution with rate λ, the MLE is λ̂=1/X̄=1/3.7≈0.27027. By the invariance property of maximum likelihood estimation, the MLE of g(λ)=1−e⁻ˡᵃᵐᵇᵈᵃ is g(λ̂)=1−e⁻¹ᐟ³·⁷≈0.2369, which rounds to 0.24.",
+      "check": "Compute λ̂=1/3.7, then substitute into 1−exp(−λ̂).",
+      "pno": 607,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p611",
+      "format": "numeric",
+      "topic": "inference-t12",
+      "stem": "Let X have density f(x;θ)=θe⁻ᶿˣ for x≥0, θ>0. For testing H₀:θ=1 against H₁:θ>1, reject H₀ when X>log(20). Find the size of the test.",
+      "options": [],
+      "answer": "0.05",
+      "explanation": "The size is the rejection probability when H₀ is true. Under H₀, X is exponential with rate 1, so P(X>log 20|H₀)=exp(−log 20)=1/20=0.05.",
+      "check": "Under H₀, use the exponential survival function P(X>t)=e⁻ᵗ at t=log 20.",
+      "pno": 611,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p612",
+      "format": "numeric",
+      "topic": "inference-t12",
+      "stem": "Let X~Uniform(θ,θ²), θ>1. Test H₀:θ=2 against H₁:θ=3 by rejecting H₀ when X>3.5. If α is the size and β is the power (as defined in the source), find α+β to two decimal places.",
+      "options": [],
+      "answer": "1.1667",
+      "explanation": "Under H₀, X~Uniform(2,4), so α=P(X>3.5|θ=2)=(4−3.5)/(4−2)=1/4. Under H₁, X~Uniform(3,9), so the power β=P(X>3.5|θ=3)=(9−3.5)/(9−3)=5.5/6=11/12. The source defines β as power, so α+β=1/4+11/12=7/6≈1.17.",
+      "check": "Calculate α=0.25 and power β=11/12; add them to obtain 7/6≈1.17.",
+      "pno": 612,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
