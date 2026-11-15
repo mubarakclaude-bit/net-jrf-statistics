@@ -955,3 +955,17 @@ Seven additional questions were imported after visual inspection:
 **Held out:** page 687 asks for a single unbiased estimator of θ² from a Normal(θ,2θ²) sample, but both ΣXᵢ²/(3n) and Σ(Xᵢ−X̄)²/[2(n−1)] are unbiased. The source's single-answer marking is therefore not unique; it was excluded rather than silently converted into an MSQ.
 
 The p681 maximum order statistic converges to θ+1/2, making option B converge to θ+1. In p682, the sum is sufficient for Poisson, exponential-rate and Bernoulli models, but not for Normal(0,σ²) with unknown variance, where the sum of squares is sufficient. For p683, the complete sufficient Poisson sum S gives UMVUE S(S−1)/n²; the observed value is 24. For p684, the pivot 2θΣXᵢ~χ²₂ₙ supports the central 90% interval and the one-sided upper 90% interval (with the source's upper-tail chi-square notation). For p685, E(1/S)=1/[(n−1)θ], giving the UMVUE (n−1)/S. Page 686 applies the CRLB with Iₙ(θ)=n/θ² and g′(θ)=2θ. Page 688 uses the invariance property after maximising n log θ−θΣXᵢ³.
+
+
+## Batch 64 — pages 689–696
+
+Four additional questions were imported after visual inspection:
+- **Statistical Inference (4):** MLE for the scale parameter of a Gamma(shape 3) model, p691; most powerful testing for two Laplace scale parameters, p693; unbiasedness and consistency of the normal sample mean and sample variance, p694; and constrained integer-valued normal mean MLE, p695.
+
+**Held out after inspection:**
+- **Page 689:** the source asks for a single non-unbiased estimator, but both options C and D are not unbiased under the stated exponential model. The single-answer key is not unique.
+- **Page 690:** both X₍n₎ and ((n+1)/n)X₍n₎ are consistent for θ under Uniform(0,θ), although the source says “Select one”.
+- **Page 692:** the wording and right-hand distribution statement for option C are cut off in the scan, so the claimed auxiliary/ancillary property cannot be checked reliably.
+- **Page 696:** the order-statistic expression in option C is not legible enough to distinguish the statistic inside the minimum; the source's key cannot be independently validated.
+
+For p691, differentiating the Gamma(shape 3, scale θ) log-likelihood gives θ̂=X̄/3. For p693, the likelihood ratio increases with Σ|Xᵢ| when θ₁>θ₀, so the MP test is upper-tailed. For p694, X̄ and the usual unbiased S² are both unbiased, with variances tending to zero. For p695, the sample mean is 0.82 and the closest allowed integer is 1.
