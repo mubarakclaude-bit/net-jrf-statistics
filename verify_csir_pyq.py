@@ -97,6 +97,20 @@ def main() -> None:
     assert "finite" in mle_text.lower() and "mixture" in mle_text.lower()
     assert "Uniform" in complete_text and "differentiate in θ" in complete_text
     assert "unbiased estimator of P(1−P)" in srs_text
+    q77 = next(x for x in methods["items"] if x["id"] == "csir-meth-2024-jun-q77")
+    assert q77["year"] == 2024 and q77["session"] == "June" and q77["answer"] == "B"
+    assert q77["topic"].startswith("inference-t4") and "5/7" in q77["explanation"]
+    q78 = next(x for x in methods["items"] if x["id"] == "csir-meth-2024-jun-q78")
+    assert q78["year"] == 2024 and q78["session"] == "June" and q78["answer"] == "C"
+    assert q78["topic"].startswith("inference-t13") and "1/[−2 ln(0.05)]" in q78["explanation"]
+    q79 = next(x for x in methods["items"] if x["id"] == "csir-meth-2024-jun-q79")
+    assert q79["year"] == 2024 and q79["session"] == "June" and q79["answer"] == "C"
+    assert q79["topic"].startswith("regression-t4") and "SSE=(1−R²)SST" in q79["explanation"]
+    q80 = next(x for x in methods["items"] if x["id"] == "csir-meth-2024-jun-q80")
+    assert q80["year"] == 2024 and q80["session"] == "June" and q80["answer"] == "B"
+    assert "".join(sorted(k for k, value in q80["verdicts"].items() if value["tf"])) == "BC"
+    assert "editorially supplied" in q80["explanation"]
+
     q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
     assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
