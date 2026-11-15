@@ -552,3 +552,22 @@ Twelve questions were imported after visual review, all in Probability:
 
 - **Page 357:** the correct conditional law is Binomial(y, λ₁/(λ₁+λ₂)); none of the printed options gives that law, so the item is keyed as “None of the above”.
 - The remaining items in this batch were checked by direct integration, transformation, standard distribution identities or moment formulas; no source-key correction was needed.
+
+
+## Batch 34 — pages 361–372
+
+Ten questions were imported after visual review:
+- **Probability (4):** chi-square distribution of a quadratic form in independent standard normals, p361; Bayes' theorem for a male/female completion problem, p365; a Uniform-plus-Bernoulli mixture distribution, p366; and the conditional distribution of independent Poisson variables given their sum, p371.
+- **Statistical Inference (6):** exact binomial upper-tail test for a coin, p363; Cramér–Rao lower bound for a power-family density, p368; definition of consistency, p369; Gamma shape estimation by method of moments, p370; and power of a test under a shifted Uniform alternative, p372. (The batch has five inference questions.)
+
+### Pages held out after inspection
+
+- **Page 362:** section cover, no question.
+- **Page 367:** the requested strict event is 50<Sₙ<80. Since Sₙ is integer-valued, the continuity-corrected normal interval is 50.5 to 79.5, giving approximately 0.9279; the printed choices do not contain this value. The source choices appear to use a different endpoint convention, so it is held out rather than keyed to a mismatched option.
+
+### Source notes and checks
+
+- **Page 363:** the exact Binomial(100, 0.5) upper tail gives P(N≥59)≈0.0443 and P(N≥58)≈0.0666, confirming N>58 as the non-randomised 5% critical region.
+- **Page 364:** only the conditional statement given X+Y=2 is universally true; the Bernoulli sum is not generally Binomial(2,pₓ+pᵧ), and the conditional probability given a sum of one depends on both parameters.
+- **Page 368:** the per-observation Fisher information is 1/θ², giving the bound θ²/n.
+- **Page 370:** the Gamma method-of-moments formula uses the second raw moment m′₂, not the variance alone.
