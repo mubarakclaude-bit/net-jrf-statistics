@@ -137,6 +137,11 @@ def main() -> None:
     assert q89["year"] == 2025 and q89["session"] == "June" and q89["answer"] == "A"
     assert "N(13,15)" in q89["explanation"]
 
+    q90 = next(x for x in methods["items"] if x["id"] == "csir-meth-2025-jun-q90")
+    assert q90["year"] == 2025 and q90["session"] == "June" and q90["answer"] == "B"
+    assert "".join(sorted(k for k, value in q90["verdicts"].items() if value["tf"])) == "BD"
+    assert "page 53" in q90["explanation"]
+
     q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
     assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
