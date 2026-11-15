@@ -75,4 +75,4 @@ close(1-(1/2)*(3/4)*(7/8)*(15/16),709/1024)
 # p348: last defective at position 9.
 close(math.comb(8,3)/math.comb(15,4),8/195)
 assert total==282,total
-print("PASS: 254 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 282 supplementary questions; source-key corrections recorded; ambiguous items held out.")
