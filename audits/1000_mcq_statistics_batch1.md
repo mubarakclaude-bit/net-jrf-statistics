@@ -743,3 +743,19 @@ Three questions were imported after visual inspection:
 - **Page 500:** the displayed statistic and denominator are incomplete, so its sampling distribution cannot be keyed.
 - **Page 502:** two answer options repeat the same statement about Z and W, leaving the intended single-choice key ambiguous.
 - **Page 503:** the definition of Yᵢ and the normalising constants in the limiting expressions are illegible.
+
+
+## Batch 47 — pages 505–516
+
+Six questions were imported after visual review:
+- **Probability (5):** distributional and dependence properties of ratios of independent standard normals, p505; expectation identity for a normal and a chi-square variable without an independence assumption, p506; fourth moment of a sum of four iid Rademacher variables, p507; nested conditional-uniform expectation, p510; and universal probability bounds for two events, p516.
+- **Statistical Inference (1):** comparing size and power of four tests for Uniform(0,θ) hypotheses, p515.
+
+### Pages held out after inspection
+
+- **Page 508:** the stated standard deviation and confidence requirement imply a sample size far larger than any printed option; the scan may have a missing decimal or transcription error.
+- **Page 509:** section/advertisement page, no question.
+- **Page 511:** the conditional distribution of X_N and the parameter of the binomial family are not sufficiently legible.
+- **Page 512:** the random-sum definition and the exceptional value when N=0 are too corrupted to identify unambiguously.
+- **Page 513:** the estimator expressions for the exponential functional are too faint to distinguish.
+- **Page 514:** the four sequence expressions and normalising factors are incomplete in the scan.
