@@ -1034,7 +1034,11 @@ Six additional questions were imported after visual inspection:
 - **Statistical Inference (2):** exact confidence interval for the rate of an exponential distribution, p725; and the Neyman–Pearson critical region for two specified densities, p728.
 
 ### Held-out pages
-- **Page 723:** the printed distributions are X~Uniform(0,2), Y~Uniform(1,3), independent. Direct integration gives P(X<Y)=3/4? [CHECKED: integrate conditional probabilities: for 0<x<1, P(Y>x)=1; for 1<x<2, P(Y>x)=(3−x)/2; integrating against fX=1/2 gives 1/2×(1+∫₁²(3−x)/2 dx)=1/2×(1+3/4)=7/8.] The scan's marked answer is 3/4 and the options include 1/2, 3/4, 7/8, 1; because the exact density and integration give 7/8, the marked key is incorrect. The correct option 7/8 is present, so this item is held for independent review of the source key rather than imported in this batch.
+- **Page 723:** the printed distributions are X~Uniform(0,2), Y~Uniform(1,3), independent. Direct integration gives P(X<Y)=7/8, option C. The source mark indicates 3/4; the imported item corrects that key using the conditional probability integral.
 - **Page 727:** the event "get an A in Chemistry" is not clearly distinguished from choosing Chemistry by a fair coin and then getting an A. The corresponding probabilities differ, and the listed options do not resolve the intended event, so the item is held.
 
 For p721, equality in Jensen for a strictly convex function forces X to be constant almost surely. For p722, the maximum CDF is [1−e^(−x)/n]ⁿ after centring, converging to e^(−e^(−x)). For p724, fY(y)=4y³ and fX|Y(x|y)=2x/y². Page 725 follows from 2θΣXᵢ~χ²₂ₙ. Page 726 applies Chebyshev with k=2. Page 728 uses the likelihood ratio 16(x₁x₂)³, so the critical region is ln x₁+ln x₂>c.
+
+
+### Page 723 correction
+The page-723 question is now imported with answer 7/8. The source key's 3/4 is incorrect: for 0<x<1, P(Y>x)=1, and for 1≤x<2, P(Y>x)=(3−x)/2. Integrating against the Uniform(0,2) density gives 1/2+3/8=7/8.

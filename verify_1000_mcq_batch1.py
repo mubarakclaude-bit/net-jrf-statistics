@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==556,total
+assert total==557,total
 
 
 
@@ -558,7 +558,7 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 556 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 557 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p681: the maximum plus one-half converges to theta+1, not theta.
 assert (0.5+0.5)==1
@@ -657,3 +657,6 @@ close(1-1/(2**2),.75)
 # p728: likelihood ratio is increasing in x1*x2, hence in log(x1)+log(x2).
 for a,b in ((.2,.3),(.4,.5)):
     assert 16*(a*b)**3>0
+
+# p723: integrate P(Y>x) over X~Uniform(0,2), Y~Uniform(1,3).
+close(.5 + .5*((3*2/2-2**2/4)-(3*1/2-1**2/4)),7/8)
