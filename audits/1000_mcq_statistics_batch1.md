@@ -900,3 +900,17 @@ Four additional questions were imported after visual inspection:
 - Pages 640, 641, 642, 643, 644, 647 and 648 were already imported and were not duplicated.
 
 For p638, the sign-only observations are Bernoulli with success probability Φ(θ); the inverse-CDF MLE is consistent, and boundedness gives convergence of its expectation. For p639, the sample variance is unbiased for the population variance, which equals θ in the Poisson(θ) and Normal(0,θ) models only. For p645, the standard Cauchy alternative is symmetric, so the threshold C=0 gives power one-half. For p646, conditional on the second Poisson arrival at 40 minutes, the first arrival is uniform on (0,40), giving probability 1/4 of occurring after minute 30.
+
+
+
+## Batch 58 — pages 649–656
+
+Six additional questions were imported after visual inspection:
+- **Probability (4):** four convergence-in-probability statements for independent Normal(2,5) variables, p649; complement probability for two mutually exclusive race winners, p651; conditional Biology readership given Mathematics readership, p652; and the position of the second red ball in sampling without replacement, p653.
+- **Statistical Inference (3):** maximum likelihood estimation for a uniform triangular support, p650; UMP upper-tail regions in the power-density family, p654; and limiting power of a Bernoulli one-sided test, p656.
+
+### Pages held out after inspection
+- **Page 655:** duplicate of the triangular-region MLE problem on page 650; excluded to avoid duplicate content.
+- Pages 651–653 contain short, compactly printed probability questions. The wording and answer choices were checked at higher resolution before transcription.
+
+The p649 statements follow from the weak law and continuous mapping; in particular E(X²)=Var(X)+[E(X)]²=9. For p650, the likelihood is proportional to θ^(−2n) subject to θ≥maxᵢ(Xᵢ+Yᵢ), so the MLE is the smallest feasible value. Page 651 uses mutual exclusivity of the two winning events, not independence. Page 652 is a direct conditional-probability calculation. For p653, there must be one red position among the first four, a red at position five, and the third red after position five, giving 16/C(9,3)=4/21. For p654, the likelihood has a monotone likelihood ratio in Σlog(Xᵢ), supporting the upper-tail region for both stated increasing alternatives. For p656, the alternative mean 3n/4 separates from the null critical boundary near n/2 by order n, so power tends to one.
