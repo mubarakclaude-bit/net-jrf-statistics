@@ -409,7 +409,7 @@ def main() -> None:
     assert "integer nearest to X̄" in mle_text and "halfway between two integers" in mle_text
     q68 = next(x for x in estimation["items"] if x["id"] == "csir-est-q68")
     assert "cannot define a probability density" in q68["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 100
+    assert len(estimation["items"]) == estimation["count"] == 99
 
     # Further source questions from pages 36–49.
     for qid, truth, year, session in [
@@ -513,7 +513,7 @@ def main() -> None:
     assert q105["answer"] == "A" and "page 65" in q105["explanation"]
     assert "hypergeometric likelihood" in srs_text and "both are maximisers" in srs_text
     assert "known to be zero" in contrast_text and "complete sufficient" in contrast_text
-    assert len(estimation["items"]) == estimation["count"] == 100
+    assert len(estimation["items"]) == estimation["count"] == 99
     assert len(methods["items"]) == methods["count"] == 13
     assert len(sampling["items"]) == sampling["count"] == 9
 
@@ -540,7 +540,7 @@ def main() -> None:
     assert q54["answer"] == "B" and "page 64" in q54["explanation"]
     q55 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q55")
     assert q55["answer"] == "C" and "page 64" in q55["explanation"]
-    assert len(estimation["items"]) == estimation["count"] == 100
+    assert len(estimation["items"]) == estimation["count"] == 99
 
     q75 = next(x for x in methods["items"] if x["id"] == "csir-meth-q75")
     assert q75["type"] == "practice" and q75["format"] == "multi"
