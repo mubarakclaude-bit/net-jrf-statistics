@@ -816,3 +816,15 @@ Nine questions were imported after visual inspection:
 - **Page 553:** the answer depends on the ordering of θ₁ and θ₂, which is not stated; the listed options do not cover both parameter orderings.
 - **Page 558:** the limiting statistic and summation bounds are too faint to identify.
 - **Page 559:** the statistic W and its scaling are unreadable, so the sampling distribution cannot be keyed.
+
+
+## Batch 52 — pages 565–576
+
+Eleven additional questions were imported after visual inspection:
+- **Probability (11):** identifying a Poisson summand from an independent Poisson sum, p565; marginals and dependence from a triangular joint density, p566; an expectation involving independent identically distributed MGFs, p567; a Gamma law from the probability integral transform, p568; the density of a squared continuous random variable, p569; the ordering probability for two iid continuous variables, p570; a Poisson CDF evaluated at a non-integer point, p571; a Chebyshev upper bound, p572; the positive-part expectation of a standard normal variable, p573; CDF-preserving transformations, p574; and a trigonometric probability under a uniform distribution, p576.
+
+### Page held out after inspection
+
+- **Page 575:** held out because the conditioning notation around the absolute value and integer-part brackets is not sufficiently unambiguous in the scan to reproduce the exact event safely. The algebraic options alone do not resolve the intended conditioning event.
+
+The page 566 marginal was recomputed by integrating the joint density over its triangular support. On page 568, the probability integral transform gives iid Uniform(0,1) variables; applying −log produces iid Exp(1) variables, whose sum is Gamma(n,1). The page 574 functions are both valid CDFs because each is a continuous non-decreasing transformation of F with endpoint values 0 and 1.
