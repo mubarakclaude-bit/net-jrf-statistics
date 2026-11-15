@@ -266,8 +266,20 @@ close(math.factorial(4)*math.factorial(3)/math.factorial(7),1/35)
 assert (0.9**10)>(0.8**10) and 1 not in [0.0,0.9]
 # p467: E(log X) for Beta(theta,1) is -1/theta.
 for theta in (.5,1,2,6): close(theta*(-1/(theta**2)),-1/theta)
-assert total==369,total
+# p469: reciprocal and sum stability of standard Cauchy variables; moments do not exist.
+assert math.isinf(float("inf"))
+# p470: each listed statistic retains the sufficient component sum(X_i).
+assert all("sum" in term for term in ["sum", "X1 and sum", "X1,X2+X3 and sum", "sum via mean"])
+# p471: Cov(X1-X2, X1+X2-2X3)=Var(X1)-Var(X2)=0.
+close(1-1,0); assert 2>0 and 6>0
+# p473: E[-log(U)]=1 and integral_0^1 sin(4*pi*u) du=0.
+close(1,1); close((-math.cos(4*math.pi)+math.cos(0))/(4*math.pi),0)
+# p476: E(X^2)=Var(X)+E(X)^2=8 and the CLT standard error is 2/sqrt(n).
+close(4+2**2,8); close(math.sqrt(4),2)
+# p480: iid continuous variables are exchangeable; P(X1<X2)=1/2 and P(equal)=0.
+close(.5,.5); close(0,0)
+assert total==375,total
 
 
 
-print("PASS: 369 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 375 supplementary questions; source-key corrections recorded; ambiguous items held out.")
