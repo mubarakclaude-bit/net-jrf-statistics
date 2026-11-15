@@ -1098,3 +1098,7 @@ Eight additional Statistical Inference questions were imported after visual insp
 - **Page 760:** sufficient statistic for two Binomial(2,θ) observations.
 
 For p753, factorisation shows that X₁+X₂ is sufficient; its half is the UMVU estimator of λ. For p754, E(X̄²−1/n)=θ². For p755, ΣXᵢ²/n has variance 2σ⁴/n, equal to the CRLB when the mean is known to be zero. For p756, the n−1 denominator sample variance is unbiased; the n denominator version is biased but consistent. For p757, the scaled sum of squares has a chi-square distribution and is complete sufficient. Page 758 has parameter-dependent support, invalidating the usual CRLB regularity conditions. For p759, the likelihood decreases over the feasible interval, so the MLE is the square root of the sample maximum. For p760, the likelihood depends on θ through X₁+X₂.
+
+
+### p756 format adaptation
+The source scan contains three statements, while the repository's multi-select contract requires four. A fourth false statement was added: “The sample variance with denominator n is unbiased for σ².” The original three source statements and their answer remain unchanged; the added statement is explicitly identified here as a format adaptation.
