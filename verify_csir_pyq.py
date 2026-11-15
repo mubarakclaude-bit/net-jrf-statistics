@@ -656,7 +656,7 @@ def main() -> None:
         "csir-meth-2012-dec-q65": ("BC", "B"),
         "csir-meth-2012-jun-q70": ("ABC", "A"),
         "csir-meth-2011-dec-q71": ("BD", "B"),
-        "csir-meth-2011-dec-q72": ("AD", "A"),
+        "csir-meth-2011-dec-q72": ("ACD", "B"),
         "csir-meth-2011-jun-q76": ("BC", "B"),
     }
     for qid, (truth, answer) in new_multi.items():
