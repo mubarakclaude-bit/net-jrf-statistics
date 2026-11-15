@@ -1523,8 +1523,8 @@
         "Y₂−3Y₃ is the BLUE of θ₁−4θ₃.",
         "Y₁−4Y₃ is an unbiased estimator of θ₁−4θ₃."
       ],
-      "answer": "B",
-      "explanation": "First check the expectation of each proposed linear estimator. Using the model means, E(2Y₁−Y₂−Y₃)=2(θ₁+2θ₂−2θ₃)−(θ₁+3θ₂−θ₃)−(θ₂+θ₃)=θ₁−4θ₃. So options A and B at least have the required unbiasedness. Similarly E(Y₂−3Y₃)=θ₁+3θ₂−θ₃−3θ₂−3θ₃=θ₁−4θ₃, so option C is also unbiased. Option D has expectation θ₁−2θ₂−6θ₃, so it is not unbiased.\\n\\nTo decide which unbiased estimator is BLUE, use the fact that the errors are uncorrelated with common variance σ². The variance of a linear combination ΣcᵢYᵢ is σ²Σcᵢ². The coefficient vectors for the first two unbiased estimators are (2,−1,−1) and (0,1,−3), with squared lengths 6 and 10, respectively. The first therefore has smaller variance. It is the BLUE, so option B is correct. Source: Methods of Estimation PDF, Question 61, December 2012, page 37. The supplied answer-key page does not include Q61.\\n\\nOther-exam relevance: estimable functions, unbiased linear estimation and BLUE comparisons are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+      "answer": "A",
+      "explanation": "First check the expectation of each proposed linear estimator. Using the model means, E(2Y₁−Y₂−Y₃)=2(θ₁+2θ₂−2θ₃)−(θ₁+3θ₂−θ₃)−(θ₂+θ₃)=θ₁−4θ₃. Thus option A is unbiased. Similarly, E(Y₂−3Y₃)=θ₁−4θ₃, so option C is also unbiased, but it is not the BLUE. Option D has expectation θ₁−2θ₂−6θ₃, so it is not unbiased.\\n\\nTo find the BLUE, minimise Var(a₁Y₁+a₂Y₂+a₃Y₃)=σ²(a₁²+a₂²+a₃²) subject to unbiasedness. The constraints are a₁+a₂=1, 2a₁+3a₂+a₃=0 and −2a₁−a₂+a₃=−4. They give (a₁,a₂,a₃)=(t,1−t,t−3). Minimising t²+(1−t)²+(t−3)² gives t=4/3. Hence the BLUE is (4Y₁−Y₂−5Y₃)/3, which is neither expression in options B nor C. Therefore only statement A is true. Source: Methods of Estimation PDF, Question 61, December 2012, page 37. The supplied answer-key page does not include Q61.\\n\\nOther-exam relevance: estimable functions, unbiased linear estimation and BLUE comparisons are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
     },
     {
       "id": "csir-meth-2012-dec-q62",
@@ -1582,12 +1582,12 @@
         "The variance of the estimated coefficient of X in the model with X and X² is larger than in the model with X alone."
       ],
       "options": [
-        "Statements 1 and 2 only",
+        "Statement 2 only",
         "Statements 2 and 4 only",
-        "Statements 1, 2 and 3 only",
+        "Statements 1 and 2 only",
         "All four statements"
       ],
-      "answer": "B",
+      "answer": "A",
       "verdicts": {
         "A": {
           "tf": false,
@@ -1602,11 +1602,11 @@
           "why": "Adjusted R² penalises additional regressors and can decrease when X² adds too little explanatory power."
         },
         "D": {
-          "tf": true,
-          "why": "Adding X² introduces an additional regressor. The variance of the coefficient of X is inflated by the factor 1/(1−r²) relative to the simple regression, where r is the sample correlation between the centred X and X² columns."
+          "tf": false,
+          "why": "The strict inequality is not necessary when the sample columns X and X² are orthogonal; in that case the coefficient variance can be equal to the simple-regression variance."
         }
       },
-      "explanation": "Statement 1 is false: even when the original errors have constant variance, the fitted residuals have covariance matrix σ²(I−H), so their individual variances are σ²(1−hᵢᵢ), which generally differ.\\n\\nStatement 2 is true. The expanded model can reproduce the original fit by setting the coefficient of X² equal to zero. Its least-squares residual sum of squares therefore cannot be larger, so the ordinary R² cannot be smaller.\\n\\nStatement 3 is false because adjusted R² includes a penalty for the extra predictor. If X² explains too little additional variation, adjusted R² decreases.\\n\\nStatement 4 is true when the design columns are not perfectly collinear: the variance of the slope for X in the two-regressor model is σ²/[Sxx(1−r²)], compared with σ²/Sxx in the one-regressor model. Since 1/(1−r²)≥1, the variance is no smaller and is strictly larger when r≠0. The printed statement says 'larger'; this is true for the usual nonzero sample correlation, but equality is possible when r=0. Strictly speaking, it is not universally larger without an additional condition. The source's use of 'necessarily' therefore makes D not universally true if the sample design has r=0. The robust conclusion is B only; D is a variance-inflation tendency, not an unconditional strict inequality.\\n\\nSource: Methods of Estimation PDF, Question 63, December 2012, page 39. The supplied answer-key page does not include Q63.\\n\\nOther-exam relevance: nested regression, R², adjusted R² and multicollinearity are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+      "explanation": "Statement 1 is false: even when the original errors have constant variance, the fitted residuals have covariance matrix σ²(I−H), so their individual variances are σ²(1−hᵢᵢ), which generally differ.\\n\\nStatement 2 is true. The expanded model can reproduce the original fit by setting the coefficient of X² equal to zero. Its least-squares residual sum of squares therefore cannot be larger, so the ordinary R² cannot be smaller.\\n\\nStatement 3 is false because adjusted R² includes a penalty for the extra predictor. If X² explains too little additional variation, adjusted R² decreases.\\n\\nStatement 4 is not necessarily true as written. In the two-regressor model, Var(β̂₁)=σ²/[Sxx(1−r²)], compared with σ²/Sxx in the simple model, where r is the sample correlation between the centred X and X² columns. This is greater when r≠0, but equal when r=0. Since the question asks what is necessarily correct, the strict greater-than statement cannot be selected without excluding r=0. Therefore statement 2 only is necessarily true. Source: Methods of Estimation PDF, Question 63, December 2012, page 39. The supplied answer-key page does not include Q63.\\n\\nOther-exam relevance: nested regression, R², adjusted R² and multicollinearity are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
     },
     {
       "id": "csir-meth-2012-dec-q64",
