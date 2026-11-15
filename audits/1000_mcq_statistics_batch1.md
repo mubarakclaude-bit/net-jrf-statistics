@@ -707,3 +707,20 @@ Six questions were imported after visual review:
 - **Page 477:** duplicate of the moment/WLLN/CLT question on page 476; not imported twice.
 - **Page 478:** the Gamma shape parameters and ratio expressions are too faint to establish the intended Beta-distribution parameters.
 - **Page 479:** the expressions involving the two normal variables are partly illegible; the complete statement set cannot be validated.
+
+
+## Batch 45 — pages 481–492
+
+Four questions were imported after visual inspection:
+- **Probability (3):** expected number of Uniform(0,1) samples until their sum exceeds one, p483; the two-toss von Neumann method for unbiased selection with a biased coin, p485; and strictly increasing outcomes from three sequential fair-die throws, p486.
+- **Statistical Inference (1):** size and power for testing between two uniform distributions with a specified critical region, p488.
+
+### Pages held out after inspection
+
+- **Page 481:** the continuous-distribution notation and all multi-select statements are too faint to reconstruct reliably.
+- **Page 482:** the binomial mode expression and options are corrupted.
+- **Page 484:** the question about generating a normal variate from a Bernoulli generator is not sufficiently specified about the allowed computational operations and precision.
+- **Page 487:** the displayed discrete probability formula is unreadable.
+- **Page 489:** the density formula for the sample and unknown parameter is too corrupted to derive the MLE safely.
+- **Pages 490–491:** the density and confidence-interval expressions are too faint to identify the model and pivot.
+- **Page 492:** the chi-square/sum expression is incomplete in the scan.
