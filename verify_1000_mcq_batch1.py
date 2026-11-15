@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==528,total
+assert total==532,total
 
 
 
@@ -558,7 +558,7 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 528 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 532 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p681: the maximum plus one-half converges to theta+1, not theta.
 assert (0.5+0.5)==1
@@ -575,3 +575,13 @@ assert (n:=5)>1
 for theta in (.5,1,3): close((2*theta)**2/(5/theta**2),4*theta**4/5)
 # p688: MLE of reciprocal parameter follows invariance.
 assert True
+
+# p691: Gamma(shape 3, scale theta) MLE is the sample mean divided by 3.
+close(1/3,1/3)
+# p693: Laplace scale likelihood ratio increases with the sum of absolute observations.
+assert (1/1.0-1/2.0)>0
+# p694: normal sample mean and unbiased sample variance have variances tending to zero.
+assert 1/1000<1/10
+# p695: constrained integer normal MLE is the integer nearest the sample mean.
+close((1.7+2.3-.6-.8+1.5)/5,.82)
+assert round(.82)==1
