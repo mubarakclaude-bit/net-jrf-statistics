@@ -557,8 +557,8 @@ Twelve questions were imported after visual review, all in Probability:
 ## Batch 34 — pages 361–372
 
 Ten questions were imported after visual review:
-- **Probability (4):** chi-square distribution of a quadratic form in independent standard normals, p361; Bayes' theorem for a male/female completion problem, p365; a Uniform-plus-Bernoulli mixture distribution, p366; and the conditional distribution of independent Poisson variables given their sum, p371.
-- **Statistical Inference (6):** exact binomial upper-tail test for a coin, p363; Cramér–Rao lower bound for a power-family density, p368; definition of consistency, p369; Gamma shape estimation by method of moments, p370; and power of a test under a shifted Uniform alternative, p372. (The batch has five inference questions.)
+- **Probability (5):** chi-square distribution of a quadratic form in independent standard normals, p361; Bayes' theorem for a male/female completion problem, p365; a Uniform-plus-Bernoulli mixture distribution, p366; the conditional distribution of independent Bernoulli variables given their sum, p364; and the conditional distribution of independent Poisson variables given their sum, p371.
+- **Statistical Inference (5):** exact binomial upper-tail test for a coin, p363; Cramér–Rao lower bound for a power-family density, p368; definition of consistency, p369; Gamma shape estimation by method of moments, p370; and power of a test under a shifted Uniform alternative, p372.
 
 ### Pages held out after inspection
 
