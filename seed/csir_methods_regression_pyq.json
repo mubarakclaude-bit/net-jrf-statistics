@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 29,
-  "clean": 29,
+  "count": 32,
+  "clean": 32,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -808,6 +808,105 @@
       ],
       "answer": "C",
       "explanation": "Because the two marginal variances are constrained to be equal, the covariance matrix is σ²[[1,ρ],[ρ,1]]. The unknown means are estimated by X̄ and Ȳ, so the likelihood can be written using the centred sums Sₓₓ, Sᵧᵧ and Sₓᵧ.\n\nAfter maximising over σ², the part of the profile log-likelihood that depends on ρ is proportional to −n log(Sₓₓ+Sᵧᵧ−2ρSₓᵧ)+(n/2)log(1−ρ²). Differentiate with respect to ρ and set the derivative to zero:\n\n2Sₓᵧ/(Sₓₓ+Sᵧᵧ−2ρSₓᵧ) − ρ/(1−ρ²)=0.\n\nCross-multiplying gives 2Sₓᵧ(1−ρ²)=ρ(Sₓₓ+Sᵧᵧ−2ρSₓᵧ). The terms −2ρ²Sₓᵧ cancel on both sides, leaving 2Sₓᵧ=ρ(Sₓₓ+Sᵧᵧ). Hence ρ̂=2Sₓᵧ/(Sₓₓ+Sᵧᵧ), option 3 (C). This differs from the ordinary sample correlation Sₓᵧ/√(SₓₓSᵧᵧ), because the model imposes equal marginal variances and estimates ρ jointly with the common variance. The supplied answer key on page 51 lists option 3.\n\nOther-exam relevance: likelihood estimation in the bivariate normal model, covariance matrices and correlation parameters are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 14, 30 November 2020, page 7; answer key page 51."
+    },
+    {
+      "id": "csir-meth-2020-nov26-q16",
+      "type": "practice",
+      "format": "multi",
+      "year": 2020,
+      "session": "26 November",
+      "topic": "inference-t13 · exact confidence intervals from a scaled uniform distribution",
+      "stem": "Let X have density f(x|θ)=2x/θ² for 0<x<θ and zero otherwise, where θ>0 is unknown. Which of the following are 100(1−α)% confidence intervals for θ?",
+      "statements": [
+        "[X, X/√α].",
+        "[X, 2X].",
+        "[√(2/(2−α))X, √(2/α)X].",
+        "[0, X]."
+      ],
+      "options": [
+        "Statements 1 and 3 only",
+        "Statements 1, 2 and 3 only",
+        "Statements 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "For U=X/θ, F_U(u)=u². The coverage of interval 1 is 1−α, and the coverage of interval 3 is also 1−α."
+        },
+        "B": {
+          "tf": false,
+          "why": "Interval 2 has coverage 3/4, not 1−α for general α."
+        },
+        "C": {
+          "tf": false,
+          "why": "Interval 4 cannot contain θ because X<θ almost surely."
+        },
+        "D": {
+          "tf": false,
+          "why": "Intervals 2 and 4 do not have the required confidence coefficient."
+        }
+      },
+      "explanation": "Start by finding the distribution of U=X/θ. Since X has density 2x/θ² on (0,θ), a change of variable gives f_U(u)=2u for 0<u<1. Hence F_U(u)=u².\n\nFor interval 1, [X,X/√α], the lower endpoint is always below θ because X<θ. The upper endpoint is at least θ exactly when X/√α≥θ, or U≥√α. Therefore the coverage is P(U≥√α)=1−F_U(√α)=1−α.\n\nFor interval 2, [X,2X], coverage requires U≥1/2, so its coverage is 1−(1/2)²=3/4. It is not a general 1−α interval.\n\nFor interval 3, let a=√(2/(2−α)) and b=√(2/α). The event aX≤θ≤bX is equivalent to 1/b≤U≤1/a. Its probability is (1/a)²−(1/b)²=(2−α)/2−α/2=1−α. Thus interval 3 is also correct.\n\nInterval 4, [0,X], cannot contain θ because X<θ almost surely. Therefore statements 1 and 3 only are correct. The supplied answer key on page 51 lists statements 1 and 3. The combination options are editorially supplied because the source presents the candidate intervals as statements. Source: Methods of Estimation PDF, Question 16, 26 November 2020, page 8; answer key page 51.\n\nOther-exam relevance: pivotal quantities and exact confidence intervals for uniform-family models are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2019-dec-q17",
+      "type": "practice",
+      "format": "single",
+      "year": 2019,
+      "session": "December",
+      "topic": "regression-t11 · conditional mean regression function with an indicator variable",
+      "stem": "Suppose (X₁,Y₁),…,(Xₙ,Yₙ) are generated as follows: Y₁,…,Yₙ are i.i.d. Bernoulli(1/2), and Xᵢ conditional on Yᵢ=y has a Uniform(0,y+1) distribution. Define h(x)=1 if x≥1 and h(x)=0 otherwise. Which of the following is a correct linear regression model for m(x)=E(Yᵢ|Xᵢ=x), in the sense that the true m(x) is obtained for some values of α₀,α₁,α₂ for all x in the support?",
+      "options": [
+        "m(x)=α₀+α₁x",
+        "m(x)=α₀+α₁x+α₂x²",
+        "m(x)=α₀+α₁x+α₂x h(x)",
+        "m(x)=α₀+α₁x+α₂h(x)"
+      ],
+      "answer": "D",
+      "explanation": "Use Bayes' rule to calculate the conditional probability that Y=1 after observing X=x. If Y=0, then X~Uniform(0,1), whose density is 1 on (0,1). If Y=1, then X~Uniform(0,2), whose density is 1/2 on (0,2). The prior probabilities of Y=0 and Y=1 are both 1/2.\n\nFor 0<x<1, both values of Y are possible. The joint density contributions are (1/2)×1 for Y=0 and (1/2)×(1/2) for Y=1. Therefore P(Y=1|X=x)=(1/4)/(1/2+1/4)=1/3.\n\nFor 1≤x<2, Y=0 is impossible because a Uniform(0,1) variable cannot exceed 1. Thus P(Y=1|X=x)=1. Since Y is binary, E(Y|X=x)=P(Y=1|X=x). Hence m(x)=1/3 for 0<x<1 and m(x)=1 for 1≤x<2. This can be written as m(x)=1/3+(2/3)h(x), which is option 4 with α₀=1/3, α₁=0 and α₂=2/3.\n\nThe supplied answer key on page 51 lists option 4. Source: Methods of Estimation PDF, Question 17, December 2019, page 8; answer key page 51.\n\nOther-exam relevance: conditional expectation, indicator variables and piecewise regression functions are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2019-dec-q19",
+      "type": "practice",
+      "format": "multi",
+      "year": 2019,
+      "session": "December",
+      "topic": "regression-t1 · diagonal leverage values in simple linear regression with an intercept",
+      "stem": "Given data {(xᵢ,yᵢ): i=1,2,…,n}, where n≥2 and the xᵢ are not all identical, fit the simple linear regression model y=α+βx+ε. Let hᵢᵢ be the i-th diagonal element of the hat matrix H=X(XᵀX)⁻¹Xᵀ, where X is the n×2 model matrix. Which of the following are possible for some choice of n and x₁,…,xₙ?",
+      "statements": [
+        "hᵢᵢ=−1 for some i.",
+        "hᵢᵢ=0 for some i.",
+        "hᵢᵢ=1 for some i.",
+        "All hᵢᵢ are equal."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 2, 3 and 4 only",
+        "Statements 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "C",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "A diagonal element of a projection matrix is a squared length, so it cannot be negative."
+        },
+        "B": {
+          "tf": false,
+          "why": "With an intercept and nonconstant x values, hᵢᵢ=1/n+(xᵢ−x̄)²/Σⱼ(xⱼ−x̄)², which is strictly positive."
+        },
+        "C": {
+          "tf": true,
+          "why": "For n=2 with two distinct x values, the 2×2 design matrix is square and full rank, so H=I and each leverage equals 1."
+        },
+        "D": {
+          "tf": true,
+          "why": "The same n=2 example has all diagonal leverages equal to 1."
+        }
+      },
+      "explanation": "For simple linear regression with an intercept, the leverage of observation i is hᵢᵢ=1/n+(xᵢ−x̄)²/Sₓₓ, where Sₓₓ=Σⱼ(xⱼ−x̄)²>0.\n\nThis formula immediately rules out statement 1 because both terms are nonnegative. It also rules out statement 2 because the first term 1/n is strictly positive. Thus no observation can have leverage −1 or 0.\n\nTo show that statements 3 and 4 are possible, choose n=2 with x₁≠x₂. The design matrix X has two rows and two columns and is invertible. Therefore H=X(XᵀX)⁻¹Xᵀ=I₂. Its diagonal entries are h₁₁=h₂₂=1. So a leverage of 1 is possible and all leverages can be equal. Hence statements 3 and 4 only are correct.\n\n**Printed-key discrepancy:** the supplied answer key on page 51 lists statements 2, 3 and 4. Statement 2 conflicts with the exact leverage formula: hᵢᵢ≥1/n>0. The bank records the mathematically supported answer (3 and 4) and preserves the source-key conflict. The combination options are editorially supplied because the scan lists statements but no combination choices. Source: Methods of Estimation PDF, Question 19, December 2019, page 9; answer key page 51.\n\nOther-exam relevance: the hat matrix, projection matrices and leverage diagnostics are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }

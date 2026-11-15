@@ -154,6 +154,17 @@ def main() -> None:
     q14 = next(x for x in methods["items"] if x["id"] == "csir-meth-2020-nov30-q14")
     assert q14["year"] == 2020 and q14["session"] == "30 November" and q14["answer"] == "C"
     assert q14["topic"].startswith("multivariate-t7") and "2Sₓᵧ/(Sₓₓ+Sᵧᵧ)" in q14["explanation"]
+    q16 = next(x for x in methods["items"] if x["id"] == "csir-meth-2020-nov26-q16")
+    assert q16["year"] == 2020 and q16["session"] == "26 November" and q16["answer"] == "A"
+    assert "".join(sorted(k for k, value in q16["verdicts"].items() if value["tf"])) == "AC"
+    q17 = next(x for x in methods["items"] if x["id"] == "csir-meth-2019-dec-q17")
+    assert q17["year"] == 2019 and q17["session"] == "December" and q17["answer"] == "D"
+    assert "1/3+(2/3)h(x)" in q17["explanation"]
+    q19 = next(x for x in methods["items"] if x["id"] == "csir-meth-2019-dec-q19")
+    assert q19["year"] == 2019 and q19["session"] == "December" and q19["answer"] == "C"
+    assert "".join(sorted(k for k, value in q19["verdicts"].items() if value["tf"])) == "CD"
+    assert "Printed-key discrepancy" in q19["explanation"]
+
     q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
     assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
