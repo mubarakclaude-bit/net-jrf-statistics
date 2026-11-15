@@ -199,4 +199,4 @@ close(5/6-1/2,1/3)
 assert max((x+y) for x in (0,1,2) for y in (0,1,2))==4
 assert total==338,total
 
-print("PASS: 327 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 338 supplementary questions; source-key corrections recorded; ambiguous items held out.")
