@@ -851,3 +851,26 @@ Twelve questions were imported after visual inspection:
 - **Multivariate Analysis (1):** identifying a valid variance-covariance matrix using symmetry and positive semidefiniteness, p599.
 
 All twelve source questions on pages 589–600 were legible enough to verify. The likelihood in page 596 is maximised at the smallest parameter value satisfying the support restrictions, θ=27.
+
+
+## Batch 55 — pages 601–624
+
+Fourteen questions from this range are now represented in the supplementary banks: eight were imported in the preceding commits and six are added in this update.
+
+- **Statistical Inference (6):** unbiased-estimator checks for a normal model with mean and variance linked to θ, p601; MLE set for a location parameter in a uniform model, p605; exponential-rate MLE by invariance, p607; size of an exponential test, p611; size-plus-power calculation for a uniform-family test, p612; and the non-uniqueness of the Laplace location MLE for an even sample, p615; plus the effect of a smaller known variance on a two-sided z-test p-value, p622.
+- **Probability (7):** conditional expectation from a triangular joint density, p606; a probability limit for a normal sample mean, p610; conditional probability from a CDF with an atom at zero, p614; density under a monotone square transformation, p616; normalising a density with two exponential tails, p620; and a CLT for the sample mean of squared standard normals, p623.
+
+### Pages held out after visual inspection
+
+- **Page 602:** duplicates an already represented iid-binomial sum/covariance question.
+- **Page 604:** formula/statistic expressions are too faint to transcribe reliably.
+- **Page 608:** the density and requested expectation are not sufficiently legible.
+- **Page 609:** the joint-density normalising expression is too faint to distinguish reliably.
+- **Page 613:** the displayed ratio/statistic is unreadable.
+- **Page 617:** the alternative distribution is not specified clearly enough; the visible wording only states Uniform(0,1), so size and power cannot both be inferred without assuming a missing parameterised model.
+- **Page 618:** the density parameterisation is corrupted.
+- **Page 619:** the binomial asymptotic expression and option exponents are not reliably legible.
+- **Page 621:** although the joint density is partly readable, the multi-dimensional integral and source answer cannot be independently confirmed from this scan.
+- **Page 624:** the estimator formula/options are corrupted.
+
+For p614, the atom at zero is 1/4 and the conditioning event has probability 3/4, giving 1/3. For p616, the shift X+1 is Uniform(0,2), making the square transformation monotone. For p620, symmetry reduces the normalising integral to two exponential tails. For p623, the variance of X² for standard normal X is 2, giving the stated CLT scaling. The p615 MLE is any sample median; with ten observations it is generally an interval, not a unique point.
