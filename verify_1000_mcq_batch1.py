@@ -250,8 +250,18 @@ close(1/8,0.125); close((1/4)*(1/4),1/16); assert 1/8 != 1/16
 close(2*10*.5-10,0)
 # p439: simple regression residual degrees of freedom n-2.
 assert 6-2==4
-assert total==361,total
+# p445: geometric conditional probability is the one-step success probability.
+close(((1/3)*(2/3)**100)/((2/3)**100),1/3)
+# p446: under theta=3, X=4 is impossible; under theta=4 it has probability 1/3.
+close(0,0); close(1/3,1/3)
+# p447: law of total probability for the three possible locations.
+close(.4*1+.35*.8+.25*.1,.705)
+# p449: sum of independent Poisson(1) counts is Poisson(2).
+close(math.exp(-2)*2**2/math.factorial(2),2*math.exp(-2))
+# p450: Uniform(2,8) has mean 5, P(X<=6)=2/3 and variance 3.
+close((2+8)/2,5); close((6-2)/(8-2),2/3); close((8-2)**2/12,3)
+assert total==366,total
 
 
 
-print("PASS: 361 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 366 supplementary questions; source-key corrections recorded; ambiguous items held out.")
