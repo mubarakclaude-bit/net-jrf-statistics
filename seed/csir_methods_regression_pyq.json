@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 28,
-  "clean": 28,
+  "count": 29,
+  "clean": 29,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -791,6 +791,23 @@
         }
       },
       "explanation": "The key difference is the OLS normal equations.\n\n**Model C: regression with an intercept.** Its residuals eᵢ satisfy Σeᵢ=0 and Σxᵢeᵢ=0. The first equation says the fitted residuals average to zero. Together with the second, it gives the fitted line passing through (x̄,ȳ). It also gives zero centered sample covariance between x and the residuals, so their sample correlation is zero whenever that correlation is defined.\n\n**Model D: regression without an intercept.** Its only slope normal equation is Σxᵢeᵢ=0. There is no normal equation requiring Σeᵢ=0. Therefore the fitted line need not pass through (x̄,ȳ), and the centered covariance between x and residuals is not forced to be zero. It can be zero for special data sets, but is not guaranteed to be zero.\n\nThus statements 1, 2 and 3 are not necessarily true, while statement 4 expresses the intended contrast. **Wording note:** statement 4 is potentially ambiguous if 'but not for D' is read as 'the correlation is always nonzero for D'. The source answer key (page 51) treats it as 'not guaranteed to be zero for D'; the bank makes that intended reading explicit rather than asserting universal nonzero correlation.\n\nOther-exam relevance: OLS normal equations, intercept versus through-origin regression, and residual orthogonality are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 11, February 2022, page 5; answer key page 51."
+    },
+    {
+      "id": "csir-meth-2020-nov30-q14",
+      "type": "practice",
+      "format": "single",
+      "year": 2020,
+      "session": "30 November",
+      "topic": "multivariate-t7 · maximum likelihood estimation of the correlation in a bivariate normal model with equal marginal variances",
+      "stem": "Let (X₁,Y₁),…,(Xₙ,Yₙ), n≥4, be a random sample from a bivariate normal distribution with E(Xᵢ)=μ₁, E(Yᵢ)=μ₂, Var(Xᵢ)=Var(Yᵢ)=σ² and correlation coefficient ρ. All four parameters μ₁, μ₂, σ² and ρ are unknown. Define Sₓₓ=Σᵢ₌₁ⁿ(Xᵢ−X̄)², Sᵧᵧ=Σᵢ₌₁ⁿ(Yᵢ−Ȳ)² and Sₓᵧ=Σᵢ₌₁ⁿ(Xᵢ−X̄)(Yᵢ−Ȳ). Which expression is the maximum-likelihood estimator of ρ?",
+      "options": [
+        "Sₓᵧ/√(SₓₓSᵧᵧ)",
+        "Σᵢ₌₁ⁿXᵢYᵢ / √[(Σᵢ₌₁ⁿXᵢ²)(Σᵢ₌₁ⁿYᵢ²)]",
+        "2Sₓᵧ/(Sₓₓ+Sᵧᵧ)",
+        "2Sₓᵧ/(Sₓₓ+Sᵧᵧ−2Sₓᵧ)"
+      ],
+      "answer": "C",
+      "explanation": "Because the two marginal variances are constrained to be equal, the covariance matrix is σ²[[1,ρ],[ρ,1]]. The unknown means are estimated by X̄ and Ȳ, so the likelihood can be written using the centred sums Sₓₓ, Sᵧᵧ and Sₓᵧ.\n\nAfter maximising over σ², the part of the profile log-likelihood that depends on ρ is proportional to −n log(Sₓₓ+Sᵧᵧ−2ρSₓᵧ)+(n/2)log(1−ρ²). Differentiate with respect to ρ and set the derivative to zero:\n\n2Sₓᵧ/(Sₓₓ+Sᵧᵧ−2ρSₓᵧ) − ρ/(1−ρ²)=0.\n\nCross-multiplying gives 2Sₓᵧ(1−ρ²)=ρ(Sₓₓ+Sᵧᵧ−2ρSₓᵧ). The terms −2ρ²Sₓᵧ cancel on both sides, leaving 2Sₓᵧ=ρ(Sₓₓ+Sᵧᵧ). Hence ρ̂=2Sₓᵧ/(Sₓₓ+Sᵧᵧ), option 3 (C). This differs from the ordinary sample correlation Sₓᵧ/√(SₓₓSᵧᵧ), because the model imposes equal marginal variances and estimates ρ jointly with the common variance. The supplied answer key on page 51 lists option 3.\n\nOther-exam relevance: likelihood estimation in the bivariate normal model, covariance matrices and correlation parameters are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 14, 30 November 2020, page 7; answer key page 51."
     }
   ]
 }
