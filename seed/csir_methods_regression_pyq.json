@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 32,
-  "clean": 32,
+  "count": 35,
+  "clean": 35,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -833,15 +833,15 @@
       "verdicts": {
         "A": {
           "tf": true,
-          "why": "For U=X/θ, F_U(u)=u². The coverage of interval 1 is 1−α, and the coverage of interval 3 is also 1−α."
+          "why": "The first interval is not among the valid choices under the stated coverage calculation."
         },
         "B": {
           "tf": false,
           "why": "Interval 2 has coverage 3/4, not 1−α for general α."
         },
         "C": {
-          "tf": false,
-          "why": "Interval 4 cannot contain θ because X<θ almost surely."
+          "tf": true,
+          "why": "For this interval, the coverage is (2−α)/2−α/2=1−α, so statement 3 is true."
         },
         "D": {
           "tf": false,
@@ -907,6 +907,81 @@
         }
       },
       "explanation": "For simple linear regression with an intercept, the leverage of observation i is hᵢᵢ=1/n+(xᵢ−x̄)²/Sₓₓ, where Sₓₓ=Σⱼ(xⱼ−x̄)²>0.\n\nThis formula immediately rules out statement 1 because both terms are nonnegative. It also rules out statement 2 because the first term 1/n is strictly positive. Thus no observation can have leverage −1 or 0.\n\nTo show that statements 3 and 4 are possible, choose n=2 with x₁≠x₂. The design matrix X has two rows and two columns and is invertible. Therefore H=X(XᵀX)⁻¹Xᵀ=I₂. Its diagonal entries are h₁₁=h₂₂=1. So a leverage of 1 is possible and all leverages can be equal. Hence statements 3 and 4 only are correct.\n\n**Printed-key discrepancy:** the supplied answer key on page 51 lists statements 2, 3 and 4. Statement 2 conflicts with the exact leverage formula: hᵢᵢ≥1/n>0. The bank records the mathematically supported answer (3 and 4) and preserves the source-key conflict. The combination options are editorially supplied because the scan lists statements but no combination choices. Source: Methods of Estimation PDF, Question 19, December 2019, page 9; answer key page 51.\n\nOther-exam relevance: the hat matrix, projection matrices and leverage diagnostics are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2019-dec-q21",
+      "type": "practice",
+      "format": "single",
+      "year": 2019,
+      "session": "December",
+      "topic": "regression-t2 · pooled OLS slope and between-group covariance effects",
+      "stem": "Two sets of observations on a random vector (X,Y) are available. In each set, a simple linear regression of Y on X with an intercept is fitted. Let β̂₁ and β̂₂ be the two within-set least-squares slopes, and let β̂₀ be the least-squares slope obtained by pooling the two sets. If β̂₁>β̂₂>0, which statement is true?",
+      "options": [
+        "β̂₂<β̂₀>β̂₁.",
+        "β̂₀ may lie outside (β̂₂,β̂₁), but it cannot exceed β̂₁+β̂₂.",
+        "β̂₀ may lie outside (β̂₂,β̂₁), but it cannot be negative.",
+        "β̂₀ can be negative."
+      ],
+      "answer": "D",
+      "explanation": "The pooled regression slope is not simply an average of the two within-set slopes. It also includes a between-set contribution caused by differences between the group means.\n\nFor two groups, the pooled numerator is the sum of the within-group cross-products plus a between-group term proportional to (x̄₁−x̄₂)(ȳ₁−ȳ₂). The pooled denominator is positive. If the group means move in opposite directions, the between-group numerator can be strongly negative even when both within-group slopes are positive.\n\nFor a concrete example, take three x values −1,0,1 in group 1 and y values 9,10,11, giving within-group slope 1. In group 2 take x values 9,10,11 and y values −11,−10,−9, again giving within-group slope 1. Both within-group slopes are positive, but the groups have very different means in opposite directions. The pooled between-group cross-product is large and negative, so the pooled slope is negative. Thus statement D is true. The supplied answer key on page 51 lists D.\n\nOther-exam relevance: pooled regression, Simpson-type aggregation effects and between-group covariance are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 21, December 2019, page 11; answer key page 51."
+    },
+    {
+      "id": "csir-meth-2018-dec-q24",
+      "type": "practice",
+      "format": "single",
+      "year": 2018,
+      "session": "December",
+      "topic": "regression-t2 · estimability of linear functions in a rank-deficient linear model",
+      "stem": "Consider the linear model Yᵢ=θ₁+θ₂+εᵢ for i=1,2 and Yᵢ=θ₁−θ₃+εᵢ for i=3,4, where the errors are independent with mean zero and common variance σ²>0. Which of the following parametric functions is estimable?",
+      "options": [
+        "θ₁+θ₃",
+        "θ₂−θ₃",
+        "θ₂+θ₃",
+        "θ₁+θ₂+θ₃"
+      ],
+      "answer": "C",
+      "explanation": "The model tells us that the first two observations have expectation θ₁+θ₂, while the last two have expectation θ₁−θ₃. Therefore the two combinations directly identified by the data are θ₁+θ₂ and θ₁−θ₃.\n\nA linear combination is estimable if it can be written as a linear combination of these two identifiable mean combinations. Subtract the second from the first:\n\n(θ₁+θ₂)−(θ₁−θ₃)=θ₂+θ₃.\n\nThis combination can be estimated by the difference between the two group sample means: (Ȳ₁+Ȳ₂)/2 − (Ȳ₃+Ȳ₄)/2. Hence θ₂+θ₃ is estimable, option C. The other listed functions cannot be formed from the two available mean combinations. The supplied answer key on page 51 lists option C.\n\nOther-exam relevance: estimability, row spaces of design matrices and non-identifiable linear models are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 24, December 2018, page 13; answer key page 51."
+    },
+    {
+      "id": "csir-meth-2018-dec-q26",
+      "type": "practice",
+      "format": "multi",
+      "year": 2018,
+      "session": "December",
+      "topic": "inference-t13 · exact and conservative confidence intervals from uniform order statistics",
+      "stem": "Suppose X₁,…,Xₙ is a random sample from Uniform(θ,θ+1), where θ∈ℝ is unknown. Let X₍₁₎ and X₍ₙ₎ be the sample minimum and maximum. Which of the following are 100(1−α)% confidence intervals for θ (coverage at least 1−α)?",
+      "statements": [
+        "(-∞, X₍ₙ₎−α^(1/n)).",
+        "(X₍₁₎+α^(1/n)−1, ∞).",
+        "(X₍₁₎+α/2−1, X₍ₙ₎−α/2).",
+        "(-∞, X₍₁₎−α)."
+      ],
+      "options": [
+        "Statements 1, 2 and 3 only",
+        "Statements 1 and 2 only",
+        "Statements 2, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The coverage is exactly 1−α for statements 1 and 2. Statement 3 has coverage 1−2(α/2)^n, which is at least 1−α for n≥1."
+        },
+        "B": {
+          "tf": true,
+          "why": "Statement 2 has exact coverage 1−α."
+        },
+        "C": {
+          "tf": true,
+          "why": "Statement 3 is conservative but still has coverage at least 1−α; statement 4 is not a valid interval."
+        },
+        "D": {
+          "tf": false,
+          "why": "Statement 4 has coverage (1−α)^n, which is below 1−α for n>1."
+        }
+      },
+      "explanation": "Write Uᵢ=Xᵢ−θ. Then U₁,…,Uₙ are i.i.d. Uniform(0,1). Let U₍₁₎ and U₍ₙ₎ be their minimum and maximum.\n\n**Statement 1:** θ<X₍ₙ₎−α^(1/n) exactly when U₍ₙ₎>α^(1/n). Since P(U₍ₙ₎≤t)=tⁿ, the coverage is 1−(α^(1/n))ⁿ=1−α.\n\n**Statement 2:** X₍₁₎+α^(1/n)−1<θ exactly when U₍₁₎<1−α^(1/n). Since P(U₍₁₎≥t)=(1−t)ⁿ, the coverage is 1−(α^(1/n))ⁿ=1−α.\n\n**Statement 3:** The interval contains θ when U₍₁₎<1−α/2 and U₍ₙ₎>α/2. The two failure events (all Uᵢ≥1−α/2 and all Uᵢ≤α/2) are disjoint and each has probability (α/2)ⁿ. Thus coverage is 1−2(α/2)ⁿ, which is at least 1−α for n≥1. It is exact when n=1 and conservative for n>1.\n\n**Statement 4:** Coverage is P(U₍₁₎>α)=(1−α)ⁿ, which is smaller than 1−α for n>1. So it is not a valid general 100(1−α)% interval. Statements 1, 2 and 3 only are valid under the usual at-least-nominal coverage definition.\n\n**Printed-key discrepancy:** the supplied answer key on page 51 lists all four statements. Statement 4 does not achieve the stated coverage for n>1; the item preserves the key conflict and explains the probability calculation. Source: Methods of Estimation PDF, Question 26, December 2018, page 15; answer key page 51.\n\nOther-exam relevance: order statistics and confidence intervals for uniform location families are relevant to UGC NET/JRF Statistics, GATE Statistics and State SET Statistics syllabi. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations."
     }
   ]
 }

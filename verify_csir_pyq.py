@@ -165,6 +165,16 @@ def main() -> None:
     assert "".join(sorted(k for k, value in q19["verdicts"].items() if value["tf"])) == "CD"
     assert "Printed-key discrepancy" in q19["explanation"]
 
+    q21 = next(x for x in methods["items"] if x["id"] == "csir-meth-2019-dec-q21")
+    assert q21["year"] == 2019 and q21["session"] == "December" and q21["answer"] == "D"
+    assert "pooled between-group cross-product is large and negative" in q21["explanation"]
+    q24 = next(x for x in methods["items"] if x["id"] == "csir-meth-2018-dec-q24")
+    assert q24["year"] == 2018 and q24["session"] == "December" and q24["answer"] == "C"
+    assert "θ₂+θ₃" in q24["explanation"]
+    q26 = next(x for x in methods["items"] if x["id"] == "csir-meth-2018-dec-q26")
+    assert q26["year"] == 2018 and q26["session"] == "December" and q26["answer"] == "A"
+    assert "".join(sorted(k for k, value in q26["verdicts"].items() if value["tf"])) == "ABC"
+    assert "Printed-key discrepancy" in q26["explanation"]
     q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
     assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
