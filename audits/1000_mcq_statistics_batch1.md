@@ -493,3 +493,17 @@ Nine questions were imported from pages 301–303, 306–308 and 310–312:
 - **Page 304:** algebra gives α=3, β=−4, but then f(x)=3−4x becomes negative on part of (0,1), so it is not a valid density.
 - **Page 305:** the normal-family mean/variance known-versus-unknown assumption is not legible enough to select the correct MLE for σ².
 - **Page 309:** the population distribution label T(λ,·) and the estimator options are too corrupted to identify the method-of-moments target safely.
+
+
+## Batch 30 — pages 313–324
+
+Eight questions were imported after visual review:
+- **Probability (3):** symmetry of an MGF for a symmetric density, p315; CLT limit for sums of iid chi-square(5) variables, p317; floor transformation of a Uniform(0,100) variable, p318.
+- **Statistical Inference (5):** power of the most powerful one-sided normal-mean test, p313; completeness and sufficiency in a one-parameter exponential family, p319; UMP upper-tail test for a logistic location family, p320; consistency of a Pareto shape estimator, p323; exact confidence intervals for a triangular-scale density, p324.
+
+### Pages held out after inspection
+
+- **Page 314:** for X~Uniform(π/6,π/4), cos X>sin X almost surely, so the probability is 1; none of the printed options matches.
+- **Page 316:** section cover, no question.
+- **Page 321:** with the stated finite-population variance denominator N=100 and sample variance denominator n=10, the unbiased multiplier is 11/10, which is absent from the printed options; the highlighted source key 100/99 is not correct for the stated target.
+- **Page 322:** held out because the phrasing does not clearly distinguish the negative-binomial family from its geometric special case under convolution.
