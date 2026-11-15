@@ -684,6 +684,11 @@ def main() -> None:
     assert q57["year"] == 2013 and q57["session"] == "December" and q57["answer"] == "C"
     assert "8/11" in q57["explanation"] and "3/4" in q57["explanation"] and "page 52" in q57["explanation"]
 
+    q47 = next(x for x in methods["items"] if x["id"] == "csir-meth-2015-jun-q47")
+    assert q47["year"] == 2015 and q47["session"] == "June" and q47["answer"] == "A"
+    assert "".join(sorted(k for k, value in q47["verdicts"].items() if value["tf"])) == "AC"
+    assert "X̄−Ȳ" in q47["explanation"] and "page 52" in q47["explanation"]
+
     # Q108 remains held: the source omits a lower bound on n, so strict efficiency claims are not universal.
     assert not any(x["id"] == "csir-est-q108" for x in estimation["items"])
 
