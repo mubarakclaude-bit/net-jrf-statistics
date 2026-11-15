@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==539,total
+assert total==545,total
 
 
 
@@ -558,7 +558,7 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 539 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 545 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p681: the maximum plus one-half converges to theta+1, not theta.
 assert (0.5+0.5)==1
@@ -608,3 +608,22 @@ close(1-(16/20)*(15/19),7/19)
 close(101/math.comb(52,2),101/1326)
 # p704: posterior probability that the lost card was a club after two clubs are drawn.
 close((13*math.comb(12,2))/(13*math.comb(12,2)+39*math.comb(13,2)),11/50)
+
+
+# p705: Binomial(5,0.9) probability of at least four successes.
+close(math.comb(5,4)*.9**4*.1+.9**5,.91854)
+# p708: two even tickets drawn without replacement.
+close((10/20)*(9/19),9/38)
+# p709: complement of all-three-same-colour draws.
+close(1-(math.comb(5,3)+math.comb(4,3)+math.comb(3,3))/math.comb(12,3),41/44)
+# p710: independent truth/falsehood outcomes contradict.
+close(.75*.20+.25*.80,.35)
+# p711: union probability under mutual exclusion and independence.
+close(.6-.5,.1)
+close((.6-.5)/(1-.5),.2)
+# p712: normalising constant and requested discrete probabilities.
+a=1/(1+4+3+7+8+10+6+9)
+close(a,1/48)
+close((1+4+3)*a,1/6)
+close((8+10+6+9)*a,33/48)
+close((4+3+7+8)*a,11/24)

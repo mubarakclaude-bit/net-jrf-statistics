@@ -993,3 +993,20 @@ Five additional questions were imported after visual inspection:
 - **Page 699:** held out because the estimator whose MSE is requested is not specified in the scan.
 - **Page 701:** held out because the displayed Normal parameterisation is unclear and does not reconcile reliably with the keyed sample size.
 - Pages 702–704 were legible. Page 702 uses the complement of drawing two good bulbs. Page 703 counts 101 favourable unordered pairs among 1326. Page 704 applies Bayes' theorem to the two possible suits of the lost card.
+
+
+## Batch 66 — pages 705–712
+
+Six additional probability questions were imported after visual inspection:
+- **Page 705:** binomial probability that at least four of five ships arrive safely (independent arrivals assumed).
+- **Page 708:** probability that two tickets drawn without replacement are both even.
+- **Page 709:** probability that three balls drawn from a three-colour box are not all the same colour.
+- **Page 710:** probability that two witnesses contradict each other (independent truth/falsehood outcomes assumed).
+- **Page 711:** solving for P(B) under mutual exclusivity and independence, given P(A) and P(A∪B).
+- **Page 712:** normalising a discrete probability mass function and evaluating three requested event probabilities.
+
+### Held-out pages
+- **Page 706:** the statement omits the variance value after “mean and variance … are 4 and”, so the binomial parameters cannot be recovered from the printed question.
+- **Page 707:** the two missing cards are not specified as randomly missing; without that assumption, the spade probability depends on which cards are absent. The scan's intended 1/4 answer requires a random-missing-card assumption, so the item is held out as written.
+
+All six imported items were checked independently. The p705 answer uses the Binomial(5,0.9) model. Pages 708 and 709 use combinations/without-replacement probabilities. Page 710 explicitly records the independence assumption required to compute the contradiction probability. Page 711 uses the addition rule in the mutually exclusive case and the independence formula in the second case. Page 712 normalises the eight masses to obtain a=1/48 before summing the requested probabilities.
