@@ -182,7 +182,7 @@ close(.25*2, .5); assert abs((1+.5*.5)/4-.25)>0
 # p400: bivariate CDF rectangle inclusion-exclusion.
 close(2/3-1/2-1/3+1/4,1/12)
 # p401: exponential errors for rate parameters 2 and 4 at threshold 3.
-close(math.exp(-2*3),math.exp(-6)); close(1-(1-math.exp(-4*3)),1-math.exp(-12))
+close(math.exp(-2*3),math.exp(-6)); close(1-math.exp(-4*3),1-math.exp(-12))
 # p402: factorial moment of Poisson(n*theta) gives unbiased theta squared.
 for n,theta in [(2,.5),(5,1.2)]: close((n*theta)**2/n**2,theta**2)
 # p403: Gamma inverse moment, valid for np>1.
