@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 648 and later pages 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 105,
+  "count": 108,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -2076,6 +2076,104 @@
       "answer": "C",
       "explanation": "Under H₀, both sample means estimate the same value λ. By the central limit theorem, X̄ is approximately normal with variance λ₁/m, and Ȳ is approximately normal with variance λ₂/n. Applying the delta method to g(x)=√x gives Var(√X̄)≈1/(4m) and Var(√Ȳ)≈1/(4n) under the null. Thus √X̄−√Ȳ has asymptotic mean zero and a variance that can be estimated without knowing λ. It can be standardised to form the large-sample test statistic, so option C is appropriate.",
       "pno": 628,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p638",
+      "format": "multi",
+      "topic": "inference-t4",
+      "stem": "Let X₁,…,Xₙ be iid N(θ,1), where −100≤θ≤100, and define Yᵢ=0 if Xᵢ<0 and Yᵢ=1 if Xᵢ≥0. Let θ̂ₙ be the MLE based on the full sample and θ̃ₙ the MLE based only on Y₁,…,Yₙ. Which statements are true?",
+      "statements": [
+        "limₙ→∞ E(θ̂ₙ)=θ.",
+        "limₙ→∞ E(θ̃ₙ)=θ.",
+        "θ̂ₙ is a consistent estimator of θ.",
+        "θ̃ₙ is a consistent estimator of θ."
+      ],
+      "options": [
+        "A, B, C and D",
+        "A and C only",
+        "B and D only",
+        "A, B and D only"
+      ],
+      "answer": "A",
+      "explanation": "For the full normal sample, the MLE is θ̂ₙ=X̄. It is unbiased because E(X̄)=θ, and its variance is 1/n, so it is consistent. For the sign-only sample, P(Yᵢ=1)=P(Xᵢ≥0)=Φ(θ), where Φ is the standard normal CDF. The sample proportion Ȳ estimates Φ(θ), and the MLE is the inverse transformation Φ⁻¹(Ȳ), constrained to [−100,100] at the endpoints. By the law of large numbers and continuity of Φ⁻¹ at Φ(θ), this estimator is consistent. Since it is bounded in [−100,100], its expectation also converges to θ. Thus all four statements are true.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The full-sample MLE is X̄ and E(X̄)=θ for every n."
+        },
+        "B": {
+          "tf": true,
+          "why": "The sign MLE is bounded and converges in probability to θ, so its expectation also converges to θ."
+        },
+        "C": {
+          "tf": true,
+          "why": "Var(X̄)=1/n tends to zero while E(X̄)=θ."
+        },
+        "D": {
+          "tf": true,
+          "why": "The sample proportion converges to Φ(θ), and applying the inverse CDF gives θ."
+        }
+      },
+      "pno": 638,
+      "sourcePdf": "1000 MCQ statistics.pdf",
+      "repaired": "The scan lists four truth statements but no combination choices; standard four-option combinations were supplied. All four statements are true."
+    },
+    {
+      "id": "mcq1000-p639",
+      "format": "multi",
+      "topic": "inference-t4",
+      "stem": "Let X₁,…,Xₙ be an iid sample from a distribution with density or mass function fθ(x), and let Sₙ²=(1/(n−1))Σ(Xᵢ−X̄)² be the usual sample variance. For which of the following models is Sₙ² an unbiased estimator of θ?",
+      "statements": [
+        "Poisson(θ), with θ>0.",
+        "Normal(0,θ), with θ>0.",
+        "Exponential with mean θ, having density fθ(x)=(1/θ)e^(−x/θ), x>0.",
+        "Exponential with rate θ, having density fθ(x)=θe^(−θx), x>0."
+      ],
+      "options": [
+        "A and B only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "For any population with finite variance, the sample variance Sₙ² is unbiased for the population variance. A Poisson(θ) variable has variance θ, so statement A is true. A Normal(0,θ) variable has variance θ, so statement B is also true. An exponential variable with mean θ has variance θ², not θ; statement C is false. An exponential variable with rate θ has variance 1/θ², not θ in general; statement D is false. Therefore A and B only are correct.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The variance of a Poisson(θ) distribution is θ."
+        },
+        "B": {
+          "tf": true,
+          "why": "For Normal(0,θ), the parameter θ is the variance."
+        },
+        "C": {
+          "tf": false,
+          "why": "An exponential distribution with mean θ has variance θ²."
+        },
+        "D": {
+          "tf": false,
+          "why": "An exponential distribution with rate θ has variance 1/θ²."
+        }
+      },
+      "pno": 639,
+      "sourcePdf": "1000 MCQ statistics.pdf",
+      "repaired": "The scan lists four models without combination options; the standard four-option combinations were supplied."
+    },
+    {
+      "id": "mcq1000-p645",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "A single observation X has a Cauchy distribution with location θ and scale 1, with density fθ(x)=1/[π{1+(x−θ)²}]. For testing H₀:θ=−1 against H₁:θ=0, reject H₀ when X/√(1+X²)>C. What value of C makes the power of the test equal to 0.5?",
+      "options": [
+        "π/4",
+        "0",
+        "tan⁻¹(1/2)",
+        "A solution of tan⁻¹√{C/(1−C)}=π/3"
+      ],
+      "answer": "B",
+      "explanation": "Power is the probability of rejecting H₀ when H₁ is true. Under H₁, θ=0, so X has a standard Cauchy distribution, which is symmetric about zero. The function g(x)=x/√(1+x²) is strictly increasing and satisfies g(0)=0. Therefore choosing C=0 makes the rejection event exactly X>0. By symmetry, P(X>0)=1/2, so the power is 0.5. Hence option B is correct.",
+      "pno": 645,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
