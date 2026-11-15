@@ -584,3 +584,15 @@ Twelve questions were imported after visual review:
 
 - **Page 362:** section cover.
 - **Page 367:** the Poisson probability in the printed question does not match any option closely enough; it remains excluded.
+
+
+## Batch 36 — pages 385–396
+
+Eleven questions were imported after checking the rendered scans:
+- **Probability (6):** variance of a lognormal transformation, p385; classification of a mixed distribution from its CDF, p386; conditional probability from three event probabilities, p389; density after the transformation Y=exp(−X²), p390; an F(1,1) ratio formed from independent normal linear combinations, p391; and identification of the weak law from convergence in probability, p394.
+- **Statistical Inference (5):** most powerful test for two normal variance values, p387; sufficiency for a normal model with mean and variance both θ, p388; Cramér–Rao bound for exp(−λ) under three Poisson observations, p392; confidence interval for a normal population variance, p395; and a most powerful Gamma shape test, p396.
+
+### Source pages held out
+
+- **Page 393:** the stated CDF F(x)=1−exp(−x/2), x≥0, gives MGF M(t)=1/(1−2t), t<1/2. None of the four printed options matches this expression, so the question is not imported.
+- **Page 395 convention:** the confidence-interval item explicitly states the upper-tail chi-square critical-value convention to remove ambiguity in the source's χ² subscript notation.
