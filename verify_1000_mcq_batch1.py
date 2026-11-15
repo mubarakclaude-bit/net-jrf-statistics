@@ -436,11 +436,6 @@ for th in (.5,1,2): close(1/th+1/(th**2),(th+1)/(th**2))
 assert 2>0 and (2*1-(-1)**2)>0
 # p600: positive association makes the complement conditional probability smaller.
 assert .5*.8+.5*.2==.5
-assert total==469,total
-
-
-
-print("PASS: 469 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p614: CDF jump at zero and conditioning on [0,1).
 close((1/4)/(1/4+(1/6)*(4-1)),1/3)
@@ -454,3 +449,10 @@ close(3-1,2)
 assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
+
+assert total==469,total
+
+
+
+print("PASS: 469 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+
