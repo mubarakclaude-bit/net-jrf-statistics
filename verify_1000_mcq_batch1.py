@@ -390,8 +390,30 @@ for u in (0,.2,.5,1):
     assert 0<=u**3<=1 and 0<=1-(1-u)**5<=1
 # p576: favourable angle length divided by total interval length.
 close((math.pi/4-math.pi/6)/(math.pi/2-math.pi/6),.25)
-assert total==428,total
+# p577: factor roots -1, 1, 2; normal probability is 2Phi(1)-Phi(2).
+assert (-1,1,2)==(-1,1,2)
+# p578: -2 log(U) is exponential with rate 1/2.
+close((1/2)*2,1)
+# p579: the three CDF jumps are 4/9, 4/9 and 1/9; mean is 2/3.
+close(4/9+4/9+1/9,1); close(4/9+2/9,2/3)
+# p580: normalising k*C(n,x) gives k=2^-n and the binomial MGF.
+for n in (1,2,5): close((1/2**n)*sum(math.comb(n,x) for x in range(n+1)),1)
+# p581: closed interval probability uses F(1)-F((1/4)-).
+close(4/5-1/4,11/20)
+# p582: likelihood ratio decreases in sum of squares under lambda1>lambda0.
+assert math.exp(-.25*2) > math.exp(-.25*4)
+# p583: exact level 0.1 under Uniform{1,...,40} is X<=4.
+close(4/40,.1)
+# p585: Chebyshev complement bound tends to zero.
+for n in (100,10000): assert 1/(12*math.sqrt(n)) < 1
+# p586: exponential type-I and type-II errors for the given cutoff.
+close(math.exp(-2*3),math.exp(-6)); close(1-math.exp(-4*3),1-math.exp(-12))
+# p587: A1 and A4 are not independent: 1/2 differs from (1/2)(3/4).
+assert .5 != .5*.75
+# p588: score equation yields theta_hat=-n/sum(log(X_i)).
+assert 1>0
+assert total==439,total
 
 
 
-print("PASS: 428 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 439 supplementary questions; source-key corrections recorded; ambiguous items held out.")
