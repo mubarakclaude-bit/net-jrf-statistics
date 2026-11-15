@@ -639,3 +639,19 @@ Eight questions were imported after checking the scans:
 - **Page 428:** the density and parameterisation are too faint to transcribe safely.
 - **Page 430:** the printed power options do not match the direct Laplace-tail calculation unless missing 1/2 factors are supplied; held out pending a clearer source.
 - **Page 431:** the density formula is too blurred to identify its normalising constant and moments reliably.
+
+
+## Batch 41 — pages 433–444
+
+Six questions were imported after visual inspection:
+- **Probability (5):** uniform-interval absolute-deviation probability, p437; standard-normal interval probability using symmetry, p438; correlation of overlapping sums of iid variables, p441; dependence of overlapping coin-toss events, p442; and expectation involving a binomial variable and its complement, p443.
+- **Regression (1):** unbiased residual-variance estimator in simple linear regression, p439.
+
+### Pages held out after inspection
+
+- **Page 433:** the density expression is too faint to identify the support and polynomial safely.
+- **Page 434:** the printed paired-data table is not sufficiently clear to transcribe all observations reliably.
+- **Page 435:** the estimator notation and summation limits are unclear in the scan.
+- **Page 436:** the parameterised probability table and observed values are not legible enough to establish the likelihood.
+- **Page 440:** the exponential-density rate/scale parameter is not clear enough to evaluate the requested density at the mean.
+- **Page 444:** the variance expression and target parameter power are too faint to determine the intended unbiased-estimation question.
