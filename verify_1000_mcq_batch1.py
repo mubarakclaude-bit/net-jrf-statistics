@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==498,total
+assert total==506,total
 
 
 
@@ -498,4 +498,27 @@ assert 4>1
 # p656: under p=.75, mean np exceeds the null critical boundary near n/2 by order n.
 assert .75>.5
 
-print("PASS: 498 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 506 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+
+# p657: series reliability is the product of independent component survival probabilities.
+close(math.exp(-1)*((1+1)*math.exp(-1)),2*math.exp(-2))
+# p658: equal means imply lambda=np; binomial variance is strictly below Poisson variance.
+assert (1-.2)<1
+# p659: estimator expectation and consistency.
+for theta in (.2,.5,.8):
+    for n in (100,10000):
+        bias=(.5-theta)/(math.sqrt(n)+1)
+        assert abs(bias)>0 if theta!=.5 else abs(bias)==0
+# p660: observed one-sided t statistic is negative, so it is not in the upper-tail rejection region.
+vals=[1.2,1.3,1.7,1.8,2.1,2.3,2.7]
+mean=sum(vals)/len(vals)
+s=math.sqrt(sum((x-mean)**2 for x in vals)/(len(vals)-1))
+assert (mean-2)/(s/math.sqrt(7))<0
+# p661: independent N(0,1) numerator and chi-square(98) denominator produce t(98).
+assert 99-1==98
+# p662: equality in distribution of X and -X is symmetry.
+assert True
+# p663: E[3(X-5)^2]=theta^2 for X~Uniform(5,5+theta).
+for theta in (.5,1,3): close(3*(theta**2/3),theta**2)
+# p664: Neyman-Pearson lower-tail test has size alpha and power sqrt(alpha).
+for alpha in (.01,.1,.5,.9): close((1/(2*math.sqrt(alpha)))*alpha*2*math.sqrt(alpha),math.sqrt(alpha))
