@@ -789,3 +789,18 @@ Eight questions were imported after visual inspection:
 - **Page 531:** the conditional-expectation identities and the final option are partly corrupted; the exact source statements cannot be recovered confidently.
 - **Page 536:** the bivariate-normal parameter values and the two linear combinations in the correlation question are not sufficiently legible.
 - **Page 539:** the weighted-sum expressions and their normalising constants are blurred, preventing a reliable convergence comparison.
+
+
+## Batch 50 — pages 541–552
+
+Six questions were imported after visual inspection:
+- **Probability (6):** reciprocal relationship between F distributions, p543; covariance of a symmetric two-point variable and its square, p545; a bivariate-normal difference tail probability, p547; a Chebyshev bound for independent symmetric variables, p548; minimum of two independent Poisson counts, p549; and a high-order moment of a Bernoulli variable, p552.
+
+### Pages held out after inspection
+
+- **Page 541:** the first two almost-sure convergence statements are not fully legible, so the complete multi-select key cannot be established.
+- **Page 542:** the convergence-in-distribution notation is corrupted and the intended joint limit is unclear.
+- **Page 544:** statements 3 and 4 have missing summation/normalising expressions.
+- **Page 546:** the distribution probabilities and definition of the partial-sum statistic are not legible enough to identify the limit.
+- **Page 550:** the event threshold and summation expression in the limit are incomplete.
+- **Page 551:** the Poisson tail thresholds and comparison integral are too faint to determine the correct limiting probability statements.
