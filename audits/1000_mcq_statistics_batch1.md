@@ -672,3 +672,22 @@ Five questions were imported after visual inspection:
 - **Page 454:** the betting rule and probability are garbled, so the remaining money cannot be calculated reliably.
 - **Page 455:** the event notation involving the two discrete-uniform variables is unreadable.
 - **Page 456:** the dice event and answer choices are too corrupted to establish the intended probability.
+
+
+## Batch 43 — pages 457–468
+
+Three questions were imported after visual review:
+- **Probability (2):** alternating queue arrangements for four boys and three girls, p458; and the logarithmic expectation of a Beta(θ,1) variable, p467.
+- **Statistical Inference (1):** non-existence of an MLE when the Bernoulli parameter space is the open interval (0,1) and all observations are successes, p461. The boundary condition is retained explicitly; if p=1 were allowed, the maximiser would be 1.
+
+### Pages held out after inspection
+
+- **Page 457:** the two life probabilities and event relationship are too corrupted to establish the intended joint probability.
+- **Page 459:** the random-variable expression and requested expectation are not legible enough to transcribe.
+- **Page 460:** the proposed probability mass function and event statements are corrupted; normalization cannot be checked.
+- **Page 462:** the expression involving two standard normal variables is unreadable.
+- **Page 463:** the Gamma-distribution parameterisations and requested ratio are unclear.
+- **Page 464:** the sample distribution and expression are too faint to identify.
+- **Page 465:** the shifted-density formula is not legible enough to determine the MLE.
+- **Page 466:** the confidence-interval expression and options are incomplete in the scan.
+- **Page 468:** the covariance expression is too corrupted to identify the random variables and coefficients.
