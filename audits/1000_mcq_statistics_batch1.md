@@ -1025,3 +1025,16 @@ Five additional questions were imported after visual inspection:
 - **Page 715:** held out because the fair-game payment does not reconcile with the stated payouts and overlapping card events; the source's marked value cannot be justified without an additional payout convention.
 
 For p716, the full sample vector is sufficient but not complete; the sum of squares is complete sufficient, and its scaled version gives the UMVU estimator. For p717, the likelihood ratio 6/x is decreasing and the H₀ lower-tail probability 0.1 gives k=10/3. For p718, the rejection region {2,3} has size 0.3 and power 0.7. For p719, the lower-tail form follows directly from the decreasing likelihood ratio. For p720, convolution of the two exponential densities yields the hypoexponential density shown in option C.
+
+
+## Batch 68 — pages 721–728
+
+Six additional questions were imported after visual inspection:
+- **Probability (4):** equality case of Jensen's inequality for the exponential function, p721; Gumbel limit of the centred maximum of iid Exponential(1) observations, p722; a conditional density derived from a joint density on 0<x<y<1, p724; and a Chebyshev lower bound for a two-standard-deviation interval, p726.
+- **Statistical Inference (2):** exact confidence interval for the rate of an exponential distribution, p725; and the Neyman–Pearson critical region for two specified densities, p728.
+
+### Held-out pages
+- **Page 723:** the printed distributions are X~Uniform(0,2), Y~Uniform(1,3), independent. Direct integration gives P(X<Y)=3/4? [CHECKED: integrate conditional probabilities: for 0<x<1, P(Y>x)=1; for 1<x<2, P(Y>x)=(3−x)/2; integrating against fX=1/2 gives 1/2×(1+∫₁²(3−x)/2 dx)=1/2×(1+3/4)=7/8.] The scan's marked answer is 3/4 and the options include 1/2, 3/4, 7/8, 1; because the exact density and integration give 7/8, the marked key is incorrect. The correct option 7/8 is present, so this item is held for independent review of the source key rather than imported in this batch.
+- **Page 727:** the event "get an A in Chemistry" is not clearly distinguished from choosing Chemistry by a fair coin and then getting an A. The corresponding probabilities differ, and the listed options do not resolve the intended event, so the item is held.
+
+For p721, equality in Jensen for a strictly convex function forces X to be constant almost surely. For p722, the maximum CDF is [1−e^(−x)/n]ⁿ after centring, converging to e^(−e^(−x)). For p724, fY(y)=4y³ and fX|Y(x|y)=2x/y². Page 725 follows from 2θΣXᵢ~χ²₂ₙ. Page 726 applies Chebyshev with k=2. Page 728 uses the likelihood ratio 16(x₁x₂)³, so the critical region is ln x₁+ln x₂>c.

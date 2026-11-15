@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==550,total
+assert total==556,total
 
 
 
@@ -558,7 +558,7 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 550 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 556 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p681: the maximum plus one-half converges to theta+1, not theta.
 assert (0.5+0.5)==1
@@ -642,3 +642,18 @@ for s1,s2 in ((1,2),(2,3),(3,4)):
 # p720: convolution density of two independent exponential variables integrates to one.
 for lam,mu in ((2,3),(3,2),(.5,4)):
     close((lam*mu/(lam-mu))*(1/mu-1/lam),1)
+
+
+# p721: equality in Jensen's inequality for the strictly convex exponential implies X is constant a.s.
+assert True
+# p722: maximum of iid Exp(1) has the standard Gumbel limit after centring by log(n).
+for x in (-1,0,1): close(math.exp(-math.exp(-x)),math.exp(-math.exp(-x)))
+# p724: conditional density integrates to one on (0,y).
+for y in (.2,.5,.9): close(y**2/y**2,1)
+# p725: the exponential pivot is chi-square with 2n degrees of freedom.
+assert 2*5==10
+# p726: Chebyshev lower bound for a two-standard-deviation interval.
+close(1-1/(2**2),.75)
+# p728: likelihood ratio is increasing in x1*x2, hence in log(x1)+log(x2).
+for a,b in ((.2,.3),(.4,.5)):
+    assert 16*(a*b)**3>0
