@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 25,
-  "clean": 25,
+  "count": 26,
+  "clean": 26,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -668,6 +668,47 @@
       ],
       "answer": "A",
       "explanation": "The likelihood as a function of θ is proportional to exp[−(13−θ)²/(2×15)]. The prior is flat, so multiplying by the prior does not change this kernel. After normalisation, the posterior distribution is N(13,15).\n\nThe posterior mean is therefore 13. The maximum-likelihood estimate in the normal location model is also the observed value, 13. The posterior variance is 15, which is exactly the sampling variance Var(X|θ)=15. Thus the posterior mean equals the MLE and the posterior variance equals the sampling variance. Option 1 (A) is correct, matching the supplied answer key on page 53. The flat prior is improper, but the resulting posterior is proper because the normal likelihood has a finite integral over θ.\n\nOther-exam relevance: conjugate/flat-prior Bayesian estimation and normal likelihoods are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 89, June 2025, page 50; answer key page 53."
+    },
+    {
+      "id": "csir-meth-2025-jun-q90",
+      "type": "practice",
+      "format": "multi",
+      "year": 2025,
+      "session": "June",
+      "topic": "inference-t13 · confidence intervals from the minimum of shifted exponential observations",
+      "stem": "Let X₁,…,Xₙ be i.i.d. with density f(x|θ)=e^{−(x−θ)} for x≥θ and zero otherwise, where θ∈ℝ is unknown. Let Y=min(X₁,…,Xₙ). Which of the following intervals have confidence coefficient 1−α?",
+      "statements": [
+        "(Y+(1/n)ln(1−α/2), Y−(1/n)ln(1−α/2)).",
+        "(Y+(1/(2n))ln α, Y).",
+        "(Y+(2/n)ln(α/2), Y+(2/n)ln(1−α/2)).",
+        "(Y+(1/n)ln(α/2), Y+(1/n)ln(1−α/2))."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statements 3 and 4 only",
+        "Statements 1, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The symmetric interval in statement 1 has coverage α/2, not 1−α."
+        },
+        "B": {
+          "tf": true,
+          "why": "For the shifted-exponential minimum, Y−θ is exponential with rate n. Both intervals 3 and 4 give coverage 1−α, as shown by their exponential tail probabilities."
+        },
+        "C": {
+          "tf": false,
+          "why": "Statement 1 is not a 1−α confidence interval, so 1, 3 and 4 is not the correct set."
+        },
+        "D": {
+          "tf": false,
+          "why": "Statement 1 and statement 2 do not have coverage 1−α."
+        }
+      },
+      "explanation": "The minimum Y has the distribution Y=θ+E, where E is exponential with rate n. Thus for 0≤a<b, P(a≤E≤b)=e^(−na)−e^(−nb). A confidence interval for θ can be obtained by choosing constants so that the probability that θ lies between its two endpoints is 1−α.\n\nFor statement 3, the endpoints are Y+(2/n)ln(α/2) and Y+(2/n)ln(1−α/2). Both logarithms are negative. The event that θ lies in this interval is equivalent to −(2/n)ln(1−α/2)≤E≤−(2/n)ln(α/2). Its probability is (1−α/2)²−(α/2)²=1−α. So statement 3 is correct.\n\nFor statement 4, the same calculation with 1/n instead of 2/n gives probability (1−α/2)−(α/2)=1−α. So statement 4 is also correct. Statement 1 gives only α/2 coverage, and statement 2 gives 1−√α coverage, so neither is generally 1−α. Therefore statements 3 and 4 only are correct, matching the supplied answer key on page 53. The combination choices are editorially supplied because the scan lists four candidate intervals without combination options.\n\nOther-exam relevance: order statistics, exponential pivots and exact confidence intervals are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 90, June 2025, page 50; answer key page 53."
     }
   ]
 }
