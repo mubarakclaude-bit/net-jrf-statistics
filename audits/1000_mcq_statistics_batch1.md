@@ -759,3 +759,19 @@ Six questions were imported after visual review:
 - **Page 512:** the random-sum definition and the exceptional value when N=0 are too corrupted to identify unambiguously.
 - **Page 513:** the estimator expressions for the exponential functional are too faint to distinguish.
 - **Page 514:** the four sequence expressions and normalising factors are incomplete in the scan.
+
+
+## Batch 48 — pages 517–528
+
+Six questions were imported after visual inspection:
+- **Probability (5):** distribution transformations involving uniform and exponential variables, p519; characterisation of CDFs under reflection, mixtures and products, p520; annual expected accident-cleanup cost under a Poisson model, p524; mixture proportions for elective registration, p526; and variance of a product of independent variables, p528.
+- **Statistical Inference (1):** sufficiency for the variance parameter in a zero-mean normal sample, p521.
+
+### Pages held out after inspection
+
+- **Page 517:** the UMVU estimator expressions are too faint to distinguish the intended parameter and constants.
+- **Page 518:** the prior variance notation and the proposed Bayes estimator are incomplete/blurred.
+- **Page 522:** the sample covariance definitions and candidate MLEs for the bivariate-normal correlation are not sufficiently legible.
+- **Page 523:** the estimator sequence and target parameter in the consistency question are corrupted.
+- **Page 525:** the power of the standard-normal moment in the expectation is not readable.
+- **Page 527:** the displayed standardised expectation/variance expression is incomplete.
