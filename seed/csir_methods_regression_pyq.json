@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 44,
-  "clean": 44,
+  "count": 47,
+  "clean": 47,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -1303,6 +1303,129 @@
         }
       },
       "explanation": "Condition on the value of N, the number of terms in the sum. If N=k, independence gives the characteristic function of A₁+⋯+Aₖ as [φ_A(t)]ᵏ. Therefore\\n\\nφ_X(t)=Σₖ₌₀∞P(N=k)[φ_A(t)]ᵏ=(1−p)Σₖ₌₀∞[pφ_A(t)]ᵏ.\\n\\nA characteristic function always has absolute value at most one. Hence |pφ_A(t)|≤p<1, so the geometric series converges for every real t and equals (1−p)/[1−pφ_A(t)]. Statement 3 is true.\\n\\nThe same formal calculation for the moment-generating function uses M_A(t) instead of φ_A(t), but it converges only when pM_A(t)<1. Boundedness of A does not guarantee this condition for every real t, because the number N of summands can be arbitrarily large. For example, if A=1 almost surely, then X=N and its MGF is finite only when peᵗ<1. Thus statement 2 is false as written.\\n\\nSince N is unbounded, X need not be bounded; and since the summands need not be symmetric, X need not be symmetric. Statements 1 and 4 are false. Therefore statement 3 only is correct. The supplied scan's answer key on page 51 stops at Q41, so no printed key entry for Q49 is available in that key page; this answer is derived directly from the stated probability model. Source: Methods of Estimation PDF, Question 49, December 2015, page 30.\\n\\nOther-exam relevance: characteristic functions, moment-generating functions and compound distributions are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2014-dec-q50",
+      "type": "practice",
+      "format": "multi",
+      "year": 2014,
+      "session": "December",
+      "topic": "inference-t7 · beta-binomial Bayesian estimation with the Jeffreys prior",
+      "stem": "Let X₁,…,Xₙ be i.i.d. Bernoulli(θ), 0<θ<1, and let S=ΣXᵢ. Suppose the prior density is proportional to [θ(1−θ)]⁻¹/². Which statements about the posterior mean of θ are correct?",
+      "statements": [
+        "The posterior mean does not exist.",
+        "The posterior mean exists.",
+        "The posterior mean is larger than the MLE for every possible S.",
+        "The posterior mean is larger than the MLE for at least some possible values of S."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statements 2 and 3 only",
+        "Statements 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "C",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The posterior is a proper Beta distribution with positive shape parameters, so its mean exists."
+        },
+        "B": {
+          "tf": true,
+          "why": "The prior is Beta(1/2,1/2), so after observing S successes the posterior is Beta(S+1/2,n−S+1/2), which has a finite mean."
+        },
+        "C": {
+          "tf": false,
+          "why": "The posterior mean is not always above S/n; it is below the MLE when S>n/2."
+        },
+        "D": {
+          "tf": true,
+          "why": "For S<n/2, (S+1/2)/(n+1) exceeds S/n, so the posterior mean is larger for some possible values of S."
+        }
+      },
+      "explanation": "The prior density proportional to 1/√[θ(1−θ)] is the Beta(1/2,1/2) prior. The likelihood from n Bernoulli observations is proportional to θˢ(1−θ)ⁿ⁻ˢ. Multiplying prior and likelihood gives a Beta(S+1/2,n−S+1/2) posterior.\\n\\nThe mean of a Beta(a,b) distribution is a/(a+b). Therefore the posterior mean is (S+1/2)/(n+1), which exists for every S=0,1,…,n. The MLE is S/n (including 0 and 1 at the two boundary samples).\\n\\nCompare them: (S+1/2)/(n+1)−S/n=(n−2S)/[2n(n+1)]. This difference is positive when S<n/2, zero when S=n/2, and negative when S>n/2. So the posterior mean exists and is larger than the MLE for some, but not all, possible S values. Statements 2 and 4 only are correct. Source: Methods of Estimation PDF, Question 50, December 2014, page 31. The answer-key page supplied with this PDF ends at Q41, so no printed key entry for Q50 is visible.\\n\\nOther-exam relevance: conjugate Bayesian estimation, Beta priors and posterior means are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2014-dec-q51",
+      "type": "practice",
+      "format": "multi",
+      "year": 2014,
+      "session": "December",
+      "topic": "regression-t2 · estimable functions, row spaces and null spaces in linear models",
+      "stem": "Consider the linear model E(Y)=Xβ and Cov(Y)=σ²I, where X is an n×p matrix of rank r≤p. Which statements are necessarily true?",
+      "statements": [
+        "The set of estimable linear functions of β is a vector space of dimension r.",
+        "If E(cᵀY)=0 for some nonzero c, then at least one linear function of β is not estimable.",
+        "If every linear function ℓᵀβ is estimable, then r=p.",
+        "The set of vectors c for which E(cᵀY)=0 has dimension r."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 1, 2 and 3 only",
+        "Statements 1, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Estimable coefficient vectors are exactly the row space of X, whose dimension is rank(X)=r."
+        },
+        "B": {
+          "tf": true,
+          "why": "E(cᵀY)=cᵀXβ=0 for all β implies Xᵀc=0. Since r≤p and c is nonzero, X cannot have full column rank p, so some coefficient function is not estimable."
+        },
+        "C": {
+          "tf": true,
+          "why": "All p-dimensional coefficient directions are estimable exactly when the row space of X is all of Rᵖ, which requires rank p."
+        },
+        "D": {
+          "tf": false,
+          "why": "The vectors c satisfying Xᵀc=0 form the null space of Xᵀ, whose dimension is n−r, not r."
+        }
+      },
+      "explanation": "A linear function ℓᵀβ is estimable precisely when its coefficient vector ℓ belongs to the row space of X. The row space has dimension rank(X)=r, so statement 1 is true.\\n\\nNext, E(cᵀY)=cᵀXβ. For this expectation to be zero for every possible β, we need Xᵀc=0. Thus c is in the null space of Xᵀ. If a nonzero such c exists, the rank is less than n; more importantly, because rank(X)=r≤p and the existence of a nonzero c in the left null space alone does not imply r<p when n>p, statement 2 as printed needs careful interpretation. The supplied statement says there is a function ℓᵀβ which is not estimable. This follows only if r<p, which is not guaranteed by c≠0 when n>p. For example, a full-column-rank n×p matrix with n>p has nonzero left-null vectors but every coefficient function is estimable. Therefore statement 2 is NOT necessarily true.\\n\\nStatement 3 is true: all coefficient functions are estimable exactly when rank(X)=p. Statement 4 is false because dim Null(Xᵀ)=n−r. Hence the mathematically necessary statements are 1 and 3 only. The bank records the corrected answer and flags the logical flaw in statement 2. Source: Methods of Estimation PDF, Question 51, December 2014, page 31. The supplied answer-key page does not include Q51.\\n\\nOther-exam relevance: estimability, rank, row spaces and null spaces are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2014-dec-q52",
+      "type": "practice",
+      "format": "multi",
+      "year": 2014,
+      "session": "December",
+      "topic": "regression-t2 · estimability in a rank-deficient three-parameter linear model",
+      "stem": "Consider the linear model with E(Y₁)=2θ+β, E(Y₂)=β+2γ and E(Y₃)=θ+β+γ, where θ, β and γ are unknown. Which of the following functions are estimable?",
+      "statements": [
+        "θ, β and γ are all estimable.",
+        "θ−γ is estimable.",
+        "2γ−2θ is estimable.",
+        "θ+γ is estimable."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statements 2 and 3 only",
+        "Statements 1, 2 and 3 only",
+        "Statements 2, 3 and 4 only"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The design matrix has rank 2, so the three individual parameters cannot all be identified."
+        },
+        "B": {
+          "tf": true,
+          "why": "θ−γ is the linear combination one-half of E(Y₁) minus one-half of E(Y₂)."
+        },
+        "C": {
+          "tf": true,
+          "why": "2γ−2θ is −2(θ−γ), a scalar multiple of an estimable function."
+        },
+        "D": {
+          "tf": false,
+          "why": "θ+γ cannot be expressed as a linear combination of the three design rows."
+        }
+      },
+      "explanation": "Write the design matrix as X=[[2,1,0],[0,1,2],[1,1,1]]. The third row is one-half the sum of the first two, so the matrix has rank 2, not 3. Therefore θ, β and γ cannot all be estimated separately. Statement 1 is false.\\n\\nNow use the expectations: E(Y₁)=2θ+β and E(Y₂)=β+2γ. Their difference, divided by two, is [E(Y₁)−E(Y₂)]/2=θ−γ. Thus θ−γ is estimable, and any scalar multiple such as 2γ−2θ is also estimable.\\n\\nBut θ+γ cannot be formed from these identifiable combinations. To see this, any row-space vector has form a(2,1,0)+b(0,1,2)=(2a,a+b,2b). Setting this equal to (1,0,1) would require a=b=1/2 but then the middle coordinate is 1, not 0. So θ+γ is not estimable. Statements 2 and 3 only are correct. Source: Methods of Estimation PDF, Question 52, December 2014, page 32. The supplied answer-key page does not include Q52.\\n\\nOther-exam relevance: estimable functions, row spaces and rank-deficient linear models are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
     }
   ]
 }
