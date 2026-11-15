@@ -63,5 +63,16 @@ close(math.comb(8,6)*(.8**6)*(.2**2),.29360128)
 close((68.3-67.3)/(3.5/10),2.857142857142857)
 # p336: the CLT statement is conditional on iid finite-variance sampling.
 assert 100>0
-assert total==272,total
+# p338-p341: standard errors sigma/sqrt(n), n=64.
+for sigma, expected in [(25,3.125),(20,2.5),(30,3.75),(45,5.625)]: close(sigma/math.sqrt(64),expected)
+# p342-p343: sample-mean z statistics.
+close((192000-189000)/(20500/math.sqrt(50)),1.0347904114925086)
+close((71-68)/(10/math.sqrt(25)),1.5)
+# p346: Bayes posterior urn probabilities sum to one.
+close(7/29+5/29+17/29,1)
+# p347: independent-event complement product.
+close(1-(1/2)*(3/4)*(7/8)*(15/16),709/1024)
+# p348: last defective at position 9.
+close(math.comb(8,3)/math.comb(15,4),8/195)
+assert total==282,total
 print("PASS: 254 supplementary questions; source-key corrections recorded; ambiguous items held out.")
