@@ -1,9 +1,9 @@
 {
   "moduleId": "inference",
   "source": "variant",
-  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 9, 17, 22, 27, 48, 60–61, 74, 77, 79, 89–90, 92, 104–105, 238, 240, 243, 249, 273, 300–302, 306–308, 310–313, 319–320, 323–327, 337, 959, 973, 999)",
+  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 9, 17, 22, 27, 48, 60–61, 74, 77, 79, 89–90, 92, 104–105, 238, 240, 243, 249, 273, 300–302, 306–308, 310–313, 319–320, 323–324, 325–327, 363, 368–370, 372, 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 42,
+  "count": 48,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -868,6 +868,126 @@
       "answer": "A",
       "explanation": "For iid observations with population standard deviation σ, the standard deviation of the sample mean is σ/√n, not σ (unless n=1). The sample mean is unbiased, so its expectation equals the population mean. A sample mean from a normal population is exactly normal, and using sample information to draw conclusions about a population is the purpose of inferential statistics.",
       "pno": 337,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p363",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "Let N be the number of heads in 100 independent tosses of a coin. For testing H₀:p=0.5 against H₁:p>0.5 at the 5% significance level, using the exact binomial test, which rejection region is appropriate?",
+      "options": [
+        "N>58",
+        "N>55",
+        "N>50",
+        "N>60"
+      ],
+      "answer": "A",
+      "explanation": "Under H₀, N~Binomial(100,0.5). For an upper-tail test, choose the smallest integer cutoff whose upper-tail probability is no more than 0.05. The exact binomial probabilities give P(N≥59)≈0.0443, whereas P(N≥58)≈0.0666. Thus the non-randomised 5% rejection region is N≥59, equivalently N>58. The test rejects only for sufficiently many heads.",
+      "pno": 363,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p364",
+      "format": "multi",
+      "topic": "probability-t8",
+      "stem": "Let X and Y be independent Bernoulli random variables with parameters pₓ and pᵧ, respectively. Which statement(s) are true?",
+      "statements": [
+        "X+Y always has a Binomial(2,pₓ+pᵧ) distribution.",
+        "P(X=1|X+Y=2)=1.",
+        "P(X=1|X+Y=1)=0.5 for all pₓ and pᵧ.",
+        "All of the above."
+      ],
+      "options": [
+        "A only",
+        "B only",
+        "C only",
+        "All of the above"
+      ],
+      "answer": "B",
+      "explanation": "If X+Y=2, both Bernoulli variables must equal 1. Therefore P(X=1|X+Y=2)=1, so statement B is true. The sum of two independent Bernoulli variables is generally Poisson-binomial, not Binomial(2,pₓ+pᵧ); it is Binomial(2,p) only when pₓ=pᵧ=p. For a total of one success, the conditional probability that X=1 is pₓ(1−pᵧ)/[pₓ(1−pᵧ)+(1−pₓ)pᵧ], which is not always 1/2. Hence only B is true.",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The sum is Binomial(2,p) only when the two Bernoulli success probabilities are equal."
+        },
+        "B": {
+          "tf": true,
+          "why": "A sum of two equals 2 only when both X and Y equal 1."
+        },
+        "C": {
+          "tf": false,
+          "why": "The conditional probability depends on pₓ and pᵧ and is not generally one-half."
+        },
+        "D": {
+          "tf": false,
+          "why": "Statements A and C are not true in general."
+        }
+      },
+      "pno": 364,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p368",
+      "format": "single",
+      "topic": "inference-t6",
+      "stem": "Let X₁,…,Xₙ be iid with density f(x|θ)=θx^(θ−1), 0<x<1, θ>0. The Cramér–Rao lower bound for the variance of an unbiased estimator of θ is:",
+      "options": [
+        "nθ",
+        "θ²/n",
+        "θ/n",
+        "θ²/n²"
+      ],
+      "answer": "B",
+      "explanation": "For one observation, the log-likelihood is log θ+(θ−1)log x. Its score is 1/θ+log X. Under this density, E(log X)=−1/θ and Var(log X)=1/θ², so the Fisher information from one observation is 1/θ². For n independent observations, information is n/θ². The Cramér–Rao lower bound is the reciprocal information, θ²/n. Thus the variance of any unbiased estimator cannot be below θ²/n under the regularity conditions.",
+      "pno": 368,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p369",
+      "format": "single",
+      "topic": "inference-t4",
+      "stem": "An estimator Tₙ of a parameter θ is consistent if, for every ε>0:",
+      "options": [
+        "P(Tₙ−θ>ε)=0 for every n.",
+        "P(|Tₙ−θ|>ε)=0 for every n.",
+        "limₙ→∞P(Tₙ−θ<ε)=0.",
+        "limₙ→∞P(|Tₙ−θ|>ε)=0."
+      ],
+      "answer": "D",
+      "explanation": "Consistency means that the estimator gets arbitrarily close to the true parameter with probability approaching one as the sample size increases. Formally, Tₙ converges in probability to θ if, for every fixed ε>0, P(|Tₙ−θ|>ε) tends to zero as n tends to infinity. Equivalently, P(|Tₙ−θ|≤ε) tends to one. This is exactly option D.",
+      "pno": 369,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p370",
+      "format": "single",
+      "topic": "inference-t5",
+      "stem": "Suppose X has a Gamma distribution with shape β and scale θ, with density f(x)=x^(β−1)e^(−x/θ)/[θ^βΓ(β)] for x≥0. Using the first two raw sample moments m′₁ and m′₂, the method-of-moments estimator of β is:",
+      "options": [
+        "(m′₁)²/(m′₂−m′₁)",
+        "m′₁/(m′₂−m′₁)",
+        "(m′₁)²/(m′₂−(m′₁)²)",
+        "m′₁/(m′₂−(m′₁)²)"
+      ],
+      "answer": "C",
+      "explanation": "For a Gamma(shape β, scale θ) distribution, E(X)=βθ and E(X²)=β(β+1)θ². Hence Var(X)=E(X²)−[E(X)]²=βθ². Dividing [E(X)]² by Var(X) gives β²θ²/(βθ²)=β. The method of moments replaces E(X) by m′₁ and E(X²) by m′₂, so β̂=(m′₁)²/[m′₂−(m′₁)²]. This is option C.",
+      "pno": 370,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p372",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "A single observation X comes from a Uniform(θ,θ+1) distribution. To test H₀:θ=0 against H₁:θ=1/2, consider the test that rejects H₀ when X>2/3. What is the power of this test?",
+      "options": [
+        "1/6",
+        "5/6",
+        "1/3",
+        "2/3"
+      ],
+      "answer": "B",
+      "explanation": "Power is the probability of rejecting the null hypothesis when the alternative is true. Under H₁, θ=1/2, so X~Uniform(1/2,3/2), whose interval has length 1. The rejection event is X>2/3. Its probability is the length of (2/3,3/2) divided by 1: 3/2−2/3=9/6−4/6=5/6. Therefore the power is 5/6.",
+      "pno": 372,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
