@@ -507,3 +507,20 @@ Eight questions were imported after visual review:
 - **Page 316:** section cover, no question.
 - **Page 321:** with the stated finite-population variance denominator N=100 and sample variance denominator n=10, the unbiased multiplier is 11/10, which is absent from the printed options; the highlighted source key 100/99 is not correct for the stated target.
 - **Page 322:** held out because the phrasing does not clearly distinguish the negative-binomial family from its geometric special case under convolution.
+
+
+## Batch 31 — pages 325–336
+
+Ten questions were imported after visual review:
+- **Statistical Inference (3):** formulating a one-sided hypothesis for a population mean, p325; definitions of critical region and significance level plus the p-value, p326; interpretation of a p-value, p327.
+- **Probability (7):** probability for a weighted die, p328; interval probability from a piecewise density, p329; covariance of two coin-toss indicators, p330; Poisson approximation for misprints per page, p331; exact binomial probability, p332; sample-mean tail probability for a normal population, p335; CLT approximation for a non-normal population with finite variance, p336.
+
+### Pages held out after inspection
+
+- **Page 333:** the chi-square sampling distribution of S² requires a normal population, but normality is not stated in the source stem; the assumption is not silently added.
+- **Page 334:** the variance of the sum of 100 expense amounts cannot be determined without an independence/dependence assumption; no assumption is supplied, so the item is held out.
+
+### Source and wording notes
+
+- **Page 330:** the marked answer 1/16 is confirmed: E(X)=E(Y)=1/4, E(XY)=1/8, and Cov(X,Y)=1/16.
+- **Page 336:** the stem makes the usual iid and finite-variance CLT conditions explicit so the answer is mathematically valid.
