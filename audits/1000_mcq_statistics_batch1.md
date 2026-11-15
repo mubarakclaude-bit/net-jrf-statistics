@@ -969,3 +969,13 @@ Four additional questions were imported after visual inspection:
 - **Page 696:** the order-statistic expression in option C is not legible enough to distinguish the statistic inside the minimum; the source's key cannot be independently validated.
 
 For p691, differentiating the Gamma(shape 3, scale θ) log-likelihood gives θ̂=X̄/3. For p693, the likelihood ratio increases with Σ|Xᵢ| when θ₁>θ₀, so the MP test is upper-tailed. For p694, X̄ and the usual unbiased S² are both unbiased, with variances tending to zero. For p695, the sample mean is 0.82 and the closest allowed integer is 1.
+
+
+## Batch 64 — pages 689–690
+
+Two additional questions were imported after visual inspection:
+- **Statistical Inference (2):** identifying the non-unbiased estimator of the mean parameter in an exponential sample, p689; and consistency of endpoint-based statistics for a Uniform(0,θ) sample, p690.
+
+For p689, the source's Exp(θ) notation is interpreted as an exponential distribution with mean θ, as implied by the estimator options. The sample minimum and sample mean are unbiased for θ, and the listed combination of the minimum and sample mean is also unbiased. The scaled second order statistic has a different expectation and is the answer. For p690, the sample maximum and its factor (n+1)/n multiple converge to θ. The sample mean converges to θ/2, while (n+1) times the minimum has a non-degenerate limiting distribution and is not consistent.
+
+Pages 692 and 696 were held out: page 692 contains a clipped/illegible option, while page 696's displayed estimator options and marked key do not agree with the unbiasedness calculations for Uniform(−θ,θ). They are not imported until the source can be resolved unambiguously.

@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==532,total
+assert total==534,total
 
 
 
@@ -558,7 +558,7 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 532 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 534 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p681: the maximum plus one-half converges to theta+1, not theta.
 assert (0.5+0.5)==1
@@ -585,3 +585,14 @@ assert 1/1000<1/10
 # p695: constrained integer normal MLE is the integer nearest the sample mean.
 close((1.7+2.3-.6-.8+1.5)/5,.82)
 assert round(.82)==1
+
+
+# p689: under Exp(mean=theta), E[X_(1)]=theta/n and E[X_(2)]=theta(1/n+1/(n-1)).
+for n in (2,3,5,10):
+    ex2=(1/n+1/(n-1))
+    assert abs(((n+1)/2)*ex2-1)>1e-12
+    close(1/n+(n-1)/n,1)
+# p690: Uniform(0,theta) maximum converges to theta; scaled minimum has non-vanishing variance.
+for n in (10,100,1000):
+    scaled_min_var=(n+1)**2*n/(n+1)**2/(n+2)
+    close(scaled_min_var,n/(n+2))
