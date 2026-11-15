@@ -278,8 +278,16 @@ close(1,1); close((-math.cos(4*math.pi)+math.cos(0))/(4*math.pi),0)
 close(4+2**2,8); close(math.sqrt(4),2)
 # p480: iid continuous variables are exchangeable; P(X1<X2)=1/2 and P(equal)=0.
 close(.5,.5); close(0,0)
-assert total==375,total
+# p483: E(N)=sum_{k>=0} 1/k! = e for the uniform-sum stopping rule.
+close(sum(1/math.factorial(k) for k in range(15)),math.e,1e-10)
+# p485: the two different ordered pairs have equal probability for every coin bias p.
+for prob in (.1,.2,.5,.8,.9): close(prob*(1-prob),(1-prob)*prob)
+# p486: choose three distinct faces; their increasing order is unique.
+close(math.comb(6,3)/(6**3),5/54)
+# p488: size and power for U(2,4) and U(3,9), critical region X>=3.5.
+close((4-3.5)/(4-2),.25); close((9-3.5)/(9-3),11/12); close(.25+11/12,7/6)
+assert total==379,total
 
 
 
-print("PASS: 375 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 379 supplementary questions; source-key corrections recorded; ambiguous items held out.")
