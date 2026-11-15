@@ -655,3 +655,20 @@ Six questions were imported after visual inspection:
 - **Page 436:** the parameterised probability table and observed values are not legible enough to establish the likelihood.
 - **Page 440:** the exponential-density rate/scale parameter is not clear enough to evaluate the requested density at the mean.
 - **Page 444:** the variance expression and target parameter power are too faint to determine the intended unbiased-estimation question.
+
+
+## Batch 42 — pages 445–456
+
+Five questions were imported after visual inspection:
+- **Probability (4):** memoryless conditional probability for a geometric variable, p445; law of total probability for finding lost keys, p447; sum of two independent Poisson scratch counts, p449; and recovering the parameters and variance of a uniform distribution from its mean and a CDF probability, p450.
+- **Statistical Inference (1):** size and power of a test for two discrete-uniform hypotheses, p446.
+
+### Pages held out after inspection
+
+- **Page 448:** duplicate of the geometric memoryless conditional-probability question on page 445, with shifted index; not imported twice.
+- **Page 451:** the displayed Poisson estimator options and target power are not legible enough to identify the intended unbiased estimator safely.
+- **Page 452:** the question does not state whether the displayed standard deviation uses the sample or population divisor; the sum of squared deviations therefore depends on the convention.
+- **Page 453:** section/advertisement page, no question.
+- **Page 454:** the betting rule and probability are garbled, so the remaining money cannot be calculated reliably.
+- **Page 455:** the event notation involving the two discrete-uniform variables is unreadable.
+- **Page 456:** the dice event and answer choices are too corrupted to establish the intended probability.
