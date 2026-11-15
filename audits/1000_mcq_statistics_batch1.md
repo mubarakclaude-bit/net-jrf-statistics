@@ -775,3 +775,17 @@ Six questions were imported after visual inspection:
 - **Page 523:** the estimator sequence and target parameter in the consistency question are corrupted.
 - **Page 525:** the power of the standard-normal moment in the expectation is not readable.
 - **Page 527:** the displayed standardised expectation/variance expression is incomplete.
+
+
+## Batch 49 — pages 529–540
+
+Eight questions were imported after visual inspection:
+- **Probability (7):** central limit theorem for geometric variables, p532; expected minimum of a normal sample of size two, p533; conditional probability for a uniform variable, p534; covariance from a conditional normal model, p535; variance from a probability generating function, p537; correlation involving a product of independent normal variables, p538; and a Bernoulli-driven sequence limit, p540.
+- **Stochastic Processes (1):** the defining martingale conditional-expectation identity, p530.
+
+### Pages held out after inspection
+
+- **Page 529:** the joint-density expression and conditional-expectation options are too faint to transcribe safely.
+- **Page 531:** the conditional-expectation identities and the final option are partly corrupted; the exact source statements cannot be recovered confidently.
+- **Page 536:** the bivariate-normal parameter values and the two linear combinations in the correlation question are not sufficiently legible.
+- **Page 539:** the weighted-sum expressions and their normalising constants are blurred, preventing a reliable convergence comparison.
