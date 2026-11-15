@@ -1714,20 +1714,20 @@
       "year": 2011,
       "session": "December",
       "topic": "regression-t4 · coefficient of determination and adjusted R-squared after adding regressors",
-      "stem": "In a multiple linear regression model with r>1 regressors and an intercept, let Ŷ be the fitted response, R² the coefficient of determination and R²_adj the adjusted coefficient of determination. Which statements are correct?",
+      "stem": "In a multiple linear regression model with r≥1 regressors and an intercept, let Ŷ be the fitted response, R² the coefficient of determination and R²_adj the adjusted coefficient of determination. Which statements are correct?",
       "statements": [
         "R² cannot decrease when an additional regressor is included.",
         "R²_adj always increases when an additional regressor is included.",
-        "R²>R²_adj for every possible data set.",
+        "R²≥R²_adj for all admissible r.",
         "The sample correlation between Y and Ŷ is nonnegative."
       ],
       "options": [
         "Statements 1 and 4 only",
-        "Statements 1, 2 and 4 only",
+        "Statements 1, 3 and 4 only",
         "Statements 2 and 3 only",
         "All four statements"
       ],
-      "answer": "A",
+      "answer": "B",
       "verdicts": {
         "A": {
           "tf": true,
@@ -1738,15 +1738,15 @@
           "why": "Adjusted R² penalises additional regressors and may decrease."
         },
         "C": {
-          "tf": false,
-          "why": "When the fit is perfect, R²=R²_adj=1, so the strict inequality does not hold for every data set."
+          "tf": true,
+          "why": "With an intercept and an admissible number of regressors, adjusted R²=1−(1−R²)(n−1)/(n−r−1), which is no greater than R²."
         },
         "D": {
           "tf": true,
           "why": "With an intercept, the fitted vector is the orthogonal projection of Y onto a space containing the constant vector; the sample correlation of Y and Ŷ is √R²≥0 when defined."
         }
       },
-      "explanation": "Ordinary R² measures the fraction of response variation explained by the fitted model. Adding a regressor gives the least-squares procedure more freedom: it can always set the new coefficient to zero and reproduce the old fit. Therefore residual sum of squares cannot increase, and R² cannot decrease. Statement 1 is true.\\n\\nAdjusted R² includes a penalty for the number of regressors. It can go down when the added variable contributes too little explanatory power, so statement 2 is false.\\n\\nThe strict inequality R²>R²_adj holds in ordinary non-perfect fits with positive residual variation and added parameters, but if the fit is perfect then both equal 1. Therefore statement 3 is not true for every possible data set.\\n\\nWith an intercept, the correlation between observed and fitted values is √R² and is nonnegative, so statement 4 is true. Hence statements 1 and 4 only are correct. Source: Methods of Estimation PDF, Question 72, December 2011, page 43. The supplied answer-key page does not include Q72.\\n\\nOther-exam relevance: multiple regression, R², adjusted R² and fitted-value properties are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+      "explanation": "Ordinary R² measures the fraction of response variation explained by the fitted model. Adding a regressor gives least squares more freedom: it can always set the new coefficient to zero and reproduce the old fit. Therefore residual sum of squares cannot increase, and R² cannot decrease. Statement 1 is true.\\n\\nAdjusted R² includes a penalty for the number of regressors. It can go down when the added variable contributes too little explanatory power, so statement 2 is false.\\n\\nFor an admissible model with an intercept, R²_adj=1−(1−R²)(n−1)/(n−r−1). The multiplier (n−1)/(n−r−1) is at least one, so R²_adj≤R². Thus statement 3, written with ≥, is true.\\n\\nWith an intercept, the correlation between observed and fitted values is √R² and is nonnegative, so statement 4 is true. Hence statements 1, 3 and 4 only are correct. Source: Methods of Estimation PDF, Question 72, December 2011, page 44. The supplied answer-key page does not include Q72.\\n\\nOther-exam relevance: multiple regression, R², adjusted R² and fitted-value properties are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
     },
     {
       "id": "csir-meth-2012-dec-q65",
