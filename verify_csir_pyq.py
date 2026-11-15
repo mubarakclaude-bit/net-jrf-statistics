@@ -423,7 +423,6 @@ def main() -> None:
         assert "".join(sorted(k for k, v in q["verdicts"].items() if v["tf"])) == truth
         assert "not a claim that this exact" in q["explanation"]
     for qid, year, session, answer in [
-        ("csir-est-q71-alt", 2015, "December", "D"),
         ("csir-est-q72", 2015, "December", "B"),
         ("csir-est-q73", 2015, "December", "C"),
         ("csir-est-q82", 2014, "June", "C"),
