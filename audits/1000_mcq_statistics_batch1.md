@@ -979,3 +979,17 @@ Two additional questions were imported after visual inspection:
 For p689, the source's Exp(θ) notation is interpreted as an exponential distribution with mean θ, as implied by the estimator options. The sample minimum and sample mean are unbiased for θ, and the listed combination of the minimum and sample mean is also unbiased. The scaled second order statistic has a different expectation and is the answer. For p690, the sample maximum and its factor (n+1)/n multiple converge to θ. The sample mean converges to θ/2, while (n+1) times the minimum has a non-degenerate limiting distribution and is not consistent.
 
 Pages 692 and 696 were held out: page 692 contains a clipped/illegible option, while page 696's displayed estimator options and marked key do not agree with the unbiasedness calculations for Uniform(−θ,θ). They are not imported until the source can be resolved unambiguously.
+
+
+## Batch 65 — pages 697–704
+
+Five additional questions were imported after visual inspection:
+- **Statistical Inference (2):** critical value for a size-0.05 likelihood-ratio test between two Normal distributions, p697; and confidence coefficient of an interval based on the minimum from a shifted exponential sample, p700.
+- **Probability (3):** probability of at least one defective bulb in a sample without replacement, p702; a two-card event involving a red card and a queen, p703; and the posterior probability that a lost card was a club after two clubs are drawn, p704.
+
+### Source-key correction and held-out items
+- **Page 697:** the source answer field gives 0.05, which is the significance level, not the requested critical value. The likelihood-ratio test rejects for large X; under H₀, the correct cutoff is the standard-normal 95th percentile, approximately 1.645. The imported item records the mathematical correction.
+- **Page 698:** held out because the keyed power is 2.5, which is impossible for a probability, and the printed density notation is not sufficiently clear to resolve the source's intended model.
+- **Page 699:** held out because the estimator whose MSE is requested is not specified in the scan.
+- **Page 701:** held out because the displayed Normal parameterisation is unclear and does not reconcile reliably with the keyed sample size.
+- Pages 702–704 were legible. Page 702 uses the complement of drawing two good bulbs. Page 703 counts 101 favourable unordered pairs among 1326. Page 704 applies Bayes' theorem to the two possible suits of the lost card.

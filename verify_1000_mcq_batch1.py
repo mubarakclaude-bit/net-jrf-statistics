@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==534,total
+assert total==539,total
 
 
 
@@ -558,7 +558,7 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 534 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 539 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p681: the maximum plus one-half converges to theta+1, not theta.
 assert (0.5+0.5)==1
@@ -596,3 +596,15 @@ for n in (2,3,5,10):
 for n in (10,100,1000):
     scaled_min_var=(n+1)**2*n/(n+1)**2/(n+2)
     close(scaled_min_var,n/(n+2))
+
+
+# p697: LRT critical value for N(0,1) against N(1,1), size 0.05.
+assert abs(1.645-1.6448536269514722)<0.001
+# p700: shifted-exponential minimum gives the stated 84% coverage.
+close(1-math.exp(-2*math.log(2.5)),0.84)
+# p702: complement probability for two good bulbs.
+close(1-(16/20)*(15/19),7/19)
+# p703: 101 favourable unordered pairs out of C(52,2).
+close(101/math.comb(52,2),101/1326)
+# p704: posterior probability that the lost card was a club after two clubs are drawn.
+close((13*math.comb(12,2))/(13*math.comb(12,2)+39*math.comb(13,2)),11/50)
