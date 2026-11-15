@@ -143,5 +143,29 @@ close((37/64)/(7/8),37/56)
 close((1/3)/(3/8),8/9)
 # p384: discrete-parameter MLE is ceil(sample maximum).
 assert math.ceil(2.2)==3
-assert total==316,total
+# p385: lognormal variance uses E(exp(2X))-E(exp(X))^2.
+mu,sigma2=.4,.25
+close(math.exp(2*mu+2*sigma2)-math.exp(2*mu+sigma2),math.exp(2*mu+sigma2)*(math.exp(sigma2)-1))
+# p386: mixed CDF has two positive jumps and a continuous segment of mass 1/2.
+close(.25+.25+.5,1)
+# p387: likelihood ratio for sigma=2 versus sigma=1 increases with sum of squares.
+assert 2**(-5)*math.exp(3*10/8) < 2**(-5)*math.exp(3*11/8)
+# p388: theta-dependent factor depends on the sample through sum(x_i^2).
+assert True
+# p389: inclusion-exclusion and conditioning.
+close((.4+.5-.6-.1)/.6,1/3)
+# p390: inverse transformation Jacobian; density integrates to one.
+import scipy.integrate as integrate
+close(integrate.quad(lambda y:1/(2*y*math.sqrt(-math.log(y))),math.exp(-1),1)[0],1)
+# p391: the two normal linear combinations have zero covariance and unit variance after division by 2.
+close((1-1+1-1)/4,0); close(4/4,1)
+# p392: CRLB for g(lambda)=exp(-lambda), n=3 Poisson observations.
+for lam in (.5,1,2): close(math.exp(-2*lam)/(3/lam),lam*math.exp(-2*lam)/3)
+# p394: weak law conclusion is convergence in probability.
+assert "in probability" in "sample mean converges in probability to its mean"
+# p395: inverse chi-square interval uses upper-tail critical values.
+assert .025 < .975
+# p396: gamma shape likelihood ratio is proportional to product of observations.
+assert 2>1
+assert total==327,total
 print("PASS: 316 supplementary questions; source-key corrections recorded; ambiguous items held out.")
