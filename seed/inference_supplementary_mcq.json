@@ -1,9 +1,9 @@
 {
   "moduleId": "inference",
   "source": "variant",
-  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages, including 601, 603, 605, 607, 611–612, 615 and 622)",
+  "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 648 and later pages 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 96,
+  "count": 103,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -1860,6 +1860,190 @@
       "answer": "C",
       "explanation": "The two-sided z statistic is |X̄−μ₀|/(σ/√n). For the same observations, replacing σ₀ by the smaller σ₁ makes the denominator smaller and the absolute test statistic larger. A larger absolute z statistic has a smaller two-sided tail probability, so the p-value decreases.",
       "pno": 622,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p627",
+      "format": "single",
+      "topic": "inference-t3",
+      "stem": "Let X₁~Uniform(0,θ) and X₂~Uniform(0,1+θ) independently. Which statistic is sufficient for θ?",
+      "options": [
+        "min(X₁,X₂)",
+        "max(X₁,X₂)",
+        "max(X₁,X₂−1)",
+        "max(X₁+1,X₂)"
+      ],
+      "answer": "C",
+      "explanation": "The joint density is 1/[θ(1+θ)] when 0<X₁<θ and 0<X₂<1+θ, and zero otherwise. The support restrictions require θ>max(X₁,X₂−1). The likelihood therefore depends on the observations through this maximum only, so the factorisation theorem shows it is sufficient.",
+      "pno": 627,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p629",
+      "format": "single",
+      "topic": "inference-t3",
+      "stem": "Let X₁,…,Xₙ be a sample from a shifted exponential distribution with unknown location μ and rate λ. Which is a sufficient statistic for (μ,λ)?",
+      "options": [
+        "(X₍₁₎,X₍ₙ₎)",
+        "ΣXᵢ",
+        "X₍ₙ₎",
+        "(X₍₁₎, Σ(Xᵢ−X₍₁₎))"
+      ],
+      "answer": "D",
+      "explanation": "The joint density includes the support condition μ≤X₍₁₎ and the factor exp(−λΣXᵢ+nλμ). Write ΣXᵢ=nX₍₁₎+Σ(Xᵢ−X₍₁₎). The likelihood then depends on the observations only through the sample minimum and the sum of deviations from that minimum. This pair is sufficient by factorisation.",
+      "pno": 629,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p630",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "Let X and Y be iid exponential variables with mean 1/θ, θ>0. For testing H₀:θ=1 against H₁:θ<1, which is the form of the uniformly most powerful test?",
+      "options": [
+        "A UMP test does not exist.",
+        "Reject H₀ when 1/X+1/Y is small.",
+        "Reject H₀ when X+Y is small.",
+        "Reject H₀ when X+Y is large."
+      ],
+      "answer": "D",
+      "explanation": "For two independent observations, the likelihood ratio for a fixed θ<1 against θ=1 is proportional to exp[(1−θ)(X+Y)]. Since 1−θ>0, it increases with X+Y. The family has a monotone likelihood ratio in the sum, so the UMP test rejects for large values of X+Y.",
+      "pno": 630,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p641",
+      "format": "single",
+      "topic": "inference-t4",
+      "stem": "Let X₁,…,Xₙ be iid N(θ,1), where θ is restricted to integer values. What is the maximum likelihood estimator of θ?",
+      "options": [
+        "The sample mean X̄.",
+        "The integer closest to X̄.",
+        "The greatest integer less than or equal to X̄.",
+        "The sample median."
+      ],
+      "answer": "B",
+      "explanation": "The normal likelihood is proportional to exp{−(1/2)Σ(Xᵢ−θ)²}. Decompose the sum into Σ(Xᵢ−X̄)²+n(X̄−θ)². Maximising the likelihood over integer θ is equivalent to choosing the integer nearest to X̄. If X̄ is exactly halfway between two integers, both maximise the likelihood.",
+      "pno": 641,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p642",
+      "format": "multi",
+      "topic": "inference-t5",
+      "stem": "For an iid sample from N(μ,σ²), with both μ and σ² unknown, which statements are correct?",
+      "statements": [
+        "S²=Σ(Xᵢ−X̄)²/(n−1) is the minimum-variance unbiased estimator of σ².",
+        "S=√S² is the minimum-variance unbiased estimator of σ.",
+        "Σ(Xᵢ−X̄)²/n is the maximum likelihood estimator of σ².",
+        "√[Σ(Xᵢ−X̄)²/n] is the maximum likelihood estimator of σ."
+      ],
+      "options": [
+        "Statements 1 and 3 only",
+        "Statements 1, 3 and 4 only",
+        "Statements 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "explanation": "For a normal sample, S² with divisor n−1 is unbiased and is the UMVU estimator of σ². The sample standard deviation S is biased for σ, so statement 2 is false. The normal likelihood is maximised at Σ(Xᵢ−X̄)²/n for σ², and its square root is the MLE of σ. Statements 1, 3 and 4 are true.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The corrected sample variance is the UMVU estimator of σ²."
+        },
+        "B": {
+          "tf": false,
+          "why": "The sample standard deviation is biased for σ."
+        },
+        "C": {
+          "tf": true,
+          "why": "The normal likelihood gives the divisor-n variance MLE."
+        },
+        "D": {
+          "tf": true,
+          "why": "The MLE of σ is the square root of the MLE of σ²."
+        }
+      },
+      "pno": 642,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p643",
+      "format": "multi",
+      "topic": "inference-t3",
+      "stem": "Let X₁,…,Xₙ be iid Uniform(1−θ,1+θ), θ>0. Let X₍₁₎ and X₍ₙ₎ be the sample minimum and maximum, and X̄ the sample mean. Which statements are true?",
+      "statements": [
+        "(X₍₁₎,X̄,X₍ₙ₎) is sufficient for θ.",
+        "(X₍ₙ₎−X₍₁₎)/2 is unbiased for θ.",
+        "(3/n)Σ(Xᵢ−1)² is unbiased for θ².",
+        "(3/n)Σ(Xᵢ−X̄)² is unbiased for θ²."
+      ],
+      "options": [
+        "Statements 1 and 3 only",
+        "Statements 1 and 4 only",
+        "Statements 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "explanation": "The likelihood depends on the sample through its minimum and maximum, so including X̄ as well remains sufficient. For Uniform(1−θ,1+θ), E(X)=1 and Var(X)=θ²/3. The expected range is 2θ(n−1)/(n+1), so half the range is biased. Also E[(X−1)²]=θ²/3, making statement 3 unbiased. Finally E[Σ(Xᵢ−X̄)²]=(n−1)θ²/3, so statement 4 is biased after scaling by 3/n.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The sample extrema determine the support restrictions, and the scaled raw squared deviations have the stated expectation."
+        },
+        "B": {
+          "tf": false,
+          "why": "The expected half-range is θ(n−1)/(n+1), not θ."
+        },
+        "C": {
+          "tf": true,
+          "why": "Each squared deviation from 1 has expectation θ²/3."
+        },
+        "D": {
+          "tf": false,
+          "why": "The scaled centred sum has expectation (n−1)θ²/n, not θ²."
+        }
+      },
+      "pno": 643,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p648",
+      "format": "multi",
+      "topic": "inference-t3",
+      "stem": "Let X₁,…,Xₙ be iid Uniform(0,3θ), θ>0, and define Tₙ=(1/3)max(X₁,…,Xₙ). Which statement is NOT true?",
+      "statements": [
+        "Tₙ is consistent for θ.",
+        "Tₙ is unbiased for θ.",
+        "Tₙ is a sufficient statistic for θ.",
+        "Tₙ is a complete statistic for θ."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statement 2 only",
+        "Statement 3 only",
+        "Statement 4 only"
+      ],
+      "answer": "B",
+      "explanation": "The scaled sample maximum is sufficient and complete for the one-parameter uniform scale family. It converges in probability to θ, so it is consistent. Its expectation is nθ/(n+1), which is below θ for every finite n. Therefore it is biased and statement 2 is the one that is not true.",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The sample maximum approaches the upper endpoint 3θ, so Tₙ approaches θ."
+        },
+        "B": {
+          "tf": false,
+          "why": "E(Tₙ)=nθ/(n+1), not θ."
+        },
+        "C": {
+          "tf": true,
+          "why": "The likelihood depends on θ through the sample maximum."
+        },
+        "D": {
+          "tf": true,
+          "why": "The maximum is complete for the uniform scale family."
+        }
+      },
+      "pno": 648,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
