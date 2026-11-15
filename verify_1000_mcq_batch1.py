@@ -238,8 +238,20 @@ for t in (-.5,0,.5): close(1/(1-t*t),1/(1-(-t)**2))
 assert 2.5>20/9>15/8
 # p432: uniform shift test has size 1/2 and power 1.
 close(2-1.5,.5); close(1,1)
-assert total==355,total
+# p437: Uniform(-2,2), event X<-1 has length 1 out of total length 4.
+close(1/4,.25)
+# p438: use standard-normal symmetry to subtract P(Z<-1.5)=0.0668.
+close((1-.8664)/2,.0668); close(.6141-.0668,.5473)
+# p441: covariance of overlapping sums is sigma^2; each variance is 2 sigma^2.
+close(1/(math.sqrt(2)*math.sqrt(2)),.5)
+# p442: E1 and E3 share toss 3; joint probability 1/8 differs from 1/16.
+close(1/8,0.125); close((1/4)*(1/4),1/16); assert 1/8 != 1/16
+# p443: E(2X-10)=2(10*0.5)-10=0.
+close(2*10*.5-10,0)
+# p439: simple regression residual degrees of freedom n-2.
+assert 6-2==4
+assert total==361,total
 
 
 
-print("PASS: 355 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 361 supplementary questions; source-key corrections recorded; ambiguous items held out.")
