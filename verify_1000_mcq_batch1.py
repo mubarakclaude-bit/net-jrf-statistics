@@ -567,8 +567,8 @@ assert True
 # p683: UMVUE of lambda^2 is S(S-1)/n^2 for Poisson observations.
 close(25*24/(5**2),24)
 # p684: central 90% and one-sided 90% chi-square pivot intervals.
-assert .95-.05==.90
-assert 1-.10==.90
+close(.95-.05,.90)
+close(1-.10,.90)
 # p685: E[(n-1)/S]=1/theta for S~Gamma(n, scale theta).
 assert (n:=5)>1
 # p686: CRLB for theta^2 under exponential mean theta.
