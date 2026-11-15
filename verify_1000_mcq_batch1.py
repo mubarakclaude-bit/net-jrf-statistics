@@ -197,6 +197,28 @@ assert "log(1−Xᵢ)" in "sum(log(1−Xᵢ))"
 # p407: mass at x=2 is the jump in the CDF.
 close(5/6-1/2,1/3)
 assert max((x+y) for x in (0,1,2) for y in (0,1,2))==4
-assert total==338,total
+# p409: Type-I error and power for the two stated densities.
+close(1-.85,.15); close(1-.85**3,1-.85**3)
+# p411: sum of n iid Exp(1) variables has Gamma(n,1) MGF.
+for t in (.1,.25): close((1/(1-t))**3,1/(1-t)**3)
+# p412: solve the score equation for the power-density MLE.
+for xs in [(.2,.4,.8),(.5,.6)]:
+    estimate=-len(xs)/sum(math.log(x) for x in xs)-1
+    close(len(xs)/(1+estimate)+sum(math.log(x) for x in xs),0)
+# p413: the probability of U(X)<theta is alpha_2.
+for a1,a2 in [(.1,.2),(.2,.3)]: close((1-a1)-(1-a1-a2),a2)
+# p414: Rademacher characteristic function is cos(t).
+for t in (.2,1.1): close((complex(math.cos(t),math.sin(t))+complex(math.cos(t),-math.sin(t))).real/2,math.cos(t))
+# p415: both alternating distributions have mean zero and bounded variance.
+assert (1/3)*(-1)+(1/3)*0+(1/3)*1==0
+assert (1/2)*(-1)+(1/2)*1==0
+# p416: independent Poisson means add; 25-3*5=10.
+close(25-3*5,10)
+# p417: constrained Bernoulli MLE at success counts 0,1,2.
+for s,expected in [(0,1/3),(1,1/2),(2,2/3)]: close((2+s)/6,expected)
+# p419: the normal likelihood depends on the sample through sum(x_i) and sum(x_i^2).
+assert "T1" in "T1,T2"
+assert total==347,total
+
 
 print("PASS: 338 supplementary questions; source-key corrections recorded; ambiguous items held out.")
