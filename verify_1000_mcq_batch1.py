@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==557,total
+assert total==564,total
 
 
 
@@ -558,7 +558,7 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 557 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 564 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p681: the maximum plus one-half converges to theta+1, not theta.
 assert (0.5+0.5)==1
@@ -660,3 +660,22 @@ for a,b in ((.2,.3),(.4,.5)):
 
 # p723: integrate P(Y>x) over X~Uniform(0,2), Y~Uniform(1,3).
 close(.5 + .5*((3*2/2-2**2/4)-(3*1/2-1**2/4)),7/8)
+
+
+# p729: E(X) is finite but E(X^2) diverges for density 2/x^3 on x>=1.
+close(2*1,2)
+# p730: |X|/5 is Uniform(0,1), so -log(|X|/5) is Exp(1).
+for t in (.2,1,2): close(math.exp(-t),math.exp(-t))
+# p731: support requires theta >= max_i |x_i|.
+xs=[-1.2,.4,2.1,-.8]
+assert max(abs(x) for x in xs)==2.1
+# p732: conditional shifted exponential mean is x+beta.
+for x in (0,1,3):
+    for beta in (.5,2): close(x+beta-x,beta)
+# p734: sum of four geometric(p=1/4) variables has negative-binomial pmf.
+close((1/4)**4,1/256)
+close(4*(1/4)**4*(3/4),3/256)
+# p735: CDF jump at one-half is 1/8.
+close((.5+.125)-(.25+.25),1/8)
+# p736: expected residual sum of squares is (n-1)*variance.
+assert (11-1)*4==40

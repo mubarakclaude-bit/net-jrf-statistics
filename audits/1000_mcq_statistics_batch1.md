@@ -1042,3 +1042,16 @@ For p721, equality in Jensen for a strictly convex function forces X to be const
 
 ### Page 723 correction
 The page-723 question is now imported with answer 7/8. The source key's 3/4 is incorrect: for 0<x<1, P(Y>x)=1, and for 1≤x<2, P(Y>x)=(3−x)/2. Integrating against the Uniform(0,2) density gives 1/2+3/8=7/8.
+
+
+## Batch 69 — pages 729–736
+
+Seven additional questions were imported after visual inspection:
+- **Probability (4):** existence of the first moment but not a finite variance for a Pareto-type density, p729; an absolute-value logarithmic transform of a Uniform(−5,5) variable, p730; the negative-binomial distribution of the sum of four geometric variables, p734; and point mass from a jump in a CDF, p735.
+- **Statistical Inference (2):** likelihood function with parameter-dependent support, p731; and expected residual sum of squares for a Normal sample, p736.
+- **Regression (1):** regression line derived from a shifted exponential conditional density, p732.
+
+### Held-out page
+- **Page 733:** the systematic-sampling relative-efficiency question is held out pending clarification of the intended intraclass-correlation design and variance comparison. The marked answer 1/7 is not imported without a fully justified design-effect calculation.
+
+For p729, E(X)=2 but E(X²) diverges, so variance is not finite. For p730, |X|/5 is Uniform(0,1), and its negative logarithm is Exp(1). For p731, the support restriction is θ≥maxᵢ|Xᵢ|. For p732, E(Y|X=x)=x+β. For p734, the sum of four geometric(p=1/4) variables has a negative-binomial distribution. For p735, the jump at x=1/2 is 5/8−1/2=1/8. For p736, E(S)=(11−1)×4=40.
