@@ -144,4 +144,4 @@ close((1/3)/(3/8),8/9)
 # p384: discrete-parameter MLE is ceil(sample maximum).
 assert math.ceil(2.2)==3
 assert total==316,total
-print("PASS: 304 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 316 supplementary questions; source-key corrections recorded; ambiguous items held out.")
