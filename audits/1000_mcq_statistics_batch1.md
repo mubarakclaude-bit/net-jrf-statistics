@@ -874,3 +874,16 @@ Fourteen questions from this range are now represented in the supplementary bank
 - **Page 624:** the estimator formula/options are corrupted.
 
 For p614, the atom at zero is 1/4 and the conditioning event has probability 3/4, giving 1/3. For p616, the shift X+1 is Uniform(0,2), making the square transformation monotone. For p620, symmetry reduces the normalising integral to two exponential tails. For p623, the variance of X² for standard normal X is 2, giving the stated CLT scaling. The p615 MLE is any sample median; with ten observations it is generally an interval, not a unique point.
+
+
+## Batch 56 — pages 625–636
+
+Five additional questions were imported after visual inspection:
+- **Statistical Inference (2):** distribution of the sample-minimum MLE in a shifted exponential location model, p625; and a delta-method asymptotic test for equality of two Poisson means, p628.
+- **Probability (3):** Poisson approximation to the overbooking/refusal probability for a 250-ticket, 248-seat flight, p631; an expectation identity that remains valid without independence, p633; and reciprocal invariance of the standard Cauchy distribution, p636.
+
+### Pages held out after inspection
+- **Page 626:** the likelihood gives θ̂=1/15 and hence the estimated two-car household proportion is 2θ̂=2/15, which is absent from all four printed options. The item is held out rather than changing its source answer choices.
+- Pages 627, 629, 630, 632, 634 and 635 were already imported in the preceding batch and were not duplicated.
+
+The p625 MLE is the sample minimum, whose shifted-exponential scale is σ/n. For p628, the delta method gives asymptotic variance 1/(4m)+1/(4n) for √X̄−√Ȳ under H₀. For p631, refusal occurs with zero or one no-show; the Poisson(2.5) approximation gives e^(−2.5)(1+2.5). Page 633 is keyed using linearity of expectation, which does not require independence.
