@@ -524,3 +524,20 @@ Ten questions were imported after visual review:
 
 - **Page 330:** the marked answer 1/16 is confirmed: E(X)=E(Y)=1/4, E(XY)=1/8, and Cov(X,Y)=1/16.
 - **Page 336:** the stem makes the usual iid and finite-variance CLT conditions explicit so the answer is mathematically valid.
+
+
+## Batch 32 — pages 337–348
+
+Ten questions were imported after visual review:
+- **Statistical Inference (1):** identifying a false statement about sampling distributions and inferential statistics, p337.
+- **Probability (9):** standard errors of sample means for four population standard deviations, p338–341; normal-approximation tail probabilities for sample means, p342–343; Bayes' theorem for three urns, p346; union probability for independent events, p347; and the position of the last defective item in sampling without replacement, p348.
+
+### Pages held out after inspection
+
+- **Page 344:** the variance of a sum of 100 expense amounts cannot be determined without an independence/dependence assumption; none is stated.
+- **Page 345:** the printed piecewise function integrates to 11/12, not 1, so it is not a valid density as written.
+
+### Source notes
+
+- **Page 342:** the normal-table approximation rounds z≈1.035 to 1.03, giving the source option 0.1515; direct evaluation is approximately 0.1504.
+- **Pages 338–341:** these are separate numeric variants of the same standard-error calculation, retained because the population standard deviations differ.
