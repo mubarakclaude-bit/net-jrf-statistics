@@ -841,3 +841,13 @@ Eleven additional questions were imported after visual inspection:
 - **Page 584:** decorative/advertising page, not a question.
 
 The p582 test is keyed using the likelihood ratio: for the larger alternative value of λ, the likelihood ratio decreases with ΣXᵢ², so the rejection region is for small sums of squares. Page 583 uses the exact 0.1 null probability P₀(X≤4)=4/40. Page 585's limit is 1 because the threshold exceeds the mean by n^(3/4), which grows faster than the standard deviation of order n^(1/2).
+
+
+## Batch 54 — pages 589–600
+
+Twelve questions were imported after visual inspection:
+- **Probability (7):** conditional regression from a triangular-support joint density, p590; a shifted-uniform square transformation, p592; the Poisson sample-mean CLT, p594; normalising exp(−x⁴) as a density, p595; correlation of two overlapping normal sums, p597; a Poisson–exponential mixture variance, p598; and implications of positive association between two events, p600.
+- **Statistical Inference (4):** method-of-moments estimation for a scaled triangular density, p589; MLE for a shifted exponential distribution, p591; power of a test between two shifted uniform distributions, p593; and an MLE determined by sample support constraints, p596.
+- **Multivariate Analysis (1):** identifying a valid variance-covariance matrix using symmetry and positive semidefiniteness, p599.
+
+All twelve source questions on pages 589–600 were legible enough to verify. The likelihood in page 596 is maximised at the smallest parameter value satisfying the support restrictions, θ=27.
