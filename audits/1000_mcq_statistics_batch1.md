@@ -1068,3 +1068,18 @@ Six additional questions were imported after visual inspection:
 - **Page 741:** under H₀ the type-I error is e⁻², but under H₁ the type-II error is P(X<2/θ₀)=1−e⁻⁴. The source options list e⁻⁴ rather than 1−e⁻⁴, so no option correctly gives the requested pair.
 
 For p738, independence gives E(X+Y|X≤1/2)=1/3+1=4/3. For p739, the statistic is sufficient but a nonzero function of it has expectation zero for all θ, proving non-completeness. Page 740's likelihood derivative gives α̂=2X. For p742, E(T)=kθ/2, so k=2. Page 743 follows from the likelihood support depending on the sample minimum and maximum. Page 744 maximises the Laplace likelihood by minimising the sum of absolute deviations, whose minimiser is a sample median.
+
+
+## Batch 71 — pages 745–752
+
+Eight additional Statistical Inference questions were imported after visual inspection:
+- **Page 745:** MLE of the location parameter in a shifted exponential model.
+- **Page 746:** size of a lower-tail test for a Binomial(10,p) model.
+- **Page 747:** consistent estimator of the squared scale parameter in a Gamma model.
+- **Page 748:** MLE of the population median in an exponential scale model.
+- **Page 749:** type-I error probability for a five-toss coin test.
+- **Page 750:** method-of-moments estimator of the rate of an exponential distribution.
+- **Page 751:** definitions of test size, power, and the two error probabilities (multi-select).
+- **Page 752:** non-existence of an unbiased estimator, and hence UMVUE, for 1/p in a finite Bernoulli sample.
+
+The p745 likelihood is increasing in θ over θ≤X₍₁₎, so its maximum is the sample minimum. Page 746 gives α=P₁/₂(X≤3)=11/64. For p747, E(X²)=α(α+1)β², so the scaled sample second moment is consistent for β². Page 748 uses the exponential median θln2 and MLE invariance. Page 749 has type-I error P₁/₂(X≥4)=3/16. Page 750 equates X̄=1/λ. Page 751 uses the standard definitions of size and power. For p752, the expectation of any statistic on the finite Bernoulli sample space is polynomial in p, so it cannot equal 1/p over the full interval 0<p<1.

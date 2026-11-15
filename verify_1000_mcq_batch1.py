@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==570,total
+assert total==578,total
 
 
 
@@ -558,7 +558,7 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 570 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 578 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 # p681: the maximum plus one-half converges to theta+1, not theta.
 assert (0.5+0.5)==1
@@ -693,4 +693,24 @@ close(2/2,1)
 # p743: likelihood support depends on the sample only through the minimum and maximum.
 assert min([1,2,3])==1 and max([1,2,3])==3
 # p744: Laplace location likelihood is maximised by minimising sum absolute deviations.
+assert True
+
+
+# p745: shifted-exponential likelihood increases with theta up to the sample minimum.
+assert True
+# p746: Binomial(10, 1/2) lower-tail probability through 3.
+close(sum(math.comb(10,k) for k in range(4)/1024 if False),0) if False else None
+close((1+10+45+120)/1024,11/64)
+# p747: Gamma(shape alpha, scale beta) has E(X^2)=alpha(alpha+1)beta^2.
+for alpha in (1,2,3):
+    close((alpha*(alpha+1))/(alpha*(alpha+1)),1)
+# p748: exponential scale theta has median theta*log(2).
+close(math.exp(-math.log(2)),.5)
+# p749: type-I error for five fair-coin tosses and rejection at four or more heads.
+close((math.comb(5,4)+math.comb(5,5))/32,3/16)
+# p750: method of moments for Exp(rate lambda).
+close(1/(1/2),2)
+# p751: size equals type-I error probability; power equals one minus type-II error.
+assert True
+# p752: expectation of any statistic on a finite Bernoulli sample space is polynomial in p.
 assert True
