@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 26,
-  "clean": 26,
+  "count": 27,
+  "clean": 27,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -709,6 +709,47 @@
         }
       },
       "explanation": "The minimum Y has the distribution Y=θ+E, where E is exponential with rate n. Thus for 0≤a<b, P(a≤E≤b)=e^(−na)−e^(−nb). A confidence interval for θ can be obtained by choosing constants so that the probability that θ lies between its two endpoints is 1−α.\n\nFor statement 3, the endpoints are Y+(2/n)ln(α/2) and Y+(2/n)ln(1−α/2). Both logarithms are negative. The event that θ lies in this interval is equivalent to −(2/n)ln(1−α/2)≤E≤−(2/n)ln(α/2). Its probability is (1−α/2)²−(α/2)²=1−α. So statement 3 is correct.\n\nFor statement 4, the same calculation with 1/n instead of 2/n gives probability (1−α/2)−(α/2)=1−α. So statement 4 is also correct. Statement 1 gives only α/2 coverage, and statement 2 gives 1−√α coverage, so neither is generally 1−α. Therefore statements 3 and 4 only are correct, matching the supplied answer key on page 53. The combination choices are editorially supplied because the scan lists four candidate intervals without combination options.\n\nOther-exam relevance: order statistics, exponential pivots and exact confidence intervals are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 90, June 2025, page 50; answer key page 53."
+    },
+    {
+      "id": "csir-meth-2024-dec-q85",
+      "type": "practice",
+      "format": "multi",
+      "year": 2024,
+      "session": "December",
+      "topic": "inference-t1 · inference-t5 · sufficiency, unbiased estimation and method of moments for a Poisson model",
+      "stem": "Let X₁,…,X₁₃ be i.i.d. Poisson(θ), θ>0. Which of the following statements are true?",
+      "statements": [
+        "(Σᵢ₌₁⁸Xᵢ)(Σᵢ₌₈¹³Xᵢ) is an unbiased estimator of 48θ².",
+        "(1/13)Σᵢ₌₁¹³Xᵢ is the method-of-moments estimator of θ.",
+        "There does not exist any unbiased estimator of e^(−7θ).",
+        "(e^(X₇), Σᵢ₌₁⁶Xᵢ, Σᵢ₌₈¹³Xᵢ) is a sufficient statistic for θ."
+      ],
+      "options": [
+        "Statement 1 only",
+        "Statements 2 and 4 only",
+        "Statements 1, 2 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The two sums share X₈. Their product has expectation 48θ²+θ, not 48θ²."
+        },
+        "B": {
+          "tf": true,
+          "why": "Since E(Xᵢ)=θ, the sample mean has expectation θ and is the method-of-moments estimator."
+        },
+        "C": {
+          "tf": false,
+          "why": "The indicator that X₁=…=X₇=0 has expectation P(X₁=…=X₇=0)=e^(−7θ), so an unbiased estimator does exist."
+        },
+        "D": {
+          "tf": true,
+          "why": "The exponential function is one-to-one, so e^(X₇) determines X₇. Together with the two sums, the statistic determines Σᵢ₌₁¹³Xᵢ, which is sufficient for θ in an i.i.d. Poisson sample."
+        }
+      },
+      "explanation": "Check each statement using expectation and the Poisson likelihood.\n\nStatement 1 is false because the two sums overlap at X₈. Write A=Σᵢ₌₁⁸Xᵢ and B=Σᵢ₌₈¹³Xᵢ. Then E(A)=8θ, E(B)=6θ and Cov(A,B)=Var(X₈)=θ. Hence E(AB)=E(A)E(B)+Cov(A,B)=48θ²+θ, not 48θ².\n\nStatement 2 is true. For a Poisson(θ) variable, E(X)=θ. Equating the population mean to the sample mean gives θ̂MM=X̄=(1/13)ΣXᵢ.\n\nStatement 3 is false. Define T=1{X₁=0,…,X₇=0}. By independence, E(T)=P(X₁=0,…,X₇=0)=(e^(−θ))⁷=e^(−7θ). Thus T is an unbiased estimator of e^(−7θ).\n\nStatement 4 is true. Since e^(X₇) uniquely determines X₇, the displayed statistic determines X₇+Σᵢ₌₁⁶Xᵢ+Σᵢ₌₈¹³Xᵢ=Σᵢ₌₁¹³Xᵢ. The total sum is sufficient for θ in an i.i.d. Poisson sample, so the displayed statistic is also sufficient. Therefore statements 2 and 4 only are true, option B.\n\n**Printed-key discrepancy:** the supplied answer-key page 53 lists statements 1 and 3. Both conflict with the literal printed question: statement 1 omits the covariance contribution from the shared X₈, and statement 3 is disproved by the seven-zero indicator estimator. The bank records the mathematically derived answer and preserves this discrepancy visibly. The scan's source wording has been retained; no unstated independence between the overlapping sums has been assumed.\n\nOther-exam relevance: Poisson sufficiency, unbiased estimation and method of moments are useful for UGC NET/JRF Statistics, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact CSIR question appeared in those examinations. Source: Methods of Estimation PDF, Question 85, December 2024, page 49; answer key page 53."
     }
   ]
 }
