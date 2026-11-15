@@ -3,8 +3,8 @@
   "topicId": null,
   "source": "pyq",
   "label": "CSIR-UGC NET Methods of Estimation (2011–2025) — regression PYQs",
-  "count": 47,
-  "clean": 47,
+  "count": 53,
+  "clean": 53,
   "items": [
     {
       "id": "csir-meth-q01",
@@ -1426,6 +1426,204 @@
         }
       },
       "explanation": "Write the design matrix as X=[[2,1,0],[0,1,2],[1,1,1]]. The third row is one-half the sum of the first two, so the matrix has rank 2, not 3. Therefore θ, β and γ cannot all be estimated separately. Statement 1 is false.\\n\\nNow use the expectations: E(Y₁)=2θ+β and E(Y₂)=β+2γ. Their difference, divided by two, is [E(Y₁)−E(Y₂)]/2=θ−γ. Thus θ−γ is estimable, and any scalar multiple such as 2γ−2θ is also estimable.\\n\\nBut θ+γ cannot be formed from these identifiable combinations. To see this, any row-space vector has form a(2,1,0)+b(0,1,2)=(2a,a+b,2b). Setting this equal to (1,0,1) would require a=b=1/2 but then the middle coordinate is 1, not 0. So θ+γ is not estimable. Statements 2 and 3 only are correct. Source: Methods of Estimation PDF, Question 52, December 2014, page 32. The supplied answer-key page does not include Q52.\\n\\nOther-exam relevance: estimable functions, row spaces and rank-deficient linear models are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2014-jun-q53",
+      "type": "practice",
+      "format": "multi",
+      "year": 2014,
+      "session": "June",
+      "topic": "regression-t2 · constrained least squares and BLUE for angles with a sum constraint",
+      "stem": "Four angles θ₁,…,θ₄ of a quadrilateral satisfy θ₁+θ₂+θ₃+θ₄=2π. The observations are Yᵢ=θᵢ+εᵢ, where the errors are independent N(0,σ²). Which statements are correct?",
+      "statements": [
+        "The BLUE of θᵢ is Yᵢ−Ȳ+π/2, where Ȳ=(Y₁+Y₂+Y₃+Y₄)/4.",
+        "The BLUE of θᵢ is Yᵢ.",
+        "The residual sum of squares is 4(Ȳ−π/2)².",
+        "The residual sum of squares is Σᵢ(Yᵢ−π/2)²."
+      ],
+      "options": [
+        "Statements 1 and 3 only",
+        "Statements 1 and 4 only",
+        "Statements 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The least-squares adjustment subtracts the common discrepancy between the observed angle sum and 2π equally from each observation."
+        },
+        "B": {
+          "tf": false,
+          "why": "The raw observations generally do not satisfy the required angle-sum constraint, so they are not the constrained BLUEs."
+        },
+        "C": {
+          "tf": true,
+          "why": "Each residual equals Ȳ−π/2, so the sum of four squared residuals is 4(Ȳ−π/2)²."
+        },
+        "D": {
+          "tf": false,
+          "why": "This expression measures deviations from π/2 separately and is not the residual sum of squares after imposing the single sum constraint."
+        }
+      },
+      "explanation": "A quadrilateral's interior angles add to 2π. The observed total is ΣYᵢ, so its discrepancy from the required total is ΣYᵢ−2π. Because all four observations have the same error variance, the least-squares correction distributes this discrepancy equally: subtract (ΣYᵢ−2π)/4=Ȳ−π/2 from each observation. Thus θ̂ᵢ=Yᵢ−Ȳ+π/2, proving statement 1.\\n\\nThe fitted residual is Yᵢ−θ̂ᵢ=Ȳ−π/2 for every i. Squaring and adding four identical residuals gives SSE=4(Ȳ−π/2)², proving statement 3. Statements 2 and 4 are false. Therefore statements 1 and 3 only are correct. Source: Methods of Estimation PDF, Question 53, June 2014, page 33. The supplied answer-key page does not include Q53.\\n\\nOther-exam relevance: constrained least squares, linear restrictions and BLUE estimation are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2014-jun-q54",
+      "type": "practice",
+      "format": "multi",
+      "year": 2014,
+      "session": "June",
+      "topic": "inference-t13 · confidence intervals from the minimum of shifted exponential samples",
+      "stem": "Let X₁,…,Xₙ have density fθ(x)=e^{−(x−θ)} for x>θ and zero otherwise, with unknown θ∈ℝ. Let X₍₁₎=min(X₁,…,Xₙ). Which proposed intervals have confidence coefficient 1−α?",
+      "statements": [
+        "[X₍₁₎+(1/n)ln(α), X₍₁₎].",
+        "[X₍₁₎+(1/n)ln(α), X₍₁₎−(1/n)ln(α)].",
+        "[X₍₁₎+(1/n)ln(α/2), X₍₁₎+(1/n)ln(1−α/2)].",
+        "[X₍₁₎+(1/n)ln(α), X₍₁₎−(1/n)ln(1−α/2)]."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 1, 2 and 3 only",
+        "Statements 1, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "D",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The interval contains θ when X₍₁₎−θ≤−ln(α)/n, an event with probability 1−α."
+        },
+        "B": {
+          "tf": true,
+          "why": "Its upper endpoint is above X₍₁₎, while θ≤X₍₁₎ almost surely; the effective event is the same as for statement 1."
+        },
+        "C": {
+          "tf": true,
+          "why": "The two endpoints correspond to the exponential pivot lying between −ln(1−α/2)/n and −ln(α/2)/n, giving probability 1−α."
+        },
+        "D": {
+          "tf": true,
+          "why": "The upper endpoint is above X₍₁₎ and the lower endpoint gives the same 1−α event as statement 1."
+        }
+      },
+      "explanation": "The minimum of n independent shifted exponential observations has distribution X₍₁₎−θ~Exponential(rate n). Therefore, for t≥0, P(X₍₁₎−θ>t)=e^(−nt). Also θ≤X₍₁₎ with probability one.\\n\\nFor statement 1, the lower endpoint is X₍₁₎+ln(α)/n=X₍₁₎−[−ln(α)]/n. The interval contains θ exactly when X₍₁₎−θ≤−ln(α)/n, which has probability 1−e^{ln(α)}=1−α.\\n\\nIn statement 2, the upper endpoint is above X₍₁₎ because ln(α)<0, so it does not add a restriction beyond θ≤X₍₁₎. Its coverage is therefore still 1−α. Statement 4 has the same effective lower bound and an upper endpoint above X₍₁₎, so it also has coverage 1−α.\\n\\nFor statement 3, write T=X₍₁₎−θ. The event is −ln(1−α/2)/n≤T≤−ln(α/2)/n. Its probability is (1−α/2)−(α/2)=1−α. Thus all four proposed intervals have the required confidence coefficient. Source: Methods of Estimation PDF, Question 54, June 2014, page 34. The supplied answer-key page does not include Q54.\\n\\nOther-exam relevance: order statistics, exponential pivots and confidence intervals for location parameters are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2012-dec-q61",
+      "type": "practice",
+      "format": "single",
+      "year": 2012,
+      "session": "December",
+      "topic": "regression-t2 · estimability and BLUE in a three-observation linear model",
+      "stem": "Consider the linear model E(Y₁)=θ₁+2θ₂−2θ₃, E(Y₂)=θ₁+3θ₂−θ₃ and E(Y₃)=θ₂+θ₃, with uncorrelated errors of common variance. Which statement is true?",
+      "options": [
+        "2Y₁−Y₂−Y₃ is an unbiased estimator of θ₁−4θ₃.",
+        "2Y₁−Y₂−Y₃ is the BLUE of θ₁−4θ₃.",
+        "Y₂−3Y₃ is the BLUE of θ₁−4θ₃.",
+        "Y₁−4Y₃ is an unbiased estimator of θ₁−4θ₃."
+      ],
+      "answer": "B",
+      "explanation": "First check the expectation of each proposed linear estimator. Using the model means, E(2Y₁−Y₂−Y₃)=2(θ₁+2θ₂−2θ₃)−(θ₁+3θ₂−θ₃)−(θ₂+θ₃)=θ₁−4θ₃. So options A and B at least have the required unbiasedness. Similarly E(Y₂−3Y₃)=θ₁+3θ₂−θ₃−3θ₂−3θ₃=θ₁−4θ₃, so option C is also unbiased. Option D has expectation θ₁−2θ₂−6θ₃, so it is not unbiased.\\n\\nTo decide which unbiased estimator is BLUE, use the fact that the errors are uncorrelated with common variance σ². The variance of a linear combination ΣcᵢYᵢ is σ²Σcᵢ². The coefficient vectors for the first two unbiased estimators are (2,−1,−1) and (0,1,−3), with squared lengths 6 and 10, respectively. The first therefore has smaller variance. It is the BLUE, so option B is correct. Source: Methods of Estimation PDF, Question 61, December 2012, page 37. The supplied answer-key page does not include Q61.\\n\\nOther-exam relevance: estimable functions, unbiased linear estimation and BLUE comparisons are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2012-dec-q62",
+      "type": "practice",
+      "format": "multi",
+      "year": 2012,
+      "session": "December",
+      "topic": "inference-t4 · likelihood and maximum-likelihood estimation with right-censored gamma lifetimes",
+      "stem": "Battery lifetimes have density f(t)=λ²t e^{−λt}, t≥0, λ>0. One battery fails at 3 hours; another is observed for 2 hours without failing. Which statements are necessarily correct?",
+      "statements": [
+        "The censoring is Type II censoring.",
+        "The likelihood is proportional to λ²(1+2λ)e^{−5λ}.",
+        "The MLE of λ is 2.",
+        "The MLE of 1/λ is 2."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 2 and 4 only",
+        "Statements 1, 3 and 4 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The second battery is right-censored at a fixed observation time; this is not Type II censoring, which stops after a fixed number of failures."
+        },
+        "B": {
+          "tf": true,
+          "why": "The exact failure contributes f(3)=9λ²e^(−3λ); the survivor contributes S(2)=e^(−2λ)(1+2λ). Constants independent of λ can be omitted."
+        },
+        "C": {
+          "tf": false,
+          "why": "The likelihood is maximised at λ=1/2, not 2."
+        },
+        "D": {
+          "tf": true,
+          "why": "The MLE of the reciprocal mean parameter 1/λ is 2."
+        }
+      },
+      "explanation": "For a gamma distribution with shape 2 and rate λ, the density is f(t)=λ²t e^(−λt), and the survival probability is S(t)=P(T>t)=e^(−λt)(1+λt).\\n\\nThe first battery fails exactly at time 3, so its likelihood contribution is f(3)=9λ²e^(−3λ). The second battery has not failed by time 2, so its contribution is S(2)=e^(−2λ)(1+2λ). Multiplying and dropping the constant 9 gives L(λ)∝λ²(1+2λ)e^(−5λ).\\n\\nThe log-likelihood derivative is 2/λ+2/(1+2λ)−5. Setting it to zero gives 10λ²−λ−2=0, whose positive root is λ̂=1/2. Hence the MLE of 1/λ is 2. The experiment is fixed-time right censoring, not Type II censoring. Thus statements 2 and 4 only are true.\\n\\n**Source scan discrepancy:** the printed likelihood expression appears to show (1+3λ); the correct survivor function at time 2 is e^(−2λ)(1+2λ). The bank uses the likelihood derived from the stated gamma density and censoring information. Source: Methods of Estimation PDF, Question 62, December 2012, page 38. The supplied answer-key page does not include Q62.\\n\\nOther-exam relevance: censored likelihoods, survival functions and gamma/exponential lifetime models are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2012-dec-q63",
+      "type": "practice",
+      "format": "multi",
+      "year": 2012,
+      "session": "December",
+      "topic": "regression-t4 · regression fit expansion, adjusted R-squared and variance inflation",
+      "stem": "For i.i.d. pairs (Xᵢ,Yᵢ), compare regression of Y on X with regression of Y on X and X². Which statements are necessarily correct?",
+      "statements": [
+        "The residuals from regression of Y on X have the same variance.",
+        "The multiple R² from adding X² cannot be smaller than the R² from using X alone.",
+        "The adjusted R² from adding X² cannot be smaller than the adjusted R² from using X alone.",
+        "The variance of the estimated coefficient of X in the model with X and X² is larger than in the model with X alone."
+      ],
+      "options": [
+        "Statements 1 and 2 only",
+        "Statements 2 and 4 only",
+        "Statements 1, 2 and 3 only",
+        "All four statements"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Residual variances depend on the leverage values and need not be identical across observations."
+        },
+        "B": {
+          "tf": true,
+          "why": "The model with X and X² contains the model with X alone by setting the coefficient of X² to zero, so its residual sum of squares cannot increase and R² cannot decrease."
+        },
+        "C": {
+          "tf": false,
+          "why": "Adjusted R² penalises additional regressors and can decrease when X² adds too little explanatory power."
+        },
+        "D": {
+          "tf": true,
+          "why": "Adding X² introduces an additional regressor. The variance of the coefficient of X is inflated by the factor 1/(1−r²) relative to the simple regression, where r is the sample correlation between the centred X and X² columns."
+        }
+      },
+      "explanation": "Statement 1 is false: even when the original errors have constant variance, the fitted residuals have covariance matrix σ²(I−H), so their individual variances are σ²(1−hᵢᵢ), which generally differ.\\n\\nStatement 2 is true. The expanded model can reproduce the original fit by setting the coefficient of X² equal to zero. Its least-squares residual sum of squares therefore cannot be larger, so the ordinary R² cannot be smaller.\\n\\nStatement 3 is false because adjusted R² includes a penalty for the extra predictor. If X² explains too little additional variation, adjusted R² decreases.\\n\\nStatement 4 is true when the design columns are not perfectly collinear: the variance of the slope for X in the two-regressor model is σ²/[Sxx(1−r²)], compared with σ²/Sxx in the one-regressor model. Since 1/(1−r²)≥1, the variance is no smaller and is strictly larger when r≠0. The printed statement says 'larger'; this is true for the usual nonzero sample correlation, but equality is possible when r=0. Strictly speaking, it is not universally larger without an additional condition. The source's use of 'necessarily' therefore makes D not universally true if the sample design has r=0. The robust conclusion is B only; D is a variance-inflation tendency, not an unconditional strict inequality.\\n\\nSource: Methods of Estimation PDF, Question 63, December 2012, page 39. The supplied answer-key page does not include Q63.\\n\\nOther-exam relevance: nested regression, R², adjusted R² and multicollinearity are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
+    },
+    {
+      "id": "csir-meth-2012-dec-q64",
+      "type": "practice",
+      "format": "single",
+      "year": 2012,
+      "session": "December",
+      "topic": "regression-t2 · rank of polynomial design matrices and estimability",
+      "stem": "Consider E(Y)=Xβ, where X is an n×n matrix with entries xᵢⱼ=1+ij+i²j² for 1≤i,j≤n. For which listed value of n is the full parameter vector β estimable?",
+      "options": [
+        "n=20",
+        "n=3",
+        "n=10",
+        "n=50"
+      ],
+      "answer": "B",
+      "explanation": "Write each matrix entry as 1+ij+i²j². Every column of X is a linear combination of the three vectors (1,1,…,1)ᵀ, (1,2,…,n)ᵀ and (1²,2²,…,n²)ᵀ, because the j-th column is 1·1-vector + j·i-vector + j²·i²-vector. Therefore rank(X)≤3 for every n.\\n\\nThe full n-dimensional parameter vector β is estimable exactly when X has full column rank n. Since rank(X)≤3, this is impossible for n>3. When n=3, X is a 3×3 matrix formed from three linearly independent polynomial columns (the Vandermonde-type factors at j=1,2,3), so its rank is 3. Thus β is estimable only for n=3, option B. Source: Methods of Estimation PDF, Question 64, December 2012, page 39. The supplied answer-key page does not include Q64.\\n\\nOther-exam relevance: rank, design matrices and estimability in linear models are syllabus-relevant to UGC NET/JRF Statistics, CSIR-UGC NET Mathematical Sciences, GATE Statistics and State SET Statistics. This is syllabus overlap, not a claim that this exact question appeared in those examinations."
     }
   ]
 }
