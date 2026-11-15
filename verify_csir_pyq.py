@@ -147,6 +147,10 @@ def main() -> None:
     assert "".join(sorted(k for k, value in q85["verdicts"].items() if value["tf"])) == "BD"
     assert "48θ²+θ" in q85["explanation"] and "answer-key page 53 lists statements 1 and 3" in q85["explanation"]
 
+    q11 = next(x for x in methods["items"] if x["id"] == "csir-meth-2022-feb-q11")
+    assert q11["year"] == 2022 and q11["session"] == "February" and q11["answer"] == "C"
+    assert "".join(sorted(k for k, value in q11["verdicts"].items() if value["tf"])) == "ABC"
+    assert "not guaranteed to be zero for D" in q11["explanation"]
     q24 = next(x for x in sampling["items"] if x["id"] == "csir-samp-q24")
     assert q24["topic"].startswith("sampling-t10"), "CSIR Sampling Q24 must map to the SRSWR/SRSWOR lesson"
     assert q24["answer"] == "C", "CSIR Sampling Q24 answer key must remain statement 3 only"
