@@ -887,3 +887,16 @@ Five additional questions were imported after visual inspection:
 - Pages 627, 629, 630, 632, 634 and 635 were already imported in the preceding batch and were not duplicated.
 
 The p625 MLE is the sample minimum, whose shifted-exponential scale is σ/n. For p628, the delta method gives asymptotic variance 1/(4m)+1/(4n) for √X̄−√Ȳ under H₀. For p631, refusal occurs with zero or one no-show; the Poisson(2.5) approximation gives e^(−2.5)(1+2.5). Page 633 is keyed using linearity of expectation, which does not require independence.
+
+
+## Batch 57 — pages 637–648
+
+Four additional questions were imported after visual inspection:
+- **Statistical Inference (3):** consistency and limiting mean of the full-data and sign-only MLEs in a bounded normal-location model, p638; unbiasedness of the sample variance across four candidate families, p639; and power calibration for a one-observation Cauchy location test, p645.
+- **Stochastic Processes (1):** conditional arrival-time probability in a Poisson process given the second arrival time, p646.
+
+### Pages held out after inspection
+- **Page 637:** the printed single-choice item has two mathematically correct choices: the UMP test rejects for large X²+Y, and under H₀ the statistic X²+Y has a chi-square distribution with three degrees of freedom. It is excluded rather than forcing a single answer.
+- Pages 640, 641, 642, 643, 644, 647 and 648 were already imported and were not duplicated.
+
+For p638, the sign-only observations are Bernoulli with success probability Φ(θ); the inverse-CDF MLE is consistent, and boundedness gives convergence of its expectation. For p639, the sample variance is unbiased for the population variance, which equals θ in the Poisson(θ) and Normal(0,θ) models only. For p645, the standard Cauchy alternative is symmetric, so the threshold C=0 gives power one-half. For p646, conditional on the second Poisson arrival at 40 minutes, the first arrival is uniform on (0,40), giving probability 1/4 of occurring after minute 30.
