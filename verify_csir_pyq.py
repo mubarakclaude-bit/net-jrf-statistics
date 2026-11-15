@@ -635,6 +635,46 @@ def main() -> None:
     assert "".join(sorted(k for k, v in q79["verdicts"].items() if v["tf"])) == "BC"
     assert "".join(sorted(k for k, v in q80["verdicts"].items() if v["tf"])) == "BC"
 
+    # Methods of Estimation PDF: audited new additions from Questions 30–76.
+    new_multi = {
+        "csir-meth-2017-dec-q31": ("AB", "A"),
+        "csir-meth-2017-dec-q32": ("ABD", "C"),
+        "csir-meth-2016-jun-q36": ("AD", "A"),
+        "csir-meth-2016-jun-q41": ("ABCD", "D"),
+        "csir-meth-2015-dec-q49": ("C", "C"),
+        "csir-meth-2014-dec-q50": ("BD", "C"),
+        "csir-meth-2014-dec-q51": ("AC", "A"),
+        "csir-meth-2014-dec-q52": ("BC", "B"),
+        "csir-meth-2014-jun-q53": ("AC", "A"),
+        "csir-meth-2014-jun-q54": ("ABCD", "D"),
+        "csir-meth-2012-dec-q62": ("BD", "B"),
+        "csir-meth-2012-dec-q63": ("A", "A"),
+        "csir-meth-2012-dec-q65": ("BC", "B"),
+        "csir-meth-2012-jun-q70": ("ABC", "A"),
+        "csir-meth-2011-dec-q71": ("BD", "B"),
+        "csir-meth-2011-dec-q72": ("AD", "A"),
+        "csir-meth-2011-jun-q76": ("BC", "B"),
+    }
+    for qid, (truth, answer) in new_multi.items():
+        q = next(x for x in methods["items"] if x["id"] == qid)
+        assert q["type"] == "practice" and q["format"] == "multi"
+        assert q["answer"] == answer
+        assert "".join(sorted(k for k, v in q["verdicts"].items() if v["tf"])) == truth
+        assert "Other-exam relevance:" in q["explanation"]
+        assert "Source: Methods of Estimation PDF" in q["explanation"]
+    for qid, year, session, answer in [
+        ("csir-meth-2017-dec-q30", 2017, "December", "D"),
+        ("csir-meth-2016-jun-q38", 2016, "June", "D"),
+        ("csir-meth-2012-dec-q61", 2012, "December", "A"),
+        ("csir-meth-2012-dec-q64", 2012, "December", "B"),
+        ("csir-meth-2011-jun-q74", 2011, "June", "D"),
+    ]:
+        q = next(x for x in methods["items"] if x["id"] == qid)
+        assert q["type"] == "practice" and q["format"] == "single"
+        assert (q["year"], q["session"], q["answer"]) == (year, session, answer)
+        assert "Source: Methods of Estimation PDF" in q["explanation"]
+    assert len(methods["items"]) == methods["count"]
+
     # Q108 remains held: the source omits a lower bound on n, so strict efficiency claims are not universal.
     assert not any(x["id"] == "csir-est-q108" for x in estimation["items"])
 
