@@ -221,4 +221,4 @@ assert "T1" in "T1,T2"
 assert total==347,total
 
 
-print("PASS: 338 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 347 supplementary questions; source-key corrections recorded; ambiguous items held out.")
