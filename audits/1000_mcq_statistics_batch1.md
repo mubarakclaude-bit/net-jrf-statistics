@@ -945,3 +945,13 @@ Seven additional questions were imported after visual inspection:
 **Held out:** page 674 repeats the randomised normal linear-combination question already represented by page 560; it was not imported again.
 
 The p673 probability is 0.2²×0.8=0.032 because attempts after the first five remain independent. For p675, the likelihood ratio is 2x and the size-.2 upper-tail cutoff under Uniform(0,1) is 4/5. For p676, Y is complete sufficient for λ and has variance λ, so it is UMVU. For p677, under H₀, 4X~χ²₄, giving the upper-tail critical value χ²₄,α/4. For p678, P(Y=k)=(1−e^(−1/θ))e^(−k/θ), a geometric pmf on nonnegative integers. For p679, α=1/8 and β=87/128. For p680, the likelihood increases over θ≤min(Xᵢ), so θ̂=1.7 and the MLE of θ² is 2.89.
+
+
+## Batch 63 — pages 681–688
+
+Seven additional questions were imported after visual inspection:
+- **Statistical Inference (7):** consistency of order-statistic estimators for a shifted uniform distribution, p681; sufficiency of the sample sum across four distribution families, p682; the UMVUE of λ² for a Poisson sample, p683; two-sided and one-sided 90% confidence intervals for an exponential rate, p684; the UMVUE of the reciprocal mean of an exponential distribution, p685; the Cramér–Rao lower bound for estimating θ² under an exponential mean parameterisation, p686; and MLE of a reciprocal parameter under a Weibull-type density, p688.
+
+**Held out:** page 687 asks for a single unbiased estimator of θ² from a Normal(θ,2θ²) sample, but both ΣXᵢ²/(3n) and Σ(Xᵢ−X̄)²/[2(n−1)] are unbiased. The source's single-answer marking is therefore not unique; it was excluded rather than silently converted into an MSQ.
+
+The p681 maximum order statistic converges to θ+1/2, making option B converge to θ+1. In p682, the sum is sufficient for Poisson, exponential-rate and Bernoulli models, but not for Normal(0,σ²) with unknown variance, where the sum of squares is sufficient. For p683, the complete sufficient Poisson sum S gives UMVUE S(S−1)/n²; the observed value is 24. For p684, the pivot 2θΣXᵢ~χ²₂ₙ supports the central 90% interval and the one-sided upper 90% interval (with the source's upper-tail chi-square notation). For p685, E(1/S)=1/[(n−1)θ], giving the UMVUE (n−1)/S. Page 686 applies the CRLB with Iₙ(θ)=n/θ² and g′(θ)=2θ. Page 688 uses the invariance property after maximising n log θ−θΣXᵢ³.

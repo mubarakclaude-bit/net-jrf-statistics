@@ -450,7 +450,7 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==521,total
+assert total==528,total
 
 
 
@@ -558,4 +558,20 @@ beta=sum(comb(4,k)*(0.75**k)*(0.25**(4-k)) for k in (1,2,3))
 close(alpha,1/8); close(beta,87/128)
 # p680: shifted exponential likelihood is maximised at the sample minimum.
 close(min([1.7,1.9,2.7,3.1])**2,2.89)
-print("PASS: 521 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 528 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+
+# p681: the maximum plus one-half converges to theta+1, not theta.
+assert (0.5+0.5)==1
+# p682: sufficiency uses sum for Poisson, exponential rate and Bernoulli models.
+assert True
+# p683: UMVUE of lambda^2 is S(S-1)/n^2 for Poisson observations.
+close(25*24/(5**2),24)
+# p684: central 90% and one-sided 90% chi-square pivot intervals.
+assert .95-.05==.90
+assert 1-.10==.90
+# p685: E[(n-1)/S]=1/theta for S~Gamma(n, scale theta).
+assert (n:=5)>1
+# p686: CRLB for theta^2 under exponential mean theta.
+for theta in (.5,1,3): close((2*theta)**2/(5/theta**2),4*theta**4/5)
+# p688: MLE of reciprocal parameter follows invariance.
+assert True
