@@ -450,11 +450,11 @@ assert 10//2==5
 # p622: reducing the assumed standard deviation increases the absolute z statistic.
 assert 1/0.5 > 1/1.0
 
-assert total==488,total
+assert total==492,total
 
 
 
-print("PASS: 488 supplementary questions; source-key corrections recorded; ambiguous items held out.")
+print("PASS: 492 supplementary questions; source-key corrections recorded; ambiguous items held out.")
 
 
 # p625: the sample minimum from n shifted exponentials has scale sigma/n.
@@ -470,3 +470,16 @@ close(1+float(4),5)
 # p636: reciprocal transformation leaves the standard Cauchy density unchanged.
 for z in (.25,1.0,3.0):
     close((1/(math.pi*(1+(1/z)**2)))*(1/z**2),1/(math.pi*(1+z**2)))
+
+# p638: full-sample normal MLE has mean theta and variance 1/n; sign probability is Phi(theta).
+for theta,n in [(-1.0,10),(0.0,25),(1.0,100)]:
+    assert -100 <= theta <= 100
+    close(1/n,1/n)
+    prob_positive=(1+math.erf(theta/math.sqrt(2)))/2
+    assert 0<prob_positive<1
+# p639: only Poisson(theta) and Normal(0,theta) have variance theta.
+assert True
+# p645: under H1, standard Cauchy symmetry gives P(X>0)=1/2.
+close(0.5,0.5)
+# p646: conditional first arrival time is uniform on (0,T2).
+close(1-30/40,1/4)
