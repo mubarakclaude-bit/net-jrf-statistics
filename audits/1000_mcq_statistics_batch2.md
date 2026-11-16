@@ -483,3 +483,34 @@ Eight questions were transcribed and independently checked:
 - Total: **707 supplementary items** on this branch (121 additions in this batch branch).
 
 Pages 888 and 889 are linked: both retain the source's without-replacement sampling setup. The variance solution uses the finite-population correction.
+
+
+## Further verified additions — pages 891–900
+
+Seven additional questions were visually transcribed and independently solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 891 | `mcq1000-p891` | Probability T1 — ordering of iid continuous variables | B, 1/6 |
+| 893 | `mcq1000-p893` | Stochastic Processes T6 — expected waiting time for consecutive heads | A, B and D |
+| 896 | `mcq1000-p896` | Probability T10 — products of independent normal variables | B, statements A, B and C |
+| 897 | `mcq1000-p897` | Multivariate T2 — validity of a correlation matrix | C, identity matrix |
+| 898 | `mcq1000-p898` | Probability T10 — expectation of the standard normal cdf at a normal variable | D, none of A–C |
+| 899 | `mcq1000-p899` | Statistical Inference T9 — Neyman–Pearson power | A, 0.0975 |
+| 900 | `mcq1000-p900` | Statistical Inference T12 — size and power for a Uniform family | statements A and B, size 0.15 and power 0.68 |
+
+### Source corrections and holds
+- **Page 900:** the source's printed answer 0.83 does not follow from the displayed Uniform(θ,θ²) models and rejection region. Direct calculation gives size 0.15 and power 0.68; the item records the correction.
+- **Page 892:** the displayed Pareto-like density has support (x>0), on which it is not integrable. A likely (x>1) correction cannot be silently assumed; held.
+- **Page 894:** for 10 draws with replacement from 10 values, (P(i\text{ included})=1-0.9^{10}\approx0.6513) and the expected number of distinct values is about 6.513. The printed 0.613 and 6.13 correspond to 9 draws, not 10; held.
+- **Page 895:** the random-walk starting position/boundary context needed to define (P_i) is not provided; held.
+
+### Updated branch counts
+- Probability: **474**
+- Statistical Inference: **210**
+- Multivariate: **16**
+- Stochastic: **10**
+- Regression: **4**
+- Total: **714 supplementary items** on this branch (128 additions in this batch branch).
+
+The source's numeric/key discrepancies are documented rather than copied into the learner bank.
