@@ -514,3 +514,35 @@ Seven additional questions were visually transcribed and independently solved:
 - Total: **714 supplementary items** on this branch (128 additions in this batch branch).
 
 The source's numeric/key discrepancies are documented rather than copied into the learner bank.
+
+
+## Further verified additions — pages 901–910
+
+Six additional questions were independently solved from enlarged scans:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 901 | `mcq1000-p901` | Probability T4 — second moment of a weighted normal sum | Numeric: 385 |
+| 903 | `mcq1000-p903` | Probability T13 — mode of a chi-square distribution | Numeric: 7 |
+| 904 | `mcq1000-p904` | Probability T6 — Cauchy moments and covariance existence | Undefined |
+| 907 | `mcq1000-p907` | Statistical Inference T13 — shortest confidence interval for shifted exponential location | Numeric: 0.4816 |
+| 908 | `mcq1000-p908` | Statistical Inference T9 — Neyman–Pearson power | Numeric: 0.09 (rounded) |
+| 910 | `mcq1000-p910` | Statistical Inference T9 — likelihood-ratio critical value for normal means | Numeric: 1.6449 |
+
+### Corrections and exclusions
+- **Page 904:** the source answer 0 is not mathematically defined as a covariance. Although sign and magnitude are independent for a symmetric Cauchy variable, (E|Z|=\infty); covariance does not exist. The bank explicitly answers “Undefined”.
+- **Page 907:** the shortest 91% interval length is (-\ln(0.09)/5\approx0.4816), not the printed 0.018.
+- **Page 908:** size 0.06 gives cutoff (c=0.18); the power is (sqrt{1.18}-1\approx0.0863), which rounds to 0.09, not 0.08.
+- **Page 902:** the normal mean notation is not legible enough to determine the intended model and moment equation; held.
+- **Pages 905 and 906:** exact duplicates of pages 881 and 899 respectively; excluded.
+- **Page 909:** an MSE cannot be computed without specifying the estimator whose MSE is requested; held.
+
+### Updated branch counts
+- Probability: **477**
+- Statistical Inference: **213**
+- Multivariate: **16**
+- Stochastic: **10**
+- Regression: **4**
+- Total: **720 supplementary items** on this branch (134 additions in this batch branch).
+
+Numeric-response items use the repository's numeric format with explicit worked solutions and verification checks.
