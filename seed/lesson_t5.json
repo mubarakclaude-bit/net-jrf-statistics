@@ -7,7 +7,7 @@
   "engine": "B",
   "engineName": "Estimation and inference — matching what you observe to what the model predicts",
   "estMin": 51,
-  "version": "1.5",
+  "version": "1.6",
   "status": "approved",
   "provenance": "Review pass, October 2026: 5 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. Theory, worked examples and practice authored for this platform against the UGC NET Statistics syllabus. Previous-year questions are stored separately and carry their exam cycle. Content enhancement, November 2026: expanded minimum chi-square for grouped counts; clarified the exact normal-error condition under which OLS and MLE coefficient estimates coincide, distinguished BLUE from MLE, and added the residual orthogonality check with the intercept condition. Reference: uploaded CSIR NET Methods of Estimation collection, Sept 2022 Question 9 (page 4) and related regression-estimation items.",
   "objectives": [
@@ -868,6 +868,49 @@
       }
     },
     {
+      "kind": "theory",
+      "title": "Sample quantiles — consistency and asymptotic precision",
+      "mins": 7,
+      "objective": "Recognise a sample quantile as an estimator, state its large-sample distribution, and compare its precision with the sample mean.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "The sample p-quantile estimates a population quantile",
+          "body": "Let qₚ be the population p-quantile, so F(qₚ)=p. The sample p-quantile is the corresponding order-statistic-based estimate. If the observations are iid, F is continuous near qₚ, and the density f(qₚ) is positive, the sample quantile is consistent for qₚ."
+        },
+        {
+          "t": "formula",
+          "h": "Asymptotic distribution",
+          "body": "√n( q̂ₚ − qₚ )  →d  N(0, p(1−p) / f(qₚ)²).\nTherefore its large-sample variance is approximately p(1−p) / [n f(qₚ)²]. The density at the target quantile matters: a flatter density means greater uncertainty."
+        },
+        {
+          "t": "step",
+          "h": "Location-uniform example",
+          "body": "If Xᵢ ~ U(θ−1, θ+1), then E(Xᵢ)=θ and Var(Xᵢ)=1/3. The sample mean is consistent and √n(X̄−θ) →d N(0, 1/3). The population 75th percentile is θ+1/2, and f(q₀.₇₅)=1/2. Thus q̂₀.₇₅−1/2 estimates θ and has asymptotic variance 0.75/n."
+        },
+        {
+          "t": "note",
+          "h": "Compare before choosing",
+          "body": "Both estimators are consistent and asymptotically normal in this model, but the sample mean has the smaller asymptotic variance: 1/(3n) versus 3/(4n). Do not confuse consistency (the estimator converges to the target) with efficiency (how much variance it has)."
+        },
+        {
+          "t": "trap",
+          "h": "Exam checklist",
+          "body": "First identify the population quantity being estimated. If a sample quantile estimates qₚ but the parameter is θ, apply the correct centring or transformation. Then use p(1−p)/f(qₚ)² for the asymptotic variance of √n(q̂ₚ−qₚ), not the variance of an individual observation."
+        },
+        {
+          "t": "note",
+          "h": "CSIR NET connection",
+          "body": "The uploaded Estimation CSIR NET (2011–2025) PDF, Question 34 (26 Nov 2020), compares a sample-mean estimator with a sample 75th-percentile estimator through consistency, asymptotic normality and asymptotic variance."
+        }
+      ],
+      "id": "s11c",
+      "ask": {
+        "q": "For a sample 75th percentile, which value of p goes into the asymptotic variance formula?",
+        "nudge": "Use p = 0.75, so p(1−p) = 0.75 × 0.25."
+      }
+    },
+    {
       "kind": "summary",
       "title": "What you should now be able to do unaided",
       "mins": 3,
@@ -881,6 +924,7 @@
         "Write the minimum chi-square and modified minimum chi-square criteria, and name the data they need.",
         "Derive the least squares normal equations by either route, and keep straight that normality is what joins least squares to maximum likelihood rather than something least squares assumes.",
         "Check whether a requested linear function of β is estimable: it must lie in the row space of X, or be orthogonal to every vector in the null space of X.",
+        "For a sample p-quantile, use the asymptotic variance p(1−p)/[n f(qₚ)²], and distinguish consistency from asymptotic efficiency.",
         "The mastery test is ten unseen questions across all of this. Hints are off. The pass is 80% overall with 70% floors on the numerical and multi-statement items."
       ],
       "id": "s12"
