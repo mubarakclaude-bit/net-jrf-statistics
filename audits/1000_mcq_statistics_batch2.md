@@ -701,3 +701,22 @@ Eight additional questions were verified from enlarged page images:
 - Total: **762 supplementary items** on this branch (176 additions in this batch branch).
 
 This completes the page-by-page eligibility pass for the remaining unreviewed 1012–1044 segment. Pages with unreadable, underspecified, invalid or duplicate content remain excluded and documented rather than being forced into the bank.
+
+
+## Final duplicate reconciliation — batch 2
+
+A normalized-stem comparison across all five supplementary pools found two exact duplicates against the first imported batch:
+- Page 837 duplicated page 641 (integer-constrained normal MLE).
+- Page 952 duplicated page 265 (variance of a standard-normal linear combination).
+
+The later copies (pages 837 and 952) were removed from batch 2; the first imported items remain. A repeat exact-normalised-stem scan across all five supplementary pools now finds **zero exact stem duplicates** within the combined pools.
+
+### Final corrected batch-2 counts
+- Probability: **499**
+- Statistical Inference: **230**
+- Multivariate: **16**
+- Stochastic: **11**
+- Regression: **4**
+- Total: **760 supplementary items**, including **174 new non-duplicate additions** in batch 2 over the 586-item batch-1 baseline.
+
+This exact-stem reconciliation is not a complete semantic-equivalence audit of every question in every seed file. Similar questions with different formulations or numerical conditions still require reviewer judgment.
