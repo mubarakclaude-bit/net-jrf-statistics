@@ -1115,3 +1115,30 @@ Updated counts: Probability 536, Statistical Inference 255, Multivariate Analysi
 ### Duplicate reconciliation — page 247
 
 A full normalized-stem scan found that page 247 duplicates the Poisson reciprocal-expectation question already present as `mcq1000-p877`. The later duplicate `mcq1000-p247` was removed; the earlier page-877 item is retained. The corrected pool count is Probability 535 and **830 total supplementary items** (244 batch-2 additions over the 586-item baseline).
+
+
+## Additional source review — pages 420–482
+
+Sixteen independently checked items were retained:
+
+- **Page 420 — retained as multi-select.** For independent symmetric variables with \(P(X_n=\pm n)=1/(n^2+1)\), the variance is bounded by 2 and \(\sum\operatorname{Var}(X_n)/n^2<\infty\). Kolmogorov's strong law gives \(S_n/n\to0\) almost surely; the mean is also zero. Added as `mcq1000-p420`.
+- **Page 427 — retained as multi-select.** For the simple hypotheses Uniform(0,1) versus density 6x(1−x), the level-α most powerful region is the central interval \(((1-\alpha)/2,(1+\alpha)/2)\); its power is \(3\alpha/2-\alpha^3/2>\alpha\). Added as `mcq1000-p427`.
+- **Page 428 — retained as multi-select.** For a shifted exponential sample, the likelihood depends on the sample through its minimum and sum; the stated range and scaled mean-minus-minimum properties were derived. Added as `mcq1000-p428`.
+- **Page 431 — retained as multi-select.** The symmetric density \((15/4)x^2(1-x^2)\) has mean and median zero and variance 3/7. Added as `mcq1000-p431`.
+- **Page 433 — retained.** A density proportional to x⁴ on (−3,3) is symmetric, so its expectation is zero. Added as `mcq1000-p433`.
+- **Page 435 — retained.** For an exponential distribution with mean λ, \(E(X^2)=2\lambda^2\); hence the average of squared observations divided by 2 is unbiased for λ². Added as `mcq1000-p435`.
+- **Page 436 — retained.** The two-observation likelihoods are 0.09 under θ₀ and 0.15 under θ₁, so the MLE is θ₁. Added as `mcq1000-p436`.
+- **Page 440 — retained.** For an exponential(rate θ) density, \(E(X)=1/\theta\), so \(f(E(X))=\theta/e\). Added as `mcq1000-p440`.
+- **Page 448 — retained.** For the geometric distribution on {0,1,…}, memorylessness gives \(P(X=11\mid X>10)=1/3\). Added as `mcq1000-p448`.
+- **Page 451 — retained.** For Poisson(λ), \(E[X(X-1)]=\lambda^2\); the sample average of \(X_i(X_i-1)\) is unbiased for λ². Added as `mcq1000-p451`.
+- **Page 455 — retained.** Powers of 7 modulo 5 have period four; four of the 16 equally likely residue pairs make the sum divisible by 5, giving probability 1/4. Added as `mcq1000-p455`.
+- **Page 456 — retained.** Five dice summing to 7 correspond to 15 nonnegative integer compositions of 2, giving probability \(15/6^5\). Added as `mcq1000-p456`.
+- **Page 457 — retained.** The two marginal probabilities do not determine the intersection; the Fréchet bounds give \(31/40\le P(A\cap B)\le7/8\). Added as `mcq1000-p457`.
+- **Page 475 — retained as multi-select.** Conditional on the total successes, two independent binomial counts with common p yield a hypergeometric conditional distribution with the standard mean and variance. Added as `mcq1000-p475`.
+- **Page 478 — retained as multi-select with the common-rate assumption made explicit.** Independent Gamma variables with common rate add to Gamma, and their ratios to sums have Beta distributions. Added as `mcq1000-p478`.
+- **Page 479 — retained as multi-select.** For independent standard normals, the transformed variable has finite variance and is negative with probability 1/2; both compared expectations in the source are zero. Added as `mcq1000-p479`.
+- **Page 482 — retained.** For Binomial(n,p), the adjacent-pmf ratio \(P(X=x)/P(X=x-1)=((n-x+1)/x)(p/(1-p))\) decreases in x. Added as `mcq1000-p482`.
+
+Pages 418 (near-duplicate of the existing uniform-extremes sufficiency item), 430 (printed power options do not match the derived result), 452 (ambiguous deviation convention), 454 (non-statistics betting puzzle), 460 (pmf parameter normalisation is inconsistent), 463 (Gamma parameterisation omitted), 464 (duplicates the existing exponential one-sided interval), 466 (the “minimal length” convention is not specified), and 472/474 (the distribution labels are corrupted) were not imported.
+
+Updated counts: Probability 547, Statistical Inference 260, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **847 total supplementary items**. Batch 2 contributes 261 over the 586-item baseline.
