@@ -140,3 +140,36 @@ The ten new items were compared against the corresponding Probability and Statis
 - Total: **619 supplementary items** on this branch, including the 33 additions made in batch 2.
 
 Page 770 remains held because the upper endpoint in the Uniform model is visually ambiguous. These additions remain draft-only.
+
+
+## Further verified additions — pages 781–789
+
+Seven additional questions were transcribed from enlarged page images and independently solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 781 | `mcq1000-p781` | Probability T6 — exponential/Gamma lifetime and series reliability | B, (2e^{-2}) |
+| 782 | `mcq1000-p782` | Probability T2 — conditional density | B, (1/27) |
+| 783 | `mcq1000-p783` | Statistical Inference T10 — likelihood-ratio/variance test direction | A, upper-tail residual sum of squares |
+| 786 | `mcq1000-p786` | Statistical Inference T4 — geometric MLE | D, (1/(1+\bar X)) |
+| 787 | `mcq1000-p787` | Statistical Inference T5 — method of moments | C, (sum X_i^2/n) |
+| 788 | `mcq1000-p788` | Statistical Inference T6 — Fisher information | B, (1/3) |
+| 789 | `mcq1000-p789` | Statistical Inference T3 — UMVU estimator | A, (((n+1)/n)X_{(n)}) |
+
+### Source correction
+- **Page 783:** the scan marks option B, but the stated alternative is (sigma^2>sigma_0^2). The rejection region must therefore be an upper-tail region with a large residual sum of squares. We corrected the key to A and explicitly recorded the discrepancy rather than repeating the source mark.
+
+### Pages held out in this range
+- **Page 784:** the displayed model statement is incomplete/ambiguous, so the likelihood and parameter cannot be transcribed confidently.
+- **Page 785:** the displayed target moment appears incompatible with the stated Uniform(-θ,0) model and all listed choices; held pending source clarification.
+- **Page 790:** for the printed Beta(1,θ) model, the likelihood ratio depends on (prod(1-X_i)), not simply (prod X_i) as in the listed critical regions. The source's marked option is not justified by the displayed model; excluded.
+
+### Updated branch counts
+- Probability: **417**
+- Statistical Inference: **183**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **7**
+- Total: **626 supplementary items** on this branch (40 additions in this batch branch).
+
+These additions are still draft-only and require latest-head CI and review.
