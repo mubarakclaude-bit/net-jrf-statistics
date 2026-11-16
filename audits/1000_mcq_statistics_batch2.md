@@ -821,3 +821,8 @@ Current branch counts after these additions: Probability 502, Statistical Infere
 Page 121, question 4 was deliberately excluded: the source gives \(P(A)=0.3\), \(P(A\cup B)=0.1\), and \(P(A\cap B)=0.5\), which violates \(P(A\cap B)\le P(A\cup B)\). The supplied answer key cannot repair an internally impossible probability specification.
 
 Updated branch counts: Probability 507, Statistical Inference 233, Multivariate Analysis 18, Stochastic Processes 11, Regression 4 — **773 supplementary items**. The batch-2 branch now contributes 187 items over the 586-item batch-1 baseline.
+
+
+### Topic-to-lesson mapping verification
+
+The new questions were checked against the actual lesson seed `topicId` values and corrected to their matching existing Paper 2 lessons: page 30 → `inference-t5` (Method of Moments); page 32 → `probability-t7` (inequalities); page 78 → `probability-t3` (conditional expectation/total variance); page 115 → `probability-t9` (convergence and limit laws); pages 120 Q2 and 121 Q5 → `probability-t12` (probability axioms/complement rule); page 120 Q3 → `probability-t8` (random chord selection/independence foundations); page 143 → `probability-t13` (sampling distributions); pages 71 and 96 → `multivariate-t1`. This replaces provisional topic tags where necessary; no new lesson seed was required.
