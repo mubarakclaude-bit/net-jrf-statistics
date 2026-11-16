@@ -742,3 +742,18 @@ This question is distinct in its integer-constrained Laplace likelihood from the
 - **Total: 761 supplementary items**
 
 Page 770 was rechecked at higher resolution and is legible, but it asks for the ordinary MLE of the endpoint in Uniform(0,50), namely the sample maximum. It is not added because this is already represented by several Uniform-endpoint MLE/sufficiency questions in the existing supplementary pool; it would add little new practice value. Pages 785, 790 and the other held items remain excluded for the mathematical or source-quality reasons recorded above.
+
+
+## Re-review of previously omitted page 930
+
+The enlarged page image clearly states that (X_1,X_2,X_3) are iid Uniform(0,1) and asks for (P(X_1+X_2+X_3\le1)). The event is the tetrahedron in the unit cube bounded by the coordinate planes and (x_1+x_2+x_3=1). Its volume is (1/3!=1/6), matching the source's numerical answer 0.17 to two decimal places. Added as `mcq1000-p930`, mapped to Probability T8 (joint probability/independence), with the integral and geometric argument in the explanation.
+
+### Updated branch pool counts after p930
+- Probability: 500
+- Statistical Inference: 231
+- Multivariate Analysis: 16
+- Stochastic Processes: 11
+- Regression: 4
+- **Total: 762 supplementary items**
+
+Page 871 was also rechecked at high resolution. The likelihood ratio is decreasing in (x), so the most powerful region is a lower tail; however, the displayed level (alpha=0.009) gives cutoff (c=\sqrt[3]{0.009}\approx0.208) under the null, which is not among the listed choices. The source-marked cutoff 0.3 has size 0.027, not 0.009. It remains excluded rather than importing an inconsistent answer.
