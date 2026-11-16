@@ -453,3 +453,33 @@ Nine further questions were checked and solved:
 - Total: **699 supplementary items** on this branch (113 additions in this batch branch).
 
 Page 878's reciprocal Beta moment was not assumed finite for all (p>0): it exists only for (p>1), and then equals ((p+q-1)/(p-1)). This is why the source's listed (q/p) is rejected.
+
+
+## Further verified additions — pages 882–890
+
+Eight questions were transcribed and independently checked:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 882 | `mcq1000-p882` | Probability T11 — Fourier transform/characteristic function identity | C, (pi e^{-|x|}) |
+| 884 | `mcq1000-p884` | Probability T4 — MGF of zero-truncated Poisson | B, ((e^{\lambda e^t}-1)/(e^\lambda-1)) |
+| 885 | `mcq1000-p885` | Probability T4 — existence of an MGF | C, does not exist |
+| 886 | `mcq1000-p886` | Probability T4 — moment-generating functions | A, both expressions |
+| 887 | `mcq1000-p887` | Probability T5 — minimum of independent geometric variables | A, geometric |
+| 888 | `mcq1000-p888` | Probability T8 — expectation in sampling without replacement | D, (n(N+1)/2) |
+| 889 | `mcq1000-p889` | Probability T8 — variance with finite-population correction | D, (n(N+1)(N-n)/12) |
+| 890 | `mcq1000-p890` | Statistical Inference T12 — factors affecting Type II error | C, sample size and test size |
+
+### Pages held out
+- **Page 881:** the notation for the requested function (r_2(e^{itx})) is not sufficiently clear to identify whether a characteristic function or another transform is intended. Although the stated factorial moments resemble the standard exponential distribution, the requested quantity is ambiguous.
+- **Page 883:** the printed condition (|E(e^{itX})|=5) is impossible for a characteristic function, whose modulus cannot exceed 1. The source expression is likely corrupted; excluded.
+
+### Updated branch counts
+- Probability: **471**
+- Statistical Inference: **208**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **9**
+- Total: **707 supplementary items** on this branch (121 additions in this batch branch).
+
+Pages 888 and 889 are linked: both retain the source's without-replacement sampling setup. The variance solution uses the finite-population correction.
