@@ -1024,3 +1024,20 @@ Reconciled pool counts: Statistical Inference 248, Probability 521, Multivariate
 ### Correction to the pool-to-topic note above
 
 The page 103 item was restored to its original Statistical Inference pool because its question ID already exists in the batch-1 base branch and the repository's ID-stability contract prohibits moving an existing question between pool files (it would orphan saved learner attempts). Its topic tag is now `inference-t3`, retaining the original pool file and stable ID. The corrected counts are Statistical Inference 249 and Probability 520; total remains **806**. This supersedes the earlier statement that the item was moved into the Probability pool.
+
+
+## Early-source review — pages 3–37
+
+The original scan was reopened and selected unbanked pages were independently checked. Seven useful items were retained:
+
+- **Page 10 — retained as multi-select.** Function A integrates to 1/2 and is not normalised; function C integrates to 1 but becomes negative at x=2. Function B is a valid density. Added as `mcq1000-p010`.
+- **Page 15 — retained as multi-select.** Under the likelihood factorisation for a sufficient statistic, an existing MLE can be selected as a function of T; the standard identity \(\operatorname{MSE}=\operatorname{Bias}^2+\operatorname{Var}\) is also true. Added as `mcq1000-p015`.
+- **Page 25 — retained as multi-select.** With standard normal marginals, either joint normality plus zero covariance (established by the stated linear-combination variance condition) or joint-MGF factorisation implies independence. Zero covariance alone and a single quadrant probability do not. Added as `mcq1000-p025`.
+- **Page 28 — retained as multi-select.** For a bivariate normal pair, zero correlation is equivalent to independence; normal marginals alone do not force a bivariate-normal joint distribution, and zero correlation outside joint normality need not imply independence. Added as `mcq1000-p028`.
+- **Page 33 — retained as multi-select.** For independent standard normals, \(\sqrt{X_1^2+X_2^2}\) is Rayleigh(1), while \(X_1/X_2\) is standard Cauchy. Added as `mcq1000-p033`.
+- **Page 36 — retained as multi-select.** For the centred Laplace scale model, the MLE is the mean absolute deviation from zero and the method-of-moments estimator is \(\sqrt{\sum X_i^2/(2n)}\). Added as `mcq1000-p036`.
+- **Page 37 — retained as multi-select.** If X~Uniform(−1,1) and Y=e^X, then Y has support (e⁻¹,e), density 1/(2y), and cdf (1+ln y)/2 on that interval. Added as `mcq1000-p037`.
+
+Pages 6, 11, 14, 20, 23, 26 and 31 were not imported: the source wording/notation is incomplete, an option set is inconsistent, or the claimed answer is not uniquely supported. Page 32 duplicates the already included variance lower-bound question.
+
+Updated counts: Probability 522, Statistical Inference 251, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **813 total supplementary items**. Batch 2 contributes 227 over the 586-item baseline.
