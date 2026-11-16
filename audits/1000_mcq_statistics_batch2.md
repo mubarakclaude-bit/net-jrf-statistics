@@ -934,3 +934,17 @@ Updated branch counts: Probability 520, Statistical Inference 246, Multivariate 
 - **Pages 881, 883, 892, 894 and 895 — held out.** The moment notation, transformed-distribution expression, sampling-with-replacement wording and random-walk setup are incomplete or ambiguous in the scanned pages.
 
 Updated branch counts: Probability 520, Statistical Inference 247, Multivariate Analysis 20, Stochastic Processes 11, Regression 4 — **802 supplementary items**. Batch 2 contributes 216 items over the 586-item batch-1 baseline.
+
+
+## Final source-page checks — pages 902–928
+
+- **Page 906 — retained.** For \(f_0(x)=1\) and \(f_1(x)=2x\) on (0,1), the likelihood ratio increases in x. A size-0.05 most powerful test rejects for \(x>0.95\); its power is \(\int_{0.95}^1 2x\,dx=0.0975\). Added as numeric item `mcq1000-p906`.
+- **Page 902 — held out.** The estimator expression and target parameter are clipped.
+- **Page 905 — held out.** The requested transform/moment expression is not legible enough to reconstruct.
+- **Page 909 — held out.** The Bernoulli parameter interval and proposed estimator are clipped.
+- **Page 911 — excluded.** The displayed density/parameter specification is not clear enough to calculate the MP-test power safely; the nearby page 906 question is separately legible and was added.
+- **Page 914 — excluded.** The displayed sample-variance divisor and supplied t-quantile do not yield the source's reported interval length under the standard two-sided t interval.
+- **Page 918 — held out.** The distributional assumptions for X and Y are missing from the scan.
+- **Page 920 — excluded earlier.** The transformed chi-square ratio does not have the claimed standard Student-t distribution.
+
+Updated branch counts: Probability 520, Statistical Inference 248, Multivariate Analysis 20, Stochastic Processes 11, Regression 4 — **803 supplementary items**. Batch 2 contributes 217 items over the 586-item batch-1 baseline.
