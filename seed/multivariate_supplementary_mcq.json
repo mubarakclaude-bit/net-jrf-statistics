@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (PDF pages 958, 963, 971, 1008, 376)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 22,
+  "count": 25,
   "items": [
     {
       "id": "mcq1000-p958",
@@ -405,6 +405,129 @@
       "explanation": "For independent variables, the variance of a linear combination is the sum of squared coefficients multiplied by their variances. Thus Var(X₁+X₂−2X₃)=1²(1)+1²(1)+(−2)²(1)=6. Dividing by √6 divides the variance by 6, giving 6/6=1.",
       "check": "Var(aX+bY+cZ)=a²Var(X)+b²Var(Y)+c²Var(Z) when the variables are independent.",
       "pno": 952,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p025",
+      "format": "multi",
+      "topic": "multivariate-t1",
+      "stem": "Let X and Y have standard normal marginal distributions. Which conditions are sufficient to imply that X and Y are independent?",
+      "statements": [
+        "Cov(X,Y)=0.",
+        "aX+bY is normal with mean 0 and variance a²+b² for every real a,b.",
+        "P(X≤0,Y≤0)=1/4.",
+        "E[eˢˣ⁺ᵗʸ]=E[eˢˣ]E[eᵗʸ] for all real s,t for which the moment-generating functions exist."
+      ],
+      "options": [
+        "A and C only",
+        "B and D only",
+        "A and B only",
+        "C and D only"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Zero covariance alone does not imply independence unless joint normality is already known."
+        },
+        "B": {
+          "tf": true,
+          "why": "The condition that every linear combination is normal establishes joint normality; the specified variance forces covariance zero. For a jointly normal pair, zero covariance implies independence."
+        },
+        "C": {
+          "tf": false,
+          "why": "One quadrant probability equal to 1/4 does not determine the full joint distribution or establish independence."
+        },
+        "D": {
+          "tf": true,
+          "why": "Factorisation of the joint MGF into the product of the marginal MGFs in a neighbourhood of zero is a standard characterisation of independence."
+        }
+      },
+      "explanation": "A and C are insufficient: zero covariance or one quadrant probability does not determine independence for arbitrary jointly distributed variables. Statement B makes every linear combination normal, so (X,Y) is jointly normal. Its variance formula a²+b² has no cross-term, which means Cov(X,Y)=0; jointly normal variables with zero covariance are independent. Statement D directly gives the factorisation of the joint MGF, which also implies independence. Thus B and D are sufficient.",
+      "check": "For a bivariate normal pair, uncorrelated implies independent; in general, use joint-MGF factorisation to establish independence.",
+      "pno": 25,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p028",
+      "format": "multi",
+      "topic": "multivariate-t1",
+      "stem": "Let X and Y each have a normal marginal distribution. Which statements about their joint distribution and independence are correct?",
+      "statements": [
+        "If (X,Y) is bivariate normal, then X and Y are independent if and only if their correlation ρ is zero.",
+        "Normal marginal distributions necessarily imply that the joint distribution is bivariate normal.",
+        "Normal marginal distributions do not necessarily imply a bivariate normal joint distribution.",
+        "If the marginals are normal, the joint distribution is not bivariate normal and ρ=0, X and Y need not be independent."
+      ],
+      "options": [
+        "A and B only",
+        "A, C and D only",
+        "B and C only",
+        "C and D only"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "For a jointly bivariate normal pair, zero correlation is equivalent to independence."
+        },
+        "B": {
+          "tf": false,
+          "why": "Normal marginals alone do not force the joint distribution to be bivariate normal."
+        },
+        "C": {
+          "tf": true,
+          "why": "There are dependent joint distributions with normal marginals that are not bivariate normal."
+        },
+        "D": {
+          "tf": true,
+          "why": "Outside the jointly normal family, zero correlation does not guarantee independence."
+        }
+      },
+      "explanation": "The equivalence between zero correlation and independence holds for a bivariate normal pair, so A is true. But normal marginals alone do not establish joint normality: dependent constructions can have normal marginals and a non-normal joint distribution. In such cases, even zero correlation does not guarantee independence. Thus A, C and D are correct.",
+      "check": "Do not confuse normal marginal distributions with a jointly bivariate normal distribution.",
+      "pno": 28,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p033",
+      "format": "multi",
+      "topic": "multivariate-t1",
+      "stem": "Let X₁ and X₂ be independent standard normal random variables. Define Y₁=√(X₁²+X₂²) and Y₂=X₁/X₂. Which distributional statements are correct?",
+      "statements": [
+        "Y₁ has a Rayleigh distribution with scale parameter 1.",
+        "Y₁ has a Cauchy distribution.",
+        "Y₂ has a standard Cauchy distribution.",
+        "Y₂ has a Rayleigh distribution."
+      ],
+      "options": [
+        "A and C only",
+        "A and B only",
+        "B and D only",
+        "C and D only"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The radius of two independent standard normal coordinates has the Rayleigh(1) distribution."
+        },
+        "B": {
+          "tf": false,
+          "why": "The radial variable is nonnegative and has a Rayleigh distribution, not a Cauchy distribution."
+        },
+        "C": {
+          "tf": true,
+          "why": "The ratio of two independent standard normal variables has the standard Cauchy distribution."
+        },
+        "D": {
+          "tf": false,
+          "why": "The ratio can be positive or negative and has heavy Cauchy tails, unlike a Rayleigh variable."
+        }
+      },
+      "explanation": "For two independent standard normal variables, the joint density is circularly symmetric. The radial distance √(X₁²+X₂²) therefore has the Rayleigh distribution with scale 1. Separately, the ratio of two independent standard normal variables follows the standard Cauchy distribution. Hence A and C are correct.",
+      "check": "Remember the standard results: radius of two iid N(0,1) variables is Rayleigh(1); their ratio is standard Cauchy.",
+      "pno": 33,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
