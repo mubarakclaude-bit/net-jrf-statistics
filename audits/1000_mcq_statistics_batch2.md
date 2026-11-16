@@ -868,3 +868,20 @@ Current branch counts: Probability 511, Statistical Inference 234, Multivariate 
 - **Page 500 — retained.** For a normal sample, \(\sqrt n(\bar X-\mu)/S\) follows Student's t with \(n-1\) degrees of freedom. Added as `mcq1000-p500`.
 
 Current branch counts: Probability 514, Statistical Inference 238, Multivariate Analysis 19, Stochastic Processes 11, Regression 4 — **786 supplementary items**. Batch 2 contributes 200 items over the 586-item batch-1 baseline.
+
+
+## Further source pages reviewed — pages 502–559
+
+- **Page 502 — excluded.** The source repeats the same proposition for options C and D (“Z and W are independent”), leaving duplicated answer choices and no well-formed single-answer item.
+- **Page 508 — excluded.** With known standard deviation 2, the requested 95% precision of 0.1 requires a sample size around 1,537, which is not among the options 25, 30, 40 and 50.
+- **Page 513 — retained.** For iid Poisson(λ), \(E[(-1)^X]=e^{-2\lambda}\); the sample average is unbiased and consistent. Conditioning \((-1)^{X_1}\) on the complete sufficient statistic \(T=\sum X_i\) gives \((1-2/n)^T\), the UMVU estimator, which is also consistent. Added as multi-select `mcq1000-p513`.
+- **Page 517 — retained.** Since \(\bar X\sim N(\theta,\sigma^2/n)\), the normal MGF gives \(E[e^{2\bar X}]=e^{2\theta+2\sigma^2/n}\). Thus \(e^{2\bar X-2\sigma^2/n}\) is unbiased and, by completeness and sufficiency, UMVU. Added as `mcq1000-p517`.
+- **Page 518 — retained.** For the normal likelihood and normal prior under squared-error loss, the posterior mean is \(n\sigma^2\bar X/(1+n\sigma^2)\). Added as `mcq1000-p518`.
+- **Page 529 — retained.** Integrating the conditional density \(6x(y-x)y^{-3}\) over \(0\le x\le y\) gives \(E(X\mid Y=y)=y/2\). Added as `mcq1000-p529`.
+- **Page 536 — retained.** Positive scaling and location shifts leave correlation unchanged, so the transformed variables retain correlation 1/2. Added as `mcq1000-p536`.
+- **Page 541 — retained.** For iid Uniform(−1,2), the sample mean tends to 1/2, not 0; the even/odd subsequence average difference tends to zero; the sample supremum and infimum tend to the support endpoints 2 and −1 almost surely. Added as multi-select `mcq1000-p541`.
+- **Page 544 — retained.** With independent normal variables of mean 2 and variance 5, the sample mean tends to 2, the average square tends to 9, its squared sample mean tends to 4, and \(\sum(X_i/n)^2\to0\). Added as multi-select `mcq1000-p544`.
+- **Page 546 — retained.** The independent, bounded, zero-mean sequence satisfies \(\operatorname{Var}(Y_n)\le1/n\to0\) and Kolmogorov's strong-law condition \(\sum_i\operatorname{Var}(X_i)/i^2<\infty\), so \(Y_n\to0\) almost surely. Added as `mcq1000-p546`.
+- **Page 559 — retained.** The numerator is independent of the sample standard deviation from the first 99 observations; the resulting pivot has a Student t distribution with 98 degrees of freedom. Added as `mcq1000-p559`.
+
+Updated branch counts: Probability 519, Statistical Inference 241, Multivariate Analysis 20, Stochastic Processes 11, Regression 4 — **795 supplementary items**. Batch 2 contributes 209 items over the 586-item batch-1 baseline.
