@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 672 and later pages 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 255,
+  "count": 260,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -5030,6 +5030,139 @@
       "explanation": "For a normal sample with known mean μ, the likelihood is proportional to (σ²)^(−n/2) exp{−Σ(Xᵢ−μ)²/(2σ²)}. Differentiating the log-likelihood with respect to σ² and setting it to zero gives σ̂²_MLE=(1/n)Σ(Xᵢ−μ)². The divisor n−1 is used for the unbiased sample-variance estimator when the mean is estimated, not when μ is known.",
       "check": "When μ is known, maximise the likelihood using the known deviations Xᵢ−μ; the MLE divisor is n.",
       "pno": 305,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p427",
+      "format": "multi",
+      "topic": "inference-t12",
+      "stem": "Test H₀:f₀(x)=1 for 0<x<1 against H₁:f₁(x)=6x(1−x) for 0<x<1. A level-α test rejects H₀ when X(1−X)>a. Which statements are correct?",
+      "statements": [
+        "H₀ is simple, but H₁ is composite.",
+        "The critical region is ( (1−α)/2, (1+α)/2 ).",
+        "The critical region is X>(1+α)/2.",
+        "The power of this test is greater than α for 0<α<1."
+      ],
+      "options": [
+        "A and B only",
+        "B and D only",
+        "A and C only",
+        "C and D only"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Both f₀ and f₁ are fully specified densities, so both hypotheses are simple."
+        },
+        "B": {
+          "tf": true,
+          "why": "Under H₀, X is Uniform(0,1). The central interval has length α, so its probability under H₀ is α; it is exactly the set where x(1−x)>a."
+        },
+        "C": {
+          "tf": false,
+          "why": "The likelihood ratio is largest near 1/2, so the rejection region is central, not an upper tail."
+        },
+        "D": {
+          "tf": true,
+          "why": "The power is ∫_{(1−α)/2}^{(1+α)/2}6x(1−x)dx=(3/2)α−(1/2)α³, which exceeds α for 0<α<1."
+        }
+      },
+      "explanation": "The likelihood ratio f₁/f₀=6x(1−x) is largest near x=1/2. The level-α rejection region is therefore a central interval of length α: ((1−α)/2,(1+α)/2). Its power is (3/2)α−(1/2)α³, and the difference from α is (1/2)α(1−α²)>0 for 0<α<1. Both hypotheses are simple. Thus B and D are true.",
+      "check": "Use the likelihood ratio shape and the Uniform(0,1) null to determine the central rejection interval and its power.",
+      "pno": 427,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p428",
+      "format": "multi",
+      "topic": "inference-t4",
+      "stem": "Let X₁,…,Xₙ be iid from the shifted exponential density f(x;μ,λ)=λe⁻λ⁽ˣ⁻μ⁾ for x>μ, where μ is a location parameter and λ>0. Which statements are correct?",
+      "statements": [
+        "For n=2, E(X₍₂₎−X₍₁₎)=1/λ.",
+        "X̄ is sufficient for μ, whether λ is known or unknown.",
+        "[n/(n−1)](X̄−X₍₁₎) is unbiased for 1/λ.",
+        "(nX̄, X₍₁₎) is jointly sufficient for (λ,μ)."
+      ],
+      "options": [
+        "A and B only",
+        "A, C and D only",
+        "B and C only",
+        "A, B, C and D"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "For two iid shifted exponentials, the expected spacing between the maximum and minimum is 1/λ."
+        },
+        "B": {
+          "tf": false,
+          "why": "The likelihood depends on the sample through both ΣXᵢ and X₍₁₎, not through X̄ alone."
+        },
+        "C": {
+          "tf": true,
+          "why": "E(X̄−X₍₁₎)=1/λ−1/(nλ)=(n−1)/(nλ), so multiplying by n/(n−1) gives expectation 1/λ."
+        },
+        "D": {
+          "tf": true,
+          "why": "The likelihood is proportional to λⁿ exp[−λ(ΣXᵢ−nμ)]I(μ<X₍₁₎), so it depends on the sample through ΣXᵢ=nX̄ and X₍₁₎."
+        }
+      },
+      "explanation": "The sample minimum has distribution μ+Exp(rate nλ), while the sample mean has expectation μ+1/λ. Thus E(X̄−X₍₁₎)=(n−1)/(nλ), proving C. For n=2, the expected range is 1/λ, proving A. The likelihood depends on ΣXᵢ and X₍₁₎, so D is true and X̄ alone is not sufficient; B is false. Hence A, C and D are correct.",
+      "check": "For a shifted exponential sample, the likelihood depends on the sample sum and the minimum; use E(X₍₁₎)=μ+1/(nλ).",
+      "pno": 428,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p435",
+      "format": "single",
+      "topic": "inference-t3",
+      "stem": "Let X₁,…,Xₙ be iid Exponential with mean λ. Define V=(1/n)ΣXᵢ². Which estimator is unbiased for λ²?",
+      "options": [
+        "V/2",
+        "2V",
+        "V",
+        "2/V"
+      ],
+      "answer": "A",
+      "explanation": "For an exponential variable with mean λ, E(X²)=2λ². Therefore E(V)=(1/n)ΣE(Xᵢ²)=2λ². Dividing V by 2 gives an estimator with expectation λ², so V/2 is unbiased.",
+      "check": "Use the second raw moment of an exponential variable: E(X²)=2λ².",
+      "pno": 435,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p436",
+      "format": "single",
+      "topic": "inference-t4",
+      "stem": "A discrete random variable X takes values −1, 1 and 2. Under θ=θ₀, the probabilities are (0.3,0.4,0.3); under θ=θ₁, they are (0.5,0.2,0.3). If the observed sample is X₁=−1 and X₂=2, find the maximum-likelihood estimate of θ.",
+      "options": [
+        "0.5",
+        "θ₀",
+        "θ₁",
+        "Cannot be calculated"
+      ],
+      "answer": "C",
+      "explanation": "Under θ₀, the likelihood is P(X=−1|θ₀)P(X=2|θ₀)=0.3×0.3=0.09. Under θ₁, it is 0.5×0.3=0.15. Since 0.15>0.09, the likelihood is larger at θ₁, so the MLE is θ₁.",
+      "check": "For each candidate parameter, multiply the probabilities of the two independent observed values and choose the larger likelihood.",
+      "pno": 436,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p451",
+      "format": "single",
+      "topic": "inference-t3",
+      "stem": "Let X₁,…,Xₙ be iid Poisson(λ). Which statistic is an unbiased estimator of λ²?",
+      "options": [
+        "(X̄)²",
+        "X̄(X̄−1)",
+        "(1/n)ΣXᵢ²",
+        "(1/n)ΣXᵢ(Xᵢ−1)"
+      ],
+      "answer": "D",
+      "explanation": "For X~Poisson(λ), E[X(X−1)]=λ². Therefore E[(1/n)ΣXᵢ(Xᵢ−1)]=(1/n)Σλ²=λ², so option D is unbiased. The other listed expressions have expectations that include extra variance or mean terms.",
+      "check": "The second factorial moment of a Poisson variable is E[X(X−1)]=λ².",
+      "pno": 451,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
