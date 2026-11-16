@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 672 and later pages 954–1011)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 535,
+  "count": 545,
   "items": [
     {
       "id": "mcq1000-p954",
@@ -10234,6 +10234,248 @@
       "explanation": "If independent random variables have NegativeBinomial(r₁,p) and NegativeBinomial(r₂,p) distributions under the failures-before-r-successes convention with common success probability p, their sum has NegativeBinomial(r₁+r₂,p) distribution. In particular, a sum of iid negative-binomial variables remains negative binomial with the shape parameter multiplied by the number of terms. The geometric distribution is the special case r=1, but sums of geometric variables are negative binomial, not generally geometric.",
       "check": "The negative-binomial family is closed under independent sums when the success probability p is common.",
       "pno": 322,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p420",
+      "format": "multi",
+      "topic": "probability-t9",
+      "stem": "Let Xₙ be independent with P(Xₙ=n)=P(Xₙ=−n)=1/(n²+1) and P(Xₙ=0)=1−2/(n²+1). Let Sₙ=Σᵢ₌₁ⁿXᵢ. Which statements are true?",
+      "statements": [
+        "For every ε>0, P(|Sₙ/n|>ε infinitely often)=0.",
+        "P(|Sₙ/n|>ε infinitely often)=1 for every ε>0.",
+        "E(Sₙ/n)→0.",
+        "limₙ→∞P(|Sₙ/n|>ε)=1/2."
+      ],
+      "options": [
+        "A and C only",
+        "A and B only",
+        "B and D only",
+        "C and D only"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "The variables have mean zero and Var(Xₙ)=2n²/(n²+1)≤2. Kolmogorov's strong-law criterion applies because ΣVar(Xₙ)/n²≤2Σ1/n²<∞, so Sₙ/n→0 almost surely."
+        },
+        "B": {
+          "tf": false,
+          "why": "The almost-sure convergence in A rules this out."
+        },
+        "C": {
+          "tf": true,
+          "why": "Each Xₙ has mean zero, so E(Sₙ/n)=0 for every n."
+        },
+        "D": {
+          "tf": false,
+          "why": "Almost-sure convergence implies convergence in probability, so the limit is zero."
+        }
+      },
+      "explanation": "Each variable is symmetric, so E(Xₙ)=0. Its variance is n²·[2/(n²+1)]=2n²/(n²+1)≤2. The sum ΣVar(Xₙ)/n² is bounded by 2Σ1/n², which is finite. Kolmogorov's strong law therefore gives Sₙ/n→0 almost surely. Consequently the probability of infinitely many deviations larger than ε is zero, and the probabilities of deviations at n tend to zero. The expectation is exactly zero for every n. Thus A and C are true.",
+      "check": "Use Kolmogorov's strong law for independent, mean-zero variables when ΣVar(Xₙ)/n² is finite.",
+      "pno": 420,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p431",
+      "format": "multi",
+      "topic": "probability-t4",
+      "stem": "A random variable X has density f(x)=(15/4)x²(1−x²) for −1<x<1 and zero otherwise. Which statements are true?",
+      "statements": [
+        "The expected value of X does not exist.",
+        "The median of X is 0.",
+        "The expected value of X is 0.",
+        "The variance of X is less than 1."
+      ],
+      "options": [
+        "A and B only",
+        "B, C and D only",
+        "A, C and D only",
+        "A, B, C and D"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The density is supported on a bounded interval, so the expectation exists."
+        },
+        "B": {
+          "tf": true,
+          "why": "The density is symmetric about zero, so zero is a median."
+        },
+        "C": {
+          "tf": true,
+          "why": "Symmetry about zero gives E(X)=0."
+        },
+        "D": {
+          "tf": true,
+          "why": "E(X²)=(15/4)∫₋₁¹(x⁴−x⁶)dx=3/7, so Var(X)=3/7<1."
+        }
+      },
+      "explanation": "The density is even, so the distribution is symmetric about zero. Since X is bounded, its expectation exists and symmetry gives E(X)=0; zero is also a median. For the variance, E(X²)=(15/4)·2(1/5−1/7)=3/7. Hence the variance is less than one. Statements B, C and D are true.",
+      "check": "Use symmetry for the mean and median, then integrate x²f(x) to obtain Var(X)=3/7.",
+      "pno": 431,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p433",
+      "format": "single",
+      "topic": "probability-t4",
+      "stem": "A random variable X has density f(x)=cx⁴ for −3<x<3 and zero otherwise. What is E(X)?",
+      "options": [
+        "0",
+        "Does not exist",
+        "1",
+        "2"
+      ],
+      "answer": "A",
+      "explanation": "The density is symmetric about zero because x⁴ is an even function and the support is symmetric. The function x·f(x)=cx⁵ is odd, so its integral over (−3,3) is zero. The support is bounded, so the expectation exists and E(X)=0.",
+      "check": "An integrable odd function over a symmetric interval has integral zero.",
+      "pno": 433,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p440",
+      "format": "single",
+      "topic": "probability-t6",
+      "stem": "Let X have exponential density f(x)=θe⁻ᶿˣ for x>0, where θ>0. Find f(E(X)).",
+      "options": [
+        "1",
+        "θ",
+        "θ/e",
+        "θe"
+      ],
+      "answer": "C",
+      "explanation": "For an exponential distribution with rate θ, E(X)=1/θ. Substitute this value into the density: f(E(X))=θexp[−θ(1/θ)]=θe⁻¹=θ/e.",
+      "check": "The mean of an exponential(rate θ) variable is 1/θ.",
+      "pno": 440,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p448",
+      "format": "single",
+      "topic": "probability-t5",
+      "stem": "A random variable X has geometric pmf P(X=x)=(1/3)(2/3)ˣ for x=0,1,2,… . Find P(X=11|X>10).",
+      "options": [
+        "1/3",
+        "2/3",
+        "(1/3)¹⁰",
+        "(2/3)¹⁰"
+      ],
+      "answer": "A",
+      "explanation": "Since X is supported on nonnegative integers, X>10 means X≥11. Thus P(X=11|X≥11)=P(X=11)/P(X≥11). The numerator is (1/3)(2/3)¹¹ and the denominator is (2/3)¹¹, so the ratio is 1/3. This is the memoryless property of the geometric distribution.",
+      "check": "For the geometric distribution on {0,1,…}, P(X=11|X≥11)=P(X=0)=p by memorylessness.",
+      "pno": 448,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p455",
+      "format": "single",
+      "topic": "probability-t1",
+      "stem": "Let m and n be independent discrete Uniform(1,100) random variables. Find P(5 divides 7ᵐ+7ⁿ).",
+      "options": [
+        "0.125",
+        "0.5",
+        "0.25",
+        "0.7"
+      ],
+      "answer": "C",
+      "explanation": "Modulo 5, powers of 7 cycle through 2,4,3,1 with period 4. Since 100 is divisible by 4, each residue occurs for exactly 25 possible exponents. The sum is divisible by 5 when the residue pair is (2,3), (3,2), (4,1) or (1,4). Four of the 16 equally likely residue pairs work, so the probability is 4/16=1/4.",
+      "check": "Reduce powers modulo 5; the cycle length is four and each residue is equally likely.",
+      "pno": 455,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p456",
+      "format": "single",
+      "topic": "probability-t2",
+      "stem": "Five fair six-sided dice are rolled. Find the probability that the sum of the five upper faces is 7.",
+      "options": [
+        "15/6⁵",
+        "8/6⁵",
+        "1/2",
+        "7/6⁵"
+      ],
+      "answer": "A",
+      "explanation": "Each die shows at least 1. To obtain a total of 7, write each score as 1+yᵢ, where yᵢ≥0. Then y₁+⋯+y₅=2. The number of nonnegative integer solutions is C(2+5−1,5−1)=C(6,4)=15. There are 6⁵ equally likely outcomes, so the probability is 15/6⁵.",
+      "check": "Convert the five positive face values into nonnegative increments above 1 and count compositions of 2.",
+      "pno": 456,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p457",
+      "format": "single",
+      "topic": "probability-t1",
+      "stem": "Suppose P(A)=7/8 and P(B)=9/10. What is P(A∩B)?",
+      "options": [
+        "1/2",
+        "63/80",
+        "7/8",
+        "It cannot be determined from the information given"
+      ],
+      "answer": "D",
+      "explanation": "The marginal probabilities alone do not determine the intersection. The Fréchet bounds are max{0,P(A)+P(B)−1}≤P(A∩B)≤min{P(A),P(B)}, which here gives 31/40≤P(A∩B)≤7/8. Different dependence structures can produce different values within these bounds. Therefore the exact probability cannot be determined.",
+      "check": "An intersection probability requires dependence information or an explicit independence assumption; marginals alone are insufficient.",
+      "pno": 457,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p479",
+      "format": "multi",
+      "topic": "probability-t4",
+      "stem": "Let X and Y be independent standard normal random variables and define W=XY/√(X²+Y²). Which statements are true?",
+      "statements": [
+        "Var(W) is finite.",
+        "E(W) is different from E(X²−Y²).",
+        "P(W<0)=1/2.",
+        "None of the first three statements is true."
+      ],
+      "options": [
+        "A and C only",
+        "A and B only",
+        "B and C only",
+        "D only"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "W²=X²Y²/(X²+Y²)≤(X²+Y²)/4, which has finite expectation, so Var(W) is finite."
+        },
+        "B": {
+          "tf": false,
+          "why": "Symmetry gives E(W)=0, and E(X²−Y²)=1−1=0, so the expectations are equal."
+        },
+        "C": {
+          "tf": true,
+          "why": "W is negative exactly when XY<0. Independent symmetric standard normals have opposite signs with probability 1/2."
+        },
+        "D": {
+          "tf": false,
+          "why": "Statements A and C are true."
+        }
+      },
+      "explanation": "For finiteness, use 4X²Y²≤(X²+Y²)², giving W²≤(X²+Y²)/4 and hence E(W²)<∞. The distribution is symmetric under X→−X, so E(W)=0. Also E(X²−Y²)=1−1=0, so statement B is false. Finally, W<0 exactly when X and Y have opposite signs, which occurs with probability 1/2. Therefore A and C are true.",
+      "check": "Use the inequality 4X²Y²≤(X²+Y²)² and sign symmetry of independent standard normals.",
+      "pno": 479,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p482",
+      "format": "single",
+      "topic": "probability-t5",
+      "stem": "If X~Binomial(n,p), how does the ratio P(X=x)/P(X=x−1) vary with x on its support?",
+      "options": [
+        "It is decreasing in x.",
+        "It is increasing in x.",
+        "It is increasing for x below the mode.",
+        "It is constant in x."
+      ],
+      "answer": "A",
+      "explanation": "For x=1,…,n, the ratio is [C(n,x)pˣ(1−p)ⁿ⁻ˣ]/[C(n,x−1)pˣ⁻¹(1−p)ⁿ⁻ˣ⁺¹]=[(n−x+1)/x]·[p/(1−p)]. The factor (n−x+1)/x decreases as x increases, so the ratio is decreasing in x.",
+      "check": "Simplify the binomial pmf ratio to ((n−x+1)/x)(p/(1−p)); only the first factor varies with x.",
+      "pno": 482,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
