@@ -885,3 +885,15 @@ Current branch counts: Probability 514, Statistical Inference 238, Multivariate 
 - **Page 559 — retained.** The numerator is independent of the sample standard deviation from the first 99 observations; the resulting pivot has a Student t distribution with 98 degrees of freedom. Added as `mcq1000-p559`.
 
 Updated branch counts: Probability 519, Statistical Inference 241, Multivariate Analysis 20, Stochastic Processes 11, Regression 4 — **795 supplementary items**. Batch 2 contributes 209 items over the 586-item batch-1 baseline.
+
+
+## Further source pages reviewed — pages 617–655
+
+- **Page 617 — retained.** For \(X\sim U(0,\theta)\), the rule rejects when \(X>0.5\). Under \(H_0:\theta=1\), size is 0.5; under \(H_1:\theta=2\), power is 0.75. Added as `mcq1000-p617`.
+- **Page 621 — excluded.** The joint-density formula and normalising constant are not legible enough to independently verify the requested order probability.
+- **Page 624 — retained with option normalisation.** For a normal sample with unknown variance, \(\bar X^2-S^2/n\) is unbiased for \(\mu^2\), but that expression is not among the source choices. The source's “none of the above” is retained. The source contains five choices; the app's four-option format was respected by removing the separate “does not exist” distractor and retaining the none-of-listed-expressions response. Added as `mcq1000-p624`.
+- **Page 626 — excluded.** The multinomial likelihood gives \(\hat\theta=1/15\), so the estimated proportion with two cars is \(2/15\), which is not among the visible options.
+- **Page 637 — retained.** The joint likelihood for independent \(X\sim N(0,\sigma^2)\) and \(Y\sim\operatorname{Exp}(\text{mean }2\sigma^2)\) depends on \(X^2+Y\) through a monotone likelihood ratio. The UMP test rejects for large \(X^2+Y\). Added as `mcq1000-p637`.
+- **Page 655 — retained.** Uniform sampling from the triangle \(x\ge0,y\ge0,x+y\le\theta\) gives likelihood proportional to \(\theta^{-2n}\) on \(\theta\ge\max_i(X_i+Y_i)\). Hence \(\hat\theta=\max_i(X_i+Y_i)\). Added as multi-select `mcq1000-p655`.
+
+Updated branch counts: Probability 519, Statistical Inference 245, Multivariate Analysis 20, Stochastic Processes 11, Regression 4 — **799 supplementary items**. Batch 2 contributes 213 items over the 586-item batch-1 baseline.
