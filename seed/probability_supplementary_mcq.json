@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 672 and later pages 954–1011)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 545,
+  "count": 547,
   "items": [
     {
       "id": "mcq1000-p954",
@@ -10476,6 +10476,88 @@
       "explanation": "For x=1,…,n, the ratio is [C(n,x)pˣ(1−p)ⁿ⁻ˣ]/[C(n,x−1)pˣ⁻¹(1−p)ⁿ⁻ˣ⁺¹]=[(n−x+1)/x]·[p/(1−p)]. The factor (n−x+1)/x decreases as x increases, so the ratio is decreasing in x.",
       "check": "Simplify the binomial pmf ratio to ((n−x+1)/x)(p/(1−p)); only the first factor varies with x.",
       "pno": 482,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p475",
+      "format": "multi",
+      "topic": "probability-t3",
+      "stem": "Let X₁~Binomial(n₁,p) and X₂~Binomial(n₂,p) be independent, and let S=X₁+X₂. Which statements about the conditional distribution of X₁ given S are correct? Let N=n₁+n₂.",
+      "statements": [
+        "X₁|S is Binomial.",
+        "E(X₁|S)=Sn₁/N.",
+        "Var(X₁|S)=S(n₁/N)(n₂/N)(N−S)/(N−1).",
+        "X₁|S is Hypergeometric(N,n₁,S)."
+      ],
+      "options": [
+        "A and B only",
+        "B, C and D only",
+        "A and D only",
+        "C and D only"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "Conditioning on the total number of successes gives a hypergeometric distribution, not a binomial distribution."
+        },
+        "B": {
+          "tf": true,
+          "why": "The mean of Hypergeometric(N,n₁,S) is S·n₁/N."
+        },
+        "C": {
+          "tf": true,
+          "why": "The hypergeometric variance is S(n₁/N)(1−n₁/N)(N−S)/(N−1), and 1−n₁/N=n₂/N."
+        },
+        "D": {
+          "tf": true,
+          "why": "The conditional successes are allocated among the n₁ and n₂ positions without replacement, giving the hypergeometric law."
+        }
+      },
+      "explanation": "Given the total S successes among N=n₁+n₂ Bernoulli trials, all sets of S success positions are equally likely. X₁ counts how many of those S positions fall in the first n₁ trials, so X₁|S is Hypergeometric(N,n₁,S). Its mean is Sn₁/N and its variance is S(n₁/N)(n₂/N)(N−S)/(N−1). Thus B, C and D are true.",
+      "check": "The sum of independent binomials with a common p is binomial; conditional on the total, the allocation is hypergeometric.",
+      "pno": 475,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p478",
+      "format": "multi",
+      "topic": "probability-t6",
+      "stem": "Let X, Y and Z be independent Gamma random variables with shapes a, b and c respectively, all with the same rate parameter. Which distributional statements are correct?",
+      "statements": [
+        "X+Y+Z has a Gamma distribution with shape a+b+c.",
+        "X/(X+Y) has a Beta(a,b) distribution.",
+        "(X+Y)/(X+Y+Z) has a Beta(a+b,c) distribution.",
+        "Y/(X+Y) has a Beta(b,a) distribution."
+      ],
+      "options": [
+        "A and B only",
+        "A, B and C only",
+        "B, C and D only",
+        "A, B, C and D"
+      ],
+      "answer": "D",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Independent Gamma variables with a common rate add to a Gamma variable whose shape is the sum of the shapes."
+        },
+        "B": {
+          "tf": true,
+          "why": "The ratio of two independent Gamma variables with common rate, divided by their sum, has a Beta(a,b) distribution."
+        },
+        "C": {
+          "tf": true,
+          "why": "X+Y is Gamma(a+b) and is independent of the ratio (X+Y)/(X+Y+Z), which has Beta(a+b,c) distribution."
+        },
+        "D": {
+          "tf": true,
+          "why": "Swapping X and Y gives Y/(X+Y)~Beta(b,a)."
+        }
+      },
+      "explanation": "The common-rate Gamma–Beta relationship gives X+Y+Z~Gamma(a+b+c). For two independent Gamma variables with a common rate, their ratio to the sum has a Beta distribution with the corresponding shape parameters. Applying this first to X,Y and then to X+Y,Z gives the listed Beta laws. All four statements are true.",
+      "check": "The common-rate assumption is essential for the Gamma sum and Beta ratio identities.",
+      "pno": 478,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
