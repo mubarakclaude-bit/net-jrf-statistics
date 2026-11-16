@@ -1019,3 +1019,8 @@ A final exact normalised-stem scan across all five supplementary pools found thr
 The later duplicate entries p277, p459 and p477 were removed; the earlier entries were retained. This is in addition to the prior exact-duplicate reconciliation recorded for the two batch-1 overlaps. A near-duplicate comparison against the current inference, probability and multivariate PYQ-variant pools and the June 2026 full-paper bank found no high-overlap stem candidates at the tested 0.65 token-Jaccard threshold; this is a screening check, not a full semantic proof.
 
 Reconciled pool counts: Statistical Inference 248, Probability 521, Multivariate Analysis 22, Stochastic Processes 11 and Regression 4 — **806 total supplementary items**. The batch-2 additions now stand at 220 over the 586-item batch-1 baseline; 194 remain to reach the 1,000-item target.
+
+
+### Correction to the pool-to-topic note above
+
+The page 103 item was restored to its original Statistical Inference pool because its question ID already exists in the batch-1 base branch and the repository's ID-stability contract prohibits moving an existing question between pool files (it would orphan saved learner attempts). Its topic tag is now `inference-t3`, retaining the original pool file and stable ID. The corrected counts are Statistical Inference 249 and Probability 520; total remains **806**. This supersedes the earlier statement that the item was moved into the Probability pool.
