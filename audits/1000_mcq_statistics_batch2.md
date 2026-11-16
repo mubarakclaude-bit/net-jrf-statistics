@@ -959,3 +959,32 @@ Updated branch counts: Probability 520, Statistical Inference 248, Multivariate 
 - **Page 489 — retained.** For the exponential scale model, the MLE is the sample mean; the observed sample {1,2,3} gives 2, which satisfies the positive-integer restriction. Added as numeric item `mcq1000-p489`.
 
 Updated branch counts: Probability 523, Statistical Inference 249, Multivariate Analysis 21, Stochastic Processes 11, Regression 4 — **808 supplementary items**. Batch 2 contributes 222 items over the 586-item batch-1 baseline.
+
+
+## Source pages 928–953: additional audit pass
+
+This pass rechecked the high-resolution scans and reconciled them against existing question IDs before adding anything:
+
+- **Page 932 — retained in the existing pool.** For \(X\sim U(\theta,\theta^2)\), \(\theta\in\{2,3\}\), the critical region \(X\ge3.5\) gives size \(\alpha=1/4\), power \(\beta=11/12\), and \(\alpha+\beta=7/6\). The existing item `mcq1000-p932` had a stale answer value; it was corrected from 0.3333 to \(7/6\).
+- **Page 933 — already present.** The sum of squares of two independent standard normals is \(\chi^2_2\); the source equation gives p=4. Existing item `mcq1000-p933` was confirmed.
+- **Page 935 — already present.** The shifted-exponential confidence interval has coverage \(1-\alpha\); 95% coverage gives \(\alpha=0.05\). Existing item `mcq1000-p935` was confirmed.
+- **Page 936 — already present.** Standardisation gives \(P(X\le3)=\Phi(0.25)=0.5987\). Existing item `mcq1000-p936` was confirmed.
+- **Page 937 — excluded.** The source does not state that the three students' attempts are independent. The marked answer requires that assumption, so it was not imported.
+- **Page 938 — already present.** Direct integration gives \(E[(2X+1)^2]=3\). Existing item `mcq1000-p938` was confirmed.
+- **Page 939 — already present.** The source explicitly states independence; the probability at least one student solves the problem is \(1-(1/2)(2/3)(3/4)=3/4\). Existing item `mcq1000-p939` was confirmed.
+- **Page 940 — already present.** The Laplace MLE of scale is the mean absolute deviation about a sample median; the estimate is 2.8. Existing item `mcq1000-p940` was confirmed.
+- **Page 941 — already present.** For 31 iid Laplace observations centred at θ, the interval between the minimum and maximum has coverage \(1-2^{-30}\), so z=30. Existing item `mcq1000-p941` was confirmed.
+- **Page 942 — already present.** The mode of \(\chi^2_3\) is 1. Existing item `mcq1000-p942` was confirmed.
+- **Page 943 — excluded.** The estimator/statistic notation is corrupted and the stated variance bound is not sufficient to identify the requested correlation.
+- **Page 944 — already present.** Conditional on the sum of two iid geometric variables being 3, the two possible ordered pairs are equally likely; the conditional mean is 1.5. Existing item `mcq1000-p944` was confirmed.
+- **Page 945 — already present.** Conditional on the sum being 4, the three ordered pairs are equiprobable, giving y=3. Existing item `mcq1000-p945` was confirmed.
+- **Page 946 — already present.** The probability integral transform gives \(E[F(X_{(1)})]=1/21\) for n=20 (approximately 0.05). Existing item `mcq1000-p946` was confirmed.
+- **Page 947 — already present.** The MGF is Poisson(0.9), so the variance is 0.9. Existing item `mcq1000-p947` was confirmed.
+- **Page 948 — excluded.** The scanned numerator/exponent in the density is not sufficiently clear to identify the distribution without guessing.
+- **Page 949 — excluded.** The displayed memoryless identity has an off-by-one issue for the stated geometric support \(\{1,2,\ldots\}\).
+- **Page 950 — already present.** Symmetry gives \(E[\Phi(X)]=1/2\) for a zero-centred normal X. Existing item `mcq1000-p950` was confirmed.
+- **Page 951 — already present.** For X uniform on (0,1), \(-2\ln X\sim\chi^2_2\). Existing item `mcq1000-p951` was confirmed.
+- **Page 952 — added.** For independent standard normals, \(\operatorname{Var}((X_1+X_2-2X_3)/\sqrt6)=1\). Added as `mcq1000-p952`.
+- **Page 953 — already present.** The MGF is Binomial(10,0.57), so \(P(X>10)=0\). Existing item `mcq1000-p953` was confirmed.
+
+The page 932 answer correction and page 952 addition bring the branch to Probability 523, Statistical Inference 249, Multivariate Analysis 22, Stochastic Processes 11 and Regression 4 — **809 supplementary items**.
