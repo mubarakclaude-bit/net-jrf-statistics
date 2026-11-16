@@ -826,3 +826,15 @@ Updated branch counts: Probability 507, Statistical Inference 233, Multivariate 
 ### Topic-to-lesson mapping verification
 
 The new questions were checked against the actual lesson seed `topicId` values and corrected to their matching existing Paper 2 lessons: page 30 → `inference-t5` (Method of Moments); page 32 → `probability-t7` (inequalities); page 78 → `probability-t3` (conditional expectation/total variance); page 115 → `probability-t9` (convergence and limit laws); pages 120 Q2 and 121 Q5 → `probability-t12` (probability axioms/complement rule); page 120 Q3 → `probability-t8` (random chord selection/independence foundations); page 143 → `probability-t13` (sampling distributions); pages 71 and 96 → `multivariate-t1`. This replaces provisional topic tags where necessary; no new lesson seed was required.
+
+
+## Further source pages reviewed — pages 134, 137, 277, 278, 293 and 299
+
+- **Page 134 — excluded.** The statement gives the marginal distribution \(P(X_n=\pm n^\lambda)=1/2\) but does not state independence or another dependence condition. The strong law conclusion cannot be inferred from the marginals alone; the source key \(\lambda<1/2\) would require additional assumptions.
+- **Page 137 — excluded.** The source key says WLLN holds if \(\lambda>0\), but the displayed covariance structure \(\operatorname{Cov}(X_i,X_j)=\lambda\) for adjacent indices and zero otherwise does not justify that restriction. For any admissible covariance parameter, the variance of the sample mean is of order \(1/n\); negative as well as positive admissible adjacent covariance values can satisfy the WLLN. The keyed condition is therefore not correct as printed.
+- **Page 277 — retained.** For \(X\sim U(\pi/6,\pi/2)\), \(\cos X>\sin X\) exactly on \((\pi/6,\pi/4)\), giving probability \((\pi/12)/(\pi/3)=1/4\). Added as `mcq1000-p277`.
+- **Page 278 — retained.** For iid exponential observations with mean \(\theta\), each listed weighted estimator is unbiased and has variance \(\theta^2\sum w_i^2\). The equal-weight sample mean has the smallest sum of squared weights, \(1/3\), and hence the smallest variance. Added as `mcq1000-p278`.
+- **Page 293 — retained with an explicit dependence caveat.** The marginals give \(E(X_n^2)=1/n\to0\), so convergence in second mean holds; they also give convergence in distribution to 0. Almost-sure convergence cannot be inferred without specifying dependence across n. The item is encoded to ask which claims must hold from the given marginals alone. Added as `mcq1000-p293`.
+- **Page 299 — retained.** The sum of two independent Uniform(0,1) variables has triangular density \(g(z)=z\) on \(0<z<1\), \(g(z)=2-z\) on \(1<z<2\), and zero elsewhere. Added as `mcq1000-p299`.
+
+Updated branch counts: Probability 510, Statistical Inference 234, Multivariate Analysis 18, Stochastic Processes 11, Regression 4 — **777 supplementary items**. Batch 2 contributes 191 items over the 586-item batch-1 baseline.
