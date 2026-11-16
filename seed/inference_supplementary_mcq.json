@@ -4441,19 +4441,43 @@
     },
     {
       "id": "mcq1000-p1039",
-      "format": "single",
+      "format": "multi",
       "topic": "inference-t1",
-      "stem": "If X₁,…,Xₙ are iid Bernoulli(π) random variables, which statistic is sufficient for π?",
+      "stem": "If X₁,…,Xₙ are iid Bernoulli(π) random variables, which of the following statistics are sufficient for π?",
       "options": [
-        "∏Xᵢ",
-        "ΣXᵢ",
-        "ΣXᵢ²",
-        "ΣXᵢ/n²"
+        "A only",
+        "B, C and D only",
+        "A, B and C only",
+        "A, C and D only"
       ],
       "answer": "B",
-      "explanation": "The likelihood is π^(ΣXᵢ)(1−π)^(n−ΣXᵢ). It depends on the sample only through the sum ΣXᵢ. By the factorisation theorem, this sum is sufficient for π. Option B is correct.",
+      "explanation": "For Bernoulli data, each Xᵢ is either 0 or 1, so Xᵢ²=Xᵢ. The likelihood is π^S(1−π)^(n−S), where S=ΣXᵢ. By the factorisation theorem, S is sufficient. Statement C is also sufficient because ΣXᵢ²=S exactly. Statement D is sufficient because S/n² is a one-to-one rescaling of S (n is fixed). The product in A only records whether every observation is 1; it does not retain the number of successes, so it is not sufficient. Therefore B, C and D are sufficient.",
       "pno": 1039,
-      "sourcePdf": "1000 MCQ statistics.pdf"
+      "sourcePdf": "1000 MCQ statistics.pdf",
+      "statements": [
+        "∏ᵢ₌₁ⁿ Xᵢ.",
+        "Σᵢ₌₁ⁿ Xᵢ.",
+        "Σᵢ₌₁ⁿ Xᵢ².",
+        "(1/n²)Σᵢ₌₁ⁿ Xᵢ."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The product only indicates whether all observations equal 1; it loses the total number of successes."
+        },
+        "B": {
+          "tf": true,
+          "why": "The likelihood depends on the sample through S=ΣXᵢ."
+        },
+        "C": {
+          "tf": true,
+          "why": "For Bernoulli variables Xᵢ²=Xᵢ, so this is exactly the same statistic as B."
+        },
+        "D": {
+          "tf": true,
+          "why": "This is a one-to-one constant rescaling of S for fixed n."
+        }
+      }
     },
     {
       "id": "mcq1000-p1044",
