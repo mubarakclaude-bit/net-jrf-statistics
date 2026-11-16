@@ -1119,7 +1119,7 @@ A full normalized-stem scan found that page 247 duplicates the Poisson reciproca
 
 ## Additional source review — pages 420–482
 
-Sixteen independently checked items were retained:
+Seventeen independently checked items were retained:
 
 - **Page 420 — retained as multi-select.** For independent symmetric variables with \(P(X_n=\pm n)=1/(n^2+1)\), the variance is bounded by 2 and \(\sum\operatorname{Var}(X_n)/n^2<\infty\). Kolmogorov's strong law gives \(S_n/n\to0\) almost surely; the mean is also zero. Added as `mcq1000-p420`.
 - **Page 427 — retained as multi-select.** For the simple hypotheses Uniform(0,1) versus density 6x(1−x), the level-α most powerful region is the central interval \(((1-\alpha)/2,(1+\alpha)/2)\); its power is \(3\alpha/2-\alpha^3/2>\alpha\). Added as `mcq1000-p427`.
