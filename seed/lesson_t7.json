@@ -906,20 +906,24 @@
       "problem": "Suppose X | n ~ Binomial(n,p), where p is known and n is an unknown non-negative integer. Assign n a Poisson(λ) prior. After observing X=x, find the posterior distribution of n and the Bayes estimator under squared-error loss.",
       "steps": [
         {
-          "h": "Step 1 — write prior times likelihood",
-          "body": "For n ≥ x, P(X=x | n)P(n) = C(n,x)p^x(1−p)^(n−x) e^(−λ) λ^n/n!."
+          "say": "Write the likelihood and prior, keeping only the terms that depend on n.",
+          "math": "P(X=x|n)P(n) = C(n,x)p^x(1−p)^(n−x) e^(−λ) λ^n/n!",
+          "why": "The observed x is fixed. The unknown integer n must satisfy n ≥ x."
         },
         {
-          "h": "Step 2 — remove factors that do not depend on n",
-          "body": "Put m=n−x. Since C(n,x)/n! = 1/[x!(n−x)!], the kernel in m is proportional to [λ(1−p)]^m/m!."
+          "say": "Set m=n−x and simplify the factorials.",
+          "math": "C(n,x)/n! = 1/[x!(n−x)!], so the kernel in m is proportional to [λ(1−p)]^m/m!.",
+          "why": "The factors p^x, e^(−λ), λ^x and x! do not vary with m and are absorbed into the normalising constant."
         },
         {
-          "h": "Step 3 — identify the posterior family",
-          "body": "That is the Poisson kernel. Therefore n−x | X=x ~ Poisson(λ(1−p)), or equivalently n | X=x is x plus a Poisson(λ(1−p)) random variable."
+          "say": "Recognise the Poisson kernel.",
+          "math": "n−x | X=x ~ Poisson(λ(1−p)).",
+          "why": "The posterior for n is a shifted Poisson distribution: n is x plus the unobserved number of failures."
         },
         {
-          "h": "Step 4 — use the stated loss",
-          "body": "Under squared-error loss, the Bayes estimator is the posterior mean: E[n | X=x] = x + λ(1−p)."
+          "say": "Apply the loss function stated in the question.",
+          "math": "Under squared-error loss, δ_B(x) = E[n|X=x] = x + λ(1−p).",
+          "why": "The posterior mean is the Bayes estimator only because squared-error loss is specified. Under another loss, a different posterior summary may be required."
         }
       ],
       "after": "The important recognition is that the observed x successes are already part of the total n. The remaining number of unobserved failures has a Poisson posterior with mean λ(1−p). The posterior is not simply Poisson with mean λ, because the observed binomial count changes the distribution.",
