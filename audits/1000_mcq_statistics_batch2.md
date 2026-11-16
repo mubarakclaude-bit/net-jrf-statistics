@@ -725,3 +725,20 @@ This exact-stem reconciliation is not a complete semantic-equivalence audit of e
 ## Learn-module coverage check
 
 Every topic ID used by the 760 retained supplementary items exists in the Paper 2 catalog and has a corresponding approved lesson in the production lesson inventory. The MLE topic `inference-t4` is covered by `seed/lesson_mle.json` (rather than a `lesson_t4.json` filename); all other used topics map to their corresponding Probability, Statistical Inference, Multivariate, Stochastic or Regression lesson files. No new lesson was required for the retained batch-2 questions.
+
+
+## Re-review of previously held pages — page 784
+
+A higher-resolution inspection resolved the earlier transcription concern for page 784. The model is the Laplace location family with unit scale, (f(x;\mu)=\frac12e^{-|x-\mu|}\), with \(\mu\) restricted to the positive integers. For observations 2.2, 2.7, 3.1, 3.8 and 5.6, the unrestricted location MLE is the sample median 3.1. Under the integer restriction, comparing the adjacent candidates gives total absolute deviations 4.6 at \(\mu=3\) and 5.8 at \(\mu=4\), so the constrained MLE is 3 (source option b). Added as `mcq1000-p784`, mapped to Statistical Inference T4 (MLE).
+
+This question is distinct in its integer-constrained Laplace likelihood from the other MLE questions in this pool, although the general median principle overlaps with Laplace-location estimation. It should remain included as a worked application rather than treated as an exact duplicate.
+
+### Updated branch pool counts after p784
+- Probability: 499
+- Statistical Inference: 231
+- Multivariate Analysis: 16
+- Stochastic Processes: 11
+- Regression: 4
+- **Total: 761 supplementary items**
+
+Page 770 was rechecked at higher resolution and is legible, but it asks for the ordinary MLE of the endpoint in Uniform(0,50), namely the sample maximum. It is not added because this is already represented by several Uniform-endpoint MLE/sufficiency questions in the existing supplementary pool; it would add little new practice value. Pages 785, 790 and the other held items remain excluded for the mathematical or source-quality reasons recorded above.
