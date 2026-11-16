@@ -638,3 +638,36 @@ Nine additional questions were transcribed and solved:
 - Stochastic: **11**
 - Regression: **4**
 - Total: **743 supplementary items** on this branch (157 additions in this batch branch).
+
+
+## Further verified additions — pages 941–953
+
+Eleven additional questions were checked from enlarged source images:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 941 | `mcq1000-p941` | Statistical Inference T13 — sample range covering a Laplace location | Numeric: (z=30) |
+| 942 | `mcq1000-p942` | Probability T13 — chi-square mode | Numeric: 1 |
+| 944 | `mcq1000-p944` | Probability T2 — conditional expectation for geometric variables | Numeric: 1.5 |
+| 945 | `mcq1000-p945` | Probability T2 — conditional distribution given geometric sum | Numeric: 3 |
+| 946 | `mcq1000-p946` | Probability T1 — expected cdf of the sample minimum | Numeric: 0.0476 |
+| 947 | `mcq1000-p947` | Probability T4 — Poisson variance from MGF | Numeric: 0.9 |
+| 949 | `mcq1000-p949` | Probability T5 — mean of zero-based geometric variable | Numeric: 0.01 |
+| 950 | `mcq1000-p950` | Probability T10 — expectation of Φ(X) for a symmetric normal | Numeric: 0.5 |
+| 951 | `mcq1000-p951` | Probability T13 — chi-square transform of a Uniform variable | Numeric: 2 degrees of freedom |
+| 952 | `mcq1000-p952` | Probability T8 — variance of a normal linear combination | Numeric: 1 |
+| 953 | `mcq1000-p953` | Probability T5 — Binomial support from MGF | Numeric: 0 |
+
+### Pages held out
+- **Page 943:** the statistic and conditions defining S are too corrupted to identify the intended covariance/correlation problem.
+- **Page 948:** the displayed function ((x^3-1)/[(1+x)^5B(3,2)]) is negative for (0<x<1), so it is not a valid density on the stated support (x>0). Excluded.
+
+### Updated branch counts
+- Probability: **499**
+- Statistical Inference: **224**
+- Multivariate: **16**
+- Stochastic: **11**
+- Regression: **4**
+- Total: **754 supplementary items** on this branch (168 additions in this batch branch).
+
+Page 949 uses the geometric distribution on support ({0,1,2,\ldots}), as indicated by the stated memoryless identity; its mean is ((1-p)/p), not (1/p).
