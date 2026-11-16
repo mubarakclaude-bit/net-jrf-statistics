@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 672 and later pages 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 250,
+  "count": 251,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -4921,6 +4921,47 @@
       "explanation": "If T is sufficient, the likelihood factorises as L(θ;x)=gθ(T(x))h(x), where h does not depend on θ. Therefore the parameter value maximising the likelihood can be selected using T. Also, MSE=E[(θ̂−θ)²]=Var(θ̂)+[Bias(θ̂)]². Hence A and C are correct.",
       "check": "Use the likelihood factorisation theorem for the first claim and the bias–variance decomposition for the MSE identity.",
       "pno": 15,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p036",
+      "format": "multi",
+      "topic": "inference-t4",
+      "stem": "Let X₁,…,Xₙ be iid from the Laplace density f(x;σ)=(1/(2σ))exp(−|x|/σ), x∈R, with known location 0 and unknown scale σ>0. Which statements are correct?",
+      "statements": [
+        "The MLE of σ is (1/n)ΣXᵢ.",
+        "The MLE of σ is (1/n)Σ|Xᵢ|.",
+        "The method-of-moments estimator of σ is √[(1/n)ΣXᵢ²].",
+        "The method-of-moments estimator of σ is √[(1/(2n))ΣXᵢ²]."
+      ],
+      "options": [
+        "A and C only",
+        "B and D only",
+        "A and D only",
+        "B and C only"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The scale estimate must be nonnegative and depends on absolute values, not the signed sample mean."
+        },
+        "B": {
+          "tf": true,
+          "why": "Maximising the likelihood gives σ̂=(1/n)Σ|Xᵢ|."
+        },
+        "C": {
+          "tf": false,
+          "why": "For this Laplace parameterisation, E(X²)=2σ², so the factor 2 is required under the square root."
+        },
+        "D": {
+          "tf": true,
+          "why": "Equating the sample second raw moment to E(X²)=2σ² gives the stated estimator."
+        }
+      },
+      "explanation": "The likelihood is proportional to σ⁻ⁿ exp[−Σ|Xᵢ|/σ]. Differentiating the log-likelihood gives σ̂_MLE=Σ|Xᵢ|/n. For the method of moments, the Laplace distribution has E(X²)=2σ². Equating this to the sample second raw moment gives σ̂_MME=√[ΣXᵢ²/(2n)]. Therefore B and D are correct.",
+      "check": "For a centred Laplace(0,σ) variable, E|X|=σ and E(X²)=2σ².",
+      "pno": 36,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
