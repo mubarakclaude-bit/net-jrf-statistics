@@ -720,3 +720,8 @@ The later copies (pages 837 and 952) were removed from batch 2; the first import
 - Total: **760 supplementary items**, including **174 new non-duplicate additions** in batch 2 over the 586-item batch-1 baseline.
 
 This exact-stem reconciliation is not a complete semantic-equivalence audit of every question in every seed file. Similar questions with different formulations or numerical conditions still require reviewer judgment.
+
+
+## Learn-module coverage check
+
+Every topic ID used by the 760 retained supplementary items exists in the Paper 2 catalog and has a corresponding approved lesson in the production lesson inventory. The MLE topic `inference-t4` is covered by `seed/lesson_mle.json` (rather than a `lesson_t4.json` filename); all other used topics map to their corresponding Probability, Statistical Inference, Multivariate, Stochastic or Regression lesson files. No new lesson was required for the retained batch-2 questions.
