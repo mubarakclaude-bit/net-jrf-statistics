@@ -104,3 +104,39 @@ Eight more questions were visually transcribed and checked:
 - Total: **609 supplementary items** on this draft branch.
 
 Page 765 is encoded as a four-statement multi-select item. Page 769 retains the source's intended option B while explaining that the lower and upper endpoints must be read in increasing order. The new additions remain draft-only pending CI and duplicate/content review.
+
+
+## Further verified additions — pages 771–780
+
+Ten further questions were checked against enlarged source images and independently solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 771 | `mcq1000-p771` | Statistical Inference T1 — sufficiency | B, product of observations |
+| 772 | `mcq1000-p772` | Statistical Inference T12 — test size | C, 0 |
+| 773 | `mcq1000-p773` | Probability T6 — harmonic mean of a continuous variable | B, 1/3 |
+| 774 | `mcq1000-p774` | Probability T4 — moments of functions of normal variables | B, 2 |
+| 775 | `mcq1000-p775` | Probability T9 — chi-square distribution and CLT | B, statements A, B and D |
+| 776 | `mcq1000-p776` | Probability T6 — normalising a piecewise density | B, 1/25 |
+| 777 | `mcq1000-p777` | Probability T12 — Bayes theorem after transfer | A, 15/29 |
+| 778 | `mcq1000-p778` | Probability T12 — defective-product Bayes problem | B, 25/69 |
+| 779 | `mcq1000-p779` | Probability T8 — symmetry, covariance and independence | B, statements B, C and D |
+| 780 | `mcq1000-p780` | Probability T7 — covariance bound, variance and Jensen | C, statements C and D |
+
+### Source-format adaptations
+- Page 775 contains two original statements. Two additional statements were added to satisfy the platform's four-statement multi-select contract; the audit and item metadata identify the adaptation.
+- Page 779 was encoded as a multi-select item, preserving the four original statements and the mathematically verified true set B, C and D.
+- Page 780 was encoded as a multi-select item, preserving the four original statements and the mathematically verified true set C and D.
+
+### Exact-stem duplicate screen
+The ten new items were compared against the corresponding Probability and Statistical Inference mastery pools and the existing Probability/Inference PYQ variant banks (13 files in total). No exact normalised-stem duplicate was found in that targeted comparison. This does not establish a complete semantic duplicate audit across every seed file.
+
+### Updated draft counts
+- Probability: **415**
+- Statistical Inference: **178**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **7**
+- Total: **619 supplementary items** on this branch, including the 33 additions made in batch 2.
+
+Page 770 remains held because the upper endpoint in the Uniform model is visually ambiguous. These additions remain draft-only.
