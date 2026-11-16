@@ -393,3 +393,33 @@ Nine further questions were visually transcribed and independently solved:
 - Total: **684 supplementary items** on this branch (98 additions in this batch branch).
 
 Page 855 is represented as multi-select because only its variance statement is true; the MGF was factored into Bernoulli components to verify each claim. These items remain draft-only.
+
+
+## Further verified additions — pages 861–870
+
+Six further questions were transcribed from enlarged page images and independently solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 861 | `mcq1000-p861` | Statistical Inference T4 — exponential-rate MLE | B, statistics A, B and D are not the MLE |
+| 862 | `mcq1000-p862` | Statistical Inference T3 — minimum-variance combination of unbiased estimators | C, equal-weight average |
+| 863 | `mcq1000-p863` | Statistical Inference T13 — pooled two-sample t confidence interval | B, (−0.20, 1.00) |
+| 867 | `mcq1000-p867` | Probability T8 — non-adjacent selection in a row | A, (1-2/n) |
+| 868 | `mcq1000-p868` | Probability T6 — symmetry of the logistic distribution | C, odd central moments are zero |
+| 870 | `mcq1000-p870` | Probability T2 — conditional bivariate normal distribution | D, (ho=0.8) |
+
+### Pages held out
+- **Page 864:** the displayed function (f(x;\theta)=x\exp\{-(x+\theta)\theta^2\}) does not integrate to one as printed; it is not a valid density in the displayed form.
+- **Page 865:** the rational/irrational discontinuity question is mathematical analysis rather than a statistics Paper 2 learning objective in the current module scope; not imported into the statistics bank.
+- **Page 866:** the two-parameter exponential density and parameter notation are not legible enough to identify the intended parameterisation and moment equations; held.
+- **Page 869:** using the supplied chi-square critical values, the 95% interval for the standard deviation is approximately (3.90, 9.33), which does not match any printed option. The marked answer was not copied; held.
+
+### Updated branch counts
+- Probability: **457**
+- Statistical Inference: **206**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **8**
+- Total: **690 supplementary items** on this branch (104 additions in this batch branch).
+
+No question from this range was imported where the source formula was invalid, unreadable or inconsistent with the options.
