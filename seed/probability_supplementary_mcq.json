@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 672 and later pages 954–1011)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 522,
+  "count": 527,
   "items": [
     {
       "id": "mcq1000-p954",
@@ -9893,6 +9893,187 @@
       "explanation": "Since X is Uniform(−1,1), its density is 1/2. The transformation Y=eˣ is increasing, so x=ln y and dx/dy=1/y. The support becomes e⁻¹<y<e. Thus fᵧ(y)=1/(2y), and integrating gives Fᵧ(y)=(1+ln y)/2 on that support. Statements C and D are correct.",
       "check": "For a monotone transformation, transform both the density using the Jacobian and the support using the original interval.",
       "pno": 37,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p039",
+      "format": "multi",
+      "topic": "probability-t9",
+      "stem": "Let X₁,X₂,… be iid Exponential(rate 1), and let Y₁,Y₂,… be iid Exponential(rate 4), with the two sequences independent. Define Zₖ=Xₖ−3Yₖ. Which statements are true?",
+      "statements": [
+        "P(Z₁>0)>0.",
+        "Σₖ₌₁ⁿ Zₖ→+∞ almost surely as n→∞.",
+        "Σₖ₌₁ⁿ Zₖ→−∞ almost surely as n→∞.",
+        "P(Z₁<0)>0."
+      ],
+      "options": [
+        "A and B only",
+        "A, B and D only",
+        "B and C only",
+        "C and D only"
+      ],
+      "answer": "B",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "There is positive probability that X₁ is sufficiently large while Y₁ is small."
+        },
+        "B": {
+          "tf": true,
+          "why": "E(Z₁)=E(X₁)−3E(Y₁)=1−3(1/4)=1/4>0. The strong law gives the sample sum divided by n tending to 1/4, so the sum tends to +∞ almost surely."
+        },
+        "C": {
+          "tf": false,
+          "why": "The strong-law limit is positive, not negative."
+        },
+        "D": {
+          "tf": true,
+          "why": "There is positive probability that Y₁ is sufficiently large while X₁ is small."
+        }
+      },
+      "explanation": "An exponential variable with rate λ has mean 1/λ. Therefore E(Z₁)=1−3(1/4)=1/4. The Zₖ are iid with finite mean, so the strong law gives (1/n)ΣZₖ→1/4 almost surely, which implies the unnormalised sum tends to +∞. Both signs are possible for an individual Z₁ because both exponential variables have support on all positive values. Thus A, B and D are true.",
+      "check": "Apply the strong law to Zₖ and calculate its mean before deciding whether the sum diverges to +∞ or −∞.",
+      "pno": 39,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p042",
+      "format": "multi",
+      "topic": "probability-t6",
+      "stem": "A nonnegative continuous random variable has density f(x)=p e⁻ˣ+2(1−p)e⁻²ˣ for x>0, where 0≤p≤1. Which statements about its hazard function are correct?",
+      "statements": [
+        "The hazard is constant when p=0 or p=1.",
+        "The hazard is constant for every 0≤p≤1.",
+        "The hazard is decreasing when 0<p<1.",
+        "The hazard is non-monotone when 0<p<1."
+      ],
+      "options": [
+        "A and C only",
+        "A and B only",
+        "B and D only",
+        "C and D only"
+      ],
+      "answer": "A",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "At p=0 the distribution is exponential with rate 2; at p=1 it is exponential with rate 1. Both have constant hazard."
+        },
+        "B": {
+          "tf": false,
+          "why": "A nontrivial mixture of exponentials does not have a constant hazard."
+        },
+        "C": {
+          "tf": true,
+          "why": "For 0<p<1, the hazard decreases from a value above 1 towards 1 as x increases."
+        },
+        "D": {
+          "tf": false,
+          "why": "The hazard is monotone decreasing, not non-monotone."
+        }
+      },
+      "explanation": "The survival function is S(x)=p e⁻ˣ+(1−p)e⁻²ˣ. Hence h(x)=f(x)/S(x)=[p e⁻ˣ+2(1−p)e⁻²ˣ]/[p e⁻ˣ+(1−p)e⁻²ˣ]. At p=0 or 1 this reduces to a constant exponential hazard. For 0<p<1, write r=((1−p)/p)e⁻ˣ; then h(x)=(1+2r)/(1+r). Since r decreases with x and the expression increases with r, h(x) decreases with x. Thus A and C are true.",
+      "check": "A mixture of exponentials has a decreasing hazard unless only one exponential component is present.",
+      "pno": 42,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p043",
+      "format": "single",
+      "topic": "probability-t6",
+      "stem": "Let X have density f(x)=σe⁻ˢˣ for x≥0, where σ>0. Which of the following statements is correct?",
+      "options": [
+        "E(X)=σ²",
+        "E(X)=1/σ",
+        "Mₓ(t)=1/(1−σt)",
+        "Var(X)=σ²"
+      ],
+      "answer": "B",
+      "explanation": "This is an exponential distribution with rate σ. Its mean is 1/σ and its variance is 1/σ². Its MGF is σ/(σ−t)=1/(1−t/σ), for t<σ. Therefore only option B is correct.",
+      "check": "For an exponential distribution parameterised by rate σ, mean=1/σ and variance=1/σ².",
+      "pno": 43,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p049",
+      "format": "multi",
+      "topic": "probability-t1",
+      "stem": "If X is a continuous random variable and a<b, which probability equalities must hold?",
+      "statements": [
+        "P(a≤X<b)=P(a≤X≤b).",
+        "P(a<X≤b)=P(a≤X≤b).",
+        "P(a<X<b)=P(a≤X≤b).",
+        "P(a≤X≤b)=P(a<X<b)."
+      ],
+      "options": [
+        "A and B only",
+        "A, B and C only",
+        "A, B, C and D",
+        "D only"
+      ],
+      "answer": "C",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "A continuous random variable has P(X=b)=0, so including or excluding b does not change the probability."
+        },
+        "B": {
+          "tf": true,
+          "why": "P(X=a)=0, so including or excluding a does not change the probability."
+        },
+        "C": {
+          "tf": true,
+          "why": "Both endpoints have probability zero, so either or both can be included or excluded."
+        },
+        "D": {
+          "tf": true,
+          "why": "This is the same endpoint-zero property written in the reverse direction."
+        }
+      },
+      "explanation": "For a continuous random variable, the probability of any single point is zero. In particular, P(X=a)=P(X=b)=0. Therefore changing whether either endpoint is included does not change the probability of the interval. All four equalities are true.",
+      "check": "For a continuous random variable, P(X=c)=0 for every fixed c.",
+      "pno": 49,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p050",
+      "format": "multi",
+      "topic": "probability-t1",
+      "stem": "Suppose A, B and C are mutually independent events. Which statements must be true?",
+      "statements": [
+        "A and B∩C are independent.",
+        "A and B∪C are independent.",
+        "Aᶜ and Bᶜ are independent.",
+        "None of the first three statements is necessarily true."
+      ],
+      "options": [
+        "A only",
+        "A and B only",
+        "A, B and C only",
+        "D only"
+      ],
+      "answer": "C",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "Mutual independence gives P(A∩B∩C)=P(A)P(B)P(C)=P(A)P(B∩C)."
+        },
+        "B": {
+          "tf": true,
+          "why": "Use inclusion-exclusion and mutual independence to obtain P(A∩(B∪C))=P(A)P(B∪C)."
+        },
+        "C": {
+          "tf": true,
+          "why": "Complements of independent events remain independent, since P(Aᶜ∩Bᶜ)=1−P(A)−P(B)+P(A)P(B)=P(Aᶜ)P(Bᶜ)."
+        },
+        "D": {
+          "tf": false,
+          "why": "All of A, B and C are true."
+        }
+      },
+      "explanation": "Mutual independence means all intersections factorise. It follows that A is independent of B∩C. For B∪C, use P(A∩(B∪C))=P(A∩B)+P(A∩C)−P(A∩B∩C), which equals P(A)[P(B)+P(C)−P(B)P(C)]=P(A)P(B∪C). Finally, complements of independent events are independent. Thus A, B and C are true.",
+      "check": "Use inclusion-exclusion for the union and the complement identity for Aᶜ and Bᶜ.",
+      "pno": 50,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
