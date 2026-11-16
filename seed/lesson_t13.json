@@ -6,7 +6,7 @@
   "breadcrumb": "Statistical Inference → Interval Estimation → Confidence intervals and pivots",
   "engine": "C",
   "engineName": "Interval estimation — a range, and how often the method gets it right",
-  "version": "1.1",
+  "version": "1.2",
   "status": "approved",
   "estMin": 98,
   "objectives": [
@@ -828,6 +828,46 @@
       "ask": {
         "q": "What is the expected length of [S/b, S/a] when S=Σ(Xᵢ−X̄)² for a normal sample of size n?",
         "nudge": "Use E(S)=(n−1)σ², so the expected length is (n−1)σ²(1/a−1/b)."
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s11c",
+      "title": "Worked in full — a confidence interval from the sample minimum",
+      "mins": 7,
+      "objective": "Construct an exact confidence interval using the minimum order statistic for an exponential scale parameter.",
+      "problem": "Let X₁,…,Xₙ be iid Exponential with scale (mean) θ, so f(x;θ) = θ⁻¹e^(−x/θ), x>0. Use the sample minimum X₍₁₎ to construct an exact two-sided confidence interval with confidence level 1−α for θ.",
+      "steps": [
+        {
+          "say": "Find the distribution of the minimum.",
+          "math": "P(X₍₁₎ > x) = P(X₁>x,…,Xₙ>x) = e^(−nx/θ),  x>0",
+          "why": "The observations are independent, so the probability that all exceed x is the product of their survival probabilities."
+        },
+        {
+          "say": "Recognise the exponential distribution and form a pivot.",
+          "math": "X₍₁₎ ~ Exponential(scale θ/n);   Q = 2nX₍₁₎/θ ~ χ²₂",
+          "why": "Twice an exponential random variable divided by its scale has a chi-square distribution with 2 degrees of freedom. The unknown θ has disappeared from the distribution of Q."
+        },
+        {
+          "say": "Trap the pivot between chi-square quantiles.",
+          "math": "P(q_(α/2,2) ≤ 2nX₍₁₎/θ ≤ q_(1−α/2,2)) = 1−α",
+          "why": "Here q_(p,2) denotes the lower-tail p quantile of chi-square with 2 degrees of freedom. State the quantile convention before substituting table values."
+        },
+        {
+          "say": "Rearrange carefully to isolate θ.",
+          "math": "P( 2nX₍₁₎/q_(1−α/2,2) ≤ θ ≤ 2nX₍₁₎/q_(α/2,2) ) = 1−α",
+          "why": "θ is in the denominator of the pivot. Dividing by the positive pivot bounds reverses the order of the two chi-square quantiles."
+        },
+        {
+          "say": "Write the confidence interval and compare it with the sum-based pivot.",
+          "math": "CI_(1−α)(θ) = [ 2nX₍₁₎/q_(1−α/2,2),  2nX₍₁₎/q_(α/2,2) ]",
+          "why": "This interval uses the minimum alone. The earlier exponential pivot based on ΣXᵢ uses 2ΣXᵢ/θ ~ χ²_(2n). Both are exact; they are different pivots and should not be mixed."
+        }
+      ],
+      "after": "This is an order-statistic method: the minimum of n independent exponential lifetimes has scale θ/n. Be careful with parameterisation. If the density is λe^(−λx), λ is a rate and the corresponding pivot is 2nλX₍₁₎; here θ⁻¹e^(−x/θ) uses θ as a scale.",
+      "ask": {
+        "q": "For the same exponential scale model, why does the minimum have scale θ/n rather than θ?",
+        "nudge": "Its survival function is the product of n individual survival functions: e^(−x/θ) raised to the n."
       }
     },
     {
