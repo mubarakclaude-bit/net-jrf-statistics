@@ -546,3 +546,33 @@ Six additional questions were independently solved from enlarged scans:
 - Total: **720 supplementary items** on this branch (134 additions in this batch branch).
 
 Numeric-response items use the repository's numeric format with explicit worked solutions and verification checks.
+
+
+## Further verified additions — pages 912–919
+
+Six additional questions were checked and solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 912 | `mcq1000-p912` | Statistical Inference T13 — coverage of a shifted-exponential confidence interval | Numeric: 84% |
+| 913 | `mcq1000-p913` | Statistical Inference T3 — UMVU estimator for a Poisson functional | Numeric: 8.33 |
+| 915 | `mcq1000-p915` | Probability T4 — variance of squared normal observations | Numeric: 6 |
+| 916 | `mcq1000-p916` | Probability T6 — normalising a rational density | Numeric: 1.4142 |
+| 917 | `mcq1000-p917` | Statistical Inference T4 — consistency of Uniform-family MLE | Numeric: 1 (Yes) |
+| 919 | `mcq1000-p919` | Statistical Inference T1 — sufficient statistic for exponential sample | Numeric: 10 |
+
+### Pages held out
+- **Page 911:** the two density formulas are corrupted in the scan; the null and alternative models cannot be identified with confidence.
+- **Page 914:** the normal model's mean/variance notation and the displayed sum-of-squares divisor are unclear, and the printed interval length does not reconcile with the visible quantities.
+- **Page 918:** the event (3\mid |X^2-Y^2|) is shown for positive-integer variables, but no joint distribution or sampling mechanism for X and Y is given; the probability is not determined.
+- **Page 920:** the displayed ratio of two independent chi-square(5) variables is not Student-t distributed in the stated form; the claimed t representation is not accepted.
+
+### Updated branch counts
+- Probability: **479**
+- Statistical Inference: **217**
+- Multivariate: **16**
+- Stochastic: **10**
+- Regression: **4**
+- Total: **726 supplementary items** on this branch (140 additions in this batch branch).
+
+Numeric-response items were added with explicit formulas and check steps. No assumptions about missing probability models were supplied for held-out questions.
