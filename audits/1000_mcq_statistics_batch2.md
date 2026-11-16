@@ -32,3 +32,45 @@ Pages 1022/1029 and 1027/1028 appeared duplicated in the initial contact-sheet r
 
 ## Batch count
 The Probability supplementary pool on the batch-2 branch increases from 394 to 396 items. The full repository-wide semantic duplicate audit and the remaining unreviewed pages are still outstanding; this batch does not claim the full PDF is complete.
+
+
+## Further verified additions — pages 1023–1042
+
+The following questions were visually transcribed from enlarged page images, solved independently, and added with worked explanations:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 1023 | `mcq1000-p1023` | Probability T5 — Poisson distribution | A (0.7619) |
+| 1024 | `mcq1000-p1024` | Probability T13 — t sampling distribution / paired t statistic | C (5.2856) |
+| 1025 | `mcq1000-p1025` | Probability T6 — normal distribution | B (95.45%) |
+| 1026 | `mcq1000-p1026` | Probability T5 — continuity correction | C ((P(Y<9.5))) |
+| 1030 | `mcq1000-p1030` | Probability T6 — normal quantile | A (124.9) |
+| 1031 | `mcq1000-p1031` | Probability T8 — independence and covariance | B (0) |
+| 1033 | `mcq1000-p1033` | Statistical Inference T13 — confidence interval | B (̅x=14, margin=2) |
+| 1034 | `mcq1000-p1034` | Probability T5 — Binomial variance | A ((p(1-p)/6)) |
+| 1036 | `mcq1000-p1036` | Probability T8 — covariance from joint density | A (0.02) |
+| 1038 | `mcq1000-p1038` | Probability T5 — continuity correction | A ((119.5<Y<130.5)) |
+| 1040 | `mcq1000-p1040` | Probability T5 — discrete mean and standard deviation | D (μ=1.226, σ=1.123) |
+| 1041 | `mcq1000-p1041` | Regression T4 — least-squares regression line | A (ŷ=1.125+1.5625x) |
+| 1042 | `mcq1000-p1042` | Statistical Inference T5 — estimator MSE | A (θ(1-θ)/4) |
+
+### Items deliberately held out
+
+- **Page 1032:** the stated 95% margin of error does not match the listed options under the standard (z=1.96) critical value; the nearest printed option is not exact.
+- **Page 1035:** the sample-size question does not state the population standard deviation (or another usable variance bound), so the answer cannot be determined.
+- **Page 1037:** duplicate of the continuity-correction question on page 1026; excluded.
+- **Page 1039:** multiple listed statistics are sufficient for the Bernoulli parameter: ΣXᵢ, ΣXᵢ² (equal to the sum for Bernoulli data), and a nonzero scalar multiple of the sum. The single-answer format is therefore invalid; excluded.
+- **Page 1043:** an F critical value cannot be determined without a stated significance level and tail convention; excluded.
+- **Page 1044:** both Σlog(Xᵢ) and its negative are one-to-one transformations and hence sufficient for θ; the single-answer options are ambiguous; excluded.
+- Pages **1022/1029** and **1027/1028** were duplicates in the source scan and remain excluded.
+
+### Current counts on this branch
+
+- Probability supplementary pool: **406**
+- Statistical Inference supplementary pool: **169**
+- Regression supplementary pool: **4**
+- Multivariate supplementary pool: **15**
+- Stochastic supplementary pool: **7**
+- Total supplementary items: **601**
+
+These are branch counts, not production counts. The new pages have not been merged or deployed. Exact-stem and semantic duplicate reconciliation against the full set of lesson/mastery/PYQ banks remains a required review gate.
