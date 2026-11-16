@@ -1071,3 +1071,16 @@ Updated counts: Probability 527, Statistical Inference 253, Multivariate Analysi
 - **Pages 171–173 — excluded.** Page 171's numerator and denominator sums overlap and the sample's stated index range is inconsistent; pages 172–173 have a clipped weighted-statistic definition, so the requested variance cannot be recovered safely.
 
 Updated counts: Probability 527, Statistical Inference 254, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **821 total supplementary items**. Batch 2 contributes 235 over the 586-item baseline.
+
+
+## Further early-source review — pages 177–199
+
+- **Page 177 — excluded.** The displayed ratio uses overlapping sums of exponential observations; the claimed F distribution cannot follow from a constant multiple of that ratio because the numerator and denominator are not independent chi-square sums.
+- **Page 184 — held out.** The role of d and n in the Pareto density/estimator expression is not defined clearly enough to select a unique answer.
+- **Page 187 — excluded.** The Bernoulli variable Y is not defined as a function of the sample, so its success probability cannot be determined from the stated iid Bernoulli observations alone.
+- **Page 195 — retained.** For \(f(x)=c(1+x^2)^{-2}\), symmetry gives mean zero; normalisation gives c=2/π and the second moment is 1, so the variance is 1. Added as `mcq1000-p195`.
+- **Page 196 — retained.** If \(f_X(x)=\alpha x^{\alpha-1}\) on (0,1), then \(X^\alpha\sim U(0,1)\), so \(-2\alpha\ln X\sim\chi^2_2\). Added as `mcq1000-p196`.
+- **Page 197 — excluded.** The displayed density \(2x/a\) on (0,a) integrates to a, so normalisation would force a=1, which is absent from the options.
+- **Page 199 — excluded from the Statistics Paper 2 question bank.** It is a matrix-determinant algebra question rather than a statistics question.
+
+Updated counts: Probability 529, Statistical Inference 254, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **823 total supplementary items**. Batch 2 contributes 237 over the 586-item baseline.
