@@ -999,3 +999,10 @@ The page 932 answer correction and page 952 addition bring the branch to Probabi
 - **Page 1043 — excluded.** The F-critical-value question gives only sample sizes \(n_1=10,n_2=14\) but omits the significance level (and tail convention). An F critical value cannot be determined uniquely from the degrees of freedom alone.
 
 The audit does not force the remaining gap to 1,000 with unclear or under-specified questions. All exclusions above remain out of the learner-facing pools.
+
+
+## Pool-to-topic consistency correction
+
+A final topic-prefix audit found one cross-module mismatch: `mcq1000-p103` was stored in the Statistical Inference supplementary pool but tagged `probability-t3`. Because it asks for a conditional expectation under independent binomial sampling, it belongs in the Probability pool. The item was moved without changing its ID, wording, answer or explanation.
+
+Updated counts: Statistical Inference 248; Probability 524; Multivariate Analysis 22; Stochastic Processes 11; Regression 4 — **809 total**. All supplementary item topic prefixes now match their owning module pool.
