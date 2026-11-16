@@ -671,3 +671,33 @@ Eleven additional questions were checked from enlarged source images:
 - Total: **754 supplementary items** on this branch (168 additions in this batch branch).
 
 Page 949 uses the geometric distribution on support ({0,1,2,\ldots}), as indicated by the stated memoryless identity; its mean is ((1-p)/p), not (1/p).
+
+
+## Final remaining-page additions — pages 1012–1044
+
+Eight additional questions were verified from enlarged page images:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 1012 | `mcq1000-p1012` | Statistical Inference T4 — MLE set for Uniform location | C, (T_3) is an MLE |
+| 1013 | `mcq1000-p1013` | Statistical Inference T4 — MLE set for shifted Uniform | A, 1.8 lies in the feasible MLE interval |
+| 1014 | `mcq1000-p1014` | Statistical Inference T4 — Gamma-shape-2 scale MLE | B, (sum X_i/(2n)) |
+| 1015 | `mcq1000-p1015` | Statistical Inference T1 — sufficiency for Uniform(0,θ) | C, maximum sufficient; minimum not |
+| 1032 | `mcq1000-p1032` | Statistical Inference T13 — margin of error with known σ | Numeric: 1.3475 |
+| 1037 | `mcq1000-p1037` | Probability T13 — continuity correction | B, (P(Y>19.5)) |
+| 1039 | `mcq1000-p1039` | Statistical Inference T1 — Bernoulli sufficient statistic | B, (sum X_i) |
+| 1044 | `mcq1000-p1044` | Statistical Inference T1 — one-to-one transformations of sufficient statistic | A, statements A, C and D |
+
+### Pages held out
+- **Page 1035:** sample-size calculation does not provide a population standard deviation or another variance estimate; the requested sample size is not determined by the visible information.
+- **Page 1043:** an F critical value requires a significance level/tail convention as well as the degrees of freedom. Only (n_1,n_2) are shown; held.
+
+### Updated branch counts
+- Probability: **500**
+- Statistical Inference: **231**
+- Multivariate: **16**
+- Stochastic: **11**
+- Regression: **4**
+- Total: **762 supplementary items** on this branch (176 additions in this batch branch).
+
+This completes the page-by-page eligibility pass for the remaining unreviewed 1012–1044 segment. Pages with unreadable, underspecified, invalid or duplicate content remain excluded and documented rather than being forced into the bank.
