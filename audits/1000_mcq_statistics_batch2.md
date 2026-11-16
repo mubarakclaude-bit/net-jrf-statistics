@@ -948,3 +948,14 @@ Updated branch counts: Probability 520, Statistical Inference 247, Multivariate 
 - **Page 920 — excluded earlier.** The transformed chi-square ratio does not have the claimed standard Student-t distribution.
 
 Updated branch counts: Probability 520, Statistical Inference 248, Multivariate Analysis 20, Stochastic Processes 11, Regression 4 — **803 supplementary items**. Batch 2 contributes 217 items over the 586-item batch-1 baseline.
+
+
+## Additional source pages reviewed — pages 459, 462, 481 and 487–489
+
+- **Page 459 — retained.** By exchangeability of three iid Uniform(0,1) variables, the three expected ratios \(E[X_i/(X_1+X_2+X_3)]\) are equal and sum to 1, so each is 1/3. Added as `mcq1000-p459`.
+- **Page 462 — retained.** For iid standard normals, the first term has zero expectation by sign symmetry in X and the second by exchange symmetry of X and Y. Added as `mcq1000-p462`.
+- **Page 481 — retained with a correction to the source claim.** The transformed order statistic \(F(X_{(r)})\) has Beta(r,n−r+1), not Beta(r+1,n−r+1); distinct order statistics are dependent, and the expected difference is (r−s)/(n+1). Added as multi-select `mcq1000-p481`, marking A and C true.
+- **Page 487 — retained.** For the negative-binomial convention counting trials to obtain r successes, \(E(X)=r/p\); at r=2,p=1/2 the answer is 4. Added as numeric item `mcq1000-p487`.
+- **Page 489 — retained.** For the exponential scale model, the MLE is the sample mean; the observed sample {1,2,3} gives 2, which satisfies the positive-integer restriction. Added as numeric item `mcq1000-p489`.
+
+Updated branch counts: Probability 523, Statistical Inference 249, Multivariate Analysis 21, Stochastic Processes 11, Regression 4 — **808 supplementary items**. Batch 2 contributes 222 items over the 586-item batch-1 baseline.
