@@ -266,3 +266,37 @@ Eight questions were checked against enlarged page images and independently solv
 - Total: **648 supplementary items** on this branch (62 additions in this batch branch).
 
 Page 818 was adapted to the repository's four-statement multi-select format by adding one explicitly identified symmetry statement. No claim is made that every item in the scanned PDF has now been reviewed.
+
+
+## Further verified additions — pages 821–830
+
+Nine more questions were visually transcribed and checked:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 821 | `mcq1000-p821` | Probability T8 — covariance of linear combinations | A, 0 |
+| 822 | `mcq1000-p822` | Probability T8 — correlation of linear combinations | D, 0 (none of listed numerical options) |
+| 823 | `mcq1000-p823` | Statistical Inference T1 — sufficient statistics in the normal model | D, all four are sufficient |
+| 825 | `mcq1000-p825` | Probability T10 — moments and symmetry of a bivariate transformation | A, statements A and C |
+| 826 | `mcq1000-p826` | Probability T6 — difference of iid exponential variables | B, statements B and C |
+| 827 | `mcq1000-p827` | Probability T1 — order-statistic properties | B, statements A, C and D |
+| 828 | `mcq1000-p828` | Probability T5 — Binomial probability ratio | A, decreasing in x |
+| 829 | `mcq1000-p829` | Probability T7 — zero variance implication | C, probability 1 |
+| 830 | `mcq1000-p830` | Probability T13 — chi-square sampling distribution | C, chi-square with 2 degrees of freedom |
+
+### Page-format notes
+- Pages **823, 825, 826 and 827** are represented as multi-select items. Where a source contained fewer than four statements, the repository format was met by explicitly adding mathematically checked statements and identifying the adaptation in the item record/audit.
+- Page 827's Beta law was checked from the probability integral transform: (F(X_{(r)})\sim\operatorname{Beta}(r,n-r+1)). The printed option with (r+1) is not correct.
+
+### Page held out
+- **Page 824:** the Gamma scale/rate convention is not explicit. The Beta ratio claims require a common rate/scale, which cannot be assumed from the scan alone.
+
+### Updated branch counts
+- Probability: **434**
+- Statistical Inference: **196**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **8**
+- Total: **657 supplementary items** on this branch (71 additions in this batch branch).
+
+The branch remains unmerged and is not a production question count.
