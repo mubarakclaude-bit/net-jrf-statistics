@@ -1006,3 +1006,16 @@ The audit does not force the remaining gap to 1,000 with unclear or under-specif
 A final topic-prefix audit found one cross-module mismatch: `mcq1000-p103` was stored in the Statistical Inference supplementary pool but tagged `probability-t3`. Because it asks for a conditional expectation under independent binomial sampling, it belongs in the Probability pool. The item was moved without changing its ID, wording, answer or explanation.
 
 Updated counts: Statistical Inference 248; Probability 524; Multivariate Analysis 22; Stochastic Processes 11; Regression 4 — **809 total**. All supplementary item topic prefixes now match their owning module pool.
+
+
+## Duplicate-stem reconciliation across all five supplementary pools
+
+A final exact normalised-stem scan across all five supplementary pools found three duplicate pairs:
+
+- `mcq1000-p277` duplicated `mcq1000-p576` (uniform trigonometric probability).
+- `mcq1000-p459` duplicated `mcq1000-p805` (exchangeable Uniform ratio expectation).
+- `mcq1000-p477` duplicated `mcq1000-p476` (iid mean/variance, WLLN and CLT statements).
+
+The later duplicate entries p277, p459 and p477 were removed; the earlier entries were retained. This is in addition to the prior exact-duplicate reconciliation recorded for the two batch-1 overlaps. A near-duplicate comparison against the current inference, probability and multivariate PYQ-variant pools and the June 2026 full-paper bank found no high-overlap stem candidates at the tested 0.65 token-Jaccard threshold; this is a screening check, not a full semantic proof.
+
+Reconciled pool counts: Statistical Inference 248, Probability 521, Multivariate Analysis 22, Stochastic Processes 11 and Regression 4 — **806 total supplementary items**. The batch-2 additions now stand at 220 over the 586-item batch-1 baseline; 194 remain to reach the 1,000-item target.
