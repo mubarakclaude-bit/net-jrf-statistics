@@ -203,3 +203,36 @@ Seven additional questions were visually checked and independently solved:
 - Total: **633 supplementary items** on this branch (47 additions in this batch branch).
 
 No additions from this range were accepted solely from the printed answer mark; each answer was independently derived. These items remain draft-only.
+
+
+## Further verified additions — pages 801–810
+
+Seven additional questions were checked and independently solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 801 | `mcq1000-p801` | Statistical Inference T5 — unbiased estimation from a mixture | D, (S_n/(3n)) |
+| 802 | `mcq1000-p802` | Probability T9 — consistency via the law of large numbers | C, (	heta/e) |
+| 803 | `mcq1000-p803` | Statistical Inference T4 — MLE from coarsened Bernoulli indicators | B, (1-\bar Y) |
+| 804 | `mcq1000-p804` | Probability T8 — counting outcomes for five dice | A, (15/6^5) |
+| 805 | `mcq1000-p805` | Probability T8 — symmetry and expectation | A, (1/3) |
+| 807 | `mcq1000-p807` | Stochastic Processes T6 — multiplicative betting/random walk | D, none of the listed outcomes |
+| 810 | `mcq1000-p810` | Probability T8 — modular arithmetic and discrete probability | C, 0.25 |
+
+### Source correction
+- **Page 801:** the printed mark appears beside option C, but the mixture has mean (3\mu). The unbiased estimator is (S_n/(3n)), option D. The item records this correction.
+
+### Pages held out in this range
+- **Page 806:** the pivotal expression is clipped/ambiguous at the left margin, so the confidence-bound event cannot be transcribed reliably.
+- **Page 808:** the intersection probability cannot be determined from the two marginal survival probabilities alone; independence is not stated. The source's product answer assumes an unstated condition, so the item is excluded.
+- **Page 809:** the four displayed probabilities sum to (	heta+2/45), not 1 for general (	heta). The displayed function is not a valid pmf as written; excluded.
+
+### Updated draft counts
+- Probability: **421**
+- Statistical Inference: **192**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **8**
+- Total: **640 supplementary items** on this branch (54 additions in this batch branch).
+
+No item was accepted solely on the basis of a printed answer mark. These questions remain draft-only pending CI and review.
