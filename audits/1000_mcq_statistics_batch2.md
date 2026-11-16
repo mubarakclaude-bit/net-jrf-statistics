@@ -363,3 +363,33 @@ Ten more questions were checked against enlarged page images and solved independ
 - Total: **675 supplementary items** on this branch (89 additions in this batch branch).
 
 All additions remain draft-only pending the latest complete CI run, duplicate reconciliation and content review.
+
+
+## Further verified additions — pages 851–860
+
+Nine further questions were visually transcribed and independently solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 851 | `mcq1000-p851` | Probability T6 — normal probability over polynomial regions | A, (Phi(1)) |
+| 852 | `mcq1000-p852` | Statistical Inference T4 — MLE for a power-density parameter | B, (-n/\sum\ln X_i-1) |
+| 853 | `mcq1000-p853` | Probability T12 — Bayes theorem and vaccination | D, 1/9 |
+| 854 | `mcq1000-p854` | Probability T4 — Poisson second moment | B, (lambda) |
+| 855 | `mcq1000-p855` | Probability T4 — MGF factorisation, mean and variance | D only, variance (233/450) |
+| 856 | `mcq1000-p856` | Probability T8 — mutually exclusive event constraints | A, ([-1/3,1/2]) |
+| 857 | `mcq1000-p857` | Probability T8 — geometric probability on a line segment | B, 1/2 |
+| 859 | `mcq1000-p859` | Probability T10 — area-ratio geometric probability | B, 1/10 |
+| 860 | `mcq1000-p860` | Statistical Inference T3 — UMVU via Poisson factorial moments | C, (X(X-1)(X-2)(X-3)(X-4)) |
+
+### Page held out
+- **Page 858:** the phrase “a randomly selected chord” does not specify a chord-selection mechanism. This is the Bertrand paradox: different natural random-chord constructions give different probabilities. The marked 1/2 cannot be treated as uniquely determined from the wording, so the item is excluded.
+
+### Updated branch counts
+- Probability: **454**
+- Statistical Inference: **203**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **8**
+- Total: **684 supplementary items** on this branch (98 additions in this batch branch).
+
+Page 855 is represented as multi-select because only its variance statement is true; the MGF was factored into Bernoulli components to verify each claim. These items remain draft-only.
