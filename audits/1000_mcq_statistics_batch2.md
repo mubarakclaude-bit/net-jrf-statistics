@@ -330,3 +330,36 @@ Eight further questions were visually transcribed and independently solved:
 - Total: **665 supplementary items** on this branch (79 additions in this batch branch).
 
 The held-out items are recorded to prevent uncertain source wording or unverified assumptions from entering the learner question bank.
+
+
+## Further verified additions — pages 841–850
+
+Ten more questions were checked against enlarged page images and solved independently:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 841 | `mcq1000-p841` | Probability T9 — Poisson CLT | C, limit 1/2 |
+| 842 | `mcq1000-p842` | Probability T6 — minimum of independent exponentials | D, minimum is exponential |
+| 843 | `mcq1000-p843` | Probability T10 — Gamma–Beta transformation and independence | A, statements A, B and C |
+| 844 | `mcq1000-p844` | Probability T10 — hazard under transformations | B, statements A and D |
+| 845 | `mcq1000-p845` | Statistical Inference T4 — MLE under Uniform location parameter | C, listed values 0.02 and −0.54 |
+| 846 | `mcq1000-p846` | Probability T9 — weak law and continuous mapping | C, all four statements |
+| 847 | `mcq1000-p847` | Statistical Inference T1 — sufficiency for Bernoulli sample | C, statements C and D |
+| 848 | `mcq1000-p848` | Probability T8 — intersection of independently chosen random subsets | C, (inom{n}{m}3^{n-m}/4^n) |
+| 849 | `mcq1000-p849` | Probability T10 — geometric probability in a disk | C, 1/4 |
+| 850 | `mcq1000-p850` | Probability T10 — product of independent Uniform variables | C, density (-\ln z) on (0,1) |
+
+### Interpretation and format notes
+- Page 845 has a non-unique MLE interval ([-0.70,0.04]). Both listed values 0.02 and −0.54 are valid MLEs; the source marks both, and the platform item is multi-select.
+- Pages 843, 844, 846 and 847 use the repository's four-statement multi-select contract. Their combination options were standardised to identify the correct sets without changing the underlying claims.
+- Page 848 is represented as two independently and uniformly selected subsets, matching the intended random-subset experiment and the provided answer form.
+
+### Updated branch counts
+- Probability: **447**
+- Statistical Inference: **201**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **8**
+- Total: **675 supplementary items** on this branch (89 additions in this batch branch).
+
+All additions remain draft-only pending the latest complete CI run, duplicate reconciliation and content review.
