@@ -236,3 +236,33 @@ Seven additional questions were checked and independently solved:
 - Total: **640 supplementary items** on this branch (54 additions in this batch branch).
 
 No item was accepted solely on the basis of a printed answer mark. These questions remain draft-only pending CI and review.
+
+
+## Further verified additions — pages 811–820
+
+Eight questions were checked against enlarged page images and independently solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 811 | `mcq1000-p811` | Probability T8 — arrangements and counting | A, 1/35 |
+| 812 | `mcq1000-p812` | Statistical Inference T4 — MLE with shifted-exponential support | A, sample minimum |
+| 813 | `mcq1000-p813` | Statistical Inference T5 — least-squares minimisation | B, c=4 |
+| 815 | `mcq1000-p815` | Probability T10 — expectation under independent transformations | B, none of the listed values (expectation 0) |
+| 816 | `mcq1000-p816` | Statistical Inference T13 — length of a t confidence interval | C, (2s,t_{1-\alpha/2,n-1}/\sqrt n) |
+| 817 | `mcq1000-p817` | Probability T6 — Beta log-moment | C, (-1/\theta) |
+| 818 | `mcq1000-p818` | Probability T6 — Cauchy reciprocal and stability | B, statements C and D |
+| 820 | `mcq1000-p820` | Probability T10 — symmetry of a bivariate normal expression | A, 0 |
+
+### Pages held out in this range
+- **Page 814:** the Gamma distributions' scale/rate parameterisation is not stated; (E(\sqrt{XY})) depends on that parameterisation.
+- **Page 819:** the distribution denoted by the asterisk is missing from the question statement; cannot determine the requested family for the sample mean.
+
+### Updated branch counts
+- Probability: **426**
+- Statistical Inference: **195**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **8**
+- Total: **648 supplementary items** on this branch (62 additions in this batch branch).
+
+Page 818 was adapted to the repository's four-statement multi-select format by adding one explicitly identified symmetry statement. No claim is made that every item in the scanned PDF has now been reviewed.
