@@ -988,3 +988,14 @@ This pass rechecked the high-resolution scans and reconciled them against existi
 - **Page 953 — already present.** The MGF is Binomial(10,0.57), so \(P(X>10)=0\). Existing item `mcq1000-p953` was confirmed.
 
 The page 932 answer correction and page 952 addition bring the branch to Probability 523, Statistical Inference 249, Multivariate Analysis 22, Stochastic Processes 11 and Regression 4 — **809 supplementary items**.
+
+
+## Remaining scan checks from pages 928–953 and page 1043
+
+- **Page 928 — excluded.** The prompt about generating a standard normal value using a Bernoulli-trial generator is corrupted in the key mathematical notation; the claimed construction cannot be reconstructed safely.
+- **Page 929 — already present.** The two-toss von Neumann procedure gives an unbiased binary choice from a biased coin because \(P(HT)=P(TH)=p(1-p)\). Existing item `mcq1000-p929` was confirmed.
+- **Page 933 — already present.** The chi-square calculation was reconciled with item `mcq1000-p933`.
+- **Page 952 — retained in the multivariate pool.** Item `mcq1000-p952` records the variance of a linear combination of three independent standard normal variables.
+- **Page 1043 — excluded.** The F-critical-value question gives only sample sizes \(n_1=10,n_2=14\) but omits the significance level (and tail convention). An F critical value cannot be determined uniquely from the degrees of freedom alone.
+
+The audit does not force the remaining gap to 1,000 with unclear or under-specified questions. All exclusions above remain out of the learner-facing pools.
