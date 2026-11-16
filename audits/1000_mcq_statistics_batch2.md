@@ -1084,3 +1084,22 @@ Updated counts: Probability 527, Statistical Inference 254, Multivariate Analysi
 - **Page 199 — excluded from the Statistics Paper 2 question bank.** It is a matrix-determinant algebra question rather than a statistics question.
 
 Updated counts: Probability 529, Statistical Inference 254, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **822 total supplementary items**. Batch 2 contributes 236 over the 586-item baseline.
+
+
+## Further early-source review — pages 247–397
+
+- **Page 247 — retained.** For X~Poisson(λ), \(E[1/(1+X)]=(1-e^{-\lambda})/\lambda\), obtained by shifting the Poisson series. Added as `mcq1000-p247`.
+- **Page 253 — held out.** The confidence-interval expression depends on the source's chi-square quantile convention, which is not specified in the scan. The maximum/minimum unbiasedness statements were not accepted from the marked key without that convention.
+- **Page 261 — held out.** The notation in the estimator/correlation question is too corrupted to reconstruct.
+- **Page 263 — excluded.** The stated geometric memoryless identity has an off-by-one error for support \(\{1,2,\ldots\}\).
+- **Page 274 — retained.** The MGF \((5+e^t)^3/216\) identifies Binomial(3,1/6), so \(P(X>1)=2/27\). Added as `mcq1000-p274`.
+- **Page 275 — retained.** Direct integration of the two pieces of the density gives \(P(1/2<X<2)=15/16\). Added as `mcq1000-p275`.
+- **Page 283 — retained.** The transformation \(U=X^2\) gives Gamma(4,1), so \(2X^2\sim\chi^2_8\). Added as `mcq1000-p283`.
+- **Page 295 — retained.** The marginal density of X is \((1+x)^{-2}\), and the conditional density of Y given X=x is Gamma(shape 2, scale 1+x), giving \(E(Y\mid X=x)=2(1+x)\). Added as `mcq1000-p295`.
+- **Page 296 — retained as multi-select.** For joint density x+y on the unit square, \(E(X\mid Y=y)=(1/3+y/2)/(1/2+y)\). The correct values are 7/12 at y=1/2 and 11/18 at y=1/4; the other two source statements are incorrect. Added as `mcq1000-p296`.
+- **Page 304 — excluded.** Normalisation and the stated mean give α=3, β=−4, making the alleged density negative on part of (0,1); the source options therefore do not define a valid pdf.
+- **Page 309 — held out.** The Gamma parameterisation is not sufficiently clear to identify the method-of-moments estimator without assuming a shape/rate convention.
+- **Page 322 — retained.** Independent negative-binomial variables with a common success probability add to another negative-binomial variable; the geometric distribution is the r=1 special case. Added as `mcq1000-p322`.
+- **Pages 333, 344, 345, 362, 367, 393 and 397 — excluded or held out.** Page 333 omits normality for the chi-square sampling result; page 344 duplicates an existing normal-sample-mean item; page 345's displayed density is not normalised; page 362 is a cover; page 367's Poisson/normal approximation does not match the listed options; page 393's transform is incomplete; and page 397's LLN condition is not legible enough to identify the exact expression.
+
+Updated counts: Probability 536, Statistical Inference 254, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **830 total supplementary items**. Batch 2 contributes 244 over the 586-item baseline.
