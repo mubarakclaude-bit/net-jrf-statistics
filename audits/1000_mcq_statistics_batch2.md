@@ -789,3 +789,9 @@ After adding page 1018, current branch counts are Probability 500, Statistical I
 - **Page 824 — excluded.** The upper portion of the scanned question, containing the distributions and parameter definitions for \(x,y,z\), is clipped. The marked options cannot be independently established from the visible portion.
 
 These exclusions are deliberate quality controls: they avoid encoding a source key that conflicts with the formula as printed.
+
+
+### Additional source-key checks
+
+- **Page 809 — excluded.** The displayed point probabilities sum to \(\theta+2/45\), not 1 for general \(\theta\). Thus the displayed function is not a pmf as claimed (except at one isolated parameter value); the source's “not a pmf” key is consistent.
+- **Page 870 — excluded.** The scan asks \(P(4<Y<16\mid X<5)\) for a bivariate normal with \(\mu_X=5,\mu_Y=10,\sigma_X=1,\sigma_Y=5\). By the symmetry \((X-5,Y-10)\mapsto (-(X-5),-(Y-10))\), the conditional probability is independent of positive \(\rho\) and equals \(P(-1.2<Z<1.2)\approx0.7699\), not the printed 0.954. The source-marked \(\rho=0.8\) is unsupported.
