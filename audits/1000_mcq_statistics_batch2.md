@@ -423,3 +423,33 @@ Six further questions were transcribed from enlarged page images and independent
 - Total: **690 supplementary items** on this branch (104 additions in this batch branch).
 
 No question from this range was imported where the source formula was invalid, unreadable or inconsistent with the options.
+
+
+## Further verified additions — pages 872–880
+
+Nine further questions were checked and solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 872 | `mcq1000-p872` | Probability T8 — volume of a simplex in the unit cube | A, 1/6 |
+| 873 | `mcq1000-p873` | Stochastic Processes T6 — gambler's ruin | D, 7/31 |
+| 874 | `mcq1000-p874` | Probability T8 — covariance and independence concepts | A, neither statement |
+| 875 | `mcq1000-p875` | Probability T8 — variance as covariance | A, Cov(X,X) |
+| 876 | `mcq1000-p876` | Probability T10 — fractional part of a Uniform variable | C, Uniform(0,1) |
+| 877 | `mcq1000-p877` | Probability T4 — expectation of a Poisson function | D, ((1-e^{-\lambda})/\lambda) |
+| 878 | `mcq1000-p878` | Probability T6 — reciprocal moment of a Beta variable | B, none of the listed expressions generally |
+| 879 | `mcq1000-p879` | Probability T11 — characteristic function of the Cauchy law | A, Cauchy(0,1) |
+| 880 | `mcq1000-p880` | Statistical Inference T5 — consistency via second moments | C, (sqrt{\sum X_i^2/(5n)}) |
+
+### Page held out
+- **Page 871:** the displayed function (f(x;\theta)=x\theta^2+x^2) on (0,1) does not integrate to one for general (	heta\in[-1,1]). It is not a valid density as printed; excluded.
+
+### Updated branch counts
+- Probability: **464**
+- Statistical Inference: **207**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **9**
+- Total: **699 supplementary items** on this branch (113 additions in this batch branch).
+
+Page 878's reciprocal Beta moment was not assumed finite for all (p>0): it exists only for (p>1), and then equals ((p+q-1)/(p-1)). This is why the source's listed (q/p) is rejected.
