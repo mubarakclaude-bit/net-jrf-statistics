@@ -1103,3 +1103,10 @@ Updated counts: Probability 529, Statistical Inference 254, Multivariate Analysi
 - **Pages 333, 344, 345, 362, 367, 393 and 397 — excluded or held out.** Page 333 omits normality for the chi-square sampling result; page 344 duplicates an existing normal-sample-mean item; page 345's displayed density is not normalised; page 362 is a cover; page 367's Poisson/normal approximation does not match the listed options; page 393's transform is incomplete; and page 397's LLN condition is not legible enough to identify the exact expression.
 
 Updated counts: Probability 536, Statistical Inference 254, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **830 total supplementary items**. Batch 2 contributes 244 over the 586-item baseline.
+
+
+### Additional page 305 check
+
+- **Page 305 — retained.** For a normal sample with known mean μ and unknown variance σ², maximising the likelihood gives \(\hat\sigma^2=n^{-1}\sum(X_i-\mu)^2\). The divisor n−1 is not the MLE in this known-mean setting. Added as `mcq1000-p305`.
+
+Updated counts: Probability 536, Statistical Inference 255, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **831 total supplementary items**. Batch 2 contributes 245 over the 586-item baseline.
