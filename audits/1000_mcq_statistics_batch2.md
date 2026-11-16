@@ -757,3 +757,14 @@ The enlarged page image clearly states that (X_1,X_2,X_3) are iid Uniform(0,1) a
 - **Total: 762 supplementary items**
 
 Page 871 was also rechecked at high resolution. The likelihood ratio is decreasing in (x), so the most powerful region is a lower tail; however, the displayed level (alpha=0.009) gives cutoff (c=\sqrt[3]{0.009}\approx0.208) under the null, which is not among the listed choices. The source-marked cutoff 0.3 has size 0.027, not 0.009. It remains excluded rather than importing an inconsistent answer.
+
+
+## Source-audit reconciliation — pages 1032, 1039 and 1044
+
+A second high-resolution audit found that the earlier held-out notes for these pages were stale and did not match the committed question records. The following is the authoritative disposition:
+
+- **Page 1032 — retained.** With known population standard deviation \(\sigma=5.5\), sample size \(n=64\), and \(z_{0.975}=1.96\), the 95% margin of error is \(1.96(5.5/\sqrt{64})=1.3475\). The numeric question is valid and remains in the Inference pool.
+- **Page 1039 — retained, answer format corrected.** For iid Bernoulli observations, \(\sum X_i\), \(\sum X_i^2\) (identical because \(X_i^2=X_i\)), and \((1/n^2)\sum X_i\) are all sufficient. The product \(\prod X_i\) is not sufficient for general \(n\). The item has been changed from single-choice to multi-select, with B, C and D marked true.
+- **Page 1044 — retained as multi-select.** For the Beta(1,θ) density \(f(x;\theta)=\theta x^{\theta-1}\), the likelihood depends on the sample through \(\sum\log X_i\). That statistic and its one-to-one transformations \(n/\sum\log X_i\) and \(-\sum\log X_i\) are all sufficient. The committed item correctly records A, C and D as true. The earlier held-out note claiming that this page was excluded is superseded.
+
+The total count is unchanged by the p1039 format correction. Current branch counts remain Probability 500, Statistical Inference 231, Multivariate 16, Stochastic 11 and Regression 4: **762 supplementary items**. This correction is important because it prevents learners being marked wrong for mathematically equivalent sufficient statistics.
