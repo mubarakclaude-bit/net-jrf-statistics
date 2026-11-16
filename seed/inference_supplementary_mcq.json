@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 672 and later pages 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 241,
+  "count": 245,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -4729,6 +4729,99 @@
       "explanation": "The likelihood contributes precision n and the prior contributes precision 1/σ². The posterior precision is n+1/σ², and the posterior mean is (nX̄)/(n+1/σ²)=nσ²X̄/(1+nσ²). Under squared-error loss, the Bayes estimator is the posterior mean, so option C is correct.",
       "check": "Posterior mean = (likelihood precision × sample mean + prior precision × prior mean)/(total precision); the prior mean is zero.",
       "pno": 518,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p617",
+      "format": "single",
+      "topic": "inference-t12",
+      "stem": "To test H₀:θ=1 against H₁:θ=2, suppose X~Uniform(0,θ) and the rule is to reject H₀ when X>0.5. What are the size and power of this test, respectively?",
+      "options": [
+        "0.05, 0.95",
+        "0.5, 0.75",
+        "0.05, 0.75",
+        "0.5, 0.5"
+      ],
+      "answer": "B",
+      "explanation": "The size is the probability of rejection under H₀. When θ=1, X is Uniform(0,1), so P(X>0.5|H₀)=0.5. The power is the probability of rejection under H₁. When θ=2, X is Uniform(0,2), so P(X>0.5|H₁)=(2−0.5)/2=0.75. Thus size=0.5 and power=0.75.",
+      "check": "For Uniform(0,θ), P(X>c)=(θ−c)/θ when 0<c<θ.",
+      "pno": 617,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p624",
+      "format": "single",
+      "topic": "inference-t3",
+      "stem": "Let X₁,…,Xₙ be a random sample from N(μ,σ²), with both μ and σ² unknown. Which listed expression is an unbiased estimator of μ²?",
+      "options": [
+        "(1/n)ΣXᵢ²",
+        "X̄²",
+        "No unbiased estimator exists",
+        "(1/[n(n−1)])(ΣXᵢ²−n²X̄²)",
+        "None of the above"
+      ],
+      "answer": "E",
+      "explanation": "Since E(X̄²)=μ²+σ²/n, X̄² is biased upward. The sample variance S²=(1/(n−1))Σ(Xᵢ−X̄)² is unbiased for σ², so X̄²−S²/n is unbiased for μ². Rewriting gives [n²X̄²−ΣXᵢ²]/[n(n−1)]. This is the negative of option D, and it is not among the listed expressions. Therefore “None of the above” is correct.",
+      "check": "Use E(X̄²)=μ²+σ²/n and E(S²)=σ²; subtract S²/n.",
+      "pno": 624,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p637",
+      "format": "single",
+      "topic": "inference-t9",
+      "stem": "Let X~N(0,σ²) and let Y be independent exponential with mean 2σ². To test H₀:σ²=1 against H₁:σ²>1 at level α, which form does the uniformly most powerful test take?",
+      "options": [
+        "A UMP test does not exist",
+        "Reject H₀ for large values of X²+Y",
+        "A chi-square test",
+        "A t-test"
+      ],
+      "answer": "B",
+      "explanation": "The joint density is proportional to (σ²)^(−3/2) exp{−(X²+Y)/(2σ²)}. It depends on the data through T=X²+Y. For σ²>1, the likelihood ratio is increasing in T, giving a monotone likelihood ratio in T. By the Karlin–Rubin theorem, the UMP upper-tail test rejects H₀ for large values of X²+Y.",
+      "check": "Identify the statistic in the joint likelihood: T=X²+Y; larger T favours larger σ².",
+      "pno": 637,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p655",
+      "format": "multi",
+      "topic": "inference-t4",
+      "stem": "A sample of size n is drawn uniformly from the triangle with vertices (0,0), (0,θ) and (θ,0), where θ>0. Let X₍ₙ₎=maxᵢXᵢ and Y₍ₙ₎=maxᵢYᵢ. Which statements are true?",
+      "statements": [
+        "X₍ₙ₎ and Y₍ₙ₎ are independent.",
+        "The MLE of θ is (X₍ₙ₎+Y₍ₙ₎)/2.",
+        "The MLE of θ is max₁≤i≤n(Xᵢ+Yᵢ).",
+        "The MLE of θ is max{X₍ₙ₎,Y₍ₙ₎}."
+      ],
+      "options": [
+        "A only",
+        "B only",
+        "C only",
+        "C and D only"
+      ],
+      "answer": "C",
+      "verdicts": {
+        "A": {
+          "tf": false,
+          "why": "The maxima are linked by the triangular support and are not independent."
+        },
+        "B": {
+          "tf": false,
+          "why": "The parameter must be at least every observed coordinate sum, not their two separate maxima averaged."
+        },
+        "C": {
+          "tf": true,
+          "why": "The sample is supported where xᵢ+yᵢ≤θ, so the smallest admissible θ is maxᵢ(xᵢ+yᵢ); the likelihood decreases with θ."
+        },
+        "D": {
+          "tf": false,
+          "why": "The maximum of the coordinate maxima can be smaller than the largest observed sum xᵢ+yᵢ."
+        }
+      },
+      "explanation": "The triangle has area θ²/2, so its uniform density is 2/θ² on x≥0, y≥0, x+y≤θ. The likelihood is (2/θ²)ⁿ provided θ≥maxᵢ(Xᵢ+Yᵢ), and zero otherwise. Since this likelihood decreases as θ increases, it is maximised at the smallest allowed value: θ̂=maxᵢ(Xᵢ+Yᵢ). Only statement C is true.",
+      "check": "For a uniform family with parameter-dependent support, first enforce every sample point's support constraint, then maximise the density over the allowed parameter values.",
+      "pno": 655,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
