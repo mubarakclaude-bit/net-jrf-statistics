@@ -838,3 +838,16 @@ The new questions were checked against the actual lesson seed `topicId` values a
 - **Page 299 — retained.** The sum of two independent Uniform(0,1) variables has triangular density \(g(z)=z\) on \(0<z<1\), \(g(z)=2-z\) on \(1<z<2\), and zero elsewhere. Added as `mcq1000-p299`.
 
 Updated branch counts: Probability 510, Statistical Inference 234, Multivariate Analysis 18, Stochastic Processes 11, Regression 4 — **777 supplementary items**. Batch 2 contributes 191 items over the 586-item batch-1 baseline.
+
+
+## Additional review — pages 314, 321–345 and 367
+
+- **Page 314 — excluded.** For \(X\sim U(\pi/6,\pi/4)\), \(\cos X>\sin X\) throughout the interval except at the endpoint, so the probability is 1. None of the printed options (2/3, 1/2, 1/3, 1/4) is correct.
+- **Page 321 — excluded.** The source defines \(s^2=(1/10)\sum_{i=1}^{10}(y_i-\bar y)^2\) and population variance \(\sigma^2=(1/100)\sum_{i=1}^{100}(Y_i-\bar Y)^2\). Under SRSWOR, \(E(s^2)=(10/11)\sigma^2\), so the unbiased estimator of \(\sigma^2\) is \((11/10)s^2\). That factor is absent from the printed options.
+- **Page 333 — excluded.** The question asks for the sampling distribution of \(S^2\) from a population specified only by its mean and variance. The chi-square result requires a normal population, which is not stated.
+- **Page 334 — retained.** For 100 independent normal expenses with mean 4,000 and standard deviation 500, the sum has mean 400,000 and standard deviation 5,000. Thus \(P(S<407500)=\Phi(1.5)=0.93319\). Added as `mcq1000-p334`.
+- **Page 344 — not added as a separate item.** It is another normal-sample-mean probability question of the same form as page 143; it is treated as a close practice variant rather than counted as a new concept item.
+- **Page 345 — excluded.** The displayed piecewise density integrates to less than one as printed, so it is not a valid pdf and the conditional probability options do not follow from a valid model.
+- **Page 367 — excluded pending clarification.** The strict event \(50<S_n<80\) for \(S_n\sim\operatorname{Poisson}(64)\) does not agree with the listed approximate values under the usual normal approximation with continuity correction. The answer key/rounding convention is not sufficiently reliable to import.
+
+Current branch counts: Probability 511, Statistical Inference 234, Multivariate Analysis 18, Stochastic Processes 11, Regression 4 — **778 supplementary items**. Batch 2 now contributes 192 items over the 586-item batch-1 baseline.
