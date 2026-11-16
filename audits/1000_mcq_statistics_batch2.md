@@ -74,3 +74,33 @@ The following questions were visually transcribed from enlarged page images, sol
 - Total supplementary items: **601**
 
 These are branch counts, not production counts. The new pages have not been merged or deployed. Exact-stem and semantic duplicate reconciliation against the full set of lesson/mastery/PYQ banks remains a required review gate.
+
+
+## Further verified additions — pages 761–769
+
+Eight more questions were visually transcribed and checked:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 761 | `mcq1000-p761` | Probability T3 — conditional expectation | D, ((X_1+\theta)/2) |
+| 762 | `mcq1000-p762` | Statistical Inference T12 — size of a test | C, 0 |
+| 763 | `mcq1000-p763` | Statistical Inference T5 — method of moments | B, (3\bar X) |
+| 765 | `mcq1000-p765` | Statistical Inference T3 — unbiased estimator properties | B, statements 2 and 3 |
+| 766 | `mcq1000-p766` | Statistical Inference T3 — MVUE | D, (\sum(X_i-\mu)^2/n) |
+| 767 | `mcq1000-p767` | Statistical Inference T3 — UMVU estimator | C, (\bar X^2-1/n) |
+| 768 | `mcq1000-p768` | Statistical Inference T4 — Poisson MLE | A, (\bar X) |
+| 769 | `mcq1000-p769` | Statistical Inference T13 — asymptotic confidence interval | B, endpoints ((1\pm1.96/\sqrt n)/\bar X) |
+
+### Pages held out
+- **Page 764:** the term “efficiency of estimator A relative to estimator B” is convention-dependent unless the variance ratio convention is stated; held out rather than guessing the intended convention.
+- **Page 770:** the upper endpoint in the Uniform model is visually ambiguous between a fixed 50 and (5\theta). Since the parameter is otherwise absent if read as fixed 50, (5\theta) is plausible but not sufficiently clear to assert as a faithful transcription. Held out pending a clearer source.
+
+### Count update
+- Probability: **407**
+- Statistical Inference: **176**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **7**
+- Total: **609 supplementary items** on this draft branch.
+
+Page 765 is encoded as a four-statement multi-select item. Page 769 retains the source's intended option B while explaining that the lower and upper endpoints must be read in increasing order. The new additions remain draft-only pending CI and duplicate/content review.
