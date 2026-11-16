@@ -576,3 +576,34 @@ Six additional questions were checked and solved:
 - Total: **726 supplementary items** on this branch (140 additions in this batch branch).
 
 Numeric-response items were added with explicit formulas and check steps. No assumptions about missing probability models were supplied for held-out questions.
+
+
+## Further verified additions — pages 921–929
+
+Eight additional questions were checked from enlarged page images and independently solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 921 | `mcq1000-p921` | Probability T4 — mean from an MGF | Numeric: 2.2 |
+| 922 | `mcq1000-p922` | Probability T5 — Binomial MGF and support | Numeric: 1 |
+| 923 | `mcq1000-p923` | Probability T4 — Poisson MGF and variance | Numeric: 3.47 |
+| 924 | `mcq1000-p924` | Statistical Inference T1 — complete sufficient statistic for discrete Uniform | Numeric: 10 |
+| 925 | `mcq1000-p925` | Statistical Inference T4 — exponential scale MLE | Numeric: 2 |
+| 926 | `mcq1000-p926` | Probability T8 — strictly increasing outcomes for three dice | Numeric: 0.09 |
+| 927 | `mcq1000-p927` | Stochastic Processes T9 — renewal stopping time for Uniform increments | Numeric: (e\approx2.7183) |
+| 929 | `mcq1000-p929` | Probability T8 — von Neumann debiasing using a biased coin | Numeric: 2 tosses per pair |
+
+### Corrections and exclusions
+- **Page 927:** the source's answer 2 is not the expected total number of samples. The tail-sum formula gives (E(N)=\sum_{n=0}^{\infty}1/n!=e\approx2.7183). The bank corrects the answer.
+- **Page 928:** the Bernoulli-generator notation below the question is too corrupted to determine the intended algorithm; held.
+- **Page 930:** duplicate of page 872 (three independent Uniform(0,1) variables with sum at most 1); excluded.
+
+### Updated branch counts
+- Probability: **484**
+- Statistical Inference: **219**
+- Multivariate: **16**
+- Stochastic: **11**
+- Regression: **4**
+- Total: **734 supplementary items** on this branch (148 additions in this batch branch).
+
+Page 929's two-toss method is the von Neumann construction: HT and TH have equal probability for any coin bias; identical pairs are discarded and retried.
