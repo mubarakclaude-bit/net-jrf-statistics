@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 672 and later pages 959, 973, 999)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 238,
+  "count": 241,
   "items": [
     {
       "id": "mcq1000-p959",
@@ -4654,6 +4654,81 @@
       "explanation": "Under H₀, N~Binomial(100,0.5). For an upper-tailed test, choose the smallest integer c such that P₀(N≥c)≤0.05. The exact binomial tail is P(N≥58)≈0.0666, which is too large, while P(N≥59)≈0.0443, which is at most 0.05. Therefore reject H₀ when N≥59, equivalently N>58 (option A).",
       "check": "The boundary check is P(N≥59)≈0.0443≤0.05, whereas P(N≥58)≈0.0666>0.05.",
       "pno": 410,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p513",
+      "format": "multi",
+      "topic": "inference-t3",
+      "stem": "Let X₁,…,Xₙ be iid Poisson(λ), with λ>0 unknown. Which statements about estimating e^(−2λ) are true?",
+      "statements": [
+        "(1/n)Σ(−1)^{Xᵢ} is unbiased for e^(−2λ).",
+        "(1/n)Σ(−1)^{Xᵢ} is consistent for e^(−2λ).",
+        "((n−2)/n)^{ΣXᵢ} is the minimum-variance unbiased estimator of e^(−2λ).",
+        "((n−2)/n)^{ΣXᵢ} is consistent for e^(−2λ)."
+      ],
+      "options": [
+        "A and B only",
+        "A, B and C only",
+        "A, B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "D",
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "For X~Poisson(λ), E[(-1)^X]=exp(λ((-1)-1))=e^(−2λ); averaging preserves unbiasedness."
+        },
+        "B": {
+          "tf": true,
+          "why": "The terms are iid with finite variance, so the law of large numbers gives convergence to their expectation."
+        },
+        "C": {
+          "tf": true,
+          "why": "ΣXᵢ is complete sufficient for λ. Conditioning the unbiased estimator (-1)^{X₁} on ΣXᵢ gives ((n−2)/n)^{ΣXᵢ}; Lehmann–Scheffé makes it UMVU."
+        },
+        "D": {
+          "tf": true,
+          "why": "ΣXᵢ/n→λ and n log(1−2/n)→−2, so the estimator converges to e^(−2λ)."
+        }
+      },
+      "explanation": "First, the Poisson probability-generating function gives E[s^X]=exp(λ(s−1)); at s=−1 this is e^(−2λ). Thus the sample average is unbiased and consistent. Next, T=ΣXᵢ is complete sufficient for λ. Given T, X₁ has Binomial(T,1/n) distribution, so E[(-1)^{X₁}|T]=(1−2/n)^T. By Lehmann–Scheffé this conditional expectation is the UMVU estimator. Finally, T/n→λ and (1−2/n)^T→e^(−2λ), so it is consistent as well.",
+      "check": "Use E[s^X]=exp(λ(s−1)) for Poisson and condition on the complete sufficient statistic T=ΣXᵢ.",
+      "pno": 513,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p517",
+      "format": "single",
+      "topic": "inference-t3",
+      "stem": "Let X₁,…,Xₙ be iid N(θ,σ²), where σ² is known, and let X̄ be the sample mean. Find the minimum-variance unbiased estimator of e^(2θ).",
+      "options": [
+        "exp(2X̄−σ²/n)",
+        "exp(2X̄−4σ²/n)",
+        "exp(2X̄−2σ²/n)",
+        "exp(2nX̄−2σ²/n)"
+      ],
+      "answer": "C",
+      "explanation": "The sample mean has distribution X̄~N(θ,σ²/n). For a normal variable Z~N(m,v), E(e^{tZ})=exp(tm+t²v/2). Therefore E[e^{2X̄}]=exp(2θ+2σ²/n). Multiplying by exp(−2σ²/n) removes the extra factor and gives expectation e^{2θ}. Since X̄ is complete sufficient for θ in this normal location family with known variance, the unbiased function exp(2X̄−2σ²/n) is the UMVU estimator.",
+      "check": "Apply the normal MGF with t=2: the correction term is t²(σ²/n)/2=2σ²/n.",
+      "pno": 517,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p518",
+      "format": "single",
+      "topic": "inference-t7",
+      "stem": "Let X₁,…,Xₙ be iid N(θ,1), with prior θ~N(0,σ²). Under squared-error loss, what is the Bayes estimator of θ in terms of X̄?",
+      "options": [
+        "X̄/(1+σ²)",
+        "X̄",
+        "nσ²X̄/(1+nσ²)",
+        "n(X̄+σ²)/(1+nσ²)"
+      ],
+      "answer": "C",
+      "explanation": "The likelihood contributes precision n and the prior contributes precision 1/σ². The posterior precision is n+1/σ², and the posterior mean is (nX̄)/(n+1/σ²)=nσ²X̄/(1+nσ²). Under squared-error loss, the Bayes estimator is the posterior mean, so option C is correct.",
+      "check": "Posterior mean = (likelihood precision × sample mean + prior precision × prior mean)/(total precision); the prior mean is zero.",
+      "pno": 518,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
