@@ -897,3 +897,21 @@ Updated branch counts: Probability 519, Statistical Inference 241, Multivariate 
 - **Page 655 — retained.** Uniform sampling from the triangle \(x\ge0,y\ge0,x+y\le\theta\) gives likelihood proportional to \(\theta^{-2n}\) on \(\theta\ge\max_i(X_i+Y_i)\). Hence \(\hat\theta=\max_i(X_i+Y_i)\). Added as multi-select `mcq1000-p655`.
 
 Updated branch counts: Probability 519, Statistical Inference 245, Multivariate Analysis 20, Stochastic Processes 11, Regression 4 — **799 supplementary items**. Batch 2 contributes 213 items over the 586-item batch-1 baseline.
+
+
+## Further source pages reviewed — pages 706–800
+
+- **Page 706 — excluded.** The variance parameter in the displayed binomial question is clipped, so the binomial parameter and requested probability cannot be recovered reliably.
+- **Page 707 — excluded.** The two missing cards' suits/ranks are unspecified; the probability of drawing a spade depends on which cards are missing.
+- **Page 713 — retained.** For \(X\sim\operatorname{Bin}(5,p)\), \(np+np(1-p)=1.8\) gives \(p=0.2\). Hence \(P(X=2)=\binom52(0.2)^2(0.8)^3=0.2048\). Added as `mcq1000-p713`.
+- **Page 714 — excluded.** The wording conflates the chance of making a 7-point shot with expected points per attempt; the source's expected-value target is not sufficiently clear.
+- **Page 715 — excluded.** The payout wording does not specify how the overlapping events (a king of hearts or queen of spades) are paid, so a unique fair entry amount cannot be determined.
+- **Page 727 — excluded.** The two grade probabilities are unreadable in the scan.
+- **Page 733 — held out.** The systematic-sampling design and intra-class correlation description do not provide enough detail to derive the claimed relative efficiency without additional assumptions about the population ordering.
+- **Page 737 — not added.** It restates the almost-sure convergence event definition already added from page 115.
+- **Page 741 — excluded.** The type-I error is \(e^{-2}\), while the type-II error under \(\theta=2\theta_0\) is \(1-e^{-4}\). None of the printed options gives this pair; the source choices omit the required leading 1−.
+- **Page 764 — retained.** For Uniform(0,θ), \(\operatorname{Var}(2\bar X)=\theta^2/(3n)\) and \(\operatorname{Var}(((n+1)/n)X_{(n)})=\theta^2/[n(n+2)]\). The defined relative efficiency is \(3/(n+2)\). Added as `mcq1000-p764`.
+- **Page 770 — not added.** The Uniform(0,θ) endpoint MLE is already represented several times in the bank; this adds no distinct practice value.
+- **Page 800 — held out.** Several listed convergence statements are true simultaneously for iid normal observations, but the scan presents a single-choice format. It is not safe to preserve the source's single-answer structure.
+
+Updated branch counts: Probability 520, Statistical Inference 246, Multivariate Analysis 20, Stochastic Processes 11, Regression 4 — **801 supplementary items**. Batch 2 contributes 215 items over the 586-item batch-1 baseline.
