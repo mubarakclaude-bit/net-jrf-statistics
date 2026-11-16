@@ -173,3 +173,33 @@ Seven additional questions were transcribed from enlarged page images and indepe
 - Total: **626 supplementary items** on this branch (40 additions in this batch branch).
 
 These additions are still draft-only and require latest-head CI and review.
+
+
+## Further verified additions — pages 791–799
+
+Seven additional questions were visually checked and independently solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 791 | `mcq1000-p791` | Statistical Inference T1 — sufficiency | A, B and C (one-to-one transformations of the full sample) |
+| 793 | `mcq1000-p793` | Statistical Inference T3 — UMVU estimation | B, 0.77 |
+| 794 | `mcq1000-p794` | Statistical Inference T3 — UMVU for a Poisson functional | B, 0.216 |
+| 796 | `mcq1000-p796` | Statistical Inference T4 — MLE for a discrete model | B, 14/25 |
+| 797 | `mcq1000-p797` | Statistical Inference T1 — sufficiency with parameter-dependent support | D, sample maximum |
+| 798 | `mcq1000-p798` | Statistical Inference T3 — variance of the MVUE | D, (	heta^2/[4n(n+1)]) |
+| 799 | `mcq1000-p799` | Statistical Inference T5 — method of moments | B, 29/50 |
+
+### Held out in this range
+- **Page 792:** left side of the density is clipped, so its normalising constant and exponent cannot be transcribed with confidence.
+- **Page 795:** the symbol in the question (“(X_i)” versus a possible order-statistic (X_{(1)})) is unclear, changing the meaning of the sufficiency question.
+- **Page 800:** the convergence-arrow notation in the options is too unclear to distinguish the intended mode of convergence.
+
+### Updated draft counts
+- Probability: **417**
+- Statistical Inference: **190**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **7**
+- Total: **633 supplementary items** on this branch (47 additions in this batch branch).
+
+No additions from this range were accepted solely from the printed answer mark; each answer was independently derived. These items remain draft-only.
