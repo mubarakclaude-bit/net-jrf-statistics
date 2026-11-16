@@ -1056,3 +1056,18 @@ Updated counts: Probability 522, Statistical Inference 251, Multivariate Analysi
 Pages 41 and 53 repeat previously included monotone-likelihood-ratio and joint-normal independence material; page 51 repeats the earlier incomplete joint-density question; page 52 repeats the Uniform-to-exponential transformation; page 55's Poisson formula options are too poorly rendered to classify safely; page 72's “incorrect statements” prompt appears to have all four statements true under the standard assumptions, so it was not imported.
 
 Updated counts: Probability 527, Statistical Inference 253, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **820 total supplementary items**. Batch 2 contributes 234 over the 586-item baseline.
+
+
+## Early-source review — pages 85–173
+
+- **Page 85 — retained.** For a sample from Uniform(θ−1,θ+1), the likelihood support is determined by both sample extremes, so \((X_{(1)},X_{(n)})\) is sufficient for θ. Added as `mcq1000-p085`.
+- **Page 86 — held out.** The transition labels in the Markov-chain diagram are not sufficiently clear to reconstruct a stochastic transition matrix with confidence.
+- **Page 87 — excluded.** The stated rejection region is central around the null value, but the question's test-size interpretation and notation are not clear enough to derive a unique answer from the scan.
+- **Page 88 — excluded.** Direct normalisation and integration of the displayed joint density do not reproduce any of the listed probability options.
+- **Page 94 — held out.** The integral defining the chi-square cdf and the subsequent inequality are not legible enough to identify the exact claim.
+- **Page 97 — excluded.** For known variance 16 and a 90% normal confidence interval with half-width 1, the required minimum sample size is \(n\ge(1.645\cdot4)^2\), i.e. 44; that value is absent from the options 40, 50, 42 and 55.
+- **Page 102 — held out.** The ratio expression's absolute-value/denominator notation is too blurred to determine the exact distributional transform.
+- **Page 150 — excluded.** The covariance matrix following the multivariate-normal mean vector is missing from the scan, so the independence selections cannot be determined.
+- **Pages 171–173 — excluded.** Page 171's numerator and denominator sums overlap and the sample's stated index range is inconsistent; pages 172–173 have a clipped weighted-statistic definition, so the requested variance cannot be recovered safely.
+
+Updated counts: Probability 527, Statistical Inference 254, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **821 total supplementary items**. Batch 2 contributes 235 over the 586-item baseline.
