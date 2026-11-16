@@ -851,3 +851,20 @@ Updated branch counts: Probability 510, Statistical Inference 234, Multivariate 
 - **Page 367 — excluded pending clarification.** The strict event \(50<S_n<80\) for \(S_n\sim\operatorname{Poisson}(64)\) does not agree with the listed approximate values under the usual normal approximation with continuity correction. The answer key/rounding convention is not sufficiently reliable to import.
 
 Current branch counts: Probability 511, Statistical Inference 234, Multivariate Analysis 18, Stochastic Processes 11, Regression 4 — **778 supplementary items**. Batch 2 now contributes 192 items over the 586-item batch-1 baseline.
+
+
+## Further source pages reviewed — pages 410–500
+
+- **Page 410 — retained.** Under \(H_0:p=0.5\), the number of heads in 100 independent tosses is \(N\sim\operatorname{Bin}(100,0.5)\). Exact upper-tail probabilities give \(P(N\ge58)\approx0.0666\) and \(P(N\ge59)\approx0.0443\); hence the 5% critical region is \(N>58\). Added as `mcq1000-p410`.
+- **Page 434 — retained.** The six paired measurements lie almost exactly on a positively sloped straight line, so the sample correlation is almost +1. Added as `mcq1000-p434`.
+- **Page 444 — retained.** From \(E(T)=\theta\) and \(\operatorname{Var}(T)=\theta^2+\theta\), obtain \(E[T(T-1)/2]=\theta^2\). Added as `mcq1000-p444`.
+- **Page 452 — excluded.** “Sum of squares of all deviations” is ambiguous about whether deviations are from zero or from the sample mean; the available options correspond to different conventions.
+- **Page 468 — retained.** For independent standard normal variables, \(\operatorname{Cov}(X_1+X_2+X_3,X_1-X_2)=\operatorname{Var}(X_1)-\operatorname{Var}(X_2)=0\). Added as `mcq1000-p468`.
+- **Page 477 — retained.** With iid observations of mean 2 and variance 4, the weak law gives \(\bar X_n\to2\), the weak law applied to \(X_i^2\) gives \(n^{-1}\sum X_i^2\to8\), and the CLT gives \(\sqrt n(\bar X_n-2)/2\Rightarrow N(0,1)\). Added as multi-select `mcq1000-p477`.
+- **Page 481 — not added.** The order-statistic notation in the scanned options is partially corrupted, so the exact claims cannot be transcribed reliably.
+- **Page 495 — excluded.** More than one listed estimator is not unbiased for \(\theta\) under \(U(0,\theta)\), although the source asks for a single answer.
+- **Page 498 — retained.** For the two unbiased linear estimators from iid \(N(\theta,1)\) observations, the variances are \(3/8\) and \(1/3\), so the defined relative efficiency is \(8/9\). Added as `mcq1000-p498`.
+- **Page 499 — retained.** For two independent exponential component lifetimes in a series system, reliability at time t is \(e^{-2\lambda t}\); substituting \(\hat\lambda=1/\bar X\) gives \(e^{-2t/\bar X}\). Added as `mcq1000-p499`.
+- **Page 500 — retained.** For a normal sample, \(\sqrt n(\bar X-\mu)/S\) follows Student's t with \(n-1\) degrees of freedom. Added as `mcq1000-p500`.
+
+Current branch counts: Probability 514, Statistical Inference 238, Multivariate Analysis 19, Stochastic Processes 11, Regression 4 — **786 supplementary items**. Batch 2 contributes 200 items over the 586-item batch-1 baseline.
