@@ -1110,3 +1110,8 @@ Updated counts: Probability 536, Statistical Inference 254, Multivariate Analysi
 - **Page 305 — retained.** For a normal sample with known mean μ and unknown variance σ², maximising the likelihood gives \(\hat\sigma^2=n^{-1}\sum(X_i-\mu)^2\). The divisor n−1 is not the MLE in this known-mean setting. Added as `mcq1000-p305`.
 
 Updated counts: Probability 536, Statistical Inference 255, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **831 total supplementary items**. Batch 2 contributes 245 over the 586-item baseline.
+
+
+### Duplicate reconciliation — page 247
+
+A full normalized-stem scan found that page 247 duplicates the Poisson reciprocal-expectation question already present as `mcq1000-p877`. The later duplicate `mcq1000-p247` was removed; the earlier page-877 item is retained. The corrected pool count is Probability 535 and **830 total supplementary items** (244 batch-2 additions over the 586-item baseline).
