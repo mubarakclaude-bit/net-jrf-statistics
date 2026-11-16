@@ -7,7 +7,7 @@
   "engine": "B",
   "engineName": "Estimation and inference — likelihood curves, sampling distributions, visible assumptions",
   "estMin": 46,
-  "version": "1.5",
+  "version": "1.6",
   "status": "approved",
   "provenance": "Review pass, October 2026: 3 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. The review also found the MLE described as ALWAYS a function of the sufficient statistic in the prerequisite and the revision sheet; applying that finding across the lesson turned up a third copy in a prerequisite-check recall, which the review had not flagged. All three now qualify the claim to an MLE that exists and is unique, and state that otherwise the sufficient statistic determines the set of maximisers. Theory and worked examples authored for this platform; previous-year questions marked separately and carry their exam cycle. Content enhancement, November 2026: added the non-unique MLE case for U(θ−1, θ+1), derived directly from the support inequalities and constant likelihood. This addresses the Feb 2022 CSIR NET Methods of Estimation collection, Question 10 (uploaded reference, page 5). Existing scene and question IDs preserved.",
   "objectives": [
@@ -599,6 +599,21 @@
           "t": "note",
           "h": "Existence and uniqueness are separate questions",
           "body": "A likelihood can have no maximiser inside the parameter space, one maximiser, or several maximisers. The sample maximum in U(0,θ) gives one boundary maximiser. In U(θ−1,θ+1), every θ in [x₍ₙ₎−1, x₍₁₎+1] gives the same maximum. When a question asks whether the MLE is unique, inspect the shape of L over the feasible parameter set; do not assume uniqueness from the definition."
+        },
+        {
+          "t": "step",
+          "h": "Constrained parameter spaces — maximise inside the allowed set",
+          "body": "First find the unconstrained maximiser, then check whether it belongs to the stated parameter space. For a normal sample with known variance and μ≤5, the log-likelihood is a concave quadratic centred at x̄. Hence μ̂ = min(x̄,5). In the June 2023 question with observations 3, 6, 9, x̄=6, so the constrained MLE is the boundary value 5. Do not use this clipping rule blindly for a different likelihood; derive it from that likelihood's shape."
+        },
+        {
+          "t": "step",
+          "h": "A discrete parameter space — compare likelihoods, not derivatives",
+          "body": "If X₁,…,Xₙ are iid N(μ,1) but μ is restricted to the integers, the likelihood is proportional to exp{−½Σ(xᵢ−μ)²}. Maximising it is equivalent to choosing the integer closest to x̄. If x̄ lies exactly halfway between two integers, both are MLEs. For a parameter restricted to {1,2}, compare L(1) and L(2); the threshold is x̄=1.5."
+        },
+        {
+          "t": "trap",
+          "h": "Three different questions — existence, uniqueness and unbiasedness",
+          "body": "A maximiser may exist but not be unique; it may fail to exist if the supremum is approached only at an excluded boundary; and even a unique MLE need not be unbiased. Check the parameter space and the likelihood before differentiating. The CSIR NET papers test all three distinctions, including a discrete two-point parameter space and a likelihood with multiple maximisers."
         }
       ],
       "id": "s7",
