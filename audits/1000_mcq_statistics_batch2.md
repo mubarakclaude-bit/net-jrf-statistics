@@ -1041,3 +1041,18 @@ The original scan was reopened and selected unbanked pages were independently ch
 Pages 6, 11, 14, 20, 23, 26 and 31 were not imported: the source wording/notation is incomplete, an option set is inconsistent, or the claimed answer is not uniquely supported. Page 32 duplicates the already included variance lower-bound question.
 
 Updated counts: Probability 522, Statistical Inference 251, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **813 total supplementary items**. Batch 2 contributes 227 over the 586-item baseline.
+
+
+## Additional early-source review — pages 39–59
+
+- **Page 39 — retained as multi-select.** For independent iid exponential sequences with rates 1 and 4, \(Z_i=X_i-3Y_i\) has mean \(1-3/4=1/4\). The strong law gives \(\sum_{i=1}^n Z_i\to+\infty\) almost surely; both positive and negative values of a single \(Z_i\) have positive probability. Added as `mcq1000-p039`.
+- **Page 42 — retained as multi-select.** The mixture of rate-1 and rate-2 exponentials has constant hazard at the pure-component endpoints p=0 or 1 and a decreasing hazard for 0<p<1. Added as `mcq1000-p042`.
+- **Page 43 — retained.** For the exponential rate parameterisation \(f(x)=\sigma e^{-\sigma x}\), the mean is 1/σ; variance is 1/σ² and the MGF is \(1/(1-t/\sigma)\). Added as `mcq1000-p043`.
+- **Page 49 — retained as multi-select.** For a continuous random variable, endpoint probabilities vanish, so including or excluding a or b does not change interval probabilities. The repeated source equality was replaced by a “none of A–C” statement so the four-statement item has no duplicated assertion. Added as `mcq1000-p049`.
+- **Page 50 — retained as multi-select.** Mutual independence implies A is independent of B∩C and B∪C, and Aᶜ and Bᶜ are independent. Added as `mcq1000-p050`.
+- **Page 57 — retained.** For the normal family \(N(\alpha\sigma,\sigma^2)\) with known α, the likelihood depends on the sample through \((\sum X_i,\sum X_i^2)\), establishing sufficiency; a non-degenerate scale-invariant function of this statistic shows it is not complete. Added as `mcq1000-p057`.
+- **Page 59 — retained.** UMVU implies unbiasedness, but unbiasedness alone does not imply UMVU; adding an arbitrary function does not preserve unbiasedness. Added as `mcq1000-p059`.
+
+Pages 41 and 53 repeat previously included monotone-likelihood-ratio and joint-normal independence material; page 51 repeats the earlier incomplete joint-density question; page 52 repeats the Uniform-to-exponential transformation; page 55's Poisson formula options are too poorly rendered to classify safely; page 72's “incorrect statements” prompt appears to have all four statements true under the standard assumptions, so it was not imported.
+
+Updated counts: Probability 527, Statistical Inference 253, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **820 total supplementary items**. Batch 2 contributes 234 over the 586-item baseline.
