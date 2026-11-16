@@ -1083,4 +1083,4 @@ Updated counts: Probability 527, Statistical Inference 254, Multivariate Analysi
 - **Page 197 — excluded.** The displayed density \(2x/a\) on (0,a) integrates to a, so normalisation would force a=1, which is absent from the options.
 - **Page 199 — excluded from the Statistics Paper 2 question bank.** It is a matrix-determinant algebra question rather than a statistics question.
 
-Updated counts: Probability 529, Statistical Inference 254, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **823 total supplementary items**. Batch 2 contributes 237 over the 586-item baseline.
+Updated counts: Probability 529, Statistical Inference 254, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **822 total supplementary items**. Batch 2 contributes 236 over the 586-item baseline.
