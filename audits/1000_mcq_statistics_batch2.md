@@ -795,3 +795,16 @@ These exclusions are deliberate quality controls: they avoid encoding a source k
 
 - **Page 809 — excluded.** The displayed point probabilities sum to \(\theta+2/45\), not 1 for general \(\theta\). Thus the displayed function is not a pmf as claimed (except at one isolated parameter value); the source's “not a pmf” key is consistent.
 - **Page 870 — excluded.** The scan asks \(P(4<Y<16\mid X<5)\) for a bivariate normal with \(\mu_X=5,\mu_Y=10,\sigma_X=1,\sigma_Y=5\). By the symmetry \((X-5,Y-10)\mapsto (-(X-5),-(Y-10))\), the conditional probability is independent of positive \(\rho\) and equals \(P(-1.2<Z<1.2)\approx0.7699\), not the printed 0.954. The source-marked \(\rho=0.8\) is unsupported.
+
+
+## Additional source pages reviewed — pages 30, 32, 71, 78 and 96
+
+Five further questions were added after inspecting the source scans at high resolution and independently deriving their answers:
+
+- **Page 30 — Statistical Inference T3 (method of moments).** For probabilities \(P(X=1)=\theta\), \(P(X=2)=\theta\), \(P(X=3)=1-2\theta\), the first moment is \(E(X)=3-3\theta\), giving \(\hat\theta=(3-\bar X)/3\). Added as `mcq1000-p030`.
+- **Page 32 — Probability T1 (variance lower bound).** At least probability 0.5 lies at distance at least 3 from the mean 10, so \(\operatorname{Var}(X)=E[(X-10)^2]\ge9(0.5)=9/2\). Added as `mcq1000-p032`.
+- **Page 71 — Multivariate T1 (inverse covariance matrix).** Applied the 2×2 inverse formula to the covariance matrix \(\begin{pmatrix}\sigma_{11}&\sigma_{12}\\\sigma_{12}&\sigma_{22}\end{pmatrix}\), with determinant \(\sigma_{11}\sigma_{22}-\sigma_{12}^2\). Added as `mcq1000-p071`.
+- **Page 78 — Probability T4 (law of total variance).** For the given density, \(E(X)=2/\sqrt\pi\) and \(E(X^2)=3/2\). Therefore \(\operatorname{Var}(Y)=E[4X^2+3]+4\operatorname{Var}(X)=15-16/\pi\). Added as `mcq1000-p078`.
+- **Page 96 — Multivariate T1 (bivariate normal sign probability).** Using \(P(XY>0)=1/2+\arcsin(\rho)/\pi\), obtain \(\rho=\cos(\pi(1-p))\). Added as `mcq1000-p096`.
+
+Current branch counts after these additions: Probability 502, Statistical Inference 233, Multivariate Analysis 18, Stochastic Processes 11, Regression 4 — **768 supplementary items**. All five additions include worked derivations and are mapped to existing Paper 2 lesson topics.
