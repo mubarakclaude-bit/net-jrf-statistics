@@ -808,3 +808,16 @@ Five further questions were added after inspecting the source scans at high reso
 - **Page 96 — Multivariate T1 (bivariate normal sign probability).** Using \(P(XY>0)=1/2+\arcsin(\rho)/\pi\), obtain \(\rho=\cos(\pi(1-p))\). Added as `mcq1000-p096`.
 
 Current branch counts after these additions: Probability 502, Statistical Inference 233, Multivariate Analysis 18, Stochastic Processes 11, Regression 4 — **768 supplementary items**. All five additions include worked derivations and are mapped to existing Paper 2 lesson topics.
+
+
+## Further verified probability questions — pages 115, 120, 121 and 143
+
+- **Page 115 — convergence concepts.** Almost-sure convergence is equivalent to the event \(\{\omega:X_n(\omega)\to X(\omega)\}\) having probability one. Convergence in probability is a weaker condition; the two probability-limit expressions in the scan do not characterise almost-sure convergence. Added as `mcq1000-p115`.
+- **Page 120, question 2 — probability axioms.** Both 0 and 1 are valid event probabilities, whereas −0.5 is not. Added as multi-select `mcq1000-p120-q2`.
+- **Page 120, question 3 — Bertrand's paradox.** The result depends on the procedure used to choose a random chord; the source key says at least three different valid results. Added as `mcq1000-p120-q3`.
+- **Page 121, question 5 — complement rule.** If \(P(A)=0.6\), then \(P(A^c)=0.4\), so the stated pair 0.6 and 0.5 is impossible. Added as `mcq1000-p121-q5`.
+- **Page 143 — normal sampling distribution.** For \(\bar X\) from \(N(28.3,2.3^2)\) with \(n=10\), standardising 27 gives \(z\approx-1.79\). The two equivalent expressions \(\Phi(-1.79)\) and \(1-\Phi(1.79)\) are both retained as correct. Added as `mcq1000-p143`.
+
+Page 121, question 4 was deliberately excluded: the source gives \(P(A)=0.3\), \(P(A\cup B)=0.1\), and \(P(A\cap B)=0.5\), which violates \(P(A\cap B)\le P(A\cup B)\). The supplied answer key cannot repair an internally impossible probability specification.
+
+Updated branch counts: Probability 507, Statistical Inference 233, Multivariate Analysis 18, Stochastic Processes 11, Regression 4 — **773 supplementary items**. The batch-2 branch now contributes 187 items over the 586-item batch-1 baseline.
