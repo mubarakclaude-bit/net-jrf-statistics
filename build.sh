@@ -17,7 +17,6 @@ OUT=app.html
 # nothing about which build they were actually running. Stamp it for real on every build.
 node tools/build-features.js        # scan src/features/ and write .cache/features.generated.js
 STAMP="$(date -u '+%Y-%m-%d %H:%M UTC')"
-sed -i "s|^const BUILD=\".*\";|const BUILD=\"$STAMP\";|" src/10-const.js
 {
   # head.html ends with </style>; splice the workspace css in before it
   head -c $(($(wc -c < src/00-head.html) - 9)) src/00-head.html
@@ -34,6 +33,8 @@ sed -i "s|^const BUILD=\".*\";|const BUILD=\"$STAMP\";|" src/10-const.js
   done
   echo '</script>'
 } > $OUT
+# Stamp the generated bundle, not the tracked source file: builds must leave the checkout clean.
+sed -i "s|^const BUILD=\".*\";|const BUILD=\"$STAMP\";|" "$OUT"
 "$PYBIN" -c "
 import re,sys
 h=open('$OUT',encoding='utf-8').read()
