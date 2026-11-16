@@ -7,9 +7,9 @@
  "engine": "B",
  "engineName": "Estimation and inference — likelihood curves, sampling distributions, visible assumptions",
  "estMin": 46,
- "version": "1.3",
+ "version": "1.4",
  "status": "approved",
- "provenance": "Review pass, October 2026: 3 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. The review also found the MLE described as ALWAYS a function of the sufficient statistic in the prerequisite and the revision sheet; applying that finding across the lesson turned up a third copy in a prerequisite-check recall, which the review had not flagged. All three now qualify the claim to an MLE that exists and is unique, and state that otherwise the sufficient statistic determines the set of maximisers. Theory and worked examples authored for this platform; previous-year questions marked separately and carry their exam cycle.",
+ "provenance": "Review pass, October 2026: 3 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. The review also found the MLE described as ALWAYS a function of the sufficient statistic in the prerequisite and the revision sheet; applying that finding across the lesson turned up a third copy in a prerequisite-check recall, which the review had not flagged. All three now qualify the claim to an MLE that exists and is unique, and state that otherwise the sufficient statistic determines the set of maximisers. Theory and worked examples authored for this platform; previous-year questions marked separately and carry their exam cycle. Content enhancement, November 2026: added the non-unique MLE case for U(θ−1, θ+1), derived directly from the support inequalities and constant likelihood. This addresses the Feb 2022 CSIR NET Methods of Estimation collection, Question 10 (uploaded reference, page 5). Existing scene and question IDs preserved.",
  "objectives": [
   "Build the likelihood of a sample and say why it is a function of θ, not of x.",
   "Derive an MLE through the log-likelihood and the score equation, and verify it is a maximum.",
@@ -262,7 +262,7 @@
    "viz": {
     "type": "exp-likelihood",
     "n": 2,
-    "sumx": 12.0
+    "sumx": 12
    },
    "body": [
     "The curve is L(λ) = λⁿ e^(−λΣxᵢ) for an exponential sample — the likelihood of the data you actually hold, at every candidate rate.",
@@ -594,6 +594,11 @@
      "t": "note",
      "h": "MLE versus UMVUE",
      "body": "They coincide often enough to be dangerous. They are different objects: the MLE maximises the likelihood, the UMVUE minimises variance among unbiased estimators. When a question offers both as options, decide which criterion it named."
+    },
+    {
+     "t": "note",
+     "h": "Existence and uniqueness are separate questions",
+     "body": "A likelihood can have no maximiser inside the parameter space, one maximiser, or several maximisers. The sample maximum in U(0,θ) gives one boundary maximiser. In U(θ−1,θ+1), every θ in [x₍ₙ₎−1, x₍₁₎+1] gives the same maximum. When a question asks whether the MLE is unique, inspect the shape of L over the feasible parameter set; do not assume uniqueness from the definition."
     }
    ],
    "id": "s7",
@@ -639,11 +644,14 @@
     "That gives the shape on screen: flat zero, a vertical cliff at x₍ₙ₎, then a curve decreasing for the rest of its life.",
     "Set the derivative to zero and you get −n·θ^(−n−1) = 0, which has no solution. The derivative is negative everywhere the likelihood is positive. Nothing is wrong with your algebra — the method simply does not apply, because the support depends on θ.",
     "The maximum is at the cliff edge: θ̂ = x₍ₙ₎, the sample maximum. Read it off the picture, not off a derivative.",
-    "This estimator is biased low — it can never exceed the true θ, and almost surely falls short, with E[θ̂] = nθ/(n+1). The unbiased correction is (n+1)/n · x₍ₙ₎, which is not the MLE."
+    "This estimator is biased low — it can never exceed the true θ, and almost surely falls short, with E[θ̂] = nθ/(n+1). The unbiased correction is (n+1)/n · x₍ₙ₎, which is not the MLE.",
+    "A second support-dependent example appears in the CSIR NET Methods of Estimation collection (Feb 2022, Question 10). Let X₁,…,Xₙ be iid Uniform(θ−1, θ+1), with θ unknown. The density is 1/2 when θ−1 ≤ xᵢ ≤ θ+1 for every observation, and zero otherwise. Therefore L(θ) = 2⁻ⁿ on the set of θ values satisfying x₍ₙ₎−1 ≤ θ ≤ x₍₁₎+1, and is zero outside it.",
+    "Every θ in that interval gives exactly the same likelihood, so there is not one unique MLE: the entire interval [x₍ₙ₎−1, x₍₁₎+1] is the set of maximum-likelihood estimates, provided the interval is nonempty. It is nonempty precisely when the sample range x₍ₙ₎−x₍₁₎ ≤ 2, as it must be for a sample that can come from a width-2 uniform distribution.",
+    "Exam move: when the support contains θ, first translate the support restrictions into inequalities for θ, intersect them, and then inspect the likelihood on that feasible set. A constant likelihood over the feasible interval means multiple MLEs; a monotone likelihood over a feasible interval means a boundary MLE. Do not force either case into a score equation."
    ],
    "ask": {
-    "q": "Drag θ below the cliff. Why is the likelihood exactly zero there rather than merely small?",
-    "nudge": "What would θ < x₍ₙ₎ say about the value you actually observed?"
+    "q": "For Xᵢ iid Uniform(θ−1, θ+1), why can the MLE be an interval rather than a single number?",
+    "nudge": "Write the two inequalities imposed by the sample minimum and maximum, then notice that the likelihood is constant wherever both hold."
    },
    "id": "s9",
    "scenario": {

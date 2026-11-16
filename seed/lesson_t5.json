@@ -7,9 +7,9 @@
  "engine": "B",
  "engineName": "Estimation and inference — matching what you observe to what the model predicts",
  "estMin": 51,
- "version": "1.3",
+ "version": "1.4",
  "status": "approved",
- "provenance": "Review pass, October 2026: 5 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. Theory, worked examples and practice authored for this platform against the UGC NET Statistics syllabus. Previous-year questions are stored separately and carry their exam cycle.",
+ "provenance": "Review pass, October 2026: 5 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. Theory, worked examples and practice authored for this platform against the UGC NET Statistics syllabus. Previous-year questions are stored separately and carry their exam cycle. Content enhancement, November 2026: expanded minimum chi-square for grouped counts; clarified the exact normal-error condition under which OLS and MLE coefficient estimates coincide, distinguished BLUE from MLE, and added the residual orthogonality check with the intercept condition. Reference: uploaded CSIR NET Methods of Estimation collection, Sept 2022 Question 9 (page 4) and related regression-estimation items.",
  "objectives": [
   "Set up and solve the moment equations for a one- or two-parameter family, choosing raw or central moments to keep the algebra short.",
   "State what the method of moments guarantees (consistency, asymptotic normality) and what it does not (unbiasedness, efficiency, a legal estimate).",
@@ -283,7 +283,7 @@
    "viz": {
     "type": "exp-likelihood",
     "n": 4,
-    "sumx": 16.0
+    "sumx": 16
    },
    "body": [
     "Exponential with rate λ, so E[X] = 1/λ. The moment equation is 1/λ = x̄, giving λ̃ = 1/x̄ = n/Σxᵢ.",
@@ -645,6 +645,21 @@
      "t": "trap",
      "h": "Why these three are one lesson",
      "body": "All three choose θ by making a feature of the model agree with the same feature of the data: moments with moments, fitted frequencies with observed frequencies, fitted values with observed values. None of them maximises a likelihood, and all of them can be computed when the likelihood is intractable. Scene 11 makes the connection exact by deriving least squares as a moment condition."
+    },
+    {
+     "t": "def",
+     "h": "Minimum chi-square: for grouped frequency data",
+     "body": "When observations are supplied as counts in k categories rather than as individual values, let Oⱼ be the observed count and Eⱼ(θ)=n pⱼ(θ) the model's expected count. The minimum chi-square estimator chooses θ to minimise X²(θ)=Σⱼ [Oⱼ−Eⱼ(θ)]²/Eⱼ(θ), subject to the model's parameter restrictions. It is a minimum-distance method: it chooses the parameter values whose expected frequencies are closest to the observed frequencies on a variance-scaled scale. Do not confuse it with the chi-square goodness-of-fit test: the expression is similar, but here θ is estimated by minimisation; in the test, the statistic is evaluated to assess a specified model."
+    },
+    {
+     "t": "step",
+     "h": "Least squares and maximum likelihood: when do they agree?",
+     "body": "Least squares chooses coefficients to minimise Σᵢ(yᵢ−ŷᵢ)². If the regression errors are independent normal variables with common variance, the normal likelihood is maximised by exactly the same coefficient estimates as ordinary least squares. The variance estimate from maximum likelihood uses divisor n, while the usual unbiased residual variance estimate uses the residual degrees of freedom. Without the normal-error assumption, least squares can still be BLUE under the Gauss–Markov conditions, but that does not make it an MLE. This distinction is central to the CSIR NET questions that place OLS, MLE and BLUE side by side."
+    },
+    {
+     "t": "note",
+     "h": "A residual identity that depends on the model",
+     "body": "For least squares with an intercept, the residuals sum to zero. With regressors xⱼ included in the fitted model, the residual vector is orthogonal to each included regressor: Σᵢ xᵢⱼ êᵢ=0. If the intercept is omitted, Σêᵢ=0 is not guaranteed. The Methods of Estimation collection (Sept 2022, Question 9) tests precisely this distinction. The full derivation belongs to the regression lesson; here it is a diagnostic check when an estimation question gives fitted residuals."
     }
    ],
    "id": "s7",
