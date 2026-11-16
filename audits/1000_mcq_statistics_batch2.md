@@ -300,3 +300,33 @@ Nine more questions were visually transcribed and checked:
 - Total: **657 supplementary items** on this branch (71 additions in this batch branch).
 
 The branch remains unmerged and is not a production question count.
+
+
+## Further verified additions — pages 831–840
+
+Eight further questions were visually transcribed and independently solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 831 | `mcq1000-p831` | Probability T11 — Cauchy stability under addition and scaling | D, (6/[\pi(4+9t^2)]) |
+| 832 | `mcq1000-p832` | Probability T1 — minimum order statistic | D, (3ny^2(1-y^3)^{n-1}) |
+| 833 | `mcq1000-p833` | Probability T12 — Bayes theorem with two boxes | B, 1/3 |
+| 835 | `mcq1000-p835` | Probability T10 — probability integral transform | C, Uniform(0,1) |
+| 837 | `mcq1000-p837` | Statistical Inference T4 — MLE with integer parameter space | B, nearest integer to sample mean |
+| 838 | `mcq1000-p838` | Statistical Inference T4 — MLE with non-identical normal variances | C, ((1/n)\sum X_k^2/k) |
+| 839 | `mcq1000-p839` | Probability T7 — Chebyshev inequality | D, limit 0 |
+| 840 | `mcq1000-p840` | Statistical Inference T10 — likelihood-ratio test for coefficient of variation | A, upper-tail residual sum about known mean |
+
+### Pages held out
+- **Page 834:** the support boundary in the second branch of the triangular density is visually unclear (it appears as 0 rather than 1). The displayed piecewise function would not integrate to one if read literally; excluded.
+- **Page 836:** the claim that equality in distribution of (X+Z) and (Y+Z) forces equality in distribution of (X) and (Y) needs an additional cancellation condition on the distribution of (Z). Finite variance alone does not guarantee a nonvanishing characteristic function. The source's marked answer is therefore not accepted without a stronger assumption.
+
+### Updated branch counts
+- Probability: **439**
+- Statistical Inference: **199**
+- Regression: **4**
+- Multivariate: **15**
+- Stochastic: **8**
+- Total: **665 supplementary items** on this branch (79 additions in this batch branch).
+
+The held-out items are recorded to prevent uncertain source wording or unverified assumptions from entering the learner question bank.
