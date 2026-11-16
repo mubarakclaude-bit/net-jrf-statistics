@@ -780,3 +780,12 @@ The total count is unchanged by the p1039 format correction. Current branch coun
 - **Pages 809, 824, 1019 and 1021 — held out pending independent reconstruction.** The visible formulas are incomplete or parameterisation-dependent in the scan; they need a cleaner source or a fully unambiguous transcription before inclusion.
 
 After adding page 1018, current branch counts are Probability 500, Statistical Inference 232, Multivariate Analysis 16, Stochastic Processes 11 and Regression 4: **763 supplementary items**. The p930 numeric item now explicitly carries an empty `options` array to satisfy the common question-item contract (numeric write-in items still retain their separate `check` field).
+
+
+### Resolution of two additional held pages
+
+- **Page 920 — excluded after full-resolution derivation.** The scan gives independent \(X_1,X_2\sim\chi^2_5\) and asks for the Student-t degrees of freedom of \(T=\sqrt5(X_1-X_2)/\sqrt{X_1X_2}\). Since \(F=X_1/X_2\sim F_{5,5}\), the transformation \(T=\sqrt5(\sqrt F-1/\sqrt F)\) has the distribution of \(2t_5\), not a standard \(t_k\) for any degrees of freedom. The source's numeric key 5 therefore does not match the statistic as printed.
+- **Page 1019 — excluded after full-resolution derivation.** The scan specifies \(X_i\sim\mathrm{Beta}(8,12)\), \(Y_i=X_i^2/(1-X_i)^2\), and \(E(Y_i)=36/55\). Direct beta-integral calculations give \(E(Y_i^2)=1\), hence \(\operatorname{Var}(Y_i)=1729/3025\). Therefore the CLT scale is \(\alpha^2=1729/3025\), so the asked quantity \(55\alpha^2=1729/55\). The printed choices are sums of cubes equal to 1729, not 1729/55; the source key is inconsistent.
+- **Page 824 — excluded.** The upper portion of the scanned question, containing the distributions and parameter definitions for \(x,y,z\), is clipped. The marked options cannot be independently established from the visible portion.
+
+These exclusions are deliberate quality controls: they avoid encoding a source key that conflicts with the formula as printed.
