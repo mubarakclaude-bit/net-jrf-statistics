@@ -915,3 +915,22 @@ Updated branch counts: Probability 519, Statistical Inference 245, Multivariate 
 - **Page 800 — held out.** Several listed convergence statements are true simultaneously for iid normal observations, but the scan presents a single-choice format. It is not safe to preserve the source's single-answer structure.
 
 Updated branch counts: Probability 520, Statistical Inference 246, Multivariate Analysis 20, Stochastic Processes 11, Regression 4 — **801 supplementary items**. Batch 2 contributes 215 items over the 586-item batch-1 baseline.
+
+
+## Further source pages reviewed — pages 806–895
+
+- **Pages 806, 808 and 809 — excluded.** Page 806 has a clipped/illegible probability expression; page 808 does not clearly specify whether the two lifespan events are independent; page 809's displayed mass function does not normalise to one for general parameter values.
+- **Page 814 — excluded.** The Gamma parameterisation is not specified, so the requested expectation depends on an unstated scale/rate convention.
+- **Page 819 — excluded.** The distributional symbols in the premise are unreadable.
+- **Page 824 — excluded.** The Gamma shape parameters and Beta parameter labels are clipped/illegible, preventing a reliable transcription.
+- **Page 834 — retained.** Under H₀ the density is Uniform(0,1); under H₁ the triangular density is \(g(t)=t\) on \([0,1]\) and \(g(t)=2-t\) on \((1,2]\). The most powerful size-0.1 test rejects on the alternative-only support \((1,2]\) and on \((0.9,1]\), giving power \(0.595\). Added as `mcq1000-p834`.
+- **Page 836 — held out.** The equality in distribution of \(X+Z\) and \(Y+Z\) does not by itself make the printed claims safe without checking convolution-cancellation and degenerate edge cases. No source key was imported.
+- **Page 837 — not added.** It is an exact duplicate of the already retained integer-constrained normal-mean MLE question from page 641.
+- **Page 858 — excluded.** The probability for a “random chord” depends on the chord-selection mechanism, which is not specified.
+- **Pages 864 and 866 — held out.** Page 864's density is too poorly rendered to recover the exponent and support reliably; page 866's two-parameter exponential parameterisation and moment notation are ambiguous in the scan.
+- **Page 865 — excluded from this statistics bank.** It is a real-analysis continuity question rather than a Statistics Paper 2 probability/inference item.
+- **Page 869 — excluded.** The stated chi-square quantiles and sample standard deviation produce confidence limits that do not match the printed answer choices.
+- **Page 871 — excluded.** The level \(\alpha=0.009\) gives the cutoff \(c=\sqrt[3]{0.009}\approx0.208\), not the source-marked 0.3.
+- **Pages 881, 883, 892, 894 and 895 — held out.** The moment notation, transformed-distribution expression, sampling-with-replacement wording and random-walk setup are incomplete or ambiguous in the scanned pages.
+
+Updated branch counts: Probability 520, Statistical Inference 247, Multivariate Analysis 20, Stochastic Processes 11, Regression 4 — **802 supplementary items**. Batch 2 contributes 216 items over the 586-item batch-1 baseline.
