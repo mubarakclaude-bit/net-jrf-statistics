@@ -607,3 +607,34 @@ Eight additional questions were checked from enlarged page images and independen
 - Total: **734 supplementary items** on this branch (148 additions in this batch branch).
 
 Page 929's two-toss method is the von Neumann construction: HT and TH have equal probability for any coin bias; identical pairs are discarded and retried.
+
+
+## Further verified additions — pages 931–940
+
+Nine additional questions were transcribed and solved:
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 931 | `mcq1000-p931` | Probability T5 — negative-binomial mean | Numeric: 4 |
+| 932 | `mcq1000-p932` | Statistical Inference T12 — size, power and Type II error | Numeric: (alpha+\beta=1/3\approx0.3333) |
+| 933 | `mcq1000-p933` | Probability T13 — chi-square distribution with 2 degrees of freedom | Numeric: 4 |
+| 934 | `mcq1000-p934` | Statistical Inference T13 — chi-square pivot for exponential rate | Numeric: (K=1/2) |
+| 935 | `mcq1000-p935` | Statistical Inference T13 — coverage of shifted-exponential interval | Numeric: (alpha=0.05) |
+| 936 | `mcq1000-p936` | Probability T6 — normal standardisation | Numeric: 0.5987 |
+| 938 | `mcq1000-p938` | Probability T4 — expectation of a polynomial function | Numeric: 3 |
+| 939 | `mcq1000-p939` | Probability T8 — union/complement with independent solvers | Numeric: 0.75 |
+| 940 | `mcq1000-p940` | Statistical Inference T4 — Laplace location and scale MLE | Numeric: 2.8 |
+
+### Corrections and holds
+- **Page 932:** the source answer 1.16 is inconsistent with the displayed Uniform(θ,θ²) hypotheses and rejection region. Direct calculation gives (alpha=0.25), power (=11/12), (eta=1/12), and (alpha+\beta=1/3).
+- **Page 937:** the three students' solving events are not stated to be independent. The displayed answer 7/8 requires independence; held rather than adding that unstated assumption.
+- **Page 930:** duplicate of page 872; excluded.
+- **Page 928:** notation for the Bernoulli-generator construction is too corrupted to identify the intended procedure; held.
+
+### Updated branch counts
+- Probability: **489**
+- Statistical Inference: **223**
+- Multivariate: **16**
+- Stochastic: **11**
+- Regression: **4**
+- Total: **743 supplementary items** on this branch (157 additions in this batch branch).
