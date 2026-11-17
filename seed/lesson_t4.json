@@ -6,10 +6,10 @@
   "breadcrumb": "Statistical Inference → Point Estimation → Maximum likelihood",
   "engine": "B",
   "engineName": "Estimation and inference — let the observed data tell us which parameter value fits best",
-  "estMin": 96,
+  "estMin": 98,
   "version": "1.0",
   "status": "review",
-  "provenance": "New lesson prepared to close the missing inference-t4 learning coverage identified during the supplementary question-bank audit (November 2026). Scope follows Unit IV of the supplied UGC NET Statistics syllabus: maximum likelihood estimators and their relationship to point-estimation properties. Examples are original instructional examples, not represented as official PYQs. The linked supplementary pool is separately labelled practice material.",
+  "provenance": "New lesson prepared to close the missing inference-t4 learning coverage identified during the supplementary question-bank audit (November 2026). Scope follows Unit IV of the supplied UGC NET Statistics syllabus: maximum likelihood estimators and their relationship to point-estimation properties. Examples are original instructional examples, not represented as official PYQs. The linked supplementary pool is separately labelled practice material. The lesson's finite-sample bias and asymptotic-normality statements were checked algebraically in verify_inference_t4.py; broader claims are explicitly qualified by regularity conditions.",
   "objectives": [
     "Build a likelihood from a sample and distinguish a likelihood function from a probability distribution.",
     "Find an MLE by taking logarithms, differentiating the log-likelihood and checking that the candidate is a maximum.",
@@ -98,7 +98,10 @@
       "Invariance: if θ̂ is an MLE, then g(θ̂) is an MLE of g(θ), under the induced-likelihood convention.",
       "MLE need not be unbiased, unique, or attained inside an open parameter space.",
       "Constrained MLE: maximise over the allowed parameter set; an unconstrained estimate outside the set is not permitted.",
-      "Large-sample theory often gives consistency and asymptotic normality under regularity conditions; these are not automatic in every model."
+      "Large-sample theory often gives consistency and asymptotic normality under regularity conditions; these are not automatic in every model.",
+      "Exponential rate MLE λ̂=n/ΣXᵢ is biased for finite n>1: E(λ̂)=nλ/(n−1), but its bias tends to zero.",
+      "Unbiasedness is a finite-sample expectation property; consistency is convergence in probability as n grows.",
+      "Under regularity conditions, √n(θ̂−θ) is asymptotically N(0, I(θ)⁻¹). This is not universal."
     ],
     "cards": [
       [
@@ -140,6 +143,18 @@
       [
         "Does MLE invariance mean all estimators are invariant?",
         "No. The invariance property applies to maximum likelihood estimation, not generally to unbiased or UMVU estimators."
+      ],
+      [
+        "Is the exponential rate MLE unbiased?",
+        "No. For n>1, E(λ̂)=nλ/(n−1), so its bias is λ/(n−1)."
+      ],
+      [
+        "Can a biased MLE be consistent?",
+        "Yes. The exponential rate MLE is biased for finite n, but the bias tends to zero and the estimator is consistent."
+      ],
+      [
+        "What does asymptotic normality say?",
+        "Under regularity conditions, √n(θ̂−θ) approaches a normal distribution with variance I(θ)⁻¹."
       ]
     ],
     "tricks": [
@@ -162,6 +177,10 @@
       {
         "hook": "Score zero is only a candidate",
         "why": "A stationary point can be a minimum or saddle point; check curvature and boundaries."
+      },
+      {
+        "hook": "Bias can shrink with n",
+        "why": "A finite-sample biased estimator may still be consistent; calculate its expectation and then study the limit."
       }
     ],
     "shortcuts": [
@@ -169,12 +188,14 @@
       "Exponential rate: λ̂ = n/ΣXᵢ.",
       "Normal with both parameters unknown: μ̂ = X̄ and σ̂² = Σ(Xᵢ−X̄)²/n.",
       "Uniform(0,θ): θ̂ = max(Xᵢ).",
-      "To estimate g(θ), apply g to the MLE when the usual invariance conditions apply."
+      "To estimate g(θ), apply g to the MLE when the usual invariance conditions apply.",
+      "For exponential rate MLE, remember the finite-sample bias λ/(n−1), n>1."
     ],
     "remember": [
       "An MLE is a parameter value that makes the observed sample most likely under the model; it is not the probability that the parameter is true.",
       "Always check the parameter space, support and boundary after solving the score equation.",
-      "Unbiasedness and maximum likelihood are different ideas. An MLE can be biased and still be consistent."
+      "Unbiasedness and maximum likelihood are different ideas. An MLE can be biased and still be consistent.",
+      "MLE properties such as unbiasedness, consistency and asymptotic normality must be checked separately."
     ]
   },
   "traps": [
@@ -474,6 +495,14 @@
         },
         {
           "say": "The unbiased sample variance would be 2/(3−1)=1. These are different estimators because they answer different optimisation and bias questions."
+        },
+        {
+          "say": "The MLE is biased for finite n. Since S=ΣXᵢ has Gamma(shape n, rate λ), E(1/S)=λ/(n−1) for n>1.",
+          "math": "E(λ̂)=nE(1/S)=nλ/(n−1)"
+        },
+        {
+          "say": "The bias is positive but tends to zero as n increases.",
+          "math": "Bias(λ̂)=λ/(n−1) → 0"
         }
       ],
       "after": "Always identify whether the question asks for the MLE or the unbiased estimator."
@@ -534,7 +563,7 @@
       "kind": "theory",
       "id": "s10",
       "title": "Functions of parameters and invariance",
-      "mins": 6,
+      "mins": 8,
       "objective": "Apply the MLE invariance property correctly.",
       "blocks": [
         {
@@ -551,6 +580,21 @@
           "t": "trap",
           "h": "Do not generalise this property",
           "body": "The invariance property is a property of maximum likelihood estimators. It does not say that a transformation of an unbiased estimator remains unbiased or UMVU."
+        },
+        {
+          "t": "def",
+          "h": "Finite-sample bias is possible",
+          "body": "An MLE is not automatically unbiased. For iid exponential observations with rate λ, λ̂=n/ΣXᵢ. When n>1, ΣXᵢ has a Gamma(n, rate λ) distribution and E(1/ΣXᵢ)=λ/(n−1), so E(λ̂)=nλ/(n−1). The bias is λ/(n−1), even though the estimator is consistent as n grows."
+        },
+        {
+          "t": "formula",
+          "h": "Consistency and asymptotic normality",
+          "body": "Under suitable regularity and identifiability conditions, MLEs are often consistent and asymptotically normal: √n(θ̂−θ) converges in distribution to N(0, I(θ)⁻¹), where I(θ) is Fisher information per observation. These are large-sample statements, not guarantees for every model."
+        },
+        {
+          "t": "trap",
+          "h": "Do not confuse properties",
+          "body": "Unbiasedness concerns Eθ(T)=θ at each sample size. Consistency concerns convergence in probability as n→∞. Efficiency compares variances or information under stated conditions. One property does not automatically imply another."
         }
       ]
     },
