@@ -25,3 +25,13 @@ geom_ratio=(1-geom_p)/geom_p
 binom_ratio=1-.3
 assert math.isclose(geom_ratio,binom_ratio,abs_tol=1e-12)
 print("Probability T5 distribution-moment and dispersion anchors: PASS")
+
+# The hypergeometric dispersion ratio depends on both population and sample size.
+N, K, sample = 50, 20, 10
+q = 1 - K / N
+hyper_ratio = q * (N - sample) / (N - 1)
+assert math.isclose(hyper_ratio, 0.6 * 40 / 49, abs_tol=1e-12)
+assert not math.isclose(hyper_ratio, q, abs_tol=1e-12)
+# Changing sample size changes the hypergeometric ratio at fixed population composition.
+hyper_ratio_small_sample = q * (N - 5) / (N - 1)
+assert hyper_ratio_small_sample > hyper_ratio
