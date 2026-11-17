@@ -1,0 +1,66 @@
+{
+ "moduleId": "regression",
+ "source": "variant",
+ "label": "CSIR NET 2011–2025 previous-year questions",
+ "count": 2,
+ "items": [
+  {
+   "id": "csir-mv-12",
+   "format": "multi",
+   "topic": "regression-t1",
+   "diff": "moderate",
+   "stem": "Suppose we fit the linear model Y = Xβ + ε using least squares, where Y = (Y₁, …, Yₙ)ᵀ and ε = (ε₁, …, εₙ)ᵀ. Here X is an n × p non-stochastic matrix with full column rank and the εᵢ are i.i.d. with mean 0 and variance 1. For i ∈ {1, …, n}, let Ŷᵢ be the fitted value of Yᵢ and ε̂ᵢ the corresponding residual. For r, s ∈ {1, …, n}, r ≠ s, which of the following must be true?",
+   "statements": [
+    "The random variables ε_r and Ŷ_s are uncorrelated",
+    "The random variables ε_s and Ŷ_s are uncorrelated",
+    "The random variables ε̂_r and Ŷ_s are uncorrelated",
+    "The random variables ε̂_s and Ŷ_s are uncorrelated"
+   ],
+   "options": [
+    "C and D only",
+    "D only",
+    "C only",
+    "A, C and D only"
+   ],
+   "answer": "A",
+   "explanation": "Fitted values and residuals are orthogonal projections of Y: Cov(ε̂, Ŷ) = (I − H) Var(Y) H = (I − H)H = 0 (C and D). The true errors are correlated with the fitted values through H (A and B fail).",
+   "verdicts": {
+    "A": {
+     "tf": false,
+     "why": "Ŷ = HY with H = X(XᵀX)⁻¹Xᵀ, so Cov(ε, Ŷ) = H and Cov(ε_r, Ŷ_s) = h_sr, which is generally non-zero."
+    },
+    "B": {
+     "tf": false,
+     "why": "Cov(ε_s, Ŷ_s) = h_ss, the leverage, which is positive."
+    },
+    "C": {
+     "tf": true,
+     "why": "Cov(ε̂, Ŷ) = (I − H)H = 0 because H is idempotent; every entry is 0."
+    },
+    "D": {
+     "tf": true,
+     "why": "Same matrix identity: the diagonal entry of (I − H)H is 0."
+    }
+   },
+   "ref": "Multivariate PDF Q12",
+   "year": "Feb-2022"
+  },
+  {
+   "id": "csir-mv-53",
+   "format": "single",
+   "topic": "regression-t4",
+   "diff": "easy",
+   "stem": "Suppose X ~ N(0, 1) and the conditional distribution of Y given X = x is N(αx, 1), for 0 < α < 1. When we regress Y on X, the coefficient of determination R² is",
+   "options": [
+    "α²",
+    "α",
+    "α/√(1 + α²)",
+    "α²/(1 + α²)"
+   ],
+   "answer": "D",
+   "explanation": "Y = αX + ε with ε ~ N(0, 1) independent of X. Var(Y) = α² + 1 and Cov(X, Y) = α. R² = ρ² = α²/(1 × (1 + α²)) = α²/(1 + α²): the explained variance α² over the total α² + 1.",
+   "ref": "Multivariate PDF Q53",
+   "year": "Dec-2014"
+  }
+ ]
+}

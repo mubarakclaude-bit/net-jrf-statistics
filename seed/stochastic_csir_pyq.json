@@ -1,0 +1,257 @@
+{
+ "moduleId": "stochastic",
+ "source": "variant",
+ "label": "CSIR NET 2011–2025 previous-year questions",
+ "count": 9,
+ "items": [
+  {
+   "id": "csir-prob-29",
+   "format": "single",
+   "topic": "stochastic-t2",
+   "diff": "moderate",
+   "stem": "In an examination question paper, all questions are 'True' or 'False' type. These are arranged in such a way that three-fourth of times a question with answer 'True' is followed by a question with answer 'True'. Also two-third of times a question with answer 'False' is followed by a question with answer 'False'. If the question paper has 100 questions, the approximate probability that the correct answer of the 100-th question is 'True', is",
+   "options": [
+    "3/7",
+    "4/7",
+    "3/4",
+    "5/6"
+   ],
+   "answer": "B",
+   "explanation": "The answers form a two-state Markov chain with P(T→T) = 3/4, P(T→F) = 1/4, P(F→F) = 2/3, P(F→T) = 1/3. It is irreducible and aperiodic, so after 99 steps the state distribution is close to the stationary one. Stationarity requires the flow T→F to balance F→T: π_T/4 = π_F/3, so π_T : π_F = 4 : 3 and π_T = 4/7.",
+   "ref": "Probability PDF Q29",
+   "year": "Dec-2024"
+  },
+  {
+   "id": "csir-std-09",
+   "format": "multi",
+   "topic": "stochastic-t5",
+   "diff": "moderate",
+   "stem": "Let {Nₜ, t ≥ 0} be a Poisson process with intensity parameter 10. Let T be an exponential random variable with mean 6, and independent of the Poisson process. Which of the following are true?",
+   "statements": [
+    "P(N_T = k) = e^{−10T}(10T)^k/k!",
+    "E(N_T) = 60",
+    "(N_{T+t} − N_T; t ≥ 0) is a Poisson process with intensity parameter 4",
+    "(N_{T+t} − N_T; t ≥ 0) is a Poisson process with intensity parameter 10"
+   ],
+   "options": [
+    "D only",
+    "B only",
+    "B and D only",
+    "A, B and D only"
+   ],
+   "answer": "C",
+   "explanation": "Conditioning on T gives E(N_T) = 10 E(T) = 60, and the restarted process after the independent time T is again Poisson with rate 10. Statement A states a conditional pmf as if it were unconditional, and C changes the rate without reason.",
+   "verdicts": {
+    "A": {
+     "tf": false,
+     "why": "That formula is the conditional probability given T. Unconditionally P(N_T = k) = E[e^{−10T}(10T)^k/k!], which, because T is exponential, is a geometric probability: (1/61)(60/61)^k."
+    },
+    "B": {
+     "tf": true,
+     "why": "E(N_T) = E[E(N_T | T)] = E(10T) = 10 × 6 = 60."
+    },
+    "C": {
+     "tf": false,
+     "why": "The intensity of the process does not change; 4 is not related to any quantity here."
+    },
+    "D": {
+     "tf": true,
+     "why": "T is independent of the process, so by the independent-increments property the increments after T form a Poisson process with the same rate 10 (this also holds for any stopping time, by the strong Markov property)."
+    }
+   },
+   "ref": "Standard Univariate PDF Q9",
+   "year": "Feb-2022"
+  },
+  {
+   "id": "csir-std-35",
+   "format": "single",
+   "topic": "stochastic-t5",
+   "diff": "easy",
+   "stem": "Planes take off in a busy airport in accordance with the Poisson process with rate 60 planes per hour. 10% of these planes are cargo planes and 90% are passenger planes. Given that 10 cargo planes have taken off during one hour, what is the expected total number of planes that have taken off in that hour?",
+   "options": [
+    "90",
+    "54",
+    "64",
+    "50"
+   ],
+   "answer": "C",
+   "explanation": "Thinning a Poisson process by independent marks gives two independent Poisson processes: cargo at rate 6 per hour and passenger at rate 54 per hour. Knowing the cargo count (10) says nothing about the independent passenger count, so the expected total is 10 + 54 = 64.",
+   "ref": "Standard Univariate PDF Q35",
+   "year": "Dec-2024"
+  },
+  {
+   "id": "csir-uni-07",
+   "format": "single",
+   "topic": "stochastic-t1",
+   "diff": "easy",
+   "stem": "Let {εₙ : n ≥ 1} represent the results of independent rolls of a dice with probability of the face i turning up being pᵢ > 0 for i = 1, 2, …, 6 and Σpᵢ = 1. Let {Xₙ : n ≥ 0} be the Markov chain on the state space {1, 2, …, 6} where Xₙ = max{ε₁, ε₂, …, εₙ₊₁}. Then lim_{n→∞} P(Xₙ = 4 | X₀ = 3) equals",
+   "options": [
+    "p₄",
+    "1",
+    "1 − p₃",
+    "0"
+   ],
+   "answer": "D",
+   "explanation": "The running maximum can only go up, and every roll shows a 6 with probability p₆ > 0, so the chain is absorbed at 6 with probability 1. Any state below 6 is transient and P(Xₙ = 4 | X₀ = 3) ≤ P(no 5 or 6 in n rolls) = (1 − p₅ − p₆)ⁿ → 0.",
+   "ref": "Univariate PDF Q7",
+   "year": "June-2023"
+  },
+  {
+   "id": "csir-uni-09",
+   "format": "multi",
+   "topic": "stochastic-t4",
+   "diff": "moderate",
+   "stem": "Let n ≥ 2 be a positive integer. Consider a Markov chain on the state space {1, 2, …, n} with a given transition probability matrix P. Let Iₙ denote the identity matrix of order n. Which of the following statements are necessarily true?",
+   "statements": [
+    "At least one state is recurrent.",
+    "At least one state is transient.",
+    "−(1/3)Iₙ + (4/3)P is also a transition probability matrix of some Markov chain.",
+    "5 is an eigenvalue of Iₙ + 3P + P²."
+   ],
+   "options": [
+    "D only",
+    "A and D only",
+    "A only",
+    "A, B and D only"
+   ],
+   "answer": "B",
+   "explanation": "Every finite Markov chain has a recurrent state (A) and 𝟙 is an eigenvector of P with eigenvalue 1, so of Iₙ + 3P + P² with eigenvalue 5 (D). B fails for an irreducible chain, and C can produce negative entries.",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "A finite chain cannot have all states transient: the chain must spend infinite time somewhere, so some state is visited infinitely often and is recurrent."
+    },
+    "B": {
+     "tf": false,
+     "why": "If P = Iₙ (or any irreducible P) every state is recurrent and none is transient."
+    },
+    "C": {
+     "tf": false,
+     "why": "The diagonal entry is −1/3 + (4/3)pᵢᵢ, which is negative whenever pᵢᵢ < 1/4; a matrix with negative entries is not stochastic."
+    },
+    "D": {
+     "tf": true,
+     "why": "P has eigenvalue 1 (P𝟙 = 𝟙). The same eigenvector gives (Iₙ + 3P + P²)𝟙 = (1 + 3 + 1)𝟙 = 5𝟙."
+    }
+   },
+   "ref": "Univariate PDF Q9",
+   "year": "June-2023"
+  },
+  {
+   "id": "csir-uni-14",
+   "format": "multi",
+   "topic": "stochastic-t4",
+   "diff": "hard",
+   "stem": "Consider a Markov chain with state space S = {0, 1, 2, …} and transition probabilities given as follows: p₀ⱼ = 1/(j! e) for j ≥ 0; pᵢ,ᵢ₋₁ = 1 for i > 0 and i odd; pᵢ,ᵢ₊₁ = 1 for i > 0 and i even. Which of the following are true?",
+   "statements": [
+    "The chain is irreducible",
+    "The chain has period 2",
+    "There are infinitely many recurrent classes",
+    "Zero is a transient state"
+   ],
+   "options": [
+    "C and D only",
+    "D only",
+    "C only",
+    "A, C and D only"
+   ],
+   "answer": "A",
+   "explanation": "Odd states step down, even positive states step up, so {2,3}, {4,5}, … are closed two-state recurrent classes (C). From 0 the only way back is a jump to 0 or 1, probability 2/e < 1, so 0 is transient (D). The chain is not irreducible and has no common period.",
+   "verdicts": {
+    "A": {
+     "tf": false,
+     "why": "From state 2 the chain moves 2 → 3 → 2 → 3 … for ever and never reaches 0, so 0 is not accessible from 2: not irreducible."
+    },
+    "B": {
+     "tf": false,
+     "why": "Period is defined per class. The class {0} has p₀₀ = 1/e > 0, so it is aperiodic; the classes {2,3}, {4,5}, … have period 2. The chain as a whole has no single period."
+    },
+    "C": {
+     "tf": true,
+     "why": "For each even i ≥ 2, {i, i+1} is a closed class (i → i+1 → i) of two states; a finite closed class is recurrent, and there are infinitely many of them."
+    },
+    "D": {
+     "tf": true,
+     "why": "From 0 the chain jumps to a Poisson(1) value j. It returns to 0 only if j = 0 (stay) or j = 1 (then 1 → 0): probability 1/e + 1/e = 2/e < 1. Otherwise it is trapped in some {2k, 2k+1}. So the return probability is 2/e < 1 and 0 is transient."
+    }
+   },
+   "ref": "Univariate PDF Q14",
+   "year": "Feb-2022"
+  },
+  {
+   "id": "csir-mv-30",
+   "format": "single",
+   "topic": "stochastic-t5",
+   "diff": "easy",
+   "stem": "In an airport, domestic passengers and international passengers arrive independently according to Poisson processes with rates 100 and 70 per hour, respectively. If it is given that the total number of passengers (domestic and international) arriving in that airport between 9:00 AM and 11:00 AM on a particular day was 520, then what is the conditional distribution of the number of domestic passengers arriving in this period?",
+   "options": [
+    "Poisson(200)",
+    "Poisson(100)",
+    "Binomial(520, 10/17)",
+    "Binomial(520, 7/17)"
+   ],
+   "answer": "C",
+   "explanation": "In two hours the counts are independent Poisson(200) and Poisson(140). Given their sum n, the first is Binomial(n, 200/340) = Binomial(520, 10/17). The length of the interval cancels in the ratio.",
+   "ref": "Multivariate PDF Q30",
+   "year": "Dec-2018"
+  },
+  {
+   "id": "csir-mv-36",
+   "format": "multi",
+   "topic": "stochastic-t5",
+   "diff": "easy",
+   "stem": "Arrival of customers in a shop is a Poisson process with intensity λ = 2. Let X be the number of customers entering during the time interval (1, 2) and let Y be the number entering during the time interval (5, 10). Which of the following are true?",
+   "statements": [
+    "P(X = 0 | X + Y = 12) = (5/6)¹²",
+    "X and Y are independent",
+    "X + Y is Poisson with parameter 6",
+    "X − Y is Poisson with parameter 8"
+   ],
+   "options": [
+    "B only",
+    "A only",
+    "A, B and C only",
+    "A and B only"
+   ],
+   "answer": "D",
+   "explanation": "Counts on disjoint intervals are independent Poisson with means rate × length: 2 and 10. Conditioning on the total gives a binomial split (A); the sum is Poisson(12), not 6, and a difference cannot be Poisson.",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "X ~ Poisson(2) and Y ~ Poisson(10). Given X + Y = 12, X ~ Bin(12, 2/12), so P(X = 0) = (5/6)¹²."
+    },
+    "B": {
+     "tf": true,
+     "why": "The intervals are disjoint, and a Poisson process has independent increments."
+    },
+    "C": {
+     "tf": false,
+     "why": "X + Y ~ Poisson(2 + 10) = Poisson(12)."
+    },
+    "D": {
+     "tf": false,
+     "why": "X − Y takes negative values, so it is not Poisson."
+    }
+   },
+   "ref": "Multivariate PDF Q36",
+   "year": "Dec-2017"
+  },
+  {
+   "id": "csir-mv-50",
+   "format": "single",
+   "topic": "stochastic-t5",
+   "diff": "moderate",
+   "stem": "Let X₁, X₂, …, Xₙ be i.i.d. random variables having an exponential distribution with mean 1/λ. Let Sₙ = X₁ + X₂ + ⋯ + Xₙ and N = inf{n ≥ 1 : Sₙ > 1}. Then Var(N) equals",
+   "options": [
+    "1",
+    "λ",
+    "λ²",
+    "∞"
+   ],
+   "answer": "B",
+   "explanation": "The partial sums are the arrival times of a Poisson process with rate λ. N − 1 is the number of arrivals in [0, 1], which is Poisson(λ). So Var(N) = Var(N − 1) = λ.",
+   "ref": "Multivariate PDF Q50",
+   "year": "June-2015"
+  }
+ ]
+}
