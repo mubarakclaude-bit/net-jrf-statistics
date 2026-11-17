@@ -42,6 +42,12 @@ close(mean_hat, 2.0)
 close(mle_var, 2/3)
 close(unbiased_var, 1.0)
 
+# Normal MLE variance bias: E[sigma_hat^2] = (n-1)*sigma^2/n.
+n, sigma2 = 6, 4.0
+expected_mle_variance = (n-1)*sigma2/n
+close(expected_mle_variance, 20/3)
+close(expected_mle_variance-sigma2, -sigma2/n)
+
 # Uniform(0,theta): likelihood is zero below the sample maximum and decreases above it.
 u = [0.2, 0.5, 0.8]
 m = max(u)
@@ -63,6 +69,6 @@ assert all_zero_likelihood(1/3) > all_zero_likelihood(0.5) > all_zero_likelihood
 print("PASS: Bernoulli score and curvature")
 print("PASS: Poisson score")
 print("PASS: exponential-rate score, rate/scale and finite-sample bias")
-print("PASS: normal MLE variance (n) versus unbiased variance (n-1)")
+print("PASS: normal MLE variance (n), unbiased variance (n-1), and MLE bias")
 print("PASS: Uniform(0,theta) support and boundary maximum")
 print("PASS: constrained Bernoulli examples")
