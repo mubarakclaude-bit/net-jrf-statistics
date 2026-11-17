@@ -1142,3 +1142,20 @@ Seventeen independently checked items were retained:
 Pages 418 (near-duplicate of the existing uniform-extremes sufficiency item), 430 (printed power options do not match the derived result), 452 (ambiguous deviation convention), 454 (non-statistics betting puzzle), 460 (pmf parameter normalisation is inconsistent), 463 (Gamma parameterisation omitted), 464 (duplicates the existing exponential one-sided interval), 466 (the “minimal length” convention is not specified), and 472/474 (the distribution labels are corrupted) were not imported.
 
 Updated counts: Probability 547, Statistical Inference 260, Multivariate Analysis 25, Stochastic Processes 11, Regression 4 — **847 total supplementary items**. Batch 2 contributes 261 over the 586-item baseline.
+
+
+## Final focused review of source pages 928–953
+
+- **Page 928 — not imported.** This asks whether a computer-programmed Bernoulli generator can produce a Normal(0,1) value. It is a software/tooling question rather than a suitable standalone Statistics Paper 2 MCQ in this question bank.
+- **Page 929 — retained earlier.** The two-toss procedure for selecting between two items with equal probability, regardless of coin bias, is already represented as `mcq1000-p929`.
+- **Page 930 — retained earlier.** The simplex probability for three independent Uniform(0,1) variables is already represented as `mcq1000-p930`.
+- **Page 931 — retained earlier.** The negative-binomial mean under the trials-until-r-successes parameterisation is already represented as `mcq1000-p931`.
+- **Pages 932–942 — relevant questions already represented.** These include the discrete test size/power calculation, chi-square transformation, exponential confidence-limit/pivot items, normal probability, expectation from a density, independent-student probability, Laplace scale MLE, Laplace extreme-order-statistic coverage and chi-square mode.
+- **Page 937 — excluded.** The printed question gives individual success/failure probabilities and the overall probability of solving, but does not state that the students' attempts are independent. The keyed answer 7/8 requires that additional assumption, so it is not imported as written.
+- **Page 943 — excluded.** The scan states only that an estimator-like statistic has expectation g(λ), with g odd and finite variance, and that S has mean zero and finite variance. It does not supply the covariance or a definition of S sufficient to determine the requested correlation.
+- **Page 948 — excluded.** The displayed expression \((x^3-1)/[(1+x)^5B(3,2)]\) is negative for 0<x<1 and therefore is not a valid probability density as printed. The transformation answer cannot be accepted without correcting the source.
+- **Pages 944–947 and 949–951 — retained earlier.** The conditional geometric calculations, probability integral transform for the sample minimum, Poisson MGF, geometric memorylessness, symmetry expectation and chi-square transformation are already represented.
+- **Page 952 — retained.** For three independent standard normals, the variance of \((X_1+X_2-2X_3)/\sqrt6\) is 1. The verified item is `mcq1000-p952` in the Multivariate Analysis pool.
+- **Page 953 — retained earlier.** The binomial MGF question has support 0,…,10, so \(P(X>10)=0\); already represented as `mcq1000-p953`.
+
+The focused review added no further items because the remaining potentially relevant pages were already present or had missing assumptions/invalid source expressions. Current verified counts remain Probability 547, Statistical Inference 260, Multivariate Analysis 25, Stochastic Processes 11 and Regression 4 — **847 supplementary items** (261 in batch 2 over the 586-item batch-1 baseline).
