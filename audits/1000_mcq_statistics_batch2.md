@@ -1192,3 +1192,40 @@ The newly supplied 1,044-page scan was inspected as page images. OCR was used to
 - **Total: 850 supplementary items**
 
 The source review does not imply that every page in 954–1015 has a new eligible question. These additions remain draft-only and are not production counts. Full semantic duplicate reconciliation across every lesson, mastery and PYQ bank remains a release gate.
+
+
+## Further source review — pages 673–760 (17 Nov 2026)
+
+Three additional items were accepted after enlarged page-image review and independent solution:
+
+| Page | Item ID | Topic | Verified result |
+|---|---|---|---|
+| 674 | `mcq1000-p674` | Probability — normal linear combinations with independent random coefficients | Statements 1, 2 and 4; Z is standard normal |
+| 687 | `mcq1000-p687` | Statistical Inference — unbiased estimation of a variance parameter | Both ΣXᵢ²/(3n) and Σ(Xᵢ−X̄)²/[2(n−1)] are unbiased |
+| 737 | `mcq1000-p737` | Probability — almost-sure convergence | P(lim Xₙ=X)=1 |
+
+The page-674 and page-687 items are multi-select because more than one statement/statistic is correct. Page 737 is a definition check and its explanation distinguishes almost-sure convergence from convergence in probability.
+
+### Pages deliberately not imported in this interval
+- Page 680: shifted-exponential likelihood has an open support boundary; the printed maximum is only a supremum under the strict support as scanned.
+- Page 692: the auxiliary-statistic options are corrupted/overprinted and cannot be transcribed reliably.
+- Page 698: the density notation is damaged and the printed numeric answer cannot be independently reconstructed.
+- Page 699: an estimator is not specified, so the requested MSE is undefined as written.
+- Page 706: the variance value is missing from the stem.
+- Page 707: the identities of the two missing cards are unspecified; the probability for the actual remaining deck is not determined.
+- Page 714: the marked expected-value answer conflicts with the weighted average of the stated point values and probabilities.
+- Page 715: the winning categories overlap and the payout rule for overlapping events is not stated.
+- Page 733: the claimed relative efficiency of systematic sampling cannot be computed without the population ordering/design details.
+- Page 741: the printed type-II error option does not match the probability under the stated critical region.
+- Other pages in this interval were already represented in the pools, were not relevant to the Paper 2 statistics bank, or did not provide a uniquely verifiable answer.
+
+### Updated counts after this review
+
+- Statistical Inference: **262**
+- Probability: **551**
+- Multivariate Analysis: **25**
+- Stochastic Processes: **11**
+- Regression: **4**
+- **Total: 853 supplementary items**
+
+These remain draft-branch counts. Full semantic duplicate reconciliation across every lesson, mastery and PYQ bank and all relevant topic-coverage checks remain release gates.
