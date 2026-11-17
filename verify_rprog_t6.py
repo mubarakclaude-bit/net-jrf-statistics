@@ -25,15 +25,11 @@ print('PASS: R T6 structure, mastery contract and NA/summary arithmetic.')
 # The worked explanations must match the exact vectors in the guided prompts.
 s6 = next(s for s in L['scenes'] if s['id'] == 's6')
 s8 = next(s for s in L['scenes'] if s['id'] == 's8')
-assert '4, 8 and 10' in s6['solution'][1]['math']
-assert 'sum(!is.na(x))=3' in s6['solution'][2]['math']
-assert 'Observed values: 1, 3, 9' in s8['solution'][0]['math']
-assert 'mean=13/3' in s8['solution'][1]['math']
-assert 'median=3' in s8['solution'][2]['math']
-# Reconciled checks: exact prompt values, requested summaries, and no invented mean.
-s6 = next(s for s in L['scenes'] if s['id'] == 's6')
-s8 = next(s for s in L['scenes'] if s['id'] == 's8')
+assert 'sum(is.na(x))=2; sum(!is.na(x))=3' in s6['solution'][1]['math']
 assert 'observed values are 4, 8 and 10' in s6['solution'][1]['why']
+assert 'length(x)=5; observed count=3' in s6['solution'][2]['math']
 assert 'no mean is required' in s6['solution'][2]['why']
+assert 'Observed values: 1, 3, 9' in s8['solution'][0]['math']
 assert 'sum=1+3+9=13' in s8['solution'][1]['math']
+assert 'mean=13/3' in s8['solution'][1]['math']
 assert 'median=3' in s8['solution'][2]['math']
