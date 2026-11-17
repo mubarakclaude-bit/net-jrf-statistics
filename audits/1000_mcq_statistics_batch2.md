@@ -1159,3 +1159,36 @@ Updated counts: Probability 547, Statistical Inference 260, Multivariate Analysi
 - **Page 953 — retained earlier.** The binomial MGF question has support 0,…,10, so \(P(X>10)=0\); already represented as `mcq1000-p953`.
 
 The focused review added no further items because the remaining potentially relevant pages were already present or had missing assumptions/invalid source expressions. Current verified counts remain Probability 547, Statistical Inference 260, Multivariate Analysis 25, Stochastic Processes 11 and Regression 4 — **847 supplementary items** (261 in batch 2 over the 586-item batch-1 baseline).
+
+
+## Follow-up source review — pages 954–1015
+
+The newly supplied 1,044-page scan was inspected as page images. OCR was used to locate material, but the accepted questions below were transcribed and checked from enlarged page images, with answers derived independently.
+
+| PDF page | Item ID | Topic mapping | Verified answer |
+|---|---|---|---|
+| 968 | `mcq1000-p968` | Statistical Inference T13 — exact confidence interval for a power-family parameter | C |
+| 969 | `mcq1000-p969` | Probability T1 — event algebra and inclusion–exclusion | A and B |
+| 986 | `mcq1000-p986` | Probability T4 — variance of a product of independent Uniform variables | B |
+
+### Corrections and exclusions in this range
+
+- **Page 962 — held out.** The equicorrelation matrix has admissible negative as well as positive values of ρ (−1/3≤ρ≤1). The first-two-principal-component proportion is not always (1+ρ)/2; the source answer requires an unstated restriction such as ρ≥0.
+- **Page 969 — source-key correction.** The source marks only P(A∪Bᶜ)=5/6. The printed inequality P(A∪Bᶜ)≤5/6 is also true because the probability equals 5/6. Both statements are retained as true.
+- **Page 981 and page 1003 — duplicate.** Both display the same joint density proportional to 1/[(1+x²)(1+y²)]; no second item was added.
+- **Page 991 and page 1006 — duplicate.** Both ask for Cov(min(A,B),max(A,B)) for independent Uniform(0,1) variables. The earlier page-991 item is retained.
+- **Pages 966 and 978 — duplicate convergence-to-zero CDF sequence material; page 977 and page 996 — duplicate uniform-sum limit material.** No duplicate additions.
+- **Page 970 — held out.** The source's joint-distribution/MGF notation is not sufficiently legible to reconstruct all options safely; the Cauchy marginal result alone is not enough to verify the intended keyed statement.
+- **Page 1009 — excluded as written.** For a sample from Uniform(0,θ²) with θ>1, the likelihood is maximised at θ=√X₍₃₎ only when X₍₃₎>1. If X₍₃₎≤1 (an event with positive probability), the likelihood has a supremum as θ↓1 but no attained maximum because θ=1 is excluded. The source's unconditional MLE answer is therefore not valid for the stated open parameter space.
+- Other pages in this range were held out or not added where the stem was already represented, assumptions were missing, notation was unclear, or the source answer was not uniquely supported.
+
+### Updated draft counts
+
+- Statistical Inference: **261**
+- Probability: **549**
+- Multivariate Analysis: **25**
+- Stochastic Processes: **11**
+- Regression: **4**
+- **Total: 850 supplementary items**
+
+The source review does not imply that every page in 954–1015 has a new eligible question. These additions remain draft-only and are not production counts. Full semantic duplicate reconciliation across every lesson, mastery and PYQ bank remains a release gate.
