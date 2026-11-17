@@ -45,7 +45,7 @@ close(unbiased_var, 1.0)
 # Normal MLE variance bias: E[sigma_hat^2] = (n-1)*sigma^2/n.
 n, sigma2 = 6, 4.0
 expected_mle_variance = (n-1)*sigma2/n
-close(expected_mle_variance, 20/3)
+close(expected_mle_variance, 10/3)
 close(expected_mle_variance-sigma2, -sigma2/n)
 
 # Uniform(0,theta): likelihood is zero below the sample maximum and decreases above it.
