@@ -6,7 +6,7 @@
  "breadcrumb": "Statistical Inference → Interval Estimation → Confidence intervals and pivots",
  "engine": "C",
  "engineName": "Interval estimation — a range, and how often the method gets it right",
- "version": "1.0",
+ "version": "1.3",
  "status": "approved",
  "estMin": 98,
  "objectives": [
@@ -798,6 +798,59 @@
    }
   },
   {
+   "kind": "theory",
+   "title": "Expected length and the shortest variance interval",
+   "mins": 7,
+   "objective": "Distinguish a confidence level constraint from the choice of interval endpoints, and understand how shortest intervals are selected.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "Coverage does not determine a unique interval",
+     "body": "For a pivot Q with a known distribution, many pairs of tail probabilities can give the same confidence level. Equal-tail intervals split the excluded probability equally, but equal tails are not automatically the shortest interval in every family."
+    },
+    {
+     "t": "formula",
+     "h": "The chi-square interval for a normal variance",
+     "body": "For a normal sample with unknown mean, let S = Σ(Xᵢ−X̄)². Then S/σ² has a chi-square distribution with n−1 degrees of freedom. Choosing positive constants a<b with P(a ≤ S/σ² ≤ b)=1−α gives the interval [S/b, S/a] for σ²."
+    },
+    {
+     "t": "step",
+     "h": "Compare intervals by expected length",
+     "body": "The length is S(1/a−1/b). Since E(S)=(n−1)σ², its expected length is (n−1)σ²(1/a−1/b). To seek the shortest interval within this family, minimize 1/a−1/b subject to the required chi-square coverage. The coverage constraint alone does not select the endpoints."
+    },
+    {
+     "t": "trap",
+     "h": "Exam connection — CSIR NET Dec 2017",
+     "body": "The uploaded Methods of Estimation PDF, Question 28 (June 2018), presents a family of variance confidence intervals indexed by a and b and asks about equal-tail conditions, shortest length, and expected length. The safe method is to identify the pivot, write the coverage constraint, then optimize the expected length; do not assume that every 95% interval is shortest."
+    },
+    {
+     "t": "def",
+     "h": "A second exact pivot — the sample minimum",
+     "body": "For X₁,…,Xₙ iid Exponential with scale θ, P(X_(1)>x)=P(X₁>x,…,Xₙ>x)=exp(−nx/θ). Thus X_(1) has exponential scale θ/n, and Q=2nX_(1)/θ follows χ² with 2 degrees of freedom."
+    },
+    {
+     "t": "formula",
+     "h": "The exact interval from the minimum",
+     "body": "Let q(p;2) denote the lower-tail p quantile of χ²₂. Then P(q(α/2;2) ≤ 2nX_(1)/θ ≤ q(1−α/2;2))=1−α. Rearranging gives CI_(1−α)(θ)=[2nX_(1)/q(1−α/2;2), 2nX_(1)/q(α/2;2)]."
+    },
+    {
+     "t": "step",
+     "h": "Why the order-statistic pivot works",
+     "body": "Independence makes the survival probabilities multiply. The minimum has survival exp(−nx/θ), so its scale is θ/n. This pivot uses the minimum alone; the separate sum-based pivot 2ΣXᵢ/θ ~ χ²_(2n) uses all observations. Both are exact, but they must not be mixed."
+    },
+    {
+     "t": "trap",
+     "h": "Keep the scale and rate parameterisations separate",
+     "body": "Here θ is the scale (mean), with density θ⁻¹exp(−x/θ). If the model is written with rate λ, density λexp(−λx), then θ=1/λ and the equivalent pivot is 2nλX_(1)."
+    }
+   ],
+   "id": "s11b",
+   "ask": {
+    "q": "What is the expected length of [S/b, S/a] when S=Σ(Xᵢ−X̄)² for a normal sample of size n?",
+    "nudge": "Use E(S)=(n−1)σ², so the expected length is (n−1)σ²(1/a−1/b)."
+   }
+  },
+  {
    "kind": "recall",
    "id": "s12",
    "mins": 2,
@@ -844,6 +897,7 @@
     "Write both one-sided bounds for a normal mean from the shape of the interval rather than from memory, and so get the sign right.",
     "Build an interval for a variance, and expect it to be asymmetric; take square roots to get one for σ.",
     "Answer the width questions: proportional to 1/√n, four times the data to halve it, wider at a higher level, and tighter one-sided than two-sided at the same level.",
+    "For a variance interval [S/b,S/a], use the chi-square coverage constraint and compare candidate endpoints through expected length (n−1)σ²(1/a−1/b); equal tails need not imply shortest length.",
     "State correctly what a confidence level means, and reject the three wrong readings — about the data, about sample means, and as a probability for the particular interval."
    ]
   },
