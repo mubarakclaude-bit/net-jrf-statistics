@@ -1229,3 +1229,7 @@ The page-674 and page-687 items are multi-select because more than one statement
 - **Total: 853 supplementary items**
 
 These remain draft-branch counts. Full semantic duplicate reconciliation across every lesson, mastery and PYQ bank and all relevant topic-coverage checks remain release gates.
+
+
+## Metadata cleanup — page 893 (17 Nov 2026)
+A final structural review found three stray numeric object keys (`0`, `1`, `2`) on `mcq1000-p893`, left by OCR/transcription tooling and unrelated to the question schema. These keys were removed from the item metadata. The question stem, statements, answer, verdicts and explanation were not changed. This is a metadata-only correction; pool item counts and question IDs are unchanged.
