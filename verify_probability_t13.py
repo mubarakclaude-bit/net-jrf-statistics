@@ -16,3 +16,14 @@ assert math.isclose(z,math.log(4)/2,abs_tol=1e-12)
 assert math.isclose(lo,.0398,abs_tol=5e-4)
 assert math.isclose(hi,.8732,abs_tol=5e-4)
 print("Probability T13 sampling-distribution anchors: PASS")
+
+# Ensure the learner-facing option agrees with the exact Uniform(-1, 1) two-tail probability.
+import json
+from pathlib import Path
+pool = json.loads((Path(__file__).resolve().parent / "seed" / "probability_t13_mastery.json").read_text(encoding="utf-8"))
+item = next(q for q in pool["items"] if q["id"] == "pr-t13-m-19")
+tail_probability = 2 * (1 - 0.97) / 2
+assert math.isclose(tail_probability, 0.03, abs_tol=1e-12)
+assert item["answer"] == "D"
+assert "probability 0.03" in item["options"][3]
+assert "probability 0.06" not in item["options"][3]
