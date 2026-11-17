@@ -7,9 +7,9 @@
   "engine": "B",
   "engineName": "Estimation and inference — let the observed data tell us which parameter value fits best",
   "estMin": 98,
-  "version": "1.0",
+  "version": "1.1",
   "status": "review",
-  "provenance": "New lesson prepared to close the missing inference-t4 learning coverage identified during the supplementary question-bank audit (November 2026). Scope follows Unit IV of the supplied UGC NET Statistics syllabus: maximum likelihood estimators and their relationship to point-estimation properties. Examples are original instructional examples, not represented as official PYQs. The linked supplementary pool is separately labelled practice material. The lesson's finite-sample bias and asymptotic-normality statements were checked algebraically in verify_inference_t4.py; broader claims are explicitly qualified by regularity conditions. Additional support-dependent, non-unique and discrete-parameter examples were added after checking the 60 inference-t4-tagged supplementary items; items testing general sufficiency or unrelated unbiased estimators remain candidates for topic-tag review rather than being treated as MLE content.",
+  "provenance": "New lesson prepared to close the missing inference-t4 learning coverage identified during the supplementary question-bank audit (November 2026). Scope follows Unit IV of the supplied UGC NET Statistics syllabus: maximum likelihood estimators and their relationship to point-estimation properties. Examples are original instructional examples, not represented as official PYQs. The linked supplementary pool is separately labelled practice material. The verifier checks the displayed finite-sample arithmetic examples; asymptotic-normality is stated as a standard theorem under explicit regularity conditions, not claimed to be numerically verified by the script. Additional support-dependent, non-unique and discrete-parameter examples were added after checking the 60 inference-t4-tagged supplementary items; items testing general sufficiency or unrelated unbiased estimators remain candidates for topic-tag review rather than being treated as MLE content.",
   "objectives": [
     "Build a likelihood from a sample and distinguish a likelihood function from a probability distribution.",
     "Find an MLE by taking logarithms, differentiating the log-likelihood and checking that the candidate is a maximum.",
@@ -509,12 +509,19 @@
           "say": "The unbiased sample variance would be 2/(3−1)=1. These are different estimators because they answer different optimisation and bias questions."
         },
         {
-          "say": "The MLE is biased for finite n. Since S=ΣXᵢ has Gamma(shape n, rate λ), E(1/S)=λ/(n−1) for n>1.",
-          "math": "E(λ̂)=nE(1/S)=nλ/(n−1)"
-        },
-        {
           "say": "The bias is positive but tends to zero as n increases.",
           "math": "Bias(λ̂)=λ/(n−1) → 0"
+        },
+        {
+          "say": "For a normal sample, the residual sum of squares has expectation (n−1)σ². The MLE divides this quantity by n.",
+          "math": "E[Σ(Xᵢ−X̄)²]=(n−1)σ²"
+        },
+        {
+          "say": "Therefore the normal MLE variance is biased downward for finite n.",
+          "math": "E[σ̂²_MLE]=(n−1)σ²/n; Bias=−σ²/n"
+        },
+        {
+          "say": "The bias tends to zero as n grows. This is separate from the unbiased sample variance, which divides by n−1."
         }
       ],
       "after": "Always identify whether the question asks for the MLE or the unbiased estimator."
