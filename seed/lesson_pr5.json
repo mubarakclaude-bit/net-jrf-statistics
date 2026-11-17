@@ -21,7 +21,7 @@
   {
    "id": "p1",
    "name": "Expectation and variance",
-   "why": "Every family is identified here by its mean, its variance and the ratio between them."
+   "why": "Mean and variance describe a family; the variance-to-mean ratio is a useful consistency check, not a unique identifier."
   },
   {
    "id": "p2",
@@ -57,7 +57,7 @@
    "Poisson(λ): pmf e^(−λ)λᵏ/k!; mean λ; var λ; mgf e^(λ(eᵗ−1)); ratio exactly 1.",
    "Geometric(p) counting trials: pmf q^(k−1)p, k ≥ 1; mean 1/p; var q/p²; mgf peᵗ/(1 − qeᵗ) for t < −ln q; ratio q/p.",
    "Negative binomial(r,p) counting failures: pmf C(k+r−1,k)pʳqᵏ; mean rq/p; var rq/p²; ratio 1/p > 1 always.",
-   "Hypergeometric(N,K,n): mean nK/N; var npq(N−n)/(N−1); ratio q(N−n)/(N−1) < q.",
+   "Hypergeometric(N,K,n): mean nK/N; var npq(N−n)/(N−1); ratio q(N−n)/(N−1) ≤ q, with equality when n = 1 and strict inequality when n > 1.",
    "The ratio depends only on the shape parameter, never on n, λ or r — so it survives a question that withholds the size.",
    "Geometric dispersion: overdispersed for p < 0.5, exactly equal at p = 0.5 (mean 2, var 2), underdispersed above. Most summaries state this wrongly.",
    "Negative binomial with r = 1 IS the geometric; checked at p = 0.3, both means 2.333.",
@@ -139,7 +139,7 @@
    "Poisson rates add. Nothing is ever due."
   ]
  },
- "howto": "The interactive chart in section 3 is the fastest way into this topic: step the family slider through all four and watch the variance-to-mean ratio go below 1, to exactly 1, and then above 1, which is the single most useful discriminator in the lesson. Section 5 is June 2026's own question, matched out one description at a time, and the method there — find the word that says which quantity is fixed — is what the matching questions actually test. Section 7 has you derive the four ratios rather than memorise them, and it is where the geometric's awkwardness appears: its ratio q/p sits on either side of 1 depending on p, so 'the geometric is overdispersed' is wrong as usually stated. Section 10's part (f) is a deliberate trap worth attempting before reading the check. If short of time, sections 3, 4, 5 and 7 are the lesson. The optional section derives the Poisson limit and proves that the geometric is the only memoryless discrete distribution, which is worth reading because the proof is three lines and explains why the exponential behaves the same way.",
+ "howto": "The interactive chart in section 3 is the fastest way into this topic: step the family slider through all four and watch the variance-to-mean ratio go below 1, to exactly 1, and then above 1, which is a useful consistency check, not a unique family identifier. Section 5 is June 2026's own question, matched out one description at a time, and the method there — find the word that says which quantity is fixed — is what the matching questions actually test. Section 7 has you derive the four ratios rather than memorise them, and it is where the geometric's awkwardness appears: its ratio q/p sits on either side of 1 depending on p, so 'the geometric is overdispersed' is wrong as usually stated. Section 10's part (f) is a deliberate trap worth attempting before reading the check. If short of time, sections 3, 4, 5 and 7 are the lesson. The optional section derives the Poisson limit and proves that the geometric is the only memoryless discrete distribution, which is worth reading because the proof is three lines and explains why the exponential behaves the same way.",
  "refs": [
   {
    "title": "Discrete Distributions",
@@ -231,7 +231,7 @@
      "ask": "For a Poisson with parameter λ, give the mean and the variance.",
      "recall": "Both equal λ.",
      "refresh": [
-      "Mean equal to variance is the Poisson's defining fingerprint, and it is what 'equidispersion' means.",
+      "Mean equal to variance is the Poisson's familiar fingerprint, but it is not unique: a geometric distribution with p = 0.5 also has equal mean and variance.",
       "It makes the Poisson the reference point: real count data with variance above its mean is called overdispersed, and below it underdispersed.",
       "A practice variant asks this directly, and the ratio variance ÷ mean = 1 is the single most useful fact in the topic."
      ]
@@ -266,7 +266,7 @@
     "Almost nothing in this topic requires arithmetic. A question describes a situation, and the work is to recognise which family it describes — after which the mean, the variance and the probabilities follow from memory.",
     "That makes the failure mode distinctive. Getting such a question wrong is rarely a calculation slip; it is reading 'failures preceding the rᵗʰ success' and reaching for the binomial because the words 'success' and 'trials' appeared. The defence is to ask, every time: which quantity was fixed in advance, and which one is random?",
     "Fixed trials, random successes — binomial. Fixed successes, random trials or failures — geometric or negative binomial. Neither fixed, with a rate over a period — Poisson. A finite population sampled without replacement — hypergeometric.",
-    "The second defence is arithmetic after all, but of the cheapest kind: compute the variance-to-mean ratio. Below 1 the family is binomial or hypergeometric; exactly 1 and it is Poisson; above 1 and it is negative binomial, or geometric with p below a half. Two independent routes to the same answer is what turns a guess into a mark."
+    "The second defence is arithmetic: compute the variance-to-mean ratio as a consistency check, not as a unique identifier. Below 1 is compatible with a binomial, a hypergeometric, or a geometric with p > 0.5; exactly 1 is compatible with a Poisson or a geometric with p = 0.5; above 1 is compatible with a negative binomial or a geometric with p < 0.5. Different families can share the same ratio, so use the fixed-versus-counted description as the primary identification and the ratio only to rule out incompatible choices."
    ],
    "scenario": {
     "teaser": "A lot of 50 is inspected by sampling 10, and the acceptance probability is computed from the wrong family.",
@@ -298,7 +298,7 @@
     "fam": 0,
     "sz": 12,
     "p": 0.3,
-    "caption": "The probability mass function of the selected family, with its mean marked and the variance-to-mean ratio reported. Move the family slider through all four and watch the ratio: below 1, exactly 1, variable, then always above 1."
+    "caption": "The probability mass function of the selected family, with its mean marked and the variance-to-mean ratio reported. Move the family slider through all four and use the ratio as a consistency check: it can be below 1, exactly 1, or above 1 depending on the family and parameter."
    },
    "body": [
     "Start on Binomial with n = 12 and p = 0.3. The mean is 3.6, the variance 2.52, and the ratio 0.70 — which is exactly q. Change p and watch the ratio follow q precisely. It can never reach 1, which is why a binomial can never look equidispersed.",
@@ -316,7 +316,7 @@
    "kind": "theory",
    "id": "s3",
    "mins": 9,
-   "title": "The five families, and the ratio that identifies them",
+   "title": "The five families, and the ratio as a consistency check",
    "objective": "Hold all five with their pmf, moments and mgf, and the identification rule.",
    "blocks": [
     {
@@ -336,13 +336,13 @@
     },
     {
      "t": "formula",
-     "h": "The variance-to-mean ratio — the discriminator",
-     "body": "Binomial:          mean np,    var npq,     ratio q        < 1 always\nPoisson:           mean λ,     var λ,       ratio 1        = 1 always\nNegative binomial: mean rq/p,  var rq/p²,   ratio 1/p      > 1 always\nGeometric (trials): mean 1/p,  var q/p²,    ratio q/p      DEPENDS on p\nHypergeometric:    mean nK/N,  var npq(N−n)/(N−1),  ratio q(N−n)/(N−1) < q\nThe geometric is the exception to every slogan: overdispersed for p < 0.5, exactly equidispersed at p = 0.5, underdispersed for p > 0.5. Verified at p = 0.2, 0.3, 0.5, 0.7, 0.9."
+     "h": "The variance-to-mean ratio — a consistency check",
+     "body": "Binomial:          mean np,    var npq,     ratio q        < 1 always\nPoisson:           mean λ,     var λ,       ratio 1        = 1 always\nNegative binomial: mean rq/p,  var rq/p²,   ratio 1/p      > 1 always\nGeometric (trials): mean 1/p,  var q/p²,    ratio q/p      DEPENDS on p\nHypergeometric:    mean nK/N,  var npq(N−n)/(N−1),  ratio q(N−n)/(N−1) ≤ q; equality when n = 1 and strict inequality when n > 1\nThe geometric is the exception to every slogan: overdispersed for p < 0.5, exactly equidispersed at p = 0.5, underdispersed for p > 0.5. Verified at p = 0.2, 0.3, 0.5, 0.7, 0.9."
     },
     {
      "t": "step",
      "h": "Why the ratio works as a check",
-     "body": "The ratio is dimensionless and depends on the shape parameter alone, not on the size parameter: it is q for ANY n, and 1/p for ANY r. So computing it from a stated mean and variance pins down the family even when the question withholds the parameters. If a question gives mean 6 and variance 15, the ratio 2.5 rules out binomial, Poisson and hypergeometric at once, and 1/p = 2.5 gives p = 0.4."
+     "body": "The ratio is dimensionless and depends on the shape parameter alone, not on the size parameter: it is q for ANY n, and 1/p for ANY r. So computing it from a stated mean and variance is a useful consistency check, but it does NOT uniquely identify the family: for example, a geometric with p = 1/1.7 has ratio q/p = 0.7, the same as a binomial with success probability 0.3. If a question gives mean 6 and variance 15, the ratio 2.5 is compatible with a negative binomial; then 1/p = 2.5 gives p = 0.4, and the mean determines r = 4."
     }
    ],
    "table": {
@@ -388,7 +388,7 @@
       "successes drawn without replacement",
       "nK/N",
       "npq(N−n)/(N−1)",
-      "below q"
+      "≤ q (equal when n = 1)"
      ]
     ]
    },
@@ -483,7 +483,7 @@
       "to": "h"
      }
     ],
-    "note": "One decision — is the trial count fixed, or the success count? — separates the two branches, and replacement separates the first. Confirm whatever you choose with the variance-to-mean ratio."
+    "note": "First identify what is fixed and what is counted. Use the variance-to-mean ratio only as a consistency check; different families can share the same ratio."
    },
    "ask": {
     "q": "A count has mean 6 and variance 15. Which families does that rule out, and what parameter does it imply for the one that survives?",
@@ -528,7 +528,7 @@
      "why": "The marked option B was A-II, B-I, C-IV, D-III, which moves every pair. Note that each wrong option here shifts at least two entries, so recognising one pair is not enough — the whole mapping has to be built, which is why the four-way reading above is the method."
     }
    ],
-   "after": "The transferable rule is to find the word that says which quantity is fixed: 'finite number of trials' fixes n, 'first' fixes one success, 'rᵗʰ' fixes r, and 'infinitesimally small p with very large n' fixes neither but fixes their product. Then confirm with the ratio — binomial below 1, Poisson exactly 1, negative binomial above 1."
+   "after": "The transferable rule is to find the word that says which quantity is fixed: 'finite number of trials' fixes n, 'first' fixes one success, 'rᵗʰ' fixes r, and 'infinitesimally small p with very large n' fixes neither but fixes their product. Then use the ratio only as a consistency check: binomial ratios are below 1, Poisson ratios equal 1, negative-binomial ratios exceed 1, and geometric ratios can fall on either side of 1. A ratio alone does not identify a unique family."
   },
   {
    "kind": "recall",
@@ -636,10 +636,10 @@
       ],
       "hint": "The extra factor is below 1 whenever n > 1."
      },
-     "why": "The ratio is q(N−n)/(N−1) < q. Sampling without replacement induces negative dependence between draws, which suppresses the variance. For N = 50, n = 10, K = 20 the ratio is 0.490 against the binomial's 0.600."
+     "why": "The ratio is q(N−n)/(N−1) ≤ q; equality holds when n = 1 and the inequality is strict when n > 1. Sampling without replacement induces negative dependence between draws, which suppresses the variance. For N = 50, n = 10, K = 20 the ratio is 0.490 against the binomial's 0.600."
     }
    ],
-   "after": "Two things worth keeping. The ratio depends only on the shape parameter — q, or 1/p — never on n, λ or r, so it survives a question that withholds the size parameter. And the geometric's ratio q/p is the one result in this topic with no fixed sign, so a question that depends on the direction of the geometric's dispersion must state p."
+   "after": "Two things worth keeping. The ratio depends only on the shape parameter — q or 1/p — never on n, λ or r, so it is useful when a question withholds the size parameter. But different families can share a ratio, so use it as a consistency check after identifying what is fixed. The geometric's ratio q/p has no fixed direction: p = 0.5 is the boundary."
   },
   {
    "kind": "theory",
@@ -710,7 +710,7 @@
    "solution": [
     {
      "say": "(a) Ratio first.",
-     "math": "variance ÷ mean = 15/6 = 2.5 > 1\n⟹ not binomial (q < 1), not Poisson (= 1), not hypergeometric (< q)\n1/p = 2.5 ⟹ p = 0.4\nmean rq/p = r(0.6)/(0.4) = 1.5r = 6 ⟹ r = 4",
+     "math": "variance ÷ mean = 15/6 = 2.5 > 1\n⟹ not binomial (q < 1), not Poisson (= 1), not hypergeometric (ratio ≤ q < 1)\n1/p = 2.5 ⟹ p = 0.4\nmean rq/p = r(0.6)/(0.4) = 1.5r = 6 ⟹ r = 4",
      "why": "Negative binomial with r = 4 and p = 0.4. Checked: mean 6.000 and variance 15.000 exactly, and a 400,000-sample simulation gave 5.998 and 14.96."
     },
     {

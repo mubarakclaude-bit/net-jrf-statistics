@@ -1,945 +1,945 @@
 {
- "id": "timeseriest1",
- "topicId": "timeseries-t1",
- "moduleId": "timeseries",
- "title": "Stationarity and Invertibility",
- "breadcrumb": "Time series → Foundations → Admissible parameter regions",
- "engine": "B",
- "engineName": "Time series — which coefficients give a process that exists and can be used",
- "version": "1.0",
- "status": "approved",
- "estMin": 100,
- "objectives": [
-  "State stationarity and invertibility as root conditions on two polynomials.",
-  "Apply the AR(2) stationarity triangle and give its three vertices.",
-  "Classify order-1 and order-2 processes into the four categories.",
-  "Explain why a finite MA is always stationary and a pure AR always invertible.",
-  "Expand a stationary AR(1) as an infinite MA and an invertible MA(1) as an infinite AR.",
-  "Say why θ and 1/θ are observationally identical and what invertibility achieves."
- ],
- "prereq": [
-  {
-   "id": "p1",
-   "name": "Weak stationarity (topic 7.6)",
-   "why": "This lesson works on the parameter regions that deliver stationarity, taking the definition as given."
-  },
-  {
-   "id": "p2",
-   "name": "AR and MA processes",
-   "why": "The conditions constrain the coefficients of exactly these two model types."
-  },
-  {
-   "id": "p3",
-   "name": "Roots of quadratics, real and complex",
-   "why": "The AR(2) conditions come from the roots of a quadratic, and the complex case has its own shortcut."
-  },
-  {
-   "id": "p4",
-   "name": "Geometric series",
-   "why": "Both conditions are the convergence condition for a geometric series, which is the duality in section 7."
-  }
- ],
- "traps": [
-  "φ₁ > 1 does NOT rule out stationarity: (1.2, −0.4) is stationary.",
-  "All THREE inequalities must hold; checking one or two is not enough.",
-  "(1.2, −0.2) sums to exactly 1 and has a unit root — a boundary case, not a stationary one.",
-  "A finite MA is always stationary; only invertibility can fail.",
-  "A pure AR is always invertible; there is no MA polynomial to constrain.",
-  "The invertibility region in θ is the SAME triangle as the stationarity region in φ.",
-  "θ and 1/θ give identical autocorrelations, so |θ| > 1 is never reported.",
-  "On a boundary, trust algebra over a numerical root-finder: 1.0 can compute as 1.0000000000000002."
- ],
- "revision": {
-  "sheet": [
-   "Backshift: Byₜ = yₜ₋₁. AR: φ(B)yₜ = εₜ with φ(B) = 1 − φ₁B − ⋯. MA: yₜ = θ(B)εₜ, minus convention.",
-   "STATIONARY ⟺ every root of φ(B) = 0 has |B| > 1 (outside the unit circle).",
-   "INVERTIBLE ⟺ every root of θ(B) = 0 has |B| > 1. Same condition, different polynomial.",
-   "AR(1): the root is 1/φ, so the condition is |φ| < 1. Variance σ²/(1 − φ²).",
-   "AR(2) stationarity triangle: φ₁ + φ₂ < 1, φ₂ − φ₁ < 1, |φ₂| < 1. All three required.",
-   "Vertices (2, −1), (−2, −1), (0, 1). The triangle extends to φ₁ = ±2, so φ₁ > 1 can be admissible.",
-   "(1.2, −0.4) IS stationary: 0.8 < 1, −1.6 < 1, 0.4 < 1; complex roots of modulus 1.5811.",
-   "(1.2, −0.2) is NOT: sums to exactly 1, and 1 − 1.2B + 0.2B² = (1 − B)(1 − 0.2B), roots 1 and 5.",
-   "(0.6, 0.4) also sums to 1 — not stationary, roots 1 and 2.5. (−0.5, −0.6) IS stationary, moduli 1.291.",
-   "Complex roots: |B| = 1/√|φ₂|, so the third condition alone decides. Discriminant is φ₁² + 4φ₂.",
-   "MA(2) invertibility: the same three inequalities in θ. (0.4, 0.3) invertible; (0.6, 0.4) not, sums to 1.",
-   "A finite MA is ALWAYS stationary: variance σ²(1 + Σθᵢ²), autocovariances zero beyond lag q.",
-   "A pure AR is ALWAYS invertible: there is no MA polynomial to constrain.",
-   "Duality: a stationary AR(1) is yₜ = Σφʲεₜ₋ⱼ with variance σ²Σφ^(2j) = σ²/(1 − φ²).",
-   "Summed: 1.3333 at φ = 0.5, 2.7778 at 0.8, 10.2564 at 0.95 — each matching 1/(1 − φ²).",
-   "An invertible MA(1) is εₜ = yₜ + θyₜ₋₁ + θ²yₜ₋₂ + ⋯, convergent exactly when |θ| < 1.",
-   "Non-identifiability: ρ₁ = −θ/(1 + θ²) is unchanged by θ ↦ 1/θ. At θ = 2 and θ = 0.5 both give −0.4.",
-   "So invertibility selects one representative per pair, which is what makes θ estimable.",
-   "Boundary warning: a root-finder gave 1.0000000000000002 for an exact unit root, passing a naive |B| > 1 test."
-  ],
-  "cards": [
-   [
-    "Stationarity, general form",
-    "All roots of φ(B) = 0 outside the unit circle"
-   ],
-   [
-    "Invertibility, general form",
-    "All roots of θ(B) = 0 outside the unit circle"
-   ],
-   [
-    "AR(2) triangle",
-    "φ₁+φ₂<1, φ₂−φ₁<1, |φ₂|<1"
-   ],
-   [
-    "Triangle vertices",
-    "(2, −1), (−2, −1), (0, 1)"
-   ],
-   [
-    "Is (1.2, −0.4) stationary?",
-    "Yes — φ₁ > 1 is not disqualifying"
-   ],
-   [
-    "Is (1.2, −0.2) stationary?",
-    "No — sums to exactly 1, a unit root"
-   ],
-   [
-    "Complex AR(2) roots",
-    "|B| = 1/√|φ₂|"
-   ],
-   [
-    "A finite MA",
-    "Always stationary; only invertibility can fail"
-   ],
-   [
-    "A pure AR",
-    "Always invertible"
-   ],
-   [
-    "Stationary AR(1) as an MA(∞)",
-    "Σφʲεₜ₋ⱼ, variance σ²/(1 − φ²)"
-   ],
-   [
-    "θ and 1/θ",
-    "Identical autocorrelations — hence the restriction"
-   ],
-   [
-    "MA(2) invertible region",
-    "The same triangle, in θ"
-   ]
-  ],
-  "tricks": [
-   "Compute all three sums first: φ₁+φ₂, φ₂−φ₁ and |φ₂|. It takes seconds and settles most questions.",
-   "A sum landing exactly on 1 is a unit root, not a pass — do not round in your own favour.",
-   "If the discriminant φ₁² + 4φ₂ is negative, the roots are complex and only |φ₂| < 1 matters.",
-   "A pure MA question is asking about invertibility; a pure AR question about stationarity.",
-   "If an MA coefficient exceeds 1 in modulus, report its reciprocal instead.",
-   "For boundary cases, factorise. Numerical root-finders are unreliable exactly there."
-  ],
-  "shortcuts": [
-   "1/√0.4 = 1.5811, the root modulus at (1.2, −0.4).",
-   "1/(1−φ²) is 1.3333, 2.7778 and 10.2564 at φ = 0.5, 0.8 and 0.95.",
-   "ρ₁ = −θ/(1+θ²) peaks in modulus at 0.5, attained at |θ| = 1."
-  ],
-  "remember": [
-   "Three inequalities, all required.",
-   "φ₁ > 1 can still be stationary.",
-   "A finite MA is always stationary."
-  ]
- },
- "howto": "Section 3's chart is the efficient way to learn the triangle: move the coefficients until the chart stops drawing an ACF, and it names the condition that failed — so the three edges can be found by experiment rather than memorised. Section 4 then proves the triangle and the root condition are the same statement, using the two cases (1.2, −0.4) and (1.2, −0.2), which differ by 0.2 in φ₂ and fall on opposite sides of the boundary. Section 6 drills the four classifications and makes the key structural point that the two conditions are independent, with a pure MA always stationary and a pure AR always invertible. Section 7 explains why both conditions have the same algebraic form — each is a geometric series converging — and why θ and 1/θ cannot be distinguished by data, which is the real justification for the invertibility restriction. If short of time, sections 3, 4 and 6 are the lesson. This lesson deliberately does not repeat topic 7.6's treatment of weak versus strict stationarity, topic 7.5's unit-root testing, or topic 7.3's Yule–Walker equations. The optional section derives the three inequalities from the root condition and ends with a warning about checking boundary cases numerically.",
- "refs": [
-  {
-   "title": "Time Series Analysis: Forecasting and Control",
-   "where": "Chapters 3 and 4",
-   "site": "Box, Jenkins and Reinsel",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-11-03",
-   "why": "The stationarity and invertibility regions derived in full, including the AR(2) triangle and its vertices."
-  },
-  {
-   "title": "Time Series Analysis and Its Applications",
-   "where": "Chapter 3",
-   "site": "Shumway and Stoffer",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-11-03",
-   "why": "The causal and invertible conditions stated through the roots of the two polynomials, with the duality."
-  },
-  {
-   "title": "Forecasting: Principles and Practice, 3rd edition",
-   "where": "Chapters 9.3 to 9.5",
-   "site": "Hyndman and Athanasopoulos",
-   "url": "https://otexts.com/fpp3/",
-   "type": "Free online textbook",
-   "free": true,
-   "checked": "2026-11-03",
-   "why": "Stationarity and the admissible regions with worked examples; freely available."
-  },
-  {
-   "title": "Time Series Analysis",
-   "where": "Weeks on stationarity and ARMA models",
-   "site": "NPTEL / SWAYAM",
-   "url": "https://archive.nptel.ac.in/courses/111104049",
-   "type": "Video course",
-   "free": true,
-   "checked": "2026-11-03",
-   "why": "Indian-syllabus treatment of the classification questions in the style NET sets them."
-  }
- ],
- "mastery": {
-  "minQ": 10,
-  "pass": 80,
-  "draw": 10,
-  "fmtMin": {
-   "numeric": 70,
-   "multi": 70
-  },
-  "diffMix": {
-   "easy": 3,
-   "moderate": 5,
-   "hard": 2
-  },
-  "noHints": true,
-  "retestDays": 7,
-  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
- },
- "provenance": "Authored November 2026, the fifth lesson of the time-series module. This topic has no PYQ anchor of its own — June 2026's four time-series questions are covered by lessons 7.3, 7.5, 7.6 and 7.7 — but it is the foundation all four rest on and the catalog assigns it the same expected weight as every other time-series topic. Scope was set deliberately against the lessons already built so that nothing is repeated: 7.6 owns weak versus strict stationarity and the random walk, 7.5 owns unit roots and differencing, 7.3 owns Yule–Walker, and this lesson owns the admissible REGIONS — the root condition, the AR(2) triangle, the matching MA invertibility region, and the duality that explains why both take the same form. Every claim was verified: the triangle and the root condition |B| > 1 agreed on all eight parameter pairs tested, including (0.5,0.3), (0.4,0.3), (1.2,−0.4), (1.2,−0.2), (0.6,0.4), (−0.5,−0.6), (0,0.99) and (0,1.0); the complex-root modulus 1/√|φ₂| was confirmed as 1.5811 at (1.2,−0.4); the infinite-MA variance Σφ^(2j) matched 1/(1−φ²) to six decimals at φ = 0.5, 0.8 and 0.95; and the non-identifiability of θ against 1/θ was confirmed by simulating ρ₁ at θ = 0.5 and θ = 2, both giving −0.3996 against the exact −0.4. One methodological point is recorded in the lesson because it arose during verification: for the boundary case (1.2, −0.2) a numerical root-finder returned the roots as 1.0000000000000002 and 4.999999999999999, so a naive test of |B| > 1 PASSED an exact unit root. The polynomial factors algebraically as (1 − B)(1 − 0.2B), which settles it, and the inequality φ₁ + φ₂ < 1 is exact in binary — so boundary cases must be checked algebraically rather than numerically. Lesson 7.3 caught the same coefficient pair independently in a pool item. Uses the existing `ar-acf` visualisation, which names the failing stationarity condition and therefore traces the triangle's edges directly. Previous-year questions are stored separately and carry their exam cycle.",
- "scenes": [
-  {
-   "kind": "foundation",
-   "id": "s0",
-   "mins": 7,
-   "title": "Before the lesson — four things it will assume",
-   "objective": "Fix the backshift notation and what the two admissibility conditions are for.",
-   "ask": {
-    "q": "Why should a model be restricted at all? What goes wrong if φ = 1.5 in an AR(1)?",
-    "nudge": "Write out y₅ in terms of ε₁. What is the coefficient?"
-   },
-   "body": [
-    "Two conditions recur throughout time-series work: STATIONARITY, which restricts the autoregressive coefficients, and INVERTIBILITY, which restricts the moving-average ones. Both define regions of parameter space, and almost every classification question in the module asks which region a given set of coefficients falls in.",
-    "They are not arbitrary. Outside the stationary region the process has no finite variance — an AR(1) with φ = 1.5 carries a shock forward as 1.5ᵏ, which explodes. Outside the invertible region the process cannot be written in terms of its own past observations, so the shocks are not recoverable and the parameters are not identified.",
-    "The two conditions turn out to have the SAME algebraic form, applied to different polynomials. That is not a coincidence, and the duality in section 7 explains it.",
-    "Four checks before starting."
-   ],
-   "items": [
-    {
-     "ask": "What does the backshift operator B do, and how is an AR(2) written with it?",
-     "recall": "Byₜ = yₜ₋₁. An AR(2) is (1 − φ₁B − φ₂B²)yₜ = εₜ.",
-     "refresh": [
-      "B shifts a series one step back, and Bᵏyₜ = yₜ₋ₖ. It turns a recursion into a polynomial, which is what makes the root conditions statable.",
-      "The polynomial 1 − φ₁B − φ₂B² is the AR polynomial, written φ(B). Similarly an MA(2) under the minus convention is yₜ = (1 − θ₁B − θ₂B²)εₜ, with MA polynomial θ(B).",
-      "Everything in this lesson is a statement about the roots of one of those two polynomials."
-     ]
-    },
-    {
-     "ask": "State the stationarity condition for an AR(1).",
-     "recall": "|φ| < 1.",
-     "refresh": [
-      "Equivalently the root of 1 − φB = 0, which is B = 1/φ, must lie outside the unit circle: |1/φ| > 1 means |φ| < 1.",
-      "At |φ| = 1 the process is a random walk — non-stationary, and topic 7.6 covers it. At |φ| > 1 it is explosive.",
-      "The variance is σ²/(1 − φ²), which is finite exactly when |φ| < 1 and blows up as |φ| approaches 1: about 10.26σ² at φ = 0.95 and 2.78σ² at φ = 0.8, both confirmed by summing Σφ^(2j)."
-     ]
-    },
-    {
-     "ask": "What is weak stationarity, in one line?",
-     "recall": "Constant mean, constant finite variance, and autocovariance depending only on the lag.",
-     "refresh": [
-      "Topic 7.6 treats the definitions in full, including the fact that weak and strict stationarity coincide for a Gaussian process. This lesson takes the definition as given and works on the parameter regions that deliver it.",
-      "Note that stationarity is a property of the PROCESS, so a condition on the coefficients is what guarantees it.",
-      "The autocovariance of a stationary AR process is what topic 7.4 computes."
-     ]
-    },
-    {
-     "ask": "Which convention does this course use for an MA process?",
-     "recall": "The MINUS convention: yₜ = εₜ − θ₁εₜ₋₁ − θ₂εₜ₋₂ − ⋯",
-     "refresh": [
-      "So the MA polynomial is 1 − θ₁B − θ₂B², exactly parallel to the AR polynomial, and the invertibility region in θ is the same shape as the stationarity region in φ.",
-      "This is not universal — many texts write yₜ = εₜ + θεₜ₋₁ — so a question must be read for its own convention. This bank's answer keys fix the minus convention twice over: lesson 7.5 established it from an invertibility variant, and lesson 7.7 from a spectral-density variant.",
-      "Under the plus convention the regions mirror in sign, and the formula ρ₁ = −θ/(1+θ²) for an MA(1) becomes +θ/(1+θ²)."
-     ]
-    }
-   ]
-  },
-  {
-   "kind": "intuition",
-   "id": "s1",
-   "mins": 7,
-   "title": "Two conditions, two quite different reasons",
-   "objective": "See why each restriction exists before meeting the algebra.",
-   "body": [
-    "Stationarity is about the process existing at all. If shocks are amplified rather than damped as they are carried forward, the variance grows without limit and there is no stable distribution to describe. The condition on the coefficients is what guarantees the damping.",
-    "Invertibility is about something else entirely: whether the model can be USED. An invertible MA can be rewritten as an infinite autoregression, so the unobservable shock εₜ can be reconstructed from the observed past. A non-invertible one cannot, which means the residuals cannot be computed from the data and forecasting from observables is impossible.",
-    "There is a second reason for invertibility, and it is the sharper one: identifiability. An MA(1) with θ and one with 1/θ have exactly the same autocorrelation function — ρ₁ = −θ/(1 + θ²) is unchanged by replacing θ with 1/θ. So the data cannot distinguish them, and restricting to |θ| < 1 picks exactly one representative from each such pair.",
-    "That is why invertibility is a convention with teeth rather than a technicality: without it the parameter would not be estimable, because two different values would fit identically."
-   ],
-   "scenario": {
-    "teaser": "An estimation routine returns an MA coefficient pinned at 1.000 with an enormous standard error.",
-    "title": "What a boundary estimate is telling you",
-    "body": [
-     "A model is fitted and the moving-average coefficient comes back as 1.000, flagged at the boundary, with a standard error so large as to be meaningless. The analyst's first instinct is that the optimiser has failed.",
-     "The optimiser has usually done exactly what it was asked. θ = 1 is the edge of the invertible region, and the likelihood surface flattens as the boundary is approached, so the maximum is poorly determined there. An estimate pinned at the edge with a huge standard error is the characteristic appearance of a likelihood with no interior maximum.",
-     "The useful question is why the data want to sit at the boundary. The commonest reason is over-differencing: differencing a series that was already stationary introduces an MA component with θ exactly 1, as topic 7.6 showed — differencing white noise gives εₜ − εₜ₋₁, whose variance is 2σ² and whose lag-1 autocorrelation is exactly −0.5. If the series was differenced as a matter of routine, the first thing to try is not differencing it.",
-     "A second reason is a genuinely non-invertible data-generating process, which happens when a series has been filtered or aggregated. A moving average applied to a series can produce exactly this, and the fix is to model the underlying series rather than the filtered one where that is possible.",
-     "Either way, the boundary estimate is informative rather than a failure. It says the data are consistent with the strongest MA structure the model allows and would prefer something outside it — which means the model, not the optimiser, needs attention.",
-     "The parallel on the AR side is an estimated coefficient near 1, which points to a unit root and sends you to the Dickey–Fuller test of topic 7.5. The two boundaries carry different diagnoses and both are worth recognising on sight."
-    ],
-    "q": "Why does an MA coefficient estimated at exactly 1 come with an unusable standard error?",
-    "answer": "Because θ = 1 is the boundary of the invertible region, and the likelihood flattens there rather than having an interior maximum. A standard error is computed from the curvature of the log-likelihood at the maximum, so when the maximum sits on a boundary with a nearly flat surface, that curvature is close to zero and the standard error is correspondingly enormous. The estimate is not a numerical failure but a message: the data want a value at or beyond the edge of what the model permits. The usual cause is over-differencing, which manufactures an MA(1) with θ exactly 1, so the first thing to check is whether the differencing was necessary at all."
-   },
-   "ask": {
-    "q": "An MA(1) with θ = 2 has the same autocorrelations as one with θ = 0.5. Which would you report, and why does the convention matter for estimation?",
-    "nudge": "If two values fit identically, what can the data say about which is right?"
-   }
-  },
-  {
-   "kind": "explore",
-   "id": "s2",
-   "mins": 7,
-   "title": "Trace the stationarity triangle",
-   "objective": "Find the three boundaries by moving the coefficients to them.",
-   "viz": {
-    "type": "ar-acf",
-    "p1": 0.5,
-    "p2": 0.3,
-    "caption": "The ACF and PACF of an AR(2). When the coefficients leave the stationary region the chart draws no stems and names the condition that failed — which is how to find the three edges of the triangle."
-   },
-   "body": [
-    "Start at φ₁ = 0.5, φ₂ = 0.3. The chart draws an ACF, so the process is stationary: 0.5 + 0.3 = 0.8 < 1, 0.3 − 0.5 = −0.2 < 1, and |0.3| < 1. All three conditions hold.",
-    "Now raise φ₁ to 0.7 so that φ₁ + φ₂ = 1.0 exactly. The stems disappear and the chart names the failed condition: φ₁ + φ₂ < 1. This is the first edge, and it is the one a unit root sits on — the random walk of topic 7.6 is the case φ₁ = 1, φ₂ = 0, on the same edge.",
-    "Return to φ₁ = 0.5 and lower φ₂ towards −1. At φ₂ = −1 the third condition |φ₂| < 1 fails. Then set φ₁ negative and raise φ₂: at φ₂ − φ₁ = 1 the second condition fails. Three edges, and together they enclose a triangle in the (φ₁, φ₂) plane with vertices at (2, −1), (−2, −1) and (0, 1).",
-    "Two instructive points inside and outside. (1.2, −0.4) IS stationary even though φ₁ exceeds 1 — a coefficient above 1 is not by itself disqualifying, because φ₂ can compensate. But (1.2, −0.2) is NOT: it sums to exactly 1 and sits on the first edge. The two differ by 0.2 in φ₂ and fall on opposite sides.",
-    "Section 4 shows the root condition is the same statement: for (1.2, −0.2) the polynomial factors as (1 − B)(1 − 0.2B), so one root is exactly 1 rather than outside the unit circle."
-   ],
-   "ask": {
-    "q": "(1.2, −0.4) is stationary while φ₁ = 1.2 exceeds 1. What does that say about reading stationarity off a single coefficient?",
-    "nudge": "How many conditions are there, and do any of them involve φ₁ alone?"
-   }
-  },
-  {
-   "kind": "theory",
-   "id": "s3",
-   "mins": 9,
-   "title": "The root condition, the triangle, and the invertible region",
-   "objective": "State both conditions properly and know the AR(2) region exactly.",
-   "blocks": [
-    {
-     "t": "formula",
-     "h": "The general condition, in terms of roots",
-     "body": "Write the AR part as φ(B)yₜ = εₜ with φ(B) = 1 − φ₁B − ⋯ − φₚBᵖ.\n    STATIONARY ⟺ every root of φ(B) = 0 lies OUTSIDE the unit circle, |B| > 1.\nWrite the MA part as yₜ = θ(B)εₜ with θ(B) = 1 − θ₁B − ⋯ − θ_qB^q.\n    INVERTIBLE ⟺ every root of θ(B) = 0 lies OUTSIDE the unit circle, |B| > 1.\nSame condition, different polynomial. Note the convention: roots outside, not inside — some texts state it in terms of the reciprocals, where the condition reads 'inside'."
-    },
-    {
-     "t": "step",
-     "h": "The AR(1) case",
-     "body": "1 − φB = 0 gives B = 1/φ, so |B| > 1 ⟺ |φ| < 1. The familiar condition is the root condition in disguise. At φ = 1 the root is exactly 1 — on the circle, not outside — which is the random walk."
-    },
-    {
-     "t": "formula",
-     "h": "The AR(2) stationarity triangle",
-     "body": "For 1 − φ₁B − φ₂B² the root condition is equivalent to three inequalities:\n    φ₁ + φ₂ < 1\n    φ₂ − φ₁ < 1\n    |φ₂| < 1\nTogether these describe a TRIANGLE in the (φ₁, φ₂) plane with vertices (2, −1), (−2, −1) and (0, 1). All three must hold. Verified against the root condition on eight parameter pairs, with agreement in every case."
-    },
-    {
-     "t": "step",
-     "h": "The boundary case worth knowing",
-     "body": "(1.2, −0.4): 1.2 − 0.4 = 0.8 < 1 ✓, −0.4 − 1.2 = −1.6 < 1 ✓, |−0.4| < 1 ✓ — STATIONARY, despite φ₁ > 1. Its roots both have modulus 1.5811.\n(1.2, −0.2): 1.2 − 0.2 = 1.0, which is NOT < 1 — NOT stationary. The polynomial factors exactly as (1 − B)(1 − 0.2B), so the roots are 1 and 5 and one of them sits ON the unit circle. A unit root, which is topic 7.5's subject.\nSo φ₁ > 1 is not by itself disqualifying, and the sum is what matters on that edge."
-    },
-    {
-     "t": "formula",
-     "h": "The invertibility region for an MA(2)",
-     "body": "Under the minus convention yₜ = (1 − θ₁B − θ₂B²)εₜ, the invertibility conditions are the SAME three inequalities in θ:\n    θ₁ + θ₂ < 1,   θ₂ − θ₁ < 1,   |θ₂| < 1.\nSo the invertible region for the MA parameters is the same triangle as the stationary region for the AR parameters. For an MA(1) it reduces to |θ| < 1. Checked: (0.4, 0.3) is invertible, (0.6, 0.2) is invertible, and (0.6, 0.4) is not, since it sums to exactly 1."
-    },
-    {
-     "t": "def",
-     "h": "The four classifications",
-     "body": "An ARMA process has an AR part and an MA part, each with its own condition, so there are four possibilities: stationary and invertible; stationary but not invertible; invertible but not stationary; neither. Topic 7.5's pool drills the classification; what matters here is that the two conditions are INDEPENDENT — checking one tells you nothing about the other, because they constrain different polynomials."
-    }
-   ],
-   "table": {
-    "caption": "Parameter pairs against the two criteria. Every case checked both by the inequalities and by computing the polynomial roots.",
-    "head": [
-     "coefficients",
-     "φ₁+φ₂<1",
-     "φ₂−φ₁<1",
-     "|φ₂|<1",
-     "root moduli",
-     "verdict"
-    ],
-    "rows": [
-     [
-      "(0.5, 0.3)",
-      "0.8 ✓",
-      "−0.2 ✓",
-      "✓",
-      "2.840, 1.174",
-      "stationary"
-     ],
-     [
-      "(0.4, 0.3)",
-      "0.7 ✓",
-      "−0.1 ✓",
-      "✓",
-      "2.610, 1.277",
-      "stationary"
-     ],
-     [
-      "(1.2, −0.4)",
-      "0.8 ✓",
-      "−1.6 ✓",
-      "✓",
-      "1.581, 1.581",
-      "stationary"
-     ],
-     [
-      "(1.2, −0.2)",
-      "1.0 ✗",
-      "−1.4 ✓",
-      "✓",
-      "1.000, 5.000",
-      "unit root"
-     ],
-     [
-      "(0.6, 0.4)",
-      "1.0 ✗",
-      "−0.2 ✓",
-      "✓",
-      "1.000, 2.500",
-      "unit root"
-     ],
-     [
-      "(0, 1.0)",
-      "1.0 ✗",
-      "1.0 ✗",
-      "✗",
-      "1.000, 1.000",
-      "not stationary"
-     ]
-    ]
-   },
-   "flow": {
-    "title": "Classifying an ARMA process",
-    "alt": "Flow chart for checking stationarity and invertibility of an ARMA process",
-    "nodes": [
-     {
-      "id": "a",
-      "r": 0,
-      "c": 1,
-      "label": "An ARMA(p, q) with coefficients given",
-      "kind": "start"
-     },
-     {
-      "id": "b",
-      "r": 1,
-      "c": 0,
-      "label": "Check the AR polynomial's roots",
-      "kind": "step"
-     },
-     {
-      "id": "c",
-      "r": 1,
-      "c": 2,
-      "label": "Check the MA polynomial's roots",
-      "kind": "step"
-     },
-     {
-      "id": "d",
-      "r": 2,
-      "c": 0,
-      "label": "All |B| > 1 → stationary",
-      "kind": "end"
-     },
-     {
-      "id": "e",
-      "r": 2,
-      "c": 2,
-      "label": "All |B| > 1 → invertible",
-      "kind": "end"
-     },
-     {
-      "id": "f",
-      "r": 3,
-      "c": 1,
-      "label": "The two are independent: four possible verdicts",
-      "kind": "note"
-     }
-    ],
-    "edges": [
-     {
-      "from": "a",
-      "to": "b"
-     },
-     {
-      "from": "a",
-      "to": "c"
-     },
-     {
-      "from": "b",
-      "to": "d"
-     },
-     {
-      "from": "c",
-      "to": "e"
-     },
-     {
-      "from": "d",
-      "to": "f"
-     },
-     {
-      "from": "e",
-      "to": "f"
-     }
-    ],
-    "note": "Two separate checks on two separate polynomials. For order 2 each reduces to the same three inequalities, which is the quickest route in an exam."
-   },
-   "ask": {
-    "q": "The stationarity and invertibility conditions are the same inequalities applied to different polynomials. Does checking one ever tell you anything about the other?",
-    "nudge": "Can you choose the AR coefficients and the MA coefficients independently?"
-   }
-  },
-  {
-   "kind": "worked",
-   "id": "s4",
-   "mins": 8,
-   "title": "Worked — the triangle and the roots agree",
-   "objective": "Verify the equivalence on the two cases that differ by 0.2.",
-   "ask": {
-    "q": "Both pairs have φ₁ = 1.2. Which single quantity decided the verdict?",
-    "nudge": "Compare φ₁ + φ₂ for the two cases against the first inequality."
-   },
-   "problem": "Classify the AR(2) processes with coefficients (1.2, −0.4) and (1.2, −0.2), by the triangle and by the roots, and reconcile the two.",
-   "steps": [
-    {
-     "say": "Apply the three inequalities to (1.2, −0.4).",
-     "math": "φ₁ + φ₂ = 1.2 − 0.4 = 0.8 < 1  ✓\nφ₂ − φ₁ = −0.4 − 1.2 = −1.6 < 1  ✓\n|φ₂| = 0.4 < 1  ✓\n⟹ STATIONARY",
-     "why": "All three hold, so the process is stationary even though φ₁ = 1.2 exceeds 1. A single coefficient above 1 is not disqualifying: none of the three conditions involves φ₁ on its own."
-    },
-    {
-     "say": "Confirm by the roots.",
-     "math": "polynomial 1 − 1.2B + 0.4B²\nroots: B = (1.2 ± √(1.44 − 1.6))/(0.8) — complex\n|B| = √(1/0.4) = 1.5811 for both",
-     "why": "Both roots have modulus 1.5811, comfortably outside the unit circle. For a complex pair the modulus is √(1/φ₂) when the discriminant is negative, which is a useful shortcut. The two criteria agree."
-    },
-    {
-     "say": "Now (1.2, −0.2) by the inequalities.",
-     "math": "φ₁ + φ₂ = 1.2 − 0.2 = 1.0,  which is NOT < 1  ✗\n⟹ NOT stationary",
-     "why": "It fails on the first edge by exactly zero margin — the sum is 1 rather than below it. The other two conditions hold, but all three are required."
-    },
-    {
-     "say": "Confirm by factorising.",
-     "math": "1 − 1.2B + 0.2B² = (1 − B)(1 − 0.2B)\nexpanding: 1 − 0.2B − B + 0.2B² = 1 − 1.2B + 0.2B² ✓\nroots: B = 1 and B = 5",
-     "why": "One root is exactly 1 — ON the unit circle, not outside it. A unit root, so the process is non-stationary and differencing is the repair, which is topic 7.5's material. The factorisation makes it exact rather than approximate."
-    },
-    {
-     "say": "A caution about checking this numerically.",
-     "math": "a numerical root-finder returned the roots as\n  1.0000000000000002  and  4.999999999999999\na naive test |B| > 1 therefore PASSED the unit root",
-     "why": "Worth knowing. Boundary cases must be checked algebraically — here by factorising — because floating-point arithmetic can place an exact unit root marginally outside the circle. The inequality φ₁ + φ₂ < 1 is the safer check, since 1.2 − 0.2 = 1.0 is exact in binary."
-    }
-   ],
-   "after": "Answering the question above: the sum φ₁ + φ₂ decided both cases, at 0.8 and 1.0 against the threshold of 1. The transferable habit is to compute all three sums first — they take seconds — and to treat any that lands exactly on 1 as a unit root rather than rounding in your favour."
-  },
-  {
-   "kind": "recall",
-   "id": "s5",
-   "mins": 2,
-   "title": "Pause and recall",
-   "objective": "Retrieve the conditions before the duality.",
-   "intro": "Answer each before revealing it.",
-   "items": [
-    {
-     "q": "State the general stationarity condition in terms of roots.",
-     "a": "Every root of the AR polynomial φ(B) = 0 lies outside the unit circle, |B| > 1."
-    },
-    {
-     "q": "Give the three inequalities of the AR(2) stationarity triangle.",
-     "a": "φ₁ + φ₂ < 1, φ₂ − φ₁ < 1, and |φ₂| < 1."
-    },
-    {
-     "q": "What is the invertibility condition for an MA(q)?",
-     "a": "Every root of the MA polynomial θ(B) = 0 lies outside the unit circle — the same condition on a different polynomial."
-    },
-    {
-     "q": "Is (1.2, −0.4) a stationary AR(2)?",
-     "a": "Yes: 0.8 < 1, −1.6 < 1, and 0.4 < 1. A coefficient above 1 is not by itself disqualifying."
-    },
-    {
-     "q": "And (1.2, −0.2)?",
-     "a": "No — the sum is exactly 1, and the polynomial factors as (1 − B)(1 − 0.2B) with a unit root."
-    }
-   ]
-  },
-  {
-   "kind": "completion",
-   "id": "s6",
-   "mins": 8,
-   "title": "Your turn — classify four processes",
-   "objective": "Apply both conditions, and see that they are independent.",
-   "problem": "Use the minus convention throughout. Classify each process as stationary, invertible, both or neither.",
-   "steps": [
-    {
-     "say": "First an AR(2) with φ = (0.4, 0.3).",
-     "blank": {
-      "prompt": "Check the three inequalities and give the verdict.",
-      "answer": "0.7 < 1, −0.1 < 1, 0.3 < 1 — stationary",
-      "accept": [
-       "stationary",
-       "yes stationary",
-       "all three hold"
-      ],
-      "hint": "Compute φ₁+φ₂, φ₂−φ₁ and |φ₂|."
-     },
-     "why": "All three hold with margin. The roots have moduli 2.610 and 1.277, both outside the unit circle, confirming it. Being a pure AR, invertibility does not arise."
-    },
-    {
-     "say": "Now an MA(2) with θ = (0.6, 0.4).",
-     "blank": {
-      "prompt": "Check invertibility and give the verdict.",
-      "answer": "θ₁ + θ₂ = 1.0, not < 1 — NOT invertible",
-      "accept": [
-       "not invertible",
-       "non-invertible",
-       "fails invertibility"
-      ],
-      "hint": "The invertibility region in θ is the same triangle as the stationarity region in φ."
-     },
-     "why": "It sits exactly on the first edge, so the MA polynomial 1 − 0.6B − 0.4B² has a unit root — factorising, (1 − B)(1 + 0.4B). Note that a pure MA process is ALWAYS stationary whatever its coefficients, since it is a finite sum of white-noise terms; only invertibility is in question. So this is 'stationary but not invertible'."
-    },
-    {
-     "say": "Now an ARMA(1,1) with φ = 0.5 and θ = 1.3.",
-     "blank": {
-      "prompt": "Give both verdicts.",
-      "answer": "stationary (|0.5| < 1) but not invertible (|1.3| > 1)",
-      "accept": [
-       "stationary not invertible",
-       "stationary but not invertible"
-      ],
-      "hint": "Two separate checks on two separate coefficients."
-     },
-     "why": "The two conditions are independent, which is the point of the exercise: the AR side passes and the MA side fails. Note that θ = 1.3 has the same autocorrelation structure as θ = 1/1.3 = 0.769, which is why the invertible representative is the one to report."
-    },
-    {
-     "say": "Now an ARMA(1,1) with φ = 1.1 and θ = 0.5.",
-     "blank": {
-      "prompt": "Give both verdicts.",
-      "answer": "invertible (|0.5| < 1) but not stationary (|1.1| > 1)",
-      "accept": [
-       "invertible not stationary",
-       "not stationary but invertible"
-      ],
-      "hint": "The other way round from the previous case."
-     },
-     "why": "The third of the four possible classifications. An AR coefficient of 1.1 makes the process explosive: a shock is carried forward as 1.1ᵏ, which grows without bound."
-    },
-    {
-     "say": "Finally, state the general rule for a pure MA.",
-     "blank": {
-      "prompt": "Is a finite-order MA process ever non-stationary?",
-      "answer": "No — a finite MA is always stationary; only invertibility can fail",
-      "accept": [
-       "no, always stationary",
-       "never non-stationary",
-       "always stationary"
-      ],
-      "hint": "Write out yₜ as a finite sum of white-noise terms and compute its variance."
-     },
-     "why": "yₜ = εₜ − θ₁εₜ₋₁ − ⋯ − θ_qεₜ₋q has mean 0 and variance σ²(1 + θ₁² + ⋯ + θ_q²) — finite and constant for any coefficients, with autocovariances that vanish beyond lag q. So a finite MA is stationary by construction, and the only question is whether it is invertible."
-    }
-   ],
-   "after": "The structure to carry: the two conditions constrain different polynomials and are therefore independent, giving four classifications. A pure AR can fail only stationarity, a pure MA can fail only invertibility, and an ARMA can fail either, both or neither."
-  },
-  {
-   "kind": "theory",
-   "id": "s7",
-   "mins": 7,
-   "title": "The duality: why both conditions look the same",
-   "objective": "See AR and MA as two views of one infinite representation.",
-   "blocks": [
-    {
-     "t": "formula",
-     "h": "A stationary AR(1) is an infinite MA",
-     "body": "From yₜ = φyₜ₋₁ + εₜ, substituting repeatedly:\n    yₜ = εₜ + φεₜ₋₁ + φ²εₜ₋₂ + ⋯ = Σ(j≥0) φʲ εₜ₋ⱼ.\nThe variance is σ² Σφ^(2j) = σ²/(1 − φ²), which converges exactly when |φ| < 1 — so the stationarity condition is precisely the condition for this infinite sum to exist. Confirmed by summing: 1.3333 at φ = 0.5, 2.7778 at φ = 0.8 and 10.2564 at φ = 0.95, each matching 1/(1 − φ²) to six decimals."
-    },
-    {
-     "t": "formula",
-     "h": "An invertible MA(1) is an infinite AR",
-     "body": "From yₜ = εₜ − θεₜ₋₁, solving for εₜ:\n    εₜ = yₜ + θεₜ₋₁ = yₜ + θyₜ₋₁ + θ²yₜ₋₂ + ⋯\nThis converges exactly when |θ| < 1 — so invertibility is the condition for the shock to be recoverable from the observed past. That is what 'invertible' means: the MA polynomial can be inverted."
-    },
-    {
-     "t": "def",
-     "h": "The duality stated",
-     "body": "Stationarity lets an AR be written as an infinite MA; invertibility lets an MA be written as an infinite AR. The two conditions are the same inequality because both are the condition for a geometric series in the relevant coefficient to converge. That is why the regions have identical shape, and why the general statement is the same root condition on two different polynomials."
-    },
-    {
-     "t": "step",
-     "h": "Why non-identifiability follows",
-     "body": "An MA(1) with coefficient θ has ρ₁ = −θ/(1 + θ²) and ρₖ = 0 beyond. Replacing θ by 1/θ leaves ρ₁ unchanged, since −(1/θ)/(1 + 1/θ²) = −θ/(θ² + 1). So θ and 1/θ are observationally identical, and exactly one of the pair satisfies |θ| < 1. Invertibility therefore selects one representative per equivalence class, which is what makes the parameter estimable. Checked numerically: at θ = 0.5 and θ = 2 the simulated ρ₁ was −0.3996 against the exact −0.4 in both cases."
-    },
-    {
-     "t": "step",
-     "h": "The practical payoff",
-     "body": "Forecasting needs εₜ expressed in terms of observed yₜ, yₜ₋₁, …, which is exactly the infinite-AR representation. So invertibility is not decoration: without it the one-step forecast cannot be computed from the data. Topic 7.11 builds forecasts on precisely this representation, and topic 7.10's Wold decomposition is the general statement that any stationary process has an infinite-MA form."
-    }
-   ],
-   "ask": {
-    "q": "θ and 1/θ give the same autocorrelations. What would happen to a maximum-likelihood estimate if the invertibility restriction were dropped?",
-    "nudge": "Two parameter values with identical likelihood means the maximum is where?"
-   }
-  },
-  {
-   "kind": "guided",
-   "id": "s8",
-   "mins": 8,
-   "title": "On your own — regions and representations",
-   "objective": "Work the triangle, the roots and the duality together.",
-   "problem": "(a) Give the three vertices of the AR(2) stationarity triangle. (b) For an AR(2) with complex roots, give the root modulus in terms of φ₂ and state when it is stationary. (c) Write a stationary AR(1) as an infinite MA and give its variance. (d) For an MA(1) with θ = 2, give the observationally equivalent invertible coefficient and the shared ρ₁.",
-   "hints": [
-    "For (a), find where pairs of the three boundary lines meet.",
-    "For (b), the product of the two roots of 1 − φ₁B − φ₂B² is −1/φ₂.",
-    "For (d), replace θ by 1/θ and check ρ₁ = −θ/(1+θ²)."
-   ],
-   "answer": "(a) (2, −1), (−2, −1) and (0, 1). (b) |B| = √(1/|φ₂|) = 1/√|φ₂|, stationary when |φ₂| < 1. (c) yₜ = Σφʲεₜ₋ⱼ with variance σ²/(1 − φ²). (d) θ = 0.5, with ρ₁ = −0.4 for both.",
-   "check": "In (b) note the modulus depends on φ₂ alone when the roots are complex, which is why the third condition |φ₂| < 1 is exactly the stationarity condition in that case — a neat consistency. At φ = (1.2, −0.4) the discriminant 1.44 − 1.6 is negative, so the roots are complex with modulus 1/√0.4 = 1.5811, matching the computed value. In (d), the shared ρ₁ = −0.4 was confirmed by simulation at both θ = 0.5 and θ = 2.",
-   "scenario": {
-    "teaser": "Two analysts fit the same series and report MA coefficients of 0.5 and 2.0, and both fits are identical.",
-    "title": "Why the convention is doing real work",
-    "body": [
-     "Two analysts fit an MA(1) to the same data. One reports θ = 0.5, the other θ = 2.0. Their fitted values agree to machine precision, their residual sums of squares are identical, and each is confident the other has erred.",
-     "Neither has. An MA(1) with coefficient θ and one with 1/θ have exactly the same autocorrelation function: ρ₁ = −θ/(1 + θ²) is invariant under θ ↦ 1/θ, and all higher autocorrelations are zero in both cases. Since a Gaussian stationary process is determined by its mean and autocovariances, the two models are observationally indistinguishable — not merely similar, but identical in every observable respect.",
-     "What differs is the implied shock variance. The process variance is σ²(1 + θ²), so matching the observed variance forces the two fits to use different σ²: the θ = 2 version needs a shock variance 1 + 0.25 over 1 + 4, that is a factor of 0.25, times the other's. The two parameterisations trade θ against σ² and land on the same observable process.",
-     "This is why the invertibility restriction exists. Without it the likelihood has two maxima of exactly equal height, so the maximum is not unique and the parameter is not identified. Restricting to |θ| < 1 picks one member of each pair, which makes the estimate well defined and gives the representation in which the shock can be recovered from the observed past.",
-     "So the second analyst's answer is not wrong about the data; it is outside the convention, and conventionally one reports the invertible representative. Software that enforces invertibility would have returned 0.5.",
-     "The general lesson is that a restriction can be an identifiability device rather than a substantive assumption. Nothing about the world rules out θ = 2; what rules it out is that the data cannot distinguish it from θ = 0.5, and a parameter the data cannot pin down is not worth reporting."
-    ],
-    "q": "If the two fits are observationally identical, in what sense is the restriction |θ| < 1 justified?",
-    "answer": "It is justified as an identifiability convention rather than as a claim about the world. Because ρ₁ = −θ/(1+θ²) is unchanged by replacing θ with 1/θ, and all higher autocorrelations are zero either way, the two models imply exactly the same autocovariance structure and therefore the same likelihood — so the likelihood has two equal maxima and the parameter is not identified without a restriction. Confining θ to |θ| < 1 selects exactly one member of each such pair, making the estimate unique, and it happens to select the representation in which the shock is recoverable from the observed past, which is what forecasting needs. The two fits differ only in how they split the observed variance between θ and σ²."
-   },
-   "solution": [
-    {
-     "say": "(a) The vertices.",
-     "math": "φ₁ + φ₂ = 1 meets |φ₂| = 1 at φ₂ = −1, φ₁ = 2  ⟹ (2, −1)\nφ₂ − φ₁ = 1 meets φ₂ = −1 at φ₁ = −2       ⟹ (−2, −1)\nφ₁ + φ₂ = 1 meets φ₂ − φ₁ = 1 at φ₁ = 0, φ₂ = 1 ⟹ (0, 1)",
-     "why": "A triangle with a flat base at φ₂ = −1 and an apex at (0, 1). Note it extends to φ₁ = ±2, which is why a coefficient above 1 can still be admissible."
-    },
-    {
-     "say": "(b) Complex roots.",
-     "math": "the product of the roots of 1 − φ₁B − φ₂B² is −1/φ₂\nfor a complex conjugate pair the product is |B|²\n⟹ |B| = √(1/|φ₂|) = 1/√|φ₂|\n|B| > 1 ⟺ |φ₂| < 1",
-     "why": "So in the complex case the third inequality alone decides it. At (1.2, −0.4) the modulus is 1/√0.4 = 1.5811, matching the computed roots exactly."
-    },
-    {
-     "say": "(c) The infinite MA form.",
-     "math": "yₜ = Σ(j≥0) φʲ εₜ₋ⱼ\nVar(yₜ) = σ² Σ φ^(2j) = σ²/(1 − φ²)   for |φ| < 1",
-     "why": "Summed numerically: 1.3333 at φ = 0.5, 2.7778 at φ = 0.8, 10.2564 at φ = 0.95, each matching the closed form to six decimals. The series converges precisely when the stationarity condition holds."
-    },
-    {
-     "say": "(d) The equivalent invertible coefficient.",
-     "math": "θ = 2 ⟹ equivalent is 1/θ = 0.5\nρ₁(2)   = −2/(1 + 4)   = −0.4\nρ₁(0.5) = −0.5/(1 + 0.25) = −0.4   ✓ identical",
-     "why": "Both give ρ₁ = −0.4 and zero beyond, so the two are observationally identical. Only θ = 0.5 satisfies |θ| < 1, so that is the one to report. Simulation at both values gave −0.3996."
-    }
-   ]
-  },
-  {
-   "kind": "trapcheck",
-   "id": "s9",
-   "mins": 6,
-   "title": "Six statements — verdict on each before you look",
-   "objective": "Rule on the claims this topic turns on.",
-   "intro": "Decide true or false on all six before revealing any.",
-   "items": [
-    {
-     "claim": "An AR(2) with φ₁ = 1.2 cannot be stationary, since φ₁ exceeds 1.",
-     "tf": false,
-     "why": "False. (1.2, −0.4) is stationary: 0.8 < 1, −1.6 < 1 and 0.4 < 1, with root moduli 1.5811. None of the three conditions involves φ₁ alone, and the triangle extends to φ₁ = ±2."
-    },
-    {
-     "claim": "Stationarity requires every root of the AR polynomial to lie outside the unit circle.",
-     "tf": true,
-     "why": "True, with 'outside' meaning |B| > 1. For an AR(1) the root is 1/φ, so the condition becomes |φ| < 1. Some texts state it for the reciprocal roots, where the condition reads 'inside' — read which convention a source uses."
-    },
-    {
-     "claim": "A finite-order MA process can be non-stationary.",
-     "tf": false,
-     "why": "False. yₜ = εₜ − θ₁εₜ₋₁ − ⋯ − θ_qεₜ₋q has constant mean 0 and finite constant variance σ²(1 + Σθᵢ²) for any coefficients, with autocovariances vanishing beyond lag q. A finite MA is stationary by construction; only invertibility can fail."
-    },
-    {
-     "claim": "The invertibility region for an MA(2) is a different shape from the AR(2) stationarity region.",
-     "tf": false,
-     "why": "False — under the minus convention it is the SAME triangle, in θ instead of φ: θ₁+θ₂ < 1, θ₂−θ₁ < 1, |θ₂| < 1. Both are the condition that a polynomial's roots lie outside the unit circle, and both amount to a geometric series converging."
-    },
-    {
-     "claim": "An MA(1) with θ = 2 has different autocorrelations from one with θ = 0.5.",
-     "tf": false,
-     "why": "False — they are identical. ρ₁ = −θ/(1+θ²) is unchanged by θ ↦ 1/θ, giving −0.4 for both, and higher autocorrelations are zero either way. That non-identifiability is precisely why the invertibility restriction exists."
-    },
-    {
-     "claim": "The AR(2) coefficients (1.2, −0.2) give a stationary process.",
-     "tf": false,
-     "why": "False. φ₁ + φ₂ = 1.0 exactly, failing the first condition, and the polynomial factors as (1 − B)(1 − 0.2B) with roots 1 and 5 — one exactly on the unit circle. Note that a numerical root-finder returned 1.0000000000000002, so a naive |B| > 1 test would wrongly pass it; boundary cases need algebra."
-    }
-   ]
-  },
-  {
-   "kind": "guided",
-   "id": "s10",
-   "mins": 8,
-   "title": "On your own — six quick classifications",
-   "objective": "Decide each in a few seconds.",
-   "problem": "Minus convention throughout. (a) AR(1), φ = −0.9. (b) AR(2), φ = (0.6, 0.4). (c) MA(1), θ = 0.8. (d) MA(1), θ = 1.0. (e) ARMA(1,1), φ = 0.3, θ = 1.5. (f) AR(2), φ = (−0.5, −0.6).",
-   "hints": [
-    "For AR(1) and MA(1), compare the modulus with 1.",
-    "For order 2, run the three inequalities.",
-    "Remember a pure MA is always stationary and a pure AR is always invertible."
-   ],
-   "answer": "(a) Stationary. (b) Not stationary — sums to exactly 1. (c) Invertible. (d) Not invertible — on the boundary. (e) Stationary but not invertible. (f) Stationary.",
-   "check": "Part (f) is the one that looks wrong and is not: (−0.5, −0.6) gives −1.1 < 1 ✓, −0.6 + 0.5 = −0.1 < 1 ✓ and 0.6 < 1 ✓, so it is stationary with root moduli 1.291 each. Negative coefficients are admissible; the triangle is not confined to positive values. Part (d) is the over-differencing boundary from topic 7.6 — θ = 1 exactly, which is where an estimation routine pins an estimate with an unusable standard error.",
-   "solution": [
-    {
-     "say": "(a) and (c), the order-1 cases.",
-     "math": "AR(1) φ = −0.9: |−0.9| = 0.9 < 1 ⟹ stationary\nMA(1) θ = 0.8: |0.8| < 1 ⟹ invertible",
-     "why": "Sign is irrelevant to both conditions; only the modulus matters. A negative φ gives an alternating ACF, which topic 7.2 covers."
-    },
-    {
-     "say": "(b) and (f), the order-2 cases.",
-     "math": "(0.6, 0.4): 0.6+0.4 = 1.0 NOT < 1 ⟹ not stationary, unit root\n(−0.5, −0.6): −1.1 < 1 ✓, −0.1 < 1 ✓, 0.6 < 1 ✓ ⟹ stationary",
-     "why": "The first fails on the sum; the second passes all three despite both coefficients being negative, with root moduli 1.291."
-    },
-    {
-     "say": "(d) The MA boundary.",
-     "math": "θ = 1.0: |θ| = 1, NOT < 1 ⟹ not invertible\n(and still stationary, as every finite MA is)",
-     "why": "Exactly the over-differencing case: differencing white noise gives this, with variance 2σ² and ρ₁ = −0.5."
-    },
-    {
-     "say": "(e) The ARMA case.",
-     "math": "φ = 0.3: |0.3| < 1 ⟹ stationary\nθ = 1.5: |1.5| > 1 ⟹ not invertible\n⟹ stationary but not invertible",
-     "why": "Two independent checks. The equivalent invertible coefficient is 1/1.5 = 0.667, which gives the same autocorrelations."
-    }
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s11",
-   "mins": 6,
-   "title": "Where these conditions are assumed",
-   "objective": "See how much of the module depends on them.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "In the ACF and PACF (topic 7.2)",
-     "body": "An autocorrelation function exists only for a stationary process, since it divides by a finite variance. So every identification method assumes stationarity has already been established — which is why the diagnostic order is always to check stationarity first, difference if necessary, and only then look at the ACF and PACF."
-    },
-    {
-     "t": "step",
-     "h": "In Yule–Walker estimation (topic 7.3)",
-     "body": "The Yule–Walker equations relate autocorrelations to coefficients, and they presume both exist — so stationarity again. Their solution can nonetheless return coefficients outside the stationary region on a short sample, which is a signal that the series was not stationary to begin with."
-    },
-    {
-     "t": "step",
-     "h": "In forecasting (topic 7.11)",
-     "body": "A forecast needs εₜ expressed through the observed past, which is the infinite-AR representation and therefore needs invertibility. Without it the one-step forecast cannot be computed from the data, which is the practical reason the restriction is imposed rather than merely conventional."
-    },
-    {
-     "t": "step",
-     "h": "In the Wold decomposition (topic 7.10)",
-     "body": "The general theorem is that every stationary process has an infinite-MA representation in terms of uncorrelated shocks. This lesson's AR(1)-to-MA(∞) expansion is the simplest instance, and the convergence condition there is the stationarity condition."
-    },
-    {
-     "t": "def",
-     "h": "The common thread",
-     "body": "Both conditions are the convergence of a geometric series in a coefficient, which is why they take the same algebraic form. Stationarity makes the process exist; invertibility makes it usable and identified. Almost every other result in the module assumes one or both without restating them."
-    }
-   ],
-   "ask": {
-    "q": "Yule–Walker can return coefficients outside the stationarity triangle on real data. What should that be read as?",
-    "nudge": "The equations assume a stationary process. What if the series supplied was not one?"
-   }
-  },
-  {
-   "kind": "recall",
-   "id": "s12",
-   "mins": 2,
-   "title": "Second recall — the parts most likely to fade",
-   "objective": "Retrieve the regions and the duality.",
-   "intro": "Answer, then reveal.",
-   "items": [
-    {
-     "q": "Give the three vertices of the AR(2) stationarity triangle.",
-     "a": "(2, −1), (−2, −1) and (0, 1)."
-    },
-    {
-     "q": "Is a finite MA ever non-stationary?",
-     "a": "No — it is stationary for any coefficients; only invertibility can fail."
-    },
-    {
-     "q": "Is a pure AR ever non-invertible?",
-     "a": "No — invertibility constrains the MA polynomial, and a pure AR has none."
-    },
-    {
-     "q": "Write a stationary AR(1) as an infinite MA, with its variance.",
-     "a": "yₜ = Σφʲεₜ₋ⱼ, variance σ²/(1 − φ²), convergent exactly when |φ| < 1."
-    },
-    {
-     "q": "Why is an MA(1) with |θ| > 1 not reported?",
-     "a": "Because θ and 1/θ give identical autocorrelations, so the parameter is unidentified without the restriction."
-    },
-    {
-     "q": "For complex AR(2) roots, what is the root modulus?",
-     "a": "1/√|φ₂|, so the condition reduces to |φ₂| < 1."
-    }
-   ]
-  },
-  {
-   "kind": "summary",
-   "id": "s13",
-   "mins": 3,
-   "title": "What you should now be able to do unaided",
-   "objective": "Close the loop before the mastery test.",
-   "body": [
-    "State both conditions as root conditions on the AR and MA polynomials.",
-    "Write down the AR(2) stationarity triangle and its three vertices, and apply it in seconds.",
-    "Classify order-1 and order-2 processes as stationary, invertible, both or neither.",
+  "id": "timeseriest1",
+  "topicId": "timeseries-t1",
+  "moduleId": "timeseries",
+  "title": "Stationarity and Invertibility",
+  "breadcrumb": "Time series → Foundations → Admissible parameter regions",
+  "engine": "B",
+  "engineName": "Time series — which coefficients give a process that exists and can be used",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 100,
+  "objectives": [
+    "State stationarity and invertibility as root conditions on two polynomials.",
+    "Apply the AR(2) stationarity triangle and give its three vertices.",
+    "Classify order-1 and order-2 processes into the four categories.",
     "Explain why a finite MA is always stationary and a pure AR always invertible.",
-    "Expand a stationary AR(1) into an infinite MA and an invertible MA(1) into an infinite AR.",
-    "Say why θ and 1/θ are observationally identical and what the restriction achieves.",
-    "Recognise a boundary case and check it algebraically rather than numerically."
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s14",
-   "mins": 8,
-   "ext": true,
-   "title": "Where the triangle comes from",
-   "objective": "Derive the three inequalities from the root condition.",
-   "blocks": [
+    "Expand a stationary AR(1) as an infinite MA and an invertible MA(1) as an infinite AR.",
+    "Say why θ and 1/θ are observationally identical and what invertibility achieves."
+  ],
+  "prereq": [
     {
-     "t": "step",
-     "h": "Setting up",
-     "body": "The AR(2) polynomial is φ(B) = 1 − φ₁B − φ₂B². Stationarity requires both roots to satisfy |B| > 1, which is awkward to check directly. The standard device is to work with the RECIPROCAL roots, which must then lie inside the unit circle, and to express the conditions through the coefficients."
+      "id": "p1",
+      "name": "Weak stationarity (topic 7.6)",
+      "why": "This lesson works on the parameter regions that deliver stationarity, taking the definition as given."
     },
     {
-     "t": "formula",
-     "h": "The three conditions",
-     "body": "Writing the reciprocal roots as z₁ and z₂, we have z₁ + z₂ = φ₁ and z₁z₂ = −φ₂. Requiring |z₁| < 1 and |z₂| < 1 is equivalent to\n    φ(1) > 0  ⟺  1 − φ₁ − φ₂ > 0  ⟺  φ₁ + φ₂ < 1\n    φ(−1) > 0 ⟺  1 + φ₁ − φ₂ > 0  ⟺  φ₂ − φ₁ < 1\n    |φ₂| < 1\nThe first two say the polynomial is positive at B = ±1, so no root sits at either, and the third bounds the product of the reciprocal roots."
+      "id": "p2",
+      "name": "AR and MA processes",
+      "why": "The conditions constrain the coefficients of exactly these two model types."
     },
     {
-     "t": "step",
-     "h": "The real and complex cases",
-     "body": "The discriminant is φ₁² + 4φ₂. When it is positive the roots are real and the first two conditions are binding; when negative the roots are a complex conjugate pair whose product is the squared modulus, so |B|² = 1/|φ₂| and the third condition |φ₂| < 1 alone decides. At (1.2, −0.4) the discriminant is 1.44 − 1.6 = −0.16, so the roots are complex with modulus 1/√0.4 = 1.5811 — matching the computed value exactly."
+      "id": "p3",
+      "name": "Roots of quadratics, real and complex",
+      "why": "The AR(2) conditions come from the roots of a quadratic, and the complex case has its own shortcut."
     },
     {
-     "t": "def",
-     "h": "Reading the triangle",
-     "body": "The apex (0, 1) is the pure seasonal-like case φ₁ = 0 with φ₂ approaching 1, where the process oscillates with period 4. The base φ₂ = −1 is where the complex roots reach the unit circle. The right vertex (2, −1) is the limit of two real roots both approaching 1 — the double unit root that calls for differencing twice. The edge φ₁ + φ₂ = 1 is the single-unit-root edge, where the random walk and the ARIMA(0,1,0) case live."
-    },
-    {
-     "t": "step",
-     "h": "A warning about numerical checks",
-     "body": "On the boundary, floating-point arithmetic is unreliable. For (1.2, −0.2) a root-finder returned 1.0000000000000002 and 4.999999999999999, so a test of |B| > 1 passed the unit root. The inequality φ₁ + φ₂ < 1 is safer, since 1.2 − 0.2 = 1.0 is exact in binary arithmetic, and factorising — here (1 − B)(1 − 0.2B) — settles it beyond doubt. The general habit is to prefer the algebraic criterion for any case that lands on a boundary."
+      "id": "p4",
+      "name": "Geometric series",
+      "why": "Both conditions are the convergence condition for a geometric series, which is the duality in section 7."
     }
-   ],
-   "ask": {
-    "q": "The first two conditions say φ(1) > 0 and φ(−1) > 0. Why is the positivity of the polynomial at ±1 the right thing to check?",
-    "nudge": "What would φ(1) = 0 mean about B = 1?"
-   }
+  ],
+  "traps": [
+    "φ₁ > 1 does NOT rule out stationarity: (1.2, −0.4) is stationary.",
+    "All THREE inequalities must hold; checking one or two is not enough.",
+    "(1.2, −0.2) sums to exactly 1 and has a unit root — a boundary case, not a stationary one.",
+    "A finite MA is always stationary; only invertibility can fail.",
+    "A pure AR is always invertible; there is no MA polynomial to constrain.",
+    "The invertibility region in θ is the SAME triangle as the stationarity region in φ.",
+    "θ and 1/θ give identical autocorrelations, so |θ| > 1 is never reported.",
+    "On a boundary, trust algebra over a numerical root-finder: 1.0 can compute as 1.0000000000000002."
+  ],
+  "revision": {
+    "sheet": [
+      "Backshift: Byₜ = yₜ₋₁. AR: φ(B)yₜ = εₜ with φ(B) = 1 − φ₁B − ⋯. MA: yₜ = θ(B)εₜ, minus convention.",
+      "STATIONARY ⟺ every root of φ(B) = 0 has |B| > 1 (outside the unit circle).",
+      "INVERTIBLE ⟺ every root of θ(B) = 0 has |B| > 1. Same condition, different polynomial.",
+      "AR(1): the root is 1/φ, so the condition is |φ| < 1. Variance σ²/(1 − φ²).",
+      "AR(2) stationarity triangle: φ₁ + φ₂ < 1, φ₂ − φ₁ < 1, |φ₂| < 1. All three required.",
+      "Vertices (2, −1), (−2, −1), (0, 1). The triangle extends to φ₁ = ±2, so φ₁ > 1 can be admissible.",
+      "(1.2, −0.4) IS stationary: 0.8 < 1, −1.6 < 1, 0.4 < 1; complex roots of modulus 1.5811.",
+      "(1.2, −0.2) is NOT: sums to exactly 1, and 1 − 1.2B + 0.2B² = (1 − B)(1 − 0.2B), roots 1 and 5.",
+      "(0.6, 0.4) also sums to 1 — not stationary, roots 1 and 2.5. (−0.5, −0.6) IS stationary, moduli 1.291.",
+      "Complex roots: |B| = 1/√|φ₂|, so the third condition alone decides. Discriminant is φ₁² + 4φ₂.",
+      "MA(2) invertibility: the same three inequalities in θ. (0.4, 0.3) invertible; (0.6, 0.4) not, sums to 1.",
+      "A finite MA is ALWAYS stationary: variance σ²(1 + Σθᵢ²), autocovariances zero beyond lag q.",
+      "A pure AR is ALWAYS invertible: there is no MA polynomial to constrain.",
+      "Duality: a stationary AR(1) is yₜ = Σφʲεₜ₋ⱼ with variance σ²Σφ^(2j) = σ²/(1 − φ²).",
+      "Summed: 1.3333 at φ = 0.5, 2.7778 at 0.8, 10.2564 at 0.95 — each matching 1/(1 − φ²).",
+      "An invertible MA(1) is εₜ = yₜ + θyₜ₋₁ + θ²yₜ₋₂ + ⋯, convergent exactly when |θ| < 1.",
+      "Non-identifiability: ρ₁ = −θ/(1 + θ²) is unchanged by θ ↦ 1/θ. At θ = 2 and θ = 0.5 both give −0.4.",
+      "So invertibility selects one representative per pair, which is what makes θ estimable.",
+      "Boundary warning: a root-finder gave 1.0000000000000002 for an exact unit root, passing a naive |B| > 1 test."
+    ],
+    "cards": [
+      [
+        "Stationarity, general form",
+        "All roots of φ(B) = 0 outside the unit circle"
+      ],
+      [
+        "Invertibility, general form",
+        "All roots of θ(B) = 0 outside the unit circle"
+      ],
+      [
+        "AR(2) triangle",
+        "φ₁+φ₂<1, φ₂−φ₁<1, |φ₂|<1"
+      ],
+      [
+        "Triangle vertices",
+        "(2, −1), (−2, −1), (0, 1)"
+      ],
+      [
+        "Is (1.2, −0.4) stationary?",
+        "Yes — φ₁ > 1 is not disqualifying"
+      ],
+      [
+        "Is (1.2, −0.2) stationary?",
+        "No — sums to exactly 1, a unit root"
+      ],
+      [
+        "Complex AR(2) roots",
+        "|B| = 1/√|φ₂|"
+      ],
+      [
+        "A finite MA",
+        "Always stationary; only invertibility can fail"
+      ],
+      [
+        "A pure AR",
+        "Always invertible"
+      ],
+      [
+        "Stationary AR(1) as an MA(∞)",
+        "Σφʲεₜ₋ⱼ, variance σ²/(1 − φ²)"
+      ],
+      [
+        "θ and 1/θ",
+        "Identical autocorrelations — hence the restriction"
+      ],
+      [
+        "MA(2) invertible region",
+        "The same triangle, in θ"
+      ]
+    ],
+    "tricks": [
+      "Compute all three sums first: φ₁+φ₂, φ₂−φ₁ and |φ₂|. It takes seconds and settles most questions.",
+      "A sum landing exactly on 1 is a unit root, not a pass — do not round in your own favour.",
+      "If the discriminant φ₁² + 4φ₂ is negative, the roots are complex and only |φ₂| < 1 matters.",
+      "A pure MA question is asking about invertibility; a pure AR question about stationarity.",
+      "If an MA coefficient exceeds 1 in modulus, report its reciprocal instead.",
+      "For boundary cases, factorise. Numerical root-finders are unreliable exactly there."
+    ],
+    "shortcuts": [
+      "1/√0.4 = 1.5811, the root modulus at (1.2, −0.4).",
+      "1/(1−φ²) is 1.3333, 2.7778 and 10.2564 at φ = 0.5, 0.8 and 0.95.",
+      "ρ₁ = −θ/(1+θ²) peaks in modulus at 0.5, attained at |θ| = 1."
+    ],
+    "remember": [
+      "Three inequalities, all required.",
+      "φ₁ > 1 can still be stationary.",
+      "A finite MA is always stationary."
+    ]
   },
-  {
-   "kind": "quiz",
-   "id": "s15",
-   "mins": 12,
-   "title": "Mastery test",
-   "objective": "Demonstrate it independently, on questions you have not seen.",
-   "setId": "timeseries_t1_mastery"
-  }
- ]
+  "howto": "Section 3's chart is the efficient way to learn the triangle: move the coefficients until the chart stops drawing an ACF, and it names the condition that failed — so the three edges can be found by experiment rather than memorised. Section 4 then proves the triangle and the root condition are the same statement, using the two cases (1.2, −0.4) and (1.2, −0.2), which differ by 0.2 in φ₂ and fall on opposite sides of the boundary. Section 6 drills the four classifications and makes the key structural point that the two conditions are independent, with a pure MA always stationary and a pure AR always invertible. Section 7 explains why both conditions have the same algebraic form — each is a geometric series converging — and why θ and 1/θ cannot be distinguished by data, which is the real justification for the invertibility restriction. If short of time, sections 3, 4 and 6 are the lesson. This lesson deliberately does not repeat topic 7.6's treatment of weak versus strict stationarity, topic 7.5's unit-root testing, or topic 7.3's Yule–Walker equations. The optional section derives the three inequalities from the root condition and ends with a warning about checking boundary cases numerically.",
+  "refs": [
+    {
+      "title": "Time Series Analysis: Forecasting and Control",
+      "where": "Chapters 3 and 4",
+      "site": "Box, Jenkins and Reinsel",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-03",
+      "why": "The stationarity and invertibility regions derived in full, including the AR(2) triangle and its vertices."
+    },
+    {
+      "title": "Time Series Analysis and Its Applications",
+      "where": "Chapter 3",
+      "site": "Shumway and Stoffer",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-03",
+      "why": "The causal and invertible conditions stated through the roots of the two polynomials, with the duality."
+    },
+    {
+      "title": "Forecasting: Principles and Practice, 3rd edition",
+      "where": "Chapters 9.3 to 9.5",
+      "site": "Hyndman and Athanasopoulos",
+      "url": "https://otexts.com/fpp3/",
+      "type": "Free online textbook",
+      "free": true,
+      "checked": "2026-11-03",
+      "why": "Stationarity and the admissible regions with worked examples; freely available."
+    },
+    {
+      "title": "Time Series Analysis",
+      "where": "Weeks on stationarity and ARMA models",
+      "site": "NPTEL / SWAYAM",
+      "url": "https://archive.nptel.ac.in/courses/111104049",
+      "type": "Video course",
+      "free": true,
+      "checked": "2026-11-03",
+      "why": "Indian-syllabus treatment of the classification questions in the style NET sets them."
+    }
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
+  },
+  "provenance": "Authored November 2026, the fifth lesson of the time-series module. This topic has no PYQ anchor of its own — June 2026's four time-series questions are covered by lessons 7.3, 7.5, 7.6 and 7.7 — but it is the foundation all four rest on and the catalog assigns it the same expected weight as every other time-series topic. Scope was set deliberately against the lessons already built so that nothing is repeated: 7.6 owns weak versus strict stationarity and the random walk, 7.5 owns unit roots and differencing, 7.3 owns Yule–Walker, and this lesson owns the admissible REGIONS — the root condition, the AR(2) triangle, the matching MA invertibility region, and the duality that explains why both take the same form. Every claim was verified: the triangle and the root condition |B| > 1 agreed on all eight parameter pairs tested, including (0.5,0.3), (0.4,0.3), (1.2,−0.4), (1.2,−0.2), (0.6,0.4), (−0.5,−0.6), (0,0.99) and (0,1.0); the complex-root modulus 1/√|φ₂| was confirmed as 1.5811 at (1.2,−0.4); the infinite-MA variance Σφ^(2j) matched 1/(1−φ²) to six decimals at φ = 0.5, 0.8 and 0.95; and the non-identifiability of θ against 1/θ was confirmed by simulating ρ₁ at θ = 0.5 and θ = 2, both giving −0.3996 against the exact −0.4. One methodological point is recorded in the lesson because it arose during verification: for the boundary case (1.2, −0.2) a numerical root-finder returned the roots as 1.0000000000000002 and 4.999999999999999, so a naive test of |B| > 1 PASSED an exact unit root. The polynomial factors algebraically as (1 − B)(1 − 0.2B), which settles it, and the inequality φ₁ + φ₂ < 1 is exact in binary — so boundary cases must be checked algebraically rather than numerically. Lesson 7.3 caught the same coefficient pair independently in a pool item. Uses the existing `ar-acf` visualisation, which names the failing stationarity condition and therefore traces the triangle's edges directly. Previous-year questions are stored separately and carry their exam cycle.",
+  "scenes": [
+    {
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Before the lesson — four things it will assume",
+      "objective": "Fix the backshift notation and what the two admissibility conditions are for.",
+      "ask": {
+        "q": "Why should a model be restricted at all? What goes wrong if φ = 1.5 in an AR(1)?",
+        "nudge": "Write out y₅ in terms of ε₁. What is the coefficient?"
+      },
+      "body": [
+        "Two conditions recur throughout time-series work: STATIONARITY, which restricts the autoregressive coefficients, and INVERTIBILITY, which restricts the moving-average ones. Both define regions of parameter space, and almost every classification question in the module asks which region a given set of coefficients falls in.",
+        "They are not arbitrary. Outside the stationary region, the AR equation has no causal stationary solution with a finite time-invariant variance; an AR(1) with φ = 1.5 amplifies a shock by 1.5ᵏ, so the impulse response grows rather than decays. Invertibility is a separate MA condition: it makes the inverse filter of a chosen MA parameterisation converge, so its innovations can be recovered from the observed past. A non-invertible parameterisation has an observationally equivalent invertible canonical representation after rescaling the innovation variance; that canonical representation is used for identification and forecasting.",
+        "The two conditions turn out to have the SAME algebraic form, applied to different polynomials. That is not a coincidence, and the duality in section 7 explains it.",
+        "Four checks before starting."
+      ],
+      "items": [
+        {
+          "ask": "What does the backshift operator B do, and how is an AR(2) written with it?",
+          "recall": "Byₜ = yₜ₋₁. An AR(2) is (1 − φ₁B − φ₂B²)yₜ = εₜ.",
+          "refresh": [
+            "B shifts a series one step back, and Bᵏyₜ = yₜ₋ₖ. It turns a recursion into a polynomial, which is what makes the root conditions statable.",
+            "The polynomial 1 − φ₁B − φ₂B² is the AR polynomial, written φ(B). Similarly an MA(2) under the minus convention is yₜ = (1 − θ₁B − θ₂B²)εₜ, with MA polynomial θ(B).",
+            "Everything in this lesson is a statement about the roots of one of those two polynomials."
+          ]
+        },
+        {
+          "ask": "State the stationarity condition for an AR(1).",
+          "recall": "|φ| < 1.",
+          "refresh": [
+            "Equivalently the root of 1 − φB = 0, which is B = 1/φ, must lie outside the unit circle: |1/φ| > 1 means |φ| < 1.",
+            "At |φ| = 1 the process is a random walk — non-stationary, and topic 7.6 covers it. At |φ| > 1 it is explosive.",
+            "The variance is σ²/(1 − φ²), which is finite exactly when |φ| < 1 and blows up as |φ| approaches 1: about 10.26σ² at φ = 0.95 and 2.78σ² at φ = 0.8, both confirmed by summing Σφ^(2j)."
+          ]
+        },
+        {
+          "ask": "What is weak stationarity, in one line?",
+          "recall": "Constant mean, constant finite variance, and autocovariance depending only on the lag.",
+          "refresh": [
+            "Topic 7.6 treats the definitions in full, including the fact that weak and strict stationarity coincide for a Gaussian process. This lesson takes the definition as given and works on the parameter regions that deliver it.",
+            "Note that stationarity is a property of the PROCESS, so a condition on the coefficients is what guarantees it.",
+            "The autocovariance of a stationary AR process is what topic 7.4 computes."
+          ]
+        },
+        {
+          "ask": "Which convention does this course use for an MA process?",
+          "recall": "The MINUS convention: yₜ = εₜ − θ₁εₜ₋₁ − θ₂εₜ₋₂ − ⋯",
+          "refresh": [
+            "So the MA polynomial is 1 − θ₁B − θ₂B², exactly parallel to the AR polynomial, and the invertibility region in θ is the same shape as the stationarity region in φ.",
+            "This is not universal — many texts write yₜ = εₜ + θεₜ₋₁ — so a question must be read for its own convention. This bank's answer keys fix the minus convention twice over: lesson 7.5 established it from an invertibility variant, and lesson 7.7 from a spectral-density variant.",
+            "Under the plus convention the regions mirror in sign, and the formula ρ₁ = −θ/(1+θ²) for an MA(1) becomes +θ/(1+θ²)."
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Two conditions, two quite different reasons",
+      "objective": "See why each restriction exists before meeting the algebra.",
+      "body": [
+        "Stationarity is about the process existing at all. If shocks are amplified rather than damped as they are carried forward, the variance grows without limit and there is no stable distribution to describe. The condition on the coefficients is what guarantees the damping.",
+        "Invertibility determines whether the innovations in a chosen MA parametrisation can be recovered uniquely from the observed past. An invertible MA can be rewritten as an infinite autoregression, so its shocks are recoverable. A non-invertible parametrisation does not recover its original shocks, but it has an observationally equivalent invertible representation with the same second-order structure. Forecasting from observations remains possible using that canonical representation; invertibility selects the identifiable innovation representation.",
+        "There is a second reason for invertibility, and it is the sharper one: identifiability. An MA(1) with θ and one with 1/θ have exactly the same autocorrelation function — ρ₁ = −θ/(1 + θ²) is unchanged by replacing θ with 1/θ. So the data cannot distinguish them, and restricting to |θ| < 1 picks exactly one representative from each such pair.",
+        "That is why invertibility is a convention with teeth rather than a technicality: without it the parameter would not be estimable, because two different values would fit identically."
+      ],
+      "scenario": {
+        "teaser": "An estimation routine returns an MA coefficient pinned at 1.000 with an enormous standard error.",
+        "title": "What a boundary estimate is telling you",
+        "body": [
+          "A model is fitted and the moving-average coefficient comes back as 1.000, flagged at the boundary, with a standard error so large as to be meaningless. The analyst's first instinct is that the optimiser has failed.",
+          "The optimiser has usually done exactly what it was asked. θ = 1 is the edge of the invertible region, and the likelihood surface flattens as the boundary is approached, so the maximum is poorly determined there. An estimate pinned at the edge with a huge standard error is the characteristic appearance of a likelihood with no interior maximum.",
+          "The useful question is why the data want to sit at the boundary. The commonest reason is over-differencing: differencing a series that was already stationary introduces an MA component with θ exactly 1, as topic 7.6 showed — differencing white noise gives εₜ − εₜ₋₁, whose variance is 2σ² and whose lag-1 autocorrelation is exactly −0.5. If the series was differenced as a matter of routine, the first thing to try is not differencing it.",
+          "A second reason is a genuinely non-invertible data-generating process, which happens when a series has been filtered or aggregated. A moving average applied to a series can produce exactly this, and the fix is to model the underlying series rather than the filtered one where that is possible.",
+          "Either way, the boundary estimate is informative rather than a failure. It says the data are consistent with the strongest MA structure the model allows and would prefer something outside it — which means the model, not the optimiser, needs attention.",
+          "The parallel on the AR side is an estimated coefficient near 1, which points to a unit root and sends you to the Dickey–Fuller test of topic 7.5. The two boundaries carry different diagnoses and both are worth recognising on sight."
+        ],
+        "q": "Why does an MA coefficient estimated at exactly 1 come with an unusable standard error?",
+        "answer": "Because θ = 1 is the boundary of the invertible region, and the likelihood flattens there rather than having an interior maximum. A standard error is computed from the curvature of the log-likelihood at the maximum, so when the maximum sits on a boundary with a nearly flat surface, that curvature is close to zero and the standard error is correspondingly enormous. The estimate is not a numerical failure but a message: the data want a value at or beyond the edge of what the model permits. The usual cause is over-differencing, which manufactures an MA(1) with θ exactly 1, so the first thing to check is whether the differencing was necessary at all."
+      },
+      "ask": {
+        "q": "An MA(1) with θ = 2 has the same autocorrelations as one with θ = 0.5. Which would you report, and why does the convention matter for estimation?",
+        "nudge": "If two values fit identically, what can the data say about which is right?"
+      }
+    },
+    {
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Trace the stationarity triangle",
+      "objective": "Find the three boundaries by moving the coefficients to them.",
+      "viz": {
+        "type": "ar-acf",
+        "p1": 0.5,
+        "p2": 0.3,
+        "caption": "The ACF and PACF of an AR(2). When the coefficients leave the stationary region the chart draws no stems and names the condition that failed — which is how to find the three edges of the triangle."
+      },
+      "body": [
+        "Start at φ₁ = 0.5, φ₂ = 0.3. The chart draws an ACF, so the process is stationary: 0.5 + 0.3 = 0.8 < 1, 0.3 − 0.5 = −0.2 < 1, and |0.3| < 1. All three conditions hold.",
+        "Now raise φ₁ to 0.7 so that φ₁ + φ₂ = 1.0 exactly. The stems disappear and the chart names the failed condition: φ₁ + φ₂ < 1. This is the first edge, and it is the one a unit root sits on — the random walk of topic 7.6 is the case φ₁ = 1, φ₂ = 0, on the same edge.",
+        "Return to φ₁ = 0.5 and lower φ₂ towards −1. At φ₂ = −1 the third condition |φ₂| < 1 fails. Then set φ₁ negative and raise φ₂: at φ₂ − φ₁ = 1 the second condition fails. Three edges, and together they enclose a triangle in the (φ₁, φ₂) plane with vertices at (2, −1), (−2, −1) and (0, 1).",
+        "Two instructive points inside and outside. (1.2, −0.4) IS stationary even though φ₁ exceeds 1 — a coefficient above 1 is not by itself disqualifying, because φ₂ can compensate. But (1.2, −0.2) is NOT: it sums to exactly 1 and sits on the first edge. The two differ by 0.2 in φ₂ and fall on opposite sides.",
+        "Section 4 shows the root condition is the same statement: for (1.2, −0.2) the polynomial factors as (1 − B)(1 − 0.2B), so one root is exactly 1 rather than outside the unit circle."
+      ],
+      "ask": {
+        "q": "(1.2, −0.4) is stationary while φ₁ = 1.2 exceeds 1. What does that say about reading stationarity off a single coefficient?",
+        "nudge": "How many conditions are there, and do any of them involve φ₁ alone?"
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s3",
+      "mins": 9,
+      "title": "The root condition, the triangle, and the invertible region",
+      "objective": "State both conditions properly and know the AR(2) region exactly.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "The general condition, in terms of roots",
+          "body": "Write the AR part as φ(B)yₜ = εₜ with φ(B) = 1 − φ₁B − ⋯ − φₚBᵖ.\n    STATIONARY ⟺ every root of φ(B) = 0 lies OUTSIDE the unit circle, |B| > 1.\nWrite the MA part as yₜ = θ(B)εₜ with θ(B) = 1 − θ₁B − ⋯ − θ_qB^q.\n    INVERTIBLE ⟺ every root of θ(B) = 0 lies OUTSIDE the unit circle, |B| > 1.\nSame condition, different polynomial. Note the convention: roots outside, not inside — some texts state it in terms of the reciprocals, where the condition reads 'inside'."
+        },
+        {
+          "t": "step",
+          "h": "The AR(1) case",
+          "body": "1 − φB = 0 gives B = 1/φ, so |B| > 1 ⟺ |φ| < 1. The familiar condition is the root condition in disguise. At φ = 1 the root is exactly 1 — on the circle, not outside — which is the random walk."
+        },
+        {
+          "t": "formula",
+          "h": "The AR(2) stationarity triangle",
+          "body": "For 1 − φ₁B − φ₂B² the root condition is equivalent to three inequalities:\n    φ₁ + φ₂ < 1\n    φ₂ − φ₁ < 1\n    |φ₂| < 1\nTogether these describe a TRIANGLE in the (φ₁, φ₂) plane with vertices (2, −1), (−2, −1) and (0, 1). All three must hold. Verified against the root condition on eight parameter pairs, with agreement in every case."
+        },
+        {
+          "t": "step",
+          "h": "The boundary case worth knowing",
+          "body": "(1.2, −0.4): 1.2 − 0.4 = 0.8 < 1 ✓, −0.4 − 1.2 = −1.6 < 1 ✓, |−0.4| < 1 ✓ — STATIONARY, despite φ₁ > 1. Its roots both have modulus 1.5811.\n(1.2, −0.2): 1.2 − 0.2 = 1.0, which is NOT < 1 — NOT stationary. The polynomial factors exactly as (1 − B)(1 − 0.2B), so the roots are 1 and 5 and one of them sits ON the unit circle. A unit root, which is topic 7.5's subject.\nSo φ₁ > 1 is not by itself disqualifying, and the sum is what matters on that edge."
+        },
+        {
+          "t": "formula",
+          "h": "The invertibility region for an MA(2)",
+          "body": "Under the minus convention yₜ = (1 − θ₁B − θ₂B²)εₜ, the invertibility conditions are the SAME three inequalities in θ:\n    θ₁ + θ₂ < 1,   θ₂ − θ₁ < 1,   |θ₂| < 1.\nSo the invertible region for the MA parameters is the same triangle as the stationary region for the AR parameters. For an MA(1) it reduces to |θ| < 1. Checked: (0.4, 0.3) is invertible, (0.6, 0.2) is invertible, and (0.6, 0.4) is not, since it sums to exactly 1."
+        },
+        {
+          "t": "def",
+          "h": "The four classifications",
+          "body": "An ARMA process has an AR part and an MA part, each with its own condition, so there are four possibilities: stationary and invertible; stationary but not invertible; invertible but not stationary; neither. Topic 7.5's pool drills the classification; what matters here is that the two conditions are INDEPENDENT — checking one tells you nothing about the other, because they constrain different polynomials."
+        }
+      ],
+      "table": {
+        "caption": "Parameter pairs against the two criteria. Every case checked both by the inequalities and by computing the polynomial roots.",
+        "head": [
+          "coefficients",
+          "φ₁+φ₂<1",
+          "φ₂−φ₁<1",
+          "|φ₂|<1",
+          "root moduli",
+          "verdict"
+        ],
+        "rows": [
+          [
+            "(0.5, 0.3)",
+            "0.8 ✓",
+            "−0.2 ✓",
+            "✓",
+            "2.840, 1.174",
+            "stationary"
+          ],
+          [
+            "(0.4, 0.3)",
+            "0.7 ✓",
+            "−0.1 ✓",
+            "✓",
+            "2.610, 1.277",
+            "stationary"
+          ],
+          [
+            "(1.2, −0.4)",
+            "0.8 ✓",
+            "−1.6 ✓",
+            "✓",
+            "1.581, 1.581",
+            "stationary"
+          ],
+          [
+            "(1.2, −0.2)",
+            "1.0 ✗",
+            "−1.4 ✓",
+            "✓",
+            "1.000, 5.000",
+            "unit root"
+          ],
+          [
+            "(0.6, 0.4)",
+            "1.0 ✗",
+            "−0.2 ✓",
+            "✓",
+            "1.000, 2.500",
+            "unit root"
+          ],
+          [
+            "(0, 1.0)",
+            "1.0 ✗",
+            "1.0 ✗",
+            "✗",
+            "1.000, 1.000",
+            "not stationary"
+          ]
+        ]
+      },
+      "flow": {
+        "title": "Classifying an ARMA process",
+        "alt": "Flow chart for checking stationarity and invertibility of an ARMA process",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "An ARMA(p, q) with coefficients given",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 0,
+            "label": "Check the AR polynomial's roots",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 1,
+            "c": 2,
+            "label": "Check the MA polynomial's roots",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 2,
+            "c": 0,
+            "label": "All |B| > 1 → stationary",
+            "kind": "end"
+          },
+          {
+            "id": "e",
+            "r": 2,
+            "c": 2,
+            "label": "All |B| > 1 → invertible",
+            "kind": "end"
+          },
+          {
+            "id": "f",
+            "r": 3,
+            "c": 1,
+            "label": "The two are independent: four possible verdicts",
+            "kind": "note"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "a",
+            "to": "c"
+          },
+          {
+            "from": "b",
+            "to": "d"
+          },
+          {
+            "from": "c",
+            "to": "e"
+          },
+          {
+            "from": "d",
+            "to": "f"
+          },
+          {
+            "from": "e",
+            "to": "f"
+          }
+        ],
+        "note": "Two separate checks on two separate polynomials. For order 2 each reduces to the same three inequalities, which is the quickest route in an exam."
+      },
+      "ask": {
+        "q": "The stationarity and invertibility conditions are the same inequalities applied to different polynomials. Does checking one ever tell you anything about the other?",
+        "nudge": "Can you choose the AR coefficients and the MA coefficients independently?"
+      }
+    },
+    {
+      "kind": "worked",
+      "id": "s4",
+      "mins": 8,
+      "title": "Worked — the triangle and the roots agree",
+      "objective": "Verify the equivalence on the two cases that differ by 0.2.",
+      "ask": {
+        "q": "Both pairs have φ₁ = 1.2. Which single quantity decided the verdict?",
+        "nudge": "Compare φ₁ + φ₂ for the two cases against the first inequality."
+      },
+      "problem": "Classify the AR(2) processes with coefficients (1.2, −0.4) and (1.2, −0.2), by the triangle and by the roots, and reconcile the two.",
+      "steps": [
+        {
+          "say": "Apply the three inequalities to (1.2, −0.4).",
+          "math": "φ₁ + φ₂ = 1.2 − 0.4 = 0.8 < 1  ✓\nφ₂ − φ₁ = −0.4 − 1.2 = −1.6 < 1  ✓\n|φ₂| = 0.4 < 1  ✓\n⟹ STATIONARY",
+          "why": "All three hold, so the process is stationary even though φ₁ = 1.2 exceeds 1. A single coefficient above 1 is not disqualifying: none of the three conditions involves φ₁ on its own."
+        },
+        {
+          "say": "Confirm by the roots.",
+          "math": "polynomial 1 − 1.2B + 0.4B²\nroots: B = (1.2 ± √(1.44 − 1.6))/(0.8) — complex\n|B| = √(1/0.4) = 1.5811 for both",
+          "why": "Both roots have modulus 1.5811, comfortably outside the unit circle. For a complex pair the modulus is √(1/φ₂) when the discriminant is negative, which is a useful shortcut. The two criteria agree."
+        },
+        {
+          "say": "Now (1.2, −0.2) by the inequalities.",
+          "math": "φ₁ + φ₂ = 1.2 − 0.2 = 1.0,  which is NOT < 1  ✗\n⟹ NOT stationary",
+          "why": "It fails on the first edge by exactly zero margin — the sum is 1 rather than below it. The other two conditions hold, but all three are required."
+        },
+        {
+          "say": "Confirm by factorising.",
+          "math": "1 − 1.2B + 0.2B² = (1 − B)(1 − 0.2B)\nexpanding: 1 − 0.2B − B + 0.2B² = 1 − 1.2B + 0.2B² ✓\nroots: B = 1 and B = 5",
+          "why": "One root is exactly 1 — ON the unit circle, not outside it. A unit root, so the process is non-stationary and differencing is the repair, which is topic 7.5's material. The factorisation makes it exact rather than approximate."
+        },
+        {
+          "say": "A caution about checking this numerically.",
+          "math": "a numerical root-finder returned the roots as\n  1.0000000000000002  and  4.999999999999999\na naive test |B| > 1 therefore PASSED the unit root",
+          "why": "Worth knowing. Boundary cases must be checked algebraically — here by factorising — because floating-point arithmetic can place an exact unit root marginally outside the circle. The inequality φ₁ + φ₂ < 1 is the safer check, since 1.2 − 0.2 = 1.0 is exact in binary."
+        }
+      ],
+      "after": "Answering the question above: the sum φ₁ + φ₂ decided both cases, at 0.8 and 1.0 against the threshold of 1. The transferable habit is to compute all three sums first — they take seconds — and to treat any that lands exactly on 1 as a unit root rather than rounding in your favour."
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 2,
+      "title": "Pause and recall",
+      "objective": "Retrieve the conditions before the duality.",
+      "intro": "Answer each before revealing it.",
+      "items": [
+        {
+          "q": "State the general stationarity condition in terms of roots.",
+          "a": "Every root of the AR polynomial φ(B) = 0 lies outside the unit circle, |B| > 1."
+        },
+        {
+          "q": "Give the three inequalities of the AR(2) stationarity triangle.",
+          "a": "φ₁ + φ₂ < 1, φ₂ − φ₁ < 1, and |φ₂| < 1."
+        },
+        {
+          "q": "What is the invertibility condition for an MA(q)?",
+          "a": "Every root of the MA polynomial θ(B) = 0 lies outside the unit circle — the same condition on a different polynomial."
+        },
+        {
+          "q": "Is (1.2, −0.4) a stationary AR(2)?",
+          "a": "Yes: 0.8 < 1, −1.6 < 1, and 0.4 < 1. A coefficient above 1 is not by itself disqualifying."
+        },
+        {
+          "q": "And (1.2, −0.2)?",
+          "a": "No — the sum is exactly 1, and the polynomial factors as (1 − B)(1 − 0.2B) with a unit root."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 8,
+      "title": "Your turn — classify four processes",
+      "objective": "Apply both conditions, and see that they are independent.",
+      "problem": "Use the minus convention throughout. Classify each process as stationary, invertible, both or neither.",
+      "steps": [
+        {
+          "say": "First an AR(2) with φ = (0.4, 0.3).",
+          "blank": {
+            "prompt": "Check the three inequalities and give the verdict.",
+            "answer": "0.7 < 1, −0.1 < 1, 0.3 < 1 — stationary",
+            "accept": [
+              "stationary",
+              "yes stationary",
+              "all three hold"
+            ],
+            "hint": "Compute φ₁+φ₂, φ₂−φ₁ and |φ₂|."
+          },
+          "why": "All three hold with margin. The roots have moduli 2.610 and 1.277, both outside the unit circle, confirming it. Being a pure AR, invertibility does not arise."
+        },
+        {
+          "say": "Now an MA(2) with θ = (0.6, 0.4).",
+          "blank": {
+            "prompt": "Check invertibility and give the verdict.",
+            "answer": "θ₁ + θ₂ = 1.0, not < 1 — NOT invertible",
+            "accept": [
+              "not invertible",
+              "non-invertible",
+              "fails invertibility"
+            ],
+            "hint": "The invertibility region in θ is the same triangle as the stationarity region in φ."
+          },
+          "why": "It sits exactly on the first edge, so the MA polynomial 1 − 0.6B − 0.4B² has a unit root — factorising, (1 − B)(1 + 0.4B). Note that a pure MA process is ALWAYS stationary whatever its coefficients, since it is a finite sum of white-noise terms; only invertibility is in question. So this is 'stationary but not invertible'."
+        },
+        {
+          "say": "Now an ARMA(1,1) with φ = 0.5 and θ = 1.3.",
+          "blank": {
+            "prompt": "Give both verdicts.",
+            "answer": "stationary (|0.5| < 1) but not invertible (|1.3| > 1)",
+            "accept": [
+              "stationary not invertible",
+              "stationary but not invertible"
+            ],
+            "hint": "Two separate checks on two separate coefficients."
+          },
+          "why": "The two conditions are independent, which is the point of the exercise: the AR side passes and the MA side fails. Note that θ = 1.3 has the same autocorrelation structure as θ = 1/1.3 = 0.769, which is why the invertible representative is the one to report."
+        },
+        {
+          "say": "Now an ARMA(1,1) with φ = 1.1 and θ = 0.5.",
+          "blank": {
+            "prompt": "Give both verdicts.",
+            "answer": "invertible (|0.5| < 1) but not stationary (|1.1| > 1)",
+            "accept": [
+              "invertible not stationary",
+              "not stationary but invertible"
+            ],
+            "hint": "The other way round from the previous case."
+          },
+          "why": "The third of the four possible classifications. An AR coefficient of 1.1 makes the process explosive: a shock is carried forward as 1.1ᵏ, which grows without bound."
+        },
+        {
+          "say": "Finally, state the general rule for a pure MA.",
+          "blank": {
+            "prompt": "Is a finite-order MA process ever non-stationary?",
+            "answer": "No — a finite MA is always stationary; only invertibility can fail",
+            "accept": [
+              "no, always stationary",
+              "never non-stationary",
+              "always stationary"
+            ],
+            "hint": "Write out yₜ as a finite sum of white-noise terms and compute its variance."
+          },
+          "why": "yₜ = εₜ − θ₁εₜ₋₁ − ⋯ − θ_qεₜ₋q has mean 0 and variance σ²(1 + θ₁² + ⋯ + θ_q²) — finite and constant for any coefficients, with autocovariances that vanish beyond lag q. So a finite MA is stationary by construction, and the only question is whether it is invertible."
+        }
+      ],
+      "after": "The structure to carry: the two conditions constrain different polynomials and are therefore independent, giving four classifications. A pure AR can fail only stationarity, a pure MA can fail only invertibility, and an ARMA can fail either, both or neither."
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 7,
+      "title": "The duality: why both conditions look the same",
+      "objective": "See AR and MA as two views of one infinite representation.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "A stationary AR(1) is an infinite MA",
+          "body": "From yₜ = φyₜ₋₁ + εₜ, substituting repeatedly:\n    yₜ = εₜ + φεₜ₋₁ + φ²εₜ₋₂ + ⋯ = Σ(j≥0) φʲ εₜ₋ⱼ.\nThe variance is σ² Σφ^(2j) = σ²/(1 − φ²), which converges exactly when |φ| < 1 — so the stationarity condition is precisely the condition for this infinite sum to exist. Confirmed by summing: 1.3333 at φ = 0.5, 2.7778 at φ = 0.8 and 10.2564 at φ = 0.95, each matching 1/(1 − φ²) to six decimals."
+        },
+        {
+          "t": "formula",
+          "h": "An invertible MA(1) is an infinite AR",
+          "body": "From yₜ = εₜ − θεₜ₋₁, solving for εₜ:\n    εₜ = yₜ + θεₜ₋₁ = yₜ + θyₜ₋₁ + θ²yₜ₋₂ + ⋯\nThis converges exactly when |θ| < 1 — so invertibility is the condition for the shock to be recoverable from the observed past. That is what 'invertible' means: the MA polynomial can be inverted."
+        },
+        {
+          "t": "def",
+          "h": "The duality stated",
+          "body": "Stationarity lets an AR be written as an infinite MA; invertibility lets an MA be written as an infinite AR. The two conditions are the same inequality because both are the condition for a geometric series in the relevant coefficient to converge. That is why the regions have identical shape, and why the general statement is the same root condition on two different polynomials."
+        },
+        {
+          "t": "step",
+          "h": "Why non-identifiability follows",
+          "body": "An MA(1) with coefficient θ has ρ₁ = −θ/(1 + θ²) and ρₖ = 0 beyond. Replacing θ by 1/θ leaves ρ₁ unchanged, since −(1/θ)/(1 + 1/θ²) = −θ/(θ² + 1). So θ and 1/θ are observationally identical, and exactly one of the pair satisfies |θ| < 1. Invertibility therefore selects one representative per equivalence class, which is what makes the parameter estimable. Checked numerically: at θ = 0.5 and θ = 2 the simulated ρ₁ was −0.3996 against the exact −0.4 in both cases."
+        },
+        {
+          "t": "step",
+          "h": "The practical payoff",
+          "body": "Forecasting needs εₜ expressed in terms of observed yₜ, yₜ₋₁, …, which is exactly the infinite-AR representation. Invertibility selects the unique recoverable innovation representation. A non-invertible MA parametrisation may be replaced by an observationally equivalent invertible representation; the process remains forecastable from observed data using its canonical innovations representation. Topic 7.11 builds forecasts on precisely this representation, and topic 7.10's Wold decomposition gives an MA(∞) representation for the purely nondeterministic component; a general stationary process may also have a deterministic component."
+        }
+      ],
+      "ask": {
+        "q": "θ and 1/θ give the same autocorrelations. What would happen to a maximum-likelihood estimate if the invertibility restriction were dropped?",
+        "nudge": "Two parameter values with identical likelihood means the maximum is where?"
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 8,
+      "title": "On your own — regions and representations",
+      "objective": "Work the triangle, the roots and the duality together.",
+      "problem": "(a) Give the three vertices of the AR(2) stationarity triangle. (b) For an AR(2) with complex roots, give the root modulus in terms of φ₂ and state when it is stationary. (c) Write a stationary AR(1) as an infinite MA and give its variance. (d) For an MA(1) with θ = 2, give the observationally equivalent invertible coefficient and the shared ρ₁.",
+      "hints": [
+        "For (a), find where pairs of the three boundary lines meet.",
+        "For (b), the product of the two roots of 1 − φ₁B − φ₂B² is −1/φ₂.",
+        "For (d), replace θ by 1/θ and check ρ₁ = −θ/(1+θ²)."
+      ],
+      "answer": "(a) (2, −1), (−2, −1) and (0, 1). (b) |B| = √(1/|φ₂|) = 1/√|φ₂|, stationary when |φ₂| < 1. (c) yₜ = Σφʲεₜ₋ⱼ with variance σ²/(1 − φ²). (d) θ = 0.5, with ρ₁ = −0.4 for both.",
+      "check": "In (b) note the modulus depends on φ₂ alone when the roots are complex, which is why the third condition |φ₂| < 1 is exactly the stationarity condition in that case — a neat consistency. At φ = (1.2, −0.4) the discriminant 1.44 − 1.6 is negative, so the roots are complex with modulus 1/√0.4 = 1.5811, matching the computed value. In (d), the shared ρ₁ = −0.4 was confirmed by simulation at both θ = 0.5 and θ = 2.",
+      "scenario": {
+        "teaser": "Two analysts fit the same series and report MA coefficients of 0.5 and 2.0, and both fits are identical.",
+        "title": "Why the convention is doing real work",
+        "body": [
+          "Two analysts fit an MA(1) to the same data. One reports θ = 0.5, the other θ = 2.0. Their fitted values agree to machine precision, their residual sums of squares are identical, and each is confident the other has erred.",
+          "Neither has. An MA(1) with coefficient θ and one with 1/θ have exactly the same autocorrelation function: ρ₁ = −θ/(1 + θ²) is invariant under θ ↦ 1/θ, and all higher autocorrelations are zero in both cases. Since a Gaussian stationary process is determined by its mean and autocovariances, the two models are observationally indistinguishable — not merely similar, but identical in every observable respect.",
+          "What differs is the implied shock variance. The process variance is σ²(1 + θ²), so matching the observed variance forces the two fits to use different σ²: the θ = 2 version needs a shock variance 1 + 0.25 over 1 + 4, that is a factor of 0.25, times the other's. The two parameterisations trade θ against σ² and land on the same observable process.",
+          "This is why the invertibility restriction exists. Without it the likelihood has two maxima of exactly equal height, so the maximum is not unique and the parameter is not identified. Restricting to |θ| < 1 picks one member of each pair, which makes the estimate well defined and gives the representation in which the shock can be recovered from the observed past.",
+          "So the second analyst's answer is not wrong about the data; it is outside the convention, and conventionally one reports the invertible representative. Software that enforces invertibility would have returned 0.5.",
+          "The general lesson is that a restriction can be an identifiability device rather than a substantive assumption. Nothing about the world rules out θ = 2; what rules it out is that the data cannot distinguish it from θ = 0.5, and a parameter the data cannot pin down is not worth reporting."
+        ],
+        "q": "If the two fits are observationally identical, in what sense is the restriction |θ| < 1 justified?",
+        "answer": "It is justified as an identifiability convention rather than as a claim about the world. Because ρ₁ = −θ/(1+θ²) is unchanged by replacing θ with 1/θ, and all higher autocorrelations are zero either way, the two models imply exactly the same autocovariance structure and therefore the same likelihood — so the likelihood has two equal maxima and the parameter is not identified without a restriction. Confining θ to |θ| < 1 selects exactly one member of each such pair, making the estimate unique, and it happens to select the representation in which the shock is recoverable from the observed past, which is what forecasting needs. The two fits differ only in how they split the observed variance between θ and σ²."
+      },
+      "solution": [
+        {
+          "say": "(a) The vertices.",
+          "math": "φ₁ + φ₂ = 1 meets |φ₂| = 1 at φ₂ = −1, φ₁ = 2  ⟹ (2, −1)\nφ₂ − φ₁ = 1 meets φ₂ = −1 at φ₁ = −2       ⟹ (−2, −1)\nφ₁ + φ₂ = 1 meets φ₂ − φ₁ = 1 at φ₁ = 0, φ₂ = 1 ⟹ (0, 1)",
+          "why": "A triangle with a flat base at φ₂ = −1 and an apex at (0, 1). Note it extends to φ₁ = ±2, which is why a coefficient above 1 can still be admissible."
+        },
+        {
+          "say": "(b) Complex roots.",
+          "math": "the product of the roots of 1 − φ₁B − φ₂B² is −1/φ₂\nfor a complex conjugate pair the product is |B|²\n⟹ |B| = √(1/|φ₂|) = 1/√|φ₂|\n|B| > 1 ⟺ |φ₂| < 1",
+          "why": "So in the complex case the third inequality alone decides it. At (1.2, −0.4) the modulus is 1/√0.4 = 1.5811, matching the computed roots exactly."
+        },
+        {
+          "say": "(c) The infinite MA form.",
+          "math": "yₜ = Σ(j≥0) φʲ εₜ₋ⱼ\nVar(yₜ) = σ² Σ φ^(2j) = σ²/(1 − φ²)   for |φ| < 1",
+          "why": "Summed numerically: 1.3333 at φ = 0.5, 2.7778 at φ = 0.8, 10.2564 at φ = 0.95, each matching the closed form to six decimals. The series converges precisely when the stationarity condition holds."
+        },
+        {
+          "say": "(d) The equivalent invertible coefficient.",
+          "math": "θ = 2 ⟹ equivalent is 1/θ = 0.5\nρ₁(2)   = −2/(1 + 4)   = −0.4\nρ₁(0.5) = −0.5/(1 + 0.25) = −0.4   ✓ identical",
+          "why": "Both give ρ₁ = −0.4 and zero beyond, so the two are observationally identical. Only θ = 0.5 satisfies |θ| < 1, so that is the one to report. Simulation at both values gave −0.3996."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 6,
+      "title": "Six statements — verdict on each before you look",
+      "objective": "Rule on the claims this topic turns on.",
+      "intro": "Decide true or false on all six before revealing any.",
+      "items": [
+        {
+          "claim": "An AR(2) with φ₁ = 1.2 cannot be stationary, since φ₁ exceeds 1.",
+          "tf": false,
+          "why": "False. (1.2, −0.4) is stationary: 0.8 < 1, −1.6 < 1 and 0.4 < 1, with root moduli 1.5811. None of the three conditions involves φ₁ alone, and the triangle extends to φ₁ = ±2."
+        },
+        {
+          "claim": "Stationarity requires every root of the AR polynomial to lie outside the unit circle.",
+          "tf": true,
+          "why": "True, with 'outside' meaning |B| > 1. For an AR(1) the root is 1/φ, so the condition becomes |φ| < 1. Some texts state it for the reciprocal roots, where the condition reads 'inside' — read which convention a source uses."
+        },
+        {
+          "claim": "A finite-order MA process can be non-stationary.",
+          "tf": false,
+          "why": "False. yₜ = εₜ − θ₁εₜ₋₁ − ⋯ − θ_qεₜ₋q has constant mean 0 and finite constant variance σ²(1 + Σθᵢ²) for any coefficients, with autocovariances vanishing beyond lag q. A finite MA is stationary by construction; only invertibility can fail."
+        },
+        {
+          "claim": "The invertibility region for an MA(2) is a different shape from the AR(2) stationarity region.",
+          "tf": false,
+          "why": "False — under the minus convention it is the SAME triangle, in θ instead of φ: θ₁+θ₂ < 1, θ₂−θ₁ < 1, |θ₂| < 1. Both are the condition that a polynomial's roots lie outside the unit circle, and both amount to a geometric series converging."
+        },
+        {
+          "claim": "An MA(1) with θ = 2 has different autocorrelations from one with θ = 0.5.",
+          "tf": false,
+          "why": "False — they are identical. ρ₁ = −θ/(1+θ²) is unchanged by θ ↦ 1/θ, giving −0.4 for both, and higher autocorrelations are zero either way. That non-identifiability is precisely why the invertibility restriction exists."
+        },
+        {
+          "claim": "The AR(2) coefficients (1.2, −0.2) give a stationary process.",
+          "tf": false,
+          "why": "False. φ₁ + φ₂ = 1.0 exactly, failing the first condition, and the polynomial factors as (1 − B)(1 − 0.2B) with roots 1 and 5 — one exactly on the unit circle. Note that a numerical root-finder returned 1.0000000000000002, so a naive |B| > 1 test would wrongly pass it; boundary cases need algebra."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 8,
+      "title": "On your own — six quick classifications",
+      "objective": "Decide each in a few seconds.",
+      "problem": "Minus convention throughout. (a) AR(1), φ = −0.9. (b) AR(2), φ = (0.6, 0.4). (c) MA(1), θ = 0.8. (d) MA(1), θ = 1.0. (e) ARMA(1,1), φ = 0.3, θ = 1.5. (f) AR(2), φ = (−0.5, −0.6).",
+      "hints": [
+        "For AR(1) and MA(1), compare the modulus with 1.",
+        "For order 2, run the three inequalities.",
+        "Remember a pure MA is always stationary and a pure AR is always invertible."
+      ],
+      "answer": "(a) Stationary. (b) Not stationary — sums to exactly 1. (c) Invertible. (d) Not invertible — on the boundary. (e) Stationary but not invertible. (f) Stationary.",
+      "check": "Part (f) is the one that looks wrong and is not: (−0.5, −0.6) gives −1.1 < 1 ✓, −0.6 + 0.5 = −0.1 < 1 ✓ and 0.6 < 1 ✓, so it is stationary with root moduli 1.291 each. Negative coefficients are admissible; the triangle is not confined to positive values. Part (d) is the over-differencing boundary from topic 7.6 — θ = 1 exactly, which is where an estimation routine pins an estimate with an unusable standard error.",
+      "solution": [
+        {
+          "say": "(a) and (c), the order-1 cases.",
+          "math": "AR(1) φ = −0.9: |−0.9| = 0.9 < 1 ⟹ stationary\nMA(1) θ = 0.8: |0.8| < 1 ⟹ invertible",
+          "why": "Sign is irrelevant to both conditions; only the modulus matters. A negative φ gives an alternating ACF, which topic 7.2 covers."
+        },
+        {
+          "say": "(b) and (f), the order-2 cases.",
+          "math": "(0.6, 0.4): 0.6+0.4 = 1.0 NOT < 1 ⟹ not stationary, unit root\n(−0.5, −0.6): −1.1 < 1 ✓, −0.1 < 1 ✓, 0.6 < 1 ✓ ⟹ stationary",
+          "why": "The first fails on the sum; the second passes all three despite both coefficients being negative, with root moduli 1.291."
+        },
+        {
+          "say": "(d) The MA boundary.",
+          "math": "θ = 1.0: |θ| = 1, NOT < 1 ⟹ not invertible\n(and still stationary, as every finite MA is)",
+          "why": "Exactly the over-differencing case: differencing white noise gives this, with variance 2σ² and ρ₁ = −0.5."
+        },
+        {
+          "say": "(e) The ARMA case.",
+          "math": "φ = 0.3: |0.3| < 1 ⟹ stationary\nθ = 1.5: |1.5| > 1 ⟹ not invertible\n⟹ stationary but not invertible",
+          "why": "Two independent checks. The equivalent invertible coefficient is 1/1.5 = 0.667, which gives the same autocorrelations."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s11",
+      "mins": 6,
+      "title": "Where these conditions are assumed",
+      "objective": "See how much of the module depends on them.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "In the ACF and PACF (topic 7.2)",
+          "body": "An autocorrelation function exists only for a stationary process, since it divides by a finite variance. So every identification method assumes stationarity has already been established — which is why the diagnostic order is always to check stationarity first, difference if necessary, and only then look at the ACF and PACF."
+        },
+        {
+          "t": "step",
+          "h": "In Yule–Walker estimation (topic 7.3)",
+          "body": "The Yule–Walker equations relate autocorrelations to coefficients, and they presume both exist — so stationarity again. Their solution can nonetheless return coefficients outside the stationary region on a short sample, which is a signal that the series was not stationary to begin with."
+        },
+        {
+          "t": "step",
+          "h": "In forecasting (topic 7.11)",
+          "body": "A forecast needs εₜ expressed through the observed past, which is the infinite-AR representation and therefore needs invertibility. Without invertibility, the shocks in that particular non-invertible parametrisation are not uniquely recoverable from the observed past. Forecasting is still possible through the equivalent canonical invertible representation; invertibility selects the identifiable shock parametrisation."
+        },
+        {
+          "t": "step",
+          "h": "In the Wold decomposition (topic 7.10)",
+          "body": "The Wold decomposition states that every weakly stationary process splits into a deterministic component and a purely nondeterministic component with an MA(∞) representation in uncorrelated innovations. If the process is purely nondeterministic, the deterministic component is absent. This lesson's AR(1)-to-MA(∞) expansion is the simplest instance, and the convergence condition there is the stationarity condition."
+        },
+        {
+          "t": "def",
+          "h": "The common thread",
+          "body": "Both conditions are the convergence of a geometric series in a coefficient, which is why they take the same algebraic form. Stationarity makes the process exist; invertibility makes it usable and identified. Almost every other result in the module assumes one or both without restating them."
+        }
+      ],
+      "ask": {
+        "q": "Yule–Walker can return coefficients outside the stationarity triangle on real data. What should that be read as?",
+        "nudge": "The equations assume a stationary process. What if the series supplied was not one?"
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s12",
+      "mins": 2,
+      "title": "Second recall — the parts most likely to fade",
+      "objective": "Retrieve the regions and the duality.",
+      "intro": "Answer, then reveal.",
+      "items": [
+        {
+          "q": "Give the three vertices of the AR(2) stationarity triangle.",
+          "a": "(2, −1), (−2, −1) and (0, 1)."
+        },
+        {
+          "q": "Is a finite MA ever non-stationary?",
+          "a": "No — it is stationary for any coefficients; only invertibility can fail."
+        },
+        {
+          "q": "Is a pure AR ever non-invertible?",
+          "a": "No — invertibility constrains the MA polynomial, and a pure AR has none."
+        },
+        {
+          "q": "Write a stationary AR(1) as an infinite MA, with its variance.",
+          "a": "yₜ = Σφʲεₜ₋ⱼ, variance σ²/(1 − φ²), convergent exactly when |φ| < 1."
+        },
+        {
+          "q": "Why is an MA(1) with |θ| > 1 not reported?",
+          "a": "Because θ and 1/θ give identical autocorrelations, so the parameter is unidentified without the restriction."
+        },
+        {
+          "q": "For complex AR(2) roots, what is the root modulus?",
+          "a": "1/√|φ₂|, so the condition reduces to |φ₂| < 1."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 3,
+      "title": "What you should now be able to do unaided",
+      "objective": "Close the loop before the mastery test.",
+      "body": [
+        "State both conditions as root conditions on the AR and MA polynomials.",
+        "Write down the AR(2) stationarity triangle and its three vertices, and apply it in seconds.",
+        "Classify order-1 and order-2 processes as stationary, invertible, both or neither.",
+        "Explain why a finite MA is always stationary and a pure AR always invertible.",
+        "Expand a stationary AR(1) into an infinite MA and an invertible MA(1) into an infinite AR.",
+        "Say why θ and 1/θ are observationally identical and what the restriction achieves.",
+        "Recognise a boundary case and check it algebraically rather than numerically."
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s14",
+      "mins": 8,
+      "ext": true,
+      "title": "Where the triangle comes from",
+      "objective": "Derive the three inequalities from the root condition.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "Setting up",
+          "body": "The AR(2) polynomial is φ(B) = 1 − φ₁B − φ₂B². Stationarity requires both roots to satisfy |B| > 1, which is awkward to check directly. The standard device is to work with the RECIPROCAL roots, which must then lie inside the unit circle, and to express the conditions through the coefficients."
+        },
+        {
+          "t": "formula",
+          "h": "The three conditions",
+          "body": "Writing the reciprocal roots as z₁ and z₂, we have z₁ + z₂ = φ₁ and z₁z₂ = −φ₂. Requiring |z₁| < 1 and |z₂| < 1 is equivalent to\n    φ(1) > 0  ⟺  1 − φ₁ − φ₂ > 0  ⟺  φ₁ + φ₂ < 1\n    φ(−1) > 0 ⟺  1 + φ₁ − φ₂ > 0  ⟺  φ₂ − φ₁ < 1\n    |φ₂| < 1\nThe first two say the polynomial is positive at B = ±1, so no root sits at either, and the third bounds the product of the reciprocal roots."
+        },
+        {
+          "t": "step",
+          "h": "The real and complex cases",
+          "body": "The discriminant is φ₁² + 4φ₂. When it is positive the roots are real and the first two conditions are binding; when negative the roots are a complex conjugate pair whose product is the squared modulus, so |B|² = 1/|φ₂| and the third condition |φ₂| < 1 alone decides. At (1.2, −0.4) the discriminant is 1.44 − 1.6 = −0.16, so the roots are complex with modulus 1/√0.4 = 1.5811 — matching the computed value exactly."
+        },
+        {
+          "t": "def",
+          "h": "Reading the triangle",
+          "body": "The apex (0, 1) is the pure seasonal-like case φ₁ = 0 with φ₂ approaching 1, where the process oscillates with period 4. The base φ₂ = −1 is where the complex roots reach the unit circle. The right vertex (2, −1) is the limit of two real roots both approaching 1 — the double unit root that calls for differencing twice. The edge φ₁ + φ₂ = 1 is the single-unit-root edge, where the random walk and the ARIMA(0,1,0) case live."
+        },
+        {
+          "t": "step",
+          "h": "A warning about numerical checks",
+          "body": "On the boundary, floating-point arithmetic is unreliable. For (1.2, −0.2) a root-finder returned 1.0000000000000002 and 4.999999999999999, so a test of |B| > 1 passed the unit root. The inequality φ₁ + φ₂ < 1 is safer, since 1.2 − 0.2 = 1.0 is exact in binary arithmetic, and factorising — here (1 − B)(1 − 0.2B) — settles it beyond doubt. The general habit is to prefer the algebraic criterion for any case that lands on a boundary."
+        }
+      ],
+      "ask": {
+        "q": "The first two conditions say φ(1) > 0 and φ(−1) > 0. Why is the positivity of the polynomial at ±1 the right thing to check?",
+        "nudge": "What would φ(1) = 0 mean about B = 1?"
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s15",
+      "mins": 12,
+      "title": "Mastery test",
+      "objective": "Demonstrate it independently, on questions you have not seen.",
+      "setId": "timeseries_t1_mastery"
+    }
+  ]
 }

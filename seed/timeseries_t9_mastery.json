@@ -1,364 +1,364 @@
 {
- "moduleId": "timeseries",
- "topicId": "timeseries-t9",
- "source": "mastery",
- "label": "Ergodicity — mastery test (unseen)",
- "count": 20,
- "items": [
-  {
-   "id": "ts-t9-m-01",
-   "format": "single",
-   "topic": "timeseries-t9",
-   "diff": "easy",
-   "stem": "A stationary process is ergodic for the mean if:",
-   "options": [
-    "its variance is finite",
-    "its mean is constant over time",
-    "the sample mean converges in probability to the process mean",
-    "its autocorrelations are all positive"
-   ],
-   "answer": "C",
-   "explanation": "Equivalently, since the sample mean is unbiased, if Var(ȳₙ) → 0. Option B is part of stationarity, which does NOT imply ergodicity — the two are separate properties, and yₜ = Z + εₜ satisfies the first without the second."
-  },
-  {
-   "id": "ts-t9-m-02",
-   "format": "single",
-   "topic": "timeseries-t9",
-   "diff": "easy",
-   "stem": "Does weak stationarity imply ergodicity?",
-   "options": [
-    "Yes, always",
-    "No — they are separate properties",
-    "Yes, for Gaussian processes only",
-    "Only if the mean is zero"
-   ],
-   "answer": "B",
-   "explanation": "The standard counterexample is yₜ = Z + εₜ with Z drawn once per realisation: it is stationary with mean 0, variance 2 and γₖ = 1 at every lag, yet its sample mean converges to Z rather than to 0. Stationarity concerns the ensemble at each time; ergodicity bridges ensemble and time averages."
-  },
-  {
-   "id": "ts-t9-m-03",
-   "format": "single",
-   "topic": "timeseries-t9",
-   "diff": "easy",
-   "stem": "A sufficient condition for a stationary process to be ergodic for the mean is:",
-   "options": [
-    "the process is Gaussian",
-    "γₖ > 0 for all k",
-    "γ₀ < ∞",
-    "γₖ → 0 as k → ∞"
-   ],
-   "answer": "D",
-   "explanation": "If the autocovariances decay, distant stretches of one realisation are nearly independent and act as separate samples, so Var(ȳₙ) → 0. The sharper sufficient condition Σ|γₖ| < ∞ additionally delivers the asymptotic variance. Note it is sufficient, not necessary."
-  },
-  {
-   "id": "ts-t9-m-04",
-   "format": "numeric",
-   "topic": "timeseries-t9",
-   "diff": "easy",
-   "stem": "The variance of the sample mean of a stationary series equals:",
-   "options": [
-    "γ₀/n²",
-    "γ₀/n always",
-    "(γ₀/n)[1 + 2Σ(1 − k/n)ρₖ]",
-    "γ₀ × n"
-   ],
-   "answer": "C",
-   "explanation": "The (1 − k/n) factor is the proportion of pairs available at lag k: there are n − k ordered pairs at that lag out of n possible. With independence every ρₖ is zero and the bracket reduces to 1, giving the familiar γ₀/n.",
-   "check": "At n = 1 the formula must give γ₀, the variance of a single observation, which it does since the sum is empty."
-  },
-  {
-   "id": "ts-t9-m-05",
-   "format": "numeric",
-   "topic": "timeseries-t9",
-   "diff": "easy",
-   "stem": "The long-run variance of an AR(1) with coefficient φ and shock variance σ² is:",
-   "options": [
-    "σ²/(1 − φ²)",
-    "σ²/(1 − φ)²",
-    "σ²(1 − φ)²",
-    "σ²/(1 + φ)"
-   ],
-   "answer": "B",
-   "explanation": "It is γ₀(1 + φ)/(1 − φ), and since γ₀ = σ²/(1 − φ²) = σ²/((1−φ)(1+φ)) this reduces to σ²/(1 − φ)². At φ = 0.8 with σ² = 1 it is 25. Note option A is γ₀ itself, not the long-run variance.",
-   "check": "At φ = 0 the two must coincide at σ², since the process is then white noise — and both formulas give σ²."
-  },
-  {
-   "id": "ts-t9-m-06",
-   "format": "single",
-   "topic": "timeseries-t9",
-   "diff": "easy",
-   "stem": "In the process yₜ = Z + εₜ with Z drawn once per realisation, the sample mean converges to:",
-   "options": [
-    "nothing — it diverges",
-    "0, the process mean",
-    "the variance of Z",
-    "Z, the value drawn for that realisation"
-   ],
-   "answer": "D",
-   "explanation": "ȳₙ = Z + ε̄ₙ, and ε̄ₙ → 0, so ȳₙ → Z. The realisation never forgets Z, so there is only ever one piece of information about the level however long the series runs. Simulated Var(ȳₙ) stayed at about 1 from n = 100 through n = 10,000."
-  },
-  {
-   "id": "ts-t9-m-07",
-   "format": "numeric",
-   "topic": "timeseries-t9",
-   "diff": "moderate",
-   "stem": "For an AR(1) with φ = 0.8, σ² = 1 and n = 200, the asymptotic variance of the sample mean is:",
-   "options": [
-    "0.005",
-    "0.0139",
-    "0.125",
-    "25"
-   ],
-   "answer": "C",
-   "explanation": "Long-run variance σ²/(1−φ)² = 1/0.04 = 25, so Var(ȳₙ) ≈ 25/200 = 0.125. The exact value is 0.122222 and the simulated 0.121690. Option B is γ₀/n = 2.7778/200, the value independence would give — nine times too small.",
-   "check": "The exact figure must be slightly below the asymptotic one, since the (1 − k/n) weights discount the higher lags, and 0.1222 < 0.1250 ✓."
-  },
-  {
-   "id": "ts-t9-m-08",
-   "format": "numeric",
-   "topic": "timeseries-t9",
-   "diff": "moderate",
-   "stem": "The effective sample size of an AR(1) series of n observations is approximately:",
-   "options": [
-    "n(1 + φ)/(1 − φ)",
-    "n(1 − φ)/(1 + φ)",
-    "n(1 − φ²)",
-    "n/φ"
-   ],
-   "answer": "B",
-   "explanation": "At n = 200 this is 66.7 at φ = 0.5, 22.2 at φ = 0.8 and 10.5 at φ = 0.9. The formula is asymptotic: the exact figures at n = 200 are 11.0 at φ = 0.9 and 5.7 at φ = 0.95, so it is a guide rather than a precise count.",
-   "check": "Positive autocorrelation must REDUCE the effective sample size, so the factor has to be below 1 for φ > 0 — which rules out option A at once."
-  },
-  {
-   "id": "ts-t9-m-09",
-   "format": "single",
-   "topic": "timeseries-t9",
-   "diff": "moderate",
-   "stem": "In the process yₜ = Z + εₜ with Z and εₜ independent standard normals, Z drawn once per realisation, the autocovariance at lag k ≥ 1 is:",
-   "options": [
-    "1/2",
-    "0",
-    "2",
-    "1, the variance of Z"
-   ],
-   "answer": "D",
-   "explanation": "Cov(Z + εₜ, Z + εₜ₋ₖ) = Var(Z) = 1, since the ε terms are independent of each other and of Z. The variance is γ₀ = 1 + 1 = 2, so ρₖ = 1/2 at every lag — never decaying, which is why the process is not ergodic. Option A is the autoCORRELATION, not the autocovariance."
-  },
-  {
-   "id": "ts-t9-m-10",
-   "format": "single",
-   "topic": "timeseries-t9",
-   "diff": "moderate",
-   "stem": "For an AR(1) with φ = −0.8, the variance of the sample mean compared with γ₀/n is:",
-   "options": [
-    "the same",
-    "larger by a factor of 9",
-    "smaller — the effective sample size is 9n",
-    "undefined"
-   ],
-   "answer": "C",
-   "explanation": "The factor is (1 + φ)/(1 − φ) = 0.2/1.8 = 1/9, so the variance is a NINTH of the independence value and n_eff = 9n. Consecutive observations are strongly negatively correlated, so they offset each other and their average is less variable than a single observation. Only positive autocorrelation costs information."
-  },
-  {
-   "id": "ts-t9-m-11",
-   "format": "multi",
-   "topic": "timeseries-t9",
-   "diff": "moderate",
-   "stem": "Consider ergodicity and its consequences.",
-   "options": [
-    "A, B and C only",
-    "A and C only",
-    "B and D only",
-    "A, B, C and D"
-   ],
-   "answer": "A",
-   "explanation": "A is true — the counterexample establishes it. B is true: a finite MA has γₖ exactly zero beyond lag q. C is true, and it is the key practical distinction. D is false — negative autocorrelation improves precision, giving n_eff = 9n at φ = −0.8.",
-   "statements": [
-    "A stationary process need not be ergodic.",
-    "A finite-order MA process is always ergodic for the mean.",
-    "Non-ergodicity makes the sample mean inconsistent, not merely imprecise.",
-    "Any autocorrelation, of either sign, reduces the precision of the sample mean."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True. yₜ = Z + εₜ with Z fixed per realisation is stationary with γ₀ = 2 and γₖ = 1 at every lag, yet Var(ȳₙ) → Var(Z) = 1 rather than 0."
+  "moduleId": "timeseries",
+  "topicId": "timeseries-t9",
+  "source": "mastery",
+  "label": "Ergodicity — mastery test (unseen)",
+  "count": 20,
+  "items": [
+    {
+      "id": "ts-t9-m-01",
+      "format": "single",
+      "topic": "timeseries-t9",
+      "diff": "easy",
+      "stem": "A stationary process is ergodic for the mean if:",
+      "options": [
+        "its variance is finite",
+        "its mean is constant over time",
+        "the sample mean converges in probability to the process mean",
+        "its autocorrelations are all positive"
+      ],
+      "answer": "C",
+      "explanation": "Ergodicity for the mean is defined by ȳₙ → μ in probability. Since ȳₙ is unbiased, Var(ȳₙ) → 0 is a convenient sufficient condition: it gives convergence in L² and hence in probability. The converse does not follow from unbiasedness alone without additional uniform-integrability or regularity conditions. Option B is part of stationarity, which does NOT imply ergodicity."
     },
-    "B": {
-     "tf": true,
-     "why": "True: γₖ is exactly zero beyond lag q, so the sufficient condition γₖ → 0 holds trivially. The MA(1) long-run variance is σ²(1 − θ)²."
+    {
+      "id": "ts-t9-m-02",
+      "format": "single",
+      "topic": "timeseries-t9",
+      "diff": "easy",
+      "stem": "Does weak stationarity imply ergodicity?",
+      "options": [
+        "Yes, always",
+        "No — they are separate properties",
+        "Yes, for Gaussian processes only",
+        "Only if the mean is zero"
+      ],
+      "answer": "B",
+      "explanation": "The standard counterexample is yₜ = Z + εₜ with Z drawn once per realisation: it is stationary with mean 0, variance 2 and γₖ = 1 at every lag, yet its sample mean converges to Z rather than to 0. Stationarity concerns the ensemble at each time; ergodicity bridges ensemble and time averages."
     },
-    "C": {
-     "tf": true,
-     "why": "True, and it is why no standard-error correction helps: the sample mean converges to μ + Z rather than μ, and scaling a standard error cannot repair a point estimate that converges to the wrong value."
+    {
+      "id": "ts-t9-m-03",
+      "format": "single",
+      "topic": "timeseries-t9",
+      "diff": "easy",
+      "stem": "A sufficient condition for a stationary process to be ergodic for the mean is:",
+      "options": [
+        "the process is Gaussian",
+        "γₖ > 0 for all k",
+        "γ₀ < ∞",
+        "γₖ → 0 as k → ∞"
+      ],
+      "answer": "D",
+      "explanation": "If the autocovariances decay, distant stretches of one realisation are nearly independent and act as separate samples, so Var(ȳₙ) → 0. The sharper sufficient condition Σ|γₖ| < ∞ additionally delivers the asymptotic variance. Note it is sufficient, not necessary."
     },
-    "D": {
-     "tf": false,
-     "why": "False. Negative autocorrelation IMPROVES precision — the factor (1+φ)/(1−φ) is 1/9 at φ = −0.8, so n_eff = 9n. Consecutive observations offset each other, which is more informative than independence."
+    {
+      "id": "ts-t9-m-04",
+      "format": "numeric",
+      "topic": "timeseries-t9",
+      "diff": "easy",
+      "stem": "The variance of the sample mean of a stationary series equals:",
+      "options": [
+        "γ₀/n²",
+        "γ₀/n always",
+        "(γ₀/n)[1 + 2Σ(1 − k/n)ρₖ]",
+        "γ₀ × n"
+      ],
+      "answer": "C",
+      "explanation": "The (1 − k/n) factor is the proportion of pairs available at lag k: there are n − k ordered pairs at that lag out of n possible. With independence every ρₖ is zero and the bracket reduces to 1, giving the familiar γ₀/n.",
+      "check": "At n = 1 the formula must give γ₀, the variance of a single observation, which it does since the sum is empty."
+    },
+    {
+      "id": "ts-t9-m-05",
+      "format": "numeric",
+      "topic": "timeseries-t9",
+      "diff": "easy",
+      "stem": "The long-run variance of an AR(1) with coefficient φ and shock variance σ² is:",
+      "options": [
+        "σ²/(1 − φ²)",
+        "σ²/(1 − φ)²",
+        "σ²(1 − φ)²",
+        "σ²/(1 + φ)"
+      ],
+      "answer": "B",
+      "explanation": "It is γ₀(1 + φ)/(1 − φ), and since γ₀ = σ²/(1 − φ²) = σ²/((1−φ)(1+φ)) this reduces to σ²/(1 − φ)². At φ = 0.8 with σ² = 1 it is 25. Note option A is γ₀ itself, not the long-run variance.",
+      "check": "At φ = 0 the two must coincide at σ², since the process is then white noise — and both formulas give σ²."
+    },
+    {
+      "id": "ts-t9-m-06",
+      "format": "single",
+      "topic": "timeseries-t9",
+      "diff": "easy",
+      "stem": "In the process yₜ = Z + εₜ with Z drawn once per realisation, the sample mean converges to:",
+      "options": [
+        "nothing — it diverges",
+        "0, the process mean",
+        "the variance of Z",
+        "Z, the value drawn for that realisation"
+      ],
+      "answer": "D",
+      "explanation": "ȳₙ = Z + ε̄ₙ, and ε̄ₙ → 0, so ȳₙ → Z. The realisation never forgets Z, so there is only ever one piece of information about the level however long the series runs. Simulated Var(ȳₙ) stayed at about 1 from n = 100 through n = 10,000."
+    },
+    {
+      "id": "ts-t9-m-07",
+      "format": "numeric",
+      "topic": "timeseries-t9",
+      "diff": "moderate",
+      "stem": "For an AR(1) with φ = 0.8, σ² = 1 and n = 200, the asymptotic variance of the sample mean is:",
+      "options": [
+        "0.005",
+        "0.0139",
+        "0.125",
+        "25"
+      ],
+      "answer": "C",
+      "explanation": "Long-run variance σ²/(1−φ)² = 1/0.04 = 25, so Var(ȳₙ) ≈ 25/200 = 0.125. The exact value is 0.122222 and the simulated 0.121690. Option B is γ₀/n = 2.7778/200, the value independence would give — nine times too small.",
+      "check": "The exact figure must be slightly below the asymptotic one, since the (1 − k/n) weights discount the higher lags, and 0.1222 < 0.1250 ✓."
+    },
+    {
+      "id": "ts-t9-m-08",
+      "format": "numeric",
+      "topic": "timeseries-t9",
+      "diff": "moderate",
+      "stem": "The effective sample size of an AR(1) series of n observations is approximately:",
+      "options": [
+        "n(1 + φ)/(1 − φ)",
+        "n(1 − φ)/(1 + φ)",
+        "n(1 − φ²)",
+        "n/φ"
+      ],
+      "answer": "B",
+      "explanation": "At n = 200 this is 66.7 at φ = 0.5, 22.2 at φ = 0.8 and 10.5 at φ = 0.9. The formula is asymptotic: the exact figures at n = 200 are 11.0 at φ = 0.9 and 5.7 at φ = 0.95, so it is a guide rather than a precise count.",
+      "check": "Positive autocorrelation must REDUCE the effective sample size, so the factor has to be below 1 for φ > 0 — which rules out option A at once."
+    },
+    {
+      "id": "ts-t9-m-09",
+      "format": "single",
+      "topic": "timeseries-t9",
+      "diff": "moderate",
+      "stem": "In the process yₜ = Z + εₜ with Z and εₜ independent standard normals, Z drawn once per realisation, the autocovariance at lag k ≥ 1 is:",
+      "options": [
+        "1/2",
+        "0",
+        "2",
+        "1, the variance of Z"
+      ],
+      "answer": "D",
+      "explanation": "Cov(Z + εₜ, Z + εₜ₋ₖ) = Var(Z) = 1, since the ε terms are independent of each other and of Z. The variance is γ₀ = 1 + 1 = 2, so ρₖ = 1/2 at every lag — never decaying, which is why the process is not ergodic. Option A is the autoCORRELATION, not the autocovariance."
+    },
+    {
+      "id": "ts-t9-m-10",
+      "format": "single",
+      "topic": "timeseries-t9",
+      "diff": "moderate",
+      "stem": "For an AR(1) with φ = −0.8, the variance of the sample mean compared with γ₀/n is:",
+      "options": [
+        "the same",
+        "larger by a factor of 9",
+        "smaller — the effective sample size is 9n",
+        "undefined"
+      ],
+      "answer": "C",
+      "explanation": "The factor is (1 + φ)/(1 − φ) = 0.2/1.8 = 1/9, so the variance is a NINTH of the independence value and n_eff = 9n. Consecutive observations are strongly negatively correlated, so they offset each other and their average is less variable than a single observation. Only positive autocorrelation costs information."
+    },
+    {
+      "id": "ts-t9-m-11",
+      "format": "multi",
+      "topic": "timeseries-t9",
+      "diff": "moderate",
+      "stem": "Consider ergodicity and its consequences.",
+      "options": [
+        "A, B and C only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "A is true — the counterexample establishes it. B is true: a finite MA has γₖ exactly zero beyond lag q. C is true, and it is the key practical distinction. D is false — negative autocorrelation improves precision, giving n_eff = 9n at φ = −0.8.",
+      "statements": [
+        "A stationary process need not be ergodic.",
+        "A finite-order MA process is always ergodic for the mean.",
+        "Non-ergodicity makes the sample mean inconsistent, not merely imprecise.",
+        "Any autocorrelation, of either sign, reduces the precision of the sample mean."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True. yₜ = Z + εₜ with Z fixed per realisation is stationary with γ₀ = 2 and γₖ = 1 at every lag, yet Var(ȳₙ) → Var(Z) = 1 rather than 0."
+        },
+        "B": {
+          "tf": true,
+          "why": "True: γₖ is exactly zero beyond lag q, so the sufficient condition γₖ → 0 holds trivially. The MA(1) long-run variance is σ²(1 − θ)²."
+        },
+        "C": {
+          "tf": true,
+          "why": "True, and it is why no standard-error correction helps: the sample mean converges to μ + Z rather than μ, and scaling a standard error cannot repair a point estimate that converges to the wrong value."
+        },
+        "D": {
+          "tf": false,
+          "why": "False. Negative autocorrelation IMPROVES precision — the factor (1+φ)/(1−φ) is 1/9 at φ = −0.8, so n_eff = 9n. Consecutive observations offset each other, which is more informative than independence."
+        }
+      }
+    },
+    {
+      "id": "ts-t9-m-12",
+      "format": "numeric",
+      "topic": "timeseries-t9",
+      "diff": "moderate",
+      "stem": "For an AR(1) with φ = 0.95, by what factor should the naive standard error sᵧ/√n (where sᵧ estimates the process standard deviation √γ₀) be multiplied?",
+      "options": [
+        "about 39",
+        "about 6.24",
+        "about 20",
+        "about 1.95"
+      ],
+      "answer": "B",
+      "explanation": "The variance correction relative to γ₀/n is (1 + φ)/(1 − φ) = 1.95/0.05 = 39, so the STANDARD ERROR correction is √39 = 6.245. Option A is the variance factor, not the standard-error factor — confusing the two is the natural error here.",
+      "check": "Relative to the iid formula using the process standard deviation, the variance multiplier is (1+φ)/(1−φ) = 39, so the standard-error multiplier is √39 ≈ 6.245. If the naive formula instead used the innovation SD, the multiplier would be 1/(1−φ) = 20."
+    },
+    {
+      "id": "ts-t9-m-13",
+      "format": "single",
+      "topic": "timeseries-t9",
+      "diff": "moderate",
+      "stem": "An analyst has 50,000 readings from a single instrument with a fixed unknown calibration offset. To estimate the underlying quantity more precisely, the best route is:",
+      "options": [
+        "a higher-order ARIMA model",
+        "more readings from the same instrument",
+        "a longer moving average of the existing readings",
+        "readings from more instruments"
+      ],
+      "answer": "D",
+      "explanation": "The readings are μ + Z + εₜ with Z the instrument's offset, so the sample mean converges to μ + Z and the residual error Var(Z) does not shrink with n. Averaging cannot touch a component present identically in every observation. Reducing it requires sampling the ENSEMBLE — more instruments — which is exactly why panel data combines a cross-section with a time dimension."
+    },
+    {
+      "id": "ts-t9-m-14",
+      "format": "single",
+      "topic": "timeseries-t9",
+      "diff": "moderate",
+      "stem": "Can ergodicity be established from a finite sample?",
+      "options": [
+        "Yes, by a Dickey–Fuller test",
+        "Yes, by testing whether the autocorrelations are zero",
+        "No — it is an asymptotic property, and near-unit-root ergodic data look like non-ergodic data",
+        "Yes, provided the sample exceeds 1,000 observations"
+      ],
+      "answer": "C",
+      "explanation": "At φ = 0.99 the autocorrelations look flat over twenty lags although they do eventually reach zero — ρ₅₀₀ = 0.0066 — whereas the non-ergodic example's ρₖ = 1/2 never moves. No finite window distinguishes them. A sample can raise suspicion, but the judgement rests on the mechanism: is there a fixed component attached to this realisation?"
+    },
+    {
+      "id": "ts-t9-m-15",
+      "format": "numeric",
+      "topic": "timeseries-t9",
+      "diff": "moderate",
+      "stem": "For an MA(1) with yₜ = εₜ − θεₜ₋₁ and θ = 0.5, the long-run variance is:",
+      "options": [
+        "1.25σ²",
+        "0.25σ²",
+        "0.75σ²",
+        "2.25σ²"
+      ],
+      "answer": "B",
+      "explanation": "γ₀ = σ²(1 + θ²) = 1.25σ² and γ₁ = −θσ² = −0.5σ², so the long-run variance is γ₀ + 2γ₁ = 1.25σ² − σ² = 0.25σ² = σ²(1 − θ)². The negative γ₁ reduces it well below γ₀, so the mean is estimated more precisely than independence would allow.",
+      "check": "Option A is γ₀ itself, which would be the answer only if γ₁ were zero."
+    },
+    {
+      "id": "ts-t9-m-16",
+      "format": "single",
+      "topic": "timeseries-t9",
+      "diff": "moderate",
+      "stem": "Is a random walk ergodic for the mean?",
+      "options": [
+        "Yes, but only asymptotically",
+        "Yes, since its increments are independent",
+        "No, because its autocorrelations do not decay",
+        "The question does not arise — a random walk is not stationary"
+      ],
+      "answer": "D",
+      "explanation": "Ergodicity is defined for stationary processes. A random walk has Var(yₜ) = tσ², growing without bound, so there is no constant mean for a sample mean to converge to — topic 7.6 shows its sample mean does not settle at all. Option C gives a reason that sounds right but applies to a stationary non-ergodic process, not to a non-stationary one."
+    },
+    {
+      "id": "ts-t9-m-17",
+      "format": "multi",
+      "topic": "timeseries-t9",
+      "diff": "hard",
+      "stem": "Consider the variance-of-the-mean formula in detail.",
+      "options": [
+        "A, B and C only",
+        "A and C only",
+        "B and D only",
+        "A, B, C and D"
+      ],
+      "answer": "A",
+      "explanation": "A is true — n − k ordered pairs out of n at each lag. B is true and is the finite-sample discount. C is true, and it is the algebraic signature of non-ergodicity. D is false: ergodicity for second moments is a separate and stronger requirement.",
+      "statements": [
+        "The (1 − k/n) weight is the proportion of observation pairs available at lag k.",
+        "For a positively autocorrelated process the exact variance is below the asymptotic one.",
+        "In the non-ergodic counterexample the bracket grows like n, cancelling the 1/n.",
+        "Ergodicity for the mean implies ergodicity for second moments."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "True. The double sum has n − k ordered pairs with i − j = k and the same with j − i = k, out of n² terms in all, which collects to the (1 − k/n) factor."
+        },
+        "B": {
+          "tf": true,
+          "why": "True — the weights discount the higher lags that the asymptotic sum counts in full. At φ = 0.9 the gap is 19% at n = 50 (1.623 against 2.000) but only 5% at n = 200 (0.4763 against 0.5000)."
+        },
+        "C": {
+          "tf": true,
+          "why": "True. Here ρₖ = 1/2 for every k ≥ 1, so the bracket is 1 + Σ(k=1..n−1)(1−k/n) = (n+1)/2. It is therefore O(n), cancelling the outer 1/n. With γ₀ = 2 this gives Var(ȳₙ) = (2/n)((n+1)/2) = 1 + 1/n, matching the direct calculation."
+        },
+        "D": {
+          "tf": false,
+          "why": "False — they are separate, and the second needs conditions on fourth moments. For a Gaussian stationary process γₖ → 0 delivers both, which is why the distinction rarely surfaces, but it is a genuine one."
+        }
+      }
+    },
+    {
+      "id": "ts-t9-m-18",
+      "format": "numeric",
+      "topic": "timeseries-t9",
+      "diff": "hard",
+      "stem": "For an AR(1) with φ = 0.9, σ² = 1 and n = 50, the exact variance of the sample mean is 1.623 while the asymptotic formula gives 2.000. The 19% gap arises because:",
+      "options": [
+        "the simulation was too short",
+        "the asymptotic formula is wrong",
+        "the (1 − k/n) weights discount the long lags, which carry much of the long-run variance",
+        "the process is not ergodic at n = 50"
+      ],
+      "answer": "C",
+      "explanation": "When ρₖ = 0.9ᵏ decays slowly, a large share of Σγₖ sits at lags that the exact formula discounts by (1 − k/50) and the asymptotic sum counts in full. The gap shrinks to 5% at n = 200, so the asymptotic approximation needs a reasonably long series when persistence is high. Simulation gave 1.636, confirming the exact value.",
+      "check": "The exact value must be the smaller of the two for a positively autocorrelated process, since every weight is at most 1."
+    },
+    {
+      "id": "ts-t9-m-19",
+      "format": "single",
+      "topic": "timeseries-t9",
+      "diff": "hard",
+      "stem": "A series is persistent and ergodic. A colleague suggests a Newey–West long-run variance estimator; another says the data may have a fixed individual effect. Which concern must be resolved first?",
+      "options": [
+        "the long-run variance, since it is estimable from the data",
+        "the individual effect — a long-run variance estimator returns a plausible number either way",
+        "neither, since both corrections can be applied together",
+        "whichever gives the smaller standard error"
+      ],
+      "answer": "B",
+      "explanation": "The two problems differ in kind. A persistent ergodic series has a consistent sample mean and merely an understated standard error, which the estimator corrects. A non-ergodic series has an INCONSISTENT sample mean, and no scaling of a standard error repairs a point estimate converging to the wrong value — yet the estimator will still return a number, wrong in a way the data do not reveal. So ergodicity has to be settled first, by thinking about where the data came from."
+    },
+    {
+      "id": "ts-t9-m-20",
+      "format": "single",
+      "topic": "timeseries-t9",
+      "diff": "hard",
+      "stem": "Why is ergodicity listed as a syllabus topic in its own right rather than mentioned in passing?",
+      "options": [
+        "because it replaces stationarity",
+        "because it is difficult to compute",
+        "because it is needed only for Gaussian processes",
+        "because it is the assumption on which identification, estimation and forecasting all rest"
+      ],
+      "answer": "D",
+      "explanation": "A sample ACF compared with a theoretical one, Yule–Walker estimates substituted from sample autocorrelations, a periodogram read as a spectral density — each takes a time average from one realisation as standing in for an ensemble expectation, and each is justified by ergodicity rather than by stationarity. Teaching estimation without it would be teaching a method with no justification."
     }
-   }
-  },
-  {
-   "id": "ts-t9-m-12",
-   "format": "numeric",
-   "topic": "timeseries-t9",
-   "diff": "moderate",
-   "stem": "For an AR(1) with φ = 0.95, by what factor should a naive standard error σ̂/√n be multiplied?",
-   "options": [
-    "about 39",
-    "about 6.24",
-    "about 20",
-    "about 1.95"
-   ],
-   "answer": "B",
-   "explanation": "The variance correction relative to γ₀/n is (1 + φ)/(1 − φ) = 1.95/0.05 = 39, so the STANDARD ERROR correction is √39 = 6.245. Option A is the variance factor, not the standard-error factor — confusing the two is the natural error here.",
-   "check": "A standard-error multiplier must be the square root of a variance multiplier, so it has to be the smaller of the two candidates."
-  },
-  {
-   "id": "ts-t9-m-13",
-   "format": "single",
-   "topic": "timeseries-t9",
-   "diff": "moderate",
-   "stem": "An analyst has 50,000 readings from a single instrument with a fixed unknown calibration offset. To estimate the underlying quantity more precisely, the best route is:",
-   "options": [
-    "a higher-order ARIMA model",
-    "more readings from the same instrument",
-    "a longer moving average of the existing readings",
-    "readings from more instruments"
-   ],
-   "answer": "D",
-   "explanation": "The readings are μ + Z + εₜ with Z the instrument's offset, so the sample mean converges to μ + Z and the residual error Var(Z) does not shrink with n. Averaging cannot touch a component present identically in every observation. Reducing it requires sampling the ENSEMBLE — more instruments — which is exactly why panel data combines a cross-section with a time dimension."
-  },
-  {
-   "id": "ts-t9-m-14",
-   "format": "single",
-   "topic": "timeseries-t9",
-   "diff": "moderate",
-   "stem": "Can ergodicity be established from a finite sample?",
-   "options": [
-    "Yes, by a Dickey–Fuller test",
-    "Yes, by testing whether the autocorrelations are zero",
-    "No — it is an asymptotic property, and near-unit-root ergodic data look like non-ergodic data",
-    "Yes, provided the sample exceeds 1,000 observations"
-   ],
-   "answer": "C",
-   "explanation": "At φ = 0.99 the autocorrelations look flat over twenty lags although they do eventually reach zero — ρ₅₀₀ = 0.0066 — whereas the non-ergodic example's ρₖ = 1/2 never moves. No finite window distinguishes them. A sample can raise suspicion, but the judgement rests on the mechanism: is there a fixed component attached to this realisation?"
-  },
-  {
-   "id": "ts-t9-m-15",
-   "format": "numeric",
-   "topic": "timeseries-t9",
-   "diff": "moderate",
-   "stem": "For an MA(1) with yₜ = εₜ − θεₜ₋₁ and θ = 0.5, the long-run variance is:",
-   "options": [
-    "1.25σ²",
-    "0.25σ²",
-    "0.75σ²",
-    "2.25σ²"
-   ],
-   "answer": "B",
-   "explanation": "γ₀ = σ²(1 + θ²) = 1.25σ² and γ₁ = −θσ² = −0.5σ², so the long-run variance is γ₀ + 2γ₁ = 1.25σ² − σ² = 0.25σ² = σ²(1 − θ)². The negative γ₁ reduces it well below γ₀, so the mean is estimated more precisely than independence would allow.",
-   "check": "Option A is γ₀ itself, which would be the answer only if γ₁ were zero."
-  },
-  {
-   "id": "ts-t9-m-16",
-   "format": "single",
-   "topic": "timeseries-t9",
-   "diff": "moderate",
-   "stem": "Is a random walk ergodic for the mean?",
-   "options": [
-    "Yes, but only asymptotically",
-    "Yes, since its increments are independent",
-    "No, because its autocorrelations do not decay",
-    "The question does not arise — a random walk is not stationary"
-   ],
-   "answer": "D",
-   "explanation": "Ergodicity is defined for stationary processes. A random walk has Var(yₜ) = tσ², growing without bound, so there is no constant mean for a sample mean to converge to — topic 7.6 shows its sample mean does not settle at all. Option C gives a reason that sounds right but applies to a stationary non-ergodic process, not to a non-stationary one."
-  },
-  {
-   "id": "ts-t9-m-17",
-   "format": "multi",
-   "topic": "timeseries-t9",
-   "diff": "hard",
-   "stem": "Consider the variance-of-the-mean formula in detail.",
-   "options": [
-    "A, B and C only",
-    "A and C only",
-    "B and D only",
-    "A, B, C and D"
-   ],
-   "answer": "A",
-   "explanation": "A is true — n − k ordered pairs out of n at each lag. B is true and is the finite-sample discount. C is true, and it is the algebraic signature of non-ergodicity. D is false: ergodicity for second moments is a separate and stronger requirement.",
-   "statements": [
-    "The (1 − k/n) weight is the proportion of observation pairs available at lag k.",
-    "For a positively autocorrelated process the exact variance is below the asymptotic one.",
-    "In the non-ergodic counterexample the bracket grows like n, cancelling the 1/n.",
-    "Ergodicity for the mean implies ergodicity for second moments."
-   ],
-   "verdicts": {
-    "A": {
-     "tf": true,
-     "why": "True. The double sum has n − k ordered pairs with i − j = k and the same with j − i = k, out of n² terms in all, which collects to the (1 − k/n) factor."
-    },
-    "B": {
-     "tf": true,
-     "why": "True — the weights discount the higher lags that the asymptotic sum counts in full. At φ = 0.9 the gap is 19% at n = 50 (1.623 against 2.000) but only 5% at n = 200 (0.4763 against 0.5000)."
-    },
-    "C": {
-     "tf": true,
-     "why": "True. With ρₖ = 1/2 at every lag the bracket is approximately n − 1, so Var(ȳₙ) ≈ (γ₀/n)(n − 1) tends to a positive constant — exactly 1 + 1/n with γ₀ = 2, matching the direct calculation."
-    },
-    "D": {
-     "tf": false,
-     "why": "False — they are separate, and the second needs conditions on fourth moments. For a Gaussian stationary process γₖ → 0 delivers both, which is why the distinction rarely surfaces, but it is a genuine one."
-    }
-   }
-  },
-  {
-   "id": "ts-t9-m-18",
-   "format": "numeric",
-   "topic": "timeseries-t9",
-   "diff": "hard",
-   "stem": "For an AR(1) with φ = 0.9, σ² = 1 and n = 50, the exact variance of the sample mean is 1.623 while the asymptotic formula gives 2.000. The 19% gap arises because:",
-   "options": [
-    "the simulation was too short",
-    "the asymptotic formula is wrong",
-    "the (1 − k/n) weights discount the long lags, which carry much of the long-run variance",
-    "the process is not ergodic at n = 50"
-   ],
-   "answer": "C",
-   "explanation": "When ρₖ = 0.9ᵏ decays slowly, a large share of Σγₖ sits at lags that the exact formula discounts by (1 − k/50) and the asymptotic sum counts in full. The gap shrinks to 5% at n = 200, so the asymptotic approximation needs a reasonably long series when persistence is high. Simulation gave 1.636, confirming the exact value.",
-   "check": "The exact value must be the smaller of the two for a positively autocorrelated process, since every weight is at most 1."
-  },
-  {
-   "id": "ts-t9-m-19",
-   "format": "single",
-   "topic": "timeseries-t9",
-   "diff": "hard",
-   "stem": "A series is persistent and ergodic. A colleague suggests a Newey–West long-run variance estimator; another says the data may have a fixed individual effect. Which concern must be resolved first?",
-   "options": [
-    "the long-run variance, since it is estimable from the data",
-    "the individual effect — a long-run variance estimator returns a plausible number either way",
-    "neither, since both corrections can be applied together",
-    "whichever gives the smaller standard error"
-   ],
-   "answer": "B",
-   "explanation": "The two problems differ in kind. A persistent ergodic series has a consistent sample mean and merely an understated standard error, which the estimator corrects. A non-ergodic series has an INCONSISTENT sample mean, and no scaling of a standard error repairs a point estimate converging to the wrong value — yet the estimator will still return a number, wrong in a way the data do not reveal. So ergodicity has to be settled first, by thinking about where the data came from."
-  },
-  {
-   "id": "ts-t9-m-20",
-   "format": "single",
-   "topic": "timeseries-t9",
-   "diff": "hard",
-   "stem": "Why is ergodicity listed as a syllabus topic in its own right rather than mentioned in passing?",
-   "options": [
-    "because it replaces stationarity",
-    "because it is difficult to compute",
-    "because it is needed only for Gaussian processes",
-    "because it is the assumption on which identification, estimation and forecasting all rest"
-   ],
-   "answer": "D",
-   "explanation": "A sample ACF compared with a theoretical one, Yule–Walker estimates substituted from sample autocorrelations, a periodogram read as a spectral density — each takes a time average from one realisation as standing in for an ensemble expectation, and each is justified by ergodicity rather than by stationarity. Teaching estimation without it would be teaching a method with no justification."
-  }
- ]
+  ]
 }

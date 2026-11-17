@@ -1,968 +1,968 @@
 {
- "id": "inferencet16",
- "topicId": "inference-t16",
- "moduleId": "inference",
- "title": "Contingency Tables: Independence and Homogeneity",
- "breadcrumb": "Statistical Inference → Testing of Hypotheses → Contingency tables",
- "engine": "C",
- "engineName": "Testing — whether two classifications of the same data are related",
- "version": "1.0",
- "status": "approved",
- "estMin": 98,
- "objectives": [
-  "Compute expected counts for a contingency table from its margins and check them against the totals.",
-  "Compute the chi-square statistic for a table and count the degrees of freedom as (r − 1)(c − 1).",
-  "Derive that rule by counting free cells and by subtracting estimated margins from rc − 1.",
-  "Distinguish tests of independence, homogeneity and goodness of fit by the sampling design.",
-  "Handle the 2 by 2 case: Yates' correction, the equivalence with the two-proportion z test, and when Fisher's exact test is needed.",
-  "Report a measure of association, and say why the statistic alone cannot measure strength."
- ],
- "prereq": [
-  {
-   "id": "p1",
-   "name": "Chi-square goodness of fit",
-   "why": "The statistic, the upper-tail rule and the minimum-expected-count condition all carry over unchanged from topic 4.14. Only the expected counts and the degrees of freedom are new."
-  },
-  {
-   "id": "p2",
-   "name": "Independence of events",
-   "why": "The null hypothesis is that the cell probabilities factorise. If P(A and B) = P(A)P(B) is not immediate, that comes first."
-  },
-  {
-   "id": "p3",
-   "name": "The likelihood ratio test and Wilks' theorem",
-   "why": "The optional section derives (r − 1)(c − 1) from dim(Θ) − dim(Θ₀), which is topic 4.10's rule — and it is what unifies this topic's formula with 4.14's."
-  },
-  {
-   "id": "p4",
-   "name": "Choosing the right test",
-   "why": "Which of the three designs a question describes is a reading skill from topic 4.15, and the non-rejection discipline there applies directly to a table that fails to reject."
-  }
- ],
- "traps": [
-  "df = (r − 1)(c − 1), not rc and not rc − 1.",
-  "A 3 by 4 and a 4 by 3 table both give 6 — only the product matters.",
-  "Expected counts come from the MARGINS: Eᵢⱼ = RᵢCⱼ/n.",
-  "Independence and homogeneity differ in design and conclusion, not in arithmetic.",
-  "Yates' correction is for 2 by 2 tables only, equivalently for df = 1.",
-  "A significant table shows association, never causation.",
-  "Doubling every count doubles χ² but leaves the association unchanged.",
-  "A 2 by 2 table cannot be pooled, so small expected counts there mean Fisher's exact test."
- ],
- "revision": {
-  "sheet": [
-   "Expected count: Eᵢⱼ = (row i total × column j total)/grand total.",
-   "Statistic: χ² = ΣΣ(Oᵢⱼ − Eᵢⱼ)²/Eᵢⱼ, upper tail only, approximately chi-square.",
-   "Degrees of freedom: (r − 1)(c − 1) — the cells still free once the margins are fixed.",
-   "Two derivations: free cells after fixing margins; or (rc − 1) − (r − 1) − (c − 1), which is topic 4.14's k − 1 − m with m the estimated margins.",
-   "Shapes and df: 2 by 2 → 1; 2 by 3 → 2; 2 by 5 → 4; 3 by 3 → 4; 3 by 4 and 4 by 3 → 6; 4 by 5 → 12.",
-   "Critical values: 3.841 (1 df), 5.991 (2), 9.488 (4), 12.592 (6), 21.026 (12).",
-   "Independence: one sample, two classifications, neither margin fixed. Homogeneity: several samples of fixed size, one classification. Same arithmetic, different conclusion.",
-   "Goodness of fit (topic 4.14): one sample, one classification, against a claimed distribution; df = k − 1 − m.",
-   "Equality of c proportions is a 2 by c table, df = c − 1. This is what June 2026 Q33 matched to the chi-square test.",
-   "Conditions: every expected count at least 5, independent observations, each item in exactly one cell.",
-   "2 by 2 only — Yates: χ² = Σ(|Oᵢⱼ − Eᵢⱼ| − 0.5)²/Eᵢⱼ, always smaller, so conservative. Equivalently applies when df = 1.",
-   "2 by 2 only — the test equals the two-sided two-proportion z test squared: z² = χ², and 1.96² = 3.841.",
-   "2 by 2 only — Fisher's exact test when expected counts are too small; a 2 by 2 table cannot be pooled.",
-   "Worked: outcome by three centres, improved 45/33/22 of 60 each. Expected 33.333 and 26.667; χ² = 17.865 on 2 df against 5.991, so reject. Centres 1 and 3 carry almost all of it.",
-   "Worked: 2 by 2, 12 and 22 passes out of 30 each. Expected 17 and 13; χ² = 6.787, Yates 5.498, both against 3.841, so reject either way. z = −2.605 and z² = 6.787.",
-   "Worked: 3 by 4 brand by city, 100 per city. Expected 25, 25, 26.667, 23.333; χ² = 5.339 on 6 df against 12.592, so no evidence against homogeneity.",
-   "Strength: φ = √(χ²/n) for 2 by 2; C = √(χ²/(χ² + n)); Cramér's V = √(χ²/(n min(r−1, c−1))). All unchanged by doubling n; prefer V in general, since C cannot reach 1.",
-   "Doubling every count doubles χ² and leaves φ at 0.336 in the worked 2 by 2 — strength and significance are different questions."
+  "id": "inferencet16",
+  "topicId": "inference-t16",
+  "moduleId": "inference",
+  "title": "Contingency Tables: Independence and Homogeneity",
+  "breadcrumb": "Statistical Inference → Testing of Hypotheses → Contingency tables",
+  "engine": "C",
+  "engineName": "Testing — whether two classifications of the same data are related",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 98,
+  "objectives": [
+    "Compute expected counts for a contingency table from its margins and check them against the totals.",
+    "Compute the chi-square statistic for a table and count the degrees of freedom as (r − 1)(c − 1).",
+    "Derive that rule by counting free cells and by subtracting estimated margins from rc − 1.",
+    "Distinguish tests of independence, homogeneity and goodness of fit by the sampling design.",
+    "Handle the 2 by 2 case: Yates' correction, the equivalence with the two-proportion z test, and when Fisher's exact test is needed.",
+    "Report a measure of association, and say why the statistic alone cannot measure strength."
   ],
-  "cards": [
-   [
-    "Expected count in a cell",
-    "Row total times column total, divided by the grand total"
-   ],
-   [
-    "Degrees of freedom",
-    "(r − 1)(c − 1) — the cells free once both margins are fixed"
-   ],
-   [
-    "3 by 4 table",
-    "6 degrees of freedom, and so does 4 by 3 — only the product matters"
-   ],
-   [
-    "Why not rc − 1",
-    "Because the row and column probabilities were estimated from the margins"
-   ],
-   [
-    "Independence design",
-    "One sample classified twice; neither margin fixed in advance"
-   ],
-   [
-    "Homogeneity design",
-    "Several samples of fixed size, each classified once; one margin fixed"
-   ],
-   [
-    "Several proportions",
-    "A 2 by c table, so df = c − 1 — a chi-square test, not a z or t test"
-   ],
-   [
-    "Yates' correction",
-    "2 by 2 only, equivalently df = 1; subtract 0.5 from each |O − E|; always conservative"
-   ],
-   [
-    "2 by 2 and the z test",
-    "The same test: z² equals the uncorrected χ², and 1.96² = 3.841"
-   ],
-   [
-    "Fisher's exact test",
-    "For a 2 by 2 table with expected counts too small to approximate; a 2 by 2 cannot be pooled"
-   ],
-   [
-    "Measuring strength",
-    "φ = √(χ²/n) for 2 by 2; Cramér's V = √(χ²/(n min(r−1, c−1))) in general"
-   ],
-   [
-    "Why a measure is needed",
-    "χ² grows with n — doubling every count doubles it while the association is unchanged"
-   ]
-  ],
-  "tricks": [
-   "Check that your expected counts reproduce the observed row and column totals. They must, and it catches arithmetic slips before the statistic forms.",
-   "In a 2 by 2 table all four absolute differences are equal — compute one and you have all four.",
-   "Read the stem for which margin was fixed by the investigator. That decides independence against homogeneity without changing any arithmetic.",
-   "For equality of proportions across c groups, go straight to df = c − 1 rather than drawing the table.",
-   "After rejecting, look at the largest terms; the cells carry the finding and questions sometimes ask which category drove it."
-  ],
-  "shortcuts": [
-   "df = 1 and 'a 2 by 2 table' are the same condition, since (r − 1)(c − 1) = 1 forces r = c = 2.",
-   "A table and its transpose always have the same degrees of freedom and the same statistic.",
-   "If every row total is equal, the expected counts are the same in every row — compute one row and copy it."
-  ],
-  "remember": [
-   "(r − 1)(c − 1). Not cells, not cells minus one.",
-   "Expected counts come from the margins.",
-   "Association, never causation. Report a strength measure too."
-  ]
- },
- "howto": "Read this straight after topic 4.14, because it reuses that lesson's statistic, direction and adequacy rule and changes only two things: where the expected counts come from, and the degrees of freedom. Sections 3 and 4 are the spine — the (r − 1)(c − 1) rule derived two ways, then a table worked end to end. Section 7 separates the three designs, which is the conceptual question this topic asks, and section 10 collects everything that is special about the 2 by 2 case, which is where the exam's special-case questions live. Section 11 is short and worth not skipping: a significant table needs a measure of strength beside it. Attempt the question at the end of each section before opening the answer. The optional section derives the degrees of freedom from Wilks' theorem, which unifies this rule with topic 4.14's and is the shortest route to never misremembering either.",
- "refs": [
-  {
-   "title": "Chi-Square Tests for Independence and Homogeneity",
-   "where": "Lesson 17, sections on two-way tables",
-   "site": "Penn State STAT 415",
-   "url": "https://online.stat.psu.edu/stat415/lesson/17",
-   "type": "Course notes",
-   "free": true,
-   "checked": "2026-11-01",
-   "why": "Both designs treated side by side with the arithmetic shown to be identical, which is the content of section 7."
-  },
-  {
-   "title": "Mathematical Statistics 18.655 — lecture notes",
-   "where": "Sessions on testing and asymptotics",
-   "site": "MIT OpenCourseWare",
-   "url": "https://ocw.mit.edu/courses/18-655-mathematical-statistics-spring-2016/pages/lecture-notes/",
-   "type": "Lecture notes",
-   "free": true,
-   "checked": "2026-11-01",
-   "why": "The dim(Θ) − dim(Θ₀) counting that the optional section uses to derive (r − 1)(c − 1)."
-  },
-  {
-   "title": "Statistical Inference",
-   "where": "Weeks on testing of hypotheses",
-   "site": "NPTEL / SWAYAM — IIT Delhi, Prof. Niladri Chatterjee",
-   "url": "https://archive.nptel.ac.in/noc/courses/noc21/SEM1/noc21-ma23",
-   "type": "Video course",
-   "free": true,
-   "checked": "2026-11-01",
-   "why": "Indian syllabus conventions for contingency tables, Yates' correction and the association measures, which is the phrasing NET questions use."
-  },
-  {
-   "title": "Statistical Inference, 2nd edition",
-   "where": "Section 10.3.1 and its exercises",
-   "site": "Casella and Berger",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-11-01",
-   "why": "The likelihood ratio statistic for a two-way table and its relationship to Pearson's, which the optional section sketches."
-  },
-  {
-   "title": "An Introduction to Probability and Statistics, 3rd edition",
-   "where": "Chapter 10",
-   "site": "Rohatgi and Saleh",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-11-01",
-   "why": "Worked contingency-table tests including the 2 by 2 special cases and Fisher's exact test."
-  }
- ],
- "mastery": {
-  "minQ": 10,
-  "pass": 80,
-  "draw": 10,
-  "fmtMin": {
-   "numeric": 70,
-   "multi": 70
-  },
-  "diffMix": {
-   "easy": 3,
-   "moderate": 5,
-   "hard": 2
-  },
-  "noHints": true,
-  "retestDays": 7,
-  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
- },
- "provenance": "Authored November 2026 for this platform against the UGC NET Statistics syllabus. The PYQ evidence for this topic is the thinnest of the six lessons built in this run, and is stated plainly: the June 2026 paper has no question whose whole subject is a contingency table. Q33, a match-the-test item, includes 'testing equality of several population proportions → chi-square test' and was answered correctly. Two practice variants are directly on this topic — the degrees of freedom of a 3 by 4 table tested for homogeneity, tagged to Q33, and the degrees of freedom of a 4 by 3 table, tagged to Q29 — and both are taught in named sections and appear in the pool. The catalog gives the topic 1.8 marks, about 0.92 expected questions per paper. It was built to complete the chi-square machinery of topic 4.14 and because (r − 1)(c − 1) is the one degrees-of-freedom form in the module that does not follow the k − 1 − m pattern. Every numerical value was computed rather than recalled: the 2 by 3 centre table giving expected counts 33.333 and 26.667, terms 4.0833, 0.0033, 3.8533, 5.1042, 0.0042 and 4.8167, total 17.865 on 2 degrees of freedom; the 2 by 2 table giving expected counts 17 and 13, uncorrected 6.7873, Yates-corrected 5.4977, two-proportion z of −2.6053 whose square is 6.7873; the 3 by 4 brand table giving expected counts 25, 25, 26.667 and 23.333 and a statistic of 5.3393 on 6 degrees of freedom; and the association measures φ = 0.3363, C = 0.3188 and V = 0.3150, with φ unchanged at 0.3363 when every count is doubled and the statistic rises to 13.5746. Previous-year questions themselves are stored separately and carry their exam cycle.",
- "scenes": [
-  {
-   "kind": "foundation",
-   "id": "s0",
-   "mins": 6,
-   "title": "Before the lesson — four things it will assume",
-   "objective": "Recover the expected-count rule for a table and the three facts from topic 4.14 that carry straight over.",
-   "ask": {
-    "q": "Topic 4.14 computed expected counts from a claimed distribution. Here nothing is claimed. Where do the expected counts come from instead?",
-    "nudge": "You are not given any probabilities. What are you given, and what would independence let you build from it?"
-   },
-   "body": [
-    "A contingency table cross-classifies the same people or items by two things at once — treatment and outcome, city and brand, qualification and employment. The question is whether the two classifications are related.",
-    "The statistic is the same one as topic 4.14, Σ(O − E)²/E, and the direction and the adequacy condition are the same too. Two things are new: where the expected counts come from, and the degrees of freedom, which take the form (r − 1)(c − 1) rather than k − 1 − m.",
-    "Four checks. One on the new expected-count rule, one on independence itself, and two carried over from the goodness-of-fit topic."
-   ],
-   "items": [
+  "prereq": [
     {
-     "ask": "A table has row totals and column totals. Under the hypothesis that the two classifications are unrelated, what count is expected in the cell in row i and column j?",
-     "recall": "Eᵢⱼ = (row i total × column j total) / grand total.",
-     "refresh": [
-      "If the classifications are independent, the proportion of row i that falls in column j should be the same as the proportion of the whole table that falls in column j — namely (column j total)/n.",
-      "So the expected count is (row i total) × (column j total)/n, which is the formula above. Nothing was assumed about the actual probabilities; they were estimated from the margins.",
-      "That last point is the whole reason the degrees of freedom are different here. The margins came from the data, and estimated quantities cost degrees of freedom."
-     ]
+      "id": "p1",
+      "name": "Chi-square goodness of fit",
+      "why": "The statistic, the upper-tail rule and the minimum-expected-count condition all carry over unchanged from topic 4.14. Only the expected counts and the degrees of freedom are new."
     },
     {
-     "ask": "What does it mean for two classifications to be independent?",
-     "recall": "That the probability of any combination factorises: P(row i and column j) = P(row i) × P(column j), for every cell.",
-     "refresh": [
-      "Equivalently, the conditional distribution across the columns is the same whichever row you condition on. Knowing the row tells you nothing about the column.",
-      "That second phrasing is the one to carry into this topic, because it is what the expected counts encode: every row gets the same column profile.",
-      "And it is why a rejection is interpreted by looking at the rows: the table is telling you that some row's profile differs from the others."
-     ]
+      "id": "p2",
+      "name": "Independence of events",
+      "why": "The null hypothesis is that the cell probabilities factorise. If P(A and B) = P(A)P(B) is not immediate, that comes first."
     },
     {
-     "ask": "For a chi-square test, is the adequacy condition about observed or expected counts, and what is the usual threshold?",
-     "recall": "Expected counts, at least 5 in every cell.",
-     "refresh": [
-      "Carried over unchanged from topic 4.14. An observed zero is unremarkable if its expected count is adequate.",
-      "In a table the remedy is to merge adjacent rows or columns that make sense together, rather than to drop a cell — dropping a cell changes the table.",
-      "For the smallest table, 2 by 2, the condition bites hardest, which is why that case has two special treatments of its own in section 10."
-     ]
+      "id": "p3",
+      "name": "The likelihood ratio test and Wilks' theorem",
+      "why": "The optional section derives (r − 1)(c − 1) from dim(Θ) − dim(Θ₀), which is topic 4.10's rule — and it is what unifies this topic's formula with 4.14's."
     },
     {
-     "ask": "In which tail of the chi-square distribution does this test reject?",
-     "recall": "The upper tail only.",
-     "refresh": [
-      "The statistic measures total discrepancy from what independence predicts, so it is large when the classifications are related and near zero when they are not.",
-      "Close agreement with independence is evidence for independence, so there is no lower critical value.",
-      "The chi-square upper 5% points worth having: 3.841 for 1 degree of freedom, 5.991 for 2, 9.488 for 4, 12.592 for 6."
-     ]
+      "id": "p4",
+      "name": "Choosing the right test",
+      "why": "Which of the three designs a question describes is a reading skill from topic 4.15, and the non-rejection discipline there applies directly to a table that fails to reject."
     }
-   ]
-  },
-  {
-   "kind": "intuition",
-   "id": "s1",
-   "mins": 7,
-   "title": "Two questions that look different and have the same answer",
-   "objective": "See that independence and homogeneity are different studies producing identical arithmetic.",
-   "body": [
-    "There are two quite different reasons to end up staring at a table of counts, and they correspond to two different hypotheses. The surprising part is that the test is the same.",
-    "In the first, you take one sample and classify each member twice — you survey 300 people and record both their city and their preferred brand. Neither margin was fixed in advance; both came out of the sampling. The question is whether city and brand are independent.",
-    "In the second, you take several separate samples and classify each member once — you survey exactly 100 people in each of three cities and record their brand. The row totals were fixed by you. The question is whether the three cities have the same brand profile, which is called homogeneity.",
-    "Different designs, different hypotheses, and yet the expected counts, the statistic and the degrees of freedom are identical. Only the sentence you write at the end changes. Knowing that saves you learning the same arithmetic twice, and knowing WHY they differ is what a question on the distinction is testing."
-   ],
-   "scenario": {
-    "teaser": "A hospital network has outcome data from three centres and two ways to read it.",
-    "title": "Three centres, one table",
-    "body": [
-     "A hospital network runs the same procedure at three centres and records whether each patient improved. The audit team builds a table: three columns for the centres, two rows for improved and not improved.",
-     "How that table should be described depends on how the data arrived. If the team pulled 180 consecutive cases from the network's combined records and then noted which centre each came from, nobody fixed the column totals — they came out as they came out. The hypothesis is that centre and outcome are independent.",
-     "If instead the team deliberately sampled 60 cases from each centre, the column totals were fixed at 60 by design. The hypothesis is now that the three centres have the same improvement rate — homogeneity across three populations rather than independence of two attributes.",
-     "The arithmetic will not notice the difference. Same expected counts, same statistic, same two degrees of freedom. What changes is what a rejection licenses you to say: in the first design, that outcome is associated with centre; in the second, that the centres differ.",
-     "And in neither design does it license a claim about why. A centre with worse outcomes may have sicker patients, and the table cannot see that. The test establishes association; attributing it to the centre's practice is a separate argument requiring separate evidence.",
-     "There is a third design worth naming, because it is where topic 4.14 sits: a single sample classified ONE way, compared against a claimed distribution. One classification is goodness of fit; two classifications is this topic. The family is the same and the degrees-of-freedom rules differ."
+  ],
+  "traps": [
+    "df = (r − 1)(c − 1), not rc and not rc − 1.",
+    "A 3 by 4 and a 4 by 3 table both give 6 — only the product matters.",
+    "Expected counts come from the MARGINS: Eᵢⱼ = RᵢCⱼ/n.",
+    "Independence and homogeneity differ in design and conclusion, not in arithmetic.",
+    "Yates' correction is for 2 by 2 tables only, equivalently for df = 1.",
+    "A significant table shows association, never causation.",
+    "Doubling every count doubles χ² but leaves the association unchanged.",
+    "A 2 by 2 table cannot be pooled, so small expected counts there mean Fisher's exact test."
+  ],
+  "revision": {
+    "sheet": [
+      "Expected count: Eᵢⱼ = (row i total × column j total)/grand total.",
+      "Statistic: χ² = ΣΣ(Oᵢⱼ − Eᵢⱼ)²/Eᵢⱼ, upper tail only, approximately chi-square.",
+      "Degrees of freedom: (r − 1)(c − 1) — the cells still free once the margins are fixed.",
+      "Two derivations: free cells after fixing margins; or (rc − 1) − (r − 1) − (c − 1), which is topic 4.14's k − 1 − m with m the estimated margins.",
+      "Shapes and df: 2 by 2 → 1; 2 by 3 → 2; 2 by 5 → 4; 3 by 3 → 4; 3 by 4 and 4 by 3 → 6; 4 by 5 → 12.",
+      "Critical values: 3.841 (1 df), 5.991 (2), 9.488 (4), 12.592 (6), 21.026 (12).",
+      "Independence: one sample, two classifications, neither margin fixed. Homogeneity: several samples of fixed size, one classification. Same arithmetic, different conclusion.",
+      "Goodness of fit (topic 4.14): one sample, one classification, against a claimed distribution; df = k − 1 − m.",
+      "Equality of c proportions is a 2 by c table, df = c − 1. This is what June 2026 Q33 matched to the chi-square test.",
+      "Conditions: every expected count at least 5, independent observations, each item in exactly one cell.",
+      "2 by 2 only — Yates: χ² = Σ(|Oᵢⱼ − Eᵢⱼ| − 0.5)²/Eᵢⱼ. Generally conservative; some implementations cap adjusted deviations at zero. Equivalently applies when df = 1.",
+      "2 by 2 only — the test equals the two-sided two-proportion z test squared: z² = χ², and 1.96² = 3.841.",
+      "2 by 2 only — Fisher's exact test when expected counts are too small; a 2 by 2 table cannot be pooled.",
+      "Worked: outcome by three centres, improved 45/33/22 of 60 each. Expected 33.333 and 26.667; χ² = 17.865 on 2 df against 5.991, so reject. Centres 1 and 3 carry almost all of it.",
+      "Worked: 2 by 2, 12 and 22 passes out of 30 each. Expected 17 and 13; χ² = 6.787, Yates 5.498, both against 3.841, so reject either way. z = −2.605 and z² = 6.787.",
+      "Worked: 3 by 4 brand by city, 100 per city. Expected 25, 25, 26.667, 23.333; χ² = 5.339 on 6 df against 12.592, so no evidence against homogeneity.",
+      "Strength: φ = √(χ²/n) for 2 by 2; C = √(χ²/(χ² + n)); Cramér's V = √(χ²/(n min(r−1, c−1))). All unchanged by doubling n; prefer V in general, since C cannot reach 1.",
+      "Doubling every count doubles χ² and leaves φ at 0.336 in the worked 2 by 2 — strength and significance are different questions."
     ],
-    "q": "If the audit team sampled 60 cases from each centre, which margin was fixed, and does that change the computation?",
-    "answer": "The column totals were fixed at 60 each by the design. It does not change the computation at all — the expected counts are still (row total × column total)/n, the statistic is still Σ(O − E)²/E, and the degrees of freedom are still (r − 1)(c − 1) = 2. What changes is the hypothesis being tested and therefore the wording of the conclusion: homogeneity of three populations rather than independence of two attributes."
-   },
-   "ask": {
-    "q": "In the homogeneity design the row totals are still free. Why does the test not care that one margin was fixed and the other was not?",
-    "nudge": "Look at what the expected counts are built from. Does the formula distinguish a total you chose from a total that happened?"
-   }
-  },
-  {
-   "kind": "explore",
-   "id": "s2",
-   "mins": 7,
-   "title": "Where a table's verdict gets decided",
-   "objective": "See how the critical value moves with the SHAPE of the table, which is what the degrees of freedom encode.",
-   "viz": {
-    "type": "chisq-tail",
-    "k": 6,
-    "alpha": 0.05,
-    "obs": 5.339
-   },
-   "body": [
-    "The curve has 6 degrees of freedom, which is what a 3 by 4 or a 4 by 3 table gives — the case both practice variants on this topic ask about. The marker sits at 5.339, the statistic from the 3 by 4 homogeneity test worked in section 8.",
-    "Read the critical value: 12.592. The statistic is nowhere near it, so that table shows no evidence against homogeneity.",
-    "Now change the degrees of freedom to see what the table's shape does. A 2 by 2 table gives 1 degree of freedom and a critical value of 3.841 — the same statistic of 5.339 would be comfortably significant there. A 2 by 3 table gives 2 and a critical value of 5.991, where 5.339 is just short.",
-    "So the same amount of total discrepancy means quite different things depending on how many cells were free to vary. A bigger table has more room to accumulate discrepancy by chance, and the critical value rises to match.",
-    "Work out the degrees of freedom for a few shapes and check them against the chart: 2 by 2 gives 1, 2 by 5 gives 4, 3 by 3 gives 4, 3 by 4 gives 6, 4 by 5 gives 12. Note that 2 by 5 and 3 by 3 both give 4, so the critical value cannot tell you the shape — only the product (r − 1)(c − 1) matters.",
-    "Finally set the degrees of freedom to 1 and compare the critical value with 1.96². That is 3.8416, and the coincidence is not one: section 10 shows that for a 2 by 2 table this test is exactly the square of the two-proportion z test."
-   ],
-   "ask": {
-    "q": "A 2 by 5 table and a 3 by 3 table both give 4 degrees of freedom. Do they have the same number of cells?",
-    "nudge": "Count them: 10 against 9. So what exactly is the degrees of freedom counting, if not cells?"
-   }
-  },
-  {
-   "kind": "theory",
-   "id": "s3",
-   "mins": 9,
-   "title": "The expected counts, the statistic, and where (r − 1)(c − 1) comes from",
-   "objective": "Build the test precisely, and understand the degrees-of-freedom rule rather than memorising it.",
-   "blocks": [
-    {
-     "t": "def",
-     "h": "The table",
-     "body": "An r by c contingency table has observed counts Oᵢⱼ for i = 1..r and j = 1..c, with row totals Rᵢ, column totals Cⱼ and grand total n. The null hypothesis is that the row classification and the column classification are independent — or, in the other design, that the r populations have the same distribution across the c categories."
-    },
-    {
-     "t": "formula",
-     "h": "Expected counts under the null",
-     "body": "Eᵢⱼ = Rᵢ Cⱼ / n\nUnder independence the proportion in column j should be Cⱼ/n in every row, so row i should contribute Rᵢ × Cⱼ/n to that column. The margins are taken from the data, which is the key fact for the degrees of freedom."
-    },
-    {
-     "t": "formula",
-     "h": "The statistic and its distribution",
-     "body": "χ² = Σᵢ Σⱼ (Oᵢⱼ − Eᵢⱼ)² / Eᵢⱼ,  approximately chi-square with (r − 1)(c − 1) degrees of freedom under the null.\nReject for large values — upper tail only, exactly as in topic 4.14."
-    },
-    {
-     "t": "step",
-     "h": "Where the degrees of freedom come from, counted two ways",
-     "body": "By free cells: once the row and column totals are fixed, how many cell counts can you still choose freely? Fill in the first r − 1 rows and the first c − 1 columns — that is (r − 1)(c − 1) cells — and every remaining cell is then forced by the totals. So (r − 1)(c − 1) cells were free.\nBy parameter counting: there are rc cells, so rc − 1 free probabilities. Independence describes them with (r − 1) row probabilities and (c − 1) column probabilities. The difference is (rc − 1) − (r − 1) − (c − 1) = rc − r − c + 1 = (r − 1)(c − 1). The second route is the k − 1 − m rule of topic 4.14 with m = (r − 1) + (c − 1) estimated margins, which is why the two rules are one rule."
-    },
-    {
-     "t": "step",
-     "h": "The common errors",
-     "body": "Answering rc, the number of cells, or rc − 1, which would be the goodness-of-fit rule for a fully specified distribution over rc categories. Neither accounts for the margins having been estimated from the data. A 4 by 3 table gives (4 − 1)(3 − 1) = 6, not 12 and not 11 — and both of those appear as options."
-    },
-    {
-     "t": "def",
-     "h": "The conditions, carried over",
-     "body": "Every expected count at least 5, independent observations, and each item counted in exactly one cell. The last condition is easy to violate in practice: if people can choose more than one brand, the counts no longer sum to the number of people and the test does not apply."
-    }
-   ],
-   "table": {
-    "caption": "Degrees of freedom by table shape. Note that shape is not recoverable from the degrees of freedom — 2 by 5 and 3 by 3 both give 4.",
-    "head": [
-     "Table",
-     "Cells",
-     "df = (r − 1)(c − 1)",
-     "5% critical value"
+    "cards": [
+      [
+        "Expected count in a cell",
+        "Row total times column total, divided by the grand total"
+      ],
+      [
+        "Degrees of freedom",
+        "(r − 1)(c − 1) — the cells free once both margins are fixed"
+      ],
+      [
+        "3 by 4 table",
+        "6 degrees of freedom, and so does 4 by 3 — only the product matters"
+      ],
+      [
+        "Why not rc − 1",
+        "Because the row and column probabilities were estimated from the margins"
+      ],
+      [
+        "Independence design",
+        "One sample classified twice; neither margin fixed in advance"
+      ],
+      [
+        "Homogeneity design",
+        "Several samples of fixed size, each classified once; one margin fixed"
+      ],
+      [
+        "Several proportions",
+        "A 2 by c table, so df = c − 1 — a chi-square test, not a z or t test"
+      ],
+      [
+        "Yates' correction",
+        "2 by 2 only, equivalently df = 1; subtract 0.5 from each |O − E|; always conservative"
+      ],
+      [
+        "2 by 2 and the z test",
+        "The same test: z² equals the uncorrected χ², and 1.96² = 3.841"
+      ],
+      [
+        "Fisher's exact test",
+        "For a 2 by 2 table with expected counts too small to approximate; a 2 by 2 cannot be pooled"
+      ],
+      [
+        "Measuring strength",
+        "φ = √(χ²/n) for 2 by 2; Cramér's V = √(χ²/(n min(r−1, c−1))) in general"
+      ],
+      [
+        "Why a measure is needed",
+        "χ² grows with n — doubling every count doubles it while the association is unchanged"
+      ]
     ],
-    "rows": [
-     [
-      "2 by 2",
-      "4",
-      "1",
-      "3.841"
-     ],
-     [
-      "2 by 3",
-      "6",
-      "2",
-      "5.991"
-     ],
-     [
-      "2 by 5",
-      "10",
-      "4",
-      "9.488"
-     ],
-     [
-      "3 by 3",
-      "9",
-      "4",
-      "9.488"
-     ],
-     [
-      "3 by 4",
-      "12",
-      "6",
-      "12.592"
-     ],
-     [
-      "4 by 3",
-      "12",
-      "6",
-      "12.592"
-     ],
-     [
-      "4 by 5",
-      "20",
-      "12",
-      "21.026"
-     ]
+    "tricks": [
+      "Check that your expected counts reproduce the observed row and column totals. They must, and it catches arithmetic slips before the statistic forms.",
+      "In a 2 by 2 table all four absolute differences are equal — compute one and you have all four.",
+      "Read the stem for which margin was fixed by the investigator. That decides independence against homogeneity without changing any arithmetic.",
+      "For equality of proportions across c groups, go straight to df = c − 1 rather than drawing the table.",
+      "After rejecting, look at the largest terms; the cells carry the finding and questions sometimes ask which category drove it."
+    ],
+    "shortcuts": [
+      "df = 1 and 'a 2 by 2 table' are the same condition, since (r − 1)(c − 1) = 1 forces r = c = 2.",
+      "A table and its transpose always have the same degrees of freedom and the same statistic.",
+      "If every row total is equal, the expected counts are the same in every row — compute one row and copy it."
+    ],
+    "remember": [
+      "(r − 1)(c − 1). Not cells, not cells minus one.",
+      "Expected counts come from the margins.",
+      "Association, never causation. Report a strength measure too."
     ]
-   },
-   "flow": {
-    "title": "Testing a contingency table",
-    "alt": "Flow chart for a chi-square test on a contingency table",
-    "nodes": [
-     {
-      "id": "a",
-      "r": 0,
-      "c": 1,
-      "label": "An r by c table of counts",
-      "kind": "start"
-     },
-     {
-      "id": "b",
-      "r": 1,
-      "c": 1,
-      "label": "Compute row totals, column totals and n",
-      "kind": "step"
-     },
-     {
-      "id": "c",
-      "r": 2,
-      "c": 1,
-      "label": "Eᵢⱼ = Rᵢ Cⱼ / n for every cell",
-      "kind": "step"
-     },
-     {
-      "id": "d",
-      "r": 3,
-      "c": 0,
-      "label": "Any Eᵢⱼ below 5? Merge sensible rows or columns",
-      "kind": "step"
-     },
-     {
-      "id": "e",
-      "r": 4,
-      "c": 1,
-      "label": "χ² = Σ(O − E)²/E,  df = (r − 1)(c − 1)",
-      "kind": "step"
-     },
-     {
-      "id": "f",
-      "r": 5,
-      "c": 0,
-      "label": "2 by 2: consider Yates, or Fisher's exact test",
-      "kind": "step"
-     },
-     {
-      "id": "g",
-      "r": 6,
-      "c": 1,
-      "label": "Reject for large χ²; then read the cells to localise it",
-      "kind": "end"
-     }
-    ],
-    "edges": [
-     {
-      "from": "a",
-      "to": "b"
-     },
-     {
-      "from": "b",
-      "to": "c"
-     },
-     {
-      "from": "c",
-      "to": "d",
-      "label": "check adequacy"
-     },
-     {
-      "from": "d",
-      "to": "e"
-     },
-     {
-      "from": "e",
-      "to": "f",
-      "label": "smallest table"
-     },
-     {
-      "from": "e",
-      "to": "g",
-      "label": "otherwise"
-     },
-     {
-      "from": "f",
-      "to": "g"
-     }
-    ],
-    "note": "Check that your expected counts have the same row and column totals as the observed table — they must, and it catches arithmetic slips before the statistic is formed."
-   },
-   "ask": {
-    "q": "The expected counts have the same row and column totals as the observed counts. Why does that follow from the formula Eᵢⱼ = RᵢCⱼ/n?",
-    "nudge": "Add the expected counts along row i. What does Σⱼ Cⱼ equal?"
-   }
   },
-  {
-   "kind": "worked",
-   "id": "s4",
-   "mins": 8,
-   "title": "Worked in full — outcome by centre",
-   "objective": "Run a 2 by 3 table end to end, and read which cells drove the result.",
-   "ask": {
-    "q": "The two middle cells contributed almost nothing, 0.003 and 0.004. What does that say about the second centre?",
-    "nudge": "A term near zero means the observed count was almost exactly what independence predicted."
-   },
-   "problem": "Three centres performed the same procedure on 60 patients each. The numbers who improved were 45, 33 and 22 respectively. Test at the 5% level whether outcome is associated with centre.",
-   "steps": [
+  "howto": "Read this straight after topic 4.14, because it reuses that lesson's statistic, direction and adequacy rule and changes only two things: where the expected counts come from, and the degrees of freedom. Sections 3 and 4 are the spine — the (r − 1)(c − 1) rule derived two ways, then a table worked end to end. Section 7 separates the three designs, which is the conceptual question this topic asks, and section 10 collects everything that is special about the 2 by 2 case, which is where the exam's special-case questions live. Section 11 is short and worth not skipping: a significant table needs a measure of strength beside it. Attempt the question at the end of each section before opening the answer. The optional section derives the degrees of freedom from Wilks' theorem, which unifies this rule with topic 4.14's and is the shortest route to never misremembering either.",
+  "refs": [
     {
-     "say": "Build the full table including the margins.",
-     "math": "                 C1    C2    C3   total\nimproved         45    33    22    100\nnot improved     15    27    38     80\ntotal            60    60    60    180",
-     "why": "The row for 'not improved' is 60 minus each improved count. Writing the margins out is not optional here — they are what the expected counts are built from."
+      "title": "Chi-Square Tests for Independence and Homogeneity",
+      "where": "Lesson 17, sections on two-way tables",
+      "site": "Penn State STAT 415",
+      "url": "https://online.stat.psu.edu/stat415/lesson/17",
+      "type": "Course notes",
+      "free": true,
+      "checked": "2026-11-01",
+      "why": "Both designs treated side by side with the arithmetic shown to be identical, which is the content of section 7."
     },
     {
-     "say": "Compute the expected counts from the margins.",
-     "math": "E(improved, any centre)     = 100 × 60/180 = 33.333\nE(not improved, any centre) = 80 × 60/180  = 26.667",
-     "why": "All three columns have the same total, so the expected counts are identical across columns — the table only has two distinct expected values. Check the row totals: 3 × 33.333 = 100 ✓ and 3 × 26.667 = 80 ✓."
+      "title": "Mathematical Statistics 18.655 — lecture notes",
+      "where": "Sessions on testing and asymptotics",
+      "site": "MIT OpenCourseWare",
+      "url": "https://ocw.mit.edu/courses/18-655-mathematical-statistics-spring-2016/pages/lecture-notes/",
+      "type": "Lecture notes",
+      "free": true,
+      "checked": "2026-11-01",
+      "why": "The dim(Θ) − dim(Θ₀) counting that the optional section uses to derive (r − 1)(c − 1)."
     },
     {
-     "say": "Compute the six terms.",
-     "math": "(45 − 33.333)²/33.333 = 4.0833\n(33 − 33.333)²/33.333 = 0.0033\n(22 − 33.333)²/33.333 = 3.8533\n(15 − 26.667)²/26.667 = 5.1042\n(27 − 26.667)²/26.667 = 0.0042\n(38 − 26.667)²/26.667 = 4.8167",
-     "why": "One per line, as in topic 4.14. Note the pattern: the first and third centres contribute almost everything, and the second contributes essentially nothing."
+      "title": "Statistical Inference",
+      "where": "Weeks on testing of hypotheses",
+      "site": "NPTEL / SWAYAM — IIT Delhi, Prof. Niladri Chatterjee",
+      "url": "https://archive.nptel.ac.in/noc/courses/noc21/SEM1/noc21-ma23",
+      "type": "Video course",
+      "free": true,
+      "checked": "2026-11-01",
+      "why": "Indian syllabus conventions for contingency tables, Yates' correction and the association measures, which is the phrasing NET questions use."
     },
     {
-     "say": "Add, and count the degrees of freedom.",
-     "math": "χ² = 17.865\ndf = (r − 1)(c − 1) = (2 − 1)(3 − 1) = 2\nχ²(0.05, 2) = 5.991,  17.865 > 5.991 ⟹ reject",
-     "why": "Two degrees of freedom, not six and not five. Once the margins are fixed, only two cells of this table were free."
+      "title": "Statistical Inference, 2nd edition",
+      "where": "Section 10.3.1 and its exercises",
+      "site": "Casella and Berger",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-01",
+      "why": "The likelihood ratio statistic for a two-way table and its relationship to Pearson's, which the optional section sketches."
     },
     {
-     "say": "State the conclusion, and localise it.",
-     "math": "outcome is associated with centre (p ≈ 0.0001)\ncentre 1 improved more than expected, centre 3 less; centre 2 is at expectation",
-     "why": "The cells carry the finding. Centre 1 has 45 improvements against 33.3 expected and centre 3 has 22 against 33.3 — a difference in improvement rates of 75% against 37%. Reporting only 'reject at 5%' discards the part an administrator would act on."
+      "title": "An Introduction to Probability and Statistics, 3rd edition",
+      "where": "Chapter 10",
+      "site": "Rohatgi and Saleh",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-01",
+      "why": "Worked contingency-table tests including the 2 by 2 special cases and Fisher's exact test."
     }
-   ],
-   "after": "Note what the test does NOT establish. It says outcome and centre are associated, not that the centres differ in quality — centre 3 may be taking harder cases. A table cannot distinguish association from the effect of something it did not record, and claiming otherwise is the standard overreach in this topic."
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
   },
-  {
-   "kind": "recall",
-   "id": "s5",
-   "mins": 2,
-   "title": "Pause and recall",
-   "objective": "Retrieve the two new rules before going on.",
-   "intro": "Answer each before revealing it.",
-   "items": [
+  "provenance": "Authored November 2026 for this platform against the UGC NET Statistics syllabus. The PYQ evidence for this topic is the thinnest of the six lessons built in this run, and is stated plainly: the June 2026 paper has no question whose whole subject is a contingency table. Q33, a match-the-test item, includes 'testing equality of several population proportions → chi-square test' and was answered correctly. Two practice variants are directly on this topic — the degrees of freedom of a 3 by 4 table tested for homogeneity, tagged to Q33, and the degrees of freedom of a 4 by 3 table, tagged to Q29 — and both are taught in named sections and appear in the pool. The catalog gives the topic 1.8 marks, about 0.92 expected questions per paper. It was built to complete the chi-square machinery of topic 4.14 and because (r − 1)(c − 1) is the one degrees-of-freedom form in the module that does not follow the k − 1 − m pattern. Every numerical value was computed rather than recalled: the 2 by 3 centre table giving expected counts 33.333 and 26.667, terms 4.0833, 0.0033, 3.8533, 5.1042, 0.0042 and 4.8167, total 17.865 on 2 degrees of freedom; the 2 by 2 table giving expected counts 17 and 13, uncorrected 6.7873, Yates-corrected 5.4977, two-proportion z of −2.6053 whose square is 6.7873; the 3 by 4 brand table giving expected counts 25, 25, 26.667 and 23.333 and a statistic of 5.3393 on 6 degrees of freedom; and the association measures φ = 0.3363, C = 0.3188 and V = 0.3150, with φ unchanged at 0.3363 when every count is doubled and the statistic rises to 13.5746. Previous-year questions themselves are stored separately and carry their exam cycle.",
+  "scenes": [
     {
-     "q": "Give the expected count for the cell in row i, column j.",
-     "a": "Eᵢⱼ = (row i total × column j total)/grand total."
-    },
-    {
-     "q": "Give the degrees of freedom for an r by c table.",
-     "a": "(r − 1)(c − 1) — the number of cells still free once the margins are fixed."
-    },
-    {
-     "q": "Degrees of freedom for a 3 by 4 table? And a 4 by 3?",
-     "a": "6 in both cases. Only the product matters, so a table and its transpose agree."
-    },
-    {
-     "q": "What is the difference between a test of independence and a test of homogeneity?",
-     "a": "The sampling design and the hypothesis. One sample classified twice gives independence; several samples classified once gives homogeneity. The arithmetic is identical."
-    },
-    {
-     "q": "Why is the rule not rc − 1?",
-     "a": "Because the row and column probabilities were estimated from the margins. Subtracting those estimated parameters from rc − 1 gives (r − 1)(c − 1)."
-    }
-   ]
-  },
-  {
-   "kind": "completion",
-   "id": "s6",
-   "mins": 8,
-   "title": "Your turn — the 2 by 2 table and Yates' correction",
-   "objective": "Handle the smallest table, where the approximation is weakest and a correction exists.",
-   "problem": "Thirty executives learned a language by method A and thirty by method B. Twelve of group A and twenty-two of group B passed. Test at the 5% level whether passing is associated with method, both without and with Yates' correction.",
-   "steps": [
-    {
-     "say": "Build the table with its margins.",
-     "blank": {
-      "prompt": "Write the 2 by 2 table of counts including row, column and grand totals.",
-      "answer": "A: 12 passed, 18 failed (30); B: 22 passed, 8 failed (30); columns 34 and 26; n = 60",
-      "accept": [
-       "12 18 / 22 8, totals 34 and 26, n=60",
-       "A 12,18; B 22,8; col totals 34,26; n 60",
-       "rows 30 and 30, columns 34 and 26, total 60"
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 6,
+      "title": "Before the lesson — four things it will assume",
+      "objective": "Recover the expected-count rule for a table and the three facts from topic 4.14 that carry straight over.",
+      "ask": {
+        "q": "Topic 4.14 computed expected counts from a claimed distribution. Here nothing is claimed. Where do the expected counts come from instead?",
+        "nudge": "You are not given any probabilities. What are you given, and what would independence let you build from it?"
+      },
+      "body": [
+        "A contingency table cross-classifies the same people or items by two things at once — treatment and outcome, city and brand, qualification and employment. The question is whether the two classifications are related.",
+        "The statistic is the same one as topic 4.14, Σ(O − E)²/E, and the direction and the adequacy condition are the same too. Two things are new: where the expected counts come from, and the degrees of freedom, which take the form (r − 1)(c − 1) rather than k − 1 − m.",
+        "Four checks. One on the new expected-count rule, one on independence itself, and two carried over from the goodness-of-fit topic."
       ],
-      "hint": "Each group had 30, so the failures are 30 minus the passes."
-     },
-     "why": "Row totals 30 and 30 were fixed by the design, so this is strictly a homogeneity test — two populations compared on one attribute. The arithmetic is unaffected."
+      "items": [
+        {
+          "ask": "A table has row totals and column totals. Under the hypothesis that the two classifications are unrelated, what count is expected in the cell in row i and column j?",
+          "recall": "Eᵢⱼ = (row i total × column j total) / grand total.",
+          "refresh": [
+            "If the classifications are independent, the proportion of row i that falls in column j should be the same as the proportion of the whole table that falls in column j — namely (column j total)/n.",
+            "So the expected count is (row i total) × (column j total)/n, which is the formula above. Nothing was assumed about the actual probabilities; they were estimated from the margins.",
+            "That last point is the whole reason the degrees of freedom are different here. The margins came from the data, and estimated quantities cost degrees of freedom."
+          ]
+        },
+        {
+          "ask": "What does it mean for two classifications to be independent?",
+          "recall": "That the probability of any combination factorises: P(row i and column j) = P(row i) × P(column j), for every cell.",
+          "refresh": [
+            "Equivalently, the conditional distribution across the columns is the same whichever row you condition on. Knowing the row tells you nothing about the column.",
+            "That second phrasing is the one to carry into this topic, because it is what the expected counts encode: every row gets the same column profile.",
+            "And it is why a rejection is interpreted by looking at the rows: the table is telling you that some row's profile differs from the others."
+          ]
+        },
+        {
+          "ask": "For a chi-square test, is the adequacy condition about observed or expected counts, and what is the usual threshold?",
+          "recall": "Expected counts, at least 5 in every cell.",
+          "refresh": [
+            "Carried over unchanged from topic 4.14. An observed zero is unremarkable if its expected count is adequate.",
+            "In a table the remedy is to merge adjacent rows or columns that make sense together, rather than to drop a cell — dropping a cell changes the table.",
+            "For the smallest table, 2 by 2, the condition bites hardest, which is why that case has two special treatments of its own in section 10."
+          ]
+        },
+        {
+          "ask": "In which tail of the chi-square distribution does this test reject?",
+          "recall": "The upper tail only.",
+          "refresh": [
+            "The statistic measures total discrepancy from what independence predicts, so it is large when the classifications are related and near zero when they are not.",
+            "Close agreement with independence is evidence for independence, so there is no lower critical value.",
+            "The chi-square upper 5% points worth having: 3.841 for 1 degree of freedom, 5.991 for 2, 9.488 for 4, 12.592 for 6."
+          ]
+        }
+      ]
     },
     {
-     "say": "Compute the four expected counts.",
-     "blank": {
-      "prompt": "Give the expected counts.",
-      "answer": "17 and 13 in each row",
-      "accept": [
-       "17, 13, 17, 13",
-       "17 and 13 twice",
-       "both rows 17 passed 13 failed"
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Two questions that look different and have the same answer",
+      "objective": "See that independence and homogeneity are different studies producing identical arithmetic.",
+      "body": [
+        "There are two quite different reasons to end up staring at a table of counts, and they correspond to two different hypotheses. The surprising part is that the test is the same.",
+        "In the first, you take one sample and classify each member twice — you survey 300 people and record both their city and their preferred brand. Neither margin was fixed in advance; both came out of the sampling. The question is whether city and brand are independent.",
+        "In the second, you take several separate samples and classify each member once — you survey exactly 100 people in each of three cities and record their brand. The row totals were fixed by you. The question is whether the three cities have the same brand profile, which is called homogeneity.",
+        "Different designs, different hypotheses, and yet the expected counts, the statistic and the degrees of freedom are identical. Only the sentence you write at the end changes. Knowing that saves you learning the same arithmetic twice, and knowing WHY they differ is what a question on the distinction is testing."
       ],
-      "hint": "Eᵢⱼ = RᵢCⱼ/n, and both rows have the same total of 30."
-     },
-     "why": "30 × 34/60 = 17 and 30 × 26/60 = 13. Both rows are identical because both row totals are 30. All four are above 5, so the adequacy condition is met."
+      "scenario": {
+        "teaser": "A hospital network has outcome data from three centres and two ways to read it.",
+        "title": "Three centres, one table",
+        "body": [
+          "A hospital network runs the same procedure at three centres and records whether each patient improved. The audit team builds a table: three columns for the centres, two rows for improved and not improved.",
+          "How that table should be described depends on how the data arrived. If the team pulled 180 consecutive cases from the network's combined records and then noted which centre each came from, nobody fixed the column totals — they came out as they came out. The hypothesis is that centre and outcome are independent.",
+          "If instead the team deliberately sampled 60 cases from each centre, the column totals were fixed at 60 by design. The hypothesis is now that the three centres have the same improvement rate — homogeneity across three populations rather than independence of two attributes.",
+          "The arithmetic will not notice the difference. Same expected counts, same statistic, same two degrees of freedom. What changes is what a rejection licenses you to say: in the first design, that outcome is associated with centre; in the second, that the centres differ.",
+          "And in neither design does it license a claim about why. A centre with worse outcomes may have sicker patients, and the table cannot see that. The test establishes association; attributing it to the centre's practice is a separate argument requiring separate evidence.",
+          "There is a third design worth naming, because it is where topic 4.14 sits: a single sample classified ONE way, compared against a claimed distribution. One classification is goodness of fit; two classifications is this topic. The family is the same and the degrees-of-freedom rules differ."
+        ],
+        "q": "If the audit team sampled 60 cases from each centre, which margin was fixed, and does that change the computation?",
+        "answer": "The column totals were fixed at 60 each by the design. It does not change the computation at all — the expected counts are still (row total × column total)/n, the statistic is still Σ(O − E)²/E, and the degrees of freedom are still (r − 1)(c − 1) = 2. What changes is the hypothesis being tested and therefore the wording of the conclusion: homogeneity of three populations rather than independence of two attributes."
+      },
+      "ask": {
+        "q": "In the homogeneity design the row totals are still free. Why does the test not care that one margin was fixed and the other was not?",
+        "nudge": "Look at what the expected counts are built from. Does the formula distinguish a total you chose from a total that happened?"
+      }
     },
     {
-     "say": "Compute the uncorrected statistic.",
-     "blank": {
-      "prompt": "Compute χ² without any correction, and give the degrees of freedom.",
-      "answer": "χ² = 6.787 on 1 degree of freedom",
-      "accept": [
-       "6.787, df 1",
-       "6.7873 on 1 df",
-       "about 6.79, 1 df",
-       "6.79 df=1"
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Where a table's verdict gets decided",
+      "objective": "See how the critical value moves with the SHAPE of the table, which is what the degrees of freedom encode.",
+      "viz": {
+        "type": "chisq-tail",
+        "k": 6,
+        "alpha": 0.05,
+        "obs": 5.339
+      },
+      "body": [
+        "The curve has 6 degrees of freedom, which is what a 3 by 4 or a 4 by 3 table gives — the case both practice variants on this topic ask about. The marker sits at 5.339, the statistic from the 3 by 4 homogeneity test worked in section 8.",
+        "Read the critical value: 12.592. The statistic is nowhere near it, so that table shows no evidence against homogeneity.",
+        "Now change the degrees of freedom to see what the table's shape does. A 2 by 2 table gives 1 degree of freedom and a critical value of 3.841 — the same statistic of 5.339 would be comfortably significant there. A 2 by 3 table gives 2 and a critical value of 5.991, where 5.339 is just short.",
+        "So the same amount of total discrepancy means quite different things depending on how many cells were free to vary. A bigger table has more room to accumulate discrepancy by chance, and the critical value rises to match.",
+        "Work out the degrees of freedom for a few shapes and check them against the chart: 2 by 2 gives 1, 2 by 5 gives 4, 3 by 3 gives 4, 3 by 4 gives 6, 4 by 5 gives 12. Note that 2 by 5 and 3 by 3 both give 4, so the critical value cannot tell you the shape — only the product (r − 1)(c − 1) matters.",
+        "Finally set the degrees of freedom to 1 and compare the critical value with 1.96². That is 3.8416, and the coincidence is not one: section 10 shows that for a 2 by 2 table this test is exactly the square of the two-proportion z test."
       ],
-      "hint": "Every absolute difference is 5, so the four terms are 25/17, 25/13, 25/17 and 25/13."
-     },
-     "why": "In a 2 by 2 table all four differences have the same magnitude — here 5 — which is a useful check. The terms are 1.4706, 1.9231, 1.4706 and 1.9231, totalling 6.787. Against 3.841 this rejects."
+      "ask": {
+        "q": "A 2 by 5 table and a 3 by 3 table both give 4 degrees of freedom. Do they have the same number of cells?",
+        "nudge": "Count them: 10 against 9. So what exactly is the degrees of freedom counting, if not cells?"
+      }
     },
     {
-     "say": "Now apply Yates' continuity correction.",
-     "blank": {
-      "prompt": "Compute the Yates-corrected statistic.",
-      "answer": "5.498",
-      "accept": [
-       "5.498",
-       "5.4977",
-       "about 5.50",
-       "5.5"
+      "kind": "theory",
+      "id": "s3",
+      "mins": 9,
+      "title": "The expected counts, the statistic, and where (r − 1)(c − 1) comes from",
+      "objective": "Build the test precisely, and understand the degrees-of-freedom rule rather than memorising it.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "The table",
+          "body": "An r by c contingency table has observed counts Oᵢⱼ for i = 1..r and j = 1..c, with row totals Rᵢ, column totals Cⱼ and grand total n. The null hypothesis is that the row classification and the column classification are independent — or, in the other design, that the r populations have the same distribution across the c categories."
+        },
+        {
+          "t": "formula",
+          "h": "Expected counts under the null",
+          "body": "Eᵢⱼ = Rᵢ Cⱼ / n\nUnder independence the proportion in column j should be Cⱼ/n in every row, so row i should contribute Rᵢ × Cⱼ/n to that column. The margins are taken from the data, which is the key fact for the degrees of freedom."
+        },
+        {
+          "t": "formula",
+          "h": "The statistic and its distribution",
+          "body": "χ² = Σᵢ Σⱼ (Oᵢⱼ − Eᵢⱼ)² / Eᵢⱼ,  approximately chi-square with (r − 1)(c − 1) degrees of freedom under the null.\nReject for large values — upper tail only, exactly as in topic 4.14."
+        },
+        {
+          "t": "step",
+          "h": "Where the degrees of freedom come from, counted two ways",
+          "body": "By free cells: once the row and column totals are fixed, how many cell counts can you still choose freely? Fill in the first r − 1 rows and the first c − 1 columns — that is (r − 1)(c − 1) cells — and every remaining cell is then forced by the totals. So (r − 1)(c − 1) cells were free.\nBy parameter counting: there are rc cells, so rc − 1 free probabilities. Independence describes them with (r − 1) row probabilities and (c − 1) column probabilities. The difference is (rc − 1) − (r − 1) − (c − 1) = rc − r − c + 1 = (r − 1)(c − 1). The second route is the k − 1 − m rule of topic 4.14 with m = (r − 1) + (c − 1) estimated margins, which is why the two rules are one rule."
+        },
+        {
+          "t": "step",
+          "h": "The common errors",
+          "body": "Answering rc, the number of cells, or rc − 1, which would be the goodness-of-fit rule for a fully specified distribution over rc categories. Neither accounts for the margins having been estimated from the data. A 4 by 3 table gives (4 − 1)(3 − 1) = 6, not 12 and not 11 — and both of those appear as options."
+        },
+        {
+          "t": "def",
+          "h": "The conditions, carried over",
+          "body": "Every expected count at least 5, independent observations, and each item counted in exactly one cell. The last condition is easy to violate in practice: if people can choose more than one brand, the counts no longer sum to the number of people and the test does not apply."
+        }
       ],
-      "hint": "Replace each (O − E)² by (|O − E| − 0.5)², so 25 becomes (5 − 0.5)² = 20.25."
-     },
-     "why": "20.25/17 + 20.25/13 twice over gives 5.498. Smaller than 6.787, as Yates always is — the correction is conservative by construction."
+      "table": {
+        "caption": "Degrees of freedom by table shape. Note that shape is not recoverable from the degrees of freedom — 2 by 5 and 3 by 3 both give 4.",
+        "head": [
+          "Table",
+          "Cells",
+          "df = (r − 1)(c − 1)",
+          "5% critical value"
+        ],
+        "rows": [
+          [
+            "2 by 2",
+            "4",
+            "1",
+            "3.841"
+          ],
+          [
+            "2 by 3",
+            "6",
+            "2",
+            "5.991"
+          ],
+          [
+            "2 by 5",
+            "10",
+            "4",
+            "9.488"
+          ],
+          [
+            "3 by 3",
+            "9",
+            "4",
+            "9.488"
+          ],
+          [
+            "3 by 4",
+            "12",
+            "6",
+            "12.592"
+          ],
+          [
+            "4 by 3",
+            "12",
+            "6",
+            "12.592"
+          ],
+          [
+            "4 by 5",
+            "20",
+            "12",
+            "21.026"
+          ]
+        ]
+      },
+      "flow": {
+        "title": "Testing a contingency table",
+        "alt": "Flow chart for a chi-square test on a contingency table",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "An r by c table of counts",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Compute row totals, column totals and n",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Eᵢⱼ = Rᵢ Cⱼ / n for every cell",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 0,
+            "label": "Any Eᵢⱼ below 5? Merge sensible rows or columns",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "χ² = Σ(O − E)²/E,  df = (r − 1)(c − 1)",
+            "kind": "step"
+          },
+          {
+            "id": "f",
+            "r": 5,
+            "c": 0,
+            "label": "2 by 2: consider Yates, or Fisher's exact test",
+            "kind": "step"
+          },
+          {
+            "id": "g",
+            "r": 6,
+            "c": 1,
+            "label": "Reject for large χ²; then read the cells to localise it",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d",
+            "label": "check adequacy"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          },
+          {
+            "from": "e",
+            "to": "f",
+            "label": "smallest table"
+          },
+          {
+            "from": "e",
+            "to": "g",
+            "label": "otherwise"
+          },
+          {
+            "from": "f",
+            "to": "g"
+          }
+        ],
+        "note": "Check that your expected counts have the same row and column totals as the observed table — they must, and it catches arithmetic slips before the statistic is formed."
+      },
+      "ask": {
+        "q": "The expected counts have the same row and column totals as the observed counts. Why does that follow from the formula Eᵢⱼ = RᵢCⱼ/n?",
+        "nudge": "Add the expected counts along row i. What does Σⱼ Cⱼ equal?"
+      }
     },
     {
-     "say": "State both conclusions and compare them.",
-     "blank": {
-      "prompt": "Does the verdict change at the 5% level?",
-      "answer": "No — both 6.787 and 5.498 exceed 3.841, so passing is associated with method either way",
-      "accept": [
-       "no, both reject",
-       "no change, both exceed 3.841",
-       "both significant",
-       "verdict unchanged"
+      "kind": "worked",
+      "id": "s4",
+      "mins": 8,
+      "title": "Worked in full — outcome by centre",
+      "objective": "Run a 2 by 3 table end to end, and read which cells drove the result.",
+      "ask": {
+        "q": "The two middle cells contributed almost nothing, 0.003 and 0.004. What does that say about the second centre?",
+        "nudge": "A term near zero means the observed count was almost exactly what independence predicted."
+      },
+      "problem": "Three centres performed the same procedure on 60 patients each. The numbers who improved were 45, 33 and 22 respectively. Test at the 5% level whether outcome is associated with centre.",
+      "steps": [
+        {
+          "say": "Build the full table including the margins.",
+          "math": "                 C1    C2    C3   total\nimproved         45    33    22    100\nnot improved     15    27    38     80\ntotal            60    60    60    180",
+          "why": "The row for 'not improved' is 60 minus each improved count. Writing the margins out is not optional here — they are what the expected counts are built from."
+        },
+        {
+          "say": "Compute the expected counts from the margins.",
+          "math": "E(improved, any centre)     = 100 × 60/180 = 33.333\nE(not improved, any centre) = 80 × 60/180  = 26.667",
+          "why": "All three columns have the same total, so the expected counts are identical across columns — the table only has two distinct expected values. Check the row totals: 3 × 33.333 = 100 ✓ and 3 × 26.667 = 80 ✓."
+        },
+        {
+          "say": "Compute the six terms.",
+          "math": "(45 − 33.333)²/33.333 = 4.0833\n(33 − 33.333)²/33.333 = 0.0033\n(22 − 33.333)²/33.333 = 3.8533\n(15 − 26.667)²/26.667 = 5.1042\n(27 − 26.667)²/26.667 = 0.0042\n(38 − 26.667)²/26.667 = 4.8167",
+          "why": "One per line, as in topic 4.14. Note the pattern: the first and third centres contribute almost everything, and the second contributes essentially nothing."
+        },
+        {
+          "say": "Add, and count the degrees of freedom.",
+          "math": "χ² = 17.865\ndf = (r − 1)(c − 1) = (2 − 1)(3 − 1) = 2\nχ²(0.05, 2) = 5.991,  17.865 > 5.991 ⟹ reject",
+          "why": "Two degrees of freedom, not six and not five. Once the margins are fixed, only two cells of this table were free."
+        },
+        {
+          "say": "State the conclusion, and localise it.",
+          "math": "outcome is associated with centre (p ≈ 0.0001)\ncentre 1 improved more than expected, centre 3 less; centre 2 is at expectation",
+          "why": "The cells carry the finding. Centre 1 has 45 improvements against 33.3 expected and centre 3 has 22 against 33.3 — a difference in improvement rates of 75% against 37%. Reporting only 'reject at 5%' discards the part an administrator would act on."
+        }
       ],
-      "hint": "Compare each statistic with the 1-degree-of-freedom critical value."
-     },
-     "why": "Here the correction does not change the decision, which is the usual case. It matters when the uncorrected statistic sits just above the critical value — then the corrected one may fall below, and reporting which was used becomes essential."
+      "after": "Note what the test does NOT establish. It says outcome and centre are associated, not that the centres differ in quality — centre 3 may be taking harder cases. A table cannot distinguish association from the effect of something it did not record, and claiming otherwise is the standard overreach in this topic."
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 2,
+      "title": "Pause and recall",
+      "objective": "Retrieve the two new rules before going on.",
+      "intro": "Answer each before revealing it.",
+      "items": [
+        {
+          "q": "Give the expected count for the cell in row i, column j.",
+          "a": "Eᵢⱼ = (row i total × column j total)/grand total."
+        },
+        {
+          "q": "Give the degrees of freedom for an r by c table.",
+          "a": "(r − 1)(c − 1) — the number of cells still free once the margins are fixed."
+        },
+        {
+          "q": "Degrees of freedom for a 3 by 4 table? And a 4 by 3?",
+          "a": "6 in both cases. Only the product matters, so a table and its transpose agree."
+        },
+        {
+          "q": "What is the difference between a test of independence and a test of homogeneity?",
+          "a": "The sampling design and the hypothesis. One sample classified twice gives independence; several samples classified once gives homogeneity. The arithmetic is identical."
+        },
+        {
+          "q": "Why is the rule not rc − 1?",
+          "a": "Because the row and column probabilities were estimated from the margins. Subtracting those estimated parameters from rc − 1 gives (r − 1)(c − 1)."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 8,
+      "title": "Your turn — the 2 by 2 table and Yates' correction",
+      "objective": "Handle the smallest table, where the approximation is weakest and a correction exists.",
+      "problem": "Thirty executives learned a language by method A and thirty by method B. Twelve of group A and twenty-two of group B passed. Test at the 5% level whether passing is associated with method, both without and with Yates' correction.",
+      "steps": [
+        {
+          "say": "Build the table with its margins.",
+          "blank": {
+            "prompt": "Write the 2 by 2 table of counts including row, column and grand totals.",
+            "answer": "A: 12 passed, 18 failed (30); B: 22 passed, 8 failed (30); columns 34 and 26; n = 60",
+            "accept": [
+              "12 18 / 22 8, totals 34 and 26, n=60",
+              "A 12,18; B 22,8; col totals 34,26; n 60",
+              "rows 30 and 30, columns 34 and 26, total 60"
+            ],
+            "hint": "Each group had 30, so the failures are 30 minus the passes."
+          },
+          "why": "Row totals 30 and 30 were fixed by the design, so this is strictly a homogeneity test — two populations compared on one attribute. The arithmetic is unaffected."
+        },
+        {
+          "say": "Compute the four expected counts.",
+          "blank": {
+            "prompt": "Give the expected counts.",
+            "answer": "17 and 13 in each row",
+            "accept": [
+              "17, 13, 17, 13",
+              "17 and 13 twice",
+              "both rows 17 passed 13 failed"
+            ],
+            "hint": "Eᵢⱼ = RᵢCⱼ/n, and both rows have the same total of 30."
+          },
+          "why": "30 × 34/60 = 17 and 30 × 26/60 = 13. Both rows are identical because both row totals are 30. All four are above 5, so the adequacy condition is met."
+        },
+        {
+          "say": "Compute the uncorrected statistic.",
+          "blank": {
+            "prompt": "Compute χ² without any correction, and give the degrees of freedom.",
+            "answer": "χ² = 6.787 on 1 degree of freedom",
+            "accept": [
+              "6.787, df 1",
+              "6.7873 on 1 df",
+              "about 6.79, 1 df",
+              "6.79 df=1"
+            ],
+            "hint": "Every absolute difference is 5, so the four terms are 25/17, 25/13, 25/17 and 25/13."
+          },
+          "why": "In a 2 by 2 table all four differences have the same magnitude — here 5 — which is a useful check. The terms are 1.4706, 1.9231, 1.4706 and 1.9231, totalling 6.787. Against 3.841 this rejects."
+        },
+        {
+          "say": "Now apply Yates' continuity correction.",
+          "blank": {
+            "prompt": "Compute the Yates-corrected statistic.",
+            "answer": "5.498",
+            "accept": [
+              "5.498",
+              "5.4977",
+              "about 5.50",
+              "5.5"
+            ],
+            "hint": "Replace each (O − E)² by (|O − E| − 0.5)², so 25 becomes (5 − 0.5)² = 20.25."
+          },
+          "why": "20.25/17 + 20.25/13 twice over gives 5.498, smaller than 6.787 in this example. The correction is generally conservative; software may cap adjusted deviations at zero to avoid overcorrection."
+        },
+        {
+          "say": "State both conclusions and compare them.",
+          "blank": {
+            "prompt": "Does the verdict change at the 5% level?",
+            "answer": "No — both 6.787 and 5.498 exceed 3.841, so passing is associated with method either way",
+            "accept": [
+              "no, both reject",
+              "no change, both exceed 3.841",
+              "both significant",
+              "verdict unchanged"
+            ],
+            "hint": "Compare each statistic with the 1-degree-of-freedom critical value."
+          },
+          "why": "Here the correction does not change the decision, which is the usual case. It matters when the uncorrected statistic sits just above the critical value — then the corrected one may fall below, and reporting which was used becomes essential."
+        }
+      ],
+      "after": "Two things specific to the 2 by 2 table. All four absolute differences are equal, which gives you a fast arithmetic check unavailable in larger tables. And this is the only shape where Yates' correction applies — not to a 2 by 3, not to goodness of fit. Section 10 adds the two other things that are special about this shape."
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 7,
+      "title": "Independence, homogeneity and goodness of fit",
+      "objective": "Separate the three designs properly, since the distinction is the conceptual question this topic asks.",
+      "blocks": [
+        {
+          "t": "def",
+          "h": "Test of independence",
+          "body": "ONE sample, each member classified by TWO attributes. Neither margin is fixed in advance; both are outcomes of the sampling. H₀: the two attributes are independent, P(row i and column j) = P(row i)P(column j) for every cell. Example: survey 300 people and record city and brand preference."
+        },
+        {
+          "t": "def",
+          "h": "Test of homogeneity",
+          "body": "SEVERAL samples, of sizes fixed by the investigator, each member classified by ONE attribute. One margin is fixed by design. H₀: the r populations have the same distribution across the c categories. Example: survey exactly 100 people in each of three cities and record brand preference."
+        },
+        {
+          "t": "def",
+          "h": "Test of goodness of fit",
+          "body": "ONE sample, each member classified ONCE, compared against a claimed distribution — topic 4.14. H₀: the claimed distribution holds. The degrees of freedom are k − 1 − m rather than a product, because there is only one classification."
+        },
+        {
+          "t": "step",
+          "h": "Why the first two share their arithmetic",
+          "body": "Both compare the observed table with the table the null predicts from the margins, and in both cases the margins must be estimated — in the homogeneity case one margin was chosen rather than estimated, but a quantity you fixed yourself is known exactly and costs no degree of freedom either way the accounting is done. So the expected counts, the statistic and (r − 1)(c − 1) are common to both. Only the conclusion's wording differs: 'the attributes are associated' against 'the populations differ'."
+        },
+        {
+          "t": "step",
+          "h": "Equality of several proportions is a special case",
+          "body": "Testing whether c populations share a common proportion is a 2 by c table — success and failure as the two rows — so df = (2 − 1)(c − 1) = c − 1. This is the entry 'testing equality of several population proportions → chi-square test' that June 2026 Q33 matched, and it is why that test is a chi-square test rather than a z or t test. For exactly two proportions the z test is available and, as section 10 shows, gives the same answer."
+        },
+        {
+          "t": "step",
+          "h": "What a question's wording tells you",
+          "body": "'A random sample of 300 people was classified by…' signals independence. 'Samples of 100 were taken from each of three cities' signals homogeneity. 'Does the data fit a Poisson distribution' signals goodness of fit. A question asking which test to use is usually testing whether you noticed which design the stem described."
+        }
+      ],
+      "ask": {
+        "q": "A survey takes exactly 150 men and 150 women and asks each a yes-or-no question. Independence or homogeneity?",
+        "nudge": "Were the 150s outcomes of the sampling, or decisions by the investigator?"
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 8,
+      "title": "On your own — a 3 by 4 homogeneity test",
+      "objective": "Run the shape both practice variants ask about, and handle a non-rejection properly.",
+      "problem": "One hundred consumers were sampled in each of three cities and asked which of four brands they prefer. The counts were: city 1 — 30, 25, 25, 20; city 2 — 20, 30, 25, 25; city 3 — 25, 20, 30, 25. Test at the 5% level whether the three cities have the same brand profile.",
+      "hints": [
+        "Direction — the sample sizes were fixed at 100 per city, so this is a homogeneity test. Compute the column totals first; the row totals are all 100.",
+        "Second step — every expected count is 100 × (column total)/300. Two of the four columns give whole numbers and two do not; keep three decimals.",
+        "Last step — the degrees of freedom are (3 − 1)(4 − 1). Compare with the 5% point for that many degrees of freedom before concluding."
+      ],
+      "answer": "χ² = 5.339 on 6 degrees of freedom; 5.339 < 12.592, so there is no evidence against homogeneity.",
+      "check": "Three things an examiner looks for. The degrees of freedom are 6, not 12 (the number of cells) and not 11 — this is exactly what the two practice variants on this topic ask. The expected counts are not all equal, because the column totals are not all equal: they are 75, 75, 80 and 70, giving expected counts of 25, 25, 26.667 and 23.333 in every row. And the conclusion must be stated as a failure to find evidence, not as proof of homogeneity — with 100 per city this test has limited power against modest differences, so a non-rejection is weak evidence at best.",
+      "scenario": {
+        "teaser": "A brand manager wants to know whether to run one national campaign or three regional ones.",
+        "title": "One campaign or three?",
+        "body": [
+          "A brand manager has a budget decision. If consumers in the three cities have essentially the same brand preferences, one national campaign is cheaper and simpler. If the cities differ, three regional campaigns are worth the extra cost.",
+          "The survey is designed for that question: a fixed 100 consumers per city, so the comparison is between three populations rather than between two attributes of one population. That is the homogeneity design, and it was chosen deliberately — it guarantees enough data from each city to say something about each.",
+          "The test comes back at 5.339 against a critical value of 12.592, nowhere near significance. The honest report is that the survey found no evidence that the cities differ.",
+          "What it is not is proof that they are the same, and the distinction matters commercially. With 100 per city, a real difference of a few percentage points in brand share would very likely go undetected. So the manager's decision rests on two things: the test found nothing, and the study could only have found a fairly large difference. If a small difference would change the decision, the survey was too small to inform it.",
+          "This is the non-rejection discipline from topic 4.15 applied to a real choice. A result of 'not significant' is only as informative as the power behind it, and reporting the statistic without that caveat invites the manager to read it as a green light it is not."
+        ],
+        "q": "The manager asks whether the survey proves the cities have the same preferences. What is the right answer?",
+        "answer": "No. The survey found no evidence that they differ, which is a different and weaker statement. With 100 consumers per city the test has limited power against differences of a few percentage points, so a true difference of that size would probably not have shown up. If such a difference would change the campaign decision, the right response is a larger survey rather than a conclusion of sameness."
+      },
+      "solution": [
+        {
+          "say": "Build the margins.",
+          "math": "            B1   B2   B3   B4   total\ncity 1      30   25   25   20    100\ncity 2      20   30   25   25    100\ncity 3      25   20   30   25    100\ntotal       75   75   80   70    300",
+          "why": "Row totals are 100 by design. The column totals are unequal, which means the expected counts vary across columns — a point worth noticing before computing them."
+        },
+        {
+          "say": "Compute the expected counts.",
+          "math": "every row: 100 × 75/300 = 25.000\n           100 × 75/300 = 25.000\n           100 × 80/300 = 26.667\n           100 × 70/300 = 23.333",
+          "why": "All three rows have the same expected counts because all three row totals are 100. They sum to 100 per row, which is the check. All are well above 5."
+        },
+        {
+          "say": "Compute the twelve terms and sum.",
+          "math": "city 1:  1.000,  0.000,  0.104,  0.476\ncity 2:  1.000,  1.000,  0.104,  0.119\ncity 3:  0.000,  1.000,  0.417,  0.119\nχ² = 5.339",
+          "why": "No single term dominates — the largest is 1.000 — which is itself informative: the discrepancies are small and scattered rather than concentrated anywhere."
+        },
+        {
+          "say": "Count the degrees of freedom and conclude.",
+          "math": "df = (3 − 1)(4 − 1) = 2 × 3 = 6\nχ²(0.05, 6) = 12.592,  5.339 < 12.592\n⟹ no evidence against homogeneity",
+          "why": "Six degrees of freedom, from the shape of the table rather than its 12 cells. The statistic is less than half the critical value, so this is not a borderline case — but it remains a failure to find a difference rather than a demonstration of sameness."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 6,
+      "title": "Six statements — verdict on each before you look",
+      "objective": "Rule on the claims this topic's questions are built from.",
+      "intro": "Decide true or false on all six before revealing any.",
+      "items": [
+        {
+          "claim": "For a 4 by 3 contingency table the degrees of freedom are 6.",
+          "tf": true,
+          "why": "True: (4 − 1)(3 − 1) = 6. Both practice variants on this topic ask exactly this, one for a 3 by 4 table and one for a 4 by 3 — and the answer is the same, since only the product matters."
+        },
+        {
+          "claim": "The degrees of freedom of an r by c table are rc − 1.",
+          "tf": false,
+          "why": "False. That would be the goodness-of-fit rule for a fully specified distribution over rc categories. Here the row and column probabilities are estimated from the margins, and subtracting them leaves (r − 1)(c − 1)."
+        },
+        {
+          "claim": "A test of independence and a test of homogeneity use the same statistic and the same degrees of freedom.",
+          "tf": true,
+          "why": "True. The designs and hypotheses differ — one sample classified twice against several samples classified once — but the expected counts, the statistic and (r − 1)(c − 1) are identical. Only the wording of the conclusion changes."
+        },
+        {
+          "claim": "Yates' correction should be applied to any contingency table with one degree of freedom.",
+          "tf": true,
+          "why": "True, and this is a careful one. One degree of freedom means (r − 1)(c − 1) = 1, which forces r = c = 2. So 'one degree of freedom' and '2 by 2' describe the same tables, and Yates applies to exactly those."
+        },
+        {
+          "claim": "A significant chi-square test on a table shows that the row variable causes the column variable.",
+          "tf": false,
+          "why": "False. It shows association. A third factor the table did not record can produce the association entirely — a centre with worse outcomes may be treating sicker patients. Causation requires a design that rules such factors out, not a larger statistic."
+        },
+        {
+          "claim": "Doubling every count in a table leaves the chi-square statistic unchanged.",
+          "tf": false,
+          "why": "False — it doubles it. Each numerator (2O − 2E)² is four times the original while each denominator 2E is twice, so every term doubles. The strength of the association has not changed, which is why measures such as phi and Cramér's V exist; they are built to be unaffected by n."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 7,
+      "title": "On your own — what is special about 2 by 2",
+      "objective": "Collect the three things that apply only to the smallest table.",
+      "problem": "For the 2 by 2 table of section 6 — group A 12 passes and 18 failures, group B 22 and 8 — answer: (a) what is the two-proportion z statistic, and how does z² compare with the uncorrected χ²? (b) why does Yates' correction exist for this table in particular? (c) when should Fisher's exact test be used instead? (d) why is 'one degree of freedom' the same condition as '2 by 2'?",
+      "hints": [
+        "For (a), the pooled proportion is 34/60, and the standard error uses that pooled value with 1/n₁ + 1/n₂. Compute z and then square it.",
+        "For (b), think about how many distinct values the table can take once the margins are fixed, and compare that with a continuous distribution.",
+        "For (d), solve (r − 1)(c − 1) = 1 in positive integers."
+      ],
+      "answer": "(a) z = −2.605 and z² = 6.787, exactly the uncorrected χ². (b) Because with the margins fixed a 2 by 2 table has only one free cell, so the statistic takes few distinct values and the continuous approximation is at its worst. (c) When expected counts are too small for the approximation and no sensible pooling is available. (d) Because (r − 1)(c − 1) = 1 forces r − 1 = c − 1 = 1.",
+      "check": "The identity in (a) is worth carrying: for a 2 by 2 table the chi-square test of independence and the two-sided two-proportion z test are the same test, which is why the critical values satisfy 3.841 = 1.96². It also explains why no correction appears in the z version as usually taught — the continuity correction is an optional extra there too. For (c), note that Fisher's test is exact rather than approximate, and conditions on both margins; it is the right answer when a question says the sample is small, not merely when the result is inconvenient.",
+      "solution": [
+        {
+          "say": "(a) Compute the two-proportion z statistic.",
+          "math": "p̂₁ = 12/30 = 0.4,  p̂₂ = 22/30 = 0.7333,  pooled p̂ = 34/60 = 0.5667\nSE = √[0.5667 × 0.4333 × (1/30 + 1/30)] = √0.016371 = 0.12795\nz = (0.4 − 0.7333)/0.12795 = −2.6053\nz² = 6.7873",
+          "why": "Exactly the uncorrected chi-square from section 6. The two tests are algebraically identical for a 2 by 2 table, so they can never disagree."
+        },
+        {
+          "say": "(b) Explain the correction.",
+          "math": "margins fixed ⟹ one free cell ⟹ few attainable values of χ²",
+          "why": "A continuous chi-square distribution is being used for a statistic that takes a small number of discrete values, and the mismatch is worst when there is only one free cell. Yates' subtraction of 0.5 is intended to make the test more conservative; some implementations cap the adjusted absolute deviation at zero to avoid overcorrection."
+        },
+        {
+          "say": "(c) Identify when the approximation must be abandoned.",
+          "math": "any expected count below 5, with no sensible merge available\n⟹ Fisher's exact test, which conditions on both margins and computes exact hypergeometric probabilities",
+          "why": "In a 2 by 2 table there is nothing to merge — merging a row or column would collapse the table entirely — so pooling is not an option and an exact test is the only route."
+        },
+        {
+          "say": "(d) Solve the degrees-of-freedom equation.",
+          "math": "(r − 1)(c − 1) = 1 with r, c positive integers\n⟹ r − 1 = 1 and c − 1 = 1 ⟹ r = c = 2",
+          "why": "So the phrases are interchangeable, and a question that says 'Yates' correction applies when df = 1' is saying the same thing as 'Yates applies to 2 by 2 tables'. Both appear in question papers."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s11",
+      "mins": 6,
+      "title": "How strong, not just whether",
+      "objective": "See why a significant table needs a measure of association alongside it.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "The problem with the statistic as a measure",
+          "body": "The chi-square statistic grows with the sample size. Doubling every count in a table doubles the statistic while leaving the pattern of association exactly as it was. So a large chi-square can mean a strong association, or a weak association measured on a lot of data, and the statistic alone cannot distinguish them. This is topic 4.15's significance-against-importance problem in the setting of a table."
+        },
+        {
+          "t": "formula",
+          "h": "The three standard measures",
+          "body": "phi (2 by 2 only):        φ = √(χ²/n)\ncontingency coefficient:  C = √(χ²/(χ² + n))\nCramér's V:               V = √(χ²/(n × min(r − 1, c − 1)))\nEach divides out the sample size, so each is unchanged when every count is doubled."
+        },
+        {
+          "t": "step",
+          "h": "The worked tables, measured",
+          "body": "For the 2 by 2 table of section 6: χ² = 6.787 with n = 60, so φ = √(6.787/60) = 0.336 and C = √(6.787/66.787) = 0.319. For the 2 by 3 table of section 4: χ² = 17.865 with n = 180 and min(r − 1, c − 1) = 1, so V = √(17.865/180) = 0.315. Both are moderate associations. And if every count in the 2 by 2 table were doubled, χ² would rise to 13.575 while φ stayed at 0.336 — which is the whole point of having the measure."
+        },
+        {
+          "t": "def",
+          "h": "Reading the measures",
+          "body": "All three are zero when the classifications are independent. Cramér's V reaches 1 for a perfect association and is the one to prefer for a general table. Phi is confined to 2 by 2 tables, where it coincides with the ordinary correlation coefficient computed on 0–1 coded variables. The contingency coefficient C cannot reach 1, and its maximum depends on the table's shape, which makes comparisons across differently shaped tables unsafe."
+        },
+        {
+          "t": "step",
+          "h": "What none of them tells you",
+          "body": "Strength is not direction and not cause. A V of 0.315 says there is a moderate association somewhere in the table; the individual cells say where, and nothing in the arithmetic says why. For an ordered classification none of these measures uses the ordering, so a monotone trend and a scattered pattern of the same strength are indistinguishable — the same blindness topic 4.14 noted for goodness of fit."
+        }
+      ],
+      "ask": {
+        "q": "A table with n = 2000 gives χ² = 40 on 1 degree of freedom, hugely significant. What is phi, and what does it say?",
+        "nudge": "φ = √(χ²/n). Compute it, and ask whether a value that small describes a strong relationship."
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s12",
+      "mins": 2,
+      "title": "Second recall — the parts most likely to fade",
+      "objective": "Retrieve the rules and the special cases that get asked.",
+      "intro": "Answer, then reveal.",
+      "items": [
+        {
+          "q": "Degrees of freedom for a 3 by 4 contingency table?",
+          "a": "(3 − 1)(4 − 1) = 6."
+        },
+        {
+          "q": "Testing the equality of proportions across 5 populations. Degrees of freedom?",
+          "a": "It is a 2 by 5 table, so (2 − 1)(5 − 1) = 4."
+        },
+        {
+          "q": "What is the relationship between the 2 by 2 chi-square test and the two-proportion z test?",
+          "a": "They are the same test: z² equals the uncorrected chi-square, and 1.96² = 3.841."
+        },
+        {
+          "q": "When is Fisher's exact test the right choice?",
+          "a": "For a 2 by 2 table whose expected counts are too small for the chi-square approximation, where no pooling is possible."
+        },
+        {
+          "q": "Doubling every count in a table does what to χ² and to phi?",
+          "a": "Doubles χ² and leaves phi unchanged. Phi measures strength; the statistic measures strength combined with sample size."
+        },
+        {
+          "q": "Which measure of association should be preferred for a general r by c table?",
+          "a": "Cramér's V, since it reaches 1 for a perfect association whatever the shape. The contingency coefficient cannot reach 1."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 3,
+      "title": "What you should now be able to do unaided",
+      "objective": "Close the loop before the mastery test.",
+      "body": [
+        "Compute expected counts for a table as (row total × column total)/grand total, and check them against the margins.",
+        "Compute the chi-square statistic cell by cell and count the degrees of freedom as (r − 1)(c − 1).",
+        "Derive that rule two ways — by counting free cells, and by subtracting the estimated margins from rc − 1.",
+        "Distinguish a test of independence, a test of homogeneity and a test of goodness of fit by the sampling design described in the stem, knowing that the first two share their arithmetic.",
+        "Treat equality of several proportions as a 2 by c table with c − 1 degrees of freedom.",
+        "Handle the 2 by 2 case: apply Yates' correction, know it is generally conservative, know the test equals the two-proportion z test squared, and know when Fisher's exact test is required instead.",
+        "Report a measure of association alongside a significant result, and say why the statistic alone cannot measure strength."
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s14",
+      "mins": 8,
+      "ext": true,
+      "title": "The degrees of freedom, derived from the likelihood ratio",
+      "objective": "Get (r − 1)(c − 1) from the general rule of topic 4.10, so it stops being a separate fact.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "Set the problem up as a multinomial",
+          "body": "The table is one multinomial over rc cells, with cell probabilities pᵢⱼ summing to 1. The unrestricted model lets all of them vary, so its dimension is rc − 1 — one fewer than the number of cells, because of the sum-to-one constraint. This is the dim(Θ) of Wilks' theorem."
+        },
+        {
+          "t": "step",
+          "h": "Impose independence and count again",
+          "body": "Under independence pᵢⱼ = αᵢ βⱼ, where the αᵢ are the row probabilities and the βⱼ the column probabilities. The αᵢ sum to 1, so they contribute r − 1 free parameters; likewise the βⱼ contribute c − 1. So dim(Θ₀) = (r − 1) + (c − 1)."
+        },
+        {
+          "t": "formula",
+          "h": "Subtract",
+          "body": "df = dim(Θ) − dim(Θ₀)\n   = (rc − 1) − (r − 1) − (c − 1)\n   = rc − 1 − r + 1 − c + 1\n   = rc − r − c + 1\n   = (r − 1)(c − 1)"
+        },
+        {
+          "t": "step",
+          "h": "Why this is the same rule as topic 4.14's",
+          "body": "Topic 4.14's rule was df = k − 1 − m with k categories and m estimated parameters. Here k = rc and m = (r − 1) + (c − 1), the margins estimated from the data — and k − 1 − m is exactly the subtraction above. So there is one degrees-of-freedom principle in this module, dim(Θ) − dim(Θ₀), and the two apparently different formulas are the same statement about different models. The same principle gave k − 2 for a fitted Poisson and k − 3 for a fitted normal."
+        },
+        {
+          "t": "step",
+          "h": "The likelihood ratio form, and why both statistics appear",
+          "body": "The likelihood ratio statistic for this problem is −2 log λ = 2 Σᵢ Σⱼ Oᵢⱼ log(Oᵢⱼ/Eᵢⱼ), sometimes called G². Expanding it about Oᵢⱼ = Eᵢⱼ gives Pearson's Σ(O − E)²/E to second order, exactly as topic 4.14's optional section showed for one classification. The two statistics are asymptotically equivalent and carry the same (r − 1)(c − 1) degrees of freedom; Pearson's is easier by hand, G² is preferred in some software and generalises better to more than two classifications. A question offering both as options is usually asking whether you know they are the same test to this order of approximation."
+        }
+      ],
+      "ask": {
+        "q": "Use the same counting to get the degrees of freedom for a three-way r by c by d table under complete independence.",
+        "nudge": "dim(Θ) = rcd − 1. What does complete independence contribute: (r − 1) + (c − 1) + (d − 1). Subtract."
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s15",
+      "mins": 12,
+      "title": "Mastery test",
+      "objective": "Demonstrate it independently, on questions you have not seen.",
+      "setId": "inference_t16_mastery"
     }
-   ],
-   "after": "Two things specific to the 2 by 2 table. All four absolute differences are equal, which gives you a fast arithmetic check unavailable in larger tables. And this is the only shape where Yates' correction applies — not to a 2 by 3, not to goodness of fit. Section 10 adds the two other things that are special about this shape."
-  },
-  {
-   "kind": "theory",
-   "id": "s7",
-   "mins": 7,
-   "title": "Independence, homogeneity and goodness of fit",
-   "objective": "Separate the three designs properly, since the distinction is the conceptual question this topic asks.",
-   "blocks": [
-    {
-     "t": "def",
-     "h": "Test of independence",
-     "body": "ONE sample, each member classified by TWO attributes. Neither margin is fixed in advance; both are outcomes of the sampling. H₀: the two attributes are independent, P(row i and column j) = P(row i)P(column j) for every cell. Example: survey 300 people and record city and brand preference."
-    },
-    {
-     "t": "def",
-     "h": "Test of homogeneity",
-     "body": "SEVERAL samples, of sizes fixed by the investigator, each member classified by ONE attribute. One margin is fixed by design. H₀: the r populations have the same distribution across the c categories. Example: survey exactly 100 people in each of three cities and record brand preference."
-    },
-    {
-     "t": "def",
-     "h": "Test of goodness of fit",
-     "body": "ONE sample, each member classified ONCE, compared against a claimed distribution — topic 4.14. H₀: the claimed distribution holds. The degrees of freedom are k − 1 − m rather than a product, because there is only one classification."
-    },
-    {
-     "t": "step",
-     "h": "Why the first two share their arithmetic",
-     "body": "Both compare the observed table with the table the null predicts from the margins, and in both cases the margins must be estimated — in the homogeneity case one margin was chosen rather than estimated, but a quantity you fixed yourself is known exactly and costs no degree of freedom either way the accounting is done. So the expected counts, the statistic and (r − 1)(c − 1) are common to both. Only the conclusion's wording differs: 'the attributes are associated' against 'the populations differ'."
-    },
-    {
-     "t": "step",
-     "h": "Equality of several proportions is a special case",
-     "body": "Testing whether c populations share a common proportion is a 2 by c table — success and failure as the two rows — so df = (2 − 1)(c − 1) = c − 1. This is the entry 'testing equality of several population proportions → chi-square test' that June 2026 Q33 matched, and it is why that test is a chi-square test rather than a z or t test. For exactly two proportions the z test is available and, as section 10 shows, gives the same answer."
-    },
-    {
-     "t": "step",
-     "h": "What a question's wording tells you",
-     "body": "'A random sample of 300 people was classified by…' signals independence. 'Samples of 100 were taken from each of three cities' signals homogeneity. 'Does the data fit a Poisson distribution' signals goodness of fit. A question asking which test to use is usually testing whether you noticed which design the stem described."
-    }
-   ],
-   "ask": {
-    "q": "A survey takes exactly 150 men and 150 women and asks each a yes-or-no question. Independence or homogeneity?",
-    "nudge": "Were the 150s outcomes of the sampling, or decisions by the investigator?"
-   }
-  },
-  {
-   "kind": "guided",
-   "id": "s8",
-   "mins": 8,
-   "title": "On your own — a 3 by 4 homogeneity test",
-   "objective": "Run the shape both practice variants ask about, and handle a non-rejection properly.",
-   "problem": "One hundred consumers were sampled in each of three cities and asked which of four brands they prefer. The counts were: city 1 — 30, 25, 25, 20; city 2 — 20, 30, 25, 25; city 3 — 25, 20, 30, 25. Test at the 5% level whether the three cities have the same brand profile.",
-   "hints": [
-    "Direction — the sample sizes were fixed at 100 per city, so this is a homogeneity test. Compute the column totals first; the row totals are all 100.",
-    "Second step — every expected count is 100 × (column total)/300. Two of the four columns give whole numbers and two do not; keep three decimals.",
-    "Last step — the degrees of freedom are (3 − 1)(4 − 1). Compare with the 5% point for that many degrees of freedom before concluding."
-   ],
-   "answer": "χ² = 5.339 on 6 degrees of freedom; 5.339 < 12.592, so there is no evidence against homogeneity.",
-   "check": "Three things an examiner looks for. The degrees of freedom are 6, not 12 (the number of cells) and not 11 — this is exactly what the two practice variants on this topic ask. The expected counts are not all equal, because the column totals are not all equal: they are 75, 75, 80 and 70, giving expected counts of 25, 25, 26.667 and 23.333 in every row. And the conclusion must be stated as a failure to find evidence, not as proof of homogeneity — with 100 per city this test has limited power against modest differences, so a non-rejection is weak evidence at best.",
-   "scenario": {
-    "teaser": "A brand manager wants to know whether to run one national campaign or three regional ones.",
-    "title": "One campaign or three?",
-    "body": [
-     "A brand manager has a budget decision. If consumers in the three cities have essentially the same brand preferences, one national campaign is cheaper and simpler. If the cities differ, three regional campaigns are worth the extra cost.",
-     "The survey is designed for that question: a fixed 100 consumers per city, so the comparison is between three populations rather than between two attributes of one population. That is the homogeneity design, and it was chosen deliberately — it guarantees enough data from each city to say something about each.",
-     "The test comes back at 5.339 against a critical value of 12.592, nowhere near significance. The honest report is that the survey found no evidence that the cities differ.",
-     "What it is not is proof that they are the same, and the distinction matters commercially. With 100 per city, a real difference of a few percentage points in brand share would very likely go undetected. So the manager's decision rests on two things: the test found nothing, and the study could only have found a fairly large difference. If a small difference would change the decision, the survey was too small to inform it.",
-     "This is the non-rejection discipline from topic 4.15 applied to a real choice. A result of 'not significant' is only as informative as the power behind it, and reporting the statistic without that caveat invites the manager to read it as a green light it is not."
-    ],
-    "q": "The manager asks whether the survey proves the cities have the same preferences. What is the right answer?",
-    "answer": "No. The survey found no evidence that they differ, which is a different and weaker statement. With 100 consumers per city the test has limited power against differences of a few percentage points, so a true difference of that size would probably not have shown up. If such a difference would change the campaign decision, the right response is a larger survey rather than a conclusion of sameness."
-   },
-   "solution": [
-    {
-     "say": "Build the margins.",
-     "math": "            B1   B2   B3   B4   total\ncity 1      30   25   25   20    100\ncity 2      20   30   25   25    100\ncity 3      25   20   30   25    100\ntotal       75   75   80   70    300",
-     "why": "Row totals are 100 by design. The column totals are unequal, which means the expected counts vary across columns — a point worth noticing before computing them."
-    },
-    {
-     "say": "Compute the expected counts.",
-     "math": "every row: 100 × 75/300 = 25.000\n           100 × 75/300 = 25.000\n           100 × 80/300 = 26.667\n           100 × 70/300 = 23.333",
-     "why": "All three rows have the same expected counts because all three row totals are 100. They sum to 100 per row, which is the check. All are well above 5."
-    },
-    {
-     "say": "Compute the twelve terms and sum.",
-     "math": "city 1:  1.000,  0.000,  0.104,  0.476\ncity 2:  1.000,  1.000,  0.104,  0.119\ncity 3:  0.000,  1.000,  0.417,  0.119\nχ² = 5.339",
-     "why": "No single term dominates — the largest is 1.000 — which is itself informative: the discrepancies are small and scattered rather than concentrated anywhere."
-    },
-    {
-     "say": "Count the degrees of freedom and conclude.",
-     "math": "df = (3 − 1)(4 − 1) = 2 × 3 = 6\nχ²(0.05, 6) = 12.592,  5.339 < 12.592\n⟹ no evidence against homogeneity",
-     "why": "Six degrees of freedom, from the shape of the table rather than its 12 cells. The statistic is less than half the critical value, so this is not a borderline case — but it remains a failure to find a difference rather than a demonstration of sameness."
-    }
-   ]
-  },
-  {
-   "kind": "trapcheck",
-   "id": "s9",
-   "mins": 6,
-   "title": "Six statements — verdict on each before you look",
-   "objective": "Rule on the claims this topic's questions are built from.",
-   "intro": "Decide true or false on all six before revealing any.",
-   "items": [
-    {
-     "claim": "For a 4 by 3 contingency table the degrees of freedom are 6.",
-     "tf": true,
-     "why": "True: (4 − 1)(3 − 1) = 6. Both practice variants on this topic ask exactly this, one for a 3 by 4 table and one for a 4 by 3 — and the answer is the same, since only the product matters."
-    },
-    {
-     "claim": "The degrees of freedom of an r by c table are rc − 1.",
-     "tf": false,
-     "why": "False. That would be the goodness-of-fit rule for a fully specified distribution over rc categories. Here the row and column probabilities are estimated from the margins, and subtracting them leaves (r − 1)(c − 1)."
-    },
-    {
-     "claim": "A test of independence and a test of homogeneity use the same statistic and the same degrees of freedom.",
-     "tf": true,
-     "why": "True. The designs and hypotheses differ — one sample classified twice against several samples classified once — but the expected counts, the statistic and (r − 1)(c − 1) are identical. Only the wording of the conclusion changes."
-    },
-    {
-     "claim": "Yates' correction should be applied to any contingency table with one degree of freedom.",
-     "tf": true,
-     "why": "True, and this is a careful one. One degree of freedom means (r − 1)(c − 1) = 1, which forces r = c = 2. So 'one degree of freedom' and '2 by 2' describe the same tables, and Yates applies to exactly those."
-    },
-    {
-     "claim": "A significant chi-square test on a table shows that the row variable causes the column variable.",
-     "tf": false,
-     "why": "False. It shows association. A third factor the table did not record can produce the association entirely — a centre with worse outcomes may be treating sicker patients. Causation requires a design that rules such factors out, not a larger statistic."
-    },
-    {
-     "claim": "Doubling every count in a table leaves the chi-square statistic unchanged.",
-     "tf": false,
-     "why": "False — it doubles it. Each numerator (2O − 2E)² is four times the original while each denominator 2E is twice, so every term doubles. The strength of the association has not changed, which is why measures such as phi and Cramér's V exist; they are built to be unaffected by n."
-    }
-   ]
-  },
-  {
-   "kind": "guided",
-   "id": "s10",
-   "mins": 7,
-   "title": "On your own — what is special about 2 by 2",
-   "objective": "Collect the three things that apply only to the smallest table.",
-   "problem": "For the 2 by 2 table of section 6 — group A 12 passes and 18 failures, group B 22 and 8 — answer: (a) what is the two-proportion z statistic, and how does z² compare with the uncorrected χ²? (b) why does Yates' correction exist for this table in particular? (c) when should Fisher's exact test be used instead? (d) why is 'one degree of freedom' the same condition as '2 by 2'?",
-   "hints": [
-    "For (a), the pooled proportion is 34/60, and the standard error uses that pooled value with 1/n₁ + 1/n₂. Compute z and then square it.",
-    "For (b), think about how many distinct values the table can take once the margins are fixed, and compare that with a continuous distribution.",
-    "For (d), solve (r − 1)(c − 1) = 1 in positive integers."
-   ],
-   "answer": "(a) z = −2.605 and z² = 6.787, exactly the uncorrected χ². (b) Because with the margins fixed a 2 by 2 table has only one free cell, so the statistic takes few distinct values and the continuous approximation is at its worst. (c) When expected counts are too small for the approximation and no sensible pooling is available. (d) Because (r − 1)(c − 1) = 1 forces r − 1 = c − 1 = 1.",
-   "check": "The identity in (a) is worth carrying: for a 2 by 2 table the chi-square test of independence and the two-sided two-proportion z test are the same test, which is why the critical values satisfy 3.841 = 1.96². It also explains why no correction appears in the z version as usually taught — the continuity correction is an optional extra there too. For (c), note that Fisher's test is exact rather than approximate, and conditions on both margins; it is the right answer when a question says the sample is small, not merely when the result is inconvenient.",
-   "solution": [
-    {
-     "say": "(a) Compute the two-proportion z statistic.",
-     "math": "p̂₁ = 12/30 = 0.4,  p̂₂ = 22/30 = 0.7333,  pooled p̂ = 34/60 = 0.5667\nSE = √[0.5667 × 0.4333 × (1/30 + 1/30)] = √0.016371 = 0.12795\nz = (0.4 − 0.7333)/0.12795 = −2.6053\nz² = 6.7873",
-     "why": "Exactly the uncorrected chi-square from section 6. The two tests are algebraically identical for a 2 by 2 table, so they can never disagree."
-    },
-    {
-     "say": "(b) Explain the correction.",
-     "math": "margins fixed ⟹ one free cell ⟹ few attainable values of χ²",
-     "why": "A continuous chi-square distribution is being used for a statistic that takes a small number of discrete values, and the mismatch is worst when there is only one free cell. Yates' subtraction of 0.5 compensates, always downwards, making the test conservative."
-    },
-    {
-     "say": "(c) Identify when the approximation must be abandoned.",
-     "math": "any expected count below 5, with no sensible merge available\n⟹ Fisher's exact test, which conditions on both margins and computes exact hypergeometric probabilities",
-     "why": "In a 2 by 2 table there is nothing to merge — merging a row or column would collapse the table entirely — so pooling is not an option and an exact test is the only route."
-    },
-    {
-     "say": "(d) Solve the degrees-of-freedom equation.",
-     "math": "(r − 1)(c − 1) = 1 with r, c positive integers\n⟹ r − 1 = 1 and c − 1 = 1 ⟹ r = c = 2",
-     "why": "So the phrases are interchangeable, and a question that says 'Yates' correction applies when df = 1' is saying the same thing as 'Yates applies to 2 by 2 tables'. Both appear in question papers."
-    }
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s11",
-   "mins": 6,
-   "title": "How strong, not just whether",
-   "objective": "See why a significant table needs a measure of association alongside it.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "The problem with the statistic as a measure",
-     "body": "The chi-square statistic grows with the sample size. Doubling every count in a table doubles the statistic while leaving the pattern of association exactly as it was. So a large chi-square can mean a strong association, or a weak association measured on a lot of data, and the statistic alone cannot distinguish them. This is topic 4.15's significance-against-importance problem in the setting of a table."
-    },
-    {
-     "t": "formula",
-     "h": "The three standard measures",
-     "body": "phi (2 by 2 only):        φ = √(χ²/n)\ncontingency coefficient:  C = √(χ²/(χ² + n))\nCramér's V:               V = √(χ²/(n × min(r − 1, c − 1)))\nEach divides out the sample size, so each is unchanged when every count is doubled."
-    },
-    {
-     "t": "step",
-     "h": "The worked tables, measured",
-     "body": "For the 2 by 2 table of section 6: χ² = 6.787 with n = 60, so φ = √(6.787/60) = 0.336 and C = √(6.787/66.787) = 0.319. For the 2 by 3 table of section 4: χ² = 17.865 with n = 180 and min(r − 1, c − 1) = 1, so V = √(17.865/180) = 0.315. Both are moderate associations. And if every count in the 2 by 2 table were doubled, χ² would rise to 13.575 while φ stayed at 0.336 — which is the whole point of having the measure."
-    },
-    {
-     "t": "def",
-     "h": "Reading the measures",
-     "body": "All three are zero when the classifications are independent. Cramér's V reaches 1 for a perfect association and is the one to prefer for a general table. Phi is confined to 2 by 2 tables, where it coincides with the ordinary correlation coefficient computed on 0–1 coded variables. The contingency coefficient C cannot reach 1, and its maximum depends on the table's shape, which makes comparisons across differently shaped tables unsafe."
-    },
-    {
-     "t": "step",
-     "h": "What none of them tells you",
-     "body": "Strength is not direction and not cause. A V of 0.315 says there is a moderate association somewhere in the table; the individual cells say where, and nothing in the arithmetic says why. For an ordered classification none of these measures uses the ordering, so a monotone trend and a scattered pattern of the same strength are indistinguishable — the same blindness topic 4.14 noted for goodness of fit."
-    }
-   ],
-   "ask": {
-    "q": "A table with n = 2000 gives χ² = 40 on 1 degree of freedom, hugely significant. What is phi, and what does it say?",
-    "nudge": "φ = √(χ²/n). Compute it, and ask whether a value that small describes a strong relationship."
-   }
-  },
-  {
-   "kind": "recall",
-   "id": "s12",
-   "mins": 2,
-   "title": "Second recall — the parts most likely to fade",
-   "objective": "Retrieve the rules and the special cases that get asked.",
-   "intro": "Answer, then reveal.",
-   "items": [
-    {
-     "q": "Degrees of freedom for a 3 by 4 contingency table?",
-     "a": "(3 − 1)(4 − 1) = 6."
-    },
-    {
-     "q": "Testing the equality of proportions across 5 populations. Degrees of freedom?",
-     "a": "It is a 2 by 5 table, so (2 − 1)(5 − 1) = 4."
-    },
-    {
-     "q": "What is the relationship between the 2 by 2 chi-square test and the two-proportion z test?",
-     "a": "They are the same test: z² equals the uncorrected chi-square, and 1.96² = 3.841."
-    },
-    {
-     "q": "When is Fisher's exact test the right choice?",
-     "a": "For a 2 by 2 table whose expected counts are too small for the chi-square approximation, where no pooling is possible."
-    },
-    {
-     "q": "Doubling every count in a table does what to χ² and to phi?",
-     "a": "Doubles χ² and leaves phi unchanged. Phi measures strength; the statistic measures strength combined with sample size."
-    },
-    {
-     "q": "Which measure of association should be preferred for a general r by c table?",
-     "a": "Cramér's V, since it reaches 1 for a perfect association whatever the shape. The contingency coefficient cannot reach 1."
-    }
-   ]
-  },
-  {
-   "kind": "summary",
-   "id": "s13",
-   "mins": 3,
-   "title": "What you should now be able to do unaided",
-   "objective": "Close the loop before the mastery test.",
-   "body": [
-    "Compute expected counts for a table as (row total × column total)/grand total, and check them against the margins.",
-    "Compute the chi-square statistic cell by cell and count the degrees of freedom as (r − 1)(c − 1).",
-    "Derive that rule two ways — by counting free cells, and by subtracting the estimated margins from rc − 1.",
-    "Distinguish a test of independence, a test of homogeneity and a test of goodness of fit by the sampling design described in the stem, knowing that the first two share their arithmetic.",
-    "Treat equality of several proportions as a 2 by c table with c − 1 degrees of freedom.",
-    "Handle the 2 by 2 case: apply Yates' correction, know it is conservative, know the test equals the two-proportion z test squared, and know when Fisher's exact test is required instead.",
-    "Report a measure of association alongside a significant result, and say why the statistic alone cannot measure strength."
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s14",
-   "mins": 8,
-   "ext": true,
-   "title": "The degrees of freedom, derived from the likelihood ratio",
-   "objective": "Get (r − 1)(c − 1) from the general rule of topic 4.10, so it stops being a separate fact.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "Set the problem up as a multinomial",
-     "body": "The table is one multinomial over rc cells, with cell probabilities pᵢⱼ summing to 1. The unrestricted model lets all of them vary, so its dimension is rc − 1 — one fewer than the number of cells, because of the sum-to-one constraint. This is the dim(Θ) of Wilks' theorem."
-    },
-    {
-     "t": "step",
-     "h": "Impose independence and count again",
-     "body": "Under independence pᵢⱼ = αᵢ βⱼ, where the αᵢ are the row probabilities and the βⱼ the column probabilities. The αᵢ sum to 1, so they contribute r − 1 free parameters; likewise the βⱼ contribute c − 1. So dim(Θ₀) = (r − 1) + (c − 1)."
-    },
-    {
-     "t": "formula",
-     "h": "Subtract",
-     "body": "df = dim(Θ) − dim(Θ₀)\n   = (rc − 1) − (r − 1) − (c − 1)\n   = rc − 1 − r + 1 − c + 1\n   = rc − r − c + 1\n   = (r − 1)(c − 1)"
-    },
-    {
-     "t": "step",
-     "h": "Why this is the same rule as topic 4.14's",
-     "body": "Topic 4.14's rule was df = k − 1 − m with k categories and m estimated parameters. Here k = rc and m = (r − 1) + (c − 1), the margins estimated from the data — and k − 1 − m is exactly the subtraction above. So there is one degrees-of-freedom principle in this module, dim(Θ) − dim(Θ₀), and the two apparently different formulas are the same statement about different models. The same principle gave k − 2 for a fitted Poisson and k − 3 for a fitted normal."
-    },
-    {
-     "t": "step",
-     "h": "The likelihood ratio form, and why both statistics appear",
-     "body": "The likelihood ratio statistic for this problem is −2 log λ = 2 Σᵢ Σⱼ Oᵢⱼ log(Oᵢⱼ/Eᵢⱼ), sometimes called G². Expanding it about Oᵢⱼ = Eᵢⱼ gives Pearson's Σ(O − E)²/E to second order, exactly as topic 4.14's optional section showed for one classification. The two statistics are asymptotically equivalent and carry the same (r − 1)(c − 1) degrees of freedom; Pearson's is easier by hand, G² is preferred in some software and generalises better to more than two classifications. A question offering both as options is usually asking whether you know they are the same test to this order of approximation."
-    }
-   ],
-   "ask": {
-    "q": "Use the same counting to get the degrees of freedom for a three-way r by c by d table under complete independence.",
-    "nudge": "dim(Θ) = rcd − 1. What does complete independence contribute: (r − 1) + (c − 1) + (d − 1). Subtract."
-   }
-  },
-  {
-   "kind": "quiz",
-   "id": "s15",
-   "mins": 12,
-   "title": "Mastery test",
-   "objective": "Demonstrate it independently, on questions you have not seen.",
-   "setId": "inference_t16_mastery"
-  }
- ]
+  ]
 }

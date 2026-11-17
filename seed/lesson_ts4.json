@@ -1,939 +1,939 @@
 {
- "id": "timeseriest4",
- "topicId": "timeseries-t4",
- "moduleId": "timeseries",
- "title": "Autocovariance of AR Processes",
- "breadcrumb": "Time series → Foundations → Computing γₖ from the coefficients",
- "engine": "B",
- "engineName": "Time series — multiply through, take expectations, and solve",
- "version": "1.0",
- "status": "approved",
- "estMin": 100,
- "objectives": [
-  "Derive the AR(1) variance and autocorrelation function from the model equation.",
-  "State and apply γ₀ = σ²/(1 − φ²) and ρₖ = φᵏ.",
-  "Derive ρ₁ = φ₁/(1 − φ₂) for an AR(2) using the symmetry γ₋ₖ = γₖ.",
-  "Run the recursion ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂ from its two starting values.",
-  "Use the closed-form AR(2) variance and read its sign as a stationarity check.",
-  "Say why only the k = 0 equation carries σ² and why autocorrelations do not."
- ],
- "prereq": [
-  {
-   "id": "p1",
-   "name": "Weak stationarity",
-   "why": "It is what makes E(yₜyₜ₋ₖ) depend on k alone, turning the calculation into a recursion."
-  },
-  {
-   "id": "p2",
-   "name": "White noise and its properties",
-   "why": "E(yₜ₋ₖεₜ) = 0 for k ≥ 1 is what kills the cross terms; E(yₜεₜ) = σ² is what survives at k = 0."
-  },
-  {
-   "id": "p3",
-   "name": "Stationarity conditions (topic 7.1)",
-   "why": "The formulas are valid only inside the admissible region, and the variance's sign reports when they are not."
-  },
-  {
-   "id": "p4",
-   "name": "Linear difference equations",
-   "why": "The autocorrelations satisfy one, and its root structure explains smooth versus oscillating decay."
-  }
- ],
- "traps": [
-  "ρ₁ = φ₁ holds for an AR(1) only; for an AR(2) it is φ₁/(1 − φ₂).",
-  "Only the k = 0 equation carries σ² — the recursion for k ≥ 1 is homogeneous.",
-  "E(yₜεₜ) = σ², not zero. Forgetting it loses the variance entirely.",
-  "The variance depends on φ², so its value is the same at φ and −φ.",
-  "Autocorrelations never involve σ²; the variance always does.",
-  "An oscillating ACF means complex roots, not an MA component.",
-  "γ₋₁ = γ₁ by symmetry — the AR(2) derivation fails without it.",
-  "A negative variance from the formula means the coefficients are outside the triangle."
- ],
- "revision": {
-  "sheet": [
-   "METHOD: multiply the model by yₜ₋ₖ, take expectations, use stationarity to get a recursion in k.",
-   "E(yₜ₋ₖεₜ) = 0 for k ≥ 1; E(yₜεₜ) = σ². Only the k = 0 equation carries σ².",
-   "AR(1) recursion: γₖ = φγₖ₋₁, so γₖ = φᵏγ₀ and ρₖ = φᵏ.",
-   "AR(1) variance: γ₀ = φγ₁ + σ² = φ²γ₀ + σ² ⟹ γ₀ = σ²/(1 − φ²).",
-   "At φ = 0.7, σ² = 1: γ₀ = 1/0.51 = 1.9608 (simulated 1.9613); ρₖ simulated 0.7001/0.4903/0.3433/0.1686.",
-   "Amplification 1/(1−φ²): 1.3333 at 0.5, 2.7778 at 0.8, 5.2632 at 0.9, 10.2564 at 0.95.",
-   "The variance depends on φ², so it is the same at φ = ±0.7. Sign changes the SHAPE only.",
-   "AR(2) recursion: γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂ (k ≥ 1), and the same in ρ.",
-   "At k = 1: ρ₁ = φ₁ + φ₂ρ₋₁ = φ₁ + φ₂ρ₁ (using ρ₋₁ = ρ₁) ⟹ ρ₁ = φ₁/(1 − φ₂).",
-   "Then ρ₂ = φ₁ρ₁ + φ₂, and the recursion onwards. At (0.5,0.3): 0.7143, 0.6571, 0.5429, 0.3971.",
-   "Simulated at (0.5,0.3): 0.7145, 0.6577, 0.5432, 0.3975 — agreement to three decimals.",
-   "AR(2) VARIANCE: γ₀ = σ²(1 − φ₂)/[(1 + φ₂)((1 − φ₂)² − φ₁²)].",
-   "At (0.5,0.3), σ²=1: 0.7/(1.3 × 0.24) = 2.2436 (simulated 2.2466). Reduces to σ²/(1−φ₁²) at φ₂ = 0.",
-   "The denominator factors (1+φ₂)(1−φ₂−φ₁)(1−φ₂+φ₁) — the three stationarity conditions.",
-   "So γ₀ > 0 ⟺ the process is stationary. A negative value is a diagnosis, not an error.",
-   "The recursion is a difference equation with characteristic equation z² − φ₁z − φ₂ = 0.",
-   "Distinct real roots → ρₖ = Az₁ᵏ + Bz₂ᵏ; repeated → (A + Bk)zᵏ; complex → Crᵏ sin(ωk + δ).",
-   "Complex roots when φ₁² + 4φ₂ < 0, with damping r = √|φ₂| — reciprocal of topic 7.1's 1/√|φ₂|.",
-   "The recursion is homogeneous, so it fixes the SHAPE; the k = 0 equation fixes the SCALE.",
-   "Effective sample size for a persistent AR(1): about n(1−φ)/(1+φ) — only ~10 at n = 200, φ = 0.9."
+  "id": "timeseriest4",
+  "topicId": "timeseries-t4",
+  "moduleId": "timeseries",
+  "title": "Autocovariance of AR Processes",
+  "breadcrumb": "Time series → Foundations → Computing γₖ from the coefficients",
+  "engine": "B",
+  "engineName": "Time series — multiply through, take expectations, and solve",
+  "version": "1.0",
+  "status": "approved",
+  "estMin": 100,
+  "objectives": [
+    "Derive the AR(1) variance and autocorrelation function from the model equation.",
+    "State and apply γ₀ = σ²/(1 − φ²) and ρₖ = φᵏ.",
+    "Derive ρ₁ = φ₁/(1 − φ₂) for an AR(2) using the symmetry γ₋ₖ = γₖ.",
+    "Run the recursion ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂ from its two starting values.",
+    "Use the closed-form AR(2) variance and read its sign as a stationarity check.",
+    "Say why only the k = 0 equation carries σ² and why autocorrelations do not."
   ],
-  "cards": [
-   [
-    "AR(1) variance",
-    "σ²/(1 − φ²)"
-   ],
-   [
-    "AR(1) ACF",
-    "ρₖ = φᵏ"
-   ],
-   [
-    "AR(2) recursion",
-    "γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂, k ≥ 1"
-   ],
-   [
-    "AR(2) ρ₁",
-    "φ₁/(1 − φ₂)"
-   ],
-   [
-    "AR(2) ρ₂",
-    "φ₁ρ₁ + φ₂"
-   ],
-   [
-    "AR(2) variance",
-    "σ²(1−φ₂)/[(1+φ₂)((1−φ₂)²−φ₁²)]"
-   ],
-   [
-    "γ₀ at (0.5, 0.3), σ²=1",
-    "2.2436"
-   ],
-   [
-    "Which equation carries σ²?",
-    "Only k = 0, from E(yₜεₜ) = σ²"
-   ],
-   [
-    "Do autocorrelations depend on σ²?",
-    "No — only the variance does"
-   ],
-   [
-    "Variance at φ = −0.7 vs +0.7",
-    "Identical; the ACF differs"
-   ],
-   [
-    "ACF oscillates when",
-    "φ₁² + 4φ₂ < 0, damping √|φ₂|"
-   ],
-   [
-    "Negative variance means",
-    "Coefficients outside the triangle"
-   ]
-  ],
-  "tricks": [
-   "Check the three stationarity conditions BEFORE substituting into any formula.",
-   "For an AR(1), ρ₁ is the coefficient; for an AR(2) it is not — divide by (1 − φ₂).",
-   "A negative φ₂ ENLARGES 1 − φ₂, so it reduces ρ₁ relative to φ₁.",
-   "Any AR variance must exceed σ². A value below it means an error somewhere.",
-   "ρ₂ = φ₁ρ₁ + φ₂ is quicker than restarting the recursion from scratch.",
-   "At φ₂ = 0 every AR(2) formula must collapse to the AR(1) one — a free check."
-  ],
-  "shortcuts": [
-   "1/(1−φ²) is 1.3333, 2.7778, 5.2632, 10.2564 at φ = 0.5, 0.8, 0.9, 0.95.",
-   "At (0.5,0.3): ρ = 0.7143, 0.6571, 0.5429, 0.4686, 0.3971 and γ₀ = 2.2436.",
-   "√0.4 = 0.6325, the damping at φ₂ = −0.4."
-  ],
-  "remember": [
-   "Only k = 0 carries σ².",
-   "ρ₁ = φ₁/(1 − φ₂) for an AR(2).",
-   "A negative variance means non-stationary coefficients."
-  ]
- },
- "howto": "Section 3 contains the method and all four formulas, and section 4 then does the AR(2) calculation from first principles with a simulation as a check — those two sections together are the lesson. The single device to internalise is in section 3's first block: multiply by yₜ₋ₖ, take expectations, and let stationarity turn the result into a recursion. Two things make that calculation go wrong, and both are flagged repeatedly: the symmetry γ₋₁ = γ₁, without which the AR(2) k = 1 equation cannot be solved, and the term E(yₜεₜ) = σ², which appears only at k = 0 and without which the variance disappears. Section 6 drills the formulas with the σ²-scaling point made explicitly, and section 10 adds a case where the coefficients are inadmissible and the formula says so by returning a negative number. Section 7 explains the three decay regimes from the characteristic roots, which is where an oscillating ACF comes from. This lesson deliberately does not repeat topic 7.3's Yule–Walker estimation — the same equations run backwards — topic 7.2's identification rule, or topic 7.7's spectral treatment, though section 11 shows how all three connect. The optional section derives the AR(2) variance in full and shows its denominator factoring into the three stationarity conditions.",
- "refs": [
-  {
-   "title": "Time Series Analysis: Forecasting and Control",
-   "where": "Chapter 3",
-   "site": "Box, Jenkins and Reinsel",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-11-03",
-   "why": "The autocovariance derivations for AR processes in full, with the difference-equation solutions."
-  },
-  {
-   "title": "Time Series Analysis and Its Applications",
-   "where": "Chapter 3.2",
-   "site": "Shumway and Stoffer",
-   "url": "",
-   "type": "Textbook",
-   "free": false,
-   "checked": "2026-11-03",
-   "why": "The AR(2) autocovariance worked through, including the complex-root case and the damping factor."
-  },
-  {
-   "title": "Forecasting: Principles and Practice, 3rd edition",
-   "where": "Chapter 9.3",
-   "site": "Hyndman and Athanasopoulos",
-   "url": "https://otexts.com/fpp3/",
-   "type": "Free online textbook",
-   "free": true,
-   "checked": "2026-11-03",
-   "why": "AR processes and their autocorrelation structure; freely available."
-  },
-  {
-   "title": "Time Series Analysis",
-   "where": "Weeks on ARMA autocovariance",
-   "site": "NPTEL / SWAYAM",
-   "url": "https://archive.nptel.ac.in/courses/111104049",
-   "type": "Video course",
-   "free": true,
-   "checked": "2026-11-03",
-   "why": "Indian-syllabus treatment of the autocovariance computations in the style NET sets them."
-  }
- ],
- "mastery": {
-  "minQ": 10,
-  "pass": 80,
-  "draw": 10,
-  "fmtMin": {
-   "numeric": 70,
-   "multi": 70
-  },
-  "diffMix": {
-   "easy": 3,
-   "moderate": 5,
-   "hard": 2
-  },
-  "noHints": true,
-  "retestDays": 7,
-  "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
- },
- "provenance": "Authored November 2026, the seventh lesson of the time-series module. No PYQ anchor of its own: June 2026's four time-series questions are covered by lessons 7.3 (Yule–Walker), 7.5 (ACF of an AR(2)), 7.6 (random walk) and 7.7 (spectral density). This topic supplies the closed forms those four draw on, and the catalog gives it the same expected weight as every other time-series topic. The scope division from topic 7.3 is deliberate and is stated inside the lesson: the same set of equations runs forwards here, from coefficients to autocovariances, and backwards there, from sample autocorrelations to coefficient estimates. Every figure was verified by simulation over long series. AR(1) with φ = 0.7 and σ² = 1: γ₀ exact 1.9608 against simulated 1.9613, with ρₖ at lags 1, 2, 3 and 5 simulated as 0.7001, 0.4903, 0.3433 and 0.1686 against φᵏ of 0.7000, 0.4900, 0.3430 and 0.1681. AR(2) with (0.5, 0.3): ρ₁ = φ₁/(1−φ₂) = 0.7143 simulated 0.7145, ρ₂ = 0.6571 simulated 0.6577, ρ₃ = 0.5429 simulated 0.5432, ρ₅ = 0.3971 simulated 0.3975, and γ₀ = σ²(1−φ₂)/((1+φ₂)((1−φ₂)²−φ₁²)) = 2.2436 simulated 2.2466. The variance was computed two independent ways — step by step through the three equations in section 4, and from the closed form — agreeing exactly at 2.2436. One structural observation is made throughout the lesson because it is both a derivation check and an exam shortcut: the denominator of the AR(2) variance factors as (1+φ₂)(1−φ₂−φ₁)(1−φ₂+φ₁), and those three factors are precisely topic 7.1's three stationarity conditions, so the variance is positive if and only if the coefficients lie inside the triangle. A negative result is therefore a stationarity diagnosis rather than an arithmetic error, and the lesson treats it as such in a scenario and a pool item. The formula's two degenerate checks were also verified: at φ₂ = 0 it reduces to σ²/(1−φ₁²), and at φ₁ = 0 to σ²/(1−φ₂²), the latter correct because yₜ = φ₂yₜ₋₂ + εₜ is two interleaved AR(1) processes. Uses the existing `ar-acf` visualisation. Previous-year questions are stored separately and carry their exam cycle.",
- "scenes": [
-  {
-   "kind": "foundation",
-   "id": "s0",
-   "mins": 7,
-   "title": "Before the lesson — four things it will assume",
-   "objective": "Fix what is being computed and the one trick that does most of the work.",
-   "ask": {
-    "q": "To find Var(yₜ) for an AR(1), why can you not simply write Var(φyₜ₋₁ + εₜ) = φ²Var(yₜ₋₁) + σ² and stop?",
-    "nudge": "You can — but then what do you do with Var(yₜ₋₁)?"
-   },
-   "body": [
-    "This lesson computes the autocovariance function of an autoregressive process: the variance γ₀ and the covariances γₖ at each lag, in terms of the coefficients and the shock variance. These are the quantities topic 7.2 reads shapes from and topic 7.3 inverts.",
-    "The whole subject rests on one device. Multiply the model equation by yₜ₋ₖ and take expectations. Because the process is stationary, E(yₜyₜ₋ₖ) is the same γₖ whatever t is, so the result is a recursion in k rather than an expression that grows with t.",
-    "Doing this for k = 0 gives an equation for the variance; for k ≥ 1 it gives the difference equation the autocovariances satisfy. Both drop out of the same calculation, which is why it is worth doing carefully once.",
-    "Four checks before starting."
-   ],
-   "items": [
+  "prereq": [
     {
-     "ask": "Define the autocovariance at lag k and state its symmetry.",
-     "recall": "γₖ = Cov(yₜ, yₜ₋ₖ) = E(yₜyₜ₋ₖ) for a zero-mean process, with γ₋ₖ = γₖ.",
-     "refresh": [
-      "Stationarity is what makes γₖ depend on k alone and not on t, which is exactly what turns the calculation into a recursion.",
-      "γ₀ is the variance, and ρₖ = γₖ/γ₀ is the autocorrelation. Dividing through by γ₀ at the end converts any autocovariance result into an autocorrelation one.",
-      "The symmetry γ₋ₖ = γₖ matters in the AR(2) derivation, where a γ₋₁ appears and must be recognised as γ₁."
-     ]
+      "id": "p1",
+      "name": "Weak stationarity",
+      "why": "It is what makes E(yₜyₜ₋ₖ) depend on k alone, turning the calculation into a recursion."
     },
     {
-     "ask": "For an AR(1), what is E(yₜ₋ₖεₜ) when k ≥ 1?",
-     "recall": "Zero — the shock at time t is uncorrelated with everything dated before t.",
-     "refresh": [
-      "The white-noise assumption is that εₜ has mean zero, constant variance σ², and zero correlation with εₛ for s ≠ t. Since yₜ₋ₖ is built from shocks up to time t−k, it is uncorrelated with εₜ for any k ≥ 1.",
-      "This is what kills most of the cross terms in the derivation and makes the recursion clean.",
-      "The exception is k = 0: E(yₜεₜ) = σ², because yₜ contains εₜ with coefficient 1. Forgetting that one term is the commonest error in the variance calculation."
-     ]
+      "id": "p2",
+      "name": "White noise and its properties",
+      "why": "E(yₜ₋ₖεₜ) = 0 for k ≥ 1 is what kills the cross terms; E(yₜεₜ) = σ² is what survives at k = 0."
     },
     {
-     "ask": "What is the stationarity condition for an AR(1), and why does the variance formula need it?",
-     "recall": "|φ| < 1. The variance σ²/(1 − φ²) is positive and finite only then.",
-     "refresh": [
-      "At |φ| ≥ 1 the formula returns a negative or undefined number, which is the algebra signalling that no stationary process exists — a useful self-check on any variance calculation.",
-      "Topic 7.1 covers the regions in full, including the AR(2) stationarity triangle, which is the condition under which this lesson's AR(2) formula is valid.",
-      "A variance formula that returns a negative value means the coefficients are outside the admissible region, not that the arithmetic went wrong."
-     ]
+      "id": "p3",
+      "name": "Stationarity conditions (topic 7.1)",
+      "why": "The formulas are valid only inside the admissible region, and the variance's sign reports when they are not."
     },
     {
-     "ask": "What does topic 7.3 do with the same equations?",
-     "recall": "It runs them backwards: given the autocorrelations, solve for the coefficients.",
-     "refresh": [
-      "The Yule–Walker equations are one set of relations between coefficients and autocorrelations. This lesson goes forwards — coefficients to autocovariances — and topic 7.3 goes backwards, which is the estimation problem.",
-      "So the derivations here are the forward direction of the machinery you already have, and knowing them makes the estimation side easier to reconstruct rather than memorise.",
-      "Topic 7.2 uses the resulting shapes to identify the order, so all three topics share one set of equations read three ways."
-     ]
+      "id": "p4",
+      "name": "Linear difference equations",
+      "why": "The autocorrelations satisfy one, and its root structure explains smooth versus oscillating decay."
     }
-   ]
-  },
-  {
-   "kind": "intuition",
-   "id": "s1",
-   "mins": 7,
-   "title": "Why the variance is amplified, and by how much",
-   "objective": "See what σ²/(1 − φ²) is really saying.",
-   "body": [
-    "For an AR(1), the variance is σ²/(1 − φ²), which is always LARGER than the shock variance σ². The process has more variability than the shocks that drive it, and the reason is that shocks accumulate: topic 7.1's expansion yₜ = Σφʲεₜ₋ⱼ shows yₜ as a weighted sum of every past shock, so its variance is σ²Σφ^(2j).",
-    "The amplification factor 1/(1 − φ²) grows sharply as |φ| approaches 1: it is 1.33 at φ = 0.5, 2.78 at 0.8, 10.26 at 0.95, and unbounded at 1. A highly persistent series is far more variable than its shocks, which is why a near-unit-root series wanders so widely.",
-    "Note what the factor does NOT depend on: the sign of φ. At φ = −0.7 the variance is the same as at +0.7, because 1 − φ² is unchanged. The sign changes the ACF's pattern, making it alternate, but not the variance. Sign affects shape, modulus affects magnitude — a distinction worth keeping clean throughout.",
-    "For an AR(2) the amplification is messier, because the two lags can reinforce or oppose each other. At (0.5, 0.3) the variance is 2.2436σ², larger than the 1.3333σ² an AR(1) with φ = 0.5 would give, because the second lag adds persistence. The closed form in section 3 makes this precise, and it is worth being able to use rather than derive under exam pressure."
-   ],
-   "scenario": {
-    "teaser": "A simulation of an AR(1) with φ = 0.95 is reported as 'not converging' because the sample variance keeps changing.",
-    "title": "A finite sample of a persistent process",
-    "body": [
-     "An analyst simulates an AR(1) with φ = 0.95 and σ² = 1, computes the sample variance over 200 observations, and gets 4.1. Repeating with a different seed gives 12.7, then 7.3. The theoretical variance is 1/(1 − 0.9025) = 10.26. The analyst concludes the simulation is broken.",
-     "Nothing is broken. The issue is that the effective number of independent observations in a persistent series is far smaller than the nominal count. A rough measure is n(1 − φ)/(1 + φ), which at n = 200 and φ = 0.95 is about 5 — so 200 observations carry roughly as much information about the variance as five independent ones. Variance estimates from five observations are wildly variable, and that is what the analyst is seeing.",
-     "There is a second effect, and it biases rather than merely scatters. The sample variance is computed around the sample mean, and for a persistent series the sample mean is itself a poor estimate of the true mean — it tends to sit near wherever the series happened to be wandering. Subtracting it removes genuine variation, so the sample variance is biased DOWNWARD, which is why two of the three estimates fell below 10.26.",
-     "The practical consequences reach beyond simulation. Standard errors computed as if observations were independent are badly understated for autocorrelated data, which is the motivation for the long-run variance estimators used in time-series regression. A confidence interval built on the nominal n will be far too narrow.",
-     "The diagnosis to carry is that the theoretical variance describes the stationary distribution, which a finite realisation approaches slowly when φ is near 1. At φ = 0.5 the same simulation would be well behaved, because the effective sample size is about 67 rather than 5.",
-     "The general point is that persistence costs information. The formula σ²/(1 − φ²) says how variable the process is; the effective sample size says how much a given stretch of it can tell you."
+  ],
+  "traps": [
+    "ρ₁ = φ₁ holds for an AR(1) only; for an AR(2) it is φ₁/(1 − φ₂).",
+    "Only the k = 0 equation carries σ² — the recursion for k ≥ 1 is homogeneous.",
+    "E(yₜεₜ) = σ², not zero. Forgetting it loses the variance entirely.",
+    "The variance depends on φ², so its value is the same at φ and −φ.",
+    "Autocorrelations never involve σ²; the variance always does.",
+    "An oscillating ACF means complex roots, not an MA component.",
+    "γ₋₁ = γ₁ by symmetry — the AR(2) derivation fails without it.",
+    "A negative variance from the formula means the coefficients are outside the triangle."
+  ],
+  "revision": {
+    "sheet": [
+      "METHOD: multiply the model by yₜ₋ₖ, take expectations, use stationarity to get a recursion in k.",
+      "E(yₜ₋ₖεₜ) = 0 for k ≥ 1; E(yₜεₜ) = σ². Only the k = 0 equation carries σ².",
+      "AR(1) recursion: γₖ = φγₖ₋₁, so γₖ = φᵏγ₀ and ρₖ = φᵏ.",
+      "AR(1) variance: γ₀ = φγ₁ + σ² = φ²γ₀ + σ² ⟹ γ₀ = σ²/(1 − φ²).",
+      "At φ = 0.7, σ² = 1: γ₀ = 1/0.51 = 1.9608 (simulated 1.9613); ρₖ simulated 0.7001/0.4903/0.3433/0.1686.",
+      "Amplification 1/(1−φ²): 1.3333 at 0.5, 2.7778 at 0.8, 5.2632 at 0.9, 10.2564 at 0.95.",
+      "The variance depends on φ², so it is the same at φ = ±0.7. Sign changes the SHAPE only.",
+      "AR(2) recursion: γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂ (k ≥ 1), and the same in ρ.",
+      "At k = 1: ρ₁ = φ₁ + φ₂ρ₋₁ = φ₁ + φ₂ρ₁ (using ρ₋₁ = ρ₁) ⟹ ρ₁ = φ₁/(1 − φ₂).",
+      "Then ρ₂ = φ₁ρ₁ + φ₂, and the recursion onwards. At (0.5,0.3): 0.7143, 0.6571, 0.5429, 0.3971.",
+      "Simulated at (0.5,0.3): 0.7145, 0.6577, 0.5432, 0.3975 — agreement to three decimals.",
+      "AR(2) VARIANCE: γ₀ = σ²(1 − φ₂)/[(1 + φ₂)((1 − φ₂)² − φ₁²)].",
+      "At (0.5,0.3), σ²=1: 0.7/(1.3 × 0.24) = 2.2436 (simulated 2.2466). Reduces to σ²/(1−φ₁²) at φ₂ = 0.",
+      "The denominator factors (1+φ₂)(1−φ₂−φ₁)(1−φ₂+φ₁) — the three stationarity conditions.",
+      "So γ₀ > 0 ⟺ the process is stationary. A negative value is a diagnosis, not an error.",
+      "The recursion is a difference equation with characteristic equation z² − φ₁z − φ₂ = 0.",
+      "Distinct real roots → ρₖ = Az₁ᵏ + Bz₂ᵏ; repeated → (A + Bk)zᵏ; complex → Crᵏ sin(ωk + δ).",
+      "Complex roots when φ₁² + 4φ₂ < 0, with damping r = √|φ₂| — reciprocal of topic 7.1's 1/√|φ₂|.",
+      "The recursion is homogeneous, so it fixes the SHAPE; the k = 0 equation fixes the SCALE.",
+      "Effective sample size for a persistent AR(1): about n(1−φ)/(1+φ) — only ~10 at n = 200, φ = 0.9."
     ],
-    "q": "Why is the sample variance of a persistent AR(1) biased downward, not merely noisy?",
-    "answer": "Because it is computed as deviations from the SAMPLE mean, and for a persistent series the sample mean is close to wherever the realisation happened to wander rather than to the true mean. Centring on a mean that has itself drifted with the data removes some of the real variation, so the estimate is too small. The effect is severe exactly when φ is near 1, because the series then spends long stretches away from its true mean and the sample mean tracks those excursions. This is on top of the sheer noisiness caused by a small effective sample size: n(1−φ)/(1+φ) is about 5 at n = 200 and φ = 0.95, so even an unbiased estimator would scatter widely. Both effects shrink as φ moves away from 1."
-   },
-   "ask": {
-    "q": "The variance at φ = −0.7 equals that at φ = +0.7. What differs between the two processes?",
-    "nudge": "Compute ρ₁ and ρ₂ in each case."
-   }
-  },
-  {
-   "kind": "explore",
-   "id": "s2",
-   "mins": 7,
-   "title": "Watch the autocorrelations follow the recursion",
-   "objective": "See the difference equation generate the ACF.",
-   "viz": {
-    "type": "ar-acf",
-    "p1": 0.5,
-    "p2": 0.3,
-    "caption": "The ACF of an AR(2). Each stem beyond lag 2 is produced by the recursion ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂ applied to the two before it."
-   },
-   "body": [
-    "At φ₁ = 0.5, φ₂ = 0.3 the ACF reads 0.714, 0.657, 0.543, 0.468, 0.397. Check the recursion on the third value: ρ₃ = 0.5(0.6571) + 0.3(0.7143) = 0.3286 + 0.2143 = 0.5429. It reproduces the stem exactly, and the same check works at every lag beyond 2.",
-    "Note that the first two values are NOT given by the recursion — they come from the starting conditions ρ₀ = 1 and ρ₁ = φ₁/(1 − φ₂) = 0.5/0.7 = 0.7143. The recursion then generates everything after. A linear difference equation needs as many starting values as its order, and that is where they come from.",
-    "Set φ₂ = 0 to get an AR(1). The recursion collapses to ρₖ = φ₁ρₖ₋₁, so ρₖ = φ₁ᵏ — the geometric decay. The AR(1) ACF is the simplest case of the same equation.",
-    "Now try φ₁ = 0.3, φ₂ = −0.7. The ACF oscillates and crosses zero, because the characteristic equation now has complex roots and the solution of the difference equation is a damped sine rather than a sum of two decaying exponentials. Same recursion, different root structure.",
-    "The point of the chart here is that the ACF is not a separate object to memorise case by case: it is the solution of one difference equation, with the coefficients setting the equation and two starting values setting the particular solution."
-   ],
-   "ask": {
-    "q": "Why does the recursion need two starting values for an AR(2) but only one for an AR(1)?",
-    "nudge": "How many previous terms does each recursion reference?"
-   }
-  },
-  {
-   "kind": "theory",
-   "id": "s3",
-   "mins": 9,
-   "title": "The derivations and the closed forms",
-   "objective": "Get both AR(1) results and both AR(2) results properly.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "The method, stated once",
-     "body": "Take the model equation, multiply through by yₜ₋ₖ, and take expectations. Stationarity makes E(yₜyₜ₋ⱼ) equal γⱼ independently of t, so the result is a relation among the γ's. Use E(yₜ₋ₖεₜ) = 0 for k ≥ 1 and E(yₜεₜ) = σ² for k = 0. That single procedure gives every result below."
-    },
-    {
-     "t": "formula",
-     "h": "AR(1): the covariance recursion",
-     "body": "From yₜ = φyₜ₋₁ + εₜ, multiply by yₜ₋ₖ (k ≥ 1) and take expectations:\n    γₖ = φγₖ₋₁ + E(yₜ₋ₖεₜ) = φγₖ₋₁.\nSo γₖ = φᵏγ₀ and ρₖ = φᵏ. Simulated at φ = 0.7: 0.7001, 0.4903, 0.3433, 0.1686 at lags 1, 2, 3, 5, against 0.7000, 0.4900, 0.3430, 0.1681."
-    },
-    {
-     "t": "formula",
-     "h": "AR(1): the variance",
-     "body": "Now take k = 0. Multiply by yₜ itself:\n    γ₀ = φγ₁ + E(yₜεₜ) = φγ₁ + σ².\nSubstituting γ₁ = φγ₀:\n    γ₀ = φ²γ₀ + σ²  ⟹  γ₀ = σ²/(1 − φ²).\nThe σ² term comes from E(yₜεₜ), which is σ² and NOT zero, because yₜ contains εₜ. At φ = 0.7, σ² = 1: γ₀ = 1/0.51 = 1.9608, simulated 1.9613."
-    },
-    {
-     "t": "formula",
-     "h": "AR(2): the difference equation",
-     "body": "From yₜ = φ₁yₜ₋₁ + φ₂yₜ₋₂ + εₜ, multiplying by yₜ₋ₖ for k ≥ 1:\n    γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂,  and dividing by γ₀,\n    ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂   for k ≥ 1.\nAt k = 1 this reads ρ₁ = φ₁ + φ₂ρ₋₁ = φ₁ + φ₂ρ₁, using ρ₋₁ = ρ₁, which rearranges to\n    ρ₁ = φ₁/(1 − φ₂).\nAt (0.5, 0.3): ρ₁ = 0.5/0.7 = 0.7143, simulated 0.7145."
-    },
-    {
-     "t": "formula",
-     "h": "AR(2): the variance in closed form",
-     "body": "Taking k = 0 gives γ₀ = φ₁γ₁ + φ₂γ₂ + σ², and solving the system yields\n    γ₀ = σ²(1 − φ₂) / [ (1 + φ₂)( (1 − φ₂)² − φ₁² ) ].\nAt (0.5, 0.3) with σ² = 1: 0.7/(1.3 × (0.49 − 0.25)) = 0.7/0.312 = 2.2436, simulated 2.2466. Note it reduces to σ²/(1 − φ₁²) when φ₂ = 0, as it must."
-    },
-    {
-     "t": "def",
-     "h": "The general pattern",
-     "body": "For an AR(p) the autocovariances satisfy γₖ = φ₁γₖ₋₁ + ⋯ + φₚγₖ₋ₚ for k ≥ 1, with p starting values obtained from the k = 1, …, p equations using γ₋ⱼ = γⱼ, and γ₀ from the k = 0 equation which carries the extra σ². That is the Yule–Walker system, which topic 7.3 solves in the other direction."
-    }
-   ],
-   "table": {
-    "caption": "AR(2) with φ = (0.5, 0.3), σ² = 1. Exact values against a long simulation.",
-    "head": [
-     "quantity",
-     "formula",
-     "exact",
-     "simulated"
+    "cards": [
+      [
+        "AR(1) variance",
+        "σ²/(1 − φ²)"
+      ],
+      [
+        "AR(1) ACF",
+        "ρₖ = φᵏ"
+      ],
+      [
+        "AR(2) recursion",
+        "γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂, k ≥ 1"
+      ],
+      [
+        "AR(2) ρ₁",
+        "φ₁/(1 − φ₂)"
+      ],
+      [
+        "AR(2) ρ₂",
+        "φ₁ρ₁ + φ₂"
+      ],
+      [
+        "AR(2) variance",
+        "σ²(1−φ₂)/[(1+φ₂)((1−φ₂)²−φ₁²)]"
+      ],
+      [
+        "γ₀ at (0.5, 0.3), σ²=1",
+        "2.2436"
+      ],
+      [
+        "Which equation carries σ²?",
+        "Only k = 0, from E(yₜεₜ) = σ²"
+      ],
+      [
+        "Do autocorrelations depend on σ²?",
+        "No — only the variance does"
+      ],
+      [
+        "Variance at φ = −0.7 vs +0.7",
+        "Identical; the ACF differs"
+      ],
+      [
+        "ACF oscillates when",
+        "φ₁² + 4φ₂ < 0, damping √|φ₂|"
+      ],
+      [
+        "Negative variance means",
+        "Coefficients outside the triangle"
+      ]
     ],
-    "rows": [
-     [
-      "γ₀",
-      "σ²(1−φ₂)/((1+φ₂)((1−φ₂)²−φ₁²))",
-      "2.2436",
-      "2.2466"
-     ],
-     [
-      "ρ₁",
-      "φ₁/(1 − φ₂)",
-      "0.7143",
-      "0.7145"
-     ],
-     [
-      "ρ₂",
-      "φ₁ρ₁ + φ₂",
-      "0.6571",
-      "0.6577"
-     ],
-     [
-      "ρ₃",
-      "φ₁ρ₂ + φ₂ρ₁",
-      "0.5429",
-      "0.5432"
-     ],
-     [
-      "ρ₅",
-      "recursion",
-      "0.3971",
-      "0.3975"
-     ]
+    "tricks": [
+      "Check the three stationarity conditions BEFORE substituting into any formula.",
+      "For an AR(1), ρ₁ is the coefficient; for an AR(2) it is not — divide by (1 − φ₂).",
+      "A negative φ₂ ENLARGES 1 − φ₂, so it reduces ρ₁ relative to φ₁.",
+      "Any stationary AR variance is at least σ². It is strictly greater when at least one non-zero past-shock weight contributes; white noise gives equality.",
+      "ρ₂ = φ₁ρ₁ + φ₂ is quicker than restarting the recursion from scratch.",
+      "At φ₂ = 0 every AR(2) formula must collapse to the AR(1) one — a free check."
+    ],
+    "shortcuts": [
+      "1/(1−φ²) is 1.3333, 2.7778, 5.2632, 10.2564 at φ = 0.5, 0.8, 0.9, 0.95.",
+      "At (0.5,0.3): ρ = 0.7143, 0.6571, 0.5429, 0.4686, 0.3971 and γ₀ = 2.2436.",
+      "√0.4 = 0.6325, the damping at φ₂ = −0.4."
+    ],
+    "remember": [
+      "Only k = 0 carries σ².",
+      "ρ₁ = φ₁/(1 − φ₂) for an AR(2).",
+      "A negative variance means non-stationary coefficients."
     ]
-   },
-   "flow": {
-    "title": "Computing the autocovariances of an AR(p)",
-    "alt": "Flow chart for deriving the autocovariance function of an autoregressive process",
-    "nodes": [
-     {
-      "id": "a",
-      "r": 0,
-      "c": 1,
-      "label": "AR(p) with coefficients and σ² given",
-      "kind": "start"
-     },
-     {
-      "id": "b",
-      "r": 1,
-      "c": 1,
-      "label": "Multiply by yₜ₋ₖ and take expectations",
-      "kind": "step"
-     },
-     {
-      "id": "c",
-      "r": 2,
-      "c": 0,
-      "label": "k ≥ 1: γₖ = Σφⱼγₖ₋ⱼ (the recursion)",
-      "kind": "step"
-     },
-     {
-      "id": "d",
-      "r": 2,
-      "c": 2,
-      "label": "k = 0: extra σ² from E(yₜεₜ)",
-      "kind": "step"
-     },
-     {
-      "id": "e",
-      "r": 3,
-      "c": 0,
-      "label": "Solve k=1..p with γ₋ⱼ = γⱼ for the starting ρ's",
-      "kind": "step"
-     },
-     {
-      "id": "f",
-      "r": 3,
-      "c": 2,
-      "label": "Combine to get γ₀",
-      "kind": "end"
-     },
-     {
-      "id": "g",
-      "r": 4,
-      "c": 1,
-      "label": "Recursion generates all remaining lags",
-      "kind": "end"
-     }
-    ],
-    "edges": [
-     {
-      "from": "a",
-      "to": "b"
-     },
-     {
-      "from": "b",
-      "to": "c"
-     },
-     {
-      "from": "b",
-      "to": "d"
-     },
-     {
-      "from": "c",
-      "to": "e"
-     },
-     {
-      "from": "d",
-      "to": "f"
-     },
-     {
-      "from": "e",
-      "to": "g"
-     },
-     {
-      "from": "f",
-      "to": "g"
-     }
-    ],
-    "note": "One procedure, two branches. The k = 0 case is the only one carrying a σ² term, and forgetting it is the commonest error."
-   },
-   "ask": {
-    "q": "Why does only the k = 0 equation carry a σ² term?",
-    "nudge": "For which k does yₜ₋ₖ contain εₜ?"
-   }
   },
-  {
-   "kind": "worked",
-   "id": "s4",
-   "mins": 8,
-   "title": "Worked — the AR(2) from first principles",
-   "objective": "Do the full calculation once, with the simulation as a check.",
-   "ask": {
-    "q": "At which step did the symmetry γ₋ₖ = γₖ become essential?",
-    "nudge": "Look at the k = 1 equation."
-   },
-   "problem": "For an AR(2) with φ = (0.5, 0.3) and σ² = 1, derive ρ₁, then compute ρ₂, ρ₃ and γ₀.",
-   "steps": [
+  "howto": "Section 3 contains the method and all four formulas, and section 4 then does the AR(2) calculation from first principles with a simulation as a check — those two sections together are the lesson. The single device to internalise is in section 3's first block: multiply by yₜ₋ₖ, take expectations, and let stationarity turn the result into a recursion. Two things make that calculation go wrong, and both are flagged repeatedly: the symmetry γ₋₁ = γ₁, without which the AR(2) k = 1 equation cannot be solved, and the term E(yₜεₜ) = σ², which appears only at k = 0 and without which the variance disappears. Section 6 drills the formulas with the σ²-scaling point made explicitly, and section 10 adds a case where the coefficients are inadmissible and the formula says so by returning a negative number. Section 7 explains the three decay regimes from the characteristic roots, which is where an oscillating ACF comes from. This lesson deliberately does not repeat topic 7.3's Yule–Walker estimation — the same equations run backwards — topic 7.2's identification rule, or topic 7.7's spectral treatment, though section 11 shows how all three connect. The optional section derives the AR(2) variance in full and shows its denominator factoring into the three stationarity conditions.",
+  "refs": [
     {
-     "say": "Multiply the model by yₜ₋₁ and take expectations.",
-     "math": "yₜ = 0.5yₜ₋₁ + 0.3yₜ₋₂ + εₜ\n× yₜ₋₁, expectations:\nγ₁ = 0.5γ₀ + 0.3γ₋₁ + E(yₜ₋₁εₜ)\n   = 0.5γ₀ + 0.3γ₁ + 0",
-     "why": "E(yₜ₋₁εₜ) = 0 because yₜ₋₁ is built from shocks dated t−1 and earlier. The term γ₋₁ appears because multiplying φ₂yₜ₋₂ by yₜ₋₁ gives a lag of −1, and the symmetry γ₋₁ = γ₁ is what makes the equation solvable."
+      "title": "Time Series Analysis: Forecasting and Control",
+      "where": "Chapter 3",
+      "site": "Box, Jenkins and Reinsel",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-03",
+      "why": "The autocovariance derivations for AR processes in full, with the difference-equation solutions."
     },
     {
-     "say": "Solve for ρ₁.",
-     "math": "γ₁(1 − 0.3) = 0.5γ₀\nρ₁ = γ₁/γ₀ = 0.5/0.7 = 0.714286",
-     "why": "So ρ₁ = φ₁/(1 − φ₂) in general. Simulated as 0.7145 over a long series. Note ρ₁ EXCEEDS φ₁ = 0.5, because the second lag reinforces the first — a point worth noticing, since the instinct is to expect ρ₁ = φ₁."
+      "title": "Time Series Analysis and Its Applications",
+      "where": "Chapter 3.2",
+      "site": "Shumway and Stoffer",
+      "url": "",
+      "type": "Textbook",
+      "free": false,
+      "checked": "2026-11-03",
+      "why": "The AR(2) autocovariance worked through, including the complex-root case and the damping factor."
     },
     {
-     "say": "Now the recursion for higher lags.",
-     "math": "ρ₂ = 0.5ρ₁ + 0.3ρ₀ = 0.5(0.714286) + 0.3 = 0.657143\nρ₃ = 0.5ρ₂ + 0.3ρ₁ = 0.328571 + 0.214286 = 0.542857\nρ₅ (two more steps) = 0.397143",
-     "why": "Each value uses only the two before it. Simulated values were 0.6577, 0.5432 and 0.3975 — agreement to three decimals throughout. Note the decay is slower than 0.7143ᵏ would give, which is the second lag's contribution."
+      "title": "Forecasting: Principles and Practice, 3rd edition",
+      "where": "Chapter 9.3",
+      "site": "Hyndman and Athanasopoulos",
+      "url": "https://otexts.com/fpp3/",
+      "type": "Free online textbook",
+      "free": true,
+      "checked": "2026-11-03",
+      "why": "AR processes and their autocorrelation structure; freely available."
     },
     {
-     "say": "The k = 0 equation for the variance.",
-     "math": "× yₜ, expectations:\nγ₀ = 0.5γ₁ + 0.3γ₂ + E(yₜεₜ)\n   = 0.5γ₁ + 0.3γ₂ + σ²\n   = γ₀(0.5ρ₁ + 0.3ρ₂) + 1",
-     "why": "Here E(yₜεₜ) = σ² = 1, because yₜ contains εₜ with coefficient 1. This is the only equation in the whole derivation with a σ² term."
-    },
-    {
-     "say": "Solve it.",
-     "math": "0.5(0.714286) + 0.3(0.657143) = 0.357143 + 0.197143 = 0.554286\nγ₀(1 − 0.554286) = 1\nγ₀ = 1/0.445714 = 2.2436",
-     "why": "Matching the closed form σ²(1−φ₂)/((1+φ₂)((1−φ₂)²−φ₁²)) = 0.7/(1.3 × 0.24) = 2.2436, and the simulated 2.2466. Two independent routes to the same number."
-    },
-    {
-     "say": "A sanity check on the magnitude.",
-     "math": "AR(1) with φ = 0.5 would give 1/(1 − 0.25) = 1.3333\nAR(2) here gives 2.2436 — larger",
-     "why": "Adding a second positive lag increases persistence and so increases the variance. If the formula had returned something below 1, that would signal an error, since the variance of an AR process always exceeds σ²."
+      "title": "Time Series Analysis",
+      "where": "Weeks on ARMA autocovariance",
+      "site": "NPTEL / SWAYAM",
+      "url": "https://archive.nptel.ac.in/courses/111104049",
+      "type": "Video course",
+      "free": true,
+      "checked": "2026-11-03",
+      "why": "Indian-syllabus treatment of the autocovariance computations in the style NET sets them."
     }
-   ],
-   "after": "Answering the question above: at the k = 1 equation, where γ₋₁ had to be recognised as γ₁. The transferable procedure is to write the k = 1 to k = p equations with the symmetry applied, solve for the starting autocorrelations, then take k = 0 for the variance — remembering that only that last equation carries σ²."
+  ],
+  "mastery": {
+    "minQ": 10,
+    "pass": 80,
+    "draw": 10,
+    "fmtMin": {
+      "numeric": 70,
+      "multi": 70
+    },
+    "diffMix": {
+      "easy": 3,
+      "moderate": 5,
+      "hard": 2
+    },
+    "noHints": true,
+    "retestDays": 7,
+    "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
   },
-  {
-   "kind": "recall",
-   "id": "s5",
-   "mins": 2,
-   "title": "Pause and recall",
-   "objective": "Retrieve the four formulas.",
-   "intro": "Answer each before revealing it.",
-   "items": [
+  "provenance": "Authored November 2026, the seventh lesson of the time-series module. No PYQ anchor of its own: June 2026's four time-series questions are covered by lessons 7.3 (Yule–Walker), 7.5 (ACF of an AR(2)), 7.6 (random walk) and 7.7 (spectral density). This topic supplies the closed forms those four draw on, and the catalog gives it the same expected weight as every other time-series topic. The scope division from topic 7.3 is deliberate and is stated inside the lesson: the same set of equations runs forwards here, from coefficients to autocovariances, and backwards there, from sample autocorrelations to coefficient estimates. Every figure was verified by simulation over long series. AR(1) with φ = 0.7 and σ² = 1: γ₀ exact 1.9608 against simulated 1.9613, with ρₖ at lags 1, 2, 3 and 5 simulated as 0.7001, 0.4903, 0.3433 and 0.1686 against φᵏ of 0.7000, 0.4900, 0.3430 and 0.1681. AR(2) with (0.5, 0.3): ρ₁ = φ₁/(1−φ₂) = 0.7143 simulated 0.7145, ρ₂ = 0.6571 simulated 0.6577, ρ₃ = 0.5429 simulated 0.5432, ρ₅ = 0.3971 simulated 0.3975, and γ₀ = σ²(1−φ₂)/((1+φ₂)((1−φ₂)²−φ₁²)) = 2.2436 simulated 2.2466. The variance was computed two independent ways — step by step through the three equations in section 4, and from the closed form — agreeing exactly at 2.2436. One structural observation is made throughout the lesson because it is both a derivation check and an exam shortcut: the denominator of the AR(2) variance factors as (1+φ₂)(1−φ₂−φ₁)(1−φ₂+φ₁), and those three factors are precisely topic 7.1's three stationarity conditions, so under stationarity the variance is positive. The sign of the formal expression outside the stationary region is not a reliable stationarity diagnosis because numerator and denominator can both be negative, and the lesson treats it as such in a scenario and a pool item. The formula's two degenerate checks were also verified: at φ₂ = 0 it reduces to σ²/(1−φ₁²), and at φ₁ = 0 to σ²/(1−φ₂²), the latter correct because yₜ = φ₂yₜ₋₂ + εₜ is two interleaved AR(1) processes. Uses the existing `ar-acf` visualisation. Previous-year questions are stored separately and carry their exam cycle.",
+  "scenes": [
     {
-     "q": "Give γ₀ and ρₖ for an AR(1).",
-     "a": "γ₀ = σ²/(1 − φ²) and ρₖ = φᵏ."
-    },
-    {
-     "q": "What difference equation do the autocovariances of an AR(2) satisfy?",
-     "a": "γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂ for k ≥ 1, and the same in ρ."
-    },
-    {
-     "q": "Give ρ₁ for an AR(2) and say why it is not simply φ₁.",
-     "a": "ρ₁ = φ₁/(1 − φ₂), because the k = 1 equation involves γ₋₁ = γ₁ and must be solved for it."
-    },
-    {
-     "q": "Which equation carries the σ² term, and why?",
-     "a": "Only k = 0, because E(yₜεₜ) = σ² while E(yₜ₋ₖεₜ) = 0 for k ≥ 1."
-    },
-    {
-     "q": "At φ = 0.7 and σ² = 1, what is the variance of an AR(1)?",
-     "a": "1/(1 − 0.49) = 1.9608, simulated 1.9613."
-    }
-   ]
-  },
-  {
-   "kind": "completion",
-   "id": "s6",
-   "mins": 8,
-   "title": "Your turn — five computations",
-   "objective": "Use both formulas and the recursion.",
-   "problem": "Take σ² = 1 unless stated otherwise.",
-   "steps": [
-    {
-     "say": "An AR(1) with φ = 0.8.",
-     "blank": {
-      "prompt": "Give γ₀ and ρ₂.",
-      "answer": "γ₀ = 1/0.36 = 2.7778, ρ₂ = 0.64",
-      "accept": [
-       "2.7778 and 0.64",
-       "2.778, 0.64",
-       "2.78 and 0.64"
+      "kind": "foundation",
+      "id": "s0",
+      "mins": 7,
+      "title": "Before the lesson — four things it will assume",
+      "objective": "Fix what is being computed and the one trick that does most of the work.",
+      "ask": {
+        "q": "To find Var(yₜ) for an AR(1), why can you not simply write Var(φyₜ₋₁ + εₜ) = φ²Var(yₜ₋₁) + σ² and stop?",
+        "nudge": "You can — but then what do you do with Var(yₜ₋₁)?"
+      },
+      "body": [
+        "This lesson computes the autocovariance function of an autoregressive process: the variance γ₀ and the covariances γₖ at each lag, in terms of the coefficients and the shock variance. These are the quantities topic 7.2 reads shapes from and topic 7.3 inverts.",
+        "The whole subject rests on one device. Multiply the model equation by yₜ₋ₖ and take expectations. Because the process is stationary, E(yₜyₜ₋ₖ) is the same γₖ whatever t is, so the result is a recursion in k rather than an expression that grows with t.",
+        "Doing this for k = 0 gives an equation for the variance; for k ≥ 1 it gives the difference equation the autocovariances satisfy. Both drop out of the same calculation, which is why it is worth doing carefully once.",
+        "Four checks before starting."
       ],
-      "hint": "γ₀ = σ²/(1 − φ²) and ρₖ = φᵏ."
-     },
-     "why": "1/(1 − 0.64) = 2.7778, matching the sum Σφ^(2j) computed in topic 7.1. And ρ₂ = 0.8² = 0.64."
+      "items": [
+        {
+          "ask": "Define the autocovariance at lag k and state its symmetry.",
+          "recall": "γₖ = Cov(yₜ, yₜ₋ₖ) = E(yₜyₜ₋ₖ) for a zero-mean process, with γ₋ₖ = γₖ.",
+          "refresh": [
+            "Stationarity is what makes γₖ depend on k alone and not on t, which is exactly what turns the calculation into a recursion.",
+            "γ₀ is the variance, and ρₖ = γₖ/γ₀ is the autocorrelation. Dividing through by γ₀ at the end converts any autocovariance result into an autocorrelation one.",
+            "The symmetry γ₋ₖ = γₖ matters in the AR(2) derivation, where a γ₋₁ appears and must be recognised as γ₁."
+          ]
+        },
+        {
+          "ask": "For an AR(1), what is E(yₜ₋ₖεₜ) when k ≥ 1?",
+          "recall": "Zero — the shock at time t is uncorrelated with everything dated before t.",
+          "refresh": [
+            "The white-noise assumption is that εₜ has mean zero, constant variance σ², and zero correlation with εₛ for s ≠ t. Since yₜ₋ₖ is built from shocks up to time t−k, it is uncorrelated with εₜ for any k ≥ 1.",
+            "This is what kills most of the cross terms in the derivation and makes the recursion clean.",
+            "The exception is k = 0: E(yₜεₜ) = σ², because yₜ contains εₜ with coefficient 1. Forgetting that one term is the commonest error in the variance calculation."
+          ]
+        },
+        {
+          "ask": "What is the stationarity condition for an AR(1), and why does the variance formula need it?",
+          "recall": "|φ| < 1. The variance σ²/(1 − φ²) is positive and finite only then.",
+          "refresh": [
+            "At |φ| ≥ 1 the formula returns a negative or undefined number, which is the algebra signalling that no stationary process exists — a useful self-check on any variance calculation.",
+            "Topic 7.1 covers the regions in full, including the AR(2) stationarity triangle, which is the condition under which this lesson's AR(2) formula is valid.",
+            "A variance formula that returns a negative value means the coefficients are outside the admissible region, not that the arithmetic went wrong."
+          ]
+        },
+        {
+          "ask": "What does topic 7.3 do with the same equations?",
+          "recall": "It runs them backwards: given the autocorrelations, solve for the coefficients.",
+          "refresh": [
+            "The Yule–Walker equations are one set of relations between coefficients and autocorrelations. This lesson goes forwards — coefficients to autocovariances — and topic 7.3 goes backwards, which is the estimation problem.",
+            "So the derivations here are the forward direction of the machinery you already have, and knowing them makes the estimation side easier to reconstruct rather than memorise.",
+            "Topic 7.2 uses the resulting shapes to identify the order, so all three topics share one set of equations read three ways."
+          ]
+        }
+      ]
     },
     {
-     "say": "The same AR(1) but with σ² = 4.",
-     "blank": {
-      "prompt": "Give γ₀ and ρ₂.",
-      "answer": "γ₀ = 4/0.36 = 11.111, ρ₂ = 0.64 unchanged",
-      "accept": [
-       "11.111 and 0.64",
-       "11.11, 0.64",
-       "11.1 and 0.64"
+      "kind": "intuition",
+      "id": "s1",
+      "mins": 7,
+      "title": "Why the variance is amplified, and by how much",
+      "objective": "See what σ²/(1 − φ²) is really saying.",
+      "body": [
+        "For an AR(1), the variance is σ²/(1 − φ²), which is always LARGER than the shock variance σ². The process has more variability than the shocks that drive it, and the reason is that shocks accumulate: topic 7.1's expansion yₜ = Σφʲεₜ₋ⱼ shows yₜ as a weighted sum of every past shock, so its variance is σ²Σφ^(2j).",
+        "The amplification factor 1/(1 − φ²) grows sharply as |φ| approaches 1: it is 1.33 at φ = 0.5, 2.78 at 0.8, 10.26 at 0.95, and unbounded at 1. A highly persistent series is far more variable than its shocks, which is why a near-unit-root series wanders so widely.",
+        "Note what the factor does NOT depend on: the sign of φ. At φ = −0.7 the variance is the same as at +0.7, because 1 − φ² is unchanged. The sign changes the ACF's pattern, making it alternate, but not the variance. Sign affects shape, modulus affects magnitude — a distinction worth keeping clean throughout.",
+        "For an AR(2) the amplification is messier, because the two lags can reinforce or oppose each other. At (0.5, 0.3) the variance is 2.2436σ², larger than the 1.3333σ² an AR(1) with φ = 0.5 would give, because the second lag adds persistence. The closed form in section 3 makes this precise, and it is worth being able to use rather than derive under exam pressure."
       ],
-      "hint": "Which of the two depends on σ²?"
-     },
-     "why": "The variance scales with σ² but the autocorrelations do not: ρₖ = φᵏ involves only the coefficient. That separation is worth noting — the shock variance sets the scale and the coefficients set the shape."
+      "scenario": {
+        "teaser": "A simulation of an AR(1) with φ = 0.95 is reported as 'not converging' because the sample variance keeps changing.",
+        "title": "A finite sample of a persistent process",
+        "body": [
+          "An analyst simulates an AR(1) with φ = 0.95 and σ² = 1, computes the sample variance over 200 observations, and gets 4.1. Repeating with a different seed gives 12.7, then 7.3. The theoretical variance is 1/(1 − 0.9025) = 10.26. The analyst concludes the simulation is broken.",
+          "Nothing is broken. The issue is that the effective number of independent observations in a persistent series is far smaller than the nominal count. A rough measure is n(1 − φ)/(1 + φ), which at n = 200 and φ = 0.95 is about 5 — so 200 observations carry roughly as much information about the variance as five independent ones. Variance estimates from five observations are wildly variable, and that is what the analyst is seeing.",
+          "There is a second effect, and it biases rather than merely scatters. The sample variance is computed around the sample mean, and for a persistent series the sample mean is itself a poor estimate of the true mean — it tends to sit near wherever the series happened to be wandering. Subtracting it removes genuine variation, so the sample variance is biased DOWNWARD, which is why two of the three estimates fell below 10.26.",
+          "The practical consequences reach beyond simulation. Standard errors computed as if observations were independent are badly understated for autocorrelated data, which is the motivation for the long-run variance estimators used in time-series regression. A confidence interval built on the nominal n will be far too narrow.",
+          "The diagnosis to carry is that the theoretical variance describes the stationary distribution, which a finite realisation approaches slowly when φ is near 1. At φ = 0.5 the same simulation would be well behaved, because the effective sample size is about 67 rather than 5.",
+          "The general point is that persistence costs information. The formula σ²/(1 − φ²) says how variable the process is; the effective sample size says how much a given stretch of it can tell you."
+        ],
+        "q": "Why is the sample variance of a persistent AR(1) biased downward, not merely noisy?",
+        "answer": "Because it is computed as deviations from the SAMPLE mean, and for a persistent series the sample mean is close to wherever the realisation happened to wander rather than to the true mean. Centring on a mean that has itself drifted with the data removes some of the real variation, so the estimate is too small. The effect is severe exactly when φ is near 1, because the series then spends long stretches away from its true mean and the sample mean tracks those excursions. This is on top of the sheer noisiness caused by a small effective sample size: n(1−φ)/(1+φ) is about 5 at n = 200 and φ = 0.95, so even an unbiased estimator would scatter widely. Both effects shrink as φ moves away from 1."
+      },
+      "ask": {
+        "q": "The variance at φ = −0.7 equals that at φ = +0.7. What differs between the two processes?",
+        "nudge": "Compute ρ₁ and ρ₂ in each case."
+      }
     },
     {
-     "say": "An AR(1) with φ = −0.6.",
-     "blank": {
-      "prompt": "Give γ₀, ρ₁ and ρ₂.",
-      "answer": "γ₀ = 1/0.64 = 1.5625, ρ₁ = −0.6, ρ₂ = 0.36",
-      "accept": [
-       "1.5625, -0.6, 0.36",
-       "1.5625 -0.6 0.36",
-       "1.56, -0.6, 0.36"
+      "kind": "explore",
+      "id": "s2",
+      "mins": 7,
+      "title": "Watch the autocorrelations follow the recursion",
+      "objective": "See the difference equation generate the ACF.",
+      "viz": {
+        "type": "ar-acf",
+        "p1": 0.5,
+        "p2": 0.3,
+        "caption": "The ACF of an AR(2). Each stem beyond lag 2 is produced by the recursion ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂ applied to the two before it."
+      },
+      "body": [
+        "At φ₁ = 0.5, φ₂ = 0.3 the ACF reads 0.714, 0.657, 0.543, 0.468, 0.397. Check the recursion on the third value: ρ₃ = 0.5(0.6571) + 0.3(0.7143) = 0.3286 + 0.2143 = 0.5429. It reproduces the stem exactly, and the same check works at every lag beyond 2.",
+        "Note that the first two values are NOT given by the recursion — they come from the starting conditions ρ₀ = 1 and ρ₁ = φ₁/(1 − φ₂) = 0.5/0.7 = 0.7143. The recursion then generates everything after. A linear difference equation needs as many starting values as its order, and that is where they come from.",
+        "Set φ₂ = 0 to get an AR(1). The recursion collapses to ρₖ = φ₁ρₖ₋₁, so ρₖ = φ₁ᵏ — the geometric decay. The AR(1) ACF is the simplest case of the same equation.",
+        "Now try φ₁ = 0.3, φ₂ = −0.7. The ACF oscillates and crosses zero, because the characteristic equation now has complex roots and the solution of the difference equation is a damped sine rather than a sum of two decaying exponentials. Same recursion, different root structure.",
+        "The point of the chart here is that the ACF is not a separate object to memorise case by case: it is the solution of one difference equation, with the coefficients setting the equation and two starting values setting the particular solution."
       ],
-      "hint": "1 − φ² does not see the sign; φᵏ does."
-     },
-     "why": "The variance is the same as at φ = +0.6, since 1 − 0.36 either way, but the ACF alternates. Sign affects shape, modulus affects magnitude."
+      "ask": {
+        "q": "Why does the recursion need two starting values for an AR(2) but only one for an AR(1)?",
+        "nudge": "How many previous terms does each recursion reference?"
+      }
     },
     {
-     "say": "An AR(2) with φ = (0.6, 0.2).",
-     "blank": {
-      "prompt": "Give ρ₁ and ρ₂.",
-      "answer": "ρ₁ = 0.6/0.8 = 0.75, ρ₂ = 0.6(0.75) + 0.2 = 0.65",
-      "accept": [
-       "0.75 and 0.65",
-       "0.75, 0.65"
+      "kind": "theory",
+      "id": "s3",
+      "mins": 9,
+      "title": "The derivations and the closed forms",
+      "objective": "Get both AR(1) results and both AR(2) results properly.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "The method, stated once",
+          "body": "Take the model equation, multiply through by yₜ₋ₖ, and take expectations. Stationarity makes E(yₜyₜ₋ⱼ) equal γⱼ independently of t, so the result is a relation among the γ's. Use E(yₜ₋ₖεₜ) = 0 for k ≥ 1 and E(yₜεₜ) = σ² for k = 0. That single procedure gives every result below."
+        },
+        {
+          "t": "formula",
+          "h": "AR(1): the covariance recursion",
+          "body": "From yₜ = φyₜ₋₁ + εₜ, multiply by yₜ₋ₖ (k ≥ 1) and take expectations:\n    γₖ = φγₖ₋₁ + E(yₜ₋ₖεₜ) = φγₖ₋₁.\nSo γₖ = φᵏγ₀ and ρₖ = φᵏ. Simulated at φ = 0.7: 0.7001, 0.4903, 0.3433, 0.1686 at lags 1, 2, 3, 5, against 0.7000, 0.4900, 0.3430, 0.1681."
+        },
+        {
+          "t": "formula",
+          "h": "AR(1): the variance",
+          "body": "Now take k = 0. Multiply by yₜ itself:\n    γ₀ = φγ₁ + E(yₜεₜ) = φγ₁ + σ².\nSubstituting γ₁ = φγ₀:\n    γ₀ = φ²γ₀ + σ²  ⟹  γ₀ = σ²/(1 − φ²).\nThe σ² term comes from E(yₜεₜ), which is σ² and NOT zero, because yₜ contains εₜ. At φ = 0.7, σ² = 1: γ₀ = 1/0.51 = 1.9608, simulated 1.9613."
+        },
+        {
+          "t": "formula",
+          "h": "AR(2): the difference equation",
+          "body": "From yₜ = φ₁yₜ₋₁ + φ₂yₜ₋₂ + εₜ, multiplying by yₜ₋ₖ for k ≥ 1:\n    γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂,  and dividing by γ₀,\n    ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂   for k ≥ 1.\nAt k = 1 this reads ρ₁ = φ₁ + φ₂ρ₋₁ = φ₁ + φ₂ρ₁, using ρ₋₁ = ρ₁, which rearranges to\n    ρ₁ = φ₁/(1 − φ₂).\nAt (0.5, 0.3): ρ₁ = 0.5/0.7 = 0.7143, simulated 0.7145."
+        },
+        {
+          "t": "formula",
+          "h": "AR(2): the variance in closed form",
+          "body": "Taking k = 0 gives γ₀ = φ₁γ₁ + φ₂γ₂ + σ², and solving the system yields\n    γ₀ = σ²(1 − φ₂) / [ (1 + φ₂)( (1 − φ₂)² − φ₁² ) ].\nAt (0.5, 0.3) with σ² = 1: 0.7/(1.3 × (0.49 − 0.25)) = 0.7/0.312 = 2.2436, simulated 2.2466. Note it reduces to σ²/(1 − φ₁²) when φ₂ = 0, as it must."
+        },
+        {
+          "t": "def",
+          "h": "The general pattern",
+          "body": "For an AR(p) the autocovariances satisfy γₖ = φ₁γₖ₋₁ + ⋯ + φₚγₖ₋ₚ for k ≥ 1, with p starting values obtained from the k = 1, …, p equations using γ₋ⱼ = γⱼ, and γ₀ from the k = 0 equation which carries the extra σ². That is the Yule–Walker system, which topic 7.3 solves in the other direction."
+        }
       ],
-      "hint": "ρ₁ = φ₁/(1 − φ₂), then the recursion with ρ₀ = 1."
-     },
-     "why": "First check the process is stationary: 0.6 + 0.2 = 0.8 < 1, 0.2 − 0.6 = −0.4 < 1, |0.2| < 1 — all three hold, so the formulas apply."
+      "table": {
+        "caption": "AR(2) with φ = (0.5, 0.3), σ² = 1. Exact values against a long simulation.",
+        "head": [
+          "quantity",
+          "formula",
+          "exact",
+          "simulated"
+        ],
+        "rows": [
+          [
+            "γ₀",
+            "σ²(1−φ₂)/((1+φ₂)((1−φ₂)²−φ₁²))",
+            "2.2436",
+            "2.2466"
+          ],
+          [
+            "ρ₁",
+            "φ₁/(1 − φ₂)",
+            "0.7143",
+            "0.7145"
+          ],
+          [
+            "ρ₂",
+            "φ₁ρ₁ + φ₂",
+            "0.6571",
+            "0.6577"
+          ],
+          [
+            "ρ₃",
+            "φ₁ρ₂ + φ₂ρ₁",
+            "0.5429",
+            "0.5432"
+          ],
+          [
+            "ρ₅",
+            "recursion",
+            "0.3971",
+            "0.3975"
+          ]
+        ]
+      },
+      "flow": {
+        "title": "Computing the autocovariances of an AR(p)",
+        "alt": "Flow chart for deriving the autocovariance function of an autoregressive process",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "AR(p) with coefficients and σ² given",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Multiply by yₜ₋ₖ and take expectations",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 0,
+            "label": "k ≥ 1: γₖ = Σφⱼγₖ₋ⱼ (the recursion)",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 2,
+            "c": 2,
+            "label": "k = 0: extra σ² from E(yₜεₜ)",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 3,
+            "c": 0,
+            "label": "Solve k=1..p with γ₋ⱼ = γⱼ for the starting ρ's",
+            "kind": "step"
+          },
+          {
+            "id": "f",
+            "r": 3,
+            "c": 2,
+            "label": "Combine to get γ₀",
+            "kind": "end"
+          },
+          {
+            "id": "g",
+            "r": 4,
+            "c": 1,
+            "label": "Recursion generates all remaining lags",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "b",
+            "to": "d"
+          },
+          {
+            "from": "c",
+            "to": "e"
+          },
+          {
+            "from": "d",
+            "to": "f"
+          },
+          {
+            "from": "e",
+            "to": "g"
+          },
+          {
+            "from": "f",
+            "to": "g"
+          }
+        ],
+        "note": "One procedure, two branches. The k = 0 case is the only one carrying a σ² term, and forgetting it is the commonest error."
+      },
+      "ask": {
+        "q": "Why does only the k = 0 equation carry a σ² term?",
+        "nudge": "For which k does yₜ₋ₖ contain εₜ?"
+      }
     },
     {
-     "say": "The same AR(2), now its variance.",
-     "blank": {
-      "prompt": "Give γ₀ with σ² = 1.",
-      "answer": "γ₀ = 0.8/(1.2 × (0.64 − 0.36)) = 0.8/0.336 = 2.381",
-      "accept": [
-       "2.381",
-       "2.38",
-       "2.3810"
+      "kind": "worked",
+      "id": "s4",
+      "mins": 8,
+      "title": "Worked — the AR(2) from first principles",
+      "objective": "Do the full calculation once, with the simulation as a check.",
+      "ask": {
+        "q": "At which step did the symmetry γ₋ₖ = γₖ become essential?",
+        "nudge": "Look at the k = 1 equation."
+      },
+      "problem": "For an AR(2) with φ = (0.5, 0.3) and σ² = 1, derive ρ₁, then compute ρ₂, ρ₃ and γ₀.",
+      "steps": [
+        {
+          "say": "Multiply the model by yₜ₋₁ and take expectations.",
+          "math": "yₜ = 0.5yₜ₋₁ + 0.3yₜ₋₂ + εₜ\n× yₜ₋₁, expectations:\nγ₁ = 0.5γ₀ + 0.3γ₋₁ + E(yₜ₋₁εₜ)\n   = 0.5γ₀ + 0.3γ₁ + 0",
+          "why": "E(yₜ₋₁εₜ) = 0 because yₜ₋₁ is built from shocks dated t−1 and earlier. The term γ₋₁ appears because multiplying φ₂yₜ₋₂ by yₜ₋₁ gives a lag of −1, and the symmetry γ₋₁ = γ₁ is what makes the equation solvable."
+        },
+        {
+          "say": "Solve for ρ₁.",
+          "math": "γ₁(1 − 0.3) = 0.5γ₀\nρ₁ = γ₁/γ₀ = 0.5/0.7 = 0.714286",
+          "why": "So ρ₁ = φ₁/(1 − φ₂) in general. Simulated as 0.7145 over a long series. Note ρ₁ EXCEEDS φ₁ = 0.5, because the second lag reinforces the first — a point worth noticing, since the instinct is to expect ρ₁ = φ₁."
+        },
+        {
+          "say": "Now the recursion for higher lags.",
+          "math": "ρ₂ = 0.5ρ₁ + 0.3ρ₀ = 0.5(0.714286) + 0.3 = 0.657143\nρ₃ = 0.5ρ₂ + 0.3ρ₁ = 0.328571 + 0.214286 = 0.542857\nρ₅ (two more steps) = 0.397143",
+          "why": "Each value uses only the two before it. Simulated values were 0.6577, 0.5432 and 0.3975 — agreement to three decimals throughout. Note the decay is slower than 0.7143ᵏ would give, which is the second lag's contribution."
+        },
+        {
+          "say": "The k = 0 equation for the variance.",
+          "math": "× yₜ, expectations:\nγ₀ = 0.5γ₁ + 0.3γ₂ + E(yₜεₜ)\n   = 0.5γ₁ + 0.3γ₂ + σ²\n   = γ₀(0.5ρ₁ + 0.3ρ₂) + 1",
+          "why": "Here E(yₜεₜ) = σ² = 1, because yₜ contains εₜ with coefficient 1. This is the only equation in the whole derivation with a σ² term."
+        },
+        {
+          "say": "Solve it.",
+          "math": "0.5(0.714286) + 0.3(0.657143) = 0.357143 + 0.197143 = 0.554286\nγ₀(1 − 0.554286) = 1\nγ₀ = 1/0.445714 = 2.2436",
+          "why": "Matching the closed form σ²(1−φ₂)/((1+φ₂)((1−φ₂)²−φ₁²)) = 0.7/(1.3 × 0.24) = 2.2436, and the simulated 2.2466. Two independent routes to the same number."
+        },
+        {
+          "say": "A sanity check on the magnitude.",
+          "math": "AR(1) with φ = 0.5 would give 1/(1 − 0.25) = 1.3333\nAR(2) here gives 2.2436 — larger\nIn general γ₀ ≥ σ², with strict inequality when at least one non-zero lag contributes.",
+          "why": "The current innovation contributes σ² and any non-zero past-shock weights add non-negative variance. Thus γ₀ is at least σ², and is strictly greater when the AR dynamics are non-zero. Here the positive second lag increases persistence and gives the larger value."
+        }
       ],
-      "hint": "γ₀ = σ²(1−φ₂)/((1+φ₂)((1−φ₂)²−φ₁²))."
-     },
-     "why": "(1 − 0.2) = 0.8 on top; (1 + 0.2) = 1.2 and (0.8² − 0.6²) = 0.64 − 0.36 = 0.28 below, giving 1.2 × 0.28 = 0.336. The result exceeds 1, as any AR variance must."
+      "after": "Answering the question above: at the k = 1 equation, where γ₋₁ had to be recognised as γ₁. The transferable procedure is to write the k = 1 to k = p equations with the symmetry applied, solve for the starting autocorrelations, then take k = 0 for the variance — remembering that only that last equation carries σ²."
+    },
+    {
+      "kind": "recall",
+      "id": "s5",
+      "mins": 2,
+      "title": "Pause and recall",
+      "objective": "Retrieve the four formulas.",
+      "intro": "Answer each before revealing it.",
+      "items": [
+        {
+          "q": "Give γ₀ and ρₖ for an AR(1).",
+          "a": "γ₀ = σ²/(1 − φ²) and ρₖ = φᵏ."
+        },
+        {
+          "q": "What difference equation do the autocovariances of an AR(2) satisfy?",
+          "a": "γₖ = φ₁γₖ₋₁ + φ₂γₖ₋₂ for k ≥ 1, and the same in ρ."
+        },
+        {
+          "q": "Give ρ₁ for an AR(2) and say why it is not simply φ₁.",
+          "a": "ρ₁ = φ₁/(1 − φ₂), because the k = 1 equation involves γ₋₁ = γ₁ and must be solved for it."
+        },
+        {
+          "q": "Which equation carries the σ² term, and why?",
+          "a": "Only k = 0, because E(yₜεₜ) = σ² while E(yₜ₋ₖεₜ) = 0 for k ≥ 1."
+        },
+        {
+          "q": "At φ = 0.7 and σ² = 1, what is the variance of an AR(1)?",
+          "a": "1/(1 − 0.49) = 1.9608, simulated 1.9613."
+        }
+      ]
+    },
+    {
+      "kind": "completion",
+      "id": "s6",
+      "mins": 8,
+      "title": "Your turn — five computations",
+      "objective": "Use both formulas and the recursion.",
+      "problem": "Take σ² = 1 unless stated otherwise.",
+      "steps": [
+        {
+          "say": "An AR(1) with φ = 0.8.",
+          "blank": {
+            "prompt": "Give γ₀ and ρ₂.",
+            "answer": "γ₀ = 1/0.36 = 2.7778, ρ₂ = 0.64",
+            "accept": [
+              "2.7778 and 0.64",
+              "2.778, 0.64",
+              "2.78 and 0.64"
+            ],
+            "hint": "γ₀ = σ²/(1 − φ²) and ρₖ = φᵏ."
+          },
+          "why": "1/(1 − 0.64) = 2.7778, matching the sum Σφ^(2j) computed in topic 7.1. And ρ₂ = 0.8² = 0.64."
+        },
+        {
+          "say": "The same AR(1) but with σ² = 4.",
+          "blank": {
+            "prompt": "Give γ₀ and ρ₂.",
+            "answer": "γ₀ = 4/0.36 = 11.111, ρ₂ = 0.64 unchanged",
+            "accept": [
+              "11.111 and 0.64",
+              "11.11, 0.64",
+              "11.1 and 0.64"
+            ],
+            "hint": "Which of the two depends on σ²?"
+          },
+          "why": "The variance scales with σ² but the autocorrelations do not: ρₖ = φᵏ involves only the coefficient. That separation is worth noting — the shock variance sets the scale and the coefficients set the shape."
+        },
+        {
+          "say": "An AR(1) with φ = −0.6.",
+          "blank": {
+            "prompt": "Give γ₀, ρ₁ and ρ₂.",
+            "answer": "γ₀ = 1/0.64 = 1.5625, ρ₁ = −0.6, ρ₂ = 0.36",
+            "accept": [
+              "1.5625, -0.6, 0.36",
+              "1.5625 -0.6 0.36",
+              "1.56, -0.6, 0.36"
+            ],
+            "hint": "1 − φ² does not see the sign; φᵏ does."
+          },
+          "why": "The variance is the same as at φ = +0.6, since 1 − 0.36 either way, but the ACF alternates. Sign affects shape, modulus affects magnitude."
+        },
+        {
+          "say": "An AR(2) with φ = (0.6, 0.2).",
+          "blank": {
+            "prompt": "Give ρ₁ and ρ₂.",
+            "answer": "ρ₁ = 0.6/0.8 = 0.75, ρ₂ = 0.6(0.75) + 0.2 = 0.65",
+            "accept": [
+              "0.75 and 0.65",
+              "0.75, 0.65"
+            ],
+            "hint": "ρ₁ = φ₁/(1 − φ₂), then the recursion with ρ₀ = 1."
+          },
+          "why": "First check the process is stationary: 0.6 + 0.2 = 0.8 < 1, 0.2 − 0.6 = −0.4 < 1, |0.2| < 1 — all three hold, so the formulas apply."
+        },
+        {
+          "say": "The same AR(2), now its variance.",
+          "blank": {
+            "prompt": "Give γ₀ with σ² = 1.",
+            "answer": "γ₀ = 0.8/(1.2 × (0.64 − 0.36)) = 0.8/0.336 = 2.381",
+            "accept": [
+              "2.381",
+              "2.38",
+              "2.3810"
+            ],
+            "hint": "γ₀ = σ²(1−φ₂)/((1+φ₂)((1−φ₂)²−φ₁²))."
+          },
+          "why": "(1 − 0.2) = 0.8 on top; (1 + 0.2) = 1.2 and (0.8² − 0.6²) = 0.64 − 0.36 = 0.28 below, giving 1.2 × 0.28 = 0.336. The result exceeds 1, as any AR variance must."
+        }
+      ],
+      "after": "The structure to carry: check stationarity, then ρ₁ = φ₁/(1 − φ₂) and the recursion for the shape, and the closed form for γ₀. Autocorrelations never involve σ²; the variance always does."
+    },
+    {
+      "kind": "theory",
+      "id": "s7",
+      "mins": 7,
+      "title": "Solving the difference equation, and what it implies",
+      "objective": "See where the shapes come from and what the roots control.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "The general solution",
+          "body": "The recursion ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂ is a linear difference equation with characteristic equation z² − φ₁z − φ₂ = 0. If its roots z₁ and z₂ are distinct,\n    ρₖ = Az₁ᵏ + Bz₂ᵏ,\nwith A and B set by ρ₀ = 1 and ρ₁ = φ₁/(1 − φ₂). Note these z are the RECIPROCALS of the AR-polynomial roots of topic 7.1, so stationarity means |z| < 1 here and the solution decays."
+        },
+        {
+          "t": "step",
+          "h": "Three regimes",
+          "body": "Two distinct real roots give a sum of two decaying exponentials — a smooth decay dominated by the larger root at long lags. A repeated real root gives (A + Bk)zᵏ. A complex conjugate pair gives a DAMPED SINE WAVE, ρₖ = Crᵏ sin(ωk + δ) with r = √|φ₂|, which crosses zero repeatedly. All three are AR(2) processes with a PACF cutting off at lag 2."
+        },
+        {
+          "t": "step",
+          "h": "What this says about identification",
+          "body": "An oscillating ACF is a root-structure phenomenon, not evidence of an MA component — the point topic 7.2 makes from the plots and this section explains. The damping factor r = √|φ₂| also ties back to topic 7.1, where the complex-root modulus was 1/√|φ₂|: the reciprocal, as it must be."
+        },
+        {
+          "t": "formula",
+          "h": "The AR(1) as the degenerate case",
+          "body": "Setting φ₂ = 0 gives z² − φ₁z = 0 with roots φ₁ and 0, so ρₖ = φ₁ᵏ exactly — a single exponential. The AR(1) geometric ACF is the one-root case of the same solution, which is why it needs only one starting value."
+        },
+        {
+          "t": "def",
+          "h": "Why the variance needs separate work",
+          "body": "The difference equation determines the SHAPE of the autocovariance function but not its scale, because it is homogeneous — multiplying every γₖ by a constant still satisfies it. The scale comes from the k = 0 equation, the only one containing σ². That is the structural reason the variance is a separate calculation rather than part of the recursion."
+        }
+      ],
+      "ask": {
+        "q": "The difference equation is homogeneous in the γ's. What does that tell you about where the variance must come from?",
+        "nudge": "If every γ doubled, would the recursion still hold?"
+      }
+    },
+    {
+      "kind": "guided",
+      "id": "s8",
+      "mins": 8,
+      "title": "On your own — four parts",
+      "objective": "Work the formulas in both directions.",
+      "problem": "(a) An AR(1) has γ₀ = 4 and σ² = 1. Find φ, assuming it is positive. (b) An AR(2) with φ = (1.2, −0.4): give ρ₁ and ρ₂. (c) For that process, state whether the ACF oscillates and why. (d) An AR(1) with φ = 0.9: give the amplification factor and comment on the effective sample size at n = 200.",
+      "hints": [
+        "For (a), invert γ₀ = σ²/(1 − φ²).",
+        "For (b), check stationarity first, then ρ₁ = φ₁/(1 − φ₂).",
+        "For (c), look at the discriminant φ₁² + 4φ₂."
+      ],
+      "answer": "(a) φ = √0.75 ≈ 0.8660. (b) ρ₁ = 1.2/1.4 = 0.8571 and ρ₂ = 0.6286. (c) Yes — the discriminant is negative, so the roots are complex and the ACF is a damped sine. (d) Factor 1/(1 − 0.81) = 5.263; effective sample size about 200(0.1)/(1.9) ≈ 10.5.",
+      "check": "In (b), stationarity holds: 1.2 − 0.4 = 0.8 < 1, −0.4 − 1.2 = −1.6 < 1, |−0.4| < 1 — the case topic 7.1 flagged as stationary despite φ₁ > 1. In (c) the damping factor is √0.4 = 0.6325, so the oscillation dies out over roughly a dozen lags. In (d) the effective sample size of about 10 explains why variance estimates from a persistent series scatter so widely.",
+      "scenario": {
+        "teaser": "A fitted AR(2) returns a negative variance from the closed form.",
+        "title": "When the formula objects",
+        "body": [
+          "An analyst estimates an AR(2) and gets φ̂ = (1.3, −0.35). Substituting into the variance formula gives (1 + 0.35) = 1.35 and (1.35² − 1.3²) = 1.8225 − 1.69 = 0.1325, so γ₀ = 1.35/(1.35 × 0.1325)σ² = 7.547σ². Positive, so the formula is content. But a colleague repeating the exercise with φ̂ = (1.4, −0.35) gets (1.35² − 1.96) = −0.1375 and therefore a NEGATIVE variance.",
+          "A negative variance is impossible, so the second set of coefficients cannot describe a stationary process — and indeed 1.4 − 0.35 = 1.05, which violates the first stationarity condition of topic 7.1. The formula is not malfunctioning; it is reporting that its own precondition has failed.",
+          "The denominator factors as (1 + φ₂)(1 − φ₂ − φ₁)(1 − φ₂ + φ₁). These three factors are positive inside the AR(2) stationarity triangle. Under stationarity, all three denominator factors and the numerator (1 − φ₂) are positive, so the variance is positive. Do not use the sign of this algebraic expression as a stationarity test outside the stationary region: the Yule–Walker derivation assumes stationarity, and a nonstationary parameter pair can still make the formal expression positive if both numerator and denominator are negative. Check the roots or the three stationarity inequalities directly.",
+          "The practical lesson is to run the stationarity check BEFORE substituting into any autocovariance formula, rather than discovering the problem from an impossible answer. In an exam a negative variance should be read immediately as a signal that the coefficients are outside the triangle, which is often what the question was testing.",
+          "There is a related trap on the estimation side. Yule–Walker estimation always returns coefficients inside the stationary region by construction, but least-squares or maximum-likelihood estimation does not, so a fitted AR can come back non-stationary. When it does, the honest reading is usually that the series had a unit root and should have been differenced first — topic 7.5's territory.",
+          "The underlying point is that these formulas encode their own domain of validity. A result that is negative, infinite, or outside [−1, 1] for an autocorrelation is information about the inputs, not an arithmetic slip to be hunted down."
+        ],
+        "q": "Why is a negative result from the AR(2) variance formula a stationarity diagnosis rather than an arithmetic error?",
+        "answer": "The denominator factors as (1 + φ₂)(1 − φ₂ − φ₁)(1 − φ₂ + φ₁), and the three factors are positive inside the AR(2) stationarity triangle. Under stationarity, all three denominator factors and the numerator (1 − φ₂) are positive, so the variance is positive. Do not use the sign of this algebraic expression as a stationarity test outside the stationary region: the Yule–Walker derivation assumes stationarity, and a nonstationary parameter pair can still make the formal expression positive if both numerator and denominator are negative. For φ = (1.4, −0.35), the sum 1.4 − 0.35 = 1.05 exceeds 1, so the process is nonstationary and this particular substitution returns a negative formal value. That result is consistent with the failed precondition, but positivity is not a general converse test."
+      },
+      "solution": [
+        {
+          "say": "(a) Inverting the variance formula.",
+          "math": "4 = 1/(1 − φ²)\n1 − φ² = 0.25\nφ² = 0.75\nφ = √0.75 = 0.866025",
+          "why": "Note the negative root −0.866 gives the same variance, which is why the question had to specify the sign. The variance determines |φ| but not its sign; ρ₁ would settle it."
+        },
+        {
+          "say": "(b) The AR(2) autocorrelations.",
+          "math": "stationarity: 0.8 < 1 ✓, −1.6 < 1 ✓, 0.4 < 1 ✓\nρ₁ = 1.2/(1 + 0.4) = 1.2/1.4 = 0.857143\nρ₂ = 1.2(0.857143) − 0.4(1) = 1.028571 − 0.4 = 0.628571",
+          "why": "Note 1 − φ₂ = 1 − (−0.4) = 1.4, so the negative φ₂ ENLARGES the denominator and reduces ρ₁ relative to φ₁. The arithmetic is unforgiving about the sign here."
+        },
+        {
+          "say": "(c) The root structure.",
+          "math": "discriminant φ₁² + 4φ₂ = 1.44 − 1.6 = −0.16 < 0\n⟹ complex conjugate roots\ndamping r = √|φ₂| = √0.4 = 0.6325",
+          "why": "So the ACF is a damped sine wave and will cross zero. Topic 7.1 computed the AR-polynomial root modulus as 1/√0.4 = 1.5811, and 1/1.5811 = 0.6325 — the reciprocal, consistent as it must be."
+        },
+        {
+          "say": "(d) The amplification and effective sample size.",
+          "math": "1/(1 − 0.81) = 1/0.19 = 5.2632\nn_eff ≈ n(1 − φ)/(1 + φ) = 200(0.1)/1.9 = 10.5",
+          "why": "The process is over five times as variable as its shocks, and 200 observations carry roughly the information of ten independent ones about the variance. That is why variance estimates from persistent series are so unstable, as section 1's scenario described."
+        }
+      ]
+    },
+    {
+      "kind": "trapcheck",
+      "id": "s9",
+      "mins": 6,
+      "title": "Six statements — verdict on each before you look",
+      "objective": "Rule on the claims this topic turns on.",
+      "intro": "Decide true or false on all six before revealing any.",
+      "items": [
+        {
+          "claim": "For an AR(2), ρ₁ = φ₁.",
+          "tf": false,
+          "why": "False — that holds only for an AR(1). For an AR(2), ρ₁ = φ₁/(1 − φ₂), because the k = 1 equation involves γ₋₁ = γ₁ and must be solved for it. At (0.5, 0.3) the value is 0.7143, not 0.5."
+        },
+        {
+          "claim": "The variance of an AR(1) is the same at φ = 0.7 and φ = −0.7.",
+          "tf": true,
+          "why": "True: γ₀ = σ²/(1 − φ²) depends on φ², not φ. Both give 1.9608 at σ² = 1. The ACFs differ — one decays monotonically, the other alternates — so the sign affects the shape but not the magnitude."
+        },
+        {
+          "claim": "Every equation in the autocovariance derivation carries a σ² term.",
+          "tf": false,
+          "why": "False. Only the k = 0 equation does, because E(yₜεₜ) = σ² while E(yₜ₋ₖεₜ) = 0 for k ≥ 1. The recursion for k ≥ 1 is homogeneous, which is exactly why the variance needs a separate calculation."
+        },
+        {
+          "claim": "An oscillating AR(2) autocorrelation function indicates a moving-average component.",
+          "tf": false,
+          "why": "False. Oscillation arises when the characteristic equation has complex roots, giving ρₖ = Crᵏ sin(ωk + δ) with r = √|φ₂|. It is still a pure AR(2) with a PACF cutting off at lag 2. Topic 7.2 makes the same point from the plots."
+        },
+        {
+          "claim": "The autocorrelations of an AR process do not depend on σ².",
+          "tf": true,
+          "why": "True. ρₖ depends only on the coefficients — ρₖ = φᵏ for an AR(1), and the recursion for higher orders. Multiplying σ² by any constant scales every γₖ equally and leaves the ratios unchanged. The shock variance sets the scale, the coefficients set the shape."
+        },
+        {
+          "claim": "A negative value from the AR(2) variance formula means an arithmetic error.",
+          "tf": false,
+          "why": "False — it means the coefficients are outside the stationarity triangle. The denominator factors as (1 + φ₂)(1 − φ₂ − φ₁)(1 − φ₂ + φ₁), whose three factors are the three stationarity conditions, so the variance is positive exactly when the process is stationary. The formula is reporting that its precondition failed."
+        }
+      ]
+    },
+    {
+      "kind": "guided",
+      "id": "s10",
+      "mins": 8,
+      "title": "On your own — six quick values",
+      "objective": "Compute at exam speed.",
+      "problem": "σ² = 1 throughout. (a) AR(1), φ = 0.5: γ₀ and ρ₃. (b) AR(1), φ = 0.95: γ₀. (c) AR(2), (0.4, 0.3): ρ₁. (d) AR(2), (0.5, −0.2): ρ₁ and ρ₂. (e) AR(1) with γ₀ = 2.7778: find |φ|. (f) AR(2), (0.6, 0.5): is the variance formula applicable?",
+      "hints": [
+        "For (b), 1 − 0.95² = 0.0975.",
+        "For (d), 1 − (−0.2) = 1.2.",
+        "For (f), check the three stationarity conditions before computing anything."
+      ],
+      "answer": "(a) γ₀ = 1.3333, ρ₃ = 0.125. (b) γ₀ = 10.2564. (c) ρ₁ = 0.5714. (d) ρ₁ = 0.4167, ρ₂ = 0.0083. (e) |φ| = 0.8. (f) No — 0.6 + 0.5 = 1.1 > 1, so the process is not stationary.",
+      "check": "Part (d) is worth noticing: with a negative φ₂ the autocorrelations fall away very fast, ρ₂ being only 0.0083, almost zero. The two lags are working against each other. Part (f) is the trap — substituting (0.6, 0.5) into the formula gives (1.5)((0.5)² − 0.36) = 1.5(−0.11) < 0 and a negative variance, which is the formula reporting the failed stationarity condition rather than an arithmetic slip.",
+      "solution": [
+        {
+          "say": "(a), (b) and (e): the AR(1) cases.",
+          "math": "φ=0.5: γ₀ = 1/0.75 = 1.3333, ρ₃ = 0.125\nφ=0.95: γ₀ = 1/0.0975 = 10.2564\nγ₀ = 2.7778 ⟹ 1 − φ² = 0.36 ⟹ |φ| = 0.8",
+          "why": "All three are the same formula used forwards or backwards. The 10.26 at φ = 0.95 is the amplification that makes persistent series so variable."
+        },
+        {
+          "say": "(c) and (d): the AR(2) autocorrelations.",
+          "math": "(0.4, 0.3): ρ₁ = 0.4/0.7 = 0.571429\n(0.5, −0.2): ρ₁ = 0.5/1.2 = 0.416667\n           ρ₂ = 0.5(0.416667) − 0.2 = 0.008333",
+          "why": "In (d) the negative φ₂ both enlarges the denominator for ρ₁ and subtracts in the recursion, so the ACF collapses almost to zero by lag 2."
+        },
+        {
+          "say": "(f) The inadmissible case.",
+          "math": "φ₁ + φ₂ = 0.6 + 0.5 = 1.1, NOT < 1 ✗\nformula would give (1.5)(0.25 − 0.36) = −0.165 < 0",
+          "why": "Not stationary, so no autocovariance function exists and the formula correctly returns a negative value. The stationarity check must come first."
+        }
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s11",
+      "mins": 6,
+      "title": "How this connects to the rest of the module",
+      "objective": "See the same equations used three ways.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "Forwards and backwards (topic 7.3)",
+          "body": "This lesson goes from coefficients to autocovariances. Topic 7.3's Yule–Walker estimation goes the other way: given sample autocorrelations, solve the same equations for the coefficients. For an AR(2) that means solving ρ₁ = φ₁ + φ₂ρ₁ and ρ₂ = φ₁ρ₁ + φ₂ simultaneously. One set of relations, two directions of use."
+        },
+        {
+          "t": "step",
+          "h": "Shapes for identification (topic 7.2)",
+          "body": "The decaying ACF that topic 7.2 reads as an AR signature is exactly what this lesson computes. The three regimes — two real roots, repeated root, complex pair — explain why an AR(2) ACF can decay smoothly or oscillate while its PACF always cuts off at lag 2."
+        },
+        {
+          "t": "step",
+          "h": "The frequency domain (topic 7.7)",
+          "body": "The spectral density is the Fourier transform of the autocovariance sequence, so f(ω) = (1/2π)Σγₖe^(−iωk). The area under it over (−π, π) is γ₀ — which is why topic 7.7's area readout matched the variance in every case. Two descriptions of the same information."
+        },
+        {
+          "t": "step",
+          "h": "Forecasting (topic 7.11)",
+          "body": "The mean squared forecast error of a k-step-ahead forecast is built from the autocovariances, and as k grows it approaches γ₀ — the variance of the process. Forecasts beyond a few steps carry no more information than the unconditional mean, and the autocovariance function is what quantifies the horizon at which that happens."
+        },
+        {
+          "t": "def",
+          "h": "Why the autocovariance function is central",
+          "body": "For a Gaussian stationary process the mean and the autocovariance function determine the entire joint distribution. So everything the model can say — identification, estimation, spectra, forecasts — is a function of what this lesson computes."
+        }
+      ],
+      "ask": {
+        "q": "If the area under the spectral density equals γ₀, what does that make the spectral density, in information terms?",
+        "nudge": "A re-description of what, exactly?"
+      }
+    },
+    {
+      "kind": "recall",
+      "id": "s12",
+      "mins": 2,
+      "title": "Second recall — the parts most likely to fade",
+      "objective": "Retrieve the AR(2) results and the structural points.",
+      "intro": "Answer, then reveal.",
+      "items": [
+        {
+          "q": "Give the AR(2) variance formula.",
+          "a": "γ₀ = σ²(1 − φ₂)/[(1 + φ₂)((1 − φ₂)² − φ₁²)]."
+        },
+        {
+          "q": "At (0.5, 0.3) with σ² = 1, what is γ₀?",
+          "a": "0.7/(1.3 × 0.24) = 2.2436, simulated 2.2466."
+        },
+        {
+          "q": "Give ρ₂ for an AR(2) in terms of ρ₁.",
+          "a": "ρ₂ = φ₁ρ₁ + φ₂, since ρ₀ = 1."
+        },
+        {
+          "q": "What is the characteristic equation of the autocorrelation recursion?",
+          "a": "z² − φ₁z − φ₂ = 0, whose roots are the reciprocals of the AR-polynomial roots."
+        },
+        {
+          "q": "When does the ACF oscillate?",
+          "a": "When φ₁² + 4φ₂ < 0, giving complex roots and a damped sine with damping √|φ₂|."
+        },
+        {
+          "q": "What does a negative variance from the formula mean?",
+          "a": "That the coefficients lie outside the stationarity triangle — the denominator's factors are the three conditions."
+        }
+      ]
+    },
+    {
+      "kind": "summary",
+      "id": "s13",
+      "mins": 3,
+      "title": "What you should now be able to do unaided",
+      "objective": "Close the loop before the mastery test.",
+      "body": [
+        "Derive the AR(1) variance and ACF by multiplying through and taking expectations.",
+        "State and use γ₀ = σ²/(1 − φ²) and ρₖ = φᵏ.",
+        "Derive ρ₁ = φ₁/(1 − φ₂) for an AR(2), using the symmetry γ₋₁ = γ₁.",
+        "Run the recursion ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂ from the two starting values.",
+        "Use the closed-form AR(2) variance and check its sign against stationarity.",
+        "Say why only the k = 0 equation carries σ², and why autocorrelations are free of it.",
+        "Identify when the ACF oscillates, from the discriminant, with damping √|φ₂|.",
+        "Relate the same equations to Yule–Walker estimation, identification and the spectrum."
+      ]
+    },
+    {
+      "kind": "theory",
+      "id": "s14",
+      "mins": 8,
+      "ext": true,
+      "title": "The AR(2) variance derived in full",
+      "objective": "See where the closed form comes from.",
+      "blocks": [
+        {
+          "t": "step",
+          "h": "The three equations",
+          "body": "For yₜ = φ₁yₜ₋₁ + φ₂yₜ₋₂ + εₜ, multiplying by yₜ, yₜ₋₁ and yₜ₋₂ in turn gives\n    γ₀ = φ₁γ₁ + φ₂γ₂ + σ²\n    γ₁ = φ₁γ₀ + φ₂γ₁        (using γ₋₁ = γ₁)\n    γ₂ = φ₁γ₁ + φ₂γ₀\nThree equations in γ₀, γ₁, γ₂, with σ² appearing only in the first."
+        },
+        {
+          "t": "step",
+          "h": "Eliminating",
+          "body": "From the second, γ₁ = φ₁γ₀/(1 − φ₂). Substituting into the third,\n    γ₂ = φ₁²γ₀/(1 − φ₂) + φ₂γ₀ = γ₀[φ₁² + φ₂(1 − φ₂)]/(1 − φ₂).\nNow put both into the first and divide through by γ₀."
+        },
+        {
+          "t": "formula",
+          "h": "The result",
+          "body": "γ₀{1 − φ₁²/(1 − φ₂) − φ₂[φ₁² + φ₂(1 − φ₂)]/(1 − φ₂)} = σ².\nCollecting over (1 − φ₂) and simplifying gives\n    γ₀ = σ²(1 − φ₂) / [(1 + φ₂)((1 − φ₂)² − φ₁²)].\nCheck at (0.5, 0.3): 0.7/(1.3 × (0.49 − 0.25)) = 0.7/0.312 = 2.2436, matching the step-by-step calculation of section 4 and the simulated 2.2466."
+        },
+        {
+          "t": "step",
+          "h": "The factorisation",
+          "body": "The denominator factors as (1 + φ₂)(1 − φ₂ − φ₁)(1 − φ₂ + φ₁), since (1−φ₂)² − φ₁² is a difference of squares. The three factors are positive exactly inside the AR(2) stationarity triangle. Under stationarity, all three denominator factors and the numerator (1 − φ₂) are positive, so the variance is positive. Do not use the sign of this algebraic expression as a stationarity test outside the stationary region: the Yule–Walker derivation assumes stationarity, and a nonstationary parameter pair can still make the formal expression positive if both numerator and denominator are negative. Use the root condition or the three inequalities to assess stationarity; do not infer it from the sign of the formal variance expression alone."
+        },
+        {
+          "t": "step",
+          "h": "The degenerate checks",
+          "body": "At φ₂ = 0 the formula gives σ²/(1 − φ₁²), the AR(1) result, as it must. At φ₁ = 0 it gives σ²/(1 − φ₂²), which is the AR(1) formula in φ₂ — correct, since yₜ = φ₂yₜ₋₂ + εₜ is two interleaved AR(1) processes. Both checks are worth running on any derivation of this kind."
+        }
+      ],
+      "ask": {
+        "q": "The formula reduces correctly at both φ₂ = 0 and φ₁ = 0. Why is the second check less obvious than the first?",
+        "nudge": "What does yₜ = φ₂yₜ₋₂ + εₜ look like if you follow only the even-numbered times?"
+      }
+    },
+    {
+      "kind": "quiz",
+      "id": "s15",
+      "mins": 12,
+      "title": "Mastery test",
+      "objective": "Demonstrate it independently, on questions you have not seen.",
+      "setId": "timeseries_t4_mastery"
     }
-   ],
-   "after": "The structure to carry: check stationarity, then ρ₁ = φ₁/(1 − φ₂) and the recursion for the shape, and the closed form for γ₀. Autocorrelations never involve σ²; the variance always does."
-  },
-  {
-   "kind": "theory",
-   "id": "s7",
-   "mins": 7,
-   "title": "Solving the difference equation, and what it implies",
-   "objective": "See where the shapes come from and what the roots control.",
-   "blocks": [
-    {
-     "t": "formula",
-     "h": "The general solution",
-     "body": "The recursion ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂ is a linear difference equation with characteristic equation z² − φ₁z − φ₂ = 0. If its roots z₁ and z₂ are distinct,\n    ρₖ = Az₁ᵏ + Bz₂ᵏ,\nwith A and B set by ρ₀ = 1 and ρ₁ = φ₁/(1 − φ₂). Note these z are the RECIPROCALS of the AR-polynomial roots of topic 7.1, so stationarity means |z| < 1 here and the solution decays."
-    },
-    {
-     "t": "step",
-     "h": "Three regimes",
-     "body": "Two distinct real roots give a sum of two decaying exponentials — a smooth decay dominated by the larger root at long lags. A repeated real root gives (A + Bk)zᵏ. A complex conjugate pair gives a DAMPED SINE WAVE, ρₖ = Crᵏ sin(ωk + δ) with r = √|φ₂|, which crosses zero repeatedly. All three are AR(2) processes with a PACF cutting off at lag 2."
-    },
-    {
-     "t": "step",
-     "h": "What this says about identification",
-     "body": "An oscillating ACF is a root-structure phenomenon, not evidence of an MA component — the point topic 7.2 makes from the plots and this section explains. The damping factor r = √|φ₂| also ties back to topic 7.1, where the complex-root modulus was 1/√|φ₂|: the reciprocal, as it must be."
-    },
-    {
-     "t": "formula",
-     "h": "The AR(1) as the degenerate case",
-     "body": "Setting φ₂ = 0 gives z² − φ₁z = 0 with roots φ₁ and 0, so ρₖ = φ₁ᵏ exactly — a single exponential. The AR(1) geometric ACF is the one-root case of the same solution, which is why it needs only one starting value."
-    },
-    {
-     "t": "def",
-     "h": "Why the variance needs separate work",
-     "body": "The difference equation determines the SHAPE of the autocovariance function but not its scale, because it is homogeneous — multiplying every γₖ by a constant still satisfies it. The scale comes from the k = 0 equation, the only one containing σ². That is the structural reason the variance is a separate calculation rather than part of the recursion."
-    }
-   ],
-   "ask": {
-    "q": "The difference equation is homogeneous in the γ's. What does that tell you about where the variance must come from?",
-    "nudge": "If every γ doubled, would the recursion still hold?"
-   }
-  },
-  {
-   "kind": "guided",
-   "id": "s8",
-   "mins": 8,
-   "title": "On your own — four parts",
-   "objective": "Work the formulas in both directions.",
-   "problem": "(a) An AR(1) has γ₀ = 4 and σ² = 1. Find φ, assuming it is positive. (b) An AR(2) with φ = (1.2, −0.4): give ρ₁ and ρ₂. (c) For that process, state whether the ACF oscillates and why. (d) An AR(1) with φ = 0.9: give the amplification factor and comment on the effective sample size at n = 200.",
-   "hints": [
-    "For (a), invert γ₀ = σ²/(1 − φ²).",
-    "For (b), check stationarity first, then ρ₁ = φ₁/(1 − φ₂).",
-    "For (c), look at the discriminant φ₁² + 4φ₂."
-   ],
-   "answer": "(a) φ = √0.75 ≈ 0.8660. (b) ρ₁ = 1.2/1.4 = 0.8571 and ρ₂ = 0.6286. (c) Yes — the discriminant is negative, so the roots are complex and the ACF is a damped sine. (d) Factor 1/(1 − 0.81) = 5.263; effective sample size about 200(0.1)/(1.9) ≈ 10.5.",
-   "check": "In (b), stationarity holds: 1.2 − 0.4 = 0.8 < 1, −0.4 − 1.2 = −1.6 < 1, |−0.4| < 1 — the case topic 7.1 flagged as stationary despite φ₁ > 1. In (c) the damping factor is √0.4 = 0.6325, so the oscillation dies out over roughly a dozen lags. In (d) the effective sample size of about 10 explains why variance estimates from a persistent series scatter so widely.",
-   "scenario": {
-    "teaser": "A fitted AR(2) returns a negative variance from the closed form.",
-    "title": "When the formula objects",
-    "body": [
-     "An analyst estimates an AR(2) and gets φ̂ = (1.3, −0.35). Substituting into the variance formula gives (1 + 0.35) = 1.35 and (1.35² − 1.3²) = 1.8225 − 1.69 = 0.1325, so γ₀ = 1.35/(1.35 × 0.1325)σ² = 7.547σ². Positive, so the formula is content. But a colleague repeating the exercise with φ̂ = (1.4, −0.35) gets (1.35² − 1.96) = −0.1375 and therefore a NEGATIVE variance.",
-     "A negative variance is impossible, so the second set of coefficients cannot describe a stationary process — and indeed 1.4 − 0.35 = 1.05, which violates the first stationarity condition of topic 7.1. The formula is not malfunctioning; it is reporting that its own precondition has failed.",
-     "This is a useful property to know, because it makes the variance formula a stationarity check in disguise. The denominator (1 + φ₂)((1 − φ₂)² − φ₁²) factors as (1 + φ₂)(1 − φ₂ − φ₁)(1 − φ₂ + φ₁), and the three factors are precisely the three stationarity conditions in another guise: each is positive exactly inside the triangle. So the variance is positive if and only if the coefficients are admissible.",
-     "The practical lesson is to run the stationarity check BEFORE substituting into any autocovariance formula, rather than discovering the problem from an impossible answer. In an exam a negative variance should be read immediately as a signal that the coefficients are outside the triangle, which is often what the question was testing.",
-     "There is a related trap on the estimation side. Yule–Walker estimation always returns coefficients inside the stationary region by construction, but least-squares or maximum-likelihood estimation does not, so a fitted AR can come back non-stationary. When it does, the honest reading is usually that the series had a unit root and should have been differenced first — topic 7.5's territory.",
-     "The underlying point is that these formulas encode their own domain of validity. A result that is negative, infinite, or outside [−1, 1] for an autocorrelation is information about the inputs, not an arithmetic slip to be hunted down."
-    ],
-    "q": "Why is a negative result from the AR(2) variance formula a stationarity diagnosis rather than an arithmetic error?",
-    "answer": "Because the denominator factors as (1 + φ₂)(1 − φ₂ − φ₁)(1 − φ₂ + φ₁), and those three factors are exactly the three stationarity conditions rewritten — each is positive precisely when the corresponding inequality holds, so the whole denominator is positive if and only if the coefficients lie inside the AR(2) triangle. A negative variance therefore means at least one condition has failed, which is a statement about the coefficients rather than about the computation. For φ = (1.4, −0.35) the sum 1.4 − 0.35 = 1.05 exceeds 1, violating the first condition, and the formula reports that by returning a negative number. The right response is to check admissibility first, and when a fitted model lands outside the triangle, to suspect a unit root and difference the series."
-   },
-   "solution": [
-    {
-     "say": "(a) Inverting the variance formula.",
-     "math": "4 = 1/(1 − φ²)\n1 − φ² = 0.25\nφ² = 0.75\nφ = √0.75 = 0.866025",
-     "why": "Note the negative root −0.866 gives the same variance, which is why the question had to specify the sign. The variance determines |φ| but not its sign; ρ₁ would settle it."
-    },
-    {
-     "say": "(b) The AR(2) autocorrelations.",
-     "math": "stationarity: 0.8 < 1 ✓, −1.6 < 1 ✓, 0.4 < 1 ✓\nρ₁ = 1.2/(1 + 0.4) = 1.2/1.4 = 0.857143\nρ₂ = 1.2(0.857143) − 0.4(1) = 1.028571 − 0.4 = 0.628571",
-     "why": "Note 1 − φ₂ = 1 − (−0.4) = 1.4, so the negative φ₂ ENLARGES the denominator and reduces ρ₁ relative to φ₁. The arithmetic is unforgiving about the sign here."
-    },
-    {
-     "say": "(c) The root structure.",
-     "math": "discriminant φ₁² + 4φ₂ = 1.44 − 1.6 = −0.16 < 0\n⟹ complex conjugate roots\ndamping r = √|φ₂| = √0.4 = 0.6325",
-     "why": "So the ACF is a damped sine wave and will cross zero. Topic 7.1 computed the AR-polynomial root modulus as 1/√0.4 = 1.5811, and 1/1.5811 = 0.6325 — the reciprocal, consistent as it must be."
-    },
-    {
-     "say": "(d) The amplification and effective sample size.",
-     "math": "1/(1 − 0.81) = 1/0.19 = 5.2632\nn_eff ≈ n(1 − φ)/(1 + φ) = 200(0.1)/1.9 = 10.5",
-     "why": "The process is over five times as variable as its shocks, and 200 observations carry roughly the information of ten independent ones about the variance. That is why variance estimates from persistent series are so unstable, as section 1's scenario described."
-    }
-   ]
-  },
-  {
-   "kind": "trapcheck",
-   "id": "s9",
-   "mins": 6,
-   "title": "Six statements — verdict on each before you look",
-   "objective": "Rule on the claims this topic turns on.",
-   "intro": "Decide true or false on all six before revealing any.",
-   "items": [
-    {
-     "claim": "For an AR(2), ρ₁ = φ₁.",
-     "tf": false,
-     "why": "False — that holds only for an AR(1). For an AR(2), ρ₁ = φ₁/(1 − φ₂), because the k = 1 equation involves γ₋₁ = γ₁ and must be solved for it. At (0.5, 0.3) the value is 0.7143, not 0.5."
-    },
-    {
-     "claim": "The variance of an AR(1) is the same at φ = 0.7 and φ = −0.7.",
-     "tf": true,
-     "why": "True: γ₀ = σ²/(1 − φ²) depends on φ², not φ. Both give 1.9608 at σ² = 1. The ACFs differ — one decays monotonically, the other alternates — so the sign affects the shape but not the magnitude."
-    },
-    {
-     "claim": "Every equation in the autocovariance derivation carries a σ² term.",
-     "tf": false,
-     "why": "False. Only the k = 0 equation does, because E(yₜεₜ) = σ² while E(yₜ₋ₖεₜ) = 0 for k ≥ 1. The recursion for k ≥ 1 is homogeneous, which is exactly why the variance needs a separate calculation."
-    },
-    {
-     "claim": "An oscillating AR(2) autocorrelation function indicates a moving-average component.",
-     "tf": false,
-     "why": "False. Oscillation arises when the characteristic equation has complex roots, giving ρₖ = Crᵏ sin(ωk + δ) with r = √|φ₂|. It is still a pure AR(2) with a PACF cutting off at lag 2. Topic 7.2 makes the same point from the plots."
-    },
-    {
-     "claim": "The autocorrelations of an AR process do not depend on σ².",
-     "tf": true,
-     "why": "True. ρₖ depends only on the coefficients — ρₖ = φᵏ for an AR(1), and the recursion for higher orders. Multiplying σ² by any constant scales every γₖ equally and leaves the ratios unchanged. The shock variance sets the scale, the coefficients set the shape."
-    },
-    {
-     "claim": "A negative value from the AR(2) variance formula means an arithmetic error.",
-     "tf": false,
-     "why": "False — it means the coefficients are outside the stationarity triangle. The denominator factors as (1 + φ₂)(1 − φ₂ − φ₁)(1 − φ₂ + φ₁), whose three factors are the three stationarity conditions, so the variance is positive exactly when the process is stationary. The formula is reporting that its precondition failed."
-    }
-   ]
-  },
-  {
-   "kind": "guided",
-   "id": "s10",
-   "mins": 8,
-   "title": "On your own — six quick values",
-   "objective": "Compute at exam speed.",
-   "problem": "σ² = 1 throughout. (a) AR(1), φ = 0.5: γ₀ and ρ₃. (b) AR(1), φ = 0.95: γ₀. (c) AR(2), (0.4, 0.3): ρ₁. (d) AR(2), (0.5, −0.2): ρ₁ and ρ₂. (e) AR(1) with γ₀ = 2.7778: find |φ|. (f) AR(2), (0.6, 0.5): is the variance formula applicable?",
-   "hints": [
-    "For (b), 1 − 0.95² = 0.0975.",
-    "For (d), 1 − (−0.2) = 1.2.",
-    "For (f), check the three stationarity conditions before computing anything."
-   ],
-   "answer": "(a) γ₀ = 1.3333, ρ₃ = 0.125. (b) γ₀ = 10.2564. (c) ρ₁ = 0.5714. (d) ρ₁ = 0.4167, ρ₂ = 0.0083. (e) |φ| = 0.8. (f) No — 0.6 + 0.5 = 1.1 > 1, so the process is not stationary.",
-   "check": "Part (d) is worth noticing: with a negative φ₂ the autocorrelations fall away very fast, ρ₂ being only 0.0083, almost zero. The two lags are working against each other. Part (f) is the trap — substituting (0.6, 0.5) into the formula gives (1.5)((0.5)² − 0.36) = 1.5(−0.11) < 0 and a negative variance, which is the formula reporting the failed stationarity condition rather than an arithmetic slip.",
-   "solution": [
-    {
-     "say": "(a), (b) and (e): the AR(1) cases.",
-     "math": "φ=0.5: γ₀ = 1/0.75 = 1.3333, ρ₃ = 0.125\nφ=0.95: γ₀ = 1/0.0975 = 10.2564\nγ₀ = 2.7778 ⟹ 1 − φ² = 0.36 ⟹ |φ| = 0.8",
-     "why": "All three are the same formula used forwards or backwards. The 10.26 at φ = 0.95 is the amplification that makes persistent series so variable."
-    },
-    {
-     "say": "(c) and (d): the AR(2) autocorrelations.",
-     "math": "(0.4, 0.3): ρ₁ = 0.4/0.7 = 0.571429\n(0.5, −0.2): ρ₁ = 0.5/1.2 = 0.416667\n           ρ₂ = 0.5(0.416667) − 0.2 = 0.008333",
-     "why": "In (d) the negative φ₂ both enlarges the denominator for ρ₁ and subtracts in the recursion, so the ACF collapses almost to zero by lag 2."
-    },
-    {
-     "say": "(f) The inadmissible case.",
-     "math": "φ₁ + φ₂ = 0.6 + 0.5 = 1.1, NOT < 1 ✗\nformula would give (1.5)(0.25 − 0.36) = −0.165 < 0",
-     "why": "Not stationary, so no autocovariance function exists and the formula correctly returns a negative value. The stationarity check must come first."
-    }
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s11",
-   "mins": 6,
-   "title": "How this connects to the rest of the module",
-   "objective": "See the same equations used three ways.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "Forwards and backwards (topic 7.3)",
-     "body": "This lesson goes from coefficients to autocovariances. Topic 7.3's Yule–Walker estimation goes the other way: given sample autocorrelations, solve the same equations for the coefficients. For an AR(2) that means solving ρ₁ = φ₁ + φ₂ρ₁ and ρ₂ = φ₁ρ₁ + φ₂ simultaneously. One set of relations, two directions of use."
-    },
-    {
-     "t": "step",
-     "h": "Shapes for identification (topic 7.2)",
-     "body": "The decaying ACF that topic 7.2 reads as an AR signature is exactly what this lesson computes. The three regimes — two real roots, repeated root, complex pair — explain why an AR(2) ACF can decay smoothly or oscillate while its PACF always cuts off at lag 2."
-    },
-    {
-     "t": "step",
-     "h": "The frequency domain (topic 7.7)",
-     "body": "The spectral density is the Fourier transform of the autocovariance sequence, so f(ω) = (1/2π)Σγₖe^(−iωk). The area under it over (−π, π) is γ₀ — which is why topic 7.7's area readout matched the variance in every case. Two descriptions of the same information."
-    },
-    {
-     "t": "step",
-     "h": "Forecasting (topic 7.11)",
-     "body": "The mean squared forecast error of a k-step-ahead forecast is built from the autocovariances, and as k grows it approaches γ₀ — the variance of the process. Forecasts beyond a few steps carry no more information than the unconditional mean, and the autocovariance function is what quantifies the horizon at which that happens."
-    },
-    {
-     "t": "def",
-     "h": "Why the autocovariance function is central",
-     "body": "For a Gaussian stationary process the mean and the autocovariance function determine the entire joint distribution. So everything the model can say — identification, estimation, spectra, forecasts — is a function of what this lesson computes."
-    }
-   ],
-   "ask": {
-    "q": "If the area under the spectral density equals γ₀, what does that make the spectral density, in information terms?",
-    "nudge": "A re-description of what, exactly?"
-   }
-  },
-  {
-   "kind": "recall",
-   "id": "s12",
-   "mins": 2,
-   "title": "Second recall — the parts most likely to fade",
-   "objective": "Retrieve the AR(2) results and the structural points.",
-   "intro": "Answer, then reveal.",
-   "items": [
-    {
-     "q": "Give the AR(2) variance formula.",
-     "a": "γ₀ = σ²(1 − φ₂)/[(1 + φ₂)((1 − φ₂)² − φ₁²)]."
-    },
-    {
-     "q": "At (0.5, 0.3) with σ² = 1, what is γ₀?",
-     "a": "0.7/(1.3 × 0.24) = 2.2436, simulated 2.2466."
-    },
-    {
-     "q": "Give ρ₂ for an AR(2) in terms of ρ₁.",
-     "a": "ρ₂ = φ₁ρ₁ + φ₂, since ρ₀ = 1."
-    },
-    {
-     "q": "What is the characteristic equation of the autocorrelation recursion?",
-     "a": "z² − φ₁z − φ₂ = 0, whose roots are the reciprocals of the AR-polynomial roots."
-    },
-    {
-     "q": "When does the ACF oscillate?",
-     "a": "When φ₁² + 4φ₂ < 0, giving complex roots and a damped sine with damping √|φ₂|."
-    },
-    {
-     "q": "What does a negative variance from the formula mean?",
-     "a": "That the coefficients lie outside the stationarity triangle — the denominator's factors are the three conditions."
-    }
-   ]
-  },
-  {
-   "kind": "summary",
-   "id": "s13",
-   "mins": 3,
-   "title": "What you should now be able to do unaided",
-   "objective": "Close the loop before the mastery test.",
-   "body": [
-    "Derive the AR(1) variance and ACF by multiplying through and taking expectations.",
-    "State and use γ₀ = σ²/(1 − φ²) and ρₖ = φᵏ.",
-    "Derive ρ₁ = φ₁/(1 − φ₂) for an AR(2), using the symmetry γ₋₁ = γ₁.",
-    "Run the recursion ρₖ = φ₁ρₖ₋₁ + φ₂ρₖ₋₂ from the two starting values.",
-    "Use the closed-form AR(2) variance and check its sign against stationarity.",
-    "Say why only the k = 0 equation carries σ², and why autocorrelations are free of it.",
-    "Identify when the ACF oscillates, from the discriminant, with damping √|φ₂|.",
-    "Relate the same equations to Yule–Walker estimation, identification and the spectrum."
-   ]
-  },
-  {
-   "kind": "theory",
-   "id": "s14",
-   "mins": 8,
-   "ext": true,
-   "title": "The AR(2) variance derived in full",
-   "objective": "See where the closed form comes from.",
-   "blocks": [
-    {
-     "t": "step",
-     "h": "The three equations",
-     "body": "For yₜ = φ₁yₜ₋₁ + φ₂yₜ₋₂ + εₜ, multiplying by yₜ, yₜ₋₁ and yₜ₋₂ in turn gives\n    γ₀ = φ₁γ₁ + φ₂γ₂ + σ²\n    γ₁ = φ₁γ₀ + φ₂γ₁        (using γ₋₁ = γ₁)\n    γ₂ = φ₁γ₁ + φ₂γ₀\nThree equations in γ₀, γ₁, γ₂, with σ² appearing only in the first."
-    },
-    {
-     "t": "step",
-     "h": "Eliminating",
-     "body": "From the second, γ₁ = φ₁γ₀/(1 − φ₂). Substituting into the third,\n    γ₂ = φ₁²γ₀/(1 − φ₂) + φ₂γ₀ = γ₀[φ₁² + φ₂(1 − φ₂)]/(1 − φ₂).\nNow put both into the first and divide through by γ₀."
-    },
-    {
-     "t": "formula",
-     "h": "The result",
-     "body": "γ₀{1 − φ₁²/(1 − φ₂) − φ₂[φ₁² + φ₂(1 − φ₂)]/(1 − φ₂)} = σ².\nCollecting over (1 − φ₂) and simplifying gives\n    γ₀ = σ²(1 − φ₂) / [(1 + φ₂)((1 − φ₂)² − φ₁²)].\nCheck at (0.5, 0.3): 0.7/(1.3 × (0.49 − 0.25)) = 0.7/0.312 = 2.2436, matching the step-by-step calculation of section 4 and the simulated 2.2466."
-    },
-    {
-     "t": "step",
-     "h": "The factorisation",
-     "body": "The denominator factors as (1 + φ₂)(1 − φ₂ − φ₁)(1 − φ₂ + φ₁), since (1−φ₂)² − φ₁² is a difference of squares. The three factors are positive exactly when |φ₂| < 1, φ₁ + φ₂ < 1 and φ₂ − φ₁ < 1 — the three stationarity conditions of topic 7.1. So the variance is positive if and only if the process is stationary, which makes the formula a stationarity test in disguise."
-    },
-    {
-     "t": "step",
-     "h": "The degenerate checks",
-     "body": "At φ₂ = 0 the formula gives σ²/(1 − φ₁²), the AR(1) result, as it must. At φ₁ = 0 it gives σ²/(1 − φ₂²), which is the AR(1) formula in φ₂ — correct, since yₜ = φ₂yₜ₋₂ + εₜ is two interleaved AR(1) processes. Both checks are worth running on any derivation of this kind."
-    }
-   ],
-   "ask": {
-    "q": "The formula reduces correctly at both φ₂ = 0 and φ₁ = 0. Why is the second check less obvious than the first?",
-    "nudge": "What does yₜ = φ₂yₜ₋₂ + εₜ look like if you follow only the even-numbered times?"
-   }
-  },
-  {
-   "kind": "quiz",
-   "id": "s15",
-   "mins": 12,
-   "title": "Mastery test",
-   "objective": "Demonstrate it independently, on questions you have not seen.",
-   "setId": "timeseries_t4_mastery"
-  }
- ]
+  ]
 }
