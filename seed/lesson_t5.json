@@ -7,9 +7,9 @@
  "engine": "B",
  "engineName": "Estimation and inference — matching what you observe to what the model predicts",
  "estMin": 51,
- "version": "1.3",
+ "version": "1.6",
  "status": "approved",
- "provenance": "Review pass, October 2026: 5 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. Theory, worked examples and practice authored for this platform against the UGC NET Statistics syllabus. Previous-year questions are stored separately and carry their exam cycle.",
+ "provenance": "Review pass, October 2026: 5 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. Theory, worked examples and practice authored for this platform against the UGC NET Statistics syllabus. Previous-year questions are stored separately and carry their exam cycle. Content enhancement, November 2026: expanded minimum chi-square for grouped counts; clarified the exact normal-error condition under which OLS and MLE coefficient estimates coincide, distinguished BLUE from MLE, and added the residual orthogonality check with the intercept condition. Reference: uploaded CSIR NET Methods of Estimation collection, Sept 2022 Question 9 (page 4) and related regression-estimation items.",
  "objectives": [
   "Set up and solve the moment equations for a one- or two-parameter family, choosing raw or central moments to keep the algebra short.",
   "State what the method of moments guarantees (consistency, asymptotic normality) and what it does not (unbiasedness, efficiency, a legal estimate).",
@@ -283,7 +283,7 @@
    "viz": {
     "type": "exp-likelihood",
     "n": 4,
-    "sumx": 16.0
+    "sumx": 16
    },
    "body": [
     "Exponential with rate λ, so E[X] = 1/λ. The moment equation is 1/λ = x̄, giving λ̃ = 1/x̄ = n/Σxᵢ.",
@@ -645,6 +645,21 @@
      "t": "trap",
      "h": "Why these three are one lesson",
      "body": "All three choose θ by making a feature of the model agree with the same feature of the data: moments with moments, fitted frequencies with observed frequencies, fitted values with observed values. None of them maximises a likelihood, and all of them can be computed when the likelihood is intractable. Scene 11 makes the connection exact by deriving least squares as a moment condition."
+    },
+    {
+     "t": "def",
+     "h": "Minimum chi-square: for grouped frequency data",
+     "body": "When observations are supplied as counts in k categories rather than as individual values, let Oⱼ be the observed count and Eⱼ(θ)=n pⱼ(θ) the model's expected count. The minimum chi-square estimator chooses θ to minimise X²(θ)=Σⱼ [Oⱼ−Eⱼ(θ)]²/Eⱼ(θ), subject to the model's parameter restrictions. It is a minimum-distance method: it chooses the parameter values whose expected frequencies are closest to the observed frequencies on a variance-scaled scale. Do not confuse it with the chi-square goodness-of-fit test: the expression is similar, but here θ is estimated by minimisation; in the test, the statistic is evaluated to assess a specified model."
+    },
+    {
+     "t": "step",
+     "h": "Least squares and maximum likelihood: when do they agree?",
+     "body": "Least squares chooses coefficients to minimise Σᵢ(yᵢ−ŷᵢ)². If the regression errors are independent normal variables with common variance, the normal likelihood is maximised by exactly the same coefficient estimates as ordinary least squares. The variance estimate from maximum likelihood uses divisor n, while the usual unbiased residual variance estimate uses the residual degrees of freedom. Without the normal-error assumption, least squares can still be BLUE under the Gauss–Markov conditions, but that does not make it an MLE. This distinction is central to the CSIR NET questions that place OLS, MLE and BLUE side by side."
+    },
+    {
+     "t": "note",
+     "h": "A residual identity that depends on the model",
+     "body": "For least squares with an intercept, the residuals sum to zero. With regressors xⱼ included in the fitted model, the residual vector is orthogonal to each included regressor: Σᵢ xᵢⱼ êᵢ=0. If the intercept is omitted, Σêᵢ=0 is not guaranteed. The Methods of Estimation collection (Sept 2022, Question 9) tests precisely this distinction. The full derivation belongs to the regression lesson; here it is a diagnostic check when an estimation question gives fitted residuals."
     }
    ],
    "id": "s7",
@@ -810,6 +825,92 @@
    "id": "s11"
   },
   {
+   "kind": "theory",
+   "title": "Estimability — which parameter combinations can the data identify?",
+   "mins": 7,
+   "objective": "Distinguish estimable linear functions from individual coefficients that cannot be identified, and connect the idea to rank and design constraints.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "The question is not always 'Can we estimate every β?'",
+     "body": "In a linear model E(Y)=Xβ, the design matrix X may fail to have full column rank. Then different coefficient vectors can produce exactly the same fitted means. Individual coefficients may not be uniquely determined, even though some combinations of them are."
+    },
+    {
+     "t": "formula",
+     "h": "The test for a linear function",
+     "body": "A linear function c′β is estimable if and only if c′ belongs to the row space of X. Equivalently, c′v=0 for every vector v in the null space of X. If X has full column rank, every linear function of β is estimable; if not, check the particular combination."
+    },
+    {
+     "t": "step",
+     "h": "A two-parameter example",
+     "body": "Suppose every observation has mean β₁+β₂, so X has rows (1, 1). The data can identify β₁+β₂, because (1, 1) is in the row space of X. They cannot identify β₁ alone or β₂ alone: increasing one coefficient and decreasing the other leaves every fitted mean unchanged."
+    },
+    {
+     "t": "note",
+     "h": "Why ANOVA questions use constraints",
+     "body": "In two-way and higher-way ANOVA models, factor effects and interactions can be redundant unless constraints or a reference parameterisation are imposed. The scientifically meaningful contrasts may still be estimable even when the raw coefficients are not individually unique. Do not confuse a chosen coding constraint with information supplied by the data."
+    },
+    {
+     "t": "trap",
+     "h": "Exam rule",
+     "body": "Do not answer 'none are estimable' just because X is rank deficient. Do not claim every coefficient is estimable just because least squares fitted values are unique. Test the requested linear combination against the row space (or null space) of X."
+    },
+    {
+     "t": "note",
+     "h": "CSIR NET connection",
+     "body": "This is the principle tested in the uploaded Estimation CSIR NET (2011–2025) PDF, Question 31 (26 Nov 2020), which asks which parameter functions are estimable in a two-way ANOVA setup. Use the design constraints in the question before selecting a combination."
+    }
+   ],
+   "id": "s11b",
+   "ask": {
+    "q": "If the model only identifies β₁+β₂, which of these can be estimated uniquely: β₁, β₂, or β₁+β₂?",
+    "nudge": "Only the combination β₁+β₂ is estimable; the individual coefficients can trade off without changing the mean."
+   }
+  },
+  {
+   "kind": "theory",
+   "title": "Sample quantiles — consistency and asymptotic precision",
+   "mins": 7,
+   "objective": "Recognise a sample quantile as an estimator, state its large-sample distribution, and compare its precision with the sample mean.",
+   "blocks": [
+    {
+     "t": "def",
+     "h": "The sample p-quantile estimates a population quantile",
+     "body": "Let qₚ be the population p-quantile, so F(qₚ)=p. The sample p-quantile is the corresponding order-statistic-based estimate. If the observations are iid, F is continuous near qₚ, and the density f(qₚ) is positive, the sample quantile is consistent for qₚ."
+    },
+    {
+     "t": "formula",
+     "h": "Asymptotic distribution",
+     "body": "√n( q̂ₚ − qₚ )  →d  N(0, p(1−p) / f(qₚ)²).\nTherefore its large-sample variance is approximately p(1−p) / [n f(qₚ)²]. The density at the target quantile matters: a flatter density means greater uncertainty."
+    },
+    {
+     "t": "step",
+     "h": "Location-uniform example",
+     "body": "If Xᵢ ~ U(θ−1, θ+1), then E(Xᵢ)=θ and Var(Xᵢ)=1/3. The sample mean is consistent and √n(X̄−θ) →d N(0, 1/3). The population 75th percentile is θ+1/2, and f(q₀.₇₅)=1/2. Thus q̂₀.₇₅−1/2 estimates θ and has asymptotic variance 0.75/n."
+    },
+    {
+     "t": "note",
+     "h": "Compare before choosing",
+     "body": "Both estimators are consistent and asymptotically normal in this model, but the sample mean has the smaller asymptotic variance: 1/(3n) versus 3/(4n). Do not confuse consistency (the estimator converges to the target) with efficiency (how much variance it has)."
+    },
+    {
+     "t": "trap",
+     "h": "Exam checklist",
+     "body": "First identify the population quantity being estimated. If a sample quantile estimates qₚ but the parameter is θ, apply the correct centring or transformation. Then use p(1−p)/f(qₚ)² for the asymptotic variance of √n(q̂ₚ−qₚ), not the variance of an individual observation."
+    },
+    {
+     "t": "note",
+     "h": "CSIR NET connection",
+     "body": "The uploaded Estimation CSIR NET (2011–2025) PDF, Question 34 (26 Nov 2020), compares a sample-mean estimator with a sample 75th-percentile estimator through consistency, asymptotic normality and asymptotic variance."
+    }
+   ],
+   "id": "s11c",
+   "ask": {
+    "q": "For a sample 75th percentile, which value of p goes into the asymptotic variance formula?",
+    "nudge": "Use p = 0.75, so p(1−p) = 0.75 × 0.25."
+   }
+  },
+  {
    "kind": "summary",
    "title": "What you should now be able to do unaided",
    "mins": 3,
@@ -822,6 +923,8 @@
     "Say immediately why the method fails for the Cauchy, and that the failure is the answer.",
     "Write the minimum chi-square and modified minimum chi-square criteria, and name the data they need.",
     "Derive the least squares normal equations by either route, and keep straight that normality is what joins least squares to maximum likelihood rather than something least squares assumes.",
+    "Check whether a requested linear function of β is estimable: it must lie in the row space of X, or be orthogonal to every vector in the null space of X.",
+    "For a sample p-quantile, use the asymptotic variance p(1−p)/[n f(qₚ)²], and distinguish consistency from asymptotic efficiency.",
     "The mastery test is ten unseen questions across all of this. Hints are off. The pass is 80% overall with 70% floors on the numerical and multi-statement items."
    ],
    "id": "s12"
