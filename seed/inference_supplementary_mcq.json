@@ -5191,21 +5191,20 @@
         "(ΣXᵢ)²/(n+2)",
         "ΣXᵢ²/(3n)",
         "X̄²/(n+2)",
-        "Σ(Xᵢ−X̄)²/[2(n−1)]",
-        "ΣXᵢ²/(2n)"
+        "Σ(Xᵢ−X̄)²/[2(n−1)]"
       ],
       "options": [
         "A and B only",
         "B and D only",
-        "A, C and E only",
-        "B, D and E only"
+        "A and C only",
+        "C and D only"
       ],
       "answer": "B",
-      "explanation": "For Xᵢ~N(θ,2θ²), E(Xᵢ)=θ and Var(Xᵢ)=2θ². Hence E(Xᵢ²)=Var(Xᵢ)+[E(Xᵢ)]²=3θ². Therefore E[ΣXᵢ²/(3n)]=θ², so statement B is unbiased. Also, the usual sample variance S²=Σ(Xᵢ−X̄)²/(n−1) is unbiased for the population variance 2θ². Dividing S² by 2 gives an unbiased estimator of θ², which is statement D. The other expressions do not have expectation θ² in general.",
+      "explanation": "For Xᵢ~N(θ,2θ²), E(Xᵢ)=θ and Var(Xᵢ)=2θ². Hence E(Xᵢ²)=Var(Xᵢ)+[E(Xᵢ)]²=3θ². Therefore E[ΣXᵢ²/(3n)]=θ², so statement B is unbiased. Also, the usual sample variance S²=Σ(Xᵢ−X̄)²/(n−1) is unbiased for the population variance 2θ². Dividing S² by 2 gives an unbiased estimator of θ², which is statement D. Statement A does not have expectation θ² in general, and statement C has expectation (1+2/n)θ²/(n+2), not θ².",
       "verdicts": {
         "A": {
           "tf": false,
-          "why": "The expectation of (ΣXᵢ)² includes both the variance of the sum and the square of its mean; division by n+2 does not give θ²."
+          "why": "The expectation of (ΣXᵢ)² is n(2θ²)+n²θ², so division by n+2 does not give θ²."
         },
         "B": {
           "tf": true,
@@ -5213,15 +5212,11 @@
         },
         "C": {
           "tf": false,
-          "why": "E(X̄²)=θ²+2θ²/n, so division by n+2 does not yield θ²."
+          "why": "E(X̄²)=θ²+2θ²/n; dividing by n+2 does not yield θ²."
         },
         "D": {
           "tf": true,
           "why": "The sample variance is unbiased for 2θ²; dividing it by 2 is unbiased for θ²."
-        },
-        "E": {
-          "tf": false,
-          "why": "Its expectation is (3/2)θ², not θ²."
         }
       },
       "pno": 687,
