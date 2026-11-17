@@ -1,0 +1,816 @@
+{
+ "moduleId": "multivariate",
+ "source": "variant",
+ "label": "CSIR NET 2011–2025 previous-year questions",
+ "count": 29,
+ "items": [
+  {
+   "id": "csir-uni-23",
+   "format": "multi",
+   "topic": "multivariate-t1",
+   "diff": "moderate",
+   "stem": "X follows a p-variate (p > 2) distribution with E(X) = μ and Var(X) = Σ (positive definite). Which of the following are true?",
+   "statements": [
+    "E(XX′) = Σ + μμ′",
+    "E(X′X) = μ′μ + trace(Σ)",
+    "E((X − μ)′Σ⁻¹(X − μ)) = p",
+    "P[(X − μ)′Σ⁻¹(X − μ) ≥ t²] ≤ p/t² for t ≠ 0"
+   ],
+   "options": [
+    "B, C and D only",
+    "A, C and D only",
+    "A, B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "D",
+   "explanation": "All four follow from second-moment algebra alone: the covariance identity, the trace trick for E(X′X) and for the Mahalanobis form (which has mean p), and Markov's inequality applied to that non-negative form.",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Σ = E[(X − μ)(X − μ)′] = E(XX′) − μμ′."
+    },
+    "B": {
+     "tf": true,
+     "why": "X′X = trace(XX′), and trace commutes with expectation: trace(Σ + μμ′) = trace(Σ) + μ′μ."
+    },
+    "C": {
+     "tf": true,
+     "why": "E[(X−μ)′Σ⁻¹(X−μ)] = E trace[Σ⁻¹(X−μ)(X−μ)′] = trace(Σ⁻¹Σ) = p, with no normality needed."
+    },
+    "D": {
+     "tf": true,
+     "why": "The quadratic form Q is non-negative with E(Q) = p, so Markov's inequality gives P(Q ≥ t²) ≤ p/t²."
+    }
+   },
+   "ref": "Univariate PDF Q23",
+   "year": "June-2019"
+  },
+  {
+   "id": "csir-uni-27",
+   "format": "multi",
+   "topic": "multivariate-t8",
+   "diff": "moderate",
+   "stem": "Consider a two-class classification problem, where the densities of the two competing classes are f₁(x) = 1 for 0 ≤ x ≤ 1 (0 otherwise) and f₂(x) = 2x for 0 ≤ x ≤ 1 (0 otherwise). Let π₁ and π₂ be the prior probabilities of these two classes. Now consider a classifier δ which classifies an observation x to class 1 if x < 1/2 and to class 2 if x ≥ 1/2.",
+   "statements": [
+    "If π₁ = π₂, then δ is the Bayes classifier",
+    "If π₁ > π₂, then δ is the Bayes classifier",
+    "If π₁ < π₂, then δ is the Bayes classifier",
+    "If π₁ = π₂, then the average probability of misclassification for δ is 3/8"
+   ],
+   "options": [
+    "D only",
+    "A and D only",
+    "A only",
+    "A, B and D only"
+   ],
+   "answer": "B",
+   "explanation": "The Bayes classifier compares π₁f₁(x) with π₂f₂(x) = 2xπ₂, giving the threshold x = π₁/(2π₂); δ's threshold 1/2 matches exactly when the priors are equal (A), and then the two error probabilities 1/2 and 1/4 average to 3/8 (D).",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The Bayes rule assigns x to class 1 iff π₁f₁(x) > π₂f₂(x), i.e. π₁ > 2xπ₂, i.e. x < π₁/(2π₂). With π₁ = π₂ the threshold is 1/2, which is δ."
+    },
+    "B": {
+     "tf": false,
+     "why": "With π₁ > π₂ the Bayes threshold π₁/(2π₂) exceeds 1/2, so δ differs from it."
+    },
+    "C": {
+     "tf": false,
+     "why": "With π₁ < π₂ the Bayes threshold is below 1/2."
+    },
+    "D": {
+     "tf": true,
+     "why": "With equal priors: P(misclassify) = (1/2)P(X ≥ 1/2 | class 1) + (1/2)P(X < 1/2 | class 2) = (1/2)(1/2) + (1/2)∫₀^{1/2} 2x dx = 1/4 + (1/2)(1/4) = 3/8."
+    }
+   },
+   "ref": "Univariate PDF Q27",
+   "year": "June-2018"
+  },
+  {
+   "id": "csir-mv-02",
+   "format": "single",
+   "topic": "multivariate-t1",
+   "diff": "easy",
+   "stem": "Let X = (X₁, X₂)ᵀ follow a bivariate normal distribution with mean vector (0, 0)ᵀ and covariance matrix Σ with rows (5, −3) and (−3, 10). The mean vector and covariance matrix of Y = (X₁, 5 − 2X₂)ᵀ are",
+   "options": [
+    "(0, 5)ᵀ and rows (5, −3), (−3, 40)",
+    "(0, 5)ᵀ and rows (5, −6), (−6, 20)",
+    "(0, 5)ᵀ and rows (5, 3), (3, 20)",
+    "(0, 5)ᵀ and rows (5, 6), (6, 40)"
+   ],
+   "answer": "D",
+   "explanation": "E(5 − 2X₂) = 5. Var(5 − 2X₂) = 4 × 10 = 40. Cov(X₁, 5 − 2X₂) = −2 Cov(X₁, X₂) = −2 × (−3) = 6. So the covariance matrix is rows (5, 6), (6, 40); the constant 5 shifts only the mean.",
+   "ref": "Multivariate PDF Q2",
+   "year": "June-2023"
+  },
+  {
+   "id": "csir-mv-05",
+   "format": "multi",
+   "topic": "multivariate-t4",
+   "diff": "hard",
+   "stem": "Suppose that X₁, …, Xₙ, Xₙ₊₁ is a random sample of size n + 1, where p > 2 and n > p + 3, from a multivariate normal population N_p(μ, Σ), μ ∈ ℝᵖ, Σ > 0. Let X̄ₙ = (1/n)Σᵢ₌₁ⁿ Xᵢ and (n − 1)S = Σᵢ₌₁ⁿ (Xᵢ − X̄ₙ)(Xᵢ − X̄ₙ)ᵀ. Which of the following are correct?",
+   "statements": [
+    "(X̄ₙ − Xₙ₊₁)ᵀS⁻¹(X̄ₙ − Xₙ₊₁) ~ [p(n² − 1)/(n(n − p))] F_{p, n−p}",
+    "E(X̄ₙᵀ S X̄ₙ) = trace(Σ²/n) + μᵀΣμ",
+    "E(S⁻¹) = [(n − 1)/(n − p − 2)] Σ⁻¹",
+    "(X̄ₙ − Xₙ₊₁)ᵀΣ⁻¹(X̄ₙ − Xₙ₊₁) ~ [(n + 1)/n] χ²_p"
+   ],
+   "options": [
+    "B, C and D only",
+    "A, C and D only",
+    "A, B and D only",
+    "A, B, C and D"
+   ],
+   "answer": "D",
+   "explanation": "All four follow from d = X̄ₙ − Xₙ₊₁ ~ N_p(0, (1 + 1/n)Σ) being independent of S, with (n − 1)S Wishart: B and D are second-moment and chi-square facts, A is Hotelling's T² rescaled, and C is the inverse-Wishart mean.",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "d = X̄ₙ − Xₙ₊₁ ~ N_p(0, ((n+1)/n)Σ), independent of S, and (n−1)S ~ W_p(n−1, Σ). Hotelling: (n/(n+1)) dᵀS⁻¹d ~ T²(p, n−1) = [(n−1)p/(n−p)] F_{p,n−p}. Multiplying by (n+1)/n gives the factor p(n²−1)/(n(n−p))."
+    },
+    "B": {
+     "tf": true,
+     "why": "S is independent of X̄ₙ with E(S) = Σ, so E(X̄ₙᵀSX̄ₙ) = E(X̄ₙᵀΣX̄ₙ) = trace(Σ Var X̄ₙ) + μᵀΣμ = trace(Σ²/n) + μᵀΣμ."
+    },
+    "C": {
+     "tf": true,
+     "why": "For W ~ W_p(m, Σ), E(W⁻¹) = Σ⁻¹/(m − p − 1). With W = (n−1)S and m = n − 1: E(S⁻¹) = (n−1)Σ⁻¹/(n − p − 2)."
+    },
+    "D": {
+     "tf": true,
+     "why": "d ~ N_p(0, ((n+1)/n)Σ), so dᵀ[((n+1)/n)Σ]⁻¹d ~ χ²_p, i.e. dᵀΣ⁻¹d ~ ((n+1)/n)χ²_p."
+    }
+   },
+   "ref": "Multivariate PDF Q5",
+   "year": "June-2023"
+  },
+  {
+   "id": "csir-mv-06",
+   "format": "multi",
+   "topic": "multivariate-t1",
+   "diff": "moderate",
+   "stem": "Let X₁ and X₂ be independent and identically distributed standard normal variables. Then which of the following statements are correct?",
+   "statements": [
+    "Expected value of max(X₁, X₂) is 1/√π.",
+    "Conditional expectation of X₁ given X₁ + X₂ is 0.5(X₁ + X₂).",
+    "X₁ − X₂ and X₁ + X₂ are independent.",
+    "X₁² + X₂² and X₁/X₂ are independent."
+   ],
+   "options": [
+    "A, B, C and D",
+    "B, C and D only",
+    "A, C and D only",
+    "A, B and D only"
+   ],
+   "answer": "A",
+   "explanation": "All four hold: E max uses max = mean + half the absolute difference; B is symmetry; C is zero covariance within a jointly normal pair; D is the independence of the radius and the angle of a standard bivariate normal point.",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "max = (X₁ + X₂)/2 + |X₁ − X₂|/2, and X₁ − X₂ ~ N(0, 2) has E|X₁ − X₂| = √2 × √(2/π) = 2/√π; so E max = 1/√π."
+    },
+    "B": {
+     "tf": true,
+     "why": "By symmetry E(X₁ | X₁ + X₂) = E(X₂ | X₁ + X₂), and they add to X₁ + X₂."
+    },
+    "C": {
+     "tf": true,
+     "why": "They are jointly normal with covariance Var X₁ − Var X₂ = 0."
+    },
+    "D": {
+     "tf": true,
+     "why": "In polar coordinates X₁² + X₂² = R² and X₁/X₂ = cot Θ; for i.i.d. N(0,1) components R and Θ are independent."
+    }
+   },
+   "ref": "Multivariate PDF Q6",
+   "year": "June-2023"
+  },
+  {
+   "id": "csir-mv-07",
+   "format": "multi",
+   "topic": "multivariate-t1",
+   "diff": "moderate",
+   "stem": "Let (X, Y, Z) ~ N₃(0, Σ) where Σ has rows (1, ρ, 0), (ρ, 1, 0), (0, 0, 1) and |ρ| < 1. Which of the following are correct?",
+   "statements": [
+    "Cor(X², Y²) = ρ²",
+    "Cor(X², Y) = 0",
+    "Cor(X², Z²) = 0",
+    "Cor(X², Y² + Z²) = ρ²"
+   ],
+   "options": [
+    "B and C only",
+    "A, B and C only",
+    "A and C only",
+    "A and B only"
+   ],
+   "answer": "B",
+   "explanation": "Use Isserlis' theorem: Cov(X², Y²) = 2Cov(X, Y)² = 2ρ². Odd moments vanish (B), independence gives C, and the extra variance of Z² in D dilutes the correlation to ρ²/√2.",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "For a standard bivariate normal pair Cov(X², Y²) = 2ρ² and Var X² = Var Y² = 2, so the correlation is ρ²."
+    },
+    "B": {
+     "tf": true,
+     "why": "Cov(X², Y) = E(X²Y) = 0 because (X, Y) and (−X, −Y) have the same law and X²Y changes sign."
+    },
+    "C": {
+     "tf": true,
+     "why": "Z is independent of X."
+    },
+    "D": {
+     "tf": false,
+     "why": "Cov(X², Y² + Z²) = 2ρ², Var(Y² + Z²) = 4, so the correlation is 2ρ²/(√2 × 2) = ρ²/√2."
+    }
+   },
+   "ref": "Multivariate PDF Q7",
+   "year": "Sept-2022"
+  },
+  {
+   "id": "csir-mv-17",
+   "format": "multi",
+   "topic": "multivariate-t2",
+   "diff": "moderate",
+   "stem": "Let p > 1 and 1 > ρ ≥ 0. Consider a multiple linear regression problem with p independent variables X₁, …, X_p and a dependent variable Y. Suppose that the correlation between Y and Xᵢ is ρ and the correlation between Xᵢ and Xⱼ is also ρ for all 1 ≤ i < j ≤ p. Which of the following are correct?",
+   "statements": [
+    "The multiple correlation between Y and (X₁, …, X_p) is larger than or equal to ρ",
+    "The multiple correlation between Y and (X₁, …, X_p) will be ρ if ρ = 0",
+    "The multiple correlation between Y and (X₁, …, X_p) will be ρ only if ρ = 0",
+    "The multiple correlation between Y and (X₁, …, X_p) tends to 1 as p → ∞"
+   ],
+   "options": [
+    "B and C only",
+    "A and C only",
+    "A and B only",
+    "A, B and C only"
+   ],
+   "answer": "D",
+   "explanation": "With equicorrelated predictors, R² = pρ²/(1 + (p−1)ρ). It is at least ρ² (A), equals ρ² only at ρ = 0 when ρ < 1 (B and C), and tends to ρ, not 1, as p grows (D fails).",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "R² = r_yxᵀ R_xx⁻¹ r_yx = pρ²/(1 + (p − 1)ρ). R² ≥ ρ² iff p ≥ 1 + (p − 1)ρ iff (p − 1)(1 − ρ) ≥ 0, which holds."
+    },
+    "B": {
+     "tf": true,
+     "why": "At ρ = 0, R² = 0, so R = 0 = ρ."
+    },
+    "C": {
+     "tf": true,
+     "why": "R = ρ needs ρ = 0 or p = 1 + (p − 1)ρ, i.e. ρ = 1, which is excluded. So R = ρ forces ρ = 0."
+    },
+    "D": {
+     "tf": false,
+     "why": "As p → ∞, R² → ρ²/ρ = ρ for ρ > 0, so R → √ρ < 1 (and R = 0 when ρ = 0)."
+    }
+   },
+   "ref": "Multivariate PDF Q17",
+   "year": "Nov-2020",
+   "keyNote": "The compilation's key gives 1, 2. Statement 3 ('will be ρ only if ρ = 0') is also true: R = ρ requires ρ = 0 or ρ = 1, and ρ < 1 is given."
+  },
+  {
+   "id": "csir-mv-24",
+   "format": "single",
+   "topic": "multivariate-t2",
+   "diff": "easy",
+   "stem": "Suppose r₁.₂₃ and r₁.₂₃₄ are sample multiple correlation coefficients of X₁ on X₂, X₃ and X₁ on X₂, X₃, X₄ respectively. Which of the following is possible?",
+   "options": [
+    "r₁.₂₃ = −0.3, r₁.₂₃₄ = 0.7",
+    "r₁.₂₃ = 0.7, r₁.₂₃₄ = 0.3",
+    "r₁.₂₃ = 0.3, r₁.₂₃₄ = 0.7",
+    "r₁.₂₃ = 0.7, r₁.₂₃₄ = −0.3"
+   ],
+   "answer": "C",
+   "explanation": "A multiple correlation is the correlation between X₁ and its least-squares fit, so it lies in [0, 1]; and adding a regressor cannot lower R² (the larger model can always reproduce the smaller fit). So we need 0 ≤ r₁.₂₃ ≤ r₁.₂₃₄ ≤ 1, which only option C satisfies.",
+   "ref": "Multivariate PDF Q24",
+   "year": "June-2019"
+  },
+  {
+   "id": "csir-mv-25",
+   "format": "single",
+   "topic": "multivariate-t1",
+   "diff": "easy",
+   "stem": "Suppose that (X, Y) has a bivariate density f = (1/2)f₁ + (1/2)f₂, where f₁ and f₂ are respectively the densities of the bivariate normal distributions N(μ₁, Σ) and N(μ₂, Σ), with μ₁ = (1, 1)ᵀ, μ₂ = (−1, −1)ᵀ and Σ = I₂, the 2 × 2 identity matrix. Then which of the following is correct?",
+   "options": [
+    "X and Y are positively correlated",
+    "X and Y are negatively correlated",
+    "X and Y are uncorrelated but they are not independent",
+    "X and Y are independent"
+   ],
+   "answer": "A",
+   "explanation": "Within each component X and Y are independent, so E(XY | component) is the product of the component means: 1 × 1 = 1 or (−1)(−1) = 1. Hence E(XY) = 1, while E(X) = E(Y) = 0. Cov(X, Y) = 1 > 0 (and Var X = 1 + 1 = 2, so the correlation is 1/2). The shared component label makes X and Y move together.",
+   "ref": "Multivariate PDF Q25",
+   "year": "June-2019"
+  },
+  {
+   "id": "csir-mv-29",
+   "format": "single",
+   "topic": "multivariate-t1",
+   "diff": "moderate",
+   "stem": "If X ~ N_p(0, I) and A (p × p) is an idempotent matrix with rank(A) = k < p, then which of the following statements is correct?",
+   "options": [
+    "X′AX/X′X ~ (k/p) F_{k,p}",
+    "X′AX/X′X ~ (k/(p − k)) F_{k,p−k}",
+    "X′AX/X′X ~ Beta(k/2, p/2)",
+    "X′AX/X′X ~ Beta(k/2, (p − k)/2)"
+   ],
+   "answer": "D",
+   "explanation": "X′X = X′AX + X′(I − A)X. For a symmetric idempotent A the two pieces are independent χ²_k and χ²_{p−k} (Cochran's theorem). A ratio U/(U + V) of independent χ²_k and χ²_{p−k} variables is Beta(k/2, (p − k)/2). Option B describes the ratio X′AX/X′(I − A)X instead, scaled.",
+   "ref": "Multivariate PDF Q29",
+   "year": "Dec-2018"
+  },
+  {
+   "id": "csir-mv-38",
+   "format": "single",
+   "topic": "multivariate-t1",
+   "diff": "moderate",
+   "stem": "Let X₁ and X₂ be independent random variables each having N(μ, σ²) distribution, μ ∈ ℝ, σ² > 0. Let 0 ≤ θ < 2π and A be the rotation matrix with rows (cos θ, sin θ) and (−sin θ, cos θ). Put Y = (Y₁, Y₂)′ = AX with X = (X₁, X₂)′. Which of the following statements is correct?",
+   "options": [
+    "Y = X in distribution if and only if μ = 0",
+    "Y = X in distribution if and only if μ = 0 and θ = 0",
+    "Y₁ and Y₂ are Gaussian",
+    "Y₁ and Y₂ may be correlated"
+   ],
+   "answer": "C",
+   "explanation": "Y is a linear map of a normal vector, so Y₁ and Y₂ are Gaussian (C). Cov(Y) = σ²AA′ = σ²I, so they are uncorrelated (D fails). E(Y) = μ(cos θ + sin θ, cos θ − sin θ)′ equals (μ, μ)′ exactly when μ = 0 or θ = 0. So Y = X in distribution iff μ = 0 or θ = 0: A fails at θ = 0 with μ ≠ 0, and B fails at μ = 0 with θ ≠ 0.",
+   "ref": "Multivariate PDF Q38",
+   "year": "June-2017",
+   "keyNote": "The compilation's key gives A, C. Statement A fails as printed for θ = 0 and μ ≠ 0 (then Y = X identically). A is true if read as 'Y = X in distribution for every θ iff μ = 0'."
+  },
+  {
+   "id": "csir-mv-39",
+   "format": "multi",
+   "topic": "multivariate-t1",
+   "diff": "moderate",
+   "stem": "Let φ(x, y; ρ) be the density of the bivariate normal distribution with mean vector (0, 0) and variance–covariance matrix with rows (1, ρ), (ρ, 1). Consider a random vector (X, Y) having density (1/2)[φ(x, y; 1/2) + φ(x, y; −1/2)]. Then",
+   "statements": [
+    "Marginal distribution of both X and Y is standard normal.",
+    "Covariance(X, Y) = 0",
+    "X and Y are independent.",
+    "(X, Y) has a bivariate normal distribution."
+   ],
+   "options": [
+    "B only",
+    "A only",
+    "A and B only",
+    "A, B and C only"
+   ],
+   "answer": "C",
+   "explanation": "Mixing two bivariate normals with correlations ±1/2 keeps the N(0, 1) margins and averages the covariance to 0 (A, B), but the mixture is not the product density, so it is neither independent nor bivariate normal.",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Each component has N(0, 1) margins, and a mixture of identical margins keeps them."
+    },
+    "B": {
+     "tf": true,
+     "why": "Cov = (1/2)(1/2) + (1/2)(−1/2) = 0."
+    },
+    "C": {
+     "tf": false,
+     "why": "The density is not the product of the margins: for instance at large x = y the ρ = 1/2 component dominates and the joint density exceeds φ(x)φ(y)."
+    },
+    "D": {
+     "tf": false,
+     "why": "If it were bivariate normal with uncorrelated N(0, 1) margins it would be the product φ(x)φ(y), which it is not."
+    }
+   },
+   "ref": "Multivariate PDF Q39",
+   "year": "Dec-2016"
+  },
+  {
+   "id": "csir-mv-40",
+   "format": "single",
+   "topic": "multivariate-t1",
+   "diff": "moderate",
+   "stem": "Let X₁ ~ N(0, 1) and let X₂ = −X₁ if −2 ≤ X₁ ≤ 2 and X₂ = X₁ otherwise. Then, identify the correct statement:",
+   "options": [
+    "corr(X₁, X₂) = 1",
+    "X₂ does not have N(0, 1) distribution",
+    "(X₁, X₂) has a bivariate normal distribution",
+    "(X₁, X₂) does not have a bivariate normal distribution"
+   ],
+   "answer": "D",
+   "explanation": "X₂ is N(0, 1) by the symmetry of the normal law (B fails). But X₁ + X₂ = 2X₁1{|X₁| > 2} equals 0 with probability P(|X₁| ≤ 2) ≈ 0.954 and is non-zero otherwise, so it is neither degenerate nor normal; a bivariate normal pair would make every linear combination normal. Hence (X₁, X₂) is not bivariate normal (D). The correlation is E(X₁X₂) = E(X₁²; |X₁| > 2) − E(X₁²; |X₁| ≤ 2) < 1.",
+   "ref": "Multivariate PDF Q40",
+   "year": "June-2016"
+  },
+  {
+   "id": "csir-mv-41",
+   "format": "single",
+   "topic": "multivariate-t1",
+   "diff": "easy",
+   "stem": "Let X ~ N₃(μ, Σ) where μ = (1, 1, 1) and Σ has rows (1, 1, 1), (1, 3, c), (1, c, 2). The value of c such that X₂ and −X₁ + X₂ − X₃ are independent is",
+   "options": [
+    "−2",
+    "0",
+    "2",
+    "1"
+   ],
+   "answer": "C",
+   "explanation": "For jointly normal variables independence is zero covariance. Cov(X₂, −X₁ + X₂ − X₃) = −σ₂₁ + σ₂₂ − σ₂₃ = −1 + 3 − c = 2 − c, which is 0 at c = 2. At c = 2 the determinant of Σ is 1 > 0, so Σ is a valid covariance matrix.",
+   "ref": "Multivariate PDF Q41",
+   "year": "June-2016"
+  },
+  {
+   "id": "csir-mv-46",
+   "format": "multi",
+   "topic": "multivariate-t1",
+   "diff": "moderate",
+   "stem": "Suppose (X, Y) is a random vector such that the marginal distributions of X and Y are the same and each is normal with mean 0 and variance 1. Then, which of the following conditions imply independence of X and Y?",
+   "statements": [
+    "Cov(X, Y) = 0",
+    "aX + bY is normally distributed with mean 0 and variance a² + b² for all real a and b",
+    "P(X ≤ 0, Y ≤ 0) = 1/4",
+    "E[e^{itX + isY}] = E[e^{itX}]E[e^{isY}] for all real s and t"
+   ],
+   "options": [
+    "D only",
+    "B only",
+    "B and D only",
+    "A, B and D only"
+   ],
+   "answer": "C",
+   "explanation": "Independence follows from factorisation of the joint characteristic function (D), or from joint normality plus zero covariance (B, via Cramér–Wold). Zero covariance alone or one orthant probability is not enough when joint normality is not given.",
+   "verdicts": {
+    "A": {
+     "tf": false,
+     "why": "Normal margins with zero covariance need not be jointly normal: Y = SX with an independent random sign S is a counterexample."
+    },
+    "B": {
+     "tf": true,
+     "why": "Every linear combination being normal makes (X, Y) bivariate normal (Cramér–Wold), and the variance a² + b² forces Cov = 0; bivariate normal with zero covariance is independent."
+    },
+    "C": {
+     "tf": false,
+     "why": "A single orthant probability does not determine the joint law; the Y = SX example has P(X ≤ 0, Y ≤ 0) = 1/4 and is dependent."
+    },
+    "D": {
+     "tf": true,
+     "why": "A joint characteristic function that factorises is equivalent to independence."
+    }
+   },
+   "ref": "Multivariate PDF Q46",
+   "year": "Dec-2015"
+  },
+  {
+   "id": "csir-mv-49",
+   "format": "single",
+   "topic": "multivariate-t1",
+   "diff": "moderate",
+   "stem": "Let Y = (Y₁, …, Yₙ)′ have the multivariate normal distribution Nₙ(0, I). Which of the following is the covariance matrix of the conditional distribution of Y given ΣYᵢ? (1 denotes the n × 1 vector with all elements 1.)",
+   "options": [
+    "I",
+    "I + 11′/n",
+    "I − 11′/n",
+    "11′/n"
+   ],
+   "answer": "C",
+   "explanation": "With T = 1′Y, Cov(Y, T) = 1 and Var(T) = n. The conditional covariance is Σ_YY − Σ_YT Σ_TT⁻¹ Σ_TY = I − 11′/n, a projection of rank n − 1 (the residual from the mean).",
+   "ref": "Multivariate PDF Q49",
+   "year": "June-2015"
+  },
+  {
+   "id": "csir-mv-54",
+   "format": "single",
+   "topic": "multivariate-t1",
+   "diff": "easy",
+   "stem": "Let X be a p × 1 random vector such that X ~ N_p(0, Σ) where rank(Σ) = p. Which of the following is true?",
+   "options": [
+    "E(X′Σ⁻¹X) = 2p, V(X′Σ⁻¹X) = 2p",
+    "E(X′Σ⁻¹X) = 2p, V(X′Σ⁻¹X) = p",
+    "E(X′Σ⁻¹X) = p, V(X′Σ⁻¹X) = p",
+    "E(X′Σ⁻¹X) = p, V(X′Σ⁻¹X) = 2p"
+   ],
+   "answer": "D",
+   "explanation": "With Z = Σ^{−1/2}X ~ N_p(0, I), X′Σ⁻¹X = Z′Z ~ χ²_p, which has mean p and variance 2p.",
+   "ref": "Multivariate PDF Q54",
+   "year": "June-2014"
+  },
+  {
+   "id": "csir-mv-57",
+   "format": "single",
+   "topic": "multivariate-t2",
+   "diff": "moderate",
+   "stem": "Let X₀, ε₁, ε₂, ε₃ and ε₄ be independent and identically distributed normal random variables with mean 0 and variance σ² > 0. Define X_{i+1} = ρXᵢ + √(1 − ρ²) ε_{i+1}, where 0 < ρ < 1, for i = 0, 1, 2, 3. Let ρ_{ij.k} denote the partial correlation between Xᵢ and Xⱼ given X_k. Then ρ₁₄.₂ =",
+   "options": [
+    "ρ³",
+    "ρ²",
+    "ρ",
+    "0"
+   ],
+   "answer": "D",
+   "explanation": "The sequence is a Gaussian Markov chain: X₄ = ρ²X₂ + (noise built from ε₃, ε₄), and that noise is independent of X₁ and X₂. So once X₂ is known, X₁ carries no further information about X₄. Formally, with corr(Xᵢ, Xⱼ) = ρ^{|i−j|}: ρ₁₄.₂ = (ρ³ − ρ·ρ²)/√((1 − ρ²)(1 − ρ⁴)) = 0.",
+   "ref": "Multivariate PDF Q57",
+   "year": "Dec-2013"
+  },
+  {
+   "id": "csir-mv-60",
+   "format": "single",
+   "topic": "multivariate-t1",
+   "diff": "easy",
+   "stem": "(X, Y) follows the bivariate normal distribution N₂(0, 0, 1, 1, ρ), −1 < ρ < 1. Then,",
+   "options": [
+    "X + Y and X − Y are uncorrelated only if ρ = 0",
+    "X + Y and X − Y are uncorrelated only if ρ < 0",
+    "X + Y and X − Y are uncorrelated only if ρ > 0",
+    "X + Y and X − Y are uncorrelated for all values of ρ"
+   ],
+   "answer": "D",
+   "explanation": "Cov(X + Y, X − Y) = Var X − Var Y = 1 − 1 = 0, whatever ρ is. Equal variances are all that is needed.",
+   "ref": "Multivariate PDF Q60",
+   "year": "June-2013"
+  },
+  {
+   "id": "csir-mv-61",
+   "format": "single",
+   "topic": "multivariate-t1",
+   "diff": "moderate",
+   "stem": "Suppose that (X₁, X₂)′ has a normal (μ₂ₓ₁, Σ₂ₓ₂) distribution, where Σ is non-singular. Let X₃ = −2X₂. Then which of the following has a singular normal distribution?",
+   "options": [
+    "(X₁ − 2X₂, X₂ − 2X₃)",
+    "(X₁ − X₂ − X₃, 2X₁ + 2X₂)",
+    "(X₁ + X₂, 2X₁ + 2X₃)",
+    "(X₁ + X₂ + X₃, X₁ + X₂)"
+   ],
+   "answer": "B",
+   "explanation": "Substitute X₃ = −2X₂ and write each pair as a matrix times (X₁, X₂)′; the pair is singular iff that 2 × 2 matrix is singular. A: rows (1, −2), (0, 5), determinant 5. B: X₁ − X₂ + 2X₂ = X₁ + X₂ and 2X₁ + 2X₂, rows (1, 1), (2, 2), determinant 0. C: rows (1, 1), (2, −4), determinant −6. D: rows (1, −1), (1, 1), determinant 2. Only B is singular.",
+   "ref": "Multivariate PDF Q61",
+   "year": "Dec-2012"
+  },
+  {
+   "id": "csir-mv-70",
+   "format": "multi",
+   "topic": "multivariate-t3",
+   "diff": "easy",
+   "stem": "Suppose X is a p-dimensional random vector with variance-covariance matrix Σ. If P₁, …, P_p represent p orthonormal eigenvectors of Σ corresponding to the eigenvalues λ₁ > λ₂ > ⋯ > λ_p ≥ 0 respectively, then which of the following is/are true?",
+   "statements": [
+    "First principal component is P₁ᵀX",
+    "Var(P₁ᵀX) = λ₁",
+    "P₁ᵀX and P₂ᵀX are correlated",
+    "Tr(Σ) = Σᵢ λᵢ"
+   ],
+   "options": [
+    "B and D only",
+    "A and D only",
+    "A, B and D only",
+    "A and B only"
+   ],
+   "answer": "C",
+   "explanation": "Principal components are the projections on the orthonormal eigenvectors: the first has variance λ₁ (A, B), distinct components are uncorrelated (C fails), and the total variance trace(Σ) is Σλᵢ (D).",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The first principal component is the unit-norm linear combination with maximal variance, which is the leading eigenvector."
+    },
+    "B": {
+     "tf": true,
+     "why": "Var(P₁ᵀX) = P₁ᵀΣP₁ = λ₁."
+    },
+    "C": {
+     "tf": false,
+     "why": "Cov(P₁ᵀX, P₂ᵀX) = P₁ᵀΣP₂ = λ₂P₁ᵀP₂ = 0: principal components are uncorrelated."
+    },
+    "D": {
+     "tf": true,
+     "why": "The trace equals the sum of the eigenvalues."
+    }
+   },
+   "ref": "Multivariate PDF Q70",
+   "year": "Dec-2011",
+   "keyNote": "The compilation's key gives A, C. Distinct principal components are uncorrelated (P₁ᵀΣP₂ = 0), so C is false, while B and D are standard facts."
+  },
+  {
+   "id": "csir-mv-75",
+   "format": "single",
+   "topic": "multivariate-t2",
+   "diff": "easy",
+   "stem": "Random variables X₁, X₂, X₃ are such that correlation(X₁, X₂) = correlation(X₂, X₃) = correlation(X₃, X₁) = ρ. Then",
+   "options": [
+    "ρ cannot be negative",
+    "ρ can take any value between −1 and +1",
+    "ρ ≥ −0.5",
+    "ρ is either +1 or −1"
+   ],
+   "answer": "C",
+   "explanation": "The correlation matrix with 1 on the diagonal and ρ elsewhere has eigenvalues 1 + 2ρ (once) and 1 − ρ (twice). It must be positive semi-definite, so 1 + 2ρ ≥ 0, i.e. ρ ≥ −1/2. Negative values down to −1/2 are possible (A fails), values below −1/2 are not (B and D fail).",
+   "ref": "Multivariate PDF Q75",
+   "year": "June-2011"
+  },
+  {
+   "id": "csir-mv-76",
+   "format": "single",
+   "topic": "multivariate-t3",
+   "diff": "easy",
+   "stem": "Let X₀, X₁, …, X_p (p ≥ 2) be independent and identically distributed random variables with mean 0 and variance 1. Suppose Yᵢ = X₀ + Xᵢ, i = 1, …, p. The first principal component based on the covariance matrix of Y = (Y₁, …, Y_p)ᵀ is",
+   "options": [
+    "(1/√p)ΣYᵢ",
+    "(1/p)ΣYᵢ",
+    "√p ΣYᵢ",
+    "ΣYᵢ"
+   ],
+   "answer": "A",
+   "explanation": "Cov(Y) = I + 11ᵀ, whose largest eigenvalue is 1 + p with unit eigenvector 1/√p. The first principal component is the projection on that unit vector: (1/√p)ΣYᵢ. The other options use the right direction but not a unit-length coefficient vector.",
+   "ref": "Multivariate PDF Q76",
+   "year": "June-2024"
+  },
+  {
+   "id": "csir-mv-79",
+   "format": "multi",
+   "topic": "multivariate-t3",
+   "diff": "easy",
+   "stem": "Let X = (X₁, X₂)ᵀ be a bivariate random vector with covariance matrix Σ with rows (1, √2) and (√2, 2). Which of the following statements are true?",
+   "statements": [
+    "The first principal component based on Σ explains exactly 90% of the total variability",
+    "The second principal component based on Σ explains exactly 10% of the total variability",
+    "sup{aᵀΣa : a ∈ ℝ², aᵀa = 1} = 3",
+    "The first principal component based on Σ is (1/√3)(X₁ + √2X₂)"
+   ],
+   "options": [
+    "D only",
+    "C only",
+    "A, C and D only",
+    "C and D only"
+   ],
+   "answer": "D",
+   "explanation": "Σ is singular (X₂ = √2X₁ up to a constant), so its eigenvalues are 3 and 0 with leading eigenvector (1, √2)/√3. The first component explains all of the variability.",
+   "verdicts": {
+    "A": {
+     "tf": false,
+     "why": "det Σ = 2 − 2 = 0, so the eigenvalues are 3 and 0: the first component explains 100%."
+    },
+    "B": {
+     "tf": false,
+     "why": "The second component has variance 0, so it explains 0%."
+    },
+    "C": {
+     "tf": true,
+     "why": "The largest eigenvalue is trace − 0 = 3."
+    },
+    "D": {
+     "tf": true,
+     "why": "Σ(1, √2)ᵀ = (1 + 2, √2 + 2√2)ᵀ = 3(1, √2)ᵀ; normalised, the eigenvector is (1, √2)/√3."
+    }
+   },
+   "ref": "Multivariate PDF Q79",
+   "year": "June-2024"
+  },
+  {
+   "id": "csir-mv-80",
+   "format": "single",
+   "topic": "multivariate-t5",
+   "diff": "hard",
+   "stem": "Let X, Y and Z be random variables such that S = [[X, Y], [Y, Z]] ~ W₂(10, Σ), where W₂ denotes the Wishart distribution and Σ has rows (1, 1/2), (1/2, 1). Define T = Z − Y²/X. Then Var(T) equals",
+   "options": [
+    "77/6",
+    "81/8",
+    "83/9",
+    "79/7"
+   ],
+   "answer": "B",
+   "explanation": "T = S₂₂ − S₂₁S₁₁⁻¹S₁₂ is the Schur complement S₂₂.₁, which has the distribution σ₂₂.₁ χ²_{m−1} with m = 10 and σ₂₂.₁ = 1 − (1/2)²/1 = 3/4. So Var(T) = (3/4)² × 2 × 9 = (9/16) × 18 = 81/8.",
+   "ref": "Multivariate PDF Q80",
+   "year": "Dec-2024"
+  },
+  {
+   "id": "csir-mv-82",
+   "format": "multi",
+   "topic": "multivariate-t1",
+   "diff": "moderate",
+   "stem": "Let (X₁, X₂) be a bivariate normal random vector with E(X₁) = 1, E(X₂) = 0, Var(X₁) = 1, Var(X₂) = 1, and correlation coefficient 1/2. Let U be a U(0, 1) random variable, independent of (X₁, X₂). If Z = (UX₁ + X₂ − U)/√(U² + U + 1), then which of the following statements are true?",
+   "statements": [
+    "The distribution of Z is symmetric about 0.",
+    "E(Z²) = 2",
+    "Var(Z²) = 1",
+    "Z and U are independent random variables."
+   ],
+   "options": [
+    "D only",
+    "A and D only",
+    "A only",
+    "A, B and D only"
+   ],
+   "answer": "B",
+   "explanation": "The normalisation is chosen so that Z | U ~ N(0, 1) for every U. So Z is standard normal (A), independent of U (D), with E(Z²) = 1 and Var(Z²) = 2.",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Given U = u, uX₁ + X₂ − u has mean u + 0 − u = 0 and variance u² + 1 + 2u(1/2) = u² + u + 1, so Z | U = u ~ N(0, 1). Hence Z ~ N(0, 1), symmetric about 0."
+    },
+    "B": {
+     "tf": false,
+     "why": "Z ~ N(0, 1) gives E(Z²) = 1."
+    },
+    "C": {
+     "tf": false,
+     "why": "Z² ~ χ²₁ has variance 2."
+    },
+    "D": {
+     "tf": true,
+     "why": "The conditional law of Z given U does not depend on U, which is independence."
+    }
+   },
+   "ref": "Multivariate PDF Q82",
+   "year": "Dec-2024"
+  },
+  {
+   "id": "csir-mv-84",
+   "format": "multi",
+   "topic": "multivariate-t3",
+   "diff": "easy",
+   "stem": "If (X₁, X₂)ᵀ ~ N₂((0, 0)ᵀ, Σ) with Σ having rows (3, 1), (1, 3), then which of the following statements are true?",
+   "statements": [
+    "The distribution of the second principal component is normal with mean 0 and variance 2.",
+    "The variance of the first principal component is 4.",
+    "The first principal component explains more than 70% of the total variance.",
+    "The correlation coefficient between the first and the second principal components is 0."
+   ],
+   "options": [
+    "A, B and D only",
+    "B and D only",
+    "A and D only",
+    "A and B only"
+   ],
+   "answer": "A",
+   "explanation": "For rows (a, b), (b, a) the eigenvalues are a ± b, here 4 and 2, with eigenvectors (1, 1)/√2 and (1, −1)/√2. The components are normal and uncorrelated; the first explains 4/6 of the variance.",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The eigenvalues are 3 + 1 = 4 and 3 − 1 = 2; the second component (X₁ − X₂)/√2 is N(0, 2)."
+    },
+    "B": {
+     "tf": true,
+     "why": "The first component (X₁ + X₂)/√2 has variance 4."
+    },
+    "C": {
+     "tf": false,
+     "why": "It explains 4/6 ≈ 66.7%, less than 70%."
+    },
+    "D": {
+     "tf": true,
+     "why": "Principal components are uncorrelated."
+    }
+   },
+   "ref": "Multivariate PDF Q84",
+   "year": "Dec-2024"
+  },
+  {
+   "id": "csir-mv-86",
+   "format": "single",
+   "topic": "multivariate-t2",
+   "diff": "easy",
+   "stem": "Suppose (X₁, X₂, X₃)ᵀ ~ N₃(0, I₃) and (X, Y, Z)ᵀ = A(X₁, X₂, X₃)ᵀ with A having rows (3, 0, 0), (2, 2, 0), (4, 0, 4). Then the partial correlation coefficient ρ_{YZ.X} is",
+   "options": [
+    "1/2",
+    "2/3",
+    "3/4",
+    "0"
+   ],
+   "answer": "D",
+   "explanation": "X = 3X₁, Y = 2X₁ + 2X₂, Z = 4X₁ + 4X₃. Fixing X fixes X₁, and then Y and Z vary only through the independent X₂ and X₃. So the partial correlation is 0. With the covariance matrix rows (9, 6, 12), (6, 8, 8), (12, 8, 32): ρ_{YZ.X} ∝ 8 − 6 × 12/9 = 0.",
+   "ref": "Multivariate PDF Q86",
+   "year": "June-2025"
+  },
+  {
+   "id": "csir-mv-88",
+   "format": "multi",
+   "topic": "multivariate-t3",
+   "diff": "moderate",
+   "stem": "Let the random vector (X₁, X₂, X₃) have the positive definite dispersion matrix with 1 on the diagonal and ρ elsewhere. Then, which of the following statements are true?",
+   "statements": [
+    "ρ may be −0.47",
+    "The first principal component can only explain 32% of the total variation for some ρ",
+    "The second principal component can explain more than 32% of the total variation for any ρ",
+    "The variance of the first principal component is 1 + 2ρ for any ρ"
+   ],
+   "options": [
+    "A and B only",
+    "A only",
+    "A and C only",
+    "A and D only"
+   ],
+   "answer": "B",
+   "explanation": "The eigenvalues are 1 + 2ρ and a repeated 1 − ρ, with total 3. Positive definiteness allows ρ = −0.47; the leading share is always at least one third; and which eigenvalue leads depends on the sign of ρ.",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "The eigenvalues are 1 + 2ρ and 1 − ρ (twice); positive definiteness needs −1/2 < ρ < 1, and −0.47 is in that range."
+    },
+    "B": {
+     "tf": false,
+     "why": "The largest eigenvalue is at least the average 1, so the first component always explains at least 1/3 ≈ 33.3%."
+    },
+    "C": {
+     "tf": false,
+     "why": "For ρ close to 1 the second eigenvalue 1 − ρ is close to 0, so it explains almost nothing."
+    },
+    "D": {
+     "tf": false,
+     "why": "For ρ < 0 the largest eigenvalue is 1 − ρ, not 1 + 2ρ."
+    }
+   },
+   "ref": "Multivariate PDF Q88",
+   "year": "June-2025"
+  }
+ ]
+}

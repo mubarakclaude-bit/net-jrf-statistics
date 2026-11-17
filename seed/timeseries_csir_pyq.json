@@ -1,0 +1,49 @@
+{
+ "moduleId": "timeseries",
+ "source": "variant",
+ "label": "CSIR NET 2011–2025 previous-year questions",
+ "count": 1,
+ "items": [
+  {
+   "id": "csir-mv-66",
+   "format": "multi",
+   "topic": "timeseries-t4",
+   "diff": "moderate",
+   "stem": "Suppose ε₁, ε₂, …, εₙ are i.i.d. N(0, σ²). Consider Y₁, …, Yₙ defined by Y₁ = μ + ε₁ and Y_{j+1} − μ = ρ(Y_j − μ) + √(1 − ρ²) ε_{j+1}, j = 1, 2, …, n − 1. Let T = (1/n)ΣYᵢ. Suppose 0 < ρ < 1 and σ² > 0. Then for n ≥ 2",
+   "statements": [
+    "T has a normal distribution",
+    "T has mean μ and variance σ²/n",
+    "E(T) = μ, Var(T) > σ²/n",
+    "T ~ N(μ, δ²) where δ² > σ²/n"
+   ],
+   "options": [
+    "C and D only",
+    "A, C and D only",
+    "A and D only",
+    "A and C only"
+   ],
+   "answer": "B",
+   "explanation": "This is a stationary Gaussian AR(1) series. Its sample mean is normal with mean μ, and positive autocorrelation inflates its variance above σ²/n, so A, C and D hold and B ignores the correlation.",
+   "verdicts": {
+    "A": {
+     "tf": true,
+     "why": "Each Yᵢ is a linear combination of the normal εs, so T is normal."
+    },
+    "B": {
+     "tf": false,
+     "why": "The Yᵢ are positively correlated (Cov(Yᵢ, Yⱼ) = σ²ρ^{|i−j|}), so the variance exceeds σ²/n."
+    },
+    "C": {
+     "tf": true,
+     "why": "Each Yᵢ has mean μ and variance σ² (the recursion preserves it), and Var(T) = σ²/n + (2σ²/n²) Σ_{i<j} ρ^{j−i} > σ²/n."
+    },
+    "D": {
+     "tf": true,
+     "why": "T is normal (statement A) with mean μ and a variance δ² above σ²/n (statement C)."
+    }
+   },
+   "ref": "Multivariate PDF Q66",
+   "year": "June-2012"
+  }
+ ]
+}

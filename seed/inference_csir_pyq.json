@@ -1,0 +1,133 @@
+{
+ "moduleId": "inference",
+ "source": "variant",
+ "label": "CSIR NET 2011–2025 previous-year questions",
+ "count": 6,
+ "items": [
+  {
+   "id": "csir-prob-01",
+   "format": "single",
+   "topic": "inference-t7",
+   "diff": "easy",
+   "stem": "The probability of getting a head in tossing a coin is p, p ∈ (0,1). The coin is independently tossed 25 times and a head appears 10 times. The Bayes estimate of p, with respect to the prior Beta(5,5) and the squared error loss function, is",
+   "options": [
+    "3/7",
+    "3/5",
+    "1/2",
+    "2/5"
+   ],
+   "answer": "A",
+   "explanation": "A Beta(a,b) prior with a binomial likelihood gives a Beta(a+heads, b+tails) posterior. Here that is Beta(5+10, 5+15) = Beta(15,20). Under squared error loss the Bayes estimate is the posterior mean, a/(a+b) = 15/35 = 3/7. The sample proportion 10/25 = 2/5 and the prior mean 1/2 are the two values the posterior mean sits between.",
+   "ref": "Probability PDF Q1"
+  },
+  {
+   "id": "csir-std-17",
+   "format": "single",
+   "topic": "inference-t7",
+   "diff": "moderate",
+   "stem": "Let X₁, X₂, X₃ and X₄ be independent and identically distributed random variables with common distribution normal with mean μ and variance 2. If the prior distribution of μ is normal with mean 0 and variance 1/2, then which of the following is true?",
+   "options": [
+    "The prior distribution is not a conjugate prior",
+    "Posterior mode of μ given X₁, X₂, X₃ and X₄ is ΣXᵢ/8",
+    "Posterior median of μ given X₁, X₂, X₃ and X₄ is ΣXᵢ/4",
+    "Posterior variance of μ given X₁, X₂, X₃ and X₄ is (ΣXᵢ/4)²"
+   ],
+   "answer": "B",
+   "explanation": "A normal prior for a normal mean with known variance is conjugate, so A is false. Precisions add: posterior precision = 1/(1/2) + 4/2 = 4, posterior variance 1/4 (D is false). The posterior mean is (n x̄/σ² + μ₀/τ²)/4 = (4x̄/2 + 0)/4 = x̄/2 = ΣXᵢ/8, and a normal posterior has mode = median = mean = ΣXᵢ/8, so B is true and C (ΣXᵢ/4) is false.",
+   "ref": "Standard Univariate PDF Q17",
+   "year": "Dec-2015"
+  },
+  {
+   "id": "csir-std-23",
+   "format": "single",
+   "topic": "inference-t7",
+   "diff": "moderate",
+   "stem": "Suppose X ~ Poisson(λ), λ > 0. Let the prior distribution of λ be U(0, 1). If X = 0 is observed, then the posterior probability of the set 0 < λ ≤ 1/2 is",
+   "options": [
+    "0.5",
+    "1",
+    "(e − √e)/(e − 1)",
+    "1/e"
+   ],
+   "answer": "C",
+   "explanation": "The likelihood at X = 0 is e^{−λ}, so the posterior density on (0,1) is proportional to e^{−λ}. P(λ ≤ 1/2 | X = 0) = ∫₀^{1/2} e^{−λ} dλ / ∫₀¹ e^{−λ} dλ = (1 − e^{−1/2})/(1 − e^{−1}). Multiplying numerator and denominator by e gives (e − √e)/(e − 1) ≈ 0.622.",
+   "ref": "Standard Univariate PDF Q23",
+   "year": "Dec-2014"
+  },
+  {
+   "id": "csir-mv-32",
+   "format": "multi",
+   "topic": "inference-t7",
+   "diff": "easy",
+   "stem": "Suppose y | θ ~ Poisson(θ), θ > 0, and the prior density τ of θ is given by τ(θ) ∝ e^{−αθ}θ^{β−1}, where α > 0 and β > 0 are hyper-parameters. Which of the following are true?",
+   "statements": [
+    "Marginal distribution of y is hypergeometric",
+    "Posterior distribution of θ given y is Gamma",
+    "τ is a conjugate prior",
+    "Bayes' estimate of θ for squared error loss function is (β + y)/(α + 1)"
+   ],
+   "options": [
+    "B, C and D only",
+    "C and D only",
+    "B and D only",
+    "B and C only"
+   ],
+   "answer": "A",
+   "explanation": "The Gamma prior is conjugate to the Poisson likelihood: posterior Gamma(β + y, α + 1) (B, C) with mean (β + y)/(α + 1), the Bayes estimate under squared error (D). The marginal of y is negative binomial.",
+   "verdicts": {
+    "A": {
+     "tf": false,
+     "why": "Mixing a Poisson over a Gamma gives a negative binomial marginal, not a hypergeometric one."
+    },
+    "B": {
+     "tf": true,
+     "why": "Posterior ∝ e^{−θ}θʸ × e^{−αθ}θ^{β−1} = e^{−(α+1)θ}θ^{β+y−1}: Gamma(shape β + y, rate α + 1)."
+    },
+    "C": {
+     "tf": true,
+     "why": "Prior and posterior are both Gamma, so the prior is conjugate."
+    },
+    "D": {
+     "tf": true,
+     "why": "The posterior mean of Gamma(β + y, α + 1) is (β + y)/(α + 1)."
+    }
+   },
+   "ref": "Multivariate PDF Q32",
+   "year": "Dec-2018"
+  },
+  {
+   "id": "csir-mv-48",
+   "format": "single",
+   "topic": "inference-t7",
+   "diff": "easy",
+   "stem": "Suppose Xᵢ | θᵢ ~ N(θᵢ, σ²), i = 1, 2, are independently distributed. Under the prior distribution, θ₁ and θ₂ are i.i.d. N(μ, τ²), where σ², μ and τ² are known. Then which of the following is true about the marginal distributions of X₁ and X₂?",
+   "options": [
+    "X₁ and X₂ are i.i.d. N(μ, τ² + σ²)",
+    "X₁ and X₂ are not normally distributed",
+    "X₁ and X₂ are N(μ, τ² + σ²) but they are not independent",
+    "X₁ and X₂ are normally distributed but are not identically distributed"
+   ],
+   "answer": "A",
+   "explanation": "Write Xᵢ = θᵢ + εᵢ with εᵢ ~ N(0, σ²) independent of θᵢ: Xᵢ ~ N(μ, τ² + σ²). The pairs (θ₁, ε₁) and (θ₂, ε₂) are independent, so X₁ and X₂ are independent; with the same law they are i.i.d.",
+   "ref": "Multivariate PDF Q48",
+   "year": "June-2015"
+  },
+  {
+   "id": "csir-mv-59",
+   "format": "single",
+   "topic": "inference-t7",
+   "diff": "moderate",
+   "stem": "Let X₁, X₂, …, Xₙ be a random sample from N(θ, σ²) where σ² > 0 is known. Suppose θ has the Cauchy prior with density proportional to (1 + ((θ − μ)/τ)²)⁻¹, −∞ < θ < ∞, with μ and τ known. Then with reference to the posterior distribution of θ,",
+   "options": [
+    "The posterior mean does not exist and the posterior variance is ∞",
+    "the posterior mean exists but the posterior variance is ∞",
+    "the posterior mean exists and the posterior variance is finite",
+    "the posterior variance is finite but the posterior mean does not exist"
+   ],
+   "answer": "C",
+   "explanation": "The posterior density is proportional to exp(−n(θ − x̄)²/(2σ²)) × (1 + ((θ − μ)/τ)²)⁻¹. The Gaussian factor from the likelihood decays faster than any power, and the Cauchy factor is bounded, so every posterior moment is finite. The heavy tails of the prior do not survive multiplication by a normal likelihood.",
+   "ref": "Multivariate PDF Q59",
+   "year": "Dec-2013"
+  }
+ ]
+}
