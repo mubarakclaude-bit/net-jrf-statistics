@@ -6,7 +6,7 @@
   "breadcrumb": "Statistical Inference → Point Estimation → Maximum likelihood",
   "engine": "B",
   "engineName": "Estimation and inference — let the observed data tell us which parameter value fits best",
-  "estMin": 59,
+  "estMin": 96,
   "version": "1.0",
   "status": "review",
   "provenance": "New lesson prepared to close the missing inference-t4 learning coverage identified during the supplementary question-bank audit (November 2026). Scope follows Unit IV of the supplied UGC NET Statistics syllabus: maximum likelihood estimators and their relationship to point-estimation properties. Examples are original instructional examples, not represented as official PYQs. The linked supplementary pool is separately labelled practice material.",
@@ -192,7 +192,7 @@
       "kind": "foundation",
       "id": "s0",
       "title": "Before the lesson — the probability facts we need",
-      "mins": 5,
+      "mins": 7,
       "objective": "Recall how a random sample produces a joint probability or density.",
       "body": [
         "Maximum likelihood starts with a simple question: for the data we actually observed, which parameter value makes those data most plausible under the model? Before answering it, we need the joint distribution of a sample."
@@ -225,18 +225,28 @@
       "kind": "intuition",
       "id": "s1",
       "title": "The central idea — which parameter best explains the data?",
-      "mins": 3,
+      "mins": 6,
       "objective": "Interpret likelihood as a score for parameter values given fixed observations.",
       "body": [
         "Imagine a coin has an unknown probability p of landing heads. You toss it 10 times and observe 7 heads. If p=0.7, this result is quite plausible. If p=0.1, seven heads would be much less plausible. Maximum likelihood chooses the p that gives the largest probability to the observed data.",
         "The likelihood is not the probability that p is true. It is the probability of the observed data, calculated under each proposed p. We compare those values and choose the largest."
-      ]
+      ],
+      "scenario": {
+        "teaser": "A coin is tossed ten times and seven heads appear.",
+        "title": "Why the sample proportion is the most plausible value",
+        "body": [
+          "A student is trying to estimate the chance that a particular coin lands heads. She does not know whether the coin is fair, so she tosses it ten times and records seven heads and three tails. Several possible values of p can be considered. If p is very close to zero, observing seven heads would be surprising. If p is very close to one, observing three tails would be surprising. A value around 0.7 makes the observed balance of heads and tails most plausible.",
+          "The likelihood function puts a numerical score on each proposed value of p. It is not a statement that p itself has a probability. We hold the ten observations fixed and compare the probability of getting this exact pattern under different values of p. The maximum-likelihood estimate is the value that gives the largest score."
+        ],
+        "q": "What value of p makes the observed 7 heads in 10 tosses most likely?",
+        "answer": "p̂=7/10=0.7."
+      }
     },
     {
       "kind": "explore",
       "id": "s2",
       "title": "A likelihood you can calculate by hand",
-      "mins": 3,
+      "mins": 5,
       "objective": "See why the sample proportion maximises the Bernoulli likelihood.",
       "viz": {
         "type": "exp-likelihood",
@@ -251,7 +261,7 @@
       "kind": "theory",
       "id": "s3",
       "title": "Construct the likelihood and use the log",
-      "mins": 5,
+      "mins": 8,
       "objective": "Write the likelihood for an iid sample and obtain the score equation.",
       "blocks": [
         {
@@ -279,13 +289,84 @@
           "h": "Regularity conditions",
           "body": "Differentiability, interchange of differentiation and integration, and parameter-independent support are common regularity conditions in standard large-sample theory. They do not hold in every model, especially some uniform-support models."
         }
-      ]
+      ],
+      "flow": {
+        "title": "The maximum-likelihood workflow",
+        "alt": "Start with the model and observed sample, construct the joint likelihood, take its logarithm, solve the score equation, check curvature and boundaries, then report the allowed maximiser.",
+        "nodes": [
+          {
+            "id": "a",
+            "r": 0,
+            "c": 1,
+            "label": "Model + observed data",
+            "kind": "start"
+          },
+          {
+            "id": "b",
+            "r": 1,
+            "c": 1,
+            "label": "Build L(θ)",
+            "kind": "step"
+          },
+          {
+            "id": "c",
+            "r": 2,
+            "c": 1,
+            "label": "Take log ℓ(θ)",
+            "kind": "step"
+          },
+          {
+            "id": "d",
+            "r": 3,
+            "c": 1,
+            "label": "Solve score = 0",
+            "kind": "step"
+          },
+          {
+            "id": "e",
+            "r": 4,
+            "c": 1,
+            "label": "Check maximum + Θ",
+            "kind": "decision"
+          },
+          {
+            "id": "f",
+            "r": 5,
+            "c": 1,
+            "label": "Report MLE",
+            "kind": "end"
+          }
+        ],
+        "edges": [
+          {
+            "from": "a",
+            "to": "b"
+          },
+          {
+            "from": "b",
+            "to": "c"
+          },
+          {
+            "from": "c",
+            "to": "d"
+          },
+          {
+            "from": "d",
+            "to": "e"
+          },
+          {
+            "from": "e",
+            "to": "f"
+          }
+        ],
+        "note": "If the candidate is outside the parameter space or the likelihood has a boundary maximum, do not stop at the score equation."
+      }
     },
     {
       "kind": "worked",
       "id": "s4",
       "title": "Worked example 1 — Bernoulli probability",
-      "mins": 5,
+      "mins": 8,
       "objective": "Derive the MLE of a success probability from the likelihood.",
       "problem": "A random sample X₁,…,Xₙ comes from Bernoulli(p). Find the MLE of p.",
       "steps": [
@@ -318,7 +399,7 @@
       "kind": "recall",
       "id": "s5",
       "title": "Three standard models — remember the likelihood pattern",
-      "mins": 4,
+      "mins": 5,
       "objective": "Recognise the Poisson and exponential likelihoods quickly.",
       "intro": "For each model, write the log-likelihood first. Notice how the sufficient sample summary appears naturally.",
       "items": [
@@ -340,7 +421,7 @@
       "kind": "theory",
       "id": "s6",
       "title": "Normal distribution — why the divisor is n",
-      "mins": 5,
+      "mins": 8,
       "objective": "Derive the normal MLEs and distinguish the variance MLE from the unbiased estimator.",
       "blocks": [
         {
@@ -374,7 +455,7 @@
       "kind": "worked",
       "id": "s7",
       "title": "Worked example 2 — normal variance",
-      "mins": 4,
+      "mins": 7,
       "objective": "Calculate the normal MLE variance from a small sample.",
       "problem": "Suppose the observations are 1, 2 and 3 from a normal population with unknown mean and variance. Find the MLEs.",
       "steps": [
@@ -401,7 +482,7 @@
       "kind": "theory",
       "id": "s8",
       "title": "Support, boundaries and constrained MLEs",
-      "mins": 5,
+      "mins": 8,
       "objective": "Handle uniform models and understand why the support can determine the MLE.",
       "blocks": [
         {
@@ -430,7 +511,7 @@
       "kind": "worked",
       "id": "s9",
       "title": "Worked example 3 — a constrained Bernoulli model",
-      "mins": 4,
+      "mins": 7,
       "objective": "Project an unconstrained MLE onto a restricted parameter interval.",
       "problem": "Two Bernoulli observations are 0 and 1. The parameter is restricted to 1/3≤p≤2/3. Find the MLE.",
       "steps": [
@@ -453,7 +534,7 @@
       "kind": "theory",
       "id": "s10",
       "title": "Functions of parameters and invariance",
-      "mins": 3,
+      "mins": 6,
       "objective": "Apply the MLE invariance property correctly.",
       "blocks": [
         {
@@ -477,7 +558,7 @@
       "kind": "guided",
       "id": "s11",
       "title": "Guided practice — Poisson likelihood",
-      "mins": 4,
+      "mins": 7,
       "objective": "Derive a Poisson MLE without skipping algebra.",
       "problem": "For an iid sample from Poisson(λ), show that the MLE is X̄.",
       "hints": [
@@ -507,13 +588,23 @@
         {
           "say": "The second derivative is −Σxᵢ/λ², which is negative when the sample total is positive. If the total is zero, the likelihood is maximised at the boundary λ=0 if zero is included in the parameter space."
         }
-      ]
+      ],
+      "scenario": {
+        "teaser": "A quality-control team estimates the failure rate of a component.",
+        "title": "Choosing a rate model for component lifetimes",
+        "body": [
+          "A factory tests a batch of electronic components and records the time each component operates before failure. The engineering team assumes, as a first model, that lifetimes are independent and exponentially distributed with an unknown failure rate λ. The observed operating times are treated as fixed data while the team compares possible values of λ. A larger λ means failures tend to happen sooner; a smaller λ means longer operating times are more plausible.",
+          "The likelihood combines the exponential density for every observed lifetime. The log-likelihood turns the product into a sum, and differentiating gives an estimate based on the total operating time. This example also illustrates why parameterisation matters: the MLE of the failure rate is the reciprocal of the sample mean, whereas the MLE of the mean lifetime (the scale) is the sample mean itself."
+        ],
+        "q": "If the sample mean lifetime is 12 hours, what is the MLE of the failure rate λ?",
+        "answer": "λ̂=1/12 per hour."
+      }
     },
     {
       "kind": "completion",
       "id": "s12",
       "title": "Complete the reasoning — exponential rate",
-      "mins": 3,
+      "mins": 5,
       "objective": "Practise the score equation for the exponential rate parameter.",
       "problem": "For iid exponential observations with rate λ, complete the likelihood calculation.",
       "steps": [
@@ -547,7 +638,7 @@
       "kind": "trapcheck",
       "id": "s13",
       "title": "Trap check — five statements to judge",
-      "mins": 4,
+      "mins": 5,
       "objective": "Catch common mistakes about likelihood and MLE properties.",
       "intro": "Decide whether each statement is true or false, then read the explanation.",
       "items": [
@@ -582,7 +673,7 @@
       "kind": "summary",
       "id": "s14",
       "title": "The complete MLE checklist",
-      "mins": 2,
+      "mins": 4,
       "objective": "Consolidate the procedure and the standard results.",
       "body": [
         "1. Write the parameter space Θ and the model pmf/pdf.",
