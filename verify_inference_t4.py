@@ -27,6 +27,12 @@ rate_hat = len(life) / sum(life)
 close(rate_hat, 1/12)
 close(len(life)/rate_hat - sum(life), 0.0)
 
+# Exponential rate MLE is biased for finite n>1: E[n/S] = n*lambda/(n-1).
+n, lam = 5, 2.0
+expected_rate_mle = n * lam / (n-1)
+close(expected_rate_mle, 2.5)
+close(expected_rate_mle - lam, lam/(n-1))
+
 # Normal sample 1,2,3: MLE variance divides by n; unbiased variance divides by n-1.
 normal = [1.0, 2.0, 3.0]
 mean_hat = sum(normal)/len(normal)
@@ -56,7 +62,7 @@ assert all_zero_likelihood(1/3) > all_zero_likelihood(0.5) > all_zero_likelihood
 
 print("PASS: Bernoulli score and curvature")
 print("PASS: Poisson score")
-print("PASS: exponential-rate score and rate/scale calculation")
+print("PASS: exponential-rate score, rate/scale and finite-sample bias")
 print("PASS: normal MLE variance (n) versus unbiased variance (n-1)")
 print("PASS: Uniform(0,theta) support and boundary maximum")
 print("PASS: constrained Bernoulli examples")
