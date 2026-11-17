@@ -1202,7 +1202,7 @@ Three additional items were accepted after enlarged page-image review and indepe
 |---|---|---|---|
 | 674 | `mcq1000-p674` | Probability — normal linear combinations with independent random coefficients | Statements 1, 2 and 4; Z is standard normal |
 | 687 | `mcq1000-p687` | Statistical Inference — unbiased estimation of a variance parameter | Both ΣXᵢ²/(3n) and Σ(Xᵢ−X̄)²/[2(n−1)] are unbiased |
-| 737 | `mcq1000-p737` | Probability — almost-sure convergence | P(lim Xₙ=X)=1 |
+| 737 | `mcq1000-p737` | Probability T9 — convergence and limit theorems | P(lim Xₙ=X)=1 |
 
 The page-674 and page-687 items are multi-select because more than one statement/statistic is correct. Page 737 is a definition check and its explanation distinguishes almost-sure convergence from convergence in probability.
 
