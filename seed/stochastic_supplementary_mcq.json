@@ -3,7 +3,7 @@
   "source": "variant",
   "label": "Supplementary practice — 1000 MCQ Statistics Test Series (selected source pages through 672)",
   "classification": "supplementary-source-practice-not-an-attributed-official-pyq",
-  "count": 7,
+  "count": 11,
   "items": [
     {
       "id": "mcq1000-p960",
@@ -183,6 +183,90 @@
       "answer": "B",
       "explanation": "Think of X₁,X₂,… as successive inter-arrival times of a Poisson process with rate λ. The number K of arrivals by time 1 has a Poisson(λ) distribution, so Var(K)=λ. The first index N for which the cumulative waiting time exceeds 1 is K+1. Adding a constant does not change variance, hence Var(N)=Var(K+1)=λ.",
       "pno": 671,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p807",
+      "format": "single",
+      "topic": "stochastic-t6",
+      "stem": "A gambler starts with $64 and makes six fair even-money bets. On each bet, the wager is half of the money currently remaining. The gambler wins exactly three bets and loses exactly three. What is the final result?",
+      "options": [
+        "Wins $27",
+        "Loses $39",
+        "Depends on the order of wins and losses",
+        "None of these"
+      ],
+      "answer": "D",
+      "explanation": "A win increases the current bankroll by half, so it multiplies the bankroll by 3/2. A loss removes half, so it multiplies the bankroll by 1/2. After three wins and three losses, the final bankroll is 64×(3/2)³×(1/2)³=27. The order does not matter because multiplication is commutative. The gambler finishes with $27, meaning a loss of $37; none of options A–C states this, so option D is correct.",
+      "pno": 807,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p873",
+      "format": "single",
+      "topic": "stochastic-t6",
+      "stem": "A random walk on the positive integers moves from state n to n+1 with probability 1/3 and to n−1 with probability 2/3. It is absorbed at 0. Starting from 3, find the probability of reaching 5 before 0.",
+      "options": [
+        "14/31",
+        "2/37",
+        "1/37",
+        "7/31"
+      ],
+      "answer": "D",
+      "explanation": "This is the gambler's ruin problem with upward probability p=1/3 and downward probability q=2/3. For boundaries 0 and N, the probability of reaching N before 0 from i is [1−(q/p)^i]/[1−(q/p)^N] when p≠q. Here q/p=2, i=3 and N=5, so the probability is (1−2³)/(1−2⁵)=−7/−31=7/31. Option D is correct.",
+      "pno": 873,
+      "sourcePdf": "1000 MCQ statistics.pdf"
+    },
+    {
+      "id": "mcq1000-p893",
+      "format": "multi",
+      "topic": "stochastic-t6",
+      "stem": "For a fair coin, let Tₙ be the expected number of tosses needed to obtain n consecutive heads. Which of the following values are correct?",
+      "options": [
+        "A, B and D only",
+        "A and B only",
+        "B and C only",
+        "A, C and D only"
+      ],
+      "answer": "A",
+      "explanation": "For a fair coin, the expected waiting time for n consecutive heads is Tₙ=2^(n+1)−2. Thus T₃=14, T₄=30, T₇=254 (not 100), and T₉=1022. Statements A, B and D are true, option A.",
+      "pno": 893,
+      "sourcePdf": "1000 MCQ statistics.pdf",
+      "statements": [
+        "T₃=14.",
+        "T₄=30.",
+        "T₇=100.",
+        "T₉=1022."
+      ],
+      "verdicts": {
+        "A": {
+          "tf": true,
+          "why": "2⁴−2=14."
+        },
+        "B": {
+          "tf": true,
+          "why": "2⁵−2=30."
+        },
+        "C": {
+          "tf": false,
+          "why": "2⁸−2=254, not 100."
+        },
+        "D": {
+          "tf": true,
+          "why": "2¹⁰−2=1022."
+        }
+      }
+    },
+    {
+      "id": "mcq1000-p927",
+      "format": "numeric",
+      "topic": "stochastic-t9",
+      "stem": "Bamey samples iid Uniform(0,1) values until their cumulative sum first exceeds 1. Find the expected number of samples.",
+      "options": [],
+      "answer": "2.7183",
+      "explanation": "Let N be the first n for which S_n=X₁+⋯+Xₙ>1. Then E(N)=Σₙ₌₀∞P(N>n)=Σₙ₌₀∞P(S_n≤1). For n≥1, the probability that n independent Uniform(0,1) values sum to at most 1 is the volume of the n-dimensional unit simplex, 1/n!. The n=0 term is 1=1/0!. Therefore E(N)=Σₙ₌₀∞1/n!=e≈2.7183. The source's answer 2 is incorrect.",
+      "check": "Use the tail-sum formula for E(N) and the simplex volume P(S_n≤1)=1/n!.",
+      "pno": 927,
       "sourcePdf": "1000 MCQ statistics.pdf"
     }
   ]
