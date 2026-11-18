@@ -7,7 +7,7 @@
  "engine": "B",
  "engineName": "Estimation and inference — prior and likelihood pooled, and the loss that picks a number",
  "estMin": 93,
- "version": "1.1",
+ "version": "1.2",
  "status": "approved",
  "provenance": "Review pass, October 2026: 3 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. The same pass scoped two 'always' claims in the three-Bayesians scenario that the review did not flag: the posterior mean lying between the prior mean and the MLE, and the prior washing out as n grows, both hold for the conjugate families in that scene but not in general. Authored for this platform in October 2026. Every numerical result was computed rather than recalled, and checked independently: the Beta(2,3) + 7/10 example (posterior Beta(9,6), mean 0.6, mode 8/13, prior weight 1/3, weighted decomposition exact); the Normal–Normal case (prior N(100,25), σ²=36, n=9, x̄=112, giving posterior precision 0.29, variance 3.448276, sd 1.856953, mean 110.344828 and a 95% credible interval of (106.705, 113.984)); and the Gamma–Poisson transfer case (Gamma(3,2) with Σx=14, n=7, giving Gamma(17,9), mean 1.888889, mode 1.777778, and an exact median of 1.851984 by bisection on the regularised incomplete gamma, against the approximation (A−1/3)/B = 1.851852). The Gamma family is used in the RATE parameterisation throughout, and the lesson says so, because Indian textbooks use both.",
  "objectives": [
@@ -899,6 +899,41 @@
    "check": "Three checks that catch most errors. All three summaries must lie between the prior mean 1.5 and the MLE 2.0. They must come in the order mode < median < mean for a right-skewed posterior. And the weighted-average decomposition must reproduce the mean exactly — if it does not, the shape and rate were swapped in the update."
   },
   {
+   "kind": "worked",
+   "title": "A Poisson prior for an unknown binomial size",
+   "mins": 8,
+   "objective": "Derive a posterior when the unknown parameter is the number of trials, not the success probability.",
+   "problem": "Suppose X | n ~ Binomial(n,p), where p is known and n is an unknown non-negative integer. Assign n a Poisson(λ) prior. After observing X=x, find the posterior distribution of n and the Bayes estimator under squared-error loss.",
+   "steps": [
+    {
+     "say": "Write the likelihood and prior, keeping only the terms that depend on n.",
+     "math": "P(X=x|n)P(n) = C(n,x)p^x(1−p)^(n−x) e^(−λ) λ^n/n!",
+     "why": "The observed x is fixed. The unknown integer n must satisfy n ≥ x."
+    },
+    {
+     "say": "Set m=n−x and simplify the factorials.",
+     "math": "C(n,x)/n! = 1/[x!(n−x)!], so the kernel in m is proportional to [λ(1−p)]^m/m!.",
+     "why": "The factors p^x, e^(−λ), λ^x and x! do not vary with m and are absorbed into the normalising constant."
+    },
+    {
+     "say": "Recognise the Poisson kernel.",
+     "math": "n−x | X=x ~ Poisson(λ(1−p)).",
+     "why": "The posterior for n is a shifted Poisson distribution: n is x plus the unobserved number of failures."
+    },
+    {
+     "say": "Apply the loss function stated in the question.",
+     "math": "Under squared-error loss, δ_B(x) = E[n|X=x] = x + λ(1−p).",
+     "why": "The posterior mean is the Bayes estimator only because squared-error loss is specified. Under another loss, a different posterior summary may be required."
+    }
+   ],
+   "after": "The important recognition is that the observed x successes are already part of the total n. The remaining number of unobserved failures has a Poisson posterior with mean λ(1−p). The posterior is not simply Poisson with mean λ, because the observed binomial count changes the distribution.",
+   "id": "s11b",
+   "ask": {
+    "q": "If x successes are observed, what is the posterior distribution of the unobserved number n−x?",
+    "nudge": "It is Poisson with mean λ(1−p)."
+   }
+  },
+  {
    "kind": "summary",
    "id": "s12",
    "title": "What you should now be able to do unaided",
@@ -911,6 +946,7 @@
     "The loss results. Squared error → posterior mean. Absolute error → posterior median. 0–1 loss → posterior mode. For a symmetric posterior all three coincide; for a skewed Beta or Gamma they are three different numbers and the ordering follows the skew. Asked for 'the Bayes estimator' with no loss named, give the posterior mean.",
     "Priors. Jeffreys' prior is ∝ √I(θ), which is invariant to reparameterisation; for a Bernoulli it is Beta(½, ½), not the uniform. A uniform prior on a probability is Beta(1, 1) and behaves like one success and one failure, so its posterior mean is Laplace's (x + 1)/(n + 2). Improper priors do not integrate but may still give proper posteriors, which must be checked.",
     "The distinction. A credible interval is a probability statement about the parameter given the data; a confidence interval is a statement about the procedure over repeated samples. They converge in large samples and mean different things in every sample, and the exam tests this directly.",
+    "When n itself is unknown in X | n ~ Binomial(n,p) with a Poisson(λ) prior, derive n−x | X=x ~ Poisson(λ(1−p)) and use the posterior mean for squared-error loss.",
     "The habit. Derive the posterior from the kernels, then check it against the standard update rule. The two must agree, and when they do not, the exponents are out by one or the shape and rate have been swapped."
    ]
   },

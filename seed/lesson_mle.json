@@ -7,9 +7,9 @@
  "engine": "B",
  "engineName": "Estimation and inference — likelihood curves, sampling distributions, visible assumptions",
  "estMin": 46,
- "version": "1.3",
+ "version": "1.6",
  "status": "approved",
- "provenance": "Review pass, October 2026: 3 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. The review also found the MLE described as ALWAYS a function of the sufficient statistic in the prerequisite and the revision sheet; applying that finding across the lesson turned up a third copy in a prerequisite-check recall, which the review had not flagged. All three now qualify the claim to an MLE that exists and is unique, and state that otherwise the sufficient statistic determines the set of maximisers. Theory and worked examples authored for this platform; previous-year questions marked separately and carry their exam cycle.",
+ "provenance": "Review pass, October 2026: 3 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. The review also found the MLE described as ALWAYS a function of the sufficient statistic in the prerequisite and the revision sheet; applying that finding across the lesson turned up a third copy in a prerequisite-check recall, which the review had not flagged. All three now qualify the claim to an MLE that exists and is unique, and state that otherwise the sufficient statistic determines the set of maximisers. Theory and worked examples authored for this platform; previous-year questions marked separately and carry their exam cycle. Content enhancement, November 2026: added the non-unique MLE case for U(θ−1, θ+1), derived directly from the support inequalities and constant likelihood. This addresses the Feb 2022 CSIR NET Methods of Estimation collection, Question 10 (uploaded reference, page 5). Existing scene and question IDs preserved.",
  "objectives": [
   "Build the likelihood of a sample and say why it is a function of θ, not of x.",
   "Derive an MLE through the log-likelihood and the score equation, and verify it is a maximum.",
@@ -262,7 +262,7 @@
    "viz": {
     "type": "exp-likelihood",
     "n": 2,
-    "sumx": 12.0
+    "sumx": 12
    },
    "body": [
     "The curve is L(λ) = λⁿ e^(−λΣxᵢ) for an exponential sample — the likelihood of the data you actually hold, at every candidate rate.",
@@ -594,6 +594,26 @@
      "t": "note",
      "h": "MLE versus UMVUE",
      "body": "They coincide often enough to be dangerous. They are different objects: the MLE maximises the likelihood, the UMVUE minimises variance among unbiased estimators. When a question offers both as options, decide which criterion it named."
+    },
+    {
+     "t": "note",
+     "h": "Existence and uniqueness are separate questions",
+     "body": "A likelihood can have no maximiser inside the parameter space, one maximiser, or several maximisers. The sample maximum in U(0,θ) gives one boundary maximiser. In U(θ−1,θ+1), every θ in [x₍ₙ₎−1, x₍₁₎+1] gives the same maximum. When a question asks whether the MLE is unique, inspect the shape of L over the feasible parameter set; do not assume uniqueness from the definition."
+    },
+    {
+     "t": "step",
+     "h": "Constrained parameter spaces — maximise inside the allowed set",
+     "body": "First find the unconstrained maximiser, then check whether it belongs to the stated parameter space. For a normal sample with known variance and μ≤5, the log-likelihood is a concave quadratic centred at x̄. Hence μ̂ = min(x̄,5). In the June 2023 question with observations 3, 6, 9, x̄=6, so the constrained MLE is the boundary value 5. Do not use this clipping rule blindly for a different likelihood; derive it from that likelihood's shape."
+    },
+    {
+     "t": "step",
+     "h": "A discrete parameter space — compare likelihoods, not derivatives",
+     "body": "If X₁,…,Xₙ are iid N(μ,1) but μ is restricted to the integers, the likelihood is proportional to exp{−½Σ(xᵢ−μ)²}. Maximising it is equivalent to choosing the integer closest to x̄. If x̄ lies exactly halfway between two integers, both are MLEs. For a parameter restricted to {1,2}, compare L(1) and L(2); the threshold is x̄=1.5."
+    },
+    {
+     "t": "trap",
+     "h": "Three different questions — existence, uniqueness and unbiasedness",
+     "body": "A maximiser may exist but not be unique; it may fail to exist if the supremum is approached only at an excluded boundary; and even a unique MLE need not be unbiased. Check the parameter space and the likelihood before differentiating. The CSIR NET papers test all three distinctions, including a discrete two-point parameter space and a likelihood with multiple maximisers."
     }
    ],
    "id": "s7",
@@ -639,11 +659,14 @@
     "That gives the shape on screen: flat zero, a vertical cliff at x₍ₙ₎, then a curve decreasing for the rest of its life.",
     "Set the derivative to zero and you get −n·θ^(−n−1) = 0, which has no solution. The derivative is negative everywhere the likelihood is positive. Nothing is wrong with your algebra — the method simply does not apply, because the support depends on θ.",
     "The maximum is at the cliff edge: θ̂ = x₍ₙ₎, the sample maximum. Read it off the picture, not off a derivative.",
-    "This estimator is biased low — it can never exceed the true θ, and almost surely falls short, with E[θ̂] = nθ/(n+1). The unbiased correction is (n+1)/n · x₍ₙ₎, which is not the MLE."
+    "This estimator is biased low — it can never exceed the true θ, and almost surely falls short, with E[θ̂] = nθ/(n+1). The unbiased correction is (n+1)/n · x₍ₙ₎, which is not the MLE.",
+    "A second support-dependent example appears in the CSIR NET Methods of Estimation collection (Feb 2022, Question 10). Let X₁,…,Xₙ be iid Uniform(θ−1, θ+1), with θ unknown. The density is 1/2 when θ−1 ≤ xᵢ ≤ θ+1 for every observation, and zero otherwise. Therefore L(θ) = 2⁻ⁿ on the set of θ values satisfying x₍ₙ₎−1 ≤ θ ≤ x₍₁₎+1, and is zero outside it.",
+    "Every θ in that interval gives exactly the same likelihood, so there is not one unique MLE: the entire interval [x₍ₙ₎−1, x₍₁₎+1] is the set of maximum-likelihood estimates, provided the interval is nonempty. It is nonempty precisely when the sample range x₍ₙ₎−x₍₁₎ ≤ 2, as it must be for a sample that can come from a width-2 uniform distribution.",
+    "Exam move: when the support contains θ, first translate the support restrictions into inequalities for θ, intersect them, and then inspect the likelihood on that feasible set. A constant likelihood over the feasible interval means multiple MLEs; a monotone likelihood over a feasible interval means a boundary MLE. Do not force either case into a score equation."
    ],
    "ask": {
-    "q": "Drag θ below the cliff. Why is the likelihood exactly zero there rather than merely small?",
-    "nudge": "What would θ < x₍ₙ₎ say about the value you actually observed?"
+    "q": "For Xᵢ iid Uniform(θ−1, θ+1), why can the MLE be an interval rather than a single number?",
+    "nudge": "Write the two inequalities imposed by the sample minimum and maximum, then notice that the likelihood is constant wherever both hold."
    },
    "id": "s9",
    "scenario": {
@@ -771,6 +794,51 @@
    "answer": "μ̂ = x̄ and σ̂² = Σ(xᵢ−x̄)²/n",
    "check": "Divided by n, not by n−1. The n−1 version is the unbiased estimator s², and it is not the MLE. E[σ̂²] = (n−1)σ²/n, so the MLE understates the variance — by 10% at n = 10. If you wrote n−1 here, that is the same reflex that produced the degrees-of-freedom errors in your error log, and it is worth a line in it now.",
    "id": "s12"
+  },
+  {
+   "kind": "worked",
+   "id": "s12b",
+   "title": "Worked in full — maximum likelihood with a censored lifetime",
+   "mins": 7,
+   "objective": "Build a likelihood correctly when one lifetime is observed exactly and another is only known to exceed its observation time.",
+   "problem": "Battery lifetimes are independent Exponential(rate λ). One battery fails at 3 hours. A second battery is observed for 2 hours and has not failed by the end of observation. Find the MLE of λ and the corresponding mean lifetime.",
+   "steps": [
+    {
+     "say": "Write the contribution from the exact failure time.",
+     "math": "f(3;λ) = λe^(−3λ)",
+     "why": "An exact observed failure contributes the density at its observed time."
+    },
+    {
+     "say": "Write the contribution from the battery that has not failed by 2 hours.",
+     "math": "P(X > 2) = S(2) = e^(−2λ)",
+     "why": "This is right-censoring. We know only that the lifetime exceeds 2; we must not pretend the failure occurred at 2. Its contribution is the survival probability, not f(2;λ)."
+    },
+    {
+     "say": "Multiply the independent contributions.",
+     "math": "L(λ) = λe^(−3λ) · e^(−2λ) = λe^(−5λ),  λ > 0",
+     "why": "The exact failure contributes one factor λ; the two observed exposure periods contribute a total of five hours in the exponential term."
+    },
+    {
+     "say": "Take logs and differentiate.",
+     "math": "ℓ(λ) = log λ − 5λ;   ℓ′(λ) = 1/λ − 5",
+     "why": "The likelihood is simple once the censored observation is represented correctly."
+    },
+    {
+     "say": "Solve and verify the maximum.",
+     "math": "λ̂ = 1/5 = 0.2 per hour;   ℓ′′(λ) = −1/λ² < 0",
+     "why": "The log-likelihood is strictly concave, so this stationary point is the unique global maximum."
+    },
+    {
+     "say": "Convert the rate estimate to the mean lifetime.",
+     "math": "μ̂ = 1/λ̂ = 5 hours",
+     "why": "For an exponential distribution parameterised by rate λ, the mean is 1/λ. State clearly whether the question asks for the rate or the mean."
+    }
+   ],
+   "after": "The exam distinction is exact failure versus right-censoring. An exact failure contributes f(t); a right-censored lifetime contributes P(X>c). Here the observed exposure totals 3+2=5 hours, but only one exact failure contributes a factor λ, so λ̂ = number of exact failures / total exposure = 1/5.",
+   "ask": {
+    "q": "If the second battery had failed exactly at 2 hours instead of being censored, what likelihood would you write?",
+    "nudge": "Both observations would contribute densities, so there would be two factors of λ."
+   }
   },
   {
    "kind": "summary",
