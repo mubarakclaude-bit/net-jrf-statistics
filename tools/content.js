@@ -138,6 +138,14 @@ function check(B) {
     if (!B.papers[paper]) bad.push("a variant bank names paper '" + paper + "' (srcPaper), but seed/pyq_" + paper + "_full.json does not exist");
     else if (!has(paper, +q)) bad.push("a variant bank names question " + q + " of paper '" + paper + "', which is not in " + B.papers[paper].file);
   });
+  // Variant question progress/flags are keyed by question ID in the learner store, across modules.
+  // Therefore IDs must be unique across all variant banks, not merely within each JSON file.
+  const variantIds = {};
+  Object.values(B.D.pools).filter(p => p.kind === "variants").forEach(p => p.items.forEach(q => {
+    if (!q.id) bad.push(p.file + ": variant question has no id");
+    else if (variantIds[q.id]) bad.push("duplicate variant question id '" + q.id + "' in " + variantIds[q.id] + " and " + p.file);
+    else variantIds[q.id] = p.file;
+  }));
   Object.values(B.D.lessons).forEach(l => {
     if (l.anchors === undefined) return;
     if (!Array.isArray(l.anchors)) { bad.push("lesson " + l.id + ": anchors must be an array of { paper, q }"); return; }
