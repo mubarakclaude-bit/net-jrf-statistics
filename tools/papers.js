@@ -17,6 +17,12 @@ const DEFAULT_PAPER = "j26";
 /** "pyq_j26_full" -> "j26"; anything else -> null */
 const paperIdOf = stem => (PAPER_FILE.exec(String(stem)) || [])[1] || null;
 
+/** True only for a genuine full past-paper document, never a practice bank tagged source:"pyq". */
+function isPaperDocument(key, doc) {
+  const stem = String(key).replace(/^qsets\//, "");
+  return /^qsets\//.test(String(key)) && !!paperIdOf(stem) && !!doc && doc.source === "pyq";
+}
+
 /** The question's number within its paper, or 0 when it cannot be read. */
 const questionNumber = item => +((/Q(\d+)\s*$/.exec((item && item.topic) || "") || /-q0*(\d+)$/.exec((item && item.id) || "") || [0, 0])[1]);
 
@@ -33,4 +39,4 @@ function scrubPaper(doc) {
   return changed;
 }
 
-module.exports = { PAPER_FILE, DEFAULT_PAPER, paperIdOf, questionNumber, scrubPaper };
+module.exports = { PAPER_FILE, DEFAULT_PAPER, paperIdOf, isPaperDocument, questionNumber, scrubPaper };
