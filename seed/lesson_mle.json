@@ -315,6 +315,36 @@
      "t": "trap",
      "h": "The error that costs a mark without feeling like an error",
      "body": "Differentiating with respect to x instead of θ. By the time you have written ℓ(θ) your variable is θ. The xᵢ are now constants."
+    },
+    {
+     "t": "def",
+     "h": "When the parameter has only a few allowed values: compare likelihoods",
+     "body": "A likelihood need not be maximised by differentiating. If the parameter space is finite, calculate the likelihood at every allowed value and choose the largest. For a mixture fθ(x)=θφ(x)+(1−θ)g(x), each observation contributes the mixture density, not a choice of one component. With two independent observations, L(θ)=fθ(x₁)fθ(x₂). In the CSIR example with θ∈{0,1/2,1}, g(x)=½e^(−|x|), and observations 0 and 2: L(0)=½·(e^(−2)/2)≈0.03383; L(1/2)=[φ(0)+½]/2·[φ(2)+e^(−2)/2]/2≈0.02734; L(1)=φ(0)φ(2)≈0.02154. The largest value is at θ=0. Do not use a continuous score equation when only three parameter values are permitted."
+    },
+    {
+     "t": "note",
+     "h": "Source PYQ: annular support with θ>1 (February 2022, Q16)",
+     "body": "This is a parameter-dependent-support problem, so the usual score equation is not the right tool. Put Rᵢ=Xᵢ²+Yᵢ², Rmin=min Rᵢ and Rmax=max Rᵢ. The likelihood is π⁻ⁿ when θ≤Rmin and Rmax≤θ+1, and zero otherwise. The admissible maximisers are [Rmax−1,Rmin]∩(1,∞). Since a valid sample has Rmin>1 and Rmax−Rmin≤1, θ̂=Rmin is always admissible. The supplied key marks statement 1, but the direct likelihood and the restriction θ>1 make statement 2 the universally valid choice. Always intersect a likelihood interval with the actual parameter space."
+    },
+    {
+     "t": "def",
+     "h": "Integer-valued parameter: choose the nearest allowed value",
+     "body": "The likelihood can be maximised over a discrete parameter space even when it contains infinitely many values. If X₁,…,Xₙ are independent N(θ,1) and θ must be an integer, then L(θ) is proportional to exp{−½Σ(Xᵢ−θ)²}. Use Σ(Xᵢ−θ)²=Σ(Xᵢ−X̄)²+n(X̄−θ)². The first term is constant in θ, so choose the integer that minimises (X̄−θ)²: the integer nearest to X̄. If X̄ is exactly halfway between two integers, both are MLEs. Do not report X̄ itself unless it is an allowed integer."
+    },
+    {
+     "t": "def",
+     "h": "A constrained normal mean: project the unconstrained MLE",
+     "body": "If X₁,…,Xₙ are iid N(μ,1) but the parameter space is μ≥0, the unrestricted MLE is X̄. The constrained likelihood is maximised at the allowed value closest to X̄, so μ̂=max(X̄,0). This is a projection onto the parameter space. It is not unbiased: at μ=0, E[max(X̄,0)]>0. It is consistent because X̄→ᵖμ and the map x↦max(x,0) is continuous and equals μ at every allowed μ≥0. The sample mean remains sufficient even though the parameter space is restricted."
+    },
+    {
+     "t": "def",
+     "h": "Geometric data: an indicator estimator and the likelihood estimator",
+     "body": "Use the one-based geometric convention P(X=k)=p(1−p)^(k−1), k=1,2,… . Define Iᵢ=1{Xᵢ=1}. Then Iᵢ~Bernoulli(p), so f=ΣIᵢ~Binomial(n,p). Therefore f/n is unbiased for p and Var(f/n)=p(1−p)/n. For the full geometric sample, the likelihood is L(p)=pⁿ(1−p)^(ΣXᵢ−n). Differentiating its log gives p̂_MLE=n/ΣXᵢ. Thus the indicator proportion is unbiased but is not the MLE in general. State the support convention: a zero-based geometric distribution has a different likelihood."
+    },
+    {
+     "t": "def",
+     "h": "Estimating an exponential rate after rounding observations",
+     "body": "If X~Exponential(rate θ) but only Y=⌊X⌋ is observed, then P(Y=k)=P(k≤X<k+1)=e^(−θk)−e^(−θ(k+1))=(1−e^(−θ))e^(−θk), k=0,1,… . This is a geometric distribution on {0,1,…} with E(Y)=e^(−θ)/(1−e^(−θ))=1/(e^θ−1). By the law of large numbers, Ȳ→1/(e^θ−1). Rearranging gives θ=log(1+1/EY), so θ̂=log(1+1/Ȳ)=log(1+n/ΣYᵢ) is consistent. Replacing n by n+1 in the numerator has the same limit because (n+1)/n→1. Rounding loses information, so do not reuse the unrounded exponential estimator without deriving the observed-data distribution."
     }
    ],
    "id": "s3",
@@ -614,6 +644,16 @@
      "t": "trap",
      "h": "Three different questions — existence, uniqueness and unbiasedness",
      "body": "A maximiser may exist but not be unique; it may fail to exist if the supremum is approached only at an excluded boundary; and even a unique MLE need not be unbiased. Check the parameter space and the likelihood before differentiating. The CSIR NET papers test all three distinctions, including a discrete two-point parameter space and a likelihood with multiple maximisers."
+    },
+    {
+     "t": "note",
+     "h": "Source PYQ: an unbiased and consistent estimator of σ (February 2022, Q19)",
+     "body": "If X∼N(0,σ²), then E|X|=σ√(2/π). Therefore σ̂=√(π/2)·(1/n)Σ|Xᵢ| is unbiased. The strong law of large numbers gives (1/n)Σ|Xᵢ|→σ√(2/π) almost surely, so σ̂→σ: it is also consistent. Do not confuse unbiasedness for σ² with unbiasedness for σ: taking the square root of the usual unbiased sample variance does not produce an unbiased estimator of σ. This is the key distinction tested by February 2022 Q19."
+    },
+    {
+     "t": "def",
+     "h": "Uniform location: mean, median and a blended estimator",
+     "body": "For a sample of odd size m from Uniform(θ−1,θ+1), symmetry gives E(X̄)=E(M)=θ, where M is the sample median. The sample mean is consistent by the law of large numbers. Their variances are Var(X̄)=1/(3m) and Var(M)=1/(m+2). Their covariance is Cov(X̄,M)=(m+1)/[2m(m+2)]. For T=(X̄+M)/2, Var(T)=(7m+5)/[12m(m+2)]. This lies between the two variances: X̄ is more efficient than T, while M is less efficient than T. Thus averaging two unbiased estimators preserves unbiasedness, but does not make the average more efficient than each component. For a uniform location model with known width, the likelihood depends on the sample minimum and maximum; the median alone is not sufficient."
     }
    ],
    "id": "s7",

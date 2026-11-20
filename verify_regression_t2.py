@@ -6,7 +6,14 @@ from collections import Counter
 R=Path(__file__).resolve().parent
 L=json.loads((R/'seed/lesson_rg2.json').read_text())
 P=json.loads((R/'seed/regression_t2_mastery.json').read_text())
-assert L['topicId']=='regression-t2' and len(L['scenes'])==16
+assert L['topicId']=='regression-t2' and len(L['scenes'])==17
+# s16: slope-product, unit-change and through-origin identities (CSIR Methods/Estimation regression PYQs).
+s16=next(s for s in L['scenes'] if s['id']=='s16')
+t16=' '.join(b['h']+' '+b['body'] for b in s16['blocks'])
+assert 'b(Y on X)·b(X on Y)=r²' in t16 and '(−2,−0.4)' in t16 and (F(-2)*F(-2,5))==F(4,5)
+assert 'a*=Ȳ*−bX̄*=cȲ−bcX̄=ca' in t16 and 'ΣXᵢ²=Σ(Xᵢ−X̄)²+nX̄²' in t16
+xs=[F(1),F(2),F(4),F(5)]; xb=sum(xs)/len(xs)
+assert sum(x*x for x in xs)==sum((x-xb)**2 for x in xs)+len(xs)*xb*xb and 1/sum(x*x for x in xs)<1/sum((x-xb)**2 for x in xs)
 M=L['mastery']
 assert M['minQ']==10 and M['pass']==80 and M['draw']==10
 assert M['fmtMin']=={'numeric':70,'multi':70}

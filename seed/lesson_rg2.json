@@ -8,7 +8,7 @@
   "engineName": "Move from the linear model to unbiased estimators, least squares and estimable functions.",
   "version": "4.1",
   "status": "approved",
-  "estMin": 98,
+  "estMin": 106,
   "objectives": [
     "State the Gauss–Markov assumptions and conclusion without adding a normality assumption.",
     "Derive the OLS estimator and its variance–covariance matrix.",
@@ -457,6 +457,11 @@
           "t": "step",
           "h": "Conclusion",
           "body": "No linear unbiased estimator has smaller variance in any linear contrast than OLS. Hence OLS is BLUE."
+        },
+        {
+          "t": "def",
+          "h": "GLS for a common mean when inverse-covariance row sums agree",
+          "body": "For E(Y)=θ·1 and known covariance V, the BLUE/GLS estimator is T=(1ᵀV⁻¹Y)/(1ᵀV⁻¹1). If V⁻¹ has every diagonal entry c and every off-diagonal entry d, each row sum is c+(n−1)d, so V⁻¹1=[c+(n−1)d]1. The GLS weights are therefore equal and T=Ȳ, the ordinary least-squares estimator. Also, a linear function aᵀY has expectation θΣaᵢ; it has zero expectation for every θ exactly when Σaᵢ=0. This is one independent linear restriction on n coefficients, so the space of zero-mean linear contrasts has dimension n−1."
         }
       ],
       "ask": {
@@ -680,6 +685,44 @@
       "ask": {
         "q": "Why is the cross term 2a′d zero?",
         "nudge": "d is built to satisfy d′X = 0."
+      }
+    },
+    {
+      "kind": "theory",
+      "id": "s16",
+      "mins": 8,
+      "title": "Simple-regression slope identities and changes of units",
+      "objective": "Relate the two regression slopes, compare through-origin and intercept estimates, and track coefficient changes under unit conversion.",
+      "blocks": [
+        {
+          "t": "formula",
+          "h": "The two simple-regression slopes",
+          "body": "For ordinary least-squares regressions with an intercept, b(Y on X)=r·sY/sX and b(X on Y)=r·sX/sY, where r is the sample correlation and sX,sY are the sample standard deviations. Multiplying gives b(Y on X)·b(X on Y)=r². The slopes therefore have the same sign (or are both zero), and their product lies between 0 and 1."
+        },
+        {
+          "t": "step",
+          "h": "Check whether a proposed pair is possible",
+          "body": "A proposed pair of regression slopes must have the same sign and a product no greater than one. For example, (−2,−0.4) is possible because the product is 0.8. A positive and a negative slope cannot both come from the same bivariate sample when both regressions include an intercept."
+        },
+        {
+          "t": "formula",
+          "h": "Convert both variables by the same factor",
+          "body": "If X*=cX and Y*=cY for a positive conversion factor c, then the slope is unchanged: Cov(X*,Y*)/Var(X*)=c²Cov(X,Y)/(c²Var(X))=b. The intercept becomes c times the original intercept because a*=Ȳ*−bX̄*=cȲ−bcX̄=ca."
+        },
+        {
+          "t": "note",
+          "h": "If only one variable changes units",
+          "body": "If X*=aX while Y is unchanged, the slope becomes b/a. If Y*=cY while X is unchanged, the slope becomes cb. Always identify which variable or variables are rescaled before deciding what happens to the coefficients."
+        },
+        {
+          "t": "formula",
+          "h": "Through-origin slope versus slope with an intercept",
+          "body": "Under the true model Yᵢ=βXᵢ+εᵢ with fixed Xᵢ and independent errors of variance σ², the through-origin estimator β̂₀=ΣXᵢYᵢ/ΣXᵢ² has variance σ²/ΣXᵢ². The usual slope with an intercept β̂₁ has variance σ²/Σ(Xᵢ−X̄)². Since ΣXᵢ²=Σ(Xᵢ−X̄)²+nX̄², β̂₀ has the smaller variance when X̄≠0. Both are unbiased under the stated true through-origin model."
+        }
+      ],
+      "ask": {
+        "q": "If both X and Y are multiplied by the same positive conversion factor, what happens to the fitted slope and intercept?",
+        "nudge": "Compare how covariance and variance scale, then use intercept=Ȳ−bX̄."
       }
     },
     {
