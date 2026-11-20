@@ -10,8 +10,8 @@ const malformed=await worker.fetch(new Request("https://processor/process",{meth
 assert.equal(malformed.status,400);
 const {auditSource}=await import("../src/audit.js");
 const aud=auditSource({pages:[{page:1,text:"Question 1. Find the unbiased estimator of variance based on independent normal observations."}]});
-assert.equal(aud.question_candidates.length,1);assert.equal(aud.question_candidates[0].page,1);
+assert.equal(aud.segments.length,1);assert.equal(aud.segments[0].page,1);assert.ok(aud.segments[0].labels.includes("question_or_prompt"));
 const {mapText}=await import("../src/mapper.js");
-const mapped=mapText("Find the maximum likelihood estimator and sufficient statistic.",{modules:[{id:"inference",paper:2,topics:[{id:"inference-t4"}]}]});
-assert.equal(mapped.suggestions[0].module,"inference");assert.ok(Array.isArray(mapped.suggestions[0].topic_candidates));
+const mapped=mapText("Explain matrix eigenvalue properties.",{items:[{id:"topic-a",name:"Matrix eigenvalues",keywords:["eigenvalue"]}]});
+assert.equal(mapped.candidates[0].id,"topic-a");
 console.log("processor smoke and heuristic tests passed");
