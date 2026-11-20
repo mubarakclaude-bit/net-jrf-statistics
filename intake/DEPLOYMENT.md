@@ -1,21 +1,22 @@
 # Cloudflare Provisioning and Deployment Runbook
 
 ## Owner authorization
-Create private R2 buckets `net-jrf-private-source` and `net-jrf-private-artifacts`, D1 `net-jrf-intake-jobs`, Queue `net-jrf-source-processing`, and two Workers.
+Provision private R2 buckets for source and artifacts, D1 intake jobs, processing Queue, and two Workers. Enforce owner-only Cloudflare Access before deployment.
 
 ### Intake Worker
-- Configure intake bindings from `intake/wrangler.toml`, replace D1 ID.
+- Configure bindings from `intake/wrangler.toml`; replace D1 IDs and queue bindings.
 - Apply `schema.sql`.
 - Set secret `INTAKE_TOKEN`.
-- Configure owner-only Cloudflare Access for portal and worker routes.
-- Deploy only after security/cost review.
+- Configure owner-only Access and review upload limits, scanning and retention.
+- Deploy only after security and cost review.
 
 ### Processor Worker
 - Deploy separately from `intake/processor/`.
-- Bind source bucket (prefer read-only scoped access) and private artifact bucket.
-- Set secrets `PROCESSOR_TOKEN` (matching intake's token), `EXTRACTOR_TOKEN`.
-- Configure `EXTRACTOR_URL` only for a reviewed, trusted extraction service.
-- Configure intake `PROCESSOR_URL` to the processor endpoint and `PROCESSOR_TOKEN` as a secret.
+- Bind source storage and private artifact storage.
+- Set `PROCESSOR_TOKEN`, `EXTRACTOR_TOKEN`.
+- Configure reviewed trusted `EXTRACTOR_URL`.
+- Configure optional trusted workspace taxonomy/resource/output variables.
+- Set intake `PROCESSOR_URL` and processor token.
 
 ## Deployment commands (not executed)
 From intake directory:
@@ -33,12 +34,13 @@ npx wrangler deploy
 
 ## Smoke checks
 1. Health endpoints return service identifiers.
-2. Unauthorized processor/intake requests return 401.
-3. Upload small valid document and confirm 202/job ID.
-4. Re-upload same document; dedupe returns original job.
-5. Processor hash validation and extraction adapter run, artifact lands in private R2.
+2. Unauthorized requests are rejected.
+3. Upload supported file and confirm durable job ID.
+4. Duplicate upload is deduplicated.
+5. Adapter processing and private artifacts confirmed.
 6. Status/event trail, retry and failure handling reviewed.
-7. R2 public access disabled; Access gate enforced.
+7. R2 is private and Access gate enforced.
+8. Test scanning/quarantine, retention, deletion and cancellation.
 
 ## Current boundary
-The processor currently performs **extraction only** (through a configured adapter) and persists page-indexed provenance. Source audit, Paper 2 syllabus mapping, coverage-gap analysis, authoring, numerical/independent verification, packaging, and draft PR generation are still not implemented. Do not accept sensitive documents until owner access policies, scanning/quarantine, retention, sandboxing, monitoring, and deployment verification are in place.
+This scaffold is not production-ready or deployed. Extraction requires a provisioned adapter. Coverage is now wired as optional configured analysis; output authoring, verification, export, and repository PR automation are not yet implemented. Owner Access, scanning/quarantine, retention, sandboxing, monitoring, deployment verification and security review are required before accepting sensitive documents.
