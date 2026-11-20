@@ -10,7 +10,7 @@ const db={prepare(sql){return {bind(...args){return {first:async()=>{
  if(sql.startsWith("INSERT INTO intake_events")){state.events.push(args);return {meta:{changes:1}};}
  if(sql.includes("SET status='blocked_infrastructure'")){const [updated,id]=args;if(state.job?.id===id){state.job.status="blocked_infrastructure";state.job.stage="intake";state.job.updated_at=updated;state.job.error_code="intake_enqueue_failed";return {meta:{changes:1}};}}
  return {meta:{changes:0}};
-}};}}};
+}};}};
 const bucket={put:async(key,bytes)=>state.objects.set(key,bytes),delete:async key=>state.objects.delete(key)};
 const queue={send:async()=>{throw new Error("simulated queue unavailable")}};
 const env={INTAKE_TOKEN:"secret",JOBS_DB:db,SOURCE_BUCKET:bucket,PROCESSING_QUEUE:queue};
