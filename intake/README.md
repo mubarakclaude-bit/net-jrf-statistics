@@ -1,21 +1,17 @@
-# Intake Worker (MVP scaffold)
+# Intake Worker
 
-This is a private, owner-authenticated intake API scaffold. It accepts PDFs, stores them in private R2, records durable jobs in D1, and dispatches processing to a Queue. The consumer currently checkpoints a safe placeholder; extraction/authoring/GitHub PR stages are not implemented yet.
-
-## Local/deployment setup
-
-1. Create Cloudflare Worker, R2 bucket, D1 database and Queue.
-2. Apply `schema.sql` to D1.
-3. Bind `SOURCE_BUCKET`, `JOBS_DB`, `PROCESSING_QUEUE` in `wrangler.toml`.
-4. Set `INTAKE_TOKEN` as a Worker secret (do not put in source).
-5. Configure `MAX_UPLOAD_BYTES` and allowed origin.
-6. Deploy only after reviewing Cloudflare account scope and costs.
+Owner-authenticated upload/status API scaffold. Accepts PDFs, stores them privately in R2, records jobs/events in D1 and dispatches a queue message. It is not production-ready.
 
 ## API
+- `GET /health`
+- `GET /`: upload/status portal (protect with owner-only Cloudflare Access before use)
+- `POST /upload`: bearer-token authenticated multipart PDF; 20 MB hard cap, signature check, SHA-256 deduplication.
+- `GET /jobs/{id}`: bearer-authenticated job/event status.
 
-- `GET /health`: health check (no secrets exposed).
-- `POST /upload`: requires `Authorization: Bearer <INTAKE_TOKEN>`, multipart `file`; PDF only.
+## Infrastructure
+See `DEPLOYMENT.md`. Bind private R2, D1, Queue. Queue consumer dispatches the full processor contract to `PROCESSOR_URL` with `PROCESSOR_TOKEN`.
 
-No source PDFs are written to Git. Queue processing is idempotent using job ID and stage checkpoints. This scaffold is not yet production-ready: add account/domain authentication, malware scanning, retention, observability, and deployment review before accepting real documents.
+## Processor
+A new `processor/` worker scaffold accepts jobs, verifies source hash, sends the PDF to the configured extractor adapter and stores page-indexed provenance in a private artifact bucket. It stops after extraction; later content-production stages are not implemented. No source PDFs are committed.
 
-See `docs/AUTONOMOUS_SOURCE_INTAKE.md` for full target architecture.
+Before deployment: owner identity gate, malware quarantine, restricted extractor, data retention, logging/observability, secret rotation and security review.
