@@ -40,7 +40,7 @@ class DB {
                 db.job.updated_at=updated;db.job.dispatch_lease_token=null;db.job.dispatch_lease_until=null;changes=1;
               }
             } else if(sql.includes("SET status=?,stage='dispatch'")) {
-              const [status,attempts,updated,message,id,token]=args;
+              const [status,attempts,updated,code,message,id,token]=args;
               if(id===db.job.id&&token===db.job.dispatch_lease_token) {
                 db.job.status=status;db.job.attempts=attempts;db.job.updated_at=updated;db.job.error_code=code;db.job.error_message=message;db.job.dispatch_lease_token=null;db.job.dispatch_lease_until=null;changes=1;
               }
