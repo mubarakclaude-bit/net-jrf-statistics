@@ -1,0 +1,10 @@
+import assert from "node:assert/strict";
+const worker=(await import("../src/index.js")).default;
+const health=await worker.fetch(new Request("https://intake/health"),{});
+assert.equal(health.status,200);
+assert.deepEqual(await health.json(),{ok:true,service:"intake"});
+const unauthorized=await worker.fetch(new Request("https://intake/jobs/abc"),{},{});
+assert.equal(unauthorized.status,401);
+const denied=await worker.fetch(new Request("https://intake/upload",{method:"POST"}),{INTAKE_TOKEN:"secret"});
+assert.equal(denied.status,401);
+console.log("intake smoke tests passed");
