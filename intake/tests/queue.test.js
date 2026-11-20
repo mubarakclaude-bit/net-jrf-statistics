@@ -13,7 +13,7 @@ class DB {
         return {
           first:async()=>{
             if(sql.startsWith("SELECT id,status,source_sha256"))return {...db.job};
-            if(sql.startsWith("SELECT id,status FROM intake_jobs"))return {id:db.job.id,status:db.job.status};
+            if(sql.startsWith("SELECT id,status FROM intake_jobs"))return {id:db.job.id,status:db.job.status,source_sha256:db.job.source_sha256};
             if(sql.startsWith("SELECT status,attempts"))return {status:db.job.status,attempts:db.job.attempts};
             return null;
           },
@@ -66,7 +66,13 @@ class DB {
 }
 
 const db=new DB();
-const env={JOBS_DB:db,PROCESSOR_URL:"https://processor/process",PROCESSOR_TOKEN:"secret",PROCESSOR_CALLBACK_TOKEN:"callback"};
+const extractBytes=new TextEncoder().encode("test artifact");
+const digest=await crypto.subtle.digest("SHA-256",extractBytes);
+const extractHash=[...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,"0")).join("");
+const manifest={schema_version:1,job_id:db.job.id,source_sha256:db.job.source_sha256,artifacts:[{key:`jobs/${db.job.id}/extract.json`,sha256:extractHash,size:extractBytes.byteLength}]};
+const artifacts=new Map([[ `jobs/${db.job.id}/manifest.json`,JSON.stringify(manifest)],[`jobs/${db.job.id}/extract.json`,extractBytes]]);
+const artifactBucket={get:async key=>{const v=artifacts.get(key);if(!v)return null;if(typeof v==="string")return {text:async()=>v};return {arrayBuffer:async()=>v.buffer.slice(v.byteOffset,v.byteOffset+v.byteLength)};}};
+const env={JOBS_DB:db,ARTIFACT_BUCKET:artifactBucket,PROCESSOR_URL:"https://processor/process",PROCESSOR_TOKEN:"secret",PROCESSOR_CALLBACK_TOKEN:"callback"};
 const workerFetch=globalThis.fetch;let callbackResult;
 globalThis.fetch=async()=>{
   // Simulate a completion callback arriving while the dispatch request is still in flight.
