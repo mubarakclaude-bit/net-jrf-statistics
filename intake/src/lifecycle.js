@@ -1,6 +1,6 @@
 // Central lifecycle rules for the generic intake ledger.
 const allowed={
- accepted:["queued","blocked_infrastructure","cancelled"],
+ accepted:["queued","processing","failed_retryable","blocked_infrastructure","cancelled"],
  queued:["processing","failed_retryable","failed_terminal","blocked_infrastructure","cancelled"],
  processing:["completed","failed_retryable","failed_terminal","blocked_infrastructure","cancelled"],
  failed_retryable:["queued","processing","failed_terminal","cancelled"],
