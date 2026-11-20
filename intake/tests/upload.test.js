@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import worker from "../src/index.js";
 
+async function main(){
 const state={job:null,events:[],objects:new Map()};
 const db={prepare(sql){return {bind(...args){return {first:async()=>{
  if(sql.startsWith("SELECT id,status FROM intake_jobs WHERE source_sha256"))return state.job?{id:state.job.id,status:state.job.status}:null;
@@ -23,3 +24,5 @@ assert.equal(state.job.status,"blocked_infrastructure");
 assert.equal(state.objects.has(state.job.object_key),true,"source object must remain available for recovery");
 assert.ok(state.events.some(e=>e[1]==="intake_enqueue_blocked"));
 console.log("upload acceptance recovery tests passed");
+}
+main().catch(err=>{console.error(err);process.exitCode=1;});
