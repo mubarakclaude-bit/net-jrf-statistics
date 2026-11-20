@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Tests tools/papers.js: finding papers by file name, reading question numbers, and scrubbing the candidate's own answers.
  *   node tests/papers.test.js                                                                                           */
-const { paperIdOf, questionNumber, scrubPaper, DEFAULT_PAPER } = require("../tools/papers");
+const { paperIdOf, questionNumber, scrubPaper, DEFAULT_PAPER, isPaperDocument } = require("../tools/papers");
 let failed = 0, total = 0;
 const expect = (name, got, want) => { total++; const ok = JSON.stringify(got) === JSON.stringify(want); if (!ok) { failed++; console.log("FAIL " + name + "  — got " + JSON.stringify(got) + ", wanted " + JSON.stringify(want)); } else console.log("ok   " + name); };
 
@@ -9,6 +9,10 @@ expect("the original paper is j26", DEFAULT_PAPER, "j26");
 expect("pyq_j26_full is paper j26", paperIdOf("pyq_j26_full"), "j26");
 expect("pyq_d25_full is paper d25", paperIdOf("pyq_d25_full"), "d25");
 expect("a variant bank is not a paper", paperIdOf("regression_pyq_variants"), null);
+expect("CSIR practice bank name is not a full-paper file", paperIdOf("csir_estimation_pyq"), null);
+expect("actual full paper with pyq source is scrubbed", isPaperDocument("qsets/pyq_j26_full", { source: "pyq" }), true);
+expect("practice bank with pyq label is not scrubbed", isPaperDocument("qsets/csir_estimation_pyq", { source: "pyq" }), false);
+expect("a full-paper filename with a non-pyq source is not scrubbed", isPaperDocument("qsets/pyq_j26_full", { source: "practice" }), false);
 expect("a file that merely contains the words is not a paper", paperIdOf("pyq_j26_full_old"), null);
 expect("capitals are not a paper id", paperIdOf("pyq_J26_full"), null);
 expect("a mastery pool is not a paper", paperIdOf("regression_t5_mastery"), null);
