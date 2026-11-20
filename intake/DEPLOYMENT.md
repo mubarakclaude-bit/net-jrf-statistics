@@ -37,7 +37,7 @@ These are instructions only; not executed here.
 
 ## Current functional limitation
 
-The queue consumer deliberately marks the job as `needs_worker` with `worker_scaffold`. It is not yet connected to PDF extraction/OCR, syllabus mapping, question auditing, solution generation, independent review, packaging, or GitHub PR creation. These stages require a processing runtime and configured AI/provider integration, followed by tests and deployment.
+The queue consumer forwards jobs to a configured processor endpoint. If the processor URL/token are absent, it records `blocked_infrastructure` and stops dispatch. The processor is not yet implemented or deployed: PDF extraction/OCR, syllabus mapping, question auditing, solution generation, independent review, packaging, and GitHub PR creation remain pending.
 
 ## Security and retention before accepting confidential material
 
