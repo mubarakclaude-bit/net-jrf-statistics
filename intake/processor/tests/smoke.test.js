@@ -40,3 +40,13 @@ assert.equal(bounded.segments[0].text.length,12000);
 assert.equal(bounded.review_required,true);
 const stable=auditSource({pages:[{page:2,text:"Explain a general concept and discuss its practical implications in detail."}]});
 assert.equal(stable.segments[0].segment_id,"segment-1");
+
+// Processor contract must reject malformed identity and non-job-scoped source keys.
+const validJob="12345678-1234-1234-1234-123456789abc";
+const validHash="a".repeat(64);
+const basePayload={schema_version:1,job_id:validJob,source_sha256:validHash,object_key:"incoming/"+validJob+"/"+validHash+"/source.txt",source_name:"source.txt",source_size:12};
+const invalidKeyPayload={...basePayload,object_key:"incoming/other/"+validHash+"/source.txt"};
+const invalidKey=await worker.fetch(new Request("https://processor/process",{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer x"},body:JSON.stringify(invalidKeyPayload)}),{PROCESSOR_TOKEN:"x"});
+assert.equal(invalidKey.status,400,"processor rejects source keys outside the job namespace before storage access");
+const malformedId=await worker.fetch(new Request("https://processor/process",{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer x"},body:JSON.stringify({...basePayload,job_id:"../bad"})}),{PROCESSOR_TOKEN:"x"});
+assert.equal(malformedId.status,400,"processor rejects malformed job IDs");
