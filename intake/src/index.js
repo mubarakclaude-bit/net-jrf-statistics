@@ -17,7 +17,8 @@ function auth(request, env) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (request.method === "GET" && url.pathname === "/health") return json({ok:true,service:"intake"});\n    if (request.method === "GET" && url.pathname === "/") return new Response(PORTAL,{headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store"}});
+    if (request.method === "GET" && url.pathname === "/health") return json({ok:true,service:"intake"});
+    if (request.method === "GET" && url.pathname === "/") return new Response(PORTAL,{headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store"}});
     if(request.method==="POST"&&url.pathname==="/internal/processor-result"){if(!env.PROCESSOR_CALLBACK_TOKEN||request.headers.get("authorization")!==`Bearer ${env.PROCESSOR_CALLBACK_TOKEN}`)return json({error:"unauthorized"},401);let payload;try{payload=await request.json()}catch{return json({error:"invalid_json"},400)}if(!payload.job_id||payload.status!=="completed"||payload.stage!=="analysis"||!Array.isArray(payload.artifact_keys))return json({error:"invalid_contract"},400);const existing=await env.JOBS_DB.prepare("SELECT id FROM intake_jobs WHERE id=?").bind(payload.job_id).first();if(!existing)return json({error:"not_found"},404);const time=now();const details=JSON.stringify({summary:payload.summary||null,artifact_keys:Array.isArray(payload.artifact_keys)?payload.artifact_keys.slice(0,20):[]});await env.JOBS_DB.prepare("UPDATE intake_jobs SET status=?,stage=?,updated_at=?,error_code=?,error_message=? WHERE id=?").bind(payload.status,payload.stage,time,payload.error_code||null,payload.error_message||null,payload.job_id).run();await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(payload.job_id,"processor_result",payload.stage,details,time).run();return json({accepted:true});}
     if (!auth(request, env)) return json({error:"unauthorized"},401);
     if (request.method === "GET" && url.pathname.startsWith("/jobs/")) {
@@ -33,7 +34,10 @@ export default {
     if (!form) return json({error:"invalid_multipart"},400);
     const file = form.get("file");
     if (!(file instanceof File)) return json({error:"missing_file"},400);
-    const configuredLimit = Number(env.MAX_UPLOAD_BYTES);\n    const limit = Number.isFinite(configuredLimit) && configuredLimit > 0 ? Math.min(configuredLimit, MAX_UPLOAD_BYTES) : MAX_UPLOAD_BYTES;\n    const contentLength = Number(request.headers.get("content-length"));\n    if (Number.isFinite(contentLength) && contentLength > limit + 1024 * 1024) return json({error:"file_size_limit"},413);
+    const configuredLimit = Number(env.MAX_UPLOAD_BYTES);
+    const limit = Number.isFinite(configuredLimit) && configuredLimit > 0 ? Math.min(configuredLimit, MAX_UPLOAD_BYTES) : MAX_UPLOAD_BYTES;
+    const contentLength = Number(request.headers.get("content-length"));
+    if (Number.isFinite(contentLength) && contentLength > limit + 1024 * 1024) return json({error:"file_size_limit"},413);
     if (file.size <= 0 || file.size > limit) return json({error:"file_size_limit"},413);
     const name = (file.name || "source.pdf").replace(/[\\x00-\\x1f\\x7f]/g,"").slice(0,180) || "source.pdf";
     const allowedTypes=new Set(["application/pdf","text/plain","text/markdown","text/csv","text/html","application/rtf","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/vnd.openxmlformats-officedocument.presentationml.presentation","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]);
