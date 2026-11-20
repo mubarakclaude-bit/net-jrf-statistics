@@ -1,3 +1,5 @@
+const PORTAL = `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Private NET JRF Source Intake</title><style>body{font:16px system-ui;max-width:720px;margin:40px auto;padding:0 16px;color:#17202a}input,button{font:inherit;padding:10px;margin:8px 0;width:100%;box-sizing:border-box}button{cursor:pointer}pre{white-space:pre-wrap;word-break:break-word;background:#f3f4f6;padding:12px;border-radius:8px}</style><h1>Source document intake</h1><p>Upload a PDF to the private processing service. Files are not added to the Git repository.</p><label>Intake token<input id="token" type="password" autocomplete="off"></label><label>PDF document<input id="file" type="file" accept="application/pdf"></label><button id="upload">Upload PDF</button><label>Job ID (for status)<input id="job" placeholder="Job ID"></label><button id="status">Check status</button><pre id="out">Ready.</pre><script>const out=document.getElementById('out'),token=()=>document.getElementById('token').value;document.getElementById('upload').onclick=async()=>{const f=document.getElementById('file').files[0];if(!f){out.textContent='Select a PDF first.';return}out.textContent='Uploading…';const d=new FormData();d.append('file',f);try{const r=await fetch('/upload',{method:'POST',headers:{Authorization:'Bearer '+token()},body:d});const j=await r.json();out.textContent=JSON.stringify(j,null,2);if(j.job_id)document.getElementById('job').value=j.job_id}catch(e){out.textContent='Upload failed: '+e}};document.getElementById('status').onclick=async()=>{const id=document.getElementById('job').value.trim();if(!id){out.textContent='Enter a job ID';return}try{const r=await fetch('/jobs/'+encodeURIComponent(id),{headers:{Authorization:'Bearer '+token()}});out.textContent=JSON.stringify(await r.json(),null,2)}catch(e){out.textContent='Status failed: '+e}};</script></html>`;
+
 const MAX_UPLOAD_BYTES = 20 * 1024 * 1024;
 const now = () => new Date().toISOString();
 const json = (data, status=200) => new Response(JSON.stringify(data), {
@@ -15,7 +17,7 @@ function auth(request, env) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (request.method === "GET" && url.pathname === "/health") return json({ok:true,service:"intake"});
+    if (request.method === "GET" && url.pathname === "/health") return json({ok:true,service:"intake"});\n    if (request.method === "GET" && url.pathname === "/") return new Response(PORTAL,{headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store"}});
     if (!auth(request, env)) return json({error:"unauthorized"},401);
     if (request.method === "GET" && url.pathname.startsWith("/jobs/")) {
       const id = url.pathname.slice("/jobs/".length);
