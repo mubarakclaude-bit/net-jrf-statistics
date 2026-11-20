@@ -25,7 +25,7 @@ export default {
       let payload;try{payload=await request.json()}catch{return json({error:"invalid_json"},400)}
       const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       if(!uuid.test(payload.job_id||"")||payload.status!=="completed"||payload.stage!=="analysis"||!payload.attempt_id||!Number.isSafeInteger(payload.fencing_token)||typeof payload.manifest_key!=="string"||!Array.isArray(payload.artifact_keys)||payload.artifact_keys.length<1||payload.artifact_keys.length>20||payload.artifact_keys.some(k=>typeof k!=="string"||k.length>512||!k.startsWith(`jobs/${payload.job_id}/attempts/`)))return json({error:"invalid_contract"},400);
-      const existing=await env.JOBS_DB.prepare("SELECT id,status FROM intake_jobs WHERE id=?").bind(payload.job_id).first();
+      const existing=await env.JOBS_DB.prepare("SELECT id,status,source_sha256 FROM intake_jobs WHERE id=?").bind(payload.job_id).first();
       if(!existing)return json({error:"not_found"},404);
       if(existing.status==="completed")return json({accepted:true,duplicate:true});
       if(existing.status!=="processing"||!canTransition(existing.status,"completed"))return json({error:"invalid_transition"},409);
