@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Practice variants of the June 2026 Paper 2 questions that are identified by official question ID
-(seed/<module>_pyq_j26_rs.json). Batch 1: thirteen computational questions, ten variants each.
+(seed/<module>_pyq_j26_rs.json). Batch 1: thirteen computational questions; batch 2: fifteen more. Ten variants each.
 
 Every number is computed here, never typed: each generator returns the stem, the correct option, three distractors that
 come from named, common mistakes, and an explanation built from the same computed values. The script refuses to write a
@@ -267,13 +267,330 @@ def g_mgf():             # 55125114508
         out.append((stem, fr(val), dis[:3], why))
     return out
 
+# ------------------------------------------------------------------------------------------------- batch 2 generators
+def powstr(a, e):
+    """a^e shown as an integer when e is a whole number, otherwise a^(e)."""
+    e = F(e)
+    if e.denominator == 1: return fr(F(a) ** e.numerator) if e >= 0 else "1/%s" % fr(F(a) ** (-e.numerator))
+    return "%s^(%s)" % (fr(a), fr(e))
+
+def g_maxexp():          # 55125114523
+    out = []
+    for a, c, kind in [(2,1,"max"),(3,2,"max"),(2,4,"max"),(5,2,"min"),(10,1,"max"),(2,3,"min"),(3,4,"max"),(4,3,"max"),(7,2,"min"),(2,5,"max")]:
+        if kind == "max":
+            corr = powstr(a, F(c * c, 4)); dis = ["1", powstr(a, F(c * c, 2)), powstr(a, c * c)]
+            stem = "The maximum value of f(x) = %d^(x(%d − x)), 0 ≤ x ≤ %d, is" % (a, c, c)
+            why = ("Because %d > 1, %d^t increases with t, so f is largest where the exponent t = x(%d − x) is largest. That downward parabola peaks at its midpoint "
+                   "x = %s, where t = %s. So the maximum is %d^(%s) = %s. Trap: the endpoints x = 0 and x = %d give t = 0 and f = 1, which is the minimum, not the maximum.") % (
+                   a, a, c, fr(F(c, 2)), fr(F(c * c, 4)), a, fr(F(c * c, 4)), corr, c)
+        else:
+            corr = powstr(a, -F(c * c, 4)); dis = ["1", powstr(a, F(c * c, 4)), powstr(a, -F(c * c, 2))]
+            stem = "The minimum value of f(x) = %d^(x(x − %d)), 0 ≤ x ≤ %d, is" % (a, c, c)
+            why = ("Because %d > 1, f is smallest where the exponent t = x(x − %d) is smallest. That upward parabola is lowest at x = %s, where t = −%s. "
+                   "So the minimum is %d^(−%s) = %s. Trap: forgetting the minus sign gives %s, which is larger than f(0) = 1.") % (
+                   a, c, fr(F(c, 2)), fr(F(c * c, 4)), a, fr(F(c * c, 4)), corr, powstr(a, F(c * c, 4)))
+        out.append((stem, corr, dis, why))
+    return out
+
+def xm(r):
+    """(x − r) written properly for negative r and r = 0."""
+    r = F(r); return "x" if r == 0 else ("(x + %s)" % fr(-r) if r < 0 else "(x − %s)" % fr(r))
+def par(v): v = F(v); return "(%s)" % fr(v) if v < 0 else fr(v)
+def poly3(s, r1, r2, k):
+    """s·[x³ − (3/2)(r1+r2)x² + 3r1r2·x] + k, written with integer coefficients."""
+    b = F(-3 * (r1 + r2), 2) * s; c = 3 * r1 * r2 * s; a = s
+    def term(coef, pw_, first=False):
+        coef = F(coef)
+        if coef == 0: return ""
+        sign = "−" if coef < 0 else ("" if first else "+")
+        mag = abs(coef); m = "" if (mag == 1 and pw_) else fr(mag)
+        body = m + {3: "x³", 2: "x²", 1: "x", 0: ""}[pw_]
+        return (sign + body) if first else " %s %s" % (sign, body)
+    return term(a, 3, True) + term(b, 2) + term(c, 1) + term(k, 0)
+
+def g_extrema():         # 55125114525
+    COMBOS = ["A, D only", "B, C only", "A, C only", "B, D only"]
+    out = []
+    for s, r1, r2, k in [(1,1,3,-8),(1,2,4,1),(-1,1,3,2),(1,-1,1,5),(1,0,2,-3),(-1,0,4,7),(1,1,5,0),(-1,-1,3,4),(1,-3,1,2),(-1,2,6,-1)]:
+        fx = poly3(s, r1, r2, k)
+        # f'' at r1 is -3(r2 - r1)s: for s > 0, r1 is a local max and r2 a local min
+        corr = "B, C only" if s > 0 else "A, D only"
+        dis = [x for x in COMBOS if x != corr]
+        stem = ("Consider f(x) = %s and the statements: A. x = %s is a point of local minimum. B. x = %s is a point of local maximum. "
+                "C. x = %s is a point of local minimum. D. x = %s is a point of local maximum. Choose the correct answer from the options given below:") % (fx, fr(r1), fr(r1), fr(r2), fr(r2))
+        why = ("f′(x) = %s%s%s, so the critical points are x = %s and x = %s. f″(x) = %s, giving f″(%s) = %s and f″(%s) = %s. "
+               "A negative second derivative means a local maximum and a positive one a local minimum, so x = %s is a local %s and x = %s a local %s: %s. "
+               "Trap: the sign of the leading coefficient decides which critical point is the maximum.") % (
+               fr(3 * s), xm(r1), xm(r2), fr(r1), fr(r2), "%s(2x %s %s)" % (fr(3 * s), "−" if r1 + r2 >= 0 else "+", fr(abs(r1 + r2))) if r1 + r2 else "%sx" % fr(6 * s),
+               par(r1), fr(3 * s * (r1 - r2)), par(r2), fr(3 * s * (r2 - r1)),
+               fr(r1), "maximum" if s > 0 else "minimum", fr(r2), "minimum" if s > 0 else "maximum", corr)
+        out.append((stem, corr, dis, why))
+    return out
+
+def g_rolle_c():         # 55125114516
+    out = []
+    for a, b, form in [(0,3,1),(0,6,1),(1,4,1),(0,3,2),(2,8,1),(0,9,2),(-3,3,1),(1,7,2),(0,12,1),(-2,4,2)]:
+        if form == 1: fx = "(x − %s)(x − %s)²" % (fr(a), fr(b)); c = F(2 * a + b, 3); other = F(a + 2 * b, 3); dbl = b
+        else: fx = "(x − %s)²(x − %s)" % (fr(a), fr(b)); c = F(a + 2 * b, 3); other = F(2 * a + b, 3); dbl = a
+        fx = fx.replace("x − −", "x + ").replace("(x − 0)", "x")
+        cands = [F(a + b, 2), other, dbl, F(b, 3), F(a + b, 3)]
+        dis = [x for x in dict.fromkeys(fr(v) for v in cands) if x != fr(c)][:3]
+        stem = "For f(x) = %s on [%s, %s], the value c ∈ (%s, %s) given by Rolle's theorem (f′(c) = 0) is" % (fx, fr(a), fr(b), fr(a), fr(b))
+        why = ("f is a polynomial (continuous and differentiable) with f(%s) = f(%s) = 0, so Rolle's theorem applies. The product rule factors f′: "
+               "the double root %s is a root of f′ too, and the other root of f′ is c = %s, which lies strictly inside (%s, %s). "
+               "Trap: x = %s also makes f′ zero, but it is an endpoint, not a point of the open interval; the midpoint %s is not a root of f′.") % (
+               fr(a), fr(b), fr(dbl), fr(c), fr(a), fr(b), fr(dbl), fr(F(a + b, 2)))
+        out.append((stem, fr(c), dis, why))
+    return out
+
+def g_laplace():         # 55125114507
+    out = []
+    for i, lam in enumerate([2, 3, F(1,2), 4, F(1,3), 5, F(3,2), F(2,3), F(1,4), 6]):
+        lam = F(lam)
+        co = lam / 2; cs = "" if co == 1 else ("%s" % ff(co) if co.denominator == 1 else "(%s)" % ff(co))
+        ex = ff(lam) if lam.denominator == 1 else "(%s)" % ff(lam)
+        dens = "%se^(−%s|x|)" % (cs, ex)
+        pair = lambda u, v: "%s, %s" % (fr(u), fr(v))
+        if i % 2 == 0:
+            ask = "E(|X|) and Var(|X|)"; corr = pair(1 / lam, 1 / lam ** 2)
+            dis = [pair(1 / lam, 2 / lam ** 2), pair(lam, lam ** 2), pair(2 / lam, 1 / lam ** 2)]
+            why = ("|X| has density λe^(−λy), y > 0: the two halves of the symmetric Laplace density fold onto an exponential with rate λ = %s. So E|X| = 1/λ = %s and Var|X| = 1/λ² = %s. "
+                   "Trap: Var(X) = 2/λ² = %s is the variance of X itself, not of |X|.") % (fr(lam), fr(1 / lam), fr(1 / lam ** 2), fr(2 / lam ** 2))
+        else:
+            ask = "E(X) and Var(X)"; corr = pair(0, 2 / lam ** 2)
+            dis = [pair(0, 1 / lam ** 2), pair(1 / lam, 2 / lam ** 2), pair(1 / lam, 1 / lam ** 2)]
+            why = ("The density is symmetric about 0, so E(X) = 0. Var(X) = E(X²) = E(|X|²), and |X| is exponential with rate λ = %s, so E(|X|²) = 2/λ² = %s. "
+                   "Trap: 1/λ² = %s is Var(|X|); it misses the (E|X|)² = 1/λ² that X² keeps.") % (fr(lam), fr(2 / lam ** 2), fr(1 / lam ** 2))
+        stem = "Let X have density f(x) = %s, −∞ < x < ∞. Then %s are, respectively," % (dens, ask)
+        out.append((stem, corr, dis, why))
+    return out
+
+def g_wlln():            # 55125114510
+    out = []
+    for i, (mu, s2) in enumerate([(2,4),(2,9),(3,4),(4,25),(4,9),(1,9),(3,16),(5,4),(2,16),(3,25)]):
+        s = math.isqrt(s2); assert s * s == s2, "the CLT statement needs an exact σ"
+        true = ["(1/n)ΣXᵢ →ᵖ %d" % mu, "(1/n)ΣXᵢ² →ᵖ %d" % (s2 + mu * mu), "(√n/%d)(X̄ₙ − %d) →ᵈ N(0, 1)" % (s, mu), "E[(1/(n−1))Σ(Xᵢ − X̄ₙ)²] = %d" % s2]
+        false = ["(1/n)ΣXᵢ →ᵖ %d" % (mu * mu), "(1/n)ΣXᵢ² →ᵖ %d" % s2, "(√n/%d)(X̄ₙ − %d) →ᵈ N(0, 1)" % (s2, mu), "E[(1/n)Σ(Xᵢ − X̄ₙ)²] = %d" % s2][i % 4]
+        k = i % 4; corr = false; dis = true[:k] + true[k + 1:]
+        reason = ["the WLLN sends X̄ₙ to the mean %d, not to its square %d" % (mu, mu * mu),
+                  "(1/n)ΣXᵢ² tends to E(X²) = σ² + μ² = %d + %d = %d, not to %d" % (s2, mu * mu, s2 + mu * mu, s2),
+                  "the CLT standardises by σ = %d, not by σ² = %d" % (s, s2),
+                  "with divisor n the expectation is (n − 1)σ²/n, not σ² = %d; the divisor n − 1 is what makes it unbiased" % s2][k]
+        stem = "Let X₁, X₂, …, Xₙ be iid random variables with mean %d and variance %d. Which of the following statements is incorrect?" % (mu, s2)
+        why = ("Check each statement against a standard result: the WLLN (sample averages tend to population means), the CLT (√n(X̄ₙ − μ)/σ → N(0,1)) and the "
+               "unbiasedness of S² with divisor n − 1. The incorrect one is '%s': %s. Trap: the other three are exactly the standard results.") % (false, reason)
+        out.append((stem, corr, dis, why))
+    return out
+
+BIBDS = [(7,7,3,3,1),(7,7,4,4,2),(6,15,5,2,1),(6,10,5,3,2),(9,12,4,3,1),(13,13,4,4,1),(11,11,5,5,2),(5,10,4,2,1),(5,10,6,3,3),(8,14,7,4,3)]
+def g_bibd():            # 55125114528
+    out = []
+    for v, b, r, k, l in BIBDS:
+        assert r * (k - 1) == l * (v - 1) and b * k == v * r
+        val = r * k * (r - l) ** (v - 1)
+        dis = [str(r * k * (r - l) ** v), str((r - l) ** (v - 1)), str(r * k * (r - l) ** (v - 2))]
+        stem = "N is the incidence matrix of a BIBD with parameters v = %d, b = %d, r = %d, k = %d, λ = %d. The value of |NN′| is" % (v, b, r, k, l)
+        why = ("NN′ has r = %d on the diagonal and λ = %d everywhere else, i.e. NN′ = (r − λ)I + λJ. Its eigenvalues are r + (v − 1)λ = rk = %d (once, eigenvector 1) and "
+               "r − λ = %d (v − 1 = %d times). The determinant is their product: |NN′| = rk(r − λ)^(v−1) = %d × %d^%d = %d. "
+               "Trap: raising r − λ to the power v counts the eigenvalue rk as if it were r − λ.") % (r, l, r * k, r - l, v - 1, r * k, r - l, v - 1, val)
+        out.append((stem, str(val), dis, why))
+    return out
+
+def g_factdf():          # 55125114529
+    out = []
+    for n, r, lay in [(3,2,"crd"),(3,2,"rbd"),(2,3,"crd"),(2,4,"rbd"),(3,3,"crd"),(4,2,"rbd"),(2,5,"crd"),(3,4,"rbd"),(4,2,"crd"),(2,3,"rbd")]:
+        t = 2 ** n; N = t * r
+        crd, rbd = t * (r - 1), (r - 1) * (t - 1)
+        val = crd if lay == "crd" else rbd
+        cands = [rbd if lay == "crd" else crd, N - 1, t - 1, N, r * (t - 1)]
+        dis = [x for x in dict.fromkeys(str(c) for c in cands) if x != str(val)][:3]
+        how = "completely randomized (CRD)" if lay == "crd" else "laid out in %d randomized blocks, one replicate per block" % r
+        stem = "A 2%s factorial experiment is replicated %d times, %s. The error degrees of freedom are" % (sup(n), r, how)
+        why = ("There are 2%s = %d treatment combinations and N = %d observations, so total df = %d and treatment df (all factorial effects) = %d. "
+               "%s Trap: forgetting the block df (or charging block df in a CRD) gives %d.") % (
+               sup(n), t, N, N - 1, t - 1,
+               ("In a CRD the rest is error: %d − %d = %d." % (N - 1, t - 1, crd)) if lay == "crd" else
+               ("Blocks take r − 1 = %d df, so error df = %d − %d − %d = %d = (r − 1)(2%s − 1)." % (r - 1, N - 1, t - 1, r - 1, rbd, sup(n))),
+               rbd if lay == "crd" else crd)
+        out.append((stem, str(val), dis, why))
+    return out
+
+def g_pps():             # 55125114531
+    out = []
+    for X, i in [((2,5,3,8,2),4),((10,20,30,40),2),((4,6,10),1),((3,3,6,12,6),3),((7,1,2),1),((5,15,10,20),4),((1,2,3,4,5,5),5),((12,8,20),1),((6,2,4,8),2),((9,3,3,9,6),1)]:
+        T = sum(X); N = len(X); M = max(X); xi = X[i - 1]
+        val = F(xi, T)
+        cands = [F(1, N), F(xi, N * M), F(xi, M), F(xi, T - xi)]
+        dis = [x for x in dict.fromkeys(fr(c) for c in cands) if x != fr(val)][:3]
+        stem = ("Lahiri's method is used to draw a sample with probability proportional to size, with replacement, from N = %d units with sizes X = (%s). "
+                "The probability that unit %d is selected at any given draw is") % (N, ", ".join(map(str, X)), i)
+        why = ("Lahiri's method picks a unit at random (probability 1/N) and a number between 1 and M = max Xⱼ = %d; it accepts the unit if the number is at most its size, "
+               "otherwise it tries again. Each trial accepts unit i with probability Xᵢ/(NM), so after the repeats P(unit i) = Xᵢ/ΣXⱼ = %d/%d = %s, exactly PPS. "
+               "Trap: Xᵢ/(NM) = %s is the chance of accepting unit %d on one trial, not on a completed draw.") % (M, xi, T, fr(val), fr(F(xi, N * M)), i)
+        out.append((stem, fr(val), dis, why))
+    return out
+
+def combo(letters):
+    letters = sorted(letters)
+    if len(letters) == 4: return "A, B, C, D"
+    return ", ".join(letters) + " only"
+
+def g_poisson_unb():     # 55125114545
+    out = []
+    sets = [[(F(3,10),F(7,10)),(1,1)], [(F(1,2),F(1,2)),(2,-1)], [(1,1),(F(1,4),F(3,4))], [(2,-1),(3,-1)], [(F(2,5),F(3,5)),(F(1,2),F(1,3))],
+            [(F(1,3),F(1,3)),(F(3,2),F(-1,2))], [(F(3,4),F(1,4)),(0,2)], [(F(5,4),F(-1,4)),(F(1,5),F(4,5))], [(F(1,2),F(1,4)),(3,-2)], [(2,0),(F(-1,2),F(3,2))]]
+    for i, ((a, b), (c, d)) in enumerate(sets):
+        def lin(u, v):
+            u, v = F(u), F(v); out_ = []
+            for coef, sym in ((u, "X̄"), (v, "S²")):
+                if coef == 0: continue
+                mag = "" if abs(coef) == 1 else ff(abs(coef))
+                if not out_: out_.append(("−" if coef < 0 else "") + mag + sym)
+                else: out_.append(("− " if coef < 0 else "+ ") + mag + sym)
+            return " ".join(out_)
+        stA = "X̄ is unbiased for λ"; stB = ("X̄² is unbiased for λ²" if i % 3 == 2 else "S² is unbiased for λ"); tB = (i % 3 != 2)
+        stC = "%s is unbiased for λ" % lin(a, b); tC = (a + b == 1)
+        stD = "%s is unbiased for λ" % lin(c, d); tD = (c + d == 1)
+        truth = ["A"] + (["B"] if tB else []) + (["C"] if tC else []) + (["D"] if tD else [])
+        corr = combo(truth)
+        allc = ["A only", "A, B only", "A, C only", "A, D only", "A, B, C only", "A, B, D only", "A, C, D only", "A, B, C, D"]
+        near = sorted((x for x in allc if x != corr), key=lambda x: (abs(len(x) - len(corr)), x))
+        dis = near[:3]
+        stem = ("Let X₁, X₂, …, Xₙ be a random sample from Poisson(λ), with X̄ = (1/n)ΣXᵢ and S² = (1/(n−1))Σ(Xᵢ − X̄)². Consider the statements: "
+                "A. %s. B. %s. C. %s. D. %s. Choose the correct answer from the options given below:") % (stA, stB, stC, stD)
+        why = ("For a Poisson distribution the mean and the variance are both λ, so E(X̄) = λ and E(S²) = λ. A linear combination uX̄ + vS² then has expectation (u + v)λ, "
+               "so it is unbiased exactly when u + v = 1 (negative weights are allowed). %sHere C has u + v = %s and D has u + v = %s, so the true statements are %s. "
+               "Trap: a sum like X̄ + S² has expectation 2λ, not λ.") % (
+               ("E(X̄²) = Var(X̄) + λ² = λ/n + λ², so X̄² is biased for λ². " if not tB else ""), fr(a + b), fr(c + d), corr.replace(" only", ""))
+        out.append((stem, corr, dis, why))
+    return out
+
+def vec(v): return "(" + ", ".join(fr(x) for x in v) + ")"
+def g_stationary():      # 55125114598
+    out = []
+    for p in [F(1,3), F(2,3), F(1,4), F(3,4), F(2,5), F(3,5), F(1,5), F(4,5), F(3,10), F(7,10)]:
+        q = 1 - p; rr = p / q; w = [F(1), rr, rr * rr]; s = sum(w); pi = [x / s for x in w]
+        corr = vec(pi); dis = ["(1/3, 1/3, 1/3)", vec(pi[::-1]), "(1/4, 1/2, 1/4)"]
+        stem = MC % fr(p) + "The stationary distribution (π₁, π₂, π₃) of the chain is"
+        why = ("Solve πP = π. The balance between neighbouring states gives pπ₁ = qπ₂ and pπ₂ = qπ₃, so π ∝ (1, p/q, (p/q)²) with p/q = %s. "
+               "Normalising: π = %s. Trap: (1/3, 1/3, 1/3) would need every column of P to sum to 1 (doubly stochastic), which happens only when p = q = 1/2.") % (fr(rr), corr)
+        out.append((stem, corr, dis, why))
+    return out
+
+def first_return(P, i, n):
+    """f_ii^(n) by the taboo recursion: leave i, avoid i until step n."""
+    v = [P[i][b] if b != i else F(0) for b in range(3)]
+    if n == 1: return P[i][i]
+    for step in range(2, n + 1):
+        nv = [sum(v[a] * P[a][b] for a in range(3)) for b in range(3)]
+        if step == n: return nv[i]
+        nv[i] = F(0); v = nv
+
+def g_first_return():    # 55125114600
+    out = []
+    for p, i, n in [(F(1,3),1,3),(F(1,2),1,2),(F(2,5),2,2),(F(1,4),1,4),(F(3,5),3,3),(F(2,3),2,3),(F(1,2),3,2),(F(1,3),2,4),(F(3,4),1,3),(F(2,5),3,4)]:
+        P = chain(p); val = first_return(P, i - 1, n)
+        cands = [mpow(P, n)[i-1][i-1], first_return(P, i - 1, n - 1), first_return(P, i - 1, n + 1), P[i-1][i-1] ** n, first_return(P, i - 1, n + 2)]
+        dis = [x for x in dict.fromkeys(ff(c) for c in cands) if x != ff(val)][:3]
+        stem = MC % fr(p) + "The probability f%s%s⁽%s⁾ that the chain, started in state %d, returns to state %d for the first time at step %d is" % ("₀₁₂₃"[i], "₀₁₂₃"[i], sup(n), i, i, n)
+        why = ("A first return at step %d means leaving state %d and avoiding it at steps 1 to %d. Carry the path probabilities forward, setting state %d to zero at each step before step %d. "
+               "This gives f%s%s⁽%s⁾ = %s. Trap: p%s%s⁽%s⁾ = %s also counts paths that came back earlier.") % (
+               n, i, n - 1, i, n, "₀₁₂₃"[i], "₀₁₂₃"[i], sup(n), ff(val), "₀₁₂₃"[i], "₀₁₂₃"[i], sup(n), ff(mpow(P, n)[i-1][i-1]))
+        out.append((stem, ff(val), dis, why))
+    return out
+
+TSM = ("Consider yₜ = Φ₁yₜ₋₁ + Φ₂yₜ₋₂ + εₜ − θ₁εₜ₋₁ − θ₂εₜ₋₂, where {εₜ} is white noise with variance 1. ")
+def tri(a1, a2): return (a1 + a2 < 1) and (a2 - a1 < 1) and (abs(a2) < 1)
+def g_statinv():         # 55125114603
+    CAT = ["Both stationary and invertible", "Stationary but not invertible", "Invertible but not stationary", "Neither stationary nor invertible"]
+    out = []
+    for f1, f2, t1, t2 in [(F(4,10),F(3,10),F(6,10),F(4,10)),(F(5,10),F(2,10),F(3,10),F(2,10)),(F(1,2),F(1,2),F(1,2),F(1,4)),(F(-3,10),F(4,10),F(1,2),F(6,10)),
+                           (F(6,10),F(5,10),F(7,10),F(5,10)),(F(2,10),F(1,10),F(-4,10),F(3,10)),(F(1,10),F(-12,10),F(2,10),F(1,10)),(F(3,10),F(3,10),F(-8,10),F(4,10)),
+                           (F(9,10),F(2,10),F(-3,10),F(-1,10)),(F(-5,10),F(-2,10),F(2,10),F(11,10))]:
+        st, iv = tri(f1, f2), tri(t1, t2)
+        corr = CAT[0 if st and iv else 1 if st else 2 if iv else 3]; dis = [c for c in CAT if c != corr]
+        stem = TSM + "If Φ₁ = %s, Φ₂ = %s, θ₁ = %s, θ₂ = %s, then the process is" % tuple(fr(x) for x in (f1, f2, t1, t2))
+        why = ("Stationarity depends only on the AR part and invertibility only on the MA part. For a second-order polynomial 1 − a₁z − a₂z², both roots lie outside "
+               "the unit circle exactly when a₁ + a₂ < 1, a₂ − a₁ < 1 and |a₂| < 1. AR: %s + %s = %s, %s − %s = %s, |Φ₂| = %s → %s. MA: %s + %s = %s, %s − %s = %s, |θ₂| = %s → %s. "
+               "So the process is: %s. Trap: an MA part never affects stationarity, and an AR part never affects invertibility.") % (
+               fr(f1), par(f2), fr(f1 + f2), fr(f2), par(f1), fr(f2 - f1), fr(abs(f2)), "stationary" if st else "not stationary",
+               fr(t1), par(t2), fr(t1 + t2), fr(t2), par(t1), fr(t2 - t1), fr(abs(t2)), "invertible" if iv else "not invertible", corr.lower())
+        out.append((stem, corr, dis, why))
+    return out
+
+def g_pacf():            # 55125114607
+    CAT = ["α(h) = 0 for all h ≥ 1", "α(h) = 0 for all h ≥ 2", "α(h) = 0 for all h ≥ 3", "α(h) ≠ 0 for all h ≥ 1"]
+    out = []
+    for f1, f2, t1 in [(F(6,10),F(3,10),0),(F(5,10),0,0),(0,0,F(5,10)),(0,0,0),(F(2,10),F(5,10),0),(F(-7,10),0,0),(0,0,F(-4,10)),(F(1,2),F(-3,10),0),(F(8,10),0,0),(0,0,F(7,10))]:
+        if t1 != 0: corr = CAT[3]; model = "an MA(1) with θ₁ = %s" % fr(t1); reason = "an invertible MA(1) is an AR(∞), so its partial autocorrelations decay but never become exactly zero"
+        elif f2 != 0: corr = CAT[2]; model = "a stationary AR(2)"; reason = "an AR(2) has α(2) = Φ₂ = %s ≠ 0 and α(h) = 0 for every h ≥ 3" % fr(f2)
+        elif f1 != 0: corr = CAT[1]; model = "a stationary AR(1)"; reason = "an AR(1) has α(1) = Φ₁ = %s and α(h) = 0 for every h ≥ 2" % fr(f1)
+        else: corr = CAT[0]; model = "white noise"; reason = "white noise has no correlation at any lag, so every α(h) is zero"
+        assert tri(f1, f2)
+        dis = [c for c in CAT if c != corr]
+        stem = TSM + "If Φ₁ = %s, Φ₂ = %s, θ₁ = %s, θ₂ = 0, and α(h) is the partial autocorrelation at lag h, then" % (fr(f1), fr(f2), fr(t1))
+        why = ("With these values the model is %s. The partial autocorrelation cuts off after lag p for an AR(p): %s. "
+               "Trap: it is the ACF, not the PACF, that cuts off for a moving average.") % (model, reason)
+        out.append((stem, corr, dis, why))
+    return out
+
+def arima_name(f1, f2, t1, t2):
+    q = 2 if t2 != 0 else (1 if t1 != 0 else 0)
+    if f1 + f2 == 1:                          # unit root: 1 - f1 z - f2 z^2 = (1 - z)(1 + f2 z)
+        return "ARIMA(%d, 1, %d) process" % (1 if f2 != 0 else 0, q)
+    return "ARMA(%d, %d) process" % (2 if f2 != 0 else (1 if f1 != 0 else 0), q)
+def g_arima():           # 55125114606
+    out = []
+    for f1, f2, t1, t2 in [(F(6,10),F(4,10),F(1,2),0),(F(7,10),F(3,10),0,0),(F(1),0,F(4,10),0),(F(1),0,0,0),(F(5,10),F(3,10),F(4,10),0),(F(1,2),F(1,2),F(3,10),F(2,10)),
+                           (F(4,10),0,F(1,2),F(3,10)),(F(12,10),F(-2,10),0,0),(F(8,10),F(2,10),F(6,10),0),(F(3,10),F(2,10),0,0)]:
+        corr = arima_name(f1, f2, t1, t2)
+        q = 2 if t2 != 0 else (1 if t1 != 0 else 0)
+        cands = ["ARMA(2, %d) process" % q, "ARIMA(2, 1, %d) process" % q, "ARIMA(1, 1, %d) process" % q, "ARIMA(0, 1, %d) process" % q, "ARMA(1, %d) process" % q,
+                 "ARMA(%d, 2) process" % (2 if f2 else 1), "ARIMA(1, 1, %d) process" % (1 - min(q, 1))]
+        dis = [x for x in dict.fromkeys(cands) if x != corr][:3]
+        stem = TSM + "If Φ₁ = %s, Φ₂ = %s, θ₁ = %s, θ₂ = %s, then {yₜ} is" % tuple(fr(x) for x in (f1, f2, t1, t2))
+        unit = f1 + f2 == 1
+        why = ("Look for a unit root in the AR polynomial 1 − Φ₁z − Φ₂z²: at z = 1 it equals 1 − Φ₁ − Φ₂ = %s. %s The MA part has order %d. So {yₜ} is an %s. "
+               "Trap: with Φ₁ + Φ₂ = 1 the model is not a stationary ARMA(2, q); one AR factor is the difference operator.") % (
+               fr(1 - f1 - f2),
+               (("That is zero, so 1 − Φ₁z − Φ₂z² = (1 − z)(1 %s %sz): difference once, and Δyₜ has AR order 1." % ("+" if f2 > 0 else "−", fr(abs(f2)))) if f2 else
+                "That is zero, so 1 − Φ₁z = 1 − z: difference once, and Δyₜ has no AR part left.") if unit else
+               ("That is not zero, so there is no unit root and the AR order is %d." % (2 if f2 else (1 if f1 else 0))), q, corr.replace(" process", ""))
+        out.append((stem, corr, dis, why))
+    return out
+
+def g_ma1_spec():        # 55125114604
+    out = []
+    for b, sgn, s2 in [(F(7,10),"+",1),(F(1,2),"−",1),(F(3,10),"+",2),(F(4,5),"−",1),(F(1,2),"+",4),(F(3,5),"−",2),(F(1,5),"+",1),(F(9,10),"−",1),(F(2,5),"+",3),(F(1,2),"−",2)]:
+        c0 = 1 + b * b; c1 = 2 * b if sgn == "+" else -2 * b
+        def expr(a0, a1, scale, inv=False):
+            sign = "+" if a1 > 0 else "−"
+            core = "[%s %s %scos(2πω)]" % (fr(a0), sign, fr(abs(a1)))
+            core = (core + "⁻¹") if inv else core
+            return core if scale == 1 else "%s%s" % (fr(scale), core)
+        corr = expr(c0, c1, s2); dis = [expr(c0, -c1, s2), expr(c0, c1, s2, True), expr(1, c1, s2)]
+        stem = ("The MA(1) process yₜ = εₜ %s %sεₜ₋₁ has white-noise variance %s. Its spectral density, taken as f(ω) = σ²|1 %s %se^(−2πiω)|², is") % (
+               sgn, fr(b), fr(s2), sgn, fr(b))
+        why = ("|1 + ce^(−2πiω)|² = (1 + c e^(−2πiω))(1 + c e^(2πiω)) = 1 + c² + 2c cos(2πω), with c = %s%s here. So f(ω) = %s × [1 + %s %s %scos(2πω)] = %s. "
+               "Trap: the sign of the cosine term follows the sign of the MA coefficient; a reciprocal [·]⁻¹ is the shape of an AR(1) spectrum.") % (
+               "" if sgn == "+" else "−", fr(b), fr(s2), fr(b * b), "+" if sgn == "+" else "−", fr(2 * b), corr)
+        out.append((stem, corr, dis, why))
+    return out
+
+BATCH2 = [("55125114523", "maths", g_maxexp), ("55125114525", "maths", g_extrema), ("55125114516", "maths", g_rolle_c),
+          ("55125114507", "probability", g_laplace), ("55125114510", "probability", g_wlln),
+          ("55125114528", "design", g_bibd), ("55125114529", "design", g_factdf), ("55125114531", "sampling", g_pps),
+          ("55125114545", "inference", g_poisson_unb), ("55125114598", "stochastic", g_stationary), ("55125114600", "stochastic", g_first_return),
+          ("55125114603", "timeseries", g_statinv), ("55125114607", "timeseries", g_pacf), ("55125114606", "timeseries", g_arima),
+          ("55125114604", "timeseries", g_ma1_spec)]
+
 BATCH = [  # (official question ID, module, generator)
     ("55125114584", "stochastic", g_ruin), ("55125114581", "stochastic", g_memoryless), ("55125114585", "stochastic", g_poisson_split),
     ("55125114597", "stochastic", g_nstep), ("55125114599", "stochastic", g_first_passage),
     ("55125114568", "timeseries", g_ar1_var), ("55125114605", "timeseries", g_ar1_acov),
     ("55125114527", "design", g_rbd), ("55125114526", "design", g_anova_f),
     ("55125114530", "sampling", g_neyman), ("55125114558", "regression", g_adjr2), ("55125114563", "regression", g_dw),
-    ("55125114508", "probability", g_mgf)]
+    ("55125114508", "probability", g_mgf)] + BATCH2
 
 BAD = []
 import re
