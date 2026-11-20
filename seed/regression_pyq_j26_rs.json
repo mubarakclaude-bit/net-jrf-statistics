@@ -1,0 +1,112 @@
+{
+ "moduleId": "regression",
+ "topicId": null,
+ "source": "pyq",
+ "label": "UGC NET June 2026 Paper 2 — Regression and Linear Models questions not in the 1–50 set (booklet numbers not known; identified by official question ID)",
+ "count": 6,
+ "clean": 6,
+ "items": [
+  {
+   "id": "j26-id114556",
+   "format": "single",
+   "paper": 2,
+   "year": 2026,
+   "topic": "June 2026 Paper 2 (official question ID 55125114556)",
+   "questionId": "55125114556",
+   "stem": "In the multiple regression model y = Xβ + u, suppose E(X′u) = δ, and b is the OLS estimator of β. Then E(b − β) is",
+   "options": [
+    "0",
+    "δ",
+    "(X′X)δ",
+    "(X′X)⁻¹δ"
+   ],
+   "answer": "D",
+   "explanation": "Idea: write the OLS error b − β in terms of u. OLS is unbiased only when E(X′u) = 0; any correlation between the regressors and the error shows up as bias. Working: b − β = (X′X)⁻¹X′u, so with X fixed E(b − β) = (X′X)⁻¹E(X′u) = (X′X)⁻¹δ. Official answer: D ((X′X)⁻¹δ)."
+  },
+  {
+   "id": "j26-id114558",
+   "format": "single",
+   "paper": 2,
+   "year": 2026,
+   "topic": "June 2026 Paper 2 (official question ID 55125114558)",
+   "questionId": "55125114558",
+   "stem": "Consider the multiple linear regression model y (50×1) = X (50×5) β (5×1) + u (50×1). If the coefficient of determination R² = 0.55, then the adjusted R² is",
+   "options": [
+    "0.49",
+    "0.51",
+    "0.45",
+    "0.53"
+   ],
+   "answer": "B",
+   "explanation": "Idea: adjusted R² penalises the number of estimated coefficients. Use adjusted R² = 1 − (1 − R²)(n − 1)/(n − k), where k counts all columns of X. Working: With n = 50 and k = 5 columns in X (intercept included), adjusted R² = 1 − (1 − R²)(n − 1)/(n − k) = 1 − 0.45 × 49/45 = 1 − 0.49 = 0.51. Official answer: B (0.51)."
+  },
+  {
+   "id": "j26-id114559",
+   "format": "single",
+   "paper": 2,
+   "year": 2026,
+   "topic": "June 2026 Paper 2 (official question ID 55125114559)",
+   "questionId": "55125114559",
+   "stem": "For the multiple linear regression model y (n×1) = X (n×k) β (k×1) + u (n×1), E(u) = 0, E(uu′) = σ²Iₙ, let P = X(X′X)⁻¹X′ and e = (Iₙ − P)y. Then E(ee′) is",
+   "options": [
+    "σ²Iₙ + Xββ′X′",
+    "σ²(Iₙ − β) + Xββ′X′",
+    "σ²P",
+    "σ²(Iₙ − P)"
+   ],
+   "answer": "D",
+   "explanation": "Idea: the residual-maker matrix Iₙ − P removes everything X can explain, including Xβ, so the residual vector depends only on the error u. Then use E(uu′) = σ²Iₙ and the fact that Iₙ − P is symmetric and idempotent. Working: (Iₙ − P)X = 0, so e = (Iₙ − P)u and E(ee′) = (Iₙ − P)σ²Iₙ(Iₙ − P)′ = σ²(Iₙ − P), since Iₙ − P is symmetric and idempotent. Official answer: D (σ²(Iₙ − P))."
+  },
+  {
+   "id": "j26-id114561",
+   "format": "single",
+   "paper": 2,
+   "year": 2026,
+   "topic": "June 2026 Paper 2 (official question ID 55125114561)",
+   "questionId": "55125114561",
+   "stem": "In the multiple linear regression model y (n×1) = X (n×k) β (k×1) + u (n×1), E(u) = 0, E(uu′) = σ²Iₙ, if C = X(X′X)⁻¹X′, then E[(Cy){(Iₙ − C)y}′] is",
+   "options": [
+    "σ²C",
+    "0",
+    "σ²CC′",
+    "σ²(n − k)CC′"
+   ],
+   "answer": "B",
+   "explanation": "Idea: Cy is the vector of fitted values and (Iₙ − C)y the vector of residuals. Their cross-moment vanishes because the hat matrix and the residual maker are orthogonal projections onto complementary spaces. Working: E[Cy y′(Iₙ − C)′] = C(σ²Iₙ + Xββ′X′)(Iₙ − C) = σ²C(Iₙ − C) + CXββ′X′(Iₙ − C) = 0, because C is idempotent (C − C² = 0) and X′(Iₙ − C) = 0. Official answer: B (0)."
+  },
+  {
+   "id": "j26-id114562",
+   "format": "single",
+   "paper": 2,
+   "year": 2026,
+   "topic": "June 2026 Paper 2 (official question ID 55125114562)",
+   "questionId": "55125114562",
+   "stem": "Consider the following two-equation model: (i) y₁ = γ₁y₂ + β₁₁x₁ + β₁₂x₂ + ε₁; (ii) y₂ = γ₂y₁ + β₂₂x₂ + ε₂, where the y's are endogenous and the x's are exogenous variables. Then",
+   "options": [
+    "Both (i) and (ii) are identified",
+    "(i) is identified but (ii) is not",
+    "(ii) is identified but (i) is not",
+    "Both (i) and (ii) are unidentified"
+   ],
+   "answer": "C",
+   "explanation": "Idea: use the order condition. In a two-equation system, each equation must leave out at least one exogenous variable that appears elsewhere in the system. Working: Order condition with G = 2 equations: an equation is identified only if it excludes at least G − 1 = 1 exogenous variable. (i) excludes none (under-identified); (ii) excludes x₁ (exactly identified). Source note: The coefficients on the endogenous regressors are printed as r₁ and r₂ (usually γ₁, γ₂). Official answer: C ((ii) is identified but (i) is not)."
+  },
+  {
+   "id": "j26-id114563",
+   "format": "single",
+   "paper": 2,
+   "year": 2026,
+   "topic": "June 2026 Paper 2 (official question ID 55125114563)",
+   "questionId": "55125114563",
+   "stem": "For the model yₜ = α + βxₜ + uₜ with uₜ = ρuₜ₋₁ + εₜ, t = 1, 2, …, n and εₜ ~ N(0, σ²). If eₜ, t = 1, 2, …, n are the residuals with Σeₜ² ≃ 5.28 and Σeₜeₜ₋₁ ≃ 1.32 for sufficiently large n, then the estimated value of ρ and the value of the Durbin–Watson statistic are, respectively:",
+   "options": [
+    "0.75, 1.50",
+    "0.25, 1.50",
+    "0.25, 0.75",
+    "0.25, 0.50"
+   ],
+   "answer": "B",
+   "explanation": "Idea: estimate ρ by regressing each residual on the previous one, and use the large-sample link between the Durbin–Watson statistic and ρ: d ≈ 2(1 − ρ̂). Working: ρ̂ = Σeₜeₜ₋₁/Σeₜ² = 1.32/5.28 = 0.25; for large n, d ≈ 2(1 − ρ̂) = 1.50. Source note: The error variance is printed as σ²t (σ² with a subscript t); it does not affect the answer. Official answer: B (0.25, 1.50)."
+  }
+ ]
+}
