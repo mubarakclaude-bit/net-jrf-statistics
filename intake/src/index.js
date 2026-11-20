@@ -22,7 +22,7 @@ export default {
     if (request.method === "GET" && url.pathname.startsWith("/jobs/")) {
       const id = url.pathname.slice("/jobs/".length);
       if (!id || id.includes("/")) return json({error:"invalid_job_id"},400);
-      const job = await env.JOBS_DB.prepare("SELECT id,source_name,source_size,status,stage,attempts,created_at,updated_at,error_code FROM intake_jobs WHERE id=?").bind(id).first();
+      const job = await env.JOBS_DB.prepare("SELECT id,source_name,source_size,mime_type,status,stage,attempts,created_at,updated_at,error_code FROM intake_jobs WHERE id=?").bind(id).first();
       if (!job) return json({error:"not_found"},404);
       const events = await env.JOBS_DB.prepare("SELECT event,stage,details_json,created_at FROM intake_events WHERE job_id=? ORDER BY id DESC LIMIT 30").bind(id).all();
       return json({job,events:events.results||[]});
@@ -48,8 +48,8 @@ export default {
     const time = now();
     await env.SOURCE_BUCKET.put(key, bytes, {httpMetadata:{contentType:mime}});
     try {
-      await env.JOBS_DB.prepare("INSERT INTO intake_jobs (id,source_name,source_sha256,object_key,source_size,status,stage,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?)")
-        .bind(id,name,hash,key,file.size,"accepted","intake",time,time).run();
+      await env.JOBS_DB.prepare("INSERT INTO intake_jobs (id,source_name,source_sha256,object_key,source_size,mime_type,status,stage,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)")
+        .bind(id,name,hash,key,file.size,mime,"accepted","intake",time,time).run();
       await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)")
         .bind(id,"accepted","intake",JSON.stringify({size:file.size,sha256:hash,mime_type:mime}),time).run();
       await env.PROCESSING_QUEUE.send({job_id:id,stage:"extract",sha256:hash});
@@ -66,7 +66,7 @@ export default {
     for (const message of batch.messages) {
       const {job_id} = message.body || {};
       if (!job_id) { message.ack(); continue; }
-      const job = await env.JOBS_DB.prepare("SELECT id,status,source_sha256,object_key,source_name,source_size FROM intake_jobs WHERE id=?").bind(job_id).first();
+      const job = await env.JOBS_DB.prepare("SELECT id,status,source_sha256,object_key,source_name,source_size,mime_type FROM intake_jobs WHERE id=?").bind(job_id).first();
       if (!job || ["completed","failed_terminal","cancelled"].includes(job.status)) { message.ack(); continue; }
       if (!env.PROCESSOR_URL || !env.PROCESSOR_TOKEN) {
         const time=now();
@@ -75,7 +75,7 @@ export default {
         message.ack(); continue;
       }
       try {
-        const resp=await fetch(env.PROCESSOR_URL,{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+env.PROCESSOR_TOKEN},body:JSON.stringify({schema_version:1,job_id,source_sha256:job.source_sha256,object_key:job.object_key,source_name:job.source_name,source_size:job.source_size,resume_stage:"extract"})});
+        const resp=await fetch(env.PROCESSOR_URL,{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+env.PROCESSOR_TOKEN},body:JSON.stringify({schema_version:1,job_id,source_sha256:job.source_sha256,object_key:job.object_key,source_name:job.source_name,source_size:job.source_size,mime_type:job.mime_type,resume_stage:"extract"})});
         if (!resp.ok) throw new Error("processor_http_"+resp.status);
         const time=now();
         await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='processing',stage='extract',updated_at=? WHERE id=?").bind(time,job_id).run();
