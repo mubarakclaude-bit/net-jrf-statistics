@@ -68,6 +68,30 @@ export default {
         return new Response(bytes,{headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","content-disposition":`attachment; filename="${filename}"`}});
       }
     }
+    if(request.method==="POST"&&url.pathname.startsWith("/jobs/")){
+      const parts=url.pathname.split("/");
+      if(parts.length===4&&parts[1]==="jobs"&&parts[3]==="retry"){
+        const id=parts[2],uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if(!uuid.test(id))return json({error:"invalid_job_id"},400);
+        const job=await env.JOBS_DB.prepare("SELECT id,status,source_sha256,object_key,source_size FROM intake_jobs WHERE id=?").bind(id).first();
+        if(!job)return json({error:"not_found"},404);
+        if(!["blocked_infrastructure","failed_retryable"].includes(job.status)||!canTransition(job.status,"queued"))return json({error:"retry_not_allowed"},409);
+        if(!env.SOURCE_BUCKET||!env.PROCESSING_QUEUE)return json({error:"recovery_storage_unconfigured"},503);
+        const source=await env.SOURCE_BUCKET.get(job.object_key);if(!source)return json({error:"source_missing"},409);
+        const bytes=await source.arrayBuffer();if(bytes.byteLength!==job.source_size||await sha256(bytes)!==job.source_sha256)return json({error:"source_integrity_failed"},422);
+        const time=now();
+        const moved=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='queued',stage='dispatch',updated_at=?,error_code=NULL,error_message=NULL,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status=?").bind(time,id,job.status).run();
+        if(!moved.meta?.changes)return json({error:"state_conflict"},409);
+        await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(id,"manual_retry_requested","dispatch",JSON.stringify({source_integrity_verified:true}),time).run();
+        try{await env.PROCESSING_QUEUE.send({job_id:id,stage:"extract",sha256:job.source_sha256});return json({job_id:id,status:"queued",retry_requested:true},202);}
+        catch{
+          const blockedTime=now();
+          await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='dispatch',updated_at=?,error_code='retry_enqueue_failed',error_message='Manual retry queueing failed.',dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status='queued'").bind(blockedTime,id).run();
+          try{await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(id,"retry_enqueue_failed","dispatch",JSON.stringify({code:"retry_enqueue_failed"}),blockedTime).run();}catch{/* job remains owner-action blocked */}
+          return json({job_id:id,status:"blocked_infrastructure",error:"retry_enqueue_failed"},503);
+        }
+      }
+    }
     if (request.method === "GET" && url.pathname.startsWith("/jobs/")) {
       const id = url.pathname.slice("/jobs/".length);
       if (!id || id.includes("/")) return json({error:"invalid_job_id"},400);
