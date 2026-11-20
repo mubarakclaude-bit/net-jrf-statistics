@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import {buildBundle} from "../src/bundle.js";
-const b=buildBundle({job_id:"job-1",source_sha256:"abc",artifacts:[{key:"a.json",content:"{}"}]});
+const id="12345678-1234-1234-1234-123456789abc",hash="a".repeat(64),key=`jobs/${id}/extract.json`;
+const b=buildBundle({job_id:id,source_sha256:hash,artifacts:[{key,content:"{}"}]});
 assert.equal(b.bundle_type,"generic-source-processing");assert.equal(b.artifact_count,1);assert.equal(b.review_required,true);
 assert.throws(()=>buildBundle({job_id:"",source_sha256:"x",artifacts:[]}));
-assert.throws(()=>buildBundle({job_id:"j",source_sha256:"x",artifacts:[{}]}));
+assert.throws(()=>buildBundle({job_id:id,source_sha256:hash,artifacts:[{}]}));
+assert.throws(()=>buildBundle({job_id:id,source_sha256:hash,artifacts:[{key:"other.json",content:"{}"}]}));
+assert.throws(()=>buildBundle({job_id:id,source_sha256:hash,artifacts:[{key,content:"{}"},{key,content:"{}"}]}));
+assert.throws(()=>buildBundle({job_id:id,source_sha256:hash,artifacts:[{key,content:"x".repeat(8*1024*1024+1)}]}));
+assert.throws(()=>buildBundle({job_id:id,source_sha256:hash,artifacts:Array.from({length:21},(_,i)=>({key:`jobs/${id}/${i}.json`,content:""}))}));
 console.log("bundle tests passed");
