@@ -30,9 +30,9 @@ class DB {
                 db.job.status="processing";db.job.stage="extract";db.job.updated_at=updated;changes=1;
               }
             } else if(sql.includes("SET status='completed'")) {
-              const [updated,id]=args;
+              const [manifestKey,updated,id]=args;
               if(id===db.job.id&&db.job.status==="processing") {
-                db.job.status="completed";db.job.stage="analysis";db.job.updated_at=updated;db.job.dispatch_lease_token=null;db.job.dispatch_lease_until=null;changes=1;
+                db.job.status="completed";db.job.stage="analysis";db.job.manifest_key=manifestKey;db.job.updated_at=updated;db.job.dispatch_lease_token=null;db.job.dispatch_lease_until=null;changes=1;
               }
             } else if(sql.includes("SET stage='extract',updated_at=?")) {
               const [updated,id,token]=args;
