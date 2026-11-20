@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent check of seed/*_j26rs_pyq_variants.json (written by variants_j26_rs.py), batches 1 to 3.
+"""Independent check of seed/*_j26rs_pyq_variants.json (written by variants_j26_rs.py), batches 1 to 4.
 
 It does not reuse the generator: it reads the numbers back out of each stem and recomputes the keyed option with its own
 formulas, then checks the structure (ten variants per source question, globally unique ids, every srcQid is a real
@@ -530,6 +530,88 @@ def chk_orgs(it):
 CHECK.update({"55125114582": chk_irred, "55125114583": chk_classes, "55125114601": chk_meanpass, "55125114524": chk_piecewise, "55125114519": chk_eigen,
               "55125114562": chk_ident, "55125114514": chk_shiftexp, "55125114538": chk_umvue, "55125114552": chk_sprt, "55125114512": chk_joint,
               "55125114589": chk_rprog, "55125114593": chk_match, "55125114535": chk_match, "55125114554": chk_match, "55125114590": chk_orgs})
+
+# ---------------------------------------------------------------------------------------------- batch 4 checks
+def solve2(A, b):                       # Cramer's rule
+    d = A[0][0] * A[1][1] - A[0][1] * A[1][0]
+    return [(b[0] * A[1][1] - A[0][1] * b[1]) / d, (A[0][0] * b[1] - b[0] * A[1][0]) / d]
+def pvec(t): return [F(x.strip().replace("−", "-")) for x in t.strip("()′").split(",")]
+def chk_bias(it):
+    s = it["stem"]
+    m = re.search(r"X′X = (\[\[.*?\]\]) and E\(X′u\) = δ = (\([^)]*\)′)", s)
+    if m: return pvec(key(it)) == solve2(parse_mat(m.group(1)), pvec(m.group(2)))
+    b1, b2, s11, s12 = re.search(r"β₁ = (\S+), β₂ = (\S+) and .*Σx₁² = (\d+), Σx₁x₂ = (−?\d+)", s).groups()
+    return fv(key(it)) == fv(b1) + fv(b2) * F(int(s12.replace("−", "-")), int(s11))
+def proj_traces(n, k):
+    """An actual full-rank n×k X (deterministic entries), P = X(X'X)^-1X' by exact elimination; returns tr(P), tr(I-P), rank(I-P), #eigenvalues 1."""
+    X = [[F((7 * i + 3 * j * j + i * j) % 11 + (1 if j == 0 else 0), 1) for j in range(k)] for i in range(n)]
+    XtX = [[sum(X[r][a] * X[r][b] for r in range(n)) for b in range(k)] for a in range(k)]
+    A = [row[:] + [F(int(i == j)) for j in range(k)] for i, row in enumerate(XtX)]
+    for c in range(k):
+        pv = next(r for r in range(c, k) if A[r][c] != 0); A[c], A[pv] = A[pv], A[c]
+        A[c] = [x / A[c][c] for x in A[c]]
+        for r in range(k):
+            if r != c: A[r] = [A[r][t] - A[r][c] * A[c][t] for t in range(2 * k)]
+    inv = [row[k:] for row in A]
+    trP = sum(sum(X[i][a] * inv[a][b] * X[i][b] for a in range(k) for b in range(k)) for i in range(n))
+    return trP, n - trP
+def chk_resid(it):
+    s = it["stem"]; n, k = map(int, re.search(r"X of order (\d+) × (\d+)", s).groups()); s2 = fv(re.search(r"σ² = (\S+)\. With", s).group(1))
+    trP, trM = proj_traces(n, k); assert trP == k
+    if "Then E(e′e) is" in s: want = s2 * trM
+    elif "Then E(e′e/n) is" in s: want = s2 * trM / n
+    elif "Var(eᵢ)" in s: want = s2 * (1 - fv(re.search(r"hᵢᵢ = (\S+) is", s).group(1)))
+    elif "Cov(eᵢ, eⱼ)" in s: want = -s2 * fv(re.search(r"hᵢⱼ = (\S+) \(", s).group(1))
+    elif "E(s²)" in s: want = s2 * trM / (n - k)
+    elif "Var(ŷᵢ)" in s: want = s2 * fv(re.search(r"hᵢᵢ = (\S+) is", s).group(1))
+    else: raise AssertionError(s)
+    return fv(key(it)) == want
+def chk_proj(it):
+    s = it["stem"]; n, k = map(int, re.search(r"X is (\d+) × (\d+)", s).groups()); trP, trM = proj_traces(n, k)
+    if ", tr(P) is" in s: want = trP
+    elif "tr(Iₙ − P) is" in s or "rank of Iₙ − P" in s: want = trM            # idempotent: rank = trace
+    elif "eigenvalues of P that equal 1" in s: want = trP
+    elif "E[y′(Iₙ − P)y]" in s: want = fv(re.search(r"σ² = (\S+) is", s).group(1)) * trM
+    elif "E(y′Py)" in s:
+        s2, q = re.search(r"σ² = (\S+) and β′X′Xβ = (\S+) is", s).groups(); want = fv(s2) * trP + fv(q)
+    elif "E[(Py)′(Iₙ − P)y]" in s: want = F(0)
+    else: raise AssertionError(s)
+    return fv(key(it)) == want
+TRUTH = {  # statement -> truth, recorded separately from the generator
+ "E(h | T) is unbiased for θ": True, "Var{E(h | T)} ≤ Var(h)": True, "E(h | T) does not depend on θ": True, "Var{E(h | T)} < Var(h) always": False,
+ "If h is already a function of T, then E(h | T) = h": True, "Rao–Blackwellisation reduces variance only when T is complete": False,
+ "E(h | U) is an estimator for every statistic U": False, "MSE{E(h | T)} ≤ MSE(h)": True, "E(h | T) has a smaller bias than h": False,
+ "Simple random sampling with replacement is more efficient than without replacement (same n)": False, "The usual ratio estimator of the population mean is biased": True,
+ "Cluster sampling is more efficient than SRSWOR when the intraclass correlation is negative": True,
+ "Systematic sampling beats SRS when the intraclass correlation within systematic samples exceeds −1/(nk − 1)": False,
+ "Stratified sampling with proportional allocation is at least as efficient as SRS (large N)": True,
+ "Neyman allocation minimises the variance of the stratified mean for a fixed total sample size": True, "The Horvitz–Thompson estimator is unbiased for the population total": True,
+ "The regression estimator is unbiased for every sample size": False, "The finite population correction (1 − n/N) increases the variance": False,
+ "For a population with a linear trend, systematic sampling is more efficient than SRS": True,
+ "Cluster sampling with positive intraclass correlation is more efficient than SRS of the same number of elements": False,
+ "Double sampling is used when the population mean of the auxiliary variable is unknown": True, "PPS sampling gives every unit the same selection probability": False,
+ "The ratio estimator beats the sample mean when ρ > (1/2)(Cₓ/Cᵧ)": True,
+ "Randomization makes the estimate of experimental error valid": True, "Replication provides an estimate of experimental error": True,
+ "Local control (blocking) reduces experimental error": True, "A completely randomized design uses local control": False,
+ "A randomized block design uses all three principles": True, "A Latin square design controls variation in two directions": True,
+ "Increasing replication increases the error variance of a treatment mean": False, "In a CRD with t treatments and N units the error degrees of freedom are N − t": True,
+ "Randomization removes the need for replication": False, "A BIBD is used when a block cannot hold all the treatments": True,
+ "In an RBD a block need not contain every treatment": False, "Confounding in factorial experiments gives up information on some interactions to reduce block size": True,
+ "A Latin square with t treatments needs t² rows": False, "A CRD is most suitable when the experimental units are homogeneous": True}
+def chk_statements(it):
+    s = it["stem"]; sts = re.search(r"Consider the following statements: A\. (.*)\. B\. (.*)\. C\. (.*)\. D\. (.*)\. Choose", s).groups()
+    def tv(x):
+        if x == "E(h | T) is the unique UMVUE of θ": return "T is also complete." in s
+        return TRUTH[x]
+    tr = [L for L, x in zip("ABCD", sts) if tv(x)]
+    return key(it) == ("A, B, C, D" if len(tr) == 4 else ", ".join(tr) + " only")
+PIV = {"(X̄ − μ)/(S/√n)": "μ when σ² is unknown", "Σ(Xᵢ − μ)²/σ²": "σ² when μ is known", "(n − 1)S²/σ²": "σ² when μ is unknown", "X₍ₙ₎/θ": "θ", "2λΣXᵢ": "λ",
+       "ΣXᵢ/θ": "θ", "X̄ − μ can": "no parameter: its distribution depends on the unknown σ", "[(X̄ − Ȳ) − (μ₁ − μ₂)]": "μ₁ − μ₂", "(S₁²/σ₁²)/(S₂²/σ₂²)": "σ₁²/σ₂²", "X₍₁₎ − θ": "θ"}
+def chk_pivot(it):
+    hits = [v for k, v in PIV.items() if ("quantity " + k) in it["stem"]]; assert len(hits) == 1, it["stem"]
+    return key(it) == hits[0]
+CHECK.update({"55125114556": chk_bias, "55125114559": chk_resid, "55125114561": chk_proj, "55125114543": chk_statements, "55125114533": chk_statements,
+              "55125114534": chk_statements, "55125114536": chk_pivot})
 
 by = defaultdict(list)
 for it in items: by[it["srcQid"]].append(it)
