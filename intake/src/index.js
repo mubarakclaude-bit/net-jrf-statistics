@@ -86,9 +86,9 @@ export default {
       if (!job_id) { message.ack(); continue; }
       const job = await env.JOBS_DB.prepare("SELECT id,status,source_sha256,object_key,source_name,source_size,mime_type FROM intake_jobs WHERE id=?").bind(job_id).first();
       if (!job || ["completed","failed_terminal","cancelled"].includes(job.status)) { message.ack(); continue; }
-      const leaseToken=crypto.randomUUID(), leaseTime=now(), leaseUntil=new Date(Date.now()+120000).toISOString();
+      const leaseToken=crypto.randomUUID(), leaseTime=now(), leaseUntil=new Date(Date.now()+30000).toISOString();
       const claim=await env.JOBS_DB.prepare("UPDATE intake_jobs SET dispatch_lease_until=?,dispatch_lease_token=?,updated_at=? WHERE id=? AND status NOT IN ('completed','failed_terminal','cancelled') AND (dispatch_lease_until IS NULL OR dispatch_lease_until < ?)").bind(leaseUntil,leaseToken,leaseTime,job_id,leaseTime).run();
-      if(!claim.meta?.changes){message.ack();continue;}
+      if(!claim.meta?.changes){message.retry();continue;}
       if (!env.PROCESSOR_URL || !env.PROCESSOR_TOKEN) {
         const time=now();
         if(canTransition(job.status,"blocked_infrastructure")) await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='dispatch',updated_at=?,error_code='processor_not_configured',error_message='Processing service configuration is required.',dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=?").bind(time,job_id).run();
