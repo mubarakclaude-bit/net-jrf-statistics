@@ -11,7 +11,7 @@ export default {async fetch(req,env){
  const obj=await env.SOURCE_BUCKET.get(p.object_key);if(!obj)return json({error:"source_not_found"},404);
  const bytes=await obj.arrayBuffer();if(await sha256(bytes)!==p.source_sha256)return json({error:"source_hash_mismatch"},422);
  if(bytes.byteLength>20*1024*1024)return json({error:"source_size_limit"},413);
- const b64=btoa(String.fromCharCode(...new Uint8Array(bytes)));
+ const raw=new Uint8Array(bytes);let binary="";for(let i=0;i<raw.length;i+=32768)binary+=String.fromCharCode(...raw.subarray(i,i+32768));const b64=btoa(binary);
  let ext;try{const res=await fetch(env.EXTRACTOR_URL,{method:"POST",headers:{"authorization":`Bearer ${env.EXTRACTOR_TOKEN}`,"content-type":"application/json"},body:JSON.stringify({job_id:p.job_id,source_sha256:p.source_sha256,source_name:safe(p.source_name),pdf_base64:b64})});if(!res.ok)return json({error:"extractor_failed",status:res.status},502);ext=await res.json()}catch{return json({error:"extractor_unavailable"},502)}
  if(!Array.isArray(ext.pages)||ext.pages.length>1000||ext.pages.some((x,i)=>!Number.isInteger(x.page)||typeof x.text!=="string"||x.text.length>200000))return json({error:"invalid_extraction_payload"},422);
  const pages=ext.pages.map(x=>({page:x.page,text:x.text,confidence:Number.isFinite(x.confidence)?x.confidence:null,ocr:!!x.ocr})).sort((a,b)=>a.page-b.page);
