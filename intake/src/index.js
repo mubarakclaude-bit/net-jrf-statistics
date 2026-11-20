@@ -18,8 +18,8 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (request.method === "GET" && url.pathname === "/health") return json({ok:true,service:"intake"});\n    if (request.method === "GET" && url.pathname === "/") return new Response(PORTAL,{headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store"}});
-    if (!auth(request, env)) return json({error:"unauthorized"},401);
     if(request.method==="POST"&&url.pathname==="/internal/processor-result"){if(!env.PROCESSOR_CALLBACK_TOKEN||request.headers.get("authorization")!==`Bearer ${env.PROCESSOR_CALLBACK_TOKEN}`)return json({error:"unauthorized"},401);let payload;try{payload=await request.json()}catch{return json({error:"invalid_json"},400)}if(!payload.job_id||!payload.status||!payload.stage)return json({error:"invalid_contract"},400);const time=now();const details=JSON.stringify({summary:payload.summary||null,artifact_keys:Array.isArray(payload.artifact_keys)?payload.artifact_keys.slice(0,20):[]});await env.JOBS_DB.prepare("UPDATE intake_jobs SET status=?,stage=?,updated_at=?,error_code=?,error_message=? WHERE id=?").bind(payload.status,payload.stage,time,payload.error_code||null,payload.error_message||null,payload.job_id).run();await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(payload.job_id,"processor_result",payload.stage,details,time).run();return json({accepted:true});}
+    if (!auth(request, env)) return json({error:"unauthorized"},401);
     if (request.method === "GET" && url.pathname.startsWith("/jobs/")) {
       const id = url.pathname.slice("/jobs/".length);
       if (!id || id.includes("/")) return json({error:"invalid_job_id"},400);
@@ -38,9 +38,9 @@ export default {
     const name = (file.name || "source.pdf").replace(/[\\x00-\\x1f\\x7f]/g,"").slice(0,180) || "source.pdf";
     const allowedTypes=new Set(["application/pdf","text/plain","text/markdown","text/csv","text/html","application/rtf","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/vnd.openxmlformats-officedocument.presentationml.presentation","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]);
     const mime=(file.type||"application/octet-stream").toLowerCase();
-    if(!allowedTypes.has(mime)&&!mime.startsWith("image/"))return json({error:"unsupported_document_type"},415);
+    const allowedImages=new Set(["image/png","image/jpeg","image/webp"]);if(!allowedTypes.has(mime)&&!allowedImages.has(mime))return json({error:"unsupported_document_type"},415);
     const bytes=await file.arrayBuffer();
-    if(mime==="application/pdf"){const signature=new Uint8Array(bytes).slice(0,5);if(signature[0]!==37||signature[1]!==80||signature[2]!==68||signature[3]!==70||signature[4]!==45)return json({error:"invalid_pdf_signature"},415);}
+    const sig=new Uint8Array(bytes);if(mime==="application/pdf"&&(sig[0]!==37||sig[1]!==80||sig[2]!==68||sig[3]!==70||sig[4]!==45))return json({error:"invalid_pdf_signature"},415);if(mime==="image/png"&&(sig.length<8||[137,80,78,71,13,10,26,10].some((v,i)=>sig[i]!==v)))return json({error:"invalid_image_signature"},415);if(mime==="image/jpeg"&&(sig[0]!==255||sig[1]!==216||sig[2]!==255))return json({error:"invalid_image_signature"},415);if(mime==="image/webp"&&(String.fromCharCode(...sig.slice(0,4))!=="RIFF"||String.fromCharCode(...sig.slice(8,12))!=="WEBP"))return json({error:"invalid_image_signature"},415);
     const hash = await sha256(bytes);
     const duplicate = await env.JOBS_DB.prepare("SELECT id,status FROM intake_jobs WHERE source_sha256=? LIMIT 1").bind(hash).first();
     if (duplicate) return json({job_id:duplicate.id,status:duplicate.status,duplicate:true},200);
