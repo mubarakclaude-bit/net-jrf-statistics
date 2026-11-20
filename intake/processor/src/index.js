@@ -1,5 +1,6 @@
 import {auditSource} from "./audit.js";
 import {mapText} from "./mapper.js";
+import {buildCoverageReport} from "./coverage.js";
 const json=(d,s=200)=>new Response(JSON.stringify(d),{status:s,headers:{"content-type":"application/json","cache-control":"no-store"}});
 const safe=(v,n=200)=>String(v||"").replace(/[\\x00-\\x1f\\x7f]/g,"").slice(0,n);
 async function sha256(buf){const d=await crypto.subtle.digest("SHA-256",buf);return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,"0")).join("")}
@@ -21,6 +22,8 @@ export default {async fetch(req,env){
  const extractKey=`jobs/${p.job_id}/extract.json`;await env.ARTIFACT_BUCKET.put(extractKey,JSON.stringify(artifact),{httpMetadata:{contentType:"application/json"}});
  const audit=auditSource(artifact);const auditKey=`jobs/${p.job_id}/source-audit.json`;await env.ARTIFACT_BUCKET.put(auditKey,JSON.stringify(audit),{httpMetadata:{contentType:"application/json"}});
  let mapping=null;if(env.TAXONOMY_JSON){try{const taxonomy=JSON.parse(env.TAXONOMY_JSON);mapping={schema_version:1,job_id:p.job_id,source_sha256:p.source_sha256,segments:audit.segments.map(s=>({segment_id:s.segment_id,page:s.page,labels:s.labels,matches:mapText(s.text,taxonomy)})),review_required:true};const mappingKey=`jobs/${p.job_id}/taxonomy-map.json`;await env.ARTIFACT_BUCKET.put(mappingKey,JSON.stringify(mapping),{httpMetadata:{contentType:"application/json"}});}catch{return json({error:"invalid_taxonomy_config"},503)}}
- return json({accepted:true,job_id:p.job_id,stage:"source-audit",extract_artifact_key:extractKey,audit_artifact_key:auditKey,taxonomy_mapping_created:!!mapping,page_count:pages.length,segments:audit.segments.length,pipeline_status:"blocked_at_configured_outputs"});
+ let coverage=null;if(env.RESOURCE_INDEX_JSON){try{const index=JSON.parse(env.RESOURCE_INDEX_JSON);const coverage=buildCoverageReport(audit.segments,index);const coverageKey=`jobs/${p.job_id}/coverage-report.json`;await env.ARTIFACT_BUCKET.put(coverageKey,JSON.stringify(coverage),{httpMetadata:{contentType:"application/json"}});}catch{return json({error:"invalid_resource_index_config"},503)}}
+
+ return json({accepted:true,job_id:p.job_id,stage:"source-audit",extract_artifact_key:extractKey,audit_artifact_key:auditKey,taxonomy_mapping_created:!!mapping,coverage_report_created:!!env.RESOURCE_INDEX_JSON,page_count:pages.length,segments:audit.segments.length,pipeline_status:"blocked_at_configured_outputs"});
 
 }};
