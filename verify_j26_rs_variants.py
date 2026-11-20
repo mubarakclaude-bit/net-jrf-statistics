@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent check of seed/*_j26rs_pyq_variants.json (written by variants_j26_rs.py), batches 1 and 2.
+"""Independent check of seed/*_j26rs_pyq_variants.json (written by variants_j26_rs.py), batches 1 to 3.
 
 It does not reuse the generator: it reads the numbers back out of each stem and recomputes the keyed option with its own
 formulas, then checks the structure (ten variants per source question, globally unique ids, every srcQid is a real
@@ -289,6 +289,247 @@ def chk_spec(it):
 CHECK.update({"55125114523": chk_maxexp, "55125114525": chk_extrema, "55125114516": chk_rolle, "55125114507": chk_laplace, "55125114510": chk_wlln,
               "55125114528": chk_bibd, "55125114529": chk_factdf, "55125114531": chk_pps, "55125114545": chk_poisson_unb, "55125114598": chk_stationary,
               "55125114600": chk_first_return, "55125114603": chk_statinv, "55125114607": chk_pacf, "55125114606": chk_arima, "55125114604": chk_spec})
+
+# ---------------------------------------------------------------------------------------------- batch 3 checks
+# Conceptual items. Where a rule decides the answer it is re-run here by a different method (BFS / Kosaraju for chain
+# structure, Cramer's rule for passage times, characteristic polynomial of f(A), numerical integration for densities and
+# expectations). Fact-based items (matching, founding years, R output) are checked against this file's own fact tables,
+# which were written separately from the generator's; R output is also re-run when Rscript is available.
+import os, shutil, subprocess, tempfile
+def parse_mat(s):
+    rows = re.findall(r"\[([^\[\]]+)\]", s)
+    return [[F(x.strip().replace("−", "-")) for x in r.split(",")] for r in rows]
+def mat_in(stem): return parse_mat(re.search(r"P = (\[\[.*?\]\])", stem).group(1))
+def bfs_reach(P, s):
+    seen, st = {s}, [s]
+    while st:
+        u = st.pop()
+        for v in range(len(P)):
+            if P[u][v] > 0 and v not in seen: seen.add(v); st.append(v)
+    return seen
+def sccs(P):
+    n = len(P); order, seen = [], set()
+    def dfs(u, G, out):
+        stack = [(u, iter(range(n)))]; seen.add(u)
+        while stack:
+            x, it_ = stack[-1]
+            for v in it_:
+                if G(x, v) and v not in seen: seen.add(v); stack.append((v, iter(range(n)))); break
+            else: stack.pop(); out.append(x)
+    for u in range(n):
+        if u not in seen: dfs(u, lambda a, b: P[a][b] > 0, order)
+    seen.clear(); comps = []
+    for u in reversed(order):
+        if u not in seen: c = []; dfs(u, lambda a, b: P[b][a] > 0, c); comps.append(sorted(c))
+    return sorted(comps)
+def period_bfs(P, s):
+    # period = gcd of (level(u) + 1 - level(v)) over edges u->v inside the class reachable from s
+    lvl = {s: 0}; q = [s]; g = 0; comp = [c for c in sccs(P) if s in c][0]
+    while q:
+        u = q.pop(0)
+        for v in comp:
+            if P[u][v] > 0:
+                if v not in lvl: lvl[v] = lvl[u] + 1; q.append(v)
+                else: g = math.gcd(g, lvl[u] + 1 - lvl[v])
+    return abs(g)
+def chk_irred(it):
+    P = mat_in(it["stem"]); cs = sccs(P); irr = len(cs) == 1
+    pers = {period_bfs(P, c[0]) for c in cs}; assert len(pers) == 1; d = pers.pop()
+    return key(it) == ("Irreducible" if irr else "Reducible") + (" and periodic" if d > 1 else " and aperiodic")
+def chk_classes(it):
+    P = mat_in(it["stem"])
+    return key(it) == ", ".join("{" + ", ".join(str(i + 1) for i in c) + "}" for c in sccs(P))
+def chk_meanpass(it):
+    p = fv(re.search(r"with p = ([\d/.]+) and q", it["stem"]).group(1)); q = 1 - p; P = [[q, p, 0], [q, 0, p], [0, q, p]]
+    m = re.search(r"mean recurrence time of state (\d)", it["stem"])
+    if m:
+        j = int(m.group(1)) - 1; r = p / q; w = [F(1), r, r * r]; want = sum(w) / w[j]          # Kac: 1/pi_j
+    else:
+        j, i = [int(x) - 1 for x in re.search(r"reach state (\d) for the first time, starting from state (\d)", it["stem"]).groups()]
+        o = [k for k in range(3) if k != j]
+        a11, a12, a21, a22 = 1 - P[o[0]][o[0]], -P[o[0]][o[1]], -P[o[1]][o[0]], 1 - P[o[1]][o[1]]
+        det = a11 * a22 - a12 * a21                                                              # Cramer's rule, right side (1, 1)
+        sol = {o[0]: (a22 - a12) / det, o[1]: (a11 - a21) / det}; want = sol[i]
+    return F(key(it).replace("−", "-")) == want
+def parse_poly(t):
+    t = t.replace(" ", "").replace("−", "-"); c = [F(0)] * 4
+    for term in re.findall(r"[+-]?[^+-]+", t):
+        mm_ = re.fullmatch(r"([+-]?)(\(?[\d/]*\)?)(x[²³]?)?", term); sgn = -1 if mm_.group(1) == "-" else 1
+        co = mm_.group(2).strip("()"); co = F(co) if co else F(1); pw_ = {None: 0, "x": 1, "x²": 2, "x³": 3}[mm_.group(3)]
+        c[pw_] += sgn * co
+    return c
+def pv_(c, x): return sum(a * x ** k for k, a in enumerate(c))
+def pd_(c): return [k * c[k] for k in range(1, len(c))] + [F(0)]
+def chk_piecewise(it):
+    m = re.search(r"Given f\(x\) = (.*?) for (\S+) ≤ x ≤ (\S+), and f\(x\) = (.*?) for \S+ < x ≤ (\S+), consider", it["stem"])
+    g1, a, c, g2, b = parse_poly(m.group(1)), fv(m.group(2)), fv(m.group(3)), parse_poly(m.group(4)), fv(m.group(5))
+    cont = pv_(g1, c) == pv_(g2, c); diff = cont and pv_(pd_(g1), c) == pv_(pd_(g2), c); rolle = diff and pv_(g1, a) == pv_(g2, b)
+    tr = [L for L, t in (("A", diff), ("B", not diff), ("C", rolle), ("D", not rolle)) if t]
+    return key(it) == ", ".join(tr) + " only"
+def mmul(A, B): return [[sum(A[i][k] * B[k][j] for k in range(2)) for j in range(2)] for i in range(2)]
+def minv(A): d = A[0][0] * A[1][1] - A[0][1] * A[1][0]; return [[A[1][1] / d, -A[0][1] / d], [-A[1][0] / d, A[0][0] / d]]
+def chk_eigen(it):
+    A = parse_mat(re.search(r"A = (\[\[.*?\]\])", it["stem"]).group(1)); I = [[F(1), F(0)], [F(0), F(1)]]
+    lam = fv(re.search(r"has λ = (\S+) as an eigenvalue", it["stem"]).group(1)); f = re.search(r"eigenvalue of (.*)\?$", it["stem"]).group(1)
+    add = lambda X, Y, s=1: [[X[i][j] + s * Y[i][j] for j in range(2)] for i in range(2)]
+    sc = lambda c, X: [[c * X[i][j] for j in range(2)] for i in range(2)]
+    M = {"A⁻¹": lambda: minv(A), "A²": lambda: mmul(A, A), "A − 2I": lambda: add(A, sc(2, I), -1), "3A + I": lambda: add(sc(3, A), I),
+         "A′ (the transpose of A)": lambda: [[A[j][i] for j in range(2)] for i in range(2)], "A² − A": lambda: add(mmul(A, A), A, -1),
+         "(A − I)⁻¹": lambda: minv(add(A, I, -1)), "A³": lambda: mmul(mmul(A, A), A), "2A⁻¹": lambda: sc(2, minv(A))}[f]()
+    tr = M[0][0] + M[1][1]; det = M[0][0] * M[1][1] - M[0][1] * M[1][0]
+    is_eig = lambda x: x * x - tr * x + det == 0
+    vals = [F(o.replace("−", "-")) for o in it["options"]]
+    # lam must be an eigenvalue of A; the key is an eigenvalue of f(A); no other option is
+    trA = A[0][0] + A[1][1]; detA = A[0][0] * A[1][1] - A[0][1] * A[1][0]
+    return lam * lam - trA * lam + detA == 0 and is_eig(F(key(it).replace("−", "-"))) and sum(map(is_eig, vals)) == 1
+def chk_ident(it):
+    e1 = set(map(int, re.findall(r"β₁(\d)", it["stem"].translate(str.maketrans("₀₁₂₃", "0123")).replace("β1", "β₁"))))
+    s = it["stem"].translate(str.maketrans("₀₁₂₃", "0123"))
+    e1 = set(int(x) for x in re.findall(r"β1(\d) x", s)); e2 = set(int(x) for x in re.findall(r"β2(\d) x", s))
+    allx = e1 | e2
+    ok1 = len(allx - e1) >= 1 and any(x in e2 for x in allx - e1); ok2 = len(allx - e2) >= 1 and any(x in e1 for x in allx - e2)
+    want = {(True, True): "Both (i) and (ii) are identified", (True, False): "(i) is identified but (ii) is not",
+            (False, True): "(ii) is identified but (i) is not", (False, False): "Both (i) and (ii) are unidentified"}[(ok1, ok2)]
+    return key(it) == want
+def coef(t): t = t.strip("()"); return F(t) if t else F(1)
+def chk_shiftexp(it):
+    s = it["stem"]; m = re.search(r"f\(x \| θ\) = (\(?[\d/]*\)?)e\^\(−", s); lam = coef(m.group(1))
+    sts = re.search(r"Consider: A\. (.*)\. B\. (.*)\. C\. (.*)\. D\. (.*)\. Choose", s).groups()
+    def over(t):
+        if t == "1/n": return F(1)
+        m_ = re.fullmatch(r"(\d+)/n", t)
+        if m_: return F(int(m_.group(1)))
+        m_ = re.fullmatch(r"1/\((\d+)n\)", t); return F(1, int(m_.group(1)))
+    def truth(x):
+        m_ = re.fullmatch(r"X̄ₙ →ᵖ θ \+ (\S+)", x)
+        if m_: return F(m_.group(1)) == 1 / lam
+        if x == "X̄ₙ →ᵖ θ": return False
+        m_ = re.fullmatch(r"If Y = min\(X₁, …, Xₙ\), then f\(y\) = (\(?[\d/]*\)?)n e\^\(−(\(?[\d/]*\)?)n\(y − θ\)\), y ≥ θ", x)
+        if m_: return coef(m_.group(1)) == lam and coef(m_.group(2)) == lam
+        m_ = re.fullmatch(r"V\(X̄ₙ\) = (1/n|\d+/n|1/\(\d+n\))", x)
+        if m_: return over(m_.group(1)) == 1 / lam ** 2
+        m_ = re.fullmatch(r"V\(X̄ₙ\) = (\(?[\d/]*\)?)n", x)
+        if m_: return False                                   # grows with n: never the variance of a mean
+        if x == "min(X₁, …, Xₙ) →ᵖ θ": return True
+        m_ = re.fullmatch(r"E\[min\(X₁, …, Xₙ\)\] = θ \+ (.+)", x)
+        if m_: return over(m_.group(1)) == 1 / lam
+        if x == "E[min(X₁, …, Xₙ)] = θ": return False
+        raise AssertionError(x)
+    tr = [L for L, x in zip("ABCD", sts) if truth(x)]
+    return key(it) == ("A, B, C, D" if len(tr) == 4 else ", ".join(tr) + " only")
+def expr_val(e, env):
+    t = e.replace("−", "-").replace("²", "^2").replace("^", "**").replace("e**(", "EXP(").replace("Φ(", "PHI(").replace("φ(", "PDF(")
+    t = re.sub(r"(?<=[\dθλpμcm)])(?=[θλpμcm(]|EXP|PHI|PDF)", "*", t)
+    for k, v in env.items(): t = t.replace(k, "(%r)" % v)
+    return eval(t, {"EXP": math.exp, "PHI": lambda z: 0.5 * (1 + math.erf(z / math.sqrt(2))), "PDF": lambda z: math.exp(-z * z / 2) / math.sqrt(2 * math.pi)})
+def chk_umvue(it):
+    s = it["stem"]; env = {"θ": 2.3, "λ": 0.7, "p": 0.3, "μ": 0.4, "c": 1.1, "m": 3}
+    th, la, p_, mu, c, m_ = env["θ"], env["λ"], env["p"], env["μ"], env["c"], env["m"]
+    if "exponential with mean θ" in s: want = math.exp(-c / th)                                      # P(X1 > c), integral of e^(-x/θ)/θ
+    elif "exponential with pdf λe^(−λx)" in s: want = 1 - math.exp(-la * c)
+    elif "Poisson(λ)" in s and "X₁ = 0," in s: want = math.exp(-la)
+    elif "Poisson(λ)" in s and "X₁ = 1," in s: want = la * math.exp(-la)
+    elif "Poisson(λ)" in s and "X₁ ≥ 1" in s: want = 1 - math.exp(-la)
+    elif "Bernoulli(p)" in s: want = p_ * p_
+    elif "Binomial(m, p)" in s: want = comb(m_, 0) * (1 - p_) ** m_
+    elif "N(μ, 1)" in s: want = 0.5 * (1 + math.erf((c - mu) / math.sqrt(2)))
+    elif "Uniform(0, θ)" in s: want = c / th
+    elif "geometric" in s: want = p_
+    else: raise AssertionError(s)
+    vals = [expr_val(o, env) for o in it["options"]]
+    return abs(expr_val(key(it), env) - want) < 1e-12 and sum(abs(v - want) < 1e-9 for v in vals) == 1
+def chk_sprt(it):
+    a, b, which = re.search(r"α = (\S+) and type II error β = (\S+), .*approximation for the (upper|lower) boundary", it["stem"]).groups()
+    a, b = fv(a), fv(b); want = (1 - b) / a if which == "upper" else b / (1 - a)
+    return F(key(it)) == want
+# joint densities: (support test, density) and numerical evaluation of each statement on a fine grid
+JD = {"f(x, y) = (1/4)(1 + xy) for |x| < 1, |y| < 1": ((-1, 1, -1, 1), lambda x, y: (1 + x * y) / 4),
+      "f(x, y) = 4xy for 0 < x < 1, 0 < y < 1": ((0, 1, 0, 1), lambda x, y: 4 * x * y),
+      "f(x, y) = x + y for 0 < x < 1, 0 < y < 1": ((0, 1, 0, 1), lambda x, y: x + y),
+      "f(x, y) = 2 for 0 < x < y < 1": ((0, 1, 0, 1), lambda x, y: 2.0 if x < y else 0.0),
+      "f(x, y) = e^(−(x + y)) for x > 0, y > 0": ((0, 14, 0, 14), lambda x, y: math.exp(-x - y)),
+      "f(x, y) = 6x for 0 < x < y < 1": ((0, 1, 0, 1), lambda x, y: 6 * x if x < y else 0.0),
+      "f(x, y) = (3/2)(x² + y²) for 0 < x < 1, 0 < y < 1": ((0, 1, 0, 1), lambda x, y: 1.5 * (x * x + y * y)),
+      "f(x, y) = 8xy for 0 < x < y < 1": ((0, 1, 0, 1), lambda x, y: 8 * x * y if x < y else 0.0),
+      "f(x, y) = 1/2 for |x| + |y| < 1": ((-1, 1, -1, 1), lambda x, y: 0.5 if abs(x) + abs(y) < 1 else 0.0),
+      "f(x, y) = 2e^(−x − 2y) for x > 0, y > 0": ((0, 14, 0, 14), lambda x, y: 2 * math.exp(-x - 2 * y))}
+def chk_joint(it):
+    s = it["stem"]; dens = re.search(r"joint pdf (.*?) \(and 0 otherwise\)", s).group(1); (x0, x1, y0, y1), f = JD[dens]
+    N = 400 if x1 - x0 < 5 else 700; hx = (x1 - x0) / N; hy = (y1 - y0) / N
+    xs = [x0 + hx * (i + 0.5) for i in range(N)]; ys = [y0 + hy * (j + 0.5) for j in range(N)]
+    G = [[f(x, y) for y in ys] for x in xs]
+    tot = sum(map(sum, G)) * hx * hy; assert abs(tot - 1) < 2e-2, (dens, tot)
+    fx = [sum(r) * hy for r in G]; fy = [sum(G[i][j] for i in range(N)) * hx for j in range(N)]
+    E = lambda g: sum(g(xs[i], ys[j]) * G[i][j] for i in range(N) for j in range(N)) * hx * hy
+    EX, EY, EXY = E(lambda x, y: x), E(lambda x, y: y), E(lambda x, y: x * y)
+    indep = max(abs(G[i][j] - fx[i] * fy[j]) for i in range(0, N, 15) for j in range(0, N, 15)) < 5e-2
+    def num(t): return float(F(t.replace("−", "-")))
+    def truth(st):
+        if st in ("X and Y are independent",): return indep
+        if st == "f(x, y) factorises, so X and Y are independent": return indep
+        if st == "Cov(X, Y) = 0": return abs(EXY - EX * EY) < 5e-3
+        if st == "E(XY) = E(X)E(Y)": return abs(EXY - EX * EY) < 5e-3
+        if st == "X + Y has a gamma distribution with shape 2":     # compare P(X + Y <= 1) with the Gamma(2, 1) cdf 1 - 2/e
+            return abs(E(lambda x, y: 1.0 if x + y < 1 - 1e-12 else (0.5 if abs(x + y - 1) < 1e-12 else 0.0)) - (1 - 2 / math.e)) < 1e-2
+        m = re.fullmatch(r"(E\(XY\)|E\(X\)|E\(Y\)|E\(X²\)|P\(X > Y\)|P\(X < Y\)) = (\S+)", st)
+        if m:
+            g = {"E(XY)": lambda x, y: x * y, "E(X)": lambda x, y: x, "E(Y)": lambda x, y: y, "E(X²)": lambda x, y: x * x,
+                 "P(X > Y)": lambda x, y: 1.0 if x > y else (0.5 if x == y else 0.0), "P(X < Y)": lambda x, y: 1.0 if x < y else (0.5 if x == y else 0.0)}[m.group(1)]
+            return abs(E(g) - num(m.group(2))) < 1e-2
+        m = re.fullmatch(r"f\((x|y)\) = (.*) for .*", st)
+        if m:
+            var, ex_ = m.group(1), m.group(2).replace("−", "-").replace("²", "**2").replace("³", "**3").replace("|x|", "abs(x)").replace("(3/2)x", "(3/2)*x")
+            ex_ = re.sub(r"(\d)([xy(])", r"\1*\2", ex_).replace(")(", ")*(").replace("x(", "x*(")
+            grid, marg = (xs, fx) if var == "x" else (ys, fy)
+            return max(abs(eval(ex_, {var: g, "abs": abs}) - m_) for g, m_ in list(zip(grid, marg))[5:-5:20]) < 3e-2
+        raise AssertionError(st)
+    sts = re.search(r"Consider: A\. (.*)\. B\. (.*)\. C\. (.*)\. D\. (.*)\. Choose", s).groups()
+    tr = [L for L, st in zip("ABCD", sts) if truth(st)]
+    return key(it) == ("A, B, C, D" if len(tr) == 4 else ", ".join(tr) + " only")
+R_OUT = {"f(3)|x * y": "30", "x <<- 5": "5", "b = a * 2": "9", "x[x > 2]": "7", "for (i in 1:n)": "10", "h(x)": "5", "1:4 * 1:2": "16", "n * f(n - 1)": "24", "x[2] <- 10": "6", "g <- function() a * 2": "10"}
+RS = shutil.which("Rscript") or next((p for p in [r"C:\Program Files\R\R-4.5.1\bin\Rscript.exe"] if os.path.exists(p)), None)
+def chk_rprog(it):
+    code = "\n".join(l[2:] for l in it["stem"].split("\n")[1:-1])
+    want = [v for k, v in R_OUT.items() if all(part in code for part in k.split("|"))]; assert len(want) == 1, code
+    if RS:
+        with tempfile.NamedTemporaryFile("w", suffix=".R", delete=False) as fh: fh.write(code + "\n")
+        out = subprocess.run([RS, "-e", "cat(source('%s', echo=FALSE)$value)" % fh.name.replace("\\", "/")], capture_output=True, text=True).stdout.strip()
+        os.unlink(fh.name); assert out == want[0], (out, want)
+    return key(it) == want[0]
+FACTS = {  # written independently of the generator's tables
+ "P. C. Mahalanobis": "D² distance in multivariate analysis", "R. C. Bose": "Partially balanced incomplete block designs", "S. N. Roy": "Union–intersection principle in multivariate testing",
+ "D. G. Horvitz and D. J. Thompson": "Unbiased estimator for unequal-probability sampling without replacement", "R. A. Fisher": "Analysis of variance and maximum likelihood",
+ "J. Neyman": "Theory of confidence intervals", "Karl Pearson": "Chi-square goodness-of-fit test", "W. S. Gosset": "Student's t distribution",
+ "C. R. Rao": "Cramér–Rao inequality and the Rao–Blackwell theorem", "A. Wald": "Sequential probability ratio test", "A. N. Kolmogorov": "Axiomatic foundation of probability",
+ "H. Hotelling": "T² statistic and principal components", "C. Spearman": "Rank correlation coefficient", "F. Wilcoxon": "Signed-rank and rank-sum tests",
+ "G. E. P. Box and G. M. Jenkins": "ARIMA model building", "J. Durbin and G. S. Watson": "Test for first-order autocorrelation of regression residuals",
+ "M. H. Hansen and W. N. Hurwitz": "Estimator for PPS sampling with replacement", "Des Raj": "Ordered estimator in PPS sampling without replacement",
+ "C. F. Gauss": "Method of least squares", "W. H. Kruskal and W. A. Wallis": "Rank-based one-way analysis of variance",
+ "Simple random sampling": "Homogeneous population", "Stratified random sampling": "Heterogeneous population that splits into homogeneous groups",
+ "Cluster sampling": "No list of elementary units is available", "Sampling with varying probabilities (PPS)": "Units of very different sizes, giving larger units more weight",
+ "Systematic sampling": "Every k-th unit from an ordered list after a random start", "Multistage sampling": "Large, widely spread population sampled in successive stages",
+ "Double (two-phase) sampling": "Auxiliary information collected first on a large preliminary sample", "Quota sampling": "Non-probability method: interviewers fill fixed numbers per category",
+ "Ratio estimation": "Auxiliary variable roughly proportional to the study variable (line through the origin)", "Regression estimation": "Linear relation with a non-zero intercept between study and auxiliary variables",
+ "Inverse sampling": "Sampling continues until a fixed number of units with a rare attribute is found", "Snowball sampling": "Respondents recruit further respondents from a hidden population",
+ "Chi-square test": "Homogeneity or independence in a contingency table", "Wilcoxon signed-rank test": "Two related (paired) samples", "Mann–Whitney U test": "Two independent samples",
+ "Kruskal–Wallis test": "Several independent samples: rank version of one-way ANOVA", "Friedman test": "Several related samples in blocks: rank version of two-way ANOVA",
+ "Kolmogorov–Smirnov one-sample test": "Goodness of fit to a fully specified continuous distribution", "Run test": "Randomness of a sequence", "Sign test": "Median of a single population using only signs",
+ "Spearman's rank correlation": "Monotone association between two variables", "McNemar test": "Change in paired binary (yes/no) responses", "Median test": "Equality of medians of independent samples",
+ "Kendall's coefficient of concordance W": "Agreement among several judges ranking the same objects"}
+def chk_match(it):
+    m = re.search(r"LIST-I \([^)]*\): (.*)\. LIST-II \([^)]*\): (.*)\. Choose", it["stem"])
+    left = [x.split(". ", 1)[1] for x in m.group(1).split("; ")]; right = {x.split(". ", 1)[0]: x.split(". ", 1)[1] for x in m.group(2).split("; ")}
+    inv = {v: k for k, v in right.items()}
+    return key(it) == ", ".join("%s-%s" % ("ABCD"[i], inv[FACTS[l]]) for i, l in enumerate(left))
+YEARS = {"Indian Statistical Institute (ISI)": 1931, "National Sample Survey (NSS)": 1950, "Central Statistical Organisation (CSO)": 1951, "Indian Statistical Service (ISS)": 1961,
+         "Ministry of Statistics and Programme Implementation (MoSPI)": 1999, "National Statistical Commission (NSC)": 2006, "NITI Aayog": 2015, "National Statistical Office (NSO)": 2019}
+def chk_orgs(it):
+    body = re.search(r"latest: (.*)\. Choose", it["stem"]).group(1)
+    parts = re.split(r"(?:^| )([A-E])\. ", body)[1:]; lab = dict(zip(parts[0::2], parts[1::2]))
+    return key(it) == ", ".join(sorted(lab, key=lambda L: YEARS[lab[L].strip()]))
+CHECK.update({"55125114582": chk_irred, "55125114583": chk_classes, "55125114601": chk_meanpass, "55125114524": chk_piecewise, "55125114519": chk_eigen,
+              "55125114562": chk_ident, "55125114514": chk_shiftexp, "55125114538": chk_umvue, "55125114552": chk_sprt, "55125114512": chk_joint,
+              "55125114589": chk_rprog, "55125114593": chk_match, "55125114535": chk_match, "55125114554": chk_match, "55125114590": chk_orgs})
 
 by = defaultdict(list)
 for it in items: by[it["srcQid"]].append(it)

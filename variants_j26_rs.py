@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Practice variants of the June 2026 Paper 2 questions that are identified by official question ID
-(seed/<module>_pyq_j26_rs.json). Batch 1: thirteen computational questions; batch 2: fifteen more. Ten variants each.
+(seed/<module>_pyq_j26_rs.json). Batch 1: thirteen computational questions; batch 2: fifteen more; batch 3: fifteen conceptual questions whose answers a rule here still decides. Ten variants each.
 
 Every number is computed here, never typed: each generator returns the stem, the correct option, three distractors that
 come from named, common mistakes, and an explanation built from the same computed values. The script refuses to write a
@@ -31,7 +31,7 @@ def _fr(x):
 
 def ff(x):
     """Probability as a fraction (never a decimal), so (1/2)^n and (0.5)^n can never both appear."""
-    x = F(x); return str(x.numerator) if x.denominator == 1 else "%d/%d" % (x.numerator, x.denominator)
+    x = F(x); return (str(x.numerator) if x.denominator == 1 else "%d/%d" % (x.numerator, x.denominator)).replace("-", "−")
 def d1(x):
     """Allocation display: integer, or one decimal place."""
     x = F(x); return str(x.numerator) if x.denominator == 1 else ("%.1f" % float(x))
@@ -584,13 +584,399 @@ BATCH2 = [("55125114523", "maths", g_maxexp), ("55125114525", "maths", g_extrema
           ("55125114603", "timeseries", g_statinv), ("55125114607", "timeseries", g_pacf), ("55125114606", "timeseries", g_arima),
           ("55125114604", "timeseries", g_ma1_spec)]
 
+# ------------------------------------------------------------------------------------------------- batch 3 generators
+# Conceptual questions whose answer is still decided by a rule this script can execute (graph structure of a chain, a
+# linear system, a derivative, an order/rank condition, an exact expectation, a fact table, or R's own output).
+def mat(M): return "[" + ", ".join("[" + ", ".join(ff(x) for x in row) + "]" for row in M) + "]"
+def reach(P):
+    n = len(P); R_ = [[i == j or P[i][j] > 0 for j in range(n)] for i in range(n)]
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                R_[i][j] = R_[i][j] or (R_[i][k] and R_[k][j])
+    return R_
+def classes(P):
+    R_ = reach(P); n = len(P); seen = set(); out = []
+    for i in range(n):
+        if i in seen: continue
+        c = sorted(j for j in range(n) if R_[i][j] and R_[j][i]); seen |= set(c); out.append(c)
+    return out
+def period(P, i):
+    n = len(P); g = 0; M = [[F(int(a == b)) for b in range(n)] for a in range(n)]
+    for step in range(1, 3 * n + 1):
+        M = [[sum(M[a][k] * P[k][b] for k in range(n)) for b in range(n)] for a in range(n)]
+        if M[i][i] > 0: g = math.gcd(g, step)
+    return g
+def cls_str(cs): return ", ".join("{" + ", ".join(str(i + 1) for i in c) + "}" for c in cs)
+
+CHAINS = [  # transition matrices; every state lies on a cycle, and within a chain every class has the same period
+    [[0,1,0],[F(1,2),0,F(1,2)],[0,1,0]], [[F(1,2),F(1,2),0],[F(1,3),F(1,3),F(1,3)],[0,F(1,2),F(1,2)]],
+    [[0,1,0],[0,0,1],[1,0,0]], [[0,1,0,0],[1,0,0,0],[0,0,0,1],[0,0,1,0]],
+    [[F(1,2),F(1,2),0],[F(1,2),F(1,2),0],[0,0,1]], [[0,F(1,2),0,F(1,2)],[F(1,2),0,F(1,2),0],[0,F(1,2),0,F(1,2)],[F(1,2),0,F(1,2),0]],
+    [[0,1,0],[0,F(1,2),F(1,2)],[1,0,0]], [[0,0,1],[1,0,0],[F(1,2),F(1,2),0]],
+    [[F(1,3),F(2,3),0,0],[F(1,2),F(1,2),0,0],[0,0,F(1,4),F(3,4)],[0,0,F(1,2),F(1,2)]], [[0,1,0,0],[0,0,1,0],[0,0,0,1],[1,0,0,0]]]
+def g_irred():           # 55125114582
+    CAT = ["Irreducible and aperiodic", "Irreducible and periodic", "Reducible and aperiodic", "Reducible and periodic"]
+    out = []
+    for P in CHAINS:
+        cs = classes(P); irr = len(cs) == 1; pers = {period(P, c[0]) for c in cs}; assert len(pers) == 1; d = pers.pop()
+        corr = CAT[(0 if irr else 2) + (1 if d > 1 else 0)]; dis = [c for c in CAT if c != corr]
+        stem = "Consider the Markov chain on states {%s} with transition probability matrix P = %s. Then the Markov chain is" % (", ".join(str(i + 1) for i in range(len(P))), mat(P))
+        why = ("Irreducible means every state can reach every other; here the communicating classes are %s, so the chain is %s. The period of a state is the gcd of the "
+               "step counts at which a return is possible; here every class has period %d, so the chain is %s. Trap: a zero diagonal does not by itself make a chain periodic — "
+               "what matters is the gcd of all return times (a cycle of length 2 together with one of length 3 gives period 1).") % (
+               cls_str(cs), "irreducible" if irr else "reducible (more than one class)", d, "periodic" if d > 1 else "aperiodic")
+        out.append((stem, corr, dis, why))
+    return out
+
+CLS_CHAINS = [
+    [[F(1,2),F(1,2),0],[F(1,2),F(1,2),0],[F(1,3),F(1,3),F(1,3)]], [[0,1,0],[1,0,0],[0,F(1,2),F(1,2)]], [[1,0,0],[F(1,2),0,F(1,2)],[0,0,1]],
+    [[F(1,2),F(1,2),0,0],[F(1,2),F(1,2),0,0],[0,0,F(1,2),F(1,2)],[0,0,F(1,2),F(1,2)]], [[0,1,0,0],[0,0,1,0],[1,0,0,0],[0,0,F(1,2),F(1,2)]],
+    [[F(1,3),F(2,3),0],[0,F(1,2),F(1,2)],[0,F(1,2),F(1,2)]], [[0,1,0],[0,0,1],[1,0,0]], [[F(1,2),0,F(1,2),0],[0,1,0,0],[F(1,2),0,F(1,2),0],[F(1,4),F(1,4),F(1,4),F(1,4)]],
+    [[0,F(1,2),F(1,2)],[F(1,2),0,F(1,2)],[0,0,1]], [[F(1,2),F(1,2),0,0],[0,0,1,0],[0,1,0,0],[0,0,F(1,2),F(1,2)]]]
+def g_classes():         # 55125114583
+    out = []
+    for P in CLS_CHAINS:
+        n = len(P); cs = classes(P); R_ = reach(P); corr = cls_str(cs)
+        oneway = [sorted(j for j in range(n) if R_[i][j]) for i in range(n)]       # trap: "reachable from" instead of "communicates with"
+        cands = [cls_str([list(range(n))]), cls_str([[i] for i in range(n)]), cls_str(sorted({tuple(o) for o in oneway}))]
+        for k in range(len(cs) - 1):                                                # merge two neighbouring classes
+            cands.append(cls_str(cs[:k] + [sorted(cs[k] + cs[k + 1])] + cs[k + 2:]))
+        for k, c in enumerate(cs):                                                  # split a class (one state treated as separate)
+            if len(c) > 1: cands.append(cls_str(sorted(cs[:k] + [[c[0]], c[1:]] + cs[k + 1:])))
+        cands += [cls_str([[0, 2], [1, 3]] if n == 4 else [[0, 2], [1]]), cls_str([[0], list(range(1, n))])]   # tidy-looking wrong partitions
+        dis = [x for x in dict.fromkeys(cands) if x != corr][:3]
+        closed = [c for c in cs if all(P[i][j] == 0 for i in c for j in range(n) if j not in c)]
+        stem = "For the Markov chain with transition probability matrix P = %s on states 1 to %d, the communicating classes are" % (mat(P), n)
+        why = ("States i and j communicate when each can reach the other (i → j and j → i). Communication is an equivalence relation, so the states split into disjoint classes: %s. "
+               "The closed classes (no way out) are %s; any other class is transient. Trap: 'i can reach j' alone does not put i and j in the same class.") % (
+               corr, cls_str(closed))
+        out.append((stem, corr, dis, why))
+    return out
+
+def mean_passage(P, j):
+    """m_i = expected steps to reach j from i (i != j), and the mean return time m_jj; solved exactly."""
+    n = len(P); idx = [i for i in range(n) if i != j]
+    A = [[(F(1) if a == b else F(0)) - P[a][b] for b in idx] + [F(1)] for a in idx]
+    for c in range(len(idx)):
+        pv = next(r for r in range(c, len(idx)) if A[r][c] != 0); A[c], A[pv] = A[pv], A[c]
+        A[c] = [x / A[c][c] for x in A[c]]
+        for r in range(len(idx)):
+            if r != c: A[r] = [A[r][k] - A[r][c] * A[c][k] for k in range(len(idx) + 1)]
+    m = {idx[r]: A[r][-1] for r in range(len(idx))}
+    m[j] = 1 + sum(P[j][k] * m[k] for k in idx)
+    return m
+def g_meanpass():        # 55125114601
+    out = []
+    for p, i, j in [(F(1,3),1,2),(F(1,2),1,2),(F(2,5),1,3),(F(1,4),2,1),(F(3,5),3,2),(F(2,3),1,3),(F(1,2),3,1),(F(1,3),2,2),(F(3,4),2,3),(F(2,5),1,1)]:
+        P = chain(p); m = mean_passage(P, j - 1); val = m[i - 1]
+        w = [F(1), p / (1 - p), (p / (1 - p)) ** 2]; pi = [x / sum(w) for x in w]
+        cands = ([1 / P[i-1][j-1]] if P[i-1][j-1] else []) + [mean_passage(P, (j % 3))[i - 1], m[(i % 3) if (i % 3) != j - 1 else (i + 1) % 3],
+                 1 / (1 - P[j-1][j-1]), F(3), val + 1]
+        dis = [x for x in dict.fromkeys(ff(c) for c in cands) if x != ff(val)][:3]
+        what = ("the mean recurrence time of state %d (expected number of steps to return to %d, starting there)" % (j, j)) if i == j else \
+               ("the expected number of steps to reach state %d for the first time, starting from state %d" % (j, i))
+        stem = MC % fr(p) + "Then %s is" % what
+        why = ("Let mₖ be the expected number of steps to reach state %d from state k. One step is always taken, then the chain continues from where it lands: "
+               "mₖ = 1 + Σ_{l ≠ %d} pₖₗ mₗ. Solving these equations exactly gives %s = %s.%s Trap: counting only the direct jump (or the time to leave state %d) ignores the detours the chain can take.") % (
+               j, j, ("m%s%s" % ("₀₁₂₃"[i], "₀₁₂₃"[j])), ff(val),
+               (" Check: the mean recurrence time is 1/π%s = 1/%s, where π is the stationary distribution (Kac's formula)." % ("₀₁₂₃"[j], "(" + ff(pi[j - 1]) + ")")) if i == j else "", j)
+        out.append((stem, ff(val), dis, why))
+    return out
+
+def pstr(c):
+    """Polynomial c[0] + c[1]x + c[2]x² + c[3]x³ as text."""
+    parts = []
+    for k in range(len(c) - 1, -1, -1):
+        a = F(c[k])
+        if a == 0: continue
+        mag = abs(a); m_ = "" if (mag == 1 and k) else (ff(mag) if (mag.denominator == 1 or k == 0) else "(%s)" % ff(mag))
+        body = m_ + ["", "x", "x²", "x³"][k]
+        parts.append((("−" if a < 0 else "") + body) if not parts else (("− " if a < 0 else "+ ") + body))
+    return " ".join(parts) if parts else "0"
+def peval(c, x): return sum(F(a) * F(x) ** k for k, a in enumerate(c))
+def pder(c): return [k * F(a) for k, a in enumerate(c)][1:] or [F(0)]
+def g_piecewise():       # 55125114524
+    CH = ["A, C only", "B, D only", "A, D only", "A, B only", "B, C only", "A, B, C only"]
+    out = []
+    for g1, g2, a, c, b in [([1,0,1],[3,-1],0,1,2), ([1,0,-1],[1,0,F(-1,4)],-1,0,2), ([1,2],[0,0,1],0,1,3), ([0,2,-1],[1],0,1,2), ([0,0,1],[0,0,0,1],-1,0,1),
+                            ([0,1],[2,-1],0,1,2), ([0,0,1],[-1,2],0,1,2), ([4,-4,1],[0,0,1],0,1,2), ([0,2,1],[0,2,-1],-2,0,2), ([0,4,-2],[2,0,0],0,1,2)]:
+        cont = peval(g1, c) == peval(g2, c); diff = cont and peval(pder(g1), c) == peval(pder(g2), c)
+        ends = peval(g1, a) == peval(g2, b); rolle = cont and diff and ends
+        truth = [L for L, t in (("A", cont and diff), ("B", not diff), ("C", rolle), ("D", not rolle)) if t]
+        corr = ", ".join(truth) + " only"; assert corr in CH, corr
+        dis = [x for x in CH if x != corr][:3]
+        stem = ("Given f(x) = %s for %s ≤ x ≤ %s, and f(x) = %s for %s < x ≤ %s, consider the statements: A. f(x) is continuous and differentiable at all points. "
+                "B. f(x) is not differentiable at x = %s. C. Rolle's theorem is applicable on [%s, %s]. D. Rolle's theorem is not applicable on [%s, %s]. "
+                "Choose the correct answer from the options given below:") % (pstr(g1), fr(a), fr(c), pstr(g2), fr(c), fr(b), fr(c), fr(a), fr(b), fr(a), fr(b))
+        why = ("Check the join x = %s: the left piece gives %s and the right piece %s, so f is %s there. Slopes at the join: left %s, right %s, so f is %s at x = %s. "
+               "Rolle's theorem needs continuity on [%s, %s], differentiability on (%s, %s) and f(%s) = f(%s); here f(%s) = %s and f(%s) = %s, so it is %s. True statements: %s. "
+               "Trap: equal end values alone are not enough; a corner inside the interval breaks Rolle's theorem.") % (
+               fr(c), fr(peval(g1, c)), fr(peval(g2, c)), "continuous" if cont else "not continuous",
+               fr(peval(pder(g1), c)), fr(peval(pder(g2), c)), "differentiable" if diff else "not differentiable", fr(c),
+               fr(a), fr(b), fr(a), fr(b), fr(a), fr(b), fr(a), fr(peval(g1, a)), fr(b), fr(peval(g2, b)), "applicable" if rolle else "not applicable", corr.replace(" only", ""))
+        out.append((stem, corr, dis, why))
+    return out
+
+def g_eigen():           # 55125114519
+    out = []
+    for A, fdesc, fn, wrong in [
+        ([[2,1],[1,2]], "A⁻¹", lambda l: 1 / l, [lambda l: l, lambda l: -l, lambda l: l * l]),
+        ([[4,1],[2,3]], "A²", lambda l: l * l, [lambda l: 2 * l, lambda l: l, lambda l: 1 / l]),
+        ([[3,0],[0,5]], "A − 2I", lambda l: l - 2, [lambda l: l + 2, lambda l: l, lambda l: l / 2]),
+        ([[2,2],[1,3]], "3A + I", lambda l: 3 * l + 1, [lambda l: 3 * l, lambda l: l + 1, lambda l: 3 * (l + 1)]),
+        ([[5,2],[2,2]], "A′ (the transpose of A)", lambda l: l, [lambda l: 1 / l, lambda l: -l, lambda l: l * l]),
+        ([[1,2],[2,1]], "A⁻¹", lambda l: 1 / l, [lambda l: l, lambda l: -l, lambda l: l * l]),
+        ([[6,2],[2,3]], "A² − A", lambda l: l * l - l, [lambda l: l * l, lambda l: l, lambda l: 2 * l]),
+        ([[4,-2],[1,1]], "(A − I)⁻¹", lambda l: 1 / (l - 1), [lambda l: l - 1, lambda l: 1 / l - 1, lambda l: 1 / l]),
+        ([[3,1],[0,2]], "A³", lambda l: l ** 3, [lambda l: l * l, lambda l: l, lambda l: 1 / l ** 3]),
+        ([[7,-2],[4,1]], "2A⁻¹", lambda l: 2 / l, [lambda l: l / 2, lambda l: 1 / (2 * l), lambda l: 2 * l])]:
+        a, b, c, d = map(F, (A[0][0], A[0][1], A[1][0], A[1][1])); tr = a + d; det = a * d - b * c
+        disc = tr * tr - 4 * det; sq = math.isqrt(int(disc)); assert sq * sq == disc
+        l1, l2 = (tr + sq) / 2, (tr - sq) / 2
+        corr = ff(fn(l1)); other = ff(fn(l2))
+        dis = [x for x in dict.fromkeys(ff(w(l1)) for w in wrong) if x not in (corr, other)]
+        assert len(dis) >= 3, (A, fdesc, dis)
+        stem = "The matrix A = %s has λ = %s as an eigenvalue. Which of the following is an eigenvalue of %s?" % (mat(A), ff(l1), fdesc)
+        why = ("If Av = λv then any polynomial (or inverse) in A acts on the same eigenvector by the same function of λ: here %s v = f(λ)v with f(λ) = %s at λ = %s. "
+               "(A's eigenvalues are %s and %s: the trace is %s and the determinant %s.) Trap: the eigenvector stays the same; only the eigenvalue is transformed, so do not leave λ unchanged.") % (
+               fdesc.split(" (")[0], corr, ff(l1), ff(l1), ff(l2), ff(tr), ff(det))
+        out.append((stem, corr, dis[:3], why))
+    return out
+
+def g_ident():           # 55125114562
+    CAT = ["Both (i) and (ii) are identified", "(i) is identified but (ii) is not", "(ii) is identified but (i) is not", "Both (i) and (ii) are unidentified"]
+    out = []
+    for e1, e2 in [({1,2},{2}), ({1},{2}), ({1,2},{1,2}), ({1},{1,2}), ({1,3},{2}), ({1,2,3},{3}), ({2},{1,3}), ({1,2},{1,3}), ({3},{3}), ({1},{2,3})]:
+        allx = sorted(e1 | e2)
+        def ident(own, other):              # rank condition with 2 equations: an excluded exogenous variable must appear in the other equation
+            return any(x not in own and x in other for x in allx)
+        i1, i2 = ident(e1, e2), ident(e2, e1)
+        corr = CAT[0 if i1 and i2 else 1 if i1 else 2 if i2 else 3]; dis = [x for x in CAT if x != corr]
+        xs = lambda S, k: " + ".join("β%s%s x%s" % ("₀₁₂₃"[k], "₀₁₂₃"[j], "₀₁₂₃"[j]) for j in sorted(S))
+        stem = ("Consider the two-equation model (i) y₁ = γ₁y₂ + %s + ε₁ and (ii) y₂ = γ₂y₁ + %s + ε₂, where the y's are endogenous and the x's are exogenous "
+                "(all coefficients shown are non-zero). Then") % (xs(e1, 1), xs(e2, 2))
+        def say(own, other, nm):
+            exc = [x for x in allx if x not in own]
+            return "(%s) excludes %s" % (nm, ", ".join("x%s" % "₀₁₂₃"[x] for x in exc) if exc else "no exogenous variable")
+        why = ("With G = 2 equations, an equation is identified when it excludes at least G − 1 = 1 exogenous variable that appears elsewhere in the system "
+               "(order condition; with two equations and non-zero coefficients this also satisfies the rank condition). %s and %s, so: %s. "
+               "Trap: including more exogenous variables in an equation makes it harder, not easier, to identify.") % (
+               say(e1, e2, "i"), say(e2, e1, "ii"), corr.lower())
+        out.append((stem, corr, dis, why))
+    return out
+
+def cpar(x):
+    x = F(x); return ff(x) if x.denominator == 1 else "(%s)" % ff(x)
+def over_n(c):
+    """c/n written cleanly: 1/n, 4/n, 1/(4n)."""
+    c = F(c)
+    if c == 1: return "1/n"
+    if c.denominator == 1: return "%d/n" % c.numerator
+    if c.numerator == 1: return "1/(%dn)" % c.denominator
+    return "%s/n" % ff(c)
+def g_shiftexp():        # 55125114514
+    out = []
+    for lam, picks in [(2,"ABCD"),(1,"BCDE"),(3,"AFGH"),(F(1,2),"ACEG"),(2,"BDFH"),(4,"AEFC"),(F(1,3),"GBHD"),(1,"AHCE"),(3,"FDGB"),(F(1,2),"EHAC")]:
+        lam = F(lam); L = lam
+        pool = {
+            "A": ("X̄ₙ →ᵖ θ + %s" % ff(1 / L), True),
+            "B": ("If Y = min(X₁, …, Xₙ), then f(y) = %sn e^(−%sn(y − θ)), y ≥ θ" % ("" if L == 1 else cpar(L), "" if L == 1 else cpar(L)), True),
+            "C": ("V(X̄ₙ) = %s" % over_n(1 / (L * L)), True),
+            "D": ("X̄ₙ →ᵖ θ", False),
+            "E": ("min(X₁, …, Xₙ) →ᵖ θ", True),
+            "F": ("V(X̄ₙ) = %sn" % ("" if L == 1 else cpar(1 / (L * L))), False),
+            "G": ("E[min(X₁, …, Xₙ)] = θ + %s" % over_n(1 / L), True),
+            "H": ("E[min(X₁, …, Xₙ)] = θ", False)}
+        st = [pool[k] for k in picks]
+        truth = [L_ for L_, (_, t) in zip("ABCD", st) if t]
+        corr = ("A, B, C, D" if len(truth) == 4 else ", ".join(truth) + " only")
+        allc = ["A, B only", "B, C, D only", "A, C, D only", "A, B, C only", "A, B, C, D", "A, C only", "B, D only", "A, D only", "C, D only", "B, C only", "A, B, D only",
+                "A only", "B only", "C only", "D only"]
+        dis = sorted((x for x in allc if x != corr), key=lambda x: (abs(len(x) - len(corr)), x))[:3]
+        dens = "e^(−(x − θ))" if L == 1 else "%se^(−%s(x − θ))" % (cpar(L), cpar(L))
+        stem = ("Let X₁, …, Xₙ be iid with pdf f(x | θ) = %s for x ≥ θ, and 0 otherwise. Consider: A. %s. B. %s. C. %s. D. %s. Choose the correct answer from the options given below:") % (
+               dens, st[0][0], st[1][0], st[2][0], st[3][0])
+        why = ("X − θ is exponential with rate λ = %s, so E(X) = θ + 1/λ = θ + %s and Var(X) = 1/λ² = %s. Hence X̄ₙ →ᵖ θ + %s (not θ) and V(X̄ₙ) = %s/n. "
+               "The minimum exceeds y only if every observation does: P(Y > y) = e^(−nλ(y − θ)), so Y − θ is exponential with rate nλ, E(Y) = θ + 1/(nλ), and Y →ᵖ θ. "
+               "True statements: %s. Trap: the sample mean estimates the mean θ + 1/λ, not the start of the support θ.") % (
+               ff(L), ff(1 / L), ff(1 / (L * L)), ff(1 / L), ff(1 / (L * L)), corr.replace(" only", ""))
+        out.append((stem, corr, dis, why))
+    return out
+
+UMVUE = [  # (family, sufficient statistic, indicator, correct, distractors, explanation of E(T))
+    ("exponential with mean θ", "ΣXᵢ", "T = 1 if X₁ > c, and 0 otherwise (c > 0 fixed)", "e^(−c/θ)", ["1 − e^(−c/θ)", "θ", "1/θ"], "E(T) = P(X₁ > c) = e^(−c/θ)"),
+    ("exponential with pdf λe^(−λx), x > 0", "ΣXᵢ", "T = 1 if X₁ ≤ c, and 0 otherwise (c > 0 fixed)", "1 − e^(−λc)", ["e^(−λc)", "λc", "1/λ"], "E(T) = P(X₁ ≤ c) = 1 − e^(−λc)"),
+    ("Poisson(λ)", "ΣXᵢ", "T = 1 if X₁ = 0, and 0 otherwise", "e^(−λ)", ["1 − e^(−λ)", "λ", "λe^(−λ)"], "E(T) = P(X₁ = 0) = e^(−λ)"),
+    ("Poisson(λ)", "ΣXᵢ", "T = 1 if X₁ = 1, and 0 otherwise", "λe^(−λ)", ["e^(−λ)", "λ", "1 − e^(−λ)"], "E(T) = P(X₁ = 1) = λe^(−λ)"),
+    ("Bernoulli(p)", "ΣXᵢ", "T = X₁X₂", "p²", ["p", "2p", "p(1 − p)"], "E(T) = E(X₁)E(X₂) = p² by independence"),
+    ("Binomial(m, p) with m known", "ΣXᵢ", "T = 1 if X₁ = 0, and 0 otherwise", "(1 − p)^m", ["1 − p", "p^m", "mp"], "E(T) = P(X₁ = 0) = (1 − p)^m"),
+    ("N(μ, 1)", "ΣXᵢ", "T = 1 if X₁ ≤ c, and 0 otherwise (c fixed)", "Φ(c − μ)", ["Φ(μ − c)", "φ(c − μ)", "c − μ"], "E(T) = P(X₁ ≤ c) = P(Z ≤ c − μ) = Φ(c − μ)"),
+    ("Uniform(0, θ)", "max(X₁, …, Xₙ)", "T = 1 if X₁ ≤ c, and 0 otherwise (0 < c < θ, c fixed)", "c/θ", ["1 − c/θ", "θ/c", "cθ"], "E(T) = P(X₁ ≤ c) = c/θ"),
+    ("geometric with P(X = x) = p(1 − p)^x, x = 0, 1, 2, …", "ΣXᵢ", "T = 1 if X₁ = 0, and 0 otherwise", "p", ["1 − p", "p(1 − p)", "1/p"], "E(T) = P(X₁ = 0) = p"),
+    ("Poisson(λ)", "ΣXᵢ", "T = 1 if X₁ ≥ 1, and 0 otherwise", "1 − e^(−λ)", ["e^(−λ)", "λ", "λe^(−λ)"], "E(T) = P(X₁ ≥ 1) = 1 − e^(−λ)")]
+def g_umvue():           # 55125114538
+    out = []
+    for fam, S, T, corr, dis, et in UMVUE:
+        stem = "Let X₁, X₂, …, Xₙ (n ≥ 2) be iid %s, and let S = %s. Define %s. Then E[T | S] is the UMVUE of" % (fam, S, T)
+        why = ("T is unbiased for its own expectation: %s. S is a complete sufficient statistic for this family, so by Rao–Blackwell and Lehmann–Scheffé, E[T | S] is the unique "
+               "UMVUE of %s. Trap: the answer is what T estimates (a probability or expectation), not the parameter itself.") % (et, corr)
+        out.append((stem, corr, dis, why))
+    return out
+
+def g_sprt():            # 55125114552
+    out = []
+    for a, b in [(F(5,100),F(10,100)),(F(1,100),F(5,100)),(F(10,100),F(20,100)),(F(5,100),F(5,100)),(F(2,100),F(10,100))]:
+        A_, B_ = (1 - b) / a, b / (1 - a)
+        for ask in ("upper", "lower"):
+            corr = fr(A_) if ask == "upper" else fr(B_)
+            cands = [B_, (1 - a) / b, 1 / a, b / a, 1 / b] if ask == "upper" else [A_, a / (1 - b), b, a, b / a]
+            dis = [x for x in dict.fromkeys(fr(c) for c in cands) if x != corr][:3]
+            stem = ("In Wald's SPRT with type I error α = %s and type II error β = %s, sampling continues while B < λₘ < A, where λₘ is the likelihood ratio L₁/L₀. "
+                    "Wald's approximation for the %s boundary %s is") % (fr(a), fr(b), ask, "A" if ask == "upper" else "B")
+            why = ("Wald's approximations are A ≈ (1 − β)/α and B ≈ β/(1 − α). Here A ≈ (1 − %s)/%s = %s and B ≈ %s/(1 − %s) = %s. "
+                   "H₁ is accepted when the ratio first reaches A and H₀ when it falls to B. Trap: swapping α and β in the formulas gives %s.") % (
+                   fr(b), fr(a), fr(A_), fr(b), fr(a), fr(B_), fr((1 - a) / b) if ask == "upper" else fr(a / (1 - b)))
+            out.append((stem, corr, dis, why))
+    return out
+
+DENS = [  # (density text, statements [(text, truth)], explanation)
+    ("f(x, y) = (1/4)(1 + xy) for |x| < 1, |y| < 1", [("X and Y are independent", False), ("f(x) = 1/2 for −1 < x < 1", True), ("E(XY) = 1/9", True), ("Cov(X, Y) = 0", False)],
+     "Integrating out y gives f(x) = 1/2 and likewise f(y) = 1/2, but f(x)f(y) = 1/4 ≠ (1/4)(1 + xy), so X and Y are dependent. E(XY) = (1/4)∫∫x²y² = (1/4)(2/3)(2/3) = 1/9, and since E(X) = E(Y) = 0, Cov(X, Y) = 1/9 ≠ 0."),
+    ("f(x, y) = 4xy for 0 < x < 1, 0 < y < 1", [("X and Y are independent", True), ("f(x) = 2x for 0 < x < 1", True), ("E(X) = 1/2", False), ("E(XY) = 4/9", True)],
+     "The density factorises as (2x)(2y) on a rectangle, so X and Y are independent with f(x) = 2x. E(X) = ∫2x² dx = 2/3, not 1/2, and E(XY) = E(X)E(Y) = 4/9."),
+    ("f(x, y) = x + y for 0 < x < 1, 0 < y < 1", [("X and Y are independent", False), ("f(x) = x + 1/2 for 0 < x < 1", True), ("E(X) = 7/12", True), ("E(XY) = E(X)E(Y)", False)],
+     "f(x) = ∫(x + y)dy = x + 1/2 and similarly for y; (x + 1/2)(y + 1/2) ≠ x + y, so they are dependent. E(X) = ∫x(x + 1/2)dx = 1/3 + 1/4 = 7/12. E(XY) = 1/3 but E(X)E(Y) = 49/144."),
+    ("f(x, y) = 2 for 0 < x < y < 1", [("X and Y are independent", False), ("f(x) = 2(1 − x) for 0 < x < 1", True), ("f(y) = 2y for 0 < y < 1", True), ("E(Y) = 1/2", False)],
+     "The support 0 < x < y < 1 is a triangle, not a rectangle, so X and Y cannot be independent. f(x) = ∫ₓ¹ 2 dy = 2(1 − x), f(y) = ∫₀ʸ 2 dx = 2y, and E(Y) = ∫2y² dy = 2/3."),
+    ("f(x, y) = e^(−(x + y)) for x > 0, y > 0", [("X and Y are independent", True), ("P(X > Y) = 1/2", True), ("X + Y has a gamma distribution with shape 2", True), ("E(XY) = 2", False)],
+     "The density is e^(−x)·e^(−y) on a product region: independent standard exponentials. By symmetry P(X > Y) = 1/2; the sum of two independent Exp(1) variables is Gamma(2, 1); and E(XY) = 1 × 1 = 1, not 2."),
+    ("f(x, y) = 6x for 0 < x < y < 1", [("X and Y are independent", False), ("f(x) = 6x(1 − x) for 0 < x < 1", True), ("f(y) = 3y² for 0 < y < 1", True), ("E(X) = 1/2", True)],
+     "On the triangle 0 < x < y < 1, f(x) = ∫ₓ¹ 6x dy = 6x(1 − x) and f(y) = ∫₀ʸ 6x dx = 3y². Their product is not 6x, so they are dependent. E(X) = ∫6x²(1 − x)dx = 2 − 3/2 = 1/2."),
+    ("f(x, y) = (3/2)(x² + y²) for 0 < x < 1, 0 < y < 1", [("X and Y are independent", False), ("f(x) = (3/2)x² + 1/2 for 0 < x < 1", True), ("E(X) = 5/8", True), ("E(X²) = 1/2", False)],
+     "f(x) = (3/2)(x² + 1/3) = (3/2)x² + 1/2, and f(x)f(y) ≠ (3/2)(x² + y²), so they are dependent. E(X) = ∫x((3/2)x² + 1/2)dx = 3/8 + 1/4 = 5/8; E(X²) = 3/10 + 1/6 = 7/15, not 1/2."),
+    ("f(x, y) = 8xy for 0 < x < y < 1", [("X and Y are independent", False), ("f(y) = 4y³ for 0 < y < 1", True), ("f(x) = 4x(1 − x²) for 0 < x < 1", True), ("f(x, y) factorises, so X and Y are independent", False)],
+     "8xy looks like a product, but the support 0 < x < y < 1 is not a rectangle, so X and Y are dependent: knowing y limits x to (0, y). f(y) = ∫₀ʸ 8xy dx = 4y³ and f(x) = ∫ₓ¹ 8xy dy = 4x(1 − x²)."),
+    ("f(x, y) = 1/2 for |x| + |y| < 1", [("X and Y are independent", False), ("Cov(X, Y) = 0", True), ("f(x) = 1 − |x| for −1 < x < 1", True), ("E(X) = 0", True)],
+     "The square |x| + |y| < 1 has area 2, so the density is 1/2. f(x) = ∫ 1/2 dy over |y| < 1 − |x| = 1 − |x|. By symmetry E(X) = 0 and E(XY) = 0, so Cov(X, Y) = 0; yet the support is not a rectangle, so X and Y are dependent — uncorrelated does not mean independent."),
+    ("f(x, y) = 2e^(−x − 2y) for x > 0, y > 0", [("X and Y are independent", True), ("E(Y) = 1/2", True), ("P(X < Y) = 1/3", True), ("E(X) = 1/2", False)],
+     "f = e^(−x)·2e^(−2y): independent, X ~ Exp(1) and Y ~ Exp(rate 2), so E(X) = 1 and E(Y) = 1/2. P(X < Y) = 1/(1 + 2) = 1/3 (the rate of X over the sum of the rates).")]
+def g_joint():           # 55125114512
+    allc = ["A, B only", "B, C only", "A, B, C only", "B, C, D only", "A, D only", "A, B, C, D", "A, B, D only", "A, C, D only", "B, D only", "A, C only", "C, D only"]
+    out = []
+    for dens, sts, ex in DENS:
+        truth = [L for L, (_, t) in zip("ABCD", sts) if t]
+        corr = "A, B, C, D" if len(truth) == 4 else ", ".join(truth) + " only"
+        dis = sorted((x for x in allc if x != corr), key=lambda x: (abs(len(x) - len(corr)), x))[:3]
+        stem = "Let X and Y have joint pdf %s (and 0 otherwise). Consider: A. %s. B. %s. C. %s. D. %s. Choose the correct answer from the options given below:" % (
+            dens, sts[0][0], sts[1][0], sts[2][0], sts[3][0])
+        why = ex + " So the true statements are %s. Trap: independence needs both a factorised density and a rectangular (product) support." % corr.replace(" only", "")
+        out.append((stem, corr, dis, why))
+    return out
+
+RSNIP = [  # (code lines, R output confirmed with R 4.5.1, distractors, explanation)
+    (["x <- 2", "f <- function(y) {", "  x <- 10", "  x * y", "}", "f(3)"], "30", ["6", "13", "5"], "Inside f, x <- 10 creates a local x that hides the global x = 2, so f(3) = 10 × 3 = 30. Trap: 6 uses the global x."),
+    (["x <- 1", "f <- function() {", "  x <<- 5", "  x + 1", "}", "f()", "x"], "5", ["1", "6", "2"], "<<- assigns in the enclosing (here global) environment, so f() changes the global x to 5 (and returns 6). The last line prints x = 5. Trap: with <- instead of <<- the global x would stay 1."),
+    (["f <- function(a, b = a * 2) {", "  a + b", "}", "f(3)"], "9", ["3", "6", "5"], "A default argument may refer to another argument: b defaults to a * 2 = 6, so f(3) = 3 + 6 = 9. Trap: 3 ignores the default for b."),
+    (["x <- c(1, 2, 3, 4)", "y <- x[x > 2]", "sum(y)"], "7", ["10", "3", "2"], "x > 2 is the logical vector (FALSE, FALSE, TRUE, TRUE), so y = c(3, 4) and sum(y) = 7. Trap: 2 counts the selected elements instead of adding them."),
+    (["g <- function(n) {", "  s <- 0", "  for (i in 1:n) s <- s + i", "  s", "}", "g(4)"], "10", ["4", "24", "6"], "The loop adds 1 + 2 + 3 + 4 = 10, and the last expression s is returned. Trap: 24 is 4! (a product, not a sum)."),
+    (["x <- 5", "h <- function(x) {", "  x <- x + 1", "  x", "}", "h(x)", "x"], "5", ["6", "1", "11"], "R passes arguments by value: h works on its own copy of x and returns 6, but the global x is untouched. The last line prints 5. Trap: 6 is what h(x) returns, not the new value of x."),
+    (["v <- 1:4 * 1:2", "sum(v)"], "16", ["10", "30", "20"], "The shorter vector is recycled: 1:4 * c(1, 2, 1, 2) = c(1, 4, 3, 8), whose sum is 16. Trap: 30 multiplies the two sums, and 20 treats 1:2 as the single number 2; R multiplies element by element after recycling."),
+    (["f <- function(n) if (n <= 1) 1 else n * f(n - 1)", "f(4)"], "24", ["4", "10", "1"], "f calls itself on n − 1 until the base case n ≤ 1 returns 1: f(4) = 4 × f(3) = 4 × 3 × f(2) = 4 × 3 × 2 × f(1) = 24, the factorial of 4. Trap: 10 adds the numbers instead of multiplying them."),
+    (["x <- c(2, 4, 6)", "x[2] <- 10", "mean(x)"], "6", ["4", "18", "10"], "After x[2] <- 10 the vector is c(2, 10, 6), whose mean is 18/3 = 6. Trap: 4 is the mean before the change; 18 is the sum."),
+    (["a <- 3", "f <- function() {", "  a <- a + 2", "  g <- function() a * 2", "  g()", "}", "f()"], "10", ["6", "12", "5"], "Inside f, a <- a + 2 makes a local a = 5. g is defined inside f, so it finds that a (lexical scoping) and returns 5 × 2 = 10. Trap: 6 uses the global a = 3.")]
+def g_rprog():           # 55125114589
+    out = []
+    for code, ans, dis, ex in RSNIP:
+        prompt, depth = [], 0
+        for l in code:
+            prompt.append(("> " if depth == 0 else "+ ") + l)
+            depth += l.count("{") - l.count("}")
+        stem = "A part of an R program is given below:\n" + "\n".join(prompt) + "\nThe output of the last line is:"
+        out.append((stem, ans, dis, ex + " (Output confirmed by running the code in R 4.5.1.)"))
+    return out
+
+def matching(pairs_sets, title1, title2, why_head):
+    out = []
+    for n, pairs in enumerate(pairs_sets):
+        k = len(pairs); perm = [(i * 3 + n) % k for i in range(k)]      # where item i's answer sits in List II
+        assert sorted(perm) == list(range(k))
+        listII = [None] * k
+        for i, p in enumerate(perm): listII[p] = pairs[i][1]
+        roman = ["I", "II", "III", "IV"]
+        corr = ", ".join("%s-%s" % ("ABCD"[i], roman[perm[i]]) for i in range(k))
+        def alt(q): return ", ".join("%s-%s" % ("ABCD"[i], roman[q[i]]) for i in range(k))
+        swaps = [[perm[1], perm[0], perm[2], perm[3]], [perm[0], perm[2], perm[1], perm[3]], [perm[3], perm[1], perm[2], perm[0]]]
+        dis = [alt(q) for q in swaps]
+        stem = "Match LIST-I with LIST-II. LIST-I (%s): %s. LIST-II (%s): %s. Choose the correct answer from the options given below:" % (
+            title1, "; ".join("%s. %s" % ("ABCD"[i], pairs[i][0]) for i in range(k)), title2, "; ".join("%s. %s" % (roman[j], listII[j]) for j in range(k)))
+        why = why_head + " " + "; ".join("%s → %s" % (pairs[i][0], pairs[i][1]) for i in range(k)) + ". So the matching is %s. Trap: each item of LIST-II is used exactly once, so fix the pairs you are sure of first." % corr
+        out.append((stem, corr, dis, why))
+    return out
+
+STATS = [("R. A. Fisher", "Analysis of variance and maximum likelihood"), ("J. Neyman", "Theory of confidence intervals"), ("Karl Pearson", "Chi-square goodness-of-fit test"),
+         ("W. S. Gosset", "Student's t distribution"), ("P. C. Mahalanobis", "D² distance in multivariate analysis"), ("C. R. Rao", "Cramér–Rao inequality and the Rao–Blackwell theorem"),
+         ("R. C. Bose", "Partially balanced incomplete block designs"), ("S. N. Roy", "Union–intersection principle in multivariate testing"), ("A. Wald", "Sequential probability ratio test"),
+         ("A. N. Kolmogorov", "Axiomatic foundation of probability"), ("H. Hotelling", "T² statistic and principal components"), ("C. Spearman", "Rank correlation coefficient"),
+         ("F. Wilcoxon", "Signed-rank and rank-sum tests"), ("G. E. P. Box and G. M. Jenkins", "ARIMA model building"), ("J. Durbin and G. S. Watson", "Test for first-order autocorrelation of regression residuals"),
+         ("D. G. Horvitz and D. J. Thompson", "Unbiased estimator for unequal-probability sampling without replacement"), ("M. H. Hansen and W. N. Hurwitz", "Estimator for PPS sampling with replacement"),
+         ("Des Raj", "Ordered estimator in PPS sampling without replacement"), ("C. F. Gauss", "Method of least squares"), ("W. H. Kruskal and W. A. Wallis", "Rank-based one-way analysis of variance")]
+def g_match_stats():     # 55125114593
+    sets = [[STATS[i] for i in idx] for idx in [(4,6,7,15),(0,1,2,3),(5,8,9,10),(11,12,13,14),(16,17,18,19),(4,5,6,7),(0,8,12,16),(1,10,14,17),(2,9,13,18),(3,11,15,19)]]
+    return matching(sets, "statisticians", "contributions", "Recall each statistician's best-known contribution:")
+
+SAMP = [("Simple random sampling", "Homogeneous population"), ("Stratified random sampling", "Heterogeneous population that splits into homogeneous groups"),
+        ("Cluster sampling", "No list of elementary units is available"), ("Sampling with varying probabilities (PPS)", "Units of very different sizes, giving larger units more weight"),
+        ("Systematic sampling", "Every k-th unit from an ordered list after a random start"), ("Multistage sampling", "Large, widely spread population sampled in successive stages"),
+        ("Double (two-phase) sampling", "Auxiliary information collected first on a large preliminary sample"), ("Quota sampling", "Non-probability method: interviewers fill fixed numbers per category"),
+        ("Ratio estimation", "Auxiliary variable roughly proportional to the study variable (line through the origin)"), ("Regression estimation", "Linear relation with a non-zero intercept between study and auxiliary variables"),
+        ("Inverse sampling", "Sampling continues until a fixed number of units with a rare attribute is found"), ("Snowball sampling", "Respondents recruit further respondents from a hidden population")]
+def g_match_samp():      # 55125114535
+    sets = [[SAMP[i] for i in idx] for idx in [(0,1,2,3),(4,5,6,7),(8,9,10,11),(0,4,8,11),(1,5,9,10),(2,6,7,3),(0,2,5,9),(1,3,6,10),(4,7,8,2),(5,11,0,6)]]
+    return matching(sets, "methods", "when used / key feature", "Link each method to the situation it is designed for:")
+
+NPT = [("Chi-square test", "Homogeneity or independence in a contingency table"), ("Wilcoxon signed-rank test", "Two related (paired) samples"), ("Mann–Whitney U test", "Two independent samples"),
+       ("Kruskal–Wallis test", "Several independent samples: rank version of one-way ANOVA"), ("Friedman test", "Several related samples in blocks: rank version of two-way ANOVA"),
+       ("Kolmogorov–Smirnov one-sample test", "Goodness of fit to a fully specified continuous distribution"), ("Run test", "Randomness of a sequence"), ("Sign test", "Median of a single population using only signs"),
+       ("Spearman's rank correlation", "Monotone association between two variables"), ("McNemar test", "Change in paired binary (yes/no) responses"), ("Median test", "Equality of medians of independent samples"),
+       ("Kendall's coefficient of concordance W", "Agreement among several judges ranking the same objects")]
+def g_match_np():        # 55125114554
+    sets = [[NPT[i] for i in idx] for idx in [(0,1,2,3),(4,5,6,7),(8,9,10,11),(0,4,8,11),(1,5,9,10),(2,6,7,3),(0,2,5,9),(1,3,6,10),(4,7,8,2),(5,11,0,6)]]
+    return matching(sets, "tests", "purpose", "Match each test to the design or question it answers:")
+
+ORGS = [("Indian Statistical Institute (ISI)", 1931), ("National Sample Survey (NSS)", 1950), ("Central Statistical Organisation (CSO)", 1951), ("Indian Statistical Service (ISS)", 1961),
+        ("Ministry of Statistics and Programme Implementation (MoSPI)", 1999), ("National Statistical Commission (NSC)", 2006), ("NITI Aayog", 2015), ("National Statistical Office (NSO)", 2019)]
+def g_orgs():            # 55125114590
+    out = []
+    for n, idx in enumerate([(0,1,2,4,7),(2,3,4,5,6),(0,2,3,5,7),(1,3,4,6,7),(0,1,3,5,6),(1,2,4,5,7),(0,2,4,6,7),(0,1,2,3,5),(3,4,5,6,7),(0,1,4,5,7)]):
+        items = [ORGS[i] for i in idx]; k = len(items)
+        order = [(n + 2 * j) % k for j in range(k)]                  # how the five are listed as A..E
+        listed = [items[o] for o in order]
+        chron = sorted(range(k), key=lambda j: listed[j][1])
+        corr = ", ".join("ABCDE"[j] for j in chron)
+        def sw(a, b): q = chron[:]; q[a], q[b] = q[b], q[a]; return ", ".join("ABCDE"[j] for j in q)
+        dis = [sw(0, 1), sw(2, 3), sw(3, 4)]
+        stem = "Arrange the following in order of their year of establishment, from oldest to latest: %s. Choose the correct answer from the options given below:" % (
+            " ".join("%s. %s" % ("ABCDE"[j], listed[j][0]) for j in range(k)))
+        why = ("Founding years: %s. Sorting them gives %s. Trap: the NSO (2019) is the newest — it was formed by merging the CSO and the NSSO.") % (
+            "; ".join("%s %d" % (listed[j][0], listed[j][1]) for j in chron), corr)
+        out.append((stem, corr, dis, why))
+    return out
+
+BATCH3 = [("55125114582", "stochastic", g_irred), ("55125114583", "stochastic", g_classes), ("55125114601", "stochastic", g_meanpass),
+          ("55125114524", "maths", g_piecewise), ("55125114519", "maths", g_eigen), ("55125114562", "regression", g_ident),
+          ("55125114514", "inference", g_shiftexp), ("55125114538", "inference", g_umvue), ("55125114552", "inference", g_sprt),
+          ("55125114512", "probability", g_joint), ("55125114589", "rprog", g_rprog),
+          ("55125114593", "official", g_match_stats), ("55125114535", "sampling", g_match_samp), ("55125114554", "nonparam", g_match_np),
+          ("55125114590", "official", g_orgs)]
+
 BATCH = [  # (official question ID, module, generator)
     ("55125114584", "stochastic", g_ruin), ("55125114581", "stochastic", g_memoryless), ("55125114585", "stochastic", g_poisson_split),
     ("55125114597", "stochastic", g_nstep), ("55125114599", "stochastic", g_first_passage),
     ("55125114568", "timeseries", g_ar1_var), ("55125114605", "timeseries", g_ar1_acov),
     ("55125114527", "design", g_rbd), ("55125114526", "design", g_anova_f),
     ("55125114530", "sampling", g_neyman), ("55125114558", "regression", g_adjr2), ("55125114563", "regression", g_dw),
-    ("55125114508", "probability", g_mgf)] + BATCH2
+    ("55125114508", "probability", g_mgf)] + BATCH2 + BATCH3
 
 BAD = []
 import re

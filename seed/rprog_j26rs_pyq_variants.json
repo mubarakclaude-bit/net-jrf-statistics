@@ -1,0 +1,159 @@
+{
+ "moduleId": "rprog",
+ "topicId": null,
+ "source": "variant",
+ "label": "June 2026 Paper 2 — practice variants of the questions identified by official question ID",
+ "count": 10,
+ "items": [
+  {
+   "id": "j26v-id114589-01",
+   "format": "single",
+   "topic": "June 2026 Paper 2 variant (official question ID 55125114589)",
+   "srcQid": "55125114589",
+   "stem": "A part of an R program is given below:\n> x <- 2\n> f <- function(y) {\n+   x <- 10\n+   x * y\n+ }\n> f(3)\nThe output of the last line is:",
+   "options": [
+    "6",
+    "13",
+    "30",
+    "5"
+   ],
+   "answer": "C",
+   "explanation": "Inside f, x <- 10 creates a local x that hides the global x = 2, so f(3) = 10 × 3 = 30. Trap: 6 uses the global x. (Output confirmed by running the code in R 4.5.1.)"
+  },
+  {
+   "id": "j26v-id114589-02",
+   "format": "single",
+   "topic": "June 2026 Paper 2 variant (official question ID 55125114589)",
+   "srcQid": "55125114589",
+   "stem": "A part of an R program is given below:\n> x <- 1\n> f <- function() {\n+   x <<- 5\n+   x + 1\n+ }\n> f()\n> x\nThe output of the last line is:",
+   "options": [
+    "1",
+    "6",
+    "2",
+    "5"
+   ],
+   "answer": "D",
+   "explanation": "<<- assigns in the enclosing (here global) environment, so f() changes the global x to 5 (and returns 6). The last line prints x = 5. Trap: with <- instead of <<- the global x would stay 1. (Output confirmed by running the code in R 4.5.1.)"
+  },
+  {
+   "id": "j26v-id114589-03",
+   "format": "single",
+   "topic": "June 2026 Paper 2 variant (official question ID 55125114589)",
+   "srcQid": "55125114589",
+   "stem": "A part of an R program is given below:\n> f <- function(a, b = a * 2) {\n+   a + b\n+ }\n> f(3)\nThe output of the last line is:",
+   "options": [
+    "9",
+    "3",
+    "6",
+    "5"
+   ],
+   "answer": "A",
+   "explanation": "A default argument may refer to another argument: b defaults to a * 2 = 6, so f(3) = 3 + 6 = 9. Trap: 3 ignores the default for b. (Output confirmed by running the code in R 4.5.1.)"
+  },
+  {
+   "id": "j26v-id114589-04",
+   "format": "single",
+   "topic": "June 2026 Paper 2 variant (official question ID 55125114589)",
+   "srcQid": "55125114589",
+   "stem": "A part of an R program is given below:\n> x <- c(1, 2, 3, 4)\n> y <- x[x > 2]\n> sum(y)\nThe output of the last line is:",
+   "options": [
+    "10",
+    "7",
+    "3",
+    "2"
+   ],
+   "answer": "B",
+   "explanation": "x > 2 is the logical vector (FALSE, FALSE, TRUE, TRUE), so y = c(3, 4) and sum(y) = 7. Trap: 2 counts the selected elements instead of adding them. (Output confirmed by running the code in R 4.5.1.)"
+  },
+  {
+   "id": "j26v-id114589-05",
+   "format": "single",
+   "topic": "June 2026 Paper 2 variant (official question ID 55125114589)",
+   "srcQid": "55125114589",
+   "stem": "A part of an R program is given below:\n> g <- function(n) {\n+   s <- 0\n+   for (i in 1:n) s <- s + i\n+   s\n+ }\n> g(4)\nThe output of the last line is:",
+   "options": [
+    "4",
+    "24",
+    "10",
+    "6"
+   ],
+   "answer": "C",
+   "explanation": "The loop adds 1 + 2 + 3 + 4 = 10, and the last expression s is returned. Trap: 24 is 4! (a product, not a sum). (Output confirmed by running the code in R 4.5.1.)"
+  },
+  {
+   "id": "j26v-id114589-06",
+   "format": "single",
+   "topic": "June 2026 Paper 2 variant (official question ID 55125114589)",
+   "srcQid": "55125114589",
+   "stem": "A part of an R program is given below:\n> x <- 5\n> h <- function(x) {\n+   x <- x + 1\n+   x\n+ }\n> h(x)\n> x\nThe output of the last line is:",
+   "options": [
+    "6",
+    "1",
+    "11",
+    "5"
+   ],
+   "answer": "D",
+   "explanation": "R passes arguments by value: h works on its own copy of x and returns 6, but the global x is untouched. The last line prints 5. Trap: 6 is what h(x) returns, not the new value of x. (Output confirmed by running the code in R 4.5.1.)"
+  },
+  {
+   "id": "j26v-id114589-07",
+   "format": "single",
+   "topic": "June 2026 Paper 2 variant (official question ID 55125114589)",
+   "srcQid": "55125114589",
+   "stem": "A part of an R program is given below:\n> v <- 1:4 * 1:2\n> sum(v)\nThe output of the last line is:",
+   "options": [
+    "16",
+    "10",
+    "30",
+    "20"
+   ],
+   "answer": "A",
+   "explanation": "The shorter vector is recycled: 1:4 * c(1, 2, 1, 2) = c(1, 4, 3, 8), whose sum is 16. Trap: 30 multiplies the two sums, and 20 treats 1:2 as the single number 2; R multiplies element by element after recycling. (Output confirmed by running the code in R 4.5.1.)"
+  },
+  {
+   "id": "j26v-id114589-08",
+   "format": "single",
+   "topic": "June 2026 Paper 2 variant (official question ID 55125114589)",
+   "srcQid": "55125114589",
+   "stem": "A part of an R program is given below:\n> f <- function(n) if (n <= 1) 1 else n * f(n - 1)\n> f(4)\nThe output of the last line is:",
+   "options": [
+    "4",
+    "24",
+    "10",
+    "1"
+   ],
+   "answer": "B",
+   "explanation": "f calls itself on n − 1 until the base case n ≤ 1 returns 1: f(4) = 4 × f(3) = 4 × 3 × f(2) = 4 × 3 × 2 × f(1) = 24, the factorial of 4. Trap: 10 adds the numbers instead of multiplying them. (Output confirmed by running the code in R 4.5.1.)"
+  },
+  {
+   "id": "j26v-id114589-09",
+   "format": "single",
+   "topic": "June 2026 Paper 2 variant (official question ID 55125114589)",
+   "srcQid": "55125114589",
+   "stem": "A part of an R program is given below:\n> x <- c(2, 4, 6)\n> x[2] <- 10\n> mean(x)\nThe output of the last line is:",
+   "options": [
+    "4",
+    "18",
+    "6",
+    "10"
+   ],
+   "answer": "C",
+   "explanation": "After x[2] <- 10 the vector is c(2, 10, 6), whose mean is 18/3 = 6. Trap: 4 is the mean before the change; 18 is the sum. (Output confirmed by running the code in R 4.5.1.)"
+  },
+  {
+   "id": "j26v-id114589-10",
+   "format": "single",
+   "topic": "June 2026 Paper 2 variant (official question ID 55125114589)",
+   "srcQid": "55125114589",
+   "stem": "A part of an R program is given below:\n> a <- 3\n> f <- function() {\n+   a <- a + 2\n+   g <- function() a * 2\n+   g()\n+ }\n> f()\nThe output of the last line is:",
+   "options": [
+    "6",
+    "12",
+    "5",
+    "10"
+   ],
+   "answer": "D",
+   "explanation": "Inside f, a <- a + 2 makes a local a = 5. g is defined inside f, so it finds that a (lexical scoping) and returns 5 × 2 = 10. Trap: 6 uses the global a = 3. (Output confirmed by running the code in R 4.5.1.)"
+  }
+ ]
+}
