@@ -16,6 +16,13 @@ for q in P["items"]:
  assert len(q["options"])==4 and len(q["explanation"])>=40
  if q["format"]=="numeric": assert q.get("check")
  if q["format"]=="multi": assert len(q["statements"])==4 and set(q["verdicts"])==set("ABCD")
+# Two mastery items previously had no exact numerical option.
+q7=next(q for q in P["items"] if q["id"]=="mv-t4-m-07")
+q13=next(q for q in P["items"] if q["id"]=="mv-t4-m-13")
+assert q7["answer"]=="C" and q7["options"][2].startswith("32/9")
+assert q13["answer"]=="A" and q13["options"][0].startswith("27/11")
+assert F(10-2,2*(10-1))*F(8)==F(32,9)
+assert F(12-3,3*(12-1))*F(9)==F(27,11)
 # June 2026 Q4, all exact rational arithmetic.
 X=[[F(1),F(2)],[F(4),F(4)],[F(4),F(3)]]
 n,p=3,2
