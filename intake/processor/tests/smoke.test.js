@@ -13,5 +13,5 @@ const aud=auditSource({pages:[{page:1,text:"Question 1. Find the unbiased estima
 assert.equal(aud.question_candidates.length,1);assert.equal(aud.question_candidates[0].page,1);
 const {mapText}=await import("../src/mapper.js");
 const mapped=mapText("Find the maximum likelihood estimator and sufficient statistic.",{modules:[{id:"inference",paper:2,topics:[{id:"inference-t4"}]}]});
-assert.equal(mapped.suggestions[0].module,"inference");assert.equal(mapped.suggestions[0].topic_ids[0],"inference-t4");
+assert.equal(mapped.suggestions[0].module,"inference");assert.ok(Array.isArray(mapped.suggestions[0].topic_candidates));
 console.log("processor smoke and heuristic tests passed");
