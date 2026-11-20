@@ -24,7 +24,7 @@ export default {
       if(!env.PROCESSOR_CALLBACK_TOKEN||request.headers.get("authorization")!==`Bearer ${env.PROCESSOR_CALLBACK_TOKEN}`)return json({error:"unauthorized"},401);
       let payload;try{payload=await request.json()}catch{return json({error:"invalid_json"},400)}
       const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-      if(!uuid.test(payload.job_id||"")||payload.status!=="completed"||payload.stage!=="analysis"||!Array.isArray(payload.artifact_keys)||payload.artifact_keys.length<1||payload.artifact_keys.length>20||payload.artifact_keys.some(k=>typeof k!=="string"||k.length>256||!k.startsWith(`jobs/${payload.job_id}/`)))return json({error:"invalid_contract"},400);
+      if(!uuid.test(payload.job_id||"")||payload.status!=="completed"||payload.stage!=="analysis"||!payload.attempt_id||!Number.isSafeInteger(payload.fencing_token)||typeof payload.manifest_key!=="string"||!Array.isArray(payload.artifact_keys)||payload.artifact_keys.length<1||payload.artifact_keys.length>20||payload.artifact_keys.some(k=>typeof k!=="string"||k.length>512||!k.startsWith(`jobs/${payload.job_id}/attempts/`)))return json({error:"invalid_contract"},400);
       const existing=await env.JOBS_DB.prepare("SELECT id,status FROM intake_jobs WHERE id=?").bind(payload.job_id).first();
       if(!existing)return json({error:"not_found"},404);
       if(existing.status==="completed")return json({accepted:true,duplicate:true});
@@ -32,16 +32,16 @@ export default {
       // Independently validate the private manifest and every artifact before the
       // ledger is allowed to record completion.
       if(!env.ARTIFACT_BUCKET)return json({error:"artifact_storage_unconfigured"},503);
-      const manifestObj=await env.ARTIFACT_BUCKET.get(`jobs/${payload.job_id}/manifest.json`);
+      const expectedPrefix=`jobs/${payload.job_id}/attempts/`;if(!payload.manifest_key.startsWith(expectedPrefix)||!payload.manifest_key.endsWith("/manifest.json"))return json({error:"invalid_manifest_key"},400);const manifestObj=await env.ARTIFACT_BUCKET.get(payload.manifest_key);
       if(!manifestObj)return json({error:"manifest_not_found"},422);
       let manifest;try{manifest=JSON.parse(await manifestObj.text())}catch{return json({error:"invalid_manifest"},422)}
-      if(manifest.schema_version!==1||manifest.job_id!==payload.job_id||manifest.source_sha256!==existing.source_sha256||!Array.isArray(manifest.artifacts)||manifest.artifacts.length>20)return json({error:"manifest_invalid"},422);
+      if(manifest.schema_version!==1||manifest.job_id!==payload.job_id||manifest.attempt_id!==payload.attempt_id||manifest.fencing_token!==payload.fencing_token||manifest.source_sha256!==existing.source_sha256||!Array.isArray(manifest.artifacts)||manifest.artifacts.length>20)return json({error:"manifest_invalid"},422);
       const reported=new Set(payload.artifact_keys),manifestKeys=new Set(manifest.artifacts.map(x=>x?.key));
-      if(manifest.artifacts.some(x=>!x||typeof x.key!=="string"||!x.key.startsWith(`jobs/${payload.job_id}/`)||! /^[a-f0-9]{64}$/i.test(x.sha256||"")||!Number.isSafeInteger(x.size)||x.size<0)||[...manifestKeys].some(k=>!reported.has(k))||[...reported].some(k=>k!==`jobs/${payload.job_id}/manifest.json`&&!manifestKeys.has(k)))return json({error:"artifact_manifest_mismatch"},422);
+      if(manifest.artifacts.some(x=>!x||typeof x.key!=="string"||!x.key.startsWith(expectedPrefix)||! /^[a-f0-9]{64}$/i.test(x.sha256||"")||!Number.isSafeInteger(x.size)||x.size<0)||[...manifestKeys].some(k=>!reported.has(k))||[...reported].some(k=>k!==payload.manifest_key&&!manifestKeys.has(k)))return json({error:"artifact_manifest_mismatch"},422);
       for(const entry of manifest.artifacts){const stored=await env.ARTIFACT_BUCKET.get(entry.key);if(!stored)return json({error:"artifact_missing"},422);const bytes=await stored.arrayBuffer();if(bytes.byteLength!==entry.size||await sha256(bytes)!==entry.sha256)return json({error:"artifact_integrity_mismatch"},422);}
       const summary=payload.summary&&typeof payload.summary==="object"?{pages:Number.isSafeInteger(payload.summary.pages)?payload.summary.pages:null,segments:Number.isSafeInteger(payload.summary.segments)?payload.summary.segments:null,production_created:typeof payload.summary.production_created==="boolean"?payload.summary.production_created:null}:null;
-      const time=now(),details=JSON.stringify({summary,artifact_keys:payload.artifact_keys});
-      const settled=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='completed',stage='analysis',updated_at=?,error_code=NULL,error_message=NULL,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status='processing'").bind(time,payload.job_id).run();
+      const time=now(),details=JSON.stringify({summary,artifact_keys:payload.artifact_keys,manifest_key:payload.manifest_key,attempt_id:payload.attempt_id,fencing_token:payload.fencing_token});
+      const settled=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='completed',stage='analysis',manifest_key=?,updated_at=?,error_code=NULL,error_message=NULL,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status='processing'").bind(time,payload.job_id).run();
       if(!settled.meta?.changes)return json({error:"state_conflict"},409);
       await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(payload.job_id,"processor_result","analysis",details,time).run();
       return json({accepted:true});
@@ -54,14 +54,14 @@ export default {
         const allowed=new Set(["manifest.json","extract.json","source-audit.json","taxonomy-map.json","coverage-report.json","production.json","verification-report.json"]);
         if(!uuid.test(id)||!allowed.has(filename))return json({error:"not_found"},404);
         if(!env.ARTIFACT_BUCKET)return json({error:"artifact_storage_unconfigured"},503);
-        const job=await env.JOBS_DB.prepare("SELECT id,status,source_sha256 FROM intake_jobs WHERE id=?").bind(id).first();
+        const job=await env.JOBS_DB.prepare("SELECT id,status,source_sha256,manifest_key FROM intake_jobs WHERE id=?").bind(id).first();
         if(!job)return json({error:"not_found"},404);
         if(job.status!=="completed")return json({error:"job_not_completed"},409);
-        const manifestObj=await env.ARTIFACT_BUCKET.get(`jobs/${id}/manifest.json`);if(!manifestObj)return json({error:"manifest_not_found"},404);
+        const manifestObj=await env.ARTIFACT_BUCKET.get(job.manifest_key);if(!manifestObj)return json({error:"manifest_not_found"},404);
         let manifest;try{manifest=JSON.parse(await manifestObj.text())}catch{return json({error:"invalid_manifest"},422)}
-        if(manifest.schema_version!==1||manifest.job_id!==id||manifest.source_sha256!==job.source_sha256||!Array.isArray(manifest.artifacts)||manifest.artifacts.length>20||manifest.artifacts.some(x=>!x||typeof x.key!=="string"||!x.key.startsWith(`jobs/${id}/`)||typeof x.sha256!=="string"||!Number.isSafeInteger(x.size)||x.size<0))return json({error:"manifest_invalid"},422);
+        if(manifest.schema_version!==1||manifest.job_id!==id||manifest.source_sha256!==job.source_sha256||!Array.isArray(manifest.artifacts)||manifest.artifacts.length>20||manifest.artifacts.some(x=>!x||typeof x.key!=="string"||!x.key.startsWith(`jobs/${id}/attempts/`)||typeof x.sha256!=="string"||!Number.isSafeInteger(x.size)||x.size<0))return json({error:"manifest_invalid"},422);
         if(filename==="manifest.json")return new Response(JSON.stringify(manifest),{headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","content-disposition":`attachment; filename="${filename}"`}});
-        const key=`jobs/${id}/${filename}`,entry=manifest.artifacts.find(x=>x&&x.key===key&&typeof x.sha256==="string"&&Number.isSafeInteger(x.size));
+        const suffix="/"+filename,entry=manifest.artifacts.find(x=>x&&x.key.endsWith(suffix)&&typeof x.sha256==="string"&&Number.isSafeInteger(x.size));const key=entry?.key;
         if(!entry)return json({error:"artifact_not_in_manifest"},404);
         const obj=await env.ARTIFACT_BUCKET.get(key);if(!obj)return json({error:"artifact_not_found"},404);
         const bytes=await obj.arrayBuffer();if(bytes.byteLength!==entry.size||await sha256(bytes)!==entry.sha256)return json({error:"artifact_integrity_mismatch"},422);
