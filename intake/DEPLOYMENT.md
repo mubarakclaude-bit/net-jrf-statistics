@@ -4,7 +4,7 @@
 Provision private R2 buckets for source and artifacts, D1 intake jobs, processing Queue, and two Workers. Enforce owner-only Cloudflare Access before deployment.
 
 ### Intake Worker
-- Configure bindings from `intake/wrangler.toml`; replace D1 IDs and queue bindings.
+- Configure bindings from `intake/wrangler.toml`; replace D1 IDs and queue bindings. Bind the private artifact R2 bucket as `ARTIFACT_BUCKET` in addition to the source bucket.
 - For a fresh database, apply `schema.sql`. For an existing database, apply migrations in order (currently `migrations/0001_dispatch_leases.sql`) before deploying the updated Worker.
 - Set secret `INTAKE_TOKEN`.
 - Configure owner-only Access and review upload limits, scanning and retention.
@@ -43,7 +43,7 @@ npx wrangler deploy
 8. Test scanning/quarantine, retention, deletion and cancellation.
 
 ## Current boundary
-This scaffold is not production-ready or deployed. Extraction requires a provisioned adapter. Coverage and optional output adapter are wired; artifact verification, integrity manifest and a generic bundle builder are implemented in the processor. However, a user-facing artifact export/download route, draft repository PR automation, and end-to-end review orchestration are not yet implemented. Owner Access, scanning/quarantine, retention, sandboxing, monitoring, deployment verification and security review are required before accepting sensitive documents.
+This scaffold is not production-ready or deployed. Extraction requires a provisioned adapter. Coverage and optional output adapter are wired; artifact verification, integrity manifest and a generic bundle builder are implemented in the processor. Authenticated artifact download routes are implemented with manifest/hash/size checks. Draft repository PR automation and end-to-end review orchestration are not yet implemented. Owner Access, scanning/quarantine, retention, sandboxing, monitoring, deployment verification and security review are required before accepting sensitive documents.
 
 
 ## Verification scaffold
