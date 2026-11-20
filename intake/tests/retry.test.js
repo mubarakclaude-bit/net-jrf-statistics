@@ -17,15 +17,15 @@ function makeDb(status="blocked_infrastructure"){
 const bucketFor=(data)=>({get:async key=>key==="incoming/source"?{arrayBuffer:async()=>data.buffer.slice(data.byteOffset,data.byteOffset+data.byteLength)}:null});
 const queueOk={send:async message=>{assert.equal(message.job_id,id);}};
 const env={INTAKE_TOKEN:"secret",JOBS_DB:makeDb().state};
-const db=makeDb();const envOk={INTAKE_TOKEN:"secret",JOBS_DB:db,SOURCE_BUCKET:bucketFor(bytes),PROCESSING_QUEUE:queueOk};
+const db=makeDb();const envOk={INTAKE_TOKEN:"secret",JOBS_DB:db,SOURCE_BUCKET:bucketFor(bytes),PROCESSING_QUEUE:queueOk,PROCESSOR_URL:"https://processor/process",PROCESSOR_TOKEN:"secret"};
 const res=await worker.fetch(new Request(`https://intake/jobs/${id}/retry`,{method:"POST",headers:{authorization:"Bearer secret"}}),envOk);
 assert.equal(res.status,202);assert.equal(db.state.job.status,"queued");assert.ok(db.state.events.some(e=>e[1]==="manual_retry_requested"));
 
-const badDb=makeDb();const badEnv={INTAKE_TOKEN:"secret",JOBS_DB:badDb,SOURCE_BUCKET:bucketFor(new TextEncoder().encode("tampered")),PROCESSING_QUEUE:queueOk};
+const badDb=makeDb();const badEnv={INTAKE_TOKEN:"secret",JOBS_DB:badDb,SOURCE_BUCKET:bucketFor(new TextEncoder().encode("tampered")),PROCESSING_QUEUE:queueOk,PROCESSOR_URL:"https://processor/process",PROCESSOR_TOKEN:"secret"};
 const bad=await worker.fetch(new Request(`https://intake/jobs/${id}/retry`,{method:"POST",headers:{authorization:"Bearer secret"}}),badEnv);
 assert.equal(bad.status,422);assert.equal(badDb.state.job.status,"blocked_infrastructure");
 
-const failDb=makeDb("failed_retryable");const failEnv={INTAKE_TOKEN:"secret",JOBS_DB:failDb,SOURCE_BUCKET:bucketFor(bytes),PROCESSING_QUEUE:{send:async()=>{throw new Error("offline");}}};
+const failDb=makeDb("failed_retryable");const failEnv={INTAKE_TOKEN:"secret",JOBS_DB:failDb,SOURCE_BUCKET:bucketFor(bytes),PROCESSING_QUEUE:{send:async()=>{throw new Error("offline");}},PROCESSOR_URL:"https://processor/process",PROCESSOR_TOKEN:"secret"};
 const fail=await worker.fetch(new Request(`https://intake/jobs/${id}/retry`,{method:"POST",headers:{authorization:"Bearer secret"}}),failEnv);
 assert.equal(fail.status,503);assert.equal(failDb.state.job.status,"blocked_infrastructure");assert.ok(failDb.state.events.some(e=>e[1]==="retry_enqueue_failed"));
 console.log("manual retry recovery tests passed");
