@@ -1,14 +1,17 @@
-# Processor Service (scaffold)
+# Generic Processor Service
 
-A separately deployed Cloudflare Worker that receives authenticated intake jobs, retrieves the private PDF, and performs extraction via a configured, authenticated extraction adapter. It does not generate lessons, create PRs, or merge.
+A document-agnostic processing Worker for educational and reference material, including question banks, textbooks, notes, articles, exams, manuals, slide decks, worksheets and mixed documents.
 
-## Bindings / secrets
-- R2: `SOURCE_BUCKET` (same private bucket; read-only ideally)
-- `PROCESSOR_TOKEN`: shared token matching intake's processor token
-- `EXTRACTOR_URL`: HTTPS extraction adapter
-- `EXTRACTOR_TOKEN`: secret for extraction adapter
-- `ARTIFACT_BUCKET`: private R2 bucket for processor artifacts
+It accepts authenticated jobs and retrieves source files from private storage. Extraction adapters may be configured for supported formats. A generic structure/source audit can identify candidate questions, answers, concepts, explanations, objectives and other content while retaining provenance. Optional workspace configuration may provide taxonomies, knowledge maps, resource indexes, output types or integrations; none are hard-coded into the processor.
 
-Extraction adapter contract: POST JSON {job_id, source_sha256, source_name, pdf_base64}; response JSON {pages:[{page:number,text:string,confidence?:number,ocr?:boolean}], ...}. Limit adapter response size and require page indices. Do not send to untrusted endpoints.
+## Bindings/secrets
+- `SOURCE_BUCKET`: private source storage
+- `ARTIFACT_BUCKET`: private processed-artifact storage
+- `PROCESSOR_TOKEN`: authentication
+- `EXTRACTOR_URL` and `EXTRACTOR_TOKEN`: trusted extraction adapter
+- Optional `TAXONOMY_JSON`, `RESOURCE_INDEX_JSON`, `WORKSPACE_CONFIG_JSON`: configuration inputs (must not be upload-controlled)
 
-This scaffold intentionally stops after extraction and durable provenance artifacts. Later stages (audit, syllabus mapping, coverage, authoring, verification, packaging, PR creation) require separately reviewed integrations and repository contracts; no fabricated completion.
+## Adapter contract
+POST JSON containing job ID, source hash, name and file bytes to a configured trusted adapter. Adapter output is page/section/chunk indexed. Limit request/response sizes and validate returned structure. Use adapters for formats beyond PDF when configured.
+
+Analysis outputs are candidate findings only, not guaranteed ground truth. Downstream outputs (lesson, summary, questions, etc.) are configurable and not hard-coded. Authoring, verification and packaging integrations must be separately implemented and validated before production.
