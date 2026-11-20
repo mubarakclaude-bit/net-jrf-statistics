@@ -23,13 +23,16 @@ export default {
     if(request.method==="POST"&&url.pathname==="/internal/processor-result"){
       if(!env.PROCESSOR_CALLBACK_TOKEN||request.headers.get("authorization")!==`Bearer ${env.PROCESSOR_CALLBACK_TOKEN}`)return json({error:"unauthorized"},401);
       let payload;try{payload=await request.json()}catch{return json({error:"invalid_json"},400)}
-      if(!payload.job_id||payload.status!=="completed"||payload.stage!=="analysis"||!Array.isArray(payload.artifact_keys))return json({error:"invalid_contract"},400);
+      const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if(!uuid.test(payload.job_id||"")||payload.status!=="completed"||payload.stage!=="analysis"||!Array.isArray(payload.artifact_keys)||payload.artifact_keys.length<1||payload.artifact_keys.length>20||payload.artifact_keys.some(k=>typeof k!=="string"||k.length>256||!k.startsWith(`jobs/${payload.job_id}/`)))return json({error:"invalid_contract"},400);
       const existing=await env.JOBS_DB.prepare("SELECT id,status FROM intake_jobs WHERE id=?").bind(payload.job_id).first();
       if(!existing)return json({error:"not_found"},404);
       if(existing.status==="completed")return json({accepted:true,duplicate:true});
-      if(!canTransition(existing.status,"completed"))return json({error:"invalid_transition"},409);
-      const time=now(),details=JSON.stringify({summary:payload.summary||null,artifact_keys:payload.artifact_keys.slice(0,20)});
-      await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='completed',stage='analysis',updated_at=?,error_code=NULL,error_message=NULL,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=?").bind(time,payload.job_id).run();
+      if(existing.status!=="processing"||!canTransition(existing.status,"completed"))return json({error:"invalid_transition"},409);
+      const summary=payload.summary&&typeof payload.summary==="object"?{pages:Number.isSafeInteger(payload.summary.pages)?payload.summary.pages:null,segments:Number.isSafeInteger(payload.summary.segments)?payload.summary.segments:null,production_created:typeof payload.summary.production_created==="boolean"?payload.summary.production_created:null}:null;
+      const time=now(),details=JSON.stringify({summary,artifact_keys:payload.artifact_keys});
+      const settled=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='completed',stage='analysis',updated_at=?,error_code=NULL,error_message=NULL,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status='processing'").bind(time,payload.job_id).run();
+      if(!settled.meta?.changes)return json({error:"state_conflict"},409);
       await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(payload.job_id,"processor_result","analysis",details,time).run();
       return json({accepted:true});
     }
@@ -91,15 +94,21 @@ export default {
       if(!claim.meta?.changes){message.retry();continue;}
       if (!env.PROCESSOR_URL || !env.PROCESSOR_TOKEN) {
         const time=now();
-        if(canTransition(job.status,"blocked_infrastructure")) await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='dispatch',updated_at=?,error_code='processor_not_configured',error_message='Processing service configuration is required.',dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=?").bind(time,job_id).run();
+        if(canTransition(job.status,"blocked_infrastructure")) await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='dispatch',updated_at=?,error_code='processor_not_configured',error_message='Processing service configuration is required.',dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND dispatch_lease_token=?").bind(time,job_id,leaseToken).run();
         await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"blocked","dispatch",JSON.stringify({code:"processor_not_configured"}),time).run();
         message.ack(); continue;
       }
+      // Move to processing before the synchronous processor call so a fast completion
+      // callback cannot race against an accepted/queued ledger state.
+      if(!canTransition(job.status,"processing")){await env.JOBS_DB.prepare("UPDATE intake_jobs SET dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND dispatch_lease_token=?").bind(job_id,leaseToken).run();message.ack();continue;}
+      const started=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='processing',stage='extract',updated_at=? WHERE id=? AND dispatch_lease_token=? AND status=?").bind(leaseTime,job_id,leaseToken,job.status).run();
+      if(!started.meta?.changes){message.retry();continue;}
+      await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"processing_started","extract",JSON.stringify({lease_token_claimed:true}),leaseTime).run();
       try {
         const resp=await fetch(env.PROCESSOR_URL,{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+env.PROCESSOR_TOKEN},body:JSON.stringify({schema_version:1,job_id,source_sha256:job.source_sha256,object_key:job.object_key,source_name:job.source_name,source_size:job.source_size,mime_type:job.mime_type,resume_stage:"extract"})});
         if (!resp.ok) throw new Error("processor_http_"+resp.status);
         const time=now();
-        const settled=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='processing',stage='extract',updated_at=?,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND dispatch_lease_token=? AND status NOT IN ('completed','failed_terminal','cancelled')").bind(time,job_id,leaseToken).run();
+        const settled=await env.JOBS_DB.prepare("UPDATE intake_jobs SET stage='extract',updated_at=?,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND dispatch_lease_token=? AND status='processing'").bind(time,job_id,leaseToken).run();
         if(!settled.meta?.changes){message.ack();continue;}
         await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"dispatched","extract",JSON.stringify({processor_status:resp.status}),time).run();
         message.ack();
