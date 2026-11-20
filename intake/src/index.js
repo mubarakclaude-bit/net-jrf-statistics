@@ -29,7 +29,7 @@ export default {
       if(existing.status==="completed")return json({accepted:true,duplicate:true});
       if(!canTransition(existing.status,"completed"))return json({error:"invalid_transition"},409);
       const time=now(),details=JSON.stringify({summary:payload.summary||null,artifact_keys:payload.artifact_keys.slice(0,20)});
-      await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='completed',stage='analysis',updated_at=?,error_code=NULL,error_message=NULL WHERE id=?").bind(time,payload.job_id).run();
+      await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='completed',stage='analysis',updated_at=?,error_code=NULL,error_message=NULL,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=?").bind(time,payload.job_id).run();
       await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(payload.job_id,"processor_result","analysis",details,time).run();
       return json({accepted:true});
     }
@@ -86,9 +86,12 @@ export default {
       if (!job_id) { message.ack(); continue; }
       const job = await env.JOBS_DB.prepare("SELECT id,status,source_sha256,object_key,source_name,source_size,mime_type FROM intake_jobs WHERE id=?").bind(job_id).first();
       if (!job || ["completed","failed_terminal","cancelled"].includes(job.status)) { message.ack(); continue; }
+      const leaseToken=crypto.randomUUID(), leaseTime=now(), leaseUntil=new Date(Date.now()+120000).toISOString();
+      const claim=await env.JOBS_DB.prepare("UPDATE intake_jobs SET dispatch_lease_until=?,dispatch_lease_token=?,updated_at=? WHERE id=? AND status NOT IN ('completed','failed_terminal','cancelled') AND (dispatch_lease_until IS NULL OR dispatch_lease_until < ?)").bind(leaseUntil,leaseToken,leaseTime,job_id,leaseTime).run();
+      if(!claim.meta?.changes){message.ack();continue;}
       if (!env.PROCESSOR_URL || !env.PROCESSOR_TOKEN) {
         const time=now();
-        if(canTransition(job.status,"blocked_infrastructure")) await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='dispatch',updated_at=?,error_code='processor_not_configured',error_message='Processing service configuration is required.' WHERE id=?").bind(time,job_id).run();
+        if(canTransition(job.status,"blocked_infrastructure")) await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='dispatch',updated_at=?,error_code='processor_not_configured',error_message='Processing service configuration is required.',dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=?").bind(time,job_id).run();
         await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"blocked","dispatch",JSON.stringify({code:"processor_not_configured"}),time).run();
         message.ack(); continue;
       }
@@ -96,7 +99,7 @@ export default {
         const resp=await fetch(env.PROCESSOR_URL,{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+env.PROCESSOR_TOKEN},body:JSON.stringify({schema_version:1,job_id,source_sha256:job.source_sha256,object_key:job.object_key,source_name:job.source_name,source_size:job.source_size,mime_type:job.mime_type,resume_stage:"extract"})});
         if (!resp.ok) throw new Error("processor_http_"+resp.status);
         const time=now();
-        await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='processing',stage='extract',updated_at=? WHERE id=?").bind(time,job_id).run();
+        await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='processing',stage='extract',updated_at=?,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=?").bind(time,job_id).run();
         await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"dispatched","extract",JSON.stringify({processor_status:resp.status}),time).run();
         message.ack();
       } catch (e) {
@@ -105,7 +108,7 @@ export default {
         const nextAttempts=(current?.attempts||0)+1,disposition=retryDisposition("failed_retryable",nextAttempts,5);
         const nextStatus=disposition==="terminalize"?"failed_terminal":"failed_retryable";
         if(current&&canTransition(current.status,nextStatus)){
-          await env.JOBS_DB.prepare("UPDATE intake_jobs SET status=?,stage='dispatch',attempts=?,updated_at=?,error_code='processor_dispatch_failed',error_message=? WHERE id=?").bind(nextStatus,nextAttempts,time,nextStatus==="failed_terminal"?"Dispatch failed after bounded retries.":"Dispatch failed; retry scheduled.",job_id).run();
+          await env.JOBS_DB.prepare("UPDATE intake_jobs SET status=?,stage='dispatch',attempts=?,updated_at=?,error_code='processor_dispatch_failed',error_message=?,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=?").bind(nextStatus,nextAttempts,time,nextStatus==="failed_terminal"?"Dispatch failed after bounded retries.":"Dispatch failed; retry scheduled.",job_id).run();
           await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,nextStatus==="failed_terminal"?"dispatch_terminal":"dispatch_failed","dispatch",JSON.stringify({code:"processor_dispatch_failed",attempt:nextAttempts,limit:5}),time).run();
         }
         if(disposition==="terminalize")message.ack();else message.retry();
