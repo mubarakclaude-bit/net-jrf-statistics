@@ -15,8 +15,10 @@ const built = buildDocs();
 if (built.problems.length) { built.problems.forEach(p => console.error("PROBLEM " + p)); console.error("FAILED: the seeds have problems"); process.exit(1); }
 const docs = built.docs;
 
-// scrub the candidate's own answers out of EVERY previous-year paper (source "pyq"), not one named file: a paper added later
-// is covered the moment its file exists (tools/papers.js).
+// scrub the candidate's own answers out of EVERY full past paper (seed/pyq_<paperId>_full.json with source "pyq"), not one
+// named file: a paper added later is covered the moment its file exists (tools/papers.js). Practice banks that merely carry
+// source "pyq" (CSIR compilations, topic subsets) are left as they are; the leak check below still fails the build if any of
+// them ever carried a candidate's marked answer.
 const { scrubPaper, isPaperDocument } = require("./tools/papers");
 for (const k of Object.keys(docs)) if (isPaperDocument(k, docs[k])) scrubPaper(docs[k]);
 // The candidate's per-module June scores ("3/11") and the "projected" figure built from them are
