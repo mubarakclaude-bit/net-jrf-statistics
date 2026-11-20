@@ -3,7 +3,7 @@ import worker from "../src/index.js";
 
 class DB {
   constructor() {
-    this.job={id:"12345678-1234-1234-1234-123456789abc",status:"accepted",source_sha256:"hash",object_key:"incoming/key",source_name:"source.txt",source_size:12,mime_type:"text/plain",attempts:0,dispatch_lease_until:null,dispatch_lease_token:null};
+    this.job={id:"12345678-1234-1234-1234-123456789abc",status:"accepted",source_sha256:"hash",manifest_key:null,object_key:"incoming/key",source_name:"source.txt",source_size:12,mime_type:"text/plain",attempts:0,dispatch_lease_until:null,dispatch_lease_token:null};
     this.events=[];
   }
   prepare(sql) {
@@ -76,7 +76,7 @@ const env={JOBS_DB:db,ARTIFACT_BUCKET:artifactBucket,PROCESSOR_URL:"https://proc
 const workerFetch=globalThis.fetch;let callbackResult;
 globalThis.fetch=async()=>{
   // Simulate a completion callback arriving while the dispatch request is still in flight.
-  const callbackPayload={job_id:db.job.id,status:"completed",stage:"analysis",summary:{pages:1,segments:2,production_created:false},artifact_keys:[`jobs/${db.job.id}/extract.json`]};
+  const callbackPayload={job_id:db.job.id,status:"completed",stage:"analysis",attempt_id:"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",fencing_token:1,manifest_key:"jobs/12345678-1234-1234-1234-123456789abc/attempts/1-aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa/manifest.json",summary:{pages:1,segments:2,production_created:false},artifact_keys:["jobs/12345678-1234-1234-1234-123456789abc/attempts/1-aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa/extract.json","jobs/12345678-1234-1234-1234-123456789abc/attempts/1-aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa/manifest.json"]};
   callbackResult=await worker.fetch(new Request("https://intake/internal/processor-result",{method:"POST",headers:{authorization:"Bearer callback","content-type":"application/json"},body:JSON.stringify(callbackPayload)}),env);
   return new Response("ok",{status:200});
 };
@@ -89,7 +89,7 @@ assert.equal(retry,0);
 assert.ok(db.events.some(e=>e[1]==="processing_started"));
 assert.ok(db.events.some(e=>e[1]==="processor_result"));
 
-const invalid=await worker.fetch(new Request("https://intake/internal/processor-result",{method:"POST",headers:{authorization:"Bearer callback","content-type":"application/json"},body:JSON.stringify({job_id:db.job.id,status:"completed",stage:"analysis",artifact_keys:["outside-prefix"]})}),env);
+const invalid=await worker.fetch(new Request("https://intake/internal/processor-result",{method:"POST",headers:{authorization:"Bearer callback","content-type":"application/json"},body:JSON.stringify({job_id:db.job.id,status:"completed",stage:"analysis",attempt_id:"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",fencing_token:1,manifest_key:"jobs/12345678-1234-1234-1234-123456789abc/attempts/1-aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa/manifest.json",artifact_keys:["outside-prefix"]})}),env);
 assert.equal(invalid.status,400,"callback must reject artifact keys outside the job namespace");
 
 const failedDb=new DB();let failRetry=0,failAck=0;
