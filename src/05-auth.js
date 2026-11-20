@@ -67,7 +67,7 @@ async function doLogin(id,pass){
 function signOut(){
   S.authed=false;S.askPass="";S.passVal="";S.authErr="";
   rememberProfile("");
-  S.att={};S.mocks=[];S.topics={};S.errs=[];S.mastery={};S.cfg=Object.assign({},S.cfg);
+  S.att={};S.attPk=PK_VERSION;S.attQuar={};S.attLoadFailed=false;S.mocks=[];S.topics={};S.errs=[];S.mastery={};S.cfg=Object.assign({},S.cfg);
   resetLearn(null);S.drill=null;S.mock=null;S.route="home";
   render();
 }

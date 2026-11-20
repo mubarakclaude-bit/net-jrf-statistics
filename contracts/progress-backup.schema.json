@@ -30,7 +30,7 @@
       "required": ["attempts", "mocks", "topics", "errors", "config", "mastery", "requests", "notes", "asks"],
       "$comment": "each record is null (never written) or its shape",
       "properties": {
-        "attempts": { "oneOf": [{ "type": "null" }, { "type": "object", "additionalProperties": false, "required": ["a"], "properties": { "a": { "$ref": "#/$defs/objectMap" }, "v": { "type": "integer" } } }] },
+        "attempts": { "oneOf": [{ "type": "null" }, { "type": "object", "additionalProperties": false, "required": ["a"], "$comment": "a is keyed by PROGRESS KEY (src/21-attempts.js progressKeyOf). pk is the key format: absent = legacy (raw question ids), 2 = progress keys with ambiguous legacy ids moved to quarantine, which is never assigned to a question and never deleted.", "properties": { "a": { "$ref": "#/$defs/objectMap" }, "v": { "type": "integer" }, "pk": { "type": "integer", "minimum": 2 }, "quarantine": { "$ref": "#/$defs/objectMap" } } }] },
         "mastery": { "oneOf": [{ "type": "null" }, { "type": "object", "additionalProperties": false, "required": ["m"], "properties": { "m": { "$ref": "#/$defs/objectMap" }, "v": { "type": "integer" } } }] },
         "topics": { "oneOf": [{ "type": "null" }, { "type": "object", "additionalProperties": false, "required": ["t"], "properties": { "t": { "$ref": "#/$defs/objectMap" } } }] },
         "notes": { "oneOf": [{ "type": "null" }, { "type": "object", "additionalProperties": false, "required": ["n"], "properties": { "n": { "type": "object" } } }] },

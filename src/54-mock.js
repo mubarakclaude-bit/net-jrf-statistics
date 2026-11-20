@@ -50,7 +50,7 @@ function buildMock(n,scope,pass){
   const pool={};let avail=0;
   ms.forEach(x=>{let l=(S.bank[x.m.id]||[]).filter(q=>!isFree(q)&&!q.needsReview);
     // a timed mock needs scorable options, and an item flagged for repair has none
-    if(scope==="wrong")l=l.filter(q=>statusOf(q.id)==="wrong");
+    if(scope==="wrong")l=l.filter(q=>statusOf(q)==="wrong");
     pool[x.m.id]=l.slice();avail+=l.length});
   if(!avail)return null;
   const live=ms.filter(x=>pool[x.m.id].length);
@@ -79,7 +79,7 @@ function buildMock(n,scope,pass){
     while(taken.length<k&&rest.length){const q=rest.shift();if(taken.indexOf(q)<0)taken.push(q)}
     out.push.apply(out,taken);
   });
-  function score(q){const a=S.att[q.id]||{};if(!a.n)return 3;if(!a.o)return 2;return 1-Math.min(.9,(now()-(a.t||0))/(1000*86400*30))}
+  function score(q){const a=attOf(q)||{};if(!a.n)return 3;if(!a.o)return 2;return 1-Math.min(.9,(now()-(a.t||0))/(1000*86400*30))}
   for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=out[i];out[i]=out[j];out[j]=t}
   return out.slice(0,n);
 }
@@ -152,7 +152,7 @@ function mockResult(){
       (q.options||[]).map((o,j)=>{const L=String.fromCharCode(65+j);
         return '<div class="opt'+(L===q.answer?" right":L===picked?" wrong":"")+'" style="pointer-events:none"><span class="ol">'+L+'</span><span>'+richText(o)+'</span></div>'}).join("")+
       '<div class="expl"><h4>Why '+esc(q.answer)+'</h4>'+esc(q.explanation||"No explanation loaded.")+'</div>'+
-      '<button class="btn sm" data-q="'+esc(q.id)+'">Open in the bank</button></div></details>'}).join("")+
+      '<button class="btn sm" data-q="'+esc(progressKeyOf(q))+'">Open in the bank</button></div></details>'}).join("")+
   '</div>'+
   askBox("ask-mock","Ask Claude what this result says about my preparation",
     "A UGC NET Statistics candidate preparing for JRF just sat a mock. Score "+M.c+"/"+M.n+" ("+p+"%). By module: "+rows.map(r=>r.name+" "+r.c+"/"+r.n).join("; ")+

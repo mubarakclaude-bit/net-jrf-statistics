@@ -29,10 +29,14 @@
   // lessons. Those writes stay in memory for the page's lifetime only.
   function persists(p) { return p.indexOf("data/") === 0 || p.indexOf("feedback/") === 0; }
   lsKeys().forEach(function (p) { if (!persists(p)) lsDel(LS + p); });   // drop stale copies saved by older builds
+  // Returns false when a per-learner write could not be persisted. The page still sees it (held in memory), but the caller
+  // is told, as the artifact store would tell it, so progress that only lives until the tab closes is never reported saved.
   function store(p, j) {
-    if (persists(p) && lsSet(LS + p, j)) { delete mem[p]; return; }
-    mem[p] = JSON.parse(j);
+    if (!persists(p)) { mem[p] = JSON.parse(j); return true; }
+    if (lsSet(LS + p, j)) { delete mem[p]; return true; }
+    return false;          // not saved: leave whatever was readable before, so no later read reports it as stored
   }
+  function unsaved(p) { var e = new Error("unavailable: could not save " + p + " in this browser"); e.code = "unavailable"; return e; }
   function read(p) {
     if (Object.prototype.hasOwnProperty.call(mem, p)) return mem[p];
     if (persists(p)) { var s = lsGet(LS + p); if (s !== null) { try { return JSON.parse(s); } catch (e) {} } }
@@ -48,9 +52,9 @@
     return {
       id: p.split("/").pop(), path: p,
       get: async function () { return snap(p); },
-      set: async function (b) { store(p, JSON.stringify(b)); },
+      set: async function (b) { if (!store(p, JSON.stringify(b))) throw unsaved(p); },
       update: async function (b) {
-        var cur = read(p) || {}; store(p, JSON.stringify(Object.assign({}, cur, b)));
+        var cur = read(p) || {}; if (!store(p, JSON.stringify(Object.assign({}, cur, b)))) throw unsaved(p);
       },
       delete: async function () { lsDel(LS + p); delete mem[p]; },
       onSnapshot: function (next) { Promise.resolve().then(function () { next(snap(p)); }); return function () {}; },

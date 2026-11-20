@@ -8,10 +8,10 @@ function drillHTML(){
   const D=S.drill,q=D.list[D.i];
   if(!q)return '<div class="empty"><h3>Set finished</h3><button class="btn p" data-exit="1">Back to the bank</button></div>';
   const m=modById(q.moduleId),F=FMT[q.format]||FMT.single;
-  const a=S.att[q.id]||{};
+  const a=attOf(q)||{};
   const free=isFree(q);
   const total=D.list.length;
-  const done=D.list.filter(x=>(S.att[x.id]||{}).n).length;
+  const done=D.list.filter(x=>(attOf(x)||{}).n).length;
   let gated=false,gateMsg="";
   if(q.format==="multi"){const n=Object.keys(D.verd).length;gated=n<(q.statements||[]).length;gateMsg="Give every statement a verdict first — "+n+" of "+(q.statements||[]).length+" done."}
   if(q.format==="numeric"){gated=!(D.wrote&&D.checked);gateMsg="Work it on paper, then confirm both boxes."}
@@ -43,7 +43,7 @@ function drillHTML(){
   return '<div class="hd"><button class="btn sm" data-exit="1">‹ Bank</button>'+
     '<p>'+esc(m?m.name:q.moduleId)+' · '+esc(F.n)+(q.source==="pyq"?" · previous year"+(q.year?" "+esc(String(q.year)):""):"")+(q.pno?" · Q"+esc(String(q.pno)):"")+'</p>'+
     '<div class="sp row tight"><span class="chip dim num">'+(D.i+1)+' / '+total+'</span>'+
-      '<button class="btn sm" data-flag="'+esc(q.id)+'">'+(a.f?"★ flagged":"☆ flag")+'</button></div></div>'+
+      '<button class="btn sm" data-flag="'+esc(progressKeyOf(q))+'">'+(a.f?"★ flagged":"☆ flag")+'</button></div></div>'+
   '<div class="card flat" style="margin-bottom:10px"><div class="kv"><span class="lbl">this set</span><b>'+done+' / '+total+' answered</b></div>'+bar(pc(done,total),"ac",true)+'</div>'+
   '<div class="card">'+
     '<p class="note" style="margin-bottom:8px">'+esc(F.hint)+'</p>'+

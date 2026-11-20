@@ -933,7 +933,7 @@ function gradeQuiz(){
   const rec={state:pass?"mastered":(everPassed?"revisionDue":"failed"),
     best:Math.max(r.best||0,pct),last:pct,passedOnce:everPassed||pass,
     byFmt:byFmt,byDiff:byDiff,ts:now(),attempts:(r.attempts||0)+1,
-    served:Q.list.map(q=>q.id),
+    served:Q.list.map(progressKeyOf),
     retestDue:pass?now()+pol.retestDays*86400000:null,independent:true};
   S.mastery[les.topicId]=rec;saveMastery();
   Q.done=true;Q.c=c;Q.pct=pct;Q.byFmt=byFmt;Q.rows=rows;Q.pass=pass;Q.fails=fails;

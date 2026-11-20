@@ -75,22 +75,24 @@ function openTopic(tid){
 function drawPaper(pool,pol,prev){
   const want=pol.draw||pol.minQ||10;
   const mix=pol.diffMix||null;
-  const seenBefore=id=>!!(S.att[id]&&S.att[id].n);
-  const gotWrong=id=>!!(S.att[id]&&S.att[id].n&&!S.att[id].o);
-  const lastTime=id=>(prev&&prev.indexOf(id)>=0)?1:0;   // served on the immediately previous attempt
+  // every lookup goes through the progress key (Issue #117); "prev" is the served list, stored as progress keys
+  const K=progressKeyOf;
+  const seenBefore=q=>!!((attOf(q)||{}).n);
+  const gotWrong=q=>{const a=attOf(q);return !!(a&&a.n&&!a.o)};
+  const lastTime=q=>(prev&&prev.indexOf(K(q))>=0)?1:0;   // served on the immediately previous attempt
   // fresh material first: not served last time, then never seen, then least recently seen
-  const rank=(a,b)=>(lastTime(a.id)-lastTime(b.id))
-                 || ((seenBefore(a.id)?1:0)-(seenBefore(b.id)?1:0))
-                 || (((S.att[a.id]||{}).t||0)-((S.att[b.id]||{}).t||0))
+  const rank=(a,b)=>(lastTime(a)-lastTime(b))
+                 || ((seenBefore(a)?1:0)-(seenBefore(b)?1:0))
+                 || (((attOf(a)||{}).t||0)-((attOf(b)||{}).t||0))
                  || (Math.random()-0.5);
   // ...but each band reserves about a third of its slots for items previously got wrong,
   // so a retake re-tests the weak spots instead of only rotating in new questions.
   const take=(band,n)=>{
     if(n<=0)return[];
-    const keep=Math.min(Math.floor(n/3),band.filter(q=>gotWrong(q.id)).length);
-    const missed=band.filter(q=>gotWrong(q.id)).sort(rank).slice(0,keep);
-    const got={};missed.forEach(q=>{got[q.id]=1});
-    return missed.concat(band.filter(q=>!got[q.id]).sort(rank).slice(0,n-missed.length));
+    const keep=Math.min(Math.floor(n/3),band.filter(gotWrong).length);
+    const missed=band.filter(gotWrong).sort(rank).slice(0,keep);
+    const got={};missed.forEach(q=>{got[K(q)]=1});
+    return missed.concat(band.filter(q=>!got[K(q)]).sort(rank).slice(0,n-missed.length));
   };
   const out=[];
   if(mix){
@@ -100,8 +102,8 @@ function drawPaper(pool,pol,prev){
   }
   // top up from whatever is left if a band was short, or if no mix is set
   if(out.length<want){
-    const have={};out.forEach(q=>{have[q.id]=1});
-    out.push.apply(out,pool.filter(q=>!have[q.id]).sort(rank).slice(0,want-out.length));
+    const have={};out.forEach(q=>{have[K(q)]=1});
+    out.push.apply(out,pool.filter(q=>!have[K(q)]).sort(rank).slice(0,want-out.length));
   }
   // present them interleaved rather than easy-block then hard-block
   return spreadKeys(out.slice(0,want),pool).sort(()=>Math.random()-0.5);
@@ -112,17 +114,17 @@ function drawPaper(pool,pol,prev){
 function spreadKeys(list,pool){
   const keyOf=q=>{const o=q.options||[];const k=o.indexOf(q.answer);return k>=0?"ABCD"[k]:String(q.answer)};
   const cap=Math.max(2,Math.ceil(list.length/4)+1);          // ten questions -> at most 4 of any letter
-  const have={};list.forEach(q=>{have[q.id]=1});
+  const have={};list.forEach(q=>{have[progressKeyOf(q)]=1});
   for(let guard=0;guard<12;guard++){
     const tally={};list.forEach(q=>{const k=keyOf(q);tally[k]=(tally[k]||0)+1});
     const over=Object.keys(tally).filter(k=>tally[k]>cap).sort((a,b)=>tally[b]-tally[a])[0];
     if(!over)break;
     const k=list.findIndex(q=>keyOf(q)===over);
     const band=(list[k].diff||"moderate");
-    const alt=pool.filter(q=>!have[q.id]&&(q.diff||"moderate")===band&&(tally[keyOf(q)]||0)<cap);
+    const alt=pool.filter(q=>!have[progressKeyOf(q)]&&(q.diff||"moderate")===band&&(tally[keyOf(q)]||0)<cap);
     if(!alt.length)break;
     const pick=alt[Math.floor(Math.random()*alt.length)];
-    delete have[list[k].id];have[pick.id]=1;list[k]=pick;
+    delete have[progressKeyOf(list[k])];have[progressKeyOf(pick)]=1;list[k]=pick;
   }
   return list;
 }
@@ -138,7 +140,7 @@ async function startQuiz(les){
   if(list.length<pol.minQ)toast("Only "+list.length+" scorable questions — the policy wants "+pol.minQ);
   if(dropped)toast(dropped+" write-in item"+(dropped>1?"s":"")+" left out: a pass/fail test has to be machine-scored");
   S.learn.quiz={list:list,i:0,ans:{},conf:{},free:{},self:{},done:false,t0:now(),
-                pool:pool.length,repeat:list.filter(q=>(r.served||[]).indexOf(q.id)>=0).length};
+                pool:pool.length,repeat:list.filter(q=>(r.served||[]).indexOf(progressKeyOf(q))>=0).length};
   render();window.scrollTo(0,0);
 }
 function redrawViz(){
@@ -462,13 +464,13 @@ function wireAll(){
       src:V.querySelector("#fSrc").value,st:V.querySelector("#fSt").value,paper:S.filt.paper};
       if(S.filt.mod)await ensure([S.filt.mod]);else await ensure(mods().map(m=>m.id).filter(id=>loadedCount(id)));
       render()}});
-  on("[data-q]",e=>{const id=e.dataset.q,all=allQ(),i=all.findIndex(q=>q.id===id);
+  on("[data-q]",e=>{const key=e.dataset.q,all=allQ(),i=all.findIndex(q=>progressKeyOf(q)===key);
     if(i<0){toast("Load that module first");return}S.mock=null;startDrill(all,i)});
   one("#drillAll",()=>{const f=S.filt;let list=f.mod?(S.bank[f.mod]||[]):allQ();
     if(f.paper)list=list.filter(q=>{const m=modById(q.moduleId);return m&&String(m.paper)===f.paper});
     if(f.fmt==="free")list=list.filter(isFree);else if(f.fmt)list=list.filter(q=>q.format===f.fmt&&!isFree(q));
     if(f.src)list=list.filter(q=>q.source===f.src);
-    if(f.st)list=list.filter(q=>f.st==="flag"?((S.att[q.id]||{}).f):statusOf(q.id)===f.st);
+    if(f.st)list=list.filter(q=>f.st==="flag"?isFlagged(q):statusOf(q)===f.st);
     startDrill(list)});
 
   /* --- drill --- */
@@ -482,7 +484,7 @@ function wireAll(){
     on("[data-w]",()=>{D.wrote=!D.wrote;render()});
     on("[data-c]",()=>{D.checked=!D.checked;render()});
     on("[data-mt]",()=>{D.matched=!D.matched;render()});
-    on("[data-flag]",e=>{flagQ(e.dataset.flag);render()});
+    on("[data-flag]",()=>{flagQ(q);render()});   // the drill's current question, so the flag lands on its progress key
     on("[data-err]",e=>{if(D.err===e.dataset.err)return;D.err=e.dataset.err;logErr(q,e.dataset.err);render()});
     on("[data-self]",e=>{D.self=e.dataset.self==="1";record(q,D.self);render()});
     const fa=V.querySelector("#freeAns");if(fa)fa.oninput=()=>{D.free=fa.value};
@@ -552,7 +554,7 @@ function wireAll(){
     if(b.order&&S.catalog)S.catalog.modules.forEach(m=>{if(b.order[m.id]!=null)m.sylOrder=b.order[m.id]})})});
   const ea=V.querySelector("#exportAll");if(ea)ea.onclick=async()=>{ea.disabled=true;await loadAll();
     saveFile("net-jrf-backup-"+dayStr(now())+".json",JSON.stringify({catalog:S.catalog,index:S.index,
-      lessons:S.lessonIdx,bank:S.bank,attempts:S.att,mastery:S.mastery,mocks:S.mocks,topics:S.topics,
+      lessons:S.lessonIdx,bank:S.bank,attempts:S.att,attemptsQuarantine:S.attQuar||{},mastery:S.mastery,mocks:S.mocks,topics:S.topics,
       errors:S.errs,config:S.cfg},null,1));ea.disabled=false};
   const eg=V.querySelector("#exGo");if(eg)eg.onclick=async()=>{const mid=V.querySelector("#exMod").value;
     eg.disabled=true;await ensure(mid?[mid]:mods().map(m=>m.id).filter(id=>loadedCount(id)));

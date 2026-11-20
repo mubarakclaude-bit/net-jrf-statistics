@@ -61,7 +61,7 @@ function mstat(m){
   const ids=S.bank[m.id];
   let att=0,cor=0;
   const scan=(qid)=>{const a=S.att[qid];if(a&&a.n){att++;if(a.o)cor++}};
-  if(ids)ids.forEach(q=>scan(q.id));
+  if(ids)ids.forEach(q=>scan(progressKeyOf(q)));
   else Object.keys(S.att).forEach(qid=>{if(qid.indexOf(m.id+"-")===0)scan(qid)});
   const loaded=loadedCount(m.id),target=m.targetQ||50;
   const acc=att?cor/att:0;
@@ -97,7 +97,7 @@ function overall(paper){
 function fmtStats(){ // accuracy by question format across everything loaded
   const o={};FORDER.forEach(f=>o[f]={att:0,cor:0});
   Object.keys(S.bank).forEach(mid=>S.bank[mid].forEach(q=>{
-    const a=S.att[q.id];if(!a||!a.n)return;const f=o[q.format]||o.single;f.att++;if(a.o)f.cor++}));
+    const a=attOf(q);if(!a||!a.n)return;const f=o[q.format]||o.single;f.att++;if(a.o)f.cor++}));
   return o;
 }
 function target(){return S.cfg.target||150}

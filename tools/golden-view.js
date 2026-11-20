@@ -33,7 +33,7 @@ const server = http.createServer((q, r) => {
   if (await load.count()) { await load.click(); await page.waitForFunction(() => document.querySelector("#loadAllBtn") && /Loaded/.test(document.querySelector("#loadAllBtn").textContent), null, { timeout: 120000 }).catch(() => {}); await page.waitForTimeout(800); }
   result.loaded = await html();
   await page.evaluate(() => {
-    const ids = []; Object.keys(S.bank).sort().forEach(m => S.bank[m].slice(0, 6).forEach(q => ids.push(q.id)));
+    const ids = []; Object.keys(S.bank).sort().forEach(m => S.bank[m].slice(0, 6).forEach(q => ids.push(progressKeyOf(q))));
     ids.forEach((id, i) => { S.att[id] = { n: 1 + (i % 3), o: i % 3 ? 1 : 0 }; });
     const kinds = ERRT.map(e => e[0]);
     S.errs = Array.from({ length: 9 }, (_, i) => ({ type: kinds[i % kinds.length], fmt: FORDER[i % FORDER.length], stem: "golden stem " + i }));

@@ -86,18 +86,30 @@ function upath(name){
     : name;
 }
 async function loadProfileData(){
-  if(!S.db||!S.uid){S.att={};S.mocks=[];S.topics={};S.errs=[];S.mastery={};S.reqs=[];S.notes={};S.asks=[];return}
+  if(!S.db||!S.uid){S.att={};S.attPk=PK_VERSION;S.attQuar={};S.attLoadFailed=false;S.mocks=[];S.topics={};S.errs=[];S.mastery={};S.reqs=[];S.notes={};S.asks=[];return}
   const P="data/users/"+S.uid+"/";
-  const rd=async p=>{try{const s=await S.db.doc(p).get();return s.exists?s.data():null}catch(e){return null}};
-  const [a,m,t,er,c,ms,rq,nt,ak]=await Promise.all(["attempts","mocks","topics","errors","config","mastery","requests","notes","asks"]
-    .map(n=>rd(P+upath(n))));
+  const failed={};
+  const rd=async (p,n)=>{try{const s=await S.db.doc(p).get();return s.exists?s.data():null}catch(e){failed[n]=1;return null}};
+  const NAMES=["attempts","mocks","topics","errors","config","mastery","requests","notes","asks"];
+  const got=await Promise.all(NAMES.map(n=>rd(P+upath(n),n)));
+  const [a,m,t,er,c,ms,rq,nt,ak]=got;
   S.att=(a&&a.a)||{};S.mocks=(m&&m.list)||[];S.topics=(t&&t.t)||{};
   S.errs=(er&&er.list)||[];S.cfg=c||{};S.mastery=(ms&&ms.m)||{};S.reqs=(rq&&rq.list)||[];S.notes=(nt&&nt.n)||{};S.asks=(ak&&ak.list)||[];
   if(S.cfg.mode&&MODES[S.cfg.mode])S.mode=S.cfg.mode;
   if(S.cfg.paper===1||S.cfg.paper===2||S.cfg.paper==="all")S.paper=S.cfg.paper;
   S.bank=S.bank||{};
+  // A failed read of the attempts record is not an empty record: never migrate it and never write over it this session.
+  S.attLoadFailed=!!failed.attempts;
+  if(S.attLoadFailed){S.attPk=1;S.attQuar={};S.pkMigration={state:"read-failed"};toast("Could not load your saved results; answers this session will not be saved.");return}
+  // progress keys (Issue #117): snapshot, then migrate; on failure S.att keeps the legacy keys and the next load retries
+  const asLoaded={};NAMES.forEach((n,i)=>{asLoaded[n]=got[i]===undefined?null:got[i]});
+  await migrateProgressKeys(a,asLoaded);
 }
-const saveAtt=()=>save("attempts",{a:S.att,v:SCHEMA});
+// Before the progress-key migration has succeeded the record is written back in its legacy shape, so nothing is lost;
+// after it, the quarantined legacy results always travel with it.
+// A record whose read failed is never overwritten, and a newer format version (pk > PK_VERSION) is never downgraded.
+const saveAtt=()=>{if(S.attLoadFailed)return;
+  save("attempts",S.attPk>=PK_VERSION?{a:S.att,v:SCHEMA,pk:S.attPk,quarantine:S.attQuar||{}}:{a:S.att,v:SCHEMA})};
 const saveMocks=()=>save("mocks",{list:S.mocks.slice(-60)});
 const saveTopics=()=>save("topics",{t:S.topics});
 const saveErrs=()=>save("errors",{list:S.errs.slice(-400)});
@@ -169,7 +181,7 @@ async function loadSet(setId){
   if(S.sets[setId]||!S.db)return S.sets[setId]||[];
   try{const s=await S.db.doc("qsets/"+setId).get();
     const b=s.exists?s.data():null;
-    S.sets[setId]=b?(b.items||[]).map(it=>Object.assign({},it,{moduleId:b.moduleId,source:b.source||"mastery"})):[];
+    S.sets[setId]=b?(b.items||[]).map(it=>Object.assign({},it,{moduleId:b.moduleId,source:b.source||"mastery",setId:setId})):[];
   }catch(e){S.sets[setId]=[]}
   return S.sets[setId];
 }

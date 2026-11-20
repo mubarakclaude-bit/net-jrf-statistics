@@ -2,7 +2,7 @@
 const S={db:null,user:null,uid:null,sampleFn:null,dl:null,
   catalog:null,index:null,app:null,bank:{},notes:{},loading:{},
   lessonIdx:null,lessons:{},sets:{},mastery:{},personal:null,syl:null,
-  att:{},mocks:[],topics:{},errs:[],cfg:{},
+  att:{},attPk:1,attQuar:{},attLoadFailed:false,mocks:[],topics:{},errs:[],cfg:{},
   users:null,profile:"me",authed:false,askPass:"",passVal:"",authErr:"",ownerName:"",
   ready:false,topH:0,focus:true,dbMsg:"",boot:"",perm:null,permState:null,readErr:"",diag:null,gen:null,route:"home",open:{},pickMod:"",
   mode:"pyq",paper:2,navW:286,aideW:300,reqs:[],reqUI:{},notes:{},noteUI:{},reqModal:null,asks:[],ask:null,askChip:null,isAdmin:false,fb:null,fbErr:"",
