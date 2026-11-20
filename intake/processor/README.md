@@ -9,7 +9,8 @@ It accepts authenticated jobs and retrieves source files from private storage. E
 - `ARTIFACT_BUCKET`: private processed-artifact storage
 - `PROCESSOR_TOKEN`: authentication
 - `EXTRACTOR_URL` and `EXTRACTOR_TOKEN`: trusted extraction adapter
-- Optional `TAXONOMY_JSON`, `RESOURCE_INDEX_JSON`, `WORKSPACE_CONFIG_JSON`: trusted configuration (never upload-controlled)\n- Optional `PRODUCTION_URL` and `PRODUCTION_TOKEN`: configured content-production adapter
+- Optional `TAXONOMY_JSON`, `RESOURCE_INDEX_JSON`, `WORKSPACE_CONFIG_JSON`: trusted configuration (never upload-controlled)
+- Optional `PRODUCTION_URL` and `PRODUCTION_TOKEN`: configured content-production adapter
 
 ## Adapter contract
 POST JSON containing job ID, source hash, name and file bytes to a configured trusted adapter. Adapter output is page/section/chunk indexed. Limit request/response sizes and validate returned structure. Use adapters for formats beyond PDF when configured.
