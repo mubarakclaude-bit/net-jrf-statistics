@@ -3,7 +3,7 @@ import worker from "../src/index.js";
 
 class DB {
   constructor(){this.job={id:"12345678-1234-1234-1234-123456789abc",status:"accepted",source_sha256:"hash",object_key:"incoming/key",source_name:"source.txt",source_size:12,mime_type:"text/plain",attempts:0,dispatch_lease_until:null,dispatch_lease_token:null};this.events=[];}
-  prepare(sql){const db=this;return {bind(...args){return {first:async()=>{if(sql.startsWith("SELECT id,status,source_sha256"))return {...db.job};if(sql.startsWith("SELECT id,status FROM intake_jobs"))return {id:db.job.id,status:db.job.status};if(sql.startsWith("SELECT status,attempts"))return {status:db.job.status,attempts:db.job.attempts};return null;},run:async()=>{let changes=0;if(sql.includes("SET dispatch_lease_until=?")){const [until,token,updated,id]=args;if(id===db.job.id&&(!db.job.dispatch_lease_until||db.job.dispatch_lease_until<args[4])){db.job.dispatch_lease_until=until;db.job.dispatch_lease_token=token;db.job.updated_at=updated;changes=1;}}
+  prepare(sql){const db=this;return {bind(...args){return {first:async()=>{if(sql.startsWith("SELECT id,status,source_sha256"))return {...db.job};if(sql.startsWith("SELECT id,status FROM intake_jobs"))return {id:db.job.id,status:db.job.status,source_sha256:db.job.source_sha256};if(sql.startsWith("SELECT status,attempts"))return {status:db.job.status,attempts:db.job.attempts};return null;},run:async()=>{let changes=0;if(sql.includes("SET dispatch_lease_until=?")){const [until,token,updated,id]=args;if(id===db.job.id&&(!db.job.dispatch_lease_until||db.job.dispatch_lease_until<args[4])){db.job.dispatch_lease_until=until;db.job.dispatch_lease_token=token;db.job.updated_at=updated;changes=1;}}
  else if(sql.includes("SET status='processing',stage='extract'")){const [updated,id,token,status]=args;if(id===db.job.id&&token===db.job.dispatch_lease_token&&status===db.job.status){db.job.status="processing";db.job.stage="extract";db.job.updated_at=updated;changes=1;}}
  else if(sql.includes("SET status='completed'")){const [updated,id]=args;if(id===db.job.id&&db.job.status==="processing"){db.job.status="completed";db.job.stage="analysis";db.job.updated_at=updated;db.job.dispatch_lease_token=null;db.job.dispatch_lease_until=null;changes=1;}}
  else if(sql.includes("SET stage='extract',updated_at=?")){const [updated,id,token]=args;if(id===db.job.id&&token===db.job.dispatch_lease_token&&db.job.status==="processing"){db.job.updated_at=updated;db.job.dispatch_lease_token=null;db.job.dispatch_lease_until=null;changes=1;}}
@@ -14,7 +14,13 @@ class DB {
  return {meta:{changes}};}};}};
 }
 
-const db=new DB();const env={JOBS_DB:db,PROCESSOR_URL:"https://processor/process",PROCESSOR_TOKEN:"secret",PROCESSOR_CALLBACK_TOKEN:"callback"};
+const db=new DB();
+const artifactKey=`jobs/${db.job.id}/extract.json`,artifactBytes=new TextEncoder().encode("{}");
+const digest=async bytes=>{const d=await crypto.subtle.digest("SHA-256",bytes);return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,"0")).join("");};
+const artifactHash=await digest(artifactBytes),manifest={schema_version:1,job_id:db.job.id,source_sha256:db.job.source_sha256,artifacts:[{key:artifactKey,sha256:artifactHash,size:artifactBytes.byteLength}]};
+const artifacts=new Map([[artifactKey,artifactBytes],[`jobs/${db.job.id}/manifest.json`,JSON.stringify(manifest)]]);
+const artifactBucket={get:async key=>{const value=artifacts.get(key);if(value===undefined)return null;if(typeof value==="string")return {text:async()=>value};return {arrayBuffer:async()=>value.buffer.slice(value.byteOffset,value.byteOffset+value.byteLength)}}};
+const env={JOBS_DB:db,ARTIFACT_BUCKET:artifactBucket,PROCESSOR_URL:"https://processor/process",PROCESSOR_TOKEN:"secret",PROCESSOR_CALLBACK_TOKEN:"callback"};
 const workerFetch=globalThis.fetch;let callbackResult;
 globalThis.fetch=async(url,init)=>{
   // Simulate the processor's synchronous completion callback before its HTTP response returns.
