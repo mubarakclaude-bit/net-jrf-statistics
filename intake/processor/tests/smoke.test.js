@@ -18,3 +18,9 @@ const {buildCoverageReport}=await import("../src/coverage.js");
 const coverage=buildCoverageReport([{segment_id:"s1",page:1,text:"matrix eigenvalues and vectors"}],[{id:"r1",name:"Matrix eigenvalues"}]);
 assert.equal(coverage.entries[0].coverage_status,"potentially-covered");
 console.log("processor smoke and heuristic tests passed");
+
+const {verifyOutputs}=await import("../src/verify.js");
+const verified=verifyOutputs([{type:"lesson",content:"Example",source_segment_ids:["segment-1"]}],aud.segments);
+assert.equal(verified.failed,0);
+const bad=verifyOutputs([{type:"lesson",content:"Untraceable",source_segment_ids:["missing"]}],aud.segments);
+assert.ok(bad.failed>0);
