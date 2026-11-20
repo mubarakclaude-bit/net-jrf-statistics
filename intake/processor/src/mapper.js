@@ -1,4 +1,4 @@
-// Lexical topic mapper; returns suggestions only and uses the Paper 2 seed catalogue.
+// Lexical topic mapper; suggestions are explicitly unverified.
 const terms={
  probability:["probability","distribution","conditional","expectation","variance","moment generating","characteristic function","order statistic","bayes theorem","convergence","clt","jacobian"],
  maths:["matrix","rank","eigen","vector","linear algebra","real analysis","limit","continuity","differentiable"],
@@ -13,9 +13,10 @@ const terms={
  official:["official statistics","census","national sample","statistical system","economic statistics","methodology"],
  rprog:["r programming","r language","r function","data frame","r studio","programming"]
 };
+function topicScore(text,topic){const name=(topic.name||"").toLowerCase();const words=name.split(/[^a-z0-9]+/).filter(w=>w.length>3);return words.reduce((s,w)=>s+(text.includes(w)?1:0),0)+((topic.id&&text.includes(topic.id.toLowerCase()))?2:0);}
 export function mapText(text,catalog){
  const t=text.toLowerCase(),scores=Object.entries(terms).map(([module,words])=>({module,score:words.reduce((s,w)=>s+(t.includes(w)?1:0),0)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
- const allowed=new Set((catalog.modules||[]).filter(m=>m.paper===2).map(m=>m.id));
- const suggestions=scores.filter(x=>allowed.has(x.module)).slice(0,3).map(x=>({...x,topic_ids:(catalog.modules.find(m=>m.id===x.module)?.topics||[]).map(t=>t.id)}));
- return {suggestions,confidence:suggestions.length?"low":"none",warning:"Module-level lexical mapping only. Topic IDs are listed for manual selection; exact topic assignment is not inferred."};
+ const allowed=(catalog.modules||[]).filter(m=>m.paper===2);
+ const suggestions=scores.filter(x=>allowed.some(m=>m.id===x.module)).slice(0,3).map(x=>{const m=allowed.find(m=>m.id===x.module);const topics=(m.topics||[]).map(topic=>({id:topic.id,name:topic.name,score:topicScore(t,topic)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,3);return {...x,topic_candidates:topics};});
+ return {suggestions,confidence:suggestions.length?"low":"none",warning:"Lexical module/topic suggestions only; human confirmation required."};
 }
