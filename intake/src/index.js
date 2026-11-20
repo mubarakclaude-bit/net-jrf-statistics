@@ -76,7 +76,7 @@ export default {
         const job=await env.JOBS_DB.prepare("SELECT id,status,source_sha256,object_key,source_size FROM intake_jobs WHERE id=?").bind(id).first();
         if(!job)return json({error:"not_found"},404);
         if(!["blocked_infrastructure","failed_retryable"].includes(job.status)||!canTransition(job.status,"queued"))return json({error:"retry_not_allowed"},409);
-        if(!env.SOURCE_BUCKET||!env.PROCESSING_QUEUE)return json({error:"recovery_storage_unconfigured"},503);
+        if(!env.SOURCE_BUCKET||!env.PROCESSING_QUEUE)return json({error:"recovery_storage_unconfigured"},503);\n        if(!env.PROCESSOR_URL||!env.PROCESSOR_TOKEN)return json({error:"processor_not_configured"},503);
         const source=await env.SOURCE_BUCKET.get(job.object_key);if(!source)return json({error:"source_missing"},409);
         const bytes=await source.arrayBuffer();if(bytes.byteLength!==job.source_size||await sha256(bytes)!==job.source_sha256)return json({error:"source_integrity_failed"},422);
         const time=now();
