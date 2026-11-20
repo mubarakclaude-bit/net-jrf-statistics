@@ -33,3 +33,19 @@ assert.ok(db.events.some(e=>e[1]==="processor_result"));
 const invalid=await worker.fetch(new Request("https://intake/internal/processor-result",{method:"POST",headers:{authorization:"Bearer callback","content-type":"application/json"},body:JSON.stringify({job_id:db.job.id,status:"completed",stage:"analysis",artifact_keys:["outside-prefix"]})}),env);
 assert.equal(invalid.status,400,"callback must reject artifact keys outside the job namespace");
 console.log("queue callback-race tests passed");
+
+// Retryable dispatch failures remain explicit and clear the claim before queue retry.
+const failedDb=new DB();let failRetry=0,failAck=0;
+const failEnv={JOBS_DB:failedDb,PROCESSOR_URL:"https://processor/process",PROCESSOR_TOKEN:"secret"};
+const fetchFail=globalThis.fetch;globalThis.fetch=async()=>new Response("down",{status:502});
+try{await worker.queue({messages:[{body:{job_id:failedDb.job.id},ack(){failAck++},retry(){failRetry++}}]},failEnv);}finally{globalThis.fetch=fetchFail;}
+assert.equal(failedDb.job.status,"failed_retryable");
+assert.equal(failedDb.job.attempts,1);
+assert.equal(failedDb.job.dispatch_lease_token,null);
+assert.equal(failRetry,1);assert.equal(failAck,0);
+
+// Missing processor credentials are recorded as a blocked owner-action state.
+const blockedDb=new DB();const blockedEnv={JOBS_DB:blockedDb};let blockedAck=0,blockedRetry=0;
+await worker.queue({messages:[{body:{job_id:blockedDb.job.id},ack(){blockedAck++},retry(){blockedRetry++}}]},blockedEnv);
+assert.equal(blockedDb.job.status,"blocked_infrastructure");
+assert.equal(blockedAck,1);assert.equal(blockedRetry,0);
