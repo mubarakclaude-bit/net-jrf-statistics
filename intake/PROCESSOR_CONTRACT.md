@@ -19,7 +19,8 @@ The processor is an independently deployed, document-agnostic service invoked th
 The request carries a storage pointer and metadata, never document bytes or tokens. Processor uses scoped storage access.
 
 ## Required behavior
-- Idempotent checkpointing on `job_id + stage`.
+- **Target requirement:** idempotent checkpointing on `job_id + stage`. The current scaffold does not yet provide processor-side durable claims or complete idempotency; duplicate external side effects remain possible until implemented.
+- Validate `job_id` as a UUID, validate the SHA-256 value, and require the source object key to remain within `incoming/<job_id>/<hash>/` before accessing storage.
 - Acknowledge only after durably recording its checkpoint or dispatch.
 - Return no source content in public status/event responses.
 - Preserve source hash, segment/page/chunk provenance and immutable stage artifacts.
