@@ -1,17 +1,13 @@
-# Intake Worker
+# Generic Document Intake
 
-Owner-authenticated upload/status API scaffold. Accepts PDFs, stores them privately in R2, records jobs/events in D1 and dispatches a queue message. It is not production-ready.
+Authenticated document upload/status API scaffold. Supported formats are deployment-configured (currently allowlisted: PDF, TXT, Markdown, CSV, HTML, RTF, DOCX, PPTX, XLSX and image MIME types). 20 MB hard limit. Stores private source files, D1 job/events and queue-dispatches processing.
+
+The processing stages and output types are configurable; no subject, exam, curriculum, answer-key, question-bank or learning-content format is assumed. Extraction adapters determine format-specific extraction. Optional workspace taxonomy and resource index may be supplied by trusted configuration.
 
 ## API
 - `GET /health`
-- `GET /`: upload/status portal (protect with owner-only Cloudflare Access before use)
-- `POST /upload`: bearer-token authenticated multipart PDF; 20 MB hard cap, signature check, SHA-256 deduplication.
-- `GET /jobs/{id}`: bearer-authenticated job/event status.
+- `GET /`: portal (owner-only Cloudflare Access required before deployment)
+- `POST /upload`: authenticated multipart document
+- `GET /jobs/{id}`: authenticated job/event status
 
-## Infrastructure
-See `DEPLOYMENT.md`. Bind private R2, D1, Queue. Queue consumer dispatches the full processor contract to `PROCESSOR_URL` with `PROCESSOR_TOKEN`.
-
-## Processor
-A new `processor/` worker scaffold accepts jobs, verifies source hash, sends the PDF to the configured extractor adapter and stores page-indexed provenance in a private artifact bucket. It stops after extraction; later content-production stages are not implemented. No source PDFs are committed.
-
-Before deployment: owner identity gate, malware quarantine, restricted extractor, data retention, logging/observability, secret rotation and security review.
+No files are committed to the repository. See deployment and processor documentation.
