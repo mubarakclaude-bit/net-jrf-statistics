@@ -8,7 +8,8 @@ The processing stages and output types are configurable; no subject, exam, curri
 - `GET /health`
 - `GET /`: portal (owner-only Cloudflare Access required before deployment)
 - `POST /upload`: authenticated multipart document
-- `GET /jobs/{id}`: authenticated job/event status\n- `POST /jobs/{id}/retry`: owner-authenticated manual retry for blocked/retryable jobs after source hash/size integrity verification and processor configuration checks
+- `GET /jobs/{id}`: authenticated job/event status
+- `POST /jobs/{id}/retry`: owner-authenticated manual retry for blocked/retryable jobs after source hash/size integrity verification and processor configuration checks
 - `GET /jobs/{id}/artifacts/{filename}`: authenticated, completed-job artifact downloads. Allowed files are manifest, extraction, audit, taxonomy, coverage, production and verification artifacts. Downloaded files are checked against the private integrity manifest.
 
 No files are committed to the repository. See deployment and processor documentation.
