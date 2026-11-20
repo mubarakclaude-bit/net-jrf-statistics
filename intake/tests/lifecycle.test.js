@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import {canTransition,transition,isTerminal,retryDisposition} from "../src/lifecycle.js";
 assert.equal(canTransition("accepted","queued"),true);
+assert.equal(canTransition("accepted","processing"),true);
+assert.equal(canTransition("accepted","failed_retryable"),true);
+assert.equal(canTransition("failed_retryable","processing"),true);
 assert.equal(canTransition("processing","completed"),true);
 assert.equal(canTransition("completed","processing"),false);
 assert.equal(transition("failed_retryable","queued"),"queued");
