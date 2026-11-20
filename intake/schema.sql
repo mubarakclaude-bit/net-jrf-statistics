@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS intake_jobs (
   source_sha256 TEXT NOT NULL UNIQUE,
   object_key TEXT NOT NULL UNIQUE,
   source_size INTEGER NOT NULL,
+  mime_type TEXT NOT NULL DEFAULT 'application/octet-stream',
   status TEXT NOT NULL,
   stage TEXT NOT NULL,
   attempts INTEGER NOT NULL DEFAULT 0,
