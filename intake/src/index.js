@@ -29,6 +29,16 @@ export default {
       if(!existing)return json({error:"not_found"},404);
       if(existing.status==="completed")return json({accepted:true,duplicate:true});
       if(existing.status!=="processing"||!canTransition(existing.status,"completed"))return json({error:"invalid_transition"},409);
+      // Independently validate the private manifest and every artifact before the
+      // ledger is allowed to record completion.
+      if(!env.ARTIFACT_BUCKET)return json({error:"artifact_storage_unconfigured"},503);
+      const manifestObj=await env.ARTIFACT_BUCKET.get(`jobs/${payload.job_id}/manifest.json`);
+      if(!manifestObj)return json({error:"manifest_not_found"},422);
+      let manifest;try{manifest=JSON.parse(await manifestObj.text())}catch{return json({error:"invalid_manifest"},422)}
+      if(manifest.schema_version!==1||manifest.job_id!==payload.job_id||manifest.source_sha256!==existing.source_sha256||!Array.isArray(manifest.artifacts)||manifest.artifacts.length>20)return json({error:"manifest_invalid"},422);
+      const reported=new Set(payload.artifact_keys),manifestKeys=new Set(manifest.artifacts.map(x=>x?.key));
+      if(manifest.artifacts.some(x=>!x||typeof x.key!=="string"||!x.key.startsWith(`jobs/${payload.job_id}/`)||! /^[a-f0-9]{64}$/i.test(x.sha256||"")||!Number.isSafeInteger(x.size)||x.size<0)||[...manifestKeys].some(k=>!reported.has(k))||[...reported].some(k=>k!==`jobs/${payload.job_id}/manifest.json`&&!manifestKeys.has(k)))return json({error:"artifact_manifest_mismatch"},422);
+      for(const entry of manifest.artifacts){const stored=await env.ARTIFACT_BUCKET.get(entry.key);if(!stored)return json({error:"artifact_missing"},422);const bytes=await stored.arrayBuffer();if(bytes.byteLength!==entry.size||await sha256(bytes)!==entry.sha256)return json({error:"artifact_integrity_mismatch"},422);}
       const summary=payload.summary&&typeof payload.summary==="object"?{pages:Number.isSafeInteger(payload.summary.pages)?payload.summary.pages:null,segments:Number.isSafeInteger(payload.summary.segments)?payload.summary.segments:null,production_created:typeof payload.summary.production_created==="boolean"?payload.summary.production_created:null}:null;
       const time=now(),details=JSON.stringify({summary,artifact_keys:payload.artifact_keys});
       const settled=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='completed',stage='analysis',updated_at=?,error_code=NULL,error_message=NULL,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status='processing'").bind(time,payload.job_id).run();
