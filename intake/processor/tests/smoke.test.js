@@ -1,7 +1,5 @@
 import assert from "node:assert/strict";
-import {readFile} from "node:fs/promises";
-const source=await readFile(new URL("../src/index.js",import.meta.url),"utf8");
-const worker=(await import("data:text/javascript;base64,"+Buffer.from(source).toString("base64"))).default;
+const worker=(await import("../src/index.js")).default;
 const response=await worker.fetch(new Request("https://processor/health"),{});
 assert.equal(response.status,200);assert.deepEqual(await response.json(),{ok:true,service:"processor"});
 const unauthorized=await worker.fetch(new Request("https://processor/process",{method:"POST",headers:{"content-type":"application/json"},body:"{}"}),{PROCESSOR_TOKEN:"x"});
@@ -10,7 +8,7 @@ const malformed=await worker.fetch(new Request("https://processor/process",{meth
 assert.equal(malformed.status,400);
 const {auditSource}=await import("../src/audit.js");
 const aud=auditSource({pages:[{page:1,text:"Question 1. Find the unbiased estimator of variance based on independent normal observations."}]});
-assert.equal(aud.segments.length,1);assert.equal(aud.segments[0].page,1);assert.ok(aud.segments[0].labels.includes("question_or_prompt"));
+assert.equal(aud.segments.length,1);assert.equal(aud.segments[0].page,1);assert.ok(aud.segments[0].labels.includes("question_or_prompt"));\nconst multi=auditSource({pages:[{page:1,text:"Question 1. Explain probability theory and its applications in detail. Question 2. Calculate the expected value of a random variable given the following conditions and data."}]});\nassert.ok(multi.segments.length>=2);
 const {mapText}=await import("../src/mapper.js");
 const mapped=mapText("Explain matrix eigenvalue properties.",{items:[{id:"topic-a",name:"Matrix eigenvalues",keywords:["eigenvalue"]}]});
 assert.equal(mapped.candidates[0].id,"topic-a");
