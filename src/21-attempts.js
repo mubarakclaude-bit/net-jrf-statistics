@@ -57,6 +57,9 @@ function planPkMigration(doc){
   });
   return{doc:{a:att,v:SCHEMA,pk:PK_VERSION,quarantine:quarantine},moved:moved};
 }
+/* JSON with object keys sorted, so a store that returns keys in another order still compares equal. */
+function canon(v){return v&&typeof v==="object"?(Array.isArray(v)?"["+v.map(canon).join(",")+"]":
+  "{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+canon(v[k])).join(",")+"}"):JSON.stringify(v===undefined?null:v)}
 function snapshotPath(){return "data/users/"+S.uid+"/"+upath("snapshots/"+PK_SNAPSHOT+"/record")}
 /* Called by loadProfileData with the attempts record as stored and every record as loaded (for the snapshot).
    Order: snapshot (written and read back; an existing one is kept, it is the earliest state) -> migrated attempts written
@@ -77,7 +80,7 @@ async function migrateProgressKeys(stored,records){
       await sref.set({format:"net-jrf-statistics-premigration",version:1,createdAt:new Date().toISOString(),
         learnerId:String(S.uid),profileId:S.profile||"me",reason:"progress keys v"+PK_VERSION+" (Issue #117)",records:records});
       const back=await sref.get();
-      if(!back.exists||JSON.stringify((back.data().records||{}).attempts)!==JSON.stringify(records.attempts))
+      if(!back.exists||canon((back.data().records||{}).attempts)!==canon(records.attempts))
         throw new Error("snapshot did not read back");
     }
     await S.db.doc("data/users/"+S.uid+"/"+upath("attempts")).set(plan.doc);
@@ -98,5 +101,8 @@ async function restorePkSnapshot(){
   const att=(s.data().records||{}).attempts;
   if(!att)return false;
   await S.db.doc("data/users/"+S.uid+"/"+upath("attempts")).set(att);
+  // the in-memory state must match what was restored, or the next save would write the migrated record back over it
+  S.att=Object.assign({},att.a||{});S.attPk=att.pk>=PK_VERSION?att.pk:1;S.attQuar=att.quarantine||{};S.attLoadFailed=false;
+  S.pkMigration={state:"restored"};
   return true;
 }

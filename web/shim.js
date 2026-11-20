@@ -32,9 +32,9 @@
   // Returns false when a per-learner write could not be persisted. The page still sees it (held in memory), but the caller
   // is told, as the artifact store would tell it, so progress that only lives until the tab closes is never reported saved.
   function store(p, j) {
-    if (persists(p) && lsSet(LS + p, j)) { delete mem[p]; return true; }
-    mem[p] = JSON.parse(j);
-    return !persists(p);
+    if (!persists(p)) { mem[p] = JSON.parse(j); return true; }
+    if (lsSet(LS + p, j)) { delete mem[p]; return true; }
+    return false;          // not saved: leave whatever was readable before, so no later read reports it as stored
   }
   function unsaved(p) { var e = new Error("unavailable: could not save " + p + " in this browser"); e.code = "unavailable"; return e; }
   function read(p) {

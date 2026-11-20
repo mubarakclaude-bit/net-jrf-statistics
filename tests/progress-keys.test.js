@@ -166,6 +166,13 @@ const Q = `const off=S.bank.official.find(q=>q.id==="j26v-q36-01"),smp=S.bank.sa
     // restore: the legacy record comes back exactly; the next load migrates it to the same result
     const ok = await page.evaluate(() => restorePkSnapshot());
     check("restore puts the pre-migration record back exactly", ok === true && same(await stored(page, "attempts"), LEGACY));
+    // a save after the restore (same session, no reload) must not write the migrated record back over it
+    await page.evaluate(id => { record(S.bank.official.find(q => q.id === id), true); }, U_OFF);
+    await page.waitForTimeout(1200);
+    const ar = await stored(page, "attempts");
+    check("a save after restore keeps the restored legacy record (no pk, ambiguous key still present)",
+      ar && !("pk" in ar) && same(ar.a["j26v-q36-01"], LEGACY.a["j26v-q36-01"]) && ar.a[U_OFF].n === LEGACY.a[U_OFF].n + 1, JSON.stringify(ar && Object.keys(ar)));
+    await page.evaluate(id => { const a = S.att[id]; a.n -= 1; }, U_OFF); await page.evaluate(() => saveAtt()); await page.waitForTimeout(1200);
     await login(page);
     const re = await stored(page, "attempts");
     check("migrating the restored record gives the same quarantine and keeps the snapshot", re.pk === 2 && same(re.quarantine, doc.quarantine) && same(await stored(page, "snapshots/premigrate-pk2/record"), snap));
@@ -201,6 +208,32 @@ const Q = `const off=S.bank.official.find(q=>q.id==="j26v-q36-01"),smp=S.bank.sa
     check("when the snapshot cannot be saved, the migration does not run", st === "failed", st);
     check("...and the stored record is untouched", same(await stored(page, "attempts"), LEGACY));
     check("...and no snapshot exists", (await stored(page, "snapshots/premigrate-pk2/record")) === null);
+    const viaDb = await page.evaluate(async () => (await (await claude.use("db")).doc(snapshotPath()).get()).exists);
+    check("...and the store does not report the failed snapshot as saved", viaDb === false);
+    await ctx.close();
+  }
+
+  /* ---- a failed read of the attempts record is not an empty record ---- */
+  {
+    const errs = [], { ctx, page } = await context(browser, errs);
+    await seed(page, base); await login(page);
+    const before = await stored(page, "attempts");
+    const r = await page.evaluate(async id => {
+      const realDoc = S.db.doc.bind(S.db);
+      S.db.doc = p => { const d = realDoc(p); if (/\/attempts$/.test(p)) return Object.assign({}, d, { get: async () => { const e = new Error("unavailable (test)"); e.code = "unavailable"; throw e; } }); return d; };
+      await loadProfileData();
+      const st = { failed: S.attLoadFailed, mig: S.pkMigration.state };
+      record(S.bank.official.find(q => q.id === id), false);
+      S.db.doc = realDoc;
+      return st;
+    }, U_OFF);
+    await page.waitForTimeout(1200);
+    check("a failed attempts read is flagged and not migrated", r.failed === true && r.mig === "read-failed", JSON.stringify(r));
+    check("...and nothing is written over the stored record that session", same(await stored(page, "attempts"), before));
+    await login(page);
+    check("the next normal load reads and keeps the record", (await page.evaluate(() => S.attLoadFailed)) === false && same(await stored(page, "attempts"), before));
+    const noise = errs.filter(e => !/unavailable \(test\)/i.test(e));
+    check("no unexpected page errors (read-failure run)", noise.length === 0, noise.slice(0, 3).join(" | "));
     await ctx.close();
   }
 
