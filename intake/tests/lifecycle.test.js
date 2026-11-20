@@ -1,0 +1,16 @@
+import assert from "node:assert/strict";
+import {canTransition,transition,isTerminal,retryDisposition} from "../src/lifecycle.js";
+assert.equal(canTransition("accepted","queued"),true);
+assert.equal(canTransition("accepted","processing"),true);
+assert.equal(canTransition("accepted","failed_retryable"),true);
+assert.equal(canTransition("failed_retryable","processing"),true);
+assert.equal(canTransition("failed_retryable","blocked_infrastructure"),true);
+assert.equal(canTransition("processing","completed"),true);
+assert.equal(canTransition("completed","processing"),false);
+assert.equal(transition("failed_retryable","queued"),"queued");
+assert.throws(()=>transition("completed","queued"));
+assert.equal(isTerminal("cancelled"),true);
+assert.equal(retryDisposition("failed_retryable",2),"retry");
+assert.equal(retryDisposition("failed_retryable",5),"terminalize");
+assert.equal(retryDisposition("blocked_infrastructure",1),"owner_action");
+console.log("lifecycle tests passed");

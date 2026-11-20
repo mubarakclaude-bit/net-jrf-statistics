@@ -1,0 +1,25 @@
+import assert from "node:assert/strict";
+import worker from "../src/index.js";
+
+const id="12345678-1234-1234-1234-123456789abc",sourceHash="source-hash";
+const attempt="attempt-1",prefix=`jobs/${id}/attempts/${attempt}`;
+const artifactText=JSON.stringify({sample:"verified"});
+const bytes=new TextEncoder().encode(artifactText);
+const hash=async buf=>{const d=await crypto.subtle.digest("SHA-256",buf);return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,"0")).join("");};
+const artifactHash=await hash(bytes);
+const artifactKey=`${prefix}/extract.json`,manifestKey=`${prefix}/manifest.json`;
+const manifest={schema_version:1,job_id:id,attempt_id:attempt,fencing_token:1,source_sha256:sourceHash,artifacts:[{key:artifactKey,sha256:artifactHash,size:bytes.byteLength}]};
+const objects=new Map([[manifestKey,JSON.stringify(manifest)],[artifactKey,bytes]]);
+const bucket={get:async key=>{const v=objects.get(key);if(!v)return null;if(typeof v==="string")return {text:async()=>v};return {arrayBuffer:async()=>v.buffer.slice(v.byteOffset,v.byteOffset+v.byteLength)};}};
+const db={prepare(sql){return {bind(){return {first:async()=>({id,status:"completed",source_sha256:sourceHash,manifest_key:manifestKey})}}}}};
+const env={INTAKE_TOKEN:"secret",JOBS_DB:db,ARTIFACT_BUCKET:bucket};
+const url=`https://intake/jobs/${id}/artifacts/extract.json`;
+const res=await worker.fetch(new Request(url,{headers:{authorization:"Bearer secret"}}),env);
+assert.equal(res.status,200);assert.equal(await res.text(),artifactText);assert.match(res.headers.get("content-disposition"),/attachment/);
+const manifestRes=await worker.fetch(new Request(`https://intake/jobs/${id}/artifacts/manifest.json`,{headers:{authorization:"Bearer secret"}}),env);
+assert.equal(manifestRes.status,200);assert.deepEqual(await manifestRes.json(),manifest);
+const denied=await worker.fetch(new Request(url),env);assert.equal(denied.status,401);
+const invalid=await worker.fetch(new Request(`https://intake/jobs/${id}/artifacts/../other.json`,{headers:{authorization:"Bearer secret"}}),env);assert.notEqual(invalid.status,200);
+objects.set(artifactKey,new TextEncoder().encode("tampered"));
+const bad=await worker.fetch(new Request(url,{headers:{authorization:"Bearer secret"}}),env);assert.equal(bad.status,422);
+console.log("artifact download and integrity tests passed");
