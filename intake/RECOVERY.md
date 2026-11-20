@@ -7,7 +7,8 @@ This subsystem is domain-agnostic. Job lifecycle data is the ledger; queue deliv
 - Up to five recorded dispatch failures remain retryable. The consumer uses queue retry delivery; the queue's configured retry ceiling is also five.
 - At the bounded threshold, the ledger moves to `failed_terminal` and the message is acknowledged to prevent infinite retry loops.
 - Infrastructure configuration failures are recorded as `blocked_infrastructure` and acknowledged. Owner action is required before manually re-enqueueing.
-- Successful processor dispatch moves the ledger to `processing`; authenticated completion callbacks are idempotent for already-completed jobs.
+- The ledger is marked `processing` before the synchronous processor call so a fast callback cannot race the state transition. Completion is accepted only from `processing`; duplicate callbacks after completion are acknowledged without a second transition.
+- If queue acceptance fails after the durable job row is created, the source object is preserved and the job is moved to `blocked_infrastructure` with a safe recovery code instead of deleting a source still referenced by the ledger.
 - User-facing error strings do not include upstream exception details, credentials, document text, or provider responses.
 
 ## Recovery checklist
@@ -18,4 +19,4 @@ This subsystem is domain-agnostic. Job lifecycle data is the ledger; queue deliv
 5. Never replay arbitrary callbacks or queue messages from untrusted sources.
 
 ## Current limitations
-The lifecycle guard is a small policy module. Dispatch leases now conditionally claim jobs and fence the consumer's success/failure ledger updates using the lease token. This reduces stale concurrent state writes but is not full processor idempotency: a lease can expire while a processor request is running, and external side effects may still be duplicated. Queue DLQ wiring, manual recovery endpoint, upload scanning/quarantine, retention/deletion and deployment remain owner/infrastructure work.
+The lifecycle guard is a small policy module. Dispatch leases conditionally claim jobs and fence ledger updates; callback validation restricts completion to the current processing state and job-scoped artifact keys. These are race and integrity mitigations, not full processor idempotency: a lease can expire while a processor request is running, and external side effects may still be duplicated. DLQ wiring, a manual recovery endpoint, upload scanning/quarantine, retention/deletion and deployment remain owner/infrastructure work.
