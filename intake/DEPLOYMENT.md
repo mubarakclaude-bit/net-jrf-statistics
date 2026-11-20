@@ -47,4 +47,4 @@ This scaffold is not production-ready or deployed. Extraction requires a provisi
 
 
 ## Verification scaffold
-The configured output adapter is checked for content bounds and source-segment provenance references. Deterministic reports are stored separately. These checks do not establish semantic accuracy, citation correctness or domain validity; outputs remain review-required. Intake and processor smoke tests are wired to CI, pending an actual successful run.
+The configured output adapter is checked for content bounds and source-segment provenance references. Deterministic reports are stored separately. These checks do not establish semantic accuracy, citation correctness or domain validity; outputs remain review-required. Intake and processor smoke tests are wired to CI, pending CI confirmation for the latest commit. The local/CI suite does not substitute for a live Cloudflare end-to-end test.
