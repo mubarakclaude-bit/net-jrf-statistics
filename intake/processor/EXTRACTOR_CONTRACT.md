@@ -1,0 +1,3 @@
+# Extractor contract
+
+The adapter is a separate trusted service. It must be restricted to this processor, support bounded requests, avoid logging document text, and return page-indexed text. OCR and extraction output is untrusted content. Return JSON: `{pages:[{page:number,text:string,confidence?:number,ocr?:boolean}]}`. Use monotonically increasing 1-based page numbers; page text is capped at 200,000 characters; max 1,000 pages. This processor verifies the original PDF hash and stores extraction provenance in a private artifact bucket. The adapter is not supplied by this repository, so extraction remains unavailable until configured.
