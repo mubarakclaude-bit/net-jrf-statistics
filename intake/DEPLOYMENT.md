@@ -44,3 +44,7 @@ npx wrangler deploy
 
 ## Current boundary
 This scaffold is not production-ready or deployed. Extraction requires a provisioned adapter. Coverage is now wired as optional configured analysis; output authoring, verification, export, and repository PR automation are not yet implemented. Owner Access, scanning/quarantine, retention, sandboxing, monitoring, deployment verification and security review are required before accepting sensitive documents.
+
+
+## Verification scaffold
+The configured output adapter is checked for content bounds and source-segment provenance references. Deterministic reports are stored separately. These checks do not establish semantic accuracy, citation correctness or domain validity; outputs remain review-required. Intake and processor smoke tests are wired to CI, pending an actual successful run.
