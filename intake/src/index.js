@@ -65,14 +65,27 @@ export default {
     for (const message of batch.messages) {
       const {job_id} = message.body || {};
       if (!job_id) { message.ack(); continue; }
-      const job = await env.JOBS_DB.prepare("SELECT status,stage FROM intake_jobs WHERE id=?").bind(job_id).first();
-      if (!job || job.status === "completed") { message.ack(); continue; }
-      const time = now();
-      // Scaffold checkpoint: full extraction/authoring/review pipeline is not yet connected.
-      await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='needs_worker',stage='worker_scaffold',attempts=attempts+1,updated_at=? WHERE id=?").bind(time,job_id).run();
-      await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)")
-        .bind(job_id,"checkpoint","worker_scaffold",JSON.stringify({note:"Extraction and content pipeline not yet connected"}),time).run();
-      message.ack();
+      const job = await env.JOBS_DB.prepare("SELECT id,status,source_sha256,object_key,source_name,source_size FROM intake_jobs WHERE id=?").bind(job_id).first();
+      if (!job || ["completed","failed_terminal","cancelled"].includes(job.status)) { message.ack(); continue; }
+      if (!env.PROCESSOR_URL || !env.PROCESSOR_TOKEN) {
+        const time=now();
+        await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='dispatch',updated_at=? WHERE id=?").bind(time,job_id).run();
+        await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"blocked","dispatch",JSON.stringify({code:"processor_not_configured"}),time).run();
+        message.ack(); continue;
+      }
+      try {
+        const resp=await fetch(env.PROCESSOR_URL,{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+env.PROCESSOR_TOKEN},body:JSON.stringify({schema_version:1,job_id,source_sha256:job.source_sha256,object_key:job.object_key,source_name:job.source_name,source_size:job.source_size,resume_stage:"extract"})});
+        if (!resp.ok) throw new Error("processor_http_"+resp.status);
+        const time=now();
+        await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='processing',stage='extract',updated_at=? WHERE id=?").bind(time,job_id).run();
+        await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"dispatched","extract",JSON.stringify({processor_status:resp.status}),time).run();
+        message.ack();
+      } catch (e) {
+        const time=now();
+        await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='failed_retryable',stage='dispatch',attempts=attempts+1,updated_at=?,error_code='processor_dispatch_failed',error_message=? WHERE id=?").bind(time,String(e).slice(0,300),job_id).run();
+        await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"dispatch_failed","dispatch",JSON.stringify({code:"processor_dispatch_failed"}),time).run();
+        message.retry();
+      }
     }
   }
 };
