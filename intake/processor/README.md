@@ -11,6 +11,7 @@ It accepts authenticated jobs and retrieves source files from private storage. E
 - `EXTRACTOR_URL` and `EXTRACTOR_TOKEN`: trusted extraction adapter
 - Optional `TAXONOMY_JSON`, `RESOURCE_INDEX_JSON`, `WORKSPACE_CONFIG_JSON`: trusted configuration (never upload-controlled)
 - Optional `PRODUCTION_URL` and `PRODUCTION_TOKEN`: configured content-production adapter
+- Optional `INTAKE_CALLBACK_URL` and `CALLBACK_TOKEN`: authenticated intake status callback
 
 ## Adapter contract
 POST JSON containing job ID, source hash, name and file bytes to a configured trusted adapter. Adapter output is page/section/chunk indexed. Limit request/response sizes and validate returned structure. Use adapters for formats beyond PDF when configured.
@@ -20,3 +21,6 @@ Analysis outputs are candidate findings only, not guaranteed ground truth. Downs
 
 ## Configurable production adapter
 When a trusted workspace config selects output types and a production adapter is configured, the processor sends bounded source-segment candidates and requested output types to that adapter. The adapter must return `{outputs:[...],metadata?:{}}`. Results are stored as private production artifacts and marked review-required. This integration is an adapter contract only; the actual provider, validation/review, export, and publication controls still require deployment and tests.
+
+## Durable status callbacks
+After successful analysis artifact creation, the processor can post a compact completion summary and artifact-key list to the intake callback endpoint. Configure `INTAKE_CALLBACK_URL` to the intake `/internal/processor-result` route and `CALLBACK_TOKEN` as a separate secret shared only between these services. Callback details contain no source text.
