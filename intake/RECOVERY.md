@@ -20,3 +20,18 @@ This subsystem is domain-agnostic. Job lifecycle data is the ledger; queue deliv
 
 ## Current limitations
 The lifecycle guard is a small policy module. Dispatch leases conditionally claim jobs and fence ledger updates; callback validation restricts completion to the current processing state and job-scoped artifact keys. These are race and integrity mitigations, not full processor idempotency: a lease can expire while a processor request is running, and external side effects may still be duplicated. DLQ wiring, a manual recovery endpoint, upload scanning/quarantine, retention/deletion and deployment remain owner/infrastructure work.
+
+## Reconciliation procedure (operator review; not yet automated)
+
+Run a periodic ledger audit against queue delivery and storage; never mark a job completed solely because an artifact object exists.
+
+| Observed condition | Operator action | Safe disposition |
+|---|---|---|
+| queued, dispatch lease expired | Inspect event history and queue state; retry dispatch after confirming no active lease | Remain queued or blocked if queue configuration is broken |
+| processing, callback absent, lease/expected runtime expired | Verify processor activity, source hash and artifact manifest; check for duplicate execution before retry | Block for review until fencing protocol is implemented |
+| completed, manifest missing/unreadable | Verify ledger callback event and artifacts; restrict download access | Treat as integrity incident; do not auto-reopen |
+| manifest references missing or hash-mismatched object | Preserve evidence, deny download, report integrity incident | Quarantine job for review |
+| retryable failure at attempt limit | Review safe failure codes and configuration | Terminalize or owner-approved new attempt |
+| blocked infrastructure | Fix deployment binding/secret/policy and confirm health checks | Owner-approved retry |
+
+The table is operational guidance only. There is no automated reconciler, DLQ consumer or quarantine action currently implemented.
