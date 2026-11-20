@@ -1,3 +1,4 @@
+import {canTransition,retryDisposition} from "./lifecycle.js";
 const PORTAL = `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Private Document Intake</title><style>body{font:16px system-ui;max-width:720px;margin:40px auto;padding:0 16px;color:#17202a}input,button{font:inherit;padding:10px;margin:8px 0;width:100%;box-sizing:border-box}button{cursor:pointer}pre{white-space:pre-wrap;word-break:break-word;background:#f3f4f6;padding:12px;border-radius:8px}</style><h1>Source document intake</h1><p>Upload a supported document to the private processing service. Files are not added to the Git repository. Protect this portal with owner-only access (such as Cloudflare Access) before accepting sensitive files.</p><label>Intake token<input id="token" type="password" autocomplete="off"></label><label>Source document<input id="file" type="file" accept=".pdf,.txt,.md,.docx,.pptx,.xlsx,.csv,.html,.rtf,image/*"></label><button id="upload">Upload document</button><label>Job ID (for status)<input id="job" placeholder="Job ID"></label><button id="status">Check status</button><pre id="out">Ready.</pre><script>const out=document.getElementById('out'),token=()=>document.getElementById('token').value;document.getElementById('upload').onclick=async()=>{const f=document.getElementById('file').files[0];if(!f){out.textContent='Select a document first.';return}out.textContent='Uploading…';const d=new FormData();d.append('file',f);try{const r=await fetch('/upload',{method:'POST',headers:{Authorization:'Bearer '+token()},body:d});const j=await r.json();out.textContent=JSON.stringify(j,null,2);if(j.job_id)document.getElementById('job').value=j.job_id}catch(e){out.textContent='Upload failed: '+e}};document.getElementById('status').onclick=async()=>{const id=document.getElementById('job').value.trim();if(!id){out.textContent='Enter a job ID';return}try{const r=await fetch('/jobs/'+encodeURIComponent(id),{headers:{Authorization:'Bearer '+token()}});out.textContent=JSON.stringify(await r.json(),null,2)}catch(e){out.textContent='Status failed: '+e}};</script></html>`;
 
 const MAX_UPLOAD_BYTES = 20 * 1024 * 1024;
@@ -19,7 +20,19 @@ export default {
     const url = new URL(request.url);
     if (request.method === "GET" && url.pathname === "/health") return json({ok:true,service:"intake"});
     if (request.method === "GET" && url.pathname === "/") return new Response(PORTAL,{headers:{"content-type":"text/html; charset=utf-8","cache-control":"no-store"}});
-    if(request.method==="POST"&&url.pathname==="/internal/processor-result"){if(!env.PROCESSOR_CALLBACK_TOKEN||request.headers.get("authorization")!==`Bearer ${env.PROCESSOR_CALLBACK_TOKEN}`)return json({error:"unauthorized"},401);let payload;try{payload=await request.json()}catch{return json({error:"invalid_json"},400)}if(!payload.job_id||payload.status!=="completed"||payload.stage!=="analysis"||!Array.isArray(payload.artifact_keys))return json({error:"invalid_contract"},400);const existing=await env.JOBS_DB.prepare("SELECT id FROM intake_jobs WHERE id=?").bind(payload.job_id).first();if(!existing)return json({error:"not_found"},404);const time=now();const details=JSON.stringify({summary:payload.summary||null,artifact_keys:Array.isArray(payload.artifact_keys)?payload.artifact_keys.slice(0,20):[]});await env.JOBS_DB.prepare("UPDATE intake_jobs SET status=?,stage=?,updated_at=?,error_code=?,error_message=? WHERE id=?").bind(payload.status,payload.stage,time,payload.error_code||null,payload.error_message||null,payload.job_id).run();await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(payload.job_id,"processor_result",payload.stage,details,time).run();return json({accepted:true});}
+    if(request.method==="POST"&&url.pathname==="/internal/processor-result"){
+      if(!env.PROCESSOR_CALLBACK_TOKEN||request.headers.get("authorization")!==`Bearer ${env.PROCESSOR_CALLBACK_TOKEN}`)return json({error:"unauthorized"},401);
+      let payload;try{payload=await request.json()}catch{return json({error:"invalid_json"},400)}
+      if(!payload.job_id||payload.status!=="completed"||payload.stage!=="analysis"||!Array.isArray(payload.artifact_keys))return json({error:"invalid_contract"},400);
+      const existing=await env.JOBS_DB.prepare("SELECT id,status FROM intake_jobs WHERE id=?").bind(payload.job_id).first();
+      if(!existing)return json({error:"not_found"},404);
+      if(existing.status==="completed")return json({accepted:true,duplicate:true});
+      if(!canTransition(existing.status,"completed"))return json({error:"invalid_transition"},409);
+      const time=now(),details=JSON.stringify({summary:payload.summary||null,artifact_keys:payload.artifact_keys.slice(0,20)});
+      await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='completed',stage='analysis',updated_at=?,error_code=NULL,error_message=NULL WHERE id=?").bind(time,payload.job_id).run();
+      await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(payload.job_id,"processor_result","analysis",details,time).run();
+      return json({accepted:true});
+    }
     if (!auth(request, env)) return json({error:"unauthorized"},401);
     if (request.method === "GET" && url.pathname.startsWith("/jobs/")) {
       const id = url.pathname.slice("/jobs/".length);
@@ -75,7 +88,7 @@ export default {
       if (!job || ["completed","failed_terminal","cancelled"].includes(job.status)) { message.ack(); continue; }
       if (!env.PROCESSOR_URL || !env.PROCESSOR_TOKEN) {
         const time=now();
-        await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='dispatch',updated_at=? WHERE id=?").bind(time,job_id).run();
+        if(canTransition(job.status,"blocked_infrastructure")) await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='dispatch',updated_at=?,error_code='processor_not_configured',error_message='Processing service configuration is required.' WHERE id=?").bind(time,job_id).run();
         await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"blocked","dispatch",JSON.stringify({code:"processor_not_configured"}),time).run();
         message.ack(); continue;
       }
@@ -88,9 +101,14 @@ export default {
         message.ack();
       } catch (e) {
         const time=now();
-        await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='failed_retryable',stage='dispatch',attempts=attempts+1,updated_at=?,error_code='processor_dispatch_failed',error_message=? WHERE id=?").bind(time,"Dispatch failed; retry scheduled.",job_id).run();
-        await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"dispatch_failed","dispatch",JSON.stringify({code:"processor_dispatch_failed"}),time).run();
-        message.retry();
+        const current=await env.JOBS_DB.prepare("SELECT status,attempts FROM intake_jobs WHERE id=?").bind(job_id).first();
+        const nextAttempts=(current?.attempts||0)+1,disposition=retryDisposition("failed_retryable",nextAttempts,5);
+        const nextStatus=disposition==="terminalize"?"failed_terminal":"failed_retryable";
+        if(current&&canTransition(current.status,nextStatus)){
+          await env.JOBS_DB.prepare("UPDATE intake_jobs SET status=?,stage='dispatch',attempts=?,updated_at=?,error_code='processor_dispatch_failed',error_message=? WHERE id=?").bind(nextStatus,nextAttempts,time,nextStatus==="failed_terminal"?"Dispatch failed after bounded retries.":"Dispatch failed; retry scheduled.",job_id).run();
+          await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,nextStatus==="failed_terminal"?"dispatch_terminal":"dispatch_failed","dispatch",JSON.stringify({code:"processor_dispatch_failed",attempt:nextAttempts,limit:5}),time).run();
+        }
+        if(disposition==="terminalize")message.ack();else message.retry();
       }
     }
   }
