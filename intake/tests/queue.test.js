@@ -1,0 +1,35 @@
+import assert from "node:assert/strict";
+import worker from "../src/index.js";
+
+class DB {
+  constructor(){this.job={id:"12345678-1234-1234-1234-123456789abc",status:"accepted",source_sha256:"hash",object_key:"incoming/key",source_name:"source.txt",source_size:12,mime_type:"text/plain",attempts:0,dispatch_lease_until:null,dispatch_lease_token:null};this.events=[];}
+  prepare(sql){const db=this;return {bind(...args){return {first:async()=>{if(sql.startsWith("SELECT id,status,source_sha256"))return {...db.job};if(sql.startsWith("SELECT id,status FROM intake_jobs"))return {id:db.job.id,status:db.job.status};if(sql.startsWith("SELECT status,attempts"))return {status:db.job.status,attempts:db.job.attempts};return null;},run:async()=>{let changes=0;if(sql.includes("SET dispatch_lease_until=?")){const [until,token,updated,id]=args;if(id===db.job.id&&(!db.job.dispatch_lease_until||db.job.dispatch_lease_until<args[4])){db.job.dispatch_lease_until=until;db.job.dispatch_lease_token=token;db.job.updated_at=updated;changes=1;}}
+ else if(sql.includes("SET status='processing',stage='extract'")){const [updated,id,token,status]=args;if(id===db.job.id&&token===db.job.dispatch_lease_token&&status===db.job.status){db.job.status="processing";db.job.stage="extract";db.job.updated_at=updated;changes=1;}}
+ else if(sql.includes("SET status='completed'")){const [updated,id]=args;if(id===db.job.id&&db.job.status==="processing"){db.job.status="completed";db.job.stage="analysis";db.job.updated_at=updated;db.job.dispatch_lease_token=null;db.job.dispatch_lease_until=null;changes=1;}}
+ else if(sql.includes("SET stage='extract',updated_at=?")){const [updated,id,token]=args;if(id===db.job.id&&token===db.job.dispatch_lease_token&&db.job.status==="processing"){db.job.updated_at=updated;db.job.dispatch_lease_token=null;db.job.dispatch_lease_until=null;changes=1;}}
+ else if(sql.includes("SET status=?,stage='dispatch'")){const [status,attempts,updated,code,message,id,token]=args;if(id===db.job.id&&token===db.job.dispatch_lease_token){db.job.status=status;db.job.attempts=attempts;db.job.updated_at=updated;db.job.error_code=code;db.job.error_message=message;db.job.dispatch_lease_token=null;db.job.dispatch_lease_until=null;changes=1;}}
+ else if(sql.includes("SET status='blocked_infrastructure'")){const [updated,id,token]=args;if(id===db.job.id&&token===db.job.dispatch_lease_token){db.job.status="blocked_infrastructure";db.job.updated_at=updated;db.job.dispatch_lease_token=null;db.job.dispatch_lease_until=null;changes=1;}}
+ else if(sql.startsWith("UPDATE intake_jobs SET dispatch_lease_until=NULL")){const [id,token]=args;if(id===db.job.id&&token===db.job.dispatch_lease_token){db.job.dispatch_lease_token=null;db.job.dispatch_lease_until=null;changes=1;}}
+ else if(sql.startsWith("INSERT INTO intake_events")){db.events.push(args);changes=1;}
+ return {meta:{changes}};}};}};
+}
+
+const db=new DB();const env={JOBS_DB:db,PROCESSOR_URL:"https://processor/process",PROCESSOR_TOKEN:"secret",PROCESSOR_CALLBACK_TOKEN:"callback"};
+const workerFetch=globalThis.fetch;let callbackResult;
+globalThis.fetch=async(url,init)=>{
+  // Simulate the processor's synchronous completion callback before its HTTP response returns.
+  const callbackPayload={job_id:db.job.id,status:"completed",stage:"analysis",summary:{pages:1,segments:2,production_created:false},artifact_keys:[`jobs/${db.job.id}/extract.json`]};
+  callbackResult=await worker.fetch(new Request("https://intake/internal/processor-result",{method:"POST",headers:{authorization:"Bearer callback","content-type":"application/json"},body:JSON.stringify(callbackPayload)}),env);
+  return new Response("ok",{status:200});
+};
+let ack=0,retry=0;try{await worker.queue({messages:[{body:{job_id:db.job.id},ack(){ack++},retry(){retry++}}]},env);}finally{globalThis.fetch=workerFetch;}
+assert.equal(callbackResult.status,200,"completion callback should succeed while dispatch request is still in flight");
+assert.equal(db.job.status,"completed","fast callback must not be rejected or overwritten");
+assert.equal(ack,1,"queue message should be acknowledged after successful synchronous dispatch");
+assert.equal(retry,0);
+assert.ok(db.events.some(e=>e[1]==="processing_started"));
+assert.ok(db.events.some(e=>e[1]==="processor_result"));
+
+const invalid=await worker.fetch(new Request("https://intake/internal/processor-result",{method:"POST",headers:{authorization:"Bearer callback","content-type":"application/json"},body:JSON.stringify({job_id:db.job.id,status:"completed",stage:"analysis",artifact_keys:["outside-prefix"]})}),env);
+assert.equal(invalid.status,400,"callback must reject artifact keys outside the job namespace");
+console.log("queue callback-race tests passed");
