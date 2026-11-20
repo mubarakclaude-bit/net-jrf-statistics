@@ -37,6 +37,27 @@ export default {
       return json({accepted:true});
     }
     if (!auth(request, env)) return json({error:"unauthorized"},401);
+    if(request.method==="GET"){
+      const parts=url.pathname.split("/");
+      if(parts.length===5&&parts[1]==="jobs"&&parts[3]==="artifacts"){
+        const id=parts[2],filename=parts[4],uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        const allowed=new Set(["manifest.json","extract.json","source-audit.json","taxonomy-map.json","coverage-report.json","production.json","verification-report.json"]);
+        if(!uuid.test(id)||!allowed.has(filename))return json({error:"not_found"},404);
+        if(!env.ARTIFACT_BUCKET)return json({error:"artifact_storage_unconfigured"},503);
+        const job=await env.JOBS_DB.prepare("SELECT id,status,source_sha256 FROM intake_jobs WHERE id=?").bind(id).first();
+        if(!job)return json({error:"not_found"},404);
+        if(job.status!=="completed")return json({error:"job_not_completed"},409);
+        const manifestObj=await env.ARTIFACT_BUCKET.get(`jobs/${id}/manifest.json`);if(!manifestObj)return json({error:"manifest_not_found"},404);
+        let manifest;try{manifest=JSON.parse(await manifestObj.text())}catch{return json({error:"invalid_manifest"},422)}
+        if(manifest.schema_version!==1||manifest.job_id!==id||manifest.source_sha256!==job.source_sha256||!Array.isArray(manifest.artifacts))return json({error:"manifest_invalid"},422);
+        if(filename==="manifest.json")return new Response(JSON.stringify(manifest),{headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","content-disposition":`attachment; filename="${filename}"`}});
+        const key=`jobs/${id}/${filename}`,entry=manifest.artifacts.find(x=>x&&x.key===key&&typeof x.sha256==="string"&&Number.isSafeInteger(x.size));
+        if(!entry)return json({error:"artifact_not_in_manifest"},404);
+        const obj=await env.ARTIFACT_BUCKET.get(key);if(!obj)return json({error:"artifact_not_found"},404);
+        const bytes=await obj.arrayBuffer();if(bytes.byteLength!==entry.size||await sha256(bytes)!==entry.sha256)return json({error:"artifact_integrity_mismatch"},422);
+        return new Response(bytes,{headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","content-disposition":`attachment; filename="${filename}"`}});
+      }
+    }
     if (request.method === "GET" && url.pathname.startsWith("/jobs/")) {
       const id = url.pathname.slice("/jobs/".length);
       if (!id || id.includes("/")) return json({error:"invalid_job_id"},400);
