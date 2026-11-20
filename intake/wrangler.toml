@@ -1,0 +1,23 @@
+name = "net-jrf-source-intake"
+main = "src/index.js"
+compatibility_date = "2026-11-20"
+
+# Configure IDs/names in your Cloudflare workspace before deployment.
+[[r2_buckets]]
+binding = "SOURCE_BUCKET"
+bucket_name = "net-jrf-private-source"
+
+[[d1_databases]]
+binding = "JOBS_DB"
+database_name = "net-jrf-intake-jobs"
+database_id = "REPLACE_AFTER_PROVISIONING"
+
+[[queues.producers]]
+binding = "PROCESSING_QUEUE"
+queue = "net-jrf-source-processing"
+
+[[queues.consumers]]
+queue = "net-jrf-source-processing"
+max_batch_size = 5
+max_batch_timeout = 10
+max_retries = 5
