@@ -29,3 +29,14 @@ const dup=verifyOutputs([{type:"lesson",content:"duplicate refs",source_segment_
 assert.ok(dup.failed>0);
 const noType=verifyOutputs([{content:"missing type",source_segment_ids:["segment-1"]}],aud.segments);
 assert.ok(noType.failed>0);
+
+// Audit edge cases: empty input, stable IDs, source text bounds and conservative review flags.
+const emptyAudit=auditSource({pages:[]});
+assert.equal(emptyAudit.segments_detected,0);
+const bounded=auditSource({pages:[{page:7,text:"A".repeat(13000)}]});
+assert.equal(bounded.segments[0].page,7);
+assert.equal(bounded.segments[0].segment_id,"segment-1");
+assert.equal(bounded.segments[0].text.length,12000);
+assert.equal(bounded.review_required,true);
+const stable=auditSource({pages:[{page:2,text:"Explain a general concept and discuss its practical implications in detail."}]});
+assert.equal(stable.segments[0].segment_id,"segment-1");
