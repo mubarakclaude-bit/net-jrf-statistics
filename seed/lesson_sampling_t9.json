@@ -6,7 +6,7 @@
   "breadcrumb": "Sampling theory → PPSWOR → Variance estimation and ordered estimators",
   "engine": "B",
   "engineName": "Check pairwise variance coefficients and distinguish ordered from unordered estimators.",
-  "version": "1.1",
+  "version": "1.2",
   "status": "review",
   "estMin": 95,
   "objectives": [
@@ -483,29 +483,29 @@
       "mins": 9,
       "title": "Transfer: Murthy unordered estimator",
       "objective": "Calculate the n=2 unordered estimate and variance.",
-      "problem": "For the same two units, y₁=10, p₁=0.2, y₂=12, p₂=0.3. Calculate Murthy's unordered estimator and its variance estimate.",
+      "problem": "For two units with y₁=10, p₁=0.2 and y₂=12, p₂=0.4, calculate Murthy's unordered estimator and its variance estimate.",
       "hints": [
         "Use the symmetric n=2 formula.",
         "Weight y₁/p₁ by 1−p₂ and y₂/p₂ by 1−p₁.",
         "Use the corresponding nonnegative variance formula."
       ],
-      "answer": "Ŷ_M=[(1−0.3)50+(1−0.2)40]/(2−0.2−0.3)=(35+32)/1.5=44.6667. v_M=[0.8×0.7×0.5/(1.5²)](10)²=12.4444.",
-      "check": "The estimate does not depend on the order of the two sampled units.",
+      "answer": "The inverse-weighted values are 50 and 30. Ŷ_M=[(1−0.4)50+(1−0.2)30]/(2−0.2−0.4)=54/1.4=270/7≈38.5714. v_M=[(1−0.2)(1−0.4)(1−0.2−0.4)/(2−0.2−0.4)²](50−30)²=1920/49≈39.1837.",
+      "check": "The estimator is invariant to order. The variance coefficient contains 1−p₁−p₂; here that factor is 0.4, not p₁+p₂=0.6.",
       "solution": [
         {
-          "say": "Calculate inverse-weighted values.",
-          "math": "y₁/p₁=50; y₂/p₂=40",
-          "why": "These are the weighted study values."
+          "say": "Calculate the inverse-weighted values.",
+          "math": "y₁/p₁=10/0.2=50; y₂/p₂=12/0.4=30",
+          "why": "These are the two weighted values used in Murthy's formula."
         },
         {
           "say": "Apply Murthy's symmetric estimator.",
-          "math": "Ŷ_M=[0.7(50)+0.8(40)]/1.5=44.6667",
-          "why": "The formula weights both possible orders into one unordered estimate."
+          "math": "Ŷ_M=[0.6(50)+0.8(30)]/1.4=54/1.4=270/7≈38.5714",
+          "why": "The numerator weights each inverse-probability contribution by the other unit's non-selection probability."
         },
         {
-          "say": "Calculate variance estimate.",
-          "math": "v_M=[0.8×0.7×0.5/2.25]×100=12.4444",
-          "why": "All factors are nonnegative for these probabilities."
+          "say": "Use the correct variance-estimator coefficient.",
+          "math": "v_M=[0.8×0.6×(1−0.2−0.4)/(1.4²)]×(50−30)²=1920/49≈39.1837",
+          "why": "The final factor is one minus the sum of the two initial draw probabilities."
         }
       ],
       "ask": {
@@ -652,5 +652,5 @@
     "retestDays": 7,
     "note": "Platform settings, not an NTA rule."
   },
-  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t9. Practice items are original and are not represented as official PYQs. Formulas are checked against Singh and Mangat, Elements of Survey Sampling, sections 4.7–4.8, and IIT Kanpur Sampling Theory Chapter 7. The SYG nonnegativity statement is conditional on positive pairwise inclusion probabilities and π_ij≤π_iπ_j for all relevant pairs; no blanket claim is made for arbitrary designs."
+  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t9. Practice items are original and are not represented as official PYQs. Formulas are checked against Singh and Mangat, Elements of Survey Sampling, sections 4.7–4.8, and IIT Kanpur Sampling Theory Chapter 7. The SYG nonnegativity statement is conditional on positive pairwise inclusion probabilities and π_ij≤π_iπ_j for all relevant pairs; no blanket claim is made for arbitrary designs. Independent audit on 2026-11-14 corrected Murthy's n=2 unbiased variance estimator: the numerator factor is (1−p₁−p₂), not (p₁+p₂). The transfer example now uses p₁=0.2 and p₂=0.4 so the two expressions no longer coincide; exact arithmetic is checked in verify_sampling_t9.py."
 }
