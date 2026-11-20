@@ -10,7 +10,7 @@ export default {async fetch(req,env){
  if(req.method!=="POST"||u.pathname!=="/process")return json({error:"not_found"},404);
  if(!env.PROCESSOR_TOKEN||req.headers.get("authorization")!==`Bearer ${env.PROCESSOR_TOKEN}`)return json({error:"unauthorized"},401);
  let p;try{p=await req.json()}catch{return json({error:"invalid_json"},400)}
- if(p.schema_version!==1||!p.job_id||!p.source_sha256||!p.object_key||!p.source_name||!Number.isSafeInteger(p.source_size)||p.source_size<1||p.source_size>20*1024*1024)return json({error:"invalid_contract"},400);
+ const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;const hashPattern=/^[a-f0-9]{64}$/i;if(p.schema_version!==1||!uuid.test(p.job_id||"")||!hashPattern.test(p.source_sha256||"")||typeof p.object_key!=="string"||!p.object_key.startsWith(`incoming/${p.job_id}/${p.source_sha256}/`)||p.object_key.length>512||typeof p.source_name!=="string"||!Number.isSafeInteger(p.source_size)||p.source_size<1||p.source_size>20*1024*1024)return json({error:"invalid_contract"},400);
  if(!env.SOURCE_BUCKET||!env.ARTIFACT_BUCKET||!env.EXTRACTOR_URL||!env.EXTRACTOR_TOKEN)return json({error:"blocked_infrastructure",missing:"required bindings or secrets"},503);
  const obj=await env.SOURCE_BUCKET.get(p.object_key);if(!obj)return json({error:"source_not_found"},404);
  const bytes=await obj.arrayBuffer();if(await sha256(bytes)!==p.source_sha256)return json({error:"source_hash_mismatch"},422);
