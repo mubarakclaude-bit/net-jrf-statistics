@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Practice variants of the June 2026 Paper 2 questions that are identified by official question ID
-(seed/<module>_pyq_j26_rs.json). Batch 1: thirteen computational questions; batch 2: fifteen more; batch 3: fifteen conceptual questions whose answers a rule here still decides. Ten variants each.
+(seed/<module>_pyq_j26_rs.json). Batch 1: thirteen computational questions; batch 2: fifteen more; batch 3: fifteen conceptual questions whose answers a rule here still decides; batch 4: the last seven. Ten variants each.
 
 Every number is computed here, never typed: each generator returns the stem, the correct option, three distractors that
 come from named, common mistakes, and an explanation built from the same computed values. The script refuses to write a
@@ -970,13 +970,195 @@ BATCH3 = [("55125114582", "stochastic", g_irred), ("55125114583", "stochastic", 
           ("55125114593", "official", g_match_stats), ("55125114535", "sampling", g_match_samp), ("55125114554", "nonparam", g_match_np),
           ("55125114590", "official", g_orgs)]
 
+# ------------------------------------------------------------------------------------------------- batch 4 generators
+# The last seven ID-keyed questions. Three are made numeric so the verifier can check them against an actual projection
+# matrix; four are statement sets whose truth values are recorded here and, separately, in the verifier.
+def v2(v): return "(" + ", ".join(ff(x) for x in v) + ")′"
+def g_bias():            # 55125114556
+    out = []
+    for XX, d in [([[2,1],[1,1]], (1,2)), ([[3,1],[1,1]], (2,0)), ([[2,0],[0,4]], (4,2)), ([[5,2],[2,1]], (1,1)), ([[1,1],[1,2]], (3,-1)), ([[4,2],[2,2]], (2,4))]:
+        a, b, c, e = map(F, (XX[0][0], XX[0][1], XX[1][0], XX[1][1])); det = a * e - b * c
+        inv = [[e / det, -b / det], [-c / det, a / det]]; d = [F(x) for x in d]
+        bias = [inv[0][0] * d[0] + inv[0][1] * d[1], inv[1][0] * d[0] + inv[1][1] * d[1]]
+        cands = [d, [a * d[0] + b * d[1], c * d[0] + e * d[1]], [-x for x in bias], [d[0] / a, d[1] / e]]
+        dis = [x for x in dict.fromkeys(v2(cv) for cv in cands) if x != v2(bias)][:3]
+        stem = ("In the regression model y = Xβ + u with two regressors, X′X = %s and E(X′u) = δ = %s (X fixed). If b = (X′X)⁻¹X′y is the OLS estimator, "
+                "then E(b − β) is") % (mat(XX), v2(d))
+        why = ("b − β = (X′X)⁻¹X′u, so E(b − β) = (X′X)⁻¹E(X′u) = (X′X)⁻¹δ. Here (X′X)⁻¹ = %s (determinant %s), and multiplying by δ gives %s. "
+               "OLS is unbiased only when E(X′u) = 0. Trap: (X′X)δ multiplies instead of solving, and δ alone forgets (X′X)⁻¹.") % (mat(inv), ff(det), v2(bias))
+        out.append((stem, v2(bias), dis, why))
+    for b1, b2, s11, s12, s22 in [(2, 3, 10, 4, 8), (1, -2, 5, 2, 6), (F(1,2), 4, 8, -2, 5), (3, 1, 20, 10, 9)]:
+        b1, b2 = F(b1), F(b2); val = b1 + b2 * F(s12, s11)
+        dis = [x for x in dict.fromkeys([ff(b1), ff(b1 + b2 * F(s12, s22)), ff(b2)]) if x != ff(val)][:3]
+        stem = ("The true model is y = β₁x₁ + β₂x₂ + u with β₁ = %s, β₂ = %s and E(u) = 0 (no intercept; x₁, x₂ fixed with Σx₁² = %d, Σx₁x₂ = %s, Σx₂² = %d). "
+                "If y is regressed on x₁ alone, b₁ = Σx₁y/Σx₁² has expectation") % (ff(b1), ff(b2), s11, ff(s12), s22)
+        why = ("Substituting the true model: b₁ = Σx₁(β₁x₁ + β₂x₂ + u)/Σx₁² = β₁ + β₂Σx₁x₂/Σx₁² + Σx₁u/Σx₁². Taking expectations, E(b₁) = %s + %s × %s/%d = %s. "
+               "This is omitted-variable bias: it vanishes only if β₂ = 0 or x₁ and x₂ are orthogonal. Trap: dividing by Σx₂² regresses x₁ on x₂ instead of x₂ on x₁.") % (
+               ff(b1), ("(%s)" % ff(b2)) if b2 < 0 else ff(b2), ff(s12), s11, ff(val))
+        out.append((stem, ff(val), dis, why))
+    return out
+
+def g_resid():           # 55125114559
+    out = []
+    specs = [("ee", 30, 4, 2), ("ee", 25, 5, 3), ("ee", 40, 6, F(1,2)), ("een", 20, 4, 5), ("een", 50, 5, 2), ("var", 20, 3, 4, F(1,5)), ("var", 15, 2, 6, F(1,3)),
+             ("cov", 12, 3, 2, F(1,4)), ("s2", 30, 5, 3), ("yhat", 10, 2, 5, F(2,5))]
+    for sp in specs:
+        kind, n, k, s2 = sp[0], sp[1], sp[2], F(sp[3]); h = F(sp[4]) if len(sp) > 4 else None
+        if kind == "ee": val = s2 * (n - k); ask = "E(e′e)"; cands = [s2 * n, s2 * k, s2 * (n - k - 1)]
+        elif kind == "een": val = s2 * (n - k) / n; ask = "E(e′e/n)"; cands = [s2, s2 * (n - k), s2 * k / n]
+        elif kind == "var": val = s2 * (1 - h); ask = "Var(eᵢ) for an observation with leverage hᵢᵢ = %s" % ff(h); cands = [s2, s2 * h, s2 * (1 + h)]
+        elif kind == "cov": val = -s2 * h; ask = "Cov(eᵢ, eⱼ) for two observations with hᵢⱼ = %s (i ≠ j)" % ff(h); cands = [F(0), s2 * h, s2 * (1 - h)]
+        elif kind == "s2": val = s2; ask = "E(s²), where s² = e′e/(n − k)"; cands = [s2 * (n - k) / n, s2 * (n - k), s2 * n / (n - k)]
+        else: val = s2 * h; ask = "Var(ŷᵢ) for an observation with leverage hᵢᵢ = %s" % ff(h); cands = [s2, s2 * (1 - h), s2 * h * h]
+        dis = [x for x in dict.fromkeys(ff(c) for c in cands) if x != ff(val)][:3]
+        stem = ("In the linear model y = Xβ + u with X of order %d × %d and full column rank, E(u) = 0 and E(uu′) = σ²Iₙ with σ² = %s. With P = X(X′X)⁻¹X′, "
+                "the residuals are e = (Iₙ − P)y. Then %s is") % (n, k, ff(s2), ask)
+        why = ("Because (Iₙ − P)X = 0, e = (Iₙ − P)u, so E(ee′) = σ²(Iₙ − P), a symmetric idempotent matrix with trace n − k. Hence E(e′e) = σ²(n − k), "
+               "Var(eᵢ) = σ²(1 − hᵢᵢ), Cov(eᵢ, eⱼ) = −σ²hᵢⱼ, and the fitted values ŷ = Py have Var(ŷᵢ) = σ²hᵢᵢ. With n = %d, k = %d and σ² = %s the requested quantity is %s. "
+               "Trap: the residuals are not independent with variance σ²; they lose k degrees of freedom to the fit.") % (n, k, ff(s2), ff(val))
+        out.append((stem, ff(val), dis, why))
+    return out
+
+def g_proj():            # 55125114561
+    out = []
+    specs = [("trP", 20, 3), ("trP", 35, 6), ("trM", 25, 4), ("trM", 18, 2), ("rkM", 30, 5), ("EyMy", 22, 4, 3), ("EyPy", 20, 3, 2, 50), ("EyPy", 40, 5, 4, 30),
+             ("cross", 15, 3, 2), ("eig1", 28, 4)]
+    for sp in specs:
+        kind, n, k = sp[0], sp[1], sp[2]
+        if kind == "trP": ask = "tr(P)"; val = F(k); cands = [n, n - k, 1]
+        elif kind == "trM": ask = "tr(Iₙ − P)"; val = F(n - k); cands = [n, k, n - k - 1]
+        elif kind == "rkM": ask = "the rank of Iₙ − P"; val = F(n - k); cands = [n, k, n - 1]
+        elif kind == "eig1": ask = "the number of eigenvalues of P that equal 1"; val = F(k); cands = [n, n - k, 1]
+        elif kind == "EyMy": s2 = F(sp[3]); ask = "E[y′(Iₙ − P)y] when σ² = %s" % ff(s2); val = s2 * (n - k); cands = [s2 * n, s2 * k, s2 * (n - k - 1)]
+        elif kind == "EyPy": s2, q = F(sp[3]), F(sp[4]); ask = "E(y′Py) when σ² = %s and β′X′Xβ = %s" % (ff(s2), ff(q)); val = k * s2 + q; cands = [k * s2, q, n * s2 + q]
+        else: s2 = F(sp[3]); ask = "E[(Py)′(Iₙ − P)y] when σ² = %s" % ff(s2); val = F(0); cands = [s2 * k, s2 * (n - k), s2]
+        dis = [x for x in dict.fromkeys(ff(c) for c in cands) if x != ff(val)][:3]
+        stem = ("In the linear model y = Xβ + u, X is %d × %d of full column rank, E(u) = 0 and E(uu′) = σ²Iₙ. With P = X(X′X)⁻¹X′, %s is") % (n, k, ask)
+        why = ("P is the orthogonal projection onto the column space of X: symmetric and idempotent (P² = P), so its eigenvalues are 0 or 1 and tr(P) = rank(P) = k = %d; "
+               "Iₙ − P projects onto the orthogonal complement, with trace and rank n − k = %d. For a quadratic form, E(y′Ay) = σ²tr(A) + β′X′AXβ; with A = Iₙ − P the second "
+               "term vanishes, with A = P it equals β′X′Xβ, and P(Iₙ − P) = 0 makes the fitted values and residuals orthogonal. So the requested quantity is %s. "
+               "Trap: tr(P) counts the columns of X (k), not the observations (n).") % (k, n - k, ff(val))
+        out.append((stem, ff(val), dis, why))
+    return out
+
+def statement_sets(sets, intro, explain):
+    allc = ["A only", "B only", "C only", "D only", "A, B only", "A, C only", "A, D only", "B, C only", "B, D only", "C, D only",
+            "A, B, C only", "A, B, D only", "A, C, D only", "B, C, D only", "A, B, C, D"]
+    out = []
+    for ctx, sts in sets:
+        truth = [L for L, (_, t, _) in zip("ABCD", sts) if t]
+        corr = "A, B, C, D" if len(truth) == 4 else (", ".join(truth) + " only") if truth else None
+        assert corr, ctx
+        dis = sorted((x for x in allc if x != corr), key=lambda x: (abs(len(x) - len(corr)), sum(L in x for L in truth) * -1, x))[:3]
+        stem = "%s Consider the following statements: A. %s. B. %s. C. %s. D. %s. Choose the correct answer from the options given below:" % (
+            (intro + " " + ctx).strip(), sts[0][0], sts[1][0], sts[2][0], sts[3][0])
+        why = " ".join("%s is %s: %s" % (L, "true" if t else "false", r) for L, (_, t, r) in zip("ABCD", sts)) + " So the answer is %s. %s" % (corr.replace(" only", ""), explain)
+        out.append((stem, corr, dis, why))
+    return out
+
+RB = {
+ "unb": ("E(h | T) is unbiased for θ", True, "E[E(h | T)] = E(h) = θ by the law of iterated expectations."),
+ "var": ("Var{E(h | T)} ≤ Var(h)", True, "Var(h) = Var{E(h | T)} + E{Var(h | T)}, and the last term is non-negative."),
+ "free": ("E(h | T) does not depend on θ", True, "the conditional distribution of the data given a sufficient T is free of θ, so E(h | T) is a genuine statistic."),
+ "umvu_nc": ("E(h | T) is the unique UMVUE of θ", False, "uniqueness of the UMVUE needs T to be complete as well as sufficient, which is not given."),
+ "umvu_c": ("E(h | T) is the unique UMVUE of θ", True, "with T complete and sufficient, Lehmann–Scheffé makes E(h | T) the unique UMVUE."),
+ "strict": ("Var{E(h | T)} < Var(h) always", False, "equality holds when h is already a function of T."),
+ "fn": ("If h is already a function of T, then E(h | T) = h", True, "conditioning on T leaves any function of T unchanged."),
+ "needc": ("Rao–Blackwellisation reduces variance only when T is complete", False, "the variance reduction needs only sufficiency; completeness is needed for uniqueness."),
+ "anyU": ("E(h | U) is an estimator for every statistic U", False, "if U is not sufficient, E(h | U) can depend on θ and then is not a statistic at all."),
+ "mse": ("MSE{E(h | T)} ≤ MSE(h)", True, "conditioning keeps the mean and cannot increase the variance, so the mean squared error cannot rise."),
+ "bias": ("E(h | T) has a smaller bias than h", False, "conditioning keeps the expectation, so the bias is unchanged (here both are unbiased).")}
+def g_rb():              # 55125114543
+    combos = [("", ["unb", "var", "umvu_nc", "free"]), ("T is also complete.", ["unb", "var", "umvu_c", "free"]), ("", ["strict", "fn", "needc", "unb"]),
+              ("", ["anyU", "mse", "bias", "var"]), ("T is also complete.", ["umvu_c", "strict", "fn", "anyU"]), ("", ["free", "needc", "mse", "umvu_nc"]),
+              ("", ["bias", "unb", "fn", "strict"]), ("T is also complete.", ["needc", "umvu_c", "mse", "bias"]), ("", ["var", "anyU", "free", "fn"]), ("", ["umvu_nc", "bias", "needc", "fn"])]
+    sets = [(ctx, [RB[k] for k in ks]) for ctx, ks in combos]
+    return statement_sets(sets, "Let h be an unbiased estimator of θ with E(h²) < ∞, and let T be a sufficient statistic.",
+                          "Trap: Rao–Blackwell needs only sufficiency; Lehmann–Scheffé adds completeness to get uniqueness.")
+
+PIVOTS = [  # (setting, quantity, correct, distractors, explanation)
+ ("X₁, …, Xₙ iid N(μ, σ²)", "(X̄ − μ)/(S/√n), where S² = Σ(Xᵢ − X̄)²/(n − 1)", "μ when σ² is unknown", ["μ when σ² is known only", "σ² when μ is known", "both μ and σ² jointly"],
+  "It has a t distribution with n − 1 df whatever μ and σ are, and it contains only μ as an unknown, so it gives intervals for μ without knowing σ."),
+ ("X₁, …, Xₙ iid N(μ, σ²)", "Σ(Xᵢ − μ)²/σ²", "σ² when μ is known", ["σ² when μ is unknown", "μ when σ² is known", "both μ and σ² jointly"],
+  "It is χ² with n df, free of the parameters, but computing it needs μ, so it serves for σ² only when μ is known."),
+ ("X₁, …, Xₙ iid N(μ, σ²)", "(n − 1)S²/σ²", "σ² when μ is unknown", ["μ when σ² is unknown", "μ when σ² is known", "neither μ nor σ²: it is not a pivot"],
+  "It is χ² with n − 1 df and involves only σ² (μ is estimated by X̄ inside S²), so it gives intervals for σ² with μ unknown."),
+ ("X₁, …, Xₙ iid Uniform(0, θ)", "X₍ₙ₎/θ, where X₍ₙ₎ is the sample maximum", "θ", ["θ only when n is large", "no parameter: its distribution depends on θ", "1/θ² only"],
+  "P(X₍ₙ₎/θ ≤ t) = tⁿ on (0, 1) whatever θ is, so it is a pivot and can be inverted for θ."),
+ ("X₁, …, Xₙ iid with pdf λe^(−λx), x > 0", "2λΣXᵢ", "λ", ["λ only when n is large", "no parameter: its distribution depends on λ", "the mean only when λ is known"],
+  "2λΣXᵢ is χ² with 2n df for every λ, so it is an exact pivot for λ."),
+ ("X₁, …, Xₙ iid exponential with mean θ", "ΣXᵢ/θ", "θ", ["θ only when n is large", "no parameter: its distribution depends on θ", "θ² only"],
+  "ΣXᵢ/θ has a Gamma(n, 1) distribution free of θ, so it is a pivot for θ."),
+ ("X₁, …, Xₙ iid N(μ, σ²) with σ unknown", "X̄ − μ", "no parameter: its distribution depends on the unknown σ", ["μ", "σ²", "both μ and σ² jointly"],
+  "X̄ − μ ~ N(0, σ²/n), so its distribution involves the unknown σ; it is not a pivot until it is divided by S/√n."),
+ ("independent samples from N(μ₁, σ²) and N(μ₂, σ²), sizes m and n, common σ² unknown", "[(X̄ − Ȳ) − (μ₁ − μ₂)]/[Sₚ√(1/m + 1/n)], with Sₚ² the pooled variance",
+  "μ₁ − μ₂", ["σ²", "μ₁/μ₂", "no parameter: its distribution depends on σ²"],
+  "It has a t distribution with m + n − 2 df whatever the parameters are, so it is a pivot for the difference in means."),
+ ("independent samples from N(μ₁, σ₁²) and N(μ₂, σ₂²), sizes m and n", "(S₁²/σ₁²)/(S₂²/σ₂²)", "σ₁²/σ₂²", ["μ₁ − μ₂", "σ₁² − σ₂²", "no parameter: its distribution depends on σ₁ and σ₂"],
+  "It has an F distribution with (m − 1, n − 1) df free of all parameters, and it involves only the ratio σ₁²/σ₂²."),
+ ("X₁, …, Xₙ iid with pdf e^(−(x − θ)), x > θ", "X₍₁₎ − θ, where X₍₁₎ is the sample minimum", "θ", ["θ only when n is large", "no parameter: its distribution depends on θ", "e^θ only"],
+  "X₍₁₎ − θ is exponential with rate n for every θ, so it is a pivot and gives exact intervals for θ.")]
+def g_pivot():           # 55125114536
+    out = []
+    for setting, qty, corr, dis, ex in PIVOTS:
+        stem = "Suppose we have %s. The quantity %s can be used as a pivot to obtain a confidence interval for" % (setting, qty)
+        why = "A pivot is a function of the data and the parameter whose distribution does not depend on any unknown parameter. " + ex + \
+              " Trap: a quantity whose distribution still involves an unknown nuisance parameter is not a pivot."
+        out.append((stem, corr, dis, why))
+    return out
+
+SAMPST = {
+ "wr": ("Simple random sampling with replacement is more efficient than without replacement (same n)", False, "SRSWOR has variance (1 − n/N)S²/n, smaller than SRSWR's σ²/n."),
+ "ratio": ("The usual ratio estimator of the population mean is biased", True, "it is a ratio of random variables; its bias is of order 1/n."),
+ "clneg": ("Cluster sampling is more efficient than SRSWOR when the intraclass correlation is negative", True, "the design effect 1 + (M − 1)ρ falls below 1 when ρ < 0."),
+ "sys": ("Systematic sampling beats SRS when the intraclass correlation within systematic samples exceeds −1/(nk − 1)", False, "it beats SRS when that correlation is LESS than −1/(nk − 1)."),
+ "prop": ("Stratified sampling with proportional allocation is at least as efficient as SRS (large N)", True, "V(SRS) − V(prop) ≈ (1 − f)/n · ΣWₕ(Ȳₕ − Ȳ)² ≥ 0."),
+ "ney": ("Neyman allocation minimises the variance of the stratified mean for a fixed total sample size", True, "minimising ΣWₕ²Sₕ²/nₕ subject to Σnₕ = n gives nₕ ∝ NₕSₕ."),
+ "ht": ("The Horvitz–Thompson estimator is unbiased for the population total", True, "E(Σ yᵢ/πᵢ over the sample) = Σ πᵢ·yᵢ/πᵢ = Y."),
+ "reg": ("The regression estimator is unbiased for every sample size", False, "with an estimated slope it is biased; the bias is of order 1/n."),
+ "fpc": ("The finite population correction (1 − n/N) increases the variance", False, "it is at most 1, so it reduces the variance."),
+ "trend": ("For a population with a linear trend, systematic sampling is more efficient than SRS", True, "the systematic sample spreads over the trend, so V(sys) ≤ V(SRS)."),
+ "clpos": ("Cluster sampling with positive intraclass correlation is more efficient than SRS of the same number of elements", False, "a positive ρ makes the design effect exceed 1."),
+ "dbl": ("Double sampling is used when the population mean of the auxiliary variable is unknown", True, "the first-phase sample estimates the auxiliary mean."),
+ "pps": ("PPS sampling gives every unit the same selection probability", False, "selection probabilities are proportional to size."),
+ "rcond": ("The ratio estimator beats the sample mean when ρ > (1/2)(Cₓ/Cᵧ)", True, "this is the first-order efficiency condition for the ratio estimator.")}
+def g_sampst():          # 55125114533
+    combos = [["wr", "ratio", "clneg", "sys"], ["prop", "ney", "ht", "reg"], ["fpc", "trend", "clpos", "dbl"], ["pps", "rcond", "wr", "ht"], ["ratio", "sys", "prop", "fpc"],
+              ["clneg", "reg", "trend", "pps"], ["ney", "clpos", "rcond", "dbl"], ["ht", "wr", "reg", "trend"], ["dbl", "pps", "ratio", "ney"], ["sys", "clpos", "fpc", "rcond"]]
+    return statement_sets([("", [SAMPST[k] for k in ks]) for ks in combos], "Statements about sampling methods.",
+                          "Trap: check the direction of each inequality — several statements reverse a correct condition.")
+
+DESST = {
+ "rand": ("Randomization makes the estimate of experimental error valid", True, "it guards against systematic bias in the allocation of treatments."),
+ "rep": ("Replication provides an estimate of experimental error", True, "error is measured by the variation between units given the same treatment."),
+ "lc": ("Local control (blocking) reduces experimental error", True, "it removes variation between blocks from the error."),
+ "crdlc": ("A completely randomized design uses local control", False, "a CRD has no blocking."),
+ "rbd3": ("A randomized block design uses all three principles", True, "it randomizes within blocks, replicates across blocks and blocks for local control."),
+ "lsd2": ("A Latin square design controls variation in two directions", True, "rows and columns are both blocking factors."),
+ "repup": ("Increasing replication increases the error variance of a treatment mean", False, "the variance of a mean falls as σ²/r."),
+ "crddf": ("In a CRD with t treatments and N units the error degrees of freedom are N − t", True, "N − 1 total minus t − 1 for treatments."),
+ "randrep": ("Randomization removes the need for replication", False, "without replication there is no estimate of error at all."),
+ "bibd": ("A BIBD is used when a block cannot hold all the treatments", True, "blocks are incomplete but balanced."),
+ "rbdinc": ("In an RBD a block need not contain every treatment", False, "each block of an RBD is complete."),
+ "conf": ("Confounding in factorial experiments gives up information on some interactions to reduce block size", True, "chosen high-order interactions are mixed with blocks."),
+ "lsdn": ("A Latin square with t treatments needs t² rows", False, "it needs t rows and t columns, i.e. t² units."),
+ "crdhom": ("A CRD is most suitable when the experimental units are homogeneous", True, "with no known source of variation there is nothing to block on.")}
+def g_desst():           # 55125114534
+    combos = [["rand", "rep", "lc", "crdlc"], ["rbd3", "lsd2", "repup", "crddf"], ["randrep", "bibd", "rbdinc", "conf"], ["lsdn", "crdhom", "rand", "rbdinc"], ["crdlc", "rbd3", "bibd", "lsdn"],
+              ["rep", "repup", "conf", "crdhom"], ["lc", "randrep", "lsd2", "crddf"], ["crddf", "rbdinc", "rand", "lsdn"], ["bibd", "crdlc", "repup", "lsd2"], ["conf", "rep", "randrep", "rbd3"]]
+    return statement_sets([("", [DESST[k] for k in ks]) for ks in combos], "Statements about the principles and layouts of experimental design.",
+                          "Trap: the three principles are randomization, replication and local control; a CRD uses only the first two.")
+
+BATCH4 = [("55125114556", "regression", g_bias), ("55125114559", "regression", g_resid), ("55125114561", "regression", g_proj),
+          ("55125114543", "inference", g_rb), ("55125114536", "inference", g_pivot), ("55125114533", "sampling", g_sampst), ("55125114534", "design", g_desst)]
+
 BATCH = [  # (official question ID, module, generator)
     ("55125114584", "stochastic", g_ruin), ("55125114581", "stochastic", g_memoryless), ("55125114585", "stochastic", g_poisson_split),
     ("55125114597", "stochastic", g_nstep), ("55125114599", "stochastic", g_first_passage),
     ("55125114568", "timeseries", g_ar1_var), ("55125114605", "timeseries", g_ar1_acov),
     ("55125114527", "design", g_rbd), ("55125114526", "design", g_anova_f),
     ("55125114530", "sampling", g_neyman), ("55125114558", "regression", g_adjr2), ("55125114563", "regression", g_dw),
-    ("55125114508", "probability", g_mgf)] + BATCH2 + BATCH3
+    ("55125114508", "probability", g_mgf)] + BATCH2 + BATCH3 + BATCH4
 
 BAD = []
 import re
