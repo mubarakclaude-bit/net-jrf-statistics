@@ -138,6 +138,13 @@ function check(B) {
     if (!B.papers[paper]) bad.push("a variant bank names paper '" + paper + "' (srcPaper), but seed/pyq_" + paper + "_full.json does not exist");
     else if (!has(paper, +q)) bad.push("a variant bank names question " + q + " of paper '" + paper + "', which is not in " + B.papers[paper].file);
   });
+  // A variant of a past question with no known booklet number names it by official question ID (srcQid); that ID must be
+  // the questionId of an item in a source "pyq" set, so a typo cannot leave a variant pointing at nothing.
+  const qids = new Set();
+  Object.values(B.D.pools).forEach(p => { if (p.source === "pyq") p.items.forEach(i => { if (i && i.questionId) qids.add(String(i.questionId)); }); });
+  Object.values(B.D.pools).forEach(p => p.items.forEach(i => {
+    if (i && i.srcQid !== undefined && !qids.has(String(i.srcQid))) bad.push(p.file + ": item '" + i.id + "' names srcQid " + i.srcQid + ", which is not the questionId of any past-paper item");
+  }));
   Object.values(B.D.lessons).forEach(l => {
     if (l.anchors === undefined) return;
     if (!Array.isArray(l.anchors)) { bad.push("lesson " + l.id + ": anchors must be an array of { paper, q }"); return; }
