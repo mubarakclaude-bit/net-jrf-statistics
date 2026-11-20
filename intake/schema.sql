@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS intake_jobs (
   error_code TEXT,
   error_message TEXT,
   dispatch_lease_until TEXT,
-  dispatch_lease_token TEXT
+  dispatch_lease_token TEXT,
+  manifest_key TEXT
 );
 CREATE INDEX IF NOT EXISTS intake_jobs_status_created ON intake_jobs(status, created_at);
 CREATE TABLE IF NOT EXISTS intake_events (
