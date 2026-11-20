@@ -13,7 +13,7 @@ This subsystem is domain-agnostic. Job lifecycle data is the ledger; queue deliv
 
 ## Recovery checklist
 1. Review job status and recent events using the authenticated status API.
-2. For `blocked_infrastructure`, repair configuration and explicitly re-enqueue after review.
+2. For `blocked_infrastructure` or `failed_retryable`, repair configuration and use the authenticated `POST /jobs/{id}/retry` route after review. The endpoint rechecks source existence, size and SHA-256 before queueing; if queueing fails, it restores an owner-action blocked state.
 3. For `failed_terminal`, review failure history and source integrity before an owner-authorized retry/new job.
 4. Confirm callback token and worker Access policies before replaying any message.
 5. Never replay arbitrary callbacks or queue messages from untrusted sources.
