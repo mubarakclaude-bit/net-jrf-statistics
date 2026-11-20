@@ -75,10 +75,18 @@ export default {
         .bind(id,"accepted","intake",JSON.stringify({size:file.size,sha256:hash,mime_type:mime}),time).run();
       await env.PROCESSING_QUEUE.send({job_id:id,stage:"extract",sha256:hash});
     } catch (e) {
-      // Concurrent duplicate requests may win the UNIQUE checksum constraint.
+      // A competing upload may win the checksum constraint; clean only this request's object.
       const raced = await env.JOBS_DB.prepare("SELECT id,status FROM intake_jobs WHERE source_sha256=? LIMIT 1").bind(hash).first();
+      if(raced&&raced.id!==id){await env.SOURCE_BUCKET.delete(key);return json({job_id:raced.id,status:raced.status,duplicate:true},200);}
+      // If our ledger row exists but queue/event acceptance failed, preserve the source
+      // and make the recovery requirement explicit rather than deleting a live object.
+      if(raced&&raced.id===id){
+        const time=now();
+        await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='intake',updated_at=?,error_code='intake_enqueue_failed',error_message='Job acceptance requires owner recovery.',dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status='accepted'").bind(time,id).run();
+        try{await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(id,"intake_enqueue_blocked","intake",JSON.stringify({code:"intake_enqueue_failed"}),time).run();}catch{/* ledger row remains visible for manual recovery */}
+        return json({job_id:id,status:"blocked_infrastructure",error:"intake_enqueue_failed",owner_action_required:true},503);
+      }
       await env.SOURCE_BUCKET.delete(key);
-      if (raced) return json({job_id:raced.id,status:raced.status,duplicate:true},200);
       throw e;
     }
     return json({job_id:id,status:"accepted",duplicate:false},202);
