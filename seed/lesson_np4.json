@@ -6,7 +6,7 @@
  "breadcrumb": "Non-parametric methods → Association → Rank correlation",
  "engine": "B",
  "engineName": "Non-parametric — correlate the orderings, not the values",
- "version": "1.0",
+ "version": "1.1",
  "status": "approved",
  "estMin": 100,
  "objectives": [
@@ -75,7 +75,7 @@
    "τ is usually SMALLER than ρ in magnitude on the same data.",
    "NULL: both have mean 0. Var(ρ) = 1/(n − 1); Var(τ) = 2(2n + 5)/[9n(n − 1)].",
    "  n=10: 0.111111 and 0.061728. n=20: 0.052632 and 0.026316. n=30: 0.034483 and 0.016603.",
-   "BIVARIATE NORMAL with correlation r: E(ρ) = (6/π)arcsin(r/2), E(τ) = (2/π)arcsin(r).",
+   "BIVARIATE NORMAL with population Pearson correlation r: population ρ_S=(6/π)arcsin(r/2), τ=(2/π)arcsin(r). For a sample of size n, E(r_s)=6/[π(n+1)]{arcsin(r)+(n−2)arcsin(r/2)}.",
    "  r=0.3 → 0.287564 and 0.193973 ; r=0.5 → 0.482584 and 0.333333 ; r=0.8 → 0.785939 and 0.590334.",
    "  The ρ ≈ 3τ/2 rule: good at r=0.3 (0.291 vs 0.288), fails at r=0.8 (0.886 vs 0.786).",
    "SMALL-n FLOOR: P(ρ = 1) = 1/n!. n=3 → 0.167 (never significant), n=4 → 0.0417, n=5 → 0.0083.",
@@ -212,7 +212,7 @@
   "retestDays": 7,
   "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
  },
- "provenance": "Authored November 2026. PYQ anchor: June 2026 Q35, answered WRONGLY — the key is B (0.345) and the user marked C (0.456). Its ten variants, j26v-q35-04 through -13, supplied the lesson's specification, covering the formula, two numerical cases, the reversed-rank bound, the Σd identity, the tie rule, the Pearson-on-ranks equivalence, Kendall's definition, the maximum Σd², and when to prefer rank correlation. Every figure was recomputed from the question's own data rather than taken from the key. Ranking both price columns ascending gives crude 5,7,8,4,1,6,2,3,9,10 and gasoline 3,2,4,1,5,8,7,6,9,10, so d = 2,5,4,3,−4,−2,−5,−3,0,0 with Σd = 0 and Σd² = 108, and ρ = 1 − 648/990 = 0.345455, agreeing with standard software to six decimals and with Pearson's r computed on the two rank columns to the same precision. Three findings go beyond what the question asks and are taught because they change how the answer should be read. First, Pearson's r on the RAW prices is 0.716682 — more than double ρ, and not among the four options — because the last two years sit far above the rest in both variables and dominate a distance-based measure while ranking compresses them; the lesson uses that gap as a diagnostic for leverage. Second, Kendall's τ on the same data is 0.288889, smaller than ρ as it usually is. Third, the exact one-sided probability of Σd² ≤ 108 under random ranking is about 0.165 over two million random permutations, so the value the exam wants is not statistically significant — the lesson says so plainly rather than leaving the impression that a relationship was established. The structural identity ρ = 1 − 2(Σd²/max) with max Σd² = n(n²−1)/3 is given prominence because it places any answer on the scale in one step; max was verified by direct computation as 40, 70 and 330 at n = 5, 6 and 10, and the half-maximum fact explains why n = 6 with Σd² = 35 gives exactly zero, which is one of the variants. Kendall's τ was checked against standard software on three permutations at n = 9, with (C, D) of (10, 26), (23, 13) and (26, 10) giving −0.444444, 0.277778 and 0.444444. The tie rule was verified on a small tied example where midranks plus Pearson and the standard routine both gave 0.763158. The bivariate-normal relations E(ρ) = (6/π)arcsin(r/2) and E(τ) = (2/π)arcsin(r) were computed at r = 0.3, 0.5 and 0.8, and the commonly quoted ρ ≈ 3τ/2 rule is shown to be good at r = 0.3 (0.290960 against 0.287564) and to fail at r = 0.8 (0.885502 against 0.785939), where it even exceeds the attainable value — so the lesson marks it as a small-correlation approximation only. Uses the new `rank-null` visualisation, which enumerates every one of the n! orderings for n ≤ 8 to give the exact null distribution with no approximation; its figures were checked independently, including P(ρ = 1) = 1/720 at n = 6, the exact one-sided 0.066667 for Σd² = 4 at n = 5, and 0.069444 for Σd² = 20 at n = 7. That chart also makes the small-sample floor concrete: P(ρ = 1) = 1/n!, so no result on three items can be significant at 5% and n = 4 is the minimum. One process matter is recorded in the lesson itself because it nearly cost a wasted lesson: Q35 is misfiled twice over, with its variant bank in the MATHEMATICS file and the paper's tally counting it under mathematics, while it is a rank-correlation question; an earlier pass had it down as an 'index numbers' question from a one-line label. Previous-year questions are stored separately and carry their exam cycle.",
+ "provenance": "Authored November 2026. PYQ anchor: June 2026 Q35, answered WRONGLY — the key is B (0.345) and the user marked C (0.456). Its ten variants, j26v-q35-04 through -13, supplied the lesson's specification, covering the formula, two numerical cases, the reversed-rank bound, the Σd identity, the tie rule, the Pearson-on-ranks equivalence, Kendall's definition, the maximum Σd², and when to prefer rank correlation. Every figure was recomputed from the question's own data rather than taken from the key. Ranking both price columns ascending gives crude 5,7,8,4,1,6,2,3,9,10 and gasoline 3,2,4,1,5,8,7,6,9,10, so d = 2,5,4,3,−4,−2,−5,−3,0,0 with Σd = 0 and Σd² = 108, and ρ = 1 − 648/990 = 0.345455, agreeing with standard software to six decimals and with Pearson's r computed on the two rank columns to the same precision. Three findings go beyond what the question asks and are taught because they change how the answer should be read. First, Pearson's r on the RAW prices is 0.716682 — more than double ρ, and not among the four options — because the last two years sit far above the rest in both variables and dominate a distance-based measure while ranking compresses them; the lesson uses that gap as a diagnostic for leverage. Second, Kendall's τ on the same data is 0.288889, smaller than ρ as it usually is. Third, the exact one-sided probability of Σd² ≤ 108 under random ranking is about 0.165 over two million random permutations, so the value the exam wants is not statistically significant — the lesson says so plainly rather than leaving the impression that a relationship was established. The structural identity ρ = 1 − 2(Σd²/max) with max Σd² = n(n²−1)/3 is given prominence because it places any answer on the scale in one step; max was verified by direct computation as 40, 70 and 330 at n = 5, 6 and 10, and the half-maximum fact explains why n = 6 with Σd² = 35 gives exactly zero, which is one of the variants. Kendall's τ was checked against standard software on three permutations at n = 9, with (C, D) of (10, 26), (23, 13) and (26, 10) giving −0.444444, 0.277778 and 0.444444. The tie rule was verified on a small tied example where midranks plus Pearson and the standard routine both gave 0.763158. The population bivariate-normal relations ρ_S = (6/π)arcsin(r/2) and τ = (2/π)arcsin(r) were computed at r = 0.3, 0.5 and 0.8. The finite-sample expectation of Spearman's statistic was separately checked using E(r_s)=6/[π(n+1)]{arcsin(r)+(n−2)arcsin(r/2)}; at r=0.5 and n=10 it is 0.441879, not the population value 0.482584. The commonly quoted ρ_S ≈ 3τ/2 rule is shown to be good at r=0.3 and to fail at r=0.8, where it even exceeds the attainable value — so the lesson marks it as a small-correlation approximation only. Uses the new `rank-null` visualisation, which enumerates every one of the n! orderings for n ≤ 8 to give the exact null distribution with no approximation; its figures were checked independently, including P(ρ = 1) = 1/720 at n = 6, the exact one-sided 0.066667 for Σd² = 4 at n = 5, and 0.069444 for Σd² = 20 at n = 7. That chart also makes the small-sample floor concrete: P(ρ = 1) = 1/n!, so no result on three items can be significant at 5% and n = 4 is the minimum. One process matter is recorded in the lesson itself because it nearly cost a wasted lesson: Q35 is misfiled twice over, with its variant bank in the MATHEMATICS file and the paper's tally counting it under mathematics, while it is a rank-correlation question; an earlier pass had it down as an 'index numbers' question from a one-line label. Previous-year questions are stored separately and carry their exam cycle. Independent mathematical audit on 2026-11-14 clarified the distinction between population rank correlations and the finite-sample expectation of Spearman's sample statistic, and corrected the n=2 edge case in the null-variance comparison. Exact checks are in verify_nonparam_t4.py.",
  "scenes": [
   {
    "kind": "foundation",
@@ -744,17 +744,17 @@
     {
      "t": "formula",
      "h": "Under bivariate normality",
-     "body": "If the underlying pair is bivariate normal with correlation r, then\n    E(ρ) = (6/π) arcsin(r/2)   and   E(τ) = (2/π) arcsin(r).\nAt r = 0.5 these give 0.482584 and 0.333333; at r = 0.8, 0.785939 and 0.590334. So both UNDERSTATE the underlying correlation, and τ much more than ρ — which is the main reason they are not interchangeable as numbers even when they agree as tests."
+     "body": "Let r be the population Pearson correlation. The population rank correlations are\n    ρ_S = (6/π) arcsin(r/2)   and   τ = (2/π) arcsin(r).\nThese are population parameters, not the finite-sample expectation of Spearman's sample statistic. For a sample of size n, the exact bivariate-normal expectation is\n    E(r_s) = 6/[π(n+1)] {arcsin(r) + (n−2)arcsin(r/2)}.\nFor example, at r=0.5 the population values are ρ_S=0.482584 and τ=0.333333, while E(r_s)=0.441879 when n=10. The sample Kendall statistic is unbiased for population τ; sample Spearman r_s is not generally unbiased for population ρ_S."
     },
     {
      "t": "step",
      "h": "The 3τ ≈ 2ρ rule, and where it fails",
-     "body": "A commonly quoted approximation is ρ ≈ 3τ/2. At r = 0.3 it gives 0.290960 against the true 0.287564 — excellent. At r = 0.5, 0.500000 against 0.482584 — acceptable. At r = 0.8, 0.885502 against 0.785939 — a 13% error, and it even exceeds the value ρ can reach. So the rule is a small-correlation approximation and should not be used for strong association."
+     "body": "A commonly quoted small-correlation approximation is ρ_S ≈ 3τ/2. At r = 0.3 it gives 0.290960 against the population ρ_S=0.287564 — excellent. At r = 0.5, 0.500000 against 0.482584 — acceptable. At r = 0.8, 0.885502 against 0.785939 — a 13% error, and it even exceeds the value ρ_S can reach. So the rule is a small-correlation approximation and should not be used for strong association."
     },
     {
      "t": "formula",
      "h": "Null variances",
-     "body": "    Var(ρ) = 1/(n − 1),       Var(τ) = 2(2n + 5)/[9n(n − 1)].\nAt n = 10: 0.111111 and 0.061728. At n = 30: 0.034483 and 0.016603. τ has the smaller null variance at every n, which is one argument for it, though the normal approximation it feeds is itself unreliable at small n."
+     "body": "Var(ρ_s) = 1/(n − 1),       Var(τ_n) = 2(2n + 5)/[9n(n − 1)].\nAt n = 10: 0.111111 and 0.061728. At n = 30: 0.034483 and 0.016603. The Kendall null variance is smaller for n>2; at n=2 the two variances are equal (both 1). The normal approximation is itself unreliable at small n."
     },
     {
      "t": "def",
@@ -864,14 +864,14 @@
    "mins": 8,
    "title": "On your own — six quick values",
    "objective": "Compute at exam speed.",
-   "problem": "(a) n = 10, Σd² = 0: ρ. (b) n = 10, Σd² = 165: ρ. (c) n = 6, Σd² = 70: ρ. (d) n = 8 with 20 concordant and 8 discordant pairs: τ. (e) n = 12: Var(ρ) under the null. (f) A bivariate normal with r = 0.5: E(ρ) and E(τ).",
+   "problem": "(a) n = 10, Σd² = 0: ρ_s. (b) n = 10, Σd² = 165: ρ_s. (c) n = 6, Σd² = 70: ρ_s. (d) n = 8 with 20 concordant and 8 discordant pairs: τ_n. (e) n = 12: Var(ρ_s) under the null. (f) For a bivariate normal population with Pearson correlation r = 0.5, find population ρ_S and τ, and E(r_s) for n = 10.",
    "hints": [
     "For (b), 165 is half of 330.",
     "For (d), there are 28 pairs at n = 8.",
-    "For (f), (6/π)arcsin(r/2) and (2/π)arcsin(r)."
+    "For (f), distinguish population ρ_S and τ from the finite-sample formula E(r_s)=6/[π(n+1)]{arcsin(r)+(n−2)arcsin(r/2)}."
    ],
-   "answer": "(a) 1. (b) 0. (c) −1. (d) (20 − 8)/28 = 0.428571. (e) 1/11 = 0.090909. (f) 0.482584 and 0.333333.",
-   "check": "Part (d) is worth a second look: C + D = 28, which equals the total number of pairs, so there are no tied pairs. Had C + D fallen short of 28, the difference would be ties and the formula would need the tie-corrected version. Part (f) shows how far both coefficients sit below the underlying r = 0.5 — ρ at 0.483 and τ at only 0.333 — which is why they should never be compared with a Pearson correlation as though they were on the same scale.",
+   "answer": "(a) 1. (b) 0. (c) −1. (d) (20 − 8)/28 = 0.428571. (e) 1/11 = 0.090909. (f) Population ρ_S=0.482584 and τ=0.333333; for n=10, E(r_s)=0.441879.",
+   "check": "Part (d) has no tied pairs because C + D = 28, the total number of pairs. Part (f) distinguishes the population Spearman coefficient (0.482584) from the finite-sample expected Spearman statistic (0.441879 at n=10); the population Kendall coefficient is 0.333333.",
    "solution": [
     {
      "say": "(a), (b) and (c): the three landmarks.",
@@ -881,12 +881,12 @@
     {
      "say": "(d) and (e): τ and the null variance.",
      "math": "pairs = 8(7)/2 = 28\nτ = (20 − 8)/28 = 12/28 = 0.428571\nVar(ρ) = 1/(n − 1) = 1/11 = 0.090909",
-     "why": "For comparison Var(τ) at n = 12 is 2(29)/(9 × 12 × 11) = 58/1188 = 0.048822 — smaller, as it is at every n."
+     "why": "For n>2, the null variance of Kendall's τ is smaller; at n=2 it equals Spearman's null variance."
     },
     {
-     "say": "(f) The bivariate normal relations.",
-     "math": "E(ρ) = (6/π) arcsin(0.25) = 0.482584\nE(τ) = (2/π) arcsin(0.50) = 0.333333\n3τ/2 = 0.500000 vs ρ = 0.482584",
-     "why": "The 3τ/2 rule is close here but drifts: at r = 0.8 it gives 0.886 against the true 0.786, overstating by 13% and exceeding what ρ reaches. Treat it as a small-correlation approximation only."
+     "say": "(f) Population rank correlations and the finite-sample expectation.",
+     "math": "ρ_S=(6/π)arcsin(0.25)=0.482584\nτ=(2/π)arcsin(0.50)=0.333333\nE(r_s)=6/[π(11)]{arcsin(0.50)+8arcsin(0.25)}=0.441879",
+     "why": "The arcsine relations give population rank correlations. The sample Spearman statistic has a finite-sample expectation that depends on n."
     }
    ]
   },

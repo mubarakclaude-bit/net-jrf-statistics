@@ -190,7 +190,7 @@
     "A, B, C and D"
    ],
    "answer": "A",
-   "explanation": "A is true — the shortcut is Pearson's formula simplified. B is true: both columns sum to n(n+1)/2. C is true, and the June 2026 data show a factor of more than two. D is false — τ is usually smaller than ρ.",
+   "explanation": "A, B and C are true. D is false: on the June 2026 data τ=0.288889 is smaller than ρ_s=0.345455. Under bivariate normality, the population values at r=0.5 are τ=0.333333 and ρ_S=0.482584.",
    "statements": [
     "Spearman's ρ equals Pearson's r computed on the two rank columns.",
     "Σd is identically zero for any pair of rankings.",
@@ -212,7 +212,7 @@
     },
     "D": {
      "tf": false,
-     "why": "False — usually SMALLER. On that same data τ = 0.288889 against ρ = 0.345455. Under bivariate normality E(τ) = (2/π)arcsin(r) and E(ρ) = (6/π)arcsin(r/2), giving 0.333 and 0.483 at r = 0.5."
+     "why": "False: τ is smaller than ρ_s on the June data (0.288889 vs 0.345455). Under bivariate normality, the population rank correlations at r=0.5 are τ=0.333333 and ρ_S=0.482584."
     }
    }
   },
@@ -244,8 +244,8 @@
     "(n² − 1)/12"
    ],
    "answer": "C",
-   "explanation": "At n = 10 this is 0.111111. Option A is the null variance of Kendall's τ, which is 0.061728 at n = 10 — smaller than ρ's at every n. Option D is the variance of the ranks themselves, which appears in the derivation of the formula rather than in its sampling theory.",
-   "check": "At n = 20 the two are 0.052632 and 0.026316, preserving the ordering."
+   "explanation": "At n=10, Var(ρ_s)=1/(10−1)=0.111111. Option A is the null variance of Kendall's τ, 2(25)/[9×10×9]=0.061728. It is smaller for n>2 and equal to Spearman's variance at n=2 (both 1). Option D is the variance of the ranks themselves.",
+   "check": "At n=2 both null variances equal 1; for n>2 Kendall's null variance is smaller."
   },
   {
    "id": "np-t4-m-15",
@@ -291,7 +291,7 @@
     "A, B, C and D"
    ],
    "answer": "A",
-   "explanation": "A is true — the 6 is 12/2, from the rank variance. B is true: midranks reduce the variance, which the derivation assumed constant. C is true, and the rule even exceeds ρ's attainable value at large r. D is false — both coefficients understate an underlying bivariate-normal r.",
+   "explanation": "A, B and C are true. D is false: population ρ_S and τ are different nonlinear functions of Pearson's r; moreover the finite-sample Spearman statistic is generally biased for ρ_S.",
    "statements": [
     "The 6 in Spearman's formula comes from the rank variance (n² − 1)/12.",
     "Ties break the Σd² shortcut because midranks reduce the variance of the rank column.",
@@ -313,7 +313,7 @@
     },
     "D": {
      "tf": false,
-     "why": "False — both UNDERSTATE it, and τ much more. At r = 0.5, E(ρ) = (6/π)arcsin(0.25) = 0.482584 and E(τ) = (2/π)arcsin(0.5) = 0.333333. They estimate monotone association, not r, so they should never be read on r's scale."
+     "why": "False. The population rank correlations are ρ_S=(6/π)arcsin(r/2) and τ=(2/π)arcsin(r), not Pearson r. For a sample of size n, E(r_s)=6/[π(n+1)]{arcsin(r)+(n−2)arcsin(r/2)}, so sample Spearman is not generally unbiased for ρ_S. Sample Kendall τ is unbiased for population τ, not for Pearson r."
     }
    }
   },
@@ -361,7 +361,7 @@
     "because τ is P(concordant) − P(discordant), a difference of probabilities"
    ],
    "answer": "D",
-   "explanation": "τ = 0.3 says concordant pairs exceed discordant ones by 30% of all pairs — a statement about the data's ordering as such. ρ is Pearson's r on a transformed variable, which has no equally clean reading. Option C is backwards: Var(τ) = 2(2n+5)/[9n(n−1)] is smaller than Var(ρ) = 1/(n−1) at every n."
+   "explanation": "τ has a direct probability interpretation: it is the population difference P(concordant)−P(discordant). Its null variance 2(2n+5)/[9n(n−1)] is smaller than Spearman's 1/(n−1) for n>2, and equal at n=2."
   }
  ]
 }
