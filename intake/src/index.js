@@ -99,7 +99,8 @@ export default {
         const resp=await fetch(env.PROCESSOR_URL,{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+env.PROCESSOR_TOKEN},body:JSON.stringify({schema_version:1,job_id,source_sha256:job.source_sha256,object_key:job.object_key,source_name:job.source_name,source_size:job.source_size,mime_type:job.mime_type,resume_stage:"extract"})});
         if (!resp.ok) throw new Error("processor_http_"+resp.status);
         const time=now();
-        await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='processing',stage='extract',updated_at=?,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=?").bind(time,job_id).run();
+        const settled=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='processing',stage='extract',updated_at=?,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND dispatch_lease_token=? AND status NOT IN ('completed','failed_terminal','cancelled')").bind(time,job_id,leaseToken).run();
+        if(!settled.meta?.changes){message.ack();continue;}
         await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"dispatched","extract",JSON.stringify({processor_status:resp.status}),time).run();
         message.ack();
       } catch (e) {
@@ -108,7 +109,8 @@ export default {
         const nextAttempts=(current?.attempts||0)+1,disposition=retryDisposition("failed_retryable",nextAttempts,5);
         const nextStatus=disposition==="terminalize"?"failed_terminal":"failed_retryable";
         if(current&&canTransition(current.status,nextStatus)){
-          await env.JOBS_DB.prepare("UPDATE intake_jobs SET status=?,stage='dispatch',attempts=?,updated_at=?,error_code='processor_dispatch_failed',error_message=?,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=?").bind(nextStatus,nextAttempts,time,nextStatus==="failed_terminal"?"Dispatch failed after bounded retries.":"Dispatch failed; retry scheduled.",job_id).run();
+          const failedUpdate=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status=?,stage='dispatch',attempts=?,updated_at=?,error_code='processor_dispatch_failed',error_message=?,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND dispatch_lease_token=? AND status NOT IN ('completed','failed_terminal','cancelled')").bind(nextStatus,nextAttempts,time,nextStatus==="failed_terminal"?"Dispatch failed after bounded retries.":"Dispatch failed; retry scheduled.",job_id,leaseToken).run();
+          if(!failedUpdate.meta?.changes){message.ack();continue;}
           await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,nextStatus==="failed_terminal"?"dispatch_terminal":"dispatch_failed","dispatch",JSON.stringify({code:"processor_dispatch_failed",attempt:nextAttempts,limit:5}),time).run();
         }
         if(disposition==="terminalize")message.ack();else message.retry();
