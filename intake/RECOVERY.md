@@ -18,4 +18,4 @@ This subsystem is domain-agnostic. Job lifecycle data is the ledger; queue deliv
 5. Never replay arbitrary callbacks or queue messages from untrusted sources.
 
 ## Current limitations
-The lifecycle guard is a small policy module and callback/dispatch guard, not a full lease-based claim protocol. Queue delivery can still race; duplicate processor requests are possible. Idempotent processor execution, queue DLQ wiring, manual recovery endpoint, upload scanning/quarantine, retention/deletion and deployment remain owner/infrastructure work.
+The lifecycle guard is a small policy module. Dispatch leases now conditionally claim jobs and fence the consumer's success/failure ledger updates using the lease token. This reduces stale concurrent state writes but is not full processor idempotency: a lease can expire while a processor request is running, and external side effects may still be duplicated. Queue DLQ wiring, manual recovery endpoint, upload scanning/quarantine, retention/deletion and deployment remain owner/infrastructure work.
