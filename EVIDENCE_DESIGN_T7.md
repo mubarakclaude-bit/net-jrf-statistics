@@ -8,3 +8,5 @@
 - Multiple missing observations generally require simultaneous or iterative estimation; the one-missing formulas are not applied blindly.
 - Classical estimates rely on the design model and may be questionable under informative missingness.
 - verify_design_t7.py checks both worked examples and df adjustment; lesson_design_t7.py checks scene and mastery contracts.
+
+- Boundary: the classical Latin-square single-missing-value estimator requires p≥3. At p=2, its denominator and residual error degrees of freedom are zero; the saturated 2×2 layout cannot estimate the missing value by this method.
