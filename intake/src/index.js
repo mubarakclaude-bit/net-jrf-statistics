@@ -59,7 +59,7 @@ export default {
         if(job.status!=="completed")return json({error:"job_not_completed"},409);
         const manifestObj=await env.ARTIFACT_BUCKET.get(`jobs/${id}/manifest.json`);if(!manifestObj)return json({error:"manifest_not_found"},404);
         let manifest;try{manifest=JSON.parse(await manifestObj.text())}catch{return json({error:"invalid_manifest"},422)}
-        if(manifest.schema_version!==1||manifest.job_id!==id||manifest.source_sha256!==job.source_sha256||!Array.isArray(manifest.artifacts))return json({error:"manifest_invalid"},422);
+        if(manifest.schema_version!==1||manifest.job_id!==id||manifest.source_sha256!==job.source_sha256||!Array.isArray(manifest.artifacts)||manifest.artifacts.length>20||manifest.artifacts.some(x=>!x||typeof x.key!=="string"||!x.key.startsWith(`jobs/${id}/`)||typeof x.sha256!=="string"||!Number.isSafeInteger(x.size)||x.size<0))return json({error:"manifest_invalid"},422);
         if(filename==="manifest.json")return new Response(JSON.stringify(manifest),{headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","content-disposition":`attachment; filename="${filename}"`}});
         const key=`jobs/${id}/${filename}`,entry=manifest.artifacts.find(x=>x&&x.key===key&&typeof x.sha256==="string"&&Number.isSafeInteger(x.size));
         if(!entry)return json({error:"artifact_not_in_manifest"},404);
