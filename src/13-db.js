@@ -86,18 +86,24 @@ function upath(name){
     : name;
 }
 async function loadProfileData(){
-  if(!S.db||!S.uid){S.att={};S.mocks=[];S.topics={};S.errs=[];S.mastery={};S.reqs=[];S.notes={};S.asks=[];return}
+  if(!S.db||!S.uid){S.att={};S.attPk=PK_VERSION;S.attQuar={};S.mocks=[];S.topics={};S.errs=[];S.mastery={};S.reqs=[];S.notes={};S.asks=[];return}
   const P="data/users/"+S.uid+"/";
   const rd=async p=>{try{const s=await S.db.doc(p).get();return s.exists?s.data():null}catch(e){return null}};
-  const [a,m,t,er,c,ms,rq,nt,ak]=await Promise.all(["attempts","mocks","topics","errors","config","mastery","requests","notes","asks"]
-    .map(n=>rd(P+upath(n))));
-  S.att=(a&&a.a)||{};S.mocks=(m&&m.list)||[];S.topics=(t&&t.t)||{};
+  const NAMES=["attempts","mocks","topics","errors","config","mastery","requests","notes","asks"];
+  const got=await Promise.all(NAMES.map(n=>rd(P+upath(n))));
+  const [a,m,t,er,c,ms,rq,nt,ak]=got;
+  S.att=(a&&a.a)||{};
+  // progress keys (Issue #117): snapshot, then migrate; on failure S.att keeps the legacy keys and the next load retries
+  const asLoaded={};NAMES.forEach((n,i)=>{asLoaded[n]=got[i]===undefined?null:got[i]});
+  await migrateProgressKeys(a,asLoaded);S.mocks=(m&&m.list)||[];S.topics=(t&&t.t)||{};
   S.errs=(er&&er.list)||[];S.cfg=c||{};S.mastery=(ms&&ms.m)||{};S.reqs=(rq&&rq.list)||[];S.notes=(nt&&nt.n)||{};S.asks=(ak&&ak.list)||[];
   if(S.cfg.mode&&MODES[S.cfg.mode])S.mode=S.cfg.mode;
   if(S.cfg.paper===1||S.cfg.paper===2||S.cfg.paper==="all")S.paper=S.cfg.paper;
   S.bank=S.bank||{};
 }
-const saveAtt=()=>save("attempts",{a:S.att,v:SCHEMA});
+// Before the progress-key migration has succeeded the record is written back in its legacy shape, so nothing is lost;
+// after it, the quarantined legacy results always travel with it.
+const saveAtt=()=>save("attempts",S.attPk>=PK_VERSION?{a:S.att,v:SCHEMA,pk:PK_VERSION,quarantine:S.attQuar||{}}:{a:S.att,v:SCHEMA});
 const saveMocks=()=>save("mocks",{list:S.mocks.slice(-60)});
 const saveTopics=()=>save("topics",{t:S.topics});
 const saveErrs=()=>save("errors",{list:S.errs.slice(-400)});
@@ -169,7 +175,7 @@ async function loadSet(setId){
   if(S.sets[setId]||!S.db)return S.sets[setId]||[];
   try{const s=await S.db.doc("qsets/"+setId).get();
     const b=s.exists?s.data():null;
-    S.sets[setId]=b?(b.items||[]).map(it=>Object.assign({},it,{moduleId:b.moduleId,source:b.source||"mastery"})):[];
+    S.sets[setId]=b?(b.items||[]).map(it=>Object.assign({},it,{moduleId:b.moduleId,source:b.source||"mastery",setId:setId})):[];
   }catch(e){S.sets[setId]=[]}
   return S.sets[setId];
 }

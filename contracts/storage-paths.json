@@ -80,10 +80,10 @@
       "pattern": "data/users/{uid}/snapshots/{snapshot}/record",
       "segments": 6,
       "scope": "learner, default profile",
-      "writer": "import",
+      "writer": "import, or a stored-progress migration (premigrate-*)",
       "params": {
         "uid": "^[A-Za-z0-9_.~:@+-]+$",
-        "snapshot": "^preimport-[a-z0-9]+$"
+        "snapshot": "^(preimport|premigrate)-[a-z0-9]+$"
       }
     },
     {
@@ -91,11 +91,11 @@
       "pattern": "data/users/{uid}/p/{profile}/snapshots/{snapshot}/record",
       "segments": 8,
       "scope": "learner, non-default profile",
-      "writer": "import",
+      "writer": "import, or a stored-progress migration (premigrate-*)",
       "params": {
         "uid": "^[A-Za-z0-9_.~:@+-]+$",
         "profile": "^(?!me(?:/|$))[a-z0-9][a-z0-9_-]{0,63}$",
-        "snapshot": "^preimport-[a-z0-9]+$"
+        "snapshot": "^(preimport|premigrate)-[a-z0-9]+$"
       }
     },
     {

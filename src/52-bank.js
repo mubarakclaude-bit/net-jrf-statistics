@@ -16,10 +16,10 @@ function vBank(){
   if(f.paper)list=list.filter(q=>{const m=modById(q.moduleId);return m&&String(m.paper)===f.paper});
   if(f.fmt==="free")list=list.filter(isFree);else if(f.fmt)list=list.filter(q=>q.format===f.fmt&&!isFree(q));
   if(f.src)list=list.filter(q=>q.source===f.src);
-  if(f.st)list=list.filter(q=>f.st==="flag"?((S.att[q.id]||{}).f):statusOf(q.id)===f.st);
+  if(f.st)list=list.filter(q=>f.st==="flag"?isFlagged(q):statusOf(q)===f.st);
   const tot=S.index?Object.keys(S.index.modules||{}).reduce((s,k)=>s+S.index.modules[k].total,0):0;
   const counts={unseen:0,correct:0,wrong:0,flag:0};
-  allQ().forEach(q=>{counts[statusOf(q.id)]++;if((S.att[q.id]||{}).f)counts.flag++});
+  allQ().forEach(q=>{counts[statusOf(q)]++;if(isFlagged(q))counts.flag++});
   const sel=(id,cur,opts)=>'<select id="'+id+'">'+opts.map(o=>'<option value="'+esc(o[0])+'"'+(cur===o[0]?" selected":"")+'>'+esc(o[1])+'</option>').join("")+'</select>';
   return '<div class="hd"><h1>Question bank</h1><p>'+tot+' loaded · previous-year questions and their variants, side by side.</p>'+
     '<div class="sp row tight">'+(list.length?'<button class="btn p sm" id="drillAll">Drill these '+list.length+'</button>':'')+'</div></div>'+
@@ -39,10 +39,10 @@ function vBank(){
     :'<div class="empty"><h3>Nothing matches</h3><p>'+(tot?"Loosen a filter.":"No questions in the store yet — the Content tab has the prompt that loads a module.")+'</p></div>');
 }
 function qrow(q){
-  const st=statusOf(q.id),a=S.att[q.id]||{};
+  const st=statusOf(q),a=attOf(q)||{};
   const c={correct:"ok",wrong:"bad",unseen:"dim"}[st];
   const m=modById(q.moduleId);
-  return '<button class="qrow" data-q="'+esc(q.id)+'">'+
+  return '<button class="qrow" data-q="'+esc(progressKeyOf(q))+'">'+
     '<span class="chip '+c+'" style="flex:0 0 auto">'+(st==="correct"?"✓":st==="wrong"?"✗":"·")+'</span>'+
     '<span class="qs">'+esc(String(q.stem||"").replace(/\s+/g," "))+'</span>'+
     '<span class="qm"><span class="chip dim">'+esc(isFree(q)?"Write-in":(FMT[q.format]||{s:q.format}).s)+'</span>'+

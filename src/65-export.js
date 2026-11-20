@@ -1,9 +1,9 @@
 /* ---------- export ---------- */
 function exportMd(mid,what){
   let list=mid?(S.bank[mid]||[]):allQ();
-  if(what==="wrong")list=list.filter(q=>statusOf(q.id)==="wrong");
-  if(what==="flag")list=list.filter(q=>(S.att[q.id]||{}).f);
-  if(what==="unseen")list=list.filter(q=>statusOf(q.id)==="unseen");
+  if(what==="wrong")list=list.filter(q=>statusOf(q)==="wrong");
+  if(what==="flag")list=list.filter(isFlagged);
+  if(what==="unseen")list=list.filter(q=>statusOf(q)==="unseen");
   if(!list.length)return null;
   const L=["# NET JRF Statistics — "+(mid?(modById(mid)||{}).name:"all modules"),"",
     "*"+list.length+" questions · "+({wrong:"answered wrongly",flag:"flagged",unseen:"not yet attempted",all:"everything loaded"}[what])+" · exported "+dayStr(now())+"*",""];
@@ -29,9 +29,9 @@ function exportMd(mid,what){
   return L.join("\n");
 }
 function exportCsv(){
-  const rows=[["module","qid","format","source","topic","answered","last_result","attempts","flagged"]];
-  mods().forEach(m=>(S.bank[m.id]||[]).forEach(q=>{const a=S.att[q.id]||{};
-    rows.push([m.name,q.id,q.format,q.source,q.topic||"",a.n?"yes":"no",a.n?(a.o?"correct":"wrong"):"",a.n||0,a.f?"yes":"no"])}));
+  const rows=[["module","qid","format","source","topic","answered","last_result","attempts","flagged","progress_key"]];
+  mods().forEach(m=>(S.bank[m.id]||[]).forEach(q=>{const a=attOf(q)||{};
+    rows.push([m.name,q.id,q.format,q.source,q.topic||"",a.n?"yes":"no",a.n?(a.o?"correct":"wrong"):"",a.n||0,a.f?"yes":"no",progressKeyOf(q)])}));
   return rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(",")).join("\n");
 }
 async function saveFile(name,data){

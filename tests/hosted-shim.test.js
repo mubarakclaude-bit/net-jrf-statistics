@@ -54,6 +54,11 @@ const server = http.createServer((q, r) => {
   check("no content copies after reload", kept.c === false);
   check("the app ran every tab on contract-valid paths with no errors", errs.length === 0, errs.slice(0, 3).join(" | "));
   await browser.close(); server.close();
+  // Progress keys and the stored-progress migration (Issue #117) are part of the hosted adapter's contract: a learner's
+  // record must survive the migration, a failed save and a reload on this adapter. They live in their own file and run
+  // from here, so the CI step that runs this file runs them too.
+  const pk = require("child_process").spawnSync(process.execPath, [path.join(__dirname, "progress-keys.test.js")], { stdio: "inherit" });
+  check("progress keys and the stored-progress migration (tests/progress-keys.test.js)", pk.status === 0, "exit " + pk.status);
   const fails = results.filter(x => !x).length;
   console.log("\n" + results.length + " checks, " + fails + " failed");
   process.exit(fails ? 1 : 0);

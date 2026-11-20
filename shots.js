@@ -16,7 +16,7 @@ const W = '/home/claude/w1';
   await page.click('[data-tab="bank"]'); await page.waitForTimeout(800);
   await page.evaluate(() => {
     const l = S.bank.inference || [];
-    l.forEach((q, i) => { if (i % 3) S.att[q.id] = { o: i % 4 ? 1 : 0, n: 1, t: Date.now() }; });
+    l.forEach((q, i) => { if (i % 3) S.att[progressKeyOf(q)] = { o: i % 4 ? 1 : 0, n: 1, t: Date.now() }; });
     S.mocks.push({ ts: Date.now() - 86400000 * 6, n: 50, c: 24, pass: 80, scope: 'P2', secs: 2100, byModule: { inference: { n: 20, c: 11 } } });
     S.mocks.push({ ts: Date.now() - 86400000 * 2, n: 50, c: 36, pass: 80, scope: 'P2', secs: 2000, byModule: { inference: { n: 22, c: 19 } } });
     S.errs = [{ qid: 'a', mid: 'inference', fmt: 'numeric', type: 'quantity', ts: Date.now(), stem: 'CRLB for lambda' },

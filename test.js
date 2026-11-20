@@ -188,7 +188,7 @@ window.claude = { use: async (n) => {
   await page.locator('[data-self="0"]').click(); await page.waitForTimeout(300);
   say('  marked wrong: attempts=' + await page.evaluate(() => Object.keys(S.att).length) +
       '  errBtns=' + await page.locator('[data-err]').count() +
-      '  status=' + await page.evaluate(() => statusOf(S.drill.list[S.drill.i].id)));
+      '  status=' + await page.evaluate(() => statusOf(S.drill.list[S.drill.i])));
   await page.click('[data-exit="1"]'); await page.waitForTimeout(200);
   await page.selectOption('#fFmt', ''); await page.waitForTimeout(400);
 
