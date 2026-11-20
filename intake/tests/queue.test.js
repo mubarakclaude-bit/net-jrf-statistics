@@ -109,3 +109,19 @@ await worker.queue({messages:[{body:{job_id:blockedDb.job.id},ack(){blockedAck++
 assert.equal(blockedDb.job.status,"blocked_infrastructure");
 assert.equal(blockedAck,1);assert.equal(blockedRetry,0);
 console.log("queue callback-race, retry and blocker tests passed");
+
+const duplicatePayload={job_id:db.job.id,status:"completed",stage:"analysis",attempt_id:"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",fencing_token:1,manifest_key:manifestKey,artifact_keys:[extractKey,manifestKey]};
+const duplicateCallback=await worker.fetch(new Request("https://intake/internal/processor-result",{method:"POST",headers:{authorization:"Bearer callback","content-type":"application/json"},body:JSON.stringify(duplicatePayload)}),env);
+assert.equal(duplicateCallback.status,200,"repeated completion callback should be accepted idempotently");
+assert.equal((await duplicateCallback.json()).duplicate,true,"duplicate callback should be marked as duplicate");
+
+const corruptedArtifacts=new Map([[manifestKey,JSON.stringify(manifest)],[extractKey,new TextEncoder().encode("tampered artifact")]]);
+const corruptEnv={...env,ARTIFACT_BUCKET:{get:async key=>{const v=corruptedArtifacts.get(key);if(!v)return null;if(typeof v==="string")return {text:async()=>v};return {arrayBuffer:async()=>v.buffer.slice(v.byteOffset,v.byteOffset+v.byteLength)};}}};
+const integrityPayload={...duplicatePayload,job_id:"12345678-1234-1234-1234-123456789abc"};
+// The ledger is already completed in the fixture, so duplicate behavior takes precedence;
+// use a separate state fixture in the integrity test to exercise hash verification.
+const integrityDb=new DB();integrityDb.job.status="processing";
+const integrityEnv={...corruptEnv,JOBS_DB:integrityDb};
+const integrity=await worker.fetch(new Request("https://intake/internal/processor-result",{method:"POST",headers:{authorization:"Bearer callback","content-type":"application/json"},body:JSON.stringify({...duplicatePayload,job_id:integrityDb.job.id})}),integrityEnv);
+assert.equal(integrity.status,422,"tampered artifact bytes must fail manifest integrity validation");
+assert.equal(integrityDb.job.status,"processing","integrity failure must not complete the ledger");
