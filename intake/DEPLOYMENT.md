@@ -43,7 +43,7 @@ npx wrangler deploy
 8. Test scanning/quarantine, retention, deletion and cancellation.
 
 ## Current boundary
-This scaffold is not production-ready or deployed. Extraction requires a provisioned adapter. Coverage is now wired as optional configured analysis; output authoring, verification, export, and repository PR automation are not yet implemented. Owner Access, scanning/quarantine, retention, sandboxing, monitoring, deployment verification and security review are required before accepting sensitive documents.
+This scaffold is not production-ready or deployed. Extraction requires a provisioned adapter. Coverage and optional output adapter are wired; artifact verification, integrity manifest and a generic bundle builder are implemented in the processor. However, a user-facing artifact export/download route, draft repository PR automation, and end-to-end review orchestration are not yet implemented. Owner Access, scanning/quarantine, retention, sandboxing, monitoring, deployment verification and security review are required before accepting sensitive documents.
 
 
 ## Verification scaffold
