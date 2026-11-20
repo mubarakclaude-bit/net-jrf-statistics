@@ -13,5 +13,8 @@ const aud=auditSource({pages:[{page:1,text:"Question 1. Find the unbiased estima
 assert.equal(aud.segments.length,1);assert.equal(aud.segments[0].page,1);assert.ok(aud.segments[0].labels.includes("question_or_prompt"));
 const {mapText}=await import("../src/mapper.js");
 const mapped=mapText("Explain matrix eigenvalue properties.",{items:[{id:"topic-a",name:"Matrix eigenvalues",keywords:["eigenvalue"]}]});
-assert.equal(mapped.candidates[0].id,"topic-a");\nconst {buildCoverageReport}=await import("../src/coverage.js");\nconst coverage=buildCoverageReport([{segment_id:"s1",page:1,text:"matrix eigenvalues and vectors"}],[{id:"r1",name:"Matrix eigenvalues"}]);\nassert.equal(coverage.entries[0].coverage_status,"potentially-covered");
+assert.equal(mapped.candidates[0].id,"topic-a");
+const {buildCoverageReport}=await import("../src/coverage.js");
+const coverage=buildCoverageReport([{segment_id:"s1",page:1,text:"matrix eigenvalues and vectors"}],[{id:"r1",name:"Matrix eigenvalues"}]);
+assert.equal(coverage.entries[0].coverage_status,"potentially-covered");
 console.log("processor smoke and heuristic tests passed");
