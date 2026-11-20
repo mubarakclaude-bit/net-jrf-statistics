@@ -1,4 +1,4 @@
-const PORTAL = `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Private NET JRF Source Intake</title><style>body{font:16px system-ui;max-width:720px;margin:40px auto;padding:0 16px;color:#17202a}input,button{font:inherit;padding:10px;margin:8px 0;width:100%;box-sizing:border-box}button{cursor:pointer}pre{white-space:pre-wrap;word-break:break-word;background:#f3f4f6;padding:12px;border-radius:8px}</style><h1>Source document intake</h1><p>Upload a PDF to the private processing service. Files are not added to the Git repository.</p><label>Intake token<input id="token" type="password" autocomplete="off"></label><label>PDF document<input id="file" type="file" accept="application/pdf"></label><button id="upload">Upload PDF</button><label>Job ID (for status)<input id="job" placeholder="Job ID"></label><button id="status">Check status</button><pre id="out">Ready.</pre><script>const out=document.getElementById('out'),token=()=>document.getElementById('token').value;document.getElementById('upload').onclick=async()=>{const f=document.getElementById('file').files[0];if(!f){out.textContent='Select a PDF first.';return}out.textContent='Uploading…';const d=new FormData();d.append('file',f);try{const r=await fetch('/upload',{method:'POST',headers:{Authorization:'Bearer '+token()},body:d});const j=await r.json();out.textContent=JSON.stringify(j,null,2);if(j.job_id)document.getElementById('job').value=j.job_id}catch(e){out.textContent='Upload failed: '+e}};document.getElementById('status').onclick=async()=>{const id=document.getElementById('job').value.trim();if(!id){out.textContent='Enter a job ID';return}try{const r=await fetch('/jobs/'+encodeURIComponent(id),{headers:{Authorization:'Bearer '+token()}});out.textContent=JSON.stringify(await r.json(),null,2)}catch(e){out.textContent='Status failed: '+e}};</script></html>`;
+const PORTAL = `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Private NET JRF Source Intake</title><style>body{font:16px system-ui;max-width:720px;margin:40px auto;padding:0 16px;color:#17202a}input,button{font:inherit;padding:10px;margin:8px 0;width:100%;box-sizing:border-box}button{cursor:pointer}pre{white-space:pre-wrap;word-break:break-word;background:#f3f4f6;padding:12px;border-radius:8px}</style><h1>Source document intake</h1><p>Upload a PDF to the private processing service. Files are not added to the Git repository. Protect this portal with owner-only access (such as Cloudflare Access) before accepting sensitive files.</p><label>Intake token<input id="token" type="password" autocomplete="off"></label><label>PDF document<input id="file" type="file" accept="application/pdf"></label><button id="upload">Upload PDF</button><label>Job ID (for status)<input id="job" placeholder="Job ID"></label><button id="status">Check status</button><pre id="out">Ready.</pre><script>const out=document.getElementById('out'),token=()=>document.getElementById('token').value;document.getElementById('upload').onclick=async()=>{const f=document.getElementById('file').files[0];if(!f){out.textContent='Select a PDF first.';return}out.textContent='Uploading…';const d=new FormData();d.append('file',f);try{const r=await fetch('/upload',{method:'POST',headers:{Authorization:'Bearer '+token()},body:d});const j=await r.json();out.textContent=JSON.stringify(j,null,2);if(j.job_id)document.getElementById('job').value=j.job_id}catch(e){out.textContent='Upload failed: '+e}};document.getElementById('status').onclick=async()=>{const id=document.getElementById('job').value.trim();if(!id){out.textContent='Enter a job ID';return}try{const r=await fetch('/jobs/'+encodeURIComponent(id),{headers:{Authorization:'Bearer '+token()}});out.textContent=JSON.stringify(await r.json(),null,2)}catch(e){out.textContent='Status failed: '+e}};</script></html>`;
 
 const MAX_UPLOAD_BYTES = 20 * 1024 * 1024;
 const now = () => new Date().toISOString();
@@ -22,7 +22,7 @@ export default {
     if (request.method === "GET" && url.pathname.startsWith("/jobs/")) {
       const id = url.pathname.slice("/jobs/".length);
       if (!id || id.includes("/")) return json({error:"invalid_job_id"},400);
-      const job = await env.JOBS_DB.prepare("SELECT id,source_name,source_size,status,stage,attempts,created_at,updated_at,error_code,error_message FROM intake_jobs WHERE id=?").bind(id).first();
+      const job = await env.JOBS_DB.prepare("SELECT id,source_name,source_size,status,stage,attempts,created_at,updated_at,error_code FROM intake_jobs WHERE id=?").bind(id).first();
       if (!job) return json({error:"not_found"},404);
       const events = await env.JOBS_DB.prepare("SELECT event,stage,details_json,created_at FROM intake_events WHERE job_id=? ORDER BY id DESC LIMIT 30").bind(id).all();
       return json({job,events:events.results||[]});
@@ -32,9 +32,9 @@ export default {
     if (!form) return json({error:"invalid_multipart"},400);
     const file = form.get("file");
     if (!(file instanceof File)) return json({error:"missing_file"},400);
-    const limit = Number(env.MAX_UPLOAD_BYTES)||MAX_UPLOAD_BYTES;
+    const configuredLimit = Number(env.MAX_UPLOAD_BYTES);\n    const limit = Number.isFinite(configuredLimit) && configuredLimit > 0 ? Math.min(configuredLimit, MAX_UPLOAD_BYTES) : MAX_UPLOAD_BYTES;\n    const contentLength = Number(request.headers.get("content-length"));\n    if (Number.isFinite(contentLength) && contentLength > limit + 1024 * 1024) return json({error:"file_size_limit"},413);
     if (file.size <= 0 || file.size > limit) return json({error:"file_size_limit"},413);
-    const name = file.name || "source.pdf";
+    const name = (file.name || "source.pdf").replace(/[\\x00-\\x1f\\x7f]/g,"").slice(0,180) || "source.pdf";
     if (!name.toLowerCase().endsWith(".pdf") || file.type !== "application/pdf") return json({error:"pdf_only"},415);
     const bytes = await file.arrayBuffer();
     const signature = new Uint8Array(bytes).slice(0,5);
@@ -82,7 +82,7 @@ export default {
         message.ack();
       } catch (e) {
         const time=now();
-        await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='failed_retryable',stage='dispatch',attempts=attempts+1,updated_at=?,error_code='processor_dispatch_failed',error_message=? WHERE id=?").bind(time,String(e).slice(0,300),job_id).run();
+        await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='failed_retryable',stage='dispatch',attempts=attempts+1,updated_at=?,error_code='processor_dispatch_failed',error_message=? WHERE id=?").bind(time,"Dispatch failed; retry scheduled.",job_id).run();
         await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"dispatch_failed","dispatch",JSON.stringify({code:"processor_dispatch_failed"}),time).run();
         message.retry();
       }
