@@ -3,7 +3,7 @@ const allowed={
  accepted:["queued","processing","failed_retryable","blocked_infrastructure","cancelled"],
  queued:["processing","failed_retryable","failed_terminal","blocked_infrastructure","cancelled"],
  processing:["completed","failed_retryable","failed_terminal","blocked_infrastructure","cancelled"],
- failed_retryable:["queued","processing","failed_terminal","cancelled"],
+ failed_retryable:["queued","processing","failed_terminal","blocked_infrastructure","cancelled"],
  blocked_infrastructure:["queued","processing","cancelled"],
  completed:[],failed_terminal:[],cancelled:[]
 };
