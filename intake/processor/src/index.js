@@ -1,6 +1,7 @@
 import {auditSource} from "./audit.js";
 import {mapText} from "./mapper.js";
-import {buildCoverageReport} from "./coverage.js";\nimport {verifyOutputs} from "./verify.js";
+import {buildCoverageReport} from "./coverage.js";
+import {verifyOutputs} from "./verify.js";
 const json=(d,s=200)=>new Response(JSON.stringify(d),{status:s,headers:{"content-type":"application/json","cache-control":"no-store"}});
 const safe=(v,n=200)=>String(v||"").replace(/[\\x00-\\x1f\\x7f]/g,"").slice(0,n);
 async function sha256(buf){const d=await crypto.subtle.digest("SHA-256",buf);return [...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,"0")).join("")}
