@@ -50,3 +50,8 @@ const invalidKey=await worker.fetch(new Request("https://processor/process",{met
 assert.equal(invalidKey.status,400,"processor rejects source keys outside the job namespace before storage access");
 const malformedId=await worker.fetch(new Request("https://processor/process",{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer x"},body:JSON.stringify({...basePayload,job_id:"../bad"})}),{PROCESSOR_TOKEN:"x"});
 assert.equal(malformedId.status,400,"processor rejects malformed job IDs");
+
+assert.throws(()=>verifyOutputs("not-array",aud.segments));
+assert.throws(()=>verifyOutputs([],Array.from({length:1001},(_,i)=>({segment_id:"s"+i}))));
+const malformedRefs=verifyOutputs([{type:"x",content:"ok",source_segment_ids:[null]}],aud.segments);assert.ok(malformedRefs.failed>0);
+const tooLongType=verifyOutputs([{type:"x".repeat(129),content:"ok",source_segment_ids:["segment-1"]}],aud.segments);assert.ok(tooLongType.failed>0);
