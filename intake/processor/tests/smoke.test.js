@@ -24,3 +24,8 @@ const verified=verifyOutputs([{type:"lesson",content:"Example",source_segment_id
 assert.equal(verified.failed,0);
 const bad=verifyOutputs([{type:"lesson",content:"Untraceable",source_segment_ids:["missing"]}],aud.segments);
 assert.ok(bad.failed>0);
+
+const dup=verifyOutputs([{type:"lesson",content:"duplicate refs",source_segment_ids:["segment-1","segment-1"]}],aud.segments);
+assert.ok(dup.failed>0);
+const noType=verifyOutputs([{content:"missing type",source_segment_ids:["segment-1"]}],aud.segments);
+assert.ok(noType.failed>0);
