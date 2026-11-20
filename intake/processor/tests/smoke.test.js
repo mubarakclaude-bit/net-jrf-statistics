@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-const worker=(await import("../src/index.js")).default;
+import {readFile} from "node:fs/promises";
+const source=await readFile(new URL("../src/index.js",import.meta.url),"utf8");
+const worker=(await import("data:text/javascript;base64,"+Buffer.from(source).toString("base64"))).default;
 const response=await worker.fetch(new Request("https://processor/health"),{});
 assert.equal(response.status,200);assert.deepEqual(await response.json(),{ok:true,service:"processor"});
 const unauthorized=await worker.fetch(new Request("https://processor/process",{method:"POST",headers:{"content-type":"application/json"},body:"{}"}),{PROCESSOR_TOKEN:"x"});
