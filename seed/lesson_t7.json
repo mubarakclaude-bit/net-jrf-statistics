@@ -397,6 +397,11 @@
      "t": "trap",
      "h": "Which summary of the posterior to report",
      "body": "The posterior is the answer; a single number is a decision. Squared-error loss gives the posterior MEAN, absolute-error loss the posterior MEDIAN, and 0–1 loss the posterior MODE. For a symmetric posterior all three coincide, which is why the Normal–Normal case hides the distinction; for a skewed Beta or Gamma posterior they are three different numbers and the question has to say which loss applies."
+    },
+    {
+     "t": "def",
+     "h": "Poisson prior for an unknown binomial sample size",
+     "body": "A different Bayesian problem arises when the unknown parameter is the number of trials n itself. Suppose X|n~Binomial(n,p), with known 0<p<1, and assign n~Poisson(λ). For an observed X=x, the posterior mass is proportional to C(n,x)p^x(1−p)^(n−x)·e^(−λ)λ^n/n!, for n≥x. Put k=n−x and cancel factors that do not depend on k. The remaining kernel is [λ(1−p)]^k/k!, so n|X=x has the representation n=x+K, where K~Poisson(λ(1−p)). This is a shifted Poisson distribution, not generally a Poisson distribution for n; when x=0 the shift vanishes. Under squared-error loss, the Bayes estimate is the posterior mean δ(X)=X+λ(1−p). Its frequentist bias at fixed n is E[δ(X)|n]−n=(1−p)(λ−n). Also Var[δ(X)|n]=np(1−p), while Var(X/p|n)=n(1−p)/p, so the Bayes estimate has the smaller variance for 0<p<1."
     }
    ],
    "flow": {

@@ -8,7 +8,7 @@
  "engineName": "NET JRF Statistics lesson engine",
  "version": "1.0",
  "status": "review",
- "estMin": 90,
+ "estMin": 102,
  "objectives": [
   "Derive the multivariate normal likelihood.",
   "Obtain the mean vector MLE as the sample mean vector.",
@@ -586,6 +586,55 @@
    "ask": {
     "q": "State the three steps in a covariance MLE numerical problem.",
     "nudge": "Find x̄, sum centred outer products, divide by n."
+   }
+  },
+  {
+   "kind": "worked",
+   "id": "s12",
+   "mins": 12,
+   "title": "Constrained MLE of correlation when marginal variances are equal",
+   "objective": "Derive the maximum-likelihood estimate of correlation under the equal-marginal-variance restriction.",
+   "problem": "A bivariate normal sample has unknown means, a common marginal variance σ², and correlation ρ. Derive the MLE of ρ using the centred sums Sₓₓ, Sᵧᵧ and Sₓᵧ.",
+   "steps": [
+    {
+     "say": "Write the covariance matrix using the equality of the two marginal variances.",
+     "math": "Σ=σ²[[1,ρ],[ρ,1]],   |Σ|=σ⁴(1−ρ²)",
+     "why": "The model has one common variance parameter, not two separate marginal variances. Its correlation parameter is restricted to −1<ρ<1."
+    },
+    {
+     "say": "Estimate the means and centre the observations.",
+     "math": "μ̂₁=X̄,   μ̂₂=Ȳ;   A(ρ)=Sₓₓ+Sᵧᵧ−2ρSₓᵧ",
+     "why": "For a normal sample, the MLEs of the means are the sample means. The centred quadratic form in the likelihood reduces to A(ρ)/[σ²(1−ρ²)]."
+    },
+    {
+     "say": "Write the log-likelihood, ignoring constants that do not depend on σ² or ρ.",
+     "math": "ℓ(σ²,ρ)=−n log(σ²)−(n/2)log(1−ρ²)−A(ρ)/[2σ²(1−ρ²)]",
+     "why": "The determinant contributes the log terms, and the inverse covariance matrix gives the centred quadratic form."
+    },
+    {
+     "say": "For a fixed ρ, maximise over the common variance σ².",
+     "math": "σ̂²(ρ)=A(ρ)/[2n(1−ρ²)]",
+     "why": "Differentiate the log-likelihood with respect to σ², set it to zero, and solve. This profiles out the nuisance variance."
+    },
+    {
+     "say": "Substitute the profiled variance and differentiate with respect to ρ.",
+     "math": "ℓₚ(ρ)=−n log A(ρ)+(n/2)log(1−ρ²)+constant;   2Sₓᵧ/A(ρ)−ρ/(1−ρ²)=0",
+     "why": "Since A′(ρ)=−2Sₓᵧ, the derivative of the first term is 2nSₓᵧ/A(ρ), while the derivative of the second is −nρ/(1−ρ²). Divide by n."
+    },
+    {
+     "say": "Solve the likelihood equation and cancel the common terms.",
+     "math": "2Sₓᵧ(1−ρ²)=ρ(Sₓₓ+Sᵧᵧ−2ρSₓᵧ)  ⇒  2Sₓᵧ=ρ(Sₓₓ+Sᵧᵧ)",
+     "why": "The −2ρ²Sₓᵧ terms appear on both sides and cancel. The resulting estimator is the constrained MLE for a nondegenerate sample."
+    },
+    {
+     "say": "State the estimator and compare it with the usual sample correlation.",
+     "math": "ρ̂=2Sₓᵧ/(Sₓₓ+Sᵧᵧ);   if Sₓₓ=10, Sᵧᵧ=6, Sₓᵧ=4, then ρ̂=8/16=0.50",
+     "why": "The usual sample correlation is Sₓᵧ/√(SₓₓSᵧᵧ)=4/√60≈0.516. It is not the same because the model imposes equal marginal variances. For a nondegenerate sample, check that |2Sₓᵧ|<Sₓₓ+Sᵧᵧ so the estimate lies inside the parameter space."
+    }
+   ],
+   "ask": {
+    "q": "Why is 2Sₓᵧ/(Sₓₓ+Sᵧᵧ) not generally the usual sample correlation?",
+    "nudge": "The model restricts the two marginal variances to be equal, so profile the common variance in the likelihood."
    }
   },
   {

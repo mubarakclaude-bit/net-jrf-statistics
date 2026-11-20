@@ -14,7 +14,9 @@
     "Calculate first- and second-order inclusion probabilities.",
     "Explain the restricted sample space compared with SRSWOR.",
     "Calculate exact design variance by enumerating possible starts.",
-    "Diagnose periodicity and variance-estimation limitations."
+    "Diagnose periodicity and variance-estimation limitations.",
+    "Distinguish linear and circular systematic sampling and prove design-unbiasedness of the circular sample mean.",
+    "Explain why the usual within-sample variance is not generally unbiased under circular systematic sampling."
   ],
   "prereq": [
     {
@@ -39,9 +41,11 @@
     "Only k systematic samples are possible when N=nk.",
     "Many second-order inclusion probabilities are zero.",
     "A periodic frame pattern aligned with k can be harmful.",
-    "A single sample generally cannot provide an unbiased design-based variance estimate."
+    "A single sample generally cannot provide an unbiased design-based variance estimate.",
+    "Do not confuse the linear design's k possible starts with the circular design's N possible start positions.",
+    "The circular sample mean is design-unbiased, but the usual within-sample variance is not generally design-unbiased for the population variance."
   ],
-  "howto": "Compute k=N/n, choose the random start from the first k positions and add k repeatedly. Each unit is included under one of k starts. Two distinct units occur together only if they occupy the same residue class modulo k. For exact variance, enumerate all k possible sample means.",
+  "howto": "Compute k=N/n, choose the random start from the first k positions and add k repeatedly. Each unit is included under one of k starts. Two distinct units occur together only if they occupy the same residue class modulo k. For exact variance, enumerate all k possible sample means. For circular systematic sampling with N=nk, choose R uniformly from 1,…,N and select R,R+k,… modulo N. Each unit has π_i=n/N; averaging over all N starts proves the sample mean is unbiased. The usual within-sample variance is not generally unbiased for S² under this restricted sample space.",
   "scenes": [
     {
       "kind": "foundation",
@@ -159,6 +163,31 @@
           "t": "def",
           "h": "Variance estimation limitation",
           "body": "A single realised systematic sample reveals only one of the k possible start-specific means. Since many pairs have π_ij=0, the usual pairwise-probability unbiased variance estimator is unavailable for those pairs. A single systematic sample therefore does not generally permit an unbiased design-based variance estimate without additional assumptions or design features."
+        },
+        {
+          "t": "def",
+          "h": "Circular systematic sampling",
+          "body": "When N=nk, arrange the N population units around a circle. Choose a random start R uniformly from {1,…,N}, then select R, R+k, R+2k,…, R+(n−1)k, wrapping around to the beginning whenever the position exceeds N. This differs from the linear design, whose start is chosen only from {1,…,k}."
+        },
+        {
+          "t": "formula",
+          "h": "Inclusion probability under the circular design",
+          "body": "Each population unit appears in exactly n of the N possible random starts. Therefore π_i=n/N for every unit i."
+        },
+        {
+          "t": "def",
+          "h": "Why the circular sample mean is unbiased",
+          "body": "Average the sample mean over all N possible starts. Each population value appears exactly n times among the N samples, and each appearance has weight 1/(Nn). Its total weight is therefore 1/N. Thus E_d(ȳ_circ)=(1/N)Σ_i y_i=Ȳ."
+        },
+        {
+          "t": "def",
+          "h": "Why the usual sample variance is not generally unbiased",
+          "body": "The circular design permits only a restricted set of systematic samples, not every possible subset. The usual within-sample variance s²=(1/(n−1))Σ(y_i−ȳ_s)² is therefore not generally design-unbiased for the finite-population variance S²=(1/(N−1))Σ(y_i−Ȳ)². Do not import the SRSWOR variance result into circular systematic sampling."
+        },
+        {
+          "t": "step",
+          "h": "A small circular design",
+          "body": "Let N=12 and n=3, so k=4. If the random start is R=11, the selected positions are 11, 3 and 7 (wrap around after 12). There are 12 equally likely starts. A fixed unit appears in 3 of them, so π_i=3/12=1/4. Averaging the sample means over all 12 starts gives the population mean."
         }
       ],
       "flow": {
@@ -532,7 +561,10 @@
       "V(ȳ_sys)=(1/k)Σ_r(ȳ_r−Ȳ)².",
       "Periodicity aligned with k can be harmful.",
       "When N/n is not an integer, use a stated fractional-interval or circular convention; do not silently round k.",
-      "A single systematic sample generally cannot provide an unbiased design-based variance estimate because many pairwise inclusion probabilities are zero."
+      "A single systematic sample generally cannot provide an unbiased design-based variance estimate because many pairwise inclusion probabilities are zero.",
+      "Circular: choose R from 1,…,N and take every kth unit modulo N.",
+      "Circular π_i=n/N; each unit appears in n of the N possible starts.",
+      "Circular sample mean is unbiased; the usual sample variance is not generally unbiased for S²."
     ],
     "cards": [
       [
@@ -558,12 +590,29 @@
       [
         "Periodicity",
         "A repeating frame pattern aligned with k can make a systematic sample unrepresentative."
+      ],
+      [
+        "Circular start",
+        "1,…,N"
+      ],
+      [
+        "Circular π_i",
+        "n/N"
+      ],
+      [
+        "Circular mean",
+        "Design-unbiased"
+      ],
+      [
+        "Usual sample variance",
+        "Not generally unbiased"
       ]
     ],
     "tricks": [
       "List k possible starts before computing pair probabilities.",
       "Check whether i−j is a multiple of k.",
-      "Inspect frame order for periodicity."
+      "Inspect frame order for periodicity.",
+      "For circular sampling, average across all N starts; each unit appears n times."
     ],
     "shortcuts": [
       "A pair in different residue classes cannot appear together.",
@@ -572,7 +621,8 @@
     ],
     "remember": [
       "Systematic sample space is smaller than SRS sample space.",
-      "One start does not reveal other start-specific estimates."
+      "One start does not reveal other start-specific estimates.",
+      "Do not transfer SRSWOR's unbiased sample-variance result to circular systematic sampling."
     ]
   },
   "refs": [
@@ -624,5 +674,5 @@
     "retestDays": 7,
     "note": "Platform settings, not an NTA rule."
   },
-  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t5. Practice questions are original, not official PYQs. Worked samples, probabilities and design-variance calculations are independently recomputed in verify_sampling_t5.py. Assumptions: linear systematic design, N=nk and a uniform random start from 1,…,k."
+  "provenance": "Author-created lesson for UGC NET Statistics Paper 2, Unit III-A, topic sampling-t5. Practice questions are original, not official PYQs. Worked samples, probabilities and design-variance calculations are independently recomputed in verify_sampling_t5.py. Assumptions: linear systematic design, N=nk and a uniform random start from 1,…,k. A circular-systematic extension covers the supplied CSIR-UGC NET Estimation PDF, printed Question 37 (26 November 2020), with a design-based explanation."
 }
