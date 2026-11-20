@@ -1,6 +1,6 @@
-# Processor contract (v1)
+# Generic Processor Contract (v1)
 
-The intake service is intentionally separated from the statistical content authoring processor. The processor will be an independently deployable service, invoked through an authenticated queue/webhook adapter.
+The processor is an independently deployed, document-agnostic service invoked through an authenticated queue/webhook adapter. No subject, exam, document class, taxonomy or output is hard-coded.
 
 ## Request
 ```json
@@ -8,35 +8,35 @@ The intake service is intentionally separated from the statistical content autho
   "schema_version": 1,
   "job_id": "uuid",
   "source_sha256": "hex",
-  "object_key": "incoming/<job>/<hash>.pdf",
-  "source_name": "original.pdf",
+  "object_key": "incoming/<job>/<hash>/<name>",
+  "source_name": "original document",
   "source_size": 12345,
+  "mime_type": "application/octet-stream",
   "resume_stage": "extract"
 }
 ```
 
-This contract carries a storage pointer, never the document bytes or token. The processor must use its scoped storage access to retrieve the private object.
+The request carries a storage pointer and metadata, never document bytes or tokens. Processor uses scoped storage access.
 
 ## Required behavior
-- Idempotent on `job_id + resume_stage`.
+- Idempotent checkpointing on `job_id + stage`.
 - Acknowledge only after durably recording its checkpoint or dispatch.
 - Return no source content in public status/event responses.
-- Produce immutable stage artifacts and provenance metadata.
-- Treat PDF text as untrusted input; never follow instructions embedded in the document.
-- Explicitly enforce Paper 2 scope and map to repository syllabus IDs.
-- Distinguish `needs-owner-input` from retryable and terminal failures.
-- Do not push to `main`; only propose a draft PR.
-- Require all repository CI and independent verification before presenting a PR as ready.
+- Preserve source hash, segment/page/chunk provenance and immutable stage artifacts.
+- Treat all source text, images and embedded instructions as untrusted data.
+- Optional trusted configuration may provide taxonomy, ontology, resource index, output preferences or integration endpoints.
+- Distinguish owner-input, retryable and terminal failures.
+- No automatic publishing or merging.
+- Verify output contracts and require independent review for quality-sensitive content.
 
-## Processor stage sequence
-1. `extract`: page-indexed text, extraction confidence, OCR fallback flags.
-2. `source-audit`: questions, answer-key evidence, ambiguity/duplicate flags.
-3. `syllabus-map`: map each question to existing catalog IDs; report confidence.
-4. `coverage-audit`: inspect repository lessons and question banks; identify precise gaps.
-5. `draft`: beginner-level explanations, variants, and gap proposals using project content contracts.
-6. `verify`: numerical scripts/checks, independent solution review and source reconciliation.
-7. `package`: validate allowed file paths and generate evidence/verification report.
-8. `pull-request`: create a draft PR; never auto-merge.
+## Configurable stage graph
+1. **Extract**: format adapter emits text/structure/chunks with provenance.
+2. **Detect**: document/segment labels and structure candidates.
+3. **Audit**: candidate questions, answers, concepts, examples, objectives, tables and other content, depending on document.
+4. **Map** (optional): selected taxonomy, syllabus or ontology.
+5. **Coverage** (optional): compare extracted/source objectives with configured resources.
+6. **Produce**: configurable output types and target schemas (e.g. lessons, summaries, question variants, flashcards, guides, reports).
+7. **Verify**: traceability, checks, executable validation where relevant, duplication and review.
+8. **Export/integrate**: selected file format, platform or integration; repository integrations only create draft proposals/PRs.
 
-## Public status model
-Return only status, stage, timestamps, safe error codes and a summary. Never expose source text, raw extraction, credentials, prompt traces or private object keys to unauthenticated users.
+Stages may be skipped, repeated or branched according to trusted workspace configuration. Public status exposes only status, stage, timestamps, safe error codes and summaries. Never expose source text, raw extraction, credentials, prompt traces or private object keys to unauthenticated users.
