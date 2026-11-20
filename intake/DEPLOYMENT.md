@@ -34,8 +34,8 @@ npx wrangler deploy
 ## Smoke checks
 1. Health endpoints return service identifiers.
 2. Unauthorized processor/intake requests return 401.
-3. Upload small valid PDF and confirm 202/job ID.
-4. Re-upload same PDF; dedupe returns original job.
+3. Upload small valid document and confirm 202/job ID.
+4. Re-upload same document; dedupe returns original job.
 5. Processor hash validation and extraction adapter run, artifact lands in private R2.
 6. Status/event trail, retry and failure handling reviewed.
 7. R2 public access disabled; Access gate enforced.
