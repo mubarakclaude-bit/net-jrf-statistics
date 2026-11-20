@@ -47,3 +47,12 @@ The queue consumer deliberately marks the job as `needs_worker` with `worker_sca
 - Add retention/deletion policy and backup policy.
 - Avoid logging source content, tokens or full PDF text.
 - Rotate secrets and review resource cost/limits.
+
+## Processor dispatch configuration
+
+The queue consumer now dispatches the contract request to an external processor service when configured. Set:
+
+- `PROCESSOR_URL`: HTTPS endpoint for the processor's authenticated request handler.
+- `PROCESSOR_TOKEN`: shared secret, stored as a Worker secret, not in Git.
+
+If absent, queued jobs are marked `blocked_infrastructure`; they do not falsely claim extraction has run. Configure both values only after the processor endpoint is deployed and its storage access is restricted. The processor must return a successful response only after accepting the job durably and idempotently.
