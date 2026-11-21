@@ -13,8 +13,8 @@
  *      in INTAKE_FOLDER. The agent does the reading, solving, verification, PR and merge.
  *
  * Engines (--agent):
- *   claude   Claude Code's CLI:  claude -p <brief> --permission-mode acceptEdits --allowedTools ...
- *   codex    OpenAI Codex CLI:   codex exec --sandbox workspace-write --approve-for-me (network on) <brief>
+ *   claude   Claude Code's CLI:  claude -p --permission-mode acceptEdits --allowedTools ...  (brief on stdin)
+ *   codex    OpenAI Codex CLI:   codex exec --sandbox workspace-write --approve-for-me (network on) -  (brief on stdin)
  *            (uses the owner's OpenAI API key or ChatGPT login; the first sandboxed run may ask the owner to set it up)
  *   none     only report what would run (the default: nothing is started until an engine is chosen)
  *   --command "<cmd>" runs any other command through the shell, with the brief's path in INTAKE_PROMPT_FILE.
@@ -69,14 +69,30 @@ function decide({ todo, unsettled, locked, today, max }) {
   return { start: true, why: todo.length + " file(s) to process, first " + todo[0].name + " (" + todo[0].kind + ")" };
 }
 
-function engineCommand(agent, briefText, custom, folder) {
-  if (custom) return { shell: true, cmd: custom, args: [] };
-  if (agent === "claude") return { cmd: "claude", args: ["-p", briefText, "--permission-mode", "acceptEdits",
-    "--allowedTools", "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch"] };
+/* An npm-installed CLI is a .cmd shim on Windows, which spawn() cannot start without a shell, and a shell mangles a long
+   multi-line brief. So run the package's own Node launcher with this Node, and send the brief on stdin. Elsewhere, or if
+   the launcher is not found, run the command by name. INTAKE_<NAME>_JS overrides the launcher path. */
+function launcher(name, pkgRel, env) {
+  const override = (env || process.env)["INTAKE_" + name.toUpperCase() + "_JS"];
+  const roots = [override].concat(process.platform === "win32" && (env || process.env).APPDATA ? [path.join((env || process.env).APPDATA, "npm", "node_modules", pkgRel)] : []);
+  const js = roots.find(r => r && fs.existsSync(r));
+  return js ? { cmd: process.execPath, pre: [js] } : { cmd: name, pre: [] };
+}
+
+function engineCommand(agent, briefText, custom, folder, env) {
+  if (custom) return { shell: true, cmd: custom, args: [], stdin: null };
+  if (agent === "claude") {
+    const l = launcher("claude", path.join("@anthropic-ai", "claude-code", "cli.js"), env);
+    return { cmd: l.cmd, args: l.pre.concat(["-p", "--permission-mode", "acceptEdits",
+      "--allowedTools", "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch"]), stdin: briefText };
+  }
   // Codex CLI 0.171: no --full-auto; workspace-write sandbox (writes only inside the repository and the source folder),
-  // approvals reviewed automatically, network on so the run can push and open the pull request.
-  if (agent === "codex") return { cmd: "codex", args: ["exec", "--sandbox", "workspace-write", "--approve-for-me",
-    "-c", "sandbox_workspace_write.network_access=true", "-C", ROOT].concat(folder ? ["--add-dir", folder] : []).concat([briefText]) };
+  // approvals reviewed automatically, network on so the run can push and open the pull request. "-" reads the brief from stdin.
+  if (agent === "codex") {
+    const l = launcher("codex", path.join("@openai", "codex", "bin", "codex.js"), env);
+    return { cmd: l.cmd, args: l.pre.concat(["exec", "--sandbox", "workspace-write", "--approve-for-me",
+      "-c", "sandbox_workspace_write.network_access=true", "-C", ROOT]).concat(folder ? ["--add-dir", folder] : []).concat(["-"]), stdin: briefText };
+  }
   return null;
 }
 
@@ -108,7 +124,8 @@ function start(opts, onExit) {
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
   const out = fs.openSync(path.join(DIR, "runs", stamp + ".log"), "a");
   const env = Object.assign({}, process.env, { INTAKE_FOLDER: opts.folder, INTAKE_PROMPT_FILE: BRIEF, INTAKE_MERGE: mergeOn(opts) ? "1" : "0" });
-  const child = spawn(eng.cmd, eng.args, { cwd: ROOT, env, shell: !!eng.shell, stdio: ["ignore", out, out], windowsHide: true });
+  const child = spawn(eng.cmd, eng.args, { cwd: ROOT, env, shell: !!eng.shell, stdio: [eng.stdin ? "pipe" : "ignore", out, out], windowsHide: true });
+  if (eng.stdin) { child.stdin.on("error", () => { /* the engine exited early; its log says why */ }); child.stdin.end(eng.stdin); }
   child.on("error", e => { log("could not start " + eng.cmd + ": " + e.message + " (is it installed and on PATH?)"); try { fs.unlinkSync(LOCK()); } catch (x) { /* none */ } onExit && onExit(-1); });
   fs.writeFileSync(LOCK(), JSON.stringify({ pid: child.pid, started: Date.now(), engine: opts.command || opts.agent, log: "runs/" + stamp + ".log" }));
   log("started run (" + (opts.command || opts.agent) + (mergeOn(opts) ? ", merges green PRs" : ", PRs left open for review") + "), pid " + child.pid + ", log .cache/intake/runs/" + stamp + ".log");
@@ -170,4 +187,4 @@ function main(argv) {
 }
 
 if (require.main === module) { const c = main(process.argv.slice(2)); if (c !== null && c !== 0) process.exit(c); }
-module.exports = { settled, decide, engineCommand, tick, start, parse, lockState, mergeOn };
+module.exports = { settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn };
