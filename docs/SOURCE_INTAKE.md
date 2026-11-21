@@ -18,6 +18,39 @@ Read `docs/CONTENT_GUIDE.md` first. This guide covers only the part before a nor
 A session without a shell (GitHub only) cannot open a PDF that is not in the repository, so it cannot do intake. It can
 review the PR afterwards.
 
+## Let the pipeline decide
+
+The owner keeps every source PDF in one folder on their machine, outside the repository. `scan` decides what to do with
+each file, so nobody has to choose:
+
+```sh
+node tools/intake.js scan "<folder>"          # what to process next, and why; changes nothing
+node tools/intake.js scan "<folder>" --add    # the same, then registers the top pick
+```
+
+For each PDF it decides, in this order, from the file name and the text of the first three pages:
+
+1. **Already in the app.** Its sha256 or file name is in `tools/intake-sources.json`, the register of finished sources.
+   It is skipped, and the output says which seed file holds it. The file name catches a second copy of the same
+   compilation whose bytes differ.
+2. **A duplicate** of another file in the folder: skipped.
+3. **Personal.** A receipt, application, admit card or similar in the name, or a roll number or date of birth on the
+   first page. It is skipped and never registered, read or listed anywhere else.
+4. **Unreadable** (pdfinfo fails): skipped with advice to download it again.
+5. **Already started here** (it has a workspace): it goes first, so work is finished before new work starts.
+6. **A question document** when the name says paper, PYQ, GATE, CSIR, NET, quiz, test, assignment, practice or questions,
+   or the first pages hold many question markers (`Q.1`, `(1)`, `(a)`). Past papers rank above other question sets.
+7. **Learning material** when the name says notes, book, course or guide, or the first pages are running text.
+8. Otherwise it **needs a look**: open it and `add` it with the right `--kind`.
+
+Question documents rank above learning material, because a question bank reaches learners directly. Within a kind, the
+shorter document goes first, and a document with no Paper 2 statistics words is marked down with a note. Every
+decision prints its reason. A wrong call is overridden by running `add` with the right `--kind`.
+
+**When content from a source is merged, add the source to `tools/intake-sources.json` in the same pull request.** Give
+its title, kind, the seed files it fed, its sha256 (all copies you know of) and its file name. That is what keeps `scan`
+from offering it again. Never list a personal document there.
+
 ## The steps
 
 ```sh
@@ -85,7 +118,10 @@ an item has the wrong number of options or statements, or the answer differs fro
    statement that cannot be computed gets a written reason or counterexample, which the reviewer reads.
 3. Add the source to `SOURCES` in `pyq_bank_build.py` (or write a build script for a new family of sources). Run it, then
    its `--check`, then `npm run check`.
-4. Open one PR per module (`AGENTS.md`, Pull requests). Paste the `gaps` report's summary and its Learn gaps into the PR
+   A source that is not a CSIR compilation gets its own small build and verification script.
+   `quiz_bank_sl.py` and `verify_quiz_sl.py` are the pattern.
+4. Add the source to `tools/intake-sources.json`.
+5. Open one PR per module (`AGENTS.md`, Pull requests). Paste the `gaps` report's summary and its Learn gaps into the PR
    description.
 
 ## Learning material (`--kind learning`)

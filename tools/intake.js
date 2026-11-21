@@ -3,6 +3,10 @@
  * from it, and report what it adds against the content already in seed/. Standard library only. It never writes to seed/
  * and never copies a source into the repository: everything it makes lives in .cache/intake/ (gitignored).
  *
+ *   node tools/intake.js scan <folder> [--add]
+ *                                          decide what to process next: skips what is already in the app
+ *                                          (tools/intake-sources.json), personal, unreadable or duplicate files, works out
+ *                                          each file's kind and ranks the rest; --add registers the top pick
  *   node tools/intake.js add <file.pdf> --kind questions|learning [--title "..."] [--render all]
  *                                          questions: every page is rendered as an image; learning: only pages whose
  *                                          text layer is empty or lost its maths symbols (--render all for every page)
@@ -179,6 +183,111 @@ function list() {
   return rows;
 }
 
+/* ------------------------------------------------------------------ scan: decide what to process next */
+/* The owner drops PDFs in one folder; `scan` decides. For every PDF it works out, from the file name and the text of its
+   first pages, whether it is already turned into content (tools/intake-sources.json), personal, unreadable, a duplicate,
+   in progress here, a question document or learning material, and ranks what is left. The rules are plain and printed
+   with every decision, so a wrong call is easy to see and to override with `add --kind`. */
+const REGISTER = path.join(ROOT, "tools", "intake-sources.json");
+const RX = {
+  personalName: /receipt|application|admit.?card|aadha+r|pan.?card|mark.?sheet|certificate|invoice|bank.?statement|resume|\bcv\b|passport|id.?card|salary|payslip/i,
+  personalText: /application\s*(no|number)|roll\s*(no|number)|date\s*of\s*birth|father'?s\s*name|registration\s*(no|number)|candidate'?s\s*name|aadha+r/i,
+  paperName: /\bpyq|previous.?year|question.?paper|\bpaper\b|\bgate\b|\bcsir\b|\bugc\b|\bnet\b|\bjam\b|\b20\d\d\b/i,
+  practiceName: /quiz|\btest\b|mock|assignment|practi[cs]e|question|exercise|problem|solution/i,
+  learningName: /notes?|book|guide|course|chapter|cheat|formula|lecture|introduction|methods|theory|handbook/i,
+  question: /\bq\.?\s?\d{1,3}\b|question\s*[:\-–]*\s*\d+|^\s*\(\d{1,3}\)|\(\s?[a-d]\s?\)\s/gim,
+  numbered: /^\s*\d{1,3}[.)]\s+[A-Z][a-z]/gm,      // "1. Two coins are tossed": counted only when the name says questions
+  syllabus: /probab|statist|distribut|estimat|regress|varian|random|sampl|hypothes|markov|stochastic|inference|time.?series|bayes|anova|design|multivariate|nonparametric/i,
+};
+
+function loadRegister() {
+  try { return readJSON(REGISTER).sources || []; } catch (e) { return []; }
+}
+
+/* Decide one file from facts already gathered, so it can be tested without a PDF. f: { name, sha256, pages (0 if unreadable),
+   text (first pages), textChars, inProgress: {kind, done, total} | null }. */
+function classify(f, register, seen) {
+  const name = f.name, text = f.text || "";
+  const banked = register.find(s => (s.sha256 || []).includes(f.sha256) || (s.files || []).some(n => n.toLowerCase() === name.toLowerCase()));
+  if (banked) return { decision: "skip", why: "already in the app: " + banked.title + " → " + (banked.outputs || []).join(", ") };
+  if (seen[f.sha256]) return { decision: "skip", why: "duplicate of " + seen[f.sha256] };
+  if (RX.personalName.test(name) || RX.personalText.test(text.slice(0, 4000))) return { decision: "skip", why: "looks personal (name or first page); never processed" };
+  if (!f.pages) return { decision: "skip", why: "unreadable PDF (pdfinfo failed); download it again" };
+  if (f.inProgress) {
+    const p = f.inProgress;
+    return { decision: "process", kind: p.kind, score: 100, why: "already started here (" + p.done + " entries" + (p.passes ? ", worksheet passes check" : "") + "); finish it first" };
+  }
+  const imageOnly = f.textChars < 300;
+  const paper = RX.paperName.test(name), practice = RX.practiceName.test(name), learning = RX.learningName.test(name);
+  const qs = (text.match(RX.question) || []).length + (paper || practice ? (text.match(RX.numbered) || []).length : 0);
+  const inSyllabus = RX.syllabus.test(name) || RX.syllabus.test(text);
+  let kind = null, score = 0, why;
+  if (paper || practice || qs >= 8 && !learning) {
+    kind = "questions";
+    score = paper ? 40 : 30;
+    const evidence = qs >= 2 ? qs + " question markers in the first pages" : imageOnly ? "pages are images" : "the name says so; the first pages' text shows no questions, so they are probably images";
+    why = (paper ? "a past paper or PYQ set" : practice || qs < 8 ? "a quiz, test or question set" : "a question set") + " (" + evidence + ")";
+  } else if (f.textChars >= 600 || learning) {
+    kind = "learning";
+    score = 10;
+    why = "learning material (" + (learning ? "name says notes, book or course" : "running text, few question markers") + ")";
+  } else return { decision: "look", why: "cannot tell what it is from its name or first pages; open it and use add --kind" };
+  if (!inSyllabus) { score -= 8; why += "; no Paper 2 statistics words found, so check it is in the syllabus"; }
+  // smaller first within a tier: a finished small document is worth more today than a half-read large one
+  score -= Math.min(f.pages, 300) / 100;
+  return { decision: "process", kind, score: Math.round(score * 100) / 100, why };
+}
+
+function sha256File(file) {
+  const h = crypto.createHash("sha256"), fd = fs.openSync(file, "r"), buf = Buffer.alloc(1 << 20);
+  let n; while ((n = fs.readSync(fd, buf, 0, buf.length, null)) > 0) h.update(buf.subarray(0, n));
+  fs.closeSync(fd);
+  return h.digest("hex");
+}
+
+function facts(file) {
+  const name = path.basename(file), sha256 = sha256File(file);
+  let pages = 0, text = "";
+  const info = spawnSync("pdfinfo", [file], { encoding: "utf8" });
+  if (info.error) throw new Error("pdfinfo is not available (" + info.error.code + "). Install poppler, or run from Git Bash, which ships it.");
+  if (info.status === 0) pages = +((info.stdout.match(/^Pages:\s+(\d+)/m) || [])[1] || 0);
+  if (pages) { const t = spawnSync("pdftotext", ["-l", "3", "-layout", file, "-"], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 }); text = t.stdout || ""; }
+  let inProgress = null;
+  const ws = path.join(DIR, sha256.slice(0, 12), "source.json");
+  if (fs.existsSync(ws)) {
+    const { src, sheet } = openWorkspace(sha256.slice(0, 12));
+    inProgress = { kind: src.kind, done: sheet && Array.isArray(sheet.items) ? sheet.items.length : 0 };
+  }
+  return { name, file, sha256, pages, text, textChars: text.replace(/\s+/g, "").length, inProgress };
+}
+
+function scan(folder, opts) {
+  if (!folder || !fs.existsSync(folder) || !fs.statSync(folder).isDirectory()) throw new Error("Give the folder that holds the PDFs: node tools/intake.js scan \"<folder>\"");
+  const register = loadRegister(), seen = {}, rows = [];
+  for (const n of fs.readdirSync(folder).filter(x => /\.pdf$/i.test(x)).sort()) {
+    const f = facts(path.join(folder, n));
+    if (f.inProgress) { try { f.inProgress.passes = check(f.sha256.slice(0, 12), loadSeed()).length === 0; } catch (e) { /* report as started */ } }
+    const c = classify(f, register, seen);
+    if (!seen[f.sha256]) seen[f.sha256] = n;
+    rows.push(Object.assign({ name: n, file: f.file, pages: f.pages }, c));
+  }
+  const todo = rows.filter(r => r.decision === "process").sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
+  const rest = rows.filter(r => r.decision !== "process");
+  console.log("To process, best first:");
+  todo.forEach((r, k) => console.log(String(k + 1).padStart(3) + ". " + r.name + "  [" + r.kind + ", " + r.pages + " pp]  " + r.why));
+  if (!todo.length) console.log("  nothing new.");
+  console.log("\nSkipped or needing a look:");
+  rest.forEach(r => console.log("   - " + r.name + ": " + r.why));
+  if (!rest.length) console.log("   none.");
+  const next = todo[0];
+  if (!next) return { rows, next: null };
+  console.log("\nNext: " + next.name + " as " + next.kind + ".");
+  if (next.why.startsWith("already started")) console.log("Finish its worksheet in .cache/intake/" + sha256File(next.file).slice(0, 12) + "/, then check and gaps.");
+  else if (opts.add) { console.log(""); add(next.file, { kind: next.kind }); }
+  else console.log("Run: node tools/intake.js add \"" + next.file + "\" --kind " + next.kind + "    (or: scan \"" + folder + "\" --add)");
+  return { rows, next };
+}
+
 /* ------------------------------------------------------------------ the worksheet checks */
 function checkQuestions(src, sheet, S) {
   const P = [], items = Array.isArray(sheet.items) ? sheet.items : null;
@@ -307,10 +416,15 @@ function gaps(id, S) {
 /* ------------------------------------------------------------------ command line */
 function main(argv) {
   const [cmd, ...rest] = argv, opts = {}, pos = [];
-  for (let i = 0; i < rest.length; i++) { if (rest[i].startsWith("--")) opts[rest[i].slice(2)] = rest[++i]; else pos.push(rest[i]); }
+  for (let i = 0; i < rest.length; i++) {
+    if (!rest[i].startsWith("--")) { pos.push(rest[i]); continue; }
+    const k = rest[i].slice(2), v = rest[i + 1];
+    if (v === undefined || v.startsWith("--")) opts[k] = true; else { opts[k] = v; i++; }   // a bare flag such as --add is true
+  }
   try {
     if (cmd === "add") { add(pos[0], opts); return 0; }
     if (cmd === "list") { list(); return 0; }
+    if (cmd === "scan") { scan(pos[0], opts); return 0; }
     if (cmd === "check") {
       const P = check(pos[0], loadSeed());
       if (P.length) { console.log(P.length + " problem(s):"); P.forEach(p => console.log("  - " + p)); return 1; }
@@ -330,4 +444,4 @@ function main(argv) {
 }
 
 if (require.main === module) process.exit(main(process.argv.slice(2)));
-module.exports = { tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost };
+module.exports = { tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost, classify };
