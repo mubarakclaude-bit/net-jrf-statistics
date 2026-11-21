@@ -47,7 +47,10 @@ expect("a flag overrides the settings file", W.parse(["--model", "gpt-6-luna", "
 fs.mkdirSync(process.env.INTAKE_DIR, { recursive: true });
 fs.writeFileSync(path.join(process.env.INTAKE_DIR, "watch.json"), JSON.stringify({ model: "gpt-5.6-luna", merge: false }));
 expect("watch.json is read from .cache/intake", W.loadSettings().model === "gpt-5.6-luna" && W.loadSettings().merge === false);
+fs.writeFileSync(path.join(process.env.INTAKE_DIR, "watch.json"), '{ "folder": "C:\Muhavin" ');
+expect("a broken watch.json is reported, not silently ignored", /not valid JSON/.test(W.loadSettings().error || "") && /not valid JSON/.test(W.parse([]).error || ""));
 fs.unlinkSync(path.join(process.env.INTAKE_DIR, "watch.json"));
+expect("no watch.json means plain defaults", !W.loadSettings().error && W.parse([]).agent === "codex");
 const xm = W.engineCommand("codex", "BRIEF", undefined, "C:/src", { APPDATA: path.join(tmp, "no-appdata") }, "gpt-5.6-terra");
 expect("a chosen model reaches codex as -m", xm.args.join(" ").includes("-m gpt-5.6-terra"));
 expect("no model means the engine's own default (no -m)", !W.engineCommand("codex", "B", undefined, "C:/src", { APPDATA: tmp }).args.includes("-m"));

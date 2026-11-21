@@ -14,7 +14,7 @@
  *
  * Settings: .cache/intake/watch.json (local, never committed) holds the defaults, so the engine, the model or the folder
  * can be changed by editing one file, with no change to how the watcher is started:
- *   { "folder": "C:\\Muhavin\\NET JRF", "agent": "codex", "model": null, "merge": null,
+ *   { "folder": "C:/Muhavin/NET JRF", "agent": "codex", "model": null, "merge": null,
  *     "interval": 300, "settle": 30, "maxRunsPerDay": 6 }
  * A command-line flag overrides the file for that start; --show-settings prints what is in force and exits.
  * "model": null lets the engine use its own default (Codex: the model in ~/.codex/config.toml, else its built-in one).
@@ -158,8 +158,12 @@ function normalise(f) {
   return o;
 }
 
+/* A missing file means defaults. A broken one is an error the owner must see: the watcher refuses to start rather than
+   quietly run with settings they did not choose. */
 function loadSettings() {
-  try { return normalise(JSON.parse(fs.readFileSync(SETTINGS(), "utf8"))); } catch (e) { return {}; }
+  if (!fs.existsSync(SETTINGS())) return {};
+  try { return normalise(JSON.parse(fs.readFileSync(SETTINGS(), "utf8"))); }
+  catch (e) { return { error: SETTINGS() + " is not valid JSON (" + e.message + "). Use forward slashes in paths, e.g. \"C:/Muhavin/NET JRF\"." }; }
 }
 
 /* Defaults, then .cache/intake/watch.json, then command-line flags. */
@@ -184,6 +188,7 @@ function parse(argv, fileSettings) {
 
 function main(argv) {
   const opts = parse(argv);
+  if (opts.error) { console.error(opts.error); return 2; }
   if (opts.show) {
     console.log("settings file: " + SETTINGS() + (fs.existsSync(SETTINGS()) ? "" : " (not found; defaults in force)"));
     console.log(JSON.stringify({ folder: opts.folder || null, engine: opts.command || opts.agent, model: opts.model || "(engine default)",
