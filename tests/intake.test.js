@@ -95,6 +95,30 @@ expect("add refuses a file that is not a PDF", r.code === 2 && /Only PDF files/.
 r = run("add", path.join(tmp, "seed", "catalog.json"));
 expect("add asks what kind of document it is", r.code === 2 && /--kind questions/.test(r.out), r.out);
 
+// scan's decisions, from gathered facts (no PDF needed)
+const reg = [{ title: "Known compilation", outputs: ["seed/x.json"], sha256: ["aaa"], files: ["Known Copy.pdf"] }];
+const fact = (name, o) => Object.assign({ name, sha256: name + "-hash", pages: 20, text: "", textChars: 2000, inProgress: null }, o || {});
+const dec = (f, seen) => T.classify(f, reg, seen || {});
+expect("a registered hash is skipped as already in the app", /already in the app: Known compilation/.test(dec(fact("other name.pdf", { sha256: "aaa" })).why));
+expect("a registered file name is skipped even when the copy's hash differs", dec(fact("known copy.pdf")).decision === "skip");
+expect("a second copy of the same file is a duplicate", /duplicate of first\.pdf/.test(dec(fact("second.pdf", { sha256: "s" }), { s: "first.pdf" }).why));
+expect("a receipt is personal and never processed", /personal/.test(dec(fact("Online Application Receipt.pdf")).why));
+expect("a first page with a roll number is personal", /personal/.test(dec(fact("scan 01.pdf", { text: "Roll No: 1234  Date of Birth: 01-01-2000" })).why));
+expect("an unreadable PDF is skipped with advice", /download it again/.test(dec(fact("broken.pdf", { pages: 0 })).why));
+expect("a document already started here comes first", dec(fact("half done.pdf", { inProgress: { kind: "questions", done: 4 } })).score === 100);
+const gate = dec(fact("GATE statistics paper 2025.pdf", { text: "Q.1 Even though ... Q.2 ... (A) (B)" }));
+const quiz = dec(fact("Day 9 Quiz Solution.pdf", { text: "(1) Suppose that ... (a) 0.2 (b) 0.5 (2) Let X ..." }));
+const notes = dec(fact("Time Series notes.pdf", { text: "1 Models for time series. A time series is a set of statistics, usually collected at regular intervals." }));
+expect("a past paper is a question document", gate.kind === "questions" && /past paper/.test(gate.why), JSON.stringify(gate));
+expect("a quiz is a question document", quiz.kind === "questions", JSON.stringify(quiz));
+expect("notes are learning material", notes.kind === "learning", JSON.stringify(notes));
+expect("a question name with image-only questions still counts as questions", dec(fact("Unit 5 practice questions.pdf", { text: "DEEP INSTITUTE coaching watermark text" })).kind === "questions");
+expect("numbered headings in notes do not make them questions", dec(fact("Markov notes.pdf", { text: "1. Definitions\n2. Basic properties\n3. Transition matrix\n4. Hitting times\n5. Strong Markov\n6. Recurrence\n7. Invariant\n8. Convergence\n9. Reversibility" })).kind === "learning");
+expect("past papers rank above quizzes, and quizzes above learning material", gate.score > quiz.score && quiz.score > notes.score);
+expect("within a kind, the shorter document ranks first", dec(fact("a quiz.pdf", { pages: 10 })).score > dec(fact("b quiz.pdf", { pages: 40 })).score);
+expect("a file with no statistics words is marked down and says why", /check it is in the syllabus/.test(dec(fact("Population studies quiz.pdf", { text: "(1) census (a) (b)" })).why));
+expect("a file it cannot place asks for a look", dec(fact("scan 7.pdf", { textChars: 40 })).decision === "look");
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log((total - failed) + "/" + total + " intake checks passed");
 process.exit(failed ? 1 : 0);
