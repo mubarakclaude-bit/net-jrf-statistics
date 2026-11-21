@@ -14,15 +14,15 @@
  *
  * Settings: .cache/intake/watch.json (local, never committed) holds the defaults, so the engine, the model or the folder
  * can be changed by editing one file, with no change to how the watcher is started:
- *   { "folder": "C:/Muhavin/NET JRF", "agent": "codex", "model": null, "merge": null,
+ *   { "folder": "C:/Muhavin/NET JRF", "agent": "codex", "model": null, "sandbox": "workspace-write", "merge": null,
  *     "interval": 300, "settle": 30, "maxRunsPerDay": 6 }
  * A command-line flag overrides the file for that start; --show-settings prints what is in force and exits.
  * "model": null lets the engine use its own default (Codex: the model in ~/.codex/config.toml, else its built-in one).
  *
  * Engines (--agent; the default is codex):
  *   claude   Claude Code's CLI:  claude -p --permission-mode acceptEdits --allowedTools ...  (brief on stdin)
- *   codex    OpenAI Codex CLI:   codex exec --sandbox workspace-write --approve-for-me (network on) -  (brief on stdin)
- *            (uses the owner's OpenAI API key or ChatGPT login; the first sandboxed run may ask the owner to set it up)
+ *   codex    OpenAI Codex CLI:   codex exec -s workspace-write -c approval_policy="never" (network on) -  (brief on stdin)
+ *            (the owner's OpenAI key or ChatGPT login; needs Codex's Windows sandbox set up, else see "sandbox")
  *   none     only report what would run
  *   --command "<cmd>" runs any other command through the shell, with the brief's path in INTAKE_PROMPT_FILE.
  * The engine must be installed and logged in by the owner; this script never handles a key.
@@ -86,7 +86,7 @@ function launcher(name, pkgRel, env) {
   return js ? { cmd: process.execPath, pre: [js] } : { cmd: name, pre: [] };
 }
 
-function engineCommand(agent, briefText, custom, folder, env, model) {
+function engineCommand(agent, briefText, custom, folder, env, model, sandbox) {
   if (custom) return { shell: true, cmd: custom, args: [], stdin: null };
   if (agent === "claude") {
     const l = launcher("claude", path.join("@anthropic-ai", "claude-code", "cli.js"), env);
@@ -95,11 +95,16 @@ function engineCommand(agent, briefText, custom, folder, env, model) {
   }
   // Codex CLI 0.171: no --full-auto; workspace-write sandbox (writes only inside the repository and the source folder),
   // approvals reviewed automatically, network on so the run can push and open the pull request. "-" reads the brief from stdin.
+  // Codex CLI 0.171. --approve-for-me cannot be combined with --sandbox and in practice left runs read-only, so the
+  // sandbox is named explicitly and approvals are off (an unattended run has nobody to ask). workspace-write: writes only
+  // inside the repository and the source folder, network on so it can push. danger-full-access: no sandbox at all, an
+  // owner-only choice in watch.json.
   if (agent === "codex") {
     const l = launcher("codex", path.join("@openai", "codex", "bin", "codex.js"), env);
-    return { cmd: l.cmd, args: l.pre.concat(["exec", "--sandbox", "workspace-write", "--approve-for-me",
-      "-c", "sandbox_workspace_write.network_access=true", "-C", ROOT]).concat(model ? ["-m", model] : [])
-      .concat(folder ? ["--add-dir", folder] : []).concat(["-"]), stdin: briefText };
+    const sb = sandbox || "workspace-write";
+    const confine = sb === "workspace-write" ? ["-c", "sandbox_workspace_write.network_access=true"].concat(folder ? ["--add-dir", folder] : []) : [];
+    return { cmd: l.cmd, args: l.pre.concat(["exec", "-s", sb, "-c", "approval_policy=\"never\""]).concat(confine)
+      .concat(["-C", ROOT]).concat(model ? ["-m", model] : []).concat(["-"]), stdin: briefText };
   }
   return null;
 }
@@ -124,9 +129,50 @@ function tick(opts, planner) {
   return Object.assign({ todo }, d);
 }
 
+/* Codex on Windows silently falls back to a read-only sandbox when its sandbox backend is not set up, and a read-only
+   run cannot do intake. Ask `codex doctor` first and refuse to start, with a note for the owner, rather than spend a run.
+   The answer is cached for 30 minutes so the 5-minute poll does not run the doctor every time. */
+let preflightCache = null;
+const NOTES = () => path.join(DIR, "watch-notes.md");
+function codexPreflight(opts, runDoctor) {
+  if (opts.command || opts.agent !== "codex" || (opts.sandbox || "workspace-write") !== "workspace-write") return { ok: true };
+  if (!runDoctor && preflightCache && Date.now() - preflightCache.at < 30 * 60 * 1000) return preflightCache.result;
+  let out = "";
+  try {
+    if (runDoctor) out = runDoctor();
+    else {
+      const l = launcher("codex", path.join("@openai", "codex", "bin", "codex.js"));
+      out = require("child_process").spawnSync(l.cmd, l.pre.concat(["doctor"]), { encoding: "utf8", timeout: 120000, windowsHide: true }).stdout || "";
+    }
+  } catch (e) { out = ""; }
+  const m = out.match(/sandbox backend\s+(\S+)/i);
+  const result = m && /^disabled$/i.test(m[1])
+    ? { ok: false, why: "Codex's sandbox backend is disabled on this computer, so a workspace-write run would fall back to read-only and could not write anything" }
+    : { ok: true, why: m ? "sandbox backend " + m[1] : "sandbox backend not reported; starting anyway" };
+  if (!runDoctor) preflightCache = { at: Date.now(), result };
+  return result;
+}
+
+function noteOnce(text) {
+  try {
+    const cur = fs.existsSync(NOTES()) ? fs.readFileSync(NOTES(), "utf8") : "";
+    if (!cur.includes(text.split("\n")[0])) fs.appendFileSync(NOTES(), (cur ? "\n" : "") + text + "\n");
+  } catch (e) { /* the log has it too */ }
+}
+
 function start(opts, onExit) {
+  const pf = (opts.preflight || codexPreflight)(opts);
+  if (!pf.ok) {
+    log("not starting: " + pf.why + ". See .cache/intake/watch-notes.md");
+    noteOnce("## Codex cannot write on this computer yet\n\n" + pf.why + ". Choose one, then the watcher starts runs by itself:\n\n" +
+      "- A (recommended): set up Codex's Windows sandbox once, as administrator, in your own terminal. It creates local accounts and firewall rules; then runs can write only inside the repository and the source folder.\n" +
+      "- B: set \"sandbox\": \"danger-full-access\" in .cache/intake/watch.json. Codex then runs with your full user permissions and no sandbox. Your decision only.\n" +
+      "- C: set \"agent\": \"claude\" after installing Claude Code's CLI.");
+    onExit && onExit(null);
+    return null;
+  }
   const brief = fs.readFileSync(BRIEF, "utf8");
-  const eng = engineCommand(opts.agent, brief, opts.command, opts.folder, undefined, opts.model);
+  const eng = engineCommand(opts.agent, brief, opts.command, opts.folder, undefined, opts.model, opts.sandbox);
   if (!eng) { log("would start a run now, but no engine is set (--agent claude|codex or --command)"); onExit && onExit(null); return null; }
   fs.mkdirSync(path.join(DIR, "runs"), { recursive: true });
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
@@ -153,7 +199,7 @@ const DEFAULTS = { agent: "codex", model: null, merge: null, interval: 300, sett
 
 function normalise(f) {
   const o = {};
-  for (const k of ["folder", "agent", "model", "command", "merge", "interval", "settle"]) if (f && f[k] !== undefined) o[k] = f[k];
+  for (const k of ["folder", "agent", "model", "sandbox", "command", "merge", "interval", "settle"]) if (f && f[k] !== undefined) o[k] = f[k];
   if (f && f.maxRunsPerDay !== undefined) o.max = f.maxRunsPerDay;
   return o;
 }
@@ -176,6 +222,7 @@ function parse(argv, fileSettings) {
     else if (k === "--folder") o.folder = argv[++i];
     else if (k === "--agent") o.agent = argv[++i];
     else if (k === "--model") o.model = argv[++i];
+    else if (k === "--sandbox") o.sandbox = argv[++i];
     else if (k === "--command") o.command = argv[++i];
     else if (k === "--interval") o.interval = +argv[++i];
     else if (k === "--settle") o.settle = +argv[++i];
@@ -191,7 +238,7 @@ function main(argv) {
   if (opts.error) { console.error(opts.error); return 2; }
   if (opts.show) {
     console.log("settings file: " + SETTINGS() + (fs.existsSync(SETTINGS()) ? "" : " (not found; defaults in force)"));
-    console.log(JSON.stringify({ folder: opts.folder || null, engine: opts.command || opts.agent, model: opts.model || "(engine default)",
+    console.log(JSON.stringify({ folder: opts.folder || null, engine: opts.command || opts.agent, model: opts.model || "(engine default)", sandbox: opts.agent === "codex" ? (opts.sandbox || "workspace-write") : "n/a",
       merging: mergeOn(opts) ? "on" : "off", interval: opts.interval, settle: opts.settle, maxRunsPerDay: opts.max }, null, 1));
     return 0;
   }
@@ -200,6 +247,7 @@ function main(argv) {
     return 2;
   }
   if (!["claude", "codex", "none"].includes(opts.agent)) { console.error("--agent must be claude, codex or none"); return 2; }
+  if (opts.sandbox && !["workspace-write", "danger-full-access"].includes(opts.sandbox)) { console.error("sandbox must be workspace-write or danger-full-access"); return 2; }
   const { plan } = require("./intake.js");
   const check = (reason) => {
     let r;
@@ -223,4 +271,4 @@ function main(argv) {
 }
 
 if (require.main === module) { const c = main(process.argv.slice(2)); if (c !== null && c !== 0) process.exit(c); }
-module.exports = { settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn, loadSettings };
+module.exports = { settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn, loadSettings, codexPreflight };

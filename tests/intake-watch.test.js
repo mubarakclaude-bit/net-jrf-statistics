@@ -29,7 +29,16 @@ expect("claude runs headless (-p) with the brief on stdin, not in its arguments"
 const x = W.engineCommand("codex", "BRIEF", undefined, "C:/src", noShim);
 expect("codex runs exec reading the brief from stdin ('-')", x.cmd === "codex" && x.args[0] === "exec" && x.args[x.args.length - 1] === "-" && x.stdin === "BRIEF");
 expect("codex runs sandboxed to the workspace, with network, and can read the source folder",
-  x.args.join(" ").includes("--sandbox workspace-write") && x.args.includes("sandbox_workspace_write.network_access=true") && x.args.join(" ").includes("--add-dir C:/src") && !x.args.includes("--full-auto"));
+  x.args.join(" ").includes("-s workspace-write") && x.args.includes("sandbox_workspace_write.network_access=true") && x.args.join(" ").includes("--add-dir C:/src"));
+expect("codex runs with approvals off and never with the rejected --approve-for-me / --full-auto flags",
+  x.args.includes('approval_policy="never"') && !x.args.includes("--approve-for-me") && !x.args.includes("--full-auto") && !x.args.includes("--sandbox"));
+const xf = W.engineCommand("codex", "BRIEF", undefined, "C:/src", noShim, null, "danger-full-access");
+expect("the owner's danger-full-access choice drops the sandbox confinement flags", xf.args.join(" ").includes("-s danger-full-access") && !xf.args.includes("--add-dir") && !xf.args.includes("sandbox_workspace_write.network_access=true"));
+expect("a disabled sandbox backend stops a workspace-write codex run", W.codexPreflight({ agent: "codex" }, () => "  sandbox backend          disabled\n").ok === false);
+expect("an enabled sandbox backend lets it start", W.codexPreflight({ agent: "codex" }, () => "  sandbox backend          restricted-token\n").ok === true);
+expect("the pre-check does not apply to danger-full-access, claude or a custom command",
+  W.codexPreflight({ agent: "codex", sandbox: "danger-full-access" }, () => "sandbox backend disabled").ok && W.codexPreflight({ agent: "claude" }, () => "sandbox backend disabled").ok && W.codexPreflight({ agent: "codex", command: "x" }, () => "sandbox backend disabled").ok);
+expect("the sandbox setting comes from watch.json or --sandbox", W.parse([], { sandbox: "danger-full-access" }).sandbox === "danger-full-access" && W.parse(["--sandbox", "workspace-write"], { sandbox: "danger-full-access" }).sandbox === "workspace-write");
 const fakeJs = path.join(tmp, "fake-codex.js"); fs.writeFileSync(fakeJs, "");
 const viaJs = W.engineCommand("codex", "BRIEF", undefined, "C:/src", { INTAKE_CODEX_JS: fakeJs });
 expect("when the package launcher is found, it runs with this Node (no .cmd shim, no shell)", viaJs.cmd === process.execPath && viaJs.args[0] === fakeJs && viaJs.args[1] === "exec");
@@ -77,6 +86,16 @@ expect("a live run's lock blocks a second run", !r.start && /already active/.tes
 fs.writeFileSync(lockFile, JSON.stringify({ pid: 2147483646, started: now }));
 r = W.tick({ folder, settle: 30, max: 6 }, planner);
 expect("a dead run's lock is cleared and work starts", r.start && !fs.existsSync(lockFile), JSON.stringify(r));
+
+// start() refuses, without spending a run, when the pre-check fails, and leaves the owner a note with the three choices
+let refusedCode = "unset";
+const refused = W.start({ folder, agent: "codex", preflight: () => ({ ok: false, why: "Codex's sandbox backend is disabled" }) }, c2 => { refusedCode = c2; });
+const notesFile = path.join(process.env.INTAKE_DIR, "watch-notes.md");
+const notes = fs.existsSync(notesFile) ? fs.readFileSync(notesFile, "utf8") : "";
+expect("a failed pre-check starts nothing and creates no run log", refused === null && refusedCode === null && !fs.existsSync(path.join(process.env.INTAKE_DIR, "runs")));
+expect("the owner's note explains the choices (sandbox, danger-full-access, claude)", /Codex cannot write/.test(notes) && /danger-full-access/.test(notes) && /"agent": "claude"/.test(notes), notes.slice(0, 200));
+W.start({ folder, agent: "codex", preflight: () => ({ ok: false, why: "Codex's sandbox backend is disabled" }) }, () => {});
+expect("the note is written once, not on every poll", (fs.readFileSync(notesFile, "utf8").match(/Codex cannot write/g) || []).length === 1);
 
 // start(): a fake agent proves it gets the folder and the brief, and the lock and log are handled
 const marker = path.join(tmp, "agent-ran.json");
