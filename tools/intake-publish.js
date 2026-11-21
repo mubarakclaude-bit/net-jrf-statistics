@@ -10,6 +10,9 @@
  *              wait for the Validate workflow on that exact commit, and merge only when it is green and merging is on
  *   cleanup()  remove the worktree (and the local branch, unless it was kept for the owner to inspect)
  *
+ * A long document is done in batches: a run that adds part of the worksheet returns {status: "progress", done, total};
+ * nothing is published, and the watcher starts the next batch.
+ *
  * Every command goes through an injectable runner, so tests drive it with a fake git, gh and npm. Standard library only. */
 const fs = require("fs"), path = require("path"), { spawnSync } = require("child_process");
 
@@ -62,7 +65,9 @@ function decodeText(buf) {
 function readResult(file) {
   let r;
   try { r = JSON.parse(decodeText(fs.readFileSync(file))); } catch (e) { return { status: "invalid", reason: "no readable result file (" + e.message + ")" }; }
-  if (!["ready", "stopped", "nothing"].includes(r.status)) return { status: "invalid", reason: "result status must be ready, stopped or nothing" };
+  if (!["ready", "stopped", "nothing", "progress"].includes(r.status)) return { status: "invalid", reason: "result status must be ready, progress, stopped or nothing" };
+  if (r.status === "progress" && !(Number.isInteger(r.done) && Number.isInteger(r.total) && r.done >= 0 && r.total > 0 && r.done <= r.total))
+    return { status: "invalid", reason: "a progress result needs whole numbers done and total, with done <= total" };
   if (r.status !== "ready") return r;
   if (typeof r.title !== "string" || !r.title.trim()) return { status: "invalid", reason: "a ready result needs a title" };
   if (typeof r.body !== "string" || r.body.length < 40) return { status: "invalid", reason: "a ready result needs a PR body" };
@@ -78,6 +83,7 @@ function publish(prep, resultFile, mergeOn, sh, opts) {
   const wt = prep.wt, branch = prep.branch;
   const r = readResult(resultFile);
   if (r.status === "nothing") return { outcome: "nothing", note: "the agent found nothing to process" };
+  if (r.status === "progress") return { outcome: "progress", done: r.done, total: r.total, note: "batch saved: " + r.done + " of " + r.total + " questions now in the worksheet" };
   if (r.status === "stopped") return { outcome: "stopped", note: "the agent stopped: " + (r.reason || "no reason given") };
   if (r.status === "invalid") return { outcome: "rejected", note: r.reason };
 

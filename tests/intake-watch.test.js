@@ -130,10 +130,33 @@ W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (cod
   expect("the lock is removed when the run ends", !fs.existsSync(lockFile));
   const runs = fs.readdirSync(path.join(process.env.INTAKE_DIR, "runs"));
   expect("the run has its own log file", runs.length === 1 && /\.log$/.test(runs[0]), runs.join(","));
-  // the daily limit counts today's run logs
-  for (let k = 0; k < 6; k++) fs.writeFileSync(path.join(process.env.INTAKE_DIR, "runs", new Date().toISOString().slice(0, 10) + "T00-00-0" + k + ".log"), "");
+  // the publication limit counts today's lines in published.log (the run above published once)
+  const pubLog = path.join(process.env.INTAKE_DIR, "published.log");
+  expect("a pushed run is recorded in published.log", W.publishedToday(Date.now()) === 1, fs.existsSync(pubLog) ? fs.readFileSync(pubLog, "utf8") : "missing");
+  for (let k = 0; k < 5; k++) fs.appendFileSync(pubLog, new Date().toISOString() + "  merged  https://github.com/o/r/pull/" + k + "\n");
+  fs.appendFileSync(pubLog, "2001-01-01T00:00:00.000Z  merged  old\n");
   r = W.tick({ folder, settle: 30, max: 6 }, planner);
-  expect("after the day's limit no further run starts", !r.start && /daily limit/.test(r.why), JSON.stringify(r));
+  expect("after the day's publication limit no further run starts (older days do not count)", !r.start && /daily limit of 6 published PRs/.test(r.why), JSON.stringify(r));
+  fs.unlinkSync(pubLog);
+  // the agent-run cap counts today's run logs, named <yyyymmdd>-<hhmmss>.log
+  const ymd = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  for (let k = 0; k < 3; k++) fs.writeFileSync(path.join(process.env.INTAKE_DIR, "runs", ymd + "-00000" + k + ".log"), "");
+  expect("agent runs today are counted from the run log names", W.agentRunsToday(Date.now()) >= 3);
+  r = W.tick({ folder, settle: 30, max: 6, maxRuns: 3 }, planner);
+  expect("after the daily cap of agent runs no further run starts", !r.start && /daily cap of 3 agent runs/.test(r.why), JSON.stringify(r));
+  // batches: a "progress" result starts the next batch at once, even with --once, up to maxBatches in a row
+  const starts = []; const scheduled = [];
+  const outcomes = [{ outcome: "progress", done: 15, total: 50 }, { outcome: "progress", done: 30, total: 50 }, { outcome: "left-open", pr: "u" }];
+  const chk = W.makeChecker({ folder, settle: 30, max: 99, maxRuns: 99, once: true, maxBatches: 8 }, planner,
+    (o, cb) => { starts.push(1); cb(0, outcomes[starts.length - 1]); }, (fn, ms) => { scheduled.push(ms); fn(); });
+  for (const f2 of fs.readdirSync(path.join(process.env.INTAKE_DIR, "runs"))) fs.unlinkSync(path.join(process.env.INTAKE_DIR, "runs", f2));
+  chk("test");
+  expect("with --once, two progress batches are followed by the final run, and then it stops", starts.length === 3 && scheduled.length === 2, JSON.stringify({ starts: starts.length, scheduled }));
+  const starts2 = [];
+  const chk2 = W.makeChecker({ folder, settle: 30, max: 99, maxRuns: 99, once: true, maxBatches: 2 }, planner,
+    (o, cb) => { starts2.push(1); cb(0, { outcome: "progress", done: starts2.length, total: 50 }); }, (fn) => fn());
+  chk2("test");
+  expect("batches in a row stop at maxBatches", starts2.length === 2, starts2.length);
   // a stand-in Codex launcher: proves the brief arrives on stdin and the sandbox arguments arrive intact
   const got = path.join(tmp, "codex-got.json");
   const stub = path.join(tmp, "codex-stub.js");
