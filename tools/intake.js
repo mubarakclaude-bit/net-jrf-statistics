@@ -300,6 +300,12 @@ function scan(folder, opts) {
 }
 
 /* ------------------------------------------------------------------ the worksheet checks */
+/* A file written by Windows PowerShell in the console code page turns every symbol it cannot encode (∩ ∪ ᶜ − ≤)
+   into "?", so "P(Aᶜ)" arrives as "P(A?)". A question mark between symbols, or U+FFFD, means the text was mangled. */
+function symbolsMangled(text) {
+  return typeof text === "string" && (/\uFFFD/.test(text) || /[\w)\]]\?[\w(=)\]+\-*\/]/.test(text) || /\?\?/.test(text));
+}
+
 function checkQuestions(src, sheet, S) {
   const P = [], items = Array.isArray(sheet.items) ? sheet.items : null;
   if (!items) return ["questions.json needs an items array"];
@@ -316,6 +322,8 @@ function checkQuestions(src, sheet, S) {
     if (!["keep", "repeat", "left-out"].includes(q.decision)) P.push(at + ": decision must be keep, repeat or left-out");
     if (q.decision !== "keep") { if (!isStr(q.note)) P.push(at + ": a " + (q.decision || "non-kept") + " question needs a note (which item it repeats, or why it is left out)"); return; }
     if (!isStr(q.stem)) P.push(at + ": stem is empty");
+    if ([q.stem].concat(q.options || [], q.statements || []).some(symbolsMangled))
+      P.push(at + ": maths symbols were lost as '?' (the file was not written as UTF-8); transcribe again and save with Python, encoding='utf-8'");
     if (!S.topics[q.topic]) P.push(at + ": topic '" + q.topic + "' is not a topic id in seed/catalog.json");
     if (q.format === "single") {
       if (!Array.isArray(q.options) || q.options.length !== 4 || q.options.some(o => !isStr(o))) P.push(at + ": a single-answer question needs its four printed options");
@@ -455,4 +463,4 @@ function main(argv) {
 }
 
 if (require.main === module) process.exit(main(process.argv.slice(2)));
-module.exports = { tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost, classify, plan };
+module.exports = { tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost, symbolsMangled, classify, plan };

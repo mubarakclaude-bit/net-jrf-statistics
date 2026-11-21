@@ -202,7 +202,9 @@ function start(opts, onExit) {
   const eng = engineCommand(opts.agent, brief, opts.command, opts.folder, undefined, opts.model, opts.sandbox, prep.wt, [DIR], opts.effort);
   const out = fs.openSync(path.join(DIR, "runs", stamp + ".log"), "a");
   const env = Object.assign({}, process.env, { INTAKE_FOLDER: opts.folder, INTAKE_PROMPT_FILE: path.join(prep.wt, "tools", "intake-run.md"),
-    INTAKE_DIR: DIR, INTAKE_RESULT: resultFile, INTAKE_WORKTREE: prep.wt });
+    INTAKE_DIR: DIR, INTAKE_RESULT: resultFile, INTAKE_WORKTREE: prep.wt,
+    // Python writes UTF-8 by default, so ∩, ∪ and ᶜ survive a worksheet saved from a script.
+    PYTHONUTF8: "1", PYTHONIOENCODING: "utf-8" });
   const child = spawn(eng.cmd, eng.args, { cwd: prep.wt, env, shell: !!eng.shell, stdio: [eng.stdin ? "pipe" : "ignore", out, out], windowsHide: true });
   if (eng.stdin) { child.stdin.on("error", () => { /* the engine exited early; its log says why */ }); child.stdin.end(eng.stdin); }
   let failedToStart = false;
