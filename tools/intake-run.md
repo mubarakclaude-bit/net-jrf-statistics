@@ -36,8 +36,15 @@ syllabus". Never stop a whole document because of its source or its level.
 2. The workspace is `$INTAKE_DIR/<id>/`, **outside your worktree**. Always use that absolute path, never
    `.cache/intake/` relative to your working directory. Read every rendered page image in `$INTAKE_DIR/<id>/pages/`.
    For a question document, read the images, not the `.txt` files.
-3. Fill the worksheet exactly as `docs/SOURCE_INTAKE.md` describes. Transcribe stems as printed. Compute every answer
-   yourself, by working and by code. Record the printed key, and add a `keyNote` wherever your answer differs.
+3. **Fill the worksheet in batches.** It lives in the workspace and survives between runs, so a long document takes
+   several runs. In this run, add **at most 15 questions**, continuing from the highest question number already in it.
+   Set `covers` to the first and last question numbers printed in the document as soon as you know them. For each
+   question: transcribe the stem as printed from the page image, compute the answer yourself by working and by code,
+   record the printed key, add a `keyNote` wherever your answer differs, and **save the worksheet after every
+   question**. Exactly as `docs/SOURCE_INTAKE.md` describes. Then:
+   - if questions remain, write `{"status": "progress", "done": <questions now in the worksheet>, "total": <questions in
+     the document>}` to `INTAKE_RESULT`, commit nothing, and end. The watcher starts the next batch at once;
+   - if the worksheet now covers every question, continue with step 4 in this same run.
 4. `node tools/intake.js check <id>` until it passes. Then `node tools/intake.js gaps <id>`, **before** you add any new
    bank file (otherwise new items match themselves). Read the report: a likely repeat becomes a `repeat` in the worksheet.
 5. Build the content:

@@ -82,7 +82,8 @@ change anything; a startup task does not need to change:
 
 ```json
 { "folder": "C:/Muhavin/NET JRF", "agent": "codex", "model": null, "sandbox": "workspace-write",
-  "merge": null, "interval": 300, "settle": 30, "maxRunsPerDay": 6 }
+  "reasoningEffort": "high", "merge": null, "interval": 300, "settle": 30,
+  "maxPublishesPerDay": 6, "maxAgentRunsPerDay": 30, "maxBatchesInARow": 8 }
 ```
 
 Write paths with forward slashes. A file that is not valid JSON stops the watcher with the error, rather than being
@@ -115,8 +116,13 @@ A Codex default model for every use, not only intake runs, can also go in Codex'
   is active (`.cache/intake/run.lock`).
 - **What triggers a check:** folder events, plus a poll every `--interval` seconds (default 300), because events are
   unreliable on synced folders such as OneDrive.
-- **Limits:** at most `--max-runs-per-day` runs (default 6), because merges cost Vercel deployments. A lock older than
-  8 hours is treated as a dead run and cleared.
+- **Batches:** a long document is done over several runs. Each run adds at most 15 questions to the worksheet, which
+  lives in `.cache/intake/<id>/` and survives between runs, and reports `progress`. The watcher starts the next batch at
+  once (`--once` included), up to `maxBatchesInARow` (default 8). The run that completes the worksheet builds,
+  verifies and commits, and the watcher publishes it.
+- **Limits:** at most `maxPublishesPerDay` published PRs (default 6; merges cost Vercel deployments), counted in
+  `.cache/intake/published.log`. At most `maxAgentRunsPerDay` agent runs (default 30; each run costs AI usage), counted
+  from the run logs. A lock older than 8 hours is treated as a dead run and cleared.
 - **Logs:** `.cache/intake/watch.log` holds the decisions, and `.cache/intake/runs/<time>.log` holds each run's full
   output. A run that hits a stop condition writes `.cache/intake/watch-notes.md`.
 

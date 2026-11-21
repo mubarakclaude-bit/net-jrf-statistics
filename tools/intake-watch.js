@@ -67,16 +67,24 @@ function lockState(now) {
   } catch (e) { return { locked: false }; }
 }
 
-function runsToday(now) {
+/* Two daily limits. Publications (pushed PRs) cost Vercel deployments when merged; agent runs cost the owner's OpenAI or
+   Claude allowance. Publications are recorded in published.log; agent runs are the run logs, named <yyyymmdd>-<hhmmss>.log. */
+const PUBLISHED = () => path.join(DIR, "published.log");
+function publishedToday(now) {
   const day = new Date(now).toISOString().slice(0, 10);
-  try { return fs.readdirSync(path.join(DIR, "runs")).filter(f => f.startsWith(day)).length; } catch (e) { return 0; }
+  try { return fs.readFileSync(PUBLISHED(), "utf8").split("\n").filter(l => l.startsWith(day)).length; } catch (e) { return 0; }
+}
+function agentRunsToday(now) {
+  const day = new Date(now).toISOString().slice(0, 10).replace(/-/g, "");
+  try { return fs.readdirSync(path.join(DIR, "runs")).filter(f => f.startsWith(day + "-")).length; } catch (e) { return 0; }
 }
 
-function decide({ todo, unsettled, locked, today, max }) {
+function decide({ todo, unsettled, locked, today, max, runs, maxRuns }) {
   if (unsettled.length) return { start: false, why: "waiting for " + unsettled.join(", ") + " to finish copying" };
   if (locked) return { start: false, why: "a run is already active" };
   if (!todo.length) return { start: false, why: "nothing to process" };
-  if (today >= max) return { start: false, why: "daily limit of " + max + " runs reached; " + todo.length + " file(s) wait for tomorrow" };
+  if (today >= max) return { start: false, why: "daily limit of " + max + " published PRs reached; " + todo.length + " file(s) wait for tomorrow" };
+  if (maxRuns && runs >= maxRuns) return { start: false, why: "daily cap of " + maxRuns + " agent runs reached; " + todo.length + " file(s) wait for tomorrow" };
   return { start: true, why: todo.length + " file(s) to process, first " + todo[0].name + " (" + todo[0].kind + ")" };
 }
 
@@ -131,7 +139,7 @@ function tick(opts, planner) {
   if (ls.stale) { log("removing a stale lock from pid " + ls.stale.pid); try { fs.unlinkSync(LOCK()); } catch (e) { /* gone */ } }
   let todo = [];
   if (!unsettled.length && !ls.locked) todo = planner(opts.folder).todo;
-  const d = decide({ todo, unsettled, locked: ls.locked, today: runsToday(now), max: opts.max });
+  const d = decide({ todo, unsettled, locked: ls.locked, today: publishedToday(now), max: opts.max, runs: agentRunsToday(now), maxRuns: opts.maxRuns });
   return Object.assign({ todo }, d);
 }
 
@@ -207,14 +215,35 @@ function start(opts, onExit) {
     try { res = failedToStart ? { outcome: "rejected", note: "the engine did not start" } : P.publish(prep, resultFile, mergeOn(opts), opts.sh, { engine: opts.command || opts.agent }); }
     catch (e) { res = { outcome: "rejected", note: "publishing failed: " + e.message }; }
     const pushed = ["left-open", "merged", "ci-failed", "pr-failed"].includes(res.outcome);
-    try { P.cleanup(ROOT, prep, !pushed && res.outcome !== "nothing" && res.outcome !== "stopped", opts.sh); } catch (e) { log("cleanup: " + e.message); }
+    const quiet = ["nothing", "stopped", "progress"].includes(res.outcome);
+    try { P.cleanup(ROOT, prep, !pushed && !quiet, opts.sh); } catch (e) { log("cleanup: " + e.message); }
+    if (pushed) { try { fs.appendFileSync(PUBLISHED(), new Date().toISOString() + "  " + res.outcome + "  " + (res.pr || "") + "\n"); } catch (e) { /* log has it */ } }
     log("run " + stamp + ": " + res.outcome + (res.pr ? " " + res.pr : "") + " — " + res.note);
-    if (res.outcome !== "nothing") noteOnce("## Run " + stamp + ": " + res.outcome + "\n\n" + (res.pr ? "PR: " + res.pr + "\n\n" : "") + res.note +
+    if (res.outcome !== "nothing" && res.outcome !== "progress") noteOnce("## Run " + stamp + ": " + res.outcome + "\n\n" + (res.pr ? "PR: " + res.pr + "\n\n" : "") + res.note +
       (pushed ? "" : res.outcome === "stopped" ? "" : "\n\nThe local branch " + prep.branch + " was kept for inspection."));
     try { fs.unlinkSync(LOCK()); } catch (e) { /* already gone */ }
     onExit && onExit(code, res);
   });
   return child;
+}
+
+/* One check: start a run if the decision says so. After a run that saved a batch ("progress"), start the next batch of
+   the same document at once, even with --once, up to maxBatches in a row, so one start finishes one document. */
+function makeChecker(opts, planner, startFn, schedule) {
+  let batches = 0;
+  const check = (reason) => {
+    let r;
+    try { r = tick(opts, planner); } catch (e) { log("check failed: " + e.message); return; }
+    log((reason ? reason + ": " : "") + r.why);
+    if (!r.start) return;
+    startFn(opts, (code, res) => {
+      if (res && res.outcome === "progress" && batches + 1 < (opts.maxBatches || 8)) { batches++; schedule(() => check("next batch (" + res.done + "/" + res.total + ")"), 5000); return; }
+      if (res && res.outcome === "progress") log("stopping after " + (opts.maxBatches || 8) + " batches in a row; the next check resumes the document");
+      batches = 0;
+      if (!opts.once) schedule(() => check("after the run"), 60 * 1000);
+    });
+  };
+  return check;
 }
 
 /* Merge only where the owner has seen enough: on for Claude, off for Codex until --merge. */
@@ -225,13 +254,16 @@ function mergeOn(opts) {
 
 /* ------------------------------------------------------------------ command line */
 const SETTINGS = () => path.join(DIR, "watch.json");
-const DEFAULTS = { agent: "codex", model: null, effort: "high", merge: null, interval: 300, settle: 30, max: 6, once: false };
+const DEFAULTS = { agent: "codex", model: null, effort: "high", merge: null, interval: 300, settle: 30, max: 6, maxRuns: 30, maxBatches: 8, once: false };
 
 function normalise(f) {
   const o = {};
   for (const k of ["folder", "agent", "model", "sandbox", "command", "merge", "interval", "settle"]) if (f && f[k] !== undefined) o[k] = f[k];
   if (f && f.reasoningEffort !== undefined) o.effort = f.reasoningEffort;
-  if (f && f.maxRunsPerDay !== undefined) o.max = f.maxRunsPerDay;
+  if (f && f.maxRunsPerDay !== undefined) o.max = f.maxRunsPerDay;            // the old name for the publication limit
+  if (f && f.maxPublishesPerDay !== undefined) o.max = f.maxPublishesPerDay;
+  if (f && f.maxAgentRunsPerDay !== undefined) o.maxRuns = f.maxAgentRunsPerDay;
+  if (f && f.maxBatchesInARow !== undefined) o.maxBatches = f.maxBatchesInARow;
   return o;
 }
 
@@ -258,7 +290,9 @@ function parse(argv, fileSettings) {
     else if (k === "--command") o.command = argv[++i];
     else if (k === "--interval") o.interval = +argv[++i];
     else if (k === "--settle") o.settle = +argv[++i];
-    else if (k === "--max-runs-per-day") o.max = +argv[++i];
+    else if (k === "--max-runs-per-day" || k === "--max-publishes-per-day") o.max = +argv[++i];
+    else if (k === "--max-agent-runs-per-day") o.maxRuns = +argv[++i];
+    else if (k === "--max-batches") o.maxBatches = +argv[++i];
     else if (k === "--merge") o.merge = true;
     else if (k === "--no-merge") o.merge = false;
   }
@@ -271,7 +305,7 @@ function main(argv) {
   if (opts.show) {
     console.log("settings file: " + SETTINGS() + (fs.existsSync(SETTINGS()) ? "" : " (not found; defaults in force)"));
     console.log(JSON.stringify({ folder: opts.folder || null, engine: opts.command || opts.agent, model: opts.model || "(engine default)", sandbox: opts.agent === "codex" ? (opts.sandbox || "workspace-write") : "n/a", reasoningEffort: opts.agent === "codex" ? opts.effort : "n/a",
-      merging: mergeOn(opts) ? "on" : "off", interval: opts.interval, settle: opts.settle, maxRunsPerDay: opts.max }, null, 1));
+      merging: mergeOn(opts) ? "on" : "off", interval: opts.interval, settle: opts.settle, maxPublishesPerDay: opts.max, maxAgentRunsPerDay: opts.maxRuns, maxBatchesInARow: opts.maxBatches }, null, 1));
     return 0;
   }
   if (!opts.folder || !fs.existsSync(opts.folder)) {
@@ -282,12 +316,7 @@ function main(argv) {
   if (opts.sandbox && !["workspace-write", "danger-full-access"].includes(opts.sandbox)) { console.error("sandbox must be workspace-write or danger-full-access"); return 2; }
   if (opts.effort && !["low", "medium", "high", "xhigh"].includes(opts.effort)) { console.error("reasoningEffort must be low, medium, high or xhigh"); return 2; }
   const { plan } = require("./intake.js");
-  const check = (reason) => {
-    let r;
-    try { r = tick(opts, plan); } catch (e) { log("check failed: " + e.message); return; }
-    log((reason ? reason + ": " : "") + r.why);
-    if (r.start) start(opts, () => { if (!opts.once) setTimeout(() => check("after the run"), 60 * 1000); });
-  };
+  const check = makeChecker(opts, plan, start, setTimeout);
   if (opts.once) { check("one-off check"); return 0; }
   log("watching " + opts.folder + " (engine: " + (opts.command || opts.agent) + (opts.model ? ", model " + opts.model : "") + (mergeOn(opts) ? ", merging on" : ", merging off") + ", every " + opts.interval + " s, settle " + opts.settle + " s)");
   check("start");
@@ -304,4 +333,4 @@ function main(argv) {
 }
 
 if (require.main === module) { const c = main(process.argv.slice(2)); if (c !== null && c !== 0) process.exit(c); }
-module.exports = { settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn, loadSettings, codexPreflight };
+module.exports = { settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn, loadSettings, codexPreflight, makeChecker, publishedToday, agentRunsToday };
