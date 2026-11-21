@@ -14,7 +14,8 @@
  *
  * Engines (--agent):
  *   claude   Claude Code's CLI:  claude -p <brief> --permission-mode acceptEdits --allowedTools ...
- *   codex    OpenAI Codex CLI:   codex exec --full-auto <brief>     (uses the owner's OpenAI API key or ChatGPT login)
+ *   codex    OpenAI Codex CLI:   codex exec --sandbox workspace-write --approve-for-me (network on) <brief>
+ *            (uses the owner's OpenAI API key or ChatGPT login; the first sandboxed run may ask the owner to set it up)
  *   none     only report what would run (the default: nothing is started until an engine is chosen)
  *   --command "<cmd>" runs any other command through the shell, with the brief's path in INTAKE_PROMPT_FILE.
  * The engine must be installed and logged in by the owner; this script never handles a key.
@@ -68,11 +69,14 @@ function decide({ todo, unsettled, locked, today, max }) {
   return { start: true, why: todo.length + " file(s) to process, first " + todo[0].name + " (" + todo[0].kind + ")" };
 }
 
-function engineCommand(agent, briefText, custom) {
+function engineCommand(agent, briefText, custom, folder) {
   if (custom) return { shell: true, cmd: custom, args: [] };
   if (agent === "claude") return { cmd: "claude", args: ["-p", briefText, "--permission-mode", "acceptEdits",
     "--allowedTools", "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch"] };
-  if (agent === "codex") return { cmd: "codex", args: ["exec", "--full-auto", briefText] };
+  // Codex CLI 0.171: no --full-auto; workspace-write sandbox (writes only inside the repository and the source folder),
+  // approvals reviewed automatically, network on so the run can push and open the pull request.
+  if (agent === "codex") return { cmd: "codex", args: ["exec", "--sandbox", "workspace-write", "--approve-for-me",
+    "-c", "sandbox_workspace_write.network_access=true", "-C", ROOT].concat(folder ? ["--add-dir", folder] : []).concat([briefText]) };
   return null;
 }
 
@@ -98,7 +102,7 @@ function tick(opts, planner) {
 
 function start(opts, onExit) {
   const brief = fs.readFileSync(BRIEF, "utf8");
-  const eng = engineCommand(opts.agent, brief, opts.command);
+  const eng = engineCommand(opts.agent, brief, opts.command, opts.folder);
   if (!eng) { log("would start a run now, but no engine is set (--agent claude|codex or --command)"); onExit && onExit(null); return null; }
   fs.mkdirSync(path.join(DIR, "runs"), { recursive: true });
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");

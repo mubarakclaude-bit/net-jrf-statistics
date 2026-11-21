@@ -14,8 +14,10 @@ The source folder is in the environment variable `INTAKE_FOLDER`. The repository
 
 Repeat until `scan` reports nothing to process:
 
-1. Bring `main` up to date (`git fetch origin main`), and work on a new branch from `origin/main`. Name it
-   `content/<short-source-name>`, never a branch name that already exists on the remote.
+1. Bring `main` up to date (`git fetch origin main`) and work in a **separate worktree** on a new branch from
+   `origin/main`: `git worktree add .cache/run-<name> -b content/<short-source-name> origin/main`. Never switch the branch
+   of the main checkout; the owner may be using it. Never reuse a branch name that already exists on the remote. Run
+   `npm ci` in the worktree before the checks. Remove the worktree after its PR is merged or left open.
 2. Run `node tools/intake.js scan "$INTAKE_FOLDER" --add`. It registers the top pick (or tells you which started workspace
    to finish) and prints the kind: `questions` or `learning`.
 3. Read every rendered page image in `.cache/intake/<id>/pages/`. For a question document, read the images, not the

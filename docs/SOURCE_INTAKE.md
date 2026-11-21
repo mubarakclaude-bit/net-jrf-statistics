@@ -74,7 +74,7 @@ npm run intake:watch -- --folder "C:\Muhavin\NET JRF" --once           # check o
   output. A run that hits a stop condition writes `.cache/intake/watch-notes.md`.
 
 **Engines.** `--agent claude` uses Claude Code's command-line tool, logged in with the owner's Claude account.
-`--agent codex` uses OpenAI's Codex CLI, with the owner's OpenAI API key or ChatGPT login. `--command "<cmd>"` runs
+`--agent codex` uses OpenAI's Codex CLI (0.171 or later), with the owner's OpenAI API key or ChatGPT login. It runs in Codex's `workspace-write` sandbox: writes only inside the repository and the source folder, network on so it can push. On Windows, the first sandboxed run may ask the owner to set the sandbox up (it creates a local account and network rules); that is the owner's step. `--command "<cmd>"` runs
 anything else, with the brief's path in `INTAKE_PROMPT_FILE`. The engine is installed and logged in by the owner; the
 watcher never sees a key. **Merging** is on by default for `claude` and off for `codex`. A Codex run leaves its PRs open
 for review, listed in `.cache/intake/watch-notes.md`, until the owner passes `--merge`. `--no-merge` turns merging off

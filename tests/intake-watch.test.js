@@ -25,8 +25,10 @@ expect("daily limit reached: wait for tomorrow", /daily limit of 6/.test(W.decid
 
 const c = W.engineCommand("claude", "BRIEF");
 expect("claude runs headless with the brief", c.cmd === "claude" && c.args[0] === "-p" && c.args[1] === "BRIEF");
-const x = W.engineCommand("codex", "BRIEF");
-expect("codex runs exec with the brief", x.cmd === "codex" && x.args[0] === "exec" && x.args.includes("BRIEF"));
+const x = W.engineCommand("codex", "BRIEF", undefined, "C:/src");
+expect("codex runs exec with the brief last", x.cmd === "codex" && x.args[0] === "exec" && x.args[x.args.length - 1] === "BRIEF");
+expect("codex runs sandboxed to the workspace, with network, and can read the source folder",
+  x.args.join(" ").includes("--sandbox workspace-write") && x.args.includes("sandbox_workspace_write.network_access=true") && x.args.join(" ").includes("--add-dir C:/src") && !x.args.includes("--full-auto"));
 expect("a custom command runs through the shell", W.engineCommand("none", "B", "my-agent --go").shell === true);
 expect("no engine means nothing is started", W.engineCommand("none", "B") === null);
 expect("merging is off by default for codex and on for claude", !W.mergeOn({ agent: "codex" }) && W.mergeOn({ agent: "claude" }));
