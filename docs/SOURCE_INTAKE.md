@@ -58,10 +58,37 @@ from offering it again. Never list a personal document there.
 green. The watcher only decides **when** to run; an AI coding engine does the run.
 
 ```sh
-npm run intake:watch -- --folder "C:\Muhavin\NET JRF" --agent claude   # keep watching (Claude Code CLI)
-npm run intake:watch -- --folder "C:\Muhavin\NET JRF" --agent codex    # the same with OpenAI Codex CLI (a GPT key)
-npm run intake:watch -- --folder "C:\Muhavin\NET JRF" --once           # check once and say what it would do
+npm run intake:watch                        # keep watching, with the settings below
+npm run intake:watch -- --once              # check once and say what it would do
+npm run intake:watch -- --show-settings     # print the settings in force
 ```
+
+**Settings** live in `.cache/intake/watch.json`, on the owner's machine only and never committed. Edit that one file to
+change anything; a startup task does not need to change:
+
+```json
+{ "folder": "C:\\Muhavin\\NET JRF", "agent": "codex", "model": null, "merge": null,
+  "interval": 300, "settle": 30, "maxRunsPerDay": 6 }
+```
+
+- `agent`: `codex` (GPT, the default), `claude`, or `none` (report only).
+- `model`: a model name the engine accepts, or `null` for the engine's own default. `codex debug models` lists what
+  your OpenAI account can use (for example `gpt-5.6-terra` or `gpt-6-luna`).
+- `merge`: `null` uses the engine's default (off for Codex, on for Claude); `true` or `false` sets it.
+- A command-line flag (`--agent`, `--model`, `--merge`, `--folder` …) overrides the file for that start only.
+
+**Changing the OpenAI account or key** is Codex's job, not the watcher's, and is done in your own terminal (`codex.cmd`
+if PowerShell blocks `codex.ps1`). Never paste a key into a chat or a file in the repository.
+
+```sh
+codex.cmd logout                  # forget the current sign-in
+codex.cmd login                   # sign in with ChatGPT in the browser
+codex.cmd login --with-api-key    # or paste an API key at the prompt (it reads stdin)
+codex.cmd login status            # check which one is in use
+```
+
+A Codex default model for every use, not only intake runs, can also go in Codex's own `~/.codex/config.toml` as
+`model = "<name>"`. The watcher's `model` setting, when set, wins for intake runs.
 
 - **When it starts a run:** a PDF's last change is at least `--settle` seconds old (default 30) and its size holds
   steady, so a half-finished download is never read. `scan`'s decisions leave something to process, and no other run
@@ -82,7 +109,7 @@ for any engine. Whatever the engine, the same gates decide what is published: th
 `check.sh`, CI, and the merge rule in the brief.
 
 **Starting it with Windows.** To start the watcher at logon, the owner registers a scheduled task once (Task Scheduler,
-"At log on", action `node <repo>\tools\intake-watch.js --folder "<folder>" --agent <engine>`). Without that, it runs
+"At log on", action `node <repo>\tools\intake-watch.js`; the folder, engine and model come from `watch.json`). Without that, it runs
 only while a terminal keeps it open.
 
 ## The steps

@@ -23,18 +23,37 @@ expect("a run already active: wait", /already active/.test(W.decide({ todo: t1, 
 expect("nothing new: no run", W.decide({ todo: [], unsettled: [], locked: false, today: 0, max: 6 }).why === "nothing to process");
 expect("daily limit reached: wait for tomorrow", /daily limit of 6/.test(W.decide({ todo: t1, unsettled: [], locked: false, today: 6, max: 6 }).why));
 
-const c = W.engineCommand("claude", "BRIEF");
-expect("claude runs headless with the brief", c.cmd === "claude" && c.args[0] === "-p" && c.args[1] === "BRIEF");
-const x = W.engineCommand("codex", "BRIEF", undefined, "C:/src");
-expect("codex runs exec with the brief last", x.cmd === "codex" && x.args[0] === "exec" && x.args[x.args.length - 1] === "BRIEF");
+const noShim = { APPDATA: path.join(tmp, "no-appdata") };
+const c = W.engineCommand("claude", "BRIEF", undefined, undefined, noShim);
+expect("claude runs headless (-p) with the brief on stdin, not in its arguments", c.cmd === "claude" && c.args[0] === "-p" && c.stdin === "BRIEF" && !c.args.includes("BRIEF"));
+const x = W.engineCommand("codex", "BRIEF", undefined, "C:/src", noShim);
+expect("codex runs exec reading the brief from stdin ('-')", x.cmd === "codex" && x.args[0] === "exec" && x.args[x.args.length - 1] === "-" && x.stdin === "BRIEF");
 expect("codex runs sandboxed to the workspace, with network, and can read the source folder",
   x.args.join(" ").includes("--sandbox workspace-write") && x.args.includes("sandbox_workspace_write.network_access=true") && x.args.join(" ").includes("--add-dir C:/src") && !x.args.includes("--full-auto"));
+const fakeJs = path.join(tmp, "fake-codex.js"); fs.writeFileSync(fakeJs, "");
+const viaJs = W.engineCommand("codex", "BRIEF", undefined, "C:/src", { INTAKE_CODEX_JS: fakeJs });
+expect("when the package launcher is found, it runs with this Node (no .cmd shim, no shell)", viaJs.cmd === process.execPath && viaJs.args[0] === fakeJs && viaJs.args[1] === "exec");
 expect("a custom command runs through the shell", W.engineCommand("none", "B", "my-agent --go").shell === true);
 expect("no engine means nothing is started", W.engineCommand("none", "B") === null);
 expect("merging is off by default for codex and on for claude", !W.mergeOn({ agent: "codex" }) && W.mergeOn({ agent: "claude" }));
 expect("--merge and --no-merge override the default", W.mergeOn(W.parse(["--agent", "codex", "--merge"])) && !W.mergeOn(W.parse(["--agent", "claude", "--no-merge"])));
-const p = W.parse(["--folder", "F", "--agent", "codex", "--once", "--max-runs-per-day", "3"]);
-expect("options are parsed", p.folder === "F" && p.agent === "codex" && p.once && p.max === 3 && p.settle === 30);
+const p = W.parse(["--folder", "F", "--agent", "claude", "--once", "--max-runs-per-day", "3"], {});
+expect("options are parsed", p.folder === "F" && p.agent === "claude" && p.once && p.max === 3 && p.settle === 30);
+expect("GPT (codex) is the default engine", W.parse([], {}).agent === "codex");
+const fileSet = { folder: "C:/src", agent: "codex", model: "gpt-5.6-terra", maxRunsPerDay: 2 };
+const ps = W.parse([], fileSet);
+expect("the settings file supplies folder, engine, model and limit", ps.folder === "C:/src" && ps.model === "gpt-5.6-terra" && ps.max === 2);
+expect("a flag overrides the settings file", W.parse(["--model", "gpt-6-luna", "--agent", "claude"], fileSet).model === "gpt-6-luna" && W.parse(["--agent", "claude"], fileSet).agent === "claude");
+fs.mkdirSync(process.env.INTAKE_DIR, { recursive: true });
+fs.writeFileSync(path.join(process.env.INTAKE_DIR, "watch.json"), JSON.stringify({ model: "gpt-5.6-luna", merge: false }));
+expect("watch.json is read from .cache/intake", W.loadSettings().model === "gpt-5.6-luna" && W.loadSettings().merge === false);
+fs.writeFileSync(path.join(process.env.INTAKE_DIR, "watch.json"), '{ "folder": "C:\Muhavin" ');
+expect("a broken watch.json is reported, not silently ignored", /not valid JSON/.test(W.loadSettings().error || "") && /not valid JSON/.test(W.parse([]).error || ""));
+fs.unlinkSync(path.join(process.env.INTAKE_DIR, "watch.json"));
+expect("no watch.json means plain defaults", !W.loadSettings().error && W.parse([]).agent === "codex");
+const xm = W.engineCommand("codex", "BRIEF", undefined, "C:/src", { APPDATA: path.join(tmp, "no-appdata") }, "gpt-5.6-terra");
+expect("a chosen model reaches codex as -m", xm.args.join(" ").includes("-m gpt-5.6-terra"));
+expect("no model means the engine's own default (no -m)", !W.engineCommand("codex", "B", undefined, "C:/src", { APPDATA: tmp }).args.includes("-m"));
 
 // tick() over a real folder, with a fake planner
 const folder = path.join(tmp, "src"); fs.mkdirSync(folder);
@@ -74,7 +93,21 @@ W.start({ folder, agent: "none", command: fake }, code => {
   for (let k = 0; k < 6; k++) fs.writeFileSync(path.join(process.env.INTAKE_DIR, "runs", new Date().toISOString().slice(0, 10) + "T00-00-0" + k + ".log"), "");
   r = W.tick({ folder, settle: 30, max: 6 }, planner);
   expect("after the day's limit no further run starts", !r.start && /daily limit/.test(r.why), JSON.stringify(r));
-  fs.rmSync(tmp, { recursive: true, force: true });
-  console.log((total - failed) + "/" + total + " intake-watch checks passed");
-  process.exit(failed ? 1 : 0);
+  // a stand-in Codex launcher: proves the brief arrives on stdin and the sandbox arguments arrive intact
+  const got = path.join(tmp, "codex-got.json");
+  const stub = path.join(tmp, "codex-stub.js");
+  fs.writeFileSync(stub, "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{require('fs').writeFileSync(" + JSON.stringify(got) +
+    ",JSON.stringify({args:process.argv.slice(2),brief:s.slice(0,40),merge:process.env.INTAKE_MERGE}))})");
+  process.env.INTAKE_CODEX_JS = stub;
+  for (const f of fs.readdirSync(path.join(process.env.INTAKE_DIR, "runs"))) fs.unlinkSync(path.join(process.env.INTAKE_DIR, "runs", f));
+  W.start({ folder, agent: "codex" }, code2 => {
+    let g = {}; try { g = JSON.parse(fs.readFileSync(got, "utf8")); } catch (e) { /* missing */ }
+    expect("the codex run exited cleanly", code2 === 0, code2);
+    expect("the brief reached codex on stdin", /^# Unattended intake run/.test(g.brief || ""), JSON.stringify(g));
+    expect("codex got exec, the sandbox flags, the source folder and '-'", (g.args || [])[0] === "exec" && (g.args || []).includes("--add-dir") && (g.args || []).includes(folder) && (g.args || []).slice(-1)[0] === "-", JSON.stringify(g.args));
+    expect("a codex run has merging off by default", g.merge === "0", g.merge);
+    fs.rmSync(tmp, { recursive: true, force: true });
+    console.log((total - failed) + "/" + total + " intake-watch checks passed");
+    process.exit(failed ? 1 : 0);
+  });
 });
