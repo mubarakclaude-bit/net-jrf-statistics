@@ -1,93 +1,10 @@
 import assert from "node:assert/strict";
 import worker from "../src/index.js";
-
-const id = "12345678-1234-1234-1234-123456789abc";
-const sourceText = "verified source for retry";
-const bytes = new TextEncoder().encode(sourceText);
-const sha = async (b) => {
-  const d = await crypto.subtle.digest("SHA-256", b);
-  return [...new Uint8Array(d)].map(x => x.toString(16).padStart(2, "0")).join("");
-};
-const hash = await sha(bytes);
-
-function makeDb(status = "blocked_infrastructure") {
-  const state = {
-    job: { id, status, source_sha256: hash, object_key: "incoming/source", source_size: bytes.byteLength },
-    events: []
-  };
-  const db = {
-    state,
-    prepare(sql) {
-      return {
-        bind(...args) {
-          return {
-            first: async () => state.job,
-            run: async () => {
-              let changes = 0;
-              if (sql.startsWith("UPDATE intake_jobs SET status='queued'")) {
-                const [updated, jobId, statusArg] = args;
-                if (jobId === state.job.id && statusArg === state.job.status) {
-                  state.job.status = "queued"; state.job.updated_at = updated; changes = 1;
-                }
-              } else if (sql.startsWith("UPDATE intake_jobs SET status='blocked_infrastructure'")) {
-                const [updated, jobId] = args;
-                if (jobId === state.job.id && state.job.status === "queued") {
-                  state.job.status = "blocked_infrastructure"; state.job.updated_at = updated; changes = 1;
-                }
-              } else if (sql.startsWith("INSERT INTO intake_events")) {
-                state.events.push(args); changes = 1;
-              }
-              return { meta: { changes } };
-            }
-          };
-        }
-      };
-    }
-  };
-  return db;
-}
-
-const bucketFor = (data) => ({
-  get: async key => key === "incoming/source"
-    ? { arrayBuffer: async () => data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) }
-    : null
-});
-const queueOk = { send: async message => assert.equal(message.job_id, id) };
-
-const db = makeDb();
-const envOk = {
-  INTAKE_TOKEN: "secret", JOBS_DB: db, SOURCE_BUCKET: bucketFor(bytes),
-  PROCESSING_QUEUE: queueOk, PROCESSOR_URL: "https://processor/process", PROCESSOR_TOKEN: "secret"
-};
-const res = await worker.fetch(new Request(`https://intake/jobs/${id}/retry`, {
-  method: "POST", headers: { authorization: "Bearer secret" }
-}), envOk);
-assert.equal(res.status, 202);
-assert.equal(db.state.job.status, "queued");
-assert.ok(db.state.events.some(e => e[1] === "manual_retry_requested"));
-
-const badDb = makeDb();
-const badEnv = {
-  INTAKE_TOKEN: "secret", JOBS_DB: badDb,
-  SOURCE_BUCKET: bucketFor(new TextEncoder().encode("tampered")),
-  PROCESSING_QUEUE: queueOk, PROCESSOR_URL: "https://processor/process", PROCESSOR_TOKEN: "secret"
-};
-const bad = await worker.fetch(new Request(`https://intake/jobs/${id}/retry`, {
-  method: "POST", headers: { authorization: "Bearer secret" }
-}), badEnv);
-assert.equal(bad.status, 422);
-assert.equal(badDb.state.job.status, "blocked_infrastructure");
-
-const failDb = makeDb("failed_retryable");
-const failEnv = {
-  INTAKE_TOKEN: "secret", JOBS_DB: failDb, SOURCE_BUCKET: bucketFor(bytes),
-  PROCESSING_QUEUE: { send: async () => { throw new Error("offline"); } },
-  PROCESSOR_URL: "https://processor/process", PROCESSOR_TOKEN: "secret"
-};
-const fail = await worker.fetch(new Request(`https://intake/jobs/${id}/retry`, {
-  method: "POST", headers: { authorization: "Bearer secret" }
-}), failEnv);
-assert.equal(fail.status, 503);
-assert.equal(failDb.state.job.status, "blocked_infrastructure");
-assert.ok(failDb.state.events.some(e => e[1] === "retry_enqueue_failed"));
-console.log("manual retry recovery tests passed");
+const id="12345678-1234-1234-1234-123456789abc",sourceText="verified source for retry",bytes=new TextEncoder().encode(sourceText);
+const sha=async b=>{const d=await crypto.subtle.digest("SHA-256",b);return[...new Uint8Array(d)].map(x=>x.toString(16).padStart(2,"0")).join("");},hash=await sha(bytes);
+function makeDb(status="blocked_infrastructure"){const state={job:{id,status,source_sha256:hash,object_key:"incoming/source",source_size:bytes.byteLength},events:[],outbox:[]};const db={state,prepare(sql){return{bind(...args){return{first:async()=>state.job,run:async()=>{let changes=0;if(sql.startsWith("UPDATE intake_jobs SET status='queued'")){const[updated,jid,old]=args;if(jid===state.job.id&&old===state.job.status){state.job.status="queued";state.job.updated_at=updated;changes=1;}}else if(sql.startsWith("INSERT INTO intake_events")){state.events.push(args);changes=1;}else if(sql.startsWith("INSERT INTO intake_outbox")){state.outbox.push(args);changes=1;}return{meta:{changes}};}};}}};db.batch=async stmts=>Promise.all(stmts.map(s=>s.run()));return db;}
+const bucketFor=data=>({get:async key=>key==="incoming/source"?{arrayBuffer:async()=>data.buffer.slice(data.byteOffset,data.byteOffset+data.byteLength)}:null});
+const env={INTAKE_TOKEN:"secret",JOBS_DB:makeDb(),SOURCE_BUCKET:bucketFor(bytes),PROCESSING_QUEUE:{send:async()=>{throw Error("unused")}},PROCESSOR_URL:"https://processor/process",PROCESSOR_TOKEN:"secret"};
+const res=await worker.fetch(new Request(`https://intake/jobs/${id}/retry`,{method:"POST",headers:{authorization:"Bearer secret"}}),env);assert.equal(res.status,202);assert.equal(env.JOBS_DB.state.job.status,"queued");assert.equal(env.JOBS_DB.state.outbox.length,1);assert.ok(env.JOBS_DB.state.events.some(e=>e[1]==="manual_retry_requested"));
+const badDb=makeDb(),badEnv={...env,JOBS_DB:badDb,SOURCE_BUCKET:bucketFor(new TextEncoder().encode("tampered"))};const bad=await worker.fetch(new Request(`https://intake/jobs/${id}/retry`,{method:"POST",headers:{authorization:"Bearer secret"}}),badEnv);assert.equal(bad.status,422);assert.equal(badDb.state.job.status,"blocked_infrastructure");
+console.log("manual retry integrity and durable intent tests passed");
