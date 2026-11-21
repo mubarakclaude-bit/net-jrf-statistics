@@ -48,6 +48,11 @@ The latest structural cross-check reports:
 - `.github/workflows/question-bank-audit.yml` is configured for pushes to question-bank branches and pull requests.
 - `test.js` asserts 50 module-scoped original questions, 500 variants, exactly ten variants per source question, unique IDs and correct module assignment.
 
+## Verification status — refreshed 2026-11-21
+
+- The latest branch head (`be7f98118b818971dab488319f44b8467a72ef4a`) has no workflow run returned by the connected workflow-run lookup. Treat CI as **not confirmed**, not passed.
+- The four targeted explanation repairs were committed on this branch (`c88d8908` and `be7f9811`); the full independent verification gate remains open.
+
 ## Verification status
 
 - Independent structural cross-check: passed in this session.
