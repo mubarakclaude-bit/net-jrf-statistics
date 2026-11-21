@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS intake_events (
   stage TEXT NOT NULL,
   details_json TEXT,
   created_at TEXT NOT NULL
-);\nCREATE TABLE IF NOT EXISTS intake_outbox (
+);
+CREATE TABLE IF NOT EXISTS intake_outbox (
   id TEXT PRIMARY KEY,
   job_id TEXT NOT NULL REFERENCES intake_jobs(id),
   payload_json TEXT NOT NULL,
@@ -35,7 +36,8 @@ CREATE TABLE IF NOT EXISTS intake_events (
   last_error TEXT,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
-  sent_at TEXT,\n  retry_after TEXT,
+  sent_at TEXT,
+  retry_after TEXT,
   UNIQUE(job_id)
 );
 CREATE INDEX IF NOT EXISTS intake_outbox_pending ON intake_outbox(state,created_at);
