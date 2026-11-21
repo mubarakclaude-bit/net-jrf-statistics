@@ -18,12 +18,12 @@ The processor checks its claim immediately before and after R2 writes. R2 writes
 
 **Acceptance tests:** lease takeover during write; stale worker write after takeover; old manifest promotion attempt; cleanup/reference safety.
 
-### 3. Transactional outbox and queue reconciliation are absent
-Upload and manual retry currently make ledger state changes and send queue messages across separate systems. Failure handling blocks jobs in some cases, but a transactional outbox and periodic reconciler are not implemented. Queue delivery is at-least-once.
+### 3. Outbox delivery is implemented; reconciliation and runtime proof remain absent
+Upload acceptance records job/event/outbox intent in a D1 batch, and a bounded leased dispatcher retries sends with backoff. Queue delivery remains at-least-once. The manual-retry path was found to conflict with the original outbox table's unique-per-job constraint; migration 0006 removes that constraint so each retry can append a fresh dispatch intent. This fix is pending CI and migration/runtime verification. A periodic reconciler remains unimplemented.
 
-**Required fix:** D1 transaction writes job/event/outbox intent. A bounded leased outbox dispatcher sends with stable message keys. Consumer claims use authoritative fencing and idempotency. A periodic reconciler repairs stale outbox and job records with conditional transitions.
+**Required fix:** verify D1 batch/migration semantics, implement a bounded reconciler for expired outbox/job/processor leases, and use conditional repairs with event records.
 
-**Acceptance tests:** crash before send; send then crash before mark-sent; repeated send; concurrent dispatcher; exhausted retry; source preservation; duplicate consumer delivery.
+**Acceptance tests:** crash before send; send then crash before mark-sent; repeated send; concurrent dispatcher; exhausted retry including expired claims; source preservation; duplicate consumer delivery; repeated manual retries.
 
 ## Priority 1 — before sensitive-source acceptance
 
