@@ -261,7 +261,8 @@ function facts(file) {
   return { name, file, sha256, pages, text, textChars: text.replace(/\s+/g, "").length, inProgress };
 }
 
-function scan(folder, opts) {
+/* The decisions for a folder, without printing: { rows, todo (best first), rest }. tools/intake-watch.js calls this. */
+function plan(folder) {
   if (!folder || !fs.existsSync(folder) || !fs.statSync(folder).isDirectory()) throw new Error("Give the folder that holds the PDFs: node tools/intake.js scan \"<folder>\"");
   const register = loadRegister(), seen = {}, rows = [];
   for (const n of fs.readdirSync(folder).filter(x => /\.pdf$/i.test(x)).sort()) {
@@ -269,10 +270,14 @@ function scan(folder, opts) {
     if (f.inProgress) { try { f.inProgress.passes = check(f.sha256.slice(0, 12), loadSeed()).length === 0; } catch (e) { /* report as started */ } }
     const c = classify(f, register, seen);
     if (!seen[f.sha256]) seen[f.sha256] = n;
-    rows.push(Object.assign({ name: n, file: f.file, pages: f.pages }, c));
+    rows.push(Object.assign({ name: n, file: f.file, pages: f.pages, sha256: f.sha256 }, c));
   }
   const todo = rows.filter(r => r.decision === "process").sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));
-  const rest = rows.filter(r => r.decision !== "process");
+  return { rows, todo, rest: rows.filter(r => r.decision !== "process") };
+}
+
+function scan(folder, opts) {
+  const { rows, todo, rest } = plan(folder);
   console.log("To process, best first:");
   todo.forEach((r, k) => console.log(String(k + 1).padStart(3) + ". " + r.name + "  [" + r.kind + ", " + r.pages + " pp]  " + r.why));
   if (!todo.length) console.log("  nothing new.");
@@ -444,4 +449,4 @@ function main(argv) {
 }
 
 if (require.main === module) process.exit(main(process.argv.slice(2)));
-module.exports = { tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost, classify };
+module.exports = { tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost, classify, plan };
