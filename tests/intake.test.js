@@ -22,6 +22,8 @@ const T = require(TOOL);
 const S = T.loadSeed();
 expect("the seed loader finds topics, the lesson and the bank items", S.topics["alpha-t1"] && S.lessons.alphat1 && S.items.length === 2);
 expect("Unicode subscripts and spelled Greek fold to the same words", [...T.tokens("X₁ ρ")].join() === [...T.tokens("x1 rho")].join(), [...T.tokens("X₁ ρ")]);
+expect("a text layer that lost maths symbols is detected (empty brackets, U+FFFD)",
+  T.symbolsLost("We need P(A|B). () = 0.2 , () = 0.4") && T.symbolsLost("parameters (�, �2)") && !T.symbolsLost("P(A) = 0.2 and f(x) = 2x; one stray �"));
 const ix = T.indexItems(S.items);
 const near = T.nearest("X1 and X2 are independent Poisson variables, means 2 and 3. Find Var(X1 | X1 + X2 = 2). 12/25 6/25 2/5 1", ix);
 expect("a repeat written differently still finds its item", near.item.id === "b1" && near.score >= 0.5, JSON.stringify({ id: near.item.id, s: near.score }));
