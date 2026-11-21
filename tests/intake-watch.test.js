@@ -97,14 +97,32 @@ expect("the owner's note explains the choices (sandbox, danger-full-access, clau
 W.start({ folder, agent: "codex", preflight: () => ({ ok: false, why: "Codex's sandbox backend is disabled" }) }, () => {});
 expect("the note is written once, not on every poll", (fs.readFileSync(notesFile, "utf8").match(/Codex cannot write/g) || []).length === 1);
 
-// start(): a fake agent proves it gets the folder and the brief, and the lock and log are handled
+// a fake publisher: a prepared worktree that is just a temporary folder, and a record of what was published
+const fakeWt = path.join(tmp, "wt"); fs.mkdirSync(path.join(fakeWt, "tools"), { recursive: true });
+fs.writeFileSync(path.join(fakeWt, "tools", "intake-run.md"), "# brief copy in the worktree");
+const calls = [];
+const fakePublisher = {
+  prepare: () => { calls.push("prepare"); return { stamp: "20261122-000000", branch: "content/intake-test", wt: fakeWt }; },
+  publish: (prep, resultFile, merge) => { calls.push("publish:" + merge + ":" + path.basename(resultFile)); return { outcome: "left-open", pr: "https://github.com/o/r/pull/1", note: "CI green; merging is off" }; },
+  cleanup: (root, prep, keep) => { calls.push("cleanup:" + keep); },
+};
+expect("a failing worktree preparation starts nothing and leaves a note",
+  W.start({ folder, agent: "codex", preflight: () => ({ ok: true }), publisher: { prepare: () => { throw new Error("git fetch failed: offline"); } } }) === null &&
+  /Preparing a run failed/.test(fs.readFileSync(notesFile, "utf8")));
+
+// start(): a fake agent proves it runs in the prepared worktree with the folder, the brief, INTAKE_DIR and INTAKE_RESULT,
+// and that the watcher then publishes and cleans up
 const marker = path.join(tmp, "agent-ran.json");
-const fake = "\"" + process.execPath.replace(/\\/g, "/") + "\" -e \"require('fs').writeFileSync(process.argv[1], JSON.stringify({folder: process.env.INTAKE_FOLDER, brief: require('fs').existsSync(process.env.INTAKE_PROMPT_FILE), merge: process.env.INTAKE_MERGE}))\" \"" + marker.replace(/\\/g, "/") + "\"";
-W.start({ folder, agent: "none", command: fake }, code => {
+const fake = "\"" + process.execPath.replace(/\\/g, "/") + "\" -e \"require('fs').writeFileSync(process.argv[1], JSON.stringify({folder: process.env.INTAKE_FOLDER, brief: require('fs').existsSync(process.env.INTAKE_PROMPT_FILE), dir: process.env.INTAKE_DIR, result: process.env.INTAKE_RESULT, cwd: process.cwd()}))\" \"" + marker.replace(/\\/g, "/") + "\"";
+W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (code, res) => {
   let m = {}; try { m = JSON.parse(fs.readFileSync(marker, "utf8")); } catch (e) { /* missing */ }
   expect("the run exited cleanly", code === 0, code);
   expect("the agent received the source folder and a readable brief", m.folder === folder && m.brief === true, JSON.stringify(m));
-  expect("a custom engine with no --merge gets merging on (INTAKE_MERGE=1)", m.merge === "1", JSON.stringify(m));
+  expect("the agent runs inside the prepared worktree", path.resolve(m.cwd || "") === path.resolve(fakeWt), m.cwd);
+  expect("the agent is told the shared intake folder and where to write its result", path.resolve(m.dir || "") === path.resolve(process.env.INTAKE_DIR) && /results[\\/]20261122-000000\.json$/.test(m.result || ""), JSON.stringify(m));
+  expect("after the agent, the watcher prepares, publishes (merging on for a custom engine) and cleans up, keeping nothing once pushed",
+    JSON.stringify(calls) === JSON.stringify(["prepare", "publish:true:20261122-000000.json", "cleanup:false"]), JSON.stringify(calls));
+  expect("the outcome is reported to the caller and noted for the owner", res && res.outcome === "left-open" && /Run 20261122-000000: left-open/.test(fs.readFileSync(notesFile, "utf8")));
   expect("the lock is removed when the run ends", !fs.existsSync(lockFile));
   const runs = fs.readdirSync(path.join(process.env.INTAKE_DIR, "runs"));
   expect("the run has its own log file", runs.length === 1 && /\.log$/.test(runs[0]), runs.join(","));
@@ -116,15 +134,18 @@ W.start({ folder, agent: "none", command: fake }, code => {
   const got = path.join(tmp, "codex-got.json");
   const stub = path.join(tmp, "codex-stub.js");
   fs.writeFileSync(stub, "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{require('fs').writeFileSync(" + JSON.stringify(got) +
-    ",JSON.stringify({args:process.argv.slice(2),brief:s.slice(0,40),merge:process.env.INTAKE_MERGE}))})");
+    ",JSON.stringify({args:process.argv.slice(2),brief:s.slice(0,40)}))})");
   process.env.INTAKE_CODEX_JS = stub;
   for (const f of fs.readdirSync(path.join(process.env.INTAKE_DIR, "runs"))) fs.unlinkSync(path.join(process.env.INTAKE_DIR, "runs", f));
-  W.start({ folder, agent: "codex" }, code2 => {
+  calls.length = 0;
+  W.start({ folder, agent: "codex", preflight: () => ({ ok: true }), publisher: fakePublisher }, code2 => {
     let g = {}; try { g = JSON.parse(fs.readFileSync(got, "utf8")); } catch (e) { /* missing */ }
+    const a = g.args || [];
     expect("the codex run exited cleanly", code2 === 0, code2);
     expect("the brief reached codex on stdin", /^# Unattended intake run/.test(g.brief || ""), JSON.stringify(g));
-    expect("codex got exec, the sandbox flags, the source folder and '-'", (g.args || [])[0] === "exec" && (g.args || []).includes("--add-dir") && (g.args || []).includes(folder) && (g.args || []).slice(-1)[0] === "-", JSON.stringify(g.args));
-    expect("a codex run has merging off by default", g.merge === "0", g.merge);
+    expect("codex got exec, the sandbox flags, the source folder and '-'", a[0] === "exec" && a.includes("--add-dir") && a.includes(folder) && a.slice(-1)[0] === "-", JSON.stringify(a));
+    expect("codex works in the prepared worktree and may also write the shared intake folder", a[a.indexOf("-C") + 1] === fakeWt && a.includes(process.env.INTAKE_DIR), JSON.stringify(a));
+    expect("a codex run is published with merging off by default", calls[1] === "publish:false:20261122-000000.json", JSON.stringify(calls));
     fs.rmSync(tmp, { recursive: true, force: true });
     console.log((total - failed) + "/" + total + " intake-watch checks passed");
     process.exit(failed ? 1 : 0);

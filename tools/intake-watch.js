@@ -9,8 +9,12 @@
  *      holds steady), so a half-copied download is never read;
  *   2. asks tools/intake.js plan() what is left to process: new files, files already started; it skips what is already
  *      in the app (tools/intake-sources.json), personal, unreadable or duplicate files;
- *   3. if anything is left and no run is active, starts ONE agent run with the brief in tools/intake-run.md and the folder
- *      in INTAKE_FOLDER. The agent does the reading, solving, verification, PR and merge.
+ *   3. if anything is left and no run is active, prepares a fresh worktree on a new branch (tools/intake-publish.js), and
+ *      starts ONE agent run there with the brief in tools/intake-run.md. The agent processes one document: reads, solves,
+ *      verifies, builds and commits locally, then writes a result file. It never touches GitHub;
+ *   4. after the agent exits, re-runs the agent's verification script and check.sh itself, and only then pushes, opens
+ *      the PR, waits for CI on that commit, and merges when green and merging is on. Anything that fails stays local,
+ *      with a note in .cache/intake/watch-notes.md.
  *
  * Settings: .cache/intake/watch.json (local, never committed) holds the defaults, so the engine, the model or the folder
  * can be changed by editing one file, with no change to how the watcher is started:
@@ -27,9 +31,9 @@
  *   --command "<cmd>" runs any other command through the shell, with the brief's path in INTAKE_PROMPT_FILE.
  * The engine must be installed and logged in by the owner; this script never handles a key.
  *
- * Merging: a run merges its own green PRs only when merging is on (INTAKE_MERGE=1 in its environment). It is on by
- * default for claude and off by default for codex, until a few Codex runs have been checked: --merge / --no-merge
- * override. With merging off the run leaves each PR open and lists it in .cache/intake/watch-notes.md.
+ * Merging: the watcher merges a run's green PR only when merging is on. It is on by default for claude and off by
+ * default for codex, until a few Codex runs have been checked: --merge / --no-merge / "merge" in watch.json override.
+ * With merging off each PR is left open and listed in .cache/intake/watch-notes.md.
  *
  * --once checks one time and exits (for Windows Task Scheduler or any other scheduler). Without it, it keeps watching.
  * Everything it writes stays in .cache/intake/: watch.log, run.lock, runs/<time>.log. Standard library only. */
@@ -86,25 +90,25 @@ function launcher(name, pkgRel, env) {
   return js ? { cmd: process.execPath, pre: [js] } : { cmd: name, pre: [] };
 }
 
-function engineCommand(agent, briefText, custom, folder, env, model, sandbox) {
+function engineCommand(agent, briefText, custom, folder, env, model, sandbox, workdir, extraDirs) {
   if (custom) return { shell: true, cmd: custom, args: [], stdin: null };
   if (agent === "claude") {
     const l = launcher("claude", path.join("@anthropic-ai", "claude-code", "cli.js"), env);
     return { cmd: l.cmd, args: l.pre.concat(["-p", "--permission-mode", "acceptEdits",
       "--allowedTools", "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch"]).concat(model ? ["--model", model] : []), stdin: briefText };
   }
-  // Codex CLI 0.171: no --full-auto; workspace-write sandbox (writes only inside the repository and the source folder),
-  // approvals reviewed automatically, network on so the run can push and open the pull request. "-" reads the brief from stdin.
   // Codex CLI 0.171. --approve-for-me cannot be combined with --sandbox and in practice left runs read-only, so the
   // sandbox is named explicitly and approvals are off (an unattended run has nobody to ask). workspace-write: writes only
-  // inside the repository and the source folder, network on so it can push. danger-full-access: no sandbox at all, an
-  // owner-only choice in watch.json.
+  // inside the run's worktree, the source folder and the shared intake folder. The agent never needs GitHub: the watcher
+  // publishes (tools/intake-publish.js). danger-full-access: no sandbox at all, an owner-only choice in watch.json.
+  // "-" reads the brief from stdin.
   if (agent === "codex") {
     const l = launcher("codex", path.join("@openai", "codex", "bin", "codex.js"), env);
     const sb = sandbox || "workspace-write";
-    const confine = sb === "workspace-write" ? ["-c", "sandbox_workspace_write.network_access=true"].concat(folder ? ["--add-dir", folder] : []) : [];
+    const dirs = [folder].concat(extraDirs || []).filter(Boolean);
+    const confine = sb === "workspace-write" ? ["-c", "sandbox_workspace_write.network_access=true"].concat(...dirs.map(d => ["--add-dir", d])) : [];
     return { cmd: l.cmd, args: l.pre.concat(["exec", "-s", sb, "-c", "approval_policy=\"never\""]).concat(confine)
-      .concat(["-C", ROOT]).concat(model ? ["-m", model] : []).concat(["-"]), stdin: briefText };
+      .concat(["-C", workdir || ROOT]).concat(model ? ["-m", model] : []).concat(["-"]), stdin: briefText };
   }
   return null;
 }
@@ -172,18 +176,42 @@ function start(opts, onExit) {
     return null;
   }
   const brief = fs.readFileSync(BRIEF, "utf8");
-  const eng = engineCommand(opts.agent, brief, opts.command, opts.folder, undefined, opts.model, opts.sandbox);
-  if (!eng) { log("would start a run now, but no engine is set (--agent claude|codex or --command)"); onExit && onExit(null); return null; }
+  if (!engineCommand(opts.agent, brief, opts.command, opts.folder)) { log("would start a run now, but no engine is set (--agent claude|codex or --command)"); onExit && onExit(null); return null; }
+  const P = opts.publisher || require("./intake-publish.js");
+  let prep;
+  try { prep = P.prepare(ROOT, opts.sh); } catch (e) {
+    log("could not prepare a worktree: " + e.message);
+    noteOnce("## Preparing a run failed (" + new Date().toISOString().slice(0, 10) + ")\n\n" + e.message);
+    onExit && onExit(null);
+    return null;
+  }
   fs.mkdirSync(path.join(DIR, "runs"), { recursive: true });
-  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+  fs.mkdirSync(path.join(DIR, "results"), { recursive: true });
+  const stamp = prep.stamp;
+  const resultFile = path.join(DIR, "results", stamp + ".json");
+  const eng = engineCommand(opts.agent, brief, opts.command, opts.folder, undefined, opts.model, opts.sandbox, prep.wt, [DIR]);
   const out = fs.openSync(path.join(DIR, "runs", stamp + ".log"), "a");
-  const env = Object.assign({}, process.env, { INTAKE_FOLDER: opts.folder, INTAKE_PROMPT_FILE: BRIEF, INTAKE_MERGE: mergeOn(opts) ? "1" : "0" });
-  const child = spawn(eng.cmd, eng.args, { cwd: ROOT, env, shell: !!eng.shell, stdio: [eng.stdin ? "pipe" : "ignore", out, out], windowsHide: true });
+  const env = Object.assign({}, process.env, { INTAKE_FOLDER: opts.folder, INTAKE_PROMPT_FILE: path.join(prep.wt, "tools", "intake-run.md"),
+    INTAKE_DIR: DIR, INTAKE_RESULT: resultFile, INTAKE_WORKTREE: prep.wt });
+  const child = spawn(eng.cmd, eng.args, { cwd: prep.wt, env, shell: !!eng.shell, stdio: [eng.stdin ? "pipe" : "ignore", out, out], windowsHide: true });
   if (eng.stdin) { child.stdin.on("error", () => { /* the engine exited early; its log says why */ }); child.stdin.end(eng.stdin); }
-  child.on("error", e => { log("could not start " + eng.cmd + ": " + e.message + " (is it installed and on PATH?)"); try { fs.unlinkSync(LOCK()); } catch (x) { /* none */ } onExit && onExit(-1); });
-  fs.writeFileSync(LOCK(), JSON.stringify({ pid: child.pid, started: Date.now(), engine: opts.command || opts.agent, log: "runs/" + stamp + ".log" }));
-  log("started run (" + (opts.command || opts.agent) + (opts.model ? ", model " + opts.model : "") + (mergeOn(opts) ? ", merges green PRs" : ", PRs left open for review") + "), pid " + child.pid + ", log .cache/intake/runs/" + stamp + ".log");
-  child.on("exit", code => { log("run finished with exit code " + code); try { fs.unlinkSync(LOCK()); } catch (e) { /* already gone */ } onExit && onExit(code); });
+  let failedToStart = false;
+  child.on("error", e => { failedToStart = true; log("could not start " + eng.cmd + ": " + e.message + " (is it installed and on PATH?)"); });
+  fs.writeFileSync(LOCK(), JSON.stringify({ pid: child.pid, started: Date.now(), engine: opts.command || opts.agent, log: "runs/" + stamp + ".log", worktree: prep.wt }));
+  log("started run (" + (opts.command || opts.agent) + (opts.model ? ", model " + opts.model : "") + (mergeOn(opts) ? ", merges green PRs" : ", PRs left open for review") + ") in " + prep.wt + ", pid " + child.pid + ", log .cache/intake/runs/" + stamp + ".log");
+  child.on("close", code => {
+    log("agent finished with exit code " + code + "; publishing");
+    let res;
+    try { res = failedToStart ? { outcome: "rejected", note: "the engine did not start" } : P.publish(prep, resultFile, mergeOn(opts), opts.sh, { engine: opts.command || opts.agent }); }
+    catch (e) { res = { outcome: "rejected", note: "publishing failed: " + e.message }; }
+    const pushed = ["left-open", "merged", "ci-failed", "pr-failed"].includes(res.outcome);
+    try { P.cleanup(ROOT, prep, !pushed && res.outcome !== "nothing" && res.outcome !== "stopped", opts.sh); } catch (e) { log("cleanup: " + e.message); }
+    log("run " + stamp + ": " + res.outcome + (res.pr ? " " + res.pr : "") + " — " + res.note);
+    if (res.outcome !== "nothing") noteOnce("## Run " + stamp + ": " + res.outcome + "\n\n" + (res.pr ? "PR: " + res.pr + "\n\n" : "") + res.note +
+      (pushed ? "" : res.outcome === "stopped" ? "" : "\n\nThe local branch " + prep.branch + " was kept for inspection."));
+    try { fs.unlinkSync(LOCK()); } catch (e) { /* already gone */ }
+    onExit && onExit(code, res);
+  });
   return child;
 }
 
