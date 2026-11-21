@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS intake_outbox (
   last_error TEXT,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
-  sent_at TEXT,
+  sent_at TEXT,\n  retry_after TEXT,
   UNIQUE(job_id)
 );
 CREATE INDEX IF NOT EXISTS intake_outbox_pending ON intake_outbox(state,created_at);
