@@ -1,7 +1,10 @@
 # Unattended intake run
 
 You were started by `tools/intake-watch.js` because a new or unfinished PDF is waiting in the owner's source folder. You
-run without a person watching. **Process one document, commit it locally, write a result file, and end.** This file is
+run without a person watching. **Process one document, commit it locally, write a result file, and end.** This is long
+work, often an hour or more for a full paper: go through every question; do not end your turn early, and never end
+it without writing `INTAKE_RESULT`. If you cannot finish, write `{"status": "stopped", "reason": ...}`. An empty
+worksheet that fails `check` is your starting point, not a reason to stop. This file is
 the whole brief. `AGENTS.md`, `docs/SOURCE_INTAKE.md` and `docs/CONTENT_GUIDE.md` are the rules you follow while doing it.
 
 ## Where you are
