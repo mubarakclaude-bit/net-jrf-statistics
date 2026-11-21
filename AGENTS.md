@@ -23,6 +23,7 @@ piece lives, what is missing, and how to tune it. `npm run content -- topic <id>
 |---|---|---|
 | Create or change a **lesson** or a **question pool** | [A. Lessons](#a-lessons) | `npm run check`, plus the lesson's own `./addlesson.sh` |
 | Create or change an **application feature** | [B. Features](#b-features) | `npm run build && node tests/features.test.js --only <id> && npm run check` |
+| Turn a **source PDF** (past paper, compilation, textbook, notes) into questions or lesson improvements | [`docs/SOURCE_INTAKE.md`](docs/SOURCE_INTAKE.md) | `npm run intake -- check <id>`, then the lesson or bank route above |
 | Change a **contract** (a schema, the storage paths) | `contracts/README.md` | `npm run check`, and the owner's approval |
 | Change a **built-in view** (Home, Learn, Question bank, Mock tests, Admin) or `src/` outside `src/features/` | [C. Core changes](#c-core-changes) | `npm test`, and the owner's review |
 

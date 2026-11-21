@@ -27,3 +27,5 @@ out=$(node tests/papers.test.js) || { echo "$out"; exit 1; }   # finding past pa
 echo "$out" | tail -1
 out=$(node tests/lesson.test.js) || { echo "$out"; exit 1; }   # the topic-driven lesson workflow (tools/lesson.js)
 echo "$out" | tail -1
+out=$(node tests/intake.test.js) || { echo "$out"; exit 1; }   # source-document intake worksheets and reports (tools/intake.js)
+echo "$out" | tail -1
