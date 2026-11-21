@@ -4,12 +4,12 @@ Status: engineering review; not a test report. This document records issues iden
 
 ## Priority 0 — must resolve before deployment
 
-### 1. Intake callback is not fenced against processor claim ownership
-The callback validates the manifest and its artifacts, then updates the intake job with a conditional transition from processing to completed. It validates manifest identity (job, source hash, attempt ID and fencing token against the submitted callback/manifest) but intake has no durable current-attempt claim record against which it can compare the fencing token. The processor's claim database is separate. A callback from a superseded attempt therefore needs an explicit cross-service authoritative attempt/claim mechanism before it can be considered protected from stale completion.
+### 1. Attempt-bound callback fencing is implemented but needs race verification
+The dispatcher stores a fresh `active_attempt_id` on the intake job and sends it to the processor. The callback compares that ID with the intake ledger, validates manifest job/source/attempt/fencing identity and artifact hashes, and fences the completion update on the active attempt ID. This materially improves stale-callback protection. The processor's numeric fencing counter remains in a separate D1 database, however, and the full cross-service takeover/race protocol has not been proven in a live runtime.
 
-**Required fix:** persist an authoritative active attempt/fencing record in the intake ledger or establish a signed, verified attempt-claim protocol. Callback acceptance must compare the callback's attempt and fencing token with the authoritative active claim. State transition and claim check must be atomic.
+**Required fix:** test stale callbacks after a retry/takeover, old attempts, concurrent callback, callback after terminal state and manifest promotion under lease expiry. Verify that the intake active-attempt ID remains the authoritative promotion guard.
 
-**Acceptance tests:** stale callback after takeover; callbacks from old attempts; callback racing a retry; concurrent callback; valid current callback; callback after terminal state.
+**Acceptance tests:** valid current callback; stale callback after takeover; callback racing a retry; duplicate/concurrent callback; callback after terminal state; callback with mismatched manifest fence/attempt.
 
 ### 2. Processor fencing does not make R2 writes atomic
 The processor checks its claim immediately before and after R2 writes. R2 writes cannot be included in the D1 fencing transaction. A worker could lose its lease between the pre-write check and the object write. Attempt-specific namespaces reduce collision risk, but a stale attempt can still leave unreferenced artifacts.
@@ -24,6 +24,13 @@ Upload acceptance records job/event/outbox intent in a D1 batch, and a bounded l
 **Required fix:** verify D1 batch/migration semantics, implement a bounded reconciler for expired outbox/job/processor leases, and use conditional repairs with event records.
 
 **Acceptance tests:** crash before send; send then crash before mark-sent; repeated send; concurrent dispatcher; exhausted retry including expired claims; source preservation; duplicate consumer delivery; repeated manual retries.
+
+### 4. Callback failure can strand processing jobs
+The processor returns HTTP 202 when the callback is missing, rejected or unavailable, and the intake queue consumer treats any successful HTTP response as a completed dispatch and acknowledges the queue message. There is no durable callback retry or job reconciler to settle that job later. This can leave the intake ledger in `processing` without an authoritative completion pointer.
+
+**Required fix:** persist callback-delivery intent and retry it durably, or implement a ledger-authoritative reconciler with fenced recovery. A 202 response must not silently be treated as completed job dispatch unless callback recovery is guaranteed.
+
+**Acceptance tests:** missing callback configuration; callback timeout; response lost after callback completion; callback rejection; eventual settlement; recovery after processor lease expiry.
 
 ## Priority 1 — before sensitive-source acceptance
 
