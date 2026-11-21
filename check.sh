@@ -29,3 +29,5 @@ out=$(node tests/lesson.test.js) || { echo "$out"; exit 1; }   # the topic-drive
 echo "$out" | tail -1
 out=$(node tests/intake.test.js) || { echo "$out"; exit 1; }   # source-document intake worksheets and reports (tools/intake.js)
 echo "$out" | tail -1
+out=$(node tests/intake-watch.test.js) || { echo "$out"; exit 1; }   # the folder watcher that starts unattended intake runs
+echo "$out" | tail -1

@@ -51,6 +51,40 @@ decision prints its reason. A wrong call is overridden by running `add` with the
 its title, kind, the seed files it fed, its sha256 (all copies you know of) and its file name. That is what keeps `scan`
 from offering it again. Never list a personal document there.
 
+## Run it automatically when a file arrives
+
+`tools/intake-watch.js` watches the folder and starts an unattended run when a new PDF is ready. The run follows
+`tools/intake-run.md`, the brief for the whole loop: pick, read, solve, verify, open a PR, wait for CI and merge when
+green. The watcher only decides **when** to run; an AI coding engine does the run.
+
+```sh
+npm run intake:watch -- --folder "C:\Muhavin\NET JRF" --agent claude   # keep watching (Claude Code CLI)
+npm run intake:watch -- --folder "C:\Muhavin\NET JRF" --agent codex    # the same with OpenAI Codex CLI (a GPT key)
+npm run intake:watch -- --folder "C:\Muhavin\NET JRF" --once           # check once and say what it would do
+```
+
+- **When it starts a run:** a PDF's last change is at least `--settle` seconds old (default 30) and its size holds
+  steady, so a half-finished download is never read. `scan`'s decisions leave something to process, and no other run
+  is active (`.cache/intake/run.lock`).
+- **What triggers a check:** folder events, plus a poll every `--interval` seconds (default 300), because events are
+  unreliable on synced folders such as OneDrive.
+- **Limits:** at most `--max-runs-per-day` runs (default 6), because merges cost Vercel deployments. A lock older than
+  8 hours is treated as a dead run and cleared.
+- **Logs:** `.cache/intake/watch.log` holds the decisions, and `.cache/intake/runs/<time>.log` holds each run's full
+  output. A run that hits a stop condition writes `.cache/intake/watch-notes.md`.
+
+**Engines.** `--agent claude` uses Claude Code's command-line tool, logged in with the owner's Claude account.
+`--agent codex` uses OpenAI's Codex CLI (0.171 or later), with the owner's OpenAI API key or ChatGPT login. It runs in Codex's `workspace-write` sandbox: writes only inside the repository and the source folder, network on so it can push. On Windows, the first sandboxed run may ask the owner to set the sandbox up (it creates a local account and network rules); that is the owner's step. `--command "<cmd>"` runs
+anything else, with the brief's path in `INTAKE_PROMPT_FILE`. The engine is installed and logged in by the owner; the
+watcher never sees a key. **Merging** is on by default for `claude` and off for `codex`. A Codex run leaves its PRs open
+for review, listed in `.cache/intake/watch-notes.md`, until the owner passes `--merge`. `--no-merge` turns merging off
+for any engine. Whatever the engine, the same gates decide what is published: the verification script,
+`check.sh`, CI, and the merge rule in the brief.
+
+**Starting it with Windows.** To start the watcher at logon, the owner registers a scheduled task once (Task Scheduler,
+"At log on", action `node <repo>\tools\intake-watch.js --folder "<folder>" --agent <engine>`). Without that, it runs
+only while a terminal keeps it open.
+
 ## The steps
 
 ```sh
