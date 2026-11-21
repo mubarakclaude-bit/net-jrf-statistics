@@ -28,9 +28,16 @@ node tools/intake.js list                                  # every source regist
 ```
 
 `add` hashes the file. The first 12 characters of the hash are the workspace id, so adding the same file twice changes
-nothing. It writes each page's text layer to `.cache/intake/<id>/pages/p###.txt`. A page with almost no text (a scan, or
-a compilation that pastes questions in as pictures) is also rendered as `p###.png`, so the assistant can read it. It then
-creates an empty worksheet: `questions.json` or `concepts.json`.
+nothing. It writes each page's text layer to `.cache/intake/<id>/pages/p###.txt` and renders pages as `p###.png` for
+reading:
+
+- **A question document: every page.** A page can have plenty of text and still carry its question as a pasted picture,
+  and maths fonts often do not survive the text layer. A quiz in this repository's first trial printed `P(A|B)` as
+  `P(AB)` in its text layer, a different question. Read the images; use the `.txt` files only to search.
+- **Learning material: only the pages that need it.** That means pages with almost no text (scans), and pages whose text
+  visibly lost symbols (several `�`, or empty brackets where `P(A)` was). Pass `--render all` to render every page.
+
+It then creates an empty worksheet: `questions.json` or `concepts.json`.
 
 ## A question document (`--kind questions`)
 

@@ -4,6 +4,8 @@
  * and never copies a source into the repository: everything it makes lives in .cache/intake/ (gitignored).
  *
  *   node tools/intake.js add <file.pdf> --kind questions|learning [--title "..."] [--render all]
+ *                                          questions: every page is rendered as an image; learning: only pages whose
+ *                                          text layer is empty or lost its maths symbols (--render all for every page)
  *   node tools/intake.js list
  *   node tools/intake.js check <id>        exit 1 if the worksheet is incomplete or wrong (every question accounted for,
  *                                          topic ids real, four options, a keyNote wherever the answer differs from the key)
@@ -106,6 +108,12 @@ function openWorkspace(id) {
   return { src, sheetFile, sheet: fs.existsSync(sheetFile) ? readJSON(sheetFile) : null };
 }
 
+/* pdftotext drops glyphs it cannot map (maths fonts): they come out as U+FFFD, or as empty brackets where P(A) or f(x) was.
+   Measured: a quiz PDF showed 13 empty "( )" on one page; a textbook page lost 23 Greek letters as U+FFFD. */
+function symbolsLost(text) {
+  return (text.match(/�/g) || []).length >= 2 || (text.match(/\(\s*\)/g) || []).length >= 2;
+}
+
 function tool(name, args) {
   const r = spawnSync(name, args, { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
   if (r.error) throw new Error(name + " is not available (" + r.error.code + "). Install poppler, or run from Git Bash, which ships it.");
@@ -127,24 +135,35 @@ function add(file, opts) {
   const info = tool("pdfinfo", [file]), pages = +((info.match(/^Pages:\s+(\d+)/m) || [])[1] || 0);
   if (!pages) throw new Error("pdfinfo could not read a page count from " + file);
   fs.mkdirSync(path.join(dir, "pages"), { recursive: true });
-  const imagePages = [];
+  // Which pages to render as images. A question document: every page, because a page with plenty of text can still carry
+  // its question as a pasted picture, and its maths may be in fonts the text layer cannot decode. Learning material: pages
+  // with no usable text, and pages where the text layer visibly lost symbols. Pass --render all to render everything.
+  const renderAll = opts.render === "all" || opts.kind === "questions";
+  const imagePages = [], symbolPages = [], rendered = [];
   for (let p = 1; p <= pages; p++) {
     const text = tool("pdftotext", ["-f", String(p), "-l", String(p), "-layout", file, "-"]);
     fs.writeFileSync(path.join(dir, "pages", "p" + pad3(p) + ".txt"), text);
     const chars = text.replace(/\s+/g, "").length;
-    if (chars < TEXT_PAGE || opts.render === "all") {
-      if (chars < TEXT_PAGE) imagePages.push(p);
+    if (chars < TEXT_PAGE) imagePages.push(p);
+    else if (symbolsLost(text)) symbolPages.push(p);
+    if (renderAll || chars < TEXT_PAGE || symbolsLost(text)) {
       tool("pdftoppm", ["-f", String(p), "-l", String(p), "-r", "110", "-png", "-singlefile", file, path.join(dir, "pages", "p" + pad3(p))]);
+      rendered.push(p);
     }
   }
   const src = { schema: 1, id, sha256, file: path.basename(file), path: path.resolve(file), size: bytes.length, pages, kind: opts.kind,
-    title: opts.title || path.basename(file, path.extname(file)), imagePages };
+    title: opts.title || path.basename(file, path.extname(file)), imagePages, symbolPages, rendered };
   writeJSON(path.join(dir, "source.json"), src);
   const sheet = opts.kind === "questions" ? { source: id, covers: { from: 1, to: null }, items: [] } : { source: id, items: [] };
   writeJSON(path.join(dir, KINDS[opts.kind]), sheet);
   const rel = path.relative(ROOT, dir).split(path.sep).join("/");
   console.log("Registered " + id + ": " + src.title + " (" + pages + " pages, " + opts.kind + ").");
-  console.log(imagePages.length ? imagePages.length + " page(s) have no usable text layer and were rendered as images to read: " + rel + "/pages/p###.png" : "Every page has a text layer: " + rel + "/pages/p###.txt");
+  const notes = [];
+  if (imagePages.length) notes.push(imagePages.length + " with no usable text layer");
+  if (symbolPages.length) notes.push(symbolPages.length + " whose text layer lost maths symbols");
+  console.log(rendered.length === pages ? "All " + pages + " pages rendered as images to read" + (notes.length ? " (" + notes.join(", ") + ")" : "") + ": " + rel + "/pages/p###.png. Read the images; the .txt files are for searching only."
+    : rendered.length ? rendered.length + " page(s) rendered as images to read (" + notes.join(", ") + "): " + rel + "/pages/p###.png. The rest have a clean text layer: p###.txt"
+    : "Every page has a clean text layer: " + rel + "/pages/p###.txt");
   console.log("Next: read the pages and fill " + rel + "/" + KINDS[opts.kind] + " (docs/SOURCE_INTAKE.md), then run: node tools/intake.js check " + id);
   return src;
 }
@@ -311,4 +330,4 @@ function main(argv) {
 }
 
 if (require.main === module) process.exit(main(process.argv.slice(2)));
-module.exports = { tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed };
+module.exports = { tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost };
