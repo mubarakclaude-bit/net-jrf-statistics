@@ -69,7 +69,7 @@
    "  Normal truth: 0.317311, 0.133614, 0.045500, 0.002700 at k = 1, 1.5, 2, 3.",
    "  Ratios truth/bound: 0.317, 0.301, 0.182, 0.024 — the slack GROWS with k.",
    "  Laplace at k=2: 0.059106 (ratio 0.236), closest of the smooth cases. Uniform: exactly 0 past k = √3.",
-   "  TIGHT: mass 1/(2k²) at each of μ ± kσ, rest at μ. At k=2 that is 0.125, 0.75, 0.125.",
+   "  TIGHT for k ≥ 1: mass 1/(2k²) at each of μ ± kσ, rest at μ. At k=2 that is 0.125, 0.75, 0.125.",
    "    Variance verified 1.000000; P(|X| ≥ k) = 1/k² exactly at k = 2 and 3. So it CANNOT be improved.",
    "ONE-SIDED (Cantelli): P(X − μ ≥ kσ) ≤ 1/(1 + k²) — 0.2 at k = 2, better than halving 1/4.",
    "CAUCHY–SCHWARZ: |E(XY)| ≤ √(E(X²)E(Y²)), equality iff Y = cX.",
@@ -355,7 +355,7 @@
     {
      "t": "formula",
      "h": "Chebyshev's inequality",
-     "body": "For any X with mean μ and finite variance σ², and any k > 0,\n    P(|X − μ| ≥ kσ) ≤ 1/k².\nIt follows from Markov applied to the non-negative variable (X − μ)² at the level k²σ², which is where the square comes from. At k = 2 the bound is 1/4; a normal puts 0.045500 there and a Laplace 0.059106. It is attained by the three-point distribution with mass 1/(2k²) at each of μ ± kσ."
+     "body": "For any X with mean μ and finite variance σ², and any k > 0,\n    P(|X − μ| ≥ kσ) ≤ 1/k².\nIt follows from Markov applied to the non-negative variable (X − μ)² at the level k²σ², which is where the square comes from. At k = 2 the bound is 1/4; a normal puts 0.045500 there and a Laplace 0.059106. For k ≥ 1, equality is attained by the three-point distribution with mass 1/(2k²) at each of μ ± kσ and the remaining mass at μ; for 0 < k < 1 the bound 1/k² exceeds 1 and is not attainable as an equality."
     },
     {
      "t": "formula",
@@ -678,7 +678,7 @@
     {
      "t": "step",
      "h": "The source of the slack",
-     "body": "A distribution-free bound must hold for the worst distribution satisfying its assumptions, so its value is set by that worst case and not by the case in front of you. Chebyshev's worst case is the three-point distribution with mass 1/(2k²) at each of μ ± kσ, which attains 1/k² exactly. Markov's is the two-point variable at 0 and a. No smaller bound is available without further assumptions."
+     "body": "A distribution-free bound must hold for the worst distribution satisfying its assumptions, so its value is set by that worst case and not by the case in front of you. For k ≥ 1, Chebyshev's worst case is the three-point distribution with mass 1/(2k²) at each of μ ± kσ and the remaining mass at μ, which attains 1/k² exactly. For 0 < k < 1 the bound is greater than 1 and is therefore vacuous, not sharp. Markov's is the two-point variable at 0 and a. No smaller bound is available without further assumptions."
     },
     {
      "t": "step",
@@ -783,7 +783,7 @@
     {
      "claim": "Chebyshev's inequality cannot be improved without further assumptions.",
      "tf": true,
-     "why": "True. The three-point distribution with mass 1/(2k²) at each of μ ± kσ and the rest at μ has variance exactly σ² and tail probability exactly 1/k², so it attains the bound. Any smaller bound would be false for that distribution, and it satisfies the inequality's only assumption of a finite variance."
+     "why": "True. For k ≥ 1, the three-point distribution with mass 1/(2k²) at each of μ ± kσ and the rest at μ has variance exactly σ² and tail probability exactly 1/k², so it attains the bound. Any smaller bound would be false for that distribution, and it satisfies the inequality's only assumption of a finite variance."
     },
     {
      "claim": "For a non-negative integer-valued X, E(X) = Σ(k≥1) P(X ≥ k).",
