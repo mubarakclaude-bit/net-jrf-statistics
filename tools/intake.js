@@ -104,6 +104,12 @@ function nearest(text, index) {
 
 /* ------------------------------------------------------------------ workspaces */
 const wsDir = id => path.join(DIR, id);
+/* A path as the reader should type it: relative when it is inside the repository, absolute otherwise. An unattended run
+   works in a worktree while INTAKE_DIR points elsewhere, and a relative path would send it to the wrong folder. */
+function shownPath(p) {
+  const rel = path.relative(ROOT, p);
+  return (rel && !rel.startsWith("..") && !path.isAbsolute(rel) ? rel : path.resolve(p)).split(path.sep).join("/");
+}
 function openWorkspace(id) {
   if (!/^[0-9a-f]{12}$/.test(id || "")) throw new Error("A workspace id is the 12 hex characters `add` printed. `list` shows them.");
   const f = path.join(wsDir(id), "source.json");
@@ -160,7 +166,7 @@ function add(file, opts) {
   writeJSON(path.join(dir, "source.json"), src);
   const sheet = opts.kind === "questions" ? { source: id, covers: { from: 1, to: null }, items: [] } : { source: id, items: [] };
   writeJSON(path.join(dir, KINDS[opts.kind]), sheet);
-  const rel = path.relative(ROOT, dir).split(path.sep).join("/");
+  const rel = shownPath(dir);
   console.log("Registered " + id + ": " + src.title + " (" + pages + " pages, " + opts.kind + ").");
   const notes = [];
   if (imagePages.length) notes.push(imagePages.length + " with no usable text layer");
@@ -287,7 +293,7 @@ function scan(folder, opts) {
   const next = todo[0];
   if (!next) return { rows, next: null };
   console.log("\nNext: " + next.name + " as " + next.kind + ".");
-  if (next.why.startsWith("already started")) console.log("Finish its worksheet in .cache/intake/" + sha256File(next.file).slice(0, 12) + "/, then check and gaps.");
+  if (next.why.startsWith("already started")) console.log("Finish its worksheet in " + shownPath(wsDir(sha256File(next.file).slice(0, 12))) + "/, then check and gaps.");
   else if (opts.add) { console.log(""); add(next.file, { kind: next.kind }); }
   else console.log("Run: node tools/intake.js add \"" + next.file + "\" --kind " + next.kind + "    (or: scan \"" + folder + "\" --add)");
   return { rows, next };

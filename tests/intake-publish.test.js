@@ -46,6 +46,10 @@ expect("a ready result needs a title and a real body", P.readResult(rf("notitle"
 expect("a verify command that is not a plain `python <script>.py` is refused (no command injection)",
   ["python verify.py; rm -rf .", "bash evil.sh", "python ../outside.py && x", "python verify.py --flag"].every(v => P.readResult(rf("inj", Object.assign({}, good, { verify: v }))).status === "invalid"));
 expect("a good result is accepted", P.readResult(rf("good", good)).status === "ready");
+const bomFile = path.join(tmp, "bom.json"); fs.writeFileSync(bomFile, Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from(JSON.stringify({ status: "stopped", reason: "r" }))]));
+expect("a UTF-8 file with a byte-order mark (PowerShell Set-Content) is read", P.readResult(bomFile).status === "stopped");
+const u16File = path.join(tmp, "u16.json"); fs.writeFileSync(u16File, Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from(JSON.stringify({ status: "nothing" }), "utf16le")]));
+expect("a UTF-16LE file (PowerShell Out-File or >) is read", P.readResult(u16File).status === "nothing");
 
 // publish(): the happy path, merging on
 const SHA = "abc1234def5678";
