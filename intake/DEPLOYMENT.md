@@ -6,29 +6,36 @@ Provision private R2 buckets for source and artifacts, D1 intake jobs, processin
 ### Intake Worker
 - Configure bindings from `intake/wrangler.toml`; replace D1 IDs and queue bindings. Bind the private artifact R2 bucket as `ARTIFACT_BUCKET` in addition to the source bucket.
 - For a fresh database, apply `schema.sql`. For an existing database, apply migrations in order (currently `migrations/0001_dispatch_leases.sql`, `migrations/0003_dispatch_outbox.sql`, `migrations/0004_outbox_retry_after.sql`, `migrations/0005_active_attempt_id.sql`, `migrations/0006_outbox_retry_generations.sql`) before deploying the updated Worker.
-- Set secret `INTAKE_TOKEN`.
+- Set secret `INTAKE_TOKEN` for portal/API access and `PROCESSOR_CALLBACK_TOKEN` for processor-to-intake completion callbacks.
+- Configure `PROCESSOR_URL` and secret `PROCESSOR_TOKEN` on the intake Worker; the token must match the processor's bearer-token secret.
 - Configure owner-only Access and review upload limits, scanning and retention.
 - Deploy only after security and cost review.
 
 ### Processor Worker
 - Deploy separately from `intake/processor/`.
-- Bind source storage and private artifact storage.
-- Set `PROCESSOR_TOKEN`, `EXTRACTOR_TOKEN`.
-- Configure reviewed trusted `EXTRACTOR_URL`.
+- Bind the private source and artifact R2 buckets.
+- Provision the processor-claims D1 database, bind it as `PROCESSOR_DB`, and apply `processor/migrations/0001_execution_claims.sql`.
+- Set `PROCESSOR_TOKEN` (must match intake's secret), `EXTRACTOR_TOKEN`, and `CALLBACK_TOKEN` (must match intake's `PROCESSOR_CALLBACK_TOKEN`).
+- Configure `INTAKE_CALLBACK_URL` to the intake Worker `/internal/processor-result` endpoint and reviewed trusted `EXTRACTOR_URL`.
 - Configure optional trusted workspace taxonomy/resource/output variables.
-- Set intake `PROCESSOR_URL` and processor token.
+- Callback configuration is required for ledger completion; callback failure/retry recovery is not yet durable and remains a release blocker.
 
 ## Deployment commands (not executed)
 From intake directory:
 ```sh
 npx wrangler d1 execute net-jrf-intake-jobs --remote --file schema.sql
 npx wrangler secret put INTAKE_TOKEN
+npx wrangler secret put PROCESSOR_CALLBACK_TOKEN
+# Configure PROCESSOR_URL and PROCESSOR_TOKEN in the intake Worker
 npx wrangler deploy
 ```
 Processor directory:
 ```sh
+npx wrangler d1 execute net-jrf-processor-claims --remote --file migrations/0001_execution_claims.sql
 npx wrangler secret put PROCESSOR_TOKEN
 npx wrangler secret put EXTRACTOR_TOKEN
+npx wrangler secret put CALLBACK_TOKEN
+# Configure INTAKE_CALLBACK_URL and EXTRACTOR_URL
 npx wrangler deploy
 ```
 
