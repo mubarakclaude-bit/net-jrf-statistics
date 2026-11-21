@@ -1,0 +1,96 @@
+{
+ "moduleId": "regression",
+ "source": "variant",
+ "label": "GATE 2025 Statistics (ST) questions",
+ "count": 4,
+ "items": [
+  {
+   "id": "gate25-q24",
+   "format": "single",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "For a given data (xᵢ, yᵢ), i = 1, 2, …, n, with Σxᵢ² > 0, let β̂ minimise Σ(yᵢ − βxᵢ)² over β ∈ ℝ. Further, let vⱼ = yⱼ − xⱼ and uⱼ = 2xⱼ, for j = 1, 2, …, n, and let γ̂ minimise Σ(vᵢ − γuᵢ)² over γ ∈ ℝ. If β̂ = 10, then the value of γ̂ is",
+   "options": [
+    "4.5",
+    "5",
+    "10",
+    "9"
+   ],
+   "answer": "A",
+   "explanation": "Least squares through the origin gives β̂ = Σxy/Σx² = 10. Likewise γ̂ = Σuv/Σu² = Σ2x(y − x)/Σ4x² = (2Σxy − 2Σx²)/(4Σx²) = (β̂ − 1)/2 = 9/2 = 4.5.",
+   "ref": "GATE 2025 ST Q24",
+   "year": "GATE-2025"
+  },
+  {
+   "id": "gate25-q35",
+   "format": "numeric",
+   "topic": "regression-t4",
+   "diff": "easy",
+   "stem": "Consider the multi-linear regression model yᵢ = β₀ + β₁x₁ᵢ + β₂x₂ᵢ + β₃x₃ᵢ + β₄x₄ᵢ + εᵢ, i = 1, 2, …, 25, where βᵢ, i = 0, 1, 2, 3, 4, are unknown parameters, the errors εᵢ are i.i.d. random variables having N(0, σ²) distribution, where σ > 0 is unknown. Suppose that the value of the coefficient of determination R² is obtained as 5/6. Then the value of adjusted R² is ________ (rounded off to two decimal places).",
+   "options": [],
+   "answer": "0.80",
+   "explanation": "Adjusted R² = 1 − (1 − R²)(n − 1)/(n − p − 1) with n = 25 observations and p = 4 regressors: 1 − (1/6)(24/20) = 1 − 0.2 = 0.80.",
+   "check": "Adjusted R² is never larger than R² = 0.833 when regressors are present; 0.80 is just below it.",
+   "ref": "GATE 2025 ST Q35",
+   "year": "GATE-2025"
+  },
+  {
+   "id": "gate25-q46",
+   "format": "single",
+   "topic": "regression-t3",
+   "diff": "moderate",
+   "stem": "Consider the simple linear regression model yᵢ = α + βxᵢ + εᵢ, i = 1, 2, …, 24, where α ∈ ℝ and β ∈ ℝ are unknown parameters, the errors εᵢ are i.i.d. random variables having N(0, σ²) distribution, where σ > 0 is unknown. Suppose the following summary statistics are obtained from a data set of 24 observations: S_xx = 22.82, S_yy = 43.62, and S_xy = 15.48. Then, for testing H₀: β = 0 against H₁: β ≠ 0, the value of the F-test statistic based on the least squares estimator of β, whose distribution is F₁,₂₂, equals (rounded off to two decimal places)",
+   "options": [
+    "2.54",
+    "2.98",
+    "3.17",
+    "6.98"
+   ],
+   "answer": "D",
+   "explanation": "Regression sum of squares SSR = S_xy²/S_xx = 15.48²/22.82 = 10.501. Error sum of squares SSE = S_yy − SSR = 33.119, on 24 − 2 = 22 degrees of freedom, so MSE = 1.5054. F = SSR/MSE = 10.501/1.5054 = 6.98.",
+   "ref": "GATE 2025 ST Q46",
+   "year": "GATE-2025"
+  },
+  {
+   "id": "gate25-q54",
+   "format": "multi",
+   "topic": "regression-t2",
+   "diff": "moderate",
+   "stem": "For Y ∈ ℝⁿ, X ∈ ℝⁿˣᵖ, and β ∈ ℝᵖ, consider a regression model Y = Xβ + ε, where ε has an n-dimensional multivariate normal distribution with zero mean vector and identity covariance matrix. Let Iₚ denote the identity matrix of order p. For λ > 0, let β̂ₙ = (XᵀX + λIₚ)⁻¹XᵀY be an estimator of β. Then which of the following options is/are correct?",
+   "statements": [
+    "β̂ₙ is an unbiased estimator of β",
+    "(XᵀX + λIₚ) is a positive definite matrix",
+    "β̂ₙ has a multivariate normal distribution",
+    "Var(β̂ₙ) = (XᵀX + λIₚ)⁻¹"
+   ],
+   "options": [
+    "C only",
+    "B only",
+    "B and C only",
+    "A, B and C only"
+   ],
+   "answer": "C",
+   "explanation": "This is the ridge estimator. Adding λI makes the matrix positive definite and invertible even when XᵀX is singular, at the cost of bias; being linear in Y it stays normal, with the sandwich variance A XᵀX A where A = (XᵀX + λI)⁻¹.",
+   "verdicts": {
+    "A": {
+     "tf": false,
+     "why": "False: E(β̂ₙ) = (XᵀX + λI)⁻¹XᵀXβ, which differs from β whenever β ≠ 0 (ridge shrinks towards 0)."
+    },
+    "B": {
+     "tf": true,
+     "why": "True: vᵀ(XᵀX + λI)v = ‖Xv‖² + λ‖v‖² > 0 for every v ≠ 0."
+    },
+    "C": {
+     "tf": true,
+     "why": "True: β̂ₙ is a fixed linear transformation of the normal vector Y."
+    },
+    "D": {
+     "tf": false,
+     "why": "False: Var(β̂ₙ) = (XᵀX + λI)⁻¹XᵀX(XᵀX + λI)⁻¹, which is not (XᵀX + λI)⁻¹ in general."
+    }
+   },
+   "ref": "GATE 2025 ST Q54",
+   "year": "GATE-2025"
+  }
+ ]
+}
