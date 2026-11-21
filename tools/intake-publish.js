@@ -50,10 +50,18 @@ function prepare(root, sh, now) {
   return { stamp, branch, wt };
 }
 
+/* Windows PowerShell writes UTF-8 with a byte-order mark (Set-Content) or UTF-16LE (Out-File, >). Accept all three. */
+function decodeText(buf) {
+  if (buf.length >= 2 && buf[0] === 0xff && buf[1] === 0xfe) return buf.slice(2).toString("utf16le");
+  if (buf.length >= 2 && buf[0] === 0xfe && buf[1] === 0xff) return Buffer.from(buf.slice(2)).swap16().toString("utf16le");
+  const s = buf.toString("utf8");
+  return s.charCodeAt(0) === 0xfeff ? s.slice(1) : s;
+}
+
 /* What the agent may claim, checked before any of it is used. */
 function readResult(file) {
   let r;
-  try { r = JSON.parse(fs.readFileSync(file, "utf8")); } catch (e) { return { status: "invalid", reason: "no readable result file (" + e.message + ")" }; }
+  try { r = JSON.parse(decodeText(fs.readFileSync(file))); } catch (e) { return { status: "invalid", reason: "no readable result file (" + e.message + ")" }; }
   if (!["ready", "stopped", "nothing"].includes(r.status)) return { status: "invalid", reason: "result status must be ready, stopped or nothing" };
   if (r.status !== "ready") return r;
   if (typeof r.title !== "string" || !r.title.trim()) return { status: "invalid", reason: "a ready result needs a title" };
@@ -118,4 +126,4 @@ function cleanup(root, prep, keepBranch, sh) {
   if (!keepBranch) sh("git", ["branch", "-D", prep.branch], { cwd: root });
 }
 
-module.exports = { prepare, publish, cleanup, readResult, realSh, bashPath, stampOf };
+module.exports = { prepare, publish, cleanup, readResult, decodeText, realSh, bashPath, stampOf };

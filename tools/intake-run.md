@@ -15,13 +15,24 @@ the whole brief. `AGENTS.md`, `docs/SOURCE_INTAKE.md` and `docs/CONTENT_GUIDE.md
   After you exit, the watcher re-runs your verification script and `check.sh` itself, then pushes, opens the pull request
   and waits for CI.
 
+## What is in scope
+
+**Scope is decided per question, by syllabus topic, never by where a document comes from.** A question belongs if it
+tests a topic in `seed/catalog.json` (the UGC NET Statistics Paper 2 syllabus): probability, distributions, inference,
+regression, multivariate, sampling, design, stochastic processes, time series, nonparametrics, and the mathematics
+topics. It does not matter whether the document is a NET, CSIR, GATE or IIT JAM paper, a university exam, a coaching
+assignment or a quiz. File each question under the topic it tests. A question with no matching topic (general
+aptitude, reasoning, pure computer science, Paper 1 material) is `left-out`, with the reason "not on the Paper 2
+syllabus". Never stop a whole document because of its source or its level.
+
 ## The steps
 
 1. `node tools/intake.js scan "$INTAKE_FOLDER" --add`. It registers the top pick, or tells you which started workspace
-   to finish, and prints its kind: `questions` or `learning`. If it reports nothing to process, write the result
-   `{"status": "nothing"}` and end.
-2. Read every rendered page image in `$INTAKE_DIR/<id>/pages/`. For a question document, read the images, not the
-   `.txt` files.
+   to finish, and prints its kind (`questions` or `learning`) and the workspace's absolute path. If it reports nothing
+   to process, write the result `{"status": "nothing"}` and end.
+2. The workspace is `$INTAKE_DIR/<id>/`, **outside your worktree**. Always use that absolute path, never
+   `.cache/intake/` relative to your working directory. Read every rendered page image in `$INTAKE_DIR/<id>/pages/`.
+   For a question document, read the images, not the `.txt` files.
 3. Fill the worksheet exactly as `docs/SOURCE_INTAKE.md` describes. Transcribe stems as printed. Compute every answer
    yourself, by working and by code. Record the printed key, and add a `keyNote` wherever your answer differs.
 4. `node tools/intake.js check <id>` until it passes. Then `node tools/intake.js gaps <id>`, **before** you add any new
@@ -48,15 +59,17 @@ the whole brief. `AGENTS.md`, `docs/SOURCE_INTAKE.md` and `docs/CONTENT_GUIDE.md
      "source": "<source file name>" }
    ```
 
-   `verify` must be exactly `python <script>.py`; the watcher re-runs it and rejects anything else.
+   `verify` must be exactly `python <script>.py`; the watcher re-runs it and rejects anything else. Write the file with
+   Python or Node (for example `python -c "import json,os; json.dump({...}, open(os.environ['INTAKE_RESULT'],'w',encoding='utf-8'))"`)
+   rather than a PowerShell redirect, so it is plain UTF-8.
 
 ## Stop conditions
 
 Write `{"status": "stopped", "reason": "<what and why>"}`, commit nothing, and end when:
 
 - the file is unreadable, or `scan` says it needs a look;
-- you cannot produce defensible answers for most of the document. A single question you cannot settle is `left-out`
-  with its reason, not a stop;
+- you cannot produce defensible answers for most of the document. A single question you cannot settle, or one off the
+  syllabus, is `left-out` with its reason, not a stop;
 - the work would require editing `.github/workflows`, `contracts/`, `src/`, `seed/catalog.json` or an existing
   verification script. Those are core changes for the owner.
 
