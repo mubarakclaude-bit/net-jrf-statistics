@@ -38,8 +38,7 @@ CREATE TABLE IF NOT EXISTS intake_outbox (
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL,
   sent_at TEXT,
-  retry_after TEXT,
-  UNIQUE(job_id)
+  retry_after TEXT
 );
 CREATE INDEX IF NOT EXISTS intake_outbox_pending ON intake_outbox(state,created_at);
 CREATE INDEX IF NOT EXISTS intake_outbox_claim_expiry ON intake_outbox(state,claim_until);
