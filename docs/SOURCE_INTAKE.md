@@ -67,13 +67,19 @@ npm run intake:watch -- --show-settings     # print the settings in force
 change anything; a startup task does not need to change:
 
 ```json
-{ "folder": "C:\\Muhavin\\NET JRF", "agent": "codex", "model": null, "merge": null,
-  "interval": 300, "settle": 30, "maxRunsPerDay": 6 }
+{ "folder": "C:/Muhavin/NET JRF", "agent": "codex", "model": null, "sandbox": "workspace-write",
+  "merge": null, "interval": 300, "settle": 30, "maxRunsPerDay": 6 }
 ```
+
+Write paths with forward slashes. A file that is not valid JSON stops the watcher with the error, rather than being
+ignored.
 
 - `agent`: `codex` (GPT, the default), `claude`, or `none` (report only).
 - `model`: a model name the engine accepts, or `null` for the engine's own default. `codex debug models` lists what
   your OpenAI account can use (for example `gpt-5.6-terra` or `gpt-6-luna`).
+- `sandbox` (Codex only): `workspace-write` (the default) lets a run write only inside the repository and the source
+  folder, with network on. `danger-full-access` runs Codex with no sandbox, with the owner's full user permissions.
+  Only the owner sets that.
 - `merge`: `null` uses the engine's default (off for Codex, on for Claude); `true` or `false` sets it.
 - A command-line flag (`--agent`, `--model`, `--merge`, `--folder` …) overrides the file for that start only.
 
@@ -101,7 +107,13 @@ A Codex default model for every use, not only intake runs, can also go in Codex'
   output. A run that hits a stop condition writes `.cache/intake/watch-notes.md`.
 
 **Engines.** `--agent claude` uses Claude Code's command-line tool, logged in with the owner's Claude account.
-`--agent codex` uses OpenAI's Codex CLI (0.171 or later), with the owner's OpenAI API key or ChatGPT login. It runs in Codex's `workspace-write` sandbox: writes only inside the repository and the source folder, network on so it can push. On Windows, the first sandboxed run may ask the owner to set the sandbox up (it creates a local account and network rules); that is the owner's step. `--command "<cmd>"` runs
+`--agent codex` uses OpenAI's Codex CLI (0.171 or later), with the owner's OpenAI API key or ChatGPT login. The watcher runs it as `codex exec -s <sandbox> -c approval_policy="never"`, with no approvals because nobody is there
+to give them. Codex 0.171 rejects `--approve-for-me` together with `--sandbox`, and on its own that flag left runs
+read-only. **On Windows, `workspace-write` needs Codex's Windows sandbox to be set up**: a one-time step the owner runs as
+administrator, which creates local accounts and firewall rules. Until then, Codex silently falls back to read-only. So
+before each Codex run the watcher asks `codex doctor`, and if the sandbox backend is disabled it starts nothing and
+writes the choices into `.cache/intake/watch-notes.md`:
+(A) set up the sandbox, (B) set `"sandbox": "danger-full-access"`, or (C) use `"agent": "claude"`. `--command "<cmd>"` runs
 anything else, with the brief's path in `INTAKE_PROMPT_FILE`. The engine is installed and logged in by the owner; the
 watcher never sees a key. **Merging** is on by default for `claude` and off for `codex`. A Codex run leaves its PRs open
 for review, listed in `.cache/intake/watch-notes.md`, until the owner passes `--merge`. `--no-merge` turns merging off
