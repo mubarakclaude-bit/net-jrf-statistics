@@ -1,6 +1,6 @@
 # Intake callback ownership binding — repair design
 
-Status: proposed repair / not yet integrated or production validated.
+Status: partial implementation in draft PR; not live-tested or production validated.\n\nThe intake dispatcher now generates and persists `active_attempt_id` at the processing transition, sends it to the processor, and callback settlement checks the identity against the ledger. The processor adopts this authorized ID for its artifact prefix and manifest. Migration 0005 adds the field. Remaining verification: callback race fixtures, failure/rotation policy, schema/migration execution, live runtime.
 
 ## Problem
 The processor callback currently carries an attempt ID and fencing token, and the manifest repeats them, but the intake ledger has no durable active-attempt identity to compare against. Integrity validation alone is not ownership validation. A callback can therefore pass manifest integrity checks without proving that the attempt is the intake ledger's current authorized attempt.
