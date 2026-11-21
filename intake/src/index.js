@@ -81,17 +81,19 @@ export default {
         if(!env.PROCESSOR_URL||!env.PROCESSOR_TOKEN)return json({error:"processor_not_configured"},503);
         const source=await env.SOURCE_BUCKET.get(job.object_key);if(!source)return json({error:"source_missing"},409);
         const bytes=await source.arrayBuffer();if(bytes.byteLength!==job.source_size||await sha256(bytes)!==job.source_sha256)return json({error:"source_integrity_failed"},422);
-        const time=now();
+        const time=now(),outboxId=crypto.randomUUID(),payload=JSON.stringify({job_id:id,stage:"extract",sha256:job.source_sha256});
         const moved=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='queued',stage='dispatch',updated_at=?,error_code=NULL,error_message=NULL,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status=?").bind(time,id,job.status).run();
         if(!moved.meta?.changes)return json({error:"state_conflict"},409);
-        await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(id,"manual_retry_requested","dispatch",JSON.stringify({source_integrity_verified:true}),time).run();
-        try{await env.PROCESSING_QUEUE.send({job_id:id,stage:"extract",sha256:job.source_sha256});return json({job_id:id,status:"queued",retry_requested:true},202);}
-        catch{
-          const blockedTime=now();
-          await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='dispatch',updated_at=?,error_code='retry_enqueue_failed',error_message='Manual retry queueing failed.',dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status='queued'").bind(blockedTime,id).run();
-          try{await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(id,"retry_enqueue_failed","dispatch",JSON.stringify({code:"retry_enqueue_failed"}),blockedTime).run();}catch{/* job remains owner-action blocked */}
-          return json({job_id:id,status:"blocked_infrastructure",error:"retry_enqueue_failed"},503);
+        try {
+          await env.JOBS_DB.batch([
+            env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(id,"manual_retry_requested","dispatch",JSON.stringify({source_integrity_verified:true,outbox_id:outboxId}),time),
+            env.JOBS_DB.prepare("INSERT INTO intake_outbox (id,job_id,payload_json,state,created_at,updated_at) VALUES (?,?,?,'pending',?,?)").bind(outboxId,id,payload,time,time)
+          ]);
+        } catch {
+          await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='blocked_infrastructure',stage='dispatch',updated_at=?,error_code='outbox_write_failed',error_message='Retry intent could not be durably recorded.',dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status='queued'").bind(now(),id).run();
+          return json({job_id:id,status:"blocked_infrastructure",error:"outbox_write_failed",owner_action_required:true},503);
         }
+        return json({job_id:id,status:"queued",retry_requested:true,dispatch:"durable_outbox"},202);
       }
     }
     if (request.method === "GET" && url.pathname.startsWith("/jobs/")) {
@@ -126,11 +128,14 @@ export default {
     const time = now();
     await env.SOURCE_BUCKET.put(key, bytes, {httpMetadata:{contentType:mime}});
     try {
-      await env.JOBS_DB.prepare("INSERT INTO intake_jobs (id,source_name,source_sha256,object_key,source_size,mime_type,status,stage,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)")
-        .bind(id,name,hash,key,file.size,mime,"accepted","intake",time,time).run();
-      await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)")
-        .bind(id,"accepted","intake",JSON.stringify({size:file.size,sha256:hash,mime_type:mime}),time).run();
-      await env.PROCESSING_QUEUE.send({job_id:id,stage:"extract",sha256:hash});
+      await env.JOBS_DB.batch([
+        env.JOBS_DB.prepare("INSERT INTO intake_jobs (id,source_name,source_sha256,object_key,source_size,mime_type,status,stage,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)")
+          .bind(id,name,hash,key,file.size,mime,"queued","dispatch",time,time),
+        env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)")
+          .bind(id,"accepted","intake",JSON.stringify({size:file.size,sha256:hash,mime_type:mime}),time),
+        env.JOBS_DB.prepare("INSERT INTO intake_outbox (id,job_id,payload_json,state,created_at,updated_at) VALUES (?,?,?,'pending',?,?)")
+          .bind(crypto.randomUUID(),id,JSON.stringify({job_id:id,stage:"extract",sha256:hash}),time,time)
+      ]);
     } catch (e) {
       // A competing upload may win the checksum constraint; clean only this request's object.
       const raced = await env.JOBS_DB.prepare("SELECT id,status FROM intake_jobs WHERE source_sha256=? LIMIT 1").bind(hash).first();
