@@ -6,10 +6,10 @@
  "breadcrumb": "Statistical Inference → Point Estimation → Best unbiased estimation",
  "engine": "B",
  "engineName": "Estimation and inference — sampling distributions, and the variance you remove by conditioning",
- "estMin": 51,
- "version": "1.3",
+ "estMin": 58,
+ "version": "1.4",
  "status": "approved",
- "provenance": "Review pass, October 2026: 3 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. The same pass qualified an unrelated overclaim the review did not flag: MLE invariance was stated as holding 'always', which needs the existence of an MLE and the induced-likelihood convention. Theory, worked examples and practice authored for this platform against the UGC NET Statistics syllabus. Previous-year questions are stored separately and carry their exam cycle.",
+ "provenance": "Review pass, October 2026: 3 per-scene quick checks added on theory, worked and explore scenes from a third-party module review, each read for correctness before import; a further set offered for completion and guided scenes was declined, since those scenes already end with the learner writing an answer. The same pass qualified an unrelated overclaim the review did not flag: MLE invariance was stated as holding 'always', which needs the existence of an MLE and the induced-likelihood convention. Theory, worked examples and practice authored for this platform against the UGC NET Statistics syllabus. Previous-year questions are stored separately and carry their exam cycle. Revision v1.4, November 2026: two gaps found when the source-intake trial compared a textbook chapter on unbiased estimation with this lesson, concept by concept. (1) Scene 3 now shows why unbiased estimators are never unique (aT₁ + (1 − a)T₂ is unbiased for every a) and why minimum variance is the rule that picks one; a new recall item in scene 5 retrieves it. (2) A new worked scene, s7b, derives E(s) = cₙσ for a normal sample from the chi-square distribution of (n − 1)s²/σ², evaluates c₅ = 3√(2π)/8 ≈ 0.9400, and corrects s = 2 to s/c₅ ≈ 2.128 on five readings. Pool item inf-t3-m-14, which repeated inf-t3-m-09, now asks for s/c₅ with s = 3 (same id, difficulty and key). Prose written fresh for this platform; nothing is copied from the source. Every figure is computed in verify_inference_t3_unbiased.py: c₅ by the closed form, by numerical integration of E(√W) for W ~ χ²₄, and by simulating 2,000,000 normal samples of size 5 (average s within two standard errors of c₅σ); c₂, c₁₀ and c₃₀; the variance factors 1, 1/2 and 13 for a = 1, 1/2 and 3; the example's s = 2; and the pool item's four options.",
  "objectives": [
   "State Rao–Blackwell and say why the statistic conditioned on must be sufficient.",
   "Compute E[δ(X) | T = t] in the standard cases, using the conditional distribution of the sample given its total.",
@@ -98,6 +98,7 @@
   "sheet": [
    "Rao–Blackwell: δ unbiased for g(θ), T sufficient ⟹ η(T) = E[δ|T] is unbiased and Var(η) ≤ Var(δ).",
    "The proof is one line: Var(δ) = E[Var(δ|T)] + Var(E[δ|T]) ≥ Var(η(T)).",
+   "Unbiased estimators are never unique: if T₁ and T₂ are unbiased, so is aT₁ + (1 − a)T₂ for every a. Minimum variance is what picks one.",
    "T must be SUFFICIENT, or E[δ|T] still contains θ and is not a statistic.",
    "The inequality is ≤, not <. It is an equality exactly when δ was already a function of T.",
    "Lehmann–Scheffé: T complete sufficient and η(T) unbiased ⟹ η(T) is THE UMVUE, unique almost surely.",
@@ -107,6 +108,7 @@
    "Exponential rate λ:  MLE = n/Σxᵢ (biased),  UMVUE = (n−1)/Σxᵢ.",
    "U(0,θ):  UMVUE of θ = (n+1)/n · x₍ₙ₎.   UMVUE of θ² = (n+2)/n · x₍ₙ₎².",
    "N(μ,σ²), σ² known:  UMVUE of μ² = x̄² − σ²/n. It can come out negative — UMVUEs are not obliged to be sensible.",
+   "N(μ,σ²), both unknown:  E(s) = cₙσ with cₙ = √(2/(n−1))·Γ(n/2)/Γ((n−1)/2) < 1, so s/cₙ is the UMVUE of σ. c₅ = 3√(2π)/8 ≈ 0.940.",
    "A UMVUE is not invariant: the UMVUE of g(θ) is not g(UMVUE of θ). The MLE is invariant; this is the difference.",
    "No complete sufficient statistic (curved family) ⟹ Lehmann–Scheffé says nothing.",
    "Unbiased does not mean smaller MSE. For σ², the MLE beats s² on mean squared error."
@@ -167,7 +169,8 @@
    "Guess an unbiased function of T and correct it — completeness means whatever you find IS the UMVUE.",
    "Poisson: UMVUE of λ² is T(T−1)/n²; of e^(−λ) is ((n−1)/n)^T.",
    "Bernoulli: UMVUE of p² is T(T−1)/(n(n−1)).",
-   "U(0,θ): UMVUE of θ is (n+1)X₍ₙ₎/n, variance θ²/(n(n+2)) — an n⁻² rate."
+   "U(0,θ): UMVUE of θ is (n+1)X₍ₙ₎/n, variance θ²/(n(n+2)) — an n⁻² rate.",
+   "Unbiased for σ: s/cₙ, with c₂ ≈ 0.798, c₅ ≈ 0.940, c₁₀ ≈ 0.973. cₙ rises to 1, so the correction matters only in small samples."
   ],
   "remember": [
    "Rao–Blackwell needs sufficiency only. Uniqueness needs completeness as well.",
@@ -181,7 +184,8 @@
   "Applying Lehmann–Scheffé in a curved family, where no complete sufficient statistic exists.",
   "Squaring the UMVUE of θ and calling it the UMVUE of θ². That is MLE invariance, and UMVUEs do not have it.",
   "Assuming the UMVUE must beat the MLE on mean squared error. For the normal variance it does not.",
-  "Forgetting to subtract the bias term: x̄² estimates μ² + σ²/n, not μ²."
+  "Forgetting to subtract the bias term: x̄² estimates μ² + σ²/n, not μ².",
+  "Taking the square root of s² and calling s unbiased for σ. E(s) = cₙσ, which is below σ."
  ],
  "scenes": [
   {
@@ -326,6 +330,11 @@
      "t": "trap",
      "h": "It is ≤, not <",
      "body": "Equality holds precisely when Var(δ|T) = 0, which means δ was already a function of T. Rao–Blackwellising an estimator that already depends only on T changes nothing. Candidates lose marks asserting a strict improvement."
+    },
+    {
+     "t": "step",
+     "h": "Unbiased estimators come in infinite families",
+     "body": "Take two independent measurements X₁ and X₂ of the same quantity μ, each with variance σ². X₁ alone is unbiased for μ. So is X₂ alone. So is their average. Any blend whose weights add to one is unbiased:\nE[aX₁ + (1 − a)X₂] = a·E[X₁] + (1 − a)·E[X₂] = aμ + (1 − a)μ = μ,   for every real number a.\nThe same line works for any two unbiased estimators T₁ and T₂ of θ: E[aT₁ + (1 − a)T₂] = aθ + (1 − a)θ = θ. So once there are two different unbiased estimators there are infinitely many, one for each a, and 'unbiased' on its own cannot choose between them.\nThe variance can. For the two measurements, Var(aX₁ + (1 − a)X₂) = a²σ² + (1 − a)²σ² = σ²[a² + (1 − a)²]. At a = 1 (X₁ alone) that is σ². At a = 3, the estimator 3X₁ − 2X₂, still unbiased, it is σ²(9 + 4) = 13σ². Setting the derivative 2a − 2(1 − a) = 4a − 2 to zero gives a = 1/2, the average, with variance σ²/2. That is why the target is the MINIMUM-variance unbiased estimator: minimum variance is the rule that picks one member of the family.\nNotice what the members differ by. aT₁ + (1 − a)T₂ = T₂ + a(T₁ − T₂), and T₁ − T₂ has expectation zero. Scene 7 comes back to exactly that difference."
     },
     {
      "t": "note",
@@ -511,6 +520,10 @@
     {
      "q": "What does Rao–Blackwell NOT give you, and what supplies it?",
      "a": "Uniqueness — a single best estimator. Completeness supplies it, through Lehmann–Scheffé."
+    },
+    {
+     "q": "Why can 'unbiased' alone never pick out one estimator?",
+     "a": "If T₁ and T₂ are both unbiased for θ, so is aT₁ + (1 − a)T₂ for every a, since its expectation is aθ + (1 − a)θ = θ. Two unbiased estimators give infinitely many; minimum variance is the rule that chooses one."
     }
    ],
    "id": "s5"
@@ -647,6 +660,61 @@
    "ask": {
     "q": "What two conditions must be combined to use Lehmann–Scheffé to identify a UMVUE?",
     "nudge": "The estimator must be unbiased and be a function of a complete sufficient statistic."
+   }
+  },
+  {
+   "kind": "worked",
+   "title": "Worked in full — an unbiased estimator of σ, not σ²",
+   "mins": 7,
+   "objective": "See why an unbiased s² does not give an unbiased s, derive the correcting constant cₙ, and use it at n = 5.",
+   "problem": "X₁,…,X₅ are iid N(μ, σ²) with both parameters unknown. Five readings came out 23, 19, 18, 21, 19. s² = Σ(xᵢ − x̄)²/(n − 1) is unbiased for σ². Is s unbiased for σ? If not, find an estimator of σ that is, and evaluate it on these readings.",
+   "steps": [
+    {
+     "say": "Start with the readings, so there is a number to hold on to.",
+     "math": "x̄ = (23 + 19 + 18 + 21 + 19)/5 = 100/5 = 20;   deviations 3, −1, −2, 1, −1;   Σ(xᵢ − x̄)² = 9 + 1 + 4 + 1 + 1 = 16;   s² = 16/4 = 4,   s = 2",
+     "why": "s² = 4 is an unbiased estimate of σ². The question is whether s = 2 is an unbiased estimate of σ."
+    },
+    {
+     "say": "See why the square root spoils unbiasedness, before any formula.",
+     "math": "Var(s) = E(s²) − [E(s)]²   ⟹   [E(s)]² = σ² − Var(s) < σ²   ⟹   E(s) < σ",
+     "why": "s changes from sample to sample, so Var(s) > 0, and E(s²) = σ² because s² is unbiased. The square root of an unbiased estimator of σ² falls short of σ on average. This is the non-invariance of scene 7 again: the unbiased estimator of σ is not the square root of the unbiased estimator of σ²."
+    },
+    {
+     "say": "Write s through a chi-square variable.",
+     "math": "W = (n − 1)s²/σ² ~ χ²ₙ₋₁   ⟹   s = σ·√(W/(n − 1))   ⟹   E(s) = σ·E(√W)/√(n − 1)",
+     "why": "For a normal sample, (n − 1)s²/σ² has a chi-square distribution with n − 1 degrees of freedom; it is the result behind every chi-square test of a variance. Only E(√W) is left, and W has a known density."
+    },
+    {
+     "say": "Compute E(√W) for W ~ χ²ₖ with the gamma integral.",
+     "math": "E(√W) = ∫₀^∞ w^(1/2) · w^(k/2 − 1) e^(−w/2) dw / [2^(k/2) Γ(k/2)]\n= ∫₀^∞ w^((k+1)/2 − 1) e^(−w/2) dw / [2^(k/2) Γ(k/2)]\n= 2^((k+1)/2) Γ((k+1)/2) / [2^(k/2) Γ(k/2)]\n= √2 · Γ((k+1)/2) / Γ(k/2)",
+     "why": "The first line is the χ²ₖ density multiplied by √w. The second adds the exponents: 1/2 + k/2 − 1 = (k + 1)/2 − 1. The third uses ∫₀^∞ w^(a−1) e^(−w/2) dw = 2^a Γ(a) with a = (k + 1)/2. The last cancels 2^(k/2) from 2^((k+1)/2), leaving 2^(1/2) = √2."
+    },
+    {
+     "say": "Put k = n − 1 and name the constant.",
+     "math": "E(s) = σ · √2 · Γ(n/2) / [√(n − 1) · Γ((n − 1)/2)] = cₙσ,   where   cₙ = √(2/(n − 1)) · Γ(n/2) / Γ((n − 1)/2)",
+     "why": "cₙ depends on n only, not on μ or σ. So E(s/cₙ) = cₙσ/cₙ = σ for every μ and σ: s/cₙ is unbiased for σ."
+    },
+    {
+     "say": "Evaluate c₅.",
+     "math": "n = 5:   Γ(5/2) = (3/2)·(1/2)·Γ(1/2) = (3/4)√π,   Γ(4/2) = Γ(2) = 1\nc₅ = √(2/4) · (3/4)√π = (1/√2)·(3√π/4) = 3√(2π)/8 ≈ 0.9400",
+     "why": "Γ(5/2) comes from Γ(x + 1) = xΓ(x) used twice, ending at Γ(1/2) = √π. So at n = 5, s comes out about 6% low on average: E(s) ≈ 0.94σ."
+    },
+    {
+     "say": "Correct the estimate.",
+     "math": "σ̂ = s/c₅ = 2/0.9400 ≈ 2.128   (the same as s × 1.0638)",
+     "why": "The unbiased estimate is a little larger than s, as step 2 said it must be."
+    },
+    {
+     "say": "Name what you have, and check it by simulation.",
+     "math": "2,000,000 simulated samples of size 5 with σ = 3:   average s ≈ 2.82,   c₅σ = 2.820;   average s/c₅ ≈ 3.00",
+     "why": "(X̄, s²) is complete sufficient for (μ, σ²) and s/c₅ is a function of it, so by Lehmann–Scheffé s/c₅ is the UMVUE of σ. The correction fades as n grows: c₂ ≈ 0.798, c₁₀ ≈ 0.973, c₃₀ ≈ 0.991."
+    }
+   ],
+   "after": "Step 2 is the one to keep. Unbiasedness survives averaging and any linear change, but not a square root. Whenever the target is a non-linear function of a parameter, check the bias again instead of carrying it over.",
+   "id": "s7b",
+   "ask": {
+    "q": "Why is s biased for σ when s² is unbiased for σ², and what does dividing by cₙ repair?",
+    "nudge": "Use Var(s) = E(s²) − [E(s)]² > 0 to see E(s) < σ; then E(s) = cₙσ with cₙ < 1, so s/cₙ has expectation σ."
    }
   },
   {
@@ -794,6 +862,7 @@
     "State Lehmann–Scheffé and explain that completeness, not sufficiency, is what delivers uniqueness.",
     "Reach for the direct route — solve E[h(T)] = g(θ) — whenever guessing the form of h is easier than conditioning.",
     "Refuse to square a UMVUE and call the result a UMVUE, and refuse to assume a UMVUE beats the MLE on mean squared error.",
+    "Explain why an unbiased s² does not make s unbiased, and correct s by cₙ when the target is σ.",
     "The mastery test is ten unseen questions across all of this. Hints are off. The pass is 80% overall with 70% floors on the numerical and multi-statement items."
    ],
    "id": "s12"
