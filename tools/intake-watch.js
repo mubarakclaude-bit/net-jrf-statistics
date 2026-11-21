@@ -18,7 +18,7 @@
  *
  * Settings: .cache/intake/watch.json (local, never committed) holds the defaults, so the engine, the model or the folder
  * can be changed by editing one file, with no change to how the watcher is started:
- *   { "folder": "C:/Muhavin/NET JRF", "agent": "codex", "model": null, "sandbox": "workspace-write", "merge": null,
+ *   { "folder": "C:/Muhavin/NET JRF", "agent": "codex", "model": null, "reasoningEffort": "high", "sandbox": "workspace-write", "merge": null,
  *     "interval": 300, "settle": 30, "maxRunsPerDay": 6 }
  * A command-line flag overrides the file for that start; --show-settings prints what is in force and exits.
  * "model": null lets the engine use its own default (Codex: the model in ~/.codex/config.toml, else its built-in one).
@@ -90,7 +90,7 @@ function launcher(name, pkgRel, env) {
   return js ? { cmd: process.execPath, pre: [js] } : { cmd: name, pre: [] };
 }
 
-function engineCommand(agent, briefText, custom, folder, env, model, sandbox, workdir, extraDirs) {
+function engineCommand(agent, briefText, custom, folder, env, model, sandbox, workdir, extraDirs, effort) {
   if (custom) return { shell: true, cmd: custom, args: [], stdin: null };
   if (agent === "claude") {
     const l = launcher("claude", path.join("@anthropic-ai", "claude-code", "cli.js"), env);
@@ -107,7 +107,9 @@ function engineCommand(agent, briefText, custom, folder, env, model, sandbox, wo
     const sb = sandbox || "workspace-write";
     const dirs = [folder].concat(extraDirs || []).filter(Boolean);
     const confine = sb === "workspace-write" ? ["-c", "sandbox_workspace_write.network_access=true"].concat(...dirs.map(d => ["--add-dir", d])) : [];
-    return { cmd: l.cmd, args: l.pre.concat(["exec", "-s", sb, "-c", "approval_policy=\"never\""]).concat(confine)
+    // `codex exec` otherwise runs with reasoning effort "none", which ends a long intake task after a few commands.
+    const think = ["-c", "model_reasoning_effort=\"" + (effort || "high") + "\""];
+    return { cmd: l.cmd, args: l.pre.concat(["exec", "-s", sb, "-c", "approval_policy=\"never\""]).concat(think).concat(confine)
       .concat(["-C", workdir || ROOT]).concat(model ? ["-m", model] : []).concat(["-"]), stdin: briefText };
   }
   return null;
@@ -189,7 +191,7 @@ function start(opts, onExit) {
   fs.mkdirSync(path.join(DIR, "results"), { recursive: true });
   const stamp = prep.stamp;
   const resultFile = path.join(DIR, "results", stamp + ".json");
-  const eng = engineCommand(opts.agent, brief, opts.command, opts.folder, undefined, opts.model, opts.sandbox, prep.wt, [DIR]);
+  const eng = engineCommand(opts.agent, brief, opts.command, opts.folder, undefined, opts.model, opts.sandbox, prep.wt, [DIR], opts.effort);
   const out = fs.openSync(path.join(DIR, "runs", stamp + ".log"), "a");
   const env = Object.assign({}, process.env, { INTAKE_FOLDER: opts.folder, INTAKE_PROMPT_FILE: path.join(prep.wt, "tools", "intake-run.md"),
     INTAKE_DIR: DIR, INTAKE_RESULT: resultFile, INTAKE_WORKTREE: prep.wt });
@@ -223,11 +225,12 @@ function mergeOn(opts) {
 
 /* ------------------------------------------------------------------ command line */
 const SETTINGS = () => path.join(DIR, "watch.json");
-const DEFAULTS = { agent: "codex", model: null, merge: null, interval: 300, settle: 30, max: 6, once: false };
+const DEFAULTS = { agent: "codex", model: null, effort: "high", merge: null, interval: 300, settle: 30, max: 6, once: false };
 
 function normalise(f) {
   const o = {};
   for (const k of ["folder", "agent", "model", "sandbox", "command", "merge", "interval", "settle"]) if (f && f[k] !== undefined) o[k] = f[k];
+  if (f && f.reasoningEffort !== undefined) o.effort = f.reasoningEffort;
   if (f && f.maxRunsPerDay !== undefined) o.max = f.maxRunsPerDay;
   return o;
 }
@@ -251,6 +254,7 @@ function parse(argv, fileSettings) {
     else if (k === "--agent") o.agent = argv[++i];
     else if (k === "--model") o.model = argv[++i];
     else if (k === "--sandbox") o.sandbox = argv[++i];
+    else if (k === "--effort") o.effort = argv[++i];
     else if (k === "--command") o.command = argv[++i];
     else if (k === "--interval") o.interval = +argv[++i];
     else if (k === "--settle") o.settle = +argv[++i];
@@ -266,7 +270,7 @@ function main(argv) {
   if (opts.error) { console.error(opts.error); return 2; }
   if (opts.show) {
     console.log("settings file: " + SETTINGS() + (fs.existsSync(SETTINGS()) ? "" : " (not found; defaults in force)"));
-    console.log(JSON.stringify({ folder: opts.folder || null, engine: opts.command || opts.agent, model: opts.model || "(engine default)", sandbox: opts.agent === "codex" ? (opts.sandbox || "workspace-write") : "n/a",
+    console.log(JSON.stringify({ folder: opts.folder || null, engine: opts.command || opts.agent, model: opts.model || "(engine default)", sandbox: opts.agent === "codex" ? (opts.sandbox || "workspace-write") : "n/a", reasoningEffort: opts.agent === "codex" ? opts.effort : "n/a",
       merging: mergeOn(opts) ? "on" : "off", interval: opts.interval, settle: opts.settle, maxRunsPerDay: opts.max }, null, 1));
     return 0;
   }
@@ -276,6 +280,7 @@ function main(argv) {
   }
   if (!["claude", "codex", "none"].includes(opts.agent)) { console.error("--agent must be claude, codex or none"); return 2; }
   if (opts.sandbox && !["workspace-write", "danger-full-access"].includes(opts.sandbox)) { console.error("sandbox must be workspace-write or danger-full-access"); return 2; }
+  if (opts.effort && !["low", "medium", "high", "xhigh"].includes(opts.effort)) { console.error("reasoningEffort must be low, medium, high or xhigh"); return 2; }
   const { plan } = require("./intake.js");
   const check = (reason) => {
     let r;

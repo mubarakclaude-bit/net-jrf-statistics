@@ -62,6 +62,10 @@ fs.unlinkSync(path.join(process.env.INTAKE_DIR, "watch.json"));
 expect("no watch.json means plain defaults", !W.loadSettings().error && W.parse([]).agent === "codex");
 const xm = W.engineCommand("codex", "BRIEF", undefined, "C:/src", { APPDATA: path.join(tmp, "no-appdata") }, "gpt-5.6-terra");
 expect("a chosen model reaches codex as -m", xm.args.join(" ").includes("-m gpt-5.6-terra"));
+expect("codex reasons at high effort by default (exec otherwise runs with none and quits early)", xm.args.includes('model_reasoning_effort="high"'));
+expect("the reasoning effort can be set, from watch.json or --effort",
+  W.engineCommand("codex", "B", undefined, "C:/src", { APPDATA: tmp }, null, null, null, null, "medium").args.includes('model_reasoning_effort="medium"') &&
+  W.parse([], { reasoningEffort: "low" }).effort === "low" && W.parse(["--effort", "xhigh"], {}).effort === "xhigh" && W.parse([], {}).effort === "high");
 expect("no model means the engine's own default (no -m)", !W.engineCommand("codex", "B", undefined, "C:/src", { APPDATA: tmp }).args.includes("-m"));
 
 // tick() over a real folder, with a fake planner
