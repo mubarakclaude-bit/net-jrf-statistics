@@ -2,7 +2,7 @@
 /* Watch the owner's source folder and start an unattended intake run when a new PDF is ready.
  *
  *   node tools/intake-watch.js --folder "<dir>" [--agent claude|codex|none] [--command "<cmd>"]
- *                              [--interval 300] [--settle 30] [--max-runs-per-day 6] [--once]
+ *                              [--interval 300] [--settle 30] [--max-runs-per-day 6] [--once] [--merge | --no-merge]
  *
  * What it does, on a folder change or every --interval seconds:
  *   1. waits until every PDF in the folder has stopped changing (its mtime is at least --settle seconds old and its size
@@ -18,6 +18,10 @@
  *   none     only report what would run (the default: nothing is started until an engine is chosen)
  *   --command "<cmd>" runs any other command through the shell, with the brief's path in INTAKE_PROMPT_FILE.
  * The engine must be installed and logged in by the owner; this script never handles a key.
+ *
+ * Merging: a run merges its own green PRs only when merging is on (INTAKE_MERGE=1 in its environment). It is on by
+ * default for claude and off by default for codex, until a few Codex runs have been checked: --merge / --no-merge
+ * override. With merging off the run leaves each PR open and lists it in .cache/intake/watch-notes.md.
  *
  * --once checks one time and exits (for Windows Task Scheduler or any other scheduler). Without it, it keeps watching.
  * Everything it writes stays in .cache/intake/: watch.log, run.lock, runs/<time>.log. Standard library only. */
@@ -99,13 +103,19 @@ function start(opts, onExit) {
   fs.mkdirSync(path.join(DIR, "runs"), { recursive: true });
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
   const out = fs.openSync(path.join(DIR, "runs", stamp + ".log"), "a");
-  const env = Object.assign({}, process.env, { INTAKE_FOLDER: opts.folder, INTAKE_PROMPT_FILE: BRIEF });
+  const env = Object.assign({}, process.env, { INTAKE_FOLDER: opts.folder, INTAKE_PROMPT_FILE: BRIEF, INTAKE_MERGE: mergeOn(opts) ? "1" : "0" });
   const child = spawn(eng.cmd, eng.args, { cwd: ROOT, env, shell: !!eng.shell, stdio: ["ignore", out, out], windowsHide: true });
   child.on("error", e => { log("could not start " + eng.cmd + ": " + e.message + " (is it installed and on PATH?)"); try { fs.unlinkSync(LOCK()); } catch (x) { /* none */ } onExit && onExit(-1); });
   fs.writeFileSync(LOCK(), JSON.stringify({ pid: child.pid, started: Date.now(), engine: opts.command || opts.agent, log: "runs/" + stamp + ".log" }));
-  log("started run (" + (opts.command || opts.agent) + "), pid " + child.pid + ", log .cache/intake/runs/" + stamp + ".log");
+  log("started run (" + (opts.command || opts.agent) + (mergeOn(opts) ? ", merges green PRs" : ", PRs left open for review") + "), pid " + child.pid + ", log .cache/intake/runs/" + stamp + ".log");
   child.on("exit", code => { log("run finished with exit code " + code); try { fs.unlinkSync(LOCK()); } catch (e) { /* already gone */ } onExit && onExit(code); });
   return child;
+}
+
+/* Merge only where the owner has seen enough: on for Claude, off for Codex until --merge. */
+function mergeOn(opts) {
+  if (opts.merge === true || opts.merge === false) return opts.merge;
+  return opts.agent !== "codex";
 }
 
 /* ------------------------------------------------------------------ command line */
@@ -120,6 +130,8 @@ function parse(argv) {
     else if (k === "--interval") o.interval = +argv[++i];
     else if (k === "--settle") o.settle = +argv[++i];
     else if (k === "--max-runs-per-day") o.max = +argv[++i];
+    else if (k === "--merge") o.merge = true;
+    else if (k === "--no-merge") o.merge = false;
   }
   return o;
 }
@@ -139,7 +151,7 @@ function main(argv) {
     if (r.start) start(opts, () => { if (!opts.once) setTimeout(() => check("after the run"), 60 * 1000); });
   };
   if (opts.once) { check("one-off check"); return 0; }
-  log("watching " + opts.folder + " (engine: " + (opts.command || opts.agent) + ", every " + opts.interval + " s, settle " + opts.settle + " s)");
+  log("watching " + opts.folder + " (engine: " + (opts.command || opts.agent) + (mergeOn(opts) ? ", merging on" : ", merging off") + ", every " + opts.interval + " s, settle " + opts.settle + " s)");
   check("start");
   let timer = null;
   try {
@@ -154,4 +166,4 @@ function main(argv) {
 }
 
 if (require.main === module) { const c = main(process.argv.slice(2)); if (c !== null && c !== 0) process.exit(c); }
-module.exports = { settled, decide, engineCommand, tick, start, parse, lockState };
+module.exports = { settled, decide, engineCommand, tick, start, parse, lockState, mergeOn };

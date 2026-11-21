@@ -8,7 +8,7 @@ follow while doing it.
 The source folder is in the environment variable `INTAKE_FOLDER`. The repository is your working directory.
 
 **Authority:** on 2026-11-21 the owner authorised unattended intake runs to merge their own content pull requests into
-`main`, under the merge rule in step 11 and nothing wider. Everything else in `AGENTS.md` and `CLAUDE.md` still applies.
+`main`, under the merge rule in step 11 and nothing wider, and only when the watcher sets `INTAKE_MERGE=1`. Everything else in `AGENTS.md` and `CLAUDE.md` still applies.
 
 ## The loop
 
@@ -38,7 +38,9 @@ Repeat until `scan` reports nothing to process:
    `keyNote` and `repaired` note.
 10. Wait for the `Validate` workflow on your exact head commit (`gh run watch <id> --exit-status`). If it fails, read the
     whole log, fix everything in one commit and push once.
-11. **Merge only when** all three jobs (`validate`, `browser`, `acceptance`) are green on that commit **and** your
+11. **If `INTAKE_MERGE` is `0`, do not merge.** Mark the PR ready for review, add its link and a one-line summary to
+    `.cache/intake/watch-notes.md`, and continue with the next file from a fresh branch off `origin/main`.
+    **Otherwise, merge only when** all three jobs (`validate`, `browser`, `acceptance`) are green on that commit **and** your
     verification script passed: `gh pr merge <n> --merge --match-head-commit <sha>`. Never merge anything else, never
     force-push, and never push to `main` directly.
 

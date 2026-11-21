@@ -29,6 +29,8 @@ const x = W.engineCommand("codex", "BRIEF");
 expect("codex runs exec with the brief", x.cmd === "codex" && x.args[0] === "exec" && x.args.includes("BRIEF"));
 expect("a custom command runs through the shell", W.engineCommand("none", "B", "my-agent --go").shell === true);
 expect("no engine means nothing is started", W.engineCommand("none", "B") === null);
+expect("merging is off by default for codex and on for claude", !W.mergeOn({ agent: "codex" }) && W.mergeOn({ agent: "claude" }));
+expect("--merge and --no-merge override the default", W.mergeOn(W.parse(["--agent", "codex", "--merge"])) && !W.mergeOn(W.parse(["--agent", "claude", "--no-merge"])));
 const p = W.parse(["--folder", "F", "--agent", "codex", "--once", "--max-runs-per-day", "3"]);
 expect("options are parsed", p.folder === "F" && p.agent === "codex" && p.once && p.max === 3 && p.settle === 30);
 
@@ -57,11 +59,12 @@ expect("a dead run's lock is cleared and work starts", r.start && !fs.existsSync
 
 // start(): a fake agent proves it gets the folder and the brief, and the lock and log are handled
 const marker = path.join(tmp, "agent-ran.json");
-const fake = "\"" + process.execPath.replace(/\\/g, "/") + "\" -e \"require('fs').writeFileSync(process.argv[1], JSON.stringify({folder: process.env.INTAKE_FOLDER, brief: require('fs').existsSync(process.env.INTAKE_PROMPT_FILE)}))\" \"" + marker.replace(/\\/g, "/") + "\"";
+const fake = "\"" + process.execPath.replace(/\\/g, "/") + "\" -e \"require('fs').writeFileSync(process.argv[1], JSON.stringify({folder: process.env.INTAKE_FOLDER, brief: require('fs').existsSync(process.env.INTAKE_PROMPT_FILE), merge: process.env.INTAKE_MERGE}))\" \"" + marker.replace(/\\/g, "/") + "\"";
 W.start({ folder, agent: "none", command: fake }, code => {
   let m = {}; try { m = JSON.parse(fs.readFileSync(marker, "utf8")); } catch (e) { /* missing */ }
   expect("the run exited cleanly", code === 0, code);
   expect("the agent received the source folder and a readable brief", m.folder === folder && m.brief === true, JSON.stringify(m));
+  expect("a custom engine with no --merge gets merging on (INTAKE_MERGE=1)", m.merge === "1", JSON.stringify(m));
   expect("the lock is removed when the run ends", !fs.existsSync(lockFile));
   const runs = fs.readdirSync(path.join(process.env.INTAKE_DIR, "runs"));
   expect("the run has its own log file", runs.length === 1 && /\.log$/.test(runs[0]), runs.join(","));
