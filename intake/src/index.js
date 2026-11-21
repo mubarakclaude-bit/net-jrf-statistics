@@ -26,10 +26,10 @@ export default {
       let payload;try{payload=await request.json()}catch{return json({error:"invalid_json"},400)}
       const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       if(!uuid.test(payload.job_id||"")||payload.status!=="completed"||payload.stage!=="analysis"||!payload.attempt_id||!Number.isSafeInteger(payload.fencing_token)||typeof payload.manifest_key!=="string"||!Array.isArray(payload.artifact_keys)||payload.artifact_keys.length<1||payload.artifact_keys.length>20||payload.artifact_keys.some(k=>typeof k!=="string"||k.length>512||!k.startsWith(`jobs/${payload.job_id}/attempts/`)))return json({error:"invalid_contract"},400);
-      const existing=await env.JOBS_DB.prepare("SELECT id,status,source_sha256 FROM intake_jobs WHERE id=?").bind(payload.job_id).first();
+      const existing=await env.JOBS_DB.prepare("SELECT id,status,source_sha256,active_attempt_id FROM intake_jobs WHERE id=?").bind(payload.job_id).first();
       if(!existing)return json({error:"not_found"},404);
-      if(existing.status==="completed")return json({accepted:true,duplicate:true});
-      if(existing.status!=="processing"||!canTransition(existing.status,"completed"))return json({error:"invalid_transition"},409);
+      if(existing.status==="completed")return json({accepted:true,duplicate:existing.active_attempt_id===payload.attempt_id});
+      if(existing.status!=="processing"||existing.active_attempt_id!==payload.attempt_id||!canTransition(existing.status,"completed"))return json({error:"attempt_not_authorized"},409);
       // Independently validate the private manifest and every artifact before the
       // ledger is allowed to record completion.
       if(!env.ARTIFACT_BUCKET)return json({error:"artifact_storage_unconfigured"},503);
@@ -42,7 +42,7 @@ export default {
       for(const entry of manifest.artifacts){const stored=await env.ARTIFACT_BUCKET.get(entry.key);if(!stored)return json({error:"artifact_missing"},422);const bytes=await stored.arrayBuffer();if(bytes.byteLength!==entry.size||await sha256(bytes)!==entry.sha256)return json({error:"artifact_integrity_mismatch"},422);}
       const summary=payload.summary&&typeof payload.summary==="object"?{pages:Number.isSafeInteger(payload.summary.pages)?payload.summary.pages:null,segments:Number.isSafeInteger(payload.summary.segments)?payload.summary.segments:null,production_created:typeof payload.summary.production_created==="boolean"?payload.summary.production_created:null}:null;
       const time=now(),details=JSON.stringify({summary,artifact_keys:payload.artifact_keys,manifest_key:payload.manifest_key,attempt_id:payload.attempt_id,fencing_token:payload.fencing_token});
-      const settled=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='completed',stage='analysis',manifest_key=?,updated_at=?,error_code=NULL,error_message=NULL,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status='processing'").bind(payload.manifest_key,time,payload.job_id).run();
+      const settled=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='completed',stage='analysis',manifest_key=?,updated_at=?,error_code=NULL,error_message=NULL,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND status='processing' AND active_attempt_id=?").bind(payload.manifest_key,time,payload.job_id,payload.attempt_id).run();
       if(!settled.meta?.changes)return json({error:"state_conflict"},409);
       await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(payload.job_id,"processor_result","analysis",details,time).run();
       return json({accepted:true});
@@ -171,11 +171,12 @@ export default {
       // Move to processing before the synchronous processor call so a fast completion
       // callback cannot race against an accepted/queued ledger state.
       if(!canTransition(job.status,"processing")){await env.JOBS_DB.prepare("UPDATE intake_jobs SET dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND dispatch_lease_token=?").bind(job_id,leaseToken).run();message.ack();continue;}
-      const started=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='processing',stage='extract',updated_at=? WHERE id=? AND dispatch_lease_token=? AND status=?").bind(leaseTime,job_id,leaseToken,job.status).run();
+      const activeAttemptId=crypto.randomUUID();
+      const started=await env.JOBS_DB.prepare("UPDATE intake_jobs SET status='processing',stage='extract',active_attempt_id=?,updated_at=? WHERE id=? AND dispatch_lease_token=? AND status=?").bind(activeAttemptId,leaseTime,job_id,leaseToken,job.status).run();
       if(!started.meta?.changes){message.retry();continue;}
       await env.JOBS_DB.prepare("INSERT INTO intake_events (job_id,event,stage,details_json,created_at) VALUES (?,?,?,?,?)").bind(job_id,"processing_started","extract",JSON.stringify({lease_token_claimed:true}),leaseTime).run();
       try {
-        const resp=await fetch(env.PROCESSOR_URL,{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+env.PROCESSOR_TOKEN},body:JSON.stringify({schema_version:1,job_id,source_sha256:job.source_sha256,object_key:job.object_key,source_name:job.source_name,source_size:job.source_size,mime_type:job.mime_type,resume_stage:"extract"})});
+        const resp=await fetch(env.PROCESSOR_URL,{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+env.PROCESSOR_TOKEN},body:JSON.stringify({schema_version:1,job_id,active_attempt_id:activeAttemptId,source_sha256:job.source_sha256,object_key:job.object_key,source_name:job.source_name,source_size:job.source_size,mime_type:job.mime_type,resume_stage:"extract"})});
         if (!resp.ok) throw new Error("processor_http_"+resp.status);
         const time=now();
         const settled=await env.JOBS_DB.prepare("UPDATE intake_jobs SET stage='extract',updated_at=?,dispatch_lease_until=NULL,dispatch_lease_token=NULL WHERE id=? AND dispatch_lease_token=? AND status='processing'").bind(time,job_id,leaseToken).run();
