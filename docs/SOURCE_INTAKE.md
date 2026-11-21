@@ -53,9 +53,23 @@ from offering it again. Never list a personal document there.
 
 ## Run it automatically when a file arrives
 
-`tools/intake-watch.js` watches the folder and starts an unattended run when a new PDF is ready. The run follows
-`tools/intake-run.md`, the brief for the whole loop: pick, read, solve, verify, open a PR, wait for CI and merge when
-green. The watcher only decides **when** to run; an AI coding engine does the run.
+`tools/intake-watch.js` watches the folder and starts an unattended run when a new PDF is ready. Each run does one
+document, and the work is split so that **the AI agent never touches GitHub**:
+
+1. **The watcher prepares the run.** It fetches `origin`, adds a fresh worktree on a new `content/intake-<time>` branch
+   from `origin/main`, runs `npm ci` in it, and gives the repository a commit identity (`tools/intake-publish.js`).
+2. **The agent does the content** in that worktree, following `tools/intake-run.md`. It picks, reads, solves, writes
+   the worksheet, builds the bank or lesson change, verifies, registers the source, runs `check.sh`, **commits once
+   locally**, and writes a result file.
+3. **The watcher publishes, as the owner.** It requires exactly one new commit and a clean tree, then re-runs the
+   agent's verification script (only a plain `python <script>.py` is accepted) and `check.sh` itself. Only then does it
+   push, open the PR, wait for the `Validate` run on that exact commit, and merge when green and merging is on. A run
+   that fails any of these is not pushed; its branch is kept locally, and `.cache/intake/watch-notes.md` says why.
+
+**Run the watcher from a clone outside OneDrive**, for example `C:\Muhavin\net-jrf-intake`. Codex's Windows sandbox
+runs the agent as a separate sandbox user, which is denied access to OneDrive-synced folders and has no GitHub
+credentials. That is why the agent works locally and the watcher, running as you, does the GitHub part. A separate
+clone also keeps unattended work away from the checkout you edit by hand.
 
 ```sh
 npm run intake:watch                        # keep watching, with the settings below

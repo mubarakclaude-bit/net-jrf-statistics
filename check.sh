@@ -31,3 +31,5 @@ out=$(node tests/intake.test.js) || { echo "$out"; exit 1; }   # source-document
 echo "$out" | tail -1
 out=$(node tests/intake-watch.test.js) || { echo "$out"; exit 1; }   # the folder watcher that starts unattended intake runs
 echo "$out" | tail -1
+out=$(node tests/intake-publish.test.js) || { echo "$out"; exit 1; }   # re-checking and publishing a run's work (fake git and gh)
+echo "$out" | tail -1
