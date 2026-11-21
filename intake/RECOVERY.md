@@ -19,7 +19,7 @@ This subsystem is domain-agnostic. Job lifecycle data is the ledger; queue deliv
 5. Never replay arbitrary callbacks or queue messages from untrusted sources.
 
 ## Current limitations
-The lifecycle guard is a small policy module. Dispatch leases conditionally claim jobs and fence ledger updates; callback validation restricts completion to the current processing state and job-scoped artifact keys. These are race and integrity mitigations, not full processor idempotency: a lease can expire while a processor request is running, and external side effects may still be duplicated. DLQ wiring, a manual recovery endpoint, upload scanning/quarantine, retention/deletion and deployment remain owner/infrastructure work.
+The lifecycle guard is a small policy module. Dispatch leases conditionally claim jobs and fence ledger updates; callback validation restricts completion to the current processing state and job-scoped artifact keys. These are race and integrity mitigations, not full processor idempotency: a lease can expire while a processor request is running, and external side effects may still be duplicated. DLQ replay runbook and monitoring, a manual recovery endpoint, upload scanning/quarantine, retention/deletion and deployment remain owner/infrastructure work.
 
 ## Reconciliation procedure (operator review; not yet automated)
 
