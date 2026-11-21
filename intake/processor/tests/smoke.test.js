@@ -44,7 +44,7 @@ assert.equal(stable.segments[0].segment_id,"segment-1");
 // Processor contract must reject malformed identity and non-job-scoped source keys.
 const validJob="12345678-1234-1234-1234-123456789abc";
 const validHash="a".repeat(64);
-const basePayload={schema_version:1,job_id:validJob,source_sha256:validHash,object_key:"incoming/"+validJob+"/"+validHash+"/source.txt",source_name:"source.txt",source_size:12};
+const basePayload={schema_version:1,job_id:validJob,active_attempt_id:"12345678-1234-1234-1234-123456789abc",source_sha256:validHash,object_key:"incoming/"+validJob+"/"+validHash+"/source.txt",source_name:"source.txt",source_size:12};
 const invalidKeyPayload={...basePayload,object_key:"incoming/other/"+validHash+"/source.txt"};
 const invalidKey=await worker.fetch(new Request("https://processor/process",{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer x"},body:JSON.stringify(invalidKeyPayload)}),{PROCESSOR_TOKEN:"x"});
 assert.equal(invalidKey.status,400,"processor rejects source keys outside the job namespace before storage access");
