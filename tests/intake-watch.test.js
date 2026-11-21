@@ -37,8 +37,20 @@ expect("a custom command runs through the shell", W.engineCommand("none", "B", "
 expect("no engine means nothing is started", W.engineCommand("none", "B") === null);
 expect("merging is off by default for codex and on for claude", !W.mergeOn({ agent: "codex" }) && W.mergeOn({ agent: "claude" }));
 expect("--merge and --no-merge override the default", W.mergeOn(W.parse(["--agent", "codex", "--merge"])) && !W.mergeOn(W.parse(["--agent", "claude", "--no-merge"])));
-const p = W.parse(["--folder", "F", "--agent", "codex", "--once", "--max-runs-per-day", "3"]);
-expect("options are parsed", p.folder === "F" && p.agent === "codex" && p.once && p.max === 3 && p.settle === 30);
+const p = W.parse(["--folder", "F", "--agent", "claude", "--once", "--max-runs-per-day", "3"], {});
+expect("options are parsed", p.folder === "F" && p.agent === "claude" && p.once && p.max === 3 && p.settle === 30);
+expect("GPT (codex) is the default engine", W.parse([], {}).agent === "codex");
+const fileSet = { folder: "C:/src", agent: "codex", model: "gpt-5.6-terra", maxRunsPerDay: 2 };
+const ps = W.parse([], fileSet);
+expect("the settings file supplies folder, engine, model and limit", ps.folder === "C:/src" && ps.model === "gpt-5.6-terra" && ps.max === 2);
+expect("a flag overrides the settings file", W.parse(["--model", "gpt-6-luna", "--agent", "claude"], fileSet).model === "gpt-6-luna" && W.parse(["--agent", "claude"], fileSet).agent === "claude");
+fs.mkdirSync(process.env.INTAKE_DIR, { recursive: true });
+fs.writeFileSync(path.join(process.env.INTAKE_DIR, "watch.json"), JSON.stringify({ model: "gpt-5.6-luna", merge: false }));
+expect("watch.json is read from .cache/intake", W.loadSettings().model === "gpt-5.6-luna" && W.loadSettings().merge === false);
+fs.unlinkSync(path.join(process.env.INTAKE_DIR, "watch.json"));
+const xm = W.engineCommand("codex", "BRIEF", undefined, "C:/src", { APPDATA: path.join(tmp, "no-appdata") }, "gpt-5.6-terra");
+expect("a chosen model reaches codex as -m", xm.args.join(" ").includes("-m gpt-5.6-terra"));
+expect("no model means the engine's own default (no -m)", !W.engineCommand("codex", "B", undefined, "C:/src", { APPDATA: tmp }).args.includes("-m"));
 
 // tick() over a real folder, with a fake planner
 const folder = path.join(tmp, "src"); fs.mkdirSync(folder);

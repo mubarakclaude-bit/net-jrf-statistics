@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* Watch the owner's source folder and start an unattended intake run when a new PDF is ready.
  *
- *   node tools/intake-watch.js --folder "<dir>" [--agent claude|codex|none] [--command "<cmd>"]
+ *   node tools/intake-watch.js [--folder "<dir>"] [--agent codex|claude|none] [--model <name>] [--command "<cmd>"]
  *                              [--interval 300] [--settle 30] [--max-runs-per-day 6] [--once] [--merge | --no-merge]
  *
  * What it does, on a folder change or every --interval seconds:
@@ -12,11 +12,18 @@
  *   3. if anything is left and no run is active, starts ONE agent run with the brief in tools/intake-run.md and the folder
  *      in INTAKE_FOLDER. The agent does the reading, solving, verification, PR and merge.
  *
- * Engines (--agent):
+ * Settings: .cache/intake/watch.json (local, never committed) holds the defaults, so the engine, the model or the folder
+ * can be changed by editing one file, with no change to how the watcher is started:
+ *   { "folder": "C:\\Muhavin\\NET JRF", "agent": "codex", "model": null, "merge": null,
+ *     "interval": 300, "settle": 30, "maxRunsPerDay": 6 }
+ * A command-line flag overrides the file for that start; --show-settings prints what is in force and exits.
+ * "model": null lets the engine use its own default (Codex: the model in ~/.codex/config.toml, else its built-in one).
+ *
+ * Engines (--agent; the default is codex):
  *   claude   Claude Code's CLI:  claude -p --permission-mode acceptEdits --allowedTools ...  (brief on stdin)
  *   codex    OpenAI Codex CLI:   codex exec --sandbox workspace-write --approve-for-me (network on) -  (brief on stdin)
  *            (uses the owner's OpenAI API key or ChatGPT login; the first sandboxed run may ask the owner to set it up)
- *   none     only report what would run (the default: nothing is started until an engine is chosen)
+ *   none     only report what would run
  *   --command "<cmd>" runs any other command through the shell, with the brief's path in INTAKE_PROMPT_FILE.
  * The engine must be installed and logged in by the owner; this script never handles a key.
  *
@@ -79,19 +86,20 @@ function launcher(name, pkgRel, env) {
   return js ? { cmd: process.execPath, pre: [js] } : { cmd: name, pre: [] };
 }
 
-function engineCommand(agent, briefText, custom, folder, env) {
+function engineCommand(agent, briefText, custom, folder, env, model) {
   if (custom) return { shell: true, cmd: custom, args: [], stdin: null };
   if (agent === "claude") {
     const l = launcher("claude", path.join("@anthropic-ai", "claude-code", "cli.js"), env);
     return { cmd: l.cmd, args: l.pre.concat(["-p", "--permission-mode", "acceptEdits",
-      "--allowedTools", "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch"]), stdin: briefText };
+      "--allowedTools", "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch"]).concat(model ? ["--model", model] : []), stdin: briefText };
   }
   // Codex CLI 0.171: no --full-auto; workspace-write sandbox (writes only inside the repository and the source folder),
   // approvals reviewed automatically, network on so the run can push and open the pull request. "-" reads the brief from stdin.
   if (agent === "codex") {
     const l = launcher("codex", path.join("@openai", "codex", "bin", "codex.js"), env);
     return { cmd: l.cmd, args: l.pre.concat(["exec", "--sandbox", "workspace-write", "--approve-for-me",
-      "-c", "sandbox_workspace_write.network_access=true", "-C", ROOT]).concat(folder ? ["--add-dir", folder] : []).concat(["-"]), stdin: briefText };
+      "-c", "sandbox_workspace_write.network_access=true", "-C", ROOT]).concat(model ? ["-m", model] : [])
+      .concat(folder ? ["--add-dir", folder] : []).concat(["-"]), stdin: briefText };
   }
   return null;
 }
@@ -118,7 +126,7 @@ function tick(opts, planner) {
 
 function start(opts, onExit) {
   const brief = fs.readFileSync(BRIEF, "utf8");
-  const eng = engineCommand(opts.agent, brief, opts.command, opts.folder);
+  const eng = engineCommand(opts.agent, brief, opts.command, opts.folder, undefined, opts.model);
   if (!eng) { log("would start a run now, but no engine is set (--agent claude|codex or --command)"); onExit && onExit(null); return null; }
   fs.mkdirSync(path.join(DIR, "runs"), { recursive: true });
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
@@ -128,7 +136,7 @@ function start(opts, onExit) {
   if (eng.stdin) { child.stdin.on("error", () => { /* the engine exited early; its log says why */ }); child.stdin.end(eng.stdin); }
   child.on("error", e => { log("could not start " + eng.cmd + ": " + e.message + " (is it installed and on PATH?)"); try { fs.unlinkSync(LOCK()); } catch (x) { /* none */ } onExit && onExit(-1); });
   fs.writeFileSync(LOCK(), JSON.stringify({ pid: child.pid, started: Date.now(), engine: opts.command || opts.agent, log: "runs/" + stamp + ".log" }));
-  log("started run (" + (opts.command || opts.agent) + (mergeOn(opts) ? ", merges green PRs" : ", PRs left open for review") + "), pid " + child.pid + ", log .cache/intake/runs/" + stamp + ".log");
+  log("started run (" + (opts.command || opts.agent) + (opts.model ? ", model " + opts.model : "") + (mergeOn(opts) ? ", merges green PRs" : ", PRs left open for review") + "), pid " + child.pid + ", log .cache/intake/runs/" + stamp + ".log");
   child.on("exit", code => { log("run finished with exit code " + code); try { fs.unlinkSync(LOCK()); } catch (e) { /* already gone */ } onExit && onExit(code); });
   return child;
 }
@@ -140,13 +148,30 @@ function mergeOn(opts) {
 }
 
 /* ------------------------------------------------------------------ command line */
-function parse(argv) {
-  const o = { agent: "none", interval: 300, settle: 30, max: 6, once: false };
+const SETTINGS = () => path.join(DIR, "watch.json");
+const DEFAULTS = { agent: "codex", model: null, merge: null, interval: 300, settle: 30, max: 6, once: false };
+
+function normalise(f) {
+  const o = {};
+  for (const k of ["folder", "agent", "model", "command", "merge", "interval", "settle"]) if (f && f[k] !== undefined) o[k] = f[k];
+  if (f && f.maxRunsPerDay !== undefined) o.max = f.maxRunsPerDay;
+  return o;
+}
+
+function loadSettings() {
+  try { return normalise(JSON.parse(fs.readFileSync(SETTINGS(), "utf8"))); } catch (e) { return {}; }
+}
+
+/* Defaults, then .cache/intake/watch.json, then command-line flags. */
+function parse(argv, fileSettings) {
+  const o = Object.assign({}, DEFAULTS, fileSettings === undefined ? loadSettings() : normalise(fileSettings));
   for (let i = 0; i < argv.length; i++) {
     const k = argv[i];
     if (k === "--once") o.once = true;
+    else if (k === "--show-settings") o.show = true;
     else if (k === "--folder") o.folder = argv[++i];
     else if (k === "--agent") o.agent = argv[++i];
+    else if (k === "--model") o.model = argv[++i];
     else if (k === "--command") o.command = argv[++i];
     else if (k === "--interval") o.interval = +argv[++i];
     else if (k === "--settle") o.settle = +argv[++i];
@@ -159,6 +184,12 @@ function parse(argv) {
 
 function main(argv) {
   const opts = parse(argv);
+  if (opts.show) {
+    console.log("settings file: " + SETTINGS() + (fs.existsSync(SETTINGS()) ? "" : " (not found; defaults in force)"));
+    console.log(JSON.stringify({ folder: opts.folder || null, engine: opts.command || opts.agent, model: opts.model || "(engine default)",
+      merging: mergeOn(opts) ? "on" : "off", interval: opts.interval, settle: opts.settle, maxRunsPerDay: opts.max }, null, 1));
+    return 0;
+  }
   if (!opts.folder || !fs.existsSync(opts.folder)) {
     console.log(fs.readFileSync(__filename, "utf8").split("*/")[0].replace(/^#!.*\n\/\* ?/, "").replace(/^ \* ?/gm, ""));
     return 2;
@@ -172,7 +203,7 @@ function main(argv) {
     if (r.start) start(opts, () => { if (!opts.once) setTimeout(() => check("after the run"), 60 * 1000); });
   };
   if (opts.once) { check("one-off check"); return 0; }
-  log("watching " + opts.folder + " (engine: " + (opts.command || opts.agent) + (mergeOn(opts) ? ", merging on" : ", merging off") + ", every " + opts.interval + " s, settle " + opts.settle + " s)");
+  log("watching " + opts.folder + " (engine: " + (opts.command || opts.agent) + (opts.model ? ", model " + opts.model : "") + (mergeOn(opts) ? ", merging on" : ", merging off") + ", every " + opts.interval + " s, settle " + opts.settle + " s)");
   check("start");
   let timer = null;
   try {
@@ -187,4 +218,4 @@ function main(argv) {
 }
 
 if (require.main === module) { const c = main(process.argv.slice(2)); if (c !== null && c !== 0) process.exit(c); }
-module.exports = { settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn };
+module.exports = { settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn, loadSettings };
