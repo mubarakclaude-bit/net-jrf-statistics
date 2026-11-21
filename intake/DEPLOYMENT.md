@@ -5,7 +5,7 @@ Provision private R2 buckets for source and artifacts, D1 intake jobs, processin
 
 ### Intake Worker
 - Configure bindings from `intake/wrangler.toml`; replace D1 IDs and queue bindings. Bind the private artifact R2 bucket as `ARTIFACT_BUCKET` in addition to the source bucket.
-- For a fresh database, apply `schema.sql`. For an existing database, apply migrations in order (currently `migrations/0001_dispatch_leases.sql`, `migrations/0003_dispatch_outbox.sql`, `migrations/0004_outbox_retry_after.sql`) before deploying the updated Worker.
+- For a fresh database, apply `schema.sql`. For an existing database, apply migrations in order (currently `migrations/0001_dispatch_leases.sql`, `migrations/0003_dispatch_outbox.sql`, `migrations/0004_outbox_retry_after.sql`, `migrations/0005_active_attempt_id.sql`) before deploying the updated Worker.
 - Set secret `INTAKE_TOKEN`.
 - Configure owner-only Access and review upload limits, scanning and retention.
 - Deploy only after security and cost review.
