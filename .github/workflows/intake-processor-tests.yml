@@ -1,0 +1,25 @@
+name: Generic intake processor tests
+on:
+  pull_request:
+    paths:
+      - "intake/**"
+      - ".github/workflows/intake-processor-tests.yml"
+  push:
+    branches: [main]
+    paths:
+      - "intake/**"
+      - ".github/workflows/intake-processor-tests.yml"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run intake smoke tests
+        working-directory: intake
+        run: npm test
+      - name: Run processor smoke tests
+        working-directory: intake/processor
+        run: npm test
