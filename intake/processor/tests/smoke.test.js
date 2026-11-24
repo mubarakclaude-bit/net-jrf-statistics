@@ -1,5 +1,10 @@
 import assert from "node:assert/strict";
-const worker=(await import("../src/index.js")).default;
+const processorModule=await import("../src/index.js");
+const worker=processorModule.default;
+const {sanitizeSourceName}=processorModule;
+assert.equal(sanitizeSourceName("xlsx2026 source.txt"),"xlsx2026 source.txt","ordinary x characters and digits must be preserved");
+assert.equal(sanitizeSourceName("a"+String.fromCharCode(1)+"b"+String.fromCharCode(127)+"c"),"abc","ASCII control characters must be removed");
+assert.equal(sanitizeSourceName("n".repeat(205)).length,200,"source names must remain bounded");
 const response=await worker.fetch(new Request("https://processor/health"),{});
 assert.equal(response.status,200);assert.deepEqual(await response.json(),{ok:true,service:"processor"});
 const unauthorized=await worker.fetch(new Request("https://processor/process",{method:"POST",headers:{"content-type":"application/json"},body:"{}"}),{PROCESSOR_TOKEN:"x"});
