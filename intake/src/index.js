@@ -114,7 +114,7 @@ export default {
     const contentLength = Number(request.headers.get("content-length"));
     if (Number.isFinite(contentLength) && contentLength > limit + 1024 * 1024) return json({error:"file_size_limit"},413);
     if (file.size <= 0 || file.size > limit) return json({error:"file_size_limit"},413);
-    const name = (file.name || "source.pdf").replace(/[\\x00-\\x1f\\x7f]/g,"").slice(0,180) || "source.pdf";
+    const name = (file.name || "source.pdf").replace(/[\x00-\x1f\x7f]/g,"").slice(0,180) || "source.pdf";
     const allowedTypes=new Set(["application/pdf","text/plain","text/markdown","text/csv","text/html","application/rtf","application/vnd.openxmlformats-officedocument.wordprocessingml.document","application/vnd.openxmlformats-officedocument.presentationml.presentation","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]);
     const mime=(file.type||"application/octet-stream").toLowerCase();
     const allowedImages=new Set(["image/png","image/jpeg","image/webp"]);if(!allowedTypes.has(mime)&&!allowedImages.has(mime))return json({error:"unsupported_document_type"},415);
