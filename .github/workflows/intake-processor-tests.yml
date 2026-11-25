@@ -1,0 +1,40 @@
+name: Generic intake processor tests
+on:
+  pull_request:
+    paths:
+      - "intake/**"
+      - ".github/workflows/intake-processor-tests.yml"
+  push:
+    branches: [main]
+    paths:
+      - "intake/**"
+      - ".github/workflows/intake-processor-tests.yml"
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect intake source tree
+        id: intake
+        shell: bash
+        run: |
+          if [ -f intake/package.json ] && [ -f intake/processor/package.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.intake.outputs.present == 'true'
+        with:
+          node-version: "22"
+      - name: Run intake smoke tests
+        if: steps.intake.outputs.present == 'true'
+        working-directory: intake
+        run: npm test
+      - name: Run processor smoke tests
+        if: steps.intake.outputs.present == 'true'
+        working-directory: intake/processor
+        run: npm test
+      - name: Explain skipped test suite
+        if: steps.intake.outputs.present != 'true'
+        run: echo "Skipped because this change does not include the intake source tree."
