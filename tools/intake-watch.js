@@ -174,7 +174,20 @@ function noteOnce(text) {
   } catch (e) { /* the log has it too */ }
 }
 
-function start(opts, onExit) {
+/* Once a document's PR exists, move its PDF into <folder>/Done ("doneFolder" in watch.json; null keeps it in place), so
+   the folder shows what is left and finished files are never hashed again. A clash gets a " (2)" suffix. */
+function moveToDone(folder, file, sub) {
+  const dir = path.join(folder, sub);
+  fs.mkdirSync(dir, { recursive: true });
+  const ext = path.extname(file), base = path.basename(file, ext);
+  let target = path.join(dir, base + ext);
+  for (let k = 2; fs.existsSync(target); k++) target = path.join(dir, base + " (" + k + ")" + ext);
+  fs.renameSync(file, target);
+  return target;
+}
+
+function start(opts, onExit, pick) {
+  if (pick && !pick.file && pick.name) pick = Object.assign({}, pick, { file: path.join(opts.folder, pick.name) });
   const pf = (opts.preflight || codexPreflight)(opts);
   if (!pf.ok) {
     log("not starting: " + pf.why + ". See .cache/intake/watch-notes.md");
@@ -204,7 +217,9 @@ function start(opts, onExit) {
   const env = Object.assign({}, process.env, { INTAKE_FOLDER: opts.folder, INTAKE_PROMPT_FILE: path.join(prep.wt, "tools", "intake-run.md"),
     INTAKE_DIR: DIR, INTAKE_RESULT: resultFile, INTAKE_WORKTREE: prep.wt,
     // Python writes UTF-8 by default, so ∩, ∪ and ᶜ survive a worksheet saved from a script.
-    PYTHONUTF8: "1", PYTHONIOENCODING: "utf-8" });
+    PYTHONUTF8: "1", PYTHONIOENCODING: "utf-8",
+    // The document the watcher chose, so the agent does not rescan the whole folder.
+    INTAKE_PICK: pick ? pick.file : "", INTAKE_PICK_KIND: pick ? pick.kind || "" : "", INTAKE_PICK_ID: pick && pick.sha256 ? pick.sha256.slice(0, 12) : "" });
   const child = spawn(eng.cmd, eng.args, { cwd: prep.wt, env, shell: !!eng.shell, stdio: [eng.stdin ? "pipe" : "ignore", out, out], windowsHide: true });
   if (eng.stdin) { child.stdin.on("error", () => { /* the engine exited early; its log says why */ }); child.stdin.end(eng.stdin); }
   let failedToStart = false;
@@ -217,6 +232,10 @@ function start(opts, onExit) {
     try { res = failedToStart ? { outcome: "rejected", note: "the engine did not start" } : P.publish(prep, resultFile, mergeOn(opts), opts.sh, { engine: opts.command || opts.agent }); }
     catch (e) { res = { outcome: "rejected", note: "publishing failed: " + e.message }; }
     const pushed = ["left-open", "merged", "ci-failed", "pr-failed"].includes(res.outcome);
+    if (pick && pick.file && opts.done !== null && ["left-open", "merged"].includes(res.outcome)) {
+      try { const to = moveToDone(opts.folder, pick.file, opts.done || "Done"); log("moved " + path.basename(pick.file) + " to " + to); res.movedTo = to; }
+      catch (e) { log("could not move " + path.basename(pick.file) + " to the Done folder: " + e.message); }
+    }
     const quiet = ["nothing", "stopped", "progress"].includes(res.outcome);
     try { P.cleanup(ROOT, prep, !pushed && !quiet, opts.sh); } catch (e) { log("cleanup: " + e.message); }
     if (pushed) { try { fs.appendFileSync(PUBLISHED(), new Date().toISOString() + "  " + res.outcome + "  " + (res.pr || "") + "\n"); } catch (e) { /* log has it */ } }
@@ -243,7 +262,7 @@ function makeChecker(opts, planner, startFn, schedule) {
       if (res && res.outcome === "progress") log("stopping after " + (opts.maxBatches || 8) + " batches in a row; the next check resumes the document");
       batches = 0;
       if (!opts.once) schedule(() => check("after the run"), 60 * 1000);
-    });
+    }, r.todo && r.todo[0]);
   };
   return check;
 }
@@ -256,11 +275,12 @@ function mergeOn(opts) {
 
 /* ------------------------------------------------------------------ command line */
 const SETTINGS = () => path.join(DIR, "watch.json");
-const DEFAULTS = { agent: "codex", model: null, effort: "high", merge: null, interval: 300, settle: 30, max: 6, maxRuns: 30, maxBatches: 8, once: false };
+const DEFAULTS = { agent: "codex", model: null, effort: "high", merge: null, done: "Done", interval: 300, settle: 30, max: 6, maxRuns: 30, maxBatches: 8, once: false };
 
 function normalise(f) {
   const o = {};
   for (const k of ["folder", "agent", "model", "sandbox", "command", "merge", "interval", "settle"]) if (f && f[k] !== undefined) o[k] = f[k];
+  if (f && f.doneFolder !== undefined) o.done = f.doneFolder;
   if (f && f.reasoningEffort !== undefined) o.effort = f.reasoningEffort;
   if (f && f.maxRunsPerDay !== undefined) o.max = f.maxRunsPerDay;            // the old name for the publication limit
   if (f && f.maxPublishesPerDay !== undefined) o.max = f.maxPublishesPerDay;
@@ -307,7 +327,7 @@ function main(argv) {
   if (opts.show) {
     console.log("settings file: " + SETTINGS() + (fs.existsSync(SETTINGS()) ? "" : " (not found; defaults in force)"));
     console.log(JSON.stringify({ folder: opts.folder || null, engine: opts.command || opts.agent, model: opts.model || "(engine default)", sandbox: opts.agent === "codex" ? (opts.sandbox || "workspace-write") : "n/a", reasoningEffort: opts.agent === "codex" ? opts.effort : "n/a",
-      merging: mergeOn(opts) ? "on" : "off", interval: opts.interval, settle: opts.settle, maxPublishesPerDay: opts.max, maxAgentRunsPerDay: opts.maxRuns, maxBatchesInARow: opts.maxBatches }, null, 1));
+      merging: mergeOn(opts) ? "on" : "off", doneFolder: opts.done, interval: opts.interval, settle: opts.settle, maxPublishesPerDay: opts.max, maxAgentRunsPerDay: opts.maxRuns, maxBatchesInARow: opts.maxBatches }, null, 1));
     return 0;
   }
   if (!opts.folder || !fs.existsSync(opts.folder)) {
@@ -335,4 +355,4 @@ function main(argv) {
 }
 
 if (require.main === module) { const c = main(process.argv.slice(2)); if (c !== null && c !== 0) process.exit(c); }
-module.exports = { settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn, loadSettings, codexPreflight, makeChecker, publishedToday, agentRunsToday };
+module.exports = { settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn, loadSettings, codexPreflight, makeChecker, publishedToday, agentRunsToday, moveToDone };
