@@ -125,8 +125,12 @@ A Codex default model for every use, not only intake runs, can also go in Codex'
   unreliable on synced folders such as OneDrive.
 - **Batches:** a long document is done over several runs. Each run adds at most 15 questions to the worksheet, which
   lives in `.cache/intake/<id>/` and survives between runs, and reports `progress`. The watcher starts the next batch at
-  once (`--once` included), up to `maxBatchesInARow` (default 8). The run that completes the worksheet builds,
-  verifies and lists its files, and the watcher commits and publishes it.
+  once (`--once` included), up to `maxBatchesInARow` (default 8). A question document then has a second batched
+  pass: each run explains and independently re-solves at most 30 kept questions (an `explanation` per worksheet item,
+  a `q<n>()` per question in the workspace's `verify_work.py`; `node tools/intake.js explain <id>` runs those functions
+  against the worksheet and lists the next batch) and reports `progress` with `stage: "explain"`. A 300-question
+  document measured on 27 Nov 2026 needed this: one run could not explain and re-solve 294 questions. The run that
+  finishes the last pass builds, verifies and lists its files, and the watcher commits and publishes it.
 - **Limits:** at most `maxPublishesPerDay` published PRs (default 6; merges cost Vercel deployments), counted in
   `.cache/intake/published.log`. At most `maxAgentRunsPerDay` agent runs (default 30; each run costs AI usage), counted
   from the run logs. A lock older than 8 hours is treated as a dead run and cleared.
@@ -157,6 +161,7 @@ only while a terminal keeps it open.
 node tools/intake.js add "<file.pdf>" --kind questions     # or --kind learning
 node tools/intake.js check <id>                            # repeat until it passes
 node tools/intake.js gaps <id>                             # writes .cache/intake/<id>/report.md
+node tools/intake.js explain <id>                          # explanations + verify_work.py, batch by batch
 node tools/intake.js list                                  # every source registered on this machine
 ```
 

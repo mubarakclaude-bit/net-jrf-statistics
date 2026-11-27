@@ -127,6 +127,29 @@ expect("within a kind, the shorter document ranks first", dec(fact("a quiz.pdf",
 expect("a file with no statistics words is marked down and says why", /check it is in the syllabus/.test(dec(fact("Population studies quiz.pdf", { text: "(1) census (a) (b)" })).why));
 expect("a file it cannot place asks for a look", dec(fact("scan 7.pdf", { textChars: 40 })).decision === "look");
 
+// the second pass: explanations and an independent recomputation, batch by batch, kept in the workspace
+const vw = lines => w("ws/" + id + "/verify_work.py", lines.join("\n") + "\n");
+vw(["def q1():", "    return 'B'", "", "def q2():", "    return chr(65)"]);
+r = run("explain", id, "--batch", "1");
+expect("explain counts a question done only with both an explanation and a q<n>()", r.code === 0 && /Explained and recomputed: 0 of 3/.test(r.out) && /Next batch: Q1 \(2 more/.test(r.out), r.out);
+sheet([keep(1, { answer: "B", keyNote: "The key is wrong because …", explanation: "Because …" }), keep(2, { explanation: "Count …" }),
+  { n: 3, page: 2, decision: "repeat", note: "Same as Q2" }, keep(4, { topic: "alpha-t2" })]);
+r = run("explain", id);
+expect("explain runs the functions, agrees, and lists what is left", r.code === 0 && /2 of 3 kept/.test(r.out) && /Next batch: Q4\s*$/m.test(r.out), r.out);
+vw(["def q1():", "    return 'C'", "", "def q2():", "    return 'A'", "", "def q3():", "    return 'A'"]);
+r = run("explain", id);
+expect("a recomputed answer that disagrees with the worksheet fails", r.code === 1 && /Q1: q1\(\) gives C but the worksheet's answer is B/.test(r.out), r.out);
+expect("a function for a question that is not kept is reported", /q3\(\) in verify_work\.py match no kept question/.test(r.out), r.out);
+vw(["import json", "A = json.load(open('questions.json'))", "def q1():", "    return 'B'"]);
+r = run("explain", id);
+expect("verify_work.py may not read the worksheet", r.code === 1 && /may not read the worksheet/.test(r.out), r.out);
+vw(["def q1():", "    return 'B'", "", "def q2():", "    return 'A'", "", "def q4():", "    return 'A'"]);
+sheet([keep(1, { answer: "B", keyNote: "k", explanation: "e" }), keep(2, { explanation: "e" }), { n: 3, page: 2, decision: "repeat", note: "Same as Q2" }, keep(4, { topic: "alpha-t2", explanation: "e" })]);
+r = run("explain", id);
+expect("when every kept question is done, explain says to build", r.code === 0 && /All kept questions are explained/.test(r.out), r.out);
+expect("numeric answers compare as numbers, multi answers as sets",
+  T.sameAnswer({ format: "numeric", answer: "1/4" }, "0.25") && T.sameAnswer({ format: "multi", answer: "AC" }, "CA") && !T.sameAnswer({ format: "single", answer: "A" }, "a"));
+
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log((total - failed) + "/" + total + " intake checks passed");
 process.exit(failed ? 1 : 0);

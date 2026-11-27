@@ -15,6 +15,11 @@
  *                                          topic ids real, four options, a keyNote wherever the answer differs from the key)
  *   node tools/intake.js gaps <id>         write .cache/intake/<id>/report.md: near-duplicates already in the banks,
  *                                          topics with no lesson, and (learning material) what each concept adds
+ *   node tools/intake.js explain <id> [--batch 30]
+ *                                          the second pass over a finished question worksheet, also done in batches:
+ *                                          how many kept questions have an `explanation` and a q<n>() in the workspace's
+ *                                          verify_work.py; runs those functions and exit 1 if one disagrees with the
+ *                                          worksheet's answer; lists the next batch to do
  *
  * The two kinds of document and what happens after this tool is in docs/SOURCE_INTAKE.md. In short: a question document
  * ends as a pyq_bank_<source>.py file built and verified like the CSIR banks; learning material ends as edits to lesson
@@ -377,6 +382,62 @@ function check(id, S) {
   return src.kind === "questions" ? checkQuestions(src, sheet, S) : checkConcepts(src, sheet, S);
 }
 
+/* ------------------------------------------------------------------ explanations and recomputation, in batches
+   A long worksheet cannot be explained and independently re-solved in one run, so the second pass is also batched and
+   kept in the workspace: each kept item gets an `explanation`, and verify_work.py gets a q<n>() that recomputes its answer
+   by a route of its own. The final run turns the two into the bank's build and verification scripts. */
+const VERIFY_WORK = "verify_work.py";
+function verifyFunctions(src) {
+  const have = new Set(); let m; const re = /^def q(\d+)\s*\(/gm;
+  while ((m = re.exec(src || ""))) have.add(+m[1]);
+  return have;
+}
+function explainStatus(sheet, verifySrc, batch) {
+  const kept = (sheet.items || []).filter(q => q.decision === "keep").sort((a, b) => a.n - b.n);
+  const fns = verifyFunctions(verifySrc), problems = [];
+  if (/questions\.json|printedKey|"answer"\s*:/.test(verifySrc || "")) problems.push(VERIFY_WORK + " must recompute each answer by its own route: it may not read the worksheet or copy its answers");
+  const done = kept.filter(q => isStr(q.explanation) && fns.has(q.n)), todo = kept.filter(q => !(isStr(q.explanation) && fns.has(q.n)));
+  const extra = [...fns].filter(n => !kept.some(q => q.n === n));
+  if (extra.length) problems.push("q" + extra.join("(), q") + "() in " + VERIFY_WORK + " match no kept question");
+  return { kept: kept.length, done: done.map(q => q.n), next: todo.slice(0, batch || 30).map(q => q.n), left: todo.length, problems };
+}
+/* Agreement between a recomputed value and the worksheet's answer: letters exactly (multi as a set), numbers to 1e-9. */
+function sameAnswer(q, got) {
+  const a = String(q.answer == null ? "" : q.answer).trim(), b = String(got == null ? "" : got).trim();
+  if (q.format === "multi") return [...a.toUpperCase()].sort().join("") === [...b.toUpperCase()].sort().join("");
+  if (q.format === "numeric") {
+    const num = x => { const f = x.match(/^(-?\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/); return f ? +f[1] / +f[2] : (x === "" ? NaN : Number(x)); };
+    const x = num(a), y = num(b);
+    if (!isNaN(x) && !isNaN(y)) return Math.abs(x - y) <= 1e-9 * Math.max(1, Math.abs(x));
+  }
+  return a === b;
+}
+const RUN_VERIFY = ["import json,re,runpy,sys", "g=runpy.run_path(sys.argv[1])", "out={}",
+  "for k,f in sorted(g.items()):",
+  "    if re.fullmatch(r'q\\d+',k) and callable(f):",
+  "        try: out[k[1:]]=str(f())",
+  "        except Exception as e: out[k[1:]]='error: '+type(e).__name__+': '+str(e)[:200]",
+  "print(json.dumps(out))"].join("\n");
+function explain(id, opts) {
+  const { src, sheet } = openWorkspace(id);
+  if (src.kind !== "questions") throw new Error("explain is for question worksheets");
+  if (!sheet) throw new Error("No worksheet yet in " + id);
+  const vf = path.join(wsDir(id), VERIFY_WORK), vsrc = fs.existsSync(vf) ? fs.readFileSync(vf, "utf8") : "";
+  const st = explainStatus(sheet, vsrc, +opts.batch || 30);
+  if (vsrc && verifyFunctions(vsrc).size) {
+    let r;
+    for (const py of process.env.PYTHON ? [process.env.PYTHON] : ["python", "python3"]) {      // CI has only python3
+      r = spawnSync(py, ["-X", "utf8", "-I", "-c", RUN_VERIFY, vf], { cwd: wsDir(id), encoding: "utf8", timeout: 10 * 60 * 1000, maxBuffer: 16 * 1024 * 1024 });
+      if (!(r.error && r.error.code === "ENOENT")) break;
+    }
+    let got = null; try { got = JSON.parse((r.stdout || "").trim().split("\n").pop()); } catch (e) { /* reported below */ }
+    if (!got) st.problems.push(VERIFY_WORK + " did not run: " + ((r.error && r.error.message) || (r.stderr || "").trim().split("\n").slice(-3).join(" ")).slice(0, 400));
+    else for (const q of sheet.items) if (q.decision === "keep" && got[q.n] !== undefined && !sameAnswer(q, got[q.n]))
+      st.problems.push("Q" + q.n + ": q" + q.n + "() gives " + got[q.n] + " but the worksheet's answer is " + q.answer);
+  }
+  return st;
+}
+
 /* ------------------------------------------------------------------ the report */
 function gaps(id, S) {
   const { src, sheet } = openWorkspace(id);
@@ -451,6 +512,14 @@ function main(argv) {
       console.log("Worksheet " + pos[0] + " passes: " + sheet.items.length + " entries. Next: node tools/intake.js gaps " + pos[0]);
       return 0;
     }
+    if (cmd === "explain") {
+      const st = explain(pos[0], opts);
+      console.log("Explained and recomputed: " + st.done.length + " of " + st.kept + " kept questions.");
+      st.problems.forEach(p => console.log("  - " + p));
+      if (st.left) console.log("Next batch: Q" + st.next.join(", Q") + (st.left > st.next.length ? " (" + (st.left - st.next.length) + " more after these)" : ""));
+      else if (!st.problems.length) console.log("All kept questions are explained and recomputed. Next: build the bank from the worksheet and " + VERIFY_WORK + ".");
+      return st.problems.length ? 1 : 0;
+    }
     if (cmd === "gaps") {
       const { text, problems } = gaps(pos[0], loadSeed());
       console.log(text);
@@ -463,4 +532,4 @@ function main(argv) {
 }
 
 if (require.main === module) process.exit(main(process.argv.slice(2)));
-module.exports = { tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost, symbolsMangled, classify, plan };
+module.exports = { explainStatus, sameAnswer, verifyFunctions, tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost, symbolsMangled, classify, plan };

@@ -13,8 +13,9 @@
  *   cleanup()  remove the worktree (and the local branch, unless it was kept for the owner to inspect); a run that failed
  *              with unpublished changes keeps its worktree, so no work is thrown away
  *
- * A long document is done in batches: a run that adds part of the worksheet returns {status: "progress", done, total};
- * nothing is published, and the watcher starts the next batch.
+ * A long document is done in batches: a run that adds part of the worksheet returns {status: "progress", done, total},
+ * and a run that explains and re-solves part of a finished worksheet adds stage: "explain"; nothing is published, and the
+ * watcher starts the next batch.
  *
  * Every command goes through an injectable runner, so tests drive it with a fake git, gh and npm. Standard library only. */
 const fs = require("fs"), path = require("path"), { spawnSync } = require("child_process");
@@ -97,7 +98,8 @@ function publish(prep, resultFile, mergeOn, sh, opts) {
   const wt = prep.wt, branch = prep.branch;
   const r = readResult(resultFile);
   if (r.status === "nothing") return { outcome: "nothing", note: "the agent found nothing to process" };
-  if (r.status === "progress") return { outcome: "progress", done: r.done, total: r.total, note: "batch saved: " + r.done + " of " + r.total + " questions now in the worksheet" };
+  if (r.status === "progress") return { outcome: "progress", done: r.done, total: r.total, stage: r.stage === "explain" ? "explain" : "worksheet",
+    note: "batch saved: " + r.done + " of " + r.total + (r.stage === "explain" ? " kept questions now explained and re-solved" : " questions now in the worksheet") };
   if (r.status === "stopped") return { outcome: "stopped", note: "the agent stopped: " + (r.reason || "no reason given") };
   if (r.status === "invalid") return { outcome: "rejected", note: r.reason };
 

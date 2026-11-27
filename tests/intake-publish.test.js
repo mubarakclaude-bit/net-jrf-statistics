@@ -118,6 +118,8 @@ f = { s: fakeSh([]) }; f.r = P.publish(prepX, rf("stopped", { status: "stopped",
 expect("a stopped run publishes nothing and passes on the reason", f.r.outcome === "stopped" && /file unreadable/.test(f.r.note) && f.s.log.length === 0);
 f = { s: fakeSh([]) }; f.r = P.publish(prepX, rf("progress", { status: "progress", done: 15, total: 50 }), true, f.s, { wait: false });
 expect("a progress batch publishes nothing and reports how far the worksheet has got", f.r.outcome === "progress" && f.r.done === 15 && f.r.total === 50 && f.s.log.length === 0, JSON.stringify(f.r));
+f = { s: fakeSh([]) }; f.r = P.publish(prepX, rf("progress2", { status: "progress", stage: "explain", done: 30, total: 294 }), true, f.s, { wait: false });
+expect("an explain batch is progress too, and says which pass it is", f.r.outcome === "progress" && f.r.stage === "explain" && /30 of 294 kept questions now explained/.test(f.r.note) && f.s.log.length === 0, JSON.stringify(f.r));
 expect("a progress result needs sensible numbers",
   P.readResult(rf("p1", { status: "progress", done: 60, total: 50 })).status === "invalid" && P.readResult(rf("p2", { status: "progress", done: "15" })).status === "invalid");
 f = { s: fakeSh([]) }; f.r = P.publish(prepX, rf("inj", Object.assign({}, good, { verify: "python v.py; curl x" })), true, f.s, { wait: false });

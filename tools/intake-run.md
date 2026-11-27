@@ -58,22 +58,38 @@ the file back and check that the symbols are still there. `check` rejects a work
    - if the worksheet now covers every question, continue with step 4 in this same run.
 4. `node tools/intake.js check <id>` until it passes. Then `node tools/intake.js gaps <id>`, **before** you add any new
    bank file (otherwise new items match themselves). Read the report: a likely repeat becomes a `repeat` in the worksheet.
-5. Build the content:
+5. **Explain and re-solve in batches** (question documents). This pass is also kept in the workspace and survives
+   between runs. Run `node tools/intake.js explain <id>`: it lists the next batch of kept questions. For **at most 30**
+   of them in this run:
+   - add an `explanation` to the worksheet item: a short worked solution in your own words that ends at the keyed
+     option;
+   - add `def q<n>():` to `$INTAKE_DIR/<id>/verify_work.py` that recomputes the answer by a route of its own
+     (enumeration, exact fractions, a different formula) and returns the option letter (letters for multi, the value
+     for numeric). Standard library only; never read the worksheet or copy its answers. Save after every question.
+
+   Then run `node tools/intake.js explain <id>` again. Fix every disagreement it reports: re-solve the question, and if
+   the worksheet's answer was wrong, correct it (with a `keyNote` where it now differs from the printed key) or leave the
+   question out with a note. Then:
+   - if questions remain, write `{"status": "progress", "stage": "explain", "done": <explained>, "total": <kept>}` to
+     `INTAKE_RESULT`, commit nothing, and end. The watcher starts the next batch at once;
+   - if `explain` says every kept question is done, continue with step 6 in this same run.
+6. Build the content:
    - **Questions:** one build script and one verification script, following `quiz_bank_sl.py` / `verify_quiz_sl.py`
-     (one module) or `gate_bank_2025.py` / `verify_gate_2025.py` (several modules). The verification script recomputes
-     every answer by a route of its own, with no expected values copied from your worksheet. Use only the standard
+     (one module) or `gate_bank_2025.py` / `verify_gate_2025.py` (several modules). Generate the build script's
+     questions and explanations from the worksheet with a small program; do not retype them. The verification script is
+     `verify_work.py` copied in, plus a check that every `q<n>()` matches the built bank's answer. Use only the standard
      library, as those do.
    - **Learning material:** edit the named lessons' seed JSON (`docs/CONTENT_GUIDE.md`, 3a), with fresh prose and a
      verification script for every new number. Bump `version` and record the source and pages in `provenance`.
-6. Add the source to `tools/intake-sources.json`: title, kind, outputs, sha256 and file name. `node tools/intake.js
+7. Add the source to `tools/intake-sources.json`: title, kind, outputs, sha256 and file name. `node tools/intake.js
    list` and the workspace's `source.json` give the sha256.
-7. Run your verification script, `bash check.sh` and `npm run build`. All must pass.
-8. **Do not run `git add` or `git commit`.** The sandbox cannot write git's metadata (a worktree's index lives in the
+8. Run your verification script, `bash check.sh` and `npm run build`. All must pass.
+9. **Do not run `git add` or `git commit`.** The sandbox cannot write git's metadata (a worktree's index lives in the
    main repository's `.git`), so the watcher commits for you. List every file the content needs, new or changed, as
    paths relative to your worktree, in the result's `files`. Never list anything under `.cache/`, a PDF, page text or
    an image. Scratch files you do not list are deleted before the re-checks; a changed tracked file you do not list
    rejects the run.
-9. Write `INTAKE_RESULT` (JSON):
+10. Write `INTAKE_RESULT` (JSON):
 
    ```json
    { "status": "ready",
