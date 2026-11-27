@@ -56,6 +56,14 @@ sheet([keep(1, { answer: "B", keyNote: "The key is wrong because …" }),
   { n: 3, page: 2, decision: "repeat", note: "Same as Q2" }, keep(4, { topic: "alpha-t2" })]);
 r = run("check", id);
 expect("a complete worksheet passes", r.code === 0 && /passes: 4 entries/.test(r.out), r.out);
+expect("symbols turned into '?' by a non-UTF-8 write are detected, plain question marks are not",
+  ["P(A?)=0.3", "P(A?B?)=0.5", "1+2q?p", "x�y"].every(T.symbolsMangled) && !["Which one is correct?", "is it true? Then", "P(Aᶜ) = 0.3 and P(A ∩ Bᶜ) = 0.5", "what is P(B)?"].some(T.symbolsMangled));
+sheet([keep(1, { stem: "If P(A?)=0.3 and P(B)=0.4, then P(A?B?) is", answer: "A" }), keep(2), keep(3), keep(4, { topic: "alpha-t2" })]);
+r = run("check", id);
+expect("check rejects a worksheet whose maths symbols were lost as '?'", r.code === 1 && /maths symbols were lost/.test(r.out), r.out);
+sheet([keep(1, { answer: "B", keyNote: "The key is wrong because …" }),
+  keep(2, { stem: "Let X₁ and X₂ be independent Poisson variables with means 2 and 3. Find the variance of X₁ given X₁ + X₂ = 2.", options: ["12/25", "6/25", "2/5", "1"] }),
+  { n: 3, page: 2, decision: "repeat", note: "Same as Q2" }, keep(4, { topic: "alpha-t2" })]);
 r = run("gaps", id);
 const rep = fs.existsSync(path.join(ws, "report.md")) ? fs.readFileSync(path.join(ws, "report.md"), "utf8") : "";
 expect("gaps writes report.md and exits 0", r.code === 0 && rep.length > 200, r.out);

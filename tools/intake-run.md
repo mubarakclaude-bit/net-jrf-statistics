@@ -28,6 +28,14 @@ assignment or a quiz. File each question under the topic it tests. A question wi
 aptitude, reasoning, pure computer science, Paper 1 material) is `left-out`, with the reason "not on the Paper 2
 syllabus". Never stop a whole document because of its source or its level.
 
+## Saving files: UTF-8 only
+
+Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShell's `Set-Content`, `Out-File`, `Add-Content` and `>` write in an
+old code page and turn every one of them into `?`, so "P(Aᶜ)" becomes "P(A?)". **Write every file (the worksheet, scripts,
+seed JSON, the result) with Python**, `open(path, "w", encoding="utf-8")` (with `json.dump(..., ensure_ascii=False)` for
+JSON), or Node `fs.writeFileSync(path, text, "utf8")`, and never with a PowerShell write or redirect. After saving, read
+the file back and check that the symbols are still there. `check` rejects a worksheet whose symbols became `?`.
+
 ## The steps
 
 1. `node tools/intake.js scan "$INTAKE_FOLDER" --add`. It registers the top pick, or tells you which started workspace
