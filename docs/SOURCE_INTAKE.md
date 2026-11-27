@@ -92,10 +92,11 @@ ignored.
 - `agent`: `codex` (GPT, the default), `claude`, or `none` (report only).
 - `model`: a model name the engine accepts, or `null` for the engine's own default. `codex debug models` lists what
   your OpenAI account can use (for example `gpt-5.6-terra` or `gpt-6-luna`).
-- `sandbox` (Codex only): `workspace-write` (the default) lets a run write only inside the repository and the source
-  folder, with network on. `danger-full-access` runs Codex with no sandbox, with the owner's full user permissions.
-  Only the owner sets that.
-- `merge`: `null` uses the engine's default (off for Codex, on for Claude); `true` or `false` sets it.
+- `sandbox` (Codex only): `workspace-write` (the default) lets a run write only inside its worktree and the shared
+  intake state, with network on. The source folder remains read-only; Codex can read it without granting write access.
+  `danger-full-access` removes the sandbox and grants the owner's full user permissions. Only the owner sets that.
+- `merge`: `null` leaves PRs open for owner review for every engine. Set `true` or pass `--merge` to let the watcher
+  merge after exact-commit CI succeeds; `false` or `--no-merge` keeps PRs open.
 - A command-line flag (`--agent`, `--model`, `--merge`, `--folder` …) overrides the file for that start only.
 
 **Changing the OpenAI account or key** is Codex's job, not the watcher's, and is done in your own terminal (`codex.cmd`

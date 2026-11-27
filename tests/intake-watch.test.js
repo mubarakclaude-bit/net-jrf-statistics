@@ -26,10 +26,12 @@ expect("daily limit reached: wait for tomorrow", /daily limit of 6/.test(W.decid
 const noShim = { APPDATA: path.join(tmp, "no-appdata") };
 const c = W.engineCommand("claude", "BRIEF", undefined, undefined, noShim);
 expect("claude runs headless (-p) with the brief on stdin, not in its arguments", c.cmd === "claude" && c.args[0] === "-p" && c.stdin === "BRIEF" && !c.args.includes("BRIEF"));
-const x = W.engineCommand("codex", "BRIEF", undefined, "C:/src", noShim);
+const x = W.engineCommand("codex", "BRIEF", undefined, "C:/src", noShim, null, null, null, ["C:/intake"]);
 expect("codex runs exec reading the brief from stdin ('-')", x.cmd === "codex" && x.args[0] === "exec" && x.args[x.args.length - 1] === "-" && x.stdin === "BRIEF");
-expect("codex runs sandboxed to the workspace, with network, and can read the source folder",
-  x.args.join(" ").includes("-s workspace-write") && x.args.includes("sandbox_workspace_write.network_access=true") && x.args.join(" ").includes("--add-dir C:/src"));
+expect("codex keeps the source folder read-only while allowing writes to the shared intake state",
+  x.args.join(" ").includes("-s workspace-write") && x.args.includes("sandbox_workspace_write.network_access=true") &&
+  x.args.includes("--add-dir") && x.args[x.args.indexOf("--add-dir") + 1] === "C:/intake" &&
+  !x.args.some((v, i) => v === "--add-dir" && x.args[i + 1] === "C:/src"));
 expect("codex runs with approvals off and never with the rejected --approve-for-me / --full-auto flags",
   x.args.includes('approval_policy="never"') && !x.args.includes("--approve-for-me") && !x.args.includes("--full-auto") && !x.args.includes("--sandbox"));
 const xf = W.engineCommand("codex", "BRIEF", undefined, "C:/src", noShim, null, "danger-full-access");
@@ -44,8 +46,10 @@ const viaJs = W.engineCommand("codex", "BRIEF", undefined, "C:/src", { INTAKE_CO
 expect("when the package launcher is found, it runs with this Node (no .cmd shim, no shell)", viaJs.cmd === process.execPath && viaJs.args[0] === fakeJs && viaJs.args[1] === "exec");
 expect("a custom command runs through the shell", W.engineCommand("none", "B", "my-agent --go").shell === true);
 expect("no engine means nothing is started", W.engineCommand("none", "B") === null);
-expect("merging is off by default for codex and on for claude", !W.mergeOn({ agent: "codex" }) && W.mergeOn({ agent: "claude" }));
-expect("--merge and --no-merge override the default", W.mergeOn(W.parse(["--agent", "codex", "--merge"])) && !W.mergeOn(W.parse(["--agent", "claude", "--no-merge"])));
+expect("merging is off by default for both engines", !W.mergeOn({ agent: "codex" }) && !W.mergeOn({ agent: "claude" }));
+expect("only explicit --merge opts in; --no-merge stays off", W.mergeOn(W.parse(["--agent", "codex", "--merge"])) &&
+  W.mergeOn(W.parse(["--agent", "claude", "--merge"])) && !W.mergeOn(W.parse(["--agent", "claude", "--no-merge"])) &&
+  !W.mergeOn(W.parse([], { agent: "claude", merge: null })) && W.mergeOn(W.parse([], { agent: "claude", merge: true })));
 const p = W.parse(["--folder", "F", "--agent", "claude", "--once", "--max-runs-per-day", "3"], {});
 expect("options are parsed", p.folder === "F" && p.agent === "claude" && p.once && p.max === 3 && p.settle === 30);
 expect("GPT (codex) is the default engine", W.parse([], {}).agent === "codex");
