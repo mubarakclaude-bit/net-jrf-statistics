@@ -194,8 +194,15 @@ W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (cod
     expect("codex got exec, the sandbox flags, the source folder and '-'", a[0] === "exec" && a.includes("--add-dir") && a.includes(folder) && a.slice(-1)[0] === "-", JSON.stringify(a));
     expect("codex works in the prepared worktree and may also write the shared intake folder", a[a.indexOf("-C") + 1] === fakeWt && a.includes(process.env.INTAKE_DIR), JSON.stringify(a));
     expect("a codex run is published with merging off by default", calls[1] === "publish:false:20261122-000000.json", JSON.stringify(calls));
-    fs.rmSync(tmp, { recursive: true, force: true });
-    console.log((total - failed) + "/" + total + " intake-watch checks passed");
-    process.exit(failed ? 1 : 0);
+    // a branch that reached GitHub but whose PR could not be opened still moves its file, so it is not started again
+    const pick2 = path.join(folder, "pushed.pdf"); fs.writeFileSync(pick2, "%PDF");
+    for (const f of fs.readdirSync(path.join(process.env.INTAKE_DIR, "runs"))) fs.unlinkSync(path.join(process.env.INTAKE_DIR, "runs", f));
+    const prFails = Object.assign({}, fakePublisher, { publish: () => ({ outcome: "pr-failed", note: "gh auth login" }) });
+    W.start({ folder, agent: "codex", preflight: () => ({ ok: true }), publisher: prFails }, (code3, res3) => {
+      expect("a pushed run whose PR failed still moves its PDF into Done", res3.outcome === "pr-failed" && !fs.existsSync(pick2) && fs.existsSync(path.join(folder, "Done", "pushed.pdf")), JSON.stringify(res3));
+      fs.rmSync(tmp, { recursive: true, force: true });
+      console.log((total - failed) + "/" + total + " intake-watch checks passed");
+      process.exit(failed ? 1 : 0);
+    }, { file: pick2, kind: "questions", sha256: "f".repeat(64) });
   });
 }, pick);

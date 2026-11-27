@@ -232,7 +232,9 @@ function start(opts, onExit, pick) {
     try { res = failedToStart ? { outcome: "rejected", note: "the engine did not start" } : P.publish(prep, resultFile, mergeOn(opts), opts.sh, { engine: opts.command || opts.agent }); }
     catch (e) { res = { outcome: "rejected", note: "publishing failed: " + e.message }; }
     const pushed = ["left-open", "merged", "ci-failed", "pr-failed"].includes(res.outcome);
-    if (pick && pick.file && opts.done !== null && ["left-open", "merged"].includes(res.outcome)) {
+    // Moved once the branch is on GitHub, even if the PR or CI then failed: the work is there to finish by hand, and
+    // leaving the file would make the next check start the same document again.
+    if (pick && pick.file && opts.done !== null && pushed) {
       try { const to = moveToDone(opts.folder, pick.file, opts.done || "Done"); log("moved " + path.basename(pick.file) + " to " + to); res.movedTo = to; }
       catch (e) { log("could not move " + path.basename(pick.file) + " to the Done folder: " + e.message); }
     }

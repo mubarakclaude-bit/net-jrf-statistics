@@ -98,9 +98,9 @@ ignored.
   folder, with network on. `danger-full-access` runs Codex with no sandbox, with the owner's full user permissions.
   Only the owner sets that.
 - `merge`: `null` uses the engine's default (off for Codex, on for Claude); `true` or `false` sets it.
-- `doneFolder`: once a document's pull request exists (left open or merged), the watcher moves its PDF into this
+- `doneFolder`: once a document's branch is on GitHub (PR left open or merged, or PR or CI failed), the watcher moves its PDF into this
   subfolder of `folder` (default `Done`), so the folder shows only what is left and finished files are not hashed
-  again. A name clash gets a ` (2)` suffix. `null` leaves files where they are. A run that stops, or whose PR fails,
+  again. A name clash gets a ` (2)` suffix. `null` leaves files where they are. A run that stops before pushing
   leaves its file in place.
 - A command-line flag (`--agent`, `--model`, `--merge`, `--folder` …) overrides the file for that start only.
 
