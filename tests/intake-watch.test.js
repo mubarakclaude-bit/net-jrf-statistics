@@ -128,8 +128,8 @@ W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (cod
   expect("the agent received the source folder and a readable brief", m.folder === folder && m.brief === true, JSON.stringify(m));
   expect("the agent runs inside the prepared worktree", path.resolve(m.cwd || "") === path.resolve(fakeWt), m.cwd);
   expect("the agent is told the shared intake folder and where to write its result", path.resolve(m.dir || "") === path.resolve(process.env.INTAKE_DIR) && /results[\\/]20261122-000000\.json$/.test(m.result || ""), JSON.stringify(m));
-  expect("after the agent, the watcher prepares, publishes (merging on for a custom engine) and cleans up, keeping nothing once pushed",
-    JSON.stringify(calls) === JSON.stringify(["prepare", "publish:true:20261122-000000.json", "cleanup:false"]), JSON.stringify(calls));
+  expect("after the agent, the watcher prepares, leaves the PR open for owner review, and cleans up",
+    JSON.stringify(calls) === JSON.stringify(["prepare", "publish:false:20261122-000000.json", "cleanup:false"]), JSON.stringify(calls));
   expect("the outcome is reported to the caller and noted for the owner", res && res.outcome === "left-open" && /Run 20261122-000000: left-open/.test(fs.readFileSync(notesFile, "utf8")));
   expect("the lock is removed when the run ends", !fs.existsSync(lockFile));
   const runs = fs.readdirSync(path.join(process.env.INTAKE_DIR, "runs"));
@@ -174,7 +174,8 @@ W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (cod
     const a = g.args || [];
     expect("the codex run exited cleanly", code2 === 0, code2);
     expect("the brief reached codex on stdin", /^# Unattended intake run/.test(g.brief || ""), JSON.stringify(g));
-    expect("codex got exec, the sandbox flags, the source folder and '-'", a[0] === "exec" && a.includes("--add-dir") && a.includes(folder) && a.slice(-1)[0] === "-", JSON.stringify(a));
+    expect("codex got exec and sandbox flags without granting the source folder write access",
+      a[0] === "exec" && a.includes("--add-dir") && a.includes(process.env.INTAKE_DIR) && !a.includes(folder) && a.slice(-1)[0] === "-", JSON.stringify(a));
     expect("codex works in the prepared worktree and may also write the shared intake folder", a[a.indexOf("-C") + 1] === fakeWt && a.includes(process.env.INTAKE_DIR), JSON.stringify(a));
     expect("a codex run is published with merging off by default", calls[1] === "publish:false:20261122-000000.json", JSON.stringify(calls));
     fs.rmSync(tmp, { recursive: true, force: true });
