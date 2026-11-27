@@ -82,7 +82,7 @@ change anything; a startup task does not need to change:
 
 ```json
 { "folder": "C:/Muhavin/NET JRF", "agent": "codex", "model": null, "sandbox": "workspace-write",
-  "reasoningEffort": "high", "merge": null, "interval": 300, "settle": 30,
+  "reasoningEffort": "high", "merge": null, "doneFolder": "Done", "interval": 300, "settle": 30,
   "maxPublishesPerDay": 6, "maxAgentRunsPerDay": 30, "maxBatchesInARow": 8 }
 ```
 
@@ -96,6 +96,10 @@ ignored.
   folder, with network on. `danger-full-access` runs Codex with no sandbox, with the owner's full user permissions.
   Only the owner sets that.
 - `merge`: `null` uses the engine's default (off for Codex, on for Claude); `true` or `false` sets it.
+- `doneFolder`: once a document's pull request exists (left open or merged), the watcher moves its PDF into this
+  subfolder of `folder` (default `Done`), so the folder shows only what is left and finished files are not hashed
+  again. A name clash gets a ` (2)` suffix. `null` leaves files where they are. A run that stops, or whose PR fails,
+  leaves its file in place.
 - A command-line flag (`--agent`, `--model`, `--merge`, `--folder` …) overrides the file for that start only.
 
 **Changing the OpenAI account or key** is Codex's job, not the watcher's, and is done in your own terminal (`codex.cmd`
@@ -113,7 +117,8 @@ A Codex default model for every use, not only intake runs, can also go in Codex'
 
 - **When it starts a run:** a PDF's last change is at least `--settle` seconds old (default 30) and its size holds
   steady, so a half-finished download is never read. `scan`'s decisions leave something to process, and no other run
-  is active (`.cache/intake/run.lock`).
+  is active (`.cache/intake/run.lock`). The watcher hands its pick to the agent (`INTAKE_PICK`, `INTAKE_PICK_KIND`,
+  `INTAKE_PICK_ID`), so the agent does not rescan the folder.
 - **What triggers a check:** folder events, plus a poll every `--interval` seconds (default 300), because events are
   unreliable on synced folders such as OneDrive.
 - **Batches:** a long document is done over several runs. Each run adds at most 15 questions to the worksheet, which

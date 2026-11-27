@@ -38,9 +38,12 @@ the file back and check that the symbols are still there. `check` rejects a work
 
 ## The steps
 
-1. `node tools/intake.js scan "$INTAKE_FOLDER" --add`. It registers the top pick, or tells you which started workspace
-   to finish, and prints its kind (`questions` or `learning`) and the workspace's absolute path. If it reports nothing
-   to process, write the result `{"status": "nothing"}` and end.
+1. **The watcher has already chosen the document; do not scan the folder.** `INTAKE_PICK` is its absolute path,
+   `INTAKE_PICK_KIND` its kind (`questions` or `learning`) and `INTAKE_PICK_ID` its workspace id. If
+   `$INTAKE_DIR/$INTAKE_PICK_ID/source.json` exists, continue that workspace. Otherwise register it with
+   `node tools/intake.js add "$INTAKE_PICK" --kind "$INTAKE_PICK_KIND"`. Only if `INTAKE_PICK` is empty, fall back to
+   `node tools/intake.js scan "$INTAKE_FOLDER" --add`, and if that reports nothing to process, write
+   `{"status": "nothing"}` and end.
 2. The workspace is `$INTAKE_DIR/<id>/`, **outside your worktree**. Always use that absolute path, never
    `.cache/intake/` relative to your working directory. Read every rendered page image in `$INTAKE_DIR/<id>/pages/`.
    For a question document, read the images, not the `.txt` files.

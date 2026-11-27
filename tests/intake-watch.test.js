@@ -117,7 +117,18 @@ expect("a failing worktree preparation starts nothing and leaves a note",
 // start(): a fake agent proves it runs in the prepared worktree with the folder, the brief, INTAKE_DIR and INTAKE_RESULT,
 // and that the watcher then publishes and cleans up
 const marker = path.join(tmp, "agent-ran.json");
-const fake = "\"" + process.execPath.replace(/\\/g, "/") + "\" -e \"require('fs').writeFileSync(process.argv[1], JSON.stringify({folder: process.env.INTAKE_FOLDER, brief: require('fs').existsSync(process.env.INTAKE_PROMPT_FILE), dir: process.env.INTAKE_DIR, result: process.env.INTAKE_RESULT, cwd: process.cwd()}))\" \"" + marker.replace(/\\/g, "/") + "\"";
+const fake = "\"" + process.execPath.replace(/\\/g, "/") + "\" -e \"require('fs').writeFileSync(process.argv[1], JSON.stringify({folder: process.env.INTAKE_FOLDER, brief: require('fs').existsSync(process.env.INTAKE_PROMPT_FILE), dir: process.env.INTAKE_DIR, result: process.env.INTAKE_RESULT, pick: process.env.INTAKE_PICK, pickId: process.env.INTAKE_PICK_ID, pickKind: process.env.INTAKE_PICK_KIND, cwd: process.cwd()}))\" \"" + marker.replace(/\\/g, "/") + "\"";
+// moveToDone: into <folder>/Done, and a name clash gets a " (2)" suffix instead of overwriting
+const mvDir = path.join(tmp, "mv"); fs.mkdirSync(mvDir);
+fs.writeFileSync(path.join(mvDir, "a.pdf"), "1");
+const mv1 = W.moveToDone(mvDir, path.join(mvDir, "a.pdf"), "Done");
+fs.writeFileSync(path.join(mvDir, "a.pdf"), "2");
+const mv2 = W.moveToDone(mvDir, path.join(mvDir, "a.pdf"), "Done");
+expect("a finished file moves into the Done subfolder", mv1 === path.join(mvDir, "Done", "a.pdf") && !fs.existsSync(path.join(mvDir, "a.pdf")), mv1);
+expect("a second file of the same name is kept as \"a (2).pdf\", not overwritten", mv2 === path.join(mvDir, "Done", "a (2).pdf") && fs.readFileSync(mv1, "utf8") === "1", mv2);
+
+const pickFile = path.join(folder, "picked.pdf"); fs.writeFileSync(pickFile, "%PDF");
+const pick = { file: pickFile, kind: "questions", sha256: "abcdef0123456789" + "0".repeat(48) };
 W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (code, res) => {
   let m = {}; try { m = JSON.parse(fs.readFileSync(marker, "utf8")); } catch (e) { /* missing */ }
   expect("the run exited cleanly", code === 0, code);
@@ -128,6 +139,11 @@ W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (cod
     JSON.stringify(calls) === JSON.stringify(["prepare", "publish:true:20261122-000000.json", "cleanup:false"]), JSON.stringify(calls));
   expect("the outcome is reported to the caller and noted for the owner", res && res.outcome === "left-open" && /Run 20261122-000000: left-open/.test(fs.readFileSync(notesFile, "utf8")));
   expect("the lock is removed when the run ends", !fs.existsSync(lockFile));
+  expect("the agent is handed the watcher's pick (file, kind, workspace id), so it need not rescan the folder",
+    m.pick === pickFile && m.pickKind === "questions" && m.pickId === "abcdef012345", JSON.stringify(m));
+  expect("once its PR exists, the picked PDF is moved into <folder>/Done",
+    !fs.existsSync(pickFile) && fs.existsSync(path.join(folder, "Done", "picked.pdf")) && res.movedTo === path.join(folder, "Done", "picked.pdf"), JSON.stringify(res));
+  fs.rmSync(path.join(folder, "Done"), { recursive: true, force: true });
   const runs = fs.readdirSync(path.join(process.env.INTAKE_DIR, "runs"));
   expect("the run has its own log file", runs.length === 1 && /\.log$/.test(runs[0]), runs.join(","));
   // the publication limit counts today's lines in published.log (the run above published once)
@@ -157,6 +173,10 @@ W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (cod
     (o, cb) => { starts2.push(1); cb(0, { outcome: "progress", done: starts2.length, total: 50 }); }, (fn) => fn());
   chk2("test");
   expect("batches in a row stop at maxBatches", starts2.length === 2, starts2.length);
+  let handed = null;
+  W.makeChecker({ folder, settle: 30, max: 99, maxRuns: 99, once: true, maxBatches: 1 }, planner,
+    (o, cb, p) => { handed = p; cb(0, { outcome: "nothing" }); }, (fn) => fn())("test");
+  expect("the checker hands the planner's first pick to the run", handed && handed.name === "old.pdf", JSON.stringify(handed));
   // a stand-in Codex launcher: proves the brief arrives on stdin and the sandbox arguments arrive intact
   const got = path.join(tmp, "codex-got.json");
   const stub = path.join(tmp, "codex-stub.js");
@@ -177,4 +197,4 @@ W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (cod
     console.log((total - failed) + "/" + total + " intake-watch checks passed");
     process.exit(failed ? 1 : 0);
   });
-});
+}, pick);
