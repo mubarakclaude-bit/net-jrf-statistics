@@ -108,7 +108,8 @@ const calls = [];
 const fakePublisher = {
   prepare: () => { calls.push("prepare"); return { stamp: "20261122-000000", branch: "content/intake-test", wt: fakeWt }; },
   publish: (prep, resultFile, merge) => { calls.push("publish:" + merge + ":" + path.basename(resultFile)); return { outcome: "left-open", pr: "https://github.com/o/r/pull/1", note: "CI green; merging is off" }; },
-  cleanup: (root, prep, keep) => { calls.push("cleanup:" + keep); },
+  cleanup: (root, prep, keep, sh, keepTree) => { calls.push("cleanup:" + keep + (keepTree ? ":tree" : "")); },
+  hasChanges: () => false,
 };
 expect("a failing worktree preparation starts nothing and leaves a note",
   W.start({ folder, agent: "codex", preflight: () => ({ ok: true }), publisher: { prepare: () => { throw new Error("git fetch failed: offline"); } } }) === null &&

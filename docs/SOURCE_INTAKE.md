@@ -59,12 +59,14 @@ document, and the work is split so that **the AI agent never touches GitHub**:
 1. **The watcher prepares the run.** It fetches `origin`, adds a fresh worktree on a new `content/intake-<time>` branch
    from `origin/main`, runs `npm ci` in it, and gives the repository a commit identity (`tools/intake-publish.js`).
 2. **The agent does the content** in that worktree, following `tools/intake-run.md`. It picks, reads, solves, writes
-   the worksheet, builds the bank or lesson change, verifies, registers the source, runs `check.sh`, **commits once
-   locally**, and writes a result file.
-3. **The watcher publishes, as the owner.** It requires exactly one new commit and a clean tree, then re-runs the
+   the worksheet, builds the bank or lesson change, verifies, registers the source, runs `check.sh`, and writes a
+   result file that **lists the files it changed**. It does not commit: Codex's sandbox cannot write git's metadata.
+3. **The watcher publishes, as the owner.** It commits the listed files (an engine that made exactly one commit itself is accepted too), removes unlisted
+   scratch files, requires a clean tree, then re-runs the
    agent's verification script (only a plain `python <script>.py` is accepted) and `check.sh` itself. Only then does it
    push, open the PR, wait for the `Validate` run on that exact commit, and merge when green and merging is on. A run
-   that fails any of these is not pushed; its branch is kept locally, and `.cache/intake/watch-notes.md` says why.
+   that fails any of these is not pushed. If it left changes, its worktree is kept under `.cache/run-<time>`, and
+   `.cache/intake/watch-notes.md` says why.
 
 **Run the watcher from a clone outside OneDrive**, for example `C:\Muhavin\net-jrf-intake`. Codex's Windows sandbox
 runs the agent as a separate sandbox user, which is denied access to OneDrive-synced folders and has no GitHub
@@ -124,7 +126,7 @@ A Codex default model for every use, not only intake runs, can also go in Codex'
 - **Batches:** a long document is done over several runs. Each run adds at most 15 questions to the worksheet, which
   lives in `.cache/intake/<id>/` and survives between runs, and reports `progress`. The watcher starts the next batch at
   once (`--once` included), up to `maxBatchesInARow` (default 8). The run that completes the worksheet builds,
-  verifies and commits, and the watcher publishes it.
+  verifies and lists its files, and the watcher commits and publishes it.
 - **Limits:** at most `maxPublishesPerDay` published PRs (default 6; merges cost Vercel deployments), counted in
   `.cache/intake/published.log`. At most `maxAgentRunsPerDay` agent runs (default 30; each run costs AI usage), counted
   from the run logs. A lock older than 8 hours is treated as a dead run and cleared.
