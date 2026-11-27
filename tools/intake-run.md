@@ -1,7 +1,7 @@
 # Unattended intake run
 
 You were started by `tools/intake-watch.js` because a new or unfinished PDF is waiting in the owner's source folder. You
-run without a person watching. **Process one document, commit it locally, write a result file, and end.** This is long
+run without a person watching. **Process one document, leave the content ready in your worktree, write a result file, and end.** This is long
 work, often an hour or more for a full paper: go through every question; do not end your turn early, and never end
 it without writing `INTAKE_RESULT`. If you cannot finish, write `{"status": "stopped", "reason": ...}`. An empty
 worksheet that fails `check` is your starting point, not a reason to stop. This file is
@@ -68,8 +68,11 @@ the file back and check that the symbols are still there. `check` rejects a work
 6. Add the source to `tools/intake-sources.json`: title, kind, outputs, sha256 and file name. `node tools/intake.js
    list` and the workspace's `source.json` give the sha256.
 7. Run your verification script, `bash check.sh` and `npm run build`. All must pass.
-8. Commit **once**, with only the files the content needs: `git add <files>` and then `git commit -m "<summary>"`. Never
-   commit anything under `.cache/`, a PDF, page text or an image.
+8. **Do not run `git add` or `git commit`.** The sandbox cannot write git's metadata (a worktree's index lives in the
+   main repository's `.git`), so the watcher commits for you. List every file the content needs, new or changed, as
+   paths relative to your worktree, in the result's `files`. Never list anything under `.cache/`, a PDF, page text or
+   an image. Scratch files you do not list are deleted before the re-checks; a changed tracked file you do not list
+   rejects the run.
 9. Write `INTAKE_RESULT` (JSON):
 
    ```json
@@ -77,6 +80,7 @@ the file back and check that the symbols are still there. `check` rejects a work
      "title": "<PR title, under 100 characters>",
      "body": "<PR description: what was added, by topic; the verification result; every keyNote and repaired note>",
      "verify": "python verify_<name>.py",
+     "files": ["<build script>.py", "verify_<name>.py", "seed/<bank>.json", "tools/intake-sources.json"],
      "source": "<source file name>" }
    ```
 

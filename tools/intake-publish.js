@@ -1,14 +1,17 @@
 /* Before and after an unattended intake run: everything that touches GitHub, done as the owner, never by the agent.
  *
  * Codex's Windows sandbox runs the agent as a separate sandbox user, with no access to the owner's GitHub credentials
- * (and an AI agent should not hold them anyway). So the agent only prepares content and commits it locally in a worktree
- * this module creates; this module then re-checks the work itself and publishes it:
+ * (and an AI agent should not hold them anyway). It cannot write git's metadata either: a worktree's index lives in the
+ * main repository's .git, outside the sandbox. So the agent only prepares content in a worktree this module creates and
+ * lists its files in the result; this module commits them, re-checks the work itself and publishes it:
  *
  *   prepare()  fetch origin, create a fresh worktree on a new branch from origin/main, npm ci in it, set the commit identity
- *   publish()  read the agent's result file; require exactly one new commit and a clean tree; re-run the agent's
+ *   publish()  read the agent's result file; commit the files it lists (or accept the one commit an engine made itself);
+ *              require a clean tree; re-run the agent's
  *              verification script (only a plain `python <script>.py` is accepted) and check.sh; then push, open the PR,
  *              wait for the Validate workflow on that exact commit, and merge only when it is green and merging is on
- *   cleanup()  remove the worktree (and the local branch, unless it was kept for the owner to inspect)
+ *   cleanup()  remove the worktree (and the local branch, unless it was kept for the owner to inspect); a run that failed
+ *              with unpublished changes keeps its worktree, so no work is thrown away
  *
  * A long document is done in batches: a run that adds part of the worksheet returns {status: "progress", done, total};
  * nothing is published, and the watcher starts the next batch.
@@ -72,7 +75,18 @@ function readResult(file) {
   if (typeof r.title !== "string" || !r.title.trim()) return { status: "invalid", reason: "a ready result needs a title" };
   if (typeof r.body !== "string" || r.body.length < 40) return { status: "invalid", reason: "a ready result needs a PR body" };
   if (typeof r.verify !== "string" || !/^python3? [A-Za-z0-9_\-/]+\.py$/.test(r.verify.trim())) return { status: "invalid", reason: "verify must be exactly `python <script>.py`" };
-  return Object.assign({}, r, { title: r.title.trim().slice(0, 120), verify: r.verify.trim() });
+  if (r.files !== undefined && !(Array.isArray(r.files) && r.files.length && r.files.every(okPath)))
+    return { status: "invalid", reason: "files must be a list of repository paths, with nothing under .cache/ and no PDF, image or page text" };
+  const files = r.files && r.files.map(p => p.trim().replace(/\\/g, "/"));
+  return Object.assign({}, r, { title: r.title.trim().slice(0, 120), verify: r.verify.trim() }, files ? { files } : {});
+}
+
+/* A path the agent may ask to commit: relative, inside the worktree, and never source material or local state. */
+function okPath(p) {
+  if (typeof p !== "string" || !p.trim()) return false;
+  const q = p.trim().replace(/\\/g, "/");
+  return !q.startsWith("/") && !q.startsWith("-") && !/^[A-Za-z]:/.test(q) && !q.split("/").includes("..") &&
+    !/^(\.cache|\.git|node_modules)(\/|$)/.test(q) && !/\.(pdf|png|jpe?g|gif|webp|txt)$/i.test(q);
 }
 
 /* Returns { outcome, pr?, note } where outcome is one of: nothing, stopped, rejected, checks-failed, push-failed,
@@ -88,9 +102,20 @@ function publish(prep, resultFile, mergeOn, sh, opts) {
   if (r.status === "invalid") return { outcome: "rejected", note: r.reason };
 
   const commits = sh("git", ["rev-list", "--count", "origin/main..HEAD"], { cwd: wt });
-  if (commits.code !== 0 || commits.out.trim() !== "1") return { outcome: "rejected", note: "expected exactly one new commit, found " + (commits.out || "none") };
+  const n = commits.code === 0 ? commits.out.trim() : "?";
+  if (n === "0") {
+    if (!r.files) return { outcome: "rejected", note: "nothing was committed and the result lists no files" };
+    const add = sh("git", ["add", "--"].concat(r.files), { cwd: wt });
+    if (add.code !== 0) return { outcome: "rejected", note: "git add of the listed files failed: " + add.out.slice(-300) };
+    const cm = sh("git", ["commit", "-m", r.title, "-m", "Source: " + (r.source || "not given") + ". Prepared by an unattended intake run (" +
+      (opts.engine || "agent") + "); committed and published by tools/intake-watch.js."], { cwd: wt });
+    if (cm.code !== 0) return { outcome: "rejected", note: "git commit failed: " + cm.out.slice(-300) };
+    // Scratch files the agent left are removed, so the re-checks see exactly what was committed. Ignored files
+    // (node_modules, __pycache__) stay.
+    sh("git", ["clean", "-fd"], { cwd: wt });
+  } else if (n !== "1") return { outcome: "rejected", note: "expected exactly one new commit, found " + (commits.out || "none") };
   const dirty = sh("git", ["status", "--porcelain"], { cwd: wt });
-  if (dirty.code !== 0 || dirty.out.trim()) return { outcome: "rejected", note: "uncommitted changes left in the worktree" };
+  if (dirty.code !== 0 || dirty.out.trim()) return { outcome: "rejected", note: "changes not in the commit (list them in files): " + dirty.out.trim().slice(0, 300) };
 
   const script = r.verify.split(" ")[1];
   const v = sh("python", ["-X", "utf8", script], { cwd: wt, timeout: 20 * 60 * 1000 });
@@ -125,11 +150,18 @@ function publish(prep, resultFile, mergeOn, sh, opts) {
 }
 
 /* Remove the worktree. Keep the local branch when the work was not published, so the owner can look at it. */
-function cleanup(root, prep, keepBranch, sh) {
+function cleanup(root, prep, keepBranch, sh, keepTree) {
   sh = sh || realSh;
+  if (keepTree) return;
   sh("git", ["worktree", "remove", "--force", prep.wt], { cwd: root });
   sh("git", ["worktree", "prune"], { cwd: root });
   if (!keepBranch) sh("git", ["branch", "-D", prep.branch], { cwd: root });
 }
 
-module.exports = { prepare, publish, cleanup, readResult, decodeText, realSh, bashPath, stampOf };
+/* Whether a run's worktree holds work that was not published (so it is worth keeping). */
+function hasChanges(prep, sh) {
+  const st = (sh || realSh)("git", ["status", "--porcelain"], { cwd: prep.wt });
+  return st.code === 0 && !!st.out.trim();
+}
+
+module.exports = { prepare, publish, cleanup, hasChanges, okPath, readResult, decodeText, realSh, bashPath, stampOf };

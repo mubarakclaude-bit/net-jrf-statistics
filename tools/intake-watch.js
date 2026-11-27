@@ -237,7 +237,11 @@ function start(opts, onExit, pick) {
       catch (e) { log("could not move " + path.basename(pick.file) + " to the Done folder: " + e.message); }
     }
     const quiet = ["nothing", "stopped", "progress"].includes(res.outcome);
-    try { P.cleanup(ROOT, prep, !pushed && !quiet, opts.sh); } catch (e) { log("cleanup: " + e.message); }
+    // A run that ended without publishing but left changes keeps its worktree, so the work is not thrown away.
+    let keepTree = false;
+    if (!pushed && !["progress", "nothing"].includes(res.outcome) && P.hasChanges) { try { keepTree = P.hasChanges(prep, opts.sh); } catch (e) { /* remove it */ } }
+    try { P.cleanup(ROOT, prep, (!pushed && !quiet) || keepTree, opts.sh, keepTree); } catch (e) { log("cleanup: " + e.message); }
+    if (keepTree) { log("kept " + prep.wt + " (branch " + prep.branch + "): it holds this run's unpublished changes"); res.kept = prep.wt; }
     if (pushed) { try { fs.appendFileSync(PUBLISHED(), new Date().toISOString() + "  " + res.outcome + "  " + (res.pr || "") + "\n"); } catch (e) { /* log has it */ } }
     log("run " + stamp + ": " + res.outcome + (res.pr ? " " + res.pr : "") + " — " + res.note);
     if (res.outcome !== "nothing" && res.outcome !== "progress") noteOnce("## Run " + stamp + ": " + res.outcome + "\n\n" + (res.pr ? "PR: " + res.pr + "\n\n" : "") + res.note +

@@ -46,6 +46,12 @@ expect("a ready result needs a title and a real body", P.readResult(rf("notitle"
 expect("a verify command that is not a plain `python <script>.py` is refused (no command injection)",
   ["python verify.py; rm -rf .", "bash evil.sh", "python ../outside.py && x", "python verify.py --flag"].every(v => P.readResult(rf("inj", Object.assign({}, good, { verify: v }))).status === "invalid"));
 expect("a good result is accepted", P.readResult(rf("good", good)).status === "ready");
+const withFiles = Object.assign({}, good, { files: ["quiz_bank_pp.py", "verify_pp.py", "seed\\pp_quiz.json", "tools/intake-sources.json"] });
+expect("a files list of repository paths is accepted, with backslashes normalised", JSON.stringify(P.readResult(rf("files", withFiles)).files) ===
+  JSON.stringify(["quiz_bank_pp.py", "verify_pp.py", "seed/pp_quiz.json", "tools/intake-sources.json"]));
+expect("files may not name local state, source material, or anything outside the worktree",
+  [[".cache/intake/x/questions.json"], ["paper.pdf"], ["pages/p1.png"], ["p1.txt"], ["../x.py"], ["C:/x.py"], ["/etc/x"], ["--force"], [".git/config"], []]
+    .every(fl => P.readResult(rf("badfiles", Object.assign({}, good, { files: fl }))).status === "invalid"));
 const bomFile = path.join(tmp, "bom.json"); fs.writeFileSync(bomFile, Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from(JSON.stringify({ status: "stopped", reason: "r" }))]));
 expect("a UTF-8 file with a byte-order mark (PowerShell Set-Content) is read", P.readResult(bomFile).status === "stopped");
 const u16File = path.join(tmp, "u16.json"); fs.writeFileSync(u16File, Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from(JSON.stringify({ status: "nothing" }), "utf16le")]));
@@ -89,6 +95,25 @@ f = { s: fakeSh([[/^git rev-list --count/, { out: "2" }]]) }; f.r = P.publish(pr
 expect("more than one commit is rejected (one commit per change)", f.r.outcome === "rejected" && /exactly one new commit/.test(f.r.note) && !ran(f.s, /^git push/));
 f = { s: fakeSh([[/^git rev-list --count/, { out: "1" }], [/^git status --porcelain/, { out: " M seed/x.json" }]]) }; f.r = P.publish(prepX, rf("good", good), true, f.s, { wait: false });
 expect("uncommitted leftovers are rejected", f.r.outcome === "rejected" && !ran(f.s, /^git push/));
+// the agent cannot commit in Codex's sandbox: the watcher commits the listed files, clears scratch files, then re-checks
+f = { s: fakeSh([[/^git rev-list --count/, { out: "0" }], [/^git status --porcelain/, { out: "" }], [/^git rev-parse HEAD/, { out: SHA }],
+  [/^gh pr create/, { out: "https://github.com/o/r/pull/80" }], [/^gh run list/, { out: JSON.stringify([{ databaseId: 9, headSha: SHA, event: "pull_request" }]) }]]) };
+f.r = P.publish(prepX, rf("files", withFiles), false, f.s, { wait: false, engine: "codex" });
+const iAdd = f.s.log.findIndex(l => /^git add -- quiz_bank_pp\.py verify_pp\.py seed\/pp_quiz\.json tools\/intake-sources\.json$/.test(l));
+const iCommit = f.s.log.findIndex(l => /^git commit -m Probability practice set/.test(l)), iClean = f.s.log.indexOf("git clean -fd");
+const iVerify = f.s.log.findIndex(l => /^python -X utf8 verify_prob_practice\.py/.test(l));
+expect("with no commit, the listed files are added and committed, scratch files cleared, and only then re-verified and pushed",
+  iAdd >= 0 && iAdd < iCommit && iCommit < iClean && iClean < iVerify && ran(f.s, /^git push/) && f.r.outcome === "left-open", f.s.log.join(" | "));
+f = { s: fakeSh([[/^git rev-list --count/, { out: "0" }]]) }; f.r = P.publish(prepX, rf("good", good), true, f.s, { wait: false });
+expect("no commit and no files list is rejected", f.r.outcome === "rejected" && /lists no files/.test(f.r.note) && !ran(f.s, /^git (add|push)/));
+f = { s: fakeSh([[/^git rev-list --count/, { out: "0" }], [/^git status --porcelain/, { out: " M tools/intake.js" }]]) };
+f.r = P.publish(prepX, rf("files", withFiles), true, f.s, { wait: false });
+expect("a changed tracked file left out of the list rejects the run, naming it", f.r.outcome === "rejected" && /tools\/intake\.js/.test(f.r.note) && !ran(f.s, /^git push/), f.r.note);
+// a failed run with changes keeps its worktree
+f = { s: fakeSh([[/^git status --porcelain/, { out: "?? verify_pp.py" }]]) };
+expect("hasChanges sees unpublished work", P.hasChanges(prepX, f.s) === true && P.hasChanges(prepX, fakeSh([])) === false);
+f = { s: fakeSh([]) }; P.cleanup(tmp, prepX, true, f.s, true);
+expect("cleanup with keepTree leaves the worktree and branch alone", f.s.log.length === 0, f.s.log.join(" | "));
 f = { s: fakeSh([]) }; f.r = P.publish(prepX, rf("stopped", { status: "stopped", reason: "file unreadable" }), true, f.s, { wait: false });
 expect("a stopped run publishes nothing and passes on the reason", f.r.outcome === "stopped" && /file unreadable/.test(f.r.note) && f.s.log.length === 0);
 f = { s: fakeSh([]) }; f.r = P.publish(prepX, rf("progress", { status: "progress", done: 15, total: 50 }), true, f.s, { wait: false });
