@@ -6,7 +6,7 @@
   "breadcrumb": "Unit VIII · Multivariate Analysis · Multivariate Normal",
   "engine": "B",
   "engineName": "NET JRF Statistics lesson engine",
-  "version": "1.0",
+  "version": "1.1",
   "status": "review",
   "estMin": 100,
   "objectives": [
@@ -14,7 +14,8 @@
     "Obtain marginal distributions by selecting the corresponding mean entries and covariance submatrix.",
     "Derive conditional means and covariance matrices using block-matrix partitioning.",
     "Apply the Schur complement to calculate conditional covariance.",
-    "Distinguish zero correlation from conditional independence, using the joint-normal assumption correctly."
+    "Distinguish zero correlation from conditional independence, using the joint-normal assumption correctly.",
+    "Relate covariance eigenvectors to normal contours and transform a multivariate normal vector by an affine map."
   ],
   "prereq": [
     {
@@ -38,7 +39,8 @@
     "A conditional distribution uses Σ₂₁Σ₁₁⁻¹ and the Schur complement Σ₂₂−Σ₂₁Σ₁₁⁻¹Σ₁₂.",
     "The conditional covariance does not depend on the observed conditioning value.",
     "Zero covariance implies independence for jointly multivariate normal subvectors, not for arbitrary distributions.",
-    "The order of the blocks matters: dimensions must conform throughout."
+    "The order of the blocks matters: dimensions must conform throughout.",
+    "For Y=b+CX, transform covariance as CΣCᵀ; do not transform only one side."
   ],
   "revision": {
     "sheet": [
@@ -144,7 +146,7 @@
     "note": "Platform mastery settings; not an NTA rule."
   },
   "anchors": [],
-  "provenance": "Authored 11 November 2026. No direct June 2026 official question is claimed as an anchor for this topic. The lesson focuses on the multivariate-normal marginal and conditional formulas; the June 2026 Q24 practice variants concern conditional covariance/partial association and are not represented as a direct official PYQ for this lesson. Formula and example checks are independently encoded in verify_multivariate_t1.py.",
+  "provenance": "Authored 11 November 2026. No direct June 2026 official question is claimed as an anchor for this topic. The lesson focuses on the multivariate-normal marginal and conditional formulas; the June 2026 Q24 practice variants concern conditional covariance/partial association and are not represented as a direct official PYQ for this lesson. Formula and example checks are independently encoded in verify_multivariate_t1.py. Source addition: Probability Distribution Cheat Sheet, pp. 14–19. The contour and affine-map material is written fresh; verify_probability_t5.py checks the example mean 1 and variance 11 by direct covariance expansion.",
   "scenes": [
     {
       "kind": "foundation",
@@ -220,7 +222,7 @@
       "id": "s2",
       "mins": 8,
       "title": "The multivariate normal model",
-      "objective": "Read the parameters and the key linear-combination property.",
+      "objective": "Read the parameters, covariance geometry and linear transformation property.",
       "blocks": [
         {
           "t": "def",
@@ -241,6 +243,21 @@
           "t": "note",
           "h": "Why partitioning works",
           "body": "A subvector and the remaining coordinates are jointly normal. Their covariance blocks determine the marginal and conditional distributions."
+        },
+        {
+          "t": "def",
+          "h": "The covariance matrix sets the contour directions",
+          "body": "Imagine repeated draws from a two-variable normal model. An equal-density contour is an ellipse around the mean. The eigenvectors of the covariance matrix point along its principal axes; their eigenvalues set the variances along those axes. With zero covariance the axes align with the coordinate directions. A positive covariance tilts the ellipse upward, and a negative covariance tilts it downward. If the covariance matrix is singular, the distribution is confined to a lower-dimensional line or plane."
+        },
+        {
+          "t": "formula",
+          "h": "An affine map changes both location and spread",
+          "body": "A linear map can combine coordinates, rescale them and add a fixed offset. If X has mean μ and covariance Σ, then Y=b+CX is also multivariate normal, with mean b+Cμ and covariance CΣCᵀ. For a one-coordinate check, let μ=(1,2)ᵀ, Σ=[[4,1],[1,9]], C=[1,−1] and b=2. Then E[Y]=2+1−2=1 and Var(Y)=4+9−2=11."
+        },
+        {
+          "t": "step",
+          "h": "Independent normal vectors can be joined",
+          "body": "If two normal vectors are independent, stacking them gives another multivariate normal vector. Its mean vectors stack in the same order, and its covariance matrix has the two original covariance matrices on the diagonal with zero blocks between them. Independence is what makes those off-diagonal covariance blocks zero."
         }
       ],
       "ask": {
