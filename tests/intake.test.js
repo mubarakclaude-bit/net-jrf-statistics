@@ -168,10 +168,13 @@ const built = (() => { try { return JSON.parse(fs.readFileSync(path.join(tmp, "s
 expect("build writes and runs both scripts, and the bank holds every kept question", r.code === 0 && built && built.count === 3 &&
   built.items.map(i => i.id).join() === "made-up-quiz-q001,made-up-quiz-q002,made-up-quiz-q004" && built.items[0].answer === "B" && built.items[0].explanation === "e", r.out);
 expect("the generated verifier passes and says what it checked", /Verified 3 answers independently/.test(r.out), r.out);
-const reg2 = JSON.parse(fs.readFileSync(path.join(tmp, "tools", "intake-sources.json"), "utf8"));
-expect("build registers the source once, with its outputs", reg2.sources.length === 1 && reg2.sources[0].outputs[0] === "seed/alpha_made_up_quiz.json" && reg2.sources[0].sha256[0] === id + "0".repeat(52), JSON.stringify(reg2));
+const reg2 = JSON.parse(fs.readFileSync(path.join(tmp, "tools", "intake-sources", id + ".json"), "utf8"));
+expect("build registers the source in a file of its own (no shared file for open PRs to conflict on)",
+  reg2.outputs[0] === "seed/alpha_made_up_quiz.json" && reg2.sha256[0] === id + "0".repeat(52) &&
+  JSON.parse(fs.readFileSync(path.join(tmp, "tools", "intake-sources.json"), "utf8")).sources.length === 0, JSON.stringify(reg2));
+expect("scan sees sources registered in either place", (() => { const R = require(TOOL); return R.classify({ name: "x.pdf", sha256: id + "0".repeat(52), pages: 3, text: "", textChars: 0 }, R.loadRegister(), {}).decision === "skip"; })());
 expect("build lists the files for the run's result and writes a PR description with the key differences",
-  /files: \["made_up_quiz_bank.py","verify_made_up_quiz.py","seed\/alpha_made_up_quiz.json","tools\/intake-sources.json"\]/.test(r.out) &&
+  /files: \["made_up_quiz_bank.py","verify_made_up_quiz.py","seed\/alpha_made_up_quiz.json","tools\/intake-sources\/abcdef012345.json"\]/.test(r.out) &&
   /Q1 \(kept, answer B, key A\)/.test(fs.readFileSync(path.join(ws, "pr-body.md"), "utf8")) && /Q3 \(repeat\)/.test(fs.readFileSync(path.join(ws, "pr-body.md"), "utf8")), r.out);
 r = spawnSync("python", ["-X", "utf8", "made_up_quiz_bank.py", "--check"], { cwd: tmp, encoding: "utf8" });
 expect("the generated build script's --check agrees with what it wrote", r.status === 0, (r.stdout || "") + (r.stderr || ""));

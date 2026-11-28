@@ -96,12 +96,12 @@ Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShel
 6. Build the content:
    - **Questions:** `node tools/intake.js build <id> --name <snake_case_name>` (for example `jam_probability_assignment`;
      `--title` overrides the source's title). It writes `<name>_bank.py` and `verify_<name>.py` from the worksheet and
-     `verify_work.py`, runs both (the bank lands in `seed/`), registers the source in `tools/intake-sources.json`, and
+     `verify_work.py`, runs both (the bank lands in `seed/`), registers the source in `tools/intake-sources/<id>.json`, and
      prints the `files` and `verify` for your result and the path of a PR description, `pr-body.md`. Do not write or
      edit these scripts by hand; if build fails, fix the worksheet or `verify_work.py` and run it again.
    - **Learning material:** edit the named lessons' seed JSON (`docs/CONTENT_GUIDE.md`, 3a), with fresh prose and a
      verification script for every new number. Bump `version` and record the source and pages in `provenance`. Add the
-     source to `tools/intake-sources.json`: title, kind, outputs, sha256 and file name (`source.json` gives the sha256).
+     source as `tools/intake-sources/<id>.json`: title, kind, outputs, sha256 and file name (`source.json` gives the sha256).
 7. Run `bash check.sh` and `npm run build` (and, for learning material, your verification script). All must pass.
    Git Bash is on your PATH; do not search for it.
 8. **Do not run `git add` or `git commit`.** The sandbox cannot write git's metadata (a worktree's index lives in the
@@ -117,7 +117,7 @@ Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShel
      "bodyFile": "<questions: the pr-body.md path build printed; the watcher reads it as UTF-8>",
      "body": "<anything to add: what you repaired; for learning material, the whole PR description>",
      "verify": "python verify_<name>.py",
-     "files": ["<build script>.py", "verify_<name>.py", "seed/<bank>.json", "tools/intake-sources.json"],
+     "files": ["<build script>.py", "verify_<name>.py", "seed/<bank>.json", "tools/intake-sources/<id>.json"],
      "source": "<source file name>" }
    ```
 
