@@ -6,7 +6,7 @@
  "breadcrumb": "Non-parametric methods → Empirical distribution function → Definition and properties",
  "engine": "B",
  "engineName": "Count observations at or below x, then divide by n.",
- "version": "1.0",
+ "version": "1.1",
  "status": "approved",
  "estMin": 96,
  "objectives": [
@@ -14,7 +14,8 @@
   "Describe monotonicity, right-continuity, limits and jump sizes, including ties.",
   "Derive the pointwise expectation and variance of the empirical CDF.",
   "Calculate empirical quantiles using the inverse-CDF convention.",
-  "State the Glivenko–Cantelli theorem and connect the EDF to KS testing."
+  "State the Glivenko–Cantelli theorem and connect the EDF to KS testing.",
+  "Use the DKW inequality to construct a finite-sample uniform confidence band."
  ],
  "prereq": [
   {
@@ -153,7 +154,7 @@
   "retestDays": 7,
   "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints."
  },
- "provenance": "The empirical distribution function topic is included in the 2026 syllabus audit. The inspected June 2026 nonparametric Q33/Q42 variants do not contain a direct EDF-theorem stem; the lesson therefore teaches the syllabus definition, jump properties, unbiasedness, variance, inverse-CDF quantiles and Glivenko–Cantelli result. Constructed numeric examples are independently recomputed in the verification script.",
+ "provenance": "The empirical distribution function topic is included in the 2026 syllabus audit. The inspected June 2026 nonparametric Q33/Q42 variants do not contain a direct EDF-theorem stem; the lesson therefore teaches the syllabus definition, jump properties, unbiasedness, variance, inverse-CDF quantiles and Glivenko–Cantelli result. Added an optional DKW confidence-band example from Nonparametric Bayesian Methods, p. 636; its n=50, alpha=0.05 margin is recomputed in verify_nonparam_t7_dkw.py.",
  "scenes": [
   {
    "kind": "foundation",
@@ -691,6 +692,42 @@
    "title": "Mastery test",
    "objective": "Demonstrate the empirical CDF skills independently.",
    "setId": "nonparam_t7_mastery"
+  },
+  {
+   "kind": "guided",
+   "id": "s15",
+   "ext": true,
+   "mins": 4,
+   "title": "Optional extension: a uniform confidence band",
+   "objective": "Use the DKW inequality to bound the largest empirical-CDF error.",
+   "problem": "A random sample of 50 observations is used to estimate an unknown CDF. Find a distribution-free 95% upper bound on sup_x |F_n(x)−F(x)|.",
+   "hints": [
+    "Direction: identify that the question asks for one bound holding over every threshold x.",
+    "Method: use the DKW inequality, P(sup_x |F_n(x)−F(x)|>epsilon)≤2 exp(−2 n epsilon²).",
+    "Next step: set the right side equal to 0.05 and solve for epsilon."
+   ],
+   "answer": "With probability at least 0.95, the largest absolute CDF gap is at most sqrt(log(40)/100)=0.192 (approximately).",
+   "solution": [
+    {
+     "say": "Set the failure probability to 0.05.",
+     "math": "2 exp(−2·50·epsilon²)=0.05",
+     "why": "This makes the DKW upper bound on failure equal to five percent."
+    },
+    {
+     "say": "Isolate epsilon.",
+     "math": "exp(−100 epsilon²)=0.025; 100 epsilon²=log(40)",
+     "why": "Taking logarithms changes the negative exponent into a positive square."
+    },
+    {
+     "say": "Take the positive square root.",
+     "math": "epsilon=sqrt(log(40)/100)=0.192064558264…≈0.192",
+     "why": "The margin is positive and is independently computed in verify_nonparam_t7_dkw.py."
+    }
+   ],
+   "ask": {
+    "q": "What does the DKW band control?",
+    "nudge": "The largest absolute gap between the empirical and population CDFs, across all x at once."
+   }
   }
  ]
 }
