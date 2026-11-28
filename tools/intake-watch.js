@@ -31,8 +31,8 @@
  *   --command "<cmd>" runs any other command through the shell, with the brief's path in INTAKE_PROMPT_FILE.
  * The engine must be installed and logged in by the owner; this script never handles a key.
  *
- * Merging: the watcher merges a run's green PR only when merging is on. It is on by default for claude and off by
- * default for codex, until a few Codex runs have been checked: --merge / --no-merge / "merge" in watch.json override.
+ * Merging is off by default for every engine. A green PR stays open for owner review unless the owner explicitly opts in
+ * with --merge or "merge": true in watch.json. --no-merge or "merge": false keeps it open.
  * With merging off each PR is left open and listed in .cache/intake/watch-notes.md.
  *
  * --once checks one time and exits (for Windows Task Scheduler or any other scheduler). Without it, it keeps watching.
@@ -126,13 +126,14 @@ function engineCommand(agent, briefText, custom, folder, env, model, sandbox, wo
   }
   // Codex CLI 0.171. --approve-for-me cannot be combined with --sandbox and in practice left runs read-only, so the
   // sandbox is named explicitly and approvals are off (an unattended run has nobody to ask). workspace-write: writes only
-  // inside the run's worktree, the source folder and the shared intake folder. The agent never needs GitHub: the watcher
-  // publishes (tools/intake-publish.js). danger-full-access: no sandbox at all, an owner-only choice in watch.json.
+  // inside the run's worktree and shared intake state; the source folder is read-only. The agent never needs GitHub:
+  // the watcher publishes (tools/intake-publish.js). danger-full-access: no sandbox at all, an owner-only choice in watch.json.
   // "-" reads the brief from stdin.
   if (agent === "codex") {
     const l = launcher("codex", path.join("@openai", "codex", "bin", "codex.js"), env);
     const sb = sandbox || "workspace-write";
-    const dirs = [folder].concat(extraDirs || []).filter(Boolean);
+    // Do not add the source folder: Codex can read it outside the workspace, but --add-dir would make it writable.
+    const dirs = (extraDirs || []).filter(Boolean);
     const confine = sb === "workspace-write" ? ["-c", "sandbox_workspace_write.network_access=true"].concat(...dirs.map(d => ["--add-dir", d])) : [];
     // `codex exec` otherwise runs with reasoning effort "none", which ends a long intake task after a few commands.
     const think = ["-c", "model_reasoning_effort=\"" + (effort || "high") + "\""];
@@ -334,10 +335,9 @@ function makeChecker(opts, planner, startFn, schedule) {
   return check;
 }
 
-/* Merge only where the owner has seen enough: on for Claude, off for Codex until --merge. */
+/* Keep every generated PR open for owner review unless merging is explicitly enabled. */
 function mergeOn(opts) {
-  if (opts.merge === true || opts.merge === false) return opts.merge;
-  return opts.agent !== "codex";
+  return opts.merge === true;
 }
 
 /* ------------------------------------------------------------------ command line */

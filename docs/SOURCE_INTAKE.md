@@ -94,10 +94,11 @@ ignored.
 - `agent`: `codex` (GPT, the default), `claude`, or `none` (report only).
 - `model`: a model name the engine accepts, or `null` for the engine's own default. `codex debug models` lists what
   your OpenAI account can use (for example `gpt-5.6-terra` or `gpt-6-luna`).
-- `sandbox` (Codex only): `workspace-write` (the default) lets a run write only inside the repository and the source
-  folder, with network on. `danger-full-access` runs Codex with no sandbox, with the owner's full user permissions.
-  Only the owner sets that.
-- `merge`: `null` uses the engine's default (off for Codex, on for Claude); `true` or `false` sets it.
+- `sandbox` (Codex only): `workspace-write` (the default) lets a run write only inside its worktree and the shared
+  intake state, with network on. The source folder remains read-only; Codex can read it without granting write access.
+  `danger-full-access` removes the sandbox and grants the owner's full user permissions. Only the owner sets that.
+- `merge`: `null` leaves PRs open for owner review for every engine. Set `true` or pass `--merge` to let the watcher
+  merge after exact-commit CI succeeds; `false` or `--no-merge` keeps PRs open.
 - `doneFolder`: once a document's branch is on GitHub (PR left open or merged, or PR or CI failed), the watcher moves its PDF into this
   subfolder of `folder` (default `Done`), so the folder shows only what is left and finished files are not hashed
   again. A name clash gets a ` (2)` suffix. `null` leaves files where they are. A run that stops before pushing
@@ -148,10 +149,10 @@ before each Codex run the watcher asks `codex doctor`, and if the sandbox backen
 writes the choices into `.cache/intake/watch-notes.md`:
 (A) set up the sandbox, (B) set `"sandbox": "danger-full-access"`, or (C) use `"agent": "claude"`. `--command "<cmd>"` runs
 anything else, with the brief's path in `INTAKE_PROMPT_FILE`. The engine is installed and logged in by the owner; the
-watcher never sees a key. **Merging** is on by default for `claude` and off for `codex`. A Codex run leaves its PRs open
-for review, listed in `.cache/intake/watch-notes.md`, until the owner passes `--merge`. `--no-merge` turns merging off
-for any engine. Whatever the engine, the same gates decide what is published: the verification script,
-`check.sh`, CI, and the merge rule in the brief.
+watcher never sees a key. **Merging** is off by default for every engine. A run leaves its PR open for owner review, listed in
+`.cache/intake/watch-notes.md`, unless the owner explicitly opts in with `--merge` or `"merge": true` in `watch.json`.
+`--no-merge` or `"merge": false` keeps it open. Whatever the engine, the same gates decide what is published: the
+verification script, `check.sh`, CI, and the merge rule in the brief.
 
 **Starting it with Windows.** To start the watcher at logon, the owner registers a scheduled task once (Task Scheduler,
 "At log on", action `node <repo>\tools\intake-watch.js`; the folder, engine and model come from `watch.json`). Without that, it runs
