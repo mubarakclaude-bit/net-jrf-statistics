@@ -16,6 +16,12 @@
  *                                          topic ids real, four options, a keyNote wherever the answer differs from the key)
  *   node tools/intake.js gaps <id>         write .cache/intake/<id>/report.md: near-duplicates already in the banks,
  *                                          topics with no lesson, and (learning material) what each concept adds
+ *   node tools/intake.js next <id> [--batch 30]
+ *                                          what this batch needs, never the whole worksheet: where transcription
+ *                                          continues, or the next kept items still to explain, as they stand
+ *   node tools/intake.js put <id> <batch.json> [--verify <batch.py>]
+ *                                          merge a batch written as a UTF-8 file into the worksheet (and its q<n>()
+ *                                          into verify_work.py); refuses one whose symbols were lost as '?'
  *   node tools/intake.js explain <id> [--batch 30]
  *                                          the second pass over a finished question worksheet, also done in batches:
  *                                          how many kept questions have an `explanation` and a q<n>() in the workspace's
@@ -254,20 +260,35 @@ function classify(f, register, seen) {
   return { decision: "process", kind, score: Math.round(score * 100) / 100, why };
 }
 
+/* Hashes are cached by path, size and modification time in .cache/intake/hashes.json: the watcher plans the folder
+   before every batch, and re-hashing every PDF (one of them 508 MB) cost most of the 8 s a plan took. */
+let hashCache = null;
 function sha256File(file) {
+  const st = fs.statSync(file), key = path.resolve(file), cf = path.join(DIR, "hashes.json");
+  if (!hashCache) { try { hashCache = readJSON(cf); } catch (e) { hashCache = {}; } }
+  const c = hashCache[key];
+  if (c && c.size === st.size && c.mtimeMs === st.mtimeMs && /^[0-9a-f]{64}$/.test(c.sha256 || "")) return c.sha256;
   const h = crypto.createHash("sha256"), fd = fs.openSync(file, "r"), buf = Buffer.alloc(1 << 20);
   let n; while ((n = fs.readSync(fd, buf, 0, buf.length, null)) > 0) h.update(buf.subarray(0, n));
   fs.closeSync(fd);
-  return h.digest("hex");
+  const sha256 = h.digest("hex");
+  hashCache[key] = { size: st.size, mtimeMs: st.mtimeMs, sha256 };
+  try { fs.mkdirSync(DIR, { recursive: true }); fs.writeFileSync(cf, JSON.stringify(hashCache)); } catch (e) { /* a cache only */ }
+  return sha256;
 }
 
 function facts(file) {
   const name = path.basename(file), sha256 = sha256File(file);
   let pages = 0, text = "";
-  const info = spawnSync("pdfinfo", [file], { encoding: "utf8" });
-  if (info.error) throw new Error("pdfinfo is not available (" + info.error.code + "). Install poppler, or run from Git Bash, which ships it.");
-  if (info.status === 0) pages = +((info.stdout.match(/^Pages:\s+(\d+)/m) || [])[1] || 0);
-  if (pages) { const t = spawnSync("pdftotext", ["-l", "3", "-layout", file, "-"], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 }); text = t.stdout || ""; }
+  const c = hashCache && hashCache[path.resolve(file)];
+  if (c && c.sha256 === sha256 && Number.isInteger(c.pages) && typeof c.text === "string") { pages = c.pages; text = c.text; }   // pdfinfo + pdftotext cost ~0.4 s a file
+  else {
+    const info = spawnSync("pdfinfo", [file], { encoding: "utf8" });
+    if (info.error) throw new Error("pdfinfo is not available (" + info.error.code + "). Install poppler, or run from Git Bash, which ships it.");
+    if (info.status === 0) pages = +((info.stdout.match(/^Pages:\s+(\d+)/m) || [])[1] || 0);
+    if (pages) { const t = spawnSync("pdftotext", ["-l", "3", "-layout", file, "-"], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 }); text = (t.stdout || "").slice(0, 20000); }
+    if (c && c.sha256 === sha256) { c.pages = pages; c.text = text; try { fs.writeFileSync(path.join(DIR, "hashes.json"), JSON.stringify(hashCache)); } catch (e) { /* a cache only */ } }
+  }
   let inProgress = null;
   const ws = path.join(DIR, sha256.slice(0, 12), "source.json");
   if (fs.existsSync(ws)) {
@@ -281,9 +302,10 @@ function facts(file) {
 function plan(folder) {
   if (!folder || !fs.existsSync(folder) || !fs.statSync(folder).isDirectory()) throw new Error("Give the folder that holds the PDFs: node tools/intake.js scan \"<folder>\"");
   const register = loadRegister(), seen = {}, rows = [];
+  let S = null;                                      // read the seed once, and only when a started document needs it
   for (const n of fs.readdirSync(folder).filter(x => /\.pdf$/i.test(x)).sort()) {
     const f = facts(path.join(folder, n));
-    if (f.inProgress) { try { f.inProgress.passes = check(f.sha256.slice(0, 12), loadSeed()).length === 0; } catch (e) { /* report as started */ } }
+    if (f.inProgress) { try { f.inProgress.passes = check(f.sha256.slice(0, 12), S = S || loadSeed()).length === 0; } catch (e) { /* report as started */ } }
     const c = classify(f, register, seen);
     if (!seen[f.sha256]) seen[f.sha256] = n;
     rows.push(Object.assign({ name: n, file: f.file, pages: f.pages, sha256: f.sha256 }, c));
@@ -451,6 +473,84 @@ function explain(id, opts) {
       st.problems.push("Q" + q.n + ": q" + q.n + "() gives " + got[q.n] + " but the worksheet's answer is " + q.answer);
   }
   return st;
+}
+
+/* ------------------------------------------------------------------ one batch at a time: next and put
+   Measured on 28 Nov 2026: each unattended run printed the whole 200 KB worksheet into its context (5,000+ lines) to
+   find its place, and wrote its additions through PowerShell here-strings piped to Python, which turn every non-ASCII
+   character (−, ∩, ᶜ) into "?". `next` prints only what this batch needs; `put` merges a batch written as a UTF-8 file
+   and refuses one whose symbols were lost, so the worksheet itself is never edited by hand. */
+const BATCH_FIELDS = ["n", "page", "format", "decision", "topic", "stem", "options", "statements", "printedKey", "answer", "keyNote", "note", "explanation", "whys", "check"];
+function nextBatch(id, opts) {
+  const { src, sheet } = openWorkspace(id);
+  const items = sheet && Array.isArray(sheet.items) ? sheet.items.slice().sort((a, b) => a.n - b.n) : [];
+  const cov = (sheet && sheet.covers) || {}, last = items[items.length - 1];
+  const vf = path.join(wsDir(id), VERIFY_WORK), vsrc = fs.existsSync(vf) ? fs.readFileSync(vf, "utf8") : "";
+  const pagesDir = shownPath(path.join(wsDir(id), "pages"));
+  const missing = []; if (Number.isInteger(cov.from) && Number.isInteger(cov.to)) for (let n = cov.from; n <= cov.to; n++) if (!items.some(q => q.n === n)) missing.push(n);
+  if (!sheet || !Number.isInteger(cov.to) || missing.length) {
+    const from = missing.length ? missing[0] : last ? last.n + 1 : 1, page = last ? Math.max(...[].concat(last.page)) : 1;
+    return { stage: "transcribe", text: [
+      "Worksheet: " + items.length + " entries" + (Number.isInteger(cov.to) ? " of Q" + cov.from + "-Q" + cov.to : " (covers not set yet)") + "; " + verifyFunctions(vsrc).size + " q<n>() in " + VERIFY_WORK + ".",
+      "Next: transcribe and solve from Q" + from + (missing.length > 1 ? " (" + missing.length + " still missing)" : "") + ", starting on page " + page + " of " + src.pages + ": " + pagesDir + "/p" + pad3(page) + ".png onward.",
+      last ? "Last entry: " + JSON.stringify(pick(last)) : "No entries yet."].join("\n") };
+  }
+  const st = explainStatus(sheet, vsrc, +opts.batch || 30);
+  return { stage: st.left ? "explain" : "build", text: ["Worksheet complete: " + items.length + " entries; explained and recomputed " + st.done.length + " of " + st.kept + " kept questions.",
+    ...st.problems.map(p => "  - " + p),
+    st.left ? "Next batch (" + st.next.length + " of " + st.left + " left), each as it stands in the worksheet; its pages are in " + pagesDir + ":" : "Nothing left to explain. Next: node tools/intake.js build " + id + " --name <bank_name>",
+    ...st.next.map(n => JSON.stringify(pick(items.find(q => q.n === n))))].join("\n") };
+  function pick(q) { const o = {}; BATCH_FIELDS.forEach(k => { if (q[k] !== undefined) o[k] = q[k]; }); return o; }
+}
+/* Merge a batch file into the worksheet: {"covers"?: {...}, "items": [{n, ...fields}]}; an item replaces the fields it
+   gives (null removes one) and new numbers are added. With --verify, each def q<n>() in that .py file replaces or joins
+   its namesake in verify_work.py, and any import lines it starts with are added once. Nothing is written if a string
+   in either file lost its symbols. */
+function splitVerify(src) {
+  const lines = String(src || "").replace(/\r\n/g, "\n").split("\n"), head = [], defs = new Map(); let cur = null;
+  for (const l of lines) {
+    const m = l.match(/^def q(\d+)\s*\(/);
+    if (m) { cur = +m[1]; defs.set(cur, [l]); }
+    else if (cur !== null && (/^\s/.test(l) || l === "")) defs.get(cur).push(l);
+    else if (cur !== null) { cur = null; head.push(l); }
+    else head.push(l);
+  }
+  return { head: head.join("\n").trim(), defs };
+}
+function put(id, file, opts) {
+  const { src, sheet, sheetFile } = openWorkspace(id);
+  if (src.kind !== "questions") throw new Error("put is for question worksheets");
+  if (!file || !fs.existsSync(file)) throw new Error("No such batch file: " + file);
+  const raw = fs.readFileSync(file, "utf8").replace(/^﻿/, "");
+  let b; try { b = JSON.parse(raw); } catch (e) { throw new Error(file + " is not valid JSON: " + e.message); }
+  if (!b || !Array.isArray(b.items) || b.items.some(q => !q || !Number.isInteger(q.n))) throw new Error("a batch is {\"items\": [{\"n\": <question number>, ...}]}");
+  const lost = x => typeof x === "string" ? symbolsMangled(x) : !!x && typeof x === "object" && Object.values(x).some(lost);
+  const bad = b.items.filter(lost).map(q => q.n);
+  if (bad.length) throw new Error("maths symbols were lost as '?' in Q" + bad.join(", Q") + " of " + file + ". Write the batch file with your file-editing tool (it saves UTF-8), never through PowerShell");
+  let vnew = null;
+  if (opts.verify) {
+    if (!fs.existsSync(opts.verify)) throw new Error("No such file: " + opts.verify);
+    vnew = fs.readFileSync(opts.verify, "utf8").replace(/^﻿/, "");
+    if (symbolsMangled(vnew.replace(/'\?'|"\?"/g, ""))) throw new Error(opts.verify + " lost symbols as '?'; write it with your file-editing tool");
+    if (/questions\.json|printedKey/.test(vnew)) throw new Error(opts.verify + " may not read the worksheet");
+  }
+  const s = sheet || { source: id, covers: {}, items: [] };
+  if (b.covers) s.covers = b.covers;
+  for (const q of b.items) {
+    let t = s.items.find(x => x.n === q.n);
+    if (!t) { t = { n: q.n }; s.items.push(t); }
+    for (const [k, v] of Object.entries(q)) { if (v === null) delete t[k]; else t[k] = v; }
+  }
+  s.items.sort((a, c) => a.n - c.n);
+  writeJSON(sheetFile, s);
+  if (vnew !== null) {
+    const vf = path.join(wsDir(id), VERIFY_WORK), cur = splitVerify(fs.existsSync(vf) ? fs.readFileSync(vf, "utf8") : ""), add = splitVerify(vnew);
+    const head = cur.head.split("\n"); add.head.split("\n").forEach(l => { if (l.trim() && !head.includes(l)) head.push(l); });
+    add.defs.forEach((v, n) => cur.defs.set(n, v));
+    const out = [head.join("\n").trim(), ...[...cur.defs.keys()].sort((x, y) => x - y).map(n => cur.defs.get(n).join("\n").trimEnd())].filter(Boolean).join("\n\n\n") + "\n";
+    fs.writeFileSync(vf, out);
+  }
+  return { items: b.items.length, defs: vnew !== null ? splitVerify(vnew).defs.size : 0 };
 }
 
 /* ------------------------------------------------------------------ the bank, built mechanically from the worksheet
@@ -669,6 +769,13 @@ function main(argv) {
       if (P.length) { console.log(P.length + " problem(s):"); P.forEach(p => console.log("  - " + p)); return 1; }
       const { sheet } = openWorkspace(pos[0]);
       console.log("Worksheet " + pos[0] + " passes: " + sheet.items.length + " entries. Next: node tools/intake.js gaps " + pos[0]);
+      return 0;
+    }
+    if (cmd === "next") { console.log(nextBatch(pos[0], opts).text); return 0; }
+    if (cmd === "put") {
+      const r = put(pos[0], pos[1], opts);
+      console.log("Saved " + r.items + " item(s)" + (opts.verify ? " and " + r.defs + " q<n>()" : "") + ".");
+      const n = nextBatch(pos[0], {}); console.log(n.text.split("\n").slice(0, n.stage === "transcribe" ? 2 : 1).join("\n"));
       return 0;
     }
     if (cmd === "explain") {
