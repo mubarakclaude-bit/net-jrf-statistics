@@ -8,7 +8,7 @@
  *   1. waits until every PDF in the folder has stopped changing (its mtime is at least --settle seconds old and its size
  *      holds steady), so a half-copied download is never read;
  *   2. asks tools/intake.js plan() what is left to process: new files, files already started; it skips what is already
- *      in the app (tools/intake-sources.json), personal, unreadable or duplicate files;
+ *      in the app (tools/intake-sources*), personal, unreadable or duplicate files;
  *   3. if anything is left and no run is active, prepares a fresh worktree on a new branch (tools/intake-publish.js), and
  *      starts ONE agent run there with the brief in tools/intake-run.md. The agent processes one document: reads, solves,
  *      verifies, builds and commits locally, then writes a result file. It never touches GitHub;

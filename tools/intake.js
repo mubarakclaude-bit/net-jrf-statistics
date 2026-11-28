@@ -6,7 +6,7 @@
  *
  *   node tools/intake.js scan <folder> [--add]
  *                                          decide what to process next: skips what is already in the app
- *                                          (tools/intake-sources.json), personal, unreadable or duplicate files, works out
+ *                                          (tools/intake-sources*), personal, unreadable or duplicate files, works out
  *                                          each file's kind and ranks the rest; --add registers the top pick
  *   node tools/intake.js add <file.pdf> --kind questions|learning [--title "..."] [--render all]
  *                                          questions: every page is rendered as an image; learning: only pages whose
@@ -30,7 +30,7 @@
  *   node tools/intake.js build <id> --name <snake_name> [--title "..."]
  *                                          once explain is finished: write <name>_bank.py and verify_<name>.py from the
  *                                          worksheet and verify_work.py, run both (the bank lands in seed/), register the
- *                                          source in tools/intake-sources.json and write the PR description to pr-body.md
+ *                                          source in tools/intake-sources/<id>.json and write the PR description to pr-body.md
  *
  * The two kinds of document and what happens after this tool is in docs/SOURCE_INTAKE.md. In short: a question document
  * ends as a pyq_bank_<source>.py file built and verified like the CSIR banks; learning material ends as edits to lesson
@@ -222,8 +222,15 @@ const RX = {
   syllabus: /probab|statist|distribut|estimat|regress|varian|random|sampl|hypothes|markov|stochastic|inference|time.?series|bayes|anova|design|multivariate|nonparametric/i,
 };
 
+/* The register is tools/intake-sources.json (the sources registered before 28 Nov 2026) plus one file per source in
+   tools/intake-sources/<workspace id>.json. Every content PR appending to the one file conflicted with the next open
+   one (#156 after #154 merged), so `build` writes its own file instead. */
+const REGISTER_DIR = path.join(ROOT, "tools", "intake-sources");
 function loadRegister() {
-  try { return readJSON(REGISTER).sources || []; } catch (e) { return []; }
+  let all = [];
+  try { all = readJSON(REGISTER).sources || []; } catch (e) { /* none yet */ }
+  try { for (const f of fs.readdirSync(REGISTER_DIR).filter(x => /\.json$/.test(x)).sort()) { try { all.push(readJSON(path.join(REGISTER_DIR, f))); } catch (e) { /* a broken entry is reported by check.sh */ } } } catch (e) { /* no directory yet */ }
+  return all;
 }
 
 /* Decide one file from facts already gathered, so it can be tested without a PDF. f: { name, sha256, pages (0 if unreadable),
@@ -572,7 +579,7 @@ function put(id, file, opts) {
    Writing a 300-question build script by hand costs a whole agent run and invites copying slips, so a finished worksheet
    becomes the bank's two scripts here: <name>_bank.py (the questions and explanations as data, built with
    pyq_bank_common like the other banks) and verify_<name>.py (verify_work.py verbatim, then a check that every q<n>()
-   agrees with the written bank). Both are then run, and the source is registered in tools/intake-sources.json. */
+   agrees with the written bank). Both are then run, and the source is registered in tools/intake-sources/<id>.json. */
 const pyLiteral = obj => "json.loads('" + JSON.stringify(obj).replace(/[\u007f-\uffff]/g, c => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"))
   .replace(/\\/g, "\\\\").replace(/'/g, "\\'") + "')";
 function runPython(script, cwd) {
@@ -695,11 +702,10 @@ function build(id, opts, S) {
   if (!b.ok) throw new Error(bankPy + " failed:\n" + b.out.slice(-1500));
   const v = runPython(verifyPy, ROOT);
   if (!v.ok) throw new Error(verifyPy + " failed:\n" + v.out.slice(-1500));
-  // register the source, replacing an earlier entry for the same file
-  const regFile = path.join(ROOT, "tools", "intake-sources.json"), reg = readJSON(regFile);
-  reg.sources = reg.sources.filter(s => !(s.sha256 || []).includes(src.sha256));
-  reg.sources.push({ title, kind: "questions", status: "banked", outputs: Object.values(outs), sha256: [src.sha256], files: [src.file] });
-  writeJSON(regFile, reg);
+  // register the source in a file of its own (see loadRegister), so open content PRs never touch the same file
+  const regRel = "tools/intake-sources/" + id + ".json";
+  fs.mkdirSync(REGISTER_DIR, { recursive: true });
+  writeJSON(path.join(ROOT, regRel), { title, kind: "questions", status: "banked", outputs: Object.values(outs), sha256: [src.sha256], files: [src.file] });
   // a PR description the run can use as it is
   const byTopic = {}; kept.forEach(q => { const t = S.topics[q.topic]; byTopic[t.name] = (byTopic[t.name] || 0) + 1; });
   const notes = sheet.items.filter(q => q.keyNote || q.decision !== "keep");
@@ -709,7 +715,7 @@ function build(id, opts, S) {
     "**Answers that differ from the printed key, repeats and left-out questions (" + notes.length + "):**", "",
     ...notes.map(q => "- Q" + q.n + " (" + (q.decision === "keep" ? "kept, answer " + q.answer + ", key " + q.printedKey : q.decision) + "): " + String(q.keyNote || q.note).replace(/\s+/g, " ")), ""].join("\n");
   fs.writeFileSync(path.join(wsDir(id), "pr-body.md"), body);
-  return { files: [bankPy, verifyPy, ...Object.values(outs), "tools/intake-sources.json"], verify: "python " + verifyPy, body: shownPath(path.join(wsDir(id), "pr-body.md")), built: b.out, verified: v.out };
+  return { files: [bankPy, verifyPy, ...Object.values(outs), regRel], verify: "python " + verifyPy, body: shownPath(path.join(wsDir(id), "pr-body.md")), built: b.out, verified: v.out };
 }
 
 /* ------------------------------------------------------------------ the report */
@@ -819,4 +825,4 @@ function main(argv) {
 }
 
 if (require.main === module) process.exit(main(process.argv.slice(2)));
-module.exports = { explainStatus, sameAnswer, verifyFunctions, tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost, symbolsMangled, classify, plan };
+module.exports = { loadRegister, explainStatus, sameAnswer, verifyFunctions, tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost, symbolsMangled, classify, plan };
