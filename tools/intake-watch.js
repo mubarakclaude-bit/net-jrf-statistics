@@ -246,6 +246,13 @@ function start(opts, onExit, pick) {
     PYTHONUTF8: "1", PYTHONIOENCODING: "utf-8",
     // The document the watcher chose, so the agent does not rescan the whole folder.
     INTAKE_PICK: pick ? pick.file : "", INTAKE_PICK_KIND: pick ? pick.kind || "" : "", INTAKE_PICK_ID: pick && pick.sha256 ? pick.sha256.slice(0, 12) : "" });
+  /* Git Bash on the agent's PATH: Codex's shell had none, so `bash check.sh` and `npm run build` (which calls bash)
+     failed and a run spent minutes looking for it (28 Nov 2026). Same key spelling as the parent ("Path" on Windows). */
+  const bash = P.bashPath ? P.bashPath() : "bash";
+  if (path.isAbsolute(bash)) {
+    const pk = Object.keys(env).find(k => k.toUpperCase() === "PATH") || "PATH";
+    env[pk] = path.dirname(bash) + path.delimiter + (env[pk] || "");
+  }
   const child = spawn(eng.cmd, eng.args, { cwd: prep.wt, env, shell: !!eng.shell, stdio: [eng.stdin ? "pipe" : "ignore", out, out], windowsHide: true });
   if (eng.stdin) { child.stdin.on("error", () => { /* the engine exited early; its log says why */ }); child.stdin.end(eng.stdin); }
   let failedToStart = false;

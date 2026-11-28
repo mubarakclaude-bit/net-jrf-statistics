@@ -334,8 +334,18 @@ function scan(folder, opts) {
 /* ------------------------------------------------------------------ the worksheet checks */
 /* A file written by Windows PowerShell in the console code page turns every symbol it cannot encode (∩ ∪ ᶜ − ≤)
    into "?", so "P(Aᶜ)" arrives as "P(A?)". A question mark between symbols, or U+FFFD, means the text was mangled. */
+/* A '?' that stands for a lost symbol. A real question mark ends a sentence: it is followed by a space, a closing quote
+   or bracket, or the end. Found in review of PR #154 (28 Nov 2026): 23 of 290 items slipped past the first version of
+   this check as "2^51 ? 1" (\u2212), "P(A ? B)" (\u222A, \u2229), "a? ? b?" (a\u00B2 \u2212 b\u00B2), "{1, 2, ?, 3n}" (\u2026), "4!?3!" (\u00D7) and
+   "E? denote" (E\u2081). Calibrated on every bank in seed/: no real question mark matches. */
 function symbolsMangled(text) {
-  return typeof text === "string" && (/\uFFFD/.test(text) || /[\w)\]]\?[\w(=)\]+\-*\/]/.test(text) || /\?\?/.test(text));
+  return typeof text === "string" && (/\uFFFD/.test(text) || /\?\?/.test(text) ||
+    /[^\s"'\u201C\u2018(]\?[^\s"'\u201D\u2019)]/.test(text) ||            // glued to text on both sides: "A?B", "4!?3!", "+?="
+    /[\w)\]]\?\)/.test(text) ||                        // "P(A?)" for P(A\u1D9C)
+    /\s\?\s+\S/.test(text) ||                          // " ? " between terms: "2^51 ? 1", "P(A ? B)"
+    /[,({]\s*\?\s*[,)}]/.test(text) ||                 // a list's ellipsis: "{1, 2, ?, 3n}"
+    /[\w)\]]\?\s+[a-z0-9]/.test(text) ||               // a sentence that goes on: "E? denote", "1? through"
+    /â[\u0080-¿Œ-˜–-›€™]|Ã[\u0080-¿]|Â[ -¿]/.test(text));   // UTF-8 read as cp1252: "âˆ’" for −, "Â²" for ²
 }
 
 function checkQuestions(src, sheet, S) {
@@ -545,7 +555,12 @@ function put(id, file, opts) {
   writeJSON(sheetFile, s);
   if (vnew !== null) {
     const vf = path.join(wsDir(id), VERIFY_WORK), cur = splitVerify(fs.existsSync(vf) ? fs.readFileSync(vf, "utf8") : ""), add = splitVerify(vnew);
-    const head = cur.head.split("\n"); add.head.split("\n").forEach(l => { if (l.trim() && !head.includes(l)) head.push(l); });
+    // import lines are added once each; any other preamble (a helper function) is added whole unless already there, never
+    // line by line, which would drop a repeated line from inside a helper
+    const head = cur.head ? cur.head.split("\n") : [], isImport = l => /^(import |from \S+ import )/.test(l);
+    add.head.split("\n").filter(isImport).forEach(l => { if (!head.includes(l)) head.splice(head.filter(isImport).length ? head.lastIndexOf(head.filter(isImport).pop()) + 1 : 0, 0, l); });
+    const rest = add.head.split("\n").filter(l => !isImport(l)).join("\n").trim();
+    if (rest && !head.join("\n").includes(rest)) head.push("", "", rest);
     add.defs.forEach((v, n) => cur.defs.set(n, v));
     const out = [head.join("\n").trim(), ...[...cur.defs.keys()].sort((x, y) => x - y).map(n => cur.defs.get(n).join("\n").trimEnd())].filter(Boolean).join("\n\n\n") + "\n";
     fs.writeFileSync(vf, out);
