@@ -34,10 +34,12 @@ expect("daily limit reached: wait for tomorrow", /daily limit of 6/.test(W.decid
 const noShim = { APPDATA: path.join(tmp, "no-appdata") };
 const c = W.engineCommand("claude", "BRIEF", undefined, undefined, noShim);
 expect("claude runs headless (-p) with the brief on stdin, not in its arguments", c.cmd === "claude" && c.args[0] === "-p" && c.stdin === "BRIEF" && !c.args.includes("BRIEF"));
-const x = W.engineCommand("codex", "BRIEF", undefined, "C:/src", noShim);
+const x = W.engineCommand("codex", "BRIEF", undefined, "C:/src", noShim, null, null, null, ["C:/intake"]);
 expect("codex runs exec reading the brief from stdin ('-')", x.cmd === "codex" && x.args[0] === "exec" && x.args[x.args.length - 1] === "-" && x.stdin === "BRIEF");
-expect("codex runs sandboxed to the workspace, with network, and can read the source folder",
-  x.args.join(" ").includes("-s workspace-write") && x.args.includes("sandbox_workspace_write.network_access=true") && x.args.join(" ").includes("--add-dir C:/src"));
+expect("codex keeps the source folder read-only while allowing writes to the shared intake state",
+  x.args.join(" ").includes("-s workspace-write") && x.args.includes("sandbox_workspace_write.network_access=true") &&
+  x.args.includes("--add-dir") && x.args[x.args.indexOf("--add-dir") + 1] === "C:/intake" &&
+  !x.args.some((v, i) => v === "--add-dir" && x.args[i + 1] === "C:/src"));
 expect("codex runs with approvals off and never with the rejected --approve-for-me / --full-auto flags",
   x.args.includes('approval_policy="never"') && !x.args.includes("--approve-for-me") && !x.args.includes("--full-auto") && !x.args.includes("--sandbox"));
 const xf = W.engineCommand("codex", "BRIEF", undefined, "C:/src", noShim, null, "danger-full-access");
@@ -52,8 +54,10 @@ const viaJs = W.engineCommand("codex", "BRIEF", undefined, "C:/src", { INTAKE_CO
 expect("when the package launcher is found, it runs with this Node (no .cmd shim, no shell)", viaJs.cmd === process.execPath && viaJs.args[0] === fakeJs && viaJs.args[1] === "exec");
 expect("a custom command runs through the shell", W.engineCommand("none", "B", "my-agent --go").shell === true);
 expect("no engine means nothing is started", W.engineCommand("none", "B") === null);
-expect("merging is off by default for codex and on for claude", !W.mergeOn({ agent: "codex" }) && W.mergeOn({ agent: "claude" }));
-expect("--merge and --no-merge override the default", W.mergeOn(W.parse(["--agent", "codex", "--merge"])) && !W.mergeOn(W.parse(["--agent", "claude", "--no-merge"])));
+expect("merging is off by default for both engines", !W.mergeOn({ agent: "codex" }) && !W.mergeOn({ agent: "claude" }));
+expect("only explicit --merge opts in; --no-merge stays off", W.mergeOn(W.parse(["--agent", "codex", "--merge"])) &&
+  W.mergeOn(W.parse(["--agent", "claude", "--merge"])) && !W.mergeOn(W.parse(["--agent", "claude", "--no-merge"])) &&
+  !W.mergeOn(W.parse([], { agent: "claude", merge: null })) && W.mergeOn(W.parse([], { agent: "claude", merge: true })));
 const p = W.parse(["--folder", "F", "--agent", "claude", "--once", "--max-runs-per-day", "3"], {});
 expect("options are parsed", p.folder === "F" && p.agent === "claude" && p.once && p.max === 3 && p.settle === 30);
 expect("GPT (codex) is the default engine", W.parse([], {}).agent === "codex");
@@ -144,8 +148,8 @@ W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (cod
   expect("the agent received the source folder and a readable brief", m.folder === folder && m.brief === true, JSON.stringify(m));
   expect("the agent runs inside the prepared worktree", path.resolve(m.cwd || "") === path.resolve(fakeWt), m.cwd);
   expect("the agent is told the shared intake folder and where to write its result", path.resolve(m.dir || "") === path.resolve(process.env.INTAKE_DIR) && /results[\\/]20261122-000000\.json$/.test(m.result || ""), JSON.stringify(m));
-  expect("after the agent, the watcher prepares, publishes (merging on for a custom engine) and cleans up, keeping nothing once pushed",
-    JSON.stringify(calls) === JSON.stringify(["prepare", "publish:true:20261122-000000.json", "cleanup:false"]), JSON.stringify(calls));
+  expect("after the agent, the watcher prepares, leaves the PR open for owner review, and cleans up",
+    JSON.stringify(calls) === JSON.stringify(["prepare", "publish:false:20261122-000000.json", "cleanup:false"]), JSON.stringify(calls));
   expect("the outcome is reported to the caller and noted for the owner", res && res.outcome === "left-open" && /Run 20261122-000000: left-open/.test(fs.readFileSync(notesFile, "utf8")));
   expect("the lock is removed when the run ends", !fs.existsSync(lockFile));
   expect("the agent is handed the watcher's pick (file, kind, workspace id), so it need not rescan the folder",
@@ -199,7 +203,8 @@ W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (cod
     const a = g.args || [];
     expect("the codex run exited cleanly", code2 === 0, code2);
     expect("the brief reached codex on stdin", /^# Unattended intake run/.test(g.brief || ""), JSON.stringify(g));
-    expect("codex got exec, the sandbox flags, the source folder and '-'", a[0] === "exec" && a.includes("--add-dir") && a.includes(folder) && a.slice(-1)[0] === "-", JSON.stringify(a));
+    expect("codex got exec and sandbox flags without granting the source folder write access",
+      a[0] === "exec" && a.includes("--add-dir") && a.includes(process.env.INTAKE_DIR) && !a.includes(folder) && a.slice(-1)[0] === "-", JSON.stringify(a));
     expect("codex works in the prepared worktree and may also write the shared intake folder", a[a.indexOf("-C") + 1] === fakeWt && a.includes(process.env.INTAKE_DIR), JSON.stringify(a));
     expect("a codex run is published with merging off by default", calls[1] === "publish:false:20261122-000000.json", JSON.stringify(calls));
     // a branch that reached GitHub but whose PR could not be opened still moves its file, so it is not started again
