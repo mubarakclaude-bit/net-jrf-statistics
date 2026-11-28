@@ -167,10 +167,36 @@ function codexPreflight(opts, runDoctor) {
   return result;
 }
 
+/* Anything written to watch-notes.md (a PR to review, a stop, a failure) also raises a Windows notification, so a stalled
+   run is seen within minutes rather than the next morning (on 27 Nov 2026 a stop went unseen for 12 hours). The text
+   goes through environment variables, never into the script. "notify": false in watch.json turns it off. */
+const TOAST = [
+  "$null = [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime]",
+  "$t = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText02)",
+  "$x = $t.GetElementsByTagName('text')",
+  "$null = $x.Item(0).AppendChild($t.CreateTextNode($env:INTAKE_TOAST_TITLE))",
+  "$null = $x.Item(1).AppendChild($t.CreateTextNode($env:INTAKE_TOAST_TEXT))",
+  "$app = '{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}\\WindowsPowerShell\\v1.0\\powershell.exe'",
+  "[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($app).Show([Windows.UI.Notifications.ToastNotification]::new($t))"].join("; ");
+function toast(title, text) {
+  if (process.platform !== "win32") return;
+  try {
+    const env = Object.assign({}, process.env, { INTAKE_TOAST_TITLE: title.slice(0, 120), INTAKE_TOAST_TEXT: text.slice(0, 250) });
+    const p = require("child_process").spawn("powershell.exe", ["-NoProfile", "-NonInteractive", "-EncodedCommand", Buffer.from(TOAST, "utf16le").toString("base64")],
+      { env, detached: true, stdio: "ignore", windowsHide: true });
+    p.on("error", () => {}); p.unref();
+  } catch (e) { /* a notification is a convenience; the note and the log have it */ }
+}
+let notifier = toast;
+function setNotifier(fn) { notifier = fn || (() => {}); }
 function noteOnce(text) {
   try {
     const cur = fs.existsSync(NOTES()) ? fs.readFileSync(NOTES(), "utf8") : "";
-    if (!cur.includes(text.split("\n")[0])) fs.appendFileSync(NOTES(), (cur ? "\n" : "") + text + "\n");
+    const head = text.split("\n")[0];
+    if (!cur.includes(head)) {
+      fs.appendFileSync(NOTES(), (cur ? "\n" : "") + text + "\n");
+      notifier("NET JRF intake: " + head.replace(/^#+\s*/, ""), text.split("\n").slice(1).join(" ").replace(/\s+/g, " ").trim() || "See .cache/intake/watch-notes.md");
+    }
   } catch (e) { /* the log has it too */ }
 }
 
@@ -292,6 +318,7 @@ function normalise(f) {
   if (f && f.maxPublishesPerDay !== undefined) o.max = f.maxPublishesPerDay;
   if (f && f.maxAgentRunsPerDay !== undefined) o.maxRuns = f.maxAgentRunsPerDay;
   if (f && f.maxBatchesInARow !== undefined) o.maxBatches = f.maxBatchesInARow;
+  if (f && f.notify !== undefined) o.notify = f.notify;
   return o;
 }
 
@@ -333,7 +360,7 @@ function main(argv) {
   if (opts.show) {
     console.log("settings file: " + SETTINGS() + (fs.existsSync(SETTINGS()) ? "" : " (not found; defaults in force)"));
     console.log(JSON.stringify({ folder: opts.folder || null, engine: opts.command || opts.agent, model: opts.model || "(engine default)", sandbox: opts.agent === "codex" ? (opts.sandbox || "workspace-write") : "n/a", reasoningEffort: opts.agent === "codex" ? opts.effort : "n/a",
-      merging: mergeOn(opts) ? "on" : "off", doneFolder: opts.done, interval: opts.interval, settle: opts.settle, maxPublishesPerDay: opts.max, maxAgentRunsPerDay: opts.maxRuns, maxBatchesInARow: opts.maxBatches }, null, 1));
+      merging: mergeOn(opts) ? "on" : "off", doneFolder: opts.done, interval: opts.interval, settle: opts.settle, maxPublishesPerDay: opts.max, maxAgentRunsPerDay: opts.maxRuns, maxBatchesInARow: opts.maxBatches, notify: opts.notify !== false }, null, 1));
     return 0;
   }
   if (!opts.folder || !fs.existsSync(opts.folder)) {
@@ -343,6 +370,7 @@ function main(argv) {
   if (!["claude", "codex", "none"].includes(opts.agent)) { console.error("--agent must be claude, codex or none"); return 2; }
   if (opts.sandbox && !["workspace-write", "danger-full-access"].includes(opts.sandbox)) { console.error("sandbox must be workspace-write or danger-full-access"); return 2; }
   if (opts.effort && !["low", "medium", "high", "xhigh"].includes(opts.effort)) { console.error("reasoningEffort must be low, medium, high or xhigh"); return 2; }
+  if (opts.notify === false) setNotifier(null);
   const { plan } = require("./intake.js");
   const check = makeChecker(opts, plan, start, setTimeout);
   if (opts.once) { check("one-off check"); return 0; }
@@ -361,4 +389,4 @@ function main(argv) {
 }
 
 if (require.main === module) { const c = main(process.argv.slice(2)); if (c !== null && c !== 0) process.exit(c); }
-module.exports = { settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn, loadSettings, codexPreflight, makeChecker, publishedToday, agentRunsToday, moveToDone };
+module.exports = { setNotifier, noteOnce, settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn, loadSettings, codexPreflight, makeChecker, publishedToday, agentRunsToday, moveToDone };
