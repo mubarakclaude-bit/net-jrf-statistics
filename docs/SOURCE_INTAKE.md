@@ -123,19 +123,21 @@ A Codex default model for every use, not only intake runs, can also go in Codex'
   `INTAKE_PICK_ID`), so the agent does not rescan the folder.
 - **What triggers a check:** folder events, plus a poll every `--interval` seconds (default 300), because events are
   unreliable on synced folders such as OneDrive.
-- **Batches:** a long document is done over several runs. Each run adds at most 15 questions to the worksheet, which
+- **Batches:** a long document is done over several runs. Each run adds at most 25 questions to the worksheet, which
   lives in `.cache/intake/<id>/` and survives between runs, and reports `progress`. The watcher starts the next batch at
-  once (`--once` included), up to `maxBatchesInARow` (default 8). A question document then has a second batched
-  pass: each run explains and independently re-solves at most 30 kept questions (an `explanation` per worksheet item,
-  a `q<n>()` per question in the workspace's `verify_work.py`; `node tools/intake.js explain <id>` runs those functions
-  against the worksheet and lists the next batch) and reports `progress` with `stage: "explain"`. A 300-question
-  document measured on 27 Nov 2026 needed this: one run could not explain and re-solve 294 questions. The run that
-  finishes the last pass builds, verifies and lists its files, and the watcher commits and publishes it.
+  once (`--once` included), up to `maxBatchesInARow` (default 8). Each question is solved, explained and given a
+  `q<n>()` in the workspace's `verify_work.py` while it is being transcribed: solving it twice cost a 315-question
+  document (27 Nov 2026) ten extra runs. `node tools/intake.js explain <id>` runs those functions against the worksheet
+  after every batch and lists anything still missing (for worksheets begun before this, a catch-up pass of up to 30 a
+  run, reported as `progress` with `stage: "explain"`). The last run then calls `node tools/intake.js build`, which
+  writes the bank's build and verification scripts from the worksheet, runs them, registers the source and drafts the
+  PR description, so no agent writes a 300-question script by hand. The watcher commits and publishes the result.
 - **Limits:** at most `maxPublishesPerDay` published PRs (default 6; merges cost Vercel deployments), counted in
   `.cache/intake/published.log`. At most `maxAgentRunsPerDay` agent runs (default 30; each run costs AI usage), counted
   from the run logs. A lock older than 8 hours is treated as a dead run and cleared.
 - **Logs:** `.cache/intake/watch.log` holds the decisions, and `.cache/intake/runs/<time>.log` holds each run's full
-  output. A run that hits a stop condition writes `.cache/intake/watch-notes.md`.
+  output. A run that hits a stop condition, fails or leaves a PR for review writes `.cache/intake/watch-notes.md`, and
+  each new note also raises a Windows notification (`"notify": false` in `watch.json` turns that off).
 
 **Engines.** `--agent claude` uses Claude Code's command-line tool, logged in with the owner's Claude account.
 `--agent codex` uses OpenAI's Codex CLI (0.171 or later), with the owner's OpenAI API key or ChatGPT login. The watcher runs it as `codex exec -s <sandbox> -c approval_policy="never"`, with no approvals because nobody is there
@@ -161,7 +163,8 @@ only while a terminal keeps it open.
 node tools/intake.js add "<file.pdf>" --kind questions     # or --kind learning
 node tools/intake.js check <id>                            # repeat until it passes
 node tools/intake.js gaps <id>                             # writes .cache/intake/<id>/report.md
-node tools/intake.js explain <id>                          # explanations + verify_work.py, batch by batch
+node tools/intake.js explain <id>                          # runs verify_work.py against the worksheet; lists what is missing
+node tools/intake.js build <id> --name <bank_name>         # writes and runs <bank_name>_bank.py and verify_<bank_name>.py
 node tools/intake.js list                                  # every source registered on this machine
 ```
 

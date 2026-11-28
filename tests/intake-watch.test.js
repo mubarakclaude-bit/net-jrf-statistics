@@ -9,6 +9,14 @@ process.env.INTAKE_DIR = path.join(tmp, "state");
 const W = require(path.join(__dirname, "..", "tools", "intake-watch.js"));
 let failed = 0, total = 0;
 const expect = (name, ok, detail) => { total++; if (!ok) { failed++; console.log("FAIL " + name + (detail ? "  — " + String(detail).slice(0, 300) : "")); } else console.log("ok   " + name); };
+const toasts = []; W.setNotifier((title, text) => toasts.push({ title, text }));   // never a real notification from a test
+
+fs.mkdirSync(process.env.INTAKE_DIR, { recursive: true });
+W.noteOnce("## Run 20261127-202813: stopped\n\nthe agent stopped: too long");
+W.noteOnce("## Run 20261127-202813: stopped\n\nthe agent stopped: too long");
+expect("a note raises one notification, with the heading as its title and the note as its text",
+  toasts.length === 1 && toasts[0].title === "NET JRF intake: Run 20261127-202813: stopped" && toasts[0].text === "the agent stopped: too long", JSON.stringify(toasts));
+fs.unlinkSync(path.join(process.env.INTAKE_DIR, "watch-notes.md"));
 
 const now = Date.now();
 expect("an old file of steady size has settled", W.settled({ mtimeMs: now - 60000, size: 10 }, now, 30, 10));

@@ -147,6 +147,36 @@ vw(["def q1():", "    return 'B'", "", "def q2():", "    return 'A'", "", "def q
 sheet([keep(1, { answer: "B", keyNote: "k", explanation: "e" }), keep(2, { explanation: "e" }), { n: 3, page: 2, decision: "repeat", note: "Same as Q2" }, keep(4, { topic: "alpha-t2", explanation: "e" })]);
 r = run("explain", id);
 expect("when every kept question is done, explain says to build", r.code === 0 && /All kept questions are explained/.test(r.out), r.out);
+sheet([keep(1, { answer: "B", keyNote: "k", explanation: "P(A??B)=1?P(A)" }), keep(2, { explanation: "e" }), { n: 3, page: 2, decision: "repeat", note: "Same as Q2" }, keep(4, { topic: "alpha-t2", explanation: "e" })]);
+r = run("explain", id);
+expect("an explanation whose symbols were lost as '?' is not done, and says how to save", r.code === 1 && /2 of 3 kept/.test(r.out) && /explanation of Q1: write them again/.test(r.out) && /Next batch: Q1\s*$/m.test(r.out), r.out);
+r = run("check", id);
+expect("check also rejects lost symbols in an explanation", r.code === 1 && /explanation or notes were lost/.test(r.out), r.out);
+sheet([keep(1, { answer: "B", keyNote: "k", explanation: "e" }), keep(2, { explanation: "e" }), { n: 3, page: 2, decision: "repeat", note: "Same as Q2" }, keep(4, { topic: "alpha-t2", explanation: "e" })]);
+// build: the bank's two scripts are generated from the worksheet and verify_work.py, then run
+w("pyq_bank_common.py", fs.readFileSync(path.join(__dirname, "..", "pyq_bank_common.py"), "utf8"));
+w("tools/intake-sources.json", { schema: 1, sources: [] });
+r = run("build", id);
+expect("build needs a bank name", r.code === 2 && /--name must be/.test(r.out), r.out);
+r = run("build", id, "--name", "made_up_quiz");
+const built = (() => { try { return JSON.parse(fs.readFileSync(path.join(tmp, "seed", "alpha_made_up_quiz.json"), "utf8")); } catch (e) { return null; } })();
+expect("build writes and runs both scripts, and the bank holds every kept question", r.code === 0 && built && built.count === 3 &&
+  built.items.map(i => i.id).join() === "made-up-quiz-q001,made-up-quiz-q002,made-up-quiz-q004" && built.items[0].answer === "B" && built.items[0].explanation === "e", r.out);
+expect("the generated verifier passes and says what it checked", /Verified 3 answers independently/.test(r.out), r.out);
+const reg2 = JSON.parse(fs.readFileSync(path.join(tmp, "tools", "intake-sources.json"), "utf8"));
+expect("build registers the source once, with its outputs", reg2.sources.length === 1 && reg2.sources[0].outputs[0] === "seed/alpha_made_up_quiz.json" && reg2.sources[0].sha256[0] === id + "0".repeat(52), JSON.stringify(reg2));
+expect("build lists the files for the run's result and writes a PR description with the key differences",
+  /files: \["made_up_quiz_bank.py","verify_made_up_quiz.py","seed\/alpha_made_up_quiz.json","tools\/intake-sources.json"\]/.test(r.out) &&
+  /Q1 \(kept, answer B, key A\)/.test(fs.readFileSync(path.join(ws, "pr-body.md"), "utf8")) && /Q3 \(repeat\)/.test(fs.readFileSync(path.join(ws, "pr-body.md"), "utf8")), r.out);
+r = spawnSync("python", ["-X", "utf8", "made_up_quiz_bank.py", "--check"], { cwd: tmp, encoding: "utf8" });
+expect("the generated build script's --check agrees with what it wrote", r.status === 0, (r.stdout || "") + (r.stderr || ""));
+fs.writeFileSync(path.join(tmp, "seed", "alpha_made_up_quiz.json"), JSON.stringify(Object.assign({}, built, { items: built.items.map((i, k) => k ? i : Object.assign({}, i, { answer: "D" })) })));
+r = spawnSync("python", ["-X", "utf8", "verify_made_up_quiz.py"], { cwd: tmp, encoding: "utf8" });
+expect("the generated verifier fails on a bank answer its function disagrees with", r.status !== 0 && /AssertionError/.test(r.stderr), (r.stdout || "") + (r.stderr || ""));
+sheet([keep(1, { answer: "B", keyNote: "k", explanation: "e" }), keep(2, { explanation: "e", format: "multi", options: undefined, statements: ["s1", "s2", "s3", "s4"], printedKey: "A", answer: "A" }),
+  { n: 3, page: 2, decision: "repeat", note: "Same as Q2" }, keep(4, { topic: "alpha-t2", explanation: "e" })]);
+r = run("build", id, "--name", "made_up_quiz");
+expect("a multiple-correct question needs a reason per statement before build", r.code === 2 && /explain is not finished: 1 kept/.test(r.out), r.out);
 expect("numeric answers compare as numbers, multi answers as sets",
   T.sameAnswer({ format: "numeric", answer: "1/4" }, "0.25") && T.sameAnswer({ format: "multi", answer: "AC" }, "CA") && !T.sameAnswer({ format: "single", answer: "A" }, "a"));
 

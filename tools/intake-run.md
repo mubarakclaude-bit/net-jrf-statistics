@@ -47,54 +47,56 @@ the file back and check that the symbols are still there. `check` rejects a work
 2. The workspace is `$INTAKE_DIR/<id>/`, **outside your worktree**. Always use that absolute path, never
    `.cache/intake/` relative to your working directory. Read every rendered page image in `$INTAKE_DIR/<id>/pages/`.
    For a question document, read the images, not the `.txt` files.
-3. **Fill the worksheet in batches.** It lives in the workspace and survives between runs, so a long document takes
-   several runs. In this run, add **at most 15 questions**, continuing from the highest question number already in it.
-   Set `covers` to the first and last question numbers printed in the document as soon as you know them. For each
-   question: transcribe the stem as printed from the page image, compute the answer yourself by working and by code,
-   record the printed key, add a `keyNote` wherever your answer differs, and **save the worksheet after every
-   question**. Exactly as `docs/SOURCE_INTAKE.md` describes. Then:
+3. **Fill the worksheet in batches, solving and explaining as you go.** It lives in the workspace and survives between
+   runs, so a long document takes several runs. In this run, add **at most 25 questions**, continuing from the highest
+   question number already in it. Set `covers` to the first and last question numbers printed in the document as soon
+   as you know them. For each question, while you have it in front of you:
+   - transcribe the stem as printed from the page image, and record the printed key;
+   - solve it, and write the `explanation`: a short worked solution in your own words that ends at the keyed option. A
+     multiple-correct question also gets `whys`, one reason per statement; a numeric one gets `check`, a one-line sanity
+     check;
+   - add `def q<n>():` to `$INTAKE_DIR/<id>/verify_work.py` that recomputes the answer by code, by a route of its own
+     (enumeration, exact fractions, a different formula), and returns the option letter (the true letters for
+     multi, the value for numeric). Standard library only; never read the worksheet or copy its answers;
+   - set `answer` to what you computed, with a `keyNote` wherever it differs from the printed key;
+   - **save the worksheet and `verify_work.py` after every question**, with Python and `encoding='utf-8'` (never a
+     PowerShell redirect or `Set-Content`, which turn −, ∩, ᶜ and the like into `?`; `check` and `explain` reject
+     that). Exactly as `docs/SOURCE_INTAKE.md` describes.
+
+   Then run `node tools/intake.js explain <id>`. It runs every `q<n>()` against the worksheet: fix each disagreement it
+   reports (re-solve; correct the answer, with a `keyNote` where it now differs from the key, or leave the question out
+   with a note). Then:
    - if questions remain, write `{"status": "progress", "done": <questions now in the worksheet>, "total": <questions in
      the document>}` to `INTAKE_RESULT`, commit nothing, and end. The watcher starts the next batch at once;
    - if the worksheet now covers every question, continue with step 4 in this same run.
 4. `node tools/intake.js check <id>` until it passes. Then `node tools/intake.js gaps <id>`, **before** you add any new
    bank file (otherwise new items match themselves). Read the report: a likely repeat becomes a `repeat` in the worksheet.
-5. **Explain and re-solve in batches** (question documents). This pass is also kept in the workspace and survives
-   between runs. Run `node tools/intake.js explain <id>`: it lists the next batch of kept questions. For **at most 30**
-   of them in this run:
-   - add an `explanation` to the worksheet item: a short worked solution in your own words that ends at the keyed
-     option;
-   - add `def q<n>():` to `$INTAKE_DIR/<id>/verify_work.py` that recomputes the answer by a route of its own
-     (enumeration, exact fractions, a different formula) and returns the option letter (letters for multi, the value
-     for numeric). Standard library only; never read the worksheet or copy its answers. Save after every question.
-
-   Then run `node tools/intake.js explain <id>` again. Fix every disagreement it reports: re-solve the question, and if
-   the worksheet's answer was wrong, correct it (with a `keyNote` where it now differs from the printed key) or leave the
-   question out with a note. Then:
-   - if questions remain, write `{"status": "progress", "stage": "explain", "done": <explained>, "total": <kept>}` to
-     `INTAKE_RESULT`, commit nothing, and end. The watcher starts the next batch at once;
-   - if `explain` says every kept question is done, continue with step 6 in this same run.
+5. **Finish what is missing** (only worksheets started before solutions were written during transcription). If
+   `node tools/intake.js explain <id>` lists a next batch, do **at most 30** of those questions as in step 3 (the
+   `explanation`, `whys` or `check`, and the `q<n>()`), run `explain` again and fix what it reports. If questions are
+   still listed, write `{"status": "progress", "stage": "explain", "done": <explained>, "total": <kept>}` to
+   `INTAKE_RESULT`, commit nothing, and end; otherwise continue with step 6 in this same run.
 6. Build the content:
-   - **Questions:** one build script and one verification script, following `quiz_bank_sl.py` / `verify_quiz_sl.py`
-     (one module) or `gate_bank_2025.py` / `verify_gate_2025.py` (several modules). Generate the build script's
-     questions and explanations from the worksheet with a small program; do not retype them. The verification script is
-     `verify_work.py` copied in, plus a check that every `q<n>()` matches the built bank's answer. Use only the standard
-     library, as those do.
+   - **Questions:** `node tools/intake.js build <id> --name <snake_case_name>` (for example `jam_probability_assignment`;
+     `--title` overrides the source's title). It writes `<name>_bank.py` and `verify_<name>.py` from the worksheet and
+     `verify_work.py`, runs both (the bank lands in `seed/`), registers the source in `tools/intake-sources.json`, and
+     prints the `files` and `verify` for your result and the path of a PR description, `pr-body.md`. Do not write or
+     edit these scripts by hand; if build fails, fix the worksheet or `verify_work.py` and run it again.
    - **Learning material:** edit the named lessons' seed JSON (`docs/CONTENT_GUIDE.md`, 3a), with fresh prose and a
-     verification script for every new number. Bump `version` and record the source and pages in `provenance`.
-7. Add the source to `tools/intake-sources.json`: title, kind, outputs, sha256 and file name. `node tools/intake.js
-   list` and the workspace's `source.json` give the sha256.
-8. Run your verification script, `bash check.sh` and `npm run build`. All must pass.
-9. **Do not run `git add` or `git commit`.** The sandbox cannot write git's metadata (a worktree's index lives in the
+     verification script for every new number. Bump `version` and record the source and pages in `provenance`. Add the
+     source to `tools/intake-sources.json`: title, kind, outputs, sha256 and file name (`source.json` gives the sha256).
+7. Run `bash check.sh` and `npm run build` (and, for learning material, your verification script). All must pass.
+8. **Do not run `git add` or `git commit`.** The sandbox cannot write git's metadata (a worktree's index lives in the
    main repository's `.git`), so the watcher commits for you. List every file the content needs, new or changed, as
-   paths relative to your worktree, in the result's `files`. Never list anything under `.cache/`, a PDF, page text or
-   an image. Scratch files you do not list are deleted before the re-checks; a changed tracked file you do not list
-   rejects the run.
-10. Write `INTAKE_RESULT` (JSON):
+   paths relative to your worktree, in the result's `files` (for questions, exactly what `build` printed). Never list
+   anything under `.cache/`, a PDF, page text or an image. Scratch files you do not list are deleted before the
+   re-checks; a changed tracked file you do not list rejects the run.
+9. Write `INTAKE_RESULT` (JSON):
 
    ```json
    { "status": "ready",
      "title": "<PR title, under 100 characters>",
-     "body": "<PR description: what was added, by topic; the verification result; every keyNote and repaired note>",
+     "body": "<PR description: for questions, the text of pr-body.md as build wrote it, plus anything you repaired>",
      "verify": "python verify_<name>.py",
      "files": ["<build script>.py", "verify_<name>.py", "seed/<bank>.json", "tools/intake-sources.json"],
      "source": "<source file name>" }

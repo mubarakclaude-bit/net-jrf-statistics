@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /* Local source-document intake: register a PDF, lay out its pages for reading, check the worksheet an assistant writes
- * from it, and report what it adds against the content already in seed/. Standard library only. It never writes to seed/
- * and never copies a source into the repository: everything it makes lives in .cache/intake/ (gitignored).
+ * from it, and report what it adds against the content already in seed/. Standard library only. It never copies a source
+ * into the repository, and only `build` writes outside .cache/intake/ (gitignored): the bank made from a finished
+ * worksheet.
  *
  *   node tools/intake.js scan <folder> [--add]
  *                                          decide what to process next: skips what is already in the app
@@ -20,6 +21,10 @@
  *                                          how many kept questions have an `explanation` and a q<n>() in the workspace's
  *                                          verify_work.py; runs those functions and exit 1 if one disagrees with the
  *                                          worksheet's answer; lists the next batch to do
+ *   node tools/intake.js build <id> --name <snake_name> [--title "..."]
+ *                                          once explain is finished: write <name>_bank.py and verify_<name>.py from the
+ *                                          worksheet and verify_work.py, run both (the bank lands in seed/), register the
+ *                                          source in tools/intake-sources.json and write the PR description to pr-body.md
  *
  * The two kinds of document and what happens after this tool is in docs/SOURCE_INTAKE.md. In short: a question document
  * ends as a pyq_bank_<source>.py file built and verified like the CSIR banks; learning material ends as edits to lesson
@@ -325,6 +330,8 @@ function checkQuestions(src, sheet, S) {
     const pages = [].concat(q.page);
     if (!pages.length || pages.some(p => !Number.isInteger(p) || p < 1 || p > src.pages)) P.push(at + ": page must be the page (or pages) it is printed on, 1 to " + src.pages);
     if (!["keep", "repeat", "left-out"].includes(q.decision)) P.push(at + ": decision must be keep, repeat or left-out");
+    const prose = [q.explanation, q.keyNote, q.note, q.check].concat(Array.isArray(q.whys) ? q.whys : []);
+    if (prose.some(symbolsMangled)) P.push(at + ": maths symbols in its explanation or notes were lost as '?' (not written as UTF-8); write them again and save with Python, encoding='utf-8'");
     if (q.decision !== "keep") { if (!isStr(q.note)) P.push(at + ": a " + (q.decision || "non-kept") + " question needs a note (which item it repeats, or why it is left out)"); return; }
     if (!isStr(q.stem)) P.push(at + ": stem is empty");
     if ([q.stem].concat(q.options || [], q.statements || []).some(symbolsMangled))
@@ -396,7 +403,15 @@ function explainStatus(sheet, verifySrc, batch) {
   const kept = (sheet.items || []).filter(q => q.decision === "keep").sort((a, b) => a.n - b.n);
   const fns = verifyFunctions(verifySrc), problems = [];
   if (/questions\.json|printedKey|"answer"\s*:/.test(verifySrc || "")) problems.push(VERIFY_WORK + " must recompute each answer by its own route: it may not read the worksheet or copy its answers");
-  const done = kept.filter(q => isStr(q.explanation) && fns.has(q.n)), todo = kept.filter(q => !(isStr(q.explanation) && fns.has(q.n)));
+  /* the build also needs, for a multiple-correct item, a reason for each statement (`whys`), and for a numeric item a
+     one-line `check` usable under exam pressure */
+  const mangled = q => [q.explanation, q.check].concat(Array.isArray(q.whys) ? q.whys : []).some(symbolsMangled);
+  const ready = q => isStr(q.explanation) && fns.has(q.n) && !mangled(q) &&
+    (q.format !== "multi" || (Array.isArray(q.whys) && q.whys.length === 4 && q.whys.every(isStr))) && (q.format !== "numeric" || isStr(q.check));
+  const done = kept.filter(ready), todo = kept.filter(q => !ready(q));
+  const lost = kept.filter(mangled).map(q => q.n);
+  if (lost.length) problems.push("maths symbols were lost as '?' (the worksheet was not written as UTF-8) in the explanation of Q" + lost.join(", Q") +
+    ": write them again and save the worksheet with Python, encoding='utf-8', never a PowerShell redirect or Set-Content");
   const extra = [...fns].filter(n => !kept.some(q => q.n === n));
   if (extra.length) problems.push("q" + extra.join("(), q") + "() in " + VERIFY_WORK + " match no kept question");
   return { kept: kept.length, done: done.map(q => q.n), next: todo.slice(0, batch || 30).map(q => q.n), left: todo.length, problems };
@@ -436,6 +451,150 @@ function explain(id, opts) {
       st.problems.push("Q" + q.n + ": q" + q.n + "() gives " + got[q.n] + " but the worksheet's answer is " + q.answer);
   }
   return st;
+}
+
+/* ------------------------------------------------------------------ the bank, built mechanically from the worksheet
+   Writing a 300-question build script by hand costs a whole agent run and invites copying slips, so a finished worksheet
+   becomes the bank's two scripts here: <name>_bank.py (the questions and explanations as data, built with
+   pyq_bank_common like the other banks) and verify_<name>.py (verify_work.py verbatim, then a check that every q<n>()
+   agrees with the written bank). Both are then run, and the source is registered in tools/intake-sources.json. */
+const pyLiteral = obj => "json.loads('" + JSON.stringify(obj).replace(/[\u007f-\uffff]/g, c => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"))
+  .replace(/\\/g, "\\\\").replace(/'/g, "\\'") + "')";
+function runPython(script, cwd) {
+  let r;
+  for (const py of process.env.PYTHON ? [process.env.PYTHON] : ["python", "python3"]) {
+    r = spawnSync(py, ["-X", "utf8", script], { cwd, encoding: "utf8", timeout: 20 * 60 * 1000, maxBuffer: 16 * 1024 * 1024 });
+    if (!(r.error && r.error.code === "ENOENT")) break;
+  }
+  return { ok: r.status === 0, out: ((r.stdout || "") + (r.stderr || "") + (r.error ? r.error.message : "")).trim() };
+}
+function build(id, opts, S) {
+  const name = opts.name;
+  if (!/^[a-z][a-z0-9_]{2,40}$/.test(name || "")) throw new Error("--name must be a short snake_case name for the bank, e.g. jam_probability_assignment");
+  const { src, sheet } = openWorkspace(id);
+  if (src.kind !== "questions") throw new Error("build is for question worksheets");
+  const P = check(id, S);
+  if (P.length) throw new Error("the worksheet does not pass check yet:\n  - " + P.slice(0, 10).join("\n  - "));
+  const st = explain(id, {});
+  if (st.problems.length || st.left) throw new Error("explain is not finished: " + (st.problems[0] || st.left + " kept questions still need an explanation and a q<n>()"));
+  const vwork = fs.readFileSync(path.join(wsDir(id), VERIFY_WORK), "utf8");
+  const title = isStr(opts.title) ? opts.title : src.title, prefix = name.replace(/_/g, "-");
+  const kept = sheet.items.filter(q => q.decision === "keep").sort((a, b) => a.n - b.n);
+  const outs = {};
+  kept.forEach(q => { const m = S.topics[q.topic].module; outs[m] = "seed/" + m + "_" + name + ".json"; });
+  const data = kept.map(q => {
+    const d = { n: q.n, format: q.format, module: S.topics[q.topic].module, topic: q.topic, stem: q.stem, answer: String(q.answer), explanation: q.explanation };
+    if (q.format === "single") d.options = q.options;
+    if (q.format === "multi") { d.statements = q.statements; d.whys = q.whys; }
+    if (q.format === "numeric") d.check = q.check;
+    return d;
+  });
+  const bankPy = name + "_bank.py", verifyPy = "verify_" + name + ".py";
+  fs.writeFileSync(path.join(ROOT, bankPy), [
+    "# -*- coding: utf-8 -*-",
+    "\"\"\"Build the " + kept.length + " questions kept from: " + title.replace(/"/g, "'") + ".",
+    "",
+    "Generated by `node tools/intake.js build " + id + " --name " + name + "` from the intake worksheet; regenerate",
+    "rather than edit by hand. `python " + bankPy + " --check` fails if the seed files differ.\"\"\"",
+    "import json, os, sys",
+    "ROOT = os.path.dirname(os.path.abspath(__file__))",
+    "sys.path.insert(0, ROOT)",
+    "from pyq_bank_common import S, M, N",
+    "LABEL = " + JSON.stringify(title),
+    "OUTS = " + JSON.stringify(outs),
+    "QUESTIONS = " + pyLiteral(data),
+    "",
+    "",
+    "def build():",
+    "    out = {m: [] for m in OUTS}",
+    "    for q in QUESTIONS:",
+    "        iid, ref = \"" + prefix + "-q%03d\" % q[\"n\"], LABEL + \", Q%d\" % q[\"n\"]",
+    "        if q[\"format\"] == \"single\":",
+    "            it = S(iid, q[\"module\"], q[\"topic\"], ref, q[\"stem\"], q[\"options\"], q[\"answer\"], q[\"explanation\"])",
+    "        elif q[\"format\"] == \"multi\":",
+    "            it = M(iid, q[\"module\"], q[\"topic\"], ref, q[\"stem\"], q[\"statements\"], q[\"answer\"], q[\"whys\"], \"ABCD\"[(q[\"n\"] - 1) % 4], q[\"explanation\"])",
+    "        else:",
+    "            it = N(iid, q[\"module\"], q[\"topic\"], ref, q[\"stem\"], q[\"answer\"], q[\"explanation\"], q[\"check\"])",
+    "        out[q[\"module\"]].append(it[\"item\"])",
+    "    return {m: {\"moduleId\": m, \"source\": \"variant\", \"label\": LABEL, \"count\": len(items), \"items\": items} for m, items in out.items()}",
+    "",
+    "",
+    "def main():",
+    "    built = build()",
+    "    for module, rel in OUTS.items():",
+    "        target = os.path.join(ROOT, rel)",
+    "        text = json.dumps(built[module], ensure_ascii=False, indent=2) + \"\\n\"",
+    "        if \"--check\" in sys.argv:",
+    "            with open(target, encoding=\"utf-8\") as f:",
+    "                if f.read() != text:",
+    "                    raise SystemExit(rel + \" differs; run python " + bankPy + "\")",
+    "        else:",
+    "            with open(target, \"w\", encoding=\"utf-8\", newline=\"\\n\") as f:",
+    "                f.write(text)",
+    "        print(rel + \": \" + str(built[module][\"count\"]) + \" items\")",
+    "",
+    "",
+    "if __name__ == \"__main__\":",
+    "    main()", ""].join("\n"));
+  fs.writeFileSync(path.join(ROOT, verifyPy), [
+    "# -*- coding: utf-8 -*-",
+    "\"\"\"Independent recomputation of every answer in " + bankPy + ".",
+    "",
+    "Each q<n>() below was written while solving question n, by a route of its own (it never reads the bank). The generated",
+    "check at the end runs them all against the written seed files.\"\"\"",
+    vwork.replace(/^# -\*- coding: utf-8 -\*-\s*\n/, "").trimEnd(), "",
+    "",
+    "# ---- generated by `node tools/intake.js build`: compare every q<n>() with the bank as written",
+    "def _same(fmt, want, got):",
+    "    import fractions",
+    "    want, got = str(want).strip(), str(got).strip()",
+    "    if fmt == \"multi\":",
+    "        return sorted(want.upper()) == sorted(got.upper())",
+    "    if fmt == \"numeric\":",
+    "        try:",
+    "            return abs(float(fractions.Fraction(want)) - float(fractions.Fraction(got))) <= 1e-9 * max(1.0, abs(float(fractions.Fraction(want))))",
+    "        except (ValueError, ZeroDivisionError):",
+    "            pass",
+    "    return want == got",
+    "",
+    "",
+    "def _check():",
+    "    import json as _json, os as _os",
+    "    root = _os.path.dirname(_os.path.abspath(__file__))",
+    "    items = {}",
+    "    for rel in " + JSON.stringify(Object.values(outs)) + ":",
+    "        with open(_os.path.join(root, rel), encoding=\"utf-8\") as f:",
+    "            for it in _json.load(f)[\"items\"]:",
+    "                items[int(it[\"id\"].rsplit(\"-q\", 1)[1])] = it",
+    "    assert len(items) == " + kept.length + ", len(items)",
+    "    for n, it in sorted(items.items()):",
+    "        want = \"\".join(L for L in \"ABCD\" if it[\"verdicts\"][L][\"tf\"]) if it[\"format\"] == \"multi\" else it[\"answer\"]",
+    "        got = globals()[\"q%d\" % n]()",
+    "        assert _same(it[\"format\"], want, got), (n, want, got)",
+    "    print(\"Verified %d answers independently against " + Object.values(outs).join(", ") + "\" % len(items))",
+    "",
+    "",
+    "if __name__ == \"__main__\":",
+    "    _check()", ""].join("\n"));
+  const b = runPython(bankPy, ROOT);
+  if (!b.ok) throw new Error(bankPy + " failed:\n" + b.out.slice(-1500));
+  const v = runPython(verifyPy, ROOT);
+  if (!v.ok) throw new Error(verifyPy + " failed:\n" + v.out.slice(-1500));
+  // register the source, replacing an earlier entry for the same file
+  const regFile = path.join(ROOT, "tools", "intake-sources.json"), reg = readJSON(regFile);
+  reg.sources = reg.sources.filter(s => !(s.sha256 || []).includes(src.sha256));
+  reg.sources.push({ title, kind: "questions", status: "banked", outputs: Object.values(outs), sha256: [src.sha256], files: [src.file] });
+  writeJSON(regFile, reg);
+  // a PR description the run can use as it is
+  const byTopic = {}; kept.forEach(q => { const t = S.topics[q.topic]; byTopic[t.name] = (byTopic[t.name] || 0) + 1; });
+  const notes = sheet.items.filter(q => q.keyNote || q.decision !== "keep");
+  const body = ["Adds " + kept.length + " questions from **" + title + "** (" + src.pages + " pages, Q" + sheet.covers.from + "-Q" + sheet.covers.to + ").", "",
+    "**By topic:** " + Object.entries(byTopic).sort((a, b) => b[1] - a[1]).map(([t, k]) => t + " " + k).join(", ") + ".", "",
+    "**Verification:** " + v.out.split("\n").pop() + ". Every answer was recomputed by its own route while solving (`" + verifyPy + "`).", "",
+    "**Answers that differ from the printed key, repeats and left-out questions (" + notes.length + "):**", "",
+    ...notes.map(q => "- Q" + q.n + " (" + (q.decision === "keep" ? "kept, answer " + q.answer + ", key " + q.printedKey : q.decision) + "): " + String(q.keyNote || q.note).replace(/\s+/g, " ")), ""].join("\n");
+  fs.writeFileSync(path.join(wsDir(id), "pr-body.md"), body);
+  return { files: [bankPy, verifyPy, ...Object.values(outs), "tools/intake-sources.json"], verify: "python " + verifyPy, body: shownPath(path.join(wsDir(id), "pr-body.md")), built: b.out, verified: v.out };
 }
 
 /* ------------------------------------------------------------------ the report */
@@ -519,6 +678,12 @@ function main(argv) {
       if (st.left) console.log("Next batch: Q" + st.next.join(", Q") + (st.left > st.next.length ? " (" + (st.left - st.next.length) + " more after these)" : ""));
       else if (!st.problems.length) console.log("All kept questions are explained and recomputed. Next: build the bank from the worksheet and " + VERIFY_WORK + ".");
       return st.problems.length ? 1 : 0;
+    }
+    if (cmd === "build") {
+      const r = build(pos[0], opts, loadSeed());
+      console.log(r.built + "\n" + r.verified);
+      console.log("files: " + JSON.stringify(r.files) + "\nverify: " + r.verify + "\nPR description: " + r.body);
+      return 0;
     }
     if (cmd === "gaps") {
       const { text, problems } = gaps(pos[0], loadSeed());
