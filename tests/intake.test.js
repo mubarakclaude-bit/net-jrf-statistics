@@ -61,6 +61,8 @@ expect("symbols turned into '?' by a non-UTF-8 write are detected, plain questio
 expect("the forms that slipped past the first check in PR #154 are detected too",
   ["(C(52,26) ? 1)/(2^51 ? 1)", "P(A ? B)=0.8", "the probability that a? ? b? is divisible", "{1, 2, 3, ?, 3n}", "in 4!?3!?2! ways", "Let E? denote the event", "+(2/3)^3(1/3)+?=(2/3)"].every(T.symbolsMangled) &&
   !["What is the probability that none of them will be selected?", "Which of these is true? (Standard deviation uses n.)", "Then x = ?"].some(T.symbolsMangled));
+expect("UTF-8 read back as cp1252 (PowerShell Get-Content) is detected as well",
+  ["E[X(Xâˆ’1)]=5/3", "E[XÂ²]=34/3"].every(T.symbolsMangled) && !["café", "x − 1", "σ² and Σ"].some(T.symbolsMangled));
 sheet([keep(1, { stem: "If P(A?)=0.3 and P(B)=0.4, then P(A?B?) is", answer: "A" }), keep(2), keep(3), keep(4, { topic: "alpha-t2" })]);
 r = run("check", id);
 expect("check rejects a worksheet whose maths symbols were lost as '?'", r.code === 1 && /maths symbols were lost/.test(r.out), r.out);

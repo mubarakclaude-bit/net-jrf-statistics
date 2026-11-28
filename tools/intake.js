@@ -344,7 +344,8 @@ function symbolsMangled(text) {
     /[\w)\]]\?\)/.test(text) ||                        // "P(A?)" for P(A\u1D9C)
     /\s\?\s+\S/.test(text) ||                          // " ? " between terms: "2^51 ? 1", "P(A ? B)"
     /[,({]\s*\?\s*[,)}]/.test(text) ||                 // a list's ellipsis: "{1, 2, ?, 3n}"
-    /[\w)\]]\?\s+[a-z0-9]/.test(text));                // a sentence that goes on: "E? denote", "1? through"
+    /[\w)\]]\?\s+[a-z0-9]/.test(text) ||               // a sentence that goes on: "E? denote", "1? through"
+    /â[\u0080-¿Œ-˜–-›€™]|Ã[\u0080-¿]|Â[ -¿]/.test(text));   // UTF-8 read as cp1252: "âˆ’" for −, "Â²" for ²
 }
 
 function checkQuestions(src, sheet, S) {

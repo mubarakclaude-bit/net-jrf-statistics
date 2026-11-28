@@ -57,6 +57,20 @@ expect("a UTF-8 file with a byte-order mark (PowerShell Set-Content) is read", P
 const u16File = path.join(tmp, "u16.json"); fs.writeFileSync(u16File, Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from(JSON.stringify({ status: "nothing" }), "utf16le")]));
 expect("a UTF-16LE file (PowerShell Out-File or >) is read", P.readResult(u16File).status === "nothing");
 
+// bodyFile: the PR description comes from build's pr-body.md, read as UTF-8, and only from the intake folder
+{
+  const idir = path.join(tmp, "intake"), wsd = path.join(idir, "abcdef012345"); fs.mkdirSync(wsd, { recursive: true });
+  const bodyPath = path.join(wsd, "pr-body.md"); fs.writeFileSync(bodyPath, "Adds 30 questions. E[X(X−1)] = 5/3 and P(A ∩ Bᶜ) are kept as written.");
+  const other = path.join(tmp, "secret-notes.md"); fs.writeFileSync(other, "x".repeat(60));
+  const saved = process.env.INTAKE_DIR; process.env.INTAKE_DIR = idir;
+  const base = { status: "ready", title: "T", verify: "python verify_x.py", files: ["verify_x.py"] };
+  const r1 = P.readResult(rf("bf1", Object.assign({ bodyFile: bodyPath, body: "Repaired Q3." }, base)));
+  expect("bodyFile is read as UTF-8 and the run's own note is appended", r1.status === "ready" && /E\[X\(X−1\)\] = 5\/3/.test(r1.body) && /P\(A ∩ Bᶜ\)/.test(r1.body) && /Repaired Q3\.$/.test(r1.body), JSON.stringify(r1));
+  expect("bodyFile outside the intake folder, or not named pr-body.md, is refused",
+    P.readResult(rf("bf2", Object.assign({ bodyFile: other }, base))).status === "invalid" && P.readResult(rf("bf3", Object.assign({ bodyFile: path.join(idir, "..", "secret-notes.md") }, base))).status === "invalid");
+  if (saved === undefined) delete process.env.INTAKE_DIR; else process.env.INTAKE_DIR = saved;
+}
+
 // publish(): the happy path, merging on
 const SHA = "abc1234def5678";
 const happy = () => fakeSh([

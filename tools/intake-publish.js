@@ -74,6 +74,16 @@ function readResult(file) {
     return { status: "invalid", reason: "a progress result needs whole numbers done and total, with done <= total" };
   if (r.status !== "ready") return r;
   if (typeof r.title !== "string" || !r.title.trim()) return { status: "invalid", reason: "a ready result needs a title" };
+  /* bodyFile: the pr-body.md that `intake.js build` wrote, read here as UTF-8. An agent that copied it through
+     PowerShell's Get-Content turned "−" into "âˆ’" in the PR description (28 Nov 2026). Only a pr-body.md inside the
+     intake folder is accepted, so a result cannot publish some other local file. */
+  if (r.bodyFile !== undefined) {
+    const dir = path.resolve(process.env.INTAKE_DIR || path.join(__dirname, "..", ".cache", "intake")), f = path.resolve(String(r.bodyFile));
+    const rel = path.relative(dir, f);
+    if (path.basename(f) !== "pr-body.md" || !rel || rel.startsWith("..") || path.isAbsolute(rel) || !fs.existsSync(f))
+      return { status: "invalid", reason: "bodyFile must be the pr-body.md that build wrote in the intake folder" };
+    r = Object.assign({}, r, { body: decodeText(fs.readFileSync(f)) + (typeof r.body === "string" && r.body.trim() ? "\n\n" + r.body.trim() : "") });
+  }
   if (typeof r.body !== "string" || r.body.length < 40) return { status: "invalid", reason: "a ready result needs a PR body" };
   if (typeof r.verify !== "string" || !/^python3? [A-Za-z0-9_\-/]+\.py$/.test(r.verify.trim())) return { status: "invalid", reason: "verify must be exactly `python <script>.py`" };
   if (r.files !== undefined && !(Array.isArray(r.files) && r.files.length && r.files.every(okPath)))

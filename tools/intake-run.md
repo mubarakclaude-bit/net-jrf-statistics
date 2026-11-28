@@ -98,6 +98,7 @@ Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShel
      verification script for every new number. Bump `version` and record the source and pages in `provenance`. Add the
      source to `tools/intake-sources.json`: title, kind, outputs, sha256 and file name (`source.json` gives the sha256).
 7. Run `bash check.sh` and `npm run build` (and, for learning material, your verification script). All must pass.
+   Git Bash is on your PATH; do not search for it.
 8. **Do not run `git add` or `git commit`.** The sandbox cannot write git's metadata (a worktree's index lives in the
    main repository's `.git`), so the watcher commits for you. List every file the content needs, new or changed, as
    paths relative to your worktree, in the result's `files` (for questions, exactly what `build` printed). Never list
@@ -108,15 +109,16 @@ Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShel
    ```json
    { "status": "ready",
      "title": "<PR title, under 100 characters>",
-     "body": "<PR description: for questions, the text of pr-body.md as build wrote it, plus anything you repaired>",
+     "bodyFile": "<questions: the pr-body.md path build printed; the watcher reads it as UTF-8>",
+     "body": "<anything to add: what you repaired; for learning material, the whole PR description>",
      "verify": "python verify_<name>.py",
      "files": ["<build script>.py", "verify_<name>.py", "seed/<bank>.json", "tools/intake-sources.json"],
      "source": "<source file name>" }
    ```
 
-   `verify` must be exactly `python <script>.py`; the watcher re-runs it and rejects anything else. Write the file with
-   Python or Node (for example `python -c "import json,os; json.dump({...}, open(os.environ['INTAKE_RESULT'],'w',encoding='utf-8'))"`)
-   rather than a PowerShell redirect, so it is plain UTF-8.
+   Do not copy `pr-body.md` into `body`: reading it through PowerShell garbles its symbols. `verify` must be exactly
+   `python <script>.py`; the watcher re-runs it and rejects anything else. Write the file with your
+   file-editing tool (UTF-8), never a PowerShell redirect or a command line that carries the text.
 
 ## Stop conditions
 
