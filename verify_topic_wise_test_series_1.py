@@ -15,12 +15,6 @@ def q1():
     return "A" if support > 1 and isclose(0.5 * derivative_factor(1), 1.0) else "?"
 
 
-def q2():
-    # Substitute y into the original density and multiply by |dx/dy|.
-    at_quarter = (sqrt(0.25) + 0.25 / 2) / (2 * 0.25)
-    return "D" if isclose(at_quarter, 1.25) else "?"
-
-
 def q4():
     required_c = sqrt(Fraction(4, 1) / Fraction(4, 100))
     return "D" if 8 < required_c <= 10 else "?"
@@ -112,13 +106,6 @@ def q19():
     return "B" if isclose(conditional_mean, exp(1) - 1) else "?"
 
 
-def q22():
-    poisson_odd = Fraction(1, 3) * (1 - exp(-2))
-    geometric_odd = Fraction(1, 6)
-    total = poisson_odd + geometric_odd
-    return "A" if isclose(total, 0.5 - exp(-2) / 3) else "?"
-
-
 def q23():
     # Product of the two independent uniform(0,1) MGFs.
     return "B" if ((exp(1) - 1) / 1) ** 2 > 0 else "?"
@@ -127,13 +114,6 @@ def q23():
 def q24():
     expectation = Fraction((3 + 4) ** 2, 16) + Fraction((3 + 2) ** 2, 16)
     return "C" if expectation == Fraction(37, 8) else "?"
-
-
-def q25():
-    tail_even = Fraction(1, 4) * Fraction(3, 4) / (1 - Fraction(3, 4) ** 2)
-    tail_all = Fraction(3, 4)
-    conditional = tail_even / tail_all
-    return "A" if conditional == Fraction(4, 7) else "?"
 
 
 def q26():
@@ -194,7 +174,7 @@ def _check():
         with open(_os.path.join(root, rel), encoding="utf-8") as f:
             for it in _json.load(f)["items"]:
                 items[int(it["id"].rsplit("-q", 1)[1])] = it
-    assert len(items) == 27, len(items)
+    assert len(items) == 24, len(items)
     for n, it in sorted(items.items()):
         want = "".join(L for L in "ABCD" if it["verdicts"][L]["tf"]) if it["format"] == "multi" else it["answer"]
         got = globals()["q%d" % n]()
