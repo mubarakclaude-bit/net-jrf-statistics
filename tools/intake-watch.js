@@ -79,10 +79,29 @@ function agentRunsToday(now) {
   try { return fs.readdirSync(path.join(DIR, "runs")).filter(f => f.startsWith(day + "-")).length; } catch (e) { return 0; }
 }
 
-function decide({ todo, unsettled, locked, today, max, runs, maxRuns }) {
+/* The engine's own usage limit. On 28 Nov 2026 the ChatGPT account behind Codex ran out ("You've hit your usage limit
+   ... try again at Dec 21st, 2026 11:04 PM") and the watcher started 12 more runs in 7 minutes, each failing in seconds,
+   until its daily cap stopped it; the next day would have repeated that. A run that ends with that message and no
+   result pauses the watcher until the time the engine gives (6 hours if it gives none), recorded in paused.json. */
+const PAUSED = () => path.join(DIR, "paused.json");
+const LIMIT_RX = /hit your usage limit|usage limit (?:reached|exceeded)|quota (?:exceeded|exhausted)|insufficient_quota|rate limit reached for/i;
+function usageLimit(text, now) {
+  if (!LIMIT_RX.test(text || "")) return null;
+  const m = String(text).match(/try again (?:at|after|on) (.+?)(?:\.\s|\.$|\n|$)/i);
+  let until = m ? Date.parse(m[1].replace(/(\d+)(st|nd|rd|th)\b/, "$1").trim()) : NaN;
+  if (!Number.isFinite(until) || until <= now) until = now + 6 * 3600 * 1000;
+  return { until, message: (String(text).match(/[^\n]*(?:usage limit|quota|rate limit)[^\n]*/i) || [""])[0].trim().slice(0, 300) };
+}
+function pausedState(now) {
+  try { const p = JSON.parse(fs.readFileSync(PAUSED(), "utf8")); if (p.until > now) return p; fs.unlinkSync(PAUSED()); } catch (e) { /* not paused */ }
+  return null;
+}
+
+function decide({ todo, unsettled, locked, today, max, runs, maxRuns, paused }) {
   if (unsettled.length) return { start: false, why: "waiting for " + unsettled.join(", ") + " to finish copying" };
   if (locked) return { start: false, why: "a run is already active" };
   if (!todo.length) return { start: false, why: "nothing to process" };
+  if (paused) return { start: false, why: "paused: " + (paused.engine || "the engine") + "'s usage limit until " + new Date(paused.until).toISOString().slice(0, 16).replace("T", " ") + " UTC; " + todo.length + " file(s) wait" };
   if (today >= max) return { start: false, why: "daily limit of " + max + " published PRs reached; " + todo.length + " file(s) wait for tomorrow" };
   if (maxRuns && runs >= maxRuns) return { start: false, why: "daily cap of " + maxRuns + " agent runs reached; " + todo.length + " file(s) wait for tomorrow" };
   return { start: true, why: todo.length + " file(s) to process, first " + todo[0].name + " (" + todo[0].kind + ")" };
@@ -139,7 +158,7 @@ function tick(opts, planner) {
   if (ls.stale) { log("removing a stale lock from pid " + ls.stale.pid); try { fs.unlinkSync(LOCK()); } catch (e) { /* gone */ } }
   let todo = [];
   if (!unsettled.length && !ls.locked) todo = planner(opts.folder).todo;
-  const d = decide({ todo, unsettled, locked: ls.locked, today: publishedToday(now), max: opts.max, runs: agentRunsToday(now), maxRuns: opts.maxRuns });
+  const d = decide({ todo, unsettled, locked: ls.locked, today: publishedToday(now), max: opts.max, runs: agentRunsToday(now), maxRuns: opts.maxRuns, paused: pausedState(now) });
   return Object.assign({ todo }, d);
 }
 
@@ -262,8 +281,15 @@ function start(opts, onExit, pick) {
   child.on("close", code => {
     log("agent finished with exit code " + code + "; publishing");
     let res;
-    try { res = failedToStart ? { outcome: "rejected", note: "the engine did not start" } : P.publish(prep, resultFile, mergeOn(opts), opts.sh, { engine: opts.command || opts.agent }); }
-    catch (e) { res = { outcome: "rejected", note: "publishing failed: " + e.message }; }
+    const limited = !fs.existsSync(resultFile) && (() => { try { return usageLimit(fs.readFileSync(path.join(DIR, "runs", stamp + ".log"), "utf8").slice(-20000), Date.now()); } catch (e) { return null; } })();
+    if (limited) {
+      const engine = opts.command ? "the engine" : opts.agent;
+      try { fs.writeFileSync(PAUSED(), JSON.stringify({ until: limited.until, engine, message: limited.message, since: new Date().toISOString() })); } catch (e) { /* the log has it */ }
+      res = { outcome: "usage-limit", until: limited.until, note: engine + " reports its usage limit (" + limited.message + "); no runs until " + new Date(limited.until).toISOString().slice(0, 16).replace("T", " ") + " UTC" };
+    } else {
+      try { res = failedToStart ? { outcome: "rejected", note: "the engine did not start" } : P.publish(prep, resultFile, mergeOn(opts), opts.sh, { engine: opts.command || opts.agent }); }
+      catch (e) { res = { outcome: "rejected", note: "publishing failed: " + e.message }; }
+    }
     const pushed = ["left-open", "merged", "ci-failed", "pr-failed"].includes(res.outcome);
     // Moved once the branch is on GitHub, even if the PR or CI then failed: the work is there to finish by hand, and
     // leaving the file would make the next check start the same document again.
@@ -271,7 +297,7 @@ function start(opts, onExit, pick) {
       try { const to = moveToDone(opts.folder, pick.file, opts.done || "Done"); log("moved " + path.basename(pick.file) + " to " + to); res.movedTo = to; }
       catch (e) { log("could not move " + path.basename(pick.file) + " to the Done folder: " + e.message); }
     }
-    const quiet = ["nothing", "stopped", "progress"].includes(res.outcome);
+    const quiet = ["nothing", "stopped", "progress", "usage-limit"].includes(res.outcome);
     // A run that ended without publishing but left changes keeps its worktree, so the work is not thrown away.
     let keepTree = false;
     if (!pushed && !["progress", "nothing"].includes(res.outcome) && P.hasChanges) { try { keepTree = P.hasChanges(prep, opts.sh); } catch (e) { /* remove it */ } }
@@ -279,7 +305,9 @@ function start(opts, onExit, pick) {
     if (keepTree) { log("kept " + prep.wt + " (branch " + prep.branch + "): it holds this run's unpublished changes"); res.kept = prep.wt; }
     if (pushed) { try { fs.appendFileSync(PUBLISHED(), new Date().toISOString() + "  " + res.outcome + "  " + (res.pr || "") + "\n"); } catch (e) { /* log has it */ } }
     log("run " + stamp + ": " + res.outcome + (res.pr ? " " + res.pr : "") + " — " + res.note);
-    if (res.outcome !== "nothing" && res.outcome !== "progress") noteOnce("## Run " + stamp + ": " + res.outcome + "\n\n" + (res.pr ? "PR: " + res.pr + "\n\n" : "") + res.note +
+    if (res.outcome === "usage-limit") noteOnce("## Paused until " + new Date(res.until).toISOString().slice(0, 10) + ": the engine's usage limit\n\n" + res.note +
+      ". The watcher keeps polling and starts again by itself then. To go on sooner, raise that account's plan, or set \"agent\" in watch.json to the other engine and delete .cache/intake/paused.json.");
+    else if (res.outcome !== "nothing" && res.outcome !== "progress") noteOnce("## Run " + stamp + ": " + res.outcome + "\n\n" + (res.pr ? "PR: " + res.pr + "\n\n" : "") + res.note +
       (pushed ? "" : res.outcome === "stopped" ? "" : "\n\nThe local branch " + prep.branch + " was kept for inspection."));
     try { fs.unlinkSync(LOCK()); } catch (e) { /* already gone */ }
     onExit && onExit(code, res);
@@ -396,4 +424,4 @@ function main(argv) {
 }
 
 if (require.main === module) { const c = main(process.argv.slice(2)); if (c !== null && c !== 0) process.exit(c); }
-module.exports = { setNotifier, noteOnce, settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn, loadSettings, codexPreflight, makeChecker, publishedToday, agentRunsToday, moveToDone };
+module.exports = { usageLimit, pausedState, setNotifier, noteOnce, settled, decide, engineCommand, launcher, tick, start, parse, lockState, mergeOn, loadSettings, codexPreflight, makeChecker, publishedToday, agentRunsToday, moveToDone };

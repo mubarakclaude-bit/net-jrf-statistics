@@ -37,7 +37,8 @@ Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShel
 - **Write files with your file-editing tool** (it saves UTF-8): batch files, `.py` scripts, the result. To run a
   script, save it as a file in your worktree and run `python -X utf8 <file>.py`; never pipe code into Python.
 - **Never edit the worksheet or `verify_work.py` directly.** `node tools/intake.js put` merges a batch into them and
-  refuses one whose symbols were lost.
+  refuses one whose symbols were lost. For learning material the batch is `{"items": [{"concept": "<name>", "pages":
+  [..], "status": .., "topic": .., "lesson": .., "note": ..}]}`, merged into `concepts.json` by concept name.
 - **Do not print the worksheet or `verify_work.py`** (they grow to 200 KB). `node tools/intake.js next <id>` prints only
   what this batch needs.
 
