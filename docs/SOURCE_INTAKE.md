@@ -163,6 +163,8 @@ only while a terminal keeps it open.
 node tools/intake.js add "<file.pdf>" --kind questions     # or --kind learning
 node tools/intake.js check <id>                            # repeat until it passes
 node tools/intake.js gaps <id>                             # writes .cache/intake/<id>/report.md
+node tools/intake.js next <id>                             # where this batch starts, or the next items to explain (never the whole worksheet)
+node tools/intake.js put <id> batch.json --verify batch_verify.py   # merge a UTF-8 batch into the worksheet and verify_work.py
 node tools/intake.js explain <id>                          # runs verify_work.py against the worksheet; lists what is missing
 node tools/intake.js build <id> --name <bank_name>         # writes and runs <bank_name>_bank.py and verify_<bank_name>.py
 node tools/intake.js list                                  # every source registered on this machine

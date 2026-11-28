@@ -30,11 +30,16 @@ syllabus". Never stop a whole document because of its source or its level.
 
 ## Saving files: UTF-8 only
 
-Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShell's `Set-Content`, `Out-File`, `Add-Content` and `>` write in an
-old code page and turn every one of them into `?`, so "P(Aᶜ)" becomes "P(A?)". **Write every file (the worksheet, scripts,
-seed JSON, the result) with Python**, `open(path, "w", encoding="utf-8")` (with `json.dump(..., ensure_ascii=False)` for
-JSON), or Node `fs.writeFileSync(path, text, "utf8")`, and never with a PowerShell write or redirect. After saving, read
-the file back and check that the symbols are still there. `check` rejects a worksheet whose symbols became `?`.
+Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShell turns every one of them into `?` ("P(Aᶜ)" becomes
+"P(A?)") whenever text passes through it: `Set-Content`, `Out-File`, `>`, **and a here-string piped into `python -`**
+(measured on 28 Nov 2026: that is how a third of the first explanations lost their symbols).
+
+- **Write files with your file-editing tool** (it saves UTF-8): batch files, `.py` scripts, the result. To run a
+  script, save it as a file in your worktree and run `python -X utf8 <file>.py`; never pipe code into Python.
+- **Never edit the worksheet or `verify_work.py` directly.** `node tools/intake.js put` merges a batch into them and
+  refuses one whose symbols were lost.
+- **Do not print the worksheet or `verify_work.py`** (they grow to 200 KB). `node tools/intake.js next <id>` prints only
+  what this batch needs.
 
 ## The steps
 
@@ -45,23 +50,30 @@ the file back and check that the symbols are still there. `check` rejects a work
    `node tools/intake.js scan "$INTAKE_FOLDER" --add`, and if that reports nothing to process, write
    `{"status": "nothing"}` and end.
 2. The workspace is `$INTAKE_DIR/<id>/`, **outside your worktree**. Always use that absolute path, never
-   `.cache/intake/` relative to your working directory. Read every rendered page image in `$INTAKE_DIR/<id>/pages/`.
-   For a question document, read the images, not the `.txt` files.
+   `.cache/intake/` relative to your working directory. Run `node tools/intake.js next <id>`: it says where this batch
+   starts and which page image to open. Read only the page images this batch needs from `$INTAKE_DIR/<id>/pages/`
+   (for a question document, the images, not the `.txt` files). **On a continuing batch, this brief and `next` are all
+   you need: do not re-read `AGENTS.md` or the docs.** On the first batch of a document, read
+   `docs/SOURCE_INTAKE.md` once.
 3. **Fill the worksheet in batches, solving and explaining as you go.** It lives in the workspace and survives between
-   runs, so a long document takes several runs. In this run, add **at most 25 questions**, continuing from the highest
-   question number already in it. Set `covers` to the first and last question numbers printed in the document as soon
-   as you know them. For each question, while you have it in front of you:
+   runs, so a long document takes several runs. In this run, add **at most 25 questions**, continuing where `next`
+   says. Give `covers` (the first and last question numbers printed in the document) in your first batch file. For
+   each question, while you have it in front of you:
    - transcribe the stem as printed from the page image, and record the printed key;
    - solve it, and write the `explanation`: a short worked solution in your own words that ends at the keyed option. A
      multiple-correct question also gets `whys`, one reason per statement; a numeric one gets `check`, a one-line sanity
      check;
-   - add `def q<n>():` to `$INTAKE_DIR/<id>/verify_work.py` that recomputes the answer by code, by a route of its own
-     (enumeration, exact fractions, a different formula), and returns the option letter (the true letters for
-     multi, the value for numeric). Standard library only; never read the worksheet or copy its answers;
+   - write `def q<n>():` that recomputes the answer by code, by a route of its own (enumeration, exact fractions, a
+     different formula), and returns the option letter (the true letters for multi, the value for numeric). Standard
+     library only; never read the worksheet or copy its answers;
    - set `answer` to what you computed, with a `keyNote` wherever it differs from the printed key;
-   - **save the worksheet and `verify_work.py` after every question**, with Python and `encoding='utf-8'` (never a
-     PowerShell redirect or `Set-Content`, which turn −, ∩, ᶜ and the like into `?`; `check` and `explain` reject
-     that). Exactly as `docs/SOURCE_INTAKE.md` describes.
+   - **save every few questions** so a stopped run loses little: write `batch.json` (`{"covers": {...}, "items":
+     [{"n": .., "page": .., "format": .., "decision": .., "topic": .., "stem": .., "options": [..], "printedKey": ..,
+     "answer": .., "explanation": ..}, ...]}`) and `batch_verify.py` (the `def q<n>()` functions and their imports) in
+     your worktree with your file-editing tool, then
+     `node tools/intake.js put <id> batch.json --verify batch_verify.py`. An item replaces only the fields it gives
+     (`null` removes one), and a `q<n>()` replaces its namesake, so the same two files can be rewritten and put again.
+     Delete them before you end. Exactly as `docs/SOURCE_INTAKE.md` describes.
 
    Then run `node tools/intake.js explain <id>`. It runs every `q<n>()` against the worksheet: fix each disagreement it
    reports (re-solve; correct the answer, with a `keyNote` where it now differs from the key, or leave the question out
@@ -72,8 +84,8 @@ the file back and check that the symbols are still there. `check` rejects a work
 4. `node tools/intake.js check <id>` until it passes. Then `node tools/intake.js gaps <id>`, **before** you add any new
    bank file (otherwise new items match themselves). Read the report: a likely repeat becomes a `repeat` in the worksheet.
 5. **Finish what is missing** (only worksheets started before solutions were written during transcription). If
-   `node tools/intake.js explain <id>` lists a next batch, do **at most 30** of those questions as in step 3 (the
-   `explanation`, `whys` or `check`, and the `q<n>()`), run `explain` again and fix what it reports. If questions are
+   `node tools/intake.js next <id>` lists a next batch, do **at most 30** of those questions as in step 3 (the
+   `explanation`, `whys` or `check`, and the `q<n>()`, saved with `put`), run `explain` and fix what it reports. If questions are
    still listed, write `{"status": "progress", "stage": "explain", "done": <explained>, "total": <kept>}` to
    `INTAKE_RESULT`, commit nothing, and end; otherwise continue with step 6 in this same run.
 6. Build the content:

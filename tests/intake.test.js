@@ -177,6 +177,24 @@ sheet([keep(1, { answer: "B", keyNote: "k", explanation: "e" }), keep(2, { expla
   { n: 3, page: 2, decision: "repeat", note: "Same as Q2" }, keep(4, { topic: "alpha-t2", explanation: "e" })]);
 r = run("build", id, "--name", "made_up_quiz");
 expect("a multiple-correct question needs a reason per statement before build", r.code === 2 && /explain is not finished: 1 kept/.test(r.out), r.out);
+// next and put: one batch at a time, saved from UTF-8 files rather than by editing the worksheet
+const bf = (name, data) => { const f = path.join(tmp, name); fs.writeFileSync(f, typeof data === "string" ? data : JSON.stringify(data)); return f; };
+r = run("put", id, bf("b1.json", { items: [{ n: 2, whys: ["w1", "w2 uses P(Aᶜ ∩ B) = 0.2", "w3", "w4"] }] }), "--verify", bf("b1.py", "from fractions import Fraction\n\ndef q2():\n    return 'A' if Fraction(1, 2) else '?'\n"));
+const vw2 = fs.readFileSync(path.join(ws, "verify_work.py"), "utf8");
+expect("put merges fields into an item and replaces its q<n>() in verify_work.py, adding the import once",
+  r.code === 0 && /Saved 1 item\(s\) and 1 q<n>\(\)/.test(r.out) && /^from fractions import Fraction$/m.test(vw2) && (vw2.match(/^def q2\(/gm) || []).length === 1 && /Fraction\(1, 2\)/.test(vw2) && /^def q4\(/m.test(vw2), r.out + vw2);
+expect("the merged worksheet keeps the symbols, and explain now passes", /P\(Aᶜ ∩ B\)/.test(fs.readFileSync(path.join(ws, "questions.json"), "utf8")) && run("explain", id).code === 0, run("explain", id).out);
+r = run("put", id, bf("b2.json", { items: [{ n: 4, explanation: "1?P(A??B)" }] }));
+expect("put refuses a batch whose symbols were lost, and writes nothing", r.code === 2 && /lost as '\?' in Q4/.test(r.out) && !/1\?P/.test(fs.readFileSync(path.join(ws, "questions.json"), "utf8")), r.out);
+r = run("put", id, bf("b3.json", { items: [{ n: 4, keyNote: null }, { n: 3, note: "Same as Q2 (both ask for the variance)" }] }));
+expect("put removes a field given as null and edits a non-kept entry", r.code === 0 && !("keyNote" in JSON.parse(fs.readFileSync(path.join(ws, "questions.json"), "utf8")).items[3]), r.out);
+r = run("next", id);
+expect("next on a finished worksheet says to build", r.code === 0 && /Nothing left to explain. Next: node tools\/intake.js build/.test(r.out), r.out);
+const id2 = "0123456789ab";
+w("ws/" + id2 + "/source.json", { schema: 1, id: id2, sha256: id2 + "1".repeat(52), file: "q2.pdf", pages: 4, kind: "questions", title: "Another", imagePages: [] });
+w("ws/" + id2 + "/questions.json", { source: id2, covers: { from: 1, to: 40 }, items: [keep(1, { page: 2 }), keep(2, { page: [2, 3] })] });
+r = run("next", id2);
+expect("next mid-transcription says where to continue and shows only the last entry", r.code === 0 && /2 entries of Q1-Q40/.test(r.out) && /from Q3 \(38 still missing\), starting on page 3 of 4/.test(r.out) && (r.out.match(/"stem"/g) || []).length === 1, r.out);
 expect("numeric answers compare as numbers, multi answers as sets",
   T.sameAnswer({ format: "numeric", answer: "1/4" }, "0.25") && T.sameAnswer({ format: "multi", answer: "AC" }, "CA") && !T.sameAnswer({ format: "single", answer: "A" }, "a"));
 
