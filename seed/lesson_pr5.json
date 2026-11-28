@@ -6,7 +6,7 @@
  "breadcrumb": "Probability → Distributions → Standard discrete families",
  "engine": "B",
  "engineName": "Probability — naming a family from what it counts, and checking it by its moments",
- "version": "1.0",
+ "version": "1.1",
  "status": "approved",
  "estMin": 99,
  "objectives": [
@@ -15,7 +15,8 @@
   "Use the variance-to-mean ratio as an independent check on an identification.",
   "Explain why the geometric has no fixed dispersion direction, with p = 0.5 as the boundary.",
   "State the limits and closures: negative binomial at r = 1, binomial to Poisson, Poisson additivity.",
-  "Say why sampling without replacement gives a hypergeometric and what the correction factor does."
+  "Say why sampling without replacement gives a hypergeometric and what the correction factor does.",
+  "Identify the finite discrete uniform and multinomial models, including dependence between cell counts."
  ],
  "prereq": [
   {
@@ -47,7 +48,8 @@
   "Mind the geometric convention: counting trials gives mean 1/p, counting failures gives q/p.",
   "A binomial's variance is always below its mean, so a binomial can never be equidispersed.",
   "The negative binomial's ratio 1/p does not involve r, so r never affects whether it is overdispersed.",
-  "A variance-to-mean ratio of 1 narrows the field but does not prove the Poisson — a geometric with p = 0.5 has it too."
+  "A variance-to-mean ratio of 1 narrows the field but does not prove the Poisson — a geometric with p = 0.5 has it too.",
+  "Multinomial cell counts are dependent because they must add to n; distinct cell counts have negative covariance."
  ],
  "revision": {
   "sheet": [
@@ -199,7 +201,7 @@
   "retestDays": 7,
   "note": "Proposed platform settings, not an NTA rule. Overall 80%, with 70% floors on numerical and multi-statement items, answered without hints. Each paper is drawn to the mix below — 3 easy, 5 moderate, 2 hard — which models a NET-style paper; NTA publishes no official difficulty split."
  },
- "provenance": "Authored November 2026 on June 2026 Q6 (answered wrongly, marked B against A), a match-the-list question pairing four descriptions with four discrete families. The marked option moved all four pairs, so the lesson teaches identification by what is FIXED versus what is COUNTED, and then supplies the variance-to-mean ratio as an independent check. All ten variants filed under Q6 are discrete-distribution items, which places the lesson at probability-t5 rather than t6. Every figure was computed and cross-checked against a 400,000-sample simulation: the means and variances of the binomial, Poisson, geometric and negative binomial; the hypergeometric mean and the finite-population correction (1.959 against the binomial's 2.400 at N=50, K=20, n=10); the Poisson limit of the binomial at λ=2 for n = 20, 100 and 1000; Poisson additivity including P(Poisson(5)=4) = 0.17547; geometric memorylessness at p=0.3; and the mgfs of all three main families. Each pmf was summed over its support and came to 1.00000000. One correction to the usual summary was found and is taught explicitly: the geometric's variance-to-mean ratio is q/p, so it is overdispersed only for p < 0.5, exactly equidispersed at p = 0.5 (mean 2, variance 2) and underdispersed above — the claim that a geometric always has variance above its mean is false, and the visualisation reports this per-family rather than asserting a Poisson signature wherever the ratio is 1. The geometric mgf's closed form was confirmed by stable partial summation after a naive simulation disagreed; the cause was Monte Carlo error near the divergence at t = −ln q, not a wrong formula. Introduces the `disc-pmf` visualisation, written for this lesson and reusable for 1.4 and 1.6. Previous-year questions are stored separately and carry their exam cycle.",
+ "provenance": "Authored November 2026 on June 2026 Q6 (answered wrongly, marked B against A), a match-the-list question pairing four descriptions with four discrete families. The marked option moved all four pairs, so the lesson teaches identification by what is FIXED versus what is COUNTED, and then supplies the variance-to-mean ratio as an independent check. All ten variants filed under Q6 are discrete-distribution items, which places the lesson at probability-t5 rather than t6. Every figure was computed and cross-checked against a 400,000-sample simulation: the means and variances of the binomial, Poisson, geometric and negative binomial; the hypergeometric mean and the finite-population correction (1.959 against the binomial's 2.400 at N=50, K=20, n=10); the Poisson limit of the binomial at λ=2 for n = 20, 100 and 1000; Poisson additivity including P(Poisson(5)=4) = 0.17547; geometric memorylessness at p=0.3; and the mgfs of all three main families. Each pmf was summed over its support and came to 1.00000000. One correction to the usual summary was found and is taught explicitly: the geometric's variance-to-mean ratio is q/p, so it is overdispersed only for p < 0.5, exactly equidispersed at p = 0.5 (mean 2, variance 2) and underdispersed above — the claim that a geometric always has variance above its mean is false, and the visualisation reports this per-family rather than asserting a Poisson signature wherever the ratio is 1. The geometric mgf's closed form was confirmed by stable partial summation after a naive simulation disagreed; the cause was Monte Carlo error near the divergence at t = −ln q, not a wrong formula. Introduces the `disc-pmf` visualisation, written for this lesson and reusable for 1.4 and 1.6. Previous-year questions are stored separately and carry their exam cycle. Source addition: Probability Distribution Cheat Sheet, pp. 3 and 10–12. Exact enumeration in verify_probability_t5.py checks the finite discrete-uniform pmf and moments on {2,3,4,5}, multinomial probability 1/6 for counts (2,1,1) with n=4 and probabilities (1/2,1/3,1/6), the cell means and covariance, and the binomial marginal after aggregation.",
  "scenes": [
   {
    "kind": "foundation",
@@ -943,6 +945,35 @@
     "q": "The functional equation G(m+n) = G(m)G(n) forced G(n) = qⁿ. What is the continuous analogue of that equation, and which distribution does it force?",
     "nudge": "Replace the integers with real numbers and ask which function satisfies G(s+t) = G(s)G(t)."
    }
+  },
+  {
+    "kind": "theory",
+    "id": "s16",
+    "ext": true,
+    "mins": 8,
+    "title": "Two more count models: equal chances and several categories",
+    "objective": "Identify finite discrete uniform and multinomial counts from how outcomes are generated.",
+    "blocks": [
+      {
+        "t": "def",
+        "h": "A finite set of equally likely values",
+        "body": "A fair spinner labelled 2, 3, 4 and 5 lands on each label with probability 1/4. This is a discrete uniform variable on the integers from a through b. There are b−a+1 possible values, so each has probability 1/(b−a+1), the mean is (a+b)/2 and the variance is ((b−a+1)²−1)/12."
+      },
+      {
+        "t": "def",
+        "h": "Counts across several categories",
+        "body": "Now make n independent draws, where each draw falls into exactly one of k categories with probabilities p₁,…,pₖ. Record all k counts as a vector X. The vector has a multinomial distribution: its entries are non-negative integers that sum to n, and P(X=x)=n!/(x₁!⋯xₖ!) ∏pᵢˣⁱ when ∑xᵢ=n."
+      },
+      {
+        "t": "formula",
+        "h": "Means, dependence and combining categories",
+        "body": "For category i, E[Xᵢ]=npᵢ and Var(Xᵢ)=npᵢ(1−pᵢ). For i≠j, Cov(Xᵢ,Xⱼ)=−npᵢpⱼ: one draw counted in category i cannot also be counted in category j. Adding selected category counts gives a binomial count with probability equal to the sum of their category probabilities. With one draw, the outcome is categorical, the one-trial case of the multinomial."
+      }
+    ],
+    "ask": {
+      "q": "Why is Cov(Xᵢ,Xⱼ) negative for two different categories in a multinomial sample?",
+      "nudge": "The total number of draws is fixed. If one category gets a draw, can that same draw also raise the other count?"
+    }
   },
   {
    "kind": "quiz",
