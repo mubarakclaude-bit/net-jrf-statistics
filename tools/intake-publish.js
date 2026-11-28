@@ -136,14 +136,31 @@ function publish(prep, resultFile, mergeOn, sh, opts) {
   const url = (pr.out.match(/https:\/\/github\.com\/\S+\/pull\/\d+/) || [])[0] || pr.out.trim();
 
   // Find the Validate run for this exact commit (it can take a moment to appear), then wait for it.
-  let runId = null;
+  /* Prefer the pull_request run. The push run for the same commit appears first and is then cancelled by the PR's run
+     (one concurrency group), so watching it reported "CI failed" on PR #154 while the real run was still going. Fall
+     back to the push run only when no pull_request run appears, and if the watched run ends cancelled, watch the other. */
+  const runs = () => { const l = sh("gh", ["run", "list", "--branch", branch, "--workflow", "Validate", "--json", "databaseId,headSha,event"], { cwd: wt }); try { return JSON.parse(l.out || "[]").filter(x => x.headSha === sha); } catch (e) { return []; } };
+  const pause = () => { if (opts.wait !== false) spawnSync(process.execPath, ["-e", "setTimeout(()=>{},5000)"]); };
+  let runId = null, any = null;
   for (let k = 0; k < (opts.findTries || 24) && !runId; k++) {
-    const l = sh("gh", ["run", "list", "--branch", branch, "--workflow", "Validate", "--json", "databaseId,headSha,event"], { cwd: wt });
-    try { const hit = JSON.parse(l.out || "[]").find(x => x.headSha === sha && x.event === "pull_request") || JSON.parse(l.out || "[]").find(x => x.headSha === sha); runId = hit && hit.databaseId; } catch (e) { /* retry */ }
-    if (!runId && opts.wait !== false) spawnSync(process.execPath, ["-e", "setTimeout(()=>{},5000)"]);
+    const rs = runs(), pr_ = rs.find(x => x.event === "pull_request");
+    if (rs.length) any = any || rs[0].databaseId;
+    if (pr_) runId = pr_.databaseId; else pause();
   }
+  runId = runId || any;
   if (!runId) return { outcome: "ci-failed", pr: url, note: "no Validate run appeared for " + sha };
-  const w = sh("gh", ["run", "watch", String(runId), "--exit-status"], { cwd: wt, timeout: 60 * 60 * 1000 });
+  const watched = new Set();
+  let w;
+  for (;;) {
+    watched.add(runId);
+    w = sh("gh", ["run", "watch", String(runId), "--exit-status"], { cwd: wt, timeout: 60 * 60 * 1000 });
+    if (w.code === 0) break;
+    const v = sh("gh", ["run", "view", String(runId), "--json", "conclusion"], { cwd: wt });
+    let conclusion = ""; try { conclusion = JSON.parse(v.out || "{}").conclusion || ""; } catch (e) { /* treat as failed */ }
+    const other = conclusion === "cancelled" && runs().find(x => !watched.has(x.databaseId));
+    if (!other) break;
+    runId = other.databaseId;
+  }
   if (w.code !== 0) return { outcome: "ci-failed", pr: url, note: "CI failed on " + sha.slice(0, 7) + "; PR left open" };
   if (!mergeOn) return { outcome: "left-open", pr: url, note: "CI green; merging is off, so the PR waits for review" };
   const m = sh("gh", ["pr", "merge", url, "--merge", "--match-head-commit", sha], { cwd: wt });

@@ -130,6 +130,17 @@ sh = fakeSh([[/^git rev-list --count/, { out: "1" }], [/^git rev-parse HEAD/, { 
   [/^gh run list/, { out: JSON.stringify([{ databaseId: 9, headSha: SHA, event: "pull_request" }]) }], [/^gh run watch/, { code: 1, out: "X validate failed" }]]);
 res = P.publish(prepX, rf("good", good), true, sh, { bash: "bash", wait: false });
 expect("red CI leaves the PR open and never merges", res.outcome === "ci-failed" && res.pr && !ran(sh, /^gh pr merge/));
+let lists = 0;
+sh = fakeSh([[/^git rev-list --count/, { out: "1" }], [/^git rev-parse HEAD/, { out: SHA }], [/^gh pr create/, { out: "https://github.com/o/r/pull/81" }],
+  [/^gh run list/, () => ({ out: JSON.stringify(++lists < 2 ? [{ databaseId: 9, headSha: SHA, event: "push" }] : [{ databaseId: 10, headSha: SHA, event: "pull_request" }, { databaseId: 9, headSha: SHA, event: "push" }]) })],
+  [/^gh run watch 9 /, { code: 1, out: "cancelled" }]]);
+res = P.publish(prepX, rf("good", good), false, sh, { bash: "bash", wait: false, findTries: 4 });
+expect("the pull_request run is watched, not the push run that it cancels (#154)", res.outcome === "left-open" && ran(sh, /^gh run watch 10 /) && !ran(sh, /^gh run watch 9 /), JSON.stringify(res) + sh.log.join("\n"));
+sh = fakeSh([[/^git rev-list --count/, { out: "1" }], [/^git rev-parse HEAD/, { out: SHA }], [/^gh pr create/, { out: "https://github.com/o/r/pull/82" }],
+  [/^gh run list/, { out: JSON.stringify([{ databaseId: 11, headSha: SHA, event: "pull_request" }, { databaseId: 12, headSha: SHA, event: "pull_request" }]) }],
+  [/^gh run watch 11 /, { code: 1, out: "cancelled" }], [/^gh run view 11 /, { out: JSON.stringify({ conclusion: "cancelled" }) }]]);
+res = P.publish(prepX, rf("good", good), false, sh, { bash: "bash", wait: false });
+expect("a watched run that ends cancelled hands over to the other run for the commit", res.outcome === "left-open" && ran(sh, /^gh run watch 12 /), JSON.stringify(res));
 sh = fakeSh([[/^git rev-list --count/, { out: "1" }], [/^git rev-parse HEAD/, { out: SHA }], [/^gh pr create/, { out: "https://github.com/o/r/pull/79" }],
   [/^gh run list/, { out: JSON.stringify([{ databaseId: 9, headSha: "otherSha", event: "pull_request" }]) }]]);
 res = P.publish(prepX, rf("good", good), true, sh, { bash: "bash", wait: false, findTries: 2 });
