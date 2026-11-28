@@ -67,6 +67,11 @@ Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShel
      different formula), and returns the option letter (the true letters for multi, the value for numeric). Standard
      library only; never read the worksheet or copy its answers;
    - set `answer` to what you computed, with a `keyNote` wherever it differs from the printed key;
+   - **check the question itself is sound** before keeping it: a given density or probability function must be
+     non-negative and total 1, an MGF must expand to non-negative probabilities, and the data must determine the
+     answer. A question that fails is `left-out` with a note saying exactly what is wrong ("the density integrates to
+     5/4"), even when the printed key matches a mechanical working. Found in review on 28 Nov 2026: three of 27
+     questions in one test series were flawed this way;
    - **save every few questions** so a stopped run loses little: write `batch.json` (`{"covers": {...}, "items":
      [{"n": .., "page": .., "format": .., "decision": .., "topic": .., "stem": .., "options": [..], "printedKey": ..,
      "answer": .., "explanation": ..}, ...]}`) and `batch_verify.py` (the `def q<n>()` functions and their imports) in
