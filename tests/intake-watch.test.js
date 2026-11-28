@@ -208,9 +208,25 @@ W.start({ folder, agent: "none", command: fake, publisher: fakePublisher }, (cod
     const prFails = Object.assign({}, fakePublisher, { publish: () => ({ outcome: "pr-failed", note: "gh auth login" }) });
     W.start({ folder, agent: "codex", preflight: () => ({ ok: true }), publisher: prFails }, (code3, res3) => {
       expect("a pushed run whose PR failed still moves its PDF into Done", res3.outcome === "pr-failed" && !fs.existsSync(pick2) && fs.existsSync(path.join(folder, "Done", "pushed.pdf")), JSON.stringify(res3));
-      fs.rmSync(tmp, { recursive: true, force: true });
-      console.log((total - failed) + "/" + total + " intake-watch checks passed");
-      process.exit(failed ? 1 : 0);
+      // the engine's usage limit: no publish, no retry storm, a pause until the time it gives, one note
+      const limitedPdf = path.join(folder, "limited.pdf"); fs.writeFileSync(limitedPdf, "%PDF");
+      const limitCmd = "\"" + process.execPath.replace(/\\/g, "/") + "\" -e \"console.log('ERROR: You have hit your usage limit. Upgrade to continue, or try again at Dec 21st, 2099 11:04 PM.')\"";
+      calls.length = 0;
+      W.start({ folder, agent: "none", command: limitCmd, publisher: fakePublisher }, (code4, res4) => {
+        const pz = (() => { try { return JSON.parse(fs.readFileSync(path.join(process.env.INTAKE_DIR, "paused.json"), "utf8")); } catch (e) { return null; } })();
+        expect("a run that hits the engine's usage limit is not published and pauses the watcher until the time given",
+          res4.outcome === "usage-limit" && !calls.some(c => c.startsWith("publish")) && pz && new Date(pz.until).getFullYear() === 2099 && fs.existsSync(limitedPdf), JSON.stringify(res4) + JSON.stringify(calls));
+        const paused = W.pausedState(Date.now());
+        expect("while paused, no run starts, and the reason says until when",
+          paused && /paused: the engine's usage limit until 2099-12-2/.test(W.decide({ todo: t1, unsettled: [], locked: false, today: 0, max: 6, paused }).why));
+        expect("the pause is noted once for the owner", /## Paused until 2099-12-2\d: the engine's usage limit/.test(fs.readFileSync(notesFile, "utf8")));
+        fs.writeFileSync(path.join(process.env.INTAKE_DIR, "paused.json"), JSON.stringify({ until: Date.now() - 1 }));
+        expect("an expired pause clears itself", W.pausedState(Date.now()) === null && !fs.existsSync(path.join(process.env.INTAKE_DIR, "paused.json")));
+        expect("a limit message without a time pauses for 6 hours", Math.abs(W.usageLimit("insufficient_quota", 0).until - 6 * 3600 * 1000) < 1);
+        fs.rmSync(tmp, { recursive: true, force: true });
+        console.log((total - failed) + "/" + total + " intake-watch checks passed");
+        process.exit(failed ? 1 : 0);
+      }, { file: limitedPdf, kind: "questions", sha256: "e".repeat(64) });
     }, { file: pick2, kind: "questions", sha256: "f".repeat(64) });
   });
 }, pick);

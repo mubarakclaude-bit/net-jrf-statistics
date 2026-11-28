@@ -536,14 +536,19 @@ function splitVerify(src) {
 }
 function put(id, file, opts) {
   const { src, sheet, sheetFile } = openWorkspace(id);
-  if (src.kind !== "questions") throw new Error("put is for question worksheets");
+  // question worksheets are keyed by the printed number n; learning worksheets (concepts.json) by the concept's name.
+  // A learning run stopped on 28 Nov 2026 because put refused its worksheet while the brief forbids editing it by hand.
+  const learning = src.kind !== "questions", key = learning ? "concept" : "n";
+  const keyOk = learning ? (q => isStr(q.concept)) : (q => Number.isInteger(q.n));
   if (!file || !fs.existsSync(file)) throw new Error("No such batch file: " + file);
   const raw = fs.readFileSync(file, "utf8").replace(/^﻿/, "");
   let b; try { b = JSON.parse(raw); } catch (e) { throw new Error(file + " is not valid JSON: " + e.message); }
-  if (!b || !Array.isArray(b.items) || b.items.some(q => !q || !Number.isInteger(q.n))) throw new Error("a batch is {\"items\": [{\"n\": <question number>, ...}]}");
+  if (!b || !Array.isArray(b.items) || b.items.some(q => !q || !keyOk(q)))
+    throw new Error(learning ? "a batch is {\"items\": [{\"concept\": <its name>, ...}]}" : "a batch is {\"items\": [{\"n\": <question number>, ...}]}");
   const lost = x => typeof x === "string" ? symbolsMangled(x) : !!x && typeof x === "object" && Object.values(x).some(lost);
-  const bad = b.items.filter(lost).map(q => q.n);
-  if (bad.length) throw new Error("maths symbols were lost as '?' in Q" + bad.join(", Q") + " of " + file + ". Write the batch file with your file-editing tool (it saves UTF-8), never through PowerShell");
+  const bad = b.items.filter(lost).map(q => q[key]);
+  if (bad.length) throw new Error("maths symbols were lost as '?' in " + (learning ? bad.join("; ") : "Q" + bad.join(", Q")) + " of " + file + ". Write the batch file with your file-editing tool (it saves UTF-8), never through PowerShell");
+  if (learning && opts.verify) throw new Error("--verify is for question worksheets");
   let vnew = null;
   if (opts.verify) {
     if (!fs.existsSync(opts.verify)) throw new Error("No such file: " + opts.verify);
@@ -551,14 +556,14 @@ function put(id, file, opts) {
     if (symbolsMangled(vnew.replace(/'\?'|"\?"/g, ""))) throw new Error(opts.verify + " lost symbols as '?'; write it with your file-editing tool");
     if (/questions\.json|printedKey/.test(vnew)) throw new Error(opts.verify + " may not read the worksheet");
   }
-  const s = sheet || { source: id, covers: {}, items: [] };
-  if (b.covers) s.covers = b.covers;
+  const s = sheet || (learning ? { source: id, items: [] } : { source: id, covers: {}, items: [] });
+  if (b.covers && !learning) s.covers = b.covers;
   for (const q of b.items) {
-    let t = s.items.find(x => x.n === q.n);
-    if (!t) { t = { n: q.n }; s.items.push(t); }
+    let t = s.items.find(x => x[key] === q[key]);
+    if (!t) { t = { [key]: q[key] }; s.items.push(t); }
     for (const [k, v] of Object.entries(q)) { if (v === null) delete t[k]; else t[k] = v; }
   }
-  s.items.sort((a, c) => a.n - c.n);
+  if (!learning) s.items.sort((a, c) => a.n - c.n);
   writeJSON(sheetFile, s);
   if (vnew !== null) {
     const vf = path.join(wsDir(id), VERIFY_WORK), cur = splitVerify(fs.existsSync(vf) ? fs.readFileSync(vf, "utf8") : ""), add = splitVerify(vnew);
@@ -796,6 +801,8 @@ function main(argv) {
     if (cmd === "put") {
       const r = put(pos[0], pos[1], opts);
       console.log("Saved " + r.items + " item(s)" + (opts.verify ? " and " + r.defs + " q<n>()" : "") + ".");
+      const ws = openWorkspace(pos[0]);
+      if (ws.src.kind !== "questions") { console.log("concepts.json now holds " + ws.sheet.items.length + " concept(s). Next: node tools/intake.js check " + pos[0]); return 0; }
       const n = nextBatch(pos[0], {}); console.log(n.text.split("\n").slice(0, n.stage === "transcribe" ? 2 : 1).join("\n"));
       return 0;
     }

@@ -185,6 +185,22 @@ sheet([keep(1, { answer: "B", keyNote: "k", explanation: "e" }), keep(2, { expla
   { n: 3, page: 2, decision: "repeat", note: "Same as Q2" }, keep(4, { topic: "alpha-t2", explanation: "e" })]);
 r = run("build", id, "--name", "made_up_quiz");
 expect("a multiple-correct question needs a reason per statement before build", r.code === 2 && /explain is not finished: 1 kept/.test(r.out), r.out);
+// put on a learning worksheet: concepts keyed by name
+const id3 = "fedcba987654";
+w("ws/" + id3 + "/source.json", { schema: 1, id: id3, sha256: id3 + "2".repeat(52), file: "notes.pdf", pages: 9, kind: "learning", title: "Notes", imagePages: [] });
+{
+  const bl = path.join(tmp, "bl.json");
+  fs.writeFileSync(bl, JSON.stringify({ items: [{ concept: "Widget counting", pages: [2], status: "covered", topic: "alpha-t1", lesson: "alphat1" }, { concept: "Gadget bounds", pages: [3], status: "missing", topic: "alpha-t2", note: "P(A ∩ B) ≤ P(A) is not shown (p. 3)" }] }));
+  let rl = run("put", id3, bl);
+  fs.writeFileSync(bl, JSON.stringify({ items: [{ concept: "Gadget bounds", status: "outside", note: "not on the syllabus" }] }));
+  const rl2 = run("put", id3, bl);
+  const cs = JSON.parse(fs.readFileSync(path.join(tmp, "ws", id3, "concepts.json"), "utf8"));
+  expect("put merges a learning batch by concept name, and an update changes only that concept",
+    rl.code === 0 && rl2.code === 0 && /holds 2 concept/.test(rl2.out) && cs.items.length === 2 && cs.items[1].status === "outside" && cs.items[0].lesson === "alphat1", rl.out + rl2.out);
+  fs.writeFileSync(bl, JSON.stringify({ items: [{ n: 3 }] }));
+  rl = run("put", id3, bl);
+  expect("a learning batch needs concept names", rl.code === 2 && /"concept"/.test(rl.out), rl.out);
+}
 // next and put: one batch at a time, saved from UTF-8 files rather than by editing the worksheet
 const bf = (name, data) => { const f = path.join(tmp, name); fs.writeFileSync(f, typeof data === "string" ? data : JSON.stringify(data)); return f; };
 r = run("put", id, bf("b1.json", { items: [{ n: 2, whys: ["w1", "w2 uses P(Aᶜ ∩ B) = 0.2", "w3", "w4"] }] }), "--verify", bf("b1.py", "from fractions import Fraction\n\ndef q2():\n    return 'A' if Fraction(1, 2) else '?'\n"));
