@@ -57,6 +57,20 @@ expect("a UTF-8 file with a byte-order mark (PowerShell Set-Content) is read", P
 const u16File = path.join(tmp, "u16.json"); fs.writeFileSync(u16File, Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from(JSON.stringify({ status: "nothing" }), "utf16le")]));
 expect("a UTF-16LE file (PowerShell Out-File or >) is read", P.readResult(u16File).status === "nothing");
 
+// bodyFile: the PR description comes from build's pr-body.md, read as UTF-8, and only from the intake folder
+{
+  const idir = path.join(tmp, "intake"), wsd = path.join(idir, "abcdef012345"); fs.mkdirSync(wsd, { recursive: true });
+  const bodyPath = path.join(wsd, "pr-body.md"); fs.writeFileSync(bodyPath, "Adds 30 questions. E[X(X−1)] = 5/3 and P(A ∩ Bᶜ) are kept as written.");
+  const other = path.join(tmp, "secret-notes.md"); fs.writeFileSync(other, "x".repeat(60));
+  const saved = process.env.INTAKE_DIR; process.env.INTAKE_DIR = idir;
+  const base = { status: "ready", title: "T", verify: "python verify_x.py", files: ["verify_x.py"] };
+  const r1 = P.readResult(rf("bf1", Object.assign({ bodyFile: bodyPath, body: "Repaired Q3." }, base)));
+  expect("bodyFile is read as UTF-8 and the run's own note is appended", r1.status === "ready" && /E\[X\(X−1\)\] = 5\/3/.test(r1.body) && /P\(A ∩ Bᶜ\)/.test(r1.body) && /Repaired Q3\.$/.test(r1.body), JSON.stringify(r1));
+  expect("bodyFile outside the intake folder, or not named pr-body.md, is refused",
+    P.readResult(rf("bf2", Object.assign({ bodyFile: other }, base))).status === "invalid" && P.readResult(rf("bf3", Object.assign({ bodyFile: path.join(idir, "..", "secret-notes.md") }, base))).status === "invalid");
+  if (saved === undefined) delete process.env.INTAKE_DIR; else process.env.INTAKE_DIR = saved;
+}
+
 // publish(): the happy path, merging on
 const SHA = "abc1234def5678";
 const happy = () => fakeSh([
@@ -130,6 +144,17 @@ sh = fakeSh([[/^git rev-list --count/, { out: "1" }], [/^git rev-parse HEAD/, { 
   [/^gh run list/, { out: JSON.stringify([{ databaseId: 9, headSha: SHA, event: "pull_request" }]) }], [/^gh run watch/, { code: 1, out: "X validate failed" }]]);
 res = P.publish(prepX, rf("good", good), true, sh, { bash: "bash", wait: false });
 expect("red CI leaves the PR open and never merges", res.outcome === "ci-failed" && res.pr && !ran(sh, /^gh pr merge/));
+let lists = 0;
+sh = fakeSh([[/^git rev-list --count/, { out: "1" }], [/^git rev-parse HEAD/, { out: SHA }], [/^gh pr create/, { out: "https://github.com/o/r/pull/81" }],
+  [/^gh run list/, () => ({ out: JSON.stringify(++lists < 2 ? [{ databaseId: 9, headSha: SHA, event: "push" }] : [{ databaseId: 10, headSha: SHA, event: "pull_request" }, { databaseId: 9, headSha: SHA, event: "push" }]) })],
+  [/^gh run watch 9 /, { code: 1, out: "cancelled" }]]);
+res = P.publish(prepX, rf("good", good), false, sh, { bash: "bash", wait: false, findTries: 4 });
+expect("the pull_request run is watched, not the push run that it cancels (#154)", res.outcome === "left-open" && ran(sh, /^gh run watch 10 /) && !ran(sh, /^gh run watch 9 /), JSON.stringify(res) + sh.log.join("\n"));
+sh = fakeSh([[/^git rev-list --count/, { out: "1" }], [/^git rev-parse HEAD/, { out: SHA }], [/^gh pr create/, { out: "https://github.com/o/r/pull/82" }],
+  [/^gh run list/, { out: JSON.stringify([{ databaseId: 11, headSha: SHA, event: "pull_request" }, { databaseId: 12, headSha: SHA, event: "pull_request" }]) }],
+  [/^gh run watch 11 /, { code: 1, out: "cancelled" }], [/^gh run view 11 /, { out: JSON.stringify({ conclusion: "cancelled" }) }]]);
+res = P.publish(prepX, rf("good", good), false, sh, { bash: "bash", wait: false });
+expect("a watched run that ends cancelled hands over to the other run for the commit", res.outcome === "left-open" && ran(sh, /^gh run watch 12 /), JSON.stringify(res));
 sh = fakeSh([[/^git rev-list --count/, { out: "1" }], [/^git rev-parse HEAD/, { out: SHA }], [/^gh pr create/, { out: "https://github.com/o/r/pull/79" }],
   [/^gh run list/, { out: JSON.stringify([{ databaseId: 9, headSha: "otherSha", event: "pull_request" }]) }]]);
 res = P.publish(prepX, rf("good", good), true, sh, { bash: "bash", wait: false, findTries: 2 });

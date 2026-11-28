@@ -58,6 +58,11 @@ r = run("check", id);
 expect("a complete worksheet passes", r.code === 0 && /passes: 4 entries/.test(r.out), r.out);
 expect("symbols turned into '?' by a non-UTF-8 write are detected, plain question marks are not",
   ["P(A?)=0.3", "P(A?B?)=0.5", "1+2q?p", "x�y"].every(T.symbolsMangled) && !["Which one is correct?", "is it true? Then", "P(Aᶜ) = 0.3 and P(A ∩ Bᶜ) = 0.5", "what is P(B)?"].some(T.symbolsMangled));
+expect("the forms that slipped past the first check in PR #154 are detected too",
+  ["(C(52,26) ? 1)/(2^51 ? 1)", "P(A ? B)=0.8", "the probability that a? ? b? is divisible", "{1, 2, 3, ?, 3n}", "in 4!?3!?2! ways", "Let E? denote the event", "+(2/3)^3(1/3)+?=(2/3)"].every(T.symbolsMangled) &&
+  !["What is the probability that none of them will be selected?", "Which of these is true? (Standard deviation uses n.)", "Then x = ?"].some(T.symbolsMangled));
+expect("UTF-8 read back as cp1252 (PowerShell Get-Content) is detected as well",
+  ["E[X(Xâˆ’1)]=5/3", "E[XÂ²]=34/3"].every(T.symbolsMangled) && !["café", "x − 1", "σ² and Σ"].some(T.symbolsMangled));
 sheet([keep(1, { stem: "If P(A?)=0.3 and P(B)=0.4, then P(A?B?) is", answer: "A" }), keep(2), keep(3), keep(4, { topic: "alpha-t2" })]);
 r = run("check", id);
 expect("check rejects a worksheet whose maths symbols were lost as '?'", r.code === 1 && /maths symbols were lost/.test(r.out), r.out);
@@ -163,10 +168,13 @@ const built = (() => { try { return JSON.parse(fs.readFileSync(path.join(tmp, "s
 expect("build writes and runs both scripts, and the bank holds every kept question", r.code === 0 && built && built.count === 3 &&
   built.items.map(i => i.id).join() === "made-up-quiz-q001,made-up-quiz-q002,made-up-quiz-q004" && built.items[0].answer === "B" && built.items[0].explanation === "e", r.out);
 expect("the generated verifier passes and says what it checked", /Verified 3 answers independently/.test(r.out), r.out);
-const reg2 = JSON.parse(fs.readFileSync(path.join(tmp, "tools", "intake-sources.json"), "utf8"));
-expect("build registers the source once, with its outputs", reg2.sources.length === 1 && reg2.sources[0].outputs[0] === "seed/alpha_made_up_quiz.json" && reg2.sources[0].sha256[0] === id + "0".repeat(52), JSON.stringify(reg2));
+const reg2 = JSON.parse(fs.readFileSync(path.join(tmp, "tools", "intake-sources", id + ".json"), "utf8"));
+expect("build registers the source in a file of its own (no shared file for open PRs to conflict on)",
+  reg2.outputs[0] === "seed/alpha_made_up_quiz.json" && reg2.sha256[0] === id + "0".repeat(52) &&
+  JSON.parse(fs.readFileSync(path.join(tmp, "tools", "intake-sources.json"), "utf8")).sources.length === 0, JSON.stringify(reg2));
+expect("scan sees sources registered in either place", (() => { const R = require(TOOL); return R.classify({ name: "x.pdf", sha256: id + "0".repeat(52), pages: 3, text: "", textChars: 0 }, R.loadRegister(), {}).decision === "skip"; })());
 expect("build lists the files for the run's result and writes a PR description with the key differences",
-  /files: \["made_up_quiz_bank.py","verify_made_up_quiz.py","seed\/alpha_made_up_quiz.json","tools\/intake-sources.json"\]/.test(r.out) &&
+  /files: \["made_up_quiz_bank.py","verify_made_up_quiz.py","seed\/alpha_made_up_quiz.json","tools\/intake-sources\/abcdef012345.json"\]/.test(r.out) &&
   /Q1 \(kept, answer B, key A\)/.test(fs.readFileSync(path.join(ws, "pr-body.md"), "utf8")) && /Q3 \(repeat\)/.test(fs.readFileSync(path.join(ws, "pr-body.md"), "utf8")), r.out);
 r = spawnSync("python", ["-X", "utf8", "made_up_quiz_bank.py", "--check"], { cwd: tmp, encoding: "utf8" });
 expect("the generated build script's --check agrees with what it wrote", r.status === 0, (r.stdout || "") + (r.stderr || ""));
@@ -184,6 +192,10 @@ const vw2 = fs.readFileSync(path.join(ws, "verify_work.py"), "utf8");
 expect("put merges fields into an item and replaces its q<n>() in verify_work.py, adding the import once",
   r.code === 0 && /Saved 1 item\(s\) and 1 q<n>\(\)/.test(r.out) && /^from fractions import Fraction$/m.test(vw2) && (vw2.match(/^def q2\(/gm) || []).length === 1 && /Fraction\(1, 2\)/.test(vw2) && /^def q4\(/m.test(vw2), r.out + vw2);
 expect("the merged worksheet keeps the symbols, and explain now passes", /P\(Aᶜ ∩ B\)/.test(fs.readFileSync(path.join(ws, "questions.json"), "utf8")) && run("explain", id).code === 0, run("explain", id).out);
+r = run("put", id, bf("b1h.json", { items: [] }), "--verify", bf("b1h.py", "import math\n\ndef _twice(x):\n    y = x\n    y = y\n    return 2 * y\n\ndef q4():\n    return 'A' if _twice(1) == 2 else '?'\n"));
+const vw3 = fs.readFileSync(path.join(ws, "verify_work.py"), "utf8");
+expect("put adds a helper whole (a repeated line inside it survives) and puts imports together at the top",
+  r.code === 0 && /    y = y\n/.test(vw3) && /^from fractions import Fraction\nimport math$/m.test(vw3) && vw3.indexOf("def _twice") < vw3.indexOf("def q2") && run("explain", id).code === 0, vw3);
 r = run("put", id, bf("b2.json", { items: [{ n: 4, explanation: "1?P(A??B)" }] }));
 expect("put refuses a batch whose symbols were lost, and writes nothing", r.code === 2 && /lost as '\?' in Q4/.test(r.out) && !/1\?P/.test(fs.readFileSync(path.join(ws, "questions.json"), "utf8")), r.out);
 r = run("put", id, bf("b3.json", { items: [{ n: 4, keyNote: null }, { n: 3, note: "Same as Q2 (both ask for the variance)" }] }));

@@ -6,7 +6,7 @@
  *
  *   node tools/intake.js scan <folder> [--add]
  *                                          decide what to process next: skips what is already in the app
- *                                          (tools/intake-sources.json), personal, unreadable or duplicate files, works out
+ *                                          (tools/intake-sources*), personal, unreadable or duplicate files, works out
  *                                          each file's kind and ranks the rest; --add registers the top pick
  *   node tools/intake.js add <file.pdf> --kind questions|learning [--title "..."] [--render all]
  *                                          questions: every page is rendered as an image; learning: only pages whose
@@ -30,7 +30,7 @@
  *   node tools/intake.js build <id> --name <snake_name> [--title "..."]
  *                                          once explain is finished: write <name>_bank.py and verify_<name>.py from the
  *                                          worksheet and verify_work.py, run both (the bank lands in seed/), register the
- *                                          source in tools/intake-sources.json and write the PR description to pr-body.md
+ *                                          source in tools/intake-sources/<id>.json and write the PR description to pr-body.md
  *
  * The two kinds of document and what happens after this tool is in docs/SOURCE_INTAKE.md. In short: a question document
  * ends as a pyq_bank_<source>.py file built and verified like the CSIR banks; learning material ends as edits to lesson
@@ -222,8 +222,15 @@ const RX = {
   syllabus: /probab|statist|distribut|estimat|regress|varian|random|sampl|hypothes|markov|stochastic|inference|time.?series|bayes|anova|design|multivariate|nonparametric/i,
 };
 
+/* The register is tools/intake-sources.json (the sources registered before 28 Nov 2026) plus one file per source in
+   tools/intake-sources/<workspace id>.json. Every content PR appending to the one file conflicted with the next open
+   one (#156 after #154 merged), so `build` writes its own file instead. */
+const REGISTER_DIR = path.join(ROOT, "tools", "intake-sources");
 function loadRegister() {
-  try { return readJSON(REGISTER).sources || []; } catch (e) { return []; }
+  let all = [];
+  try { all = readJSON(REGISTER).sources || []; } catch (e) { /* none yet */ }
+  try { for (const f of fs.readdirSync(REGISTER_DIR).filter(x => /\.json$/.test(x)).sort()) { try { all.push(readJSON(path.join(REGISTER_DIR, f))); } catch (e) { /* a broken entry is reported by check.sh */ } } } catch (e) { /* no directory yet */ }
+  return all;
 }
 
 /* Decide one file from facts already gathered, so it can be tested without a PDF. f: { name, sha256, pages (0 if unreadable),
@@ -334,8 +341,18 @@ function scan(folder, opts) {
 /* ------------------------------------------------------------------ the worksheet checks */
 /* A file written by Windows PowerShell in the console code page turns every symbol it cannot encode (∩ ∪ ᶜ − ≤)
    into "?", so "P(Aᶜ)" arrives as "P(A?)". A question mark between symbols, or U+FFFD, means the text was mangled. */
+/* A '?' that stands for a lost symbol. A real question mark ends a sentence: it is followed by a space, a closing quote
+   or bracket, or the end. Found in review of PR #154 (28 Nov 2026): 23 of 290 items slipped past the first version of
+   this check as "2^51 ? 1" (\u2212), "P(A ? B)" (\u222A, \u2229), "a? ? b?" (a\u00B2 \u2212 b\u00B2), "{1, 2, ?, 3n}" (\u2026), "4!?3!" (\u00D7) and
+   "E? denote" (E\u2081). Calibrated on every bank in seed/: no real question mark matches. */
 function symbolsMangled(text) {
-  return typeof text === "string" && (/\uFFFD/.test(text) || /[\w)\]]\?[\w(=)\]+\-*\/]/.test(text) || /\?\?/.test(text));
+  return typeof text === "string" && (/\uFFFD/.test(text) || /\?\?/.test(text) ||
+    /[^\s"'\u201C\u2018(]\?[^\s"'\u201D\u2019)]/.test(text) ||            // glued to text on both sides: "A?B", "4!?3!", "+?="
+    /[\w)\]]\?\)/.test(text) ||                        // "P(A?)" for P(A\u1D9C)
+    /\s\?\s+\S/.test(text) ||                          // " ? " between terms: "2^51 ? 1", "P(A ? B)"
+    /[,({]\s*\?\s*[,)}]/.test(text) ||                 // a list's ellipsis: "{1, 2, ?, 3n}"
+    /[\w)\]]\?\s+[a-z0-9]/.test(text) ||               // a sentence that goes on: "E? denote", "1? through"
+    /â[\u0080-¿Œ-˜–-›€™]|Ã[\u0080-¿]|Â[ -¿]/.test(text));   // UTF-8 read as cp1252: "âˆ’" for −, "Â²" for ²
 }
 
 function checkQuestions(src, sheet, S) {
@@ -545,7 +562,12 @@ function put(id, file, opts) {
   writeJSON(sheetFile, s);
   if (vnew !== null) {
     const vf = path.join(wsDir(id), VERIFY_WORK), cur = splitVerify(fs.existsSync(vf) ? fs.readFileSync(vf, "utf8") : ""), add = splitVerify(vnew);
-    const head = cur.head.split("\n"); add.head.split("\n").forEach(l => { if (l.trim() && !head.includes(l)) head.push(l); });
+    // import lines are added once each; any other preamble (a helper function) is added whole unless already there, never
+    // line by line, which would drop a repeated line from inside a helper
+    const head = cur.head ? cur.head.split("\n") : [], isImport = l => /^(import |from \S+ import )/.test(l);
+    add.head.split("\n").filter(isImport).forEach(l => { if (!head.includes(l)) head.splice(head.filter(isImport).length ? head.lastIndexOf(head.filter(isImport).pop()) + 1 : 0, 0, l); });
+    const rest = add.head.split("\n").filter(l => !isImport(l)).join("\n").trim();
+    if (rest && !head.join("\n").includes(rest)) head.push("", "", rest);
     add.defs.forEach((v, n) => cur.defs.set(n, v));
     const out = [head.join("\n").trim(), ...[...cur.defs.keys()].sort((x, y) => x - y).map(n => cur.defs.get(n).join("\n").trimEnd())].filter(Boolean).join("\n\n\n") + "\n";
     fs.writeFileSync(vf, out);
@@ -557,7 +579,7 @@ function put(id, file, opts) {
    Writing a 300-question build script by hand costs a whole agent run and invites copying slips, so a finished worksheet
    becomes the bank's two scripts here: <name>_bank.py (the questions and explanations as data, built with
    pyq_bank_common like the other banks) and verify_<name>.py (verify_work.py verbatim, then a check that every q<n>()
-   agrees with the written bank). Both are then run, and the source is registered in tools/intake-sources.json. */
+   agrees with the written bank). Both are then run, and the source is registered in tools/intake-sources/<id>.json. */
 const pyLiteral = obj => "json.loads('" + JSON.stringify(obj).replace(/[\u007f-\uffff]/g, c => "\\u" + c.charCodeAt(0).toString(16).padStart(4, "0"))
   .replace(/\\/g, "\\\\").replace(/'/g, "\\'") + "')";
 function runPython(script, cwd) {
@@ -680,11 +702,10 @@ function build(id, opts, S) {
   if (!b.ok) throw new Error(bankPy + " failed:\n" + b.out.slice(-1500));
   const v = runPython(verifyPy, ROOT);
   if (!v.ok) throw new Error(verifyPy + " failed:\n" + v.out.slice(-1500));
-  // register the source, replacing an earlier entry for the same file
-  const regFile = path.join(ROOT, "tools", "intake-sources.json"), reg = readJSON(regFile);
-  reg.sources = reg.sources.filter(s => !(s.sha256 || []).includes(src.sha256));
-  reg.sources.push({ title, kind: "questions", status: "banked", outputs: Object.values(outs), sha256: [src.sha256], files: [src.file] });
-  writeJSON(regFile, reg);
+  // register the source in a file of its own (see loadRegister), so open content PRs never touch the same file
+  const regRel = "tools/intake-sources/" + id + ".json";
+  fs.mkdirSync(REGISTER_DIR, { recursive: true });
+  writeJSON(path.join(ROOT, regRel), { title, kind: "questions", status: "banked", outputs: Object.values(outs), sha256: [src.sha256], files: [src.file] });
   // a PR description the run can use as it is
   const byTopic = {}; kept.forEach(q => { const t = S.topics[q.topic]; byTopic[t.name] = (byTopic[t.name] || 0) + 1; });
   const notes = sheet.items.filter(q => q.keyNote || q.decision !== "keep");
@@ -694,7 +715,7 @@ function build(id, opts, S) {
     "**Answers that differ from the printed key, repeats and left-out questions (" + notes.length + "):**", "",
     ...notes.map(q => "- Q" + q.n + " (" + (q.decision === "keep" ? "kept, answer " + q.answer + ", key " + q.printedKey : q.decision) + "): " + String(q.keyNote || q.note).replace(/\s+/g, " ")), ""].join("\n");
   fs.writeFileSync(path.join(wsDir(id), "pr-body.md"), body);
-  return { files: [bankPy, verifyPy, ...Object.values(outs), "tools/intake-sources.json"], verify: "python " + verifyPy, body: shownPath(path.join(wsDir(id), "pr-body.md")), built: b.out, verified: v.out };
+  return { files: [bankPy, verifyPy, ...Object.values(outs), regRel], verify: "python " + verifyPy, body: shownPath(path.join(wsDir(id), "pr-body.md")), built: b.out, verified: v.out };
 }
 
 /* ------------------------------------------------------------------ the report */
@@ -804,4 +825,4 @@ function main(argv) {
 }
 
 if (require.main === module) process.exit(main(process.argv.slice(2)));
-module.exports = { explainStatus, sameAnswer, verifyFunctions, tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost, symbolsMangled, classify, plan };
+module.exports = { loadRegister, explainStatus, sameAnswer, verifyFunctions, tokens, jaccard, indexItems, nearest, checkQuestions, checkConcepts, loadSeed, symbolsLost, symbolsMangled, classify, plan };

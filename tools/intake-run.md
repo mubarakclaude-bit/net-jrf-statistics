@@ -67,6 +67,11 @@ Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShel
      different formula), and returns the option letter (the true letters for multi, the value for numeric). Standard
      library only; never read the worksheet or copy its answers;
    - set `answer` to what you computed, with a `keyNote` wherever it differs from the printed key;
+   - **check the question itself is sound** before keeping it: a given density or probability function must be
+     non-negative and total 1, an MGF must expand to non-negative probabilities, and the data must determine the
+     answer. A question that fails is `left-out` with a note saying exactly what is wrong ("the density integrates to
+     5/4"), even when the printed key matches a mechanical working. Found in review on 28 Nov 2026: three of 27
+     questions in one test series were flawed this way;
    - **save every few questions** so a stopped run loses little: write `batch.json` (`{"covers": {...}, "items":
      [{"n": .., "page": .., "format": .., "decision": .., "topic": .., "stem": .., "options": [..], "printedKey": ..,
      "answer": .., "explanation": ..}, ...]}`) and `batch_verify.py` (the `def q<n>()` functions and their imports) in
@@ -91,13 +96,14 @@ Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShel
 6. Build the content:
    - **Questions:** `node tools/intake.js build <id> --name <snake_case_name>` (for example `jam_probability_assignment`;
      `--title` overrides the source's title). It writes `<name>_bank.py` and `verify_<name>.py` from the worksheet and
-     `verify_work.py`, runs both (the bank lands in `seed/`), registers the source in `tools/intake-sources.json`, and
+     `verify_work.py`, runs both (the bank lands in `seed/`), registers the source in `tools/intake-sources/<id>.json`, and
      prints the `files` and `verify` for your result and the path of a PR description, `pr-body.md`. Do not write or
      edit these scripts by hand; if build fails, fix the worksheet or `verify_work.py` and run it again.
    - **Learning material:** edit the named lessons' seed JSON (`docs/CONTENT_GUIDE.md`, 3a), with fresh prose and a
      verification script for every new number. Bump `version` and record the source and pages in `provenance`. Add the
-     source to `tools/intake-sources.json`: title, kind, outputs, sha256 and file name (`source.json` gives the sha256).
+     source as `tools/intake-sources/<id>.json`: title, kind, outputs, sha256 and file name (`source.json` gives the sha256).
 7. Run `bash check.sh` and `npm run build` (and, for learning material, your verification script). All must pass.
+   Git Bash is on your PATH; do not search for it.
 8. **Do not run `git add` or `git commit`.** The sandbox cannot write git's metadata (a worktree's index lives in the
    main repository's `.git`), so the watcher commits for you. List every file the content needs, new or changed, as
    paths relative to your worktree, in the result's `files` (for questions, exactly what `build` printed). Never list
@@ -108,15 +114,16 @@ Questions are full of symbols (∩ ∪ Aᶜ − ≤ λ σ Σ). Windows PowerShel
    ```json
    { "status": "ready",
      "title": "<PR title, under 100 characters>",
-     "body": "<PR description: for questions, the text of pr-body.md as build wrote it, plus anything you repaired>",
+     "bodyFile": "<questions: the pr-body.md path build printed; the watcher reads it as UTF-8>",
+     "body": "<anything to add: what you repaired; for learning material, the whole PR description>",
      "verify": "python verify_<name>.py",
-     "files": ["<build script>.py", "verify_<name>.py", "seed/<bank>.json", "tools/intake-sources.json"],
+     "files": ["<build script>.py", "verify_<name>.py", "seed/<bank>.json", "tools/intake-sources/<id>.json"],
      "source": "<source file name>" }
    ```
 
-   `verify` must be exactly `python <script>.py`; the watcher re-runs it and rejects anything else. Write the file with
-   Python or Node (for example `python -c "import json,os; json.dump({...}, open(os.environ['INTAKE_RESULT'],'w',encoding='utf-8'))"`)
-   rather than a PowerShell redirect, so it is plain UTF-8.
+   Do not copy `pr-body.md` into `body`: reading it through PowerShell garbles its symbols. `verify` must be exactly
+   `python <script>.py`; the watcher re-runs it and rejects anything else. Write the file with your
+   file-editing tool (UTF-8), never a PowerShell redirect or a command line that carries the text.
 
 ## Stop conditions
 

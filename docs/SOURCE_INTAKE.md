@@ -30,7 +30,7 @@ node tools/intake.js scan "<folder>" --add    # the same, then registers the top
 
 For each PDF it decides, in this order, from the file name and the text of the first three pages:
 
-1. **Already in the app.** Its sha256 or file name is in `tools/intake-sources.json`, the register of finished sources.
+1. **Already in the app.** Its sha256 or file name is in the register of finished sources: `tools/intake-sources.json` (sources before 28 Nov 2026) or one file per source in `tools/intake-sources/<id>.json`, so open content PRs never edit the same file.
    It is skipped, and the output says which seed file holds it. The file name catches a second copy of the same
    compilation whose bytes differ.
 2. **A duplicate** of another file in the folder: skipped.
@@ -47,7 +47,7 @@ Question documents rank above learning material, because a question bank reaches
 shorter document goes first, and a document with no Paper 2 statistics words is marked down with a note. Every
 decision prints its reason. A wrong call is overridden by running `add` with the right `--kind`.
 
-**When content from a source is merged, add the source to `tools/intake-sources.json` in the same pull request.** Give
+**When content from a source is merged, add the source to the register (`tools/intake-sources/<id>.json`) in the same pull request.** Give
 its title, kind, the seed files it fed, its sha256 (all copies you know of) and its file name. That is what keeps `scan`
 from offering it again. Never list a personal document there.
 
@@ -230,7 +230,7 @@ an item has the wrong number of options or statements, or the answer differs fro
    its `--check`, then `npm run check`.
    A source that is not a CSIR compilation gets its own small build and verification script.
    `quiz_bank_sl.py` and `verify_quiz_sl.py` are the pattern.
-4. Add the source to `tools/intake-sources.json`.
+4. Add the source as `tools/intake-sources/<id>.json` (`build` does this for question documents).
 5. Open one PR per module (`AGENTS.md`, Pull requests). Paste the `gaps` report's summary and its Learn gaps into the PR
    description.
 
